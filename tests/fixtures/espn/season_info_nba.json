@@ -1,0 +1,175 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024?lang=en&region=us",
+ "awards": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards?lang=en&region=us"
+ },
+ "displayName": "2023-24",
+ "endDate": "2024-06-21T06:59Z",
+ "futures": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/futures?lang=en&region=us"
+ },
+ "leaders": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/leaders?lang=en&region=us"
+ },
+ "powerIndexLeaders": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/powerindex/leaders?lang=en&region=us"
+ },
+ "powerIndexes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/powerindex?lang=en&region=us"
+ },
+ "rankings": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/rankings?lang=en&region=us"
+ },
+ "startDate": "2023-10-05T07:00Z",
+ "type": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2?lang=en&region=us",
+  "abbreviation": "reg",
+  "corrections": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/corrections?lang=en&region=us"
+  },
+  "endDate": "2024-04-15T06:59Z",
+  "groups": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/groups?lang=en&region=us"
+  },
+  "hasGroups": false,
+  "hasLegs": false,
+  "hasStandings": true,
+  "id": "2",
+  "leaders": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/leaders?lang=en&region=us"
+  },
+  "name": "Regular Season",
+  "slug": "regular-season",
+  "startDate": "2023-10-24T07:00Z",
+  "type": 2,
+  "weeks": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/weeks?lang=en&region=us"
+  },
+  "year": 2024
+ },
+ "types": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types?lang=en&region=us",
+  "count": 5,
+  "items": [
+   {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/1?lang=en&region=us",
+    "abbreviation": "pre",
+    "corrections": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/1/corrections?lang=en&region=us"
+    },
+    "endDate": "2023-10-24T06:59Z",
+    "groups": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/1/groups?lang=en&region=us"
+    },
+    "hasGroups": false,
+    "hasLegs": false,
+    "hasStandings": true,
+    "id": "1",
+    "name": "Preseason",
+    "slug": "preseason",
+    "startDate": "2023-10-05T07:00Z",
+    "type": 1,
+    "weeks": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/1/weeks?lang=en&region=us"
+    },
+    "year": 2024
+   },
+   {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2?lang=en&region=us",
+    "abbreviation": "reg",
+    "corrections": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/corrections?lang=en&region=us"
+    },
+    "endDate": "2024-04-15T06:59Z",
+    "groups": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/groups?lang=en&region=us"
+    },
+    "hasGroups": false,
+    "hasLegs": false,
+    "hasStandings": true,
+    "id": "2",
+    "leaders": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/leaders?lang=en&region=us"
+    },
+    "name": "Regular Season",
+    "slug": "regular-season",
+    "startDate": "2023-10-24T07:00Z",
+    "type": 2,
+    "weeks": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/weeks?lang=en&region=us"
+    },
+    "year": 2024
+   },
+   {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/3?lang=en&region=us",
+    "abbreviation": "post",
+    "corrections": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/3/corrections?lang=en&region=us"
+    },
+    "endDate": "2024-06-21T06:59Z",
+    "groups": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/3/groups?lang=en&region=us"
+    },
+    "hasGroups": false,
+    "hasLegs": false,
+    "hasStandings": false,
+    "id": "3",
+    "leaders": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/3/leaders?lang=en&region=us"
+    },
+    "name": "Postseason",
+    "slug": "post-season",
+    "startDate": "2024-04-20T07:00Z",
+    "type": 3,
+    "weeks": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/3/weeks?lang=en&region=us"
+    },
+    "year": 2024
+   },
+   {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/4?lang=en&region=us",
+    "abbreviation": "off",
+    "endDate": "2024-09-24T06:59Z",
+    "groups": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/4/groups?lang=en&region=us"
+    },
+    "hasGroups": false,
+    "hasLegs": false,
+    "hasStandings": false,
+    "id": "4",
+    "name": "Off Season",
+    "slug": "off-season",
+    "startDate": "2024-06-21T07:00Z",
+    "type": 4,
+    "weeks": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/4/weeks?lang=en&region=us"
+    },
+    "year": 2024
+   },
+   {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/5?lang=en&region=us",
+    "abbreviation": "playin",
+    "endDate": "2024-04-20T06:59Z",
+    "groups": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/5/groups?lang=en&region=us"
+    },
+    "hasGroups": false,
+    "hasLegs": false,
+    "hasStandings": false,
+    "id": "5",
+    "name": "Play-In Season",
+    "slug": "play-in-season",
+    "startDate": "2024-04-15T07:00Z",
+    "type": 5,
+    "weeks": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/5/weeks?lang=en&region=us"
+    },
+    "year": 2024
+   }
+  ],
+  "pageCount": 1,
+  "pageIndex": 1,
+  "pageSize": 5
+ },
+ "year": 2024
+}

@@ -1,0 +1,225 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/4239/statisticslog?lang=en&region=us",
+ "entries": [
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2020?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2020/types/2/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2020/types/2/teams/1/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2020/teams/1?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  },
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2019?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2019/types/3/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2019/types/3/teams/22/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2019/teams/22?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  },
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2018?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2018/types/3/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2018/types/3/teams/22/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2018/teams/22?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  },
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2017?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2017/types/3/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2017/types/3/teams/22/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2017/teams/22?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  },
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2016?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2016/types/3/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2016/types/3/teams/2/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2016/teams/2?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  },
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2015?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2015/types/3/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2015/types/3/teams/2/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2015/teams/2?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  },
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2014?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2014/types/3/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2014/types/3/teams/11/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2014/teams/11?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  },
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2013?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2013/types/2/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2013/types/2/teams/20/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2013/teams/20?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  },
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2012?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2012/types/3/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2012/types/3/teams/20/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2012/teams/20?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  },
+  {
+   "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2011?lang=en&region=us"
+   },
+   "statistics": [
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2011/types/3/athletes/4239/statistics/0?lang=en&region=us"
+     },
+     "type": "total"
+    },
+    {
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2011/types/3/teams/20/athletes/4239/statistics?lang=en&region=us"
+     },
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2011/teams/20?lang=en&region=us"
+     },
+     "type": "team"
+    }
+   ]
+  }
+ ]
+}

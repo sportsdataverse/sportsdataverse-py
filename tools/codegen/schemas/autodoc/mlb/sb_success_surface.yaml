@@ -1,0 +1,18 @@
+schema: sb_success_surface
+kind: dataframe
+columns:
+- name: speed_b
+  type: integer
+  description: ''
+- name: pop_b
+  type: integer
+  description: ''
+- name: base
+  type: character
+  description: ''
+- name: p_success
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

@@ -173,9 +173,9 @@ not covered by the generated API-endpoint reference above.
 | [nba_matchup_drapm](additional/models-and-calculators.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
 | [nba_predict_games](additional/models-and-calculators.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
 | [nba_rookie_projection](additional/models-and-calculators.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |
-| [nba_spm](additional/models-and-calculators.md#nba_spm) | Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM. |
-| [nba_team_ratings](additional/models-and-calculators.md#nba_team_ratings) | Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware. |
-| [nba_war](additional/models-and-calculators.md#nba_war) | Points-above-replacement -> wins for each player. |
+| [nba_spm](additional/models-and-calculators-2.md#nba_spm) | Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM. |
+| [nba_team_ratings](additional/models-and-calculators-2.md#nba_team_ratings) | Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware. |
+| [nba_war](additional/models-and-calculators-2.md#nba_war) | Points-above-replacement -> wins for each player. |
 | [predict_margin](additional/models-and-calculators-2.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
 | [predict_total](additional/models-and-calculators-2.md#predict_total) | Expected total points from adjusted ratings and paces. |
 | [raw_game_efficiency](additional/models-and-calculators-2.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
@@ -217,13 +217,13 @@ not covered by the generated API-endpoint reference above.
 | [nba_ratings_panel](additional/analytics.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
 | [nba_raw_store_season_frame](additional/analytics.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
 | [nba_referee_assignments](additional/analytics.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
-| [nba_shot_value](additional/analytics.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |
-| [nba_shot_value_lineups](additional/analytics.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
-| [nba_team_clutch](additional/analytics.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
-| [nba_tracking_drive_value](additional/analytics.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
-| [nba_tracking_pass_value](additional/analytics.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
-| [nba_tracking_reb_oe](additional/analytics.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
-| [nba_tracking_rim_protect_value](additional/analytics.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
+| [nba_shot_value](additional/analytics-2.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |
+| [nba_shot_value_lineups](additional/analytics-2.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
+| [nba_team_clutch](additional/analytics-2.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
+| [nba_tracking_drive_value](additional/analytics-2.md#nba_tracking_drive_value) | Drive value over expected + rim-pressure, per player-season. |
+| [nba_tracking_pass_value](additional/analytics-2.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
+| [nba_tracking_reb_oe](additional/analytics-2.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
+| [nba_tracking_rim_protect_value](additional/analytics-2.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
 | [nba_tracking_shot_diet_value](additional/analytics-2.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
 | [nba_tracking_touch_value](additional/analytics-2.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-2.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |

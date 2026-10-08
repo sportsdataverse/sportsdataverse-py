@@ -1,0 +1,12 @@
+schema: nba_matchup_drapm
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: matchup_drapm
+  type: double
+  description: ''
+- name: matchup_poss
+  type: double
+  description: ''

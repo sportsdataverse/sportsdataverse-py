@@ -33,6 +33,26 @@ requested with `limit=100` and `offset` advanced page by page until
 
 A polars/pandas DataFrame with the `laps_page` columns (`season`, `round`, `race_*`, `lap_number`, `driver_id`, `position`, `time`), concatenated across pages; zero rows (same columns) when the race has no lap data (before 1996, or a round not yet run).
 
+| col_name | type | description |
+|---|---|---|
+| `round` | integer |  |
+| `season` | integer |  |
+| `race_circuit_location_country` | character |  |
+| `race_circuit_location_lat` | double |  |
+| `race_circuit_location_locality` | character |  |
+| `race_circuit_location_long` | double |  |
+| `race_circuit_id` | character |  |
+| `race_circuit_name` | character |  |
+| `race_circuit_url` | character |  |
+| `race_date` | character |  |
+| `race_name` | character |  |
+| `race_time` | character |  |
+| `race_url` | character |  |
+| `lap_number` | integer |  |
+| `driver_id` | character |  |
+| `position` | integer |  |
+| `time` | character |  |
+
 **Example**
 
 ```python

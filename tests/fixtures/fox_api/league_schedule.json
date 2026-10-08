@@ -1,0 +1,309 @@
+{
+ "currentSelectionId": "2026-5-1",
+ "hideLeague": true,
+ "hideRecords": true,
+ "hideSelections": false,
+ "selectionGroupList": [
+  {
+   "selectionList": [
+    {
+     "id": "2026-1-3",
+     "parameters": {
+      "seasonType": "pre",
+      "week": "1"
+     },
+     "subtitle": "Aug 6",
+     "title": "HOF Game",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-1-3",
+     "webUrl": "/nfl/schedule?seasonType=pre&week=1"
+    },
+    {
+     "id": "2026-2-3",
+     "parameters": {
+      "seasonType": "pre",
+      "week": "2"
+     },
+     "subtitle": "Aug 13 - Aug 15",
+     "title": "Pre Week 1",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-2-3",
+     "webUrl": "/nfl/schedule?seasonType=pre&week=2"
+    },
+    {
+     "id": "2026-3-3",
+     "parameters": {
+      "seasonType": "pre",
+      "week": "3"
+     },
+     "subtitle": "Aug 20 - Aug 23",
+     "title": "Pre Week 2",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-3-3",
+     "webUrl": "/nfl/schedule?seasonType=pre&week=3"
+    },
+    {
+     "id": "2026-4-3",
+     "parameters": {
+      "seasonType": "pre",
+      "week": "4"
+     },
+     "subtitle": "Aug 27 - Aug 29",
+     "title": "Pre Week 3",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-4-3",
+     "webUrl": "/nfl/schedule?seasonType=pre&week=4"
+    }
+   ],
+   "title": "PRESEASON"
+  },
+  {
+   "selectionList": [
+    {
+     "id": "2026-1-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "1"
+     },
+     "subtitle": "Sep 9 - Sep 14",
+     "title": "Week 1",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-1-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=1"
+    },
+    {
+     "id": "2026-2-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "2"
+     },
+     "subtitle": "Sep 17 - Sep 21",
+     "title": "Week 2",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-2-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=2"
+    },
+    {
+     "id": "2026-3-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "3"
+     },
+     "subtitle": "Sep 24 - Sep 28",
+     "title": "Week 3",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-3-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=3"
+    },
+    {
+     "id": "2026-4-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "4"
+     },
+     "subtitle": "Oct 1 - Oct 5",
+     "title": "Week 4",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-4-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=4"
+    },
+    {
+     "id": "2026-5-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "5"
+     },
+     "subtitle": "Oct 8 - Oct 12",
+     "title": "Week 5",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-5-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=5"
+    },
+    {
+     "id": "2026-6-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "6"
+     },
+     "subtitle": "Oct 15 - Oct 19",
+     "title": "Week 6",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-6-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=6"
+    },
+    {
+     "id": "2026-7-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "7"
+     },
+     "subtitle": "Oct 22 - Oct 26",
+     "title": "Week 7",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-7-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=7"
+    },
+    {
+     "id": "2026-8-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "8"
+     },
+     "subtitle": "Oct 29 - Nov 2",
+     "title": "Week 8",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-8-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=8"
+    },
+    {
+     "id": "2026-9-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "9"
+     },
+     "subtitle": "Nov 5 - Nov 9",
+     "title": "Week 9",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-9-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=9"
+    },
+    {
+     "id": "2026-10-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "10"
+     },
+     "subtitle": "Nov 12 - Nov 16",
+     "title": "Week 10",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-10-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=10"
+    },
+    {
+     "id": "2026-11-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "11"
+     },
+     "subtitle": "Nov 19 - Nov 23",
+     "title": "Week 11",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-11-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=11"
+    },
+    {
+     "id": "2026-12-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "12"
+     },
+     "subtitle": "Nov 25 - Nov 30",
+     "title": "Week 12",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-12-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=12"
+    },
+    {
+     "id": "2026-13-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "13"
+     },
+     "subtitle": "Dec 3 - Dec 7",
+     "title": "Week 13",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-13-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=13"
+    },
+    {
+     "id": "2026-14-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "14"
+     },
+     "subtitle": "Dec 10 - Dec 14",
+     "title": "Week 14",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-14-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=14"
+    },
+    {
+     "id": "2026-15-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "15"
+     },
+     "subtitle": "Dec 17 - Dec 21",
+     "title": "Week 15",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-15-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=15"
+    },
+    {
+     "id": "2026-16-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "16"
+     },
+     "subtitle": "Dec 24 - Dec 28",
+     "title": "Week 16",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-16-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=16"
+    },
+    {
+     "id": "2026-17-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "17"
+     },
+     "subtitle": "Dec 31 - Jan 4",
+     "title": "Week 17",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-17-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=17"
+    },
+    {
+     "id": "2026-18-1",
+     "parameters": {
+      "seasonType": "reg",
+      "week": "18"
+     },
+     "subtitle": "Jan 10",
+     "title": "Week 18",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-18-1",
+     "webUrl": "/nfl/schedule?seasonType=reg&week=18"
+    }
+   ],
+   "title": "REGULAR SEASON"
+  },
+  {
+   "selectionList": [
+    {
+     "id": "2026-1-2",
+     "parameters": {
+      "seasonType": "post",
+      "week": "1"
+     },
+     "subtitle": "Jan 16 - Jan 18",
+     "title": "Wild Card",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-1-2",
+     "webUrl": "/nfl/schedule?seasonType=post&week=1"
+    },
+    {
+     "id": "2026-2-2",
+     "parameters": {
+      "seasonType": "post",
+      "week": "2"
+     },
+     "subtitle": "Jan 23 - Jan 24",
+     "title": "Div. Round",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-2-2",
+     "webUrl": "/nfl/schedule?seasonType=post&week=2"
+    },
+    {
+     "id": "2026-3-2",
+     "parameters": {
+      "seasonType": "post",
+      "week": "3"
+     },
+     "subtitle": "Jan 31",
+     "title": "Conf. Champ",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-3-2",
+     "webUrl": "/nfl/schedule?seasonType=post&week=3"
+    },
+    {
+     "id": "2026-4-2",
+     "parameters": {
+      "seasonType": "post",
+      "week": "4"
+     },
+     "subtitle": "Feb 14",
+     "title": "Super Bowl",
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/schedule-segment/2026-4-2",
+     "webUrl": "/nfl/schedule?seasonType=post&week=4"
+    }
+   ],
+   "title": "POSTSEASON"
+  }
+ ]
+}

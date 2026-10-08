@@ -1,0 +1,68 @@
+{
+ "count": 2,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15?lang=en&region=us",
+   "homeAway": "home",
+   "id": "15",
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/leaders?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/linescores?lang=en&region=us"
+   },
+   "order": 0,
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/records?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/score?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/statistics?lang=en&region=us"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "type": "team",
+   "uid": "s:40~l:46~t:15",
+   "winner": true
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8?lang=en&region=us",
+   "homeAway": "away",
+   "id": "8",
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/leaders?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/linescores?lang=en&region=us"
+   },
+   "order": 1,
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/records?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/score?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/statistics?lang=en&region=us"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "type": "team",
+   "uid": "s:40~l:46~t:8",
+   "winner": false
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 25
+}

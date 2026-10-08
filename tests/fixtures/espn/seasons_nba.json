@@ -1,0 +1,83 @@
+{
+ "count": 81,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2026?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2025?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2023?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2022?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2021?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2020?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2019?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2018?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2017?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2016?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2015?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2014?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2013?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2012?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2011?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2010?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2009?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2008?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2007?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2006?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2005?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2004?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2003?lang=en&region=us"
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 200
+}

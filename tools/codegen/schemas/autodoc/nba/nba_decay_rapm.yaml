@@ -1,0 +1,21 @@
+schema: nba_decay_rapm
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: o_decay_rapm
+  type: double
+  description: ''
+- name: d_decay_rapm
+  type: double
+  description: ''
+- name: decay_rapm
+  type: double
+  description: ''
+- name: off_poss
+  type: integer
+  description: ''
+- name: def_poss
+  type: integer
+  description: ''

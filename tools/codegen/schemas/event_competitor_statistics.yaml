@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: event_competitor_statistics
+unverified: 'parser: parse_event_competitor_statistics raises AttributeError: ''str'' object has no attribute ''get'' on the
+  live payload (nba, 2026-10-07), so no columns can be derived'

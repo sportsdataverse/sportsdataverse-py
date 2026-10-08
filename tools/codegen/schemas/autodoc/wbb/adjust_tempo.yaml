@@ -1,0 +1,12 @@
+schema: adjust_tempo
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: adj_tempo
+  type: double
+  description: ''

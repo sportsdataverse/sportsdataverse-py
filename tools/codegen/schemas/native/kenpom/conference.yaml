@@ -1,0 +1,233 @@
+schema: conference
+kind: frames
+frames:
+- section: conf_table
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: overall
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: net_rtg
+    type: double
+    description: ''
+  - name: net_rtg_1
+    type: integer
+    description: ''
+  - name: o_rtg
+    type: double
+    description: ''
+  - name: o_rtg_1
+    type: integer
+    description: ''
+  - name: d_rtg
+    type: double
+    description: ''
+  - name: d_rtg_1
+    type: integer
+    description: ''
+  - name: adj_t
+    type: double
+    description: ''
+  - name: adj_t_1
+    type: integer
+    description: ''
+  - name: conf_sos
+    type: double
+    description: ''
+  - name: conf_sos_1
+    type: integer
+    description: ''
+  - name: conf_sos_1_rk
+    type: character
+    description: ''
+  - name: conf_sos_1_rk_rk
+    type: character
+    description: ''
+  - name: conf_sos_1_rk_rk_rk
+    type: character
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''
+- section: conf_table_2
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: oe
+    type: double
+    description: ''
+  - name: oe_1
+    type: integer
+    description: ''
+  - name: e_fg_pct
+    type: double
+    description: ''
+  - name: e_fg_pct_1
+    type: integer
+    description: ''
+  - name: to_pct
+    type: double
+    description: ''
+  - name: to_pct_1
+    type: integer
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: or_pct_1
+    type: integer
+    description: ''
+  - name: ftr
+    type: double
+    description: ''
+  - name: ftr_1
+    type: integer
+    description: ''
+  - name: 2_p_pct
+    type: double
+    description: ''
+  - name: 2_p_pct_1
+    type: integer
+    description: ''
+  - name: 3_p_pct
+    type: double
+    description: ''
+  - name: 3_p_pct_1
+    type: integer
+    description: ''
+  - name: ft_pct
+    type: double
+    description: ''
+  - name: ft_pct_1
+    type: integer
+    description: ''
+  - name: tempo
+    type: double
+    description: ''
+  - name: tempo_1
+    type: integer
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''
+- section: conf_table_3
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: de
+    type: double
+    description: ''
+  - name: de_1
+    type: integer
+    description: ''
+  - name: e_fg_pct
+    type: double
+    description: ''
+  - name: e_fg_pct_1
+    type: integer
+    description: ''
+  - name: to_pct
+    type: double
+    description: ''
+  - name: to_pct_1
+    type: integer
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: or_pct_1
+    type: integer
+    description: ''
+  - name: ftr
+    type: double
+    description: ''
+  - name: ftr_1
+    type: integer
+    description: ''
+  - name: 2_p_pct
+    type: double
+    description: ''
+  - name: 2_p_pct_1
+    type: integer
+    description: ''
+  - name: 3_p_pct
+    type: double
+    description: ''
+  - name: 3_p_pct_1
+    type: integer
+    description: ''
+  - name: blk_pct
+    type: double
+    description: ''
+  - name: blk_pct_1
+    type: integer
+    description: ''
+  - name: stl_pct
+    type: double
+    description: ''
+  - name: stl_pct_1
+    type: integer
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''
+- section: conf_table_4
+  columns:
+  - name: rank
+    type: integer
+    description: ''
+  - name: player
+    type: character
+    description: ''
+- section: conf_table_5
+  columns:
+  - name: stat
+    type: character
+    description: ''
+  - name: value
+    type: double
+    description: ''
+  - name: value_1
+    type: integer
+    description: ''
+- section: conf_table_6
+  columns:
+  - name: stat
+    type: character
+    description: ''
+  - name: stat_rk
+    type: character
+    description: ''
+  - name: value
+    type: character
+    description: ''
+  - name: value_1
+    type: integer
+    description: ''
+- section: conf_table_rank
+  columns:
+  - name: conference
+    type: integer
+    description: ''
+  - name: conference_1
+    type: character
+    description: ''
+  - name: rating
+    type: double
+    description: ''
+  - name: conference_2
+    type: double
+    description: ''
+  - name: conference_3
+    type: character
+    description: ''
+  - name: rating_1
+    type: double
+    description: ''

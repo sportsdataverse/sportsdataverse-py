@@ -36,6 +36,92 @@ season, so cross-family joins need no dtype reconciliation.
 
 Polars dataframe with one row per player / team / lineup per requested season for the requested family; an empty frame when no requested season is published.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `age` | double | Player age (in years). |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | double | Wins percentage (0-1 decimal). |
+| `min` | double | Minutes played. |
+| `e_off_rating` | double |  |
+| `off_rating` | double |  |
+| `sp_work_off_rating` | double |  |
+| `e_def_rating` | double |  |
+| `def_rating` | double |  |
+| `sp_work_def_rating` | double |  |
+| `e_net_rating` | double |  |
+| `net_rating` | double | Net rating (off rating - def rating). |
+| `sp_work_net_rating` | double |  |
+| `ast_pct` | double | Assist percentage. |
+| `ast_to` | double |  |
+| `ast_ratio` | double |  |
+| `oreb_pct` | double |  |
+| `dreb_pct` | double |  |
+| `reb_pct` | double |  |
+| `tm_tov_pct` | double |  |
+| `e_tov_pct` | double |  |
+| `efg_pct` | double |  |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `usg_pct` | double |  |
+| `e_usg_pct` | double |  |
+| `e_pace` | double |  |
+| `pace` | double | Possessions per 48 minutes. |
+| `pace_per40` | double | Pace per40. |
+| `sp_work_pace` | double |  |
+| `pie` | double | Player Impact Estimate (0-1). |
+| `poss` | integer | Poss. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
+| `fgm_pg` | double |  |
+| `fga_pg` | double |  |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `e_off_rating_rank` | integer |  |
+| `off_rating_rank` | integer |  |
+| `sp_work_off_rating_rank` | integer |  |
+| `e_def_rating_rank` | integer |  |
+| `def_rating_rank` | integer |  |
+| `sp_work_def_rating_rank` | integer |  |
+| `e_net_rating_rank` | integer |  |
+| `net_rating_rank` | integer |  |
+| `sp_work_net_rating_rank` | integer |  |
+| `ast_pct_rank` | integer |  |
+| `ast_to_rank` | integer |  |
+| `ast_ratio_rank` | integer |  |
+| `oreb_pct_rank` | integer |  |
+| `dreb_pct_rank` | integer |  |
+| `reb_pct_rank` | integer |  |
+| `tm_tov_pct_rank` | integer |  |
+| `e_tov_pct_rank` | integer |  |
+| `efg_pct_rank` | integer |  |
+| `ts_pct_rank` | integer |  |
+| `usg_pct_rank` | integer |  |
+| `e_usg_pct_rank` | integer |  |
+| `e_pace_rank` | integer |  |
+| `pace_rank` | integer |  |
+| `sp_work_pace_rank` | integer |  |
+| `pie_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fgm_pg_rank` | integer |  |
+| `fga_pg_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `team_count` | integer |  |
+| `season` | integer | Season year. |
+| `league_id` | character | League identifier ('10' = WNBA). |
+| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `per_mode` | character |  |
+
 **Example**
 
 ```python

@@ -1,0 +1,95 @@
+schema: coach_history
+kind: frames
+frames:
+- section: player_table
+  columns:
+  - name: column_0
+    type: integer
+    description: ''
+  - name: pre_rk
+    type: character
+    description: ''
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: w_l
+    type: character
+    description: ''
+  - name: adj_t
+    type: double
+    description: ''
+  - name: adj_o
+    type: double
+    description: ''
+  - name: adj_d
+    type: double
+    description: ''
+  - name: offense_e_fg_pct
+    type: double
+    description: ''
+  - name: offense_to_pct
+    type: double
+    description: ''
+  - name: offense_or_pct
+    type: double
+    description: ''
+  - name: offense_ftr
+    type: double
+    description: ''
+  - name: offense_2_p_pct
+    type: double
+    description: ''
+  - name: offense_3_p_pct
+    type: double
+    description: ''
+  - name: offense_ft_pct
+    type: double
+    description: ''
+  - name: offense_3_pa_pct
+    type: double
+    description: ''
+  - name: offense_a_pct
+    type: double
+    description: ''
+  - name: offense_apl
+    type: double
+    description: ''
+  - name: defense_e_fg_pct
+    type: double
+    description: ''
+  - name: defense_to_pct
+    type: double
+    description: ''
+  - name: defense_or_pct
+    type: double
+    description: ''
+  - name: defense_ftr
+    type: double
+    description: ''
+  - name: defense_2_p_pct
+    type: double
+    description: ''
+  - name: defense_3_p_pct
+    type: double
+    description: ''
+  - name: defense_blk_pct
+    type: double
+    description: ''
+  - name: defense_3_pa_pct
+    type: double
+    description: ''
+  - name: defense_a_pct
+    type: double
+    description: ''
+  - name: defense_apl
+    type: double
+    description: ''
+  - name: 2_fp_pct
+    type: double
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

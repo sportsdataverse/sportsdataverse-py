@@ -1,0 +1,24 @@
+schema: nhl_zone_transitions
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: controlled_entries
+  type: integer
+  description: ''
+- name: dump_entries
+  type: integer
+  description: ''
+- name: exits
+  type: integer
+  description: ''
+- name: controlled_entry_rate
+  type: double
+  description: ''
+- name: entry_value
+  type: double
+  description: ''
+- name: exit_value
+  type: double
+  description: ''

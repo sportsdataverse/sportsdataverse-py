@@ -1,0 +1,107 @@
+schema: conference_stats
+kind: frames
+frames:
+- section: confrank_table
+  columns:
+  - name: conf
+    type: character
+    description: ''
+  - name: eff
+    type: double
+    description: ''
+  - name: eff_1
+    type: integer
+    description: ''
+  - name: tempo
+    type: double
+    description: ''
+  - name: tempo_1
+    type: integer
+    description: ''
+  - name: e_fg_pct
+    type: double
+    description: ''
+  - name: e_fg_pct_1
+    type: integer
+    description: ''
+  - name: to_pct
+    type: double
+    description: ''
+  - name: to_pct_1
+    type: integer
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: or_pct_1
+    type: integer
+    description: ''
+  - name: ftr
+    type: double
+    description: ''
+  - name: ftr_1
+    type: integer
+    description: ''
+  - name: blk_pct
+    type: double
+    description: ''
+  - name: blk_pct_1
+    type: integer
+    description: ''
+  - name: stl_pct
+    type: double
+    description: ''
+  - name: stl_pct_1
+    type: integer
+    description: ''
+  - name: 2_p_pct
+    type: double
+    description: ''
+  - name: 2_p_pct_1
+    type: integer
+    description: ''
+  - name: 3_p_pct
+    type: double
+    description: ''
+  - name: 3_p_pct_1
+    type: integer
+    description: ''
+  - name: ft_pct
+    type: double
+    description: ''
+  - name: ft_pct_1
+    type: integer
+    description: ''
+  - name: 3_pa_pct
+    type: double
+    description: ''
+  - name: 3_pa_pct_1
+    type: integer
+    description: ''
+  - name: a_pct
+    type: double
+    description: ''
+  - name: a_pct_1
+    type: integer
+    description: ''
+  - name: home_w_l
+    type: character
+    description: ''
+  - name: home_w_l_1
+    type: double
+    description: ''
+  - name: home_w_l_2
+    type: integer
+    description: ''
+  - name: close
+    type: character
+    description: ''
+  - name: close_1
+    type: integer
+    description: ''
+  - name: blowouts
+    type: character
+    description: ''
+  - name: blowouts_1
+    type: integer
+    description: ''

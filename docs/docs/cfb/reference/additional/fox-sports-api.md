@@ -27,6 +27,16 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data`
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | ESPN game identifier. |
+| `team` | character | Team name. |
+| `stat_group` | character |  |
+| `player` | character | Player name. |
+| `athlete_id` | character | ESPN athlete id. |
+| `stat` | character |  |
+| `value` | character | Metric value. |
+
 **Example**
 
 ```python
@@ -277,6 +287,8 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `v2` | character | Team short name as Fox prints it in the poll, with first-place votes in parentheses when it got any (e.g. 'Texas (56)', 'Ohio State', 'Miami (FL) (4)'). |
 | `pts` | character |  |
 | `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
+| `team` | character | Team name. |
+| `rank_change` | integer |  |
 
 **Example**
 
@@ -411,6 +423,14 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/odds`
 
 A polars DataFrame (default; empty when no market is posted), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | ESPN game identifier. |
+| `team` | character | Team name. |
+| `spread` | character | Pre-game point spread from the selected provider. |
+| `to_win` | character |  |
+| `total` | character |  |
+
 **Example**
 
 ```python
@@ -437,6 +457,21 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data`
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | ESPN game identifier. |
+| `quarter` | character |  |
+| `drive_id` | character | CFBD drive identifier the play belongs to. |
+| `drive_result` | character | Drive result code (`drive_`-prefixed; every drive-level column is carried with this prefix). |
+| `drive_summary` | character |  |
+| `drive_team` | character |  |
+| `play_id` | character | ESPN play id. |
+| `period` | character | Period (quarter) number. |
+| `clock` | character | Game clock display value at the play (`MM:SS`). |
+| `field_position` | character | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
+| `play_text` | character | Free-form text description of the play from the CFBD feed. |
+| `play_team` | character |  |
 
 **Example**
 
@@ -630,6 +665,21 @@ standings are keyed by team).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | ESPN team id. |
+| `section` | character |  |
+| `atlantic_coast` | character |  |
+| `v1` | character |  |
+| `conf` | character |  |
+| `w_l` | character |  |
+| `home` | character | Home team name. |
+| `away` | character | Away team name. |
+| `pf` | character |  |
+| `pa` | character |  |
+| `strk` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+
 **Example**
 
 ```python
@@ -659,6 +709,17 @@ defense, ...) and season-type split; this flattens to columns
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | ESPN team id. |
+| `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
+| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `game_id` | character | ESPN game identifier. |
+| `game_date` | character | Kickoff date-time (ISO 8601, UTC). |
+| `opponent` | character | Opponent team name. |
+| `stat` | character |  |
+| `value` | character | Metric value. |
 
 **Example**
 
@@ -706,6 +767,17 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/roster`
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | ESPN team id. |
+| `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
+| `player` | character | Player name. |
+| `pos` | character |  |
+| `cls` | character |  |
+| `ht` | character |  |
+| `wt` | character |  |
+| `athlete_id` | character | ESPN athlete id. |
+
 **Example**
 
 ```python
@@ -732,6 +804,15 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/stats`
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | ESPN team id. |
+| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `stat` | character |  |
+| `stat_abbreviation` | character |  |
+| `player` | character | Player name. |
+| `value` | character | Metric value. |
 
 **Example**
 

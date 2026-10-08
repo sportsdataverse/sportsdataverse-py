@@ -50,6 +50,9 @@ _No description available._
 {% for c in fn.return_columns %}
 | `{{ c.name }}` | {{ c.type }} | {{ c.description }} |
 {% endfor %}
+{% elif fn.return_unverified %}
+
+No returns table is published for this function: {{ fn.return_unverified }}.
 {% endif %}
 {% endif %}
 {% if fn.example %}

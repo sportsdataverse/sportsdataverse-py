@@ -19,3 +19,9 @@ columns:
 - name: entity_id
   type: character
   description: ''
+- name: team
+  type: character
+  description: ''
+- name: rank_change
+  type: integer
+  description: ''

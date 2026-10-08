@@ -1,0 +1,33 @@
+schema: raw_game_efficiency
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: date
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: opp_team_id
+  type: character
+  description: ''
+- name: is_home
+  type: logical
+  description: ''
+- name: neutral_site
+  type: logical
+  description: ''
+- name: poss
+  type: double
+  description: ''
+- name: off_rtg
+  type: double
+  description: ''
+- name: def_rtg
+  type: double
+  description: ''

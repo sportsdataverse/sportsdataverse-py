@@ -1,0 +1,5 @@
+schema: wnba_predict_games
+kind: dataframe
+columns: []
+unverified: 'no capture: it needs one row per game with string home_team_id / away_team_id matching wnba_team_ratings.team_id,
+  and every package schedule carries integer ids'

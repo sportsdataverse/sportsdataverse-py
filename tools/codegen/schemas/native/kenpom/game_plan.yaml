@@ -1,0 +1,149 @@
+schema: game_plan
+kind: frames
+frames:
+- section: schedule_table
+  columns:
+  - name: date
+    type: character
+    description: ''
+  - name: opponent
+    type: integer
+    description: ''
+  - name: opponent_rk
+    type: character
+    description: ''
+  - name: result
+    type: character
+    description: ''
+  - name: result_rk
+    type: character
+    description: ''
+  - name: pace
+    type: integer
+    description: ''
+  - name: offense_eff
+    type: double
+    description: ''
+  - name: offense_eff_1
+    type: integer
+    description: ''
+  - name: offense_e_fg_pct
+    type: double
+    description: ''
+  - name: offense_to_pct
+    type: double
+    description: ''
+  - name: offense_or_pct
+    type: double
+    description: ''
+  - name: offense_ftr
+    type: double
+    description: ''
+  - name: offense_2_p_pct
+    type: character
+    description: ''
+  - name: offense_2_p_pct_1
+    type: double
+    description: ''
+  - name: offense_3_p_pct
+    type: character
+    description: ''
+  - name: offense_3_p_pct_1
+    type: double
+    description: ''
+  - name: offense_3_pa_pct
+    type: double
+    description: ''
+  - name: defense_eff
+    type: double
+    description: ''
+  - name: defense_eff_1
+    type: integer
+    description: ''
+  - name: defense_e_fg_pct
+    type: double
+    description: ''
+  - name: defense_to_pct
+    type: double
+    description: ''
+  - name: defense_or_pct
+    type: double
+    description: ''
+  - name: defense_ftr
+    type: double
+    description: ''
+  - name: defense_2_p_pct
+    type: character
+    description: ''
+  - name: defense_2_p_pct_1
+    type: double
+    description: ''
+  - name: defense_3_p_pct
+    type: character
+    description: ''
+  - name: defense_3_p_pct_1
+    type: double
+    description: ''
+  - name: defense_3_pa_pct
+    type: double
+    description: ''
+- section: table_1
+  columns:
+  - name: column_0
+    type: character
+    description: ''
+  - name: pct_points_c
+    type: double
+    description: ''
+  - name: pct_points_pf
+    type: double
+    description: ''
+  - name: pct_points_sf
+    type: double
+    description: ''
+  - name: pct_points_sg
+    type: double
+    description: ''
+  - name: pct_points_pg
+    type: double
+    description: ''
+- section: table_2
+  columns:
+  - name: column_0
+    type: character
+    description: ''
+  - name: pct_off_rebs_c
+    type: double
+    description: ''
+  - name: pct_off_rebs_pf
+    type: double
+    description: ''
+  - name: pct_off_rebs_sf
+    type: double
+    description: ''
+  - name: pct_off_rebs_sg
+    type: double
+    description: ''
+  - name: pct_off_rebs_pg
+    type: double
+    description: ''
+- section: table_3
+  columns:
+  - name: column_0
+    type: character
+    description: ''
+  - name: pct_def_rebs_c
+    type: double
+    description: ''
+  - name: pct_def_rebs_pf
+    type: double
+    description: ''
+  - name: pct_def_rebs_sf
+    type: double
+    description: ''
+  - name: pct_def_rebs_sg
+    type: double
+    description: ''
+  - name: pct_def_rebs_pg
+    type: double
+    description: ''

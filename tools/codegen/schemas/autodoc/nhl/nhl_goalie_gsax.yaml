@@ -1,0 +1,24 @@
+schema: nhl_goalie_gsax
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: goalie
+  type: character
+  description: ''
+- name: shots
+  type: integer
+  description: ''
+- name: xga
+  type: double
+  description: ''
+- name: ga
+  type: integer
+  description: ''
+- name: gsax
+  type: double
+  description: ''
+- name: gsax_per_60
+  type: double
+  description: ''

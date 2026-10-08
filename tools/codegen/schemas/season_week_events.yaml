@@ -1,0 +1,6 @@
+schema: season_week_events
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

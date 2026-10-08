@@ -1,0 +1,39 @@
+schema: nhl_team_ratings
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: adj_xgf
+  type: double
+  description: ''
+- name: adj_xga
+  type: double
+  description: ''
+- name: adj_xg_net
+  type: double
+  description: ''
+- name: adj_gf
+  type: double
+  description: ''
+- name: adj_ga
+  type: double
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: off_rank
+  type: integer
+  description: ''
+- name: def_rank
+  type: integer
+  description: ''
+- name: net_rank
+  type: integer
+  description: ''
+- name: net_z
+  type: double
+  description: ''

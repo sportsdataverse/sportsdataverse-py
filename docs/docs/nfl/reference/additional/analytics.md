@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 13
+sidebar_position: 24
 description: "NFL — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Analytics
@@ -32,6 +32,22 @@ records are computed per team, and ties are broken win_pct -> head-to-head
 **Returns**
 
 A polars (or pandas) DataFrame with one row per (season, team): `conf`, `division`, `div_rank`, `seed` (null past `playoff_seeds`), `team`, `games`, `wins`, `losses`, `ties`, `win_pct` (ties count as 0.5 win), `div_pct`, `conf_pct`. Sorted by `(season, division, div_rank, seed)`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `conf` | character |  |
+| `division` | character |  |
+| `div_rank` | integer |  |
+| `seed` | integer |  |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `games` | integer | Games played in career |
+| `wins` | integer |  |
+| `losses` | integer |  |
+| `ties` | integer |  |
+| `win_pct` | double |  |
+| `div_pct` | double |  |
+| `conf_pct` | double |  |
 
 **Example**
 
@@ -607,6 +623,22 @@ played and `kappa` the stat family's fitted shrinkage.
 **Returns**
 
 One row per `player_id` (Utf8) whose position has a prior table: `position` / `team_id` (Utf8, latest team), `games` (Int64), `exp_attempts` / `exp_carries` / `exp_targets` (Float64, shrunk per-game usage), `ypa` / `ypc` / `ypt` / `pass_td_rate` / `rush_td_rate` / `rec_td_rate` (Float64, shrunk per-opportunity efficiency). Zero-row, correctly-typed on empty input.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `position` | character | Primary position as reported by NFL.com |
+| `team_id` | character |  |
+| `games` | integer | Games played in career |
+| `exp_attempts` | double |  |
+| `exp_carries` | double |  |
+| `exp_targets` | double |  |
+| `ypa` | double |  |
+| `ypc` | double |  |
+| `ypt` | double |  |
+| `pass_td_rate` | double |  |
+| `rush_td_rate` | double |  |
+| `rec_td_rate` | double |  |
 
 **Example**
 

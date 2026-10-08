@@ -1,0 +1,4 @@
+columns: []
+kind: dataframe
+schema: team_skating_distance_detail
+unverified: 'no parser: the wrapper returns the raw JSON dict as-is, so there are no columns to tabulate'

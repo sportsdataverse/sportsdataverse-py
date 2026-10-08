@@ -1,0 +1,5 @@
+schema: make_prob_joint
+kind: dataframe
+columns: []
+unverified: 'no capture: its inputs come from make_prob_by_context on stats.nba.com tracking data, which answers HTTP 403
+  to the datacenter IP the docs are built on'

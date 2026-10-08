@@ -1,0 +1,15 @@
+schema: mlb_catcher_blocking
+kind: dataframe
+columns:
+- name: catcher_id
+  type: character
+  description: ''
+- name: block_opps
+  type: integer
+  description: ''
+- name: blocks_above_expected
+  type: double
+  description: ''
+- name: blocking_runs
+  type: double
+  description: ''

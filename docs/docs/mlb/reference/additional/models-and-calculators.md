@@ -29,6 +29,128 @@ that boundary is enforced, so every predictive caller shares it.
 
 the filtered frame (unchanged if empty or missing `date_col`).
 
+| col_name | type | description |
+|---|---|---|
+| `pitch_type` | character | Abbreviation of the pitch type thrown (e.g. FF, SL, CH). |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `release_speed` | double | Pitch velocity out of the hand (mph). |
+| `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
+| `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
+| `player_name` | character | Player name. |
+| `batter` | integer | MLBAM player id of the batter. |
+| `pitcher` | integer | Whether the position is a pitcher. |
+| `events` | character | Nested list of non-game events. |
+| `description` | character | Long-form description text. |
+| `spin_dir` | double | Deprecated spin direction field, no longer populated. |
+| `spin_rate_deprecated` | double | Deprecated legacy spin-rate field, no longer populated. |
+| `break_angle_deprecated` | double | Deprecated legacy break-angle field, no longer populated. |
+| `break_length_deprecated` | double | Deprecated legacy break-length field, no longer populated. |
+| `zone` | double | Strike-zone region the pitch crossed (1-14 Gameday zone). |
+| `des` | character | Full text description of the play. |
+| `game_type` | character | Game type code (R, P, etc.). |
+| `stand` | character | Side of the plate the batter is standing (L or R). |
+| `p_throws` | character | Hand the pitcher throws with (L or R). |
+| `home_team` | character | Home team name. |
+| `away_team` | character | Away team name. |
+| `type` | character | Record type / category. |
+| `hit_location` | double | Fielder position number that fielded the ball. |
+| `bb_type` | character | Batted-ball type (ground_ball, line_drive, fly_ball, popup). |
+| `balls` | integer | Ball count before the pitch. |
+| `strikes` | integer | Strike count before the pitch. |
+| `game_year` | integer | Season year of the game. |
+| `pfx_x` | double | Horizontal pitch movement from the catcher's perspective (feet). |
+| `pfx_z` | double | Vertical pitch movement from the catcher's perspective (feet). |
+| `plate_x` | double | Horizontal position of the pitch crossing the plate (feet from center). |
+| `plate_z` | double | Vertical position of the pitch crossing the plate (feet above ground). |
+| `on_3b` | integer | MLBAM ID of the runner on third base, if any. |
+| `on_2b` | integer | MLBAM ID of the runner on second base, if any. |
+| `on_1b` | integer | MLBAM ID of the runner on first base, if any. |
+| `outs_when_up` | integer | Number of outs when the batter came to the plate. |
+| `inning` | integer | Inning number. |
+| `inning_topbot` | character | Half of the inning (Top or Bot). |
+| `hc_x` | double | Hit coordinate X on the field diagram. |
+| `hc_y` | double | Hit coordinate Y on the field diagram. |
+| `tfs_deprecated` | double | Deprecated time-from-start field, no longer populated. |
+| `tfs_zulu_deprecated` | double | Deprecated Zulu time-from-start field, no longer populated. |
+| `umpire` | double | Deprecated umpire field, no longer populated. |
+| `sv_id` | double | Deprecated Sportvision/Statcast pitch identifier, no longer populated. |
+| `vx0` | double | Velocity of the pitch in the x-direction at y=50 ft (ft/s). |
+| `vy0` | double | Velocity of the pitch in the y-direction at y=50 ft (ft/s). |
+| `vz0` | double | Velocity of the pitch in the z-direction at y=50 ft (ft/s). |
+| `ax` | double | Acceleration of the pitch in the x-direction at y=50 ft (ft/s^2). |
+| `ay` | double | Acceleration of the pitch in the y-direction at y=50 ft (ft/s^2). |
+| `az` | double | Acceleration of the pitch in the z-direction at y=50 ft (ft/s^2). |
+| `sz_top` | double | Top of the batter's strike zone for the pitch (feet). |
+| `sz_bot` | double | Bottom of the batter's strike zone for the pitch (feet). |
+| `hit_distance_sc` | double | Statcast-measured projected distance of the batted ball (feet). |
+| `launch_speed` | double | Exit velocity of the batted ball (mph). |
+| `launch_angle` | double | Vertical launch angle of the batted ball (degrees). |
+| `effective_speed` | double | Perceived velocity adjusted for release extension (mph). |
+| `release_spin_rate` | double | Spin rate of the pitch at release (rpm). |
+| `release_extension` | double | Distance toward the plate at release (feet). |
+| `game_pk` | integer | Unique game identifier. |
+| `fielder_2` | integer | MLBAM ID of the catcher. |
+| `fielder_3` | integer | MLBAM ID of the first baseman. |
+| `fielder_4` | integer | MLBAM ID of the second baseman. |
+| `fielder_5` | integer | MLBAM ID of the third baseman. |
+| `fielder_6` | integer | MLBAM ID of the shortstop. |
+| `fielder_7` | integer | MLBAM ID of the left fielder. |
+| `fielder_8` | integer | MLBAM ID of the center fielder. |
+| `fielder_9` | integer | MLBAM ID of the right fielder. |
+| `release_pos_y` | double | Release position of the ball toward the plate (feet). |
+| `estimated_ba_using_speedangle` | double | Expected batting average based on exit velocity and launch angle. |
+| `estimated_woba_using_speedangle` | double | Expected wOBA based on exit velocity and launch angle. |
+| `woba_value` | double | wOBA value assigned to the event. |
+| `woba_denom` | double | wOBA denominator (plate-appearance weight) for the event. |
+| `babip_value` | double | BABIP value assigned to the event (0 or 1). |
+| `iso_value` | double | Isolated power value assigned to the event. |
+| `launch_speed_angle` | double | Batted-ball classification code (1-6) from exit velocity and angle. |
+| `at_bat_number` | integer | Sequential plate-appearance number within the game. |
+| `pitch_number` | integer | Pitch number within the plate appearance. |
+| `pitch_name` | character | Full name of the pitch type (e.g. 4-Seam Fastball, Slider). |
+| `home_score` | integer | Home team run total after the play. |
+| `away_score` | integer | Away team run total after the play. |
+| `bat_score` | integer | Batting team score before the pitch. |
+| `fld_score` | integer | Fielding team score before the pitch. |
+| `post_away_score` | integer | Away team score after the pitch. |
+| `post_home_score` | integer | Home team score after the pitch. |
+| `post_bat_score` | integer | Batting team score after the pitch. |
+| `post_fld_score` | integer | Fielding team score after the pitch. |
+| `if_fielding_alignment` | character | Infield defensive alignment (Standard, Strategic, Infield shift). |
+| `of_fielding_alignment` | character | Outfield defensive alignment (Standard, Strategic, 4th outfielder). |
+| `spin_axis` | double | Spin axis of the pitch as a clock-face angle (degrees). |
+| `delta_home_win_exp` | double | Change in home team win expectancy on the play. |
+| `delta_run_exp` | double | Change in run expectancy on the play. |
+| `bat_speed` | double | Bat speed at the point of contact (mph). |
+| `swing_length` | double | Length of the swing path to contact (feet). |
+| `miss_distance` | double |  |
+| `estimated_slg_using_speedangle` | double | Expected slugging based on exit velocity and launch angle. |
+| `delta_pitcher_run_exp` | double | Change in run expectancy credited to the pitcher. |
+| `hyper_speed` | double | Adjusted (90th-percentile) exit velocity (mph). |
+| `home_score_diff` | integer | Home team score minus away team score before the pitch. |
+| `bat_score_diff` | integer | Batting team score minus fielding team score before the pitch. |
+| `home_win_exp` | double | Home team win expectancy before the play. |
+| `bat_win_exp` | double | Batting team win expectancy before the play. |
+| `age_pit_legacy` | integer | Pitcher age using the legacy calculation. |
+| `age_bat_legacy` | integer | Batter age using the legacy calculation. |
+| `age_pit` | integer | Pitcher age for the season. |
+| `age_bat` | integer | Batter age for the season. |
+| `n_thruorder_pitcher` | integer | Times through the order the pitcher is facing the lineup. |
+| `n_priorpa_thisgame_player_at_bat` | integer | Number of prior plate appearances by the batter in the game. |
+| `pitcher_days_since_prev_game` | double | Days since the pitcher's previous game appearance. |
+| `batter_days_since_prev_game` | integer | Days since the batter's previous game appearance. |
+| `pitcher_days_until_next_game` | double | Days until the pitcher's next game appearance. |
+| `batter_days_until_next_game` | double | Days until the batter's next game appearance. |
+| `api_break_z_with_gravity` | double | Vertical pitch break including gravity (inches). |
+| `api_break_x_arm` | double | Horizontal pitch break to the pitcher's arm side (inches). |
+| `api_break_x_batter_in` | double | Horizontal pitch break toward/away from the batter (inches). |
+| `arm_angle` | double | Pitcher's arm angle at release (degrees). |
+| `attack_angle` | double | Angle of the bat's path at contact (degrees). |
+| `attack_direction` | double | Horizontal direction of the swing at contact (degrees). |
+| `swing_path_tilt` | double | Vertical tilt of the swing path (degrees). |
+| `intercept_ball_minus_batter_pos_x_inches` | double | Horizontal offset of ball-bat intercept from batter position (inches). |
+| `intercept_ball_minus_batter_pos_y_inches` | double | Depth offset of ball-bat intercept from batter position (inches). |
+
 **Example**
 
 ```python
@@ -94,6 +216,12 @@ E[delta_run_exp | ball, count])`.
 **Returns**
 
 one row per observed count. | Column | Type | Description | |---|---|---| | balls | Int64 | Ball count (0-3) entering the pitch | | strikes | Int64 | Strike count (0-2) entering the pitch | | strike_run_value | Float64 | Runs saved by the defense per called strike vs. a ball in this count |
+
+| col_name | type | description |
+|---|---|---|
+| `balls` | integer | Ball count before the pitch. |
+| `strikes` | integer | Strike count before the pitch. |
+| `strike_run_value` | double |  |
 
 **Example**
 
@@ -872,6 +1000,8 @@ the suffix-sum of `runs_on_play` within the half.
 **Returns**
 
 one row per plate appearance. | Column | Type | Description | |---|---|---| | game_id | Utf8 | Game identifier | | inning | Int64 | Inning number | | half | Utf8 | `"top"` or `"bottom"` | | at_bat_index | Int64 | Game-global sequential PA index | | base_state | Utf8 | 3-char occupancy before the PA (`"1_3"` etc.) | | outs_start | Int64 | Outs before the PA (0-2) | | runs_on_play | Int64 | Runs scored on this PA | | runs_rest_of_inning | Int64 | Runs scored from this PA through the half's end | | score_diff | Int64 | home - away score at the start of the PA |
+
+No returns table is published for this function: no capture: its play-by-play input comes from statsapi.mlb.com, which answers HTTP 406 to the datacenter IP the docs are built on, and load_mlb_pbp lacks its game_id / about_* columns.
 
 **Example**
 

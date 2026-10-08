@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Play-by-play processing"
-sidebar_label: "Play-by-play processing"
+title: "NFL — additional Python functions — Play-by-play processing: NFLPlayProcess–build_nfl"
+sidebar_label: "Play-by-play processing: NFLPlayProcess–build_nfl"
 sidebar_position: 10
-description: "NFL — additional Python functions — Play-by-play processing — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Play-by-play processing: NFLPlayProcess–build_nfl — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Play-by-play processing
+# NFL — additional Python functions — Play-by-play processing: NFLPlayProcess–build_nfl
 
 ### NFLPlayProcess {#NFLPlayProcess}
 
@@ -291,6 +291,62 @@ SDV-PBP column-gap handling (`passing_epa` uses the exact `qb_epa`;
 
 A polars (or pandas) DataFrame in the published `load_nfl_player_stats` schema. At `summary_level="season"` the `week` / `season_type` / `opponent_team` columns are replaced by a `games` column.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_name` | character | Full name of player |
+| `player_display_name` | character | Full name of the player |
+| `position` | character | Primary position as reported by NFL.com |
+| `position_group` | character | Postion group of player as listed by NFL |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `recent_team` | character | Most recent team player appears in `pbp` with. |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `week` | integer | Season week. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `opponent_team` | character |  |
+| `completions` | integer | The number of completed passes. |
+| `attempts` | integer | The number of pass attempts as defined by the NFL. |
+| `passing_yards` | double | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
+| `passing_tds` | integer | The number of passing touchdowns. |
+| `interceptions` | integer | The number of interceptions thrown. |
+| `sacks` | integer | The Number of times sacked. |
+| `sack_yards` | double | Yards lost on sack plays. |
+| `sack_fumbles` | integer | The number of sacks with a fumble. |
+| `sack_fumbles_lost` | integer | The number of sacks with a lost fumble. |
+| `passing_air_yards` | double | Passing air yards (includes incomplete passes). |
+| `passing_yards_after_catch` | double | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
+| `passing_first_downs` | integer | First downs on pass attempts. |
+| `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
+| `passing_2pt_conversions` | integer | Two-point conversion passes. |
+| `pacr` | double | Passing (yards) Air (yards) Conversion Ratio - the number of passing yards per air yards thrown per game |
+| `dakota` | double | Adjusted EPA + CPOE composite based on coefficients which best predict adjusted EPA/play in the following year. |
+| `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
+| `rushing_yards` | double | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `rushing_tds` | integer | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
+| `rushing_fumbles` | integer | The number of rushes with a fumble. |
+| `rushing_fumbles_lost` | integer | The number of rushes with a lost fumble. |
+| `rushing_first_downs` | integer | First downs on rush attempts (incl. scrambles). |
+| `rushing_epa` | double | Expected points added on rush attempts (incl. scrambles and kneel downs). |
+| `rushing_2pt_conversions` | integer | Two-point conversion rushes |
+| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
+| `receiving_yards` | double | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `receiving_tds` | integer | The number of touchdowns following a pass reception. Also includes touchdowns after receiving a lateral on a play that started as a pass play. |
+| `receiving_fumbles` | integer | The number of fumbles after a pass reception. |
+| `receiving_fumbles_lost` | integer | The number of fumbles lost after a pass reception. |
+| `receiving_air_yards` | double | Receiving air yards (incl. incomplete passes). |
+| `receiving_yards_after_catch` | double | Yards after the catch gained on plays in which player was receiver (this is an unofficial stat and may differ slightly between different sources). |
+| `receiving_first_downs` | integer | Total number of first downs gained on receptions |
+| `receiving_epa` | double | Total EPA on plays where this receiver was targeted |
+| `receiving_2pt_conversions` | integer | Two-point conversion receptions |
+| `racr` | double | Receiving (yards) Air (yards) Conversion Ratio - the number of receiving yards per air yards targeted per game |
+| `target_share` | double | "Player's share of team receiving targets in this game" |
+| `air_yards_share` | double | Player's share of the team's air yards in this game |
+| `wopr` | double | Weighted OPportunity Rating - 1.5 x target_share + 0.7 x air_yards_share - a weighted average that contextualizes total fantasy usage. |
+| `special_teams_tds` | integer | Total number of kick/punt return touchdowns |
+| `fantasy_points` | double | Standard fantasy points. |
+| `fantasy_points_ppr` | double | PPR fantasy points. |
+
 **Example**
 
 ```python
@@ -338,6 +394,39 @@ the R function's own signature.
 
 A polars (or pandas) DataFrame with the `def_*` column set documented in the nflfastR-parity reference (weekly grain carries `season`/`week`/`season_type`; the season collapse replaces those with `games`).
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_name` | character | Full name of player |
+| `player_display_name` | character | Full name of the player |
+| `games` | integer | Games played in career |
+| `position` | character | Primary position as reported by NFL.com |
+| `position_group` | character | Postion group of player as listed by NFL |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `def_tackles` | double | Total number of tackles for this player |
+| `def_tackles_solo` | double | Total number of solo tackles for this player |
+| `def_tackles_with_assist` | double | Number of tackles this player had with an assisted tackle |
+| `def_tackle_assists` | double | Number of assisted tackles for this player |
+| `def_tackles_for_loss` | double | Number of tackles for loss (TFL) for this player |
+| `def_tackles_for_loss_yards` | double | Yards lost from TFLs involving this player |
+| `def_fumbles_forced` | double | Number of times a fumble was forced from this player |
+| `def_sacks` | double | Number of sacks form this player |
+| `def_sack_yards` | double | Yards lost from sacks forced by this player |
+| `def_qb_hits` | double | Number of QB hits from this player (should not include plays where the QB was sacked) |
+| `def_interceptions` | double | Number of interceptions forced by this player |
+| `def_interception_yards` | double | yards gained/lost by interception returns from this player |
+| `def_pass_defended` | double | Number of passes defended/broken up by this player |
+| `def_tds` | double | Number of defensive touchdowns scored by this player |
+| `def_fumbles` | double | Number of fumbles by this player |
+| `def_fumble_recovery_own` | double | Number of times a player's team fumbled the ball and this player recovered |
+| `def_fumble_recovery_yards_own` | double | Number of yards gained/lost from fumble recoveries that happened because the player's team fumbled the ball and this player recovered the fumble on that same play |
+| `def_fumble_recovery_opp` | double | Number of times a player's opponent fumbled the ball and this player recovered |
+| `def_fumble_recovery_yards_opp` | double | Number of yards gained/lost from fumble recoveries that happened because the player's opponent fumbled the ball and this player recovered the fumble on that same play |
+| `def_safety` | double | Number of times this player forced a defensive safety |
+| `def_penalty` | double | Number of times this player was penalized defensively |
+| `def_penalty_yards` | double | Number of penalty yards for this player defensively |
+
 **Example**
 
 ```python
@@ -384,6 +473,51 @@ function's own signature.
 **Returns**
 
 A polars (or pandas) DataFrame with the `fg_*`/`pat_*`/`gwfg_*` column set documented in the nflfastR-parity reference.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `player_name` | character | Full name of player |
+| `player_display_name` | character | Full name of the player |
+| `games` | integer | Games played in career |
+| `position` | character | Primary position as reported by NFL.com |
+| `position_group` | character | Postion group of player as listed by NFL |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `fg_made` | integer |  |
+| `fg_att` | integer |  |
+| `fg_missed` | integer |  |
+| `fg_blocked` | integer |  |
+| `fg_long` | double |  |
+| `fg_pct` | double |  |
+| `fg_made_0_19` | integer |  |
+| `fg_made_20_29` | integer |  |
+| `fg_made_30_39` | integer |  |
+| `fg_made_40_49` | integer |  |
+| `fg_made_50_59` | integer |  |
+| `fg_made_60_` | integer |  |
+| `fg_missed_0_19` | integer |  |
+| `fg_missed_20_29` | integer |  |
+| `fg_missed_30_39` | integer |  |
+| `fg_missed_40_49` | integer |  |
+| `fg_missed_50_59` | integer |  |
+| `fg_missed_60_` | integer |  |
+| `fg_made_list` | character |  |
+| `fg_missed_list` | character |  |
+| `fg_blocked_list` | character |  |
+| `fg_made_distance` | integer |  |
+| `fg_missed_distance` | integer |  |
+| `fg_blocked_distance` | integer |  |
+| `pat_made` | integer |  |
+| `pat_att` | integer |  |
+| `pat_missed` | integer |  |
+| `pat_blocked` | integer |  |
+| `pat_pct` | double |  |
+| `gwfg_att` | integer |  |
+| `gwfg_distance_list` | character |  |
+| `gwfg_made` | integer |  |
+| `gwfg_missed` | integer |  |
+| `gwfg_blocked` | integer |  |
 
 **Example**
 
@@ -438,6 +572,39 @@ SDV-native frame that depends only on the live NFL Shield API.
 
 A one-row-per-player season-roster `DataFrame` with the documented schema. An empty / missing season yields a zero-row frame carrying the same column set (never a raise).
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `position` | character | Primary position as reported by NFL.com |
+| `depth_chart_position` | character | Position assigned on depth chart. Not always accurate! |
+| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
+| `status` | character |  |
+| `full_name` | character | Full name as per NFL.com |
+| `first_name` | character | First name of player |
+| `last_name` | character | Last name of player |
+| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
+| `height` | double | Official height, in inches |
+| `weight` | integer | Official weight, in pounds |
+| `college` | character | Official college (usually the last one attended) |
+| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `sportradar_id` | character | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
+| `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
+| `rotowire_id` | character | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
+| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `pfr_id` | character | Pro-Football-Reference ID for player |
+| `fantasy_data_id` | character | FantasyData ID - usual format five digit integer |
+| `sleeper_id` | character | Sleeper ID - usually an integer with ~4 digits. |
+| `years_exp` | integer | Years played in league |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `esb_id` | character | Player ID for Elias Sports Bureau |
+| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
+| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
+| `entry_year` | integer | The year a player first became eligible to play in the NFL. |
+| `rookie_year` | integer | The year a player lost their rookie eligibility. |
+
 **Example**
 
 ```python
@@ -454,293 +621,3 @@ df = build_nfl_rosters(range(2021, 2024), return_as_pandas=True)
 import polars as pl
 build_nfl_rosters([2023]).filter(pl.col("team") == "KC").head()
 ```
-
-### build_nfl_season {#build_nfl_season}
-
-`build_nfl_season(game_ids: 'list[int] | None' = None, *, seasons: 'list[int] | None' = None, source: 'str' = 'espn', return_as_pandas: 'bool' = False, raw_dir: "'str | Path | None'" = None, schedule_lookup: "'dict[str, dict[str, Any]] | None'" = None) -> "'pl.DataFrame | pd.DataFrame'"`
-
-Compile play-by-play for multiple NFL games into one tidy frame.
-
-The `source` parameter determines which input parameter is required:
-
-- `source="espn"` — requires *game_ids*; *seasons* must be `None`.
-- `source="nflverse"` — requires *seasons*; *game_ids* must be `None`.
-- `source="shield"` — requires *seasons* and *raw_dir*; *game_ids* must be `None`.
-
-For ESPN games the function either loads a previously cached plays frame or
-processes the game fresh via `NFLPlayProcess`.  Individual game failures
-are logged and skipped so a single bad game does not abort the whole season
-build.  The per-game frames are concatenated with `how="diagonal_relaxed"`
-(schema union, missing columns filled with `null`) so games with slightly
-different column sets merge cleanly.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_ids` | `list[int] \| None` | `None` | ESPN event IDs to compile (e.g. `[401671801, 401671802]`). Required when `source="espn"`; must be `None` for other sources. |
-| `seasons` | `list[int] \| None` | `None` | Season years to compile (e.g. `[2023, 2024]`). Required when `source="nflverse"`; must be `None` for other sources. |
-| `source` | `str` | `'espn'` | Data source. - `"espn"` *(default)*: each game is processed via `NFLPlayProcess(gameId=gid).espn_nfl_pbp()` + `run_processing_pipeline()`. Pass *game_ids*. - `"nflverse"`: delegates to `sportsdataverse.nfl.load_nfl_pbp` for the requested seasons. Pass *seasons*. Returns the full pre-enriched season frame as-is. - `"shield"`: reconstructs nflverse-shape play-by-play from a committed library of Shield (api.nfl.com) per-game JSON files via `sportsdataverse.nfl.shield_pbp.build_season` (the nflfastR parser port graduated from nfl-data's `native_pbp`). Pass *seasons* and *raw_dir*. Preseason games are skipped and TIMEOUT rows dropped, matching nflverse's row set. The frame is NOT EP/WP-enriched; feed it to `sportsdataverse.nfl.ep_wp.enrich_nfl_pbp` for the `nfl_model_pbp` columns. |
-| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame` instead of polars. |
-| `raw_dir` | `str \| Path \| None` | `None` | `source="shield"` only. Root of the per-game Shield JSON library laid out as `{raw_dir}/{season}/{game_id}.json` (the `nfl-raw` repo's `nfl/raw`). Required for the shield source; must be `None` otherwise. |
-| `schedule_lookup` | `dict[str, dict[str, Any]] \| None` | `None` | `source="shield"` only. `{game_id: {"roof": ..., "spread_line": ..., "total_line": ...}}` supplying the game-level fields the Shield feed omits. `None` *(default)* builds it from `sportsdataverse.nfl.load_nfl_schedule` for each season, degrading to nulls with a `RuntimeWarning` if the schedule cannot be loaded. Pass `{}` to skip the lookup (hermetic; the three columns stay null). |
-
-**Returns**
-
-All plays from the requested games/seasons, concatenated with schema-union semantics (missing columns are `null`). Returns a zero-row frame if every game failed (ESPN source only). When *return_as_pandas* is `True`, returns a `pandas.DataFrame` instead. For `source="shield"` the frame carries the nflverse base columns (233; a superset of the EP/WP/CP training contract) with the same names, types and meanings as `sportsdataverse.nfl.load_nfl_model_pbp` minus the EP/WP/CP enrichment columns: identifiers (`game_id`, `play_id`, `posteam`, `defteam`), game state (`down`, `ydstogo`, `yardline_100`, `qtr`, `half_seconds_remaining`, `game_seconds_remaining`, `score_differential`, `posteam_timeouts_remaining`), play classification (`play_type`, `pass`, `rush`, `desc`, `yards_gained`, `touchdown`, `field_goal_result`), drive/series (`fixed_drive`, `fixed_drive_result`, `series`, `series_result`), schedule fields (`roof`, `spread_line`, `total_line`) and game outcome (`home_score`, `away_score`, `result`).
-
-**Example**
-
-```python
-from sportsdataverse.nfl import build_nfl_season
-df = build_nfl_season(game_ids=[401671801, 401671802])
-print(df.shape)
-
-# nflverse season compile (pass season years)
-
-from sportsdataverse.nfl import build_nfl_season
-df = build_nfl_season(seasons=[2023], source="nflverse")
-print(df.shape)
-
-# Shield season compile from a committed raw library (nfl-raw checkout)
-
-from sportsdataverse.nfl import build_nfl_season
-df = build_nfl_season(seasons=[2024], source="shield", raw_dir="nfl-raw/nfl/raw")
-print(df.shape)
-
-# With filesystem cache enabled (ESPN)
-
-from sportsdataverse.nfl import build_nfl_season, update_config
-update_config(cache_mode="filesystem")
-df = build_nfl_season(game_ids=[401671801, 401671802])  # processes + caches
-df2 = build_nfl_season(game_ids=[401671801, 401671802]) # served from cache
-
-# Pandas output
-
-from sportsdataverse.nfl import build_nfl_season
-df_pd = build_nfl_season(game_ids=[401671801], return_as_pandas=True)
-print(df_pd.shape)
-```
-
-### build_nfl_team_stats {#build_nfl_team_stats}
-
-`build_nfl_team_stats(seasons: 'List[int]', *, summary_level: 'str' = 'week', season_type: 'str' = 'REG', source: 'str' = 'sdv', return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"`
-
-Build nflverse **team_stats** by aggregating SDV-native play-by-play.
-
-A faithful polars port of nflfastR's `calculate_stats(stat_type = "team")`
-(the `aggregate_game_stats*` family). Offense is keyed on `posteam`,
-defense on the tackler's team (per-play `*_team` slot tags -- NOT
-`defteam`, which double-counts on return plays), kicking on `posteam`,
-and returns / penalties / timeouts on the relevant play team tag. See the
-module docstring for the full grouping + SDV-PBP gap notes (`passing_epa`
-uses the exact `qb_epa`; `gwfg_*` derive from `fixed_drive`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  | Four-digit NFL seasons to aggregate (e.g. `[2023]`). |
-| `summary_level` | `str` | `'week'` | `"week"` (group on season + week + team, with `opponent_team`) or `"season"` (group on season + team, with a `games` distinct-game count replacing week / season_type / opponent_team). |
-| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"REG+POST"`. Pre-filters the play-by-play before aggregation. |
-| `source` | `str` | `'sdv'` | Play-by-play release passed to `load_nfl_pbp`. Defaults to `"sdv"` (the SDV-native enriched release). |
-| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
-
-**Returns**
-
-A polars (or pandas) DataFrame in the published `load_nfl_team_stats` schema (~102 columns). At `summary_level="season"` the `week` / `season_type` / `opponent_team` columns are replaced by a `games` column.
-
-**Example**
-
-```python
-from sportsdataverse.nfl import build_nfl_team_stats
-wk = build_nfl_team_stats([2023], summary_level="week")
-print(wk.shape)
-
-# Season totals as pandas
-
-df_pd = build_nfl_team_stats([2023], summary_level="season",
-                             return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-wk.sort("def_sacks", descending=True).head()
-```
-
-### calculate_nfl_series_conversion_rates {#calculate_nfl_series_conversion_rates}
-
-`calculate_nfl_series_conversion_rates(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"`
-
-Compute per-team offense + defense series conversion rates.
-
-A faithful polars port of nflfastR's `calculate_series_conversion_rates`.
-Series where `down` is null (kickoffs, PAT/2pt attempts, non-plays, no
-`posteam`) and series ending in a `"QB kneel"` are excluded from the
-series count before rates are computed, matching the R source.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame carrying `season`, `week`, `posteam`, `defteam`, `down`, `series`, `series_success`, and `series_result` (added by the `add_series_data` port). Rows must already be in play order within each series so the internal `first()`/`last()` series collapse is correct. |
-| `weekly` | `bool` | `False` | If `True`, group on `(season, team, week)`; if `False` (default), group on `(season, team)` -- collapsing every week into one season-level rate. |
-| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
-
-**Returns**
-
-A polars (or pandas) DataFrame with one row per team (per week when `weekly=True`), `off_n`/`def_n` (series count) plus the `off_*`/`def_*` rate columns documented in reference Sec 11. A team with offensive series but zero defensive series in a group (or vice versa -- effectively never happens in real data) carries nulls in the missing side rather than being dropped (full outer join).
-
-**Example**
-
-```python
-from sportsdataverse.nfl import calculate_nfl_series_conversion_rates
-rates = calculate_nfl_series_conversion_rates(pbp)
-rates.filter(pl.col("team") == "KC").select("off_scr", "def_scr")
-
-# Weekly grain
-
-weekly = calculate_nfl_series_conversion_rates(pbp, weekly=True)
-
-# Pipeline next step (one line)
-
-rates.sort("off_scr", descending=True).head()
-```
-
-### clean_nfl_pbp {#clean_nfl_pbp}
-
-`clean_nfl_pbp(df: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port).
-
-See the module docstring for the full column set added, the
-compute-if-absent scope note on `pass`/`rush`, and the lookaround ->
-capture-group regex rewrites.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` | `DataFrame` |  | An nflverse-shape (or ESPN/native) play-by-play `polars.DataFrame`. Required columns: `desc`, `epa`, `game_id`, `play_id`, `season`, `posteam`. See the module docstring for the full optional-column-with-default list. |
-| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
-
-**Returns**
-
-The input frame with every §6 column added/overwritten (idempotent -- pre-existing values of those columns, except `pass`/`rush`, are dropped and recomputed). A zero-row input yields a zero-row frame carrying the full documented schema rather than raising.
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_pbp
-from sportsdataverse.nfl.nfl_clean import clean_nfl_pbp
-
-pbp = load_nfl_pbp([2023])
-cleaned = clean_nfl_pbp(pbp)
-print(cleaned.select("name", "id", "fantasy").head())
-
-# Pandas output
-
-cleaned_pd = clean_nfl_pbp(pbp, return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-import polars as pl
-cleaned.filter(pl.col("play") == 1).group_by("passer").len()
-```
-
-### shield_nfl_pbp {#shield_nfl_pbp}
-
-`shield_nfl_pbp(game_detail: 'Optional[Dict[str, Any]]' = None, shield_game_id: 'Optional[str]' = None, *, enrich: 'bool' = True, context: 'Optional[Dict[str, Any]]' = None, game_id: 'Optional[str]' = None) -> 'pl.DataFrame'`
-
-Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase.
-
-The live entry point: the same parser `build_pbp` runs on the archived
-`nfl/raw` finals, plus the four things a game still being played needs — the
-in-progress drive's possession, game-outcome columns held null until the feed says
-FINAL, a next-snap row from `summary`, and provisional rows flagged (see
-`sportsdataverse.nfl.shield_pbp.live`). Safe to poll: pass the payload you
-already have via *game_detail* (no network), or a *shield_game_id* to fetch it.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_detail` | `Optional[Dict[str, Any]]` | `None` | A Shield `experience/v2/gamedetails` payload (the raw body, or a `{"data": ...}` envelope). Takes precedence over *shield_game_id*, so tests and pollers that already hold a payload never touch the network. |
-| `shield_game_id` | `Optional[str]` | `None` | Shield game uuid, fetched via `sportsdataverse.nfl.nfl_game_details_v2` with `include_drive_chart=True, return_parsed=False` when *game_detail* is None. |
-| `enrich` | `bool` | `True` | Run `sportsdataverse.nfl.ep_wp.enrich_nfl_pbp` on the result (default True) for the `nfl_model_pbp` EP/EPA/WP/WPA/CP/CPOE columns. Pass False for the base frame only (no model loads). |
-| `context` | `Optional[Dict[str, Any]]` | `None` | Game context `{"roof": ..., "spread_line": ..., "total_line": ...}` the Shield feed omits. Unset fields fall back to the nflverse schedule row for this game, then to `live.DEFAULT_CONTEXT` (`outdoors` / 2.5 / 55.5, the same default the ESPN processor uses). |
-| `game_id` | `Optional[str]` | `None` | Override the nflverse game_id (computed from the payload when None). |
-
-**Returns**
-
-A polars DataFrame, one row per play (plus, while `summary.phase` is `INGAME`, one current-situation row), carrying the `nfl_model_pbp` columns — the `build_pbp` base frame, the EP/WP enrichment when *enrich* is True, and: | col_name | type | description | |----------|------|-------------| | `live_phase` | `str` | The payload's `summary.phase`: `PREGAME`, `INGAME`, `HALFTIME`, `FINAL` or `FINAL_OVERTIME`. | | `is_play` | `int` | `1` for a real play; `0` for the feed's `GAME_START` / `END_QUARTER` / `END_GAME` markers and the current-situation row. | | `provisional` | `int` | `1` when the feed has not closed the play (`playEndTime` null) and it is in the trailing run of such plays of a non-final game — its text, yardage and stats may still change. Always `0` on a final game. | `home_score` / `away_score` / `result` are null until the game is final. The current-situation row is not inert once *enrich* is True: it is the next state, so it also completes the **previous** play's lead-diff columns (`epa`, `qb_epa`, `wpa`, `vegas_wpa`, the `total_*` running sums). That play is usually still `provisional`, so those values can move on the next poll. A payload Shield has not populated a drive chart for (every scheduled game before kickoff) returns a zero-row frame carrying only the three live columns — check `df.is_empty()` before selecting anything else.
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nfl import shield_nfl_pbp
-
-df = shield_nfl_pbp(shield_game_id="a9a8944e-4feb-11f1-abca-2c54536568a9")
-df.filter(pl.col("is_play") == 0).select("posteam", "down", "ydstogo", "wp")
-```
-
-### shield_to_espn_summary {#shield_to_espn_summary}
-
-`shield_to_espn_summary(game_detail: 'Mapping[str, Any]', idmap_row: 'Mapping[str, Any]', *, parsed: 'Optional[pl.DataFrame]' = None, odds: 'Optional[Mapping[str, Any]]' = None, player_stats: 'Optional[Mapping[str, Any]]' = None, team_stats: 'Optional[Mapping[str, Any]]' = None) -> 'Tuple[Dict[str, Any], List[str]]'`
-
-Project one Shield game (any phase) onto an ESPN-summary-shaped dict.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_detail` | `Mapping[str, Any]` |  | A Shield `experience/v2/gamedetails` payload (raw body or a `{"data": ...}` envelope) -- the same object `sportsdataverse.nfl.shield_pbp.build.shield_nfl_pbp` consumes. |
-| `idmap_row` | `Mapping[str, Any]` |  | The game's pre-kickoff id-map row (`sportsdataverse.football.sources.idmap.GAME_SCHEMA`): `espn_event_id`, `home_espn_team_id` and `away_espn_team_id` are required; the optional `home_team` / `away_team` sub-dicts supply the era-correct `espn_abbr`. |
-| `parsed` | `Optional[DataFrame]` | `None` | The frame `shield_nfl_pbp(game_detail, enrich=False)` already produced. Built here when None -- pass it to parse the payload once for both projections. |
-| `odds` | `Optional[Mapping[str, Any]]` | `None` | `{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}` (the stored closing line, `sportsdataverse.football.sources.idmap._odds_override_from_row`). Becomes the summary's one-provider `pickcenter`. |
-| `player_stats` | `Optional[Mapping[str, Any]]` | `None` | A Shield `/football/v2/stats/live/player-statistics/{gameId}` body. Becomes `boxscore.players` in ESPN's exact shape (ten categories, athletes carrying ESPN ids from the players crosswalk). Omitted -> the box stays empty and no ESPN athlete id is attached to any play. |
-| `team_stats` | `Optional[Mapping[str, Any]]` | `None` | A Shield `/football/v2/stats/live/team-statistics/{gameId}` body. Becomes `boxscore.teams` -- the authoritative countable team totals `NFLPlayProcess.create_box_score` prefers over its play-by-play derivation. |
-
-**Returns**
-
-`(summary, notes)`. | item | type | description | |---|---|---| | summary | dict | An ESPN-summary-shaped payload: `header` (season/week/competitions/competitors/status), `drives.previous` (+ `drives.current` while the game is live), `gameInfo`, `pickcenter`, `boxscore` (filled when `player_stats`/`team_stats` are given) and passthrough arrays. Feed it to `espn_nfl_pbp(summary=)`. | | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a missing `summary.timeouts` block, a missing `summary.homeTeam`/`awayTeam` team id, a PAT with no touchdown to fold into, plays outside the drive chart, and (pre-2014) play ids that do not join ESPN's own. |
-
-**Example**
-
-```python
-import json
-from sportsdataverse.nfl import NFLPlayProcess, shield_to_espn_summary
-
-# any Shield gamedetails body -- here the copy nfl-raw keeps
-with open("nfl/raw/2025/2025_07_LA_JAX.json") as fh:
-    game = json.load(fh)
-row = {"espn_event_id": "401772635", "home_espn_team_id": "30", "away_espn_team_id": "14"}
-summary, notes = shield_to_espn_summary(game, row)
-proc = NFLPlayProcess(gameId=401772635, join_participants=False)
-proc.espn_nfl_pbp(summary=summary)
-result = proc.run_processing_pipeline()
-```
-
-### team_name_fn {#team_name_fn}
-
-`team_name_fn(expr: 'pl.Expr') -> 'pl.Expr'`
-
-Fold historical/relocated team codes onto their current abbreviation.
-
-Verbatim port of nflfastR's `team_name_fn` (a plain
-`stringr::str_replace_all` over a 10-entry named vector). Operates as a
-**substring** replace (not a full-value lookup) so it also fixes
-embedded codes like `"SD 49" -> "LAC 49"` on yard-line columns. The
-10 from-codes are disjoint from all of their to-values, so the order of
-the 10 sequential replacements does not matter (verified in
-`tests.nfl.test_nfl_clean`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `expr` | `Expr` |  | A `polars.Expr` over a Utf8 column (e.g. `pl.col("posteam")`). |
-
-**Returns**
-
-The same expression with every occurrence of the 10 historical codes replaced by their current-franchise code.

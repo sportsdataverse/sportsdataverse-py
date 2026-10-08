@@ -1,0 +1,827 @@
+{
+ "count": 21,
+ "items": [
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3122882?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671626/competitions/401671626?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       },
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "-1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/33?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3126356?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671626/competitions/401671626?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/33?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3915189?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671626/competitions/401671626?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "-1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/33?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/4430831?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671626/competitions/401671626?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/33?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3916577?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671859/competitions/401671859?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/2?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/4568624?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671859/competitions/401671859?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       },
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "-1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/2?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3919117?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671859/competitions/401671859?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "PD",
+        "description": "The total number of passes defended.",
+        "displayName": "Passes Defended",
+        "displayValue": "1",
+        "name": "passesDefended",
+        "shortDisplayName": "Passes Defended",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/34?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/4431517?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671859/competitions/401671859?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "-1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/34?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/15222?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671718/competitions/401671718?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/5?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/4242208?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671718/competitions/401671718?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       },
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "-1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/5?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/4258206?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671718/competitions/401671718?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "PD",
+        "description": "The total number of passes defended.",
+        "displayName": "Passes Defended",
+        "displayValue": "1",
+        "name": "passesDefended",
+        "shortDisplayName": "Passes Defended",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/28?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3116177?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671679/competitions/401671679?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "-1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/14?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/4362245?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671679/competitions/401671679?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/14?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3124005?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671633/competitions/401671633?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       },
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "-1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/11?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3128630?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671633/competitions/401671633?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/11?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3915239?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671633/competitions/401671633?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "-1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/30?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/4361861?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671633/competitions/401671633?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/30?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3121423?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671700/competitions/401671700?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "-1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/17?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/3925350?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671700/competitions/401671700?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "-1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": -1.0
+       },
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": 1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/17?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/4428232?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671700/competitions/401671700?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       },
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "-1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/17?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/4240706?lang=en&region=us"
+   },
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401671680/competitions/401671680?lang=en&region=us"
+   },
+   "splitStats": {
+    "abbreviation": "Stat Correction",
+    "categories": [
+     {
+      "abbreviation": "def",
+      "displayName": "Defense",
+      "name": "defensive",
+      "shortDisplayName": "Defensive",
+      "stats": [
+       {
+        "abbreviation": "AST",
+        "description": "The number of assists on tackles.",
+        "displayName": "Assist Tackles",
+        "displayValue": "1",
+        "name": "assistTackles",
+        "shortDisplayName": "AST",
+        "value": 1.0
+       },
+       {
+        "abbreviation": "SOLO",
+        "description": "The number of times a tackle was made unassisted.",
+        "displayName": "Solo Tackles",
+        "displayValue": "-1",
+        "name": "soloTackles",
+        "shortDisplayName": "SOLO",
+        "value": -1.0
+       }
+      ],
+      "summary": ""
+     }
+    ],
+    "id": "0",
+    "name": "statCorrection"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/19?lang=en&region=us"
+   }
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 25
+}

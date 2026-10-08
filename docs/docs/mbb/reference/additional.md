@@ -27,7 +27,7 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
-| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | _No description available._ |
+| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |
 
 ## stats.ncaa.org
 
@@ -126,12 +126,12 @@ not covered by the generated API-endpoint reference above.
 | [ncaa_mbb_join_pbp_shots](additional/stats-ncaa-org-2.md#ncaa_mbb_join_pbp_shots) | Attach shot-chart coordinates to play-by-play rows (bigballR |
 | [ncaa_mbb_player_stats](additional/stats-ncaa-org-2.md#ncaa_mbb_player_stats) | Aggregate bigballR-contract play-by-play into per-player box stats. |
 | [ncaa_mbb_possessions](additional/stats-ncaa-org-2.md#ncaa_mbb_possessions) | Aggregate bigballR-contract play-by-play into one row per possession. |
-| [ncaa_mbb_shot_locations](additional/stats-ncaa-org-2.md#ncaa_mbb_shot_locations) | Scrape MBB shot locations for one or more games (bigballR |
-| [ncaa_mbb_team_stats](additional/stats-ncaa-org-2.md#ncaa_mbb_team_stats) | Aggregate bigballR-contract play-by-play into per-team game stats. |
-| [phase1_shot_event_enrichment](additional/stats-ncaa-org-2.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
-| [playwright_transport](additional/stats-ncaa-org-2.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |
-| [remove_diacritics](additional/stats-ncaa-org-2.md#remove_diacritics) | Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"` |
-| [remove_html_encoding](additional/stats-ncaa-org-2.md#remove_html_encoding) | Undo a handful of literal HTML entity escapes (``ExtractorUtils |
+| [ncaa_mbb_shot_locations](additional/stats-ncaa-org-3.md#ncaa_mbb_shot_locations) | Scrape MBB shot locations for one or more games (bigballR |
+| [ncaa_mbb_team_stats](additional/stats-ncaa-org-3.md#ncaa_mbb_team_stats) | Aggregate bigballR-contract play-by-play into per-team game stats. |
+| [phase1_shot_event_enrichment](additional/stats-ncaa-org-3.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
+| [playwright_transport](additional/stats-ncaa-org-3.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |
+| [remove_diacritics](additional/stats-ncaa-org-3.md#remove_diacritics) | Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"` |
+| [remove_html_encoding](additional/stats-ncaa-org-3.md#remove_html_encoding) | Undo a handful of literal HTML entity escapes (``ExtractorUtils |
 | [reorder_and_reverse](additional/stats-ncaa-org-3.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
 | [reset_config](additional/stats-ncaa-org-3.md#reset_config) | Reset the active config to its env-var-derived defaults. |
 | [right_kind_of_shot](additional/stats-ncaa-org-3.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
@@ -200,7 +200,7 @@ not covered by the generated API-endpoint reference above.
 | [classify_zone_type](additional/play-by-play-processing.md#classify_zone_type) | Collapse a source shot-type label to `rim \| arc3 \| jump`. |
 | [espn_shots_to_canonical](additional/play-by-play-processing.md#espn_shots_to_canonical) | ESPN `load_mbb_shots` frame -> the canonical shot frame. |
 | [fit_espn_court_scale](additional/play-by-play-processing.md#fit_espn_court_scale) | Fit the ESPN raw-coordinate court scale: `(origin_x, origin_y, feet_per_unit)`. |
-| [mbb_pbp_disk](additional/play-by-play-processing.md#mbb_pbp_disk) | _No description available._ |
+| [mbb_pbp_disk](additional/play-by-play-processing.md#mbb_pbp_disk) | Read a saved ESPN MBB play-by-play payload from disk. |
 | [mbb_shot_data](additional/play-by-play-processing.md#mbb_shot_data) | Season(s) of shots in the canonical frame (the spine's data entry point). |
 | [ncaa_mbb_game_pbp](additional/play-by-play-processing.md#ncaa_mbb_game_pbp) | Scrape one MBB game's play-by-play (bigballR `scrape_game`). |
 | [shot_events_to_frame](additional/play-by-play-processing.md#shot_events_to_frame) | Flatten NCAA HTML `ShotEvent` objects to the canonical frame. |
@@ -255,11 +255,11 @@ not covered by the generated API-endpoint reference above.
 | [build_o_rtg](additional/models-and-calculators.md#build_o_rtg) | Individual offensive rating (Dean-Oliver ORtg) + diagnostics. |
 | [build_player_context](additional/models-and-calculators.md#build_player_context) | Build the context object the RAPM matrix-solve layer consumes. |
 | [build_priors](additional/models-and-calculators.md#build_priors) | Build strong/weak per-player RAPM priors for every column. |
-| [build_productivity](additional/models-and-calculators.md#build_productivity) | Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`). |
-| [build_weak_prior_from_rapm](additional/models-and-calculators.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
-| [calc_collinearity_diag](additional/models-and-calculators.md#calc_collinearity_diag) | Multi-collinearity diagnostic between the players in an off/def design matrix. |
-| [calc_lineup_outputs](additional/models-and-calculators.md#calc_lineup_outputs) | Build the off/def target vectors the RAPM design matrices are fit against. |
-| [calc_player_weights](additional/models-and-calculators.md#calc_player_weights) | Build the off/def player-weight (design) matrices for the RAPM solve. |
+| [build_productivity](additional/models-and-calculators-2.md#build_productivity) | Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`). |
+| [build_weak_prior_from_rapm](additional/models-and-calculators-2.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
+| [calc_collinearity_diag](additional/models-and-calculators-2.md#calc_collinearity_diag) | Multi-collinearity diagnostic between the players in an off/def design matrix. |
+| [calc_lineup_outputs](additional/models-and-calculators-2.md#calc_lineup_outputs) | Build the off/def target vectors the RAPM design matrices are fit against. |
+| [calc_player_weights](additional/models-and-calculators-2.md#calc_player_weights) | Build the off/def player-weight (design) matrices for the RAPM solve. |
 | [calc_slow_pseudo_inverse](additional/models-and-calculators-2.md#calc_slow_pseudo_inverse) | Per-parameter variance terms for the ridge-regression standard errors. |
 | [calculate_predicted_out](additional/models-and-calculators-2.md#calculate_predicted_out) | Predict per-lineup outputs from fitted per-player RAPM values. |
 | [calculate_rapm](additional/models-and-calculators-2.md#calculate_rapm) | Apply a regression solver matrix to a target-outputs vector. |
@@ -302,10 +302,10 @@ not covered by the generated API-endpoint reference above.
 | [score_to_tuple](additional/models-and-calculators-2.md#score_to_tuple) | Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`, |
 | [simulate_game](additional/models-and-calculators-2.md#simulate_game) | Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`. |
 | [slow_regression](additional/models-and-calculators-2.md#slow_regression) | Build the Tikhonov (ridge) regression solver matrix. |
-| [spearman_corr](additional/models-and-calculators-2.md#spearman_corr) | Spearman rank correlation between two arrays. |
-| [talent_split_mse](additional/models-and-calculators-2.md#talent_split_mse) | Weighted MSE of the k-regressed first half predicting the raw second half. |
-| [transfer_cohort](additional/models-and-calculators-2.md#transfer_cohort) | One row per transfer: same `player_id`, different `team_id` in |
-| [win_prob_from_margin](additional/models-and-calculators-2.md#win_prob_from_margin) | Home win probability from an expected margin (normal-CDF closed form). |
+| [spearman_corr](additional/models-and-calculators-3.md#spearman_corr) | Spearman rank correlation between two arrays. |
+| [talent_split_mse](additional/models-and-calculators-3.md#talent_split_mse) | Weighted MSE of the k-regressed first half predicting the raw second half. |
+| [transfer_cohort](additional/models-and-calculators-3.md#transfer_cohort) | One row per transfer: same `player_id`, different `team_id` in |
+| [win_prob_from_margin](additional/models-and-calculators-3.md#win_prob_from_margin) | Home win probability from an expected margin (normal-CDF closed form). |
 
 ## Analytics
 
@@ -349,13 +349,13 @@ not covered by the generated API-endpoint reference above.
 | [ncaa_mbb_player_combos](additional/analytics.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/analytics.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
 | [order_lineup](additional/analytics.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
-| [pos_class_to_score](additional/analytics.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
-| [project_bracket](additional/analytics.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
-| [regress_shot_quality](additional/analytics.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
-| [strength_of_schedule](additional/analytics.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
-| [test_positional_aware_filter](additional/analytics.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
-| [using_roster_pos](additional/analytics.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
-| [weighted_avg](additional/analytics.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
+| [pos_class_to_score](additional/analytics-2.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
+| [project_bracket](additional/analytics-2.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
+| [regress_shot_quality](additional/analytics-2.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
+| [strength_of_schedule](additional/analytics-2.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
+| [test_positional_aware_filter](additional/analytics-2.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
+| [using_roster_pos](additional/analytics-2.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
+| [weighted_avg](additional/analytics-2.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 
 ## IDs and crosswalks
 

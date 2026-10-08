@@ -184,7 +184,58 @@ Pull a team's season stat block.
 
 ### Returns {#nhl_club_stats-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_stats`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
+**skaters**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `headshot` | character | URL to the player headshot image. |
+| `position_code` | character | Player position code. |
+| `games_played` | integer | Games played. |
+| `goals` | integer | Goals scored. |
+| `assists` | integer | Assists. |
+| `points` | integer | Total points (goals + assists). |
+| `plus_minus` | integer | Plus/minus rating. |
+| `penalty_minutes` | integer | Penalty minutes. |
+| `power_play_goals` | integer | Power-play goals. |
+| `shorthanded_goals` | integer | Shorthanded goals. |
+| `game_winning_goals` | integer | Game-winning goals. |
+| `overtime_goals` | integer | Overtime goals. |
+| `shots` | integer | Shots on goal. |
+| `shooting_pctg` | double | Shooting percentage from the area. |
+| `avg_time_on_ice_per_game` | double | Average time on ice per game. |
+| `avg_shifts_per_game` | double | Average shifts per game. |
+| `faceoff_win_pctg` | double | Faceoff win percentage. |
+| `first_name_default` | character | Player first name (default language). |
+| `last_name_default` | character | Player last name (default language). |
+
+**goalies**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `headshot` | character | URL to the player headshot image. |
+| `games_played` | integer | Games played. |
+| `games_started` | integer | Games started (goalies). |
+| `wins` | integer | Wins. |
+| `losses` | integer | Losses. |
+| `overtime_losses` | integer | Total overtime losses. |
+| `goals_against_average` | double | Goals against average. |
+| `save_percentage` | double | Save percentage (goalies). |
+| `shots_against` | integer | Shots faced. |
+| `saves` | integer | Saves made. |
+| `goals_against` | integer | Goals against. |
+| `shutouts` | integer | Shutouts recorded. |
+| `goals` | integer | Goals scored. |
+| `assists` | integer | Assists. |
+| `points` | integer | Total points (goals + assists). |
+| `penalty_minutes` | integer | Penalty minutes. |
+| `time_on_ice` | integer | Time on ice in seconds. |
+| `first_name_default` | character | Player first name (default language). |
+| `last_name_default` | character | Player last name (default language). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_club_stats-example}
@@ -209,7 +260,7 @@ Pull the seasons a team has stats for.
 
 ### Returns {#nhl_club_stats_season-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_stats`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (parser: `parse_nhl_web_club_stats`); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_club_stats_season-example}

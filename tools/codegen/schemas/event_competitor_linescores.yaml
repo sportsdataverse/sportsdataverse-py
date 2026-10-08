@@ -1,0 +1,4 @@
+columns: []
+kind: dataframe
+schema: event_competitor_linescores
+unverified: 'no capture: the page holds zero items (count 0) in nba with the documented example arguments (2026-10-07)'

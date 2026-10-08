@@ -1,0 +1,41 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/franchises/2?lang=en&region=us",
+ "abbreviation": "BOS",
+ "color": "008348",
+ "displayName": "Boston Celtics",
+ "id": "2",
+ "isActive": true,
+ "location": "Boston",
+ "name": "Celtics",
+ "shortDisplayName": "Celtics",
+ "slug": "boston-celtics",
+ "team": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/teams/2?lang=en&region=us"
+ },
+ "uid": "s:40~l:46~f:2",
+ "venue": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues/1824?lang=en&region=us",
+  "address": {
+   "city": "Boston",
+   "state": "MA"
+  },
+  "fullName": "TD Garden",
+  "grass": false,
+  "guid": "58cac4d0-a208-3028-b2a6-ff7aba657bc3",
+  "id": "1824",
+  "images": [
+   {
+    "alt": "",
+    "height": 1125,
+    "href": "https://a.espncdn.com/i/venues/nba/day/1824.jpg",
+    "rel": [
+     "full",
+     "day"
+    ],
+    "width": 2000
+   }
+  ],
+  "indoor": true,
+  "shortName": "TD Banknorth Garden"
+ }
+}

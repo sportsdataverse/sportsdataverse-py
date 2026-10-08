@@ -1,0 +1,341 @@
+{
+ "leadersSections": [
+  {
+   "leaders": [
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/passing/0",
+     "imageAltText": "Michael Penix Jr.",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+     "name": "Michael Penix Jr.",
+     "selectionId": "p_yds",
+     "shortName": "M. Penix Jr.",
+     "statAbbreviation": "PYDS",
+     "statValue": "479",
+     "template": "leader-image",
+     "title": "Passing Yards",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=passing&sort=p_yds&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/passing/0",
+     "imageAltText": "Michael Penix Jr.",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+     "name": "Michael Penix Jr.",
+     "selectionId": "p_td",
+     "shortName": "M. Penix Jr.",
+     "statAbbreviation": "PTD",
+     "statValue": "2",
+     "template": "leader-image",
+     "title": "Passing Touchdowns",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=passing&sort=p_td&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/rushing/0",
+     "imageAltText": "Bijan Robinson",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+     "name": "Bijan Robinson",
+     "selectionId": "ru_yds",
+     "shortName": "B. Robinson",
+     "statAbbreviation": "RYDS",
+     "statValue": "494",
+     "template": "leader-image",
+     "title": "Rushing Yards",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=rushing&sort=ru_yds&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/rushing/0",
+     "imageAltText": "Brian Robinson",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22828.vresize.140.170.medium.3.png",
+     "name": "Brian Robinson",
+     "selectionId": "ru_td",
+     "shortName": "B. Robinson",
+     "statAbbreviation": "RTD",
+     "statValue": "4",
+     "template": "leader-image",
+     "title": "Rushing Touchdowns",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=rushing&sort=ru_td&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/receiving/0",
+     "imageAltText": "Drake London",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "name": "Drake London",
+     "selectionId": "rec_yyds",
+     "shortName": "D. London",
+     "statAbbreviation": "RECYDS",
+     "statValue": "370",
+     "template": "leader-image",
+     "title": "Receiving Yards",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=receiving&sort=rec_yyds&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/receiving/0",
+     "imageAltText": "Austin Hooper",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12291.vresize.140.170.medium.5.png",
+     "name": "Austin Hooper",
+     "selectionId": "rec_td",
+     "shortName": "A. Hooper",
+     "statAbbreviation": "RECTD",
+     "statValue": "1",
+     "template": "leader-image",
+     "title": "Receiving Touchdowns",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=receiving&sort=rec_td&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/kicking/0",
+     "imageAltText": "Nick Folk",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/6520.vresize.140.170.medium.1.png",
+     "name": "Nick Folk",
+     "selectionId": "k_pts",
+     "shortName": "N. Folk",
+     "statAbbreviation": "PTS",
+     "statValue": "28",
+     "template": "leader-image",
+     "title": "Kicking Points",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=kicking&sort=k_pts&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/returning/0",
+     "imageAltText": "Brian Robinson",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22828.vresize.140.170.medium.3.png",
+     "name": "Brian Robinson",
+     "selectionId": "ret_kyds",
+     "shortName": "B. Robinson",
+     "statAbbreviation": "K-RET YDS",
+     "statValue": "118",
+     "template": "leader-image",
+     "title": "Kick Return Yards",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=returning&sort=ret_kyds&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/returning/0",
+     "imageAltText": "Zachariah Branch",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329448.vresize.140.170.medium.2.png",
+     "name": "Zachariah Branch",
+     "selectionId": "ret_pyds",
+     "shortName": "Z. Branch",
+     "statAbbreviation": "P-RET YDS",
+     "statValue": "83",
+     "template": "leader-image",
+     "title": "Punt Return Yards",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=returning&sort=ret_pyds&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/defense/0",
+     "imageAltText": "Xavier Watts",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328648.vresize.140.170.medium.4.png",
+     "name": "Xavier Watts",
+     "selectionId": "def_int",
+     "shortName": "X. Watts",
+     "statAbbreviation": "DEF INT",
+     "statValue": "1",
+     "template": "leader-image",
+     "title": "Defensive Interceptions",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=defense&sort=def_int&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/defense/0",
+     "imageAltText": "Xavier Watts",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328648.vresize.140.170.medium.4.png",
+     "name": "Xavier Watts",
+     "selectionId": "def_tckl",
+     "shortName": "X. Watts",
+     "statAbbreviation": "TCKL",
+     "statValue": "24",
+     "template": "leader-image",
+     "title": "Defensive Tackles",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=defense&sort=def_tckl&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/defense/0",
+     "imageAltText": "Za'Darius Smith",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11497.vresize.140.170.medium.1.png",
+     "name": "Za'Darius Smith",
+     "selectionId": "def_sck",
+     "shortName": "Z. Smith",
+     "statAbbreviation": "SCK",
+     "statValue": "2.5",
+     "template": "leader-image",
+     "title": "Sacks",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=defense&sort=def_sck&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/scoring/0",
+     "imageAltText": "Bijan Robinson",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+     "name": "Bijan Robinson",
+     "selectionId": "o_pts",
+     "shortName": "B. Robinson",
+     "statAbbreviation": "PTS",
+     "statValue": "30",
+     "template": "leader-image",
+     "title": "Points",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=scoring&sort=o_pts&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/yardage/0",
+     "imageAltText": "Bijan Robinson",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+     "name": "Bijan Robinson",
+     "selectionId": "o_apyds",
+     "shortName": "B. Robinson",
+     "statAbbreviation": "AP YDS",
+     "statValue": "614",
+     "template": "leader-image",
+     "title": "All Purpose Yards",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=yardage&sort=o_apyds&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/kickoffsandpunts/0",
+     "imageAltText": "Nick Folk",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/6520.vresize.140.170.medium.1.png",
+     "name": "Nick Folk",
+     "selectionId": "k_ktb",
+     "shortName": "N. Folk",
+     "statAbbreviation": "TB",
+     "statValue": "0",
+     "template": "leader-image",
+     "title": "Kickoff Touchbacks",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=kickoffsandpunts&sort=k_ktb&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/player/kickoffsandpunts/0",
+     "imageAltText": "Jake Bailey",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/15006.vresize.140.170.medium.3.png",
+     "name": "Jake Bailey",
+     "selectionId": "k_pnetavg",
+     "shortName": "J. Bailey",
+     "statAbbreviation": "NET AVG",
+     "statValue": "38.4",
+     "template": "leader-image",
+     "title": "Punt Net Avg",
+     "webUrl": "/nfl/atlanta-falcons-team-stats?category=kickoffsandpunts&sort=k_pnetavg&season=2026&seasonType=reg&sortOrder=desc"
+    }
+   ],
+   "title": "PLAYER STATS"
+  },
+  {
+   "leaders": [
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/passing/0",
+     "rankLine1": "25TH OVERALL",
+     "selectionId": "p_ydsg",
+     "statAbbreviation": "PYDS/G",
+     "statValue": "179.5",
+     "template": "leader-stat",
+     "title": "Passing Yards / Game",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=passing&sort=p_ydsg&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/rushing/0",
+     "rankLine1": "2ND OVERALL",
+     "selectionId": "ru_ydsg",
+     "statAbbreviation": "RYDS/G",
+     "statValue": "181.0",
+     "template": "leader-stat",
+     "title": "Rushing Yards / Game",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=rushing&sort=ru_ydsg&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/kicking/0",
+     "selectionId": "k_pts",
+     "statAbbreviation": "PTS",
+     "statValue": "28",
+     "template": "leader-stat",
+     "title": "Kicking Points",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=kicking&sort=k_pts&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/returning/0",
+     "selectionId": "ret_kavg",
+     "statAbbreviation": "K-RET AVG",
+     "statValue": "24.5",
+     "template": "leader-stat",
+     "title": "Kick Return Avg",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=returning&sort=ret_kavg&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/returning/0",
+     "selectionId": "ret_pavg",
+     "statAbbreviation": "P-RET AVG",
+     "statValue": "12.4",
+     "template": "leader-stat",
+     "title": "Punt Return Avg",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=returning&sort=ret_pavg&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/defense/0",
+     "selectionId": "def_pts_a",
+     "statAbbreviation": "PA",
+     "statValue": "92",
+     "template": "leader-stat",
+     "title": "Points Allowed",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=defense&sort=def_pts_a&season=2026&seasonType=reg&sortOrder=asc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/downs/0",
+     "rankLine1": "18TH OVERALL",
+     "selectionId": "o_3rdpct",
+     "statAbbreviation": "3RD%",
+     "statValue": "37.2",
+     "template": "leader-stat",
+     "title": "Third Down %",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=downs&sort=o_3rdpct&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/yardage/0",
+     "selectionId": "o_ydsg",
+     "statAbbreviation": "YDS/G",
+     "statValue": "360.5",
+     "template": "leader-stat",
+     "title": "Yards / Game",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=yardage&sort=o_ydsg&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/turnovers/0",
+     "rankLine1": "T-27TH OVERALL",
+     "selectionId": "o_to_plusminus",
+     "statAbbreviation": "+/-",
+     "statValue": "-5",
+     "template": "leader-stat",
+     "title": "Turnover +/-",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=turnovers&sort=o_to_plusminus&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/kickoffsandpunts/0",
+     "selectionId": "k_ktbpct",
+     "statAbbreviation": "TB %",
+     "statValue": "0.0",
+     "template": "leader-stat",
+     "title": "Kickoff Touchback %",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=kickoffsandpunts&sort=k_ktbpct&season=2026&seasonType=reg&sortOrder=desc"
+    },
+    {
+     "condensedUri": "https://api.foxsports.com/bifrost/v1/nfl/team/25/stats-con/team/kickoffsandpunts/0",
+     "selectionId": "k_pnetavg",
+     "statAbbreviation": "NET AVG",
+     "statValue": "38.4",
+     "template": "leader-stat",
+     "title": "Punt Net Average",
+     "webUrl": "/nfl/atlanta-falcons-team-summary-stats?category=kickoffsandpunts&sort=k_pnetavg&season=2026&seasonType=reg&sortOrder=desc"
+    }
+   ],
+   "title": "TEAM STATS"
+  }
+ ]
+}

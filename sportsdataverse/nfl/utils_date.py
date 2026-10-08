@@ -158,6 +158,13 @@ def most_recent_nfl_season(roster: bool = False) -> int:
     """Alias for `get_current_nfl_season()` mirroring nflreadr's
     `most_recent_season()`.
 
+    Args:
+        roster: Use roster-year logic (the current year from March 15) instead of season
+            logic.
+
+    Returns:
+        int: The current NFL season (or roster) year, from :func:`get_current_nfl_season`.
+
     Example:
         Bare alias call (matches the R-side ``most_recent_season()``)::
 

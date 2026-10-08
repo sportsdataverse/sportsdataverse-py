@@ -1,0 +1,42 @@
+schema: calculate_nfl_standings
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: conf
+  type: character
+  description: ''
+- name: division
+  type: character
+  description: ''
+- name: div_rank
+  type: integer
+  description: ''
+- name: seed
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: wins
+  type: integer
+  description: ''
+- name: losses
+  type: integer
+  description: ''
+- name: ties
+  type: integer
+  description: ''
+- name: win_pct
+  type: double
+  description: ''
+- name: div_pct
+  type: double
+  description: ''
+- name: conf_pct
+  type: double
+  description: ''

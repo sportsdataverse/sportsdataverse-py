@@ -1,0 +1,4 @@
+columns: []
+kind: dataframe
+schema: ping
+unverified: 'no capture: the liveness route answers with an empty body by design, so it has no rows or columns'

@@ -1,0 +1,5 @@
+schema: get_punt_wp
+kind: dataframe
+columns: []
+unverified: 'no capture: it skips its own input preparation when posteam_spread is present, so it raises KeyError on enriched
+  play-by-play, and a full unenriched season does not fit in memory'

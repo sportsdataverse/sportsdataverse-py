@@ -1,0 +1,427 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us",
+ "attendance": 17341,
+ "boxscoreAvailable": true,
+ "boxscoreSource": {
+  "description": "scrubbed",
+  "id": "3",
+  "state": "full"
+ },
+ "bracketAvailable": false,
+ "broadcasts": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/broadcasts?lang=en&region=us"
+ },
+ "commentaryAvailable": false,
+ "competitors": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15?lang=en&region=us",
+   "homeAway": "home",
+   "id": "15",
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/leaders?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/linescores?lang=en&region=us"
+   },
+   "order": 0,
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/records?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/score?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/statistics?lang=en&region=us"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "type": "team",
+   "uid": "s:40~l:46~t:15",
+   "winner": true
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8?lang=en&region=us",
+   "homeAway": "away",
+   "id": "8",
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/leaders?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/linescores?lang=en&region=us"
+   },
+   "order": 1,
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/records?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/score?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/statistics?lang=en&region=us"
+   },
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "type": "team",
+   "uid": "s:40~l:46~t:8",
+   "winner": false
+  }
+ ],
+ "conferenceCompetition": false,
+ "conversationAvailable": true,
+ "date": "2023-11-09T01:00Z",
+ "details": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays?lang=en&region=us"
+ },
+ "divisionCompetition": false,
+ "format": {
+  "overtime": {
+   "clock": 300.0,
+   "displayName": "Quarter",
+   "slug": "quarter"
+  },
+  "regulation": {
+   "clock": 720.0,
+   "displayName": "Quarter",
+   "periods": 4,
+   "slug": "quarter"
+  }
+ },
+ "gameSource": {
+  "description": "basic/manual",
+  "id": "1",
+  "state": "basic"
+ },
+ "gamecastAvailable": true,
+ "guid": "cd0b3bc4-63fe-39ef-96d7-1b5970c6c74a",
+ "highlightsAvailable": true,
+ "id": "401584793",
+ "linescoreSource": {
+  "description": "basic/manual",
+  "id": "1",
+  "state": "basic"
+ },
+ "lineupAvailable": false,
+ "links": [
+  {
+   "href": "https://www.espn.com/nba/game/_/gameId/401584793/pistons-bucks",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "summary",
+    "desktop",
+    "event"
+   ],
+   "shortText": "Summary",
+   "text": "Gamecast"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showGame?sportName=basketball&leagueAbbrev=nba&gameId=401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "summary",
+    "sportscenter",
+    "app",
+    "event"
+   ],
+   "shortText": "Summary",
+   "text": "Gamecast"
+  },
+  {
+   "href": "https://www.espn.com/nba/game/_/gameId/401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "now",
+    "desktop",
+    "event"
+   ],
+   "shortText": "Now",
+   "text": "Now"
+  },
+  {
+   "href": "https://www.espn.com/nba/matchup?gameId=401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "teamstats",
+    "desktop",
+    "event"
+   ],
+   "shortText": "Team Stats",
+   "text": "Team Stats"
+  },
+  {
+   "href": "https://www.espn.com/nba/boxscore/_/gameId/401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "boxscore",
+    "desktop",
+    "event"
+   ],
+   "shortText": "Box Score",
+   "text": "Box Score"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showGame?sportName=basketball&leagueAbbrev=nba&gameId=401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "boxscore",
+    "sportscenter",
+    "app",
+    "event"
+   ],
+   "shortText": "Box Score",
+   "text": "Box Score"
+  },
+  {
+   "href": "https://www.espn.com/nba/game/_/gameId/401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "gamecast",
+    "desktop",
+    "event"
+   ],
+   "shortText": "Gamecast",
+   "text": "Gamecast"
+  },
+  {
+   "href": "http://m.espn.com/nba/gamecast?gameId=401584793&action=summary",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "gamecast",
+    "mobile",
+    "event"
+   ],
+   "shortText": "Gamecast",
+   "text": "Gamecast"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showGame?sportName=basketball&leagueAbbrev=nba&gameId=401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "gamecast",
+    "sportscenter",
+    "app",
+    "event"
+   ],
+   "shortText": "Gamecast",
+   "text": "Gamecast"
+  },
+  {
+   "href": "https://www.espn.com/nba/recap?gameId=401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "recap",
+    "desktop",
+    "event"
+   ],
+   "shortText": "Recap",
+   "text": "Recap"
+  },
+  {
+   "href": "https://www.espn.com/nba/playbyplay/_/gameId/401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "pbp",
+    "desktop",
+    "event"
+   ],
+   "shortText": "Play-by-Play",
+   "text": "Play-by-Play"
+  },
+  {
+   "href": "https://www.espn.com/nba/video?gameId=401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "videos",
+    "desktop",
+    "event"
+   ],
+   "shortText": "Videos",
+   "text": "Videos"
+  },
+  {
+   "href": "https://www.espn.com/nba/odds/_/gameId/401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "odds",
+    "desktop",
+    "event"
+   ],
+   "shortText": "Odds",
+   "text": "Odds"
+  },
+  {
+   "href": "https://m.espn.com/nba/odds/_/gameId/401584793",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "odds",
+    "mobile",
+    "event"
+   ],
+   "shortText": "Odds",
+   "text": "Odds"
+  }
+ ],
+ "liveAvailable": false,
+ "necessary": true,
+ "neutralSite": false,
+ "notes": [],
+ "odds": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds?lang=en&region=us"
+ },
+ "officials": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/officials?lang=en&region=us"
+ },
+ "onWatchESPN": false,
+ "pickcenterAvailable": true,
+ "playByPlayAvailable": true,
+ "playByPlaySource": {
+  "description": "feed",
+  "id": "2",
+  "state": "full"
+ },
+ "possessionArrowAvailable": false,
+ "powerIndexes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/powerindex?lang=en&region=us"
+ },
+ "predictor": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/predictor?lang=en&region=us"
+ },
+ "previewAvailable": false,
+ "probabilities": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities?lang=en&region=us"
+ },
+ "recapAvailable": true,
+ "recent": false,
+ "relevancy": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/relevancy?lang=en&region=us"
+ },
+ "series": [
+  {
+   "competitors": [
+    {
+     "id": "15",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+     },
+     "ties": 0,
+     "uid": "s:40~l:46~t:15",
+     "wins": 1
+    },
+    {
+     "id": "8",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+     },
+     "ties": 0,
+     "uid": "s:40~l:46~t:8",
+     "wins": 0
+    }
+   ],
+   "completed": false,
+   "description": "Regular Season Series",
+   "events": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584962?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401585220?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401585234?lang=en&region=us"
+    }
+   ],
+   "startDate": "2023-11-09T01:00Z",
+   "summary": "MIL leads series 1-0",
+   "title": "Regular Season Series",
+   "totalCompetitions": 4,
+   "type": "season"
+  }
+ ],
+ "shotChartAvailable": true,
+ "situation": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/situation?lang=en&region=us"
+ },
+ "statsSource": {
+  "description": "scrubbed",
+  "id": "3",
+  "state": "full"
+ },
+ "status": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/status?lang=en&region=us"
+ },
+ "summaryAvailable": true,
+ "ticketsAvailable": false,
+ "timeValid": true,
+ "timeoutsAvailable": true,
+ "type": {
+  "abbreviation": "STD",
+  "id": "1",
+  "slug": "standard",
+  "text": "Standard",
+  "type": "standard"
+ },
+ "uid": "s:40~l:46~e:401584793~c:401584793",
+ "venue": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues/5777?lang=en&region=us",
+  "address": {
+   "city": "Milwaukee",
+   "state": "WI"
+  },
+  "fullName": "Fiserv Forum",
+  "grass": false,
+  "guid": "6ce5d0bd-a0a1-32b2-b649-4b7f70141365",
+  "id": "5777",
+  "images": [
+   {
+    "alt": "",
+    "height": 1125,
+    "href": "https://a.espncdn.com/i/venues/nba/day/5777.jpg",
+    "rel": [
+     "full",
+     "day"
+    ],
+    "width": 2000
+   }
+  ],
+  "indoor": true
+ },
+ "wallclockAvailable": true
+}

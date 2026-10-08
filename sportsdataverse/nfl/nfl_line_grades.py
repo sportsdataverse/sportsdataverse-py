@@ -96,7 +96,17 @@ def team_pressure_rates(pbp: pl.DataFrame) -> pl.DataFrame:
 
 
 def pressure_pairs(pbp: pl.DataFrame) -> pl.DataFrame:
-    """Per (season, off_team, def_team) dropbacks + pressures (matchup grid)."""
+    """Per (season, off_team, def_team) dropbacks + pressures (matchup grid).
+
+    Args:
+        pbp: nflverse play-by-play with ``season``, ``posteam``, ``defteam`` and the
+            dropback / pressure flags.
+
+    Returns:
+        polars.DataFrame: One row per (``season``, ``off_team``, ``def_team``) matchup, with
+            ``dropbacks`` and ``pressures`` (Int64), sorted by season and teams. A zero-row frame
+            with that schema when the input has no dropbacks.
+    """
     df = _dropbacks(pbp)
     if df.height == 0:
         return pl.DataFrame(

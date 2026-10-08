@@ -1,0 +1,68 @@
+{
+ "count": 20,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/33?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/39?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/35?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/40?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/36?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/43?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/44?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/45?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/46?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/47?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/48?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/49?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/50?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/53?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/77?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/377?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/378?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/297?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/218?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/awards/217?lang=en&region=us"
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 200
+}

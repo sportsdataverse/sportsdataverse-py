@@ -34,3 +34,9 @@ columns:
 - name: neutral
   type: character
   description: ''
+- name: team
+  type: character
+  description: ''
+- name: rank_change
+  type: integer
+  description: ''

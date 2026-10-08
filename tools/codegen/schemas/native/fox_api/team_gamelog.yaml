@@ -1,0 +1,24 @@
+schema: team_gamelog
+kind: dataframe
+columns:
+- name: emphasized
+  type: logical
+  description: ''
+- name: index
+  type: integer
+  description: ''
+- name: priority
+  type: integer
+  description: ''
+- name: sortable
+  type: character
+  description: ''
+- name: template
+  type: character
+  description: ''
+- name: text
+  type: character
+  description: ''
+- name: weight
+  type: double
+  description: ''

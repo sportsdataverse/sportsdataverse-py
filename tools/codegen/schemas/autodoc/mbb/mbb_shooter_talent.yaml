@@ -1,0 +1,27 @@
+schema: mbb_shooter_talent
+kind: dataframe
+columns:
+- name: shooter_id
+  type: character
+  description: ''
+- name: n_shots
+  type: integer
+  description: ''
+- name: make_rate
+  type: double
+  description: ''
+- name: xmake_mean
+  type: double
+  description: ''
+- name: oe_pct
+  type: double
+  description: ''
+- name: oe_pct_regressed
+  type: double
+  description: ''
+- name: points_over_expected
+  type: double
+  description: ''
+- name: poe_per_100
+  type: double
+  description: ''

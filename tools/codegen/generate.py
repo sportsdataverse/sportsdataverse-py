@@ -6,6 +6,7 @@ import argparse
 import dataclasses
 import functools
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -610,10 +611,26 @@ def _manual_col_descs() -> dict:
     return yaml.safe_load(_MANUAL_DESC_FILE.read_text(encoding="utf-8")) or {}
 
 
-def _manual_col_desc(schema: str | None, col: str) -> str:
-    """Hand-curated description for ``col``: schema-keyed first, then ``_global``.
+# A pass-through transformer returns its input frame plus a few columns, so the input's schema
+# describes its returns table. Keyed ``league/schema`` (``get_fg_wp`` exists in cfb AND nfl):
+# ``(source schema, columns NOT to inherit)``.
+_DESC_INHERITS: dict[str, tuple[str, frozenset[str]]] = {
+    **{
+        f"cfb/{s}": ("load_cfb_pbp", frozenset())
+        for s in ("add_play_type_canonical", "add_era_columns", "normalize_pbp_columns", "get_2pt_probs", "get_fg_wp")
+    },
+    # NFL and CFB play-by-play come out of the same ESPN football construction pipeline. Three
+    # load_cfb_pbp descriptions name college-only models, so they are not inherited.
+    **{
+        f"nfl/{s}": ("load_cfb_pbp", frozenset({"opportunity_run", "prob_2pt", "xp_wp"}))
+        for s in ("build_nfl_season", "calculate_epa", "calculate_wpa")
+    },
+}
 
-    Resolution: ``manual[schema][col]`` -> ``manual["_global"][col]`` -> ``""``."""
+
+def _manual_col_desc(schema: str | None, col: str, league: str | None = None) -> str:
+    """Hand-curated description for ``col``: schema-keyed, then the schema it inherits
+    from (:data:`_DESC_INHERITS`, league-scoped), then ``_global``."""
     if not col:
         return ""
     d = _manual_col_descs()
@@ -621,6 +638,11 @@ def _manual_col_desc(schema: str | None, col: str) -> str:
         v = (d.get(schema) or {}).get(col)
         if v:
             return v
+        src = _DESC_INHERITS.get(f"{league}/{schema}")
+        if src and col not in src[1]:
+            v = (d.get(src[0]) or {}).get(col)
+            if v:
+                return v
     return (d.get("_global") or {}).get(col, "") or ""
 
 
@@ -644,7 +666,7 @@ def _table_cell_desc(
     if (stored or "").strip():
         raw = stored
     else:
-        raw = _manual_col_desc(schema, col)
+        raw = _manual_col_desc(schema, col, league)
         # ``r_dict_key`` defaults to ``schema`` because the autodoc and loader callers pass a
         # wrapper / loader name there; the reference-table caller passes the bare short, so it
         # hands the full ``native/<family>/<short>`` id in explicitly. ``_r_col_desc`` then
@@ -1674,6 +1696,68 @@ def _return_schema_parsers():
     }
 
 
+def _espn_parser(name: str):
+    """An ESPN parser by function name (``parse_items``), or the one ``ENDPOINT_PARSERS`` maps a short to."""
+    from sportsdataverse import _common_espn_parsers as P
+
+    return getattr(P, name, None) or P.ENDPOINT_PARSERS[name]
+
+
+def _auto_espn_schemas() -> dict:
+    """``{short: parser}`` for every ESPN endpoint whose ``returns_schema`` is its own short and that
+    the curated :func:`_return_schema_parsers` does not cover.
+
+    ``--schemas`` writes each one's GENERIC ``schemas/<short>.yaml`` from its one captured league
+    (``tools/codegen/capture_fixtures.py`` captures a representative league per endpoint): the
+    parser fixes the shape, so every league page can fall back to it."""
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    curated = _return_schema_parsers()
+    out = {}
+    for api in ESPN_APIS:
+        for ep in spec.load_espn_api(ENDPOINTS / f"{api}.yaml", params).endpoints:
+            if ep.returns_schema == ep.short and ep.short not in curated:
+                # The parser the generated wrapper actually calls (the YAML's ``parser:``).
+                out[ep.short] = _espn_parser(ep.parser or ep.short)
+    return out
+
+
+def _write_auto_espn_schemas(fix_dir: Path, schema_dir: Path) -> int:
+    """Write ``schema_dir/<short>.yaml`` for each :func:`_auto_espn_schemas` endpoint with a capture.
+
+    Returns:
+        int: How many schemas were written. An endpoint with no capture, or whose capture parses to
+        no columns, writes nothing (an empty table would claim the endpoint returns nothing)."""
+    import json
+
+    import yaml
+
+    written = 0
+    cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
+    leagues = _LEAGUES + [lg.prefix for lg in cfg.leagues if lg.prefix not in _LEAGUES]
+    for name, parser in sorted(_auto_espn_schemas().items()):
+        fx = next((fix_dir / f"{name}_{lg}.json" for lg in leagues if (fix_dir / f"{name}_{lg}.json").exists()), None)
+        if fx is None:
+            continue
+        result = parser(json.loads(fx.read_text(encoding="utf-8")))
+        descs = _desc_lookup(name)
+        if isinstance(result, dict):
+            frames = [{"section": sec, "columns": _cols_from_frame(df, descs)} for sec, df in result.items()]
+            if not any(f["columns"] for f in frames):
+                continue  # an empty frames table would claim the endpoint returns nothing
+            doc = {"schema": name, "kind": "frames", "frames": frames}
+        else:
+            cols = _cols_from_frame(result, descs)
+            if not cols:
+                continue
+            doc = {"schema": name, "kind": "dataframe", "columns": cols}
+        schema_dir.mkdir(parents=True, exist_ok=True)
+        (schema_dir / f"{name}.yaml").write_text(
+            yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
+        )
+        written += 1
+    return written
+
+
 def _desc_lookup(schema_name: str) -> dict:
     """{column_name: description} from the hand-curated generic schema, used to
     annotate the introspected per-league columns (which carry only name+type)."""
@@ -1847,6 +1931,8 @@ def refresh_return_schemas() -> int:
             )
             written += 1
 
+    written += _write_auto_espn_schemas(_FIX, ROOT / "tools" / "codegen" / "schemas")
+
     # --- natives ---
     import importlib
 
@@ -1863,7 +1949,14 @@ def refresh_return_schemas() -> int:
             try:
                 payload = json.loads((ROOT / "tests" / "fixtures" / api / fname).read_text("utf-8"))
                 df = getattr(pmod, ep.parser)(payload)
-                doc = {"schema": short, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
+                if isinstance(df, dict):  # one frame per section (a KenPom page parses to {table_id: frame})
+                    doc = {
+                        "schema": short,
+                        "kind": "frames",
+                        "frames": [{"section": sec, "columns": _cols_from_frame(f, {})} for sec, f in df.items()],
+                    }
+                else:
+                    doc = {"schema": short, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
             except Exception as e:  # noqa: BLE001
                 print(f"  native skip {api}/{short} ({fname}): {e}")
                 continue
@@ -2698,6 +2791,50 @@ def _source_gaps() -> list[tuple[str, str, str]]:
     return gaps
 
 
+_RETURNS_SECTION_RE = re.compile(r"(?m)^\s*(Returns|Yields)\s*:?\s*$")
+
+
+def _documents_a_return(doc: str) -> bool:
+    """True when ``doc`` carries a napoleon ``Returns:`` or ``Yields:`` section.
+
+    A section HEADING, not the word: prose like "will return a frame" does not
+    tell a caller the shape of what comes back, which is the whole point of the
+    gate."""
+    return bool(doc) and _RETURNS_SECTION_RE.search(doc) is not None
+
+
+def _scope_callable(label: str, name: str):
+    """The live object behind an in-scope ``(league_label, name)`` pair, or ``None``."""
+    import importlib
+
+    mod_path = "sportsdataverse" if label == "global" else f"sportsdataverse.{_LEAGUE_MODULE.get(label, label)}"
+    return getattr(importlib.import_module(mod_path), name, None)
+
+
+def _returns_gaps() -> list[tuple[str, str]]:
+    """``[(league_label, name)]`` for every public callable with no documented return.
+
+    Skips callables annotated ``-> None`` (there is nothing to document) and classes
+    (calling one returns an instance; napoleon documents a class with ``Attributes:``).
+    Everything else must have a ``Returns:`` or ``Yields:`` section -- there is no
+    allowlist, because "what does this give me back" is the question the docs exist to
+    answer."""
+    import inspect
+
+    gaps: list[tuple[str, str]] = []
+    for (label, name), _module in sorted(_source_scope_objects().items()):
+        obj = _scope_callable(label, name)
+        if obj is None or inspect.isclass(obj):
+            continue
+        ann = getattr(obj, "__annotations__", {}) or {}
+        if "return" in ann and ann["return"] in (None, type(None), "None"):
+            continue
+        if _documents_a_return(inspect.getdoc(obj) or ""):
+            continue
+        gaps.append((label, name))
+    return gaps
+
+
 def coverage_report() -> int:
     """Report user-facing functions that never reach the rendered docs corpus.
 
@@ -3272,6 +3409,16 @@ def _autodoc_return_columns(scope: str, fn: str) -> tuple:
 
     d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
     return tuple(d.get("columns", []) or [])
+
+
+def _autodoc_unverified(scope: str, fn: str) -> str:
+    """The committed ``unverified:`` reason for an autodoc function with no capturable table, or ``""``."""
+    p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
+    if not p.exists():
+        return ""
+    import yaml
+
+    return str((yaml.safe_load(p.read_text(encoding="utf-8")) or {}).get("unverified") or "")
 
 
 # Modules whose name happens to end in "_parsers" but which are genuine
@@ -3977,7 +4124,13 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n, highlighted, module=getattr(obj, "__module__", "")), []).append(
-            {"name": n, "signature": _autodoc_signature(obj), "return_columns": return_columns, **view},
+            {
+                "name": n,
+                "signature": _autodoc_signature(obj),
+                "return_columns": return_columns,
+                "return_unverified": "" if return_columns else _autodoc_unverified(scope, n),
+                **view,
+            },
         )
 
     rank = _family_rank()
@@ -4092,6 +4245,95 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
     return out, len(fresh), retained, types_kept
 
 
+def _resolve_autodoc_arg(value, memo: dict):
+    """An example argument, with ``{"$call": "<scope>.<fn>", "args": {...}, "key": ...}`` replaced
+    by that call's result.
+
+    Lets a function that takes a frame be captured on real data: another sportsdataverse
+    function fetches the input. ``key`` picks one frame out of a dict result. Results are
+    memoized on the reference, so one season load feeds every transformer that names it."""
+    if not (isinstance(value, dict) and "$call" in value):
+        return value
+    ref = json.dumps(value, sort_keys=True, default=str)
+    if ref not in memo:
+        scope, _, fn = str(value["$call"]).rpartition(".")
+        args = {k: _resolve_autodoc_arg(v, memo) for k, v in (value.get("args") or {}).items()}
+        out = _scope_callable(scope or "global", fn)(**args)
+        memo[ref] = out[value["key"]] if "key" in value else out
+    return memo[ref]
+
+
+class _CallTimeout(BaseException):
+    """Raised by :func:`_call_with_timeout`. A ``BaseException`` on purpose: the HTTP layer
+    (``dl_utils.download``) retries on any ``Exception``, which would swallow a plain
+    ``TimeoutError`` and retry the stalled call with no alarm left."""
+
+
+def _call_with_timeout(thunk, seconds: float):
+    """``thunk()``, raising :class:`_CallTimeout` after ``seconds`` (0 = no limit).
+
+    stats.nba.com stalls rather than failing on a datacenter IP; one such call must not
+    hang the whole capture run. Needs SIGALRM and the main thread; elsewhere (Windows, a
+    worker thread) the call simply runs unbounded."""
+    import signal
+    import threading
+
+    if not seconds or not hasattr(signal, "SIGALRM") or threading.current_thread() is not threading.main_thread():
+        return thunk()
+
+    def _alarm(*_):
+        raise _CallTimeout(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
+
+    old = signal.signal(signal.SIGALRM, _alarm)
+    signal.setitimer(signal.ITIMER_REAL, seconds)
+    try:
+        return thunk()
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, old)
+
+
+def _returns_a_frame(annotation) -> bool:
+    """True when a return annotation's top level is a DataFrame (alone or in a union).
+
+    ``dict[str, pl.DataFrame]`` / ``list[pl.DataFrame]`` are containers of frames, not a frame:
+    they get no single returns table. ``pl.DataFrame | dict`` (a ``raw=`` escape hatch) counts."""
+    s = str(annotation or "").strip().strip("'\"")
+    if s.startswith(("Union[", "Optional[", "typing.Union[", "typing.Optional[")):
+        s, sep = s[s.index("[") + 1 : -1], ","
+    else:
+        sep = "|"
+    members, depth, cur = [], 0, ""
+    for ch in s:
+        depth += ch == "["
+        depth -= ch == "]"
+        if ch == sep and depth == 0:
+            members.append(cur)
+            cur = ""
+        else:
+            cur += ch
+    members.append(cur)
+    return any("DataFrame" in m and "[" not in m.split("DataFrame")[0] for m in (x.strip() for x in members))
+
+
+def _autodoc_dataframe_names() -> list[tuple[str, str]]:
+    """``[(scope_key, fn)]`` for every autodoc function annotated to return a DataFrame.
+
+    The capture's denominator: a function whose return annotation mentions
+    ``DataFrame`` is expected to have a returns table, and one that does not (an
+    int, a dict of frames, None) is not. Annotation strings are enough here --
+    ``from __future__ import annotations`` makes every annotation a string, and
+    this is a docs gate, not a type check."""
+    out: list[tuple[str, str]] = []
+    for scope, names in _autodoc_names_by_scope().items():
+        scope_key = "global" if scope is None else scope
+        for fn in names:
+            obj = _scope_callable(scope_key, fn)
+            if _returns_a_frame((getattr(obj, "__annotations__", {}) or {}).get("return")):
+                out.append((scope_key, fn))
+    return sorted(out)
+
+
 def refresh_autodoc_schemas() -> int:
     """Call every in-scope autodoc DataFrame-returning function and capture its
     column schema to ``schemas/autodoc/{scope}/{fn}.yaml`` (network; best-effort).
@@ -4118,19 +4360,27 @@ def refresh_autodoc_schemas() -> int:
     # whether or not its capture succeeds -- the prune guard below keys off this.
     in_scope: set = set()
     args_by_scope = _autodoc_example_args()
+    memo: dict = {}
+    timeout = float(os.environ.get("SDV_AUTODOC_CALL_TIMEOUT", "120"))
     for scope, names in _autodoc_names_by_scope().items():
         scope_key = "global" if scope is None else scope
         mod = importlib.import_module("sportsdataverse" if scope is None else f"sportsdataverse.{scope}")
         scope_args = args_by_scope.get(scope_key, {})
+        memo.clear()  # inputs are scope-local; don't hold every league's season loads at once
         for fn in names:
             obj = getattr(mod, fn, None)
             if obj is None or not callable(obj):
                 continue
             in_scope.add((scope_key, fn))
             kwargs = scope_args.get(fn, {})
+            annotated = _returns_a_frame((getattr(obj, "__annotations__", {}) or {}).get("return"))
+            if not (annotated or fn in scope_args or (_AUTODOC_SCHEMA_DIR / scope_key / f"{fn}.yaml").exists()):
+                continue  # not a frame function: never call it blind (it may write files or clear a cache)
             try:
-                df = obj(**kwargs)
-            except Exception as e:  # noqa: BLE001
+                df = _call_with_timeout(
+                    lambda: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}), timeout
+                )
+            except (Exception, _CallTimeout) as e:  # noqa: BLE001
                 msg = str(e).splitlines()[0][:120] if str(e) else type(e).__name__
                 print(f"  autodoc skip {scope_key}.{fn}: {msg}")
                 skip_reasons.append(f"{scope_key}.{fn}: {msg}")
@@ -4951,6 +5201,14 @@ def main(argv=None) -> int:
             print(
                 "codegen --check: public functions with no single source:",
                 "; ".join(f"{label}.{name}: {why}" for label, name, why in src_gaps),
+                file=sys.stderr,
+            )
+            rc = 1
+        ret_gaps = _returns_gaps()
+        if ret_gaps:
+            print(
+                "codegen --check: public functions with no documented return:",
+                ", ".join(f"{label}.{name}" for label, name in ret_gaps),
                 file=sys.stderr,
             )
             rc = 1

@@ -326,7 +326,10 @@ Pull the EDGE top-10 skaters for a shot-location category.
 
 ### Returns {#nhl_edge_skater_shot_location_top_10-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_edge_top10`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: every value tried 404s for season 20242025 (sort_by points/total/savePctg/save-pctg, position F/forwards/all, category shots/high/all/high-danger, fastRhockey's examples included), so the valid path values are unconfirmed.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_edge_skater_shot_location_top_10-example}
@@ -410,7 +413,7 @@ Pull the EDGE top-10 skaters by shot speed.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/{positions}/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/points/now](https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/points/now)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/max/20242025/2](https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/max/20242025/2)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -421,13 +424,51 @@ Pull the EDGE top-10 skaters by shot speed.
 
 ### Returns {#nhl_edge_skater_shot_speed_top_10-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `shot_attempts70_to80` | integer |  |
+| `shot_attempts80_to90` | integer |  |
+| `shot_attempts90_to100` | integer |  |
+| `shot_attempts_over100` | integer |  |
+| `hardest_shot_imperial` | double |  |
+| `hardest_shot_metric` | double |  |
+| `hardest_shot_overlay_away_team_abbrev` | character |  |
+| `hardest_shot_overlay_away_team_score` | integer |  |
+| `hardest_shot_overlay_game_date` | character |  |
+| `hardest_shot_overlay_game_outcome_last_period_type` | character |  |
+| `hardest_shot_overlay_game_outcome_ot_periods` | double |  |
+| `hardest_shot_overlay_game_type` | integer |  |
+| `hardest_shot_overlay_home_team_abbrev` | character |  |
+| `hardest_shot_overlay_home_team_score` | integer |  |
+| `hardest_shot_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `hardest_shot_overlay_period_descriptor_number` | integer |  |
+| `hardest_shot_overlay_period_descriptor_period_type` | character |  |
+| `hardest_shot_overlay_player_first_name_default` | character |  |
+| `hardest_shot_overlay_player_last_name_default` | character |  |
+| `hardest_shot_overlay_time_in_period` | character |  |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_position` | character | Primary player position. |
+| `player_slug` | character | URL slug for the player. |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_slug` | character | Player team URL-friendly slug. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `player_team_common_name_fr` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_edge_skater_shot_speed_top_10-example}
 
 ```python
-nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='points')
+nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='max', season=20242025)
 ```
 
 _Last validated n/a._
@@ -530,7 +571,7 @@ Pull the EDGE top-10 skaters by skating speed.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-speed-top-10/{positions}/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/points/now](https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/points/now)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/max/20242025/2](https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/max/20242025/2)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -541,13 +582,50 @@ Pull the EDGE top-10 skaters by skating speed.
 
 ### Returns {#nhl_edge_skater_speed_top_10-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `bursts18_to20` | integer |  |
+| `bursts20_to22` | integer |  |
+| `bursts_over22` | integer |  |
+| `max_speed_imperial` | double |  |
+| `max_speed_metric` | double |  |
+| `max_speed_overlay_away_team_abbrev` | character |  |
+| `max_speed_overlay_away_team_score` | integer |  |
+| `max_speed_overlay_game_date` | character |  |
+| `max_speed_overlay_game_outcome_last_period_type` | character |  |
+| `max_speed_overlay_game_type` | integer |  |
+| `max_speed_overlay_home_team_abbrev` | character |  |
+| `max_speed_overlay_home_team_score` | integer |  |
+| `max_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `max_speed_overlay_period_descriptor_number` | integer |  |
+| `max_speed_overlay_period_descriptor_period_type` | character |  |
+| `max_speed_overlay_player_first_name_default` | character |  |
+| `max_speed_overlay_player_last_name_default` | character |  |
+| `max_speed_overlay_time_in_period` | character |  |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_position` | character | Primary player position. |
+| `player_slug` | character | URL slug for the player. |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_slug` | character | Player team URL-friendly slug. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `max_speed_overlay_game_outcome_ot_periods` | double |  |
+| `player_team_common_name_fr` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_edge_skater_speed_top_10-example}
 
 ```python
-nhl_edge_skater_speed_top_10(positions='defense', sort_by='points')
+nhl_edge_skater_speed_top_10(positions='defense', sort_by='max', season=20242025)
 ```
 
 _Last validated n/a._
@@ -558,7 +636,7 @@ Pull the EDGE top-10 skaters by skating distance.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/ev/points/now](https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/ev/points/now)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/all/total/20242025/2](https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/all/total/20242025/2)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -570,13 +648,63 @@ Pull the EDGE top-10 skaters by skating distance.
 
 ### Returns {#nhl_edge_skater_distance_top_10-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `distance_max_per_game_imperial` | double | Maximum single-game skating distance (imperial units). |
+| `distance_max_per_game_metric` | double | Maximum distance skated in a single game, in kilometers. |
+| `distance_max_per_game_overlay_away_team_abbrev` | character | Away team abbreviation in the max-per-game game. |
+| `distance_max_per_game_overlay_away_team_score` | integer | Away team score in the max-per-game game. |
+| `distance_max_per_game_overlay_game_date` | character | Game date of the max-per-game performance. |
+| `distance_max_per_game_overlay_game_outcome_last_period_type` | character | Last period type of the max-per-game game outcome. |
+| `distance_max_per_game_overlay_game_type` | integer | Game type of the max-per-game performance. |
+| `distance_max_per_game_overlay_home_team_abbrev` | character | Home team abbreviation in the max-per-game game. |
+| `distance_max_per_game_overlay_home_team_score` | integer | Home team score in the max-per-game game. |
+| `distance_max_per_game_overlay_period_descriptor_max_regulation_periods` | integer | Maximum regulation periods for the max-per-game game. |
+| `distance_max_per_game_overlay_period_descriptor_number` | integer | Period number for the max-per-game game descriptor. |
+| `distance_max_per_game_overlay_period_descriptor_period_type` | character | Period type for the max-per-game game descriptor. |
+| `distance_max_per_game_overlay_player_first_name_default` | character | Max-per-game player first name (default locale). |
+| `distance_max_per_game_overlay_player_last_name_default` | character | Max-per-game player last name (default locale). |
+| `distance_max_per_period_imperial` | double | Maximum single-period skating distance (imperial units). |
+| `distance_max_per_period_metric` | double | Maximum distance skated in a single period, in kilometers. |
+| `distance_max_per_period_overlay_away_team_abbrev` | character | Away team abbreviation in the max-per-period game. |
+| `distance_max_per_period_overlay_away_team_score` | integer | Away team score in the max-per-period game. |
+| `distance_max_per_period_overlay_game_date` | character | Game date of the max-per-period performance. |
+| `distance_max_per_period_overlay_game_outcome_last_period_type` | character | Last period type of the max-per-period game outcome. |
+| `distance_max_per_period_overlay_game_type` | integer | Game type of the max-per-period performance. |
+| `distance_max_per_period_overlay_home_team_abbrev` | character | Home team abbreviation in the max-per-period game. |
+| `distance_max_per_period_overlay_home_team_score` | integer | Home team score in the max-per-period game. |
+| `distance_max_per_period_overlay_period_descriptor_max_regulation_periods` | integer | Maximum regulation periods for the max-per-period game. |
+| `distance_max_per_period_overlay_period_descriptor_number` | integer | Period number for the max-per-period game descriptor. |
+| `distance_max_per_period_overlay_period_descriptor_period_type` | character | Period type for the max-per-period game descriptor. |
+| `distance_max_per_period_overlay_player_first_name_default` | character | Max-per-period player first name (default locale). |
+| `distance_max_per_period_overlay_player_last_name_default` | character | Max-per-period player last name (default locale). |
+| `distance_per60_imperial` | double | Skating distance per 60 minutes (imperial units). |
+| `distance_per60_metric` | double | Skating distance per 60 minutes (metric units). |
+| `distance_total_imperial` | double | Total skating distance (imperial units). |
+| `distance_total_metric` | double | Total skating distance (metric units). |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_position` | character | Primary player position. |
+| `player_slug` | character | URL slug for the player. |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_slug` | character | Player team URL-friendly slug. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `distance_max_per_game_overlay_game_outcome_ot_periods` | double | Number of overtime periods in the max-per-game game. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_edge_skater_distance_top_10-example}
 
 ```python
-nhl_edge_skater_distance_top_10(positions='defense', strength='ev', sort_by='points')
+nhl_edge_skater_distance_top_10(positions='defense', strength='all', sort_by='total', season=20242025)
 ```
 
 _Last validated n/a._
@@ -628,7 +756,7 @@ Pull the EDGE top-10 skaters by zone time.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/ev/points/now](https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/ev/points/now)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/all/offensive/20242025/2](https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/all/offensive/20242025/2)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -640,13 +768,33 @@ Pull the EDGE top-10 skaters by zone time.
 
 ### Returns {#nhl_edge_skater_zone_time_top_10-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `defensive_zone_time` | double | Percentage of time spent in the defensive zone. |
+| `neutral_zone_time` | double | Percentage of time spent in the neutral zone. |
+| `offensive_zone_time` | double | Percentage of time spent in the offensive zone. |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_position` | character | Primary player position. |
+| `player_slug` | character | URL slug for the player. |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_slug` | character | Player team URL-friendly slug. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_edge_skater_zone_time_top_10-example}
 
 ```python
-nhl_edge_skater_zone_time_top_10(positions='defense', strength='ev', sort_by='points')
+nhl_edge_skater_zone_time_top_10(positions='defense', strength='all', sort_by='offensive', season=20242025)
 ```
 
 _Last validated n/a._

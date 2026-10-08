@@ -1,0 +1,83 @@
+{
+ "count": 144,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/2?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/5?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/6?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/8?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/9?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/12?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/21?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/23?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/24?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/25?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/26?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/30?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/36?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/38?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/41?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/52?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/55?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/57?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/58?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/59?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/61?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/62?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/66?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/68?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/77?lang=en&region=us"
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 500
+}

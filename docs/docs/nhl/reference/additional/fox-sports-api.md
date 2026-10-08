@@ -24,6 +24,16 @@ NHL boxscore (long: one row per player-stat).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team` | character | Team name. |
+| `stat_group` | character | Stat group name ("forwards","defenses","goalies"). |
+| `player` | character | Penalized player name. |
+| `athlete_id` | character | ESPN athlete identifier (echoed from arg). |
+| `stat` | character |  |
+| `value` | character | Leader stat numeric value. |
+
 **Example**
 
 ```python
@@ -397,6 +407,8 @@ NHL game odds six-pack (spread / to-win / total per team).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+No returns table is published for this function: no capture: for this sport Fox sends the odds under sectionList modules rather than the top-level sixPack key the shared parser reads (football and MLB still use sixPack), so it returns an empty frame for every game.
+
 **Example**
 
 ```python
@@ -421,6 +433,19 @@ NHL play-by-play (one row per play; period-based).
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `period` | character | Period number. |
+| `left_team` | character |  |
+| `right_team` | character |  |
+| `play_id` | character | ESPN play id (echoed from arg). |
+| `clock` | character | Game clock time remaining (MM:SS). |
+| `team` | character | Team name. |
+| `left_score_change` | logical |  |
+| `right_score_change` | logical |  |
+| `play_text` | character |  |
 
 **Example**
 
@@ -515,6 +540,33 @@ NHL standings for a team's conference/division.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique team identifier. |
+| `section` | character |  |
+| `eastern_conference` | character |  |
+| `v1` | character |  |
+| `w_l_otl` | character |  |
+| `pts` | character |  |
+| `gp` | character |  |
+| `row` | character |  |
+| `sow` | character |  |
+| `sol` | character |  |
+| `gf` | character |  |
+| `ga` | character | Goals against (goalies). |
+| `gd` | character |  |
+| `home` | character | Whether the player's team was home. |
+| `away` | character | Away team shots in the period. |
+| `l10` | character |  |
+| `strk` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `western_conference` | character |  |
+| `east_atlantic` | character |  |
+| `east_metropolitan` | character |  |
+| `west_central` | character |  |
+| `west_pacific` | character |  |
+| `wild_card` | character |  |
+
 **Example**
 
 ```python
@@ -539,6 +591,17 @@ NHL team game log (long: one row per game-stat).
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique team identifier. |
+| `season_type` | character | Season type code (echoed from arg). |
+| `category` | character | Stat leader category. |
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date. |
+| `opponent` | character |  |
+| `stat` | character |  |
+| `value` | character | Leader stat numeric value. |
 
 **Example**
 
@@ -584,6 +647,18 @@ NHL team roster (one row per player).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique team identifier. |
+| `position_group` | character | Position group name (e.g. Centers). |
+| `player` | character | Penalized player name. |
+| `pos` | character |  |
+| `age` | character | Player age. |
+| `ht` | character | Hits (skaters). |
+| `wt` | character |  |
+| `college` | character |  |
+| `athlete_id` | character | ESPN athlete identifier (echoed from arg). |
+
 **Example**
 
 ```python
@@ -608,6 +683,15 @@ NHL team stat leaders by category.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique team identifier. |
+| `category` | character | Stat leader category. |
+| `stat` | character |  |
+| `stat_abbreviation` | character |  |
+| `player` | character | Penalized player name. |
+| `value` | character | Leader stat numeric value. |
 
 **Example**
 

@@ -1,0 +1,664 @@
+[
+ {
+  "hardestShot": {
+   "imperial": 105.05,
+   "metric": 169.0616,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "FLA",
+     "score": 1
+    },
+    "gameDate": "2025-03-20",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "CBJ",
+     "score": 0
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Gustav"
+     },
+     "lastName": {
+      "default": "Forsling"
+     }
+    },
+    "timeInPeriod": "11:53"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Gustav"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/FLA/8478055.png",
+   "lastName": {
+    "default": "Forsling"
+   },
+   "position": "D",
+   "slug": "gustav-forsling-8478055",
+   "sweaterNumber": 42,
+   "team": {
+    "abbrev": "FLA",
+    "commonName": {
+     "default": "Panthers"
+    },
+    "placeNameWithPreposition": {
+     "default": "Florida",
+     "fr": "de la Floride"
+    },
+    "slug": "florida-panthers-13",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 112,
+  "shotAttempts80To90": 97,
+  "shotAttempts90To100": 25,
+  "shotAttemptsOver100": 2
+ },
+ {
+  "hardestShot": {
+   "imperial": 103.77,
+   "metric": 167.0016,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "COL",
+     "score": 5
+    },
+    "gameDate": "2024-10-24",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "UTA",
+     "score": 1
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Michael"
+     },
+     "lastName": {
+      "default": "Kesselring"
+     }
+    },
+    "timeInPeriod": "14:16"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Michael"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/UTA/8480891.png",
+   "lastName": {
+    "default": "Kesselring"
+   },
+   "position": "D",
+   "slug": "michael-kesselring-8480891",
+   "sweaterNumber": 7,
+   "team": {
+    "abbrev": "UTA",
+    "commonName": {
+     "default": "Utah Hockey Club",
+     "fr": "Club de hockey de l'Utah"
+    },
+    "placeNameWithPreposition": {
+     "default": "Utah",
+     "fr": "de l'Utah"
+    },
+    "slug": "utah-hockey-club-59",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 98,
+  "shotAttempts80To90": 68,
+  "shotAttempts90To100": 23,
+  "shotAttemptsOver100": 1
+ },
+ {
+  "hardestShot": {
+   "imperial": 103.08,
+   "metric": 165.8912,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "FLA",
+     "score": 3
+    },
+    "gameDate": "2024-11-19",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "WPG",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Colin"
+     },
+     "lastName": {
+      "default": "Miller"
+     }
+    },
+    "timeInPeriod": "15:12"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Colin"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/WPG/8476525.png",
+   "lastName": {
+    "default": "Miller"
+   },
+   "position": "D",
+   "slug": "colin-miller-8476525",
+   "sweaterNumber": 6,
+   "team": {
+    "abbrev": "WPG",
+    "commonName": {
+     "default": "Jets"
+    },
+    "placeNameWithPreposition": {
+     "default": "Winnipeg",
+     "fr": "de Winnipeg"
+    },
+    "slug": "winnipeg-jets-52",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/WPG_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 54,
+  "shotAttempts80To90": 34,
+  "shotAttempts90To100": 24,
+  "shotAttemptsOver100": 2
+ },
+ {
+  "hardestShot": {
+   "imperial": 102.3,
+   "metric": 164.6359,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "WPG",
+     "score": 4
+    },
+    "gameDate": "2025-02-22",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "STL",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Colton"
+     },
+     "lastName": {
+      "default": "Parayko"
+     }
+    },
+    "timeInPeriod": "12:33"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Colton"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/STL/8476892.png",
+   "lastName": {
+    "default": "Parayko"
+   },
+   "position": "D",
+   "slug": "colton-parayko-8476892",
+   "sweaterNumber": 55,
+   "team": {
+    "abbrev": "STL",
+    "commonName": {
+     "default": "Blues"
+    },
+    "placeNameWithPreposition": {
+     "default": "St. Louis",
+     "fr": "de St. Louis"
+    },
+    "slug": "st-louis-blues-19",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 50,
+  "shotAttempts80To90": 57,
+  "shotAttempts90To100": 17,
+  "shotAttemptsOver100": 1
+ },
+ {
+  "hardestShot": {
+   "imperial": 101.92,
+   "metric": 164.0243,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "ANA",
+     "score": 3
+    },
+    "gameDate": "2024-11-19",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "CHI",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Alex"
+     },
+     "lastName": {
+      "default": "Vlasic"
+     }
+    },
+    "timeInPeriod": "05:36"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Alex"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/CHI/8481568.png",
+   "lastName": {
+    "default": "Vlasic"
+   },
+   "position": "D",
+   "slug": "alex-vlasic-8481568",
+   "sweaterNumber": 72,
+   "team": {
+    "abbrev": "CHI",
+    "commonName": {
+     "default": "Blackhawks"
+    },
+    "placeNameWithPreposition": {
+     "default": "Chicago",
+     "fr": "de Chicago"
+    },
+    "slug": "chicago-blackhawks-16",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/CHI_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 76,
+  "shotAttempts80To90": 35,
+  "shotAttempts90To100": 1,
+  "shotAttemptsOver100": 1
+ },
+ {
+  "hardestShot": {
+   "imperial": 101.34,
+   "metric": 163.0909,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "NYI",
+     "score": 3
+    },
+    "gameDate": "2024-12-15",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "CHI",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Ryan"
+     },
+     "lastName": {
+      "default": "Pulock"
+     }
+    },
+    "timeInPeriod": "18:43"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Ryan"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/NYI/8477506.png",
+   "lastName": {
+    "default": "Pulock"
+   },
+   "position": "D",
+   "slug": "ryan-pulock-8477506",
+   "sweaterNumber": 6,
+   "team": {
+    "abbrev": "NYI",
+    "commonName": {
+     "default": "Islanders"
+    },
+    "placeNameWithPreposition": {
+     "default": "New York",
+     "fr": "de New York"
+    },
+    "slug": "new-york-islanders-2",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/NYI_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 40,
+  "shotAttempts80To90": 27,
+  "shotAttempts90To100": 35,
+  "shotAttemptsOver100": 4
+ },
+ {
+  "hardestShot": {
+   "imperial": 101.24,
+   "metric": 162.93,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "PIT",
+     "score": 1
+    },
+    "gameDate": "2025-01-23",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "ANA",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Radko"
+     },
+     "lastName": {
+      "default": "Gudas"
+     }
+    },
+    "timeInPeriod": "15:59"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Radko"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/ANA/8475462.png",
+   "lastName": {
+    "default": "Gudas"
+   },
+   "position": "D",
+   "slug": "radko-gudas-8475462",
+   "sweaterNumber": 6,
+   "team": {
+    "abbrev": "ANA",
+    "commonName": {
+     "default": "Ducks"
+    },
+    "placeNameWithPreposition": {
+     "default": "Anaheim",
+     "fr": "d'Anaheim"
+    },
+    "slug": "anaheim-ducks-24",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 65,
+  "shotAttempts80To90": 42,
+  "shotAttempts90To100": 25,
+  "shotAttemptsOver100": 2
+ },
+ {
+  "hardestShot": {
+   "imperial": 101.06,
+   "metric": 162.6403,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "VAN",
+     "score": 3
+    },
+    "gameDate": "2025-03-01",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "SEA",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Tyler"
+     },
+     "lastName": {
+      "default": "Myers"
+     }
+    },
+    "timeInPeriod": "08:55"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Tyler"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/VAN/8474574.png",
+   "lastName": {
+    "default": "Myers"
+   },
+   "position": "D",
+   "slug": "tyler-myers-8474574",
+   "sweaterNumber": 57,
+   "team": {
+    "abbrev": "VAN",
+    "commonName": {
+     "default": "Canucks"
+    },
+    "placeNameWithPreposition": {
+     "default": "Vancouver",
+     "fr": "de Vancouver"
+    },
+    "slug": "vancouver-canucks-23",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/VAN_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 48,
+  "shotAttempts80To90": 49,
+  "shotAttempts90To100": 15,
+  "shotAttemptsOver100": 1
+ },
+ {
+  "hardestShot": {
+   "imperial": 100.65,
+   "metric": 161.9805,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "DET",
+     "score": 1
+    },
+    "gameDate": "2025-04-10",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "FLA",
+     "score": 4
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Jeff"
+     },
+     "lastName": {
+      "default": "Petry"
+     }
+    },
+    "timeInPeriod": "10:03"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Jeff"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/DET/8473507.png",
+   "lastName": {
+    "default": "Petry"
+   },
+   "position": "D",
+   "slug": "jeff-petry-8473507",
+   "sweaterNumber": 2,
+   "team": {
+    "abbrev": "DET",
+    "commonName": {
+     "default": "Red Wings"
+    },
+    "placeNameWithPreposition": {
+     "default": "Detroit",
+     "fr": "de Detroit"
+    },
+    "slug": "detroit-red-wings-17",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/DET_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 33,
+  "shotAttempts80To90": 12,
+  "shotAttempts90To100": 11,
+  "shotAttemptsOver100": 1
+ },
+ {
+  "hardestShot": {
+   "imperial": 100.37,
+   "metric": 161.5299,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "TOR",
+     "score": 3
+    },
+    "gameDate": "2025-01-09",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "CAR",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Philippe"
+     },
+     "lastName": {
+      "default": "Myers"
+     }
+    },
+    "timeInPeriod": "03:59"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Philippe"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8479026.png",
+   "lastName": {
+    "default": "Myers"
+   },
+   "position": "D",
+   "slug": "philippe-myers-8479026",
+   "sweaterNumber": 51,
+   "team": {
+    "abbrev": "TOR",
+    "commonName": {
+     "default": "Maple Leafs"
+    },
+    "placeNameWithPreposition": {
+     "default": "Toronto",
+     "fr": "de Toronto"
+    },
+    "slug": "toronto-maple-leafs-10",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/TOR_light.svg"
+    }
+   }
+  },
+  "shotAttempts70To80": 36,
+  "shotAttempts80To90": 28,
+  "shotAttempts90To100": 15,
+  "shotAttemptsOver100": 1
+ }
+]

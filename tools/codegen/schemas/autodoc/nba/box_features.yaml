@@ -1,0 +1,45 @@
+schema: box_features
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: pts
+  type: double
+  description: ''
+- name: fg3m
+  type: double
+  description: ''
+- name: fga
+  type: double
+  description: ''
+- name: fta
+  type: double
+  description: ''
+- name: ast
+  type: double
+  description: ''
+- name: oreb
+  type: double
+  description: ''
+- name: dreb
+  type: double
+  description: ''
+- name: stl
+  type: double
+  description: ''
+- name: blk
+  type: double
+  description: ''
+- name: tov
+  type: double
+  description: ''
+- name: pf
+  type: double
+  description: ''
+- name: min
+  type: double
+  description: ''
+- name: gp
+  type: integer
+  description: ''

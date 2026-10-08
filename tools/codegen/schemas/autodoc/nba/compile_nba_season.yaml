@@ -1,0 +1,5 @@
+schema: compile_nba_season
+kind: dataframe
+columns: []
+unverified: 'no capture: it reads stats.nba.com (HTTP 403 to the datacenter IP the docs are built on), and compiling a season
+  from the raw store takes far longer than the capture allows'

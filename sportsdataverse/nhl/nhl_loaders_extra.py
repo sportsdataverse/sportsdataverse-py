@@ -45,22 +45,62 @@ __all__ = [
 
 
 def load_nhl_team_box(seasons, return_as_pandas: bool = False):
-    """Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R)."""
+    """Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R).
+
+    Args:
+        seasons: A season or list of seasons, as END years (2026 = the 2025-26 season).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: Exactly what :func:`load_nhl_team_boxscore` returns -- one row per team per game, the requested
+            seasons stacked; see its documented columns. A pandas DataFrame when
+            ``return_as_pandas`` is True.
+    """
     return load_nhl_team_boxscore(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_nhl_player_box(seasons, return_as_pandas: bool = False):
-    """Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R)."""
+    """Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R).
+
+    Args:
+        seasons: A season or list of seasons, as END years (2026 = the 2025-26 season).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: Exactly what :func:`load_nhl_player_boxscore` returns -- one row per player per game, the requested
+            seasons stacked; see its documented columns. A pandas DataFrame when
+            ``return_as_pandas`` is True.
+    """
     return load_nhl_player_boxscore(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_nhl_skater_box(seasons, return_as_pandas: bool = False):
-    """Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R)."""
+    """Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R).
+
+    Args:
+        seasons: A season or list of seasons, as END years (2026 = the 2025-26 season).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: Exactly what :func:`load_nhl_skater_boxscores` returns -- one row per skater per game, the requested
+            seasons stacked; see its documented columns. A pandas DataFrame when
+            ``return_as_pandas`` is True.
+    """
     return load_nhl_skater_boxscores(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_nhl_goalie_box(seasons, return_as_pandas: bool = False):
-    """Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R)."""
+    """Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R).
+
+    Args:
+        seasons: A season or list of seasons, as END years (2026 = the 2025-26 season).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: Exactly what :func:`load_nhl_goalie_boxscores` returns -- one row per goalie per game, the requested
+            seasons stacked; see its documented columns. A pandas DataFrame when
+            ``return_as_pandas`` is True.
+    """
     return load_nhl_goalie_boxscores(seasons, return_as_pandas=return_as_pandas)
 
 

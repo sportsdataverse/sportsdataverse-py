@@ -1,0 +1,30 @@
+schema: fox_mlb_team_roster
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: ''
+- name: position_group
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: pos
+  type: character
+  description: ''
+- name: age
+  type: character
+  description: ''
+- name: ht
+  type: character
+  description: ''
+- name: wt
+  type: character
+  description: ''
+- name: school
+  type: character
+  description: ''
+- name: athlete_id
+  type: character
+  description: ''

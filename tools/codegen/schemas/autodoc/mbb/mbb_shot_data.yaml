@@ -1,0 +1,45 @@
+schema: mbb_shot_data
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: shooter_id
+  type: character
+  description: ''
+- name: shot_x
+  type: double
+  description: ''
+- name: shot_y
+  type: double
+  description: ''
+- name: dist_ft
+  type: double
+  description: ''
+- name: shot_zone
+  type: character
+  description: ''
+- name: shot_type
+  type: character
+  description: ''
+- name: made
+  type: logical
+  description: ''
+- name: point_value
+  type: integer
+  description: ''
+- name: period
+  type: integer
+  description: ''
+- name: sec_left
+  type: double
+  description: ''
+- name: source
+  type: character
+  description: ''

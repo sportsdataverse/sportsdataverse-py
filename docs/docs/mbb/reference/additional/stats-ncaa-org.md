@@ -1344,8 +1344,12 @@ the same base path therefore always produce two distinct cache files.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `path` | `str` |  |  |
-| `cache_dir` | `Optional[Path]` | `None` |  |
+| `path` | `str` |  | The stats.ncaa.org URL path (with its query string, if any). |
+| `cache_dir` | `Optional[Path]` | `None` | The cache root; the active config's `cache_dir` when None. |
+
+**Returns**
+
+Where the page's HTML is (or would be) cached. The file need not exist.
 
 **Example**
 

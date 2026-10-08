@@ -1,0 +1,18 @@
+schema: transfer_cohort
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: from_team_id
+  type: character
+  description: ''
+- name: to_team_id
+  type: character
+  description: ''
+- name: from_season
+  type: integer
+  description: ''
+- name: to_season
+  type: integer
+  description: ''

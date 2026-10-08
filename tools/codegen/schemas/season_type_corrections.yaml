@@ -1,0 +1,24 @@
+schema: season_type_corrections
+kind: dataframe
+columns:
+- name: athlete_$ref
+  type: character
+  description: ''
+- name: competition_$ref
+  type: character
+  description: ''
+- name: split_stats_abbreviation
+  type: character
+  description: ''
+- name: split_stats_categories
+  type: character
+  description: ''
+- name: split_stats_id
+  type: character
+  description: ''
+- name: split_stats_name
+  type: character
+  description: ''
+- name: team_$ref
+  type: character
+  description: ''

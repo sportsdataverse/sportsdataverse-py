@@ -1,0 +1,27 @@
+schema: mbb_box_bpm
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: min
+  type: double
+  description: ''
+- name: box_obpm
+  type: double
+  description: ''
+- name: box_dbpm
+  type: double
+  description: ''
+- name: box_bpm
+  type: double
+  description: ''

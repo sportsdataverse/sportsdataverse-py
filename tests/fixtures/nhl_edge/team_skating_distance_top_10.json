@@ -1,0 +1,727 @@
+[
+ {
+  "distanceMaxPerGame": {
+   "imperial": 18.9956,
+   "metric": 30.569,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CBJ",
+     "score": 0
+    },
+    "gameDate": "2025-01-18",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NYR",
+     "score": 1
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.3613,
+   "metric": 10.2371,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CBJ",
+     "score": 2
+    },
+    "gameDate": "2025-03-04",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "TBL",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.7529,
+   "metric": 14.0858
+  },
+  "distanceTotal": {
+   "imperial": 1411.6841,
+   "metric": 2271.7744
+  },
+  "team": {
+   "abbrev": "CBJ",
+   "commonName": {
+    "default": "Blue Jackets"
+   },
+   "placeNameWithPreposition": {
+    "default": "Columbus"
+   },
+   "slug": "columbus-blue-jackets-29",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/CBJ_light.svg"
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 18.7349,
+   "metric": 30.1494,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "BUF",
+     "score": 3
+    },
+    "gameDate": "2024-11-22",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "ANA",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.4426,
+   "metric": 10.3679,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "MTL",
+     "score": 4
+    },
+    "gameDate": "2025-03-01",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "BUF",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.7388,
+   "metric": 14.063
+  },
+  "distanceTotal": {
+   "imperial": 1395.2497,
+   "metric": 2245.3271
+  },
+  "team": {
+   "abbrev": "BUF",
+   "commonName": {
+    "default": "Sabres"
+   },
+   "placeNameWithPreposition": {
+    "default": "Buffalo"
+   },
+   "slug": "buffalo-sabres-7",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/BUF_light.svg"
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 18.2156,
+   "metric": 29.3137,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "NJD",
+     "score": 3
+    },
+    "gameDate": "2024-11-04",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "EDM",
+     "score": 0
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.2136,
+   "metric": 9.9993,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CHI",
+     "score": 5
+    },
+    "gameDate": "2024-10-12",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "EDM",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.6039,
+   "metric": 13.8459
+  },
+  "distanceTotal": {
+   "imperial": 1383.9817,
+   "metric": 2227.194
+  },
+  "team": {
+   "abbrev": "EDM",
+   "commonName": {
+    "default": "Oilers"
+   },
+   "placeNameWithPreposition": {
+    "default": "Edmonton"
+   },
+   "slug": "edmonton-oilers-22",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg"
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 19.1656,
+   "metric": 30.8425,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "MIN",
+     "score": 5
+    },
+    "gameDate": "2024-10-22",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "FLA",
+     "score": 1
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.7879,
+   "metric": 10.9236,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "MIN",
+     "score": 5
+    },
+    "gameDate": "2024-10-22",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "FLA",
+     "score": 1
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.6672,
+   "metric": 13.9479
+  },
+  "distanceTotal": {
+   "imperial": 1383.746,
+   "metric": 2226.8146
+  },
+  "team": {
+   "abbrev": "FLA",
+   "commonName": {
+    "default": "Panthers"
+   },
+   "placeNameWithPreposition": {
+    "default": "Florida"
+   },
+   "slug": "florida-panthers-13",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg"
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 18.4491,
+   "metric": 29.6895,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "DET",
+     "score": 3
+    },
+    "gameDate": "2025-02-02",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "VAN",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.3175,
+   "metric": 10.1665,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "VAN",
+     "score": 3
+    },
+    "gameDate": "2025-02-26",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "LAK",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.5922,
+   "metric": 13.8272
+  },
+  "distanceTotal": {
+   "imperial": 1379.2023,
+   "metric": 2219.5027
+  },
+  "team": {
+   "abbrev": "VAN",
+   "commonName": {
+    "default": "Canucks"
+   },
+   "placeNameWithPreposition": {
+    "default": "Vancouver"
+   },
+   "slug": "vancouver-canucks-23",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/VAN_light.svg"
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 18.2238,
+   "metric": 29.327,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CBJ",
+     "score": 4
+    },
+    "gameDate": "2024-12-21",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "PHI",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.2757,
+   "metric": 10.0993,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "NYI",
+     "score": 3
+    },
+    "gameDate": "2025-04-12",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "PHI",
+     "score": 4
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.642,
+   "metric": 13.9072
+  },
+  "distanceTotal": {
+   "imperial": 1376.9128,
+   "metric": 2215.8182
+  },
+  "team": {
+   "abbrev": "PHI",
+   "commonName": {
+    "default": "Flyers"
+   },
+   "placeNameWithPreposition": {
+    "default": "Philadelphia"
+   },
+   "slug": "philadelphia-flyers-4",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg"
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 18.5813,
+   "metric": 29.9022,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "VGK",
+     "score": 1
+    },
+    "gameDate": "2024-11-27",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "COL",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.6533,
+   "metric": 10.7069,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "COL",
+     "score": 2
+    },
+    "gameDate": "2024-11-02",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NSH",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.6285,
+   "metric": 13.8856
+  },
+  "distanceTotal": {
+   "imperial": 1375.7375,
+   "metric": 2213.9269
+  },
+  "team": {
+   "abbrev": "COL",
+   "commonName": {
+    "default": "Avalanche"
+   },
+   "placeNameWithPreposition": {
+    "default": "Colorado"
+   },
+   "slug": "colorado-avalanche-21",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 18.2112,
+   "metric": 29.3067,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "UTA",
+     "score": 3
+    },
+    "gameDate": "2024-11-02",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "VGK",
+     "score": 4
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.3145,
+   "metric": 10.1617,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "VGK",
+     "score": 3
+    },
+    "gameDate": "2025-01-14",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NSH",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.5245,
+   "metric": 13.7183
+  },
+  "distanceTotal": {
+   "imperial": 1372.4211,
+   "metric": 2208.5899
+  },
+  "team": {
+   "abbrev": "VGK",
+   "commonName": {
+    "default": "Golden Knights"
+   },
+   "placeNameWithPreposition": {
+    "default": "Vegas"
+   },
+   "slug": "vegas-golden-knights-54",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg"
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 20.6314,
+   "metric": 33.2013,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CBJ",
+     "score": 4
+    },
+    "gameDate": "2025-03-24",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NYI",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.6768,
+   "metric": 10.7448,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CBJ",
+     "score": 4
+    },
+    "gameDate": "2025-03-24",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NYI",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.4649,
+   "metric": 13.6223
+  },
+  "distanceTotal": {
+   "imperial": 1369.7728,
+   "metric": 2204.3281
+  },
+  "team": {
+   "abbrev": "NYI",
+   "commonName": {
+    "default": "Islanders"
+   },
+   "placeNameWithPreposition": {
+    "default": "New York"
+   },
+   "slug": "new-york-islanders-2",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/NYI_light.svg"
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 17.7841,
+   "metric": 28.6193,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CAR",
+     "score": 2
+    },
+    "gameDate": "2024-12-23",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NSH",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 6.4229,
+   "metric": 10.3362,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "VGK",
+     "score": 3
+    },
+    "gameDate": "2025-01-14",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NSH",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.6257,
+   "metric": 13.881
+  },
+  "distanceTotal": {
+   "imperial": 1365.7836,
+   "metric": 2197.9084
+  },
+  "team": {
+   "abbrev": "NSH",
+   "commonName": {
+    "default": "Predators"
+   },
+   "placeNameWithPreposition": {
+    "default": "Nashville"
+   },
+   "slug": "nashville-predators-18",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg"
+   }
+  }
+ }
+]

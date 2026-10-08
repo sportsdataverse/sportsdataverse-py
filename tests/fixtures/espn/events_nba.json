@@ -1,0 +1,36 @@
+{
+ "$meta": {
+  "parameters": {
+   "dates": [
+    "20261007"
+   ],
+   "season": [
+    "2027"
+   ],
+   "seasontypes": [
+    "1"
+   ]
+  }
+ },
+ "count": 5,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401914123?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401898391?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401908620?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401908939?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401914129?lang=en&region=us"
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 500
+}

@@ -1,0 +1,42 @@
+schema: event
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: competitions
+  type: character
+  description: ''
+- name: date
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: ''
+- name: links
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: short_name
+  type: character
+  description: ''
+- name: time_valid
+  type: logical
+  description: ''
+- name: uid
+  type: character
+  description: ''
+- name: venues
+  type: character
+  description: ''
+- name: league_$ref
+  type: character
+  description: ''
+- name: season_$ref
+  type: character
+  description: ''
+- name: season_type_$ref
+  type: character
+  description: ''

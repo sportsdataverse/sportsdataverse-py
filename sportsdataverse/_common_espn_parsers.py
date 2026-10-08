@@ -1435,6 +1435,40 @@ def parse_news(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     return _to_output(df, return_as_pandas)
 
 
+def parse_transactions(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a Site v2 ``transactions`` response into a tidy frame.
+
+    Input: raw payload from ``espn_{league}_transactions()`` -- shape::
+
+        {"count": N, "pageIndex": 1, "season": {...}, "transactions": [
+            {"date": "...", "description": "...", "team": {...}}, ...]}
+
+    The records live under ``transactions``, not the ``items`` list the generic
+    :func:`parse_items` reads.
+
+    Args:
+        payload: Raw JSON dict from a transactions wrapper.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per transaction: ``date``,
+        ``description`` and the team flattened to ``team_id``, ``team_abbreviation``,
+        ``team_display_name``, colors and links. A zero-row frame when the payload
+        carries no transactions.
+    """
+    if not payload or not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    records = payload.get("transactions")
+    if not isinstance(records, list) or not records:
+        return _empty_frame(return_as_pandas)
+    try:
+        df = pd.json_normalize(records, sep="_")
+    except Exception:
+        return _empty_frame(return_as_pandas)
+    df = _snake_columns(df)
+    return _to_output(df, return_as_pandas)
+
+
 def parse_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Site v2 ``injuries`` response into a tidy frame.
 
@@ -2389,7 +2423,7 @@ ENDPOINT_PARSERS = {
     "awards": parse_items,
     "tournaments": parse_items,
     "positions": parse_items,
-    "transactions": parse_items,
+    "transactions": parse_transactions,
     "team_transactions": parse_items,
     "team_record": parse_items,
     "team_history": parse_items,

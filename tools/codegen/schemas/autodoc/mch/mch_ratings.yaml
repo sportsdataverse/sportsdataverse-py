@@ -1,0 +1,24 @@
+schema: mch_ratings
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: ''
+- name: adj_off
+  type: double
+  description: ''
+- name: adj_def
+  type: double
+  description: ''
+- name: adj_net
+  type: double
+  description: ''
+- name: raw_off
+  type: double
+  description: ''
+- name: raw_def
+  type: double
+  description: ''
+- name: games
+  type: integer
+  description: ''

@@ -1,0 +1,3279 @@
+{
+ "count": 13,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/50?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+450",
+      "american": "+450",
+      "decimal": 5.5,
+      "displayValue": "9/2",
+      "fraction": "9/2",
+      "value": 5.5
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+450",
+      "american": "+450",
+      "decimal": 5.5,
+      "displayValue": "9/2",
+      "fraction": "9/2",
+      "value": 5.5
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "favorite": false,
+    "moneyLine": 450,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+550",
+      "american": "+550",
+      "decimal": 6.5,
+      "displayValue": "11/2",
+      "fraction": "11/2",
+      "value": 6.5
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-120",
+      "american": "-120",
+      "decimal": 1.83,
+      "displayValue": "5/6",
+      "fraction": "5/6",
+      "value": 1.83
+     }
+    },
+    "spreadOdds": -111.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    }
+   },
+   "details": "MIL -12",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-700",
+      "american": "-700",
+      "decimal": 1.14,
+      "displayValue": "1/7",
+      "fraction": "1/7",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-700",
+      "american": "-700",
+      "decimal": 1.14,
+      "displayValue": "1/7",
+      "fraction": "1/7",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "favorite": true,
+    "moneyLine": -700,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-1000",
+      "american": "-1000",
+      "decimal": 1.1,
+      "displayValue": "1/10",
+      "fraction": "1/10",
+      "value": 1.1
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-120",
+      "american": "-120",
+      "decimal": 1.83,
+      "displayValue": "5/6",
+      "fraction": "5/6",
+      "value": 1.83
+     }
+    },
+    "spreadOdds": -111.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-120",
+     "american": "-120",
+     "decimal": 1.83,
+     "displayValue": "5/6",
+     "fraction": "5/6",
+     "value": 1.83
+    },
+    "total": {
+     "alternateDisplayValue": "229",
+     "american": "229",
+     "decimal": 229.0,
+     "displayValue": "229",
+     "fraction": "229",
+     "value": 229.0
+    },
+    "under": {
+     "alternateDisplayValue": "-120",
+     "american": "-120",
+     "decimal": 1.83,
+     "displayValue": "5/6",
+     "fraction": "5/6",
+     "value": 1.83
+    }
+   },
+   "overOdds": -111.0,
+   "overUnder": 227.0,
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/50?lang=en&region=us",
+    "id": "50",
+    "name": "BetfairSportsbook",
+    "priority": 0
+   },
+   "spread": -12.0,
+   "spreadWinner": false,
+   "underOdds": -111.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/52?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": false,
+    "moneyLine": 500,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+600",
+      "american": "+600",
+      "decimal": 7.0,
+      "displayValue": "6/1",
+      "fraction": "6/1",
+      "value": 7.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "details": "MIL -12",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-700",
+      "american": "-700",
+      "decimal": 1.14,
+      "displayValue": "1/7",
+      "fraction": "1/7",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-700",
+      "american": "-700",
+      "decimal": 1.14,
+      "displayValue": "1/7",
+      "fraction": "1/7",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": true,
+    "moneyLine": -700,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-900",
+      "american": "-900",
+      "decimal": 1.11,
+      "displayValue": "1/9",
+      "fraction": "1/9",
+      "value": 1.11
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "229",
+     "american": "229",
+     "decimal": 229.0,
+     "displayValue": "229",
+     "fraction": "229",
+     "value": 229.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "overOdds": -110.0,
+   "overUnder": 227.0,
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/52?lang=en&region=us",
+    "id": "52",
+    "name": "Caesars Sportsbook (Colorado)",
+    "priority": 0
+   },
+   "spread": -12.0,
+   "spreadWinner": false,
+   "underOdds": -110.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/45?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": false,
+    "moneyLine": 500,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+600",
+      "american": "+600",
+      "decimal": 7.0,
+      "displayValue": "6/1",
+      "fraction": "6/1",
+      "value": 7.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "details": "MIL -12",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-700",
+      "american": "-700",
+      "decimal": 1.14,
+      "displayValue": "1/7",
+      "fraction": "1/7",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-700",
+      "american": "-700",
+      "decimal": 1.14,
+      "displayValue": "1/7",
+      "fraction": "1/7",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": true,
+    "moneyLine": -700,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-900",
+      "american": "-900",
+      "decimal": 1.11,
+      "displayValue": "1/9",
+      "fraction": "1/9",
+      "value": 1.11
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "229",
+     "american": "229",
+     "decimal": 229.0,
+     "displayValue": "229",
+     "fraction": "229",
+     "value": 229.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "overOdds": -110.0,
+   "overUnder": 227.0,
+   "propBets": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/45/propBets?lang=en&region=us"
+   },
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/45?lang=en&region=us",
+    "id": "45",
+    "name": "Caesars Sportsbook (New Jersey)",
+    "priority": 0
+   },
+   "spread": -12.0,
+   "spreadWinner": false,
+   "underOdds": -110.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/46?lang=en&region=us",
+   "awayTeamOdds": {
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-120",
+      "american": "-120",
+      "decimal": 1.83,
+      "displayValue": "5/6",
+      "fraction": "5/6",
+      "value": 1.83
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-1.5",
+      "american": "-1.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "+110",
+      "american": "+110",
+      "decimal": 2.1,
+      "displayValue": "11/10",
+      "fraction": "11/10",
+      "value": 2.1
+     }
+    },
+    "favorite": true,
+    "moneyLine": -120,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-120",
+      "american": "-120",
+      "decimal": 1.83,
+      "displayValue": "5/6",
+      "fraction": "5/6",
+      "value": 1.83
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-1.5",
+      "american": "-1.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "+110",
+      "american": "+110",
+      "decimal": 2.1,
+      "displayValue": "11/10",
+      "fraction": "11/10",
+      "value": 2.1
+     }
+    },
+    "spreadOdds": 110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-105",
+     "american": "-105",
+     "decimal": 1.95,
+     "displayValue": "20/21",
+     "fraction": "20/21",
+     "value": 1.95
+    },
+    "total": {
+     "alternateDisplayValue": "236.5",
+     "american": "236.5",
+     "decimal": 236.5,
+     "displayValue": "236.5",
+     "fraction": "236.5",
+     "value": 236.5
+    },
+    "under": {
+     "alternateDisplayValue": "-125",
+     "american": "-125",
+     "decimal": 1.8,
+     "displayValue": "4/5",
+     "fraction": "4/5",
+     "value": 1.8
+    }
+   },
+   "details": "DET -1.5",
+   "homeTeamOdds": {
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+1.5",
+      "american": "+1.5",
+      "decimal": 1.5,
+      "displayValue": "1.5",
+      "fraction": "1.5",
+      "value": 1.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-140",
+      "american": "-140",
+      "decimal": 1.71,
+      "displayValue": "5/7",
+      "fraction": "5/7",
+      "value": 1.71
+     }
+    },
+    "favorite": false,
+    "moneyLine": -110,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+1.5",
+      "american": "+1.5",
+      "decimal": 1.5,
+      "displayValue": "1.5",
+      "fraction": "1.5",
+      "value": 1.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-140",
+      "american": "-140",
+      "decimal": 1.71,
+      "displayValue": "5/7",
+      "fraction": "5/7",
+      "value": 1.71
+     }
+    },
+    "spreadOdds": -140.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-105",
+     "american": "-105",
+     "decimal": 1.95,
+     "displayValue": "20/21",
+     "fraction": "20/21",
+     "value": 1.95
+    },
+    "total": {
+     "alternateDisplayValue": "236.5",
+     "american": "236.5",
+     "decimal": 236.5,
+     "displayValue": "236.5",
+     "fraction": "236.5",
+     "value": 236.5
+    },
+    "under": {
+     "alternateDisplayValue": "-125",
+     "american": "-125",
+     "decimal": 1.8,
+     "displayValue": "4/5",
+     "fraction": "4/5",
+     "value": 1.8
+    }
+   },
+   "overOdds": -105.0,
+   "overUnder": 236.5,
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/46?lang=en&region=us",
+    "id": "46",
+    "name": "Caesars Sportsbook (New Jersey) - Live Odds",
+    "priority": 0
+   },
+   "spread": 1.5,
+   "spreadWinner": false,
+   "underOdds": -125.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/57?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": false,
+    "moneyLine": 500,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+600",
+      "american": "+600",
+      "decimal": 7.0,
+      "displayValue": "6/1",
+      "fraction": "6/1",
+      "value": 7.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "details": "MIL -12",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-700",
+      "american": "-700",
+      "decimal": 1.14,
+      "displayValue": "1/7",
+      "fraction": "1/7",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-700",
+      "american": "-700",
+      "decimal": 1.14,
+      "displayValue": "1/7",
+      "fraction": "1/7",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": true,
+    "moneyLine": -700,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-900",
+      "american": "-900",
+      "decimal": 1.11,
+      "displayValue": "1/9",
+      "fraction": "1/9",
+      "value": 1.11
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "229",
+     "american": "229",
+     "decimal": 229.0,
+     "displayValue": "229",
+     "fraction": "229",
+     "value": 229.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "overOdds": -110.0,
+   "overUnder": 227.0,
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/57?lang=en&region=us",
+    "id": "57",
+    "name": "Caesars Sportsbook (Tennessee)",
+    "priority": 0
+   },
+   "spread": -12.0,
+   "spreadWinner": false,
+   "underOdds": -110.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/40?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+490",
+      "american": "+490",
+      "decimal": 5.9,
+      "displayValue": "49/10",
+      "fraction": "49/10",
+      "value": 5.9
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-108",
+      "american": "-108",
+      "decimal": 1.93,
+      "displayValue": "25/27",
+      "fraction": "25/27",
+      "value": 1.93
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+490",
+      "american": "+490",
+      "decimal": 5.9,
+      "displayValue": "49/10",
+      "fraction": "49/10",
+      "value": 5.9
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-108",
+      "american": "-108",
+      "decimal": 1.93,
+      "displayValue": "25/27",
+      "fraction": "25/27",
+      "value": 1.93
+     }
+    },
+    "favorite": false,
+    "moneyLine": 490,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+600",
+      "american": "+600",
+      "decimal": 7.0,
+      "displayValue": "6/1",
+      "fraction": "6/1",
+      "value": 7.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -108.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "details": "MIL -12",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-675",
+      "american": "-675",
+      "decimal": 1.15,
+      "displayValue": "4/27",
+      "fraction": "4/27",
+      "value": 1.15
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-112",
+      "american": "-112",
+      "decimal": 1.89,
+      "displayValue": "25/28",
+      "fraction": "25/28",
+      "value": 1.89
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-675",
+      "american": "-675",
+      "decimal": 1.15,
+      "displayValue": "4/27",
+      "fraction": "4/27",
+      "value": 1.15
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-112",
+      "american": "-112",
+      "decimal": 1.89,
+      "displayValue": "25/28",
+      "fraction": "25/28",
+      "value": 1.89
+     }
+    },
+    "favorite": true,
+    "moneyLine": -675,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-900",
+      "american": "-900",
+      "decimal": 1.11,
+      "displayValue": "1/9",
+      "fraction": "1/9",
+      "value": 1.11
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -112.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "229.5",
+     "american": "229.5",
+     "decimal": 229.5,
+     "displayValue": "229.5",
+     "fraction": "229.5",
+     "value": 229.5
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "overOdds": -110.0,
+   "overUnder": 227.0,
+   "propBets": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/40/propBets?lang=en&region=us"
+   },
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/40?lang=en&region=us",
+    "id": "40",
+    "name": "DraftKings",
+    "priority": 0
+   },
+   "spread": -12.0,
+   "spreadWinner": false,
+   "underOdds": -110.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/58?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": false,
+    "moneyLine": 500,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-115",
+     "american": "-115",
+     "decimal": 1.87,
+     "displayValue": "20/23",
+     "fraction": "20/23",
+     "value": 1.87
+    },
+    "total": {
+     "alternateDisplayValue": "227.5",
+     "american": "227.5"
+    },
+    "under": {
+     "alternateDisplayValue": "-105",
+     "american": "-105",
+     "decimal": 1.95,
+     "displayValue": "20/21",
+     "fraction": "20/21",
+     "value": 1.95
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-115",
+     "american": "-115",
+     "decimal": 1.87,
+     "displayValue": "20/23",
+     "fraction": "20/23",
+     "value": 1.87
+    },
+    "total": {
+     "alternateDisplayValue": "227.5",
+     "american": "227.5"
+    },
+    "under": {
+     "alternateDisplayValue": "-105",
+     "american": "-105",
+     "decimal": 1.95,
+     "displayValue": "20/21",
+     "fraction": "20/21",
+     "value": 1.95
+    }
+   },
+   "details": "MIL -12.5",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-725",
+      "american": "-725",
+      "decimal": 1.14,
+      "displayValue": "4/29",
+      "fraction": "4/29",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-725",
+      "american": "-725",
+      "decimal": 1.14,
+      "displayValue": "4/29",
+      "fraction": "4/29",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": true,
+    "moneyLine": -725,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-800",
+      "american": "-800",
+      "decimal": 1.13,
+      "displayValue": "1/8",
+      "fraction": "1/8",
+      "value": 1.13
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-105",
+     "american": "-105",
+     "decimal": 1.95,
+     "displayValue": "20/21",
+     "fraction": "20/21",
+     "value": 1.95
+    },
+    "total": {
+     "alternateDisplayValue": "229.5",
+     "american": "229.5"
+    },
+    "under": {
+     "alternateDisplayValue": "-115",
+     "american": "-115",
+     "decimal": 1.87,
+     "displayValue": "20/23",
+     "fraction": "20/23",
+     "value": 1.87
+    }
+   },
+   "overOdds": -115.0,
+   "overUnder": 227.5,
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/58?lang=en&region=us",
+    "id": "58",
+    "name": "ESPN BET",
+    "priority": 0
+   },
+   "spread": -12.5,
+   "spreadWinner": false,
+   "underOdds": -105.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/47?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+475",
+      "american": "+475",
+      "decimal": 5.75,
+      "displayValue": "19/4",
+      "fraction": "19/4",
+      "value": 5.75
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-115",
+      "american": "-115",
+      "decimal": 1.87,
+      "displayValue": "20/23",
+      "fraction": "20/23",
+      "value": 1.87
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+475",
+      "american": "+475",
+      "decimal": 5.75,
+      "displayValue": "19/4",
+      "fraction": "19/4",
+      "value": 5.75
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-115",
+      "american": "-115",
+      "decimal": 1.87,
+      "displayValue": "20/23",
+      "fraction": "20/23",
+      "value": 1.87
+     }
+    },
+    "favorite": false,
+    "moneyLine": 475,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+600",
+      "american": "+600",
+      "decimal": 7.0,
+      "displayValue": "6/1",
+      "fraction": "6/1",
+      "value": 7.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -115.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-105",
+     "american": "-105",
+     "decimal": 1.95,
+     "displayValue": "20/21",
+     "fraction": "20/21",
+     "value": 1.95
+    },
+    "total": {
+     "alternateDisplayValue": "227.5",
+     "american": "227.5",
+     "decimal": 227.5,
+     "displayValue": "227.5",
+     "fraction": "227.5",
+     "value": 227.5
+    },
+    "under": {
+     "alternateDisplayValue": "-115",
+     "american": "-115",
+     "decimal": 1.87,
+     "displayValue": "20/23",
+     "fraction": "20/23",
+     "value": 1.87
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-105",
+     "american": "-105",
+     "decimal": 1.95,
+     "displayValue": "20/21",
+     "fraction": "20/21",
+     "value": 1.95
+    },
+    "total": {
+     "alternateDisplayValue": "227.5",
+     "american": "227.5",
+     "decimal": 227.5,
+     "displayValue": "227.5",
+     "fraction": "227.5",
+     "value": 227.5
+    },
+    "under": {
+     "alternateDisplayValue": "-115",
+     "american": "-115",
+     "decimal": 1.87,
+     "displayValue": "20/23",
+     "fraction": "20/23",
+     "value": 1.87
+    }
+   },
+   "details": "MIL -12.5",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-650",
+      "american": "-650",
+      "decimal": 1.15,
+      "displayValue": "2/13",
+      "fraction": "2/13",
+      "value": 1.15
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-105",
+      "american": "-105",
+      "decimal": 1.95,
+      "displayValue": "20/21",
+      "fraction": "20/21",
+      "value": 1.95
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-650",
+      "american": "-650",
+      "decimal": 1.15,
+      "displayValue": "2/13",
+      "fraction": "2/13",
+      "value": 1.15
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-105",
+      "american": "-105",
+      "decimal": 1.95,
+      "displayValue": "20/21",
+      "fraction": "20/21",
+      "value": 1.95
+     }
+    },
+    "favorite": true,
+    "moneyLine": -650,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-900",
+      "american": "-900",
+      "decimal": 1.11,
+      "displayValue": "1/9",
+      "fraction": "1/9",
+      "value": 1.11
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -105.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "229.5",
+     "american": "229.5",
+     "decimal": 229.5,
+     "displayValue": "229.5",
+     "fraction": "229.5",
+     "value": 229.5
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "overOdds": -105.0,
+   "overUnder": 227.5,
+   "propBets": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/47/propBets?lang=en&region=us"
+   },
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/47?lang=en&region=us",
+    "id": "47",
+    "name": "MGM",
+    "priority": 0
+   },
+   "spread": -12.5,
+   "spreadWinner": false,
+   "underOdds": -115.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/48?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+450",
+      "american": "+450",
+      "decimal": 5.5,
+      "displayValue": "9/2",
+      "fraction": "9/2",
+      "value": 5.5
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+450",
+      "american": "+450",
+      "decimal": 5.5,
+      "displayValue": "9/2",
+      "fraction": "9/2",
+      "value": 5.5
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "favorite": false,
+    "moneyLine": 450,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "spreadOdds": -111.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    },
+    "total": {
+     "alternateDisplayValue": "227.5",
+     "american": "227.5",
+     "decimal": 227.5,
+     "displayValue": "227.5",
+     "fraction": "227.5",
+     "value": 227.5
+    },
+    "under": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    },
+    "total": {
+     "alternateDisplayValue": "227.5",
+     "american": "227.5",
+     "decimal": 227.5,
+     "displayValue": "227.5",
+     "fraction": "227.5",
+     "value": 227.5
+    },
+    "under": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    }
+   },
+   "details": "MIL -12",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-769",
+      "american": "-769",
+      "decimal": 1.13,
+      "displayValue": "100/769",
+      "fraction": "100/769",
+      "value": 1.13
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-769",
+      "american": "-769",
+      "decimal": 1.13,
+      "displayValue": "100/769",
+      "fraction": "100/769",
+      "value": 1.13
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "favorite": true,
+    "moneyLine": -769,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-909",
+      "american": "-909",
+      "decimal": 1.11,
+      "displayValue": "100/909",
+      "fraction": "100/909",
+      "value": 1.11
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "spreadOdds": -111.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    },
+    "total": {
+     "alternateDisplayValue": "229",
+     "american": "229",
+     "decimal": 229.0,
+     "displayValue": "229",
+     "fraction": "229",
+     "value": 229.0
+    },
+    "under": {
+     "alternateDisplayValue": "-111",
+     "american": "-111",
+     "decimal": 1.9,
+     "displayValue": "100/111",
+     "fraction": "100/111",
+     "value": 1.9
+    }
+   },
+   "overOdds": -111.0,
+   "overUnder": 227.5,
+   "propBets": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/48/propBets?lang=en&region=us"
+   },
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/48?lang=en&region=us",
+    "id": "48",
+    "name": "PointsBet",
+    "priority": 0
+   },
+   "spread": -12.0,
+   "spreadWinner": false,
+   "underOdds": -111.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/41?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+540",
+      "american": "+540",
+      "decimal": 6.4,
+      "displayValue": "27/5",
+      "fraction": "27/5",
+      "value": 6.4
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+540",
+      "american": "+540",
+      "decimal": 6.4,
+      "displayValue": "27/5",
+      "fraction": "27/5",
+      "value": 6.4
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-111",
+      "american": "-111",
+      "decimal": 1.9,
+      "displayValue": "100/111",
+      "fraction": "100/111",
+      "value": 1.9
+     }
+    },
+    "favorite": false,
+    "moneyLine": 540,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+575",
+      "american": "+575",
+      "decimal": 6.75,
+      "displayValue": "23/4",
+      "fraction": "23/4",
+      "value": 6.75
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -111.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "226.5",
+     "american": "226.5",
+     "decimal": 226.5,
+     "displayValue": "226.5",
+     "fraction": "226.5",
+     "value": 226.5
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "226.5",
+     "american": "226.5",
+     "decimal": 226.5,
+     "displayValue": "226.5",
+     "fraction": "226.5",
+     "value": 226.5
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "details": "MIL -12",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-769",
+      "american": "-769",
+      "decimal": 1.13,
+      "displayValue": "100/769",
+      "fraction": "100/769",
+      "value": 1.13
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-109",
+      "american": "-109",
+      "decimal": 1.92,
+      "displayValue": "100/109",
+      "fraction": "100/109",
+      "value": 1.92
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-769",
+      "american": "-769",
+      "decimal": 1.13,
+      "displayValue": "100/769",
+      "fraction": "100/769",
+      "value": 1.13
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-109",
+      "american": "-109",
+      "decimal": 1.92,
+      "displayValue": "100/109",
+      "fraction": "100/109",
+      "value": 1.92
+     }
+    },
+    "favorite": true,
+    "moneyLine": -769,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-833",
+      "american": "-833",
+      "decimal": 1.12,
+      "displayValue": "100/833",
+      "fraction": "100/833",
+      "value": 1.12
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -109.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-112",
+     "american": "-112",
+     "decimal": 1.89,
+     "displayValue": "25/28",
+     "fraction": "25/28",
+     "value": 1.89
+    },
+    "total": {
+     "alternateDisplayValue": "228.5",
+     "american": "228.5",
+     "decimal": 228.5,
+     "displayValue": "228.5",
+     "fraction": "228.5",
+     "value": 228.5
+    },
+    "under": {
+     "alternateDisplayValue": "-108",
+     "american": "-108",
+     "decimal": 1.93,
+     "displayValue": "25/27",
+     "fraction": "25/27",
+     "value": 1.93
+    }
+   },
+   "overOdds": -110.0,
+   "overUnder": 226.5,
+   "propBets": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/41/propBets?lang=en&region=us"
+   },
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/41?lang=en&region=us",
+    "id": "41",
+    "name": "SugarHouse",
+    "priority": 0
+   },
+   "spread": -12.0,
+   "spreadWinner": false,
+   "underOdds": -110.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/53?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": false,
+    "moneyLine": 500,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+475",
+      "american": "+475",
+      "decimal": 5.75,
+      "displayValue": "19/4",
+      "fraction": "19/4",
+      "value": 5.75
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "227",
+     "american": "227",
+     "decimal": 227.0,
+     "displayValue": "227",
+     "fraction": "227",
+     "value": 227.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "details": "MIL -12",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-704",
+      "american": "-704",
+      "decimal": 1.14,
+      "displayValue": "25/176",
+      "fraction": "25/176",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-704",
+      "american": "-704",
+      "decimal": 1.14,
+      "displayValue": "25/176",
+      "fraction": "25/176",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": true,
+    "moneyLine": -704,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-704",
+      "american": "-704",
+      "decimal": 1.14,
+      "displayValue": "25/176",
+      "fraction": "25/176",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "229",
+     "american": "229",
+     "decimal": 229.0,
+     "displayValue": "229",
+     "fraction": "229",
+     "value": 229.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "overOdds": -110.0,
+   "overUnder": 227.0,
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/53?lang=en&region=us",
+    "id": "53",
+    "name": "Titanbets",
+    "priority": 0
+   },
+   "spread": -12.0,
+   "spreadWinner": false,
+   "underOdds": -110.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/36?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+540",
+      "american": "+540",
+      "decimal": 6.4,
+      "displayValue": "27/5",
+      "fraction": "27/5",
+      "value": 6.4
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-118",
+      "american": "-118",
+      "decimal": 1.85,
+      "displayValue": "50/59",
+      "fraction": "50/59",
+      "value": 1.85
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+540",
+      "american": "+540",
+      "decimal": 6.4,
+      "displayValue": "27/5",
+      "fraction": "27/5",
+      "value": 6.4
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-118",
+      "american": "-118",
+      "decimal": 1.85,
+      "displayValue": "50/59",
+      "fraction": "50/59",
+      "value": 1.85
+     }
+    },
+    "favorite": false,
+    "moneyLine": 540,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+575",
+      "american": "+575",
+      "decimal": 6.75,
+      "displayValue": "23/4",
+      "fraction": "23/4",
+      "value": 6.75
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -118.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "+108",
+     "american": "+108",
+     "decimal": 2.08,
+     "displayValue": "27/25",
+     "fraction": "27/25",
+     "value": 2.08
+    },
+    "total": {
+     "alternateDisplayValue": "228.5",
+     "american": "228.5",
+     "decimal": 228.5,
+     "displayValue": "228.5",
+     "fraction": "228.5",
+     "value": 228.5
+    },
+    "under": {
+     "alternateDisplayValue": "-134",
+     "american": "-134",
+     "decimal": 1.75,
+     "displayValue": "50/67",
+     "fraction": "50/67",
+     "value": 1.75
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "+108",
+     "american": "+108",
+     "decimal": 2.08,
+     "displayValue": "27/25",
+     "fraction": "27/25",
+     "value": 2.08
+    },
+    "total": {
+     "alternateDisplayValue": "228.5",
+     "american": "228.5",
+     "decimal": 228.5,
+     "displayValue": "228.5",
+     "fraction": "228.5",
+     "value": 228.5
+    },
+    "under": {
+     "alternateDisplayValue": "-134",
+     "american": "-134",
+     "decimal": 1.75,
+     "displayValue": "50/67",
+     "fraction": "50/67",
+     "value": 1.75
+    }
+   },
+   "details": "MIL -12.5",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-770",
+      "american": "-770",
+      "decimal": 1.13,
+      "displayValue": "10/77",
+      "fraction": "10/77",
+      "value": 1.13
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-103",
+      "american": "-103",
+      "decimal": 1.97,
+      "displayValue": "100/103",
+      "fraction": "100/103",
+      "value": 1.97
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-770",
+      "american": "-770",
+      "decimal": 1.13,
+      "displayValue": "10/77",
+      "fraction": "10/77",
+      "value": 1.13
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-103",
+      "american": "-103",
+      "decimal": 1.97,
+      "displayValue": "100/103",
+      "fraction": "100/103",
+      "value": 1.97
+     }
+    },
+    "favorite": true,
+    "moneyLine": -770,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-835",
+      "american": "-835",
+      "decimal": 1.12,
+      "displayValue": "20/167",
+      "fraction": "20/167",
+      "value": 1.12
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -103.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-113",
+     "american": "-113",
+     "decimal": 1.88,
+     "displayValue": "100/113",
+     "fraction": "100/113",
+     "value": 1.88
+    },
+    "total": {
+     "alternateDisplayValue": "228.5",
+     "american": "228.5",
+     "decimal": 228.5,
+     "displayValue": "228.5",
+     "fraction": "228.5",
+     "value": 228.5
+    },
+    "under": {
+     "alternateDisplayValue": "-108",
+     "american": "-108",
+     "decimal": 1.93,
+     "displayValue": "25/27",
+     "fraction": "25/27",
+     "value": 1.93
+    }
+   },
+   "overOdds": 108.0,
+   "overUnder": 228.5,
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/36?lang=en&region=us",
+    "id": "36",
+    "name": "Unibet",
+    "priority": 0
+   },
+   "spread": -12.5,
+   "spreadWinner": false,
+   "underOdds": -134.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/odds/1001?lang=en&region=us",
+   "awayTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "+500",
+      "american": "+500",
+      "decimal": 6.0,
+      "displayValue": "5/1",
+      "fraction": "5/1",
+      "value": 6.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12",
+      "american": "+12"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": false,
+    "moneyLine": 500,
+    "open": {
+     "favorite": false,
+     "moneyLine": {
+      "alternateDisplayValue": "+600",
+      "american": "+600",
+      "decimal": 7.0,
+      "displayValue": "6/1",
+      "fraction": "6/1",
+      "value": 7.0
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "+12.5",
+      "american": "+12.5"
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+    },
+    "underdog": true
+   },
+   "close": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "226.5",
+     "american": "226.5",
+     "decimal": 226.5,
+     "displayValue": "226.5",
+     "fraction": "226.5",
+     "value": 226.5
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "current": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "226.5",
+     "american": "226.5",
+     "decimal": 226.5,
+     "displayValue": "226.5",
+     "fraction": "226.5",
+     "value": 226.5
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "details": "MIL -12",
+   "homeTeamOdds": {
+    "close": {
+     "moneyLine": {
+      "alternateDisplayValue": "-704",
+      "american": "-704",
+      "decimal": 1.14,
+      "displayValue": "25/176",
+      "fraction": "25/176",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "current": {
+     "moneyLine": {
+      "alternateDisplayValue": "-704",
+      "american": "-704",
+      "decimal": 1.14,
+      "displayValue": "25/176",
+      "fraction": "25/176",
+      "value": 1.14
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12",
+      "american": "-12",
+      "decimal": -12.0,
+      "displayValue": "-12",
+      "fraction": "-12",
+      "value": -12.0
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "favorite": true,
+    "moneyLine": -704,
+    "open": {
+     "favorite": true,
+     "moneyLine": {
+      "alternateDisplayValue": "-901",
+      "american": "-901",
+      "decimal": 1.11,
+      "displayValue": "100/901",
+      "fraction": "100/901",
+      "value": 1.11
+     },
+     "pointSpread": {
+      "alternateDisplayValue": "-12.5",
+      "american": "-12.5",
+      "decimal": -12.5,
+      "displayValue": "-12.5",
+      "fraction": "-12.5",
+      "value": -12.5
+     },
+     "spread": {
+      "alternateDisplayValue": "-110",
+      "american": "-110",
+      "decimal": 1.91,
+      "displayValue": "10/11",
+      "fraction": "10/11",
+      "value": 1.91
+     }
+    },
+    "spreadOdds": -110.0,
+    "team": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+    },
+    "underdog": false
+   },
+   "moneylineWinner": false,
+   "open": {
+    "over": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    },
+    "total": {
+     "alternateDisplayValue": "229",
+     "american": "229",
+     "decimal": 229.0,
+     "displayValue": "229",
+     "fraction": "229",
+     "value": 229.0
+    },
+    "under": {
+     "alternateDisplayValue": "-110",
+     "american": "-110",
+     "decimal": 1.91,
+     "displayValue": "10/11",
+     "fraction": "10/11",
+     "value": 1.91
+    }
+   },
+   "overOdds": -110.0,
+   "overUnder": 226.5,
+   "provider": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/providers/1001?lang=en&region=us",
+    "id": "1001",
+    "name": "accuscore",
+    "priority": 0
+   },
+   "spread": -12.0,
+   "spreadWinner": false,
+   "underOdds": -110.0
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 25
+}

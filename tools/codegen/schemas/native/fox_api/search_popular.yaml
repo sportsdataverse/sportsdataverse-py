@@ -1,0 +1,33 @@
+schema: search_popular
+kind: dataframe
+columns:
+- name: group
+  type: character
+  description: ''
+- name: type
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: subtitle
+  type: character
+  description: ''
+- name: content_type
+  type: character
+  description: ''
+- name: content_uri
+  type: character
+  description: ''
+- name: web_url
+  type: character
+  description: ''
+- name: analytics_name
+  type: character
+  description: ''
+- name: image_url
+  type: character
+  description: ''

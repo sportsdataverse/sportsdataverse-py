@@ -1,0 +1,6 @@
+schema: events
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

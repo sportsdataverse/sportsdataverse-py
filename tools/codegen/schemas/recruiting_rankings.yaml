@@ -1,0 +1,6 @@
+schema: recruiting_rankings
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

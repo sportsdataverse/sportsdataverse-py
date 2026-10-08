@@ -240,6 +240,45 @@ same page (`player_game_log_post`) is not wrapped, matching the R surface.
 
 One row per regular-season game: `ranker`, `player_game_num_career`, `date`, `team`, `location` (`@` for away), `opp`, `result`, `is_starter`, `mp`, the full shooting / box columns, `game_score`, `plus_minus`, plus echoed `player_id` / `season`. Month-separator and no-date rows are dropped. Zero rows when the player did not play that season.
 
+| col_name | type | description |
+|---|---|---|
+| `ranker` | double | Row rank. |
+| `player_game_num_career` | double | Career game number. |
+| `team_game_num_season` | double |  |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `team` | character | Team-side label or team identifier. |
+| `location` | character | Location. |
+| `opp` | character | Opponent abbreviation. |
+| `result` | character | Result. |
+| `is_starter` | character | 1 if the player started. |
+| `mp` | character | Minutes played. |
+| `fg` | double |  |
+| `fga` | double | Field goal attempts. |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `fg3` | double |  |
+| `fg3a` | double | Three-point field goal attempts. |
+| `fg3_pct` | double | Three-point field goal percentage (0-1). |
+| `fg2` | double |  |
+| `fg2a` | double |  |
+| `fg2_pct` | double |  |
+| `efg_pct` | double |  |
+| `ft` | double |  |
+| `fta` | double | Free throw attempts. |
+| `ft_pct` | double | Free throw percentage (0-1). |
+| `orb` | double |  |
+| `drb` | double |  |
+| `trb` | double | Career total rebounds. |
+| `ast` | double | Assists. |
+| `stl` | double | Steals. |
+| `blk` | double | Blocks. |
+| `tov` | double | Turnovers. |
+| `pf` | double | Personal fouls. |
+| `pts` | double | Points scored. |
+| `game_score` | double | Bart Torvik single-game quality score. |
+| `plus_minus` | double | Plus/minus point differential while on court. |
+| `player_id` | character | Unique player identifier. |
+| `season` | integer | Season year. |
+
 **Example**
 
 ```python
@@ -277,6 +316,20 @@ Port of hoopR's `bref_team_roster()`. NBA only.
 **Returns**
 
 One row per rostered player: `number`, `player`, `pos`, `height`, `weight`, `birth_date`, `flag`, `years_experience`, `college`, plus echoed `team` / `season`. Zero rows when the team/season combination has no page.
+
+| col_name | type | description |
+|---|---|---|
+| `number` | double | Number. |
+| `player` | character | Player name. |
+| `pos` | character | Position. |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `weight` | double | Player weight in pounds. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `flag` | character |  |
+| `years_experience` | character | Years of NBA experience (`R` for rookies). |
+| `college` | character | College. |
+| `team` | character | Team-side label or team identifier. |
+| `season` | integer | Season year. |
 
 **Example**
 

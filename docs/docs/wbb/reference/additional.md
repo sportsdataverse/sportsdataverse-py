@@ -20,7 +20,7 @@ not covered by the generated API-endpoint reference above.
 | [espn_wbb_schedule](additional/espn.md#espn_wbb_schedule) | espn_wbb_schedule - look up the women's college basketball schedule for a given season |
 | [espn_wbb_team_stats](additional/espn.md#espn_wbb_team_stats) | Pull ESPN team season stats for a women's-college-basketball team. |
 | [espn_wbb_teams](additional/espn.md#espn_wbb_teams) | espn_wbb_teams - look up the women's college basketball teams |
-| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | _No description available._ |
+| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |
 
 ## stats.ncaa.org
 
@@ -119,16 +119,16 @@ not covered by the generated API-endpoint reference above.
 | [ncaa_wbb_team_schedule](additional/stats-ncaa-org-2.md#ncaa_wbb_team_schedule) | Scrape a women's team's season schedule from stats.ncaa.org. |
 | [ncaa_wbb_team_stats](additional/stats-ncaa-org-2.md#ncaa_wbb_team_stats) | Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`). |
 | [phase1_shot_event_enrichment](additional/stats-ncaa-org-2.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
-| [playwright_transport](additional/stats-ncaa-org-2.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |
-| [remove_diacritics](additional/stats-ncaa-org-2.md#remove_diacritics) | Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"` |
-| [reorder_and_reverse](additional/stats-ncaa-org-2.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
-| [reset_config](additional/stats-ncaa-org-2.md#reset_config) | Reset the active config to its env-var-derived defaults. |
-| [right_kind_of_shot](additional/stats-ncaa-org-2.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
-| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-2.md#run_iterative_adjustment_with_hca) | KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
-| [select_contains](additional/stats-ncaa-org-2.md#select_contains) | JSoup `root.select(sel + ":contains(text)")`: candidates whose full |
-| [select_matching](additional/stats-ncaa-org-2.md#select_matching) | JSoup `root.select(sel + ":matches(regex)")`: candidates whose full |
-| [select_matching_own](additional/stats-ncaa-org-2.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |
-| [shot_js_to_html](additional/stats-ncaa-org-2.md#shot_js_to_html) | Converts client-side `addShot(...)` JS calls into parseable |
+| [playwright_transport](additional/stats-ncaa-org-3.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |
+| [remove_diacritics](additional/stats-ncaa-org-3.md#remove_diacritics) | Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"` |
+| [reorder_and_reverse](additional/stats-ncaa-org-3.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
+| [reset_config](additional/stats-ncaa-org-3.md#reset_config) | Reset the active config to its env-var-derived defaults. |
+| [right_kind_of_shot](additional/stats-ncaa-org-3.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
+| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
+| [select_contains](additional/stats-ncaa-org-3.md#select_contains) | JSoup `root.select(sel + ":contains(text)")`: candidates whose full |
+| [select_matching](additional/stats-ncaa-org-3.md#select_matching) | JSoup `root.select(sel + ":matches(regex)")`: candidates whose full |
+| [select_matching_own](additional/stats-ncaa-org-3.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |
+| [shot_js_to_html](additional/stats-ncaa-org-3.md#shot_js_to_html) | Converts client-side `addShot(...)` JS calls into parseable |
 | [start_time_from_period](additional/stats-ncaa-org-3.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
 | [sum_event_stats](additional/stats-ncaa-org-3.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
@@ -193,7 +193,7 @@ not covered by the generated API-endpoint reference above.
 | [ncaa_wbb_game_pbp](additional/play-by-play-processing.md#ncaa_wbb_game_pbp) | Scrape one WBB game's play-by-play (wbigballR `scrape_game`, quarters fixed). |
 | [ncaa_wbb_play_by_play](additional/play-by-play-processing.md#ncaa_wbb_play_by_play) | Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, quarters fixed). |
 | [shot_events_to_frame](additional/play-by-play-processing.md#shot_events_to_frame) | Flatten NCAA HTML `ShotEvent` objects to the canonical frame. |
-| [wbb_pbp_disk](additional/play-by-play-processing.md#wbb_pbp_disk) | _No description available._ |
+| [wbb_pbp_disk](additional/play-by-play-processing.md#wbb_pbp_disk) | Read a saved ESPN WBB play-by-play payload from disk. |
 
 ## Models and calculators
 
@@ -232,7 +232,6 @@ not covered by the generated API-endpoint reference above.
 | [ShotQualityConstants](additional/models-and-calculators.md#ShotQualityConstants) | Per-league rule + fitted constants for the shot-quality spine. |
 | [TeamId](additional/models-and-calculators.md#TeamId) | CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`). |
 | [TeamSeasonId](additional/models-and-calculators.md#TeamSeasonId) | A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`). |
-| [Year](additional/models-and-calculators.md#Year) | CBB season, named by the year it ends (`Year`, `Year.scala`). |
 | [adjust_efficiency](additional/models-and-calculators.md#adjust_efficiency) | Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season. |
 | [adjust_off_rating_stats](additional/models-and-calculators.md#adjust_off_rating_stats) | Apply a missing-possession correction factor to an `ORtgDiagnostics` dict in place. |
 | [adjust_tempo](additional/models-and-calculators.md#adjust_tempo) | Opponent-adjusted tempo (possessions/40) per team-season. |
@@ -248,10 +247,10 @@ not covered by the generated API-endpoint reference above.
 | [build_player_context](additional/models-and-calculators.md#build_player_context) | Build the context object the RAPM matrix-solve layer consumes. |
 | [build_priors](additional/models-and-calculators.md#build_priors) | Build strong/weak per-player RAPM priors for every column. |
 | [build_productivity](additional/models-and-calculators.md#build_productivity) | Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`). |
-| [build_wbb_season_wp](additional/models-and-calculators.md#build_wbb_season_wp) | A WBB season's play-by-play with win-probability columns joined in. |
-| [build_weak_prior_from_rapm](additional/models-and-calculators.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
-| [calc_collinearity_diag](additional/models-and-calculators.md#calc_collinearity_diag) | Multi-collinearity diagnostic between the players in an off/def design matrix. |
-| [calc_lineup_outputs](additional/models-and-calculators.md#calc_lineup_outputs) | Build the off/def target vectors the RAPM design matrices are fit against. |
+| [build_wbb_season_wp](additional/models-and-calculators-2.md#build_wbb_season_wp) | A WBB season's play-by-play with win-probability columns joined in. |
+| [build_weak_prior_from_rapm](additional/models-and-calculators-2.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
+| [calc_collinearity_diag](additional/models-and-calculators-2.md#calc_collinearity_diag) | Multi-collinearity diagnostic between the players in an off/def design matrix. |
+| [calc_lineup_outputs](additional/models-and-calculators-2.md#calc_lineup_outputs) | Build the off/def target vectors the RAPM design matrices are fit against. |
 | [calc_player_weights](additional/models-and-calculators-2.md#calc_player_weights) | Build the off/def player-weight (design) matrices for the RAPM solve. |
 | [calc_slow_pseudo_inverse](additional/models-and-calculators-2.md#calc_slow_pseudo_inverse) | Per-parameter variance terms for the ridge-regression standard errors. |
 | [calculate_predicted_out](additional/models-and-calculators-2.md#calculate_predicted_out) | Predict per-lineup outputs from fitted per-player RAPM values. |
@@ -338,8 +337,8 @@ not covered by the generated API-endpoint reference above.
 | [test_positional_aware_filter](additional/analytics.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
 | [using_roster_pos](additional/analytics.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
 | [wbb_bracketology](additional/analytics.md#wbb_bracketology) | Women's projected tournament field for a season. |
-| [wbb_strength_of_schedule](additional/analytics.md#wbb_strength_of_schedule) | Women's season-level SoS / Quad / WAB résumé. |
-| [weighted_avg](additional/analytics.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
+| [wbb_strength_of_schedule](additional/analytics-2.md#wbb_strength_of_schedule) | Women's season-level SoS / Quad / WAB résumé. |
+| [weighted_avg](additional/analytics-2.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 
 ## Dates and seasons
 

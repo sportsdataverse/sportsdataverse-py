@@ -154,3 +154,21 @@ columns:
 - name: home_team_common_name_fr
   type: character
   description: ''
+- name: away_team_sog
+  type: double
+  description: ''
+- name: home_team_sog
+  type: double
+  description: ''
+- name: clock_time_remaining
+  type: character
+  description: ''
+- name: clock_seconds_remaining
+  type: double
+  description: ''
+- name: clock_running
+  type: logical
+  description: ''
+- name: clock_in_intermission
+  type: logical
+  description: ''

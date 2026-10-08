@@ -6,7 +6,6 @@ import polars as pl
 from tqdm import tqdm
 
 from sportsdataverse._codegen_runtime import _as_season_list, _fetch_release_parquet
-from sportsdataverse._deprecation import warn_deprecated as _warn_deprecated
 from sportsdataverse.config import (
     NFL_BASE_URL,
     NFL_COMBINE_URL,
@@ -665,79 +664,6 @@ def load_nfl_nextgen_stats(
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-@cached_loader
-def load_nfl_ngs_passing(seasons: List[int] = None, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_nextgen_stats(stat_type='passing')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_nextgen_stats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_nextgen_stats
-            ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
-    """
-    _warn_deprecated(
-        "load_nfl_ngs_passing",
-        replacement="load_nfl_nextgen_stats(stat_type='passing')",
-        removed_in="0.1.0",
-    )
-    if seasons is None:
-        # Preserve the legacy "load every season" behavior of the original alias.
-        data = _fetch_release_parquet(NFL_NGS_PASSING_URL)
-        return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
-    return load_nfl_nextgen_stats(seasons, stat_type="passing", return_as_pandas=return_as_pandas)
-
-
-@cached_loader
-def load_nfl_ngs_rushing(seasons: List[int] = None, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_nextgen_stats(stat_type='rushing')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_nextgen_stats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_nextgen_stats
-            ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
-    """
-    _warn_deprecated(
-        "load_nfl_ngs_rushing",
-        replacement="load_nfl_nextgen_stats(stat_type='rushing')",
-        removed_in="0.1.0",
-    )
-    if seasons is None:
-        data = _fetch_release_parquet(NFL_NGS_RUSHING_URL)
-        return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
-    return load_nfl_nextgen_stats(seasons, stat_type="rushing", return_as_pandas=return_as_pandas)
-
-
-@cached_loader
-def load_nfl_ngs_receiving(seasons: List[int] = None, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_nextgen_stats(stat_type='receiving')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_nextgen_stats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_nextgen_stats
-            ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
-    """
-    _warn_deprecated(
-        "load_nfl_ngs_receiving",
-        replacement="load_nfl_nextgen_stats(stat_type='receiving')",
-        removed_in="0.1.0",
-    )
-    if seasons is None:
-        data = _fetch_release_parquet(NFL_NGS_RECEIVING_URL)
-        return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
-    return load_nfl_nextgen_stats(seasons, stat_type="receiving", return_as_pandas=return_as_pandas)
-
-
 # PFR advstats URL dispatch table. Keyed by (stat_type, summary_level)
 # matching nflreadpy's ``load_pfr_advstats`` semantics. ``season``-level
 # URLs are single combined files; ``week``-level URLs are per-season
@@ -873,195 +799,6 @@ def load_nfl_pfr_advstats(
         data = pl.concat(frames, how="diagonal_relaxed")
 
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
-
-
-@cached_loader
-def load_nfl_pfr_pass(return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='pass', summary_level='season')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_pfr_advstats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_pfr_advstats
-            df = load_nfl_pfr_advstats(
-                seasons=[2024], stat_type="pass", summary_level="season"
-            )
-    """
-    _warn_deprecated(
-        "load_nfl_pfr_pass",
-        replacement="load_nfl_pfr_advstats(stat_type='pass', summary_level='season')",
-        removed_in="0.1.0",
-    )
-    # Preserve the legacy "no seasons filter" behavior — read the full combined parquet.
-    data = _fetch_release_parquet(NFL_PFR_SEASON_PASS_URL)
-    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
-
-
-@cached_loader
-def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='pass', summary_level='week')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_pfr_advstats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_pfr_advstats
-            df = load_nfl_pfr_advstats(
-                seasons=[2024], stat_type="pass", summary_level="week"
-            )
-    """
-    _warn_deprecated(
-        "load_nfl_pfr_weekly_pass",
-        replacement="load_nfl_pfr_advstats(stat_type='pass', summary_level='week')",
-        removed_in="0.1.0",
-    )
-    return load_nfl_pfr_advstats(seasons, stat_type="pass", summary_level="week", return_as_pandas=return_as_pandas)
-
-
-@cached_loader
-def load_nfl_pfr_rush(return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rush', summary_level='season')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_pfr_advstats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_pfr_advstats
-            df = load_nfl_pfr_advstats(
-                seasons=[2024], stat_type="rush", summary_level="season"
-            )
-    """
-    _warn_deprecated(
-        "load_nfl_pfr_rush",
-        replacement="load_nfl_pfr_advstats(stat_type='rush', summary_level='season')",
-        removed_in="0.1.0",
-    )
-    data = _fetch_release_parquet(NFL_PFR_SEASON_RUSH_URL)
-    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
-
-
-@cached_loader
-def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rush', summary_level='week')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_pfr_advstats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_pfr_advstats
-            df = load_nfl_pfr_advstats(
-                seasons=[2024], stat_type="rush", summary_level="week"
-            )
-    """
-    _warn_deprecated(
-        "load_nfl_pfr_weekly_rush",
-        replacement="load_nfl_pfr_advstats(stat_type='rush', summary_level='week')",
-        removed_in="0.1.0",
-    )
-    return load_nfl_pfr_advstats(seasons, stat_type="rush", summary_level="week", return_as_pandas=return_as_pandas)
-
-
-@cached_loader
-def load_nfl_pfr_rec(return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rec', summary_level='season')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_pfr_advstats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_pfr_advstats
-            df = load_nfl_pfr_advstats(
-                seasons=[2024], stat_type="rec", summary_level="season"
-            )
-    """
-    _warn_deprecated(
-        "load_nfl_pfr_rec",
-        replacement="load_nfl_pfr_advstats(stat_type='rec', summary_level='season')",
-        removed_in="0.1.0",
-    )
-    data = _fetch_release_parquet(NFL_PFR_SEASON_REC_URL)
-    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
-
-
-@cached_loader
-def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rec', summary_level='week')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_pfr_advstats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_pfr_advstats
-            df = load_nfl_pfr_advstats(
-                seasons=[2024], stat_type="rec", summary_level="week"
-            )
-    """
-    _warn_deprecated(
-        "load_nfl_pfr_weekly_rec",
-        replacement="load_nfl_pfr_advstats(stat_type='rec', summary_level='week')",
-        removed_in="0.1.0",
-    )
-    return load_nfl_pfr_advstats(seasons, stat_type="rec", summary_level="week", return_as_pandas=return_as_pandas)
-
-
-@cached_loader
-def load_nfl_pfr_def(return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='def', summary_level='season')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_pfr_advstats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_pfr_advstats
-            df = load_nfl_pfr_advstats(
-                seasons=[2024], stat_type="def", summary_level="season"
-            )
-    """
-    _warn_deprecated(
-        "load_nfl_pfr_def",
-        replacement="load_nfl_pfr_advstats(stat_type='def', summary_level='season')",
-        removed_in="0.1.0",
-    )
-    data = _fetch_release_parquet(NFL_PFR_SEASON_DEF_URL)
-    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
-
-
-@cached_loader
-def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
-    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='def', summary_level='week')``.
-
-    Will be removed in a future release. Migrate callers to the unified
-    ``load_nfl_pfr_advstats`` function.
-
-    Example:
-        Migrate to the unified entry point::
-
-            from sportsdataverse.nfl import load_nfl_pfr_advstats
-            df = load_nfl_pfr_advstats(
-                seasons=[2024], stat_type="def", summary_level="week"
-            )
-    """
-    _warn_deprecated(
-        "load_nfl_pfr_weekly_def",
-        replacement="load_nfl_pfr_advstats(stat_type='def', summary_level='week')",
-        removed_in="0.1.0",
-    )
-    return load_nfl_pfr_advstats(seasons, stat_type="def", summary_level="week", return_as_pandas=return_as_pandas)
 
 
 @cached_loader
@@ -2014,12 +1751,14 @@ def load_nfl_ff_rankings(
         data = _read_csv_retry(
             NFL_FF_RANKINGS_DRAFT_URL,
             null_values=["NA", "NULL", ""],
+            infer_schema_length=None,  # a column empty in the first 100 rows would otherwise read as String
             schema_overrides=_FF_RANKINGS_ID_DTYPES["draft"],
         )
     elif effective == "week":
         data = _read_csv_retry(
             NFL_FF_RANKINGS_WEEK_URL,
             null_values=["NA", "NULL", ""],
+            infer_schema_length=None,  # a column empty in the first 100 rows would otherwise read as String
             schema_overrides=_FF_RANKINGS_ID_DTYPES["week"],
         )
     else:  # all

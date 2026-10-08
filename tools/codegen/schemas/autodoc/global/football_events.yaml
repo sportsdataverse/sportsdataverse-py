@@ -1,0 +1,5 @@
+schema: football_events
+kind: dataframe
+columns: []
+unverified: 'no capture: its game_dates input needs game_id with game_date, and no package function returns that pair (load_cfb_schedule
+  carries start_date)'

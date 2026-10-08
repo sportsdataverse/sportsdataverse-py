@@ -1,0 +1,322 @@
+[
+ {
+  "defensiveZoneTime": 0.30748364,
+  "neutralZoneTime": 0.17935832,
+  "offensiveZoneTime": 0.51315804,
+  "player": {
+   "firstName": {
+    "default": "Shayne"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/CAR/8476906.png",
+   "lastName": {
+    "default": "Gostisbehere"
+   },
+   "position": "D",
+   "slug": "shayne-gostisbehere-8476906",
+   "sweaterNumber": 4,
+   "team": {
+    "abbrev": "CAR",
+    "commonName": {
+     "default": "Hurricanes"
+    },
+    "placeNameWithPreposition": {
+     "default": "Carolina",
+     "fr": "de la Caroline"
+    },
+    "slug": "carolina-hurricanes-12",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.33680615,
+  "neutralZoneTime": 0.17175007,
+  "offensiveZoneTime": 0.49144378,
+  "player": {
+   "firstName": {
+    "default": "Evan"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/EDM/8480803.png",
+   "lastName": {
+    "default": "Bouchard"
+   },
+   "position": "D",
+   "slug": "evan-bouchard-8480803",
+   "sweaterNumber": 2,
+   "team": {
+    "abbrev": "EDM",
+    "commonName": {
+     "default": "Oilers"
+    },
+    "placeNameWithPreposition": {
+     "default": "Edmonton",
+     "fr": "d'Edmonton"
+    },
+    "slug": "edmonton-oilers-22",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.33545234,
+  "neutralZoneTime": 0.18442401,
+  "offensiveZoneTime": 0.48012366,
+  "player": {
+   "firstName": {
+    "default": "Sean"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/CAR/8480336.png",
+   "lastName": {
+    "default": "Walker"
+   },
+   "position": "D",
+   "slug": "sean-walker-8480336",
+   "sweaterNumber": 26,
+   "team": {
+    "abbrev": "CAR",
+    "commonName": {
+     "default": "Hurricanes"
+    },
+    "placeNameWithPreposition": {
+     "default": "Carolina",
+     "fr": "de la Caroline"
+    },
+    "slug": "carolina-hurricanes-12",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.3575213,
+  "neutralZoneTime": 0.17033259,
+  "offensiveZoneTime": 0.47214611,
+  "player": {
+   "firstName": {
+    "default": "Quinn"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/VAN/8480800.png",
+   "lastName": {
+    "default": "Hughes"
+   },
+   "position": "D",
+   "slug": "quinn-hughes-8480800",
+   "sweaterNumber": 43,
+   "team": {
+    "abbrev": "VAN",
+    "commonName": {
+     "default": "Canucks"
+    },
+    "placeNameWithPreposition": {
+     "default": "Vancouver",
+     "fr": "de Vancouver"
+    },
+    "slug": "vancouver-canucks-23",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/VAN_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.34956946,
+  "neutralZoneTime": 0.18014896,
+  "offensiveZoneTime": 0.47028158,
+  "player": {
+   "firstName": {
+    "default": "Roman"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/NSH/8474600.png",
+   "lastName": {
+    "default": "Josi"
+   },
+   "position": "D",
+   "slug": "roman-josi-8474600",
+   "sweaterNumber": 59,
+   "team": {
+    "abbrev": "NSH",
+    "commonName": {
+     "default": "Predators"
+    },
+    "placeNameWithPreposition": {
+     "default": "Nashville",
+     "fr": "de Nashville"
+    },
+    "slug": "nashville-predators-18",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.35526286,
+  "neutralZoneTime": 0.17816601,
+  "offensiveZoneTime": 0.46657112,
+  "player": {
+   "firstName": {
+    "default": "Nate"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/FLA/8477220.png",
+   "lastName": {
+    "default": "Schmidt"
+   },
+   "position": "D",
+   "slug": "nate-schmidt-8477220",
+   "sweaterNumber": 88,
+   "team": {
+    "abbrev": "FLA",
+    "commonName": {
+     "default": "Panthers"
+    },
+    "placeNameWithPreposition": {
+     "default": "Florida",
+     "fr": "de la Floride"
+    },
+    "slug": "florida-panthers-13",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.36435999,
+  "neutralZoneTime": 0.16967215,
+  "offensiveZoneTime": 0.46596786,
+  "player": {
+   "firstName": {
+    "default": "Adam"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/NYR/8479323.png",
+   "lastName": {
+    "default": "Fox"
+   },
+   "position": "D",
+   "slug": "adam-fox-8479323",
+   "sweaterNumber": 23,
+   "team": {
+    "abbrev": "NYR",
+    "commonName": {
+     "default": "Rangers"
+    },
+    "placeNameWithPreposition": {
+     "default": "New York",
+     "fr": "de New York"
+    },
+    "slug": "new-york-rangers-3",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/NYR_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.35229625,
+  "neutralZoneTime": 0.18362869,
+  "offensiveZoneTime": 0.46407506,
+  "player": {
+   "firstName": {
+    "default": "Shea"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/VGK/8477447.png",
+   "lastName": {
+    "default": "Theodore"
+   },
+   "position": "D",
+   "slug": "shea-theodore-8477447",
+   "sweaterNumber": 27,
+   "team": {
+    "abbrev": "VGK",
+    "commonName": {
+     "default": "Golden Knights"
+    },
+    "placeNameWithPreposition": {
+     "default": "Vegas",
+     "fr": "de Vegas"
+    },
+    "slug": "vegas-golden-knights-54",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.36659825,
+  "neutralZoneTime": 0.17090099,
+  "offensiveZoneTime": 0.46250076,
+  "player": {
+   "firstName": {
+    "default": "Mattias"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/EDM/8475218.png",
+   "lastName": {
+    "default": "Ekholm"
+   },
+   "position": "D",
+   "slug": "mattias-ekholm-8475218",
+   "sweaterNumber": 14,
+   "team": {
+    "abbrev": "EDM",
+    "commonName": {
+     "default": "Oilers"
+    },
+    "placeNameWithPreposition": {
+     "default": "Edmonton",
+     "fr": "d'Edmonton"
+    },
+    "slug": "edmonton-oilers-22",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.35520881,
+  "neutralZoneTime": 0.18345238,
+  "offensiveZoneTime": 0.46133881,
+  "player": {
+   "firstName": {
+    "default": "Brent"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/CAR/8470613.png",
+   "lastName": {
+    "default": "Burns"
+   },
+   "position": "D",
+   "slug": "brent-burns-8470613",
+   "sweaterNumber": 84,
+   "team": {
+    "abbrev": "CAR",
+    "commonName": {
+     "default": "Hurricanes"
+    },
+    "placeNameWithPreposition": {
+     "default": "Carolina",
+     "fr": "de la Caroline"
+    },
+    "slug": "carolina-hurricanes-12",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+    }
+   }
+  }
+ }
+]

@@ -94,6 +94,8 @@ effectively current-season.
 
 `pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
 
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python

@@ -361,7 +361,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `tournament_id` | integer | ESPN tournament identifier. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
 | `broadcast` | character | Broadcast information string. |
-| `highlights` | integer |  |
+| `highlights` | character |  |
 | `notes_type` | character | Notes type. |
 | `notes_headline` | character | Notes headline. |
 | `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
@@ -423,6 +423,8 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season year. |
 | `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `home_logo_dark` | character |  |
+| `away_logo_dark` | character |  |
 
 **Example**
 
@@ -546,6 +548,44 @@ row-binds the survivors, and logs the removed ids.
 
 Row-bound play-by-play for every game that scraped successfully (zero-row contract frame when none did).
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | character | Game clock value. |
+| `game_time` | character | Game start time. |
+| `game_seconds` | integer |  |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `event_team` | character |  |
+| `event_description` | character |  |
+| `player_1` | character |  |
+| `player_2` | character |  |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `event_result` | character |  |
+| `shot_value` | integer | Point value of the shot (2 or 3). |
+| `event_length` | integer |  |
+| `poss_num` | integer |  |
+| `poss_team` | character |  |
+| `poss_length` | integer |  |
+| `is_transition` | logical |  |
+| `home_1` | character |  |
+| `home_2` | character |  |
+| `home_3` | character |  |
+| `home_4` | character |  |
+| `home_5` | character |  |
+| `away_1` | character |  |
+| `away_2` | character |  |
+| `away_3` | character |  |
+| `away_4` | character |  |
+| `away_5` | character |  |
+| `status` | character | Status label. |
+| `is_garbage_time` | logical |  |
+| `sub_deviate` | integer |  |
+
 **Example**
 
 ```python
@@ -582,6 +622,22 @@ normalization, so roster<->pbp joins line up.
 
 One row per player -- see `parse_ncaa_bb_team_roster` for the column contract.
 
+| col_name | type | description |
+|---|---|---|
+| `gp` | character | Games played. |
+| `gs` | character | Games started. |
+| `jersey` | character | Jersey number worn by the player. |
+| `name` | character | Display name. |
+| `class` | character | College class / draft eligibility note. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `hometown` | character | Player hometown. |
+| `high_school` | character |  |
+| `player` | character | Player name. |
+| `clean_name` | character |  |
+| `ht_inches` | integer |  |
+| `player_id` | character | Unique player identifier. |
+
 **Example**
 
 ```python
@@ -613,6 +669,19 @@ men's crosswalk).
 **Returns**
 
 One row per scheduled game -- see `parse_ncaa_bb_team_schedule` for the column contract.
+
+| col_name | type | description |
+|---|---|---|
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away` | character | Away record. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `box_id` | character |  |
+| `game_id` | character | Unique game identifier. |
+| `is_neutral` | logical |  |
+| `detail` | character | Detail. |
+| `attendance` | integer | Reported attendance. |
 
 **Example**
 

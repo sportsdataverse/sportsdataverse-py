@@ -10,9 +10,11 @@ runtime_imports:
 - format_nhl_season
 endpoints:
 - short: ping
+  returns_schema: native/nhl_stats_rest/ping
   summary: Ping the NHL Stats REST API database.
   path: /ping
 - short: component_season
+  returns_schema: native/nhl_stats_rest/component_season
   summary: Retrieve the component-season configuration.
   path: /{lang}/componentSeason
   path_params:
@@ -21,6 +23,7 @@ endpoints:
     required: false
     default: en
 - short: config
+  returns_schema: native/nhl_stats_rest/config
   summary: Retrieve the Stats REST API configuration payload.
   path: /{lang}/config
   path_params:
@@ -29,6 +32,7 @@ endpoints:
     required: false
     default: en
 - short: content_module
+  returns_schema: native/nhl_stats_rest/content_module
   summary: Retrieve a content module by template key.
   path: /{lang}/content/module/{template_key}
   path_params:

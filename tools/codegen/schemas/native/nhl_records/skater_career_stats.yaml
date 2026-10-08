@@ -1,0 +1,4 @@
+columns: []
+kind: dataframe
+schema: skater_career_stats
+unverified: 'no capture: records.nhl.com answers 404 for this route with the documented example arguments (2026-10-07)'

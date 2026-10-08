@@ -62,6 +62,8 @@ defense), documented here so callers weigh it.
 
 One row per `(close_def_dist_range, shot_clock_range)`: `close_def_dist_range:Utf8, shot_clock_range:Utf8, joint_fg_pct:Float64`. Empty inputs return the zero-row schema.
 
+No returns table is published for this function: no capture: its inputs come from make_prob_by_context on stats.nba.com tracking data, which answers HTTP 403 to the datacenter IP the docs are built on.
+
 **Example**
 
 ```python
@@ -92,6 +94,8 @@ shot_value`, and `actual_points = shot_made_flag * shot_value`.
 **Returns**
 
 The input `shots` plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64`. Empty input returns the augmented schema with zero rows.
+
+No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
 
 **Example**
 
@@ -130,6 +134,8 @@ cut itself.
 
 One row per `player_id`: `player_id:Int64, n_att:Int64, actual_makes:Int64, exp_makes:Float64, points_above_expected:Float64, raw_above_pct:Float64, talent_pct:Float64`. Empty input returns the zero-row schema.
 
+No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
+
 **Example**
 
 ```python
@@ -164,6 +170,8 @@ scores positive, a mid-range diet negative.
 
 One row per `player_id`: `player_id:Int64, n_att:Int64, xev_per_shot:Float64, league_xev_per_shot:Float64, selection_quality:Float64`. Empty input returns the zero-row schema.
 
+No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
+
 **Example**
 
 ```python
@@ -195,6 +203,8 @@ full contract; `avail_pct` is availability, not skill.
 
 Frame `player_id:Utf8, season:Int64, avail_pct:Float64`.
 
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -224,6 +234,8 @@ to the women's league.
 **Returns**
 
 Same schema as `sportsdataverse.nba.nba_expected_turnovers.nba_expected_turnovers`.
+
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -257,6 +269,8 @@ women's league.
 
 Same schema as `sportsdataverse.nba.nba_foul_drawing.nba_foul_drawing`.
 
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -288,6 +302,8 @@ women's league.
 
 Same schema as `sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm`.
 
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -313,6 +329,20 @@ WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `team_id` | character | Unique team identifier. |
+| `stat_pts_exp` | double |  |
+| `stat_reb_exp` | double |  |
+| `stat_ast_exp` | double |  |
+| `stat_fg3m_exp` | double |  |
+| `pace_proj` | double |  |
+
 ### wnba_playtype_ratings {#wnba_playtype_ratings}
 
 `wnba_playtype_ratings(season: 'str', *, off_team: "'Optional[pl.DataFrame]'" = None, def_team: "'Optional[pl.DataFrame]'" = None, schedule: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -337,6 +367,8 @@ fetch degrades to a zero-row frame (never raises).
 **Returns**
 
 Same schema as `sportsdataverse.nba.nba_playtype.nba_playtype_ratings`.
+
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -451,6 +483,12 @@ WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
+
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 ### wnba_tracking_drive_value {#wnba_tracking_drive_value}
 
 `wnba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -475,6 +513,8 @@ for the full recipe.
 **Returns**
 
 One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, drives:Float64, drive_pts:Float64, drive_baseline_rate:Float64, drive_expected:Float64, drive_pts_oe:Float64, drive_pts_oe_per_36:Float64, drive_fta:Float64, rim_pressure:Float64, drive_ast:Float64, drive_tov:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -513,6 +553,8 @@ enrichment).
 
 One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, ast:Float64, passes:Float64, ast_baseline_rate:Float64, ast_expected:Float64, ast_oe:Float64, ast_oe_per_36:Float64, ast_pts_created:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
 
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -546,6 +588,8 @@ role-bucket baseline).
 **Returns**
 
 One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, reb:Float64, reb_chances:Float64, reb_baseline_rate:Float64, reb_expected:Float64, reb_oe:Float64, reb_oe_per_36:Float64, oreb_oe:Float64, dreb_oe:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -586,6 +630,8 @@ for the full recipe (bucket-mean defended-rate baseline; optional
 
 One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, d_fga:Float64, d_fgm:Float64, d_fg_pct:Float64, normal_fg_pct:Float64, rim_protect_pts_saved:Float64, rim_protect_pts_saved_per_36:Float64, source:Utf8, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
 
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -621,6 +667,8 @@ for the full recipe.
 
 One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, cs_fga:Float64, cs_pts:Float64, cs_pts_oe:Float64, pu_fga:Float64, pu_pts:Float64, pu_pts_oe:Float64, shot_diet_delta:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
 
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -654,6 +702,8 @@ for the full recipe.
 
 One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, touches:Float64, pts:Float64, touch_baseline_rate:Float64, touch_expected:Float64, pts_per_touch_oe:Float64, time_of_poss:Float64, time_of_poss_eff:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
 
+No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -682,6 +732,8 @@ per shot in each zone.
 **Returns**
 
 One row per `(player_id, zone)`: `player_id:Int64, zone:Utf8, att:Int64, makes:Int64, pts:Float64, pps:Float64, xpps:Float64, pps_above_expected:Float64` (`pps` = points per shot, `xpps` = expected). Empty input returns the zero-row schema.
+
+No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
 
 **Example**
 

@@ -23,7 +23,32 @@ ESPN endpoint.
 
 ### Returns {#espn_mlb_player_overview-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_overview`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `athlete_id` | character | Unique ESPN athlete identifier. |
+| `athlete_display_name` | character | Athlete display name (full). |
+| `athlete_short_name` | character | Athlete short display name. |
+| `athlete_position` | character |  |
+| `athlete_jersey` | character | Athlete jersey. |
+| `athlete_team_id` | character |  |
+| `athlete_team_abbreviation` | character |  |
+| `split_name` | character | Split name (typically "All Splits"). |
+| `split_category` | character |  |
+| `games_played` | character | Games played. |
+| `avg_minutes` | character |  |
+| `field_goal_pct` | character |  |
+| `three_point_pct` | character |  |
+| `free_throw_pct` | character |  |
+| `avg_rebounds` | character |  |
+| `avg_assists` | character |  |
+| `avg_blocks` | character |  |
+| `avg_steals` | character |  |
+| `avg_fouls` | character |  |
+| `avg_turnovers` | character |  |
+| `avg_points` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_mlb_player_overview-example}
@@ -49,7 +74,10 @@ ESPN endpoint.
 
 ### Returns {#espn_mlb_player_stats_v3-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_stats`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_athlete_stats`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_athlete_stats returns no columns on the live payload (nba, mlb, mbb, 2026-10-07); its rows sit under keys it does not read (top level: categories, filters, glossary, teams).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_mlb_player_stats_v3-example}
@@ -75,7 +103,37 @@ ESPN endpoint.
 
 ### Returns {#espn_mlb_player_gamelog-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_gamelog`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `season_type_id` | character |  |
+| `season_type_name` | character |  |
+| `category` | character | Category label. |
+| `event_id` | character | Unique ESPN event/game identifier. |
+| `event_date` | character | Event date-time in ISO 8601 (e.g. '2017-07-11T00:00:00Z'). |
+| `home_away` | character | Venue label for the team ('home' or 'away'). |
+| `score` | character | Running score (away-home) after the play. |
+| `opponent_id` | character | Unique identifier for opponent. |
+| `opponent_abbreviation` | character | Opponent abbreviation. |
+| `opponent_display_name` | character | Display name. |
+| `game_result` | character | Game result (W/L). |
+| `game_processed` | character |  |
+| `stat_0` | character |  |
+| `stat_1` | character |  |
+| `stat_2` | character |  |
+| `stat_3` | character |  |
+| `stat_4` | character |  |
+| `stat_5` | character |  |
+| `stat_6` | character |  |
+| `stat_7` | character |  |
+| `stat_8` | character |  |
+| `stat_9` | character |  |
+| `stat_10` | character |  |
+| `stat_11` | character |  |
+| `stat_12` | character |  |
+| `stat_13` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_mlb_player_gamelog-example}
@@ -101,7 +159,18 @@ ESPN endpoint.
 
 ### Returns {#espn_mlb_player_splits-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_splits`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `descriptions` | character |  |
+| `display_name` | character | Display name. |
+| `display_names` | character |  |
+| `filters` | character |  |
+| `labels` | character |  |
+| `names` | character | Associated detail names for the type. |
+| `split_categories` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_mlb_player_splits-example}

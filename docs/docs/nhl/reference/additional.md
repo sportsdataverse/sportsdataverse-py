@@ -18,7 +18,7 @@ not covered by the generated API-endpoint reference above.
 | [espn_nhl_player_stats](additional/espn.md#espn_nhl_player_stats) | Pull an NHL athlete's ESPN **season** stat line as one wide row. |
 | [espn_nhl_schedule](additional/espn.md#espn_nhl_schedule) | espn_nhl_schedule - look up the NHL schedule for a given date |
 | [espn_nhl_teams](additional/espn.md#espn_nhl_teams) | espn_nhl_teams - look up NHL teams |
-| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | _No description available._ |
+| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |
 
 ## sportsdataverse-data releases
 
@@ -81,7 +81,7 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
-| [nhl_pbp_disk](additional/play-by-play-processing.md#nhl_pbp_disk) | _No description available._ |
+| [nhl_pbp_disk](additional/play-by-play-processing.md#nhl_pbp_disk) | Read a saved ESPN NHL play-by-play payload from disk. |
 
 ## Models and calculators
 

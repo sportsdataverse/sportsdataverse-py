@@ -103,12 +103,99 @@ def _bucket_of(path: str) -> str:
 #
 # {bucket: max uncovered cells, or None for no cap}
 _DEFERRED_BUCKETS: dict[str, int | None] = {
+    # The ESPN generic tables captured 2026-10-07 by tools/codegen/capture_fixtures.py (one live
+    # payload per schema-less Site v2 / Core v2 / Web v3 endpoint, parsed by the wrapper's own
+    # parser). Their names and types are real; ESPN publishes no field dictionary to describe
+    # them from. Each is CAPPED at its measured count: lower a cap as columns are authored.
+    "athlete_contracts.yaml": 1,
+    "athlete_core.yaml": 54,
+    "athlete_gamelog.yaml": 26,
+    "athlete_hotzones.yaml": 5,
+    "athlete_overview.yaml": 21,
+    "athlete_seasons.yaml": 1,
+    "athlete_splits.yaml": 7,
+    "athlete_statisticslog.yaml": 2,
+    "athletes_index.yaml": 1,
+    "award.yaml": 5,
+    "awards.yaml": 1,
+    "coach.yaml": 10,
+    "coach_record.yaml": 8,
+    "conferences.yaml": 8,
+    "event.yaml": 13,
+    "event_broadcasts.yaml": 21,
+    "event_competition.yaml": 81,
+    "event_competitor.yaml": 14,
+    "event_competitor_roster.yaml": 5,
+    "event_competitors.yaml": 14,
+    "event_odds.yaml": 175,
+    "event_official_detail.yaml": 10,
+    "event_officials.yaml": 10,
+    "event_play.yaml": 26,
+    "event_plays.yaml": 27,
+    "event_powerindex.yaml": 5,
+    "event_predictor.yaml": 7,
+    "event_probabilities.yaml": 16,
+    "event_situation.yaml": 14,
+    "event_status.yaml": 11,
+    "events.yaml": 1,
+    "franchise.yaml": 22,
+    "franchises.yaml": 1,
+    "league_root.yaml": 60,
+    "position.yaml": 7,
+    "positions.yaml": 1,
+    "recruiting_athletes.yaml": 34,
+    "recruiting_rankings.yaml": 1,
+    "recruiting_years.yaml": 1,
+    "season_athletes.yaml": 1,
+    "season_awards.yaml": 1,
+    "season_coaches.yaml": 1,
+    "season_futures.yaml": 6,
+    "season_group.yaml": 14,
+    "season_groups.yaml": 1,
+    "season_info.yaml": 33,
+    "season_pointer.yaml": 32,
+    "season_powerindex.yaml": 9,
+    "season_qbr_week.yaml": 7,
+    "season_recruits.yaml": 1,
+    "season_team.yaml": 40,
+    "season_teams.yaml": 1,
+    "season_type.yaml": 16,
+    "season_types.yaml": 1,
+    "season_week.yaml": 6,
+    "season_week_rankings.yaml": 1,
+    "season_weeks.yaml": 1,
+    "seasons.yaml": 1,
+    "team.yaml": 41,
+    "team_core.yaml": 40,
+    "tournaments.yaml": 1,
+    "transactions.yaml": 11,
+    "venue.yaml": 7,
+    "venues.yaml": 1,
+    # Same 2026-10-07 sweep, second pass: captured in the league whose payload the parser reads
+    # (CFB groups, NFL corrections/weeks/talent picks, MBB power-index leaders) and the two
+    # power-index tables whose links had pointed at no schema since 0.0.67.
+    "fpi.yaml": 41,
+    "season_group_children.yaml": 1,
+    "season_group_teams.yaml": 1,
+    "season_powerindex_leaders.yaml": 3,
+    "season_type_corrections.yaml": 7,
+    "season_week_events.yaml": 1,
+    "season_week_powerindex.yaml": 37,
+    "talentpicks.yaml": 12,
+    # Fox Sports and KenPom tables from the same capture sweep. KenPom's column names are
+    # hoopR's kp_* @return vocabulary in snake case, so it is the source to author them from.
+    "native/fox_api": 496,
+    "native/kenpom": 449,
     "native/nflpro": 30,  # the un-authorable NGS fields only (2026-10-07); was None
     "native/nba_stats": 312,
     "native/wnba_stats": 269,
     "native/fotmob": 283,
     "native/uefa": 841,
     "native/sleeper": 459,
+    # The autodoc buckets were re-based 2026-10-08 at their measured counts when Task 26 captured
+    # returns tables for every hand-written DataFrame function (295 new tables, ~4,900 undescribed
+    # cells after pass-through transformers inherit their input loader's descriptions via
+    # generate._DESC_INHERITS). Lower a cap as columns are authored.
     # Buckets whose blank cells held CROSS-SPORT R text until the fallback was scoped to the
     # league's own sport (2026-10-07): the earlier zero residual counted baseballr's "Inning
     # number." on a jersey number and cfbfastR's SP+ on an NFL rating as coverage, so these are
@@ -116,32 +203,37 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "autodoc/ahl": 2,
     "autodoc/ajhl": 1,
     "autodoc/cchl": 1,
-    "autodoc/cfb": 92,
+    "autodoc/cfb": 817,
     "autodoc/chl": 2,
-    "autodoc/global": 3,
+    "autodoc/global": 204,
     "autodoc/gojhl": 1,
-    "autodoc/mbb": 6,
-    "autodoc/mlb": 31,
-    "autodoc/nba": 4,
-    "autodoc/nfl": 248,
-    "autodoc/nhl": 51,
+    "autodoc/mbb": 642,
+    "autodoc/mlb": 107,
+    "autodoc/nba": 432,
+    "autodoc/nfl": 1098,
+    "autodoc/nhl": 208,
     "autodoc/nojhl": 1,
-    "autodoc/odds": 22,
+    "autodoc/odds": 69,
     "autodoc/ohl": 2,
-    "autodoc/pwhl": 4,
+    "autodoc/pwhl": 13,
     "autodoc/qmjhl": 4,
     "autodoc/sjhl": 1,
     "autodoc/ushl": 2,
-    "autodoc/wbb": 6,
+    "autodoc/wbb": 593,
     "autodoc/whl": 1,
-    "autodoc/wnba": 5,
+    "autodoc/wnba": 558,
+    "autodoc/college_baseball": 38,
+    "autodoc/f1": 17,
+    "autodoc/mch": 7,
+    "autodoc/soccer": 83,
+    "autodoc/ufl": 24,
     "cdn_scoreboard.yaml": 38,
     "loader_schemas": 371,
     "native/cbs_napi": 42,
     "native/mlb_api": 10,
     "native/mls_api": 8,
-    "native/nhl_api_web": 6,
-    "native/nhl_edge": 12,
+    "native/nhl_api_web": 17,  # was 6: right_rail / club_stats(_season) built 2026-10-07 (dict -> frames)
+    "native/nhl_edge": 74,  # was 12: eight *_top_10 boards captured 2026-10-07 (fastRhockey describes them)
     "native/nhl_records": 19,
     "native/nhl_stats_rest": 2,
     "native/nwsl_api": 9,
@@ -270,7 +362,7 @@ def iter_schema_columns() -> list[dict]:
 
 def _uncovered(r: dict) -> bool:
     """A blank column with no manual-dict and no R-dict description."""
-    if not r["blank"] or _manual_col_desc(r["schema"], r["col"]):
+    if not r["blank"] or _manual_col_desc(r["schema"], r["col"], r["league"]):
         return False
     # Same gate as render: a family with no R counterpart (``_NO_R_DICT_FAMILIES``) gets no fill.
     key = f"{r['bucket']}/{r['schema']}" if r["bucket"].startswith("native/") else r["schema"]

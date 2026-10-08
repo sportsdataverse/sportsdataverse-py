@@ -129,6 +129,23 @@ fitted basket origin and scaled to feet.
 
 The canonical shot frame (`CANONICAL_SHOT_SCHEMA`); empty input returns the zero-row schema.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team_id` | character | Unique team identifier. |
+| `shooter_id` | character | Unique identifier for shooter. |
+| `shot_x` | double |  |
+| `shot_y` | double |  |
+| `dist_ft` | double |  |
+| `shot_zone` | character |  |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `made` | logical |  |
+| `point_value` | integer |  |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `sec_left` | double |  |
+| `source` | character |  |
+
 **Example**
 
 ```python
@@ -190,6 +207,44 @@ this deliberately diverges from wbigballR's halves math).
 
 The 35-column play-by-play frame (zero rows when the game is not found).
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | character | Game clock value. |
+| `game_time` | character | Game start time. |
+| `game_seconds` | integer |  |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `event_team` | character |  |
+| `event_description` | character |  |
+| `player_1` | character |  |
+| `player_2` | character |  |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `event_result` | character |  |
+| `shot_value` | integer | Point value of the shot (2 or 3). |
+| `event_length` | integer |  |
+| `poss_num` | integer |  |
+| `poss_team` | character |  |
+| `poss_length` | integer |  |
+| `is_transition` | logical |  |
+| `home_1` | character |  |
+| `home_2` | character |  |
+| `home_3` | character |  |
+| `home_4` | character |  |
+| `home_5` | character |  |
+| `away_1` | character |  |
+| `away_2` | character |  |
+| `away_3` | character |  |
+| `away_4` | character |  |
+| `away_5` | character |  |
+| `status` | character | Status label. |
+| `is_garbage_time` | logical |  |
+| `sub_deviate` | integer |  |
+
 **Example**
 
 ```python
@@ -219,6 +274,44 @@ the WBB quarter model `(4, 600, 300)` bound.
 **Returns**
 
 Row-bound play-by-play for every game that scraped successfully (zero-row contract frame when none did).
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | character | Game clock value. |
+| `game_time` | character | Game start time. |
+| `game_seconds` | integer |  |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `event_team` | character |  |
+| `event_description` | character |  |
+| `player_1` | character |  |
+| `player_2` | character |  |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `event_result` | character |  |
+| `shot_value` | integer | Point value of the shot (2 or 3). |
+| `event_length` | integer |  |
+| `poss_num` | integer |  |
+| `poss_team` | character |  |
+| `poss_length` | integer |  |
+| `is_transition` | logical |  |
+| `home_1` | character |  |
+| `home_2` | character |  |
+| `home_3` | character |  |
+| `home_4` | character |  |
+| `home_5` | character |  |
+| `away_1` | character |  |
+| `away_2` | character |  |
+| `away_3` | character |  |
+| `away_4` | character |  |
+| `away_5` | character |  |
+| `status` | character | Status label. |
+| `is_garbage_time` | logical |  |
+| `sub_deviate` | integer |  |
 
 **Example**
 
@@ -251,6 +344,23 @@ geometry classifiers. The parser-phase `pts` field is the MADE flag
 
 The canonical shot frame (`CANONICAL_SHOT_SCHEMA`); empty input returns the zero-row schema.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team_id` | character | Unique team identifier. |
+| `shooter_id` | character | Unique identifier for shooter. |
+| `shot_x` | double |  |
+| `shot_y` | double |  |
+| `dist_ft` | double |  |
+| `shot_zone` | character |  |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `made` | logical |  |
+| `point_value` | integer |  |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `sec_left` | double |  |
+| `source` | character |  |
+
 **Example**
 
 ```python
@@ -262,11 +372,15 @@ df = shot_events_to_frame(events, season=2025)
 
 `wbb_pbp_disk(game_id, path_to_json)`
 
-_No description available._
+Read a saved ESPN WBB play-by-play payload from disk.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` |  |  |  |
-| `path_to_json` |  |  |  |
+| `game_id` |  |  | The ESPN game id; the file read is `{game_id}.json`. |
+| `path_to_json` |  |  | The directory holding the saved payloads. |
+
+**Returns**
+
+The payload exactly as saved (the raw ESPN summary JSON), ready for `helper_wbb_pbp`.

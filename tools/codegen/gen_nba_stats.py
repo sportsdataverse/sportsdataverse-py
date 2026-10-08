@@ -143,7 +143,11 @@ def _schema(stem: str, slug: str, sets: Dict[str, pl.DataFrame], sibling: Dict[s
             "schema": slug,
             "kind": "dataframe",
             "columns": [],
-            "unverified": f"parse_nba_stats_result_sets emits no columns for the committed capture {rel}",
+            "unverified": (
+                f"the committed capture {rel} holds no rows, so parse_nba_stats_result_sets emits no columns; "
+                "a capture with rows needs a residential IP (stats.nba.com / stats.wnba.com hang on datacenter "
+                "IPs) and SDV_PY_NBA_STATS_LIVE=1"
+            ),
         }
     if len(blocks) == 1:
         return {"schema": slug, "kind": "dataframe", "columns": blocks[0]["columns"]}

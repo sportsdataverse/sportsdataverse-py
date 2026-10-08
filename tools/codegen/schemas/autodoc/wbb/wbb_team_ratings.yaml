@@ -1,0 +1,36 @@
+schema: wbb_team_ratings
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: adj_o
+  type: double
+  description: ''
+- name: adj_d
+  type: double
+  description: ''
+- name: adj_em
+  type: double
+  description: ''
+- name: adj_tempo
+  type: double
+  description: ''
+- name: raw_o
+  type: double
+  description: ''
+- name: raw_d
+  type: double
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: rank
+  type: integer
+  description: ''
+- name: adj_em_z
+  type: double
+  description: ''

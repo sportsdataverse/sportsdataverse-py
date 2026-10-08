@@ -1,0 +1,24 @@
+schema: venue
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: full_name
+  type: character
+  description: ''
+- name: grass
+  type: logical
+  description: ''
+- name: guid
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: ''
+- name: images
+  type: character
+  description: ''
+- name: indoor
+  type: logical
+  description: ''

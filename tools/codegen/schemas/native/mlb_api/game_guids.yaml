@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: game_guids
+unverified: 'no capture: statsapi.mlb.com answers 406 to the datacenter IP and 401 ''Please Login'' through the residential
+  proxy; the route needs an MLB login session the package does not hold'

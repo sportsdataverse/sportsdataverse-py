@@ -1,0 +1,394 @@
+schema: player_career
+kind: frames
+frames:
+- section: player_table
+  columns:
+  - name: column_0
+    type: character
+    description: ''
+  - name: column_0_rk
+    type: character
+    description: ''
+  - name: ht
+    type: character
+    description: ''
+  - name: wt
+    type: double
+    description: ''
+  - name: yr
+    type: character
+    description: ''
+  - name: g
+    type: integer
+    description: ''
+  - name: pct_min
+    type: double
+    description: ''
+  - name: o_rtg
+    type: double
+    description: ''
+  - name: pct_poss
+    type: double
+    description: ''
+  - name: pct_shots
+    type: double
+    description: ''
+  - name: e_fg_pct
+    type: double
+    description: ''
+  - name: ts_pct
+    type: double
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: dr_pct
+    type: double
+    description: ''
+  - name: a_rate
+    type: double
+    description: ''
+  - name: to_rate
+    type: double
+    description: ''
+  - name: blk_pct
+    type: double
+    description: ''
+  - name: stl_pct
+    type: double
+    description: ''
+  - name: fc_40
+    type: double
+    description: ''
+  - name: fd_40
+    type: double
+    description: ''
+  - name: ft_rate
+    type: double
+    description: ''
+  - name: ftm_a
+    type: character
+    description: ''
+  - name: pct
+    type: double
+    description: ''
+  - name: 2_pm_a
+    type: character
+    description: ''
+  - name: pct_1
+    type: double
+    description: ''
+  - name: 3_pm_a
+    type: character
+    description: ''
+  - name: pct_2
+    type: double
+    description: ''
+- section: schedule_table
+  columns:
+  - name: column_0
+    type: double
+    description: ''
+  - name: column_0_rk
+    type: character
+    description: ''
+  - name: column_0_rk_rk
+    type: integer
+    description: ''
+  - name: opponent
+    type: character
+    description: ''
+  - name: result
+    type: character
+    description: ''
+  - name: result_rk
+    type: double
+    description: ''
+  - name: site
+    type: character
+    description: ''
+  - name: site_rk
+    type: character
+    description: ''
+  - name: site_rk_rk
+    type: double
+    description: ''
+  - name: st
+    type: double
+    description: ''
+  - name: mp
+    type: integer
+    description: ''
+  - name: o_rtg
+    type: character
+    description: ''
+  - name: pct_ps
+    type: character
+    description: ''
+  - name: pts
+    type: integer
+    description: ''
+  - name: 2_pt
+    type: character
+    description: ''
+  - name: 3_pt
+    type: character
+    description: ''
+  - name: ft
+    type: character
+    description: ''
+  - name: or
+    type: integer
+    description: ''
+  - name: dr
+    type: integer
+    description: ''
+  - name: a
+    type: integer
+    description: ''
+  - name: to
+    type: integer
+    description: ''
+  - name: blk
+    type: integer
+    description: ''
+  - name: stl
+    type: integer
+    description: ''
+  - name: pf
+    type: integer
+    description: ''
+  - name: pf_rk
+    type: double
+    description: ''
+- section: schedule_table_3
+  columns:
+  - name: column_0
+    type: double
+    description: ''
+  - name: column_0_rk
+    type: character
+    description: ''
+  - name: column_0_rk_rk
+    type: integer
+    description: ''
+  - name: opponent
+    type: character
+    description: ''
+  - name: result
+    type: character
+    description: ''
+  - name: result_rk
+    type: double
+    description: ''
+  - name: site
+    type: character
+    description: ''
+  - name: site_rk
+    type: character
+    description: ''
+  - name: site_rk_rk
+    type: double
+    description: ''
+  - name: st
+    type: character
+    description: ''
+  - name: mp
+    type: integer
+    description: ''
+  - name: o_rtg
+    type: integer
+    description: ''
+  - name: pct_ps
+    type: integer
+    description: ''
+  - name: pts
+    type: integer
+    description: ''
+  - name: 2_pt
+    type: character
+    description: ''
+  - name: 3_pt
+    type: character
+    description: ''
+  - name: ft
+    type: character
+    description: ''
+  - name: or
+    type: integer
+    description: ''
+  - name: dr
+    type: integer
+    description: ''
+  - name: a
+    type: integer
+    description: ''
+  - name: to
+    type: integer
+    description: ''
+  - name: blk
+    type: integer
+    description: ''
+  - name: stl
+    type: integer
+    description: ''
+  - name: pf
+    type: integer
+    description: ''
+  - name: pf_rk
+    type: double
+    description: ''
+- section: schedule_table_4
+  columns:
+  - name: column_0
+    type: double
+    description: ''
+  - name: column_0_rk
+    type: character
+    description: ''
+  - name: column_0_rk_rk
+    type: integer
+    description: ''
+  - name: opponent
+    type: character
+    description: ''
+  - name: result
+    type: character
+    description: ''
+  - name: result_rk
+    type: double
+    description: ''
+  - name: site
+    type: character
+    description: ''
+  - name: site_rk
+    type: character
+    description: ''
+  - name: site_rk_rk
+    type: character
+    description: ''
+  - name: st
+    type: character
+    description: ''
+  - name: mp
+    type: integer
+    description: ''
+  - name: o_rtg
+    type: integer
+    description: ''
+  - name: pct_ps
+    type: integer
+    description: ''
+  - name: pts
+    type: integer
+    description: ''
+  - name: 2_pt
+    type: character
+    description: ''
+  - name: 3_pt
+    type: character
+    description: ''
+  - name: ft
+    type: character
+    description: ''
+  - name: or
+    type: integer
+    description: ''
+  - name: dr
+    type: integer
+    description: ''
+  - name: a
+    type: integer
+    description: ''
+  - name: to
+    type: integer
+    description: ''
+  - name: blk
+    type: integer
+    description: ''
+  - name: stl
+    type: integer
+    description: ''
+  - name: pf
+    type: integer
+    description: ''
+  - name: pf_rk
+    type: double
+    description: ''
+- section: schedule_table_5
+  columns:
+  - name: column_0
+    type: double
+    description: ''
+  - name: column_0_rk
+    type: character
+    description: ''
+  - name: column_0_rk_rk
+    type: integer
+    description: ''
+  - name: opponent
+    type: character
+    description: ''
+  - name: result
+    type: character
+    description: ''
+  - name: result_rk
+    type: double
+    description: ''
+  - name: site
+    type: character
+    description: ''
+  - name: site_rk
+    type: character
+    description: ''
+  - name: site_rk_rk
+    type: double
+    description: ''
+  - name: st
+    type: character
+    description: ''
+  - name: mp
+    type: integer
+    description: ''
+  - name: o_rtg
+    type: integer
+    description: ''
+  - name: pct_ps
+    type: integer
+    description: ''
+  - name: pts
+    type: integer
+    description: ''
+  - name: 2_pt
+    type: character
+    description: ''
+  - name: 3_pt
+    type: character
+    description: ''
+  - name: ft
+    type: character
+    description: ''
+  - name: or
+    type: integer
+    description: ''
+  - name: dr
+    type: integer
+    description: ''
+  - name: a
+    type: integer
+    description: ''
+  - name: to
+    type: integer
+    description: ''
+  - name: blk
+    type: integer
+    description: ''
+  - name: stl
+    type: integer
+    description: ''
+  - name: pf
+    type: integer
+    description: ''
+  - name: pf_rk
+    type: double
+    description: ''

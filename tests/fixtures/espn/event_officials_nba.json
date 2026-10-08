@@ -1,0 +1,50 @@
+{
+ "count": 3,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/officials/1?lang=en&region=us",
+   "displayName": "Rodney Mott",
+   "firstName": "Rodney",
+   "fullName": "Rodney Mott",
+   "id": "2615770",
+   "lastName": "Mott",
+   "order": 1,
+   "position": {
+    "displayName": "Referee",
+    "id": "40",
+    "name": "Referee"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/officials/2?lang=en&region=us",
+   "displayName": "Mitchell Ervin",
+   "firstName": "Mitchell",
+   "fullName": "Mitchell Ervin",
+   "id": "2616466",
+   "lastName": "Ervin",
+   "order": 2,
+   "position": {
+    "displayName": "Referee",
+    "id": "40",
+    "name": "Referee"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/officials/3?lang=en&region=us",
+   "displayName": "Scott Twardoski",
+   "firstName": "Scott",
+   "fullName": "Scott Twardoski",
+   "id": "2616803",
+   "lastName": "Twardoski",
+   "order": 3,
+   "position": {
+    "displayName": "Referee",
+    "id": "40",
+    "name": "Referee"
+   }
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 25
+}

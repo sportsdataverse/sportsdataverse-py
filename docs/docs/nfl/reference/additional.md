@@ -76,22 +76,11 @@ not covered by the generated API-endpoint reference above.
 | [load_nfl_ff_playerids](additional/nflverse-data-releases-2.md#load_nfl_ff_playerids) | Load fantasy football player IDs from DynastyProcess.com |
 | [load_nfl_ff_rankings](additional/nflverse-data-releases-2.md#load_nfl_ff_rankings) | Load fantasy football rankings and projections |
 | [load_nfl_nextgen_stats](additional/nflverse-data-releases-2.md#load_nfl_nextgen_stats) | Load NFL NextGen Stats data going back to 2016. |
-| [load_nfl_ngs_passing](additional/nflverse-data-releases-2.md#load_nfl_ngs_passing) | Deprecated alias for `load_nfl_nextgen_stats(stat_type='passing')`. |
-| [load_nfl_ngs_receiving](additional/nflverse-data-releases-2.md#load_nfl_ngs_receiving) | Deprecated alias for `load_nfl_nextgen_stats(stat_type='receiving')`. |
-| [load_nfl_ngs_rushing](additional/nflverse-data-releases-2.md#load_nfl_ngs_rushing) | Deprecated alias for `load_nfl_nextgen_stats(stat_type='rushing')`. |
 | [load_nfl_officials](additional/nflverse-data-releases-2.md#load_nfl_officials) | Load NFL Officials information |
 | [load_nfl_pfr_advstats](additional/nflverse-data-releases-2.md#load_nfl_pfr_advstats) | Load Pro-Football Reference advanced statistics going back to 2018. |
-| [load_nfl_pfr_def](additional/nflverse-data-releases-2.md#load_nfl_pfr_def) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='season')`. |
-| [load_nfl_pfr_pass](additional/nflverse-data-releases-2.md#load_nfl_pfr_pass) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='pass', summary_level='season')`. |
-| [load_nfl_pfr_rec](additional/nflverse-data-releases-2.md#load_nfl_pfr_rec) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='rec', summary_level='season')`. |
-| [load_nfl_pfr_rush](additional/nflverse-data-releases-2.md#load_nfl_pfr_rush) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='rush', summary_level='season')`. |
-| [load_nfl_pfr_weekly_def](additional/nflverse-data-releases-2.md#load_nfl_pfr_weekly_def) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='week')`. |
-| [load_nfl_pfr_weekly_pass](additional/nflverse-data-releases-3.md#load_nfl_pfr_weekly_pass) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='pass', summary_level='week')`. |
-| [load_nfl_pfr_weekly_rec](additional/nflverse-data-releases-3.md#load_nfl_pfr_weekly_rec) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='rec', summary_level='week')`. |
-| [load_nfl_pfr_weekly_rush](additional/nflverse-data-releases-3.md#load_nfl_pfr_weekly_rush) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='rush', summary_level='week')`. |
-| [load_nfl_player_stats](additional/nflverse-data-releases-3.md#load_nfl_player_stats) | Load NFL player stats data |
-| [load_nfl_players](additional/nflverse-data-releases-3.md#load_nfl_players) | Load the nflverse NFL player-identity master. |
-| [load_nfl_schedule](additional/nflverse-data-releases-3.md#load_nfl_schedule) | Load NFL schedule data |
+| [load_nfl_player_stats](additional/nflverse-data-releases-2.md#load_nfl_player_stats) | Load NFL player stats data |
+| [load_nfl_players](additional/nflverse-data-releases-2.md#load_nfl_players) | Load the nflverse NFL player-identity master. |
+| [load_nfl_schedule](additional/nflverse-data-releases-2.md#load_nfl_schedule) | Load NFL schedule data |
 | [load_nfl_team_stats](additional/nflverse-data-releases-3.md#load_nfl_team_stats) | Load NFL team stats data going back to 1999 |
 | [load_nfl_teams](additional/nflverse-data-releases-3.md#load_nfl_teams) | Load NFL team ID information and logos |
 | [load_nfl_trades](additional/nflverse-data-releases-3.md#load_nfl_trades) | Load NFL trades data |
@@ -99,10 +88,10 @@ not covered by the generated API-endpoint reference above.
 | [load_participation](additional/nflverse-data-releases-3.md#load_participation) | Load NFL play-by-play participation data for selected seasons |
 | [load_pfr_advstats](additional/nflverse-data-releases-3.md#load_pfr_advstats) | Load Pro-Football Reference advanced statistics going back to 2018. |
 | [load_player_stats](additional/nflverse-data-releases-3.md#load_player_stats) | Load NFL player stats data |
-| [load_players](additional/nflverse-data-releases-4.md#load_players) | Load the nflverse NFL player-identity master. |
-| [load_rosters_weekly](additional/nflverse-data-releases-4.md#load_rosters_weekly) | Load NFL weekly roster data for the requested seasons. |
-| [load_schedules](additional/nflverse-data-releases-4.md#load_schedules) | Load NFL schedule data |
-| [load_snap_counts](additional/nflverse-data-releases-4.md#load_snap_counts) | Load NFL snap counts data for selected seasons |
+| [load_players](additional/nflverse-data-releases-3.md#load_players) | Load the nflverse NFL player-identity master. |
+| [load_rosters_weekly](additional/nflverse-data-releases-3.md#load_rosters_weekly) | Load NFL weekly roster data for the requested seasons. |
+| [load_schedules](additional/nflverse-data-releases-3.md#load_schedules) | Load NFL schedule data |
+| [load_snap_counts](additional/nflverse-data-releases-3.md#load_snap_counts) | Load NFL snap counts data for selected seasons |
 | [load_team_stats](additional/nflverse-data-releases-4.md#load_team_stats) | Load NFL team stats data going back to 1999 |
 | [load_teams](additional/nflverse-data-releases-4.md#load_teams) | Load NFL team ID information and logos |
 | [load_trades](additional/nflverse-data-releases-4.md#load_trades) | Load NFL trades data |
@@ -146,13 +135,13 @@ not covered by the generated API-endpoint reference above.
 | [build_nfl_player_stats_def](additional/play-by-play-processing.md#build_nfl_player_stats_def) | Build player-level defensive stats from play-by-play (nflfastR parity). |
 | [build_nfl_player_stats_kicking](additional/play-by-play-processing.md#build_nfl_player_stats_kicking) | Build player-level kicking stats from play-by-play (nflfastR parity). |
 | [build_nfl_rosters](additional/play-by-play-processing.md#build_nfl_rosters) | Build SDV-native NFL season rosters from the public Shield API. |
-| [build_nfl_season](additional/play-by-play-processing.md#build_nfl_season) | Compile play-by-play for multiple NFL games into one tidy frame. |
-| [build_nfl_team_stats](additional/play-by-play-processing.md#build_nfl_team_stats) | Build nflverse **team_stats** by aggregating SDV-native play-by-play. |
-| [calculate_nfl_series_conversion_rates](additional/play-by-play-processing.md#calculate_nfl_series_conversion_rates) | Compute per-team offense + defense series conversion rates. |
-| [clean_nfl_pbp](additional/play-by-play-processing.md#clean_nfl_pbp) | Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port). |
-| [shield_nfl_pbp](additional/play-by-play-processing.md#shield_nfl_pbp) | Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase. |
-| [shield_to_espn_summary](additional/play-by-play-processing.md#shield_to_espn_summary) | Project one Shield game (any phase) onto an ESPN-summary-shaped dict. |
-| [team_name_fn](additional/play-by-play-processing.md#team_name_fn) | Fold historical/relocated team codes onto their current abbreviation. |
+| [build_nfl_season](additional/play-by-play-processing-2.md#build_nfl_season) | Compile play-by-play for multiple NFL games into one tidy frame. |
+| [build_nfl_team_stats](additional/play-by-play-processing-2.md#build_nfl_team_stats) | Build nflverse **team_stats** by aggregating SDV-native play-by-play. |
+| [calculate_nfl_series_conversion_rates](additional/play-by-play-processing-2.md#calculate_nfl_series_conversion_rates) | Compute per-team offense + defense series conversion rates. |
+| [clean_nfl_pbp](additional/play-by-play-processing-3.md#clean_nfl_pbp) | Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port). |
+| [shield_nfl_pbp](additional/play-by-play-processing-4.md#shield_nfl_pbp) | Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase. |
+| [shield_to_espn_summary](additional/play-by-play-processing-4.md#shield_to_espn_summary) | Project one Shield game (any phase) onto an ESPN-summary-shaped dict. |
+| [team_name_fn](additional/play-by-play-processing-4.md#team_name_fn) | Fold historical/relocated team codes onto their current abbreviation. |
 
 ## Models and calculators
 
@@ -160,36 +149,36 @@ not covered by the generated API-endpoint reference above.
 |---|---|
 | [adjust_pressure_pairs](additional/models-and-calculators.md#adjust_pressure_pairs) | Opponent-adjust matchup pressure rates via an additive fixed point. |
 | [calculate_completion_probability](additional/models-and-calculators.md#calculate_completion_probability) | Compute completion probability (CP) and CPOE for pass plays. |
-| [calculate_epa](additional/models-and-calculators.md#calculate_epa) | Derive expected points added (EPA) from pre-scored EP point estimates. |
-| [calculate_expected_points](additional/models-and-calculators.md#calculate_expected_points) | Compute expected points for provided plays. |
-| [calculate_win_probability](additional/models-and-calculators.md#calculate_win_probability) | Compute win probability for provided plays. |
-| [calculate_wpa](additional/models-and-calculators.md#calculate_wpa) | Derive win probability added (WPA) from pre-scored WP point estimates. |
-| [calculate_xpass](additional/models-and-calculators.md#calculate_xpass) | Compute expected dropback probability (`xpass`) and `pass_oe`. |
-| [calculate_xyac](additional/models-and-calculators.md#calculate_xyac) | Compute expected yards after catch (xYAC) for intended pass plays. |
-| [efficiency_ratings](additional/models-and-calculators.md#efficiency_ratings) | One row per team: opponent-adjusted offense/defense EPA per play. |
-| [env_adjusted_make_prob](additional/models-and-calculators.md#env_adjusted_make_prob) | Add `base_make_prob` + environment-adjusted `exp_make_prob`. |
-| [fg_make_probability](additional/models-and-calculators.md#fg_make_probability) | Predict FG make probability from the bundled `fg_model` (public wrapper). |
-| [fit_nfl_field_position_ep](additional/models-and-calculators.md#fit_nfl_field_position_ep) | Fit the NFL EP-by-starting-yardline curve from released `espn_nfl_pbp` plays. |
-| [get_2pt_probs](additional/models-and-calculators.md#get_2pt_probs) | The PAT-vs-2pt decision surface for post-touchdown states (CFB-shaped). |
-| [get_2pt_wp](additional/models-and-calculators.md#get_2pt_wp) | Win probability of the PAT-vs-2pt choice after a touchdown (nfl4th `get_2pt_wp`). |
-| [get_4th_down_probs](additional/models-and-calculators.md#get_4th_down_probs) | Full 4th-down decision surface (nfl4th `add_4th_probs`) + recommendation. |
-| [get_fg_wp](additional/models-and-calculators.md#get_fg_wp) | Expected win probability of attempting a field goal (nfl4th `get_fg_wp`). |
-| [get_go_wp](additional/models-and-calculators.md#get_go_wp) | Expected win probability of going for it on 4th down (nfl4th `get_go_wp`). |
-| [get_punt_wp](additional/models-and-calculators.md#get_punt_wp) | Expected win probability of punting on 4th down (nfl4th `get_punt_wp`). |
-| [load_nfl_fp_curve](additional/models-and-calculators.md#load_nfl_fp_curve) | Load the bundled NFL EP-by-yardline curve (no network). |
-| [nfl_compute_results](additional/models-and-calculators.md#nfl_compute_results) | Compute NFL game results for one week of a season simulation. |
-| [nfl_draft_projection](additional/models-and-calculators.md#nfl_draft_projection) | Draft outcome projection for one draft class. |
-| [nfl_fantasy_projection](additional/models-and-calculators.md#nfl_fantasy_projection) | Fantasy-points projection: deterministic scoring of the Marcel component |
-| [nfl_kicker_rating](additional/models-and-calculators.md#nfl_kicker_rating) | Environment-adjusted kicker FG-over-expected ratings. |
-| [nfl_line_grades](additional/models-and-calculators.md#nfl_line_grades) | Team-season OL pass-block + DL pass-rush grades (opponent-adjusted, EB-shrunk). |
-| [nfl_player_projection](additional/models-and-calculators.md#nfl_player_projection) | Marcel-style next-season player projection with delta-method aging. |
-| [nfl_ratings](additional/models-and-calculators.md#nfl_ratings) | One row per team: the native NFL ratings spine (off/def/ST EPA). |
-| [nfl_simulations](additional/models-and-calculators.md#nfl_simulations) | Simulate an NFL season from a schedule with (partially) missing results. |
-| [nfl_usage_projection](additional/models-and-calculators.md#nfl_usage_projection) | Project next-season target share, air-yards share, and WOPR. |
-| [opponent_adjusted_ridge](additional/models-and-calculators-2.md#opponent_adjusted_ridge) | Ridge-regress `resp_col` on offense + defense team indicators + HFA. |
-| [pressure_pairs](additional/models-and-calculators-2.md#pressure_pairs) | Per (season, off_team, def_team) dropbacks + pressures (matchup grid). |
-| [special_teams_ratings](additional/models-and-calculators-2.md#special_teams_ratings) | One row per team: opponent-adjusted special-teams EPA per play. |
-| [team_pressure_rates](additional/models-and-calculators-2.md#team_pressure_rates) | Per (season, team) raw pressure rates, both sides of the ball. |
+| [calculate_epa](additional/models-and-calculators-2.md#calculate_epa) | Derive expected points added (EPA) from pre-scored EP point estimates. |
+| [calculate_expected_points](additional/models-and-calculators-3.md#calculate_expected_points) | Compute expected points for provided plays. |
+| [calculate_win_probability](additional/models-and-calculators-4.md#calculate_win_probability) | Compute win probability for provided plays. |
+| [calculate_wpa](additional/models-and-calculators-5.md#calculate_wpa) | Derive win probability added (WPA) from pre-scored WP point estimates. |
+| [calculate_xpass](additional/models-and-calculators-6.md#calculate_xpass) | Compute expected dropback probability (`xpass`) and `pass_oe`. |
+| [calculate_xyac](additional/models-and-calculators-7.md#calculate_xyac) | Compute expected yards after catch (xYAC) for intended pass plays. |
+| [efficiency_ratings](additional/models-and-calculators-7.md#efficiency_ratings) | One row per team: opponent-adjusted offense/defense EPA per play. |
+| [env_adjusted_make_prob](additional/models-and-calculators-7.md#env_adjusted_make_prob) | Add `base_make_prob` + environment-adjusted `exp_make_prob`. |
+| [fg_make_probability](additional/models-and-calculators-7.md#fg_make_probability) | Predict FG make probability from the bundled `fg_model` (public wrapper). |
+| [fit_nfl_field_position_ep](additional/models-and-calculators-7.md#fit_nfl_field_position_ep) | Fit the NFL EP-by-starting-yardline curve from released `espn_nfl_pbp` plays. |
+| [get_2pt_probs](additional/models-and-calculators-7.md#get_2pt_probs) | The PAT-vs-2pt decision surface for post-touchdown states (CFB-shaped). |
+| [get_2pt_wp](additional/models-and-calculators-7.md#get_2pt_wp) | Win probability of the PAT-vs-2pt choice after a touchdown (nfl4th `get_2pt_wp`). |
+| [get_4th_down_probs](additional/models-and-calculators-8.md#get_4th_down_probs) | Full 4th-down decision surface (nfl4th `add_4th_probs`) + recommendation. |
+| [get_fg_wp](additional/models-and-calculators-9.md#get_fg_wp) | Expected win probability of attempting a field goal (nfl4th `get_fg_wp`). |
+| [get_go_wp](additional/models-and-calculators-9.md#get_go_wp) | Expected win probability of going for it on 4th down (nfl4th `get_go_wp`). |
+| [get_punt_wp](additional/models-and-calculators-9.md#get_punt_wp) | Expected win probability of punting on 4th down (nfl4th `get_punt_wp`). |
+| [load_nfl_fp_curve](additional/models-and-calculators-9.md#load_nfl_fp_curve) | Load the bundled NFL EP-by-yardline curve (no network). |
+| [nfl_compute_results](additional/models-and-calculators-9.md#nfl_compute_results) | Compute NFL game results for one week of a season simulation. |
+| [nfl_draft_projection](additional/models-and-calculators-9.md#nfl_draft_projection) | Draft outcome projection for one draft class. |
+| [nfl_fantasy_projection](additional/models-and-calculators-9.md#nfl_fantasy_projection) | Fantasy-points projection: deterministic scoring of the Marcel component |
+| [nfl_kicker_rating](additional/models-and-calculators-9.md#nfl_kicker_rating) | Environment-adjusted kicker FG-over-expected ratings. |
+| [nfl_line_grades](additional/models-and-calculators-9.md#nfl_line_grades) | Team-season OL pass-block + DL pass-rush grades (opponent-adjusted, EB-shrunk). |
+| [nfl_player_projection](additional/models-and-calculators-9.md#nfl_player_projection) | Marcel-style next-season player projection with delta-method aging. |
+| [nfl_ratings](additional/models-and-calculators-9.md#nfl_ratings) | One row per team: the native NFL ratings spine (off/def/ST EPA). |
+| [nfl_simulations](additional/models-and-calculators-10.md#nfl_simulations) | Simulate an NFL season from a schedule with (partially) missing results. |
+| [nfl_usage_projection](additional/models-and-calculators-10.md#nfl_usage_projection) | Project next-season target share, air-yards share, and WOPR. |
+| [opponent_adjusted_ridge](additional/models-and-calculators-10.md#opponent_adjusted_ridge) | Ridge-regress `resp_col` on offense + defense team indicators + HFA. |
+| [pressure_pairs](additional/models-and-calculators-10.md#pressure_pairs) | Per (season, off_team, def_team) dropbacks + pressures (matchup grid). |
+| [special_teams_ratings](additional/models-and-calculators-10.md#special_teams_ratings) | One row per team: opponent-adjusted special-teams EPA per play. |
+| [team_pressure_rates](additional/models-and-calculators-10.md#team_pressure_rates) | Per (season, team) raw pressure rates, both sides of the ball. |
 
 ## Analytics
 

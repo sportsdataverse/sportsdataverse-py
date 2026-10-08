@@ -1,0 +1,45 @@
+schema: team_play_context
+kind: dataframe
+columns:
+- name: offense_team_id
+  type: integer
+  description: ''
+- name: poss
+  type: integer
+  description: ''
+- name: points
+  type: integer
+  description: ''
+- name: transition_poss
+  type: integer
+  description: ''
+- name: transition_points
+  type: integer
+  description: ''
+- name: halfcourt_poss
+  type: integer
+  description: ''
+- name: pts_per_100
+  type: double
+  description: ''
+- name: transition_freq
+  type: double
+  description: ''
+- name: transition_pts_per_100
+  type: double
+  description: ''
+- name: non_transition_pts_per_100
+  type: double
+  description: ''
+- name: freq_off_steal
+  type: double
+  description: ''
+- name: freq_off_live_rebound
+  type: double
+  description: ''
+- name: transition_pts_added_per_100
+  type: double
+  description: ''
+- name: halfcourt_pts_per_100
+  type: double
+  description: ''

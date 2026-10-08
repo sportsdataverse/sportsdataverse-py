@@ -60,3 +60,20 @@ def test_variant_frames_functions_are_not_described_as_returning_a_dict():
         assert "dict of polars" not in doc and "dict of pandas" not in doc, short
     for fn in ("pff_api_facet_receiving_coverage", "pff_api_facet_defense_coverage_matchup"):
         assert "dict of polars" in getattr(pff_api, fn).__doc__, fn
+
+
+_REQUIRED_REASON_WORDS = ("entitle", "datacenter", "capture", "deprecat", "heuristic", "rows", "parser")
+
+
+@pytest.mark.parametrize("path", [p for p, _ in _UNVERIFIED], ids=lambda p: p.relative_to(SCHEMAS).as_posix())
+def test_the_reason_says_why_not_just_that_it_is_unverified(path):
+    reason = str(yaml.safe_load(path.read_text(encoding="utf-8"))["unverified"]).lower()
+    assert any(w in reason for w in _REQUIRED_REASON_WORDS), f"{path.name}: {reason!r} names no cause"
+    assert len(reason) > 30, f"{path.name}: the reason is too short to be actionable"
+
+
+def test_the_playbyplayv3_reason_names_the_datacenter_ip_cause():
+    for family in ("nba_stats", "wnba_stats"):
+        doc = yaml.safe_load((SCHEMAS / "native" / family / "playbyplayv3.yaml").read_text(encoding="utf-8"))
+        assert "datacenter" in str(doc["unverified"]).lower()
+        assert "SDV_PY_NBA_STATS_LIVE" in str(doc["unverified"])

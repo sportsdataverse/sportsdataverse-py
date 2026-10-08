@@ -1,0 +1,83 @@
+{
+ "count": 30,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/52120?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/2232684?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/2529241?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/3233?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/6809?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/4391222?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/3067059?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/2613478?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/425?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/866?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/4661?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/489?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/3024?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/6749?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/3044495?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/2613479?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/4058088?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/3612?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/2142798?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/52085?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/4061667?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/3233?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/147?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/4401170?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/coaches/4356384?lang=en&region=us"
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 500
+}

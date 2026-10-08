@@ -12,15 +12,21 @@ description: "Package — additional Python functions — Cache and configuratio
 
 Return a snapshot of the cache for debugging / inspection.
 
-Returns a dict with `mode`, `entries`, and `disk_bytes` (only
-populated when mode=filesystem). Cheap — doesn't read the cached
-bodies, just counts + sizes.
+Cheap — doesn't read the cached bodies, just counts + sizes.
+
+**Returns**
+
+`mode` (the current cache mode), `entries` (cached responses: memory entries, or cache files in filesystem mode) and `disk_bytes` (total size of those files; 0 unless the mode is `"filesystem"`).
 
 ### get_cache_mode {#get_cache_mode}
 
 `get_cache_mode() -> 'str'`
 
 Return the current cache mode.
+
+**Returns**
+
+`"off"`, `"memory"` or `"filesystem"`.
 
 ### set_cache_mode {#set_cache_mode}
 

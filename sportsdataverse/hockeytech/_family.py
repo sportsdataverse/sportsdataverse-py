@@ -28,6 +28,34 @@ from sportsdataverse.hockeytech._analytics import (
 
 import polars as pl
 
+# Shared docstring tails for the minted callables (every one goes through hockeytech_api).
+_RAISES = (
+    "\n\nRaises:\n"
+    "    NoDataError: The feed answered 404.\n"
+    "    AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an\n"
+    "        ``Undefined Tab`` / ``InvalidView`` sentinel."
+)
+_PANDAS = "A pandas DataFrame when ``return_as_pandas`` is True."
+_SEASON_ARGS = (
+    "Args:\n"
+    "    season: Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular\n"
+    "        season when neither ``season`` nor ``season_id`` is given.\n"
+    "    season_id: The HockeyTech season id, when it is already known.\n"
+    "    return_as_pandas: Return a pandas DataFrame instead of polars.\n\n"
+)
+_SCHEDULE_ARGS = (
+    "Args:\n"
+    "    season: Season as an END year (2026 = the 2025-26 season). With neither ``season`` nor\n"
+    "        ``season_id``, no season filter is sent and the feed's whole recent window comes back.\n"
+    "    season_id: The HockeyTech season id, when it is already known.\n"
+    "    return_as_pandas: Return a pandas DataFrame instead of polars.\n\n"
+)
+_GAME_ARGS = (
+    "Args:\n"
+    "    game_id: The HockeyTech game id.\n"
+    "    return_as_pandas: Return a pandas DataFrame instead of polars.\n\n"
+)
+
 
 def build_family(league: str) -> dict[str, Any]:
     """Return a dict of public callables for *league*.
@@ -62,7 +90,15 @@ def build_family(league: str) -> dict[str, Any]:
 
     _season_id.__name__ = f"{lg}_season_id"
     _season_id.__qualname__ = f"{lg}_season_id"
-    _season_id.__doc__ = f"All {cfg.name} seasons with end-year + game-type labels."
+    _season_id.__doc__ = (
+        f"All {cfg.name} seasons with end-year + game-type labels.\n\n"
+        "Args:\n"
+        "    return_as_pandas: Return a pandas DataFrame instead of polars.\n\n"
+        "Returns:\n"
+        "    polars.DataFrame: One row per season: ``season_id`` (Int64), ``season_name``,\n"
+        "        ``season_short``, ``career``, ``playoff``, ``start_date``, ``end_date``, ``season_yr``\n"
+        f"        (Int64, the END year) and ``game_type_label``. {_PANDAS}" + _RAISES
+    )
 
     def _most_recent_season() -> int:
         """Newest regular season as an end-year integer."""
@@ -72,8 +108,12 @@ def build_family(league: str) -> dict[str, Any]:
     _most_recent_season.__qualname__ = f"most_recent_{lg}_season"
     _most_recent_season.__doc__ = (
         f"Newest {cfg.name} regular season as an end-year integer: the highest ``season_yr`` of a "
-        "regular season that is not a one-off event, so a preseason listed first is not a default. "
-        "Raises ``NoDataError`` when the seasons feed lists none, ``AssetFetchError`` when it fails."
+        "regular season that is not a one-off event, so a preseason listed first is not a default.\n\n"
+        "Returns:\n"
+        "    int: The newest regular season's END year (2026 = the 2025-26 season).\n\n"
+        "Raises:\n"
+        "    NoDataError: The seasons feed lists no regular season.\n"
+        "    AssetFetchError: The seasons feed failed."
     )
 
     def _season_or_latest(season: Optional[int], season_id: Optional[int]) -> Optional[int]:
@@ -102,7 +142,13 @@ def build_family(league: str) -> dict[str, Any]:
 
     _schedule.__name__ = f"{lg}_schedule"
     _schedule.__qualname__ = f"{lg}_schedule"
-    _schedule.__doc__ = f"{cfg.name} schedule — one row per game."
+    _schedule.__doc__ = (
+        f"{cfg.name} schedule — one row per game.\n\n" + _SCHEDULE_ARGS + "Returns:\n"
+        "    polars.DataFrame: One row per game: ``game_id``, ``game_date``, ``game_status``,\n"
+        "        ``home_team`` / ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` /\n"
+        "        ``away_score``, ``venue``, ``season_id`` and ``game_type`` (all String). With no season\n"
+        f"        given, the feed's whole recent window. {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # PBP
@@ -130,7 +176,17 @@ def build_family(league: str) -> dict[str, Any]:
 
     _pbp.__name__ = f"{lg}_pbp"
     _pbp.__qualname__ = f"{lg}_pbp"
-    _pbp.__doc__ = f"{cfg.name} play-by-play — one row per event, fully enriched."
+    _pbp.__doc__ = (
+        f"{cfg.name} play-by-play — one row per event, fully enriched.\n\n" + _GAME_ARGS + "Returns:\n"
+        "    polars.DataFrame: One row per event (shot, goal, penalty, faceoff, hit, goalie change ...):\n"
+        "        ``game_id``, ``event``, ``team_id``, ``period_of_game``, ``time_of_period``, rink\n"
+        f"        ``x_coord`` / ``y_coord`` (Float64, {cfg.pbp_style} canvas), the primary / second / third\n"
+        "        player and goalie ids and names, the plus / minus skaters on a goal, game metadata from\n"
+        "        the game summary, and derived ``shot_distance`` / ``shot_angle`` / ``scoring_chance`` and\n"
+        "        the ``on_ice_home`` / ``on_ice_away`` skaters from the shift feed. Player ids are Float64\n"
+        "        here. Some leagues (USHL, MJHL) publish only goals, penalties and goalie changes, with no\n"
+        f"        coordinates. {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # Standings
@@ -164,7 +220,13 @@ def build_family(league: str) -> dict[str, Any]:
 
     _standings.__name__ = f"{lg}_standings"
     _standings.__qualname__ = f"{lg}_standings"
-    _standings.__doc__ = f"{cfg.name} standings — one row per team."
+    _standings.__doc__ = (
+        f"{cfg.name} standings — one row per team.\n\n" + _SEASON_ARGS + "Returns:\n"
+        "    polars.DataFrame: One row per team: ``team``, ``team_code``, ``team_rank`` and ``wins``\n"
+        "        (Int64), and ``games_played``, ``losses``, ``regulation_wins``, ``non_reg_wins``,\n"
+        "        ``non_reg_losses``, ``points``, ``goals_for``, ``goals_against``, ``games_remaining``,\n"
+        f"        ``percentage`` and ``overall_rank`` (String, as the feed ships them). {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # Teams
@@ -188,7 +250,11 @@ def build_family(league: str) -> dict[str, Any]:
 
     _teams.__name__ = f"{lg}_teams"
     _teams.__qualname__ = f"{lg}_teams"
-    _teams.__doc__ = f"{cfg.name} teams for a given season."
+    _teams.__doc__ = (
+        f"{cfg.name} teams for a given season.\n\n" + _SEASON_ARGS + "Returns:\n"
+        "    polars.DataFrame: One row per team: ``team_id``, ``team_name``, ``team_code``,\n"
+        f"        ``team_nickname``, ``team_label``, ``division`` and ``team_logo`` (String). {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # Team roster
@@ -213,7 +279,16 @@ def build_family(league: str) -> dict[str, Any]:
 
     _team_roster.__name__ = f"{lg}_team_roster"
     _team_roster.__qualname__ = f"{lg}_team_roster"
-    _team_roster.__doc__ = f"{cfg.name} team roster for a given team + season."
+    _team_roster.__doc__ = (
+        f"{cfg.name} team roster for a given team + season.\n\n"
+        "Args:\n"
+        "    team_id: The HockeyTech team id.\n" + _SEASON_ARGS.split("Args:\n", 1)[1] + "Returns:\n"
+        "    polars.DataFrame: One row per rostered player: ``player_id``, ``person_id``, names\n"
+        "        (``first_name``, ``last_name``, ``display_name``), ``position``, ``tp_jersey_number``,\n"
+        "        ``shoots`` / ``catches``, ``height`` / ``weight``, ``birthdate``, home and birth places,\n"
+        "        ``rookie``, ``veteran_status``, ``draft_status`` and ``player_image`` (String, as the feed\n"
+        f"        ships them). {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # Player stats
@@ -233,7 +308,19 @@ def build_family(league: str) -> dict[str, Any]:
 
     _player_stats.__name__ = f"{lg}_player_stats"
     _player_stats.__qualname__ = f"{lg}_player_stats"
-    _player_stats.__doc__ = f"{cfg.name} player season stats across all seasons."
+    _player_stats.__doc__ = (
+        f"{cfg.name} player season stats across all seasons.\n\n"
+        "Args:\n"
+        "    player_id: The HockeyTech player id.\n"
+        "    return_as_pandas: Return a pandas DataFrame instead of polars.\n\n"
+        "Returns:\n"
+        "    polars.DataFrame: One row per season (and team) the player played: ``season_id``,\n"
+        "        ``season_name``, ``playoff``, ``team_id`` / ``team_name`` / ``team_code``,\n"
+        "        ``games_played``, ``goals``, ``assists``, ``points``, ``plus_minus``,\n"
+        "        ``penalty_minutes``, power-play / short-handed / shootout splits, ``shots``,\n"
+        "        ``faceoff_wins`` / ``faceoff_attempts``, ``ice_time`` and ``stat_type`` (String, as the\n"
+        f"        feed ships them). {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # Leaders
@@ -266,7 +353,13 @@ def build_family(league: str) -> dict[str, Any]:
 
     _leaders.__name__ = f"{lg}_leaders"
     _leaders.__qualname__ = f"{lg}_leaders"
-    _leaders.__doc__ = f"{cfg.name} statistical leaders for a given season."
+    _leaders.__doc__ = (
+        f"{cfg.name} statistical leaders for a given season.\n\n" + _SEASON_ARGS + "Returns:\n"
+        "    polars.DataFrame: One row per ranked skater (points and goals leaders): ``rank`` (Int64),\n"
+        "        ``player_id``, ``name``, ``jersey_number``, ``position``, ``team_id`` / ``team_name`` /\n"
+        "        ``team_code``, ``stat_formatted`` and ``type_formatted`` (String), plus photo and logo\n"
+        f"        URLs. {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # Game summary
@@ -282,7 +375,15 @@ def build_family(league: str) -> dict[str, Any]:
     _game_summary.__name__ = f"{lg}_game_summary"
     _game_summary.__qualname__ = f"{lg}_game_summary"
     _game_summary.__doc__ = (
-        f"{cfg.name} game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars)."
+        f"{cfg.name} game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).\n\n"
+        "Args:\n"
+        "    game_id: The HockeyTech game id.\n\n"
+        "Returns:\n"
+        "    dict[str, polars.DataFrame]: ``game`` (one row: ``game_id``, ``date``, ``status``,\n"
+        "        ``venue``, ``attendance``, both teams and scores), ``goals`` (one row per goal with the\n"
+        "        scorer, both assists and the plus / minus skaters), ``penalties`` (one row per penalty),\n"
+        "        ``shots_by_period`` (``side``, ``period``, ``shots``) and ``three_stars``. When the league\n"
+        "        denies the summary view, the event frames are empty and ``game`` is a ``game_id`` stub row." + _RAISES
     )
 
     # ------------------------------------------------------------------
@@ -301,7 +402,14 @@ def build_family(league: str) -> dict[str, Any]:
 
     _game_shifts.__name__ = f"{lg}_game_shifts"
     _game_shifts.__qualname__ = f"{lg}_game_shifts"
-    _game_shifts.__doc__ = f"Parsed shift stints for a single {cfg.name} game."
+    _game_shifts.__doc__ = (
+        f"Parsed shift stints for a single {cfg.name} game.\n\n" + _GAME_ARGS + "Returns:\n"
+        "    polars.DataFrame: One row per shift: ``game_id`` and ``player_id`` (Int64),\n"
+        "        ``first_name``, ``last_name``, ``jersey_number``, ``home`` (Int64, 1 = home),\n"
+        "        ``period``, ``start_time`` / ``end_time`` / ``length`` (clock strings), ``start_s`` /\n"
+        "        ``end_s`` (Int64 seconds) and the ``goal_on_shift`` / ``penalty_on_shift`` flags.\n"
+        f"        {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # Player TOI
@@ -317,7 +425,12 @@ def build_family(league: str) -> dict[str, Any]:
 
     _player_toi.__name__ = f"{lg}_player_toi"
     _player_toi.__qualname__ = f"{lg}_player_toi"
-    _player_toi.__doc__ = f"Per-player time-on-ice totals for a single {cfg.name} game."
+    _player_toi.__doc__ = (
+        f"Per-player time-on-ice totals for a single {cfg.name} game.\n\n" + _GAME_ARGS + "Returns:\n"
+        "    polars.DataFrame: One row per player: ``player_id`` (Int64), ``first_name``,\n"
+        "        ``last_name``, ``toi_seconds`` (Int64), ``num_shifts`` and ``avg_shift_s`` (Float64).\n"
+        f"        {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # Game Corsi
@@ -346,7 +459,14 @@ def build_family(league: str) -> dict[str, Any]:
 
     _game_corsi.__name__ = f"{lg}_game_corsi"
     _game_corsi.__qualname__ = f"{lg}_game_corsi"
-    _game_corsi.__doc__ = f"Player-level on-ice Corsi and Fenwick for a single {cfg.name} game."
+    _game_corsi.__doc__ = (
+        f"Player-level on-ice Corsi and Fenwick for a single {cfg.name} game.\n\n" + _GAME_ARGS + "Returns:\n"
+        "    polars.DataFrame: One row per player on ice for a shot attempt: ``player_id`` (String),\n"
+        "        ``corsi_for`` / ``corsi_against`` / ``corsi_for_pct``, ``fenwick_for`` /\n"
+        "        ``fenwick_against`` / ``fenwick_for_pct``, ``corsi_includes_missed`` (Boolean),\n"
+        "        ``toi_seconds`` (Int64) and ``corsi_for_per60`` (Float64, null without time on ice).\n"
+        f"        {_PANDAS}" + _RAISES
+    )
 
     # ------------------------------------------------------------------
     # Assemble and return the family dict

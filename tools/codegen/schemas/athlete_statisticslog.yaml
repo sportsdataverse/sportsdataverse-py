@@ -1,0 +1,9 @@
+schema: athlete_statisticslog
+kind: dataframe
+columns:
+- name: statistics
+  type: character
+  description: ''
+- name: season_$ref
+  type: character
+  description: ''

@@ -349,7 +349,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `recent` | logical | Whether the game is recent. |
 | `start_date` | character | Season start date. |
 | `broadcast` | character | Broadcast network(s). |
-| `highlights` | character |  |
+| `highlights` | integer |  |
 | `notes_type` | character |  |
 | `notes_headline` | character |  |
 | `broadcast_market` | character |  |
@@ -406,6 +406,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season year (echoed from arg). |
 | `season_type` | integer | Season type code (echoed from arg). |
+| `status_featured_athletes` | integer |  |
+| `home_logo_dark` | character |  |
+| `home_winner` | logical | Whether the home team won. |
+| `away_logo_dark` | character |  |
+| `away_winner` | logical | Whether the away team won. |
 
 **Example**
 
@@ -482,10 +487,14 @@ teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 
 `scoreboard_event_parsing(event)`
 
-_No description available._
+Flatten one ESPN scoreboard event for the schedule frame, in place.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `event` |  |  |  |
+| `event` |  |  | One element of the scoreboard payload's `events` list. |
+
+**Returns**
+
+The same event, modified: `competitions[0]` gains `home` / `away` team dicts (with `score`, `winner`, `currentRank`, `linescores`, `records`), `notes_type` / `notes_headline` and `broadcast_market` / `broadcast_name`, and loses `competitors`, `broadcasts`, `notes`, `odds`, `leaders` and the other nested blocks the schedule frame does not use.

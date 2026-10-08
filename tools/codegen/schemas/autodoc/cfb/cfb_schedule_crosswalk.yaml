@@ -1,0 +1,36 @@
+schema: cfb_schedule_crosswalk
+kind: dataframe
+columns:
+- name: matchup_key
+  type: character
+  description: ''
+- name: espn_game_id
+  type: integer
+  description: ''
+- name: fox_game_id
+  type: character
+  description: ''
+- name: yahoo_game_id
+  type: character
+  description: ''
+- name: yahoo_global_game_id
+  type: character
+  description: ''
+- name: home_team
+  type: character
+  description: ''
+- name: away_team
+  type: character
+  description: ''
+- name: espn_date
+  type: character
+  description: ''
+- name: fox_date
+  type: character
+  description: ''
+- name: yahoo_date
+  type: character
+  description: ''
+- name: matched_sources
+  type: character
+  description: ''

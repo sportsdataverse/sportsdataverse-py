@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import functools
 
+from sportsdataverse.wnba._bind import wnba_doc
+
 from sportsdataverse.nba.nba_game_predict import expected_possessions as _expected_possessions
 from sportsdataverse.nba.nba_game_predict import in_game_features as in_game_features
 from sportsdataverse.nba.nba_game_predict import nba_in_game_win_prob as _in_game
@@ -22,7 +24,7 @@ from sportsdataverse.nba.nba_game_predict import win_prob_from_margin as _win_pr
 def _bind(fn, name: str):  # type: ignore[no-untyped-def]
     p = functools.partial(fn, league_id="10")
     functools.update_wrapper(p, fn)
-    p.__doc__ = f"WNBA {name} (league_id='10'). See sportsdataverse.nba.nba_game_predict.{fn.__name__}."
+    p.__doc__ = wnba_doc(f"WNBA {name} (league_id='10'). See sportsdataverse.nba.nba_game_predict.{fn.__name__}.", fn)
     return p
 
 

@@ -1,0 +1,503 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us",
+ "abbreviation": "NBA",
+ "athletes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes?lang=en&region=us"
+ },
+ "awards": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/awards?lang=en&region=us"
+ },
+ "calendar": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/calendar?lang=en&region=us"
+ },
+ "color": "253b73",
+ "displayName": "NBA",
+ "draft": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2026/draft?lang=en&region=us"
+ },
+ "events": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events?lang=en&region=us"
+ },
+ "franchises": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/franchises?lang=en&region=us"
+ },
+ "gender": "MALE",
+ "group": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/groups/7?lang=en&region=us"
+ },
+ "groups": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/groups?lang=en&region=us"
+ },
+ "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+ "id": "46",
+ "isTournament": false,
+ "leaders": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/leaders?lang=en&region=us"
+ },
+ "links": [
+  {
+   "href": "https://www.espn.com/nba/",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "index",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Index",
+   "text": "Index"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "index",
+    "sportscenter",
+    "app",
+    "league"
+   ],
+   "shortText": "Index",
+   "text": "Index"
+  },
+  {
+   "href": "https://www.espn.com/nba/schedule",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "schedule",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Schedule",
+   "text": "Schedule"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46&section=scores",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "schedule",
+    "sportscenter",
+    "app",
+    "league"
+   ],
+   "shortText": "Schedule",
+   "text": "Schedule"
+  },
+  {
+   "href": "https://www.espn.com/nba/standings",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "standings",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Standings",
+   "text": "Standings"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46&section=standings",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "standings",
+    "sportscenter",
+    "app",
+    "league"
+   ],
+   "shortText": "Standings",
+   "text": "Standings"
+  },
+  {
+   "href": "https://www.espn.com/nba/rankings",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "rankings",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Rankings",
+   "text": "Rankings"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46&section=rankings",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "rankings",
+    "sportscenter",
+    "app",
+    "league"
+   ],
+   "shortText": "Rankings",
+   "text": "Rankings"
+  },
+  {
+   "href": "https://www.espn.com/nba/scoreboard",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "scores",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Scores",
+   "text": "Scores"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46&section=scores",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "scores",
+    "sportscenter",
+    "app",
+    "league"
+   ],
+   "shortText": "Scores",
+   "text": "Scores"
+  },
+  {
+   "href": "https://www.espn.com/nba/stats",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Stats",
+   "text": "Stats"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46&section=stats",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "sportscenter",
+    "app",
+    "league"
+   ],
+   "shortText": "Stats",
+   "text": "Stats"
+  },
+  {
+   "href": "https://www.espn.com/nba/teams",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "teams",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Teams",
+   "text": "Teams"
+  },
+  {
+   "href": "https://www.espn.com/nba/players",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "athletes",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Players",
+   "text": "Players"
+  },
+  {
+   "href": "https://www.espn.com/nba/injuries",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "injuries",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Injuries",
+   "text": "Injuries"
+  },
+  {
+   "href": "https://www.espn.com/nba/odds",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "odds",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Odds",
+   "text": "Odds"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46&section=odds",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "odds",
+    "sportscenter",
+    "app",
+    "league"
+   ],
+   "shortText": "Odds",
+   "text": "Odds"
+  },
+  {
+   "href": "https://www.espn.com/nba/playoff-bracket",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "playoff-bracket",
+    "desktop",
+    "league"
+   ],
+   "shortText": "Bracket",
+   "text": "Bracket"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46&section=bracket",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "playoff-bracket",
+    "sportscenter",
+    "app",
+    "league"
+   ],
+   "shortText": "Bracket",
+   "text": "Bracket"
+  }
+ ],
+ "logos": [
+  {
+   "alt": "",
+   "height": 500,
+   "href": "https://a.espncdn.com/i/teamlogos/leagues/500/nba.png",
+   "lastUpdated": "2018-06-05T12:07Z",
+   "rel": [
+    "full",
+    "default"
+   ],
+   "width": 500
+  },
+  {
+   "alt": "",
+   "height": 500,
+   "href": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500-dark/nba.png&w=500&h=500&transparent=true",
+   "lastUpdated": "2026-10-06T21:31Z",
+   "rel": [
+    "full",
+    "dark"
+   ],
+   "width": 500
+  }
+ ],
+ "name": "National Basketball Association",
+ "notes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/notes?lang=en&region=us"
+ },
+ "rankings": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/rankings?lang=en&region=us"
+ },
+ "season": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027?lang=en&region=us",
+  "athletes": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/athletes?lang=en&region=us"
+  },
+  "coaches": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/coaches?lang=en&region=us"
+  },
+  "displayName": "2026-27",
+  "endDate": "2027-06-26T06:59Z",
+  "futures": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/futures?lang=en&region=us"
+  },
+  "powerIndexLeaders": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/powerindex/leaders?lang=en&region=us"
+  },
+  "powerIndexes": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/powerindex?lang=en&region=us"
+  },
+  "rankings": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/rankings?lang=en&region=us"
+  },
+  "startDate": "2026-09-30T07:00Z",
+  "type": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1?lang=en&region=us",
+   "abbreviation": "pre",
+   "corrections": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/corrections?lang=en&region=us"
+   },
+   "endDate": "2026-10-20T06:59Z",
+   "groups": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/groups?lang=en&region=us"
+   },
+   "hasGroups": false,
+   "hasLegs": false,
+   "hasStandings": true,
+   "id": "1",
+   "name": "Preseason",
+   "slug": "preseason",
+   "startDate": "2026-09-30T07:00Z",
+   "type": 1,
+   "weeks": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/weeks?lang=en&region=us"
+   },
+   "year": 2027
+  },
+  "types": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types?lang=en&region=us",
+   "count": 5,
+   "items": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1?lang=en&region=us",
+     "abbreviation": "pre",
+     "corrections": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/corrections?lang=en&region=us"
+     },
+     "endDate": "2026-10-20T06:59Z",
+     "groups": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/groups?lang=en&region=us"
+     },
+     "hasGroups": false,
+     "hasLegs": false,
+     "hasStandings": true,
+     "id": "1",
+     "name": "Preseason",
+     "slug": "preseason",
+     "startDate": "2026-09-30T07:00Z",
+     "type": 1,
+     "weeks": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/weeks?lang=en&region=us"
+     },
+     "year": 2027
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/2?lang=en&region=us",
+     "abbreviation": "reg",
+     "corrections": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/2/corrections?lang=en&region=us"
+     },
+     "endDate": "2027-04-12T06:59Z",
+     "groups": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/2/groups?lang=en&region=us"
+     },
+     "hasGroups": false,
+     "hasLegs": false,
+     "hasStandings": true,
+     "id": "2",
+     "name": "Regular Season",
+     "slug": "regular-season",
+     "startDate": "2026-10-20T07:00Z",
+     "type": 2,
+     "weeks": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/2/weeks?lang=en&region=us"
+     },
+     "year": 2027
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/3?lang=en&region=us",
+     "abbreviation": "post",
+     "corrections": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/3/corrections?lang=en&region=us"
+     },
+     "endDate": "2027-06-26T06:59Z",
+     "groups": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/3/groups?lang=en&region=us"
+     },
+     "hasGroups": false,
+     "hasLegs": false,
+     "hasStandings": false,
+     "id": "3",
+     "name": "Postseason",
+     "slug": "post-season",
+     "startDate": "2027-04-17T07:00Z",
+     "type": 3,
+     "weeks": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/3/weeks?lang=en&region=us"
+     },
+     "year": 2027
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/4?lang=en&region=us",
+     "abbreviation": "off",
+     "endDate": "2027-09-30T06:59Z",
+     "groups": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/4/groups?lang=en&region=us"
+     },
+     "hasGroups": false,
+     "hasLegs": false,
+     "hasStandings": false,
+     "id": "4",
+     "name": "Off Season",
+     "slug": "off-season",
+     "startDate": "2027-06-26T07:00Z",
+     "type": 4,
+     "weeks": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/4/weeks?lang=en&region=us"
+     },
+     "year": 2027
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/5?lang=en&region=us",
+     "abbreviation": "playin",
+     "endDate": "2027-04-17T06:59Z",
+     "groups": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/5/groups?lang=en&region=us"
+     },
+     "hasGroups": false,
+     "hasLegs": false,
+     "hasStandings": false,
+     "id": "5",
+     "name": "Play-In Season",
+     "slug": "play-in-season",
+     "startDate": "2027-04-12T07:00Z",
+     "type": 5,
+     "weeks": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/5/weeks?lang=en&region=us"
+     },
+     "year": 2027
+    }
+   ],
+   "pageCount": 1,
+   "pageIndex": 1,
+   "pageSize": 5
+  },
+  "year": 2027
+ },
+ "seasons": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons?lang=en&region=us"
+ },
+ "shortName": "NBA",
+ "slug": "nba",
+ "teams": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/teams?lang=en&region=us"
+ },
+ "transactions": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/transactions?lang=en&region=us"
+ },
+ "uid": "s:40~l:46"
+}

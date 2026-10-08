@@ -126,7 +126,7 @@ Pull the EDGE top-10 goalies by 5-on-5 metrics.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points/now](https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points/now)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/save-pctg/20242025/2](https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/save-pctg/20242025/2)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -136,13 +136,39 @@ Pull the EDGE top-10 goalies by 5-on-5 metrics.
 
 ### Returns {#nhl_edge_goalie_5v5_top_10-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `save_pctg` | double | Save percentage. |
+| `save_pctg_close` | double |  |
+| `shots` | integer | Shots on goal. |
+| `shots_per60` | double |  |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_position` | character | Primary player position. |
+| `player_slug` | character | URL slug for the player. |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_slug` | character | Player team URL-friendly slug. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `player_first_name_cs` | character | Player first name (Czech locale). |
+| `player_first_name_sk` | character | Player first name (Slovak locale). |
+| `player_last_name_cs` | character | Player last name (Czech locale). |
+| `player_last_name_fi` | character | Player last name (Finnish). |
+| `player_last_name_sk` | character | Player last name (Slovak locale). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_edge_goalie_5v5_top_10-example}
 
 ```python
-nhl_edge_goalie_5v5_top_10(sort_by='points')
+nhl_edge_goalie_5v5_top_10(sort_by='save-pctg', season=20242025)
 ```
 
 _Last validated n/a._
@@ -266,7 +292,10 @@ Pull the EDGE top-10 goalies by save-percentage.
 
 ### Returns {#nhl_edge_goalie_edge_save_pctg_top_10-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_edge_top10`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: every value tried 404s for season 20242025 (sort_by points/total/savePctg/save-pctg, position F/forwards/all, category shots/high/all/high-danger, fastRhockey's examples included), so the valid path values are unconfirmed.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_edge_goalie_edge_save_pctg_top_10-example}
@@ -334,7 +363,10 @@ Pull the EDGE top-10 goalies for a shot-location category.
 
 ### Returns {#nhl_edge_goalie_shot_location_top_10-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_edge_top10`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: every value tried 404s for season 20242025 (sort_by points/total/savePctg/save-pctg, position F/forwards/all, category shots/high/all/high-danger, fastRhockey's examples included), so the valid path values are unconfirmed.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_edge_goalie_shot_location_top_10-example}

@@ -1,0 +1,655 @@
+[
+ {
+  "bursts18To20": 480,
+  "bursts20To22": 101,
+  "burstsOver22": 7,
+  "maxSpeed": {
+   "imperial": 24.561,
+   "metric": 39.527,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "VAN",
+     "score": 3
+    },
+    "gameDate": "2025-03-22",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NYR",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Quinn"
+     },
+     "lastName": {
+      "default": "Hughes"
+     }
+    },
+    "timeInPeriod": "07:53"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Quinn"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/VAN/8480800.png",
+   "lastName": {
+    "default": "Hughes"
+   },
+   "position": "D",
+   "slug": "quinn-hughes-8480800",
+   "sweaterNumber": 43,
+   "team": {
+    "abbrev": "VAN",
+    "commonName": {
+     "default": "Canucks"
+    },
+    "placeNameWithPreposition": {
+     "default": "Vancouver",
+     "fr": "de Vancouver"
+    },
+    "slug": "vancouver-canucks-23",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/VAN_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "bursts18To20": 280,
+  "bursts20To22": 53,
+  "burstsOver22": 4,
+  "maxSpeed": {
+   "imperial": 24.189,
+   "metric": 38.929,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "DAL",
+     "score": 4
+    },
+    "gameDate": "2024-11-25",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "CAR",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Jaccob"
+     },
+     "lastName": {
+      "default": "Slavin"
+     }
+    },
+    "timeInPeriod": "13:07"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Jaccob"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/CAR/8476958.png",
+   "lastName": {
+    "default": "Slavin"
+   },
+   "position": "D",
+   "slug": "jaccob-slavin-8476958",
+   "sweaterNumber": 74,
+   "team": {
+    "abbrev": "CAR",
+    "commonName": {
+     "default": "Hurricanes"
+    },
+    "placeNameWithPreposition": {
+     "default": "Carolina",
+     "fr": "de la Caroline"
+    },
+    "slug": "carolina-hurricanes-12",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "bursts18To20": 523,
+  "bursts20To22": 101,
+  "burstsOver22": 6,
+  "maxSpeed": {
+   "imperial": 23.771,
+   "metric": 38.256,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CAR",
+     "score": 0
+    },
+    "gameDate": "2025-02-25",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "MTL",
+     "score": 4
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Lane"
+     },
+     "lastName": {
+      "default": "Hutson"
+     }
+    },
+    "timeInPeriod": "04:54"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Lane"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/MTL/8483457.png",
+   "lastName": {
+    "default": "Hutson"
+   },
+   "position": "D",
+   "slug": "lane-hutson-8483457",
+   "sweaterNumber": 48,
+   "team": {
+    "abbrev": "MTL",
+    "commonName": {
+     "default": "Canadiens"
+    },
+    "placeNameWithPreposition": {
+     "default": "Montréal",
+     "fr": "de Montréal"
+    },
+    "slug": "montreal-canadiens-8",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "bursts18To20": 118,
+  "bursts20To22": 17,
+  "burstsOver22": 1,
+  "maxSpeed": {
+   "imperial": 23.716,
+   "metric": 38.168,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "VAN",
+     "score": 5
+    },
+    "gameDate": "2025-03-26",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NYI",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Elias"
+     },
+     "lastName": {
+      "default": "Pettersson"
+     }
+    },
+    "timeInPeriod": "13:34"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Elias"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/VAN/8483678.png",
+   "lastName": {
+    "default": "Pettersson"
+   },
+   "position": "D",
+   "slug": "elias-pettersson-8483678",
+   "sweaterNumber": 25,
+   "team": {
+    "abbrev": "VAN",
+    "commonName": {
+     "default": "Canucks"
+    },
+    "placeNameWithPreposition": {
+     "default": "Vancouver",
+     "fr": "de Vancouver"
+    },
+    "slug": "vancouver-canucks-23",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/VAN_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "bursts18To20": 250,
+  "bursts20To22": 33,
+  "burstsOver22": 1,
+  "maxSpeed": {
+   "imperial": 23.673,
+   "metric": 38.098,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "TOR",
+     "score": 0
+    },
+    "gameDate": "2024-10-09",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "MTL",
+     "score": 1
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Jake"
+     },
+     "lastName": {
+      "default": "McCabe"
+     }
+    },
+    "timeInPeriod": "12:56"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Jake"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8476931.png",
+   "lastName": {
+    "default": "McCabe"
+   },
+   "position": "D",
+   "slug": "jake-mccabe-8476931",
+   "sweaterNumber": 22,
+   "team": {
+    "abbrev": "TOR",
+    "commonName": {
+     "default": "Maple Leafs"
+    },
+    "placeNameWithPreposition": {
+     "default": "Toronto",
+     "fr": "de Toronto"
+    },
+    "slug": "toronto-maple-leafs-10",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/TOR_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "bursts18To20": 492,
+  "bursts20To22": 127,
+  "burstsOver22": 12,
+  "maxSpeed": {
+   "imperial": 23.671,
+   "metric": 38.095,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "TBL",
+     "score": 3
+    },
+    "gameDate": "2024-11-19",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "PIT",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Erik"
+     },
+     "lastName": {
+      "default": "Karlsson"
+     }
+    },
+    "timeInPeriod": "17:48"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Erik"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/PIT/8474578.png",
+   "lastName": {
+    "default": "Karlsson"
+   },
+   "position": "D",
+   "slug": "erik-karlsson-8474578",
+   "sweaterNumber": 65,
+   "team": {
+    "abbrev": "PIT",
+    "commonName": {
+     "default": "Penguins"
+    },
+    "placeNameWithPreposition": {
+     "default": "Pittsburgh",
+     "fr": "de Pittsburgh"
+    },
+    "slug": "pittsburgh-penguins-5",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/PIT_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "bursts18To20": 488,
+  "bursts20To22": 179,
+  "burstsOver22": 27,
+  "maxSpeed": {
+   "imperial": 23.626,
+   "metric": 38.022,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "NYR",
+     "score": 2
+    },
+    "gameDate": "2025-01-14",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "COL",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 4,
+     "periodType": "OT"
+    },
+    "player": {
+     "firstName": {
+      "default": "Cale"
+     },
+     "lastName": {
+      "default": "Makar"
+     }
+    },
+    "timeInPeriod": "02:50"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Cale"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/COL/8480069.png",
+   "lastName": {
+    "default": "Makar"
+   },
+   "position": "D",
+   "slug": "cale-makar-8480069",
+   "sweaterNumber": 8,
+   "team": {
+    "abbrev": "COL",
+    "commonName": {
+     "default": "Avalanche"
+    },
+    "placeNameWithPreposition": {
+     "default": "Colorado",
+     "fr": "du Colorado"
+    },
+    "slug": "colorado-avalanche-21",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "bursts18To20": 333,
+  "bursts20To22": 86,
+  "burstsOver22": 1,
+  "maxSpeed": {
+   "imperial": 23.583,
+   "metric": 37.953,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "NSH",
+     "score": 4
+    },
+    "gameDate": "2025-04-10",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "UTA",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 4,
+     "periodType": "OT"
+    },
+    "player": {
+     "firstName": {
+      "default": "Justin"
+     },
+     "lastName": {
+      "default": "Barron"
+     }
+    },
+    "timeInPeriod": "00:42"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Justin"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/NSH/8482111.png",
+   "lastName": {
+    "default": "Barron"
+   },
+   "position": "D",
+   "slug": "justin-barron-8482111",
+   "sweaterNumber": 20,
+   "team": {
+    "abbrev": "NSH",
+    "commonName": {
+     "default": "Predators"
+    },
+    "placeNameWithPreposition": {
+     "default": "Nashville",
+     "fr": "de Nashville"
+    },
+    "slug": "nashville-predators-18",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "bursts18To20": 496,
+  "bursts20To22": 109,
+  "burstsOver22": 16,
+  "maxSpeed": {
+   "imperial": 23.583,
+   "metric": 37.953,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "SEA",
+     "score": 2
+    },
+    "gameDate": "2024-12-06",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NJD",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Luke"
+     },
+     "lastName": {
+      "default": "Hughes"
+     }
+    },
+    "timeInPeriod": "08:59"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Luke"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/NJD/8482684.png",
+   "lastName": {
+    "default": "Hughes"
+   },
+   "position": "D",
+   "slug": "luke-hughes-8482684",
+   "sweaterNumber": 43,
+   "team": {
+    "abbrev": "NJD",
+    "commonName": {
+     "default": "Devils"
+    },
+    "placeNameWithPreposition": {
+     "default": "New Jersey",
+     "fr": "du New Jersey"
+    },
+    "slug": "new-jersey-devils-1",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/NJD_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "bursts18To20": 578,
+  "bursts20To22": 180,
+  "burstsOver22": 19,
+  "maxSpeed": {
+   "imperial": 23.53,
+   "metric": 37.868,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "MIN",
+     "score": 0
+    },
+    "gameDate": "2025-02-01",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "OTT",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Jake"
+     },
+     "lastName": {
+      "default": "Sanderson"
+     }
+    },
+    "timeInPeriod": "15:03"
+   }
+  },
+  "player": {
+   "firstName": {
+    "default": "Jake"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/OTT/8482105.png",
+   "lastName": {
+    "default": "Sanderson"
+   },
+   "position": "D",
+   "slug": "jake-sanderson-8482105",
+   "sweaterNumber": 85,
+   "team": {
+    "abbrev": "OTT",
+    "commonName": {
+     "default": "Senators",
+     "fr": "Sénateurs"
+    },
+    "placeNameWithPreposition": {
+     "default": "Ottawa",
+     "fr": "d'Ottawa"
+    },
+    "slug": "ottawa-senators-9",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/OTT_light.svg"
+    }
+   }
+  }
+ }
+]

@@ -154,6 +154,14 @@ nhl_api_web:
   playoff_series_20232024_a.json: playoff_series
 
 nhl_edge:
+  team_zone_time_top_10.json: team_zone_time_top_10
+  team_skating_distance_top_10.json: team_skating_distance_top_10
+  skater_zone_time_top_10.json: skater_zone_time_top_10
+  skater_distance_top_10.json: skater_distance_top_10
+  team_skating_speed_top_10.json: team_skating_speed_top_10
+  goalie_5v5_top_10.json: goalie_5v5_top_10
+  skater_speed_top_10.json: skater_speed_top_10
+  skater_shot_speed_top_10.json: skater_shot_speed_top_10
   # /edge/skater-detail/8478402/20242025/2            -> /v1/edge/skater-detail/{player_id}/{season}/{game_type}
   skater_detail.json: skater_detail
   # /edge/skater-comparison/8478402/20242025/2        -> /v1/edge/skater-comparison/{player_id}/{season}/{game_type}
@@ -322,3 +330,67 @@ nhl_stats_rest:
   stats_rest_goalie_summary_2024.json: goalie_report
   # /team/summary?...                     -> /{lang}/team/{report} (report=summary)
   stats_rest_team_summary_2024.json: team_report
+fox_api:
+  league_polls.json: league_polls
+  league_conferences.json: league_conferences
+  foxpolls.json: foxpolls
+  trending_videos.json: trending_videos
+  trending_articles.json: trending_articles
+  search_popular.json: search_popular
+  search_entities.json: search_entities
+  search_content.json: search_content
+  explore_odds.json: explore_odds
+  explore_browse.json: explore_browse
+  team_stats.json: team_stats
+  team_standings.json: team_standings
+  team_roster.json: team_roster
+  team_header.json: team_header
+  team_gamelog.json: team_gamelog
+  event_standings.json: event_standings
+  event_recap.json: event_recap
+  event_odds.json: event_odds
+  event_matchup.json: event_matchup
+  event_data.json: event_data
+  league_teamnav.json: league_teamnav
+  league_stats_con.json: league_stats_con
+  league_stats.json: league_stats
+  league_standings.json: league_standings
+  league_scores_segment.json: league_scores_segment
+  league_scores.json: league_scores
+  league_schedule.json: league_schedule
+  league_playernews.json: league_playernews
+  league_odds.json: league_odds
+  league_header.json: league_header
+  topevents_scoreboard_segment.json: topevents_scoreboard_segment
+  scorechip.json: scorechip
+  scoreboard.json: scoreboard
+kenpom:
+  conference.json: conference
+  team_stats.json: team_stats
+  game_attributes.json: game_attributes
+  referee.json: referee
+  officials.json: officials
+  arenas.json: arenas
+  home_court_advantage.json: home_court_advantage
+  trends.json: trends
+  conference_history.json: conference_history
+  conference_stats.json: conference_stats
+  archive_ratings.json: archive_ratings
+  program_ratings.json: program_ratings
+  coach_history.json: coach_history
+  team_history.json: team_history
+  fan_match.json: fan_match
+  box.json: box
+  player_career.json: player_career
+  opponent_tracker.json: opponent_tracker
+  game_plan.json: game_plan
+  team_players_expanded.json: team_players_expanded
+  team.json: team
+  kpoy.json: kpoy
+  player_stats.json: player_stats
+  foul_trouble.json: foul_trouble
+  height.json: height
+  point_distribution.json: point_distribution
+  four_factors.json: four_factors
+  efficiency.json: efficiency
+  ratings.json: ratings

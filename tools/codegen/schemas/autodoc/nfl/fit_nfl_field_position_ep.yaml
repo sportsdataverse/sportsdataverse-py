@@ -1,0 +1,5 @@
+schema: fit_nfl_field_position_ep
+kind: dataframe
+columns: []
+unverified: 'no capture: it raises DuplicateError (''down'') on real play-by-play, because it renames start.down to down even
+  when down already exists'

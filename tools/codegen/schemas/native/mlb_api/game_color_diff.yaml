@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: game_color_diff
+unverified: 'no capture: statsapi.mlb.com answers 406 to the datacenter IP and 404 through the residential proxy with the
+  documented example arguments (2026-10-07)'

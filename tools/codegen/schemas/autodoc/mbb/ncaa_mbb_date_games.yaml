@@ -1,0 +1,45 @@
+schema: ncaa_mbb_date_games
+kind: dataframe
+columns:
+- name: date
+  type: character
+  description: ''
+- name: start_time
+  type: character
+  description: ''
+- name: home
+  type: character
+  description: ''
+- name: away
+  type: character
+  description: ''
+- name: box_id
+  type: character
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: home_score
+  type: character
+  description: ''
+- name: away_score
+  type: character
+  description: ''
+- name: attendance
+  type: character
+  description: ''
+- name: neutral_site
+  type: logical
+  description: ''
+- name: home_wins
+  type: integer
+  description: ''
+- name: home_losses
+  type: integer
+  description: ''
+- name: away_wins
+  type: integer
+  description: ''
+- name: away_losses
+  type: integer
+  description: ''

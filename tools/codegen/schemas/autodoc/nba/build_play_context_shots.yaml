@@ -1,0 +1,42 @@
+schema: build_play_context_shots
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: possession_number
+  type: integer
+  description: ''
+- name: order_index
+  type: integer
+  description: ''
+- name: period
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: person_id
+  type: integer
+  description: ''
+- name: shot_value
+  type: integer
+  description: ''
+- name: shot_made
+  type: logical
+  description: ''
+- name: ctg_shot_zone
+  type: character
+  description: ''
+- name: is_assisted
+  type: logical
+  description: ''
+- name: is_putback
+  type: logical
+  description: ''
+- name: is_second_chance_shot
+  type: logical
+  description: ''
+- name: shot_context
+  type: character
+  description: ''

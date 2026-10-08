@@ -1,0 +1,708 @@
+{
+ "count": 492,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/4015847934?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.16500000000000004,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.835,
+   "lastModified": "2023-11-09T04:10Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/4015847934?lang=en&region=us"
+   },
+   "sequenceNumber": "4",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/4015847937?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.15900000000000003,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.841,
+   "lastModified": "2023-11-09T04:11Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/4015847937?lang=en&region=us"
+   },
+   "sequenceNumber": "7",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/4015847939?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.15600000000000003,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.844,
+   "lastModified": "2023-11-09T04:11Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/4015847939?lang=en&region=us"
+   },
+   "sequenceNumber": "9",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479310?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.14200000000000002,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.858,
+   "lastModified": "2023-11-09T04:11Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479310?lang=en&region=us"
+   },
+   "sequenceNumber": "10",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479312?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.134,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.866,
+   "lastModified": "2023-11-09T04:11Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479312?lang=en&region=us"
+   },
+   "sequenceNumber": "12",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479313?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.132,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.868,
+   "lastModified": "2023-11-09T04:11Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479313?lang=en&region=us"
+   },
+   "sequenceNumber": "13",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479314?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.14,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.86,
+   "lastModified": "2023-11-09T04:11Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479314?lang=en&region=us"
+   },
+   "sequenceNumber": "14",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479315?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.14300000000000002,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.857,
+   "lastModified": "2023-11-09T04:11Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479315?lang=en&region=us"
+   },
+   "sequenceNumber": "15",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479316?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.15900000000000003,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.841,
+   "lastModified": "2023-11-09T04:11Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479316?lang=en&region=us"
+   },
+   "sequenceNumber": "16",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479318?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.16800000000000004,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.832,
+   "lastModified": "2023-11-09T04:12Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479318?lang=en&region=us"
+   },
+   "sequenceNumber": "18",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479319?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.17100000000000004,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.829,
+   "lastModified": "2023-11-09T04:12Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479319?lang=en&region=us"
+   },
+   "sequenceNumber": "19",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479320?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.16400000000000003,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.836,
+   "lastModified": "2023-11-09T04:12Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479320?lang=en&region=us"
+   },
+   "sequenceNumber": "20",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479322?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.17300000000000004,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.827,
+   "lastModified": "2023-11-09T04:12Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479322?lang=en&region=us"
+   },
+   "sequenceNumber": "22",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479323?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.18999999999999995,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.81,
+   "lastModified": "2023-11-09T04:12Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479323?lang=en&region=us"
+   },
+   "sequenceNumber": "23",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479325?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.20299999999999996,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.797,
+   "lastModified": "2023-11-09T04:13Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479325?lang=en&region=us"
+   },
+   "sequenceNumber": "25",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479326?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.20699999999999996,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.793,
+   "lastModified": "2023-11-09T04:12Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479326?lang=en&region=us"
+   },
+   "sequenceNumber": "26",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479327?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.19599999999999995,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.804,
+   "lastModified": "2023-11-09T04:12Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479327?lang=en&region=us"
+   },
+   "sequenceNumber": "27",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479329?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.19199999999999995,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.808,
+   "lastModified": "2023-11-09T04:12Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479329?lang=en&region=us"
+   },
+   "sequenceNumber": "29",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479330?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.16300000000000003,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.837,
+   "lastModified": "2023-11-09T04:13Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479330?lang=en&region=us"
+   },
+   "sequenceNumber": "30",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479332?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.15200000000000002,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.848,
+   "lastModified": "2023-11-09T04:13Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479332?lang=en&region=us"
+   },
+   "sequenceNumber": "32",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479333?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.14800000000000002,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.852,
+   "lastModified": "2023-11-09T04:13Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479333?lang=en&region=us"
+   },
+   "sequenceNumber": "33",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479334?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.16100000000000003,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.839,
+   "lastModified": "2023-11-09T04:13Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479334?lang=en&region=us"
+   },
+   "sequenceNumber": "34",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479335?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.16600000000000004,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.834,
+   "lastModified": "2023-11-09T04:13Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479335?lang=en&region=us"
+   },
+   "sequenceNumber": "35",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479336?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.15400000000000003,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.846,
+   "lastModified": "2023-11-09T04:13Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479336?lang=en&region=us"
+   },
+   "sequenceNumber": "36",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479337?lang=en&region=us",
+   "awayTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "awayWinPercentage": 0.15000000000000002,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "homeTeam": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "homeWinPercentage": 0.85,
+   "lastModified": "2023-11-09T04:13Z",
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479337?lang=en&region=us"
+   },
+   "sequenceNumber": "37",
+   "source": {
+    "description": "feed",
+    "id": "2",
+    "state": "full"
+   },
+   "spreadCoverProbHome": 0.0,
+   "spreadPushProb": 0.0,
+   "tiePercentage": 0.0,
+   "totalOverProb": 0.0
+  }
+ ],
+ "pageCount": 2,
+ "pageIndex": 1,
+ "pageSize": 300
+}

@@ -1,0 +1,36 @@
+schema: transactions
+kind: dataframe
+columns:
+- name: date
+  type: character
+  description: ''
+- name: description
+  type: character
+  description: ''
+- name: team_abbreviation
+  type: character
+  description: ''
+- name: team_alternate_color
+  type: character
+  description: ''
+- name: team_color
+  type: character
+  description: ''
+- name: team_display_name
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team_links
+  type: character
+  description: ''
+- name: team_location
+  type: character
+  description: ''
+- name: team_logos
+  type: character
+  description: ''
+- name: team_name
+  type: character
+  description: ''

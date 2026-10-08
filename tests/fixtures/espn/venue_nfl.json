@@ -1,0 +1,9 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/venues/3663?lang=en&region=us",
+ "fullName": "Burke-Tarr Stadium",
+ "grass": false,
+ "guid": "d8f61c09-a8ea-3d96-a4fa-b6e58f4207cd",
+ "id": "3663",
+ "images": [],
+ "indoor": false
+}

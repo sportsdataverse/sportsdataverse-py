@@ -1,0 +1,24 @@
+schema: mbb_shot_quality_model
+kind: dataframe
+columns:
+- name: shot_zone
+  type: character
+  description: ''
+- name: shot_type
+  type: character
+  description: ''
+- name: n
+  type: integer
+  description: ''
+- name: make_rate_raw
+  type: double
+  description: ''
+- name: make_rate_shrunk
+  type: double
+  description: ''
+- name: point_value
+  type: double
+  description: ''
+- name: xpoints
+  type: double
+  description: ''

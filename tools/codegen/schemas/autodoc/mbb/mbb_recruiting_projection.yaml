@@ -1,0 +1,30 @@
+schema: mbb_recruiting_projection
+kind: dataframe
+columns:
+- name: recruit_id
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: composite
+  type: double
+  description: ''
+- name: rank_nat
+  type: integer
+  description: ''
+- name: exp_box_bpm
+  type: double
+  description: ''
+- name: resume_residual
+  type: double
+  description: ''

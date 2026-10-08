@@ -1,0 +1,5 @@
+schema: mbb_strength_of_schedule
+kind: dataframe
+columns: []
+unverified: 'no capture: it raises a join-key dtype mismatch on every real season (the schedule''s home_team_id is Int32,
+  the ratings'' team_id is String)'

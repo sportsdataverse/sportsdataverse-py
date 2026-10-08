@@ -78,6 +78,17 @@ def mlb_schedule(
     """GET /api/v1/schedule — schedule of games for a date, range, team, or season.
 
     Response: ``dates[].games[]``.
+
+    Returns:
+        dict: The StatsAPI JSON body, unparsed: ``copyright``, the ``totalItems`` / ``totalGames`` /
+            ``totalGamesInProgress`` counts and ``dates`` -- one dict per date, each with its own
+            counts and a ``games`` list.
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
     """
     return _get(
         "/api/v1/schedule",
@@ -111,6 +122,16 @@ def mlb_pbp_live(
     Top-level keys: ``copyright, gamePk, link, metaData, gameData, liveData``.
     Includes Statcast metrics where available. The historical name
     ``mlb_pbp`` is preserved as an alias in the generated module.
+
+    Returns:
+        dict: The StatsAPI JSON body, unparsed: ``copyright``, ``gamePk``, ``link``, ``metaData``, ``gameData``
+            (teams, players, venue, status) and ``liveData`` (plays, linescore, boxscore).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
     """
     return _get(
         f"/api/v1.1/game/{game_pk}/feed/live",
@@ -128,6 +149,16 @@ def mlb_pbp_diff(game_pk: int, start_timecode: str, end_timecode: Optional[str] 
     """GET /api/v1/game/{gamePk}/feed/live/diffPatch — JSON-patch diff of the live feed.
 
     Replays of in-game state for low-bandwidth clients.
+
+    Returns:
+        dict | list: The parsed JSON body of the diff, unparsed (no committed capture
+            pins its shape yet).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
     """
     return _get(
         f"/api/v1/game/{game_pk}/feed/live/diffPatch",
@@ -149,7 +180,17 @@ def mlb_teams(
     fields: Optional[str] = None,
     **kwargs,
 ) -> Dict:
-    """GET /api/v1/teams — list teams. ``sport_id=1`` = MLB."""
+    """GET /api/v1/teams — list teams. ``sport_id=1`` = MLB.
+
+    Returns:
+        dict: The StatsAPI JSON body, unparsed: ``copyright`` and ``teams`` (one dict per team).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
+    """
     return _get(
         "/api/v1/teams",
         params={
@@ -179,6 +220,16 @@ def mlb_team_stats(
 
     ``stats``: ``season``, ``career``, ``yearByYear``, ``byMonth``, ``byDayOfWeek``, …
     ``group``: ``hitting``, ``pitching``, ``fielding``.
+
+    Returns:
+        dict: The StatsAPI JSON body for this endpoint, unparsed (no committed capture
+            pins its keys yet; inspect ``.keys()``).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
     """
     return _get(
         f"/api/v1/teams/{team_id}/stats",
@@ -206,6 +257,16 @@ def mlb_team_leaders(
 
     ``leader_categories`` e.g. ``homeRuns``, ``battingAverage``, ``wins``,
     ``earnedRunAverage`` (comma-separated for multi).
+
+    Returns:
+        dict: The StatsAPI JSON body for this endpoint, unparsed (no committed capture
+            pins its keys yet; inspect ``.keys()``).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
     """
     return _get(
         f"/api/v1/teams/{team_id}/leaders",
@@ -234,6 +295,16 @@ def mlb_person_stats(
 
     ``stats``: ``season``, ``career``, ``yearByYear``, ``vsTeam``, ``vsPlayer``,
     ``byMonth``, ``byDayOfWeek``, ``homeAndAway``, ``gameLog``, ``lastXGames``, …
+
+    Returns:
+        dict: The StatsAPI JSON body, unparsed: ``copyright`` and ``stats`` -- one dict per requested stat
+            type with ``type``, ``group`` and ``splits``.
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
     """
     return _get(
         f"/api/v1/people/{person_id}/stats",
@@ -263,6 +334,16 @@ def mlb_standings(
 
     ``league_id``: ``103`` AL, ``104`` NL (comma-separated for both, the default).
     ``standings_types`` e.g. ``regularSeason``, ``wildCard``, ``divisionLeaders``.
+
+    Returns:
+        dict: The StatsAPI JSON body, unparsed: ``copyright`` and ``records`` -- one dict per division standings
+            table (``standingsType``, ``league``, ``division``, ``lastUpdated`` and ``teamRecords``).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
     """
     return _get(
         "/api/v1/standings",
@@ -297,6 +378,16 @@ def mlb_stats(
     ``stats`` selects the slice (``season``, ``career``, ``yearByYear``, …) and
     ``group`` selects the stat group (``hitting``, ``pitching``, ``fielding``).
     Filters: ``season``, ``team_id``, ``league_id``, ``game_type``, ``player_pool``.
+
+    Returns:
+        dict: The StatsAPI JSON body for this endpoint, unparsed (no committed capture
+            pins its keys yet; inspect ``.keys()``).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
     """
     return _get(
         "/api/v1/stats",
@@ -327,7 +418,18 @@ def mlb_stats_leaders(
     limit: int = 10,
     **kwargs,
 ) -> Dict:
-    """GET /api/v1/stats/leaders — top-N leaders for a stat category."""
+    """GET /api/v1/stats/leaders — top-N leaders for a stat category.
+
+    Returns:
+        dict: The StatsAPI JSON body for this endpoint, unparsed (no committed capture
+            pins its keys yet; inspect ``.keys()``).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
+    """
     return _get(
         "/api/v1/stats/leaders",
         params={
@@ -355,6 +457,16 @@ def mlb_stats_streaks(
     """GET /api/v1/stats/streaks — active or historical streaks.
 
     ``streak_type`` e.g. ``hittingStreakOverall``, ``onBaseOverall``.
+
+    Returns:
+        dict: The StatsAPI JSON body for this endpoint, unparsed (no committed capture
+            pins its keys yet; inspect ``.keys()``).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
     """
     return _get(
         "/api/v1/stats/streaks",
@@ -376,7 +488,17 @@ def mlb_divisions(
     division_id: Optional[int] = None,
     **kwargs,
 ) -> Dict:
-    """GET /api/v1/divisions — list divisions."""
+    """GET /api/v1/divisions — list divisions.
+
+    Returns:
+        dict: The StatsAPI JSON body, unparsed: ``copyright`` and ``divisions`` (one dict per division).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
+    """
     return _get(
         "/api/v1/divisions",
         params={
@@ -394,7 +516,17 @@ def mlb_seasons(
     all_seasons: bool = False,
     **kwargs,
 ) -> Dict:
-    """GET /api/v1/seasons — list of seasons for a sport."""
+    """GET /api/v1/seasons — list of seasons for a sport.
+
+    Returns:
+        dict: The StatsAPI JSON body, unparsed: ``copyright`` and ``seasons`` (one dict per season with its key dates).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
+    """
     return _get(
         "/api/v1/seasons",
         params={
@@ -412,7 +544,18 @@ def mlb_draft_prospects(
     limit: int = 100,
     **kwargs,
 ) -> Dict:
-    """GET /api/v1/draft/prospects/{year} — draft prospect list for a year."""
+    """GET /api/v1/draft/prospects/{year} — draft prospect list for a year.
+
+    Returns:
+        dict: The StatsAPI JSON body for this endpoint, unparsed (no committed capture
+            pins its keys yet; inspect ``.keys()``).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
+    """
     return _get(
         f"/api/v1/draft/prospects/{year}",
         params={
@@ -431,7 +574,18 @@ def mlb_attendance(
     game_type: Optional[str] = None,
     **kwargs,
 ) -> Dict:
-    """GET /api/v1/attendance — game attendance figures."""
+    """GET /api/v1/attendance — game attendance figures.
+
+    Returns:
+        dict: The StatsAPI JSON body for this endpoint, unparsed (no committed capture
+            pins its keys yet; inspect ``.keys()``).
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a 2xx
+            whose body is empty or not JSON.
+    """
     return _get(
         "/api/v1/attendance",
         params={

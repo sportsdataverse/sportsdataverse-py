@@ -217,3 +217,12 @@ columns:
 - name: week
   type: integer
   description: ''
+- name: format_overtime_periods
+  type: integer
+  description: ''
+- name: home_logo_dark
+  type: character
+  description: ''
+- name: away_logo_dark
+  type: character
+  description: ''

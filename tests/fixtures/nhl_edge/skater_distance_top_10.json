@@ -1,0 +1,1016 @@
+[
+ {
+  "distanceMaxPerGame": {
+   "imperial": 5.1639,
+   "metric": 8.3102,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CBJ",
+     "score": 4
+    },
+    "gameDate": "2025-03-24",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NYI",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Zach"
+     },
+     "lastName": {
+      "default": "Werenski"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 2.0374,
+   "metric": 3.2788,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CBJ",
+     "score": 4
+    },
+    "gameDate": "2025-03-24",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NYI",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Zach"
+     },
+     "lastName": {
+      "default": "Werenski"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.8698,
+   "metric": 14.2739
+  },
+  "distanceTotal": {
+   "imperial": 320.2548,
+   "metric": 515.375
+  },
+  "player": {
+   "firstName": {
+    "default": "Zach"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/CBJ/8478460.png",
+   "lastName": {
+    "default": "Werenski"
+   },
+   "position": "D",
+   "slug": "zach-werenski-8478460",
+   "sweaterNumber": 8,
+   "team": {
+    "abbrev": "CBJ",
+    "commonName": {
+     "default": "Blue Jackets"
+    },
+    "placeNameWithPreposition": {
+     "default": "Columbus",
+     "fr": "de Columbus"
+    },
+    "slug": "columbus-blue-jackets-29",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/CBJ_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 4.6439,
+   "metric": 7.4732,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "COL",
+     "score": 3
+    },
+    "gameDate": "2024-11-29",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "DAL",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Cale"
+     },
+     "lastName": {
+      "default": "Makar"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 1.8429,
+   "metric": 2.9657,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "COL",
+     "score": 1
+    },
+    "gameDate": "2025-01-08",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "CHI",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Cale"
+     },
+     "lastName": {
+      "default": "Makar"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.8594,
+   "metric": 14.2572
+  },
+  "distanceTotal": {
+   "imperial": 303.7754,
+   "metric": 488.8553
+  },
+  "player": {
+   "firstName": {
+    "default": "Cale"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/COL/8480069.png",
+   "lastName": {
+    "default": "Makar"
+   },
+   "position": "D",
+   "slug": "cale-makar-8480069",
+   "sweaterNumber": 8,
+   "team": {
+    "abbrev": "COL",
+    "commonName": {
+     "default": "Avalanche"
+    },
+    "placeNameWithPreposition": {
+     "default": "Colorado",
+     "fr": "du Colorado"
+    },
+    "slug": "colorado-avalanche-21",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 4.6877,
+   "metric": 7.5438,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "COL",
+     "score": 3
+    },
+    "gameDate": "2024-11-18",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "PHI",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Travis"
+     },
+     "lastName": {
+      "default": "Sanheim"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 1.9954,
+   "metric": 3.2112,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "COL",
+     "score": 3
+    },
+    "gameDate": "2024-11-18",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "PHI",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Travis"
+     },
+     "lastName": {
+      "default": "Sanheim"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.9511,
+   "metric": 14.4046
+  },
+  "distanceTotal": {
+   "imperial": 299.6542,
+   "metric": 482.2232
+  },
+  "player": {
+   "firstName": {
+    "default": "Travis"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/PHI/8477948.png",
+   "lastName": {
+    "default": "Sanheim"
+   },
+   "position": "D",
+   "slug": "travis-sanheim-8477948",
+   "sweaterNumber": 6,
+   "team": {
+    "abbrev": "PHI",
+    "commonName": {
+     "default": "Flyers"
+    },
+    "placeNameWithPreposition": {
+     "default": "Philadelphia",
+     "fr": "de Philadelphie"
+    },
+    "slug": "philadelphia-flyers-4",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 4.2038,
+   "metric": 6.765,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "DET",
+     "score": 3
+    },
+    "gameDate": "2025-01-30",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "EDM",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Moritz"
+     },
+     "lastName": {
+      "default": "Seider"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 1.6132,
+   "metric": 2.596,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "PIT",
+     "score": 6
+    },
+    "gameDate": "2024-10-10",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "DET",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Moritz"
+     },
+     "lastName": {
+      "default": "Seider"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.5013,
+   "metric": 13.6809
+  },
+  "distanceTotal": {
+   "imperial": 291.2999,
+   "metric": 468.7788
+  },
+  "player": {
+   "firstName": {
+    "default": "Moritz"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/DET/8481542.png",
+   "lastName": {
+    "default": "Seider"
+   },
+   "position": "D",
+   "slug": "moritz-seider-8481542",
+   "sweaterNumber": 53,
+   "team": {
+    "abbrev": "DET",
+    "commonName": {
+     "default": "Red Wings"
+    },
+    "placeNameWithPreposition": {
+     "default": "Detroit",
+     "fr": "de Detroit"
+    },
+    "slug": "detroit-red-wings-17",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/DET_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 4.7479,
+   "metric": 7.6407,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "SJS",
+     "score": 1
+    },
+    "gameDate": "2025-02-24",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "WPG",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Josh"
+     },
+     "lastName": {
+      "default": "Morrissey"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 1.7249,
+   "metric": 2.7758,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "WPG",
+     "score": 2
+    },
+    "gameDate": "2025-03-18",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "VAN",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Josh"
+     },
+     "lastName": {
+      "default": "Morrissey"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.9298,
+   "metric": 14.3704
+  },
+  "distanceTotal": {
+   "imperial": 290.4112,
+   "metric": 467.3488
+  },
+  "player": {
+   "firstName": {
+    "default": "Josh"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/WPG/8477504.png",
+   "lastName": {
+    "default": "Morrissey"
+   },
+   "position": "D",
+   "slug": "josh-morrissey-8477504",
+   "sweaterNumber": 44,
+   "team": {
+    "abbrev": "WPG",
+    "commonName": {
+     "default": "Jets"
+    },
+    "placeNameWithPreposition": {
+     "default": "Winnipeg",
+     "fr": "de Winnipeg"
+    },
+    "slug": "winnipeg-jets-52",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/WPG_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 4.5461,
+   "metric": 7.3158,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CBJ",
+     "score": 1
+    },
+    "gameDate": "2024-11-05",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "SJS",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Ivan"
+     },
+     "lastName": {
+      "default": "Provorov"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 1.7188,
+   "metric": 2.766,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "EDM",
+     "score": 1
+    },
+    "gameDate": "2024-10-28",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "CBJ",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Ivan"
+     },
+     "lastName": {
+      "default": "Provorov"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 9.0659,
+   "metric": 14.5894
+  },
+  "distanceTotal": {
+   "imperial": 289.3551,
+   "metric": 465.6491
+  },
+  "player": {
+   "firstName": {
+    "default": "Ivan"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/CBJ/8478500.png",
+   "lastName": {
+    "default": "Provorov"
+   },
+   "position": "D",
+   "slug": "ivan-provorov-8478500",
+   "sweaterNumber": 9,
+   "team": {
+    "abbrev": "CBJ",
+    "commonName": {
+     "default": "Blue Jackets"
+    },
+    "placeNameWithPreposition": {
+     "default": "Columbus",
+     "fr": "de Columbus"
+    },
+    "slug": "columbus-blue-jackets-29",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/CBJ_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 4.3468,
+   "metric": 6.9952,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CGY",
+     "score": 0
+    },
+    "gameDate": "2025-03-01",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "FLA",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "MacKenzie"
+     },
+     "lastName": {
+      "default": "Weegar"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 1.5076,
+   "metric": 2.4261,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CGY",
+     "score": 0
+    },
+    "gameDate": "2025-03-01",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "FLA",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "MacKenzie"
+     },
+     "lastName": {
+      "default": "Weegar"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.8487,
+   "metric": 14.24
+  },
+  "distanceTotal": {
+   "imperial": 288.6627,
+   "metric": 464.535
+  },
+  "player": {
+   "firstName": {
+    "default": "MacKenzie"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/CGY/8477346.png",
+   "lastName": {
+    "default": "Weegar"
+   },
+   "position": "D",
+   "slug": "mackenzie-weegar-8477346",
+   "sweaterNumber": 52,
+   "team": {
+    "abbrev": "CGY",
+    "commonName": {
+     "default": "Flames"
+    },
+    "placeNameWithPreposition": {
+     "default": "Calgary",
+     "fr": "de Calgary"
+    },
+    "slug": "calgary-flames-20",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/CGY_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 4.1603,
+   "metric": 6.695,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "MTL",
+     "score": 2
+    },
+    "gameDate": "2025-03-06",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "EDM",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Mike"
+     },
+     "lastName": {
+      "default": "Matheson"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 1.6269,
+   "metric": 2.6181,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "MTL",
+     "score": 0
+    },
+    "gameDate": "2024-11-14",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "MIN",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Mike"
+     },
+     "lastName": {
+      "default": "Matheson"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.513,
+   "metric": 13.6996
+  },
+  "distanceTotal": {
+   "imperial": 284.6803,
+   "metric": 458.1261
+  },
+  "player": {
+   "firstName": {
+    "default": "Mike"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/MTL/8476875.png",
+   "lastName": {
+    "default": "Matheson"
+   },
+   "position": "D",
+   "slug": "mike-matheson-8476875",
+   "sweaterNumber": 8,
+   "team": {
+    "abbrev": "MTL",
+    "commonName": {
+     "default": "Canadiens"
+    },
+    "placeNameWithPreposition": {
+     "default": "Montréal",
+     "fr": "de Montréal"
+    },
+    "slug": "montreal-canadiens-8",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 4.358,
+   "metric": 7.0131,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "SEA",
+     "score": 5
+    },
+    "gameDate": "2024-12-28",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "VAN",
+     "score": 4
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Brandon"
+     },
+     "lastName": {
+      "default": "Montour"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 1.9298,
+   "metric": 3.1056,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "COL",
+     "score": 3
+    },
+    "gameDate": "2024-10-22",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "SEA",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Brandon"
+     },
+     "lastName": {
+      "default": "Montour"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 9.0005,
+   "metric": 14.4841
+  },
+  "distanceTotal": {
+   "imperial": 279.174,
+   "metric": 449.2651
+  },
+  "player": {
+   "firstName": {
+    "default": "Brandon"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/SEA/8477986.png",
+   "lastName": {
+    "default": "Montour"
+   },
+   "position": "D",
+   "slug": "brandon-montour-8477986",
+   "sweaterNumber": 62,
+   "team": {
+    "abbrev": "SEA",
+    "commonName": {
+     "default": "Kraken"
+    },
+    "placeNameWithPreposition": {
+     "default": "Seattle",
+     "fr": "de Seattle"
+    },
+    "slug": "seattle-kraken-55",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/SEA_light.svg"
+    }
+   }
+  }
+ },
+ {
+  "distanceMaxPerGame": {
+   "imperial": 4.5479,
+   "metric": 7.3187,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "LAK",
+     "score": 4
+    },
+    "gameDate": "2024-10-17",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "MTL",
+     "score": 1
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Lane"
+     },
+     "lastName": {
+      "default": "Hutson"
+     }
+    }
+   }
+  },
+  "distanceMaxPerPeriod": {
+   "imperial": 1.6443,
+   "metric": 2.6461,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "COL",
+     "score": 5
+    },
+    "gameDate": "2025-03-22",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "MTL",
+     "score": 4
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Lane"
+     },
+     "lastName": {
+      "default": "Hutson"
+     }
+    }
+   }
+  },
+  "distancePer60": {
+   "imperial": 8.9382,
+   "metric": 14.3839
+  },
+  "distanceTotal": {
+   "imperial": 277.696,
+   "metric": 446.8865
+  },
+  "player": {
+   "firstName": {
+    "default": "Lane"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/MTL/8483457.png",
+   "lastName": {
+    "default": "Hutson"
+   },
+   "position": "D",
+   "slug": "lane-hutson-8483457",
+   "sweaterNumber": 48,
+   "team": {
+    "abbrev": "MTL",
+    "commonName": {
+     "default": "Canadiens"
+    },
+    "placeNameWithPreposition": {
+     "default": "Montréal",
+     "fr": "de Montréal"
+    },
+    "slug": "montreal-canadiens-8",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+    }
+   }
+  }
+ }
+]

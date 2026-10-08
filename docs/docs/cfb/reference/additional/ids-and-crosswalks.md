@@ -1,7 +1,7 @@
 ---
 title: "CFB — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 10
+sidebar_position: 14
 description: "CFB — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # CFB — additional Python functions — IDs and crosswalks
@@ -87,6 +87,21 @@ can't be resolved, the Yahoo columns are simply null.
 
 A polars DataFrame (pandas when `return_as_pandas=True`) with columns `person_key`, `espn_athlete_id`, `fox_athlete_id`, `yahoo_athlete_id`, `name`, `espn_jersey`, `fox_jersey`, `espn_position`, `fox_position`, `yahoo_position`, `match_method`, `matched_sources`. `match_method` reflects the ESPN/Fox jersey agreement: `name_jersey` (agree), `name` (name only), `name_jersey_conflict` (jerseys differ — review), or `unmatched`.
 
+| col_name | type | description |
+|---|---|---|
+| `person_key` | character |  |
+| `espn_athlete_id` | integer |  |
+| `fox_athlete_id` | character |  |
+| `yahoo_athlete_id` | character |  |
+| `name` | character | Position name (e.g. `Quarterback`). |
+| `espn_jersey` | character |  |
+| `fox_jersey` | character |  |
+| `espn_position` | character |  |
+| `fox_position` | character |  |
+| `yahoo_position` | character |  |
+| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `matched_sources` | character |  |
+
 **Example**
 
 ```python
@@ -138,6 +153,20 @@ provider's columns null rather than failing the call.
 **Returns**
 
 A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_key`, `espn_game_id`, `fox_game_id`, `yahoo_game_id`, `yahoo_global_game_id`, `home_team`, `away_team`, `espn_date`, `fox_date`, `yahoo_date`, `matched_sources`.
+
+| col_name | type | description |
+|---|---|---|
+| `matchup_key` | character |  |
+| `espn_game_id` | integer |  |
+| `fox_game_id` | character |  |
+| `yahoo_game_id` | character |  |
+| `yahoo_global_game_id` | character |  |
+| `home_team` | character | Home team name. |
+| `away_team` | character | Away team name. |
+| `espn_date` | character |  |
+| `fox_date` | character |  |
+| `yahoo_date` | character |  |
+| `matched_sources` | character |  |
 
 **Example**
 

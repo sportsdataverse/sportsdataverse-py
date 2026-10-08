@@ -21,8 +21,12 @@ Player-level on-ice Corsi and Fenwick for a single QMJHL game.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `int` |  | The HockeyTech game id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player on ice for a shot attempt: `player_id` (String), `corsi_for` / `corsi_against` / `corsi_for_pct`, `fenwick_for` / `fenwick_against` / `fenwick_for_pct`, `corsi_includes_missed` (Boolean), `toi_seconds` (Int64) and `corsi_for_per60` (Float64, null without time on ice). A pandas DataFrame when `return_as_pandas` is True.
 
 ### qmjhl_game_shifts {#qmjhl_game_shifts}
 
@@ -34,8 +38,12 @@ Parsed shift stints for a single QMJHL game.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `int` |  | The HockeyTech game id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per shift: `game_id` and `player_id` (Int64), `first_name`, `last_name`, `jersey_number`, `home` (Int64, 1 = home), `period`, `start_time` / `end_time` / `length` (clock strings), `start_s` / `end_s` (Int64 seconds) and the `goal_on_shift` / `penalty_on_shift` flags. A pandas DataFrame when `return_as_pandas` is True.
 
 ### qmjhl_game_summary {#qmjhl_game_summary}
 
@@ -47,7 +55,11 @@ QMJHL game summary — dict of frames (game/goals/penalties/shots_by_period/thre
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  |  |
+| `game_id` | `int` |  | The HockeyTech game id. |
+
+**Returns**
+
+`game` (one row: `game_id`, `date`, `status`, `venue`, `attendance`, both teams and scores), `goals` (one row per goal with the scorer, both assists and the plus / minus skaters), `penalties` (one row per penalty), `shots_by_period` (`side`, `period`, `shots`) and `three_stars`. When the league denies the summary view, the event frames are empty and `game` is a `game_id` stub row.
 
 ### qmjhl_leaders {#qmjhl_leaders}
 
@@ -59,12 +71,13 @@ QMJHL statistical leaders for a given season.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id`, `name`, `jersey_number`, `position`, `team_id` / `team_name` / `team_code`, `stat_formatted` and `type_formatted` (String), plus photo and logo URLs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -94,8 +107,12 @@ QMJHL play-by-play — one row per event, fully enriched.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `int` |  | The HockeyTech game id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_id`, `event`, `team_id`, `period_of_game`, `time_of_period`, rink `x_coord` / `y_coord` (Float64, hockeytech_b canvas), the primary / second / third player and goalie ids and names, the plus / minus skaters on a goal, game metadata from the game summary, and derived `shot_distance` / `shot_angle` / `scoring_chance` and the `on_ice_home` / `on_ice_away` skaters from the shift feed. Player ids are Float64 here. Some leagues (USHL, MJHL) publish only goals, penalties and goalie changes, with no coordinates. A pandas DataFrame when `return_as_pandas` is True.
 
 ### qmjhl_player_stats {#qmjhl_player_stats}
 
@@ -107,11 +124,12 @@ QMJHL player season stats across all seasons.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `player_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `player_id` | `int` |  | The HockeyTech player id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per season (and team) the player played: `season_id`, `season_name`, `playoff`, `team_id` / `team_name` / `team_code`, `games_played`, `goals`, `assists`, `points`, `plus_minus`, `penalty_minutes`, power-play / short-handed / shootout splits, `shots`, `faceoff_wins` / `faceoff_attempts`, `ice_time` and `stat_type` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -178,8 +196,12 @@ Per-player time-on-ice totals for a single QMJHL game.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `int` |  | The HockeyTech game id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player: `player_id` (Int64), `first_name`, `last_name`, `toi_seconds` (Int64), `num_shifts` and `avg_shift_s` (Float64). A pandas DataFrame when `return_as_pandas` is True.
 
 ### qmjhl_schedule {#qmjhl_schedule}
 
@@ -191,12 +213,13 @@ QMJHL schedule — one row per game.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). With neither `season` nor `season_id`, no season filter is sent and the feed's whole recent window comes back. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type` (all String). With no season given, the feed's whole recent window. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -223,12 +246,13 @@ QMJHL standings — one row per team.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `games_played`, `losses`, `regulation_wins`, `non_reg_wins`, `non_reg_losses`, `points`, `goals_for`, `goals_against`, `games_remaining`, `percentage` and `overall_rank` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -263,13 +287,14 @@ QMJHL team roster for a given team + season.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `int` |  |  |
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `team_id` | `int` |  | The HockeyTech team id. |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per rostered player: `player_id`, `person_id`, names (`first_name`, `last_name`, `display_name`), `position`, `tp_jersey_number`, `shoots` / `catches`, `height` / `weight`, `birthdate`, home and birth places, `rookie`, `veteran_status`, `draft_status` and `player_image` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -329,12 +354,13 @@ QMJHL teams for a given season.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_label`, `division` and `team_logo` (String). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -352,7 +378,11 @@ QMJHL teams for a given season.
 
 `most_recent_qmjhl_season() -> 'int'`
 
-Newest QMJHL regular season as an end-year integer: the highest `season_yr` of a regular season that is not a one-off event, so a preseason listed first is not a default. Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
+Newest QMJHL regular season as an end-year integer: the highest `season_yr` of a regular season that is not a one-off event, so a preseason listed first is not a default.
+
+**Returns**
+
+The newest regular season's END year (2026 = the 2025-26 season).
 
 ### qmjhl_season_id {#qmjhl_season_id}
 
@@ -364,10 +394,11 @@ All QMJHL seasons with end-year + game-type labels.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per season: `season_id` (Int64), `season_name`, `season_short`, `career`, `playoff`, `start_date`, `end_date`, `season_yr` (Int64, the END year) and `game_type_label`. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|

@@ -1,0 +1,5631 @@
+{
+ "sectionList": [
+  {
+   "id": "p_comp_pct",
+   "legend": {
+    "details": [
+     {
+      "key": "PCT",
+      "text": " - Completion %"
+     },
+     {
+      "key": "PATT",
+      "text": " - Passing Attempts"
+     },
+     {
+      "key": "COMP",
+      "text": " - Completions"
+     }
+    ]
+   },
+   "table": {
+    "headers": [
+     {
+      "columns": [
+       {
+        "emphasized": true,
+        "index": 0,
+        "priority": 1,
+        "sortable": "none",
+        "template": "cell-rank",
+        "text": "PLAYERS",
+        "weight": 0.5
+       },
+       {
+        "emphasized": false,
+        "index": 1,
+        "priority": 2,
+        "sortable": "none",
+        "template": "cell-entity-text",
+        "weight": 5
+       },
+       {
+        "emphasized": false,
+        "index": 2,
+        "priority": 3,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "PCT",
+        "weight": 1.5
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "priority": 4,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "PATT",
+        "weight": 1.5
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "priority": 5,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "COMP",
+        "weight": 1.5
+       }
+      ],
+      "isPrimary": true
+     }
+    ],
+    "rows": [
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "1"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NYG",
+        "text": "J. Dart"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "76.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "34"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "26"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328573.vresize.140.170.medium.2.png",
+       "analyticsName": "jaxson-dart",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/328573",
+       "imageAltText": "Jaxson Dart",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328573.vresize.140.170.medium.2.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/328573",
+         "id": "328573"
+        }
+       },
+       "title": "JAXSON DART",
+       "type": "entity",
+       "webUrl": "/nfl/jaxson-dart-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "2"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "ATL",
+        "text": "M. Penix Jr."
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "73.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "45"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "33"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+       "analyticsName": "michael-penix",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327699",
+       "imageAltText": "Michael Penix Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327699",
+         "id": "327699"
+        }
+       },
+       "title": "MICHAEL PENIX JR.",
+       "type": "entity",
+       "webUrl": "/nfl/michael-penix-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "3"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "SEA",
+        "text": "D. Lock"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "72.9"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "48"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "35"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14886.vresize.140.170.medium.4.png",
+       "analyticsName": "drew-lock",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/14886",
+       "imageAltText": "Drew Lock",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14886.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/14886",
+         "id": "14886"
+        }
+       },
+       "title": "DREW LOCK",
+       "type": "entity",
+       "webUrl": "/nfl/drew-lock-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "4"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NYJ",
+        "text": "G. Smith"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "72.6"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "117"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "85"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/9761.vresize.140.170.medium.4.png",
+       "analyticsName": "geno-smith",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/9761",
+       "imageAltText": "Geno Smith",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/9761.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/9761",
+         "id": "9761"
+        }
+       },
+       "title": "GENO SMITH",
+       "type": "entity",
+       "webUrl": "/nfl/geno-smith-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "5"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CIN",
+        "text": "J. Burrow"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "71.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "157"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "112"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21450.vresize.140.170.medium.6.png",
+       "analyticsName": "joe-burrow",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21450",
+       "imageAltText": "Joe Burrow",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21450.vresize.140.170.medium.6.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21450",
+         "id": "21450"
+        }
+       },
+       "title": "JOE BURROW",
+       "type": "entity",
+       "webUrl": "/nfl/joe-burrow-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "6"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "BAL",
+        "text": "L. Jackson"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "70.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "96"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "68"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+       "analyticsName": "lamar-jackson",
+       "analyticsSport": "nfl",
+       "color": "1, 141, 52, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13985",
+       "imageAltText": "Lamar Jackson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13985",
+         "id": "13985"
+        }
+       },
+       "title": "LAMAR JACKSON",
+       "type": "entity",
+       "webUrl": "/nfl/lamar-jackson-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "7"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CHI",
+        "text": "C. Keenum"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "70.6"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "34"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "24"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10383.vresize.140.170.medium.5.png",
+       "analyticsName": "case-keenum",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/10383",
+       "imageAltText": "Case Keenum",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10383.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/10383",
+         "id": "10383"
+        }
+       },
+       "title": "CASE KEENUM",
+       "type": "entity",
+       "webUrl": "/nfl/case-keenum-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "8"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DAL",
+        "text": "D. Prescott"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "70.0"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "150"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "105"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png",
+       "analyticsName": "dak-prescott",
+       "analyticsSport": "nfl",
+       "color": "1, 192, 192, 192",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12340",
+       "imageAltText": "Dak Prescott",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12340",
+         "id": "12340"
+        }
+       },
+       "title": "DAK PRESCOTT",
+       "type": "entity",
+       "webUrl": "/nfl/dak-prescott-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "9"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "SF",
+        "text": "B. Purdy"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "69.9"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "113"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "79"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png",
+       "analyticsName": "brock-purdy",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22997",
+       "imageAltText": "Brock Purdy",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22997",
+         "id": "22997"
+        }
+       },
+       "title": "BROCK PURDY",
+       "type": "entity",
+       "webUrl": "/nfl/brock-purdy-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "10"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CHI",
+        "text": "T. Bagent"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "69.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "43"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "30"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327360.vresize.140.170.medium.5.png",
+       "analyticsName": "tyson-bagent",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327360",
+       "imageAltText": "Tyson Bagent",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327360.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327360",
+         "id": "327360"
+        }
+       },
+       "title": "TYSON BAGENT",
+       "type": "entity",
+       "webUrl": "/nfl/tyson-bagent-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "11"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CLE",
+        "text": "D. Watson"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "69.6"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "115"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "80"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13111.vresize.140.170.medium.2.png",
+       "analyticsName": "deshaun-watson",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13111",
+       "imageAltText": "Deshaun Watson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13111.vresize.140.170.medium.2.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13111",
+         "id": "13111"
+        }
+       },
+       "title": "DESHAUN WATSON",
+       "type": "entity",
+       "webUrl": "/nfl/deshaun-watson-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "12"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "JAX",
+        "text": "T. Lawrence"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "69.2"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "104"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "72"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22197.vresize.140.170.medium.3.png",
+       "analyticsName": "trevor-lawrence",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 170, 150",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22197",
+       "imageAltText": "Trevor Lawrence",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22197.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22197",
+         "id": "22197"
+        }
+       },
+       "title": "TREVOR LAWRENCE",
+       "type": "entity",
+       "webUrl": "/nfl/trevor-lawrence-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "13"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "ARI",
+        "text": "J. Brissett"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "67.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "152"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "103"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12306.vresize.140.170.medium.4.png",
+       "analyticsName": "jacoby-brissett",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12306",
+       "imageAltText": "Jacoby Brissett",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12306.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12306",
+         "id": "12306"
+        }
+       },
+       "title": "JACOBY BRISSETT",
+       "type": "entity",
+       "webUrl": "/nfl/jacoby-brissett-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "14"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DET",
+        "text": "J. Goff"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "67.7"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "161"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "109"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12216.vresize.140.170.medium.5.png",
+       "analyticsName": "jared-goff",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12216",
+       "imageAltText": "Jared Goff",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12216.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12216",
+         "id": "12216"
+        }
+       },
+       "title": "JARED GOFF",
+       "type": "entity",
+       "webUrl": "/nfl/jared-goff-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "15"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NO",
+        "text": "T. Shough"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "67.2"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "180"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "121"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+       "analyticsName": "tyler-shough",
+       "analyticsSport": "nfl",
+       "color": "1, 222, 190, 103",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/328616",
+       "imageAltText": "Tyler Shough",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/328616",
+         "id": "328616"
+        }
+       },
+       "title": "TYLER SHOUGH",
+       "type": "entity",
+       "webUrl": "/nfl/tyler-shough-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "16"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "BUF",
+        "text": "J. Allen"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "66.4"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "119"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "79"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png",
+       "analyticsName": "josh-allen-2",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13955",
+       "imageAltText": "Josh Allen",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13955",
+         "id": "13955"
+        }
+       },
+       "title": "JOSH ALLEN",
+       "type": "entity",
+       "webUrl": "/nfl/josh-allen-2-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "17"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CHI",
+        "text": "C. Williams"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "65.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "55"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "36"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327693.vresize.140.170.medium.5.png",
+       "analyticsName": "caleb-williams",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327693",
+       "imageAltText": "Caleb Williams",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327693.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327693",
+         "id": "327693"
+        }
+       },
+       "title": "CALEB WILLIAMS",
+       "type": "entity",
+       "webUrl": "/nfl/caleb-williams-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "18"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "SEA",
+        "text": "S. Darnold"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "65.2"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "69"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "45"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13960.vresize.140.170.medium.4.png",
+       "analyticsName": "sam-darnold",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13960",
+       "imageAltText": "Sam Darnold",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13960.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13960",
+         "id": "13960"
+        }
+       },
+       "title": "SAM DARNOLD",
+       "type": "entity",
+       "webUrl": "/nfl/sam-darnold-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "19"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "WAS",
+        "text": "M. Mariota"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "64.7"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "51"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "33"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11368.vresize.140.170.medium.5.png",
+       "analyticsName": "marcus-mariota",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/11368",
+       "imageAltText": "Marcus Mariota",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11368.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/11368",
+         "id": "11368"
+        }
+       },
+       "title": "MARCUS MARIOTA",
+       "type": "entity",
+       "webUrl": "/nfl/marcus-mariota-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "20"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LV",
+        "text": "K. Cousins"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "64.6"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "144"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "93"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/8649.vresize.140.170.medium.3.png",
+       "analyticsName": "kirk-cousins",
+       "analyticsSport": "nfl",
+       "color": "1, 135, 135, 135",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/8649",
+       "imageAltText": "Kirk Cousins",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/8649.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/8649",
+         "id": "8649"
+        }
+       },
+       "title": "KIRK COUSINS",
+       "type": "entity",
+       "webUrl": "/nfl/kirk-cousins-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "21"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "KC",
+        "text": "P. Mahomes"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "64.1"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "128"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "82"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+       "analyticsName": "patrick-mahomes-ii",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13107",
+       "imageAltText": "Patrick Mahomes",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13107",
+         "id": "13107"
+        }
+       },
+       "title": "PATRICK MAHOMES",
+       "type": "entity",
+       "webUrl": "/nfl/patrick-mahomes-ii-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "22"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "IND",
+        "text": "D. Jones"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "63.6"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "132"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "84"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14849.vresize.140.170.medium.3.png",
+       "analyticsName": "daniel-jones",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/14849",
+       "imageAltText": "Daniel Jones",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14849.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/14849",
+         "id": "14849"
+        }
+       },
+       "title": "DANIEL JONES",
+       "type": "entity",
+       "webUrl": "/nfl/daniel-jones-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "23"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "TB",
+        "text": "B. Mayfield"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "63.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "96"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "61"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13954.vresize.140.170.medium.5.png",
+       "analyticsName": "baker-mayfield",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13954",
+       "imageAltText": "Baker Mayfield",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13954.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13954",
+         "id": "13954"
+        }
+       },
+       "title": "BAKER MAYFIELD",
+       "type": "entity",
+       "webUrl": "/nfl/baker-mayfield-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "24"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "MIN",
+        "text": "K. Murray"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "63.4"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "71"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "45"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14853.vresize.140.170.medium.4.png",
+       "analyticsName": "kyler-murray",
+       "analyticsSport": "nfl",
+       "color": "1, 141, 52, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/14853",
+       "imageAltText": "Kyler Murray",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14853.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/14853",
+         "id": "14853"
+        }
+       },
+       "title": "KYLER MURRAY",
+       "type": "entity",
+       "webUrl": "/nfl/kyler-murray-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "25"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "TB",
+        "text": "J. Daniels"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "63.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "30"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "19"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+       "analyticsName": "jalon-daniels",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/329650",
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/329650",
+         "id": "329650"
+        }
+       },
+       "title": "JALON DANIELS",
+       "type": "entity",
+       "webUrl": "/nfl/jalon-daniels-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     }
+    ],
+    "template": "table"
+   }
+  },
+  {
+   "id": "p_yds",
+   "legend": {
+    "details": [
+     {
+      "key": "PYDS",
+      "text": " - Passing Yards"
+     },
+     {
+      "key": "GP",
+      "text": " - Games Played"
+     }
+    ]
+   },
+   "table": {
+    "headers": [
+     {
+      "columns": [
+       {
+        "emphasized": true,
+        "index": 0,
+        "priority": 1,
+        "sortable": "none",
+        "template": "cell-rank",
+        "text": "PLAYERS",
+        "weight": 0.5
+       },
+       {
+        "emphasized": false,
+        "index": 1,
+        "priority": 2,
+        "sortable": "none",
+        "template": "cell-entity-text",
+        "weight": 5
+       },
+       {
+        "emphasized": false,
+        "index": 2,
+        "priority": 3,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "PYDS",
+        "weight": 1.5
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "priority": 4,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "GP",
+        "weight": 1.5
+       }
+      ],
+      "isPrimary": true
+     }
+    ],
+    "rows": [
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "1"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CAR",
+        "text": "B. Young"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,268"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326926.vresize.140.170.medium.5.png",
+       "analyticsName": "bryce-young",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/326926",
+       "imageAltText": "Bryce Young",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326926.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/326926",
+         "id": "326926"
+        }
+       },
+       "title": "BRYCE YOUNG",
+       "type": "entity",
+       "webUrl": "/nfl/bryce-young-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "2"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DET",
+        "text": "J. Goff"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,214"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12216.vresize.140.170.medium.5.png",
+       "analyticsName": "jared-goff",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12216",
+       "imageAltText": "Jared Goff",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12216.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12216",
+         "id": "12216"
+        }
+       },
+       "title": "JARED GOFF",
+       "type": "entity",
+       "webUrl": "/nfl/jared-goff-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "3"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NO",
+        "text": "T. Shough"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,203"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+       "analyticsName": "tyler-shough",
+       "analyticsSport": "nfl",
+       "color": "1, 222, 190, 103",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/328616",
+       "imageAltText": "Tyler Shough",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/328616",
+         "id": "328616"
+        }
+       },
+       "title": "TYLER SHOUGH",
+       "type": "entity",
+       "webUrl": "/nfl/tyler-shough-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "4"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LAR",
+        "text": "M. Stafford"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,189"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/7231.vresize.140.170.medium.4.png",
+       "analyticsName": "matthew-stafford",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/7231",
+       "imageAltText": "Matthew Stafford",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/7231.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/7231",
+         "id": "7231"
+        }
+       },
+       "title": "MATTHEW STAFFORD",
+       "type": "entity",
+       "webUrl": "/nfl/matthew-stafford-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "5"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CIN",
+        "text": "J. Burrow"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,171"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21450.vresize.140.170.medium.6.png",
+       "analyticsName": "joe-burrow",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21450",
+       "imageAltText": "Joe Burrow",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21450.vresize.140.170.medium.6.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21450",
+         "id": "21450"
+        }
+       },
+       "title": "JOE BURROW",
+       "type": "entity",
+       "webUrl": "/nfl/joe-burrow-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "6"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "HOU",
+        "text": "C. Stroud"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,141"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326928.vresize.140.170.medium.4.png",
+       "analyticsName": "cj-stroud",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/326928",
+       "imageAltText": "C.J. Stroud",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326928.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/326928",
+         "id": "326928"
+        }
+       },
+       "title": "C.J. STROUD",
+       "type": "entity",
+       "webUrl": "/nfl/cj-stroud-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "7"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DAL",
+        "text": "D. Prescott"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,065"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png",
+       "analyticsName": "dak-prescott",
+       "analyticsSport": "nfl",
+       "color": "1, 192, 192, 192",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12340",
+       "imageAltText": "Dak Prescott",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12340",
+         "id": "12340"
+        }
+       },
+       "title": "DAK PRESCOTT",
+       "type": "entity",
+       "webUrl": "/nfl/dak-prescott-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "8"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "GB",
+        "text": "J. Love"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,041"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+       "analyticsName": "jordan-love",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21466",
+       "imageAltText": "Jordan Love",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21466",
+         "id": "21466"
+        }
+       },
+       "title": "JORDAN LOVE",
+       "type": "entity",
+       "webUrl": "/nfl/jordan-love-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "9"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "BUF",
+        "text": "J. Allen"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,039"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png",
+       "analyticsName": "josh-allen-2",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13955",
+       "imageAltText": "Josh Allen",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13955",
+         "id": "13955"
+        }
+       },
+       "title": "JOSH ALLEN",
+       "type": "entity",
+       "webUrl": "/nfl/josh-allen-2-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "10"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "KC",
+        "text": "P. Mahomes"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,037"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+       "analyticsName": "patrick-mahomes-ii",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13107",
+       "imageAltText": "Patrick Mahomes",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13107",
+         "id": "13107"
+        }
+       },
+       "title": "PATRICK MAHOMES",
+       "type": "entity",
+       "webUrl": "/nfl/patrick-mahomes-ii-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "11"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LV",
+        "text": "K. Cousins"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,026"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/8649.vresize.140.170.medium.3.png",
+       "analyticsName": "kirk-cousins",
+       "analyticsSport": "nfl",
+       "color": "1, 135, 135, 135",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/8649",
+       "imageAltText": "Kirk Cousins",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/8649.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/8649",
+         "id": "8649"
+        }
+       },
+       "title": "KIRK COUSINS",
+       "type": "entity",
+       "webUrl": "/nfl/kirk-cousins-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "12"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "SF",
+        "text": "B. Purdy"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "1,007"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png",
+       "analyticsName": "brock-purdy",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22997",
+       "imageAltText": "Brock Purdy",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22997",
+         "id": "22997"
+        }
+       },
+       "title": "BROCK PURDY",
+       "type": "entity",
+       "webUrl": "/nfl/brock-purdy-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "13"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "PIT",
+        "text": "A. Rodgers"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "999"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/5842.vresize.140.170.medium.6.png",
+       "analyticsName": "aaron-rodgers",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 188, 41",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/5842",
+       "imageAltText": "Aaron Rodgers",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/5842.vresize.140.170.medium.6.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/5842",
+         "id": "5842"
+        }
+       },
+       "title": "AARON RODGERS",
+       "type": "entity",
+       "webUrl": "/nfl/aaron-rodgers-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "14"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "BAL",
+        "text": "L. Jackson"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "967"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+       "analyticsName": "lamar-jackson",
+       "analyticsSport": "nfl",
+       "color": "1, 141, 52, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13985",
+       "imageAltText": "Lamar Jackson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13985",
+         "id": "13985"
+        }
+       },
+       "title": "LAMAR JACKSON",
+       "type": "entity",
+       "webUrl": "/nfl/lamar-jackson-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "15"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NYJ",
+        "text": "G. Smith"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "902"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/9761.vresize.140.170.medium.4.png",
+       "analyticsName": "geno-smith",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/9761",
+       "imageAltText": "Geno Smith",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/9761.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/9761",
+         "id": "9761"
+        }
+       },
+       "title": "GENO SMITH",
+       "type": "entity",
+       "webUrl": "/nfl/geno-smith-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "16"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CLE",
+        "text": "D. Watson"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "855"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13111.vresize.140.170.medium.2.png",
+       "analyticsName": "deshaun-watson",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13111",
+       "imageAltText": "Deshaun Watson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13111.vresize.140.170.medium.2.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13111",
+         "id": "13111"
+        }
+       },
+       "title": "DESHAUN WATSON",
+       "type": "entity",
+       "webUrl": "/nfl/deshaun-watson-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "17"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NE",
+        "text": "D. Maye"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "854"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327678.vresize.140.170.medium.3.png",
+       "analyticsName": "drake-maye",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327678",
+       "imageAltText": "Drake Maye",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327678.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327678",
+         "id": "327678"
+        }
+       },
+       "title": "DRAKE MAYE",
+       "type": "entity",
+       "webUrl": "/nfl/drake-maye-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "18"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "JAX",
+        "text": "T. Lawrence"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "843"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22197.vresize.140.170.medium.3.png",
+       "analyticsName": "trevor-lawrence",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 170, 150",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22197",
+       "imageAltText": "Trevor Lawrence",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22197.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22197",
+         "id": "22197"
+        }
+       },
+       "title": "TREVOR LAWRENCE",
+       "type": "entity",
+       "webUrl": "/nfl/trevor-lawrence-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "19"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DEN",
+        "text": "B. Nix"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "819"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png",
+       "analyticsName": "bo-nix",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327683",
+       "imageAltText": "Bo Nix",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327683",
+         "id": "327683"
+        }
+       },
+       "title": "BO NIX",
+       "type": "entity",
+       "webUrl": "/nfl/bo-nix-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "20"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "ARI",
+        "text": "J. Brissett"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "818"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12306.vresize.140.170.medium.4.png",
+       "analyticsName": "jacoby-brissett",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12306",
+       "imageAltText": "Jacoby Brissett",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12306.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12306",
+         "id": "12306"
+        }
+       },
+       "title": "JACOBY BRISSETT",
+       "type": "entity",
+       "webUrl": "/nfl/jacoby-brissett-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "21"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LAC",
+        "text": "J. Herbert"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "816"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21458.vresize.140.170.medium.3.png",
+       "analyticsName": "justin-herbert",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21458",
+       "imageAltText": "Justin Herbert",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21458.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21458",
+         "id": "21458"
+        }
+       },
+       "title": "JUSTIN HERBERT",
+       "type": "entity",
+       "webUrl": "/nfl/justin-herbert-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "22"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "IND",
+        "text": "D. Jones"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "754"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14849.vresize.140.170.medium.3.png",
+       "analyticsName": "daniel-jones",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/14849",
+       "imageAltText": "Daniel Jones",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14849.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/14849",
+         "id": "14849"
+        }
+       },
+       "title": "DANIEL JONES",
+       "type": "entity",
+       "webUrl": "/nfl/daniel-jones-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "23"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "TEN",
+        "text": "C. Ward"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "726"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328565.vresize.140.170.medium.3.png",
+       "analyticsName": "cam-ward",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/328565",
+       "imageAltText": "Cam Ward",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328565.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/328565",
+         "id": "328565"
+        }
+       },
+       "title": "CAM WARD",
+       "type": "entity",
+       "webUrl": "/nfl/cam-ward-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "24"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "PHI",
+        "text": "J. Hurts"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "713"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21495.vresize.140.170.medium.5.png",
+       "analyticsName": "jalen-hurts",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 170, 150",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21495",
+       "imageAltText": "Jalen Hurts",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21495.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21495",
+         "id": "21495"
+        }
+       },
+       "title": "JALEN HURTS",
+       "type": "entity",
+       "webUrl": "/nfl/jalen-hurts-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "25"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "MIA",
+        "text": "M. Willis"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "712"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22814.vresize.140.170.medium.5.png",
+       "analyticsName": "malik-willis",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 188, 200",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22814",
+       "imageAltText": "Malik Willis",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22814.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22814",
+         "id": "22814"
+        }
+       },
+       "title": "MALIK WILLIS",
+       "type": "entity",
+       "webUrl": "/nfl/malik-willis-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     }
+    ],
+    "template": "table"
+   }
+  },
+  {
+   "id": "p_ydsa",
+   "legend": {
+    "details": [
+     {
+      "key": "PAVG",
+      "text": " - Passing Yards / Attempt"
+     },
+     {
+      "key": "PATT",
+      "text": " - Passing Attempts"
+     },
+     {
+      "key": "PYDS",
+      "text": " - Passing Yards"
+     }
+    ]
+   },
+   "table": {
+    "headers": [
+     {
+      "columns": [
+       {
+        "emphasized": true,
+        "index": 0,
+        "priority": 1,
+        "sortable": "none",
+        "template": "cell-rank",
+        "text": "PLAYERS",
+        "weight": 0.5
+       },
+       {
+        "emphasized": false,
+        "index": 1,
+        "priority": 2,
+        "sortable": "none",
+        "template": "cell-entity-text",
+        "weight": 5
+       },
+       {
+        "emphasized": false,
+        "index": 2,
+        "priority": 3,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "PAVG",
+        "weight": 1.5
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "priority": 4,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "PATT",
+        "weight": 1.5
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "priority": 5,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "PYDS",
+        "weight": 1.5
+       }
+      ],
+      "isPrimary": true
+     }
+    ],
+    "rows": [
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "1"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "ATL",
+        "text": "M. Penix Jr."
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "10.6"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "45"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "479"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+       "analyticsName": "michael-penix",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327699",
+       "imageAltText": "Michael Penix Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327699",
+         "id": "327699"
+        }
+       },
+       "title": "MICHAEL PENIX JR.",
+       "type": "entity",
+       "webUrl": "/nfl/michael-penix-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "2"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "BAL",
+        "text": "L. Jackson"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "10.1"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "96"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "967"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+       "analyticsName": "lamar-jackson",
+       "analyticsSport": "nfl",
+       "color": "1, 141, 52, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13985",
+       "imageAltText": "Lamar Jackson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13985",
+         "id": "13985"
+        }
+       },
+       "title": "LAMAR JACKSON",
+       "type": "entity",
+       "webUrl": "/nfl/lamar-jackson-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "3"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "SF",
+        "text": "B. Purdy"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "8.9"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "113"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,007"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png",
+       "analyticsName": "brock-purdy",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22997",
+       "imageAltText": "Brock Purdy",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22997",
+         "id": "22997"
+        }
+       },
+       "title": "BROCK PURDY",
+       "type": "entity",
+       "webUrl": "/nfl/brock-purdy-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "4"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "SEA",
+        "text": "D. Lock"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "8.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "48"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "422"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14886.vresize.140.170.medium.4.png",
+       "analyticsName": "drew-lock",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/14886",
+       "imageAltText": "Drew Lock",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14886.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/14886",
+         "id": "14886"
+        }
+       },
+       "title": "DREW LOCK",
+       "type": "entity",
+       "webUrl": "/nfl/drew-lock-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "5"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "BUF",
+        "text": "J. Allen"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "8.7"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "119"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,039"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png",
+       "analyticsName": "josh-allen-2",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13955",
+       "imageAltText": "Josh Allen",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13955",
+         "id": "13955"
+        }
+       },
+       "title": "JOSH ALLEN",
+       "type": "entity",
+       "webUrl": "/nfl/josh-allen-2-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "6"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "SEA",
+        "text": "S. Darnold"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "8.1"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "69"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "560"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13960.vresize.140.170.medium.4.png",
+       "analyticsName": "sam-darnold",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13960",
+       "imageAltText": "Sam Darnold",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13960.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13960",
+         "id": "13960"
+        }
+       },
+       "title": "SAM DARNOLD",
+       "type": "entity",
+       "webUrl": "/nfl/sam-darnold-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "7"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "JAX",
+        "text": "T. Lawrence"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "8.1"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "104"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "843"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22197.vresize.140.170.medium.3.png",
+       "analyticsName": "trevor-lawrence",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 170, 150",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22197",
+       "imageAltText": "Trevor Lawrence",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22197.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22197",
+         "id": "22197"
+        }
+       },
+       "title": "TREVOR LAWRENCE",
+       "type": "entity",
+       "webUrl": "/nfl/trevor-lawrence-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "8"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "KC",
+        "text": "P. Mahomes"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "8.1"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "128"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,037"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+       "analyticsName": "patrick-mahomes-ii",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13107",
+       "imageAltText": "Patrick Mahomes",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13107",
+         "id": "13107"
+        }
+       },
+       "title": "PATRICK MAHOMES",
+       "type": "entity",
+       "webUrl": "/nfl/patrick-mahomes-ii-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "9"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CAR",
+        "text": "B. Young"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "162"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,268"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326926.vresize.140.170.medium.5.png",
+       "analyticsName": "bryce-young",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/326926",
+       "imageAltText": "Bryce Young",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326926.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/326926",
+         "id": "326926"
+        }
+       },
+       "title": "BRYCE YOUNG",
+       "type": "entity",
+       "webUrl": "/nfl/bryce-young-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "10"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NYJ",
+        "text": "G. Smith"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.7"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "117"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "902"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/9761.vresize.140.170.medium.4.png",
+       "analyticsName": "geno-smith",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/9761",
+       "imageAltText": "Geno Smith",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/9761.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/9761",
+         "id": "9761"
+        }
+       },
+       "title": "GENO SMITH",
+       "type": "entity",
+       "webUrl": "/nfl/geno-smith-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "11"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "HOU",
+        "text": "C. Stroud"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.6"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "151"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,141"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326928.vresize.140.170.medium.4.png",
+       "analyticsName": "cj-stroud",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/326928",
+       "imageAltText": "C.J. Stroud",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326928.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/326928",
+         "id": "326928"
+        }
+       },
+       "title": "C.J. STROUD",
+       "type": "entity",
+       "webUrl": "/nfl/cj-stroud-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "12"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DET",
+        "text": "J. Goff"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "161"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,214"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12216.vresize.140.170.medium.5.png",
+       "analyticsName": "jared-goff",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12216",
+       "imageAltText": "Jared Goff",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12216.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12216",
+         "id": "12216"
+        }
+       },
+       "title": "JARED GOFF",
+       "type": "entity",
+       "webUrl": "/nfl/jared-goff-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "13"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CHI",
+        "text": "T. Bagent"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "43"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "322"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327360.vresize.140.170.medium.5.png",
+       "analyticsName": "tyson-bagent",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327360",
+       "imageAltText": "Tyson Bagent",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327360.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327360",
+         "id": "327360"
+        }
+       },
+       "title": "TYSON BAGENT",
+       "type": "entity",
+       "webUrl": "/nfl/tyson-bagent-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "14"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CIN",
+        "text": "J. Burrow"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "157"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,171"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21450.vresize.140.170.medium.6.png",
+       "analyticsName": "joe-burrow",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21450",
+       "imageAltText": "Joe Burrow",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21450.vresize.140.170.medium.6.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21450",
+         "id": "21450"
+        }
+       },
+       "title": "JOE BURROW",
+       "type": "entity",
+       "webUrl": "/nfl/joe-burrow-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "15"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CLE",
+        "text": "D. Watson"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.4"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "115"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "855"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13111.vresize.140.170.medium.2.png",
+       "analyticsName": "deshaun-watson",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13111",
+       "imageAltText": "Deshaun Watson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13111.vresize.140.170.medium.2.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13111",
+         "id": "13111"
+        }
+       },
+       "title": "DESHAUN WATSON",
+       "type": "entity",
+       "webUrl": "/nfl/deshaun-watson-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "16"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CHI",
+        "text": "C. Williams"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.4"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "55"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "407"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327693.vresize.140.170.medium.5.png",
+       "analyticsName": "caleb-williams",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327693",
+       "imageAltText": "Caleb Williams",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327693.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327693",
+         "id": "327693"
+        }
+       },
+       "title": "CALEB WILLIAMS",
+       "type": "entity",
+       "webUrl": "/nfl/caleb-williams-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "17"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NYG",
+        "text": "J. Dart"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.4"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "34"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "250"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328573.vresize.140.170.medium.2.png",
+       "analyticsName": "jaxson-dart",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/328573",
+       "imageAltText": "Jaxson Dart",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328573.vresize.140.170.medium.2.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/328573",
+         "id": "328573"
+        }
+       },
+       "title": "JAXSON DART",
+       "type": "entity",
+       "webUrl": "/nfl/jaxson-dart-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "18"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LAR",
+        "text": "M. Stafford"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "162"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,189"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/7231.vresize.140.170.medium.4.png",
+       "analyticsName": "matthew-stafford",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/7231",
+       "imageAltText": "Matthew Stafford",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/7231.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/7231",
+         "id": "7231"
+        }
+       },
+       "title": "MATTHEW STAFFORD",
+       "type": "entity",
+       "webUrl": "/nfl/matthew-stafford-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "19"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NE",
+        "text": "D. Maye"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "117"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "854"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327678.vresize.140.170.medium.3.png",
+       "analyticsName": "drake-maye",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327678",
+       "imageAltText": "Drake Maye",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327678.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327678",
+         "id": "327678"
+        }
+       },
+       "title": "DRAKE MAYE",
+       "type": "entity",
+       "webUrl": "/nfl/drake-maye-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "20"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CHI",
+        "text": "C. Keenum"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "34"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "247"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10383.vresize.140.170.medium.5.png",
+       "analyticsName": "case-keenum",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/10383",
+       "imageAltText": "Case Keenum",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10383.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/10383",
+         "id": "10383"
+        }
+       },
+       "title": "CASE KEENUM",
+       "type": "entity",
+       "webUrl": "/nfl/case-keenum-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "21"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LV",
+        "text": "K. Cousins"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.1"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "144"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,026"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/8649.vresize.140.170.medium.3.png",
+       "analyticsName": "kirk-cousins",
+       "analyticsSport": "nfl",
+       "color": "1, 135, 135, 135",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/8649",
+       "imageAltText": "Kirk Cousins",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/8649.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/8649",
+         "id": "8649"
+        }
+       },
+       "title": "KIRK COUSINS",
+       "type": "entity",
+       "webUrl": "/nfl/kirk-cousins-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "22"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DAL",
+        "text": "D. Prescott"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.1"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "150"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,065"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png",
+       "analyticsName": "dak-prescott",
+       "analyticsSport": "nfl",
+       "color": "1, 192, 192, 192",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12340",
+       "imageAltText": "Dak Prescott",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12340",
+         "id": "12340"
+        }
+       },
+       "title": "DAK PRESCOTT",
+       "type": "entity",
+       "webUrl": "/nfl/dak-prescott-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "23"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "MIN",
+        "text": "C. Wentz"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "7.1"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "39"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "276"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12218.vresize.140.170.medium.2.png",
+       "analyticsName": "carson-wentz",
+       "analyticsSport": "nfl",
+       "color": "1, 141, 52, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12218",
+       "imageAltText": "Carson Wentz",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12218.vresize.140.170.medium.2.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12218",
+         "id": "12218"
+        }
+       },
+       "title": "CARSON WENTZ",
+       "type": "entity",
+       "webUrl": "/nfl/carson-wentz-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "24"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "MIA",
+        "text": "M. Willis"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "6.9"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "103"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "712"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22814.vresize.140.170.medium.5.png",
+       "analyticsName": "malik-willis",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 188, 200",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22814",
+       "imageAltText": "Malik Willis",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22814.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22814",
+         "id": "22814"
+        }
+       },
+       "title": "MALIK WILLIS",
+       "type": "entity",
+       "webUrl": "/nfl/malik-willis-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "25"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LAC",
+        "text": "J. Herbert"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "6.9"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "119"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "816"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21458.vresize.140.170.medium.3.png",
+       "analyticsName": "justin-herbert",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21458",
+       "imageAltText": "Justin Herbert",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21458.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21458",
+         "id": "21458"
+        }
+       },
+       "title": "JUSTIN HERBERT",
+       "type": "entity",
+       "webUrl": "/nfl/justin-herbert-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     }
+    ],
+    "template": "table"
+   }
+  },
+  {
+   "id": "p_ydsg",
+   "legend": {
+    "details": [
+     {
+      "key": "PYDS/G",
+      "text": " - Passing Yards / Game"
+     },
+     {
+      "key": "GP",
+      "text": " - Games Played"
+     },
+     {
+      "key": "PYDS",
+      "text": " - Passing Yards"
+     }
+    ]
+   },
+   "table": {
+    "headers": [
+     {
+      "columns": [
+       {
+        "emphasized": true,
+        "index": 0,
+        "priority": 1,
+        "sortable": "none",
+        "template": "cell-rank",
+        "text": "PLAYERS",
+        "weight": 0.5
+       },
+       {
+        "emphasized": false,
+        "index": 1,
+        "priority": 2,
+        "sortable": "none",
+        "template": "cell-entity-text",
+        "weight": 5
+       },
+       {
+        "emphasized": false,
+        "index": 2,
+        "priority": 3,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "PYDS/G",
+        "weight": 1.5
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "priority": 4,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "GP",
+        "weight": 1.5
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "priority": 5,
+        "sortable": "none",
+        "template": "cell-number",
+        "text": "PYDS",
+        "weight": 1.5
+       }
+      ],
+      "isPrimary": true
+     }
+    ],
+    "rows": [
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "1"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CAR",
+        "text": "B. Young"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "317.0"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,268"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326926.vresize.140.170.medium.5.png",
+       "analyticsName": "bryce-young",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/326926",
+       "imageAltText": "Bryce Young",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326926.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/326926",
+         "id": "326926"
+        }
+       },
+       "title": "BRYCE YOUNG",
+       "type": "entity",
+       "webUrl": "/nfl/bryce-young-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "2"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DET",
+        "text": "J. Goff"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "303.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,214"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12216.vresize.140.170.medium.5.png",
+       "analyticsName": "jared-goff",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12216",
+       "imageAltText": "Jared Goff",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12216.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12216",
+         "id": "12216"
+        }
+       },
+       "title": "JARED GOFF",
+       "type": "entity",
+       "webUrl": "/nfl/jared-goff-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "3"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NO",
+        "text": "T. Shough"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "300.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,203"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+       "analyticsName": "tyler-shough",
+       "analyticsSport": "nfl",
+       "color": "1, 222, 190, 103",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/328616",
+       "imageAltText": "Tyler Shough",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/328616",
+         "id": "328616"
+        }
+       },
+       "title": "TYLER SHOUGH",
+       "type": "entity",
+       "webUrl": "/nfl/tyler-shough-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "4"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LAR",
+        "text": "M. Stafford"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "297.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,189"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/7231.vresize.140.170.medium.4.png",
+       "analyticsName": "matthew-stafford",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/7231",
+       "imageAltText": "Matthew Stafford",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/7231.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/7231",
+         "id": "7231"
+        }
+       },
+       "title": "MATTHEW STAFFORD",
+       "type": "entity",
+       "webUrl": "/nfl/matthew-stafford-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "5"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CIN",
+        "text": "J. Burrow"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "292.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,171"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21450.vresize.140.170.medium.6.png",
+       "analyticsName": "joe-burrow",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21450",
+       "imageAltText": "Joe Burrow",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21450.vresize.140.170.medium.6.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21450",
+         "id": "21450"
+        }
+       },
+       "title": "JOE BURROW",
+       "type": "entity",
+       "webUrl": "/nfl/joe-burrow-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "6"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "HOU",
+        "text": "C. Stroud"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "285.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,141"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326928.vresize.140.170.medium.4.png",
+       "analyticsName": "cj-stroud",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/326928",
+       "imageAltText": "C.J. Stroud",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326928.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/326928",
+         "id": "326928"
+        }
+       },
+       "title": "C.J. STROUD",
+       "type": "entity",
+       "webUrl": "/nfl/cj-stroud-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "7"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DAL",
+        "text": "D. Prescott"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "266.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,065"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png",
+       "analyticsName": "dak-prescott",
+       "analyticsSport": "nfl",
+       "color": "1, 192, 192, 192",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12340",
+       "imageAltText": "Dak Prescott",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12340",
+         "id": "12340"
+        }
+       },
+       "title": "DAK PRESCOTT",
+       "type": "entity",
+       "webUrl": "/nfl/dak-prescott-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "8"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "GB",
+        "text": "J. Love"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "260.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,041"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+       "analyticsName": "jordan-love",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21466",
+       "imageAltText": "Jordan Love",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21466",
+         "id": "21466"
+        }
+       },
+       "title": "JORDAN LOVE",
+       "type": "entity",
+       "webUrl": "/nfl/jordan-love-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "9"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "BUF",
+        "text": "J. Allen"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "259.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,039"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png",
+       "analyticsName": "josh-allen-2",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13955",
+       "imageAltText": "Josh Allen",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13955",
+         "id": "13955"
+        }
+       },
+       "title": "JOSH ALLEN",
+       "type": "entity",
+       "webUrl": "/nfl/josh-allen-2-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "10"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "KC",
+        "text": "P. Mahomes"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "259.3"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,037"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+       "analyticsName": "patrick-mahomes-ii",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13107",
+       "imageAltText": "Patrick Mahomes",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13107",
+         "id": "13107"
+        }
+       },
+       "title": "PATRICK MAHOMES",
+       "type": "entity",
+       "webUrl": "/nfl/patrick-mahomes-ii-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "11"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LV",
+        "text": "K. Cousins"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "256.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,026"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/8649.vresize.140.170.medium.3.png",
+       "analyticsName": "kirk-cousins",
+       "analyticsSport": "nfl",
+       "color": "1, 135, 135, 135",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/8649",
+       "imageAltText": "Kirk Cousins",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/8649.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/8649",
+         "id": "8649"
+        }
+       },
+       "title": "KIRK COUSINS",
+       "type": "entity",
+       "webUrl": "/nfl/kirk-cousins-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "12"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "SF",
+        "text": "B. Purdy"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "251.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "1,007"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png",
+       "analyticsName": "brock-purdy",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22997",
+       "imageAltText": "Brock Purdy",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22997",
+         "id": "22997"
+        }
+       },
+       "title": "BROCK PURDY",
+       "type": "entity",
+       "webUrl": "/nfl/brock-purdy-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "13"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "PIT",
+        "text": "A. Rodgers"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "249.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "999"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/5842.vresize.140.170.medium.6.png",
+       "analyticsName": "aaron-rodgers",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 188, 41",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/5842",
+       "imageAltText": "Aaron Rodgers",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/5842.vresize.140.170.medium.6.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/5842",
+         "id": "5842"
+        }
+       },
+       "title": "AARON RODGERS",
+       "type": "entity",
+       "webUrl": "/nfl/aaron-rodgers-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "14"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "BAL",
+        "text": "L. Jackson"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "241.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "967"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+       "analyticsName": "lamar-jackson",
+       "analyticsSport": "nfl",
+       "color": "1, 141, 52, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13985",
+       "imageAltText": "Lamar Jackson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13985",
+         "id": "13985"
+        }
+       },
+       "title": "LAMAR JACKSON",
+       "type": "entity",
+       "webUrl": "/nfl/lamar-jackson-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "15"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "ATL",
+        "text": "M. Penix Jr."
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "239.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "2"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "479"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+       "analyticsName": "michael-penix",
+       "analyticsSport": "nfl",
+       "color": "1, 240, 31, 65",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327699",
+       "imageAltText": "Michael Penix Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327699",
+         "id": "327699"
+        }
+       },
+       "title": "MICHAEL PENIX JR.",
+       "type": "entity",
+       "webUrl": "/nfl/michael-penix-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "16"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NYJ",
+        "text": "G. Smith"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "225.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "902"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/9761.vresize.140.170.medium.4.png",
+       "analyticsName": "geno-smith",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/9761",
+       "imageAltText": "Geno Smith",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/9761.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/9761",
+         "id": "9761"
+        }
+       },
+       "title": "GENO SMITH",
+       "type": "entity",
+       "webUrl": "/nfl/geno-smith-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "17"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CLE",
+        "text": "D. Watson"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "213.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "855"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13111.vresize.140.170.medium.2.png",
+       "analyticsName": "deshaun-watson",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13111",
+       "imageAltText": "Deshaun Watson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13111.vresize.140.170.medium.2.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13111",
+         "id": "13111"
+        }
+       },
+       "title": "DESHAUN WATSON",
+       "type": "entity",
+       "webUrl": "/nfl/deshaun-watson-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "18"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "NE",
+        "text": "D. Maye"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "213.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "854"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327678.vresize.140.170.medium.3.png",
+       "analyticsName": "drake-maye",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327678",
+       "imageAltText": "Drake Maye",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327678.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327678",
+         "id": "327678"
+        }
+       },
+       "title": "DRAKE MAYE",
+       "type": "entity",
+       "webUrl": "/nfl/drake-maye-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "19"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "SEA",
+        "text": "D. Lock"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "211.0"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "2"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "422"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14886.vresize.140.170.medium.4.png",
+       "analyticsName": "drew-lock",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 156, 26",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/14886",
+       "imageAltText": "Drew Lock",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14886.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/14886",
+         "id": "14886"
+        }
+       },
+       "title": "DREW LOCK",
+       "type": "entity",
+       "webUrl": "/nfl/drew-lock-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "20"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "JAX",
+        "text": "T. Lawrence"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "210.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "843"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22197.vresize.140.170.medium.3.png",
+       "analyticsName": "trevor-lawrence",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 170, 150",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/22197",
+       "imageAltText": "Trevor Lawrence",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22197.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/22197",
+         "id": "22197"
+        }
+       },
+       "title": "TREVOR LAWRENCE",
+       "type": "entity",
+       "webUrl": "/nfl/trevor-lawrence-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "21"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "TB",
+        "text": "B. Mayfield"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "205.0"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "3"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "615"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13954.vresize.140.170.medium.5.png",
+       "analyticsName": "baker-mayfield",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/13954",
+       "imageAltText": "Baker Mayfield",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13954.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/13954",
+         "id": "13954"
+        }
+       },
+       "title": "BAKER MAYFIELD",
+       "type": "entity",
+       "webUrl": "/nfl/baker-mayfield-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "22"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "DEN",
+        "text": "B. Nix"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "204.8"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "819"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png",
+       "analyticsName": "bo-nix",
+       "analyticsSport": "nfl",
+       "color": "1, 0, 87, 244",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327683",
+       "imageAltText": "Bo Nix",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327683",
+         "id": "327683"
+        }
+       },
+       "title": "BO NIX",
+       "type": "entity",
+       "webUrl": "/nfl/bo-nix-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "23"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "ARI",
+        "text": "J. Brissett"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "204.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "818"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12306.vresize.140.170.medium.4.png",
+       "analyticsName": "jacoby-brissett",
+       "analyticsSport": "nfl",
+       "color": "1, 170, 0, 49",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/12306",
+       "imageAltText": "Jacoby Brissett",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12306.vresize.140.170.medium.4.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/12306",
+         "id": "12306"
+        }
+       },
+       "title": "JACOBY BRISSETT",
+       "type": "entity",
+       "webUrl": "/nfl/jacoby-brissett-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "24"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "LAC",
+        "text": "J. Herbert"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "204.0"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "4"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "816"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21458.vresize.140.170.medium.3.png",
+       "analyticsName": "justin-herbert",
+       "analyticsSport": "nfl",
+       "color": "1, 82, 181, 255",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/21458",
+       "imageAltText": "Justin Herbert",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21458.vresize.140.170.medium.3.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/21458",
+         "id": "21458"
+        }
+       },
+       "title": "JUSTIN HERBERT",
+       "type": "entity",
+       "webUrl": "/nfl/justin-herbert-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     },
+     {
+      "columns": [
+       {
+        "emphasized": false,
+        "index": 0,
+        "text": "25"
+       },
+       {
+        "emphasized": true,
+        "index": 1,
+        "superscript": "CHI",
+        "text": "C. Williams"
+       },
+       {
+        "emphasized": true,
+        "index": 2,
+        "text": "203.5"
+       },
+       {
+        "emphasized": false,
+        "index": 3,
+        "text": "2"
+       },
+       {
+        "emphasized": false,
+        "index": 4,
+        "text": "407"
+       }
+      ],
+      "entityLink": {
+       "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327693.vresize.140.170.medium.5.png",
+       "analyticsName": "caleb-williams",
+       "analyticsSport": "nfl",
+       "color": "1, 255, 104, 53",
+       "contentType": "athlete",
+       "contentUri": "football/nfl/athletes/327693",
+       "imageAltText": "Caleb Williams",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327693.vresize.140.170.medium.5.png",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+        "tokens": {
+         "contentUri": "football/nfl/athletes/327693",
+         "id": "327693"
+        }
+       },
+       "title": "CALEB WILLIAMS",
+       "type": "entity",
+       "webUrl": "/nfl/caleb-williams-player"
+      },
+      "isCutoff": false,
+      "isFaded": false,
+      "selected": false
+     }
+    ],
+    "template": "table"
+   }
+  }
+ ],
+ "segmentId": 1,
+ "selectionList": [
+  {
+   "id": "p_comp",
+   "name": "COMP",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/0"
+  },
+  {
+   "id": "p_att",
+   "name": "PATT",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/0"
+  },
+  {
+   "id": "p_attg",
+   "name": "ATT/G",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/0"
+  },
+  {
+   "id": "p_comp_pct",
+   "name": "PCT"
+  },
+  {
+   "id": "p_yds",
+   "name": "PYDS"
+  },
+  {
+   "id": "p_ydsa",
+   "name": "PAVG"
+  },
+  {
+   "id": "p_ydsg",
+   "name": "PYDS/G"
+  },
+  {
+   "id": "p_td",
+   "name": "PTD",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/2"
+  },
+  {
+   "id": "p_lng",
+   "name": "LNG",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/2"
+  },
+  {
+   "id": "p_int",
+   "name": "INT",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/2"
+  },
+  {
+   "id": "p_sck",
+   "name": "SCK",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/3"
+  },
+  {
+   "id": "p_sckyds",
+   "name": "SCKYDS",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/3"
+  },
+  {
+   "id": "p_qbr",
+   "name": "QBR",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/3"
+  }
+ ],
+ "title": "PASSING"
+}

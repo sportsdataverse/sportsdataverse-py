@@ -6,6 +6,38 @@ description: "Package — additional Python functions — PFF Premium Stats (LEG
 ---
 # Package — additional Python functions — PFF Premium Stats (LEGACY): ufl_player–ufl_teams
 
+### pff_ufl_player_passing_summary {#pff_ufl_player_passing_summary}
+
+`pff_ufl_player_passing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
+
+Endpoint: `GET https://premium.pff.com/api/v1/player/passing/summary`
+Example URL: https://premium.pff.com/api/v1/player/passing/summary
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
+| `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
+| `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
+| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+pff_player_passing_summary()
+```
+
 ### pff_ufl_player_position_pivot {#pff_ufl_player_position_pivot}
 
 `pff_ufl_player_position_pivot(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`

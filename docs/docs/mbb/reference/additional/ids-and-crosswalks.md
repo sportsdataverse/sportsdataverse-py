@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 12
+sidebar_position: 14
 description: "MBB — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — IDs and crosswalks
@@ -343,6 +343,26 @@ per-player tables, so neither is joined.
 
 `pl.DataFrame` (or pandas), one row per ESPN athlete, 17 columns.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `espn_team_id` | integer | ESPN team id (canonical key). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_name` | character | Player name. |
+| `espn_athlete_id` | character | ESPN athlete id. |
+| `espn_full_name` | character | ESPN full name. |
+| `espn_jersey` | character | ESPN jersey number. |
+| `espn_position` | character | ESPN position abbreviation. |
+| `fox_athlete_id` | character | Fox athlete id (NA if unmatched). |
+| `fox_player` | character | Fox player name (NA if unmatched). |
+| `fox_jersey` | character | Fox jersey number (NA if unmatched). |
+| `fox_position_group` | character | Fox position group label (NA if unmatched). |
+| `yahoo_player_id` | character | Yahoo player id (NA placeholder). |
+| `yahoo_player_name` | character | Yahoo player name (NA placeholder). |
+| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `match_confidence` | double | Jaro-Winkler score or 1 for exact (NA if none). |
+| `match_keys` | character | NA (reserved for future use). |
+
 **Example**
 
 ```python
@@ -384,6 +404,8 @@ paid subscription and is not ported.
 
 `pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
 
+No returns table is published for this function: no capture: barttorvik.com answers HTTP 403 to the datacenter IP the docs are built on.
+
 **Example**
 
 ```python
@@ -421,6 +443,30 @@ each join on the normalized school name after `BART_ALIAS` /
 **Returns**
 
 `pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `espn_team_id` | integer | ESPN team id (canonical key). |
+| `espn_abbreviation` | character | ESPN abbreviation. |
+| `espn_display_name` | character | ESPN display name (school + mascot). |
+| `espn_short_name` | character | ESPN short name. |
+| `espn_location` | character | ESPN school/location only. |
+| `espn_mascot` | character | ESPN mascot/nickname. |
+| `espn_conference` | character | ESPN conference name. |
+| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_name` | character | Fox team name (NA if unmatched). |
+| `fox_section` | character | Fox conference/section label (NA if unmatched). |
+| `bart_team` | character | Torvik team name (NA if unmatched). |
+| `bart_conf` | character | Torvik conference abbreviation (NA if unmatched). |
+| `kp_team` | character | KenPom team name (NA if unmatched). |
+| `kp_conf` | character | KenPom conference abbreviation (NA if unmatched). |
+| `yahoo_team_id` | character | Yahoo team id (NA placeholder). |
+| `yahoo_team_name` | character | Yahoo team name (NA placeholder). |
+| `fox_match_confidence` | double | 1 for matched, NA for unmatched. |
+| `bart_match_confidence` | double | 1 for matched, NA for unmatched. |
+| `kp_match_confidence` | double | 1 for matched, NA for unmatched. |
+| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 
 **Example**
 
@@ -536,6 +582,13 @@ season, 2009-10 through 2025-26).
 
 DataFrame with columns `team` (str), `conference` (str), `id` (Int64 -- the season-specific stats.ncaa.org team id) and `season` (str, `"YYYY-YY"`).
 
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team-side label or team identifier. |
+| `conference` | character | Conference name. |
+| `id` | integer | Id. |
+| `season` | character | Season year. |
+
 **Example**
 
 ```python
@@ -581,6 +634,8 @@ maintainer overwrites `sportsdataverse/<league>/data/ncaa_teamids_
 **Returns**
 
 The full refreshed crosswalk (historical rows + the new season), deduplicated and sorted by season/team.
+
+No returns table is published for this function: no capture: it refreshes the stats.ncaa.org team-id table through a configured proxy, and the docs build has none.
 
 **Example**
 

@@ -1,0 +1,25 @@
+schema: kpoy
+kind: frames
+frames:
+- section: kpoy_table
+  columns:
+  - name: column_0
+    type: integer
+    description: ''
+  - name: player
+    type: character
+    description: ''
+  - name: k_poy_rating
+    type: double
+    description: ''
+- section: kpoy_table_2
+  columns:
+  - name: column_0
+    type: double
+    description: ''
+  - name: player
+    type: character
+    description: ''
+  - name: game_mvp_s
+    type: integer
+    description: ''

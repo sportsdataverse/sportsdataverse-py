@@ -1,0 +1,26 @@
+schema: game_attributes
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: column_0
+    type: integer
+    description: ''
+  - name: date
+    type: character
+    description: ''
+  - name: game
+    type: character
+    description: ''
+  - name: game_rk
+    type: character
+    description: ''
+  - name: location
+    type: character
+    description: ''
+  - name: location_rk
+    type: character
+    description: ''
+  - name: value
+    type: double
+    description: ''

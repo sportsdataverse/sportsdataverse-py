@@ -1,0 +1,29 @@
+schema: referee
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: column_0
+    type: integer
+    description: ''
+  - name: date
+    type: character
+    description: ''
+  - name: time_et
+    type: character
+    description: ''
+  - name: game
+    type: character
+    description: ''
+  - name: location
+    type: character
+    description: ''
+  - name: venue
+    type: character
+    description: ''
+  - name: venue_rk
+    type: character
+    description: ''
+  - name: thrill_score
+    type: double
+    description: ''

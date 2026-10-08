@@ -1,0 +1,68 @@
+{
+ "altSortKey": "132026092500153200011195",
+ "contentType": "event",
+ "contentUri": "football/nfl/events/11195",
+ "entityLink": {
+  "analyticsSport": "nfl",
+  "contentType": "event",
+  "contentUri": "football/nfl/events/11195",
+  "layout": {
+   "path": "/layouts?type=layout&subtype=nflEventLayout",
+   "tokens": {
+    "awayUri": "football/nfl/teams/25",
+    "eventUri": "football/nfl/events/11195",
+    "homeUri": "football/nfl/teams/22",
+    "id": "11195"
+   }
+  },
+  "type": "entity",
+  "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195"
+ },
+ "eventHeadline": "Robinson rumbles for 194 yards, scores 2 TDs as Falcons handle Packers",
+ "eventStatus": 3,
+ "eventTime": "2026-09-25T00:15:00Z",
+ "favoriteEntities": [
+  "football/nfl/teams/22",
+  "football/nfl/teams/25"
+ ],
+ "id": "nfl11195",
+ "importance": 0,
+ "isTba": false,
+ "league": "NFL",
+ "lowerTeam": {
+  "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+  "hasPossession": false,
+  "imageAltText": "Green Bay Packers",
+  "imageType": "image-logo",
+  "isLoser": true,
+  "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+  "longName": "Packers",
+  "name": "GB",
+  "record": "1-2",
+  "score": 14,
+  "stackedNameBottom": "Packers",
+  "stackedNameTop": "Green Bay",
+  "uri": "football/nfl/teams/22"
+ },
+ "oddsLine": "ATL +4.5",
+ "overUnderLine": "OVER 43.5",
+ "sortKey": "132026092500153200011195",
+ "statusLine": "FINAL",
+ "template": "scores-team",
+ "upperTeam": {
+  "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+  "hasPossession": false,
+  "imageAltText": "Atlanta Falcons",
+  "imageType": "image-logo",
+  "isLoser": false,
+  "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+  "longName": "Falcons",
+  "name": "ATL",
+  "record": "1-2",
+  "score": 35,
+  "stackedNameBottom": "Falcons",
+  "stackedNameTop": "Atlanta",
+  "uri": "football/nfl/teams/25"
+ },
+ "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11195"
+}

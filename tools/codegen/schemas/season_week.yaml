@@ -1,0 +1,21 @@
+schema: season_week
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: end_date
+  type: character
+  description: ''
+- name: number
+  type: integer
+  description: ''
+- name: start_date
+  type: character
+  description: ''
+- name: text
+  type: character
+  description: ''
+- name: rankings_$ref
+  type: character
+  description: ''

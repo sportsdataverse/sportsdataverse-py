@@ -1,0 +1,33 @@
+schema: event_odds
+kind: dataframe
+columns:
+- name: odds1
+  type: character
+  description: ''
+- name: odds2
+  type: character
+  description: ''
+- name: point
+  type: integer
+  description: ''
+- name: text
+  type: character
+  description: ''
+- name: text1
+  type: character
+  description: ''
+- name: text2
+  type: character
+  description: ''
+- name: timestamp
+  type: character
+  description: ''
+- name: annotation_color
+  type: character
+  description: ''
+- name: annotation_text
+  type: character
+  description: ''
+- name: annotation_type
+  type: character
+  description: ''

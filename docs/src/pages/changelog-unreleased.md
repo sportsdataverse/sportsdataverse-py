@@ -8,6 +8,26 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes
+
+- The twelve `nhl_edge_*_top_10` functions always returned an empty frame. The EDGE boards answer
+  with a bare JSON list and `parse_edge_top10` accepted only a dict. Eight of their documented
+  examples also used values the API rejects (`sort_by="points"`, `strength="ev"`).
+- `espn_<league>_transactions` parsed to an empty frame because it ran the generic item parser; it
+  now uses `parse_transactions`.
+- `load_nfl_ff_rankings` read `rank_delta` as String early in a season, when its first 100 cells are
+  empty. The CSV schema is now inferred from the whole file.
+- The KenPom `box`, `win_probability` and `referee` examples used ids KenPom does not recognise, and
+  KenPom silently served its home page instead. `kenpom_referee` takes the numeric `r=` id.
+
+### Changed — every public function documents its return, and shows a returns table or says why not
+
+- `generate.py --check` fails when a public callable has no `Returns:` (or `Yields:`) section.
+- Generated wrappers and hand-written DataFrame functions show a returns table captured from real
+  data. Where none can be captured, the page says why: the host refuses a datacenter IP, the route
+  needs a login, the parser reads none of the live payload, or no package function produces the
+  input. A new `tools/codegen/capture_fixtures.py` captures endpoint payloads.
+
 ### Changed — polars 2.x is allowed; the lock moves to polars 2.0.0
 
 The runtime constraint is now `polars>=1.0,<3` (was `<2.0`), mirrored in `recipe/meta.yaml`. The
@@ -71,6 +91,17 @@ is unchanged. The `polars>=1.0,<2.0` pin is not lifted here.
 - `explode()` on an empty list gives one null row in 1.x and no rows in 2.0. Five calls
   (`usage_box`, the CBS subplays parser, the NCAA MBB RAPM stints) pass `empty_as_null=True` to
   keep the 1.x rows.
+
+### Removed — BREAKING: the 11 overdue NFL loader aliases
+
+The 11 per-type NFL loaders marked `removed_in="0.1.0"` are gone: `load_nfl_ngs_passing`,
+`load_nfl_ngs_rushing`, `load_nfl_ngs_receiving`, `load_nfl_pfr_pass`, `load_nfl_pfr_weekly_pass`,
+`load_nfl_pfr_rush`, `load_nfl_pfr_weekly_rush`, `load_nfl_pfr_rec`, `load_nfl_pfr_weekly_rec`,
+`load_nfl_pfr_def`, `load_nfl_pfr_weekly_def`. Callers move to
+`load_nfl_nextgen_stats(seasons, stat_type=...)` and
+`load_nfl_pfr_advstats(seasons, stat_type=..., summary_level=...)`. They had emitted
+`DeprecationWarning` since 0.0.68 and were overdue under the `CONTRIBUTING.md` deprecation policy.
+The deprecated `sportsdataverse.parsed.nfl` aliases of the same names go with them.
 
 ### Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()
 

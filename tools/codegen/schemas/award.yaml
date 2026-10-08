@@ -1,0 +1,18 @@
+schema: award
+kind: dataframe
+columns:
+- name: count
+  type: integer
+  description: ''
+- name: items
+  type: character
+  description: ''
+- name: page_count
+  type: integer
+  description: ''
+- name: page_index
+  type: integer
+  description: ''
+- name: page_size
+  type: integer
+  description: ''

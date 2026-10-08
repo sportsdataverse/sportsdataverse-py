@@ -37,3 +37,6 @@ columns:
 - name: entity_id
   type: character
   description: ''
+- name: di
+  type: character
+  description: ''

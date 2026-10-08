@@ -1,0 +1,21 @@
+schema: realgm_gms
+kind: dataframe
+columns:
+- name: staff
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: start_season
+  type: character
+  description: ''
+- name: years_in_role
+  type: integer
+  description: ''
+- name: birth_date
+  type: character
+  description: ''
+- name: nationality
+  type: character
+  description: ''

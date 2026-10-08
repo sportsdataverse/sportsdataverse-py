@@ -1,0 +1,4 @@
+schema: get_2pt_wp
+kind: dataframe
+columns: []
+unverified: 'no capture: it never prepares its input, so it raises KeyError (era3) on real play-by-play'

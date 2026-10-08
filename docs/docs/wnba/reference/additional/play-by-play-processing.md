@@ -46,6 +46,8 @@ payloads — returns a zero-row frame instead.
 
 Polars (or pandas) DataFrame with schema `sportsdataverse.nba.nba_enhanced_pbp.ENHANCED_PBP_SCHEMA`. Key columns include `game_id` (Utf8), `action_number` (Int64), `period` (Int64), `seconds_remaining` (Float64), `team_id` (Int64), `person_id` (Int64), `is_substitution` (Boolean), and one Boolean flag per event type.
 
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -90,6 +92,8 @@ to the rotation endpoint.  Never raises on malformed payloads.
 
 Polars (or pandas) DataFrame with one row per PBP action and columns `home_player_1` … `home_player_5`, `away_player_1` … `away_player_5` (all Int64), plus the `action_number` join key.
 
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -113,14 +117,18 @@ joined = enh.join(oc, on="action_number", how="left")
 
 `wnba_pbp_disk(game_id, path_to_json)`
 
-_No description available._
+Read a saved ESPN WNBA play-by-play payload from disk.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` |  |  |  |
-| `path_to_json` |  |  |  |
+| `game_id` |  |  | The ESPN game id; the file read is `{game_id}.json`. |
+| `path_to_json` |  |  | The directory holding the saved payloads. |
+
+**Returns**
+
+The payload exactly as saved (the raw ESPN summary JSON), ready for `helper_wnba_pbp`.
 
 ### wnba_play_context {#wnba_play_context}
 
@@ -161,6 +169,8 @@ Two caveats worth stating plainly:
 **Returns**
 
 The possession frame (`POSSESSIONS_SCHEMA`) plus `~sportsdataverse.nba.nba_play_context.PLAY_CONTEXT_POSSESSIONS_SCHEMA`. Empty or malformed payloads return a zero-row frame — never raises on payload content.
+
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -205,6 +215,8 @@ specific logic.  Never raises on malformed payloads.
 
 Polars (or pandas) DataFrame with schema combining `POSSESSIONS_SCHEMA` and ten lineup columns: `off_player_1` … `off_player_5`, `def_player_1` … `def_player_5` (all Int64). One row per possession. Empty or malformed inputs return a zero-row frame.
 
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -246,6 +258,8 @@ a zero-row frame when no valid possessions are found.
 **Returns**
 
 Polars (or pandas) DataFrame with one row per player and columns `player_id` (Int64), `o_rapm` (Float64), `d_rapm` (Float64), `rapm` (Float64), `off_poss` (Int64), `def_poss` (Int64).
+
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 

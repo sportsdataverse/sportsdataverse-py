@@ -1,0 +1,2758 @@
+{
+ "standingsSections": [
+  {
+   "id": "1",
+   "lastUpdated": "2026-10-04T21:19:00Z",
+   "legend": {
+    "details": [
+     {
+      "key": "Teams Receiving Votes:",
+      "text": " Kentucky 160, Wake Forest 142, Wisconsin 88, Duke 83, Northwestern 59, Nebraska 48, Minnesota 19, Arizona 19, James Madison 12, North Dakota State 7"
+     }
+    ]
+   },
+   "metadata": {
+    "parameters": {
+     "leagueName": "NCAA FB",
+     "standingsType": "Associated Press"
+    }
+   },
+   "pageTitle": "2026 NCAA FOOTBALL ASSOCIATED PRESS POLLS",
+   "standings": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-rank",
+         "text": "RANKING",
+         "weight": 0.5
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 4,
+         "sortable": "none",
+         "template": "cell-change",
+         "weight": 1
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 6
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 3,
+         "sortable": "none",
+         "template": "cell-number",
+         "text": "PTS",
+         "weight": 2.5
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Texas-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Texas Longhorns",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Texas.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "4-0",
+         "text": "Texas (61)"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1737"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "texas-longhorns",
+        "analyticsSport": "college-football",
+        "color": "1, 255, 104, 53",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/38",
+        "imageAltText": "Texas Longhorns",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Texas-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/38",
+          "id": "38"
+         }
+        },
+        "title": "TEXAS LONGHORNS",
+        "type": "entity",
+        "webUrl": "/college-football/texas-longhorns-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Georgia.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Georgia Bulldogs",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Georgia.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Georgia (6)"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1647"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "georgia-bulldogs",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/96",
+        "imageAltText": "Georgia Bulldogs",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Georgia.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/96",
+          "id": "96"
+         }
+        },
+        "title": "GEORGIA BULLDOGS",
+        "type": "entity",
+        "webUrl": "/college-football/georgia-bulldogs-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/NotreDame-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Notre Dame Fighting Irish",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/NotreDame.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Notre Dame"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1532"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "notre-dame-fighting-irish",
+        "analyticsSport": "college-football",
+        "color": "1, 222, 190, 103",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/63",
+        "imageAltText": "Notre Dame Fighting Irish",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/NotreDame-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/63",
+          "id": "63"
+         }
+        },
+        "title": "NOTRE DAME FIGHTING IRISH",
+        "type": "entity",
+        "webUrl": "/college-football/notre-dame-fighting-irish-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Miami(FL).vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Miami (FL) Hurricanes",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Miami(FL).vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Miami (FL) (2)"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1524"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "miami-(fl)-hurricanes",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 156, 26",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/11",
+        "imageAltText": "Miami (FL) Hurricanes",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Miami(FL).vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/11",
+          "id": "11"
+         }
+        },
+        "title": "MIAMI (FL) HURRICANES",
+        "type": "entity",
+        "webUrl": "/college-football/miami-(fl)-hurricanes-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "5"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OhioState.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Ohio State Buckeyes",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OhioState.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Ohio State"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1490"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "ohio-state-buckeyes",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/25",
+        "imageAltText": "Ohio State Buckeyes",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OhioState.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/25",
+          "id": "25"
+         }
+        },
+        "title": "OHIO STATE BUCKEYES",
+        "type": "entity",
+        "webUrl": "/college-football/ohio-state-buckeyes-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "6"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Alabama-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Alabama Crimson Tide",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Alabama.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Alabama"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1460"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "alabama-crimson-tide",
+        "analyticsSport": "college-football",
+        "color": "1, 170, 0, 49",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/101",
+        "imageAltText": "Alabama Crimson Tide",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Alabama-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/101",
+          "id": "101"
+         }
+        },
+        "title": "ALABAMA CRIMSON TIDE",
+        "type": "entity",
+        "webUrl": "/college-football/alabama-crimson-tide-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "7"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Indiana-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Indiana Hoosiers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Indiana.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Indiana (1)"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1380"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "indiana-hoosiers",
+        "analyticsSport": "college-football",
+        "color": "1, 170, 0, 49",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/19",
+        "imageAltText": "Indiana Hoosiers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Indiana-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/19",
+          "id": "19"
+         }
+        },
+        "title": "INDIANA HOOSIERS",
+        "type": "entity",
+        "webUrl": "/college-football/indiana-hoosiers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BYU-alternate.vresize.200.200.medium.2.png",
+         "emphasized": false,
+         "imageAltText": "BYU Cougars",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BYU.vresize.200.200.medium.2.png",
+         "index": 2,
+         "superscript": "4-0",
+         "text": "BYU"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1144"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "byu-cougars",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/78",
+        "imageAltText": "BYU Cougars",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BYU-alternate.vresize.200.200.medium.2.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/78",
+          "id": "78"
+         }
+        },
+        "title": "BYU COUGARS",
+        "type": "entity",
+        "webUrl": "/college-football/byu-cougars-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OleMiss.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Ole Miss Rebels",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OleMiss.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "3-1",
+         "text": "Ole Miss"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1095"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "ole-miss-rebels",
+        "analyticsSport": "college-football",
+        "color": "1, 82, 181, 255",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/105",
+        "imageAltText": "Ole Miss Rebels",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OleMiss.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/105",
+          "id": "105"
+         }
+        },
+        "title": "OLE MISS REBELS",
+        "type": "entity",
+        "webUrl": "/college-football/ole-miss-rebels-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/LSU-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "LSU Tigers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/LSU.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "LSU"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1087"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "lsu-tigers",
+        "analyticsSport": "college-football",
+        "color": "1, 141, 52, 255",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/104",
+        "imageAltText": "LSU Tigers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/LSU-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/104",
+          "id": "104"
+         }
+        },
+        "title": "LSU TIGERS",
+        "type": "entity",
+        "webUrl": "/college-football/lsu-tigers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "11"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasTech.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Texas Tech Red Raiders",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasTech.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Texas Tech"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1062"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "texas-tech-red-raiders",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/40",
+        "imageAltText": "Texas Tech Red Raiders",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasTech.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/40",
+          "id": "40"
+         }
+        },
+        "title": "TEXAS TECH RED RAIDERS",
+        "type": "entity",
+        "webUrl": "/college-football/texas-tech-red-raiders-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "12"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Utah-alternate.vresize.200.200.medium.2.png",
+         "emphasized": false,
+         "imageAltText": "Utah Utes",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Utah.vresize.200.200.medium.3.png",
+         "index": 2,
+         "superscript": "4-0",
+         "text": "Utah"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "996"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "utah-utes",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/83",
+        "imageAltText": "Utah Utes",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Utah-alternate.vresize.200.200.medium.2.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/83",
+          "id": "83"
+         }
+        },
+        "title": "UTAH UTES",
+        "type": "entity",
+        "webUrl": "/college-football/utah-utes-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "13"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Oregon-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Oregon Ducks",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Oregon.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "3-1",
+         "text": "Oregon"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "831"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "oregon-ducks",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 156, 26",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/88",
+        "imageAltText": "Oregon Ducks",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Oregon-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/88",
+          "id": "88"
+         }
+        },
+        "title": "OREGON DUCKS",
+        "type": "entity",
+        "webUrl": "/college-football/oregon-ducks-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "14"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "11"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Missouri.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Missouri Tigers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Missouri.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Missouri"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "755"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "missouri-tigers",
+        "analyticsSport": "college-football",
+        "color": "1, 255, 188, 41",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/33",
+        "imageAltText": "Missouri Tigers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Missouri.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/33",
+          "id": "33"
+         }
+        },
+        "title": "MISSOURI TIGERS",
+        "type": "entity",
+        "webUrl": "/college-football/missouri-tigers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "15"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Tennessee-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Tennessee Volunteers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Tennessee.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Tennessee"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "746"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "tennessee-volunteers",
+        "analyticsSport": "college-football",
+        "color": "1, 255, 104, 53",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/99",
+        "imageAltText": "Tennessee Volunteers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Tennessee-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/99",
+          "id": "99"
+         }
+        },
+        "title": "TENNESSEE VOLUNTEERS",
+        "type": "entity",
+        "webUrl": "/college-football/tennessee-volunteers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "16"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "8"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Florida.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Florida Gators",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Florida.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Florida"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "691"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "florida-gators",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/95",
+        "imageAltText": "Florida Gators",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Florida.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/95",
+          "id": "95"
+         }
+        },
+        "title": "FLORIDA GATORS",
+        "type": "entity",
+        "webUrl": "/college-football/florida-gators-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "17"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MississippiState.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Mississippi State Bulldogs",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MississippiState.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Mississippi State"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "487"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "mississippi-state-bulldogs",
+        "analyticsSport": "college-football",
+        "color": "1, 170, 0, 49",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/106",
+        "imageAltText": "Mississippi State Bulldogs",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MississippiState.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/106",
+          "id": "106"
+         }
+        },
+        "title": "MISSISSIPPI STATE BULLDOGS",
+        "type": "entity",
+        "webUrl": "/college-football/mississippi-state-bulldogs-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "18"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OklahomaState-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Oklahoma State Cowboys",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OklahomaState.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "3-1",
+         "text": "Oklahoma State"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "477"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "oklahoma-state-cowboys",
+        "analyticsSport": "college-football",
+        "color": "1, 255, 104, 53",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/37",
+        "imageAltText": "Oklahoma State Cowboys",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OklahomaState-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/37",
+          "id": "37"
+         }
+        },
+        "title": "OKLAHOMA STATE COWBOYS",
+        "type": "entity",
+        "webUrl": "/college-football/oklahoma-state-cowboys-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "19"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/USC-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "USC Trojans",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/USC.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-1",
+         "text": "USC"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "439"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "usc-trojans",
+        "analyticsSport": "college-football",
+        "color": "1, 170, 0, 49",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/90",
+        "imageAltText": "USC Trojans",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/USC-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/90",
+          "id": "90"
+         }
+        },
+        "title": "USC TROJANS",
+        "type": "entity",
+        "webUrl": "/college-football/usc-trojans-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "20"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "6"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Iowa-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Iowa Hawkeyes",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Iowa.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Iowa"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "367"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "iowa-hawkeyes",
+        "analyticsSport": "college-football",
+        "color": "1, 255, 188, 41",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/20",
+        "imageAltText": "Iowa Hawkeyes",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Iowa-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/20",
+          "id": "20"
+         }
+        },
+        "title": "IOWA HAWKEYES",
+        "type": "entity",
+        "webUrl": "/college-football/iowa-hawkeyes-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "21"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/UCLA-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "UCLA Bruins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/UCLA.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-0",
+         "text": "UCLA"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "287"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "ucla-bruins",
+        "analyticsSport": "college-football",
+        "color": "1, 82, 181, 255",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/92",
+        "imageAltText": "UCLA Bruins",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/UCLA-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/92",
+          "id": "92"
+         }
+        },
+        "title": "UCLA BRUINS",
+        "type": "entity",
+        "webUrl": "/college-football/ucla-bruins-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "22"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Houston-alternate.vresize.200.200.medium.2.png",
+         "emphasized": false,
+         "imageAltText": "Houston Cougars",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Houston.vresize.200.200.medium.2.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Houston"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "279"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "houston-cougars",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/50",
+        "imageAltText": "Houston Cougars",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Houston-alternate.vresize.200.200.medium.2.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/50",
+          "id": "50"
+         }
+        },
+        "title": "HOUSTON COUGARS",
+        "type": "entity",
+        "webUrl": "/college-football/houston-cougars-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "23"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BoiseState.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Boise State Broncos",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BoiseState.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Boise State"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "271"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "boise-state-broncos",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/42",
+        "imageAltText": "Boise State Broncos",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BoiseState.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/42",
+          "id": "42"
+         }
+        },
+        "title": "BOISE STATE BRONCOS",
+        "type": "entity",
+        "webUrl": "/college-football/boise-state-broncos-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "24"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "3"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SMU.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "SMU Mustangs",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SMU.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "SMU"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "167"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "smu-mustangs",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/112",
+        "imageAltText": "SMU Mustangs",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SMU.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/112",
+          "id": "112"
+         }
+        },
+        "title": "SMU MUSTANGS",
+        "type": "entity",
+        "webUrl": "/college-football/smu-mustangs-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Pittsburgh-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Pittsburgh.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Pittsburgh"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "162"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "pittsburgh-panthers",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/12",
+        "imageAltText": "Pittsburgh Panthers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Pittsburgh-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/12",
+          "id": "12"
+         }
+        },
+        "title": "PITTSBURGH PANTHERS",
+        "type": "entity",
+        "webUrl": "/college-football/pittsburgh-panthers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-polls"
+    }
+   ],
+   "title": "ASSOCIATED PRESS"
+  },
+  {
+   "id": "2",
+   "lastUpdated": "2026-10-04T19:36:00Z",
+   "legend": {
+    "details": [
+     {
+      "key": "Teams Receiving Votes:",
+      "text": " Oklahoma State 187, Boise State 161, Nebraska 117, Wake Forest 87, Northwestern 70, Wisconsin 47, James Madison 42, Minnesota 40, North Dakota State 29, Arizona 15, New Mexico 7, Baylor 3, Kansas State 1, Virginia Tech 1, Texas A&M 1"
+     }
+    ]
+   },
+   "metadata": {
+    "parameters": {
+     "leagueName": "NCAA FB",
+     "standingsType": "USA Today Coaches Poll"
+    }
+   },
+   "pageTitle": "2026 NCAA FOOTBALL USA TODAY COACHES POLL POLLS",
+   "standings": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-rank",
+         "text": "RANKING",
+         "weight": 0.5
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 4,
+         "sortable": "none",
+         "template": "cell-change",
+         "weight": 1
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 6
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 3,
+         "sortable": "none",
+         "template": "cell-number",
+         "text": "PTS",
+         "weight": 2.5
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Texas-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Texas Longhorns",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Texas.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "4-0",
+         "text": "Texas (45)"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1806"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "texas-longhorns",
+        "analyticsSport": "college-football",
+        "color": "1, 255, 104, 53",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/38",
+        "imageAltText": "Texas Longhorns",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Texas-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/38",
+          "id": "38"
+         }
+        },
+        "title": "TEXAS LONGHORNS",
+        "type": "entity",
+        "webUrl": "/college-football/texas-longhorns-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Georgia.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Georgia Bulldogs",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Georgia.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Georgia (20)"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1760"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "georgia-bulldogs",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/96",
+        "imageAltText": "Georgia Bulldogs",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Georgia.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/96",
+          "id": "96"
+         }
+        },
+        "title": "GEORGIA BULLDOGS",
+        "type": "entity",
+        "webUrl": "/college-football/georgia-bulldogs-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/NotreDame-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Notre Dame Fighting Irish",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/NotreDame.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Notre Dame (1)"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1630"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "notre-dame-fighting-irish",
+        "analyticsSport": "college-football",
+        "color": "1, 222, 190, 103",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/63",
+        "imageAltText": "Notre Dame Fighting Irish",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/NotreDame-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/63",
+          "id": "63"
+         }
+        },
+        "title": "NOTRE DAME FIGHTING IRISH",
+        "type": "entity",
+        "webUrl": "/college-football/notre-dame-fighting-irish-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Miami(FL).vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Miami (FL) Hurricanes",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Miami(FL).vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Miami (FL)"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1622"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "miami-(fl)-hurricanes",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 156, 26",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/11",
+        "imageAltText": "Miami (FL) Hurricanes",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Miami(FL).vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/11",
+          "id": "11"
+         }
+        },
+        "title": "MIAMI (FL) HURRICANES",
+        "type": "entity",
+        "webUrl": "/college-football/miami-(fl)-hurricanes-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "5"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Indiana-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Indiana Hoosiers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Indiana.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Indiana (8)"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1556"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "indiana-hoosiers",
+        "analyticsSport": "college-football",
+        "color": "1, 170, 0, 49",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/19",
+        "imageAltText": "Indiana Hoosiers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Indiana-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/19",
+          "id": "19"
+         }
+        },
+        "title": "INDIANA HOOSIERS",
+        "type": "entity",
+        "webUrl": "/college-football/indiana-hoosiers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "6"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OhioState.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Ohio State Buckeyes",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OhioState.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Ohio State"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1514"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "ohio-state-buckeyes",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/25",
+        "imageAltText": "Ohio State Buckeyes",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OhioState.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/25",
+          "id": "25"
+         }
+        },
+        "title": "OHIO STATE BUCKEYES",
+        "type": "entity",
+        "webUrl": "/college-football/ohio-state-buckeyes-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "7"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Alabama-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Alabama Crimson Tide",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Alabama.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Alabama"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1483"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "alabama-crimson-tide",
+        "analyticsSport": "college-football",
+        "color": "1, 170, 0, 49",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/101",
+        "imageAltText": "Alabama Crimson Tide",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Alabama-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/101",
+          "id": "101"
+         }
+        },
+        "title": "ALABAMA CRIMSON TIDE",
+        "type": "entity",
+        "webUrl": "/college-football/alabama-crimson-tide-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BYU-alternate.vresize.200.200.medium.2.png",
+         "emphasized": false,
+         "imageAltText": "BYU Cougars",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BYU.vresize.200.200.medium.2.png",
+         "index": 2,
+         "superscript": "4-0",
+         "text": "BYU"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1214"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "byu-cougars",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/78",
+        "imageAltText": "BYU Cougars",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BYU-alternate.vresize.200.200.medium.2.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/78",
+          "id": "78"
+         }
+        },
+        "title": "BYU COUGARS",
+        "type": "entity",
+        "webUrl": "/college-football/byu-cougars-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasTech.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Texas Tech Red Raiders",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasTech.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Texas Tech"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1169"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "texas-tech-red-raiders",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/40",
+        "imageAltText": "Texas Tech Red Raiders",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasTech.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/40",
+          "id": "40"
+         }
+        },
+        "title": "TEXAS TECH RED RAIDERS",
+        "type": "entity",
+        "webUrl": "/college-football/texas-tech-red-raiders-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/LSU-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "LSU Tigers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/LSU.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "LSU"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1136"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "lsu-tigers",
+        "analyticsSport": "college-football",
+        "color": "1, 141, 52, 255",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/104",
+        "imageAltText": "LSU Tigers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/LSU-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/104",
+          "id": "104"
+         }
+        },
+        "title": "LSU TIGERS",
+        "type": "entity",
+        "webUrl": "/college-football/lsu-tigers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "11"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OleMiss.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Ole Miss Rebels",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OleMiss.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "3-1",
+         "text": "Ole Miss"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1059"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "ole-miss-rebels",
+        "analyticsSport": "college-football",
+        "color": "1, 82, 181, 255",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/105",
+        "imageAltText": "Ole Miss Rebels",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OleMiss.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/105",
+          "id": "105"
+         }
+        },
+        "title": "OLE MISS REBELS",
+        "type": "entity",
+        "webUrl": "/college-football/ole-miss-rebels-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "12"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Utah-alternate.vresize.200.200.medium.2.png",
+         "emphasized": false,
+         "imageAltText": "Utah Utes",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Utah.vresize.200.200.medium.3.png",
+         "index": 2,
+         "superscript": "4-0",
+         "text": "Utah"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1015"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "utah-utes",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/83",
+        "imageAltText": "Utah Utes",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Utah-alternate.vresize.200.200.medium.2.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/83",
+          "id": "83"
+         }
+        },
+        "title": "UTAH UTES",
+        "type": "entity",
+        "webUrl": "/college-football/utah-utes-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "13"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Oregon-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Oregon Ducks",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Oregon.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "3-1",
+         "text": "Oregon"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "948"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "oregon-ducks",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 156, 26",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/88",
+        "imageAltText": "Oregon Ducks",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Oregon-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/88",
+          "id": "88"
+         }
+        },
+        "title": "OREGON DUCKS",
+        "type": "entity",
+        "webUrl": "/college-football/oregon-ducks-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "14"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "3"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Tennessee-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Tennessee Volunteers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Tennessee.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Tennessee"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "768"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "tennessee-volunteers",
+        "analyticsSport": "college-football",
+        "color": "1, 255, 104, 53",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/99",
+        "imageAltText": "Tennessee Volunteers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Tennessee-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/99",
+          "id": "99"
+         }
+        },
+        "title": "TENNESSEE VOLUNTEERS",
+        "type": "entity",
+        "webUrl": "/college-football/tennessee-volunteers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "15"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "7"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Florida.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Florida Gators",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Florida.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Florida"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "672"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "florida-gators",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/95",
+        "imageAltText": "Florida Gators",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Florida.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/95",
+          "id": "95"
+         }
+        },
+        "title": "FLORIDA GATORS",
+        "type": "entity",
+        "webUrl": "/college-football/florida-gators-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "16"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "9"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Missouri.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Missouri Tigers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Missouri.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Missouri"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "646"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "missouri-tigers",
+        "analyticsSport": "college-football",
+        "color": "1, 255, 188, 41",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/33",
+        "imageAltText": "Missouri Tigers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Missouri.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/33",
+          "id": "33"
+         }
+        },
+        "title": "MISSOURI TIGERS",
+        "type": "entity",
+        "webUrl": "/college-football/missouri-tigers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "17"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/USC-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "USC Trojans",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/USC.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "5-1",
+         "text": "USC"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "643"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "usc-trojans",
+        "analyticsSport": "college-football",
+        "color": "1, 170, 0, 49",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/90",
+        "imageAltText": "USC Trojans",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/USC-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/90",
+          "id": "90"
+         }
+        },
+        "title": "USC TROJANS",
+        "type": "entity",
+        "webUrl": "/college-football/usc-trojans-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "18"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "4"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Iowa-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Iowa Hawkeyes",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Iowa.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Iowa"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "457"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "iowa-hawkeyes",
+        "analyticsSport": "college-football",
+        "color": "1, 255, 188, 41",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/20",
+        "imageAltText": "Iowa Hawkeyes",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Iowa-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/20",
+          "id": "20"
+         }
+        },
+        "title": "IOWA HAWKEYES",
+        "type": "entity",
+        "webUrl": "/college-football/iowa-hawkeyes-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "19"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Houston-alternate.vresize.200.200.medium.2.png",
+         "emphasized": false,
+         "imageAltText": "Houston Cougars",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Houston.vresize.200.200.medium.2.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Houston"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "391"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "houston-cougars",
+        "analyticsSport": "college-football",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/50",
+        "imageAltText": "Houston Cougars",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Houston-alternate.vresize.200.200.medium.2.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/50",
+          "id": "50"
+         }
+        },
+        "title": "HOUSTON COUGARS",
+        "type": "entity",
+        "webUrl": "/college-football/houston-cougars-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "20"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "4"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MississippiState.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Mississippi State Bulldogs",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MississippiState.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Mississippi State"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "355"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "mississippi-state-bulldogs",
+        "analyticsSport": "college-football",
+        "color": "1, 170, 0, 49",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/106",
+        "imageAltText": "Mississippi State Bulldogs",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MississippiState.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/106",
+          "id": "106"
+         }
+        },
+        "title": "MISSISSIPPI STATE BULLDOGS",
+        "type": "entity",
+        "webUrl": "/college-football/mississippi-state-bulldogs-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "21"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SMU.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "SMU Mustangs",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SMU.vresize.200.200.medium.1.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "SMU"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "354"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "smu-mustangs",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/112",
+        "imageAltText": "SMU Mustangs",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SMU.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/112",
+          "id": "112"
+         }
+        },
+        "title": "SMU MUSTANGS",
+        "type": "entity",
+        "webUrl": "/college-football/smu-mustangs-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "22"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "up",
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/UCLA-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "UCLA Bruins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/UCLA.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-0",
+         "text": "UCLA"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "318"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "ucla-bruins",
+        "analyticsSport": "college-football",
+        "color": "1, 82, 181, 255",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/92",
+        "imageAltText": "UCLA Bruins",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/UCLA-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/92",
+          "id": "92"
+         }
+        },
+        "title": "UCLA BRUINS",
+        "type": "entity",
+        "webUrl": "/college-football/ucla-bruins-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "23"
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "subType": "down",
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Duke-alternate.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Duke Blue Devils",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Duke.vresize.200.200.medium.2.png",
+         "index": 2,
+         "superscript": "4-0",
+         "text": "Duke"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "274"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "duke-blue-devils",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/2",
+        "imageAltText": "Duke Blue Devils",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Duke-alternate.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/2",
+          "id": "2"
+         }
+        },
+        "title": "DUKE BLUE DEVILS",
+        "type": "entity",
+        "webUrl": "/college-football/duke-blue-devils-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "24"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Pittsburgh-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Pittsburgh.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "5-0",
+         "text": "Pittsburgh"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "242"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "pittsburgh-panthers",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/12",
+        "imageAltText": "Pittsburgh Panthers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Pittsburgh-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/12",
+          "id": "12"
+         }
+        },
+        "title": "PITTSBURGH PANTHERS",
+        "type": "entity",
+        "webUrl": "/college-football/pittsburgh-panthers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 1
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kentucky-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Kentucky Wildcats",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kentucky.vresize.200.200.medium.0.png",
+         "index": 2,
+         "superscript": "4-1",
+         "text": "Kentucky"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "210"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "kentucky-wildcats",
+        "analyticsSport": "college-football",
+        "color": "1, 0, 87, 244",
+        "contentType": "team",
+        "contentUri": "football/cfb/teams/97",
+        "imageAltText": "Kentucky Wildcats",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kentucky-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+         "tokens": {
+          "contentUri": "football/cfb/teams/97",
+          "id": "97"
+         }
+        },
+        "title": "KENTUCKY WILDCATS",
+        "type": "entity",
+        "webUrl": "/college-football/kentucky-wildcats-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-polls"
+    }
+   ],
+   "title": "USA TODAY COACHES POLL"
+  }
+ ]
+}

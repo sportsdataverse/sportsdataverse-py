@@ -1,0 +1,28 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches/1?lang=en&region=us",
+ "birthPlace": {
+  "city": "Brooklyn",
+  "state": "NY"
+ },
+ "careerRecords": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches/1/record/0?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches/1/record/2?lang=en&region=us"
+  }
+ ],
+ "coachSeasons": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2004/coaches/1?lang=en&region=us"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2005/coaches/1?lang=en&region=us"
+  }
+ ],
+ "experience": 2,
+ "firstName": "Lee",
+ "id": "1",
+ "lastName": "Mazzilli",
+ "uid": "s:1~l:10~co:1"
+}

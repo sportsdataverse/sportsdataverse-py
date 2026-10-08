@@ -1,0 +1,24 @@
+schema: wnba_player_props
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: stat_pts_exp
+  type: double
+  description: ''
+- name: stat_reb_exp
+  type: double
+  description: ''
+- name: stat_ast_exp
+  type: double
+  description: ''
+- name: stat_fg3m_exp
+  type: double
+  description: ''
+- name: pace_proj
+  type: double
+  description: ''

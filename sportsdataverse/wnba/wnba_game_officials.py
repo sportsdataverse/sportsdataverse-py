@@ -61,8 +61,8 @@ def espn_wnba_game_officials(
     semantics.
 
     Args:
-        game_id: ESPN WNBA event identifier (e.g. ``401620238`` for Game 1
-            of the 2024 WNBA Finals).
+        game_id: ESPN WNBA event identifier (e.g. ``401620238``, Minnesota at
+            Connecticut, 2024-05-23).
         season: Season year (recorded as output column only).
         raw: If True, returns the parsed JSON dict before any flattening.
         return_as_pandas: If True, returns a pandas DataFrame; otherwise polars.

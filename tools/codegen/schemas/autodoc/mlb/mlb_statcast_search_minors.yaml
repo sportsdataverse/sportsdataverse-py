@@ -323,7 +323,7 @@ columns:
   type: double
   description: ''
 - name: batter_days_since_prev_game
-  type: integer
+  type: double
   description: ''
 - name: pitcher_days_until_next_game
   type: double

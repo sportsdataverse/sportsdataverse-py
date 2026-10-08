@@ -1,0 +1,24 @@
+schema: nhl_expected_assists
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: primary_assists
+  type: integer
+  description: ''
+- name: secondary_assists
+  type: integer
+  description: ''
+- name: x_primary_assists
+  type: double
+  description: ''
+- name: x_secondary_assists
+  type: double
+  description: ''
+- name: assists_above_expected
+  type: double
+  description: ''
+- name: primary_share
+  type: double
+  description: ''

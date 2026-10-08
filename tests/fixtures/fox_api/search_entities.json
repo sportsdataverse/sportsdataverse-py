@@ -1,0 +1,518 @@
+{
+ "results": [
+  {
+   "components": [
+    {
+     "model": {
+      "analyticsName": "patrick-mahomes",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/13107",
+      "image": {
+       "altText": "Patrick Mahomes",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png"
+      },
+      "subtitle": "KANSAS CITY CHIEFS",
+      "title": "Patrick Mahomes",
+      "webUrl": "/nfl/patrick-mahomes-ii-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "national-football-league",
+      "contentType": "league",
+      "contentUri": "football/nfl/league/1",
+      "image": {
+       "altText": "National Football League",
+       "altUrl": "https://b.fssta.com/uploads/application/leagues/logos/NFL.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/leagues/logos/NFL.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "FOOTBALL",
+      "title": "National Football League",
+      "webUrl": "/nfl"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "kansas-city-chiefs",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/11",
+      "image": {
+       "altText": "Kansas City Chiefs",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chiefs.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Chiefs.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Kansas City Chiefs",
+      "webUrl": "/nfl/kansas-city-chiefs-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "denver-broncos",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/10",
+      "image": {
+       "altText": "Denver Broncos",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Denver Broncos",
+      "webUrl": "/nfl/denver-broncos-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "josh-allen",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/13955",
+      "image": {
+       "altText": "Josh Allen",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/13955.vresize.140.170.medium.4.png"
+      },
+      "subtitle": "BUFFALO BILLS",
+      "title": "Josh Allen",
+      "webUrl": "/nfl/josh-allen-2-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "caleb-williams",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327693",
+      "image": {
+       "altText": "Caleb Williams",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327693.vresize.140.170.medium.5.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/327693.vresize.140.170.medium.5.png"
+      },
+      "subtitle": "CHICAGO BEARS",
+      "title": "Caleb Williams",
+      "webUrl": "/nfl/caleb-williams-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "los-angeles-rams",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/26",
+      "image": {
+       "altText": "Los Angeles Rams",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Rams-alternate.vresize.200.200.medium.2.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Rams.vresize.200.200.medium.3.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Los Angeles Rams",
+      "webUrl": "/nfl/los-angeles-rams-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "new-england-patriots",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/4",
+      "image": {
+       "altText": "New England Patriots",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Patriots.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Patriots.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "New England Patriots",
+      "webUrl": "/nfl/new-england-patriots-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "buffalo-bills",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/1",
+      "image": {
+       "altText": "Buffalo Bills",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bills.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Bills.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Buffalo Bills",
+      "webUrl": "/nfl/buffalo-bills-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "chicago-bears",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/20",
+      "image": {
+       "altText": "Chicago Bears",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Chicago Bears",
+      "webUrl": "/nfl/chicago-bears-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "kenneth-walker-iii",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22781",
+      "image": {
+       "altText": "Kenneth Walker III",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22781.vresize.140.170.medium.1.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/22781.vresize.140.170.medium.1.png"
+      },
+      "subtitle": "KANSAS CITY CHIEFS",
+      "title": "Kenneth Walker III",
+      "webUrl": "/nfl/ken-walker-iii-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "super-bowl",
+      "contentType": "topic",
+      "contentUri": "topics/super-bowl",
+      "image": {
+       "altText": "Super Bowl",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/logos/SuperBowlLX.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/logos/SuperBowlLX.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "NFL",
+      "title": "Super Bowl",
+      "webUrl": "/nfl/super-bowl"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "baltimore-ravens",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/33",
+      "image": {
+       "altText": "Baltimore Ravens",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Ravens.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Ravens.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Baltimore Ravens",
+      "webUrl": "/nfl/baltimore-ravens-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "matthew-stafford",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/7231",
+      "image": {
+       "altText": "Matthew Stafford",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/7231.vresize.140.170.medium.4.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/7231.vresize.140.170.medium.4.png"
+      },
+      "subtitle": "LOS ANGELES RAMS",
+      "title": "Matthew Stafford",
+      "webUrl": "/nfl/matthew-stafford-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "brock-purdy",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22997",
+      "image": {
+       "altText": "Brock Purdy",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/22997.vresize.140.170.medium.5.png"
+      },
+      "subtitle": "SAN FRANCISCO 49ERS",
+      "title": "Brock Purdy",
+      "webUrl": "/nfl/brock-purdy-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "dallas-cowboys",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/15",
+      "image": {
+       "altText": "Dallas Cowboys",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cowboys.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Cowboys.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Dallas Cowboys",
+      "webUrl": "/nfl/dallas-cowboys-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "san-francisco-49ers",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/28",
+      "image": {
+       "altText": "San Francisco 49ers",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/49ers.vresize.200.200.medium.1.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/49ers.vresize.200.200.medium.1.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "San Francisco 49ers",
+      "webUrl": "/nfl/san-francisco-49ers-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "los-angeles-chargers",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/13",
+      "image": {
+       "altText": "Los Angeles Chargers",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chargers.vresize.200.200.medium.2.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Chargers.vresize.200.200.medium.2.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Los Angeles Chargers",
+      "webUrl": "/nfl/los-angeles-chargers-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "travis-kelce",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/9309",
+      "image": {
+       "altText": "Travis Kelce",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/9309.vresize.140.170.medium.3.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/9309.vresize.140.170.medium.3.png"
+      },
+      "subtitle": "KANSAS CITY CHIEFS",
+      "title": "Travis Kelce",
+      "webUrl": "/nfl/travis-kelce-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "philadelphia-eagles",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/17",
+      "image": {
+       "altText": "Philadelphia Eagles",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Eagles.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Eagles.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Philadelphia Eagles",
+      "webUrl": "/nfl/philadelphia-eagles-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "dak-prescott",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/12340",
+      "image": {
+       "altText": "Dak Prescott",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/12340.vresize.140.170.medium.4.png"
+      },
+      "subtitle": "DALLAS COWBOYS",
+      "title": "Dak Prescott",
+      "webUrl": "/nfl/dak-prescott-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "lamar-jackson",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/13985",
+      "image": {
+       "altText": "Lamar Jackson",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png"
+      },
+      "subtitle": "BALTIMORE RAVENS",
+      "title": "Lamar Jackson",
+      "webUrl": "/nfl/lamar-jackson-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "houston-texans",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/34",
+      "image": {
+       "altText": "Houston Texans",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Texans.vresize.200.200.medium.1.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Texans.vresize.200.200.medium.1.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Houston Texans",
+      "webUrl": "/nfl/houston-texans-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "indianapolis-colts",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/2",
+      "image": {
+       "altText": "Indianapolis Colts",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.200.200.medium.1.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.200.200.medium.1.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Indianapolis Colts",
+      "webUrl": "/nfl/indianapolis-colts-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "drake-maye",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327678",
+      "image": {
+       "altText": "Drake Maye",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327678.vresize.140.170.medium.3.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/327678.vresize.140.170.medium.3.png"
+      },
+      "subtitle": "NEW ENGLAND PATRIOTS",
+      "title": "Drake Maye",
+      "webUrl": "/nfl/drake-maye-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "jacksonville-jaguars",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/31",
+      "image": {
+       "altText": "Jacksonville Jaguars",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jaguars.vresize.200.200.medium.0.png",
+       "type": "image-logo",
+       "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Jaguars.vresize.200.200.medium.0.png"
+      },
+      "subtitle": "NATIONAL FOOTBALL LEAGUE",
+      "title": "Jacksonville Jaguars",
+      "webUrl": "/nfl/jacksonville-jaguars-team"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "mansoor-delane",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329369",
+      "image": {
+       "altText": "Mansoor Delane",
+       "altUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png"
+      },
+      "subtitle": "KANSAS CITY CHIEFS",
+      "title": "Mansoor Delane",
+      "webUrl": "/nfl/mansoor-delane-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "bo-nix",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327683",
+      "image": {
+       "altText": "Bo Nix",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png"
+      },
+      "subtitle": "DENVER BRONCOS",
+      "title": "Bo Nix",
+      "webUrl": "/nfl/bo-nix-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "josh-simmons",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/328568",
+      "image": {
+       "altText": "Josh Simmons",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328568.vresize.140.170.medium.2.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/328568.vresize.140.170.medium.2.png"
+      },
+      "subtitle": "KANSAS CITY CHIEFS",
+      "title": "Josh Simmons",
+      "webUrl": "/nfl/josh-simmons-player"
+     },
+     "type": "entity"
+    },
+    {
+     "model": {
+      "analyticsName": "jaxon-smithnjigba",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/326909",
+      "image": {
+       "altText": "Jaxon Smith-Njigba",
+       "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326909.vresize.140.170.medium.4.png",
+       "type": "image-headshot",
+       "url": "https://b.fssta.com/uploads/application/nfl/headshots/326909.vresize.140.170.medium.4.png"
+      },
+      "subtitle": "SEATTLE SEAHAWKS",
+      "title": "Jaxon Smith-Njigba",
+      "webUrl": "/nfl/jaxon-smith-njigba-player"
+     },
+     "type": "entity"
+    }
+   ]
+  }
+ ]
+}

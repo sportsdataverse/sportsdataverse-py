@@ -1,7 +1,7 @@
 ---
 title: "WBB — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 11
+sidebar_position: 12
 description: "WBB — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WBB — additional Python functions — Dates and seasons

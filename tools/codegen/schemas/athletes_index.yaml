@@ -1,0 +1,6 @@
+schema: athletes_index
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

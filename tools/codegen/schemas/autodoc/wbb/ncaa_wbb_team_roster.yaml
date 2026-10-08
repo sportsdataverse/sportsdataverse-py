@@ -1,0 +1,42 @@
+schema: ncaa_wbb_team_roster
+kind: dataframe
+columns:
+- name: gp
+  type: character
+  description: ''
+- name: gs
+  type: character
+  description: ''
+- name: jersey
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: class
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: height
+  type: character
+  description: ''
+- name: hometown
+  type: character
+  description: ''
+- name: high_school
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: clean_name
+  type: character
+  description: ''
+- name: ht_inches
+  type: integer
+  description: ''
+- name: player_id
+  type: character
+  description: ''

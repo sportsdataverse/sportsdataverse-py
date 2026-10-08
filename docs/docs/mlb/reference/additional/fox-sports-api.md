@@ -383,6 +383,14 @@ MLB game odds six-pack (run line / to-win / total per team).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique ESPN game/event identifier. |
+| `team` | character | Team. |
+| `run_line` | character |  |
+| `to_win` | character |  |
+| `total` | character | Total. |
+
 **Example**
 
 ```python
@@ -476,6 +484,33 @@ MLB standings for a team's division/league.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique ESPN team identifier. |
+| `section` | character |  |
+| `al_east` | character |  |
+| `v1` | character |  |
+| `w_l` | character |  |
+| `pct` | character |  |
+| `gb` | character | Average exit velocity on ground balls (mph). |
+| `home` | character | Home. |
+| `away` | character |  |
+| `rs` | character |  |
+| `ra` | character |  |
+| `diff` | character |  |
+| `l10` | character |  |
+| `strk` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `al_central` | character |  |
+| `al_west` | character |  |
+| `nl_east` | character |  |
+| `nl_central` | character |  |
+| `nl_west` | character |  |
+| `division_leaders` | character |  |
+| `wild_card` | character |  |
+| `grapefruit_league` | character |  |
+| `cactus_league` | character |  |
+
 **Example**
 
 ```python
@@ -500,6 +535,17 @@ MLB team game log (long: one row per game-stat).
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique ESPN team identifier. |
+| `season_type` | character | Season-type id. |
+| `category` | character | Category label. |
+| `game_id` | character | Unique ESPN game/event identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `opponent` | character |  |
+| `stat` | character |  |
+| `value` | character | Numeric value. |
 
 **Example**
 
@@ -545,6 +591,18 @@ MLB team roster (one row per player).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique ESPN team identifier. |
+| `position_group` | character |  |
+| `player` | character |  |
+| `pos` | character | Player position. |
+| `age` | character | Player age (in years). |
+| `ht` | character |  |
+| `wt` | character |  |
+| `school` | character | Team name. |
+| `athlete_id` | character | Unique ESPN athlete identifier. |
+
 **Example**
 
 ```python
@@ -569,6 +627,15 @@ MLB team stat leaders by category.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique ESPN team identifier. |
+| `category` | character | Category label. |
+| `stat` | character |  |
+| `stat_abbreviation` | character |  |
+| `player` | character |  |
+| `value` | character | Numeric value. |
 
 **Example**
 

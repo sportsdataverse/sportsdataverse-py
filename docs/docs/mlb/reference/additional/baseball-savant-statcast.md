@@ -598,7 +598,7 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 | `n_thruorder_pitcher` | integer | Times through the order the pitcher is facing the lineup. |
 | `n_priorpa_thisgame_player_at_bat` | integer | Number of prior plate appearances by the batter in the game. |
 | `pitcher_days_since_prev_game` | double | Days since the pitcher's previous game appearance. |
-| `batter_days_since_prev_game` | integer | Days since the batter's previous game appearance. |
+| `batter_days_since_prev_game` | double | Days since the batter's previous game appearance. |
 | `pitcher_days_until_next_game` | double | Days until the pitcher's next game appearance. |
 | `batter_days_until_next_game` | double | Days until the batter's next game appearance. |
 | `api_break_z_with_gravity` | double | Vertical pitch break including gravity (inches). |

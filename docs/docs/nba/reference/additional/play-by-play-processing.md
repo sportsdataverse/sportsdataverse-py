@@ -109,6 +109,70 @@ Pipeline:
 
 Polars (or pandas) DataFrame with the full v2 schema (game/event identifiers, event/action type codes, home/visitor/neutral descriptions, forward-filled score + margin + leader, per-player columns for players 1-3, and the v3 passthrough columns). Empty or malformed input returns a zero-row frame with the same schema (never raises).
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `event_num` | character | Sequential event number within the game (V2 PBP). |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `event_action_type` | character | Numeric event-action-type code (V2 PBP). |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | character | Game clock value. |
+| `minute_game` | double | Minute game. |
+| `time_remaining` | double | Time remaining. |
+| `wc_time_string` | character | Wc time string. |
+| `time_quarter` | character | Time quarter. |
+| `minute_remaining_quarter` | integer | Minute remaining quarter. |
+| `seconds_remaining_quarter` | integer | Seconds remaining quarter. |
+| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `sub_type` | character | Action sub-type label. |
+| `home_description` | character | Home team's description. |
+| `neutral_description` | character | Neutral description. |
+| `visitor_description` | character | Visitor description. |
+| `description` | character | Long-form description text. |
+| `location` | character | Location. |
+| `score` | character | Final score. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `home_score` | integer | Home team score at the time of the play. |
+| `score_margin` | character | Score margin. |
+| `team_leading` | character | Team leading. |
+| `person1type` | character | Person1type. |
+| `player1_id` | character | V2 PBP primary player ID (e.g. shooter / fouler). |
+| `player1_name` | character | V2 PBP primary player name. |
+| `player1_team_id` | character | Team ID of player1. |
+| `player1_team_city` | character | Player1 team city. |
+| `player1_team_nickname` | character | Player1 team nickname. |
+| `player1_team_abbreviation` | character | Player1 team abbreviation. |
+| `person2type` | character | Person2type. |
+| `player2_id` | character | V2 PBP secondary player ID (e.g. assister / fouled-by). |
+| `player2_name` | character | V2 PBP secondary player name. |
+| `player2_team_id` | character | Team ID of player2. |
+| `player2_team_city` | character | Player2 team city. |
+| `player2_team_nickname` | character | Player2 team nickname. |
+| `player2_team_abbreviation` | character | Player2 team abbreviation. |
+| `person3type` | character | Person3type. |
+| `player3_id` | character | V2 PBP tertiary player ID (e.g. blocker). |
+| `player3_name` | character | V2 PBP tertiary player name. |
+| `player3_team_id` | character | Team ID of player3. |
+| `player3_team_city` | character | Player3 team city. |
+| `player3_team_nickname` | character | Player3 team nickname. |
+| `player3_team_abbreviation` | character | Player3 team abbreviation. |
+| `video_available_flag` | character | Video available flag. |
+| `x_legacy` | integer | V2-format X coordinate (preserved for V3-to-V2 compatibility). |
+| `y_legacy` | integer | V2-format Y coordinate (preserved for V3-to-V2 compatibility). |
+| `shot_distance` | integer | Shot distance from the basket, in feet. |
+| `shot_result` | character | Shot result ('Made' / 'Missed'). |
+| `is_field_goal` | integer | 1 if the action was a field goal; 0 otherwise. |
+| `points_total` | integer | Running total of points scored. |
+| `shot_value` | integer | Point value of the shot (2 or 3). |
+| `action_number` | integer | Sequential action number within a game (V3 PBP). |
+| `team_id` | integer | Unique team identifier. |
+| `team_tricode` | character | Three-letter team code (e.g. 'LAS' / 'NYL'). |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `player_name` | character | Player name. |
+| `score_home` | character | Score home. |
+| `score_away` | character | Score away. |
+| `action_id` | integer | Unique action identifier within a game (V3 PBP). |
+
 **Example**
 
 ```python

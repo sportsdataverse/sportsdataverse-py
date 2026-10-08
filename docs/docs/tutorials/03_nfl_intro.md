@@ -47,13 +47,13 @@ full reference.
 | [`nfl_ngs_league_schedule`](../nfl/reference/additional/nfl-pro.md#nfl_ngs_league_schedule) | NextGen schedule — source of NGS `gameId`s | 🟢 premium (NextGen Stats) |
 | [`nfl_ngs_gamecenter_overview`](../nfl/reference/additional/nfl-pro.md#nfl_ngs_gamecenter_overview) | Per-game NextGen player splits (passers/rushers/…) | 🟢 premium (NextGen Stats) |
 | [`load_nfl_pbp`](../nfl/reference/loaders/pbp.md#load_nfl_pbp) | Full nflfastR play-by-play (370+ columns) | 📦 nflverse release |
-| [`load_nfl_player_stats`](../nfl/reference/additional/nflverse-data-releases-3.md#load_nfl_player_stats) | Weekly player box-score stats | 📦 nflverse release |
+| [`load_nfl_player_stats`](../nfl/reference/additional/nflverse-data-releases-2.md#load_nfl_player_stats) | Weekly player box-score stats | 📦 nflverse release |
 | [`load_nfl_nextgen_stats`](../nfl/reference/additional/nflverse-data-releases-2.md#load_nfl_nextgen_stats) | NextGen Stats back to 2016 (release parquet) | 📦 nflverse release |
 | [`load_nfl_rosters`](../nfl/reference/loaders/other.md#load_nfl_rosters) | Season rosters with IDs & bios | 📦 nflverse release |
 | [`espn_nfl_schedule`](../nfl/reference/additional/espn.md#espn_nfl_schedule) · [`espn_nfl_scoreboard`](../nfl/reference/site.md#espn_nfl_scoreboard) | ESPN scoreboard/schedule (no auth) | 🔵 ESPN (secondary) |
 | [`load_nfl_snap_counts`](../nfl/reference/loaders/other.md#load_nfl_snap_counts) | Weekly snap counts & snap-share % per player | 📦 nflverse release |
 | [`load_nfl_depth_charts`](../nfl/reference/loaders/other.md#load_nfl_depth_charts) | Weekly depth charts, one row per slotted player | 📦 nflverse release |
-| [`load_nfl_schedule`](../nfl/reference/additional/nflverse-data-releases-3.md#load_nfl_schedule) | Game results + lines, one row per game | 📦 nflverse release |
+| [`load_nfl_schedule`](../nfl/reference/additional/nflverse-data-releases-2.md#load_nfl_schedule) | Game results + lines, one row per game | 📦 nflverse release |
 | [`load_nfl_draft_picks`](../nfl/reference/additional/nflverse-data-releases.md#load_nfl_draft_picks) | Every draft pick + career value, one row per pick | 📦 nflverse release |
 | `get_current_nfl_season` · `most_recent_nfl_season` | Season helpers | 🟢 helper |
 
@@ -264,7 +264,7 @@ versioned, cached releases (very reliable), so we call them directly.
 | Function | Rows | Highlights |
 |---|---|---|
 | [`load_nfl_pbp`](../nfl/reference/loaders/pbp.md#load_nfl_pbp) | ~49k/season | EPA, WP, air yards, 370+ columns |
-| [`load_nfl_player_stats`](../nfl/reference/additional/nflverse-data-releases-3.md#load_nfl_player_stats) | weekly | passing/rushing/receiving box lines |
+| [`load_nfl_player_stats`](../nfl/reference/additional/nflverse-data-releases-2.md#load_nfl_player_stats) | weekly | passing/rushing/receiving box lines |
 | [`load_nfl_nextgen_stats`](../nfl/reference/additional/nflverse-data-releases-2.md#load_nfl_nextgen_stats) | weekly | NGS back to 2016 |
 | [`load_nfl_rosters`](../nfl/reference/loaders/other.md#load_nfl_rosters) | per player | IDs, bios, draft info |
 
@@ -427,7 +427,7 @@ out
 
 ### Recipe 5 — Season rushing leaders 🏃
 
-Roll the weekly box scores in [`load_nfl_player_stats`](../nfl/reference/additional/nflverse-data-releases-3.md#load_nfl_player_stats) up to season totals and crown the ground-game kings (≥150 carries).
+Roll the weekly box scores in [`load_nfl_player_stats`](../nfl/reference/additional/nflverse-data-releases-2.md#load_nfl_player_stats) up to season totals and crown the ground-game kings (≥150 carries).
 
 
 ```python
@@ -604,7 +604,7 @@ sep
 
 ### Recipe 12 — The nail-biters: closest games of the season 😬
 
-[`load_nfl_schedule`](../nfl/reference/additional/nflverse-data-releases-3.md#load_nfl_schedule) carries the final `result` (home margin). Take its absolute value and sort ascending to surface the one-score thrillers — built-in betting lines ride along too.
+[`load_nfl_schedule`](../nfl/reference/additional/nflverse-data-releases-2.md#load_nfl_schedule) carries the final `result` (home margin). Take its absolute value and sort ascending to surface the one-score thrillers — built-in betting lines ride along too.
 
 
 ```python

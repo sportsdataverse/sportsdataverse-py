@@ -1,0 +1,18 @@
+schema: called_strike_prob_grid
+kind: dataframe
+columns:
+- name: stand
+  type: character
+  description: ''
+- name: px_bin
+  type: integer
+  description: ''
+- name: pz_bin
+  type: integer
+  description: ''
+- name: p_strike
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

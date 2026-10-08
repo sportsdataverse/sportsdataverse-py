@@ -303,6 +303,11 @@ _config: NcaaFetchConfig = _from_env()
 def get_config() -> NcaaFetchConfig:
     """Return the live ``NcaaFetchConfig`` singleton.
 
+    Returns:
+        NcaaFetchConfig: The live singleton (``cache_dir``, ``proxy_url``, the ProxyBonanza
+            settings, ``timeout``, ``impersonate``, ``max_retries`` and the rotation / Terms-gate
+            backoffs, ``transport``).
+
     Example:
         Quick start::
 
@@ -343,6 +348,9 @@ def update_config(**kwargs: object) -> NcaaFetchConfig:
 
 def reset_config() -> NcaaFetchConfig:
     """Reset the active config to its env-var-derived defaults.
+
+    Returns:
+        NcaaFetchConfig: The live singleton, now holding the env-var-derived defaults again.
 
     Example:
         Restore defaults after a session of tweaks::
@@ -493,6 +501,13 @@ def cached_path(path: str, *, cache_dir: Optional[Path] = None) -> Path:
     (unsafe characters replaced with ``_``). Two different query strings for
     the same base path therefore always produce two distinct cache files.
 
+    Args:
+        path: The stats.ncaa.org URL path (with its query string, if any).
+        cache_dir: The cache root; the active config's ``cache_dir`` when None.
+
+    Returns:
+        pathlib.Path: Where the page's HTML is (or would be) cached. The file need not exist.
+
     Example:
         Quick start::
 
@@ -514,7 +529,15 @@ def cached_path(path: str, *, cache_dir: Optional[Path] = None) -> Path:
 
 
 def is_cached(path: str, *, cache_dir: Optional[Path] = None) -> bool:
-    """Return whether *path* already has a cache file on disk."""
+    """Return whether *path* already has a cache file on disk.
+
+    Args:
+        path: The stats.ncaa.org URL path (with its query string, if any).
+        cache_dir: The cache root; the active config's ``cache_dir`` when None.
+
+    Returns:
+        bool: True when :func:`cached_path` already exists on disk.
+    """
     return cached_path(path, cache_dir=cache_dir).exists()
 
 

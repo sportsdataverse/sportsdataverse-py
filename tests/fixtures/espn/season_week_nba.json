@@ -1,0 +1,10 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/weeks/1?lang=en&region=us",
+ "endDate": "2024-10-31T06:59Z",
+ "number": 1,
+ "rankings": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/weeks/1/rankings?lang=en&region=us"
+ },
+ "startDate": "2024-10-24T07:00Z",
+ "text": "Week 1"
+}

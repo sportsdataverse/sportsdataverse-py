@@ -344,7 +344,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_calendar-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_calendar-example}
@@ -446,7 +449,22 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_transactions-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `date` | character | Date in YYYY-MM-DD format. |
+| `description` | character | Long-form description text. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_display_name` | character | Full team display name. |
+| `team_id` | character | Unique team identifier. |
+| `team_links` | character |  |
+| `team_location` | character | Team city or location string. |
+| `team_logos` | character |  |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_transactions-example}
@@ -470,7 +488,19 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_conferences-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_groups`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_id` | character | ESPN group id. |
+| `name` | character | Display name. |
+| `abbreviation` | character | Short abbreviation. |
+| `short_name` | character | Short display name. |
+| `is_conference` | logical | Whether this group is a conference. |
+| `parent_group_id` | character | Unique identifier for parent group. |
+| `depth` | integer |  |
+| `children_count` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_conferences-example}
@@ -494,7 +524,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_statistics_league-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb, 2026-10-07); its rows sit under keys it does not read (top level: league, season, status, timestamp).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_statistics_league-example}
@@ -518,7 +551,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_draft-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, nhl, wnba, 2026-10-07); its rows sit under keys it does not read (top level: breakingNews, broadcasts, displayName, picks, positions, rounds, shortDisplayName, status).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_draft-example}
@@ -586,7 +622,52 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_team-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_display_name` | character | Full team display name. |
+| `team_franchise_$ref` | character |  |
+| `team_franchise_abbreviation` | character |  |
+| `team_franchise_color` | character |  |
+| `team_franchise_display_name` | character |  |
+| `team_franchise_id` | character |  |
+| `team_franchise_is_active` | logical |  |
+| `team_franchise_location` | character |  |
+| `team_franchise_name` | character |  |
+| `team_franchise_short_display_name` | character |  |
+| `team_franchise_slug` | character |  |
+| `team_franchise_team_$ref` | character |  |
+| `team_franchise_uid` | character |  |
+| `team_franchise_venue_$ref` | character |  |
+| `team_franchise_venue_address_city` | character |  |
+| `team_franchise_venue_address_state` | character |  |
+| `team_franchise_venue_full_name` | character |  |
+| `team_franchise_venue_grass` | logical |  |
+| `team_franchise_venue_guid` | character |  |
+| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_images` | character |  |
+| `team_franchise_venue_indoor` | logical |  |
+| `team_franchise_venue_short_name` | character |  |
+| `team_groups_id` | character |  |
+| `team_groups_is_conference` | logical |  |
+| `team_groups_parent_id` | character |  |
+| `team_id` | character | Unique team identifier. |
+| `team_is_active` | logical | TRUE if the team is currently active. |
+| `team_links` | character |  |
+| `team_location` | character | Team city or location string. |
+| `team_logos` | character |  |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_next_event` | character |  |
+| `team_record_items` | character |  |
+| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_standing_summary` | character |  |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_team-example}
@@ -728,7 +809,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_team_record-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_team_record-example}
@@ -753,7 +837,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_team_depthcharts-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb, 2026-10-07); its rows sit under keys it does not read (top level: depthchart, season, status, team, timestamp).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_team_depthcharts-example}
@@ -810,7 +897,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_team_transactions-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_team_transactions-example}
@@ -835,7 +925,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_team_history-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, mbb, wbb; 400 in cfb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_team_history-example}
@@ -907,7 +1000,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_team_leaders-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_team_leaders-example}
@@ -932,7 +1028,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_player_info-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_single_entity`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_player_info-example}
@@ -957,7 +1056,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_player_bio-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_single_entity`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_player_bio-example}
@@ -1085,7 +1187,10 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_rankings-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (cfb, mbb, wbb, mch, wch, 2026-10-07); its rows sit under keys it does not read (top level: availableRankings, latestSeason, latestWeek, leagues, rankings, requestedSeason, sports, weekCounts).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_rankings-example}

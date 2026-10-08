@@ -1,0 +1,6 @@
+schema: nhl_in_game_win_prob
+kind: dataframe
+columns:
+- name: home_win_prob
+  type: double
+  description: ''

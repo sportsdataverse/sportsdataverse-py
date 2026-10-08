@@ -1,0 +1,18 @@
+schema: load_dunks_threes_stats
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: team_alias
+  type: character
+  description: ''
+- name: ewins
+  type: double
+  description: ''

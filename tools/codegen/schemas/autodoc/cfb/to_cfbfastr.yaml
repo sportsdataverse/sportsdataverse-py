@@ -1,0 +1,5 @@
+schema: to_cfbfastr
+kind: dataframe
+columns: []
+unverified: 'no capture: its one-game stats.ncaa.org input comes only from a season-sized release or from raw HTML, and the
+  season load runs longer than the capture allows'

@@ -252,7 +252,7 @@ def fox_api_league_conferences(
     """GET /bifrost/v1/{sport}/league/conferences -- Fox Sports API league conferences.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/conferences``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/conferences?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
+    Example URL: https://api.foxsports.com/bifrost/v1/cfb/league/conferences?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -274,7 +274,7 @@ def fox_api_league_conferences(
         Quick start::
 
             from sportsdataverse.fox import fox_api_league_conferences
-            fox_api_league_conferences(sport='nfl')
+            fox_api_league_conferences(sport='cfb')
 
         See Also:
             * `Fox Sports`_ - the public site this API renders
@@ -491,7 +491,7 @@ def fox_api_league_polls(
     """GET /bifrost/v1/{sport}/league/polls -- Fox Sports API league polls.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/polls``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/polls?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
+    Example URL: https://api.foxsports.com/bifrost/v1/cfb/league/polls?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -513,7 +513,7 @@ def fox_api_league_polls(
         Quick start::
 
             from sportsdataverse.fox import fox_api_league_polls
-            fox_api_league_polls(sport='nfl')
+            fox_api_league_polls(sport='cfb')
 
         See Also:
             * `Fox Sports`_ - the public site this API renders

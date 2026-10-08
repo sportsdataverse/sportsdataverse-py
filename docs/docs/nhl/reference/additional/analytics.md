@@ -58,6 +58,16 @@ five features via a documented column map from
 
 A polars DataFrame, one row per play. |col_name |type | |:-------------------|:------| |score_diff |Int32 | |sec_remaining |Float64| |sqrt_sec_remaining |Float64| |strength_diff |Int32 | |home_goalie_pulled |Int8 | |away_goalie_pulled |Int8 | |pregame_logit |Float64|
 
+| col_name | type | description |
+|---|---|---|
+| `score_diff` | integer |  |
+| `sec_remaining` | double |  |
+| `sqrt_sec_remaining` | double |  |
+| `strength_diff` | integer |  |
+| `home_goalie_pulled` | integer |  |
+| `away_goalie_pulled` | integer |  |
+| `pregame_logit` | double |  |
+
 **Example**
 
 ```python
@@ -86,6 +96,17 @@ Per-skater EDGE skating-value composite (z-score or percentile blend).
 **Returns**
 
 Per-skater frame: `player_id`, `season`, `top_speed`, `distance_km`, `speed_bursts_20`, `oz_time_pct`, `skating_value`, `skating_value_rank` (1 = fastest composite), plus `oz_dz_time_balance` when `include_zone_balance=True` and derivable. PWHL (or empty/absent input) returns a zero-row frame with the base schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `season` | integer | Season year (echoed from arg). |
+| `top_speed` | double |  |
+| `distance_km` | double |  |
+| `speed_bursts_20` | double |  |
+| `oz_time_pct` | double |  |
+| `skating_value` | double |  |
+| `skating_value_rank` | integer |  |
 
 **Example**
 
@@ -124,6 +145,15 @@ the context expectation and a zone-weighted `faceoff_value` using
 
 Per-player frame: `player_id`, `faceoffs_taken`, `faceoffs_won`, `fo_win_pct`, `fo_win_pct_above_exp`, `faceoff_value`. Zero-row input returns a zero-row frame with this schema.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `faceoffs_taken` | integer | Faceoffs taken in the season. |
+| `faceoffs_won` | integer | Faceoffs won in the season. |
+| `fo_win_pct` | double |  |
+| `fo_win_pct_above_exp` | double |  |
+| `faceoff_value` | double |  |
+
 **Example**
 
 ```python
@@ -160,6 +190,8 @@ the exact same `sportsdataverse.nhl.nhl_market.predict_total` that
 
 A polars (or pandas) DataFrame with `game_id`, `exp_total`. |col_name |type | |:---------|:------| |game_id |String | |exp_total |Float64|
 
+No returns table is published for this function: no capture: it needs games with home_team / away_team / neutral_site columns that no loader returns.
+
 **Example**
 
 ```python
@@ -191,6 +223,10 @@ committed logistic (`sportsdataverse/nhl/models/<league>_in_game_wp.json`
 **Returns**
 
 A polars (or pandas) DataFrame, one row per play, with a single `home_win_prob: Float64` column.
+
+| col_name | type | description |
+|---|---|---|
+| `home_win_prob` | double |  |
 
 **Example**
 
@@ -226,6 +262,18 @@ converts the net into expected goals:
 **Returns**
 
 Per-player frame: `player_id`, `penalties_drawn`, `penalties_taken`, `minors_drawn`, `minors_taken`, `majors_drawn`, `majors_taken`, `net_penalties`, `net_penalty_value`. League-wide `net_penalty_value` sums to (approximately) zero by construction -- every penalty taken by one player is drawn by another. Zero-row input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `penalties_drawn` | integer |  |
+| `penalties_taken` | integer |  |
+| `minors_drawn` | integer |  |
+| `minors_taken` | integer |  |
+| `majors_drawn` | integer |  |
+| `majors_taken` | integer |  |
+| `net_penalties` | integer |  |
+| `net_penalty_value` | double |  |
 
 **Example**
 
@@ -269,6 +317,19 @@ per-projected-game ratings.
 
 A polars (or pandas) DataFrame, one row per (player, game, stat). Empty/malformed input returns a zero-row frame with the documented schema. |col_name |type | |:---------|:------| |season |Int64 | |game_id |String | |player_id |String | |team |String | |opp_team |String | |stat |String | |proj_mean |Float64| |proj_sd |Float64| |p_over |Float64| |line |Float64|
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year (echoed from arg). |
+| `game_id` | character | Unique game identifier. |
+| `player_id` | character | Unique player identifier. |
+| `team` | character | Team name. |
+| `opp_team` | character |  |
+| `stat` | character |  |
+| `proj_mean` | double |  |
+| `proj_sd` | double |  |
+| `p_over` | double |  |
+| `line` | double |  |
+
 **Example**
 
 ```python
@@ -302,6 +363,8 @@ Vectorized pregame margin/win-prob/total (+ market edge) over a schedule.
 
 A polars (or pandas) DataFrame, one row per game. |col_name |type | |:-------------|:------| |game_id |String | |home_team |String | |away_team |String | |neutral_site |Boolean| |exp_margin |Float64| |home_win_prob |Float64| |exp_total |Float64| |market_edge |Float64|
 
+No returns table is published for this function: no capture: it needs games with home_team / away_team / neutral_site columns that no loader returns.
+
 **Example**
 
 ```python
@@ -330,6 +393,14 @@ Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 **Returns**
 
 `player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `pp_toi_minutes` | double |  |
+| `pk_toi_minutes` | double |  |
+| `pp_value` | double |  |
+| `pk_value` | double |  |
 
 **Example**
 
@@ -364,6 +435,16 @@ zone_exit_value` -- all from `get_constants(league)`.
 **Returns**
 
 Per-player frame: `player_id`, `controlled_entries`, `dump_entries`, `exits`, `controlled_entry_rate`, `entry_value`, `exit_value`. Zero-row input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `controlled_entries` | integer |  |
+| `dump_entries` | integer |  |
+| `exits` | integer |  |
+| `controlled_entry_rate` | double |  |
+| `entry_value` | double |  |
+| `exit_value` | double |  |
 
 **Example**
 

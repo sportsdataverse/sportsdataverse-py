@@ -1,0 +1,5408 @@
+{
+ "count": 90,
+ "items": [
+  {
+   "lastUpdated": "2024-06-22T02:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-21T10:00Z",
+   "runDateTimeKey": 20240621222237,
+   "season": 2024,
+   "seasonType": 3,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "8.658",
+     "name": "bpi",
+     "value": 8.658
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "1st",
+     "name": "bpirank",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "6.324",
+     "name": "bpioffense",
+     "value": 6.324
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "2.333",
+     "name": "bpidefense",
+     "value": 2.333
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "80",
+     "name": "numwins",
+     "value": 80.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "21",
+     "name": "numlosses",
+     "value": 21.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.792",
+     "name": "winpct",
+     "value": 0.792
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "64.000",
+     "name": "projectedw",
+     "value": 64.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "18.000",
+     "name": "projectedl",
+     "value": 18.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.780",
+     "name": "projectedwpct",
+     "value": 0.78
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "1st",
+     "name": "projectedwpctrank",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "1.000",
+     "name": "prob1seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "100%",
+     "name": "probmakeconfchamp",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "100%",
+     "name": "probmaketitlegame",
+     "value": 100.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/2?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-04-19T14:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-04-15T00:46Z",
+   "runCutoffDate": "2024-04-18T10:00Z",
+   "runDateTimeKey": 20240418222002,
+   "season": 2024,
+   "seasonType": 5,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "7.494",
+     "name": "bpi",
+     "value": 7.494
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "1st",
+     "name": "bpirank",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "6.393",
+     "name": "bpioffense",
+     "value": 6.393
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "1.101",
+     "name": "bpidefense",
+     "value": 1.101
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "64",
+     "name": "numwins",
+     "value": 64.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "18",
+     "name": "numlosses",
+     "value": 18.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.780",
+     "name": "winpct",
+     "value": 0.78
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "64.000",
+     "name": "projectedw",
+     "value": 64.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "18.000",
+     "name": "projectedl",
+     "value": 18.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.780",
+     "name": "projectedwpct",
+     "value": 0.78
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "1st",
+     "name": "projectedwpctrank",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "1.000",
+     "name": "prob1seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "90.8%",
+     "name": "probmakeconfsemi",
+     "value": 90.8
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "75.4%",
+     "name": "probmakeconfchamp",
+     "value": 75.4
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "61.6%",
+     "name": "probmaketitlegame",
+     "value": 61.6
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/2?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-28T02:09Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-27T10:00Z",
+   "runDateTimeKey": 20240627220026,
+   "season": 2024,
+   "seasonType": 2,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "7.431",
+     "name": "bpi",
+     "value": 7.431
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "1st",
+     "name": "bpirank",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "5.711",
+     "name": "bpioffense",
+     "value": 5.711
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "1.720",
+     "name": "bpidefense",
+     "value": 1.72
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "80",
+     "name": "numwins",
+     "value": 80.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "21",
+     "name": "numlosses",
+     "value": 21.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.792",
+     "name": "winpct",
+     "value": 0.792
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "64.000",
+     "name": "projectedw",
+     "value": 64.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "18.000",
+     "name": "projectedl",
+     "value": 18.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.780",
+     "name": "projectedwpct",
+     "value": 0.78
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "1st",
+     "name": "projectedwpctrank",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "1.000",
+     "name": "prob1seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "100%",
+     "name": "probmakeconfchamp",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "100%",
+     "name": "probmaketitlegame",
+     "value": 100.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/2?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-28T02:09Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-27T10:00Z",
+   "runDateTimeKey": 20240627220026,
+   "season": 2024,
+   "seasonType": 2,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "6.025",
+     "name": "bpi",
+     "value": 6.025
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "2nd",
+     "name": "bpirank",
+     "value": 2.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "3.016",
+     "name": "bpioffense",
+     "value": 3.016
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "3.008",
+     "name": "bpidefense",
+     "value": 3.008
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "63",
+     "name": "numwins",
+     "value": 63.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "41",
+     "name": "numlosses",
+     "value": 41.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.606",
+     "name": "winpct",
+     "value": 0.606
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "50.000",
+     "name": "projectedw",
+     "value": 50.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "32.000",
+     "name": "projectedl",
+     "value": 32.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.610",
+     "name": "projectedwpct",
+     "value": 0.61
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "6th",
+     "name": "projectedwpctrank",
+     "value": 6.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "0.000",
+     "name": "probhomecourt",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "1.000",
+     "name": "prob5seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "100%",
+     "name": "probmakeconfchamp",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "100%",
+     "name": "probmaketitlegame",
+     "value": 100.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/6?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-22T02:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-21T10:00Z",
+   "runDateTimeKey": 20240621222237,
+   "season": 2024,
+   "seasonType": 3,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "6.025",
+     "name": "bpi",
+     "value": 6.025
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "2nd",
+     "name": "bpirank",
+     "value": 2.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "3.016",
+     "name": "bpioffense",
+     "value": 3.016
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "3.008",
+     "name": "bpidefense",
+     "value": 3.008
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "63",
+     "name": "numwins",
+     "value": 63.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "41",
+     "name": "numlosses",
+     "value": 41.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.606",
+     "name": "winpct",
+     "value": 0.606
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "50.000",
+     "name": "projectedw",
+     "value": 50.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "32.000",
+     "name": "projectedl",
+     "value": 32.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.610",
+     "name": "projectedwpct",
+     "value": 0.61
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "6th",
+     "name": "projectedwpctrank",
+     "value": 6.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "0.000",
+     "name": "probhomecourt",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "1.000",
+     "name": "prob5seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "100%",
+     "name": "probmakeconfchamp",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "100%",
+     "name": "probmaketitlegame",
+     "value": 100.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/6?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-04-19T14:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-04-15T00:46Z",
+   "runCutoffDate": "2024-04-18T10:00Z",
+   "runDateTimeKey": 20240418222002,
+   "season": 2024,
+   "seasonType": 5,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "5.171",
+     "name": "bpi",
+     "value": 5.171
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "2nd",
+     "name": "bpirank",
+     "value": 2.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "3.212",
+     "name": "bpioffense",
+     "value": 3.212
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "1.959",
+     "name": "bpidefense",
+     "value": 1.959
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "57",
+     "name": "numwins",
+     "value": 57.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "25",
+     "name": "numlosses",
+     "value": 25.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.695",
+     "name": "winpct",
+     "value": 0.695
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "57.000",
+     "name": "projectedw",
+     "value": 57.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "25.000",
+     "name": "projectedl",
+     "value": 25.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.695",
+     "name": "projectedwpct",
+     "value": 0.695
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "2nd",
+     "name": "projectedwpctrank",
+     "value": 2.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "1.000",
+     "name": "prob1seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "81.3%",
+     "name": "probmakeconfsemi",
+     "value": 81.3
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "47.9%",
+     "name": "probmakeconfchamp",
+     "value": 47.9
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "28.5%",
+     "name": "probmaketitlegame",
+     "value": 28.499999999999996
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/25?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-04-19T14:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-04-15T00:46Z",
+   "runCutoffDate": "2024-04-18T10:00Z",
+   "runDateTimeKey": 20240418222002,
+   "season": 2024,
+   "seasonType": 5,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.982",
+     "name": "bpi",
+     "value": 4.982
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "3rd",
+     "name": "bpirank",
+     "value": 3.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "2.919",
+     "name": "bpioffense",
+     "value": 2.919
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "2.063",
+     "name": "bpidefense",
+     "value": 2.063
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "57",
+     "name": "numwins",
+     "value": 57.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "25",
+     "name": "numlosses",
+     "value": 25.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.695",
+     "name": "winpct",
+     "value": 0.695
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "57.000",
+     "name": "projectedw",
+     "value": 57.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "25.000",
+     "name": "projectedl",
+     "value": 25.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.695",
+     "name": "projectedwpct",
+     "value": 0.695
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "2nd",
+     "name": "projectedwpctrank",
+     "value": 2.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "1.000",
+     "name": "prob2seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "74.2%",
+     "name": "probmakeconfsemi",
+     "value": 74.2
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "47.6%",
+     "name": "probmakeconfchamp",
+     "value": 47.599999999999994
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "25.9%",
+     "name": "probmaketitlegame",
+     "value": 25.900000000000002
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/7?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-28T02:09Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-27T10:00Z",
+   "runDateTimeKey": 20240627220026,
+   "season": 2024,
+   "seasonType": 2,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.744",
+     "name": "bpi",
+     "value": 4.744
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "3rd",
+     "name": "bpirank",
+     "value": 3.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "2.553",
+     "name": "bpioffense",
+     "value": 2.553
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "2.191",
+     "name": "bpidefense",
+     "value": 2.191
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "64",
+     "name": "numwins",
+     "value": 64.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "30",
+     "name": "numlosses",
+     "value": 30.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.681",
+     "name": "winpct",
+     "value": 0.681
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "57.000",
+     "name": "projectedw",
+     "value": 57.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "25.000",
+     "name": "projectedl",
+     "value": 25.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.695",
+     "name": "projectedwpct",
+     "value": 0.695
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "2nd",
+     "name": "projectedwpctrank",
+     "value": 2.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "1.000",
+     "name": "prob2seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/7?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-22T02:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-21T10:00Z",
+   "runDateTimeKey": 20240621222237,
+   "season": 2024,
+   "seasonType": 3,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.744",
+     "name": "bpi",
+     "value": 4.744
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "3rd",
+     "name": "bpirank",
+     "value": 3.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "2.553",
+     "name": "bpioffense",
+     "value": 2.553
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "2.191",
+     "name": "bpidefense",
+     "value": 2.191
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "64",
+     "name": "numwins",
+     "value": 64.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "30",
+     "name": "numlosses",
+     "value": 30.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.681",
+     "name": "winpct",
+     "value": 0.681
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "57.000",
+     "name": "projectedw",
+     "value": 57.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "25.000",
+     "name": "projectedl",
+     "value": 25.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.695",
+     "name": "projectedwpct",
+     "value": 0.695
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "2nd",
+     "name": "projectedwpctrank",
+     "value": 2.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "1.000",
+     "name": "prob2seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/7?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-28T02:09Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-27T10:00Z",
+   "runDateTimeKey": 20240627220026,
+   "season": 2024,
+   "seasonType": 2,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.691",
+     "name": "bpi",
+     "value": 4.691
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "4th",
+     "name": "bpirank",
+     "value": 4.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "2.300",
+     "name": "bpioffense",
+     "value": 2.3
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "2.391",
+     "name": "bpidefense",
+     "value": 2.391
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "63",
+     "name": "numwins",
+     "value": 63.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "29",
+     "name": "numlosses",
+     "value": 29.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.685",
+     "name": "winpct",
+     "value": 0.685
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "57.000",
+     "name": "projectedw",
+     "value": 57.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "25.000",
+     "name": "projectedl",
+     "value": 25.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.695",
+     "name": "projectedwpct",
+     "value": 0.695
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "2nd",
+     "name": "projectedwpctrank",
+     "value": 2.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "1.000",
+     "name": "prob1seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/25?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-22T02:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-21T10:00Z",
+   "runDateTimeKey": 20240621222237,
+   "season": 2024,
+   "seasonType": 3,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.691",
+     "name": "bpi",
+     "value": 4.691
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "4th",
+     "name": "bpirank",
+     "value": 4.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "2.300",
+     "name": "bpioffense",
+     "value": 2.3
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "2.391",
+     "name": "bpidefense",
+     "value": 2.391
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "63",
+     "name": "numwins",
+     "value": 63.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "29",
+     "name": "numlosses",
+     "value": 29.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.685",
+     "name": "winpct",
+     "value": 0.685
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "57.000",
+     "name": "projectedw",
+     "value": 57.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "25.000",
+     "name": "projectedl",
+     "value": 25.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.695",
+     "name": "projectedwpct",
+     "value": 0.695
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "2nd",
+     "name": "projectedwpctrank",
+     "value": 2.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "1.000",
+     "name": "prob1seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/25?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-04-19T14:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-04-15T00:46Z",
+   "runCutoffDate": "2024-04-18T10:00Z",
+   "runDateTimeKey": 20240418222002,
+   "season": 2024,
+   "seasonType": 5,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.690",
+     "name": "bpi",
+     "value": 4.69
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "4th",
+     "name": "bpirank",
+     "value": 4.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "2.904",
+     "name": "bpioffense",
+     "value": 2.904
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "1.786",
+     "name": "bpidefense",
+     "value": 1.786
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "50",
+     "name": "numwins",
+     "value": 50.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "32",
+     "name": "numlosses",
+     "value": 32.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.610",
+     "name": "winpct",
+     "value": 0.61
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "50.000",
+     "name": "projectedw",
+     "value": 50.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "32.000",
+     "name": "projectedl",
+     "value": 32.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.610",
+     "name": "projectedwpct",
+     "value": 0.61
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "6th",
+     "name": "projectedwpctrank",
+     "value": 6.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "0.000",
+     "name": "probhomecourt",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "1.000",
+     "name": "prob5seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "54.1%",
+     "name": "probmakeconfsemi",
+     "value": 54.1
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "26.6%",
+     "name": "probmakeconfchamp",
+     "value": 26.6
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "13.5%",
+     "name": "probmaketitlegame",
+     "value": 13.5
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/6?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-28T02:09Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-27T10:00Z",
+   "runDateTimeKey": 20240627220026,
+   "season": 2024,
+   "seasonType": 2,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.576",
+     "name": "bpi",
+     "value": 4.576
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "5th",
+     "name": "bpirank",
+     "value": 5.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "0.159",
+     "name": "bpioffense",
+     "value": 0.159
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "4.417",
+     "name": "bpidefense",
+     "value": 4.417
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "47",
+     "name": "numwins",
+     "value": 47.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "40",
+     "name": "numlosses",
+     "value": 40.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.540",
+     "name": "winpct",
+     "value": 0.54
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "46.000",
+     "name": "projectedw",
+     "value": 46.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "36.000",
+     "name": "projectedl",
+     "value": 36.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.561",
+     "name": "projectedwpct",
+     "value": 0.561
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "16th",
+     "name": "projectedwpctrank",
+     "value": 16.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "0.000",
+     "name": "probhomecourt",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "1.000",
+     "name": "prob8seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "0%",
+     "name": "probmakeconfsemi",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/14?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-22T02:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-21T10:00Z",
+   "runDateTimeKey": 20240621222237,
+   "season": 2024,
+   "seasonType": 3,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.576",
+     "name": "bpi",
+     "value": 4.576
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "5th",
+     "name": "bpirank",
+     "value": 5.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "0.159",
+     "name": "bpioffense",
+     "value": 0.159
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "4.417",
+     "name": "bpidefense",
+     "value": 4.417
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "47",
+     "name": "numwins",
+     "value": 47.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "40",
+     "name": "numlosses",
+     "value": 40.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.540",
+     "name": "winpct",
+     "value": 0.54
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "46.000",
+     "name": "projectedw",
+     "value": 46.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "36.000",
+     "name": "projectedl",
+     "value": 36.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.561",
+     "name": "projectedwpct",
+     "value": 0.561
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "16th",
+     "name": "projectedwpctrank",
+     "value": 16.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "0.000",
+     "name": "probhomecourt",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "1.000",
+     "name": "prob8seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "0%",
+     "name": "probmakeconfsemi",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/14?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-28T02:09Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-27T10:00Z",
+   "runDateTimeKey": 20240627220026,
+   "season": 2024,
+   "seasonType": 2,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.534",
+     "name": "bpi",
+     "value": 4.534
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "6th",
+     "name": "bpirank",
+     "value": 6.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "1.185",
+     "name": "bpioffense",
+     "value": 1.185
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "3.349",
+     "name": "bpidefense",
+     "value": 3.349
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "65",
+     "name": "numwins",
+     "value": 65.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "33",
+     "name": "numlosses",
+     "value": 33.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.663",
+     "name": "winpct",
+     "value": 0.663
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "56.000",
+     "name": "projectedw",
+     "value": 56.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "26.000",
+     "name": "projectedl",
+     "value": 26.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.683",
+     "name": "projectedwpct",
+     "value": 0.683
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "4th",
+     "name": "projectedwpctrank",
+     "value": 4.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "1.000",
+     "name": "prob3seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "100%",
+     "name": "probmakeconfchamp",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/16?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-22T02:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-21T10:00Z",
+   "runDateTimeKey": 20240621222237,
+   "season": 2024,
+   "seasonType": 3,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.534",
+     "name": "bpi",
+     "value": 4.534
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "6th",
+     "name": "bpirank",
+     "value": 6.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "1.185",
+     "name": "bpioffense",
+     "value": 1.185
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "3.349",
+     "name": "bpidefense",
+     "value": 3.349
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "65",
+     "name": "numwins",
+     "value": 65.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "33",
+     "name": "numlosses",
+     "value": 33.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.663",
+     "name": "winpct",
+     "value": 0.663
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "56.000",
+     "name": "projectedw",
+     "value": 56.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "26.000",
+     "name": "projectedl",
+     "value": 26.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.683",
+     "name": "projectedwpct",
+     "value": 0.683
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "4th",
+     "name": "projectedwpctrank",
+     "value": 4.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "1.000",
+     "name": "prob3seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "100%",
+     "name": "probmakeconfchamp",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/16?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-28T02:09Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-27T10:00Z",
+   "runDateTimeKey": 20240627220026,
+   "season": 2024,
+   "seasonType": 2,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "4.178",
+     "name": "bpi",
+     "value": 4.178
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "7th",
+     "name": "bpirank",
+     "value": 7.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "3.148",
+     "name": "bpioffense",
+     "value": 3.148
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "1.030",
+     "name": "bpidefense",
+     "value": 1.03
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "57",
+     "name": "numwins",
+     "value": 57.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "38",
+     "name": "numlosses",
+     "value": 38.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.600",
+     "name": "winpct",
+     "value": 0.6
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "50.000",
+     "name": "projectedw",
+     "value": 50.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "32.000",
+     "name": "projectedl",
+     "value": 32.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.610",
+     "name": "projectedwpct",
+     "value": 0.61
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "6th",
+     "name": "projectedwpctrank",
+     "value": 6.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "1.000",
+     "name": "prob2seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "100%",
+     "name": "probmakeconfsemi",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/18?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-04-19T14:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-04-15T00:46Z",
+   "runCutoffDate": "2024-04-18T10:00Z",
+   "runDateTimeKey": 20240418222002,
+   "season": 2024,
+   "seasonType": 5,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "3.991",
+     "name": "bpi",
+     "value": 3.991
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "5th",
+     "name": "bpirank",
+     "value": 5.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "0.272",
+     "name": "bpioffense",
+     "value": 0.272
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "3.718",
+     "name": "bpidefense",
+     "value": 3.718
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "56",
+     "name": "numwins",
+     "value": 56.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "26",
+     "name": "numlosses",
+     "value": 26.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.683",
+     "name": "winpct",
+     "value": 0.683
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "56.000",
+     "name": "projectedw",
+     "value": 56.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "26.000",
+     "name": "projectedl",
+     "value": 26.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.683",
+     "name": "projectedwpct",
+     "value": 0.683
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "4th",
+     "name": "projectedwpctrank",
+     "value": 4.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "1.000",
+     "name": "prob3seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "66.4%",
+     "name": "probmakeconfsemi",
+     "value": 66.4
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "31%",
+     "name": "probmakeconfchamp",
+     "value": 31.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "14.7%",
+     "name": "probmaketitlegame",
+     "value": 14.7
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/16?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-04-19T14:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-04-15T00:46Z",
+   "runCutoffDate": "2024-04-18T10:00Z",
+   "runDateTimeKey": 20240418222002,
+   "season": 2024,
+   "seasonType": 5,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "3.811",
+     "name": "bpi",
+     "value": 3.811
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "6th",
+     "name": "bpirank",
+     "value": 6.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "1.448",
+     "name": "bpioffense",
+     "value": 1.448
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "2.363",
+     "name": "bpidefense",
+     "value": 2.363
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "47",
+     "name": "numwins",
+     "value": 47.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "35",
+     "name": "numlosses",
+     "value": 35.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.573",
+     "name": "winpct",
+     "value": 0.573
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "47.000",
+     "name": "projectedw",
+     "value": 47.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "35.000",
+     "name": "projectedl",
+     "value": 35.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.573",
+     "name": "projectedwpct",
+     "value": 0.573
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "12th",
+     "name": "projectedwpctrank",
+     "value": 12.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "0.000",
+     "name": "probhomecourt",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "1.000",
+     "name": "prob7seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "53.6%",
+     "name": "probmakeconfsemi",
+     "value": 53.6
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "31.4%",
+     "name": "probmakeconfchamp",
+     "value": 31.4
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "9%",
+     "name": "probmaketitlegame",
+     "value": 9.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/20?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-04-19T14:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-04-15T00:46Z",
+   "runCutoffDate": "2024-04-18T10:00Z",
+   "runDateTimeKey": 20240418222002,
+   "season": 2024,
+   "seasonType": 5,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "3.720",
+     "name": "bpi",
+     "value": 3.72
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "7th",
+     "name": "bpirank",
+     "value": 7.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "-0.037",
+     "name": "bpioffense",
+     "value": -0.037
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "3.757",
+     "name": "bpidefense",
+     "value": 3.757
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "46",
+     "name": "numwins",
+     "value": 46.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "36",
+     "name": "numlosses",
+     "value": 36.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.561",
+     "name": "winpct",
+     "value": 0.561
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "46.000",
+     "name": "projectedw",
+     "value": 46.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "36.000",
+     "name": "projectedl",
+     "value": 36.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.561",
+     "name": "projectedwpct",
+     "value": 0.561
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "16th",
+     "name": "projectedwpctrank",
+     "value": 16.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": "62.6%",
+     "name": "probmakeplayoffs",
+     "value": 62.64999999999999
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "0.000",
+     "name": "probhomecourt",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.627",
+     "name": "prob8seed",
+     "value": 0.627
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "7.6%",
+     "name": "probmakeconfsemi",
+     "value": 7.6
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "4.6%",
+     "name": "probmakeconfchamp",
+     "value": 4.6
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "2.9%",
+     "name": "probmaketitlegame",
+     "value": 2.9000000000000004
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/14?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-04-19T14:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-04-15T00:46Z",
+   "runCutoffDate": "2024-04-18T10:00Z",
+   "runDateTimeKey": 20240418222002,
+   "season": 2024,
+   "seasonType": 5,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "3.692",
+     "name": "bpi",
+     "value": 3.692
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "8th",
+     "name": "bpirank",
+     "value": 8.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "3.624",
+     "name": "bpioffense",
+     "value": 3.624
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "0.067",
+     "name": "bpidefense",
+     "value": 0.067
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "51",
+     "name": "numwins",
+     "value": 51.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "31",
+     "name": "numlosses",
+     "value": 31.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.622",
+     "name": "winpct",
+     "value": 0.622
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "51.000",
+     "name": "projectedw",
+     "value": 51.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "31.000",
+     "name": "projectedl",
+     "value": 31.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.622",
+     "name": "projectedwpct",
+     "value": 0.622
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "5th",
+     "name": "projectedwpctrank",
+     "value": 5.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "1.000",
+     "name": "prob4seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "45.9%",
+     "name": "probmakeconfsemi",
+     "value": 45.9
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "19.9%",
+     "name": "probmakeconfchamp",
+     "value": 19.900000000000002
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "9%",
+     "name": "probmaketitlegame",
+     "value": 9.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/12?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-28T02:09Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-27T10:00Z",
+   "runDateTimeKey": 20240627220026,
+   "season": 2024,
+   "seasonType": 2,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "3.657",
+     "name": "bpi",
+     "value": 3.657
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "8th",
+     "name": "bpirank",
+     "value": 8.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "3.512",
+     "name": "bpioffense",
+     "value": 3.512
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "0.145",
+     "name": "bpidefense",
+     "value": 0.145
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "53",
+     "name": "numwins",
+     "value": 53.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "35",
+     "name": "numlosses",
+     "value": 35.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.602",
+     "name": "winpct",
+     "value": 0.602
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "51.000",
+     "name": "projectedw",
+     "value": 51.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "31.000",
+     "name": "projectedl",
+     "value": 31.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.622",
+     "name": "projectedwpct",
+     "value": 0.622
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "5th",
+     "name": "projectedwpctrank",
+     "value": 5.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "1.000",
+     "name": "prob4seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "0%",
+     "name": "probmakeconfsemi",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/12?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-22T02:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-21T10:00Z",
+   "runDateTimeKey": 20240621222237,
+   "season": 2024,
+   "seasonType": 3,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "3.657",
+     "name": "bpi",
+     "value": 3.657
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "7th",
+     "name": "bpirank",
+     "value": 7.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "3.512",
+     "name": "bpioffense",
+     "value": 3.512
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "0.145",
+     "name": "bpidefense",
+     "value": 0.145
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "53",
+     "name": "numwins",
+     "value": 53.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "35",
+     "name": "numlosses",
+     "value": 35.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.602",
+     "name": "winpct",
+     "value": 0.602
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "51.000",
+     "name": "projectedw",
+     "value": 51.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "31.000",
+     "name": "projectedl",
+     "value": 31.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.622",
+     "name": "projectedwpct",
+     "value": 0.622
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "5th",
+     "name": "projectedwpctrank",
+     "value": 5.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "100%",
+     "name": "probwindiv",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "1.000",
+     "name": "probhomecourt",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "1.000",
+     "name": "prob4seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "0.000",
+     "name": "prob7seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "0%",
+     "name": "probmakeconfsemi",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/12?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-28T02:09Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-27T10:00Z",
+   "runDateTimeKey": 20240627220026,
+   "season": 2024,
+   "seasonType": 2,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "3.590",
+     "name": "bpi",
+     "value": 3.59
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "9th",
+     "name": "bpirank",
+     "value": 9.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "1.589",
+     "name": "bpioffense",
+     "value": 1.589
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "2.001",
+     "name": "bpidefense",
+     "value": 2.001
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "49",
+     "name": "numwins",
+     "value": 49.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "39",
+     "name": "numlosses",
+     "value": 39.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.557",
+     "name": "winpct",
+     "value": 0.557
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "47.000",
+     "name": "projectedw",
+     "value": 47.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "35.000",
+     "name": "projectedl",
+     "value": 35.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.573",
+     "name": "projectedwpct",
+     "value": 0.573
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "12th",
+     "name": "projectedwpctrank",
+     "value": 12.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "0.000",
+     "name": "probhomecourt",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "1.000",
+     "name": "prob7seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "0%",
+     "name": "probmakeconfsemi",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/20?lang=en&region=us"
+   }
+  },
+  {
+   "lastUpdated": "2024-06-22T02:31Z",
+   "league": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba?lang=en&region=us"
+   },
+   "maxGameDate": "2024-06-18T05:51Z",
+   "runCutoffDate": "2024-06-21T10:00Z",
+   "runDateTimeKey": 20240621222237,
+   "season": 2024,
+   "seasonType": 3,
+   "stats": [
+    {
+     "abbreviation": "BPI",
+     "description": "Basketball Power Index that measures team’s true strength on net points scale; expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI",
+     "displayValue": "3.590",
+     "name": "bpi",
+     "value": 3.59
+    },
+    {
+     "abbreviation": "bpiRank",
+     "description": "Basketball Power Index Rank vs all NBA teams",
+     "displayName": "BPI RANK",
+     "displayValue": "8th",
+     "name": "bpirank",
+     "value": 8.0
+    },
+    {
+     "abbreviation": "Off",
+     "description": "Offensive component of BPI. Offensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI OFFENSE",
+     "displayValue": "1.589",
+     "name": "bpioffense",
+     "value": 1.589
+    },
+    {
+     "abbreviation": "Def",
+     "description": "Defensive component of BPI. Defensive contribution to expected point margin vs average opponent on neutral court.",
+     "displayName": "BPI DEFENSE",
+     "displayValue": "2.001",
+     "name": "bpidefense",
+     "value": 2.001
+    },
+    {
+     "abbreviation": "W",
+     "description": "Team’s current wins record",
+     "displayName": "NUM WINS",
+     "displayValue": "49",
+     "name": "numwins",
+     "value": 49.0
+    },
+    {
+     "abbreviation": "L",
+     "description": "Team’s losses record",
+     "displayName": "NUM LOSSES",
+     "displayValue": "39",
+     "name": "numlosses",
+     "value": 39.0
+    },
+    {
+     "abbreviation": "WPct",
+     "description": "Win percentage",
+     "displayName": "WIN PCT",
+     "displayValue": "0.557",
+     "name": "winpct",
+     "value": 0.557
+    },
+    {
+     "abbreviation": "ProjW",
+     "description": "Projected overall wins, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ WINS",
+     "displayValue": "47.000",
+     "name": "projectedw",
+     "value": 47.0
+    },
+    {
+     "abbreviation": "ProjL",
+     "description": "Projected overall losses, accounting for results to date and BPI-based projections for remaining scheduled games.",
+     "displayName": "PROJ LOSSES",
+     "displayValue": "35.000",
+     "name": "projectedl",
+     "value": 35.0
+    },
+    {
+     "abbreviation": "ProjWPct",
+     "description": "Projected win percentage",
+     "displayName": "PROJ WIN PCT",
+     "displayValue": "0.573",
+     "name": "projectedwpct",
+     "value": 0.573
+    },
+    {
+     "abbreviation": "ProjWPctRank",
+     "description": "Projected win percentage rank",
+     "displayName": "PROJ WIN PCT RANK",
+     "displayValue": "12th",
+     "name": "projectedwpctrank",
+     "value": 12.0
+    },
+    {
+     "abbreviation": "WinDiv%",
+     "description": "Chance to win the conference division, according to BPI.",
+     "displayName": "PROB WIN DIV",
+     "displayValue": "0%",
+     "name": "probwindiv",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Playoffs%",
+     "description": "Chance to make the NBA playoffs, according to BPI.",
+     "displayName": "PROB MAKE PLAYOFFS",
+     "displayValue": ">99.9%",
+     "name": "probmakeplayoffs",
+     "value": 100.0
+    },
+    {
+     "abbreviation": "",
+     "description": "",
+     "displayName": "PROB HOME COURT",
+     "displayValue": "0.000",
+     "name": "probhomecourt",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob1Sd",
+     "description": "Probability of 1 seed",
+     "displayName": "PROB 1 SEED",
+     "displayValue": "0.000",
+     "name": "prob1seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob2Sd",
+     "description": "Probability of 2 seed",
+     "displayName": "PROB 2 SEED",
+     "displayValue": "0.000",
+     "name": "prob2seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob3Sd",
+     "description": "Probability of 3 seed",
+     "displayName": "PROB 3 SEED",
+     "displayValue": "0.000",
+     "name": "prob3seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob4Sd",
+     "description": "Probability of 4 seed",
+     "displayName": "PROB 4 SEED",
+     "displayValue": "0.000",
+     "name": "prob4seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob5Sd",
+     "description": "Probability of 5 seed",
+     "displayName": "PROB 5 SEED",
+     "displayValue": "0.000",
+     "name": "prob5seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob6Sd",
+     "description": "Probability of 6 seed",
+     "displayName": "PROB 6 SEED",
+     "displayValue": "0.000",
+     "name": "prob6seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Prob7Sd",
+     "description": "Probability of 7 seed",
+     "displayName": "PROB 7 SEED",
+     "displayValue": "1.000",
+     "name": "prob7seed",
+     "value": 1.0
+    },
+    {
+     "abbreviation": "Prob8Sd",
+     "description": "Probability of 8 seed",
+     "displayName": "PROB 8 SEED",
+     "displayValue": "0.000",
+     "name": "prob8seed",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCS%",
+     "description": "Chance to make the Conference Semifinals, according to BPI.",
+     "displayName": "PROB MAKE CONF SEMI",
+     "displayValue": "0%",
+     "name": "probmakeconfsemi",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "MakeCF%",
+     "description": "Chance to make the Conference Finals, according to BPI.",
+     "displayName": "PROB MAKE CONF CHAMP",
+     "displayValue": "0%",
+     "name": "probmakeconfchamp",
+     "value": 0.0
+    },
+    {
+     "abbreviation": "Finals%",
+     "description": "Chance to make the NBA Finals, according to BPI.",
+     "displayName": "PROB MAKE TITLE GAME",
+     "displayValue": "0%",
+     "name": "probmaketitlegame",
+     "value": 0.0
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/20?lang=en&region=us"
+   }
+  }
+ ],
+ "pageCount": 4,
+ "pageIndex": 1,
+ "pageSize": 25
+}

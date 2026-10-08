@@ -1,0 +1,30 @@
+schema: realgm_salary_cap
+kind: dataframe
+columns:
+- name: season
+  type: character
+  description: ''
+- name: salary_cap
+  type: character
+  description: ''
+- name: luxury_tax
+  type: character
+  description: ''
+- name: 1st_apron
+  type: character
+  description: ''
+- name: 2nd_apron
+  type: character
+  description: ''
+- name: bae
+  type: character
+  description: ''
+- name: non_taxpayer_mle
+  type: character
+  description: ''
+- name: taxpayer_mle
+  type: character
+  description: ''
+- name: team_room_mle
+  type: character
+  description: ''

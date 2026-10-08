@@ -108,6 +108,12 @@ def _response_shape(spec: dict, op: dict) -> Dict[str, str]:
     return {k: (v.get("$ref", "").split("/")[-1] or str(v.get("type"))) for k, v in props.items()}
 
 
+_WHOAMI_UNVERIFIED = (
+    "no capture: the body is the calling account's own identity record, so none is committed; there is "
+    "no parser either -- the wrapper returns that raw dict"
+)
+
+
 def _parser(path: str, op: dict, shape: Dict[str, str]) -> str | None:
     if path.startswith("/v2"):
         return "parse_pff_v2_table"
@@ -329,6 +335,15 @@ def build() -> tuple[dict, Dict[str, dict]]:
             ep["returns_schema"] = f"native/pff_api/{short}"
             if not schemas[short]["columns"]:
                 missing.append(short)  # no table columns captured and no union body
+        elif op["operationId"] == "whoami":
+            # deliberately unparsed (`_parser`); its docs page says why there is no table
+            schemas[short] = {
+                "schema": f"pff_api_{short}",
+                "kind": "dataframe",
+                "columns": [],
+                "unverified": _WHOAMI_UNVERIFIED,
+            }
+            ep["returns_schema"] = f"native/pff_api/{short}"
         endpoints.append(ep)
     if missing:
         # the per-route twin of _load's guard: one stale or partial capture must not ship an

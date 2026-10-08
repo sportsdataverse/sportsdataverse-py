@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import functools
 
+from sportsdataverse.wnba._bind import wnba_doc
+
 from sportsdataverse.nba.nba_player_props import nba_player_props as _core
 from sportsdataverse.nba.nba_player_props import player_rates as player_rates
 from sportsdataverse.nba.nba_player_props import project_player_line as project_player_line
@@ -18,8 +20,8 @@ from sportsdataverse.nba.nba_player_props import team_pace_projection as team_pa
 
 wnba_player_props = functools.partial(_core, league_id="10")
 functools.update_wrapper(wnba_player_props, _core)
-wnba_player_props.__doc__ = (
-    "WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props."
+wnba_player_props.__doc__ = wnba_doc(
+    "WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.", _core
 )
 
 __all__ = [

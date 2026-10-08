@@ -1,0 +1,21 @@
+schema: realgm_rookie_scale
+kind: dataframe
+columns:
+- name: pick
+  type: integer
+  description: ''
+- name: 1st_year_salary
+  type: character
+  description: ''
+- name: 2nd_year_salary
+  type: character
+  description: ''
+- name: 3rd_year_option_salary
+  type: character
+  description: ''
+- name: 4th_year_option_percentage_increased_over_3rd_year_salary
+  type: character
+  description: ''
+- name: qualifying_offer_percentage_increase_over_4th_year_salary
+  type: character
+  description: ''

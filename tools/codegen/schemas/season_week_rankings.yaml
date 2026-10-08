@@ -1,0 +1,6 @@
+schema: season_week_rankings
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

@@ -1,0 +1,33 @@
+schema: yahoo_cfb_boxscore
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: home_away
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: stat_category
+  type: character
+  description: ''
+- name: stat_type_id
+  type: character
+  description: ''
+- name: stat_name
+  type: character
+  description: ''
+- name: stat_abbreviation
+  type: character
+  description: ''
+- name: stat_variation
+  type: character
+  description: ''
+- name: value
+  type: character
+  description: ''

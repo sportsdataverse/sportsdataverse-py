@@ -29,6 +29,13 @@ not covered by the generated API-endpoint reference above.
 
 see the core function's Returns table.
 
+| col_name | type | description |
+|---|---|---|
+| `base_state` | character | 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third. |
+| `outs` | integer | Outs at the start of the base-out state (0-2). |
+| `run_expectancy` | double | Empirical mean runs scored from this state through the end of the half-inning (RE24). |
+| `n` | integer | Number of plate appearances observed starting in this base-out state. |
+
 **Example**
 
 ```python
@@ -52,6 +59,19 @@ matrix = college_baseball_re24(state=state)
 **Returns**
 
 see the core function's Returns table.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character |  |
+| `inning` | integer |  |
+| `half` | character |  |
+| `base_state` | character |  |
+| `outs` | integer |  |
+| `runs_before` | integer |  |
+| `runs_after` | integer |  |
+| `batting_team_id` | character |  |
+| `play_seq` | integer |  |
+| `score_diff` | integer |  |
 
 **Example**
 
@@ -78,6 +98,15 @@ state = college_baseball_state(raw)
 **Returns**
 
 see the core function's Returns table.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | ESPN event id for the game (join key to the schedule). |
+| `play_seq` | integer | Game-global sequential plate-appearance order. |
+| `re_before` | double | RE24 of the base-out state before the PA. |
+| `re_after` | double | RE24 of the base-out state after the PA. |
+| `run_value` | double | re_after minus re_before, plus runs scored on the play. |
+| `wpa` | double | Home-perspective win-probability added. |
 
 **Example**
 
@@ -111,6 +140,39 @@ freshly captured games resolve into IDENTICAL pbp columns.
 **Returns**
 
 One row per input play with every text-derivable `PBP_SCHEMA` column populated (`play_type`, hit/out flags, `rbi`, `pitch_sequence`, runner movement, ...). Empty input returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `contest_id` | character |  |
+| `inning` | integer |  |
+| `inning_top_bot` | character |  |
+| `batting` | character |  |
+| `fielding` | character |  |
+| `play_number` | integer |  |
+| `score_away` | integer |  |
+| `score_home` | integer |  |
+| `batter` | character | MLBAM player id of the batter. |
+| `play_type` | character |  |
+| `hit_trajectory` | character |  |
+| `fielded_position` | character |  |
+| `is_hit` | logical |  |
+| `is_out` | logical |  |
+| `strikeout_type` | character |  |
+| `is_sacrifice` | logical |  |
+| `sac_type` | character |  |
+| `is_double_play` | logical |  |
+| `rbi` | integer |  |
+| `count_balls` | integer |  |
+| `count_strikes` | integer |  |
+| `pitch_sequence` | character |  |
+| `error_position` | character |  |
+| `unearned` | logical |  |
+| `runs_scored` | integer |  |
+| `scoring_runners` | character |  |
+| `runners_advanced` | character |  |
+| `outs_on_play` | integer |  |
+| `is_scoring_play` | logical | Flag indicating that the play put points on the board (1 = scoring play, 0 = not). |
+| `description` | character |  |
 
 **Example**
 

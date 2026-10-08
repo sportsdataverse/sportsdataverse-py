@@ -236,10 +236,9 @@ silently completing the build from the live API.
   `sportsdataverse` namespace — the prefix-based names handle
   cross-sport disambiguation there.
 - Use unified `load_nfl_nextgen_stats(stat_type=...)` and
-  `load_nfl_pfr_advstats(stat_type=, summary_level=)`. The per-type
-  variants (`load_nfl_ngs_passing`, etc.) emit `DeprecationWarning` and
-  dispatch to the unified function. Extend the unified function;
-  do NOT add new per-type wrappers.
+  `load_nfl_pfr_advstats(stat_type=, summary_level=)`. The 11 per-type
+  variants (`load_nfl_ngs_passing`, etc.) were removed in 0.1.5. Extend the
+  unified function; do NOT add new per-type wrappers.
 - `load_nfl_ff_rankings` accepts `kind=` (preferred — `type=` shadows
   the builtin) AND `type=` (kept for nflreadpy parity). Pass exactly one.
 - Three module-level static datasets ship at import time from
@@ -251,8 +250,7 @@ silently completing the build from the live API.
 ### NFL Cache + Config
 
 `sportsdataverse/nfl/cache.py` + `config.py` provide a shared caching
-layer. All 45 canonical loaders + the 11 deprecated aliases still shipping in
-0.1.5 are wrapped with
+layer. All 45 canonical loaders are wrapped with
 `@cached_loader`. Cache key hashes `(qualified_name, args, sorted_kwargs)`
 and excludes `return_as_pandas` (one stored polars frame serves both
 engines).
@@ -412,11 +410,10 @@ uv add --dev some-package           # add dev-only dep
   changing a loader's underlying URL, call `clear_cache()` or set
   `cache_mode="off"` during development. The cache key excludes
   `return_as_pandas`.
-- **Don't add new per-type NFL loaders.** `load_nfl_ngs_*` and
-  `load_nfl_pfr_advstats_*` per-type variants emit `DeprecationWarning`
-  and dispatch to the unified `load_nfl_nextgen_stats(stat_type=)` /
-  `load_nfl_pfr_advstats(stat_type=, summary_level=)`. Extend the
-  unified function instead.
+- **Don't add new per-type NFL loaders.** The per-type `load_nfl_ngs_*`
+  and `load_nfl_pfr_*` variants were removed in 0.1.5. Extend the unified
+  `load_nfl_nextgen_stats(stat_type=)` /
+  `load_nfl_pfr_advstats(stat_type=, summary_level=)` instead.
 - **`cfb_play_participants` sidecar gaps** are mostly backfilled by the
   default-on `$ref` resolution pass (capped at 50 fetches/game).
   Don't replace it with new regex extraction — the four narrow

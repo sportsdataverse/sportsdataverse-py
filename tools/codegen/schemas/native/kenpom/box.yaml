@@ -1,0 +1,129 @@
+schema: box
+kind: frames
+frames:
+- section: linescore_table2
+  columns:
+  - name: column_0
+    type: character
+    description: ''
+  - name: q1
+    type: integer
+    description: ''
+  - name: q2
+    type: integer
+    description: ''
+  - name: q3
+    type: integer
+    description: ''
+  - name: q4
+    type: integer
+    description: ''
+  - name: t
+    type: integer
+    description: ''
+- section: table_1
+  columns:
+  - name: column_0
+    type: character
+    description: ''
+  - name: column_0_rk
+    type: integer
+    description: ''
+  - name: name
+    type: character
+    description: ''
+  - name: min
+    type: integer
+    description: ''
+  - name: o_rtg
+    type: integer
+    description: ''
+  - name: pct_ps
+    type: integer
+    description: ''
+  - name: pts
+    type: integer
+    description: ''
+  - name: 2_pm_a
+    type: character
+    description: ''
+  - name: 3_pm_a
+    type: character
+    description: ''
+  - name: ftm_a
+    type: character
+    description: ''
+  - name: or
+    type: integer
+    description: ''
+  - name: dr
+    type: integer
+    description: ''
+  - name: a
+    type: integer
+    description: ''
+  - name: to
+    type: integer
+    description: ''
+  - name: blk
+    type: integer
+    description: ''
+  - name: stl
+    type: integer
+    description: ''
+  - name: pf
+    type: integer
+    description: ''
+- section: table_2
+  columns:
+  - name: column_0
+    type: character
+    description: ''
+  - name: column_0_rk
+    type: integer
+    description: ''
+  - name: name
+    type: character
+    description: ''
+  - name: min
+    type: integer
+    description: ''
+  - name: o_rtg
+    type: integer
+    description: ''
+  - name: pct_ps
+    type: integer
+    description: ''
+  - name: pts
+    type: integer
+    description: ''
+  - name: 2_pm_a
+    type: character
+    description: ''
+  - name: 3_pm_a
+    type: character
+    description: ''
+  - name: ftm_a
+    type: character
+    description: ''
+  - name: or
+    type: integer
+    description: ''
+  - name: dr
+    type: integer
+    description: ''
+  - name: a
+    type: integer
+    description: ''
+  - name: to
+    type: integer
+    description: ''
+  - name: blk
+    type: integer
+    description: ''
+  - name: stl
+    type: integer
+    description: ''
+  - name: pf
+    type: integer
+    description: ''

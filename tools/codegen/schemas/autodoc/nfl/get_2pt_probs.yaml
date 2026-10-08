@@ -1,0 +1,21 @@
+schema: get_2pt_probs
+kind: dataframe
+columns:
+- name: go_index
+  type: integer
+  description: ''
+- name: two_pt_wp
+  type: double
+  description: ''
+- name: xp_wp
+  type: double
+  description: ''
+- name: prob_2pt
+  type: double
+  description: ''
+- name: two_pt_wp_diff
+  type: double
+  description: ''
+- name: two_pt_recommendation
+  type: character
+  description: ''

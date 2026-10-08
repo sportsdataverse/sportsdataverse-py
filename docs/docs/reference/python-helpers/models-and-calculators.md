@@ -23,6 +23,26 @@ Expected remaining runs + run rate from a win-probability-scored state frame.
 
 The input rows plus `exp_runs_remaining:Float64` (`proj_final - runs`, floored at 0) and `exp_run_rate:Float64` (per remaining over; null when no overs remain). A zero-row input returns the schema with both columns appended (all null).
 
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character |  |
+| `innings_number` | integer |  |
+| `batting_team_id` | character |  |
+| `runs` | integer |  |
+| `wickets` | integer |  |
+| `balls_bowled` | integer |  |
+| `balls_total` | integer |  |
+| `target` | integer |  |
+| `fmt` | character |  |
+| `overs_left` | integer |  |
+| `wickets_left` | integer |  |
+| `resources_left` | double |  |
+| `proj_final` | double |  |
+| `win_prob_raw` | double |  |
+| `win_prob` | double |  |
+| `exp_runs_remaining` | double |  |
+| `exp_run_rate` | double |  |
+
 **Example**
 
 ```python
@@ -56,6 +76,18 @@ the other is the first innings (setting).
 
 A `polars.DataFrame` (or pandas) with the documented state schema; a zero-row frame when the payload is empty/malformed.
 
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character |  |
+| `innings_number` | integer |  |
+| `batting_team_id` | character |  |
+| `runs` | integer |  |
+| `wickets` | integer |  |
+| `balls_bowled` | integer |  |
+| `balls_total` | integer |  |
+| `target` | integer |  |
+| `fmt` | character |  |
+
 **Example**
 
 ```python
@@ -81,6 +113,24 @@ In-play win probability for the batting/chasing team from match state.
 **Returns**
 
 The input rows plus `overs_left:Int64`, `wickets_left:Int64`, `resources_left:Float64`, `proj_final:Float64`, `win_prob_raw:Float64` (parametric core) and `win_prob:Float64` (calibrated, the shipped estimate). A zero-row input returns the schema with these columns appended (all null).
+
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character |  |
+| `innings_number` | integer |  |
+| `batting_team_id` | character |  |
+| `runs` | integer |  |
+| `wickets` | integer |  |
+| `balls_bowled` | integer |  |
+| `balls_total` | integer |  |
+| `target` | integer |  |
+| `fmt` | character |  |
+| `overs_left` | integer |  |
+| `wickets_left` | integer |  |
+| `resources_left` | double |  |
+| `proj_final` | double |  |
+| `win_prob_raw` | double |  |
+| `win_prob` | double |  |
 
 **Example**
 
@@ -115,6 +165,27 @@ innings, and the first state of each innings has `wpa_batting = 0`.
 **Returns**
 
 The input rows (sorted by `event_id, innings_number, balls_bowled`) plus `win_prob_before:Float64`, `wpa_batting:Float64` and `wpa_bowling:Float64`. A zero-row input returns the schema with those columns appended (all null).
+
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character |  |
+| `innings_number` | integer |  |
+| `batting_team_id` | character |  |
+| `runs` | integer |  |
+| `wickets` | integer |  |
+| `balls_bowled` | integer |  |
+| `balls_total` | integer |  |
+| `target` | integer |  |
+| `fmt` | character |  |
+| `overs_left` | integer |  |
+| `wickets_left` | integer |  |
+| `resources_left` | double |  |
+| `proj_final` | double |  |
+| `win_prob_raw` | double |  |
+| `win_prob` | double |  |
+| `win_prob_before` | double |  |
+| `wpa_batting` | double |  |
+| `wpa_bowling` | double |  |
 
 **Example**
 
@@ -283,6 +354,16 @@ coverage observed during this port was tournament-only.
 **Returns**
 
 One row per team: `team_id, adj_off, adj_def, adj_net, raw_off, raw_def, games`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `adj_off` | double |  |
+| `adj_def` | double |  |
+| `adj_net` | double |  |
+| `raw_off` | double |  |
+| `raw_def` | double |  |
+| `games` | integer |  |
 
 **Example**
 

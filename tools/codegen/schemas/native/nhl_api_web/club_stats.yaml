@@ -1,0 +1,127 @@
+schema: club_stats
+kind: frames
+frames:
+- section: skaters
+  columns:
+  - name: player_id
+    type: integer
+    description: ''
+  - name: headshot
+    type: character
+    description: ''
+  - name: position_code
+    type: character
+    description: ''
+  - name: games_played
+    type: integer
+    description: ''
+  - name: goals
+    type: integer
+    description: ''
+  - name: assists
+    type: integer
+    description: ''
+  - name: points
+    type: integer
+    description: ''
+  - name: plus_minus
+    type: integer
+    description: ''
+  - name: penalty_minutes
+    type: integer
+    description: ''
+  - name: power_play_goals
+    type: integer
+    description: ''
+  - name: shorthanded_goals
+    type: integer
+    description: ''
+  - name: game_winning_goals
+    type: integer
+    description: ''
+  - name: overtime_goals
+    type: integer
+    description: ''
+  - name: shots
+    type: integer
+    description: ''
+  - name: shooting_pctg
+    type: double
+    description: ''
+  - name: avg_time_on_ice_per_game
+    type: double
+    description: ''
+  - name: avg_shifts_per_game
+    type: double
+    description: ''
+  - name: faceoff_win_pctg
+    type: double
+    description: ''
+  - name: first_name_default
+    type: character
+    description: ''
+  - name: last_name_default
+    type: character
+    description: ''
+- section: goalies
+  columns:
+  - name: player_id
+    type: integer
+    description: ''
+  - name: headshot
+    type: character
+    description: ''
+  - name: games_played
+    type: integer
+    description: ''
+  - name: games_started
+    type: integer
+    description: ''
+  - name: wins
+    type: integer
+    description: ''
+  - name: losses
+    type: integer
+    description: ''
+  - name: overtime_losses
+    type: integer
+    description: ''
+  - name: goals_against_average
+    type: double
+    description: ''
+  - name: save_percentage
+    type: double
+    description: ''
+  - name: shots_against
+    type: integer
+    description: ''
+  - name: saves
+    type: integer
+    description: ''
+  - name: goals_against
+    type: integer
+    description: ''
+  - name: shutouts
+    type: integer
+    description: ''
+  - name: goals
+    type: integer
+    description: ''
+  - name: assists
+    type: integer
+    description: ''
+  - name: points
+    type: integer
+    description: ''
+  - name: penalty_minutes
+    type: integer
+    description: ''
+  - name: time_on_ice
+    type: integer
+    description: ''
+  - name: first_name_default
+    type: character
+    description: ''
+  - name: last_name_default
+    type: character
+    description: ''

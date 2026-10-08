@@ -1,0 +1,30 @@
+schema: nhl_penalty_value
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: penalties_drawn
+  type: integer
+  description: ''
+- name: penalties_taken
+  type: integer
+  description: ''
+- name: minors_drawn
+  type: integer
+  description: ''
+- name: minors_taken
+  type: integer
+  description: ''
+- name: majors_drawn
+  type: integer
+  description: ''
+- name: majors_taken
+  type: integer
+  description: ''
+- name: net_penalties
+  type: integer
+  description: ''
+- name: net_penalty_value
+  type: double
+  description: ''

@@ -1,0 +1,29 @@
+schema: player_stats
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: rk
+    type: integer
+    description: ''
+  - name: player
+    type: character
+    description: ''
+  - name: team
+    type: character
+    description: ''
+  - name: e_fg_pct
+    type: double
+    description: ''
+  - name: ht
+    type: character
+    description: ''
+  - name: wt
+    type: integer
+    description: ''
+  - name: yr
+    type: character
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

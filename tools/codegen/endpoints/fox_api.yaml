@@ -25,6 +25,7 @@ docstring:
     note: the endpoint spec these wrappers were cleaned from
 endpoints:
 - short: scoreboard
+  returns_schema: native/fox_api/scoreboard
   summary: GET /bifrost/v1/{sport}/scoreboard/main -- Fox Sports API scoreboard.
   path: /bifrost/v1/{sport}/scoreboard/main
   parser: parse_fox_api_events
@@ -51,6 +52,7 @@ endpoints:
   example_args:
     sport: nfl
 - short: scorechip
+  returns_schema: native/fox_api/scorechip
   summary: GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route 400s if api-version is sent).
   path: /bifrost/v1/{sport}/scorechip/{chip_id}
   parser: parse_fox_api_scorechip
@@ -73,6 +75,7 @@ endpoints:
     sport: nfl
     chip_id: nfl11195
 - short: topevents_scoreboard_segment
+  returns_schema: native/fox_api/topevents_scoreboard_segment
   summary: GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topevents scoreboard segment.
   path: /bifrost/v1/topevents/scoreboard/segment/{segment}
   parser: parse_fox_api_events
@@ -95,6 +98,7 @@ endpoints:
   example_args:
     segment: '1'
 - short: league_conferences
+  returns_schema: native/fox_api/league_conferences
   summary: GET /bifrost/v1/{sport}/league/conferences -- Fox Sports API league conferences.
   path: /bifrost/v1/{sport}/league/conferences
   parser: parse_fox_api_nav
@@ -115,8 +119,9 @@ endpoints:
     default: '1.1'
     description: Fox API version (``api-version`` query key).
   example_args:
-    sport: nfl
+    sport: cfb
 - short: league_header
+  returns_schema: native/fox_api/league_header
   summary: GET /bifrost/v1/{sport}/league/header -- Fox Sports API league header.
   path: /bifrost/v1/{sport}/league/header
   parser: parse_fox_api_header
@@ -139,6 +144,7 @@ endpoints:
   example_args:
     sport: nfl
 - short: league_odds
+  returns_schema: native/fox_api/league_odds
   summary: GET /bifrost/v1/{sport}/league/odds -- Fox Sports API league odds.
   path: /bifrost/v1/{sport}/league/odds
   parser: parse_fox_api
@@ -165,6 +171,7 @@ endpoints:
   example_args:
     sport: nfl
 - short: league_playernews
+  returns_schema: native/fox_api/league_playernews
   summary: GET /bifrost/v1/{sport}/league/playernews -- Fox Sports API league playernews.
   path: /bifrost/v1/{sport}/league/playernews
   parser: parse_fox_api
@@ -187,6 +194,7 @@ endpoints:
   example_args:
     sport: nfl
 - short: league_polls
+  returns_schema: native/fox_api/league_polls
   summary: GET /bifrost/v1/{sport}/league/polls -- Fox Sports API league polls.
   path: /bifrost/v1/{sport}/league/polls
   parser: parse_fox_api_polls
@@ -207,8 +215,9 @@ endpoints:
     default: '1.1'
     description: Fox API version (``api-version`` query key).
   example_args:
-    sport: nfl
+    sport: cfb
 - short: league_schedule
+  returns_schema: native/fox_api/league_schedule
   summary: GET /bifrost/v1/{sport}/league/schedule -- Fox Sports API league schedule.
   path: /bifrost/v1/{sport}/league/schedule
   parser: parse_fox_api_events
@@ -231,6 +240,7 @@ endpoints:
   example_args:
     sport: nfl
 - short: league_scores
+  returns_schema: native/fox_api/league_scores
   summary: GET /bifrost/v1/{sport}/league/scores -- Fox Sports API league scores.
   path: /bifrost/v1/{sport}/league/scores
   parser: parse_fox_api_events
@@ -253,6 +263,7 @@ endpoints:
   example_args:
     sport: nfl
 - short: league_scores_segment
+  returns_schema: native/fox_api/league_scores_segment
   summary: GET /bifrost/v1/{sport}/league/scores-segment/{segment_id} -- Fox Sports API league scores segment.
   path: /bifrost/v1/{sport}/league/scores-segment/{segment_id}
   parser: parse_fox_api_events
@@ -284,6 +295,7 @@ endpoints:
     sport: nfl
     segment_id: 2026-3-1
 - short: league_standings
+  returns_schema: native/fox_api/league_standings
   summary: GET /bifrost/v1/{sport}/league/standings -- Fox Sports API league standings.
   path: /bifrost/v1/{sport}/league/standings
   parser: parse_fox_api_standings
@@ -306,6 +318,7 @@ endpoints:
   example_args:
     sport: nfl
 - short: league_stats
+  returns_schema: native/fox_api/league_stats
   summary: GET /bifrost/v1/{sport}/league/stats -- Fox Sports API league stats.
   path: /bifrost/v1/{sport}/league/stats
   parser: parse_fox_api
@@ -328,6 +341,7 @@ endpoints:
   example_args:
     sport: nfl
 - short: league_stats_con
+  returns_schema: native/fox_api/league_stats_con
   summary: GET /bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page} -- Fox Sports API league stats con.
   path: /bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page}
   parser: parse_fox_api
@@ -369,6 +383,7 @@ endpoints:
     category: passing
     page: '1'
 - short: league_teamnav
+  returns_schema: native/fox_api/league_teamnav
   summary: GET /bifrost/v1/{sport}/league/teamnav -- Fox Sports API league teamnav.
   path: /bifrost/v1/{sport}/league/teamnav
   parser: parse_fox_api_nav
@@ -391,6 +406,7 @@ endpoints:
   example_args:
     sport: nfl
 - short: event_data
+  returns_schema: native/fox_api/event_data
   summary: GET /bifrost/v1/{sport}/event/{event_id}/data -- Fox Sports API event data.
   path: /bifrost/v1/{sport}/event/{event_id}/data
   parser: parse_fox_api
@@ -418,6 +434,7 @@ endpoints:
     sport: nfl
     event_id: '11195'
 - short: event_matchup
+  returns_schema: native/fox_api/event_matchup
   summary: GET /bifrost/v1/{sport}/event/{event_id}/matchup -- Fox Sports API event matchup.
   path: /bifrost/v1/{sport}/event/{event_id}/matchup
   parser: parse_fox_api
@@ -445,6 +462,7 @@ endpoints:
     sport: nfl
     event_id: '11195'
 - short: event_odds
+  returns_schema: native/fox_api/event_odds
   summary: GET /bifrost/v1/{sport}/event/{event_id}/odds -- Fox Sports API event odds.
   path: /bifrost/v1/{sport}/event/{event_id}/odds
   parser: parse_fox_api
@@ -472,6 +490,7 @@ endpoints:
     sport: nfl
     event_id: '11195'
 - short: event_recap
+  returns_schema: native/fox_api/event_recap
   summary: GET /bifrost/v1/{sport}/event/{event_id}/recap -- Fox Sports API event recap.
   path: /bifrost/v1/{sport}/event/{event_id}/recap
   parser: parse_fox_api
@@ -499,6 +518,7 @@ endpoints:
     sport: nfl
     event_id: '11195'
 - short: event_standings
+  returns_schema: native/fox_api/event_standings
   summary: GET /bifrost/v1/{sport}/event/{event_id}/standings -- Fox Sports API event standings.
   path: /bifrost/v1/{sport}/event/{event_id}/standings
   parser: parse_fox_api_standings
@@ -526,6 +546,7 @@ endpoints:
     sport: nfl
     event_id: '11195'
 - short: team_gamelog
+  returns_schema: native/fox_api/team_gamelog
   summary: GET /bifrost/v1/{sport}/team/{team_id}/gamelog -- Fox Sports API team gamelog.
   path: /bifrost/v1/{sport}/team/{team_id}/gamelog
   parser: parse_fox_api
@@ -553,6 +574,7 @@ endpoints:
     sport: nfl
     team_id: '25'
 - short: team_header
+  returns_schema: native/fox_api/team_header
   summary: GET /bifrost/v1/{sport}/team/{team_id}/header -- Fox Sports API team header.
   path: /bifrost/v1/{sport}/team/{team_id}/header
   parser: parse_fox_api_header
@@ -580,6 +602,7 @@ endpoints:
     sport: nfl
     team_id: '25'
 - short: team_roster
+  returns_schema: native/fox_api/team_roster
   summary: GET /bifrost/v1/{sport}/team/{team_id}/roster -- Fox Sports API team roster.
   path: /bifrost/v1/{sport}/team/{team_id}/roster
   parser: parse_fox_api_roster
@@ -607,6 +630,7 @@ endpoints:
     sport: nfl
     team_id: '25'
 - short: team_standings
+  returns_schema: native/fox_api/team_standings
   summary: GET /bifrost/v1/{sport}/team/{team_id}/standings -- Fox Sports API team standings.
   path: /bifrost/v1/{sport}/team/{team_id}/standings
   parser: parse_fox_api_standings
@@ -634,6 +658,7 @@ endpoints:
     sport: nfl
     team_id: '25'
 - short: team_stats
+  returns_schema: native/fox_api/team_stats
   summary: GET /bifrost/v1/{sport}/team/{team_id}/stats -- Fox Sports API team stats.
   path: /bifrost/v1/{sport}/team/{team_id}/stats
   parser: parse_fox_api
@@ -661,6 +686,7 @@ endpoints:
     sport: nfl
     team_id: '25'
 - short: explore_browse
+  returns_schema: native/fox_api/explore_browse
   summary: GET /bifrost/v1/explore/browse/{section}/main -- Fox Sports API explore browse.
   path: /bifrost/v1/explore/browse/{section}/main
   parser: parse_fox_api_nav
@@ -683,6 +709,7 @@ endpoints:
   example_args:
     section: sports
 - short: explore_odds
+  returns_schema: native/fox_api/explore_odds
   summary: GET /bifrost/v1/explore/odds/main -- Fox Sports API explore odds.
   path: /bifrost/v1/explore/odds/main
   parser: parse_fox_api
@@ -698,6 +725,7 @@ endpoints:
     default: '1.1'
     description: Fox API version (``api-version`` query key).
 - short: search_content
+  returns_schema: native/fox_api/search_content
   summary: GET /bifrost/v1/search/content -- Fox Sports API search content.
   path: /bifrost/v1/search/content
   parser: parse_fox_api_search
@@ -719,6 +747,7 @@ endpoints:
   example_args:
     text: mahomes
 - short: search_entities
+  returns_schema: native/fox_api/search_entities
   summary: GET /bifrost/v1/search/entities -- Fox Sports API search entities.
   path: /bifrost/v1/search/entities
   parser: parse_fox_api_search
@@ -740,6 +769,7 @@ endpoints:
   example_args:
     text: mahomes
 - short: search_popular
+  returns_schema: native/fox_api/search_popular
   summary: GET /bifrost/v1/search/popular -- Fox Sports API search popular.
   path: /bifrost/v1/search/popular
   parser: parse_fox_api_search
@@ -755,6 +785,7 @@ endpoints:
     default: '1.1'
     description: Fox API version (``api-version`` query key).
 - short: trending_articles
+  returns_schema: native/fox_api/trending_articles
   summary: GET /bifrost/v1/general/trending/articles -- Fox Sports API trending articles.
   path: /bifrost/v1/general/trending/articles
   parser: parse_fox_api_trending
@@ -779,6 +810,7 @@ endpoints:
     type: str
     description: Comma-separated tag filter.
 - short: trending_videos
+  returns_schema: native/fox_api/trending_videos
   summary: GET /bifrost/v1/general/trending/videos -- Fox Sports API trending videos.
   path: /bifrost/v1/general/trending/videos
   parser: parse_fox_api_trending
@@ -804,6 +836,7 @@ endpoints:
     description: Maximum items to return.
     default: 12
 - short: foxpolls
+  returns_schema: native/fox_api/foxpolls
   summary: GET /foxpolls/v1/polls -- Fox Sports API foxpolls.
   path: /foxpolls/v1/polls
   parser: parse_fox_api

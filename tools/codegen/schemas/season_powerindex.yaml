@@ -1,0 +1,30 @@
+schema: season_powerindex
+kind: dataframe
+columns:
+- name: last_updated
+  type: character
+  description: ''
+- name: max_game_date
+  type: character
+  description: ''
+- name: run_cutoff_date
+  type: character
+  description: ''
+- name: run_date_time_key
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: season_type
+  type: integer
+  description: ''
+- name: stats
+  type: character
+  description: ''
+- name: league_$ref
+  type: character
+  description: ''
+- name: team_$ref
+  type: character
+  description: ''

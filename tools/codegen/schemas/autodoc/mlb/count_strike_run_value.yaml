@@ -1,0 +1,12 @@
+schema: count_strike_run_value
+kind: dataframe
+columns:
+- name: balls
+  type: integer
+  description: ''
+- name: strikes
+  type: integer
+  description: ''
+- name: strike_run_value
+  type: double
+  description: ''

@@ -28,6 +28,14 @@ sign-prefixed integer columns (`"+7"`, not `"7"`).
 
 Frame with schema `DARKO_DPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
 
+| col_name | type | description |
+|---|---|---|
+| `player_name` | character | Player name. |
+| `team` | character | Team-side label or team identifier. |
+| `dpm` | integer |  |
+| `odpm` | integer |  |
+| `ddpm` | integer |  |
+
 **Example**
 
 ```python
@@ -57,6 +65,14 @@ plan's "WP4/WP2 dependency notes").
 
 Frame with schema `DT_STATS_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `season` | integer | Season year. |
+| `player_name` | character | Player name. |
+| `team_alias` | character | JSON-encoded alias object for the entity's team, carrying its Yahoo page URL and path. |
+| `ewins` | double |  |
+
 **Example**
 
 ```python
@@ -80,6 +96,16 @@ Parse a Dunks & Threes EPM CSV (`{season}_EPM_data.csv`).
 
 Frame with schema `EPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `season` | integer | Season year. |
+| `player_name` | character | Player name. |
+| `team` | character | Team-side label or team identifier. |
+| `oepm` | double |  |
+| `depm` | double |  |
+| `epm` | double |  |
+
 **Example**
 
 ```python
@@ -102,6 +128,18 @@ Parse a LEBRON daily-snapshot CSV (e.g. `lebron_daily_2026-07-02.csv`).
 **Returns**
 
 Frame with schema `LEBRON_DAILY_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `through_date` | character |  |
+| `season` | character | Season year. |
+| `player_name` | character | Player name. |
+| `mins` | double |  |
+| `lebron` | double |  |
+| `o_lebron` | double |  |
+| `d_lebron` | double |  |
+| `war` | double |  |
 
 **Example**
 
@@ -132,6 +170,17 @@ multi-year window (`"2010-2013"`). Both parse with this one function.
 
 Frame with schema `LEBRON_SEASON_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `seasons` | character | NBA seasons played. |
+| `team` | character | Team-side label or team identifier. |
+| `lebron` | double |  |
+| `o_lebron` | double |  |
+| `d_lebron` | double |  |
+| `war` | double |  |
+
 **Example**
 
 ```python
@@ -161,6 +210,18 @@ convention (`nba_rapm`'s `rapm` column, not separate offense/defense).
 **Returns**
 
 Frame with schema `RAPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `season` | character | Season year. |
+| `LA_RAPM` | double |  |
+| `RAPM` | double |  |
+| `RA_EFG` | double |  |
+| `RA_FTR` | double |  |
+| `RA_ORBD` | double |  |
+| `RA_TOV` | double |  |
 
 **Example**
 

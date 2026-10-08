@@ -1974,6 +1974,7 @@ endpoints:
   short: signature_defense_slot_coverage
   summary: 'Signature stat: slot coverage'
 - path: /v1/auth/whoami
+  returns_schema: native/pff_api/whoami
   short: whoami
   summary: Show what this API believes about the current credential
 - example_args:

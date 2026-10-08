@@ -82,8 +82,12 @@ Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` |  |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` |  |  | A season or list of seasons, as END years (2026 = the 2025-26 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Exactly what `load_nhl_goalie_boxscores` returns -- one row per goalie per game, the requested seasons stacked; see its documented columns. A pandas DataFrame when `return_as_pandas` is True.
 
 ### load_nhl_player_box {#load_nhl_player_box}
 
@@ -95,8 +99,12 @@ Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` |  |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` |  |  | A season or list of seasons, as END years (2026 = the 2025-26 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Exactly what `load_nhl_player_boxscore` returns -- one row per player per game, the requested seasons stacked; see its documented columns. A pandas DataFrame when `return_as_pandas` is True.
 
 ### load_nhl_skater_box {#load_nhl_skater_box}
 
@@ -108,8 +116,12 @@ Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` |  |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` |  |  | A season or list of seasons, as END years (2026 = the 2025-26 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Exactly what `load_nhl_skater_boxscores` returns -- one row per skater per game, the requested seasons stacked; see its documented columns. A pandas DataFrame when `return_as_pandas` is True.
 
 ### load_nhl_team_box {#load_nhl_team_box}
 
@@ -121,5 +133,9 @@ Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` |  |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` |  |  | A season or list of seasons, as END years (2026 = the 2025-26 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Exactly what `load_nhl_team_boxscore` returns -- one row per team per game, the requested seasons stacked; see its documented columns. A pandas DataFrame when `return_as_pandas` is True.

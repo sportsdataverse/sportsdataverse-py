@@ -1,0 +1,5 @@
+schema: pbp_base_out_states
+kind: dataframe
+columns: []
+unverified: 'no capture: its play-by-play input comes from statsapi.mlb.com, which answers HTTP 406 to the datacenter IP the
+  docs are built on, and load_mlb_pbp lacks its game_id / about_* columns'

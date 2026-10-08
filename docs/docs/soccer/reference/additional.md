@@ -173,6 +173,33 @@ event, columns snake-cased (kloppy's own names -- `event_id`, `event_type`,
 
 A polars DataFrame (pandas with `return_as_pandas=True`), one row per event. Coordinates are in the dataset's coordinate system -- kloppy's default is a 0-1 normalized pitch; pass `coordinates="statsbomb"` (etc.) to kloppy's loader to keep the provider's units.
 
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character |  |
+| `event_type` | character |  |
+| `period_id` | integer |  |
+| `timestamp` | character |  |
+| `end_timestamp` | character |  |
+| `ball_state` | character |  |
+| `ball_owning_team` | character |  |
+| `team_id` | character |  |
+| `player_id` | character |  |
+| `coordinates_x` | double |  |
+| `coordinates_y` | double |  |
+| `result` | character |  |
+| `success` | logical |  |
+| `end_coordinates_x` | double |  |
+| `end_coordinates_y` | double |  |
+| `receiver_player_id` | character |  |
+| `set_piece_type` | character |  |
+| `body_part_type` | character |  |
+| `is_under_pressure` | logical |  |
+| `pass_type` | character |  |
+| `duel_type` | character |  |
+| `goalkeeper_type` | character |  |
+| `is_counter_attack` | logical |  |
+| `card_type` | character |  |
+
 **Example**
 
 ```python
@@ -250,6 +277,33 @@ shape and are added on request.
 
 A polars DataFrame (pandas with `return_as_pandas=True`), one row per event; see `soccer_events_to_frame` for the columns.
 
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character |  |
+| `event_type` | character |  |
+| `period_id` | integer |  |
+| `timestamp` | character |  |
+| `end_timestamp` | character |  |
+| `ball_state` | character |  |
+| `ball_owning_team` | character |  |
+| `team_id` | character |  |
+| `player_id` | character |  |
+| `coordinates_x` | double |  |
+| `coordinates_y` | double |  |
+| `result` | character |  |
+| `success` | logical |  |
+| `end_coordinates_x` | double |  |
+| `end_coordinates_y` | double |  |
+| `receiver_player_id` | character |  |
+| `set_piece_type` | character |  |
+| `body_part_type` | character |  |
+| `is_under_pressure` | logical |  |
+| `pass_type` | character |  |
+| `duel_type` | character |  |
+| `goalkeeper_type` | character |  |
+| `is_counter_attack` | logical |  |
+| `card_type` | character |  |
+
 **Example**
 
 ```python
@@ -287,6 +341,26 @@ frame from any provider kloppy reads is comparable. StatsBomb is the tested path
 
 One row per on-ball action with the SPADL columns (`type_name`, `result_name`, `bodypart_name`, start/end coordinates in meters, `time_seconds` from the period's kick-off). Empty dataset -> zero-row frame with the same schema.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character |  |
+| `original_event_id` | character |  |
+| `action_id` | integer |  |
+| `period_id` | integer |  |
+| `time_seconds` | double |  |
+| `team_id` | character |  |
+| `player_id` | character |  |
+| `start_x` | double |  |
+| `start_y` | double |  |
+| `end_x` | double |  |
+| `end_y` | double |  |
+| `bodypart_id` | integer |  |
+| `bodypart_name` | character |  |
+| `type_id` | integer |  |
+| `type_name` | character |  |
+| `result_id` | integer |  |
+| `result_name` | character |  |
+
 **Example**
 
 ```python
@@ -316,6 +390,27 @@ Append `xt_value` (Expected Threat added by each successful pass, dribble or cro
 **Returns**
 
 `actions` with a `Float64` `xt_value` column (null for actions xT does not value).
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character |  |
+| `original_event_id` | character |  |
+| `action_id` | integer |  |
+| `period_id` | integer |  |
+| `time_seconds` | double |  |
+| `team_id` | character |  |
+| `player_id` | character |  |
+| `start_x` | double |  |
+| `start_y` | double |  |
+| `end_x` | double |  |
+| `end_y` | double |  |
+| `bodypart_id` | integer |  |
+| `bodypart_name` | character |  |
+| `type_id` | integer |  |
+| `type_name` | character |  |
+| `result_id` | integer |  |
+| `result_name` | character |  |
+| `xt_value` | double |  |
 
 **Example**
 

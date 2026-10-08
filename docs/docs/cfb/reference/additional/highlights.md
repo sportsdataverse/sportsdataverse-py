@@ -755,7 +755,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `recent` | logical |  |
 | `start_date` | character | Season start timestamp (ISO 8601, UTC). |
 | `broadcast` | character | Broadcast network short name. |
-| `highlights` | character | Game highlight urls. |
+| `highlights` | integer | Game highlight urls. |
 | `notes_type` | character |  |
 | `notes_headline` | character |  |
 | `broadcast_market` | character |  |
@@ -821,6 +821,10 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `season` | integer | Season (4-digit year). |
 | `season_type` | integer | ESPN season type (2 = regular, 3 = postseason). |
 | `week` | integer | Game week of the season. |
+| `home_logo_dark` | character |  |
+| `away_logo_dark` | character |  |
+| `home_winner` | logical |  |
+| `away_winner` | logical |  |
 
 **Example**
 
@@ -941,6 +945,8 @@ cfbfastR-named play frame from the NCAA structural pbp frame.
 **Returns**
 
 A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas`) with one row per play (markers/furniture dropped) and the columns of `CFBFASTR_SCHEMA`. Empty input returns a **zero-row frame carrying the documented schema**. Two conventions the NCAA page forces, both matching the ESPN processor: a play wiped out by a penalty ("... NO PLAY.") is typed `"Penalty"` with every outcome flag `False` and every yardage column null (it keeps its participants, its `penalty_*` columns and its spot) -- except `fg_made`, which is null there as on every row that is not a field-goal attempt; and a try is attributed to the team that scored the touchdown, so a block-printed pair of tries carries a different `pos_team` per row.
+
+No returns table is published for this function: no capture: its one-game stats.ncaa.org input comes only from a season-sized release or from raw HTML, and the season load runs longer than the capture allows.
 
 **Example**
 

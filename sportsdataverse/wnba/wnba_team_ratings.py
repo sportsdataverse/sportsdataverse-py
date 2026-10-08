@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import functools
 
+from sportsdataverse.wnba._bind import wnba_doc
+
 from sportsdataverse.nba.nba_team_ratings import adjust_efficiency as adjust_efficiency
 from sportsdataverse.nba.nba_team_ratings import adjust_pace as adjust_pace
 from sportsdataverse.nba.nba_team_ratings import nba_team_ratings as _core
@@ -17,8 +19,8 @@ from sportsdataverse.nba.nba_team_ratings import raw_game_efficiency as raw_game
 
 wnba_team_ratings = functools.partial(_core, league_id="10")
 functools.update_wrapper(wnba_team_ratings, _core)
-wnba_team_ratings.__doc__ = (
-    "WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings."
+wnba_team_ratings.__doc__ = wnba_doc(
+    "WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings.", _core
 )
 
 __all__ = ["adjust_efficiency", "adjust_pace", "raw_game_efficiency", "wnba_team_ratings"]

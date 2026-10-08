@@ -1,0 +1,39 @@
+schema: nba_team_ratings
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: adj_off_rtg
+  type: double
+  description: ''
+- name: adj_def_rtg
+  type: double
+  description: ''
+- name: adj_net_rtg
+  type: double
+  description: ''
+- name: adj_pace
+  type: double
+  description: ''
+- name: raw_off_rtg
+  type: double
+  description: ''
+- name: raw_def_rtg
+  type: double
+  description: ''
+- name: raw_pace
+  type: double
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: rank
+  type: integer
+  description: ''
+- name: adj_net_z
+  type: double
+  description: ''

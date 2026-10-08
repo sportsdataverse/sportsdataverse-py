@@ -34,6 +34,7 @@ from sportsdataverse._common_espn_parsers import (
     parse_team_roster,
     parse_team_schedule,
     parse_teams,
+    parse_transactions,
     parse_weekly_powerindex,
 )
 
@@ -418,7 +419,7 @@ def espn_wbb_transactions(
 
     Args:
         limit: Maximum number of items to return.
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_transactions -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -445,7 +446,7 @@ def espn_wbb_transactions(
         **kwargs,
     )
     if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
+        return parse_transactions(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

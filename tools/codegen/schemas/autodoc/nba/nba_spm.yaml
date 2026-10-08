@@ -1,0 +1,21 @@
+schema: nba_spm
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: ospm
+  type: double
+  description: ''
+- name: dspm
+  type: double
+  description: ''
+- name: spm
+  type: double
+  description: ''
+- name: min
+  type: double
+  description: ''
+- name: gp
+  type: integer
+  description: ''

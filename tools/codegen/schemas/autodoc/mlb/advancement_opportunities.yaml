@@ -1,0 +1,12 @@
+schema: advancement_opportunities
+kind: dataframe
+columns:
+- name: runner_id
+  type: character
+  description: ''
+- name: opp_type
+  type: character
+  description: ''
+- name: took_extra
+  type: integer
+  description: ''

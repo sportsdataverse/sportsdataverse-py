@@ -1,0 +1,15 @@
+schema: mlb_catcher_framing
+kind: dataframe
+columns:
+- name: catcher_id
+  type: character
+  description: ''
+- name: takes
+  type: integer
+  description: ''
+- name: framing_runs
+  type: double
+  description: ''
+- name: strikes_gained
+  type: double
+  description: ''

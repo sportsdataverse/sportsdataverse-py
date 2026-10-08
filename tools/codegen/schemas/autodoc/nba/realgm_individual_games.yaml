@@ -1,0 +1,4 @@
+schema: realgm_individual_games
+kind: dataframe
+columns: []
+unverified: 'no capture: the RealGM page it reads now carries no table, so it returns an empty frame'

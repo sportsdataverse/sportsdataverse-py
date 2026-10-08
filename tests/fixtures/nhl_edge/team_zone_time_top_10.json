@@ -1,0 +1,203 @@
+[
+ {
+  "defensiveZoneTime": 0.3545412,
+  "neutralZoneTime": 0.1849447,
+  "offensiveZoneTime": 0.4605141,
+  "team": {
+   "abbrev": "CAR",
+   "commonName": {
+    "default": "Hurricanes"
+   },
+   "placeNameWithPreposition": {
+    "default": "Carolina",
+    "fr": "de la Caroline"
+   },
+   "slug": "carolina-hurricanes-12",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.3843721,
+  "neutralZoneTime": 0.1767766,
+  "offensiveZoneTime": 0.4388513,
+  "team": {
+   "abbrev": "FLA",
+   "commonName": {
+    "default": "Panthers"
+   },
+   "placeNameWithPreposition": {
+    "default": "Florida",
+    "fr": "de la Floride"
+   },
+   "slug": "florida-panthers-13",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg"
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.397672,
+  "neutralZoneTime": 0.1731538,
+  "offensiveZoneTime": 0.4291742,
+  "team": {
+   "abbrev": "EDM",
+   "commonName": {
+    "default": "Oilers"
+   },
+   "placeNameWithPreposition": {
+    "default": "Edmonton",
+    "fr": "d'Edmonton"
+   },
+   "slug": "edmonton-oilers-22",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg"
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.3849755,
+  "neutralZoneTime": 0.1864219,
+  "offensiveZoneTime": 0.4286026,
+  "team": {
+   "abbrev": "NSH",
+   "commonName": {
+    "default": "Predators"
+   },
+   "placeNameWithPreposition": {
+    "default": "Nashville",
+    "fr": "de Nashville"
+   },
+   "slug": "nashville-predators-18",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg"
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.3931026,
+  "neutralZoneTime": 0.1818162,
+  "offensiveZoneTime": 0.4250812,
+  "team": {
+   "abbrev": "COL",
+   "commonName": {
+    "default": "Avalanche"
+   },
+   "placeNameWithPreposition": {
+    "default": "Colorado",
+    "fr": "du Colorado"
+   },
+   "slug": "colorado-avalanche-21",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.4012677,
+  "neutralZoneTime": 0.1762419,
+  "offensiveZoneTime": 0.4224905,
+  "team": {
+   "abbrev": "PIT",
+   "commonName": {
+    "default": "Penguins"
+   },
+   "placeNameWithPreposition": {
+    "default": "Pittsburgh",
+    "fr": "de Pittsburgh"
+   },
+   "slug": "pittsburgh-penguins-5",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/PIT_light.svg"
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.4069082,
+  "neutralZoneTime": 0.175396,
+  "offensiveZoneTime": 0.4176958,
+  "team": {
+   "abbrev": "OTT",
+   "commonName": {
+    "default": "Senators",
+    "fr": "Sénateurs"
+   },
+   "placeNameWithPreposition": {
+    "default": "Ottawa",
+    "fr": "d'Ottawa"
+   },
+   "slug": "ottawa-senators-9",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/OTT_light.svg"
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.4000067,
+  "neutralZoneTime": 0.1833529,
+  "offensiveZoneTime": 0.4166404,
+  "team": {
+   "abbrev": "CGY",
+   "commonName": {
+    "default": "Flames"
+   },
+   "placeNameWithPreposition": {
+    "default": "Calgary",
+    "fr": "de Calgary"
+   },
+   "slug": "calgary-flames-20",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/CGY_light.svg"
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.3994334,
+  "neutralZoneTime": 0.1846814,
+  "offensiveZoneTime": 0.4158851,
+  "team": {
+   "abbrev": "VGK",
+   "commonName": {
+    "default": "Golden Knights"
+   },
+   "placeNameWithPreposition": {
+    "default": "Vegas",
+    "fr": "de Vegas"
+   },
+   "slug": "vegas-golden-knights-54",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg"
+   }
+  }
+ },
+ {
+  "defensiveZoneTime": 0.4044596,
+  "neutralZoneTime": 0.1797345,
+  "offensiveZoneTime": 0.4158059,
+  "team": {
+   "abbrev": "STL",
+   "commonName": {
+    "default": "Blues"
+   },
+   "placeNameWithPreposition": {
+    "default": "St. Louis",
+    "fr": "de St. Louis"
+   },
+   "slug": "st-louis-blues-19",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_light.svg"
+   }
+  }
+ }
+]

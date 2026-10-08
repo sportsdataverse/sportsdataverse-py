@@ -46,3 +46,9 @@ columns:
 - name: team
   type: character
   description: ''
+- name: non_reg_wins
+  type: character
+  description: ''
+- name: non_reg_losses
+  type: character
+  description: ''

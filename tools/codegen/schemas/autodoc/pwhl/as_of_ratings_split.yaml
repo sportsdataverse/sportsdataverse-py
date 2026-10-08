@@ -1,0 +1,36 @@
+schema: as_of_ratings_split
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: date
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: opp_team
+  type: character
+  description: ''
+- name: is_home
+  type: logical
+  description: ''
+- name: neutral_site
+  type: logical
+  description: ''
+- name: xgf
+  type: double
+  description: ''
+- name: xga
+  type: double
+  description: ''
+- name: gf
+  type: integer
+  description: ''
+- name: ga
+  type: integer
+  description: ''

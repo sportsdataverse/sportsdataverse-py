@@ -1,0 +1,50 @@
+schema: point_distribution
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: offense_ft
+    type: double
+    description: ''
+  - name: offense_ft_rk
+    type: integer
+    description: ''
+  - name: offense_2_pt_fg
+    type: double
+    description: ''
+  - name: offense_2_pt_fg_rk
+    type: integer
+    description: ''
+  - name: offense_3_pt_fg
+    type: double
+    description: ''
+  - name: offense_3_pt_fg_rk
+    type: integer
+    description: ''
+  - name: defense_ft
+    type: double
+    description: ''
+  - name: defense_ft_rk
+    type: integer
+    description: ''
+  - name: defense_2_pt_fg
+    type: double
+    description: ''
+  - name: defense_2_pt_fg_rk
+    type: integer
+    description: ''
+  - name: defense_3_pt_fg
+    type: double
+    description: ''
+  - name: defense_3_pt_fg_rk
+    type: integer
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

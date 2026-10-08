@@ -3,6 +3,7 @@ host: web_v3
 name_pattern: espn_{prefix}_{short}
 endpoints:
 - short: athlete_overview
+  returns_schema: athlete_overview
   scope: universal
   path: /{sport}/{league}/athletes/{athlete_id}/overview
   path_params:
@@ -13,6 +14,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_stats
+  returns_schema: athlete_stats
   scope: universal
   path: /{sport}/{league}/athletes/{athlete_id}/stats
   path_params:
@@ -27,6 +29,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_gamelog
+  returns_schema: athlete_gamelog
   scope: universal
   path: /{sport}/{league}/athletes/{athlete_id}/gamelog
   path_params:
@@ -41,6 +44,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_splits
+  returns_schema: athlete_splits
   scope: universal
   path: /{sport}/{league}/athletes/{athlete_id}/splits
   path_params:

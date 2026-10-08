@@ -1,0 +1,24 @@
+schema: season_qbr_week
+kind: dataframe
+columns:
+- name: athlete_$ref
+  type: character
+  description: ''
+- name: season_$ref
+  type: character
+  description: ''
+- name: splits_abbreviation
+  type: character
+  description: ''
+- name: splits_categories
+  type: character
+  description: ''
+- name: splits_id
+  type: character
+  description: ''
+- name: splits_name
+  type: character
+  description: ''
+- name: team_$ref
+  type: character
+  description: ''

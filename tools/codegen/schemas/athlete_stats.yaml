@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: athlete_stats
+unverified: 'parser: parse_athlete_stats returns no columns on the live payload (nba, mlb, mbb, 2026-10-07); its rows sit
+  under keys it does not read (top level: categories, filters, glossary, teams)'

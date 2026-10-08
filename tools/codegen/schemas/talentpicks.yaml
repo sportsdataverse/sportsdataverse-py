@@ -1,0 +1,39 @@
+schema: talentpicks
+kind: dataframe
+columns:
+- name: pick_competition_$ref
+  type: character
+  description: ''
+- name: pick_competitor_$ref
+  type: character
+  description: ''
+- name: pick_correct
+  type: logical
+  description: ''
+- name: pick_person_display_name
+  type: character
+  description: ''
+- name: pick_person_first_name
+  type: character
+  description: ''
+- name: pick_person_headshot_alt
+  type: character
+  description: ''
+- name: pick_person_headshot_href
+  type: character
+  description: ''
+- name: pick_person_id
+  type: character
+  description: ''
+- name: pick_person_last_name
+  type: character
+  description: ''
+- name: week_record_display_value
+  type: character
+  description: ''
+- name: week_record_season_$ref
+  type: character
+  description: ''
+- name: week_record_stats
+  type: character
+  description: ''

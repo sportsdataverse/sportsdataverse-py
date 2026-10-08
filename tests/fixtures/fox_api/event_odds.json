@@ -1,0 +1,2479 @@
+{
+ "sectionList": [
+  {
+   "modules": [
+    {
+     "model": {
+      "betSection": {
+       "bets": [
+        {
+         "model": {
+          "mainText": "The Packers needed to win by 5 points or more to cover the spread. They did not cover, so people who took the Falcons won.",
+          "odds": [
+           {
+            "subText": "ATL",
+            "success": true,
+            "text": "+4.5"
+           },
+           {
+            "subText": "GB",
+            "text": "-4.5"
+           }
+          ],
+          "subtitle": "SPREAD"
+         },
+         "template": "market"
+        },
+        {
+         "model": {
+          "mainText": "The Falcons won at +198 odds so a bet of $100 won $298 total",
+          "odds": [
+           {
+            "subText": "ATL",
+            "success": true,
+            "text": "+198"
+           },
+           {
+            "subText": "GB",
+            "text": "-240"
+           }
+          ],
+          "subtitle": "TEAM TO WIN"
+         },
+         "template": "market"
+        },
+        {
+         "model": {
+          "mainText": "The over/under was 43.5 and the teams scored 49 points, so people who bet the over won",
+          "odds": [
+           {
+            "subText": "OVER 43.5",
+            "success": true,
+            "text": "-101"
+           },
+           {
+            "subText": "UNDER 43.5",
+            "text": "-120"
+           }
+          ],
+          "subtitle": "TOTAL"
+         },
+         "template": "market"
+        }
+       ],
+       "name": "FALCONS vs PACKERS"
+      },
+      "contentUri": "football/nfl/events/11195",
+      "entityLink": {
+       "analyticsSport": "nfl",
+       "contentType": "event",
+       "contentUri": "football/nfl/events/11195",
+       "layout": {
+        "path": "/layouts?type=layout&subtype=nflEventLayout",
+        "tokens": {
+         "awayUri": "football/nfl/teams/25",
+         "eventUri": "football/nfl/events/11195",
+         "homeUri": "football/nfl/teams/22",
+         "id": "11195"
+        }
+       },
+       "tab": "odds",
+       "type": "entity",
+       "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=odds"
+      },
+      "eventStatus": 3,
+      "fairPlayMetaData": {
+       "parameters": {
+        "homeTeam": "Green Bay Packers"
+       }
+      },
+      "isTba": false,
+      "moduleLinkText": "ODDS INFO",
+      "odds": {
+       "columnHeaders": [
+        "SPREAD",
+        "TO WIN",
+        "TOTAL"
+       ],
+       "rows": [
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+         "fullText": "Atlanta Falcons",
+         "image": {
+          "altText": "Atlanta Falcons",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+          "type": "image-logo",
+          "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png"
+         },
+         "imageAltText": "Atlanta Falcons",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+         "template": "entity",
+         "text": "ATL",
+         "values": [
+          {
+           "id": "closing",
+           "odds": "+4.5",
+           "success": true
+          },
+          {
+           "id": "closing",
+           "odds": "+198",
+           "success": true
+          },
+          {
+           "id": "closing",
+           "odds": "O 43.5",
+           "success": true
+          }
+         ]
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "fullText": "Green Bay Packers",
+         "image": {
+          "altText": "Green Bay Packers",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+          "type": "image-logo",
+          "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png"
+         },
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "template": "entity",
+         "text": "GB",
+         "values": [
+          {
+           "id": "closing",
+           "odds": "-4.5",
+           "success": false
+          },
+          {
+           "id": "closing",
+           "odds": "-240",
+           "success": false
+          },
+          {
+           "id": "closing",
+           "odds": "U 43.5",
+           "success": false
+          }
+         ]
+        }
+       ],
+       "template": "default"
+      },
+      "title": "MATCHUP ODDS"
+     },
+     "type": "six-pack"
+    },
+    {
+     "model": {
+      "chartRangeX": [
+       0,
+       189
+      ],
+      "chartRangeY": [
+       -50,
+       50
+      ],
+      "dataRangeX": [
+       0,
+       189
+      ],
+      "description": "Team to win likelihood based on moneyline",
+      "incrementX": 1,
+      "lines": [
+       {
+        "alternateColor": "1, 240, 31, 65",
+        "alternateColor2": "1, 0, 156, 26",
+        "color": "1, 240, 31, 65",
+        "color2": "1, 0, 156, 26",
+        "name": "ATL",
+        "name2": "GB",
+        "stat1Subtext": "-16949",
+        "stat1Value": "ATL 95%",
+        "stat2Subtext": "+1690",
+        "stat2Value": "GB 5%",
+        "values": [
+         {
+          "odds1": "+285",
+          "odds2": "-360",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-06-28T00:00:36+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-06-28T00:00:36+00:00"
+         },
+         {
+          "odds1": "+260",
+          "odds2": "-391",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-06-30T11:00:39+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-06-30T13:00:35+00:00"
+         },
+         {
+          "odds1": "+268",
+          "odds2": "-366",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-07-02T18:00:43+00:00"
+         },
+         {
+          "odds1": "+270",
+          "odds2": "-372",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-07-03T05:30:43+00:00"
+         },
+         {
+          "odds1": "+242",
+          "odds2": "-417",
+          "point": -23,
+          "text": "ATL 27%\nGB 73%",
+          "text1": "ATL 27%",
+          "text2": "GB 73%",
+          "timestamp": "2026-07-06T10:00:38+00:00"
+         },
+         {
+          "odds1": "+270",
+          "odds2": "-372",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-07-06T13:00:46+00:00"
+         },
+         {
+          "odds1": "+268",
+          "odds2": "-366",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-07-07T16:00:37+00:00"
+         },
+         {
+          "odds1": "+260",
+          "odds2": "-391",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-07-20T14:30:35+00:00"
+         },
+         {
+          "odds1": "+270",
+          "odds2": "-372",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-07-21T08:00:41+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-07-28T23:00:40+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-07-29T12:30:38+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-07-29T13:00:38+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-07-29T19:00:33+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-03T00:30:36+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-03T08:30:42+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-06T22:30:43+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-08T22:30:42+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-14T13:30:50+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-18T13:30:49+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-18T14:00:46+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-19T22:00:37+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-21T15:30:37+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-21T23:30:49+00:00"
+         },
+         {
+          "odds1": "+260",
+          "odds2": "-391",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-08-25T08:30:42+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-25T10:30:34+00:00"
+         },
+         {
+          "odds1": "+260",
+          "odds2": "-391",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-08-30T01:30:42+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-30T04:00:44+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-08-31T00:30:39+00:00"
+         },
+         {
+          "odds1": "+260",
+          "odds2": "-391",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-03T21:00:42+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-09-03T23:00:42+00:00"
+         },
+         {
+          "odds1": "+273",
+          "odds2": "-375",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-09-13T03:30:36+00:00"
+         },
+         {
+          "odds1": "+278",
+          "odds2": "-383",
+          "point": -25,
+          "text": "ATL 25%\nGB 75%",
+          "text1": "ATL 25%",
+          "text2": "GB 75%",
+          "timestamp": "2026-09-13T04:30:43+00:00"
+         },
+         {
+          "odds1": "+260",
+          "odds2": "-391",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-13T18:30:43+00:00"
+         },
+         {
+          "odds1": "+242",
+          "odds2": "-323",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-15T17:31:14+00:00"
+         },
+         {
+          "odds1": "+240",
+          "odds2": "-311",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-15T20:00:43+00:00"
+         },
+         {
+          "odds1": "+245",
+          "odds2": "-318",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-15T20:30:42+00:00"
+         },
+         {
+          "odds1": "+244",
+          "odds2": "-313",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-16T07:30:36+00:00"
+         },
+         {
+          "odds1": "+239",
+          "odds2": "-294",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-16T17:30:39+00:00"
+         },
+         {
+          "odds1": "+241",
+          "odds2": "-297",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-17T07:00:47+00:00"
+         },
+         {
+          "odds1": "+239",
+          "odds2": "-294",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-18T18:00:38+00:00"
+         },
+         {
+          "odds1": "+236",
+          "odds2": "-292",
+          "point": -21,
+          "text": "ATL 29%\nGB 71%",
+          "text1": "ATL 29%",
+          "text2": "GB 71%",
+          "timestamp": "2026-09-20T06:30:36+00:00"
+         },
+         {
+          "odds1": "+248",
+          "odds2": "-306",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-20T08:00:40+00:00"
+         },
+         {
+          "odds1": "+240",
+          "odds2": "-298",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-20T18:00:42+00:00"
+         },
+         {
+          "odds1": "+253",
+          "odds2": "-312",
+          "point": -23,
+          "text": "ATL 27%\nGB 73%",
+          "text1": "ATL 27%",
+          "text2": "GB 73%",
+          "timestamp": "2026-09-20T22:30:43+00:00"
+         },
+         {
+          "odds1": "+265",
+          "odds2": "-332",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-20T23:00:45+00:00"
+         },
+         {
+          "odds1": "+263",
+          "odds2": "-330",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-20T23:30:43+00:00"
+         },
+         {
+          "odds1": "+265",
+          "odds2": "-330",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-21T01:00:42+00:00"
+         },
+         {
+          "odds1": "+270",
+          "odds2": "-337",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-21T01:30:36+00:00"
+         },
+         {
+          "odds1": "+268",
+          "odds2": "-334",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-21T02:00:45+00:00"
+         },
+         {
+          "odds1": "+271",
+          "odds2": "-342",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-21T04:30:35+00:00"
+         },
+         {
+          "odds1": "+270",
+          "odds2": "-338",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-21T06:30:36+00:00"
+         },
+         {
+          "odds1": "+271",
+          "odds2": "-340",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-21T11:00:37+00:00"
+         },
+         {
+          "odds1": "+269",
+          "odds2": "-336",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-21T11:30:32+00:00"
+         },
+         {
+          "odds1": "+271",
+          "odds2": "-340",
+          "point": -24,
+          "text": "ATL 26%\nGB 74%",
+          "text1": "ATL 26%",
+          "text2": "GB 74%",
+          "timestamp": "2026-09-21T14:30:34+00:00"
+         },
+         {
+          "odds1": "+238",
+          "odds2": "-297",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-21T21:00:36+00:00"
+         },
+         {
+          "odds1": "+233",
+          "odds2": "-288",
+          "point": -21,
+          "text": "ATL 29%\nGB 71%",
+          "text1": "ATL 29%",
+          "text2": "GB 71%",
+          "timestamp": "2026-09-21T21:30:37+00:00"
+         },
+         {
+          "odds1": "+231",
+          "odds2": "-287",
+          "point": -21,
+          "text": "ATL 29%\nGB 71%",
+          "text1": "ATL 29%",
+          "text2": "GB 71%",
+          "timestamp": "2026-09-22T00:00:44+00:00"
+         },
+         {
+          "odds1": "+233",
+          "odds2": "-288",
+          "point": -21,
+          "text": "ATL 29%\nGB 71%",
+          "text1": "ATL 29%",
+          "text2": "GB 71%",
+          "timestamp": "2026-09-22T02:30:34+00:00"
+         },
+         {
+          "odds1": "+231",
+          "odds2": "-287",
+          "point": -21,
+          "text": "ATL 29%\nGB 71%",
+          "text1": "ATL 29%",
+          "text2": "GB 71%",
+          "timestamp": "2026-09-22T05:00:37+00:00"
+         },
+         {
+          "odds1": "+230",
+          "odds2": "-285",
+          "point": -21,
+          "text": "ATL 29%\nGB 71%",
+          "text1": "ATL 29%",
+          "text2": "GB 71%",
+          "timestamp": "2026-09-22T06:00:33+00:00"
+         },
+         {
+          "odds1": "+231",
+          "odds2": "-287",
+          "point": -21,
+          "text": "ATL 29%\nGB 71%",
+          "text1": "ATL 29%",
+          "text2": "GB 71%",
+          "timestamp": "2026-09-22T09:00:35+00:00"
+         },
+         {
+          "odds1": "+230",
+          "odds2": "-285",
+          "point": -21,
+          "text": "ATL 29%\nGB 71%",
+          "text1": "ATL 29%",
+          "text2": "GB 71%",
+          "timestamp": "2026-09-22T12:30:43+00:00"
+         },
+         {
+          "odds1": "+226",
+          "odds2": "-279",
+          "point": -21,
+          "text": "ATL 29%\nGB 71%",
+          "text1": "ATL 29%",
+          "text2": "GB 71%",
+          "timestamp": "2026-09-22T21:30:35+00:00"
+         },
+         {
+          "odds1": "+223",
+          "odds2": "-274",
+          "point": -20,
+          "text": "ATL 30%\nGB 70%",
+          "text1": "ATL 30%",
+          "text2": "GB 70%",
+          "timestamp": "2026-09-23T01:00:35+00:00"
+         },
+         {
+          "odds1": "+219",
+          "odds2": "-269",
+          "point": -20,
+          "text": "ATL 30%\nGB 70%",
+          "text1": "ATL 30%",
+          "text2": "GB 70%",
+          "timestamp": "2026-09-23T01:30:40+00:00"
+         },
+         {
+          "odds1": "+217",
+          "odds2": "-268",
+          "point": -20,
+          "text": "ATL 30%\nGB 70%",
+          "text1": "ATL 30%",
+          "text2": "GB 70%",
+          "timestamp": "2026-09-23T07:00:36+00:00"
+         },
+         {
+          "odds1": "+214",
+          "odds2": "-262",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-23T09:00:36+00:00"
+         },
+         {
+          "odds1": "+213",
+          "odds2": "-260",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-23T12:30:36+00:00"
+         },
+         {
+          "odds1": "+214",
+          "odds2": "-262",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-23T14:00:32+00:00"
+         },
+         {
+          "odds1": "+215",
+          "odds2": "-264",
+          "point": -20,
+          "text": "ATL 30%\nGB 70%",
+          "text1": "ATL 30%",
+          "text2": "GB 70%",
+          "timestamp": "2026-09-23T15:00:38+00:00"
+         },
+         {
+          "odds1": "+213",
+          "odds2": "-260",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-23T16:00:38+00:00"
+         },
+         {
+          "odds1": "+210",
+          "odds2": "-258",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-23T18:00:32+00:00"
+         },
+         {
+          "odds1": "+208",
+          "odds2": "-254",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-23T19:30:32+00:00"
+         },
+         {
+          "odds1": "+204",
+          "odds2": "-249",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-23T20:00:48+00:00"
+         },
+         {
+          "odds1": "+205",
+          "odds2": "-251",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-23T21:00:35+00:00"
+         },
+         {
+          "odds1": "+206",
+          "odds2": "-253",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-23T21:30:32+00:00"
+         },
+         {
+          "odds1": "+205",
+          "odds2": "-250",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-24T02:00:35+00:00"
+         },
+         {
+          "odds1": "+203",
+          "odds2": "-249",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-24T04:00:40+00:00"
+         },
+         {
+          "odds1": "+205",
+          "odds2": "-250",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-24T04:30:32+00:00"
+         },
+         {
+          "odds1": "+203",
+          "odds2": "-249",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-24T05:30:39+00:00"
+         },
+         {
+          "odds1": "+205",
+          "odds2": "-251",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-24T12:00:42+00:00"
+         },
+         {
+          "odds1": "+206",
+          "odds2": "-253",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-24T15:30:32+00:00"
+         },
+         {
+          "odds1": "+204",
+          "odds2": "-250",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-24T16:00:34+00:00"
+         },
+         {
+          "odds1": "+206",
+          "odds2": "-253",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-24T19:00:48+00:00"
+         },
+         {
+          "odds1": "+205",
+          "odds2": "-251",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-24T21:30:36+00:00"
+         },
+         {
+          "odds1": "+204",
+          "odds2": "-249",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-24T22:00:40+00:00"
+         },
+         {
+          "odds1": "+203",
+          "odds2": "-247",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-24T22:30:37+00:00"
+         },
+         {
+          "odds1": "+201",
+          "odds2": "-246",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-24T23:30:36+00:00"
+         },
+         {
+          "annotation": {
+           "color": "0, 16, 168, 44",
+           "text": "CLOSING ODDS",
+           "type": "pin"
+          },
+          "odds1": "+199",
+          "odds2": "-242",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-25T00:00:56+00:00"
+         },
+         {
+          "odds1": "+198",
+          "odds2": "-240",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-25T00:24:29+00:00"
+         },
+         {
+          "odds1": "+180",
+          "odds2": "-225",
+          "point": -16,
+          "text": "ATL 34%\nGB 66%",
+          "text1": "ATL 34%",
+          "text2": "GB 66%",
+          "timestamp": "2026-09-25T00:25:34+00:00"
+         },
+         {
+          "odds1": "+172",
+          "odds2": "-215",
+          "point": -15,
+          "text": "ATL 35%\nGB 65%",
+          "text1": "ATL 35%",
+          "text2": "GB 65%",
+          "timestamp": "2026-09-25T00:26:40+00:00"
+         },
+         {
+          "odds1": "+184",
+          "odds2": "-231",
+          "point": -16,
+          "text": "ATL 34%\nGB 66%",
+          "text1": "ATL 34%",
+          "text2": "GB 66%",
+          "timestamp": "2026-09-25T00:27:45+00:00"
+         },
+         {
+          "odds1": "+212",
+          "odds2": "-270",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-25T00:28:49+00:00"
+         },
+         {
+          "odds1": "+205",
+          "odds2": "-259",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-25T00:29:54+00:00"
+         },
+         {
+          "odds1": "+203",
+          "odds2": "-257",
+          "point": -19,
+          "text": "ATL 31%\nGB 69%",
+          "text1": "ATL 31%",
+          "text2": "GB 69%",
+          "timestamp": "2026-09-25T00:30:58+00:00"
+         },
+         {
+          "odds1": "+198",
+          "odds2": "-250",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-25T00:32:12+00:00"
+         },
+         {
+          "odds1": "+176",
+          "odds2": "-220",
+          "point": -15,
+          "text": "ATL 35%\nGB 65%",
+          "text1": "ATL 35%",
+          "text2": "GB 65%",
+          "timestamp": "2026-09-25T00:33:17+00:00"
+         },
+         {
+          "odds1": "+259",
+          "odds2": "-337",
+          "point": -23,
+          "text": "ATL 27%\nGB 73%",
+          "text1": "ATL 27%",
+          "text2": "GB 73%",
+          "timestamp": "2026-09-25T00:34:23+00:00"
+         },
+         {
+          "odds1": "+193",
+          "odds2": "-244",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-25T00:35:28+00:00"
+         },
+         {
+          "odds1": "+310",
+          "odds2": "-415",
+          "point": -27,
+          "text": "ATL 23%\nGB 77%",
+          "text1": "ATL 23%",
+          "text2": "GB 77%",
+          "timestamp": "2026-09-25T00:36:36+00:00"
+         },
+         {
+          "odds1": "+307",
+          "odds2": "-411",
+          "point": -27,
+          "text": "ATL 23%\nGB 77%",
+          "text1": "ATL 23%",
+          "text2": "GB 77%",
+          "timestamp": "2026-09-25T00:37:41+00:00"
+         },
+         {
+          "odds1": "+328",
+          "odds2": "-445",
+          "point": -28,
+          "text": "ATL 22%\nGB 78%",
+          "text1": "ATL 22%",
+          "text2": "GB 78%",
+          "timestamp": "2026-09-25T00:38:47+00:00"
+         },
+         {
+          "odds1": "+355",
+          "odds2": "-488",
+          "point": -29,
+          "text": "ATL 21%\nGB 79%",
+          "text1": "ATL 21%",
+          "text2": "GB 79%",
+          "timestamp": "2026-09-25T00:39:53+00:00"
+         },
+         {
+          "odds1": "+131",
+          "odds2": "-161",
+          "point": -9,
+          "text": "ATL 41%\nGB 59%",
+          "text1": "ATL 41%",
+          "text2": "GB 59%",
+          "timestamp": "2026-09-25T00:40:58+00:00"
+         },
+         {
+          "odds1": "+410",
+          "odds2": "-584",
+          "point": -31,
+          "text": "ATL 19%\nGB 81%",
+          "text1": "ATL 19%",
+          "text2": "GB 81%",
+          "timestamp": "2026-09-25T00:42:11+00:00"
+         },
+         {
+          "odds1": "+413",
+          "odds2": "-590",
+          "point": -31,
+          "text": "ATL 19%\nGB 81%",
+          "text1": "ATL 19%",
+          "text2": "GB 81%",
+          "timestamp": "2026-09-25T00:44:23+00:00"
+         },
+         {
+          "odds1": "+451",
+          "odds2": "-660",
+          "point": -33,
+          "text": "ATL 17%\nGB 83%",
+          "text1": "ATL 17%",
+          "text2": "GB 83%",
+          "timestamp": "2026-09-25T00:45:29+00:00"
+         },
+         {
+          "odds1": "+413",
+          "odds2": "-590",
+          "point": -31,
+          "text": "ATL 19%\nGB 81%",
+          "text1": "ATL 19%",
+          "text2": "GB 81%",
+          "timestamp": "2026-09-25T00:46:36+00:00"
+         },
+         {
+          "odds1": "+370",
+          "odds2": "-514",
+          "point": -30,
+          "text": "ATL 20%\nGB 80%",
+          "text1": "ATL 20%",
+          "text2": "GB 80%",
+          "timestamp": "2026-09-25T00:47:42+00:00"
+         },
+         {
+          "odds1": "+476",
+          "odds2": "-709",
+          "point": -33,
+          "text": "ATL 17%\nGB 83%",
+          "text1": "ATL 17%",
+          "text2": "GB 83%",
+          "timestamp": "2026-09-25T00:48:47+00:00"
+         },
+         {
+          "odds1": "+374",
+          "odds2": "-521",
+          "point": -30,
+          "text": "ATL 20%\nGB 80%",
+          "text1": "ATL 20%",
+          "text2": "GB 80%",
+          "timestamp": "2026-09-25T00:49:51+00:00"
+         },
+         {
+          "odds1": "+244",
+          "odds2": "-315",
+          "point": -22,
+          "text": "ATL 28%\nGB 72%",
+          "text1": "ATL 28%",
+          "text2": "GB 72%",
+          "timestamp": "2026-09-25T00:50:55+00:00"
+         },
+         {
+          "odds1": "+626",
+          "odds2": "-1040",
+          "point": -37,
+          "text": "ATL 13%\nGB 87%",
+          "text1": "ATL 13%",
+          "text2": "GB 87%",
+          "timestamp": "2026-09-25T00:52:00+00:00"
+         },
+         {
+          "odds1": "+194",
+          "odds2": "-245",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-25T00:53:05+00:00"
+         },
+         {
+          "odds1": "+187",
+          "odds2": "-235",
+          "point": -17,
+          "text": "ATL 33%\nGB 67%",
+          "text1": "ATL 33%",
+          "text2": "GB 67%",
+          "timestamp": "2026-09-25T00:54:20+00:00"
+         },
+         {
+          "odds1": "+180",
+          "odds2": "-226",
+          "point": -16,
+          "text": "ATL 34%\nGB 66%",
+          "text1": "ATL 34%",
+          "text2": "GB 66%",
+          "timestamp": "2026-09-25T00:55:25+00:00"
+         },
+         {
+          "odds1": "+166",
+          "odds2": "-207",
+          "point": -14,
+          "text": "ATL 36%\nGB 64%",
+          "text1": "ATL 36%",
+          "text2": "GB 64%",
+          "timestamp": "2026-09-25T00:56:29+00:00"
+         },
+         {
+          "odds1": "+143",
+          "odds2": "-177",
+          "point": -11,
+          "text": "ATL 39%\nGB 61%",
+          "text1": "ATL 39%",
+          "text2": "GB 61%",
+          "timestamp": "2026-09-25T00:57:39+00:00"
+         },
+         {
+          "odds1": "+161",
+          "odds2": "-200",
+          "point": -14,
+          "text": "ATL 36%\nGB 64%",
+          "text1": "ATL 36%",
+          "text2": "GB 64%",
+          "timestamp": "2026-09-25T00:58:43+00:00"
+         },
+         {
+          "odds1": "+163",
+          "odds2": "-203",
+          "point": -14,
+          "text": "ATL 36%\nGB 64%",
+          "text1": "ATL 36%",
+          "text2": "GB 64%",
+          "timestamp": "2026-09-25T01:00:51+00:00"
+         },
+         {
+          "odds1": "+180",
+          "odds2": "-225",
+          "point": -16,
+          "text": "ATL 34%\nGB 66%",
+          "text1": "ATL 34%",
+          "text2": "GB 66%",
+          "timestamp": "2026-09-25T01:01:57+00:00"
+         },
+         {
+          "odds1": "+162",
+          "odds2": "-202",
+          "point": -14,
+          "text": "ATL 36%\nGB 64%",
+          "text1": "ATL 36%",
+          "text2": "GB 64%",
+          "timestamp": "2026-09-25T01:03:01+00:00"
+         },
+         {
+          "odds1": "+153",
+          "odds2": "-189",
+          "point": -12,
+          "text": "ATL 38%\nGB 62%",
+          "text1": "ATL 38%",
+          "text2": "GB 62%",
+          "timestamp": "2026-09-25T01:04:07+00:00"
+         },
+         {
+          "odds1": "+144",
+          "odds2": "-177",
+          "point": -11,
+          "text": "ATL 39%\nGB 61%",
+          "text1": "ATL 39%",
+          "text2": "GB 61%",
+          "timestamp": "2026-09-25T01:05:20+00:00"
+         },
+         {
+          "odds1": "+159",
+          "odds2": "-198",
+          "point": -13,
+          "text": "ATL 37%\nGB 63%",
+          "text1": "ATL 37%",
+          "text2": "GB 63%",
+          "timestamp": "2026-09-25T01:06:25+00:00"
+         },
+         {
+          "odds1": "+201",
+          "odds2": "-254",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-25T01:07:31+00:00"
+         },
+         {
+          "odds1": "+174",
+          "odds2": "-218",
+          "point": -15,
+          "text": "ATL 35%\nGB 65%",
+          "text1": "ATL 35%",
+          "text2": "GB 65%",
+          "timestamp": "2026-09-25T01:08:35+00:00"
+         },
+         {
+          "odds1": "+165",
+          "odds2": "-206",
+          "point": -14,
+          "text": "ATL 36%\nGB 64%",
+          "text1": "ATL 36%",
+          "text2": "GB 64%",
+          "timestamp": "2026-09-25T01:10:45+00:00"
+         },
+         {
+          "odds1": "+156",
+          "odds2": "-194",
+          "point": -13,
+          "text": "ATL 37%\nGB 63%",
+          "text1": "ATL 37%",
+          "text2": "GB 63%",
+          "timestamp": "2026-09-25T01:11:49+00:00"
+         },
+         {
+          "odds1": "+123",
+          "odds2": "-150",
+          "point": -7,
+          "text": "ATL 43%\nGB 57%",
+          "text1": "ATL 43%",
+          "text2": "GB 57%",
+          "timestamp": "2026-09-25T01:15:01+00:00"
+         },
+         {
+          "odds1": "-139",
+          "odds2": "+114",
+          "point": 5,
+          "text": "ATL 55%\nGB 45%",
+          "text1": "ATL 55%",
+          "text2": "GB 45%",
+          "timestamp": "2026-09-25T01:31:15+00:00"
+         },
+         {
+          "odds1": "-141",
+          "odds2": "+115",
+          "point": 6,
+          "text": "ATL 56%\nGB 44%",
+          "text1": "ATL 56%",
+          "text2": "GB 44%",
+          "timestamp": "2026-09-25T01:32:20+00:00"
+         },
+         {
+          "odds1": "-133",
+          "odds2": "+109",
+          "point": 4,
+          "text": "ATL 54%\nGB 46%",
+          "text1": "ATL 54%",
+          "text2": "GB 46%",
+          "timestamp": "2026-09-25T01:33:27+00:00"
+         },
+         {
+          "odds1": "-210",
+          "odds2": "+168",
+          "point": 14,
+          "text": "ATL 64%\nGB 36%",
+          "text1": "ATL 64%",
+          "text2": "GB 36%",
+          "timestamp": "2026-09-25T01:34:32+00:00"
+         },
+         {
+          "odds1": "-206",
+          "odds2": "+166",
+          "point": 14,
+          "text": "ATL 64%\nGB 36%",
+          "text1": "ATL 64%",
+          "text2": "GB 36%",
+          "timestamp": "2026-09-25T01:35:36+00:00"
+         },
+         {
+          "odds1": "-180",
+          "odds2": "+145",
+          "point": 11,
+          "text": "ATL 61%\nGB 39%",
+          "text1": "ATL 61%",
+          "text2": "GB 39%",
+          "timestamp": "2026-09-25T01:36:40+00:00"
+         },
+         {
+          "odds1": "+200",
+          "odds2": "-252",
+          "point": -18,
+          "text": "ATL 32%\nGB 68%",
+          "text1": "ATL 32%",
+          "text2": "GB 68%",
+          "timestamp": "2026-09-25T01:37:45+00:00"
+         },
+         {
+          "odds1": "-250",
+          "odds2": "+198",
+          "point": 18,
+          "text": "ATL 68%\nGB 32%",
+          "text1": "ATL 68%",
+          "text2": "GB 32%",
+          "timestamp": "2026-09-25T01:38:49+00:00"
+         },
+         {
+          "odds1": "-269",
+          "odds2": "+212",
+          "point": 19,
+          "text": "ATL 69%\nGB 31%",
+          "text1": "ATL 69%",
+          "text2": "GB 31%",
+          "timestamp": "2026-09-25T01:42:03+00:00"
+         },
+         {
+          "odds1": "-263",
+          "odds2": "+207",
+          "point": 19,
+          "text": "ATL 69%\nGB 31%",
+          "text1": "ATL 69%",
+          "text2": "GB 31%",
+          "timestamp": "2026-09-25T01:43:10+00:00"
+         },
+         {
+          "odds1": "-379",
+          "odds2": "+286",
+          "point": 25,
+          "text": "ATL 75%\nGB 25%",
+          "text1": "ATL 75%",
+          "text2": "GB 25%",
+          "timestamp": "2026-09-25T01:44:15+00:00"
+         },
+         {
+          "odds1": "-324",
+          "odds2": "+250",
+          "point": 23,
+          "text": "ATL 73%\nGB 27%",
+          "text1": "ATL 73%",
+          "text2": "GB 27%",
+          "timestamp": "2026-09-25T01:45:19+00:00"
+         },
+         {
+          "odds1": "-286",
+          "odds2": "+224",
+          "point": 21,
+          "text": "ATL 71%\nGB 29%",
+          "text1": "ATL 71%",
+          "text2": "GB 29%",
+          "timestamp": "2026-09-25T01:46:23+00:00"
+         },
+         {
+          "odds1": "-266",
+          "odds2": "+209",
+          "point": 19,
+          "text": "ATL 69%\nGB 31%",
+          "text1": "ATL 69%",
+          "text2": "GB 31%",
+          "timestamp": "2026-09-25T01:47:31+00:00"
+         },
+         {
+          "odds1": "-275",
+          "odds2": "+216",
+          "point": 20,
+          "text": "ATL 70%\nGB 30%",
+          "text1": "ATL 70%",
+          "text2": "GB 30%",
+          "timestamp": "2026-09-25T01:48:36+00:00"
+         },
+         {
+          "odds1": "-264",
+          "odds2": "+208",
+          "point": 19,
+          "text": "ATL 69%\nGB 31%",
+          "text1": "ATL 69%",
+          "text2": "GB 31%",
+          "timestamp": "2026-09-25T01:49:41+00:00"
+         },
+         {
+          "odds1": "-279",
+          "odds2": "+219",
+          "point": 20,
+          "text": "ATL 70%\nGB 30%",
+          "text1": "ATL 70%",
+          "text2": "GB 30%",
+          "timestamp": "2026-09-25T01:50:45+00:00"
+         },
+         {
+          "odds1": "-273",
+          "odds2": "+214",
+          "point": 20,
+          "text": "ATL 70%\nGB 30%",
+          "text1": "ATL 70%",
+          "text2": "GB 30%",
+          "timestamp": "2026-09-25T01:52:56+00:00"
+         },
+         {
+          "odds1": "-255",
+          "odds2": "+202",
+          "point": 18,
+          "text": "ATL 68%\nGB 32%",
+          "text1": "ATL 68%",
+          "text2": "GB 32%",
+          "timestamp": "2026-09-25T01:54:00+00:00"
+         },
+         {
+          "odds1": "-269",
+          "odds2": "+211",
+          "point": 19,
+          "text": "ATL 69%\nGB 31%",
+          "text1": "ATL 69%",
+          "text2": "GB 31%",
+          "timestamp": "2026-09-25T01:55:07+00:00"
+         },
+         {
+          "odds1": "-310",
+          "odds2": "+240",
+          "point": 22,
+          "text": "ATL 72%\nGB 28%",
+          "text1": "ATL 72%",
+          "text2": "GB 28%",
+          "timestamp": "2026-09-25T02:01:38+00:00"
+         },
+         {
+          "odds1": "-281",
+          "odds2": "+220",
+          "point": 20,
+          "text": "ATL 70%\nGB 30%",
+          "text1": "ATL 70%",
+          "text2": "GB 30%",
+          "timestamp": "2026-09-25T02:02:45+00:00"
+         },
+         {
+          "odds1": "-192",
+          "odds2": "+155",
+          "point": 13,
+          "text": "ATL 63%\nGB 37%",
+          "text1": "ATL 63%",
+          "text2": "GB 37%",
+          "timestamp": "2026-09-25T02:03:50+00:00"
+         },
+         {
+          "odds1": "-180",
+          "odds2": "+145",
+          "point": 11,
+          "text": "ATL 61%\nGB 39%",
+          "text1": "ATL 61%",
+          "text2": "GB 39%",
+          "timestamp": "2026-09-25T02:04:54+00:00"
+         },
+         {
+          "odds1": "-178",
+          "odds2": "+144",
+          "point": 11,
+          "text": "ATL 61%\nGB 39%",
+          "text1": "ATL 61%",
+          "text2": "GB 39%",
+          "timestamp": "2026-09-25T02:05:59+00:00"
+         },
+         {
+          "odds1": "-167",
+          "odds2": "+136",
+          "point": 10,
+          "text": "ATL 60%\nGB 40%",
+          "text1": "ATL 60%",
+          "text2": "GB 40%",
+          "timestamp": "2026-09-25T02:08:09+00:00"
+         },
+         {
+          "odds1": "-187",
+          "odds2": "+151",
+          "point": 12,
+          "text": "ATL 62%\nGB 38%",
+          "text1": "ATL 62%",
+          "text2": "GB 38%",
+          "timestamp": "2026-09-25T02:09:16+00:00"
+         },
+         {
+          "odds1": "-307",
+          "odds2": "+238",
+          "point": 22,
+          "text": "ATL 72%\nGB 28%",
+          "text1": "ATL 72%",
+          "text2": "GB 28%",
+          "timestamp": "2026-09-25T02:11:33+00:00"
+         },
+         {
+          "odds1": "-335",
+          "odds2": "+257",
+          "point": 23,
+          "text": "ATL 73%\nGB 27%",
+          "text1": "ATL 73%",
+          "text2": "GB 27%",
+          "timestamp": "2026-09-25T02:13:47+00:00"
+         },
+         {
+          "odds1": "-412",
+          "odds2": "+308",
+          "point": 27,
+          "text": "ATL 77%\nGB 23%",
+          "text1": "ATL 77%",
+          "text2": "GB 23%",
+          "timestamp": "2026-09-25T02:14:52+00:00"
+         },
+         {
+          "odds1": "-550",
+          "odds2": "+390",
+          "point": 31,
+          "text": "ATL 81%\nGB 19%",
+          "text1": "ATL 81%",
+          "text2": "GB 19%",
+          "timestamp": "2026-09-25T02:15:58+00:00"
+         },
+         {
+          "odds1": "-727",
+          "odds2": "+485",
+          "point": 34,
+          "text": "ATL 84%\nGB 16%",
+          "text1": "ATL 84%",
+          "text2": "GB 16%",
+          "timestamp": "2026-09-25T02:17:03+00:00"
+         },
+         {
+          "odds1": "-662",
+          "odds2": "+452",
+          "point": 33,
+          "text": "ATL 83%\nGB 17%",
+          "text1": "ATL 83%",
+          "text2": "GB 17%",
+          "timestamp": "2026-09-25T02:18:09+00:00"
+         },
+         {
+          "odds1": "-1025",
+          "odds2": "+620",
+          "point": 37,
+          "text": "ATL 87%\nGB 13%",
+          "text1": "ATL 87%",
+          "text2": "GB 13%",
+          "timestamp": "2026-09-25T02:19:14+00:00"
+         },
+         {
+          "odds1": "-1122",
+          "odds2": "+658",
+          "point": 37,
+          "text": "ATL 87%\nGB 13%",
+          "text1": "ATL 87%",
+          "text2": "GB 13%",
+          "timestamp": "2026-09-25T02:20:23+00:00"
+         },
+         {
+          "odds1": "-6579",
+          "odds2": "+1439",
+          "point": 44,
+          "text": "ATL 94%\nGB 6%",
+          "text1": "ATL 94%",
+          "text2": "GB 6%",
+          "timestamp": "2026-09-25T02:36:33+00:00"
+         },
+         {
+          "odds1": "-6173",
+          "odds2": "+1417",
+          "point": 44,
+          "text": "ATL 94%\nGB 6%",
+          "text1": "ATL 94%",
+          "text2": "GB 6%",
+          "timestamp": "2026-09-25T02:38:42+00:00"
+         },
+         {
+          "odds1": "-43478",
+          "odds2": "+1811",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:39:47+00:00"
+         },
+         {
+          "odds1": "-52632",
+          "odds2": "+1826",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:40:51+00:00"
+         },
+         {
+          "odds1": "-24390",
+          "odds2": "+1748",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:41:57+00:00"
+         },
+         {
+          "odds1": "-27027",
+          "odds2": "+1764",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:43:01+00:00"
+         },
+         {
+          "odds1": "-41667",
+          "odds2": "+1810",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:45:14+00:00"
+         },
+         {
+          "odds1": "-45455",
+          "odds2": "+1815",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:46:19+00:00"
+         },
+         {
+          "odds1": "-83333",
+          "odds2": "+1853",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:47:24+00:00"
+         },
+         {
+          "odds1": "-23256",
+          "odds2": "+1741",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:48:29+00:00"
+         },
+         {
+          "odds1": "-50000",
+          "odds2": "+1823",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:49:34+00:00"
+         },
+         {
+          "odds1": "-21277",
+          "odds2": "+1730",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:50:39+00:00"
+         },
+         {
+          "odds1": "-16667",
+          "odds2": "+1687",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:51:44+00:00"
+         },
+         {
+          "odds1": "-8696",
+          "odds2": "+1528",
+          "point": 44,
+          "text": "ATL 94%\nGB 6%",
+          "text1": "ATL 94%",
+          "text2": "GB 6%",
+          "timestamp": "2026-09-25T02:52:48+00:00"
+         },
+         {
+          "odds1": "-5319",
+          "odds2": "+1361",
+          "point": 43,
+          "text": "ATL 93%\nGB 7%",
+          "text1": "ATL 93%",
+          "text2": "GB 7%",
+          "timestamp": "2026-09-25T02:53:52+00:00"
+         },
+         {
+          "odds1": "-5556",
+          "odds2": "+1377",
+          "point": 44,
+          "text": "ATL 94%\nGB 6%",
+          "text1": "ATL 94%",
+          "text2": "GB 6%",
+          "timestamp": "2026-09-25T02:54:57+00:00"
+         },
+         {
+          "odds1": "-5435",
+          "odds2": "+1369",
+          "point": 44,
+          "text": "ATL 94%\nGB 6%",
+          "text1": "ATL 94%",
+          "text2": "GB 6%",
+          "timestamp": "2026-09-25T02:56:02+00:00"
+         },
+         {
+          "odds1": "-5495",
+          "odds2": "+1374",
+          "point": 44,
+          "text": "ATL 94%\nGB 6%",
+          "text1": "ATL 94%",
+          "text2": "GB 6%",
+          "timestamp": "2026-09-25T02:57:06+00:00"
+         },
+         {
+          "odds1": "-11628",
+          "odds2": "+1609",
+          "point": 44,
+          "text": "ATL 94%\nGB 6%",
+          "text1": "ATL 94%",
+          "text2": "GB 6%",
+          "timestamp": "2026-09-25T02:58:13+00:00"
+         },
+         {
+          "odds1": "-12821",
+          "odds2": "+1632",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T02:59:17+00:00"
+         },
+         {
+          "odds1": "-1000000",
+          "odds2": "+1894",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T03:00:25+00:00"
+         },
+         {
+          "odds1": "-16949",
+          "odds2": "+1690",
+          "point": 45,
+          "text": "ATL 95%\nGB 5%",
+          "text1": "ATL 95%",
+          "text2": "GB 5%",
+          "timestamp": "2026-09-25T03:03:47+00:00"
+         }
+        ]
+       }
+      ],
+      "showAxisLines": true,
+      "title": "CHANCE TO WIN"
+     },
+     "type": "chart-win-chance"
+    },
+    {
+     "model": {
+      "bets": [
+       {
+        "model": {
+         "mainText": "The Packers needed to win by 5 points or more to cover the spread. They did not cover, so people who took the Falcons won.",
+         "odds": [
+          {
+           "subText": "ATL",
+           "success": true,
+           "text": "+4.5"
+          },
+          {
+           "subText": "GB",
+           "text": "-4.5"
+          }
+         ]
+        },
+        "template": "market"
+       }
+      ],
+      "name": "SPREAD"
+     },
+     "type": "bet-section"
+    },
+    {
+     "model": {
+      "description": "While the majority of bets favored the Packers, 58% of the money was actually on the Falcons.",
+      "items": [
+       {
+        "alternateLeftColor": "1, 240, 31, 65",
+        "alternateRightColor": "1, 0, 156, 26",
+        "leftColor": "1, 240, 31, 65",
+        "leftDisplay": "47%",
+        "leftName": "ATL",
+        "leftValue": 0.4686,
+        "rightColor": "1, 0, 156, 26",
+        "rightDisplay": "53%",
+        "rightName": "GB",
+        "rightValue": 0.5314,
+        "title": "% OF BETS PLACED"
+       },
+       {
+        "alternateLeftColor": "1, 240, 31, 65",
+        "alternateRightColor": "1, 0, 156, 26",
+        "leftColor": "1, 240, 31, 65",
+        "leftDisplay": "58%",
+        "leftName": "ATL",
+        "leftValue": 0.5808,
+        "rightColor": "1, 0, 156, 26",
+        "rightDisplay": "42%",
+        "rightName": "GB",
+        "rightValue": 0.4192,
+        "title": "% OF MONEY WAGERED"
+       }
+      ],
+      "title": "SPREAD BREAKDOWN",
+      "trackingData": {
+       "betEntityUri": "football/nfl/teams/25,football/nfl/teams/22",
+       "betEventUri": "football/nfl/events/11195",
+       "contentEntityUri": "event:football/nfl/events/11195,team:football/nfl/teams/25,team:football/nfl/teams/22"
+      }
+     },
+     "type": "breakdown"
+    },
+    {
+     "model": {
+      "bets": [
+       {
+        "model": {
+         "mainText": "The Falcons won at +198 odds so a bet of $100 won $298 total",
+         "odds": [
+          {
+           "subText": "ATL",
+           "success": true,
+           "text": "+198"
+          },
+          {
+           "subText": "GB",
+           "text": "-240"
+          }
+         ]
+        },
+        "template": "market"
+       }
+      ],
+      "name": "TEAM TO WIN"
+     },
+     "type": "bet-section"
+    },
+    {
+     "model": {
+      "description": "While the vast majority of bets favored the Packers, only 56% of the money was on the Packers.",
+      "items": [
+       {
+        "alternateLeftColor": "1, 240, 31, 65",
+        "alternateRightColor": "1, 0, 156, 26",
+        "leftColor": "1, 240, 31, 65",
+        "leftDisplay": "12%",
+        "leftName": "ATL",
+        "leftValue": 0.1168,
+        "rightColor": "1, 0, 156, 26",
+        "rightDisplay": "88%",
+        "rightName": "GB",
+        "rightValue": 0.8832,
+        "title": "% OF BETS PLACED"
+       },
+       {
+        "alternateLeftColor": "1, 240, 31, 65",
+        "alternateRightColor": "1, 0, 156, 26",
+        "leftColor": "1, 240, 31, 65",
+        "leftDisplay": "44%",
+        "leftName": "ATL",
+        "leftValue": 0.4429,
+        "rightColor": "1, 0, 156, 26",
+        "rightDisplay": "56%",
+        "rightName": "GB",
+        "rightValue": 0.5571,
+        "title": "% OF MONEY WAGERED"
+       }
+      ],
+      "title": "TEAM TO WIN BREAKDOWN",
+      "trackingData": {
+       "betEntityUri": "football/nfl/teams/25,football/nfl/teams/22",
+       "betEventUri": "football/nfl/events/11195",
+       "contentEntityUri": "event:football/nfl/events/11195,team:football/nfl/teams/25,team:football/nfl/teams/22"
+      }
+     },
+     "type": "breakdown"
+    },
+    {
+     "model": {
+      "bets": [
+       {
+        "model": {
+         "mainText": "The over/under was 43.5 and the teams scored 49 points, so people who bet the over won",
+         "odds": [
+          {
+           "subText": "OVER 43.5",
+           "success": true,
+           "text": "-101"
+          },
+          {
+           "subText": "UNDER 43.5",
+           "text": "-120"
+          }
+         ]
+        },
+        "template": "market"
+       }
+      ],
+      "name": "TOTAL"
+     },
+     "type": "bet-section"
+    },
+    {
+     "model": {
+      "description": "Bets and money were in the majority towards the Under.",
+      "items": [
+       {
+        "alternateLeftColor": "0, 255, 255, 255",
+        "alternateRightColor": "0, 145, 145, 145",
+        "leftColor": "0, 0, 0, 0",
+        "leftDisplay": "49%",
+        "leftName": "OVER",
+        "leftValue": 0.4932,
+        "rightColor": "0, 145, 145, 145",
+        "rightDisplay": "51%",
+        "rightName": "UNDER",
+        "rightValue": 0.5068,
+        "title": "% OF BETS PLACED"
+       },
+       {
+        "alternateLeftColor": "0, 255, 255, 255",
+        "alternateRightColor": "0, 145, 145, 145",
+        "leftColor": "0, 0, 0, 0",
+        "leftDisplay": "46%",
+        "leftName": "OVER",
+        "leftValue": 0.456,
+        "rightColor": "0, 145, 145, 145",
+        "rightDisplay": "54%",
+        "rightName": "UNDER",
+        "rightValue": 0.544,
+        "title": "% OF MONEY WAGERED"
+       }
+      ],
+      "title": "TOTAL BREAKDOWN",
+      "trackingData": {
+       "betEntityUri": "football/nfl/teams/25,football/nfl/teams/22",
+       "betEventUri": "football/nfl/events/11195",
+       "contentEntityUri": "event:football/nfl/events/11195,team:football/nfl/teams/25,team:football/nfl/teams/22"
+      }
+     },
+     "type": "breakdown"
+    },
+    {
+     "model": {
+      "bets": [
+       {
+        "model": {
+         "image": {
+          "altText": "Jordan Love",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+          "type": "image-headshot",
+          "url": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png"
+         },
+         "infoSubText": "FINAL",
+         "infoText": "ATL 35 · GB 14",
+         "mainText": "J. Love",
+         "odds": {
+          "subText": "-113",
+          "text": "231.5",
+          "title": "OVER"
+         },
+         "subText": "312 Pass Yds"
+        },
+        "template": "prop-future"
+       },
+       {
+        "model": {
+         "image": {
+          "altText": "Michael Penix Jr.",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+          "type": "image-headshot",
+          "url": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png"
+         },
+         "infoSubText": "FINAL",
+         "infoText": "ATL 35 · GB 14",
+         "mainText": "M. Penix Jr.",
+         "odds": {
+          "subText": "-113",
+          "text": "204.5",
+          "title": "OVER"
+         },
+         "subText": "256 Pass Yds"
+        },
+        "template": "prop-future"
+       }
+      ],
+      "description": "How many passing yards will these players have in their next game? Select a player to see potential winnings.",
+      "name": "PLAYER PASSING YARDS (TOTAL)",
+      "title": "PROPS"
+     },
+     "type": "bet-section"
+    },
+    {
+     "model": {
+      "bets": [
+       {
+        "model": {
+         "image": {
+          "altText": "Jordan Love",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+          "type": "image-headshot",
+          "url": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png"
+         },
+         "infoSubText": "FINAL",
+         "infoText": "ATL 35 · GB 14",
+         "mainText": "J. Love",
+         "odds": {
+          "subText": "-110",
+          "text": "1.5",
+          "title": "OVER"
+         },
+         "subText": "2 Pass TD"
+        },
+        "template": "prop-future"
+       },
+       {
+        "model": {
+         "image": {
+          "altText": "Michael Penix Jr.",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+          "type": "image-headshot",
+          "url": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png"
+         },
+         "infoSubText": "FINAL",
+         "infoText": "ATL 35 · GB 14",
+         "mainText": "M. Penix Jr.",
+         "odds": {
+          "subText": "-260",
+          "text": "0.5",
+          "title": "OVER"
+         },
+         "subText": "1 Pass TD"
+        },
+        "template": "prop-future"
+       }
+      ],
+      "description": "How many passing touchdowns will these players have in their next game? Select a player to see potential winnings.",
+      "name": "PLAYER PASSING TDS (TOTAL)",
+      "title": "PROPS"
+     },
+     "type": "bet-section"
+    },
+    {
+     "model": {
+      "bets": [
+       {
+        "model": {
+         "image": {
+          "altText": "Jordan Love",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+          "type": "image-headshot",
+          "url": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png"
+         },
+         "infoSubText": "FINAL",
+         "infoText": "ATL 35 · GB 14",
+         "mainText": "J. Love",
+         "odds": {
+          "subText": "-110",
+          "text": "31.5",
+          "title": "OVER"
+         },
+         "subText": "53 Pass Att"
+        },
+        "template": "prop-future"
+       },
+       {
+        "model": {
+         "image": {
+          "altText": "Michael Penix Jr.",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+          "type": "image-headshot",
+          "url": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png"
+         },
+         "infoSubText": "FINAL",
+         "infoText": "ATL 35 · GB 14",
+         "mainText": "M. Penix Jr.",
+         "odds": {
+          "subText": "-102",
+          "text": "31.5",
+          "title": "OVER"
+         },
+         "subText": "25 Pass Att"
+        },
+        "template": "prop-future"
+       }
+      ],
+      "description": "How many passing attempts will these players have in their next game? Select a player to see potential winnings.",
+      "name": "PLAYER PASSING ATTEMPTS (TOTAL)",
+      "title": "PROPS"
+     },
+     "type": "bet-section"
+    },
+    {
+     "model": {
+      "bets": [
+       {
+        "model": {
+         "image": {
+          "altText": "Michael Penix Jr.",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+          "type": "image-headshot",
+          "url": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png"
+         },
+         "infoSubText": "FINAL",
+         "infoText": "ATL 35 · GB 14",
+         "mainText": "M. Penix Jr.",
+         "odds": {
+          "subText": "-102",
+          "text": "19.5",
+          "title": "OVER"
+         },
+         "subText": "18 Pass Comp"
+        },
+        "template": "prop-future"
+       },
+       {
+        "model": {
+         "image": {
+          "altText": "Jordan Love",
+          "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+          "type": "image-headshot",
+          "url": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png"
+         },
+         "infoSubText": "FINAL",
+         "infoText": "ATL 35 · GB 14",
+         "mainText": "J. Love",
+         "odds": {
+          "subText": "-146",
+          "text": "18.5",
+          "title": "OVER"
+         },
+         "subText": "28 Pass Comp"
+        },
+        "template": "prop-future"
+       }
+      ],
+      "description": "How many passing completions will these players have in their next game? Select a player to see potential winnings.",
+      "name": "PLAYER PASS COMPLETIONS (TOTAL)",
+      "title": "PROPS"
+     },
+     "type": "bet-section"
+    }
+   ]
+  }
+ ],
+ "sixPack": {
+  "betSection": {
+   "bets": [
+    {
+     "model": {
+      "mainText": "The Packers needed to win by 5 points or more to cover the spread. They did not cover, so people who took the Falcons won.",
+      "odds": [
+       {
+        "subText": "ATL",
+        "success": true,
+        "text": "+4.5"
+       },
+       {
+        "subText": "GB",
+        "text": "-4.5"
+       }
+      ],
+      "subtitle": "SPREAD"
+     },
+     "template": "market"
+    },
+    {
+     "model": {
+      "mainText": "The Falcons won at +198 odds so a bet of $100 won $298 total",
+      "odds": [
+       {
+        "subText": "ATL",
+        "success": true,
+        "text": "+198"
+       },
+       {
+        "subText": "GB",
+        "text": "-240"
+       }
+      ],
+      "subtitle": "TEAM TO WIN"
+     },
+     "template": "market"
+    },
+    {
+     "model": {
+      "mainText": "The over/under was 43.5 and the teams scored 49 points, so people who bet the over won",
+      "odds": [
+       {
+        "subText": "OVER 43.5",
+        "success": true,
+        "text": "-101"
+       },
+       {
+        "subText": "UNDER 43.5",
+        "text": "-120"
+       }
+      ],
+      "subtitle": "TOTAL"
+     },
+     "template": "market"
+    }
+   ],
+   "name": "FALCONS vs PACKERS"
+  },
+  "contentUri": "football/nfl/events/11195",
+  "entityLink": {
+   "analyticsSport": "nfl",
+   "contentType": "event",
+   "contentUri": "football/nfl/events/11195",
+   "layout": {
+    "path": "/layouts?type=layout&subtype=nflEventLayout",
+    "tokens": {
+     "awayUri": "football/nfl/teams/25",
+     "eventUri": "football/nfl/events/11195",
+     "homeUri": "football/nfl/teams/22",
+     "id": "11195"
+    }
+   },
+   "tab": "odds",
+   "type": "entity",
+   "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=odds"
+  },
+  "eventStatus": 3,
+  "header": {
+   "title": "MATCHUP ODDS"
+  },
+  "isTba": false,
+  "moduleLinkText": "ODDS INFO",
+  "odds": {
+   "columnHeaders": [
+    "SPREAD",
+    "TO WIN",
+    "TOTAL"
+   ],
+   "rows": [
+    {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+     "fullText": "Atlanta Falcons",
+     "image": {
+      "altText": "Atlanta Falcons",
+      "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+      "type": "image-logo",
+      "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png"
+     },
+     "imageAltText": "Atlanta Falcons",
+     "imageType": "image-logo",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+     "template": "entity",
+     "text": "ATL",
+     "values": [
+      {
+       "id": "closing",
+       "odds": "+4.5",
+       "success": true
+      },
+      {
+       "id": "closing",
+       "odds": "+198",
+       "success": true
+      },
+      {
+       "id": "closing",
+       "odds": "O 43.5",
+       "success": true
+      }
+     ]
+    },
+    {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+     "fullText": "Green Bay Packers",
+     "image": {
+      "altText": "Green Bay Packers",
+      "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+      "type": "image-logo",
+      "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png"
+     },
+     "imageAltText": "Green Bay Packers",
+     "imageType": "image-logo",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+     "template": "entity",
+     "text": "GB",
+     "values": [
+      {
+       "id": "closing",
+       "odds": "-4.5",
+       "success": false
+      },
+      {
+       "id": "closing",
+       "odds": "-240",
+       "success": false
+      },
+      {
+       "id": "closing",
+       "odds": "U 43.5",
+       "success": false
+      }
+     ]
+    }
+   ],
+   "template": "default"
+  }
+ }
+}

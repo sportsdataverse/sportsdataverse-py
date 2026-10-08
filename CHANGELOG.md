@@ -3,8 +3,14 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes](#fixed--nhl-edge-top-10-boards-espn-transactions-nfl-fantasy-ranking-dtypes)
+  - [Changed — every public function documents its return, and shows a returns table or says why not](#changed--every-public-function-documents-its-return-and-shows-a-returns-table-or-says-why-not)
+  - [Changed — polars 2.x is allowed; the lock moves to polars 2.0.0](#changed--polars-2x-is-allowed-the-lock-moves-to-polars-200)
+  - [Fixed — CFB player loader schemas, and remote parquet reads under polars 2.0](#fixed--cfb-player-loader-schemas-and-remote-parquet-reads-under-polars-20)
   - [Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid](#added--expected-threat-xthreat-soccer_xthreat_rate-and-a-bundled-grid)
   - [Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter](#fixed--soccer_open_events-and-soccer_open_dataset-failed-in-a-fresh-interpreter)
+  - [Fixed — code that polars 2.0 rejects now runs on both 1.x and 2.0](#fixed--code-that-polars-20-rejects-now-runs-on-both-1x-and-20)
+  - [Removed — BREAKING: the 11 overdue NFL loader aliases](#removed--breaking-the-11-overdue-nfl-loader-aliases)
   - [Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()](#added--spadl-actions-from-any-kloppy-event-dataset-soccer_spadl-and-soccer_open_dataset)
   - [Changed — returns-table descriptions: NFL Pro, On3 and Fox authored; R-dictionary fill scoped to the league's own sport](#changed--returns-table-descriptions-nfl-pro-on3-and-fox-authored-r-dictionary-fill-scoped-to-the-leagues-own-sport)
   - [Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)](#added--wrappers-for-six-more-intake-providers-espn-content-thesportsdb-football-datacouk-openligadb-polymarket-kalshi)
@@ -240,7 +246,7 @@
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
-  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl-%E2%86%94-nflfastr-alignment--faithful-model-artifacts)
+  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl--nflfastr-alignment--faithful-model-artifacts)
   - [CFB — EP + WP models retrained on the full 2004–2025 history](#cfb--ep--wp-models-retrained-on-the-full-20042025-history)
 - [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
   - [CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)](#cfb--cfb_pbp-sparse-game-columnnotfounderror-guard-endteamid-et-al)
@@ -285,7 +291,7 @@
   - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
   - [NFL — restored the api.nfl.com game schedule + play-by-play wrappers](#nfl--restored-the-apinflcom-game-schedule--play-by-play-wrappers)
   - [ESPN — remove always-erroring endpoint variants + NFL R-parity](#espn--remove-always-erroring-endpoint-variants--nfl-r-parity)
-  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python-%E2%86%94-r-parity-tables)
+  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python--r-parity-tables)
   - [Documentation — example notebooks repaired, expanded, and rendered on-site](#documentation--example-notebooks-repaired-expanded-and-rendered-on-site)
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
   - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
@@ -323,7 +329,7 @@
   - [New: `return_parsed=True` dispatch shim](#new-return_parsedtrue-dispatch-shim)
   - [New: `nhl_edge_parsers.py`](#new-nhl_edge_parserspy)
   - [New: Site v2 summary dispatcher (20 sub-parsers)](#new-site-v2-summary-dispatcher-20-sub-parsers)
-  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100%25-endpoint_parsers-coverage-121121)
+  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100-endpoint_parsers-coverage-121121)
   - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
@@ -365,6 +371,26 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes
+
+- The twelve `nhl_edge_*_top_10` functions always returned an empty frame. The EDGE boards answer
+  with a bare JSON list and `parse_edge_top10` accepted only a dict. Eight of their documented
+  examples also used values the API rejects (`sort_by="points"`, `strength="ev"`).
+- `espn_<league>_transactions` parsed to an empty frame because it ran the generic item parser; it
+  now uses `parse_transactions`.
+- `load_nfl_ff_rankings` read `rank_delta` as String early in a season, when its first 100 cells are
+  empty. The CSV schema is now inferred from the whole file.
+- The KenPom `box`, `win_probability` and `referee` examples used ids KenPom does not recognise, and
+  KenPom silently served its home page instead. `kenpom_referee` takes the numeric `r=` id.
+
+### Changed — every public function documents its return, and shows a returns table or says why not
+
+- `generate.py --check` fails when a public callable has no `Returns:` (or `Yields:`) section.
+- Generated wrappers and hand-written DataFrame functions show a returns table captured from real
+  data. Where none can be captured, the page says why: the host refuses a datacenter IP, the route
+  needs a login, the parser reads none of the live payload, or no package function produces the
+  input. A new `tools/codegen/capture_fixtures.py` captures endpoint payloads.
 
 ### Changed — polars 2.x is allowed; the lock moves to polars 2.0.0
 
@@ -429,6 +455,17 @@ is unchanged. The `polars>=1.0,<2.0` pin is not lifted here.
 - `explode()` on an empty list gives one null row in 1.x and no rows in 2.0. Five calls
   (`usage_box`, the CBS subplays parser, the NCAA MBB RAPM stints) pass `empty_as_null=True` to
   keep the 1.x rows.
+
+### Removed — BREAKING: the 11 overdue NFL loader aliases
+
+The 11 per-type NFL loaders marked `removed_in="0.1.0"` are gone: `load_nfl_ngs_passing`,
+`load_nfl_ngs_rushing`, `load_nfl_ngs_receiving`, `load_nfl_pfr_pass`, `load_nfl_pfr_weekly_pass`,
+`load_nfl_pfr_rush`, `load_nfl_pfr_weekly_rush`, `load_nfl_pfr_rec`, `load_nfl_pfr_weekly_rec`,
+`load_nfl_pfr_def`, `load_nfl_pfr_weekly_def`. Callers move to
+`load_nfl_nextgen_stats(seasons, stat_type=...)` and
+`load_nfl_pfr_advstats(seasons, stat_type=..., summary_level=...)`. They had emitted
+`DeprecationWarning` since 0.0.68 and were overdue under the `CONTRIBUTING.md` deprecation policy.
+The deprecated `sportsdataverse.parsed.nfl` aliases of the same names go with them.
 
 ### Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()
 

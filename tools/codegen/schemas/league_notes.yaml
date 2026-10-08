@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: league_notes
+unverified: 'no capture: the page holds zero items (count 0) in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented
+  example arguments (2026-10-07)'
