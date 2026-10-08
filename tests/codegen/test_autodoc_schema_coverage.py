@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import signal
+import sys
+import time
+
 import polars as pl
 import pytest
 import yaml
@@ -113,12 +117,33 @@ def test_a_call_reference_is_resolved_once_and_can_pick_a_key(monkeypatch):
     assert generate._resolve_autodoc_arg(7, memo) == 7
 
 
-def test_a_stalled_call_times_out():
-    import time
+_NO_ALARM = pytest.mark.skipif(not hasattr(signal, "SIGALRM"), reason="SIGALRM is POSIX-only; the timeout is a no-op")
 
-    with pytest.raises(TimeoutError, match="SDV_AUTODOC_CALL_TIMEOUT"):
+
+@_NO_ALARM
+def test_a_stalled_call_times_out():
+    with pytest.raises(generate._CallTimeout, match="SDV_AUTODOC_CALL_TIMEOUT"):
         generate._call_with_timeout(lambda: time.sleep(5), 0.2)
     assert generate._call_with_timeout(lambda: 3, 0.2) == 3
+
+
+@_NO_ALARM
+def test_the_timeout_escapes_a_retry_loop_that_catches_exception():
+    """dl_utils.download retries on any Exception: a plain TimeoutError would be swallowed and
+    the stalled call retried with no alarm left."""
+    attempts = []
+
+    def retrying():
+        for _ in range(50):
+            try:
+                attempts.append(1)
+                time.sleep(5)
+            except Exception:  # noqa: BLE001 -- the shape of the HTTP layer's retry loop
+                continue
+
+    with pytest.raises(generate._CallTimeout):
+        generate._call_with_timeout(retrying, 0.2)
+    assert len(attempts) == 1
 
 
 def test_an_unannotated_function_without_args_or_schema_is_never_called(tmp_path, monkeypatch):
@@ -163,3 +188,52 @@ def test_an_unverified_autodoc_schema_states_its_reason_instead_of_a_table(tmp_p
 )
 def test_only_a_top_level_frame_counts_as_a_dataframe_return(annotation, frame):
     assert generate._returns_a_frame(annotation) is frame
+
+
+def test_a_committed_schema_survives_a_failed_recapture_and_a_gone_function_is_pruned(tmp_path, monkeypatch):
+    """A rate limit or an off-season endpoint fails the call while the function stays documented:
+    its committed table must survive. Only a schema whose function left the autodoc set is pruned."""
+    monkeypatch.setattr(generate, "_AUTODOC_SCHEMA_DIR", tmp_path)
+    (tmp_path / "nfl").mkdir()
+    committed = {
+        "schema": "flaky",
+        "kind": "dataframe",
+        "columns": [{"name": "a", "type": "integer", "description": ""}],
+    }
+    (tmp_path / "nfl" / "flaky.yaml").write_text(yaml.safe_dump(committed))
+    (tmp_path / "nfl" / "gone.yaml").write_text(yaml.safe_dump({**committed, "schema": "gone"}))
+    monkeypatch.setattr(generate, "_autodoc_names_by_scope", lambda: {"nfl": ["flaky"]})
+
+    class _Mod:
+        @staticmethod
+        def flaky(**kw) -> pl.DataFrame:
+            raise RuntimeError("HTTP 429")
+
+    monkeypatch.setitem(sys.modules, "sportsdataverse.nfl", _Mod)
+    generate.refresh_autodoc_schemas()
+    assert yaml.safe_load((tmp_path / "nfl" / "flaky.yaml").read_text()) == committed
+    assert not (tmp_path / "nfl" / "gone.yaml").exists()
+
+
+def test_a_call_reference_can_name_a_module_path():
+    """The YAML reaches non-exported inputs as ``<league>.<module>.<fn>`` (nba.nba_team_ratings._normalize_schedule)."""
+    import importlib
+
+    mod = importlib.import_module("sportsdataverse.nba.nba_team_ratings")
+    assert generate._scope_callable("nba.nba_team_ratings", "_normalize_schedule") is mod._normalize_schedule
+
+
+def test_a_passthrough_transformer_inherits_its_inputs_descriptions_per_league(monkeypatch):
+    monkeypatch.setattr(generate, "_manual_col_descs", lambda: {"load_cfb_pbp": {"a": "A.", "prob_2pt": "CFB model."}})
+    monkeypatch.setattr(
+        generate,
+        "_DESC_INHERITS",
+        {
+            "cfb/get_fg_wp": ("load_cfb_pbp", frozenset()),
+            "nfl/build_nfl_season": ("load_cfb_pbp", frozenset({"prob_2pt"})),
+        },
+    )
+    assert generate._manual_col_desc("get_fg_wp", "a", "cfb") == "A."
+    assert generate._manual_col_desc("get_fg_wp", "a", "nfl") == ""  # nfl's get_fg_wp is a different function
+    assert generate._manual_col_desc("build_nfl_season", "a", "nfl") == "A."
+    assert generate._manual_col_desc("build_nfl_season", "prob_2pt", "nfl") == ""  # excluded: college-only wording

@@ -611,10 +611,26 @@ def _manual_col_descs() -> dict:
     return yaml.safe_load(_MANUAL_DESC_FILE.read_text(encoding="utf-8")) or {}
 
 
-def _manual_col_desc(schema: str | None, col: str) -> str:
-    """Hand-curated description for ``col``: schema-keyed first, then ``_global``.
+# A pass-through transformer returns its input frame plus a few columns, so the input's schema
+# describes its returns table. Keyed ``league/schema`` (``get_fg_wp`` exists in cfb AND nfl):
+# ``(source schema, columns NOT to inherit)``.
+_DESC_INHERITS: dict[str, tuple[str, frozenset[str]]] = {
+    **{
+        f"cfb/{s}": ("load_cfb_pbp", frozenset())
+        for s in ("add_play_type_canonical", "add_era_columns", "normalize_pbp_columns", "get_2pt_probs", "get_fg_wp")
+    },
+    # NFL and CFB play-by-play come out of the same ESPN football construction pipeline. Three
+    # load_cfb_pbp descriptions name college-only models, so they are not inherited.
+    **{
+        f"nfl/{s}": ("load_cfb_pbp", frozenset({"opportunity_run", "prob_2pt", "xp_wp"}))
+        for s in ("build_nfl_season", "calculate_epa", "calculate_wpa")
+    },
+}
 
-    Resolution: ``manual[schema][col]`` -> ``manual["_global"][col]`` -> ``""``."""
+
+def _manual_col_desc(schema: str | None, col: str, league: str | None = None) -> str:
+    """Hand-curated description for ``col``: schema-keyed, then the schema it inherits
+    from (:data:`_DESC_INHERITS`, league-scoped), then ``_global``."""
     if not col:
         return ""
     d = _manual_col_descs()
@@ -622,6 +638,11 @@ def _manual_col_desc(schema: str | None, col: str) -> str:
         v = (d.get(schema) or {}).get(col)
         if v:
             return v
+        src = _DESC_INHERITS.get(f"{league}/{schema}")
+        if src and col not in src[1]:
+            v = (d.get(src[0]) or {}).get(col)
+            if v:
+                return v
     return (d.get("_global") or {}).get(col, "") or ""
 
 
@@ -645,7 +666,7 @@ def _table_cell_desc(
     if (stored or "").strip():
         raw = stored
     else:
-        raw = _manual_col_desc(schema, col)
+        raw = _manual_col_desc(schema, col, league)
         # ``r_dict_key`` defaults to ``schema`` because the autodoc and loader callers pass a
         # wrapper / loader name there; the reference-table caller passes the bare short, so it
         # hands the full ``native/<family>/<short>`` id in explicitly. ``_r_col_desc`` then
@@ -1720,11 +1741,10 @@ def _write_auto_espn_schemas(fix_dir: Path, schema_dir: Path) -> int:
         result = parser(json.loads(fx.read_text(encoding="utf-8")))
         descs = _desc_lookup(name)
         if isinstance(result, dict):
-            doc = {
-                "schema": name,
-                "kind": "frames",
-                "frames": [{"section": sec, "columns": _cols_from_frame(df, descs)} for sec, df in result.items()],
-            }
+            frames = [{"section": sec, "columns": _cols_from_frame(df, descs)} for sec, df in result.items()]
+            if not any(f["columns"] for f in frames):
+                continue  # an empty frames table would claim the endpoint returns nothing
+            doc = {"schema": name, "kind": "frames", "frames": frames}
         else:
             cols = _cols_from_frame(result, descs)
             if not cols:
@@ -4228,18 +4248,26 @@ def _resolve_autodoc_arg(value, memo: dict):
     return memo[ref]
 
 
+class _CallTimeout(BaseException):
+    """Raised by :func:`_call_with_timeout`. A ``BaseException`` on purpose: the HTTP layer
+    (``dl_utils.download``) retries on any ``Exception``, which would swallow a plain
+    ``TimeoutError`` and retry the stalled call with no alarm left."""
+
+
 def _call_with_timeout(thunk, seconds: float):
-    """``thunk()``, raising ``TimeoutError`` after ``seconds`` where SIGALRM exists (0 = no limit).
+    """``thunk()``, raising :class:`_CallTimeout` after ``seconds`` (0 = no limit).
 
     stats.nba.com stalls rather than failing on a datacenter IP; one such call must not
-    hang the whole capture run."""
+    hang the whole capture run. Needs SIGALRM and the main thread; elsewhere (Windows, a
+    worker thread) the call simply runs unbounded."""
     import signal
+    import threading
 
-    if not seconds or not hasattr(signal, "SIGALRM"):
+    if not seconds or not hasattr(signal, "SIGALRM") or threading.current_thread() is not threading.main_thread():
         return thunk()
 
     def _alarm(*_):
-        raise TimeoutError(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
+        raise _CallTimeout(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
 
     old = signal.signal(signal.SIGALRM, _alarm)
     signal.setitimer(signal.ITIMER_REAL, seconds)
@@ -4337,7 +4365,7 @@ def refresh_autodoc_schemas() -> int:
                 df = _call_with_timeout(
                     lambda: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}), timeout
                 )
-            except Exception as e:  # noqa: BLE001
+            except (Exception, _CallTimeout) as e:  # noqa: BLE001
                 msg = str(e).splitlines()[0][:120] if str(e) else type(e).__name__
                 print(f"  autodoc skip {scope_key}.{fn}: {msg}")
                 skip_reasons.append(f"{scope_key}.{fn}: {msg}")

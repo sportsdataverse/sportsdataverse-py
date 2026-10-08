@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: adjust_pressure–calculate_completion"
 sidebar_label: "Models and calculators: adjust_pressure–calculate_completion"
-sidebar_position: 13
+sidebar_position: 14
 description: "NFL — additional Python functions — Models and calculators: adjust_pressure–calculate_completion — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: adjust_pressure–calculate_completion

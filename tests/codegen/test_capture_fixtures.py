@@ -130,3 +130,40 @@ def test_every_espn_wrapper_calls_the_parser_the_registry_names():
         if ep.parser and ep.short in ENDPOINT_PARSERS and ep.parser != ENDPOINT_PARSERS[ep.short].__name__
     ]
     assert not bad, "\n".join(bad)
+
+
+def test_register_native_scopes_to_its_own_api_block(tmp_path, monkeypatch):
+    """Two APIs may share an endpoint short, and `fox_api:` appears inside `wbb_fox_api:`."""
+    import yaml
+
+    m = tmp_path / "native_fixture_map.yaml"
+    m.write_text("wbb_fox_api:\n  scoreboard.json: scoreboard\nfox_api:\n  other.json: other\n")
+    monkeypatch.setattr(cf, "NATIVE_MAP", m)
+    cf._register_native("fox_api", "scoreboard", "scoreboard.json")
+    cf._register_native("fox_api", "scoreboard", "scoreboard.json")  # idempotent
+    cf._register_native("new_api", "x", "x.json")
+    doc = yaml.safe_load(m.read_text())
+    assert doc["fox_api"] == {"scoreboard.json": "scoreboard", "other.json": "other"}
+    assert doc["wbb_fox_api"] == {"scoreboard.json": "scoreboard"}
+    assert doc["new_api"] == {"x.json": "x"}
+
+
+def test_an_unserializable_payload_is_a_reported_failure_not_a_crash(tmp_path, monkeypatch):
+    monkeypatch.setattr(cf, "FIXTURES", tmp_path)
+    monkeypatch.setattr(cf, "_call", lambda *a, **kw: {"a": object()})
+    ok, reason = cf.capture("espn_core_v2", "venues", "nba")
+    assert not ok and "TypeError" in reason
+    assert not list(tmp_path.rglob("*.json"))
+
+
+def test_a_failure_in_every_league_reports_the_representative_leagues_cause(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(cf, "FIXTURES", tmp_path)
+
+    def call(api, short, league):
+        raise RuntimeError(f"boom in {league}")
+
+    monkeypatch.setattr(cf, "_call", call)
+    monkeypatch.setattr(cf, "_candidate_leagues", lambda api, short, limit=8: ["nba", "cfb", "wch"])
+    cf.main(["--api", "espn_core_v2", "--endpoints", "season_group", "--sleep", "0"])
+    out = capsys.readouterr().out
+    assert "[nba] RuntimeError: boom in nba" in out and "2 more league(s)" in out and "boom in wch" not in out

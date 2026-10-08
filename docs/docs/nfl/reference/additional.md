@@ -135,13 +135,13 @@ not covered by the generated API-endpoint reference above.
 | [build_nfl_player_stats_def](additional/play-by-play-processing.md#build_nfl_player_stats_def) | Build player-level defensive stats from play-by-play (nflfastR parity). |
 | [build_nfl_player_stats_kicking](additional/play-by-play-processing.md#build_nfl_player_stats_kicking) | Build player-level kicking stats from play-by-play (nflfastR parity). |
 | [build_nfl_rosters](additional/play-by-play-processing.md#build_nfl_rosters) | Build SDV-native NFL season rosters from the public Shield API. |
-| [build_nfl_season](additional/play-by-play-processing.md#build_nfl_season) | Compile play-by-play for multiple NFL games into one tidy frame. |
-| [build_nfl_team_stats](additional/play-by-play-processing.md#build_nfl_team_stats) | Build nflverse **team_stats** by aggregating SDV-native play-by-play. |
+| [build_nfl_season](additional/play-by-play-processing-2.md#build_nfl_season) | Compile play-by-play for multiple NFL games into one tidy frame. |
+| [build_nfl_team_stats](additional/play-by-play-processing-2.md#build_nfl_team_stats) | Build nflverse **team_stats** by aggregating SDV-native play-by-play. |
 | [calculate_nfl_series_conversion_rates](additional/play-by-play-processing-2.md#calculate_nfl_series_conversion_rates) | Compute per-team offense + defense series conversion rates. |
-| [clean_nfl_pbp](additional/play-by-play-processing-2.md#clean_nfl_pbp) | Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port). |
-| [shield_nfl_pbp](additional/play-by-play-processing-3.md#shield_nfl_pbp) | Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase. |
-| [shield_to_espn_summary](additional/play-by-play-processing-3.md#shield_to_espn_summary) | Project one Shield game (any phase) onto an ESPN-summary-shaped dict. |
-| [team_name_fn](additional/play-by-play-processing-3.md#team_name_fn) | Fold historical/relocated team codes onto their current abbreviation. |
+| [clean_nfl_pbp](additional/play-by-play-processing-3.md#clean_nfl_pbp) | Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port). |
+| [shield_nfl_pbp](additional/play-by-play-processing-4.md#shield_nfl_pbp) | Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase. |
+| [shield_to_espn_summary](additional/play-by-play-processing-4.md#shield_to_espn_summary) | Project one Shield game (any phase) onto an ESPN-summary-shaped dict. |
+| [team_name_fn](additional/play-by-play-processing-4.md#team_name_fn) | Fold historical/relocated team codes onto their current abbreviation. |
 
 ## Models and calculators
 

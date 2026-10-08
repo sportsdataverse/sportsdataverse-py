@@ -178,7 +178,7 @@ CCHL schedule — one row per game.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). With neither `season` nor `season_id`, no season filter is sent and the feed's whole recent window comes back. |
 | `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 

@@ -131,17 +131,23 @@ def _call(api: str, short: str, league: str):
 
 
 def _register_native(api: str, short: str, fname: str) -> None:
-    """Add ``fname: short`` under ``api`` in native_fixture_map.yaml, keeping its comments."""
+    """Add ``fname: short`` under ``api`` in native_fixture_map.yaml, keeping its comments.
+
+    Registration is checked inside ``api``'s own block (two APIs can share an endpoint short),
+    and the block header is matched at the start of a line (``fox_api:`` is inside ``wbb_fox_api:``)."""
+    import re
+
+    import yaml
+
     text = NATIVE_MAP.read_text(encoding="utf-8")
+    if ((yaml.safe_load(text) or {}).get(api) or {}).get(fname) == short:
+        return
     line = f"  {fname}: {short}\n"
-    if line in text:
+    head = re.search(rf"^{re.escape(api)}:[ \t]*\n", text, re.M)
+    if head is None:
+        NATIVE_MAP.write_text(text.rstrip("\n") + f"\n{api}:\n{line}", encoding="utf-8", newline="\n")
         return
-    head = f"{api}:\n"
-    if head not in text:
-        NATIVE_MAP.write_text(text.rstrip("\n") + f"\n{head}{line}", encoding="utf-8", newline="\n")
-        return
-    i = text.index(head) + len(head)
-    NATIVE_MAP.write_text(text[:i] + line + text[i:], encoding="utf-8", newline="\n")
+    NATIVE_MAP.write_text(text[: head.end()] + line + text[head.end() :], encoding="utf-8", newline="\n")
 
 
 def capture(api: str, short: str, league: str = "", *, dry_run: bool = False) -> tuple[bool, str]:
@@ -152,14 +158,13 @@ def capture(api: str, short: str, league: str = "", *, dry_run: bool = False) ->
         return True, f"dry-run: would capture {where} -> {dest.relative_to(dest.parents[2]).as_posix()}"
     try:
         payload = _call(api, short, league)
+        body = json.dumps(payload, indent=1, sort_keys=True, ensure_ascii=False) + "\n" if payload else ""
     except Exception as e:  # noqa: BLE001 -- every failure is reported, none is fatal
         return False, f"{type(e).__name__}: {(str(e).splitlines() or [''])[0][:200]}"
     if not payload:
         return False, "the live call returned an empty payload"
     dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(
-        json.dumps(payload, indent=1, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
-    )
+    dest.write_text(body, encoding="utf-8", newline="\n")
     if api not in generate.ESPN_APIS:
         _register_native(api, short, dest.name)
     return True, f"captured {dest.relative_to(ROOT).as_posix() if dest.is_relative_to(ROOT) else dest}"
@@ -185,12 +190,17 @@ def main(argv: list[str] | None = None) -> int:
         # An endpoint's base example args can belong to one league (group 80 is college football), so a
         # failed ESPN capture is retried in the next leagues that reach it before it is reported.
         leagues = [args.league] if args.league else _candidate_leagues(args.api, short)
+        first_failure = ""
         for i, league in enumerate(leagues):
             good, reason = capture(args.api, short, league, dry_run=args.dry_run)
             if not args.dry_run:
                 time.sleep(args.sleep)
-            if good or args.dry_run or i == len(leagues) - 1:
+            if good or args.dry_run:
                 break
+            first_failure = first_failure or (f"[{league}] {reason}" if league else reason)
+        if not good and len(leagues) > 1:
+            # the representative league's cause, not the last obscure fallback's
+            reason = f"{first_failure} (also failed in {len(leagues) - 1} more league(s))"
         print(f"  {'ok  ' if good else 'skip'} {args.api}/{short}: {reason}", flush=True)
         ok, bad = (ok + 1, bad) if good else (ok, bad + 1)
     print(f"capture_fixtures: {ok} captured, {bad} skipped", flush=True)

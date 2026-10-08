@@ -192,6 +192,10 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "native/fotmob": 283,
     "native/uefa": 841,
     "native/sleeper": 459,
+    # The autodoc buckets were re-based 2026-10-08 at their measured counts when Task 26 captured
+    # returns tables for every hand-written DataFrame function (295 new tables, ~4,900 undescribed
+    # cells after pass-through transformers inherit their input loader's descriptions via
+    # generate._DESC_INHERITS). Lower a cap as columns are authored.
     # Buckets whose blank cells held CROSS-SPORT R text until the fallback was scoped to the
     # league's own sport (2026-10-07): the earlier zero residual counted baseballr's "Inning
     # number." on a jersey number and cfbfastR's SP+ on an NFL rating as coverage, so these are
@@ -199,25 +203,30 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "autodoc/ahl": 2,
     "autodoc/ajhl": 1,
     "autodoc/cchl": 1,
-    "autodoc/cfb": 92,
+    "autodoc/cfb": 817,
     "autodoc/chl": 2,
-    "autodoc/global": 3,
+    "autodoc/global": 204,
     "autodoc/gojhl": 1,
-    "autodoc/mbb": 6,
-    "autodoc/mlb": 31,
-    "autodoc/nba": 4,
-    "autodoc/nfl": 248,
-    "autodoc/nhl": 51,
+    "autodoc/mbb": 642,
+    "autodoc/mlb": 107,
+    "autodoc/nba": 432,
+    "autodoc/nfl": 1098,
+    "autodoc/nhl": 208,
     "autodoc/nojhl": 1,
-    "autodoc/odds": 22,
+    "autodoc/odds": 69,
     "autodoc/ohl": 2,
-    "autodoc/pwhl": 4,
+    "autodoc/pwhl": 13,
     "autodoc/qmjhl": 4,
     "autodoc/sjhl": 1,
     "autodoc/ushl": 2,
-    "autodoc/wbb": 6,
+    "autodoc/wbb": 593,
     "autodoc/whl": 1,
-    "autodoc/wnba": 5,
+    "autodoc/wnba": 558,
+    "autodoc/college_baseball": 38,
+    "autodoc/f1": 17,
+    "autodoc/mch": 7,
+    "autodoc/soccer": 83,
+    "autodoc/ufl": 24,
     "cdn_scoreboard.yaml": 38,
     "loader_schemas": 371,
     "native/cbs_napi": 42,
@@ -353,7 +362,7 @@ def iter_schema_columns() -> list[dict]:
 
 def _uncovered(r: dict) -> bool:
     """A blank column with no manual-dict and no R-dict description."""
-    if not r["blank"] or _manual_col_desc(r["schema"], r["col"]):
+    if not r["blank"] or _manual_col_desc(r["schema"], r["col"], r["league"]):
         return False
     # Same gate as render: a family with no R counterpart (``_NO_R_DICT_FAMILIES``) gets no fill.
     key = f"{r['bucket']}/{r['schema']}" if r["bucket"].startswith("native/") else r["schema"]

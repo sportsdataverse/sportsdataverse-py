@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: calculate_xpass"
 sidebar_label: "Models and calculators: calculate_xpass"
-sidebar_position: 18
+sidebar_position: 19
 description: "NFL — additional Python functions — Models and calculators: calculate_xpass — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: calculate_xpass

@@ -111,32 +111,32 @@ not covered by the generated API-endpoint reference above.
 | [calculate_xpass](additional/models-and-calculators.md#calculate_xpass) | Expected pass probability for each row. |
 | [cfb_adjusted_epa](additional/models-and-calculators.md#cfb_adjusted_epa) | Season opponent-adjusted per-team EPA from a season's play-by-play. |
 | [cfb_adjusted_epa_by_game](additional/models-and-calculators.md#cfb_adjusted_epa_by_game) | Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game. |
-| [cfb_compute_results](additional/models-and-calculators.md#cfb_compute_results) | Default results generator — nflseedR's dynamic ELO model for CFB. |
-| [cfb_draft_projection](additional/models-and-calculators.md#cfb_draft_projection) | Project NFL-draft probability per player + expected picks per team. |
-| [cfb_field_position](additional/models-and-calculators.md#cfb_field_position) | Team-season field-position value: avg start, drive EP, margin, pts/drive. |
-| [cfb_predict_games](additional/models-and-calculators.md#cfb_predict_games) | Predict a whole schedule of games from a ratings frame (vectorized). |
-| [cfb_ratings](additional/models-and-calculators.md#cfb_ratings) | One row per team: the full CFB ratings spine (off/def/ST EPA + FEI). |
-| [cfb_recruiting_projection](additional/models-and-calculators.md#cfb_recruiting_projection) | Project team wins / scoring margin for a season from preseason roster features. |
-| [cfb_roster_talent](additional/models-and-calculators.md#cfb_roster_talent) | Team-talent composite per team-season (247 Team Talent Composite style). |
-| [cfb_simulations](additional/models-and-calculators.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |
-| [efficiency_ratings](additional/models-and-calculators.md#efficiency_ratings) | One row per team: opponent-adjusted offensive/defensive efficiency. |
+| [cfb_compute_results](additional/models-and-calculators-2.md#cfb_compute_results) | Default results generator — nflseedR's dynamic ELO model for CFB. |
+| [cfb_draft_projection](additional/models-and-calculators-2.md#cfb_draft_projection) | Project NFL-draft probability per player + expected picks per team. |
+| [cfb_field_position](additional/models-and-calculators-2.md#cfb_field_position) | Team-season field-position value: avg start, drive EP, margin, pts/drive. |
+| [cfb_predict_games](additional/models-and-calculators-2.md#cfb_predict_games) | Predict a whole schedule of games from a ratings frame (vectorized). |
+| [cfb_ratings](additional/models-and-calculators-2.md#cfb_ratings) | One row per team: the full CFB ratings spine (off/def/ST EPA + FEI). |
+| [cfb_recruiting_projection](additional/models-and-calculators-2.md#cfb_recruiting_projection) | Project team wins / scoring margin for a season from preseason roster features. |
+| [cfb_roster_talent](additional/models-and-calculators-2.md#cfb_roster_talent) | Team-talent composite per team-season (247 Team Talent Composite style). |
+| [cfb_simulations](additional/models-and-calculators-2.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |
+| [efficiency_ratings](additional/models-and-calculators-2.md#efficiency_ratings) | One row per team: opponent-adjusted offensive/defensive efficiency. |
 | [fei_ratings](additional/models-and-calculators-2.md#fei_ratings) | One row per team: opponent-adjusted per-drive efficiency (FEI-style). |
 | [fit_field_position_ep](additional/models-and-calculators-2.md#fit_field_position_ep) | Fit the monotone EP-by-starting-yardline curve from a drives frame. |
-| [get_2pt_probs](additional/models-and-calculators-2.md#get_2pt_probs) | Two-point-conversion decision surface (cfb4th `get_2pt_wp`). |
-| [get_4th_down_probs](additional/models-and-calculators-2.md#get_4th_down_probs) | Full 4th-down decision surface (cfb4th `add_4th_probs`) + recommendation. |
-| [get_fg_wp](additional/models-and-calculators-2.md#get_fg_wp) | Expected win probability of attempting a field goal (cfb4th `get_fg_wp`). |
-| [get_go_wp](additional/models-and-calculators-2.md#get_go_wp) | Expected win probability of going for it on 4th down (cfb4th `get_go_wp`). |
-| [get_punt_wp](additional/models-and-calculators-2.md#get_punt_wp) | Expected win probability of punting on 4th down (cfb4th `get_punt_wp`). |
-| [load_draft_outcomes](additional/models-and-calculators-2.md#load_draft_outcomes) | NFL draft picks with the college of each pick, for the requested draft years. |
-| [load_fp_curve](additional/models-and-calculators-2.md#load_fp_curve) | Load the bundled EP-by-yardline curve (no network, no first-use download). |
-| [load_recruit_classes](additional/models-and-calculators-2.md#load_recruit_classes) | Load recruiting classes as per-recruit rows from the 247 RDB feed. |
-| [normalize_pbp_columns](additional/models-and-calculators-3.md#normalize_pbp_columns) | Add card-named copies of any play-by-play columns `df` already carries. |
-| [predict_from_card](additional/models-and-calculators-3.md#predict_from_card) | Score `df` with `booster`, validated and ordered by the model's card. |
-| [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home scoring margin from the two net ratings. |
-| [predict_total](additional/models-and-calculators-3.md#predict_total) | Expected combined point total from the four efficiency ratings + tempo. |
-| [slope_for_games](additional/models-and-calculators-3.md#slope_for_games) | Points per unit of rating differential, given how many games back it. |
-| [special_teams_ratings](additional/models-and-calculators-3.md#special_teams_ratings) | One row per team: a per-unit special-teams EPA composite. |
-| [win_prob_from_margin](additional/models-and-calculators-3.md#win_prob_from_margin) | Home win probability from an expected margin via the Gaussian CDF. |
+| [get_2pt_probs](additional/models-and-calculators-3.md#get_2pt_probs) | Two-point-conversion decision surface (cfb4th `get_2pt_wp`). |
+| [get_4th_down_probs](additional/models-and-calculators-3.md#get_4th_down_probs) | Full 4th-down decision surface (cfb4th `add_4th_probs`) + recommendation. |
+| [get_fg_wp](additional/models-and-calculators-4.md#get_fg_wp) | Expected win probability of attempting a field goal (cfb4th `get_fg_wp`). |
+| [get_go_wp](additional/models-and-calculators-4.md#get_go_wp) | Expected win probability of going for it on 4th down (cfb4th `get_go_wp`). |
+| [get_punt_wp](additional/models-and-calculators-4.md#get_punt_wp) | Expected win probability of punting on 4th down (cfb4th `get_punt_wp`). |
+| [load_draft_outcomes](additional/models-and-calculators-4.md#load_draft_outcomes) | NFL draft picks with the college of each pick, for the requested draft years. |
+| [load_fp_curve](additional/models-and-calculators-4.md#load_fp_curve) | Load the bundled EP-by-yardline curve (no network, no first-use download). |
+| [load_recruit_classes](additional/models-and-calculators-4.md#load_recruit_classes) | Load recruiting classes as per-recruit rows from the 247 RDB feed. |
+| [normalize_pbp_columns](additional/models-and-calculators-5.md#normalize_pbp_columns) | Add card-named copies of any play-by-play columns `df` already carries. |
+| [predict_from_card](additional/models-and-calculators-5.md#predict_from_card) | Score `df` with `booster`, validated and ordered by the model's card. |
+| [predict_margin](additional/models-and-calculators-5.md#predict_margin) | Expected home scoring margin from the two net ratings. |
+| [predict_total](additional/models-and-calculators-5.md#predict_total) | Expected combined point total from the four efficiency ratings + tempo. |
+| [slope_for_games](additional/models-and-calculators-5.md#slope_for_games) | Points per unit of rating differential, given how many games back it. |
+| [special_teams_ratings](additional/models-and-calculators-5.md#special_teams_ratings) | One row per team: a per-unit special-teams EPA composite. |
+| [win_prob_from_margin](additional/models-and-calculators-5.md#win_prob_from_margin) | Home win probability from an expected margin via the Gaussian CDF. |
 
 ## Analytics
 
@@ -149,13 +149,13 @@ not covered by the generated API-endpoint reference above.
 | [cfb_playoff_seeds](additional/analytics.md#cfb_playoff_seeds) | Assign College Football Playoff seeds (current straight-seeding rule). |
 | [cfb_resume](additional/analytics.md#cfb_resume) | Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble. |
 | [cfb_returning_production](additional/analytics.md#cfb_returning_production) | Returning production per team-season (offense / defense / overall). |
-| [cfb_season_odds](additional/analytics.md#cfb_season_odds) | Ratings-driven season Monte Carlo: conference / playoff / championship odds. |
-| [cfb_transfer_impact](additional/analytics.md#cfb_transfer_impact) | Net transfer talent and its projected win-total impact per team-season. |
-| [cfb_transfer_moves](additional/analytics.md#cfb_transfer_moves) | Transfer moves inferred from year-over-year roster diffs. |
-| [create_drive_summary](additional/analytics.md#create_drive_summary) | Build the StatBroadcast-style drive summary, chart, and long-play lists. |
-| [create_situational_stats](additional/analytics.md#create_situational_stats) | Build the situational team-stats block from a plays frame. |
-| [make_ratings_compute_results](additional/analytics.md#make_ratings_compute_results) | Build a `cfb_simulations` `compute_results` closure from fixed ratings. |
-| [play_type_family_expr](additional/analytics.md#play_type_family_expr) | Build the polars expression mapping a canonical type to its phase family. |
+| [cfb_season_odds](additional/analytics-2.md#cfb_season_odds) | Ratings-driven season Monte Carlo: conference / playoff / championship odds. |
+| [cfb_transfer_impact](additional/analytics-2.md#cfb_transfer_impact) | Net transfer talent and its projected win-total impact per team-season. |
+| [cfb_transfer_moves](additional/analytics-2.md#cfb_transfer_moves) | Transfer moves inferred from year-over-year roster diffs. |
+| [create_drive_summary](additional/analytics-2.md#create_drive_summary) | Build the StatBroadcast-style drive summary, chart, and long-play lists. |
+| [create_situational_stats](additional/analytics-2.md#create_situational_stats) | Build the situational team-stats block from a plays frame. |
+| [make_ratings_compute_results](additional/analytics-2.md#make_ratings_compute_results) | Build a `cfb_simulations` `compute_results` closure from fixed ratings. |
+| [play_type_family_expr](additional/analytics-2.md#play_type_family_expr) | Build the polars expression mapping a canonical type to its phase family. |
 
 ## IDs and crosswalks
 

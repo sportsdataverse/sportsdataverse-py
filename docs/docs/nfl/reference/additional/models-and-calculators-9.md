@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: get_fg–nfl_ratings"
 sidebar_label: "Models and calculators: get_fg–nfl_ratings"
-sidebar_position: 21
+sidebar_position: 22
 description: "NFL — additional Python functions — Models and calculators: get_fg–nfl_ratings — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: get_fg–nfl_ratings

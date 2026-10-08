@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: calculate_expected"
 sidebar_label: "Models and calculators: calculate_expected"
-sidebar_position: 15
+sidebar_position: 16
 description: "NFL — additional Python functions — Models and calculators: calculate_expected — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: calculate_expected

@@ -90,13 +90,13 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`build_nfl_player_stats_def`](reference/additional/play-by-play-processing#build_nfl_player_stats_def)
 - [`build_nfl_player_stats_kicking`](reference/additional/play-by-play-processing#build_nfl_player_stats_kicking)
 - [`build_nfl_rosters`](reference/additional/play-by-play-processing#build_nfl_rosters)
-- [`build_nfl_season`](reference/additional/play-by-play-processing#build_nfl_season)
-- [`build_nfl_team_stats`](reference/additional/play-by-play-processing#build_nfl_team_stats)
+- [`build_nfl_season`](reference/additional/play-by-play-processing-2#build_nfl_season)
+- [`build_nfl_team_stats`](reference/additional/play-by-play-processing-2#build_nfl_team_stats)
 - [`calculate_nfl_series_conversion_rates`](reference/additional/play-by-play-processing-2#calculate_nfl_series_conversion_rates)
-- [`clean_nfl_pbp`](reference/additional/play-by-play-processing-2#clean_nfl_pbp)
-- [`shield_nfl_pbp`](reference/additional/play-by-play-processing-3#shield_nfl_pbp)
-- [`shield_to_espn_summary`](reference/additional/play-by-play-processing-3#shield_to_espn_summary)
-- [`team_name_fn`](reference/additional/play-by-play-processing-3#team_name_fn)
+- [`clean_nfl_pbp`](reference/additional/play-by-play-processing-3#clean_nfl_pbp)
+- [`shield_nfl_pbp`](reference/additional/play-by-play-processing-4#shield_nfl_pbp)
+- [`shield_to_espn_summary`](reference/additional/play-by-play-processing-4#shield_to_espn_summary)
+- [`team_name_fn`](reference/additional/play-by-play-processing-4#team_name_fn)
 
 ### Models and calculators {#models-and-calculators}
 

@@ -1,33 +1,26 @@
 ---
-title: "CFB — additional Python functions — Models and calculators: add_era–cfb_adjusted"
-sidebar_label: "Models and calculators: add_era–cfb_adjusted"
-sidebar_position: 7
-description: "CFB — additional Python functions — Models and calculators: add_era–cfb_adjusted — function reference in sdv-py, the SportsDataverse Python package."
+title: "CFB — additional Python functions — Models and calculators: get_fg–load_recruit"
+sidebar_label: "Models and calculators: get_fg–load_recruit"
+sidebar_position: 10
+description: "CFB — additional Python functions — Models and calculators: get_fg–load_recruit — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — Models and calculators: add_era–cfb_adjusted
+# CFB — additional Python functions — Models and calculators: get_fg–load_recruit
 
-### add_era_columns {#add_era_columns}
+### get_fg_wp {#get_fg_wp}
 
-`add_era_columns(df: 'pl.DataFrame', model: 'str', season: 'int | None' = None) -> 'pl.DataFrame'`
+`get_fg_wp(pbp_df) -> 'pd.DataFrame'`
 
-Add the era column(s) `model` consumes, using ITS card's cuts.
-
-The cuts are read from the published contract, never restated here. That is
-the fix for cfbfastR-cfb-data#70, where both consumers kept a private copy of
-the era boundary, both drifted to a 2017 cut the trainer never used, and
-2018-2020 scored an era off the models trained with them.
+Expected win probability of attempting a field goal (cfb4th `get_fg_wp`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `df` | `DataFrame` |  | Frame carrying a `season` column, or any frame when `season` is given explicitly. |
-| `model` | `str` |  | Bundle stem, used to look up the era contract. |
-| `season` | `int \| None` | `None` | Season to use when `df` has no `season` column -- the hand-built-row case. |
+| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations. |
 
 **Returns**
 
-`df` with the contract's columns added. Returned unchanged when the model declares no era contract, or when the columns are already present.
+A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `fg_wp` (= make_prob*make_wp + (1-make_prob)*miss_wp, from the kicking team's perspective). All four are NaN when the FG model is not bundled (`FG_MODEL_AVAILABLE` is False) -- probabilities are never fabricated.
 
 | col_name | type | description |
 |---|---|---|
@@ -78,34 +71,34 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `pos_score_diff` | integer | Score differential from the possession team's perspective. |
 | `change_of_poss` | logical | Binary flag for change of possession on the play (CFBD offense field). |
 | `rusher_player_name` | character | Name of the rusher on a rushing play. |
-| `yds_rushed` | integer | Rushing yards gained on the play. |
+| `yds_rushed` | double | Rushing yards gained on the play. |
 | `passer_player_name` | character | Name of the passer on a passing play. |
 | `receiver_player_name` | character | Name of the receiver on a passing play. |
-| `yds_receiving` | integer | Receiving yards gained on the play. |
-| `yds_sacked` | integer | Yards lost on the sack. |
+| `yds_receiving` | double | Receiving yards gained on the play. |
+| `yds_sacked` | double | Yards lost on the sack. |
 | `sack_players` | character | Combined names of all sack participants. |
 | `sack_player_name` | character | Primary sack player name. |
 | `sack_player_name2` | character | Secondary sack player name (when split between two defenders). |
 | `pass_breakup_player_name` | character | Name of the defender credited with the pass breakup. |
 | `interception_player_name` | character | Name of the defender credited with the interception. |
-| `yds_int_return` | integer | Yards gained on an interception return. |
+| `yds_int_return` | double | Yards gained on an interception return. |
 | `fumble_player_name` | character | Name of the player who fumbled. |
 | `fumble_forced_player_name` | character | Name of the player who forced the fumble. |
 | `fumble_recovered_player_name` | character | Name of the player who recovered the fumble. |
-| `yds_fumble_return` | integer | Yards gained on a fumble return. |
+| `yds_fumble_return` | double | Yards gained on a fumble return. |
 | `punter_player_name` | character | Name of the punter. |
-| `yds_punted` | integer | Yards the ball traveled on the punt. |
-| `yds_punt_return` | integer | Yards gained on the punt return. |
-| `yds_punt_gained` | integer | Net yards gained on the punt (punt distance minus return). |
+| `yds_punted` | double | Yards the ball traveled on the punt. |
+| `yds_punt_return` | double | Yards gained on the punt return. |
+| `yds_punt_gained` | double | Net yards gained on the punt (punt distance minus return). |
 | `punt_block_player_name` | character | Name of the player credited with blocking the punt. |
 | `punt_block_return_player_name` | character | Name of the player returning a blocked punt. |
 | `fg_kicker_player_name` | character | Name of the field goal kicker. |
-| `yds_fg` | integer | Distance of the field goal attempt in yards. |
+| `yds_fg` | double | Distance of the field goal attempt in yards. |
 | `fg_block_player_name` | character | Name of the player credited with blocking the field goal. |
 | `fg_return_player_name` | character | Name of the player returning the blocked/missed field goal. |
 | `kickoff_player_name` | character | Name of the kickoff specialist. |
-| `yds_kickoff` | integer | Yards the ball traveled on the kickoff. |
-| `yds_kickoff_return` | integer | Yards gained on the kickoff return. |
+| `yds_kickoff` | double | Yards the ball traveled on the kickoff. |
+| `yds_kickoff_return` | double | Yards gained on the kickoff return. |
 | `rush` | logical | Binary flag for a rushing play. |
 | `rush_td` | logical | Binary flag for a rushing touchdown. |
 | `pass` | logical | Binary flag for a passing play (includes sacks). |
@@ -147,7 +140,7 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `penalty_text` | character | TRUE when penalty information is detectable in the play text. |
 | `lead_wp_before2` | double | Value of wp_before 2 plays ahead, used for sequence-aware derivations. |
 | `lead_wp_before` | double | Value of wp_before on the next play, used for sequence-aware derivations. |
-| `lead_pos_team2` | integer | Value of pos_team 2 plays ahead, used for sequence-aware derivations. |
+| `lead_pos_team2` | double | Value of pos_team 2 plays ahead, used for sequence-aware derivations. |
 | `id` | integer | 247Sports referencing id for the recruit. |
 | `sequenceNumber` | integer |  |
 | `text` | character | Full play description. |
@@ -174,7 +167,7 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `end.down` | integer | ESPN's `down` value for the play state at the end of the play. |
 | `end.distance` | integer | ESPN's `distance` value for the play state at the end of the play. |
 | `end.yardLine` | integer | ESPN's `yardLine` value for the play state at the end of the play. |
-| `end.yardsToEndzone` | integer | ESPN's `yardsToEndzone` value for the play state at the end of the play. |
+| `end.yardsToEndzone` | double | ESPN's `yardsToEndzone` value for the play state at the end of the play. |
 | `end.downDistanceText` | character | ESPN's `downDistanceText` value for the play state at the end of the play. |
 | `end.shortDownDistanceText` | character | ESPN's `shortDownDistanceText` value for the play state at the end of the play. |
 | `end.possessionText` | character | ESPN's `possessionText` value for the play state at the end of the play. |
@@ -207,9 +200,9 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `drive.start.yardLine` | integer | ESPN's `start.yardLine` field for the drive containing this play. |
 | `drive.start.clock.displayValue` | character | ESPN's `start.clock.displayValue` field for the drive containing this play. |
 | `drive.start.text` | character | ESPN's `start.text` field for the drive containing this play. |
-| `drive.end.period.number` | integer | ESPN's `end.period.number` field for the drive containing this play. |
+| `drive.end.period.number` | double | ESPN's `end.period.number` field for the drive containing this play. |
 | `drive.end.period.type` | character | ESPN's `end.period.type` field for the drive containing this play. |
-| `drive.end.yardLine` | integer | ESPN's `end.yardLine` field for the drive containing this play. |
+| `drive.end.yardLine` | double | ESPN's `end.yardLine` field for the drive containing this play. |
 | `drive.end.clock.displayValue` | character | ESPN's `end.clock.displayValue` field for the drive containing this play. |
 | `seasonType` | integer | ESPN season type for the game (2 = regular season, 3 = postseason). |
 | `week` | integer | Game week of the season. |
@@ -233,16 +226,16 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `homeTeamSpread` | double | ESPN's home-team Spread for the game, stamped on every play. |
 | `clock.minutes` | integer | Minutes remaining on the game clock at the play. |
 | `clock.seconds` | integer | Seconds component of the game clock at the play. |
-| `lag_half` | integer | Value of half on the previous play, used for sequence-aware derivations. |
+| `lag_half` | double | Value of half on the previous play, used for sequence-aware derivations. |
 | `lead_half` | integer | Value of half on the next play, used for sequence-aware derivations. |
 | `start.TimeSecsRem` | integer | Seconds remaining in the half from ESPN's clock stamp for this play, which is the end-of-play time in 2005 and 2007+ (the snap time in 2004 and most of 2006); tops out at 1800. |
 | `start.adj_TimeSecsRem` | integer | ESPN's `adj_TimeSecsRem` value for the play state at the start of the play. |
 | `lead_text` | character | Value of text on the next play, used for sequence-aware derivations. |
 | `lead_start_team` | character | Value of start_team on the next play, used for sequence-aware derivations. |
-| `lead_start_yardsToEndzone` | integer | Value of start_yardsToEndzone on the next play, used for sequence-aware derivations. |
-| `lead_start_down` | integer | Value of start_down on the next play, used for sequence-aware derivations. |
-| `lead_start_distance` | integer | Value of start_distance on the next play, used for sequence-aware derivations. |
-| `lead_scoringPlay` | logical | Value of scoringPlay on the next play, used for sequence-aware derivations. |
+| `lead_start_yardsToEndzone` | double | Value of start_yardsToEndzone on the next play, used for sequence-aware derivations. |
+| `lead_start_down` | double | Value of start_down on the next play, used for sequence-aware derivations. |
+| `lead_start_distance` | double | Value of start_distance on the next play, used for sequence-aware derivations. |
+| `lead_scoringPlay` | character | Value of scoringPlay on the next play, used for sequence-aware derivations. |
 | `text_dupe` | logical | Always False in the emitted frame -- the duplicate-row filter it gates runs before the column is returned, so it marks nothing and is retained only for schema stability. |
 | `end_state_missing` | logical | Flag that ESPN's end-of-play state (end.team.id) was absent and the end state was imputed. |
 | `start.pos_team.id` | integer | ESPN's `pos_team.id` value for the play state at the start of the play. |
@@ -270,7 +263,7 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `firstHalfKickoffTeamId` | integer | ESPN id of the team that received the opening kickoff. |
 | `start.yard` | integer | ESPN's `yard` value for the play state at the start of the play. |
 | `end.yard` | integer | ESPN's `yard` value for the play state at the end of the play. |
-| `lag_scoringPlay` | logical | Value of scoringPlay on the previous play, used for sequence-aware derivations. |
+| `lag_scoringPlay` | character | Value of scoringPlay on the previous play, used for sequence-aware derivations. |
 | `down_1` | logical | True when it is 1st down at the start of the play. |
 | `down_2` | logical | True when it is 2nd down at the start of the play. |
 | `down_3` | logical | True when it is 3rd down at the start of the play. |
@@ -282,11 +275,11 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `td_check` | logical | Internal flag used while reconciling whether the play produced a touchdown. |
 | `forced_fumble` | logical | True when the defense forced a fumble on the play. |
 | `is_home` | logical |  |
-| `lag_HA_score_diff` | integer | Value of HA_score_diff on the previous play, used for sequence-aware derivations. |
+| `lag_HA_score_diff` | double | Value of HA_score_diff on the previous play, used for sequence-aware derivations. |
 | `HA_score_diff` | integer | Home score minus away score for the play. |
-| `net_HA_score_pts` | integer | Net points the play added to the home-minus-away score margin. |
-| `H_score_diff` | integer | Home team's score minus the away team's, from the home perspective. |
-| `A_score_diff` | integer | Away team's score minus the home team's, from the away perspective. |
+| `net_HA_score_pts` | double | Net points the play added to the home-minus-away score margin. |
+| `H_score_diff` | double | Home team's score minus the away team's, from the home perspective. |
+| `A_score_diff` | double | Away team's score minus the home team's, from the away perspective. |
 | `lag_homeScore` | integer | Value of homeScore on the previous play, used for sequence-aware derivations. |
 | `lag_awayScore` | integer | Value of awayScore on the previous play, used for sequence-aware derivations. |
 | `start.homeScore` | integer | ESPN's `homeScore` value for the play state at the start of the play. |
@@ -306,7 +299,7 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `penalty_declined_count` | integer | Number of the flagged penalties that were declined. |
 | `penalty_all_declined` | logical | Whether every penalty flagged on the play was declined. |
 | `penalty_enforcement` | character | How the penalty was resolved: one of no_play, declined, offsetting, negating_foul, play_stands, unknown. |
-| `penalty_negated_play` | logical | Whether the penalty negated the play's result. |
+| `penalty_negated_play` | character | Whether the penalty negated the play's result. |
 | `pass_breakup` | logical | True when a defender broke up the pass. |
 | `pass_depth` | character | Thrown-pass depth parsed from ESPN play text ("short" or "deep"); null when the text omits it (sacks, screens, pre-2025 text). |
 | `pass_direction` | character | Pass direction parsed from ESPN play text ("left", "middle", or "right"); null when the text omits it. |
@@ -331,30 +324,30 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `yds_punted_source` | character | Provenance of yds_punted: "text" when the value was present before the special-teams derivation step (parsed from the play text, or set by a flag convention such as a blocked punt's 0), "derived" when that step filled it from field position, null when there is no value. |
 | `yds_kickoff_source` | character | Provenance of yds_kickoff: "text" when the value was present before the special-teams derivation step (parsed from the play text, or set by a flag convention such as a blocked punt's 0), "derived" when that step filled it from field position, null when there is no value. |
 | `yds_punt_return_source` | character | Provenance of yds_punt_return: "text" when the value was present before the special-teams derivation step (parsed from the play text, or set by a flag convention such as a blocked punt's 0), "derived" when that step filled it from field position, null when there is no value. |
-| `air_yardsToEndzone` | integer | Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025 or when unresolvable. |
-| `air_yards` | integer |  |
-| `yards_after_catch` | integer |  |
+| `air_yardsToEndzone` | double | Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025 or when unresolvable. |
+| `air_yards` | double |  |
+| `yards_after_catch` | double |  |
 | `kickoff_return_player_name` | character | Name of the player returning the kickoff, when the play was returned. |
 | `punt_return_player_name` | character | Name of the player returning the punt, when the punt was returned. |
 | `xp_attempt` | logical | Whether an extra-point kick was attempted on the play. |
 | `xp_made` | logical | Whether the extra-point kick was successful. |
 | `xp_kicker_player_name` | character | Name of the kicker attempting the extra point. |
-| `kicking_team` | integer | Team id of the kicking team on kickoff, punt, and field-goal plays. |
-| `return_team` | integer | Team id of the returning side; set on interception, fumble, kickoff, punt, and blocked-kick returns. |
+| `kicking_team` | double | Team id of the kicking team on kickoff, punt, and field-goal plays. |
+| `return_team` | double | Team id of the returning side; set on interception, fumble, kickoff, punt, and blocked-kick returns. |
 | `fumble_or_muff` | logical | Whether the play includes a fumble or a muffed kick or punt (widened beyond ESPN's fumble play types). |
-| `recovery_team` | integer | Team id parsed from the play text as recovering the fumble or muff. |
-| `recovery_team_2` | integer | Team id of the second recovery in a multi-recovery scramble, parsed from the play text. |
-| `penalty_spot_yardline` | integer | Yard line (0-50) at which the penalty was spotted. |
+| `recovery_team` | double | Team id parsed from the play text as recovering the fumble or muff. |
+| `recovery_team_2` | double | Team id of the second recovery in a multi-recovery scramble, parsed from the play text. |
+| `penalty_spot_yardline` | double | Yard line (0-50) at which the penalty was spotted. |
 | `penalty_spot_side` | character | Side of the field the penalty was spotted on: 'home', 'away' or 'mid' (midfield). |
-| `penalty_spot_yardsToEndzone` | integer | Yards from the penalty spot to the end zone (0-100). |
-| `fumbling_team` | integer | Team id of the side that fumbled or muffed the ball, parsed from the play text. |
+| `penalty_spot_yardsToEndzone` | double | Yards from the penalty spot to the end zone (0-100). |
+| `fumbling_team` | double | Team id of the side that fumbled or muffed the ball, parsed from the play text. |
 | `int_turnover` | logical | Whether the play is an interception giveaway. |
 | `pos_fumble_lost` | logical | Whether the possession team fumbled and lost the ball. |
 | `def_fumble_lost` | logical | Whether the defending team (e.g. a returner after a takeaway) fumbled and lost the ball back. |
 | `is_pos_team_turnover` | logical | Whether the possession team committed a giveaway (interception or fumble lost). |
 | `is_def_pos_team_turnover` | logical | Whether the defending team gave the ball back via a lost fumble. |
 | `is_turnover` | logical | True when the play is a giveaway-based turnover (interception thrown or fumble lost); blocked kicks recovered by the defense are carried by the blocked-kick fields instead. |
-| `turnover_team` | integer | Team id charged with the giveaway on the play. |
+| `turnover_team` | double | Team id charged with the giveaway on the play. |
 | `is_st_turnover` | logical | Whether the giveaway happened on a special-teams play (kick or punt snap, or a return). |
 | `is_blocked_punt_turnover` | logical | Blocked-punt possession loss (blocked-punt TD, or the defense recovered); kept out of is_turnover to match ESPN's giveaway-only box. |
 | `is_blocked_fg_turnover` | logical | Blocked-field-goal possession loss (blocked-FG TD, or the defense recovered); kept out of is_turnover to match ESPN's giveaway-only box. |
@@ -362,16 +355,16 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `interception_team` | integer | Team id credited with the interception (the defense). |
 | `pass_breakup_team` | integer | Team id credited with the pass breakup (the defense). |
 | `forced_fumble_team` | integer | Team id credited with forcing the fumble -- the side opposite the fumbling player (the covering team on returns). |
-| `fumble_recovery_team` | integer | Team id that recovered the fumble or muff, from parsed text with a giveaway / own-recovery fallback. |
-| `punt_return_team` | integer | Team id of the punt-returning side. |
-| `kick_return_team` | integer | Team id of the kick-returning side. |
-| `fg_team` | integer | Team id attempting the field goal (the kicking team). |
-| `punt_team` | integer | Team id punting the ball (the kicking team). |
-| `penalized_team` | integer | Team id the penalty was assessed against, from the home/away text resolver with a foul-direction fallback. |
+| `fumble_recovery_team` | double | Team id that recovered the fumble or muff, from parsed text with a giveaway / own-recovery fallback. |
+| `punt_return_team` | double | Team id of the punt-returning side. |
+| `kick_return_team` | double | Team id of the kick-returning side. |
+| `fg_team` | double | Team id attempting the field goal (the kicking team). |
+| `punt_team` | double | Team id punting the ball (the kicking team). |
+| `penalized_team` | double | Team id the penalty was assessed against, from the home/away text resolver with a foul-direction fallback. |
 | `penalty_yards_signed` | integer | Penalty yardage parsed from the play text with era-aware bounds; the printed sign is retained but is not a reliable enforcement direction. |
 | `penalty_side` | character | Which side committed the penalty -- 'off' (offense) or 'def' (defense). |
-| `penalty_yards_net` | integer | Net yardage assessed for the penalty, signed relative to the possession team (observed -25 to 25). |
-| `penalty_team_id` | integer | Team id of the side that committed the penalty. |
+| `penalty_yards_net` | double | Net yardage assessed for the penalty, signed relative to the possession team (observed -25 to 25). |
+| `penalty_team_id` | double | Team id of the side that committed the penalty. |
 | `new_down` | integer | Down after the play, including any penalty enforcement. |
 | `new_distance` | integer | Distance to go after the play, including any penalty enforcement. |
 | `under_2` | logical | Whether the play began with two minutes or less remaining in the half. |
@@ -379,18 +372,18 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `stopped_run` | logical | True when the rush was stopped at or behind the line of scrimmage. |
 | `opportunity_run` | logical | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | logical | True when the rush gained 8 or more yards. |
-| `adj_rush_yardage` | integer | Rushing yards capped at 8, the input to the line-yards decomposition. |
+| `adj_rush_yardage` | double | Rushing yards capped at 8, the input to the line-yards decomposition. |
 | `line_yards` | double | Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that. |
 | `second_level_yards` | double | Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition. |
-| `open_field_yards` | integer | Rushing yards gained beyond 8, credited to the ball carrier rather than the line. |
+| `open_field_yards` | double | Rushing yards gained beyond 8, credited to the ball carrier rather than the line. |
 | `highlight_yards` | double | Second-level plus open-field yards -- the yardage credited to the carrier. |
 | `opp_highlight_yards` | double | Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could never co-occur with non-zero highlight yards. |
-| `short_rush_success` | logical | True when a short-yardage rush gained the yardage needed. |
-| `short_rush_attempt` | logical | True when the play is a rush in a short-yardage situation. |
+| `short_rush_success` | character | True when a short-yardage rush gained the yardage needed. |
+| `short_rush_attempt` | character | True when the play is a rush in a short-yardage situation. |
 | `early_down` | logical | True when the play is a scrimmage play on first or second down. |
 | `late_down` | logical | True when the play is a scrimmage play on third or fourth down. |
-| `power_rush_attempt` | logical | True when the play is a short-yardage power rushing attempt. |
-| `power_rush_success` | logical | True when a power rushing attempt gained the yardage needed. |
+| `power_rush_attempt` | character | True when the play is a short-yardage power rushing attempt. |
+| `power_rush_success` | character | True when a power rushing attempt gained the yardage needed. |
 | `early_down_pass` | logical | True when the play is a pass on an early down. |
 | `early_down_rush` | logical | True when the play is a rush on an early down. |
 | `late_down_pass` | logical | True when the play is a pass on a late down. |
@@ -416,7 +409,7 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `EP_start` | double | Expected points for the offense at the start of the play. |
 | `EP_end` | double | Expected points for the offense at the end of the play. |
 | `EP_penalty_cf` | double | Counterfactual expected points for the penalty branch -- the EP had the alternative penalty outcome been taken (null unless a penalty decision existed). |
-| `penalty_cf_yardsToEndzone` | integer | Yards to the end zone in the counterfactual penalty branch. |
+| `penalty_cf_yardsToEndzone` | double | Yards to the end zone in the counterfactual penalty branch. |
 | `lag_EP_end` | double | Value of EP_end on the previous play, used for sequence-aware derivations. |
 | `EP_between` | double | Change in expected points across the play, before penalty adjustment. |
 | `EPA_scrimmage` | double | EPA credited to the play on plays from scrimmage. |
@@ -499,22 +492,22 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `pen_weight` | double | Weighting applied to the penalty component of the play. |
 | `action_play` | logical | True when the play advanced the game state -- excludes timeouts, end-of-period markers and other non-action rows. |
 | `athlete_name` | character | Player full name. |
-| `rusher_player_id` | integer |  |
-| `passer_player_id` | integer |  |
-| `receiver_player_id` | integer |  |
-| `fumble_player_id` | integer | CFBD athlete_id of the player who fumbled. |
-| `sack_player_id` | integer | Comma-separated CFBD athlete_id(s) of the sacking defender(s). |
-| `sack_player_id2` | integer | ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot). |
-| `interception_player_id` | integer | CFBD athlete_id of the defender credited with an interception. |
-| `pass_breakup_player_id` | integer | CFBD athlete_id of the defender credited with the pass breakup (PBU). |
-| `fumble_forced_player_id` | integer | CFBD athlete_id of the defender credited with forcing the fumble. |
-| `fumble_recovered_player_id` | integer | CFBD athlete_id of the player recovering the fumble. |
-| `fg_kicker_player_id` | integer | ESPN athlete id of the field-goal kicker. |
-| `punter_player_id` | integer |  |
-| `kickoff_player_id` | integer | ESPN athlete id of the player kicking off. |
-| `kickoff_return_player_id` | integer | ESPN athlete id of the kickoff returner. |
-| `punt_return_player_id` | integer | ESPN athlete id of the punt returner. |
-| `fg_block_player_id` | integer | ESPN athlete id of the player who blocked the field goal. |
+| `rusher_player_id` | double |  |
+| `passer_player_id` | double |  |
+| `receiver_player_id` | double |  |
+| `fumble_player_id` | double | CFBD athlete_id of the player who fumbled. |
+| `sack_player_id` | double | Comma-separated CFBD athlete_id(s) of the sacking defender(s). |
+| `sack_player_id2` | double | ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot). |
+| `interception_player_id` | double | CFBD athlete_id of the defender credited with an interception. |
+| `pass_breakup_player_id` | double | CFBD athlete_id of the defender credited with the pass breakup (PBU). |
+| `fumble_forced_player_id` | double | CFBD athlete_id of the defender credited with forcing the fumble. |
+| `fumble_recovered_player_id` | double | CFBD athlete_id of the player recovering the fumble. |
+| `fg_kicker_player_id` | double | ESPN athlete id of the field-goal kicker. |
+| `punter_player_id` | double |  |
+| `kickoff_player_id` | double | ESPN athlete id of the player kicking off. |
+| `kickoff_return_player_id` | double | ESPN athlete id of the kickoff returner. |
+| `punt_return_player_id` | double | ESPN athlete id of the punt returner. |
+| `fg_block_player_id` | double | ESPN athlete id of the player who blocked the field goal. |
 | `punt_block_player_id` | character | ESPN athlete id of the player who blocked the punt. |
 | `fg_return_player_id` | character | ESPN athlete id of the player who returned the blocked or missed field goal. |
 | `punt_block_return_player_id` | character | ESPN athlete id of the player who returned the blocked punt. |
@@ -540,422 +533,236 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 **Example**
 
 ```python
-from sportsdataverse.cfb.model_calculators import add_era_columns
-add_era_columns(pl.DataFrame({"season": [2018]}), "xpass_model")
+from sportsdataverse.cfb.cfb_fourth_down import get_fg_wp
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
+out = get_fg_wp(fourth_down_rows)
+print(out[["fg_make_prob", "fg_wp"]].head())
 ```
 
-### assert_rating_scale {#assert_rating_scale}
+### get_go_wp {#get_go_wp}
 
-`assert_rating_scale(ratings: 'pl.DataFrame', *, era: 'str' = 'modern', tol: 'float' = 1.6) -> 'float'`
+`get_go_wp(pbp_df) -> 'pd.DataFrame'`
 
-Warn if the ratings have drifted off the scale the constants were fit on.
-
-THE FAILURE THIS PREVENTS. `net_points_scale` is a frozen statement about
-a relationship between two things: rating units and points. When the
-ratings change -- a different ridge penalty, a rescale, a rebuilt corpus --
-the constant silently becomes wrong while every function keeps returning
-plausible numbers. That is exactly what happened: the shipped 44.5367 was
-fit on 2026-07-28, the ridge lambda moved on 08-01, the corpus was rebuilt
-on 08-02, and nothing failed. Measured out-of-sample the result was a
-calibration slope of 0.55 -- predictions stretched nearly 2x wider than
-reality -- for two days, undetected.
+Expected win probability of going for it on 4th down (cfb4th `get_go_wp`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `ratings` | `DataFrame` |  | Team ratings frame carrying an `adj_net` column, as returned by `cfb_ratings.efficiency_ratings`. Frames without that column, or with fewer than 30 rows, are too thin to judge and return `1.0` unchecked. |
-| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`, used only to name the era in the warning text. |
-| `tol` | `float` | `1.6` | Fold-change tolerance. The check fires outside `[1/tol, tol]`. |
+| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations carrying the `start.*` state columns in PBP_COLS`. |
 
 **Returns**
 
-The observed/fitted sd ratio. `1.0` when the frame is too thin to judge, so a caller can treat "1.0" as "no evidence of drift" either way.
+A pandas copy of `pbp_df` plus `go_wp` (prob-weighted WP of going for it), `first_down_prob` (P(conversion)), `wp_succeed` (mean WP over conversion outcomes) and `wp_fail` (mean WP over failure outcomes). `go_wp` is always in [0, 1]; the conditional columns are in [0, 1] but can be NaN for degenerate goal-line plays where one outcome bucket is empty (matches the R reference `pivot_wider` NA behavior).
+
+No returns table is published for this function: no capture: on the smallest real input (one released season of play-by-play) it runs longer than the capture allows.
 
 **Example**
 
 ```python
-from sportsdataverse.cfb import cfb_ratings
-from sportsdataverse.cfb.cfb_game_predict import assert_rating_scale
-ratings = cfb_ratings.efficiency_ratings(2024)
-ratio = assert_rating_scale(ratings)
+from sportsdataverse.cfb.cfb_fourth_down import get_go_wp
 
-# Treat a large drift as a refit signal, not a nuisance warning
+import polars as pl
 
-assert ratio < 1.6, "refit the constants before trusting predictions"
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
+out = get_go_wp(fourth_down_rows)
+print(out[["go_wp", "first_down_prob"]].head())
 ```
 
-### calculate_completion_probability {#calculate_completion_probability}
+### get_punt_wp {#get_punt_wp}
 
-`calculate_completion_probability(df, *, season=None, return_as_pandas=False)`
+`get_punt_wp(pbp_df) -> 'pd.DataFrame'`
 
-Completion probability for each pass attempt.
-
-Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
-from a play-by-play frame or be typed by hand to ask a hypothetical; only
-the model card's declared columns are required, and extra columns pass
-through untouched.
+Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `df` |  |  | Frame carrying `down`, `distance`, `yards_to_goal`, `score_diff`, `seconds_remaining`, `is_home`, `period`, `passing_down`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
-| `season` |  | `None` | Season used to derive era columns when `df` has none. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations. |
 
 **Returns**
 
-`df` with a `cp` column appended. Input columns are preserved, so chaining two calculators is lossless.
+A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the punting team's perspective). `punt_wp` is NaN where the punt end-yardline distribution has no support for the play's `yards_to_goal` (e.g. inside the 31, where punting is dominated and the cfb4th table is empty -- matching the R reference's left-join NA behavior).
+
+No returns table is published for this function: no capture: on the smallest real input (one released season of play-by-play) it runs longer than the capture allows.
 
 **Example**
 
 ```python
-from sportsdataverse.cfb import calculate_completion_probability
-calculate_completion_probability(df, season=2024)
+from sportsdataverse.cfb.cfb_fourth_down import get_punt_wp
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
+out = get_punt_wp(fourth_down_rows)
+print(out[["punt_wp"]].head())
 ```
 
-### calculate_epa {#calculate_epa}
+### load_draft_outcomes {#load_draft_outcomes}
 
-`calculate_epa(df, *, season=None, return_as_pandas=False)`
+`load_draft_outcomes(years: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Expected points added: the change in EP across a play.
-
-Recomputes `ep` when it is absent, matching nflfastR's behaviour. Requires
-`ep_end` -- the expected points after the play -- because EPA is a
-difference and this function scores rows, not sequences.
+NFL draft picks with the college of each pick, for the requested draft years.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `df` |  |  | Frame with the EP features and an `ep_end` column. |
-| `season` |  | `None` | Unused by the EP model; accepted for signature consistency. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+| `years` | `int \| list[int]` |  | A draft year or list of draft years. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
 
 **Returns**
 
-`df` with `ep` (if it was absent) and `epa` appended.
+One row per pick: `draft_year` (Int64), `college` (Utf8 PFR-style college name), `player_id` (Utf8 ESPN college athlete id; null for older drafts), `player_name` (Utf8), `round` / `pick` (Int64), `position` (Utf8). Zero-row (typed) when the source is unavailable.
+
+| col_name | type | description |
+|---|---|---|
+| `draft_year` | integer | NFL draft year of the pick. |
+| `college` | character | College of the pick (PFR-style name, e.g. "Ohio St."). |
+| `player_id` | character | ESPN college athlete id as a string (null for older drafts). |
+| `player_name` | character | Player name as listed on the pick record. |
+| `round` | integer | Round of the NFL draft the player was selected in (1-7 in the modern format). |
+| `pick` | integer | Overall pick number. |
+| `position` | character | Position drafted at (PFR abbreviation). |
 
 **Example**
 
 ```python
-from sportsdataverse.cfb import calculate_epa
-calculate_epa(pbp)
+from sportsdataverse.cfb import load_draft_outcomes
+picks = load_draft_outcomes([2023, 2024])
+picks.group_by("college").len().sort("len", descending=True).head()
 ```
 
-### calculate_expected_points {#calculate_expected_points}
+### load_fp_curve {#load_fp_curve}
 
-`calculate_expected_points(df, *, season=None, return_as_pandas=False)`
+`load_fp_curve() -> 'pl.DataFrame'`
 
-Expected points for each row.
+Load the bundled EP-by-yardline curve (no network, no first-use download).
 
-Mirrors `sportsdataverse.nfl.calculate_expected_points()`. The EP booster
-is `multi:softprob` over seven next-score classes; this collapses those
-probabilities to a points expectation using the package's own
-`ep_class_to_score_mapping` rather than restating the class order.
+**Returns**
+
+`yardline_own: Int64 (1..99), ep: Float64`.
+
+| col_name | type | description |
+|---|---|---|
+| `yardline_own` | integer | Starting yard line from the offense's own goal (1-99). |
+| `ep` | double | Bundled expected points for a drive starting at this yard line (2018-2021 fit). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_field_position import load_fp_curve
+curve = load_fp_curve()
+```
+
+### load_recruit_classes {#load_recruit_classes}
+
+`load_recruit_classes(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Load recruiting classes as per-recruit rows from the 247 RDB feed.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `df` |  |  | Frame carrying `TimeSecsRem`, `yards_to_goal`, `distance`, `down_1` through `down_4` and `pos_score_diff_start`. |
-| `season` |  | `None` | Unused by this model (EP consumes no era feature); accepted so every calculator shares one signature. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+| `seasons` | `int \| list[int]` |  | A single recruiting-class year or a list of them. |
+| `division` | `str` | `'fbs'` | Division slug (reserved for constant lookups downstream; the feed itself is queried for all of college football). |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
 
 **Returns**
 
-`df` with the seven class probability columns and an `ep` column appended.
+One row per committed recruit: `season` (Int64), `team_id` (Utf8 — the 247 committed-team key), `team` (Utf8 full name — the downstream name-join key, since the 247 recruit-team key differs from the 247 talent-composite key), `recruit_id` (Utf8), `stars` (Int64), `grade` (Float64 247 composite rating), `position` (Utf8). Zero-row (typed) when no data is available.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Recruiting-class year the recruit signed in. |
+| `team_id` | character | 247Sports signed-institution team key as a string (falls back to the committed institution when unsigned). |
+| `team` | character | Signed-institution full name (falls back to committed) - the downstream name-join key. |
+| `recruit_id` | character | 247Sports recruit key as a string (integer-origin). |
+| `stars` | integer | 247 composite star rating (1-5; null for unrated recruits). |
+| `grade` | double | 247 composite rating on the 0-100 scale. |
+| `position` | character | Primary position abbreviation from the 247 recruit record. |
 
 **Example**
 
 ```python
-from sportsdataverse.cfb import calculate_expected_points
-calculate_expected_points(pbp)
-```
-
-### calculate_field_goal_probability {#calculate_field_goal_probability}
-
-`calculate_field_goal_probability(df, *, season=None, return_as_pandas=False)`
-
-Field-goal make probability for each row.
-
-Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
-from a play-by-play frame or be typed by hand to ask a hypothetical; only
-the model card's declared columns are required, and extra columns pass
-through untouched.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` |  |  | Frame carrying `yards_to_goal`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
-| `season` |  | `None` | Season used to derive era columns when `df` has none. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-`df` with an `fg_make_prob` column appended. Named `fg_make_prob`, not `fg_prob`: `calculate_expected_points` emits `fg_prob` for the probability the NEXT SCORE is a field goal, which is a different quantity. Sharing the name made chaining the two silently lossy. Input columns are preserved, so chaining two calculators is lossless.
-
-**Example**
-
-```python
-from sportsdataverse.cfb import calculate_field_goal_probability
-calculate_field_goal_probability(df, season=2024)
-```
-
-### calculate_fourth_down {#calculate_fourth_down}
-
-`calculate_fourth_down(df, *, season=None, return_as_pandas=False)`
-
-Fourth-down conversion model output for each row.
-
-Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
-from a play-by-play frame or be typed by hand to ask a hypothetical; only
-the model card's declared columns are required, and extra columns pass
-through untouched.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` |  |  | Frame carrying `down`, `distance`, `yards_to_goal`, `posteam_total`, `posteam_spread`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
-| `season` |  | `None` | Season used to derive era columns when `df` has none. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-`df` with `fd_conversion_prob` (probability the gain reaches `distance`) and `fd_expected_yards` appended. Input columns are preserved, so chaining two calculators is lossless.
-
-**Example**
-
-```python
-from sportsdataverse.cfb import calculate_fourth_down
-calculate_fourth_down(df, season=2024)
-```
-
-### calculate_qbr {#calculate_qbr}
-
-`calculate_qbr(df, *, season=None, return_as_pandas=False)`
-
-Model QBR for each row.
-
-Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
-from a play-by-play frame or be typed by hand to ask a hypothetical; only
-the model card's declared columns are required, and extra columns pass
-through untouched.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` |  |  | Frame carrying `qbr_epa`, `sack_epa`, `pass_epa`, `rush_epa`, `pen_epa`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
-| `season` |  | `None` | Season used to derive era columns when `df` has none. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-`df` with a `qbr` column appended. Input columns are preserved, so chaining two calculators is lossless.
-
-**Example**
-
-```python
-from sportsdataverse.cfb import calculate_qbr
-calculate_qbr(df, season=2024)
-```
-
-### calculate_two_point_probability {#calculate_two_point_probability}
-
-`calculate_two_point_probability(df, *, season=None, return_as_pandas=False)`
-
-Two-point conversion success probability.
-
-Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
-from a play-by-play frame or be typed by hand to ask a hypothetical; only
-the model card's declared columns are required, and extra columns pass
-through untouched.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` |  |  | Frame carrying `posteam_spread`, `posteam_total`, `pos_score_diff`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
-| `season` |  | `None` | Season used to derive era columns when `df` has none. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-`df` with a `two_pt_prob` column appended. Input columns are preserved, so chaining two calculators is lossless.
-
-**Example**
-
-```python
-from sportsdataverse.cfb import calculate_two_point_probability
-calculate_two_point_probability(df, season=2024)
-```
-
-### calculate_win_probability {#calculate_win_probability}
-
-`calculate_win_probability(df, *, season=None, return_as_pandas=False)`
-
-Win probability for each row.
-
-Selects the booster the way the pipeline does: `wp_spread` when the frame
-carries a `spread_time` column, `wp_naive` otherwise. The naive model is
-the spread model minus that single feature, so which one applies is decided
-by whether the caller has spread information at all.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` |  |  | Frame carrying the win-probability features. Include `spread_time` to use the spread model. |
-| `season` |  | `None` | Unused by these models; accepted for signature consistency. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-`df` with a `wp` column appended.
-
-**Example**
-
-```python
-from sportsdataverse.cfb import calculate_win_probability
-calculate_win_probability(pbp)
-```
-
-### calculate_wpa {#calculate_wpa}
-
-`calculate_wpa(df, *, season=None, return_as_pandas=False)`
-
-Win probability added: the change in WP across a play.
-
-Recomputes `wp` when it is absent. Requires `wp_end` for the same reason
-`calculate_epa` requires `ep_end`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` |  |  | Frame with the WP features and a `wp_end` column. |
-| `season` |  | `None` | Unused by these models; accepted for signature consistency. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-`df` with `wp` (if it was absent) and `wpa` appended.
-
-**Example**
-
-```python
-from sportsdataverse.cfb import calculate_wpa
-calculate_wpa(pbp)
-```
-
-### calculate_xpass {#calculate_xpass}
-
-`calculate_xpass(df, *, season=None, return_as_pandas=False)`
-
-Expected pass probability for each row.
-
-Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
-from a play-by-play frame or be typed by hand to ask a hypothetical; only
-the model card's declared columns are required, and extra columns pass
-through untouched.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` |  |  | Frame carrying `down`, `distance`, `yards_to_goal`, `pos_score_diff`, `TimeSecsRem`, `period`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
-| `season` |  | `None` | Season used to derive era columns when `df` has none. |
-| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-`df` with an `xpass` column (probability the play is a pass) appended. Input columns are preserved, so chaining two calculators is lossless.
-
-**Example**
-
-```python
-from sportsdataverse.cfb import calculate_xpass
-calculate_xpass(df, season=2024)
-```
-
-### cfb_adjusted_epa {#cfb_adjusted_epa}
-
-`cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Season opponent-adjusted per-team EPA from a season's play-by-play.
-
-Fits one ridge of per-play `EPA` on offense-team, defense-team, and
-home-field indicators (every team shrunk toward the league average by its own
-play count) over the `0.05 <= wp_before_naive <= 0.95` pass
-and rush plays, nets each team's per-game raw EPA against the opponent's
-fitted strength, and averages to a season figure. In-sample/descriptive (the
-fit uses the whole season); for leak-free per-game values use
-`cfb_adjusted_epa_by_game`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
-| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
-| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (`0.1 <= wp_before <= 0.9` band, standardized ridge with the first team id as the reference level, lambda 0.035). pre598 reads `wp_before` instead of `wp_before_naive`. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
-
-**Returns**
-
-One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_off_epa`, `adj_def_epa`, `off_strength_faced`, `def_strength_faced`, `net_adj_epa` and their `*_rank` columns.
-
-No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
-
-**Example**
-
-```python
-import sportsdataverse.cfb as cfb
-pbp = cfb.load_cfb_pbp(seasons=[2023])
-cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
-
-# NFL team summaries (the pre-#598 method; reads wp_before)
-
-cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
-```
-
-### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
-
-`cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
-
-For each week `w` the opponent-strength ridge is fit on FIT_WP`-band plays
-from **weeks before `w` only**, then that week's games are adjusted with
-those as-of strengths -- so the value uses no future information and is valid
-as an in-season power-rating / model feature. Week 1 (no prior) yields null
-adjustments; not-yet-seen opponents fall back to the league baseline (an
-average team), and teams seen on few plays are shrunk most of the way there.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
-| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
-| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (see `cfb_adjusted_epa`). pre598 also keeps the old week order: it sorts by `week` alone and does not read `seasonType`, so postseason games that restart at week 1 are fit with (and leak into) the regular season, exactly as before. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
-
-**Returns**
-
-One row per (game, team), sorted by `week` then `team_id`: `game_id`, `week`, `team_id`, `opponent_id`, `pos_team`, `raw_off_epa`, `adj_off_epa`, `raw_def_epa`, `adj_def_epa`, `off_strength_faced` (opponent offense), `def_strength_faced` (opponent defense), `net_adj_epa`. The `adj_*` / `net` columns are null for week 1 (and any week with no prior fit).
-
-No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
-
-**Example**
-
-```python
-import sportsdataverse.cfb as cfb
-pbp = cfb.load_cfb_pbp(seasons=[2023])
-tg = cfb.cfb_adjusted_epa_by_game(pbp)
-tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
+from sportsdataverse.cfb.cfb_roster_talent import load_recruit_classes
+rec = load_recruit_classes([2022, 2023])
+rec.group_by("team").len().sort("len", descending=True).head()
 ```

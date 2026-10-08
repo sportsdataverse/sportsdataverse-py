@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: nfl_simulations–team_pressure"
 sidebar_label: "Models and calculators: nfl_simulations–team_pressure"
-sidebar_position: 22
+sidebar_position: 23
 description: "NFL — additional Python functions — Models and calculators: nfl_simulations–team_pressure — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: nfl_simulations–team_pressure
