@@ -119,4 +119,5 @@ jobs:
           # plus backoff. A CI failure should surface in seconds, not minutes.
           SDV_PY_HTTP_RETRIES: "3"
           SDV_PY_HTTP_TIMEOUT: "15"
-        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 --cov=sportsdataverse --cov-report=term-missing:skip-covered
+        # -W default: warnings report here rather than fail; the PR jobs enforce pytest.ini's `error`.
+        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -W default --cov=sportsdataverse --cov-report=term-missing:skip-covered

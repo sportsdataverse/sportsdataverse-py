@@ -362,12 +362,15 @@ Mirror their structure for any new ESPN-endpoint module:
 
 - Test files mirror the source layout: `tests/<sport>/test_<sport>_<module>.py`.
 - Live-API tests use `@skip_if_no_live` from `tests/conftest.py` and run only
-  when `SDV_PY_LIVE_TESTS=1` is set. `tests.yml` DOES set it on every PR and
-  push (opt out with a `workflow_dispatch` `live_tests=false`), and
-  `live-tests-cron.yml` always sets it — so keep gated tests resilient to
-  upstream flakiness. `nba_stats` / `wnba_stats` live tests use the separate
+  when `SDV_PY_LIVE_TESTS=1` is set. `tests.yml`'s live job sets it on pushes to
+  main and manual runs, not on PRs (opt out with a `workflow_dispatch`
+  `live_tests=false`), and `live-tests-cron.yml` always sets it. A timeout, dropped
+  connection or 429/5xx skips a live test instead of failing it. `nba_stats` / `wnba_stats` live tests use the separate
   `@skip_if_no_nba_stats_live` gate (`SDV_PY_NBA_STATS_LIVE=1`), which no
   workflow sets: those hosts hang on datacenter IPs.
+- Warnings are errors (`pytest.ini`): assert an expected warning with
+  `pytest.warns(..., match=...)`; filter an incidental one by exact message, with a
+  comment naming the test that asserts it.
 - CI runs **Python 3.13.2 only**; the `[project]` target range is 3.9-3.14.
 - Assertion style: prefer **subset** column checks (`expected_cols.issubset(set(df.columns))`)
   rather than exact equality, so upstream column additions don't fail tests.
