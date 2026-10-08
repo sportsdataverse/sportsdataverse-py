@@ -1,13 +1,15 @@
-"""0.1.5 has a frozen docs snapshot, and `current` is still the default version."""
+"""The released version has a frozen docs snapshot, and `current` is still the default version."""
 
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
-VERSION = "0.1.5"
+# The release PR snapshots the docs as the version it bumps to, so the two always agree.
+VERSION = re.search(r'^version = "([^"]+)"$', (ROOT / "pyproject.toml").read_text(encoding="utf-8"), re.M).group(1)
 
 
 def test_versions_json_lists_the_release_first():

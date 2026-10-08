@@ -72,35 +72,36 @@ _PRS = [
 ]
 
 
-def _section() -> str:
-    """The first `## ` section: `Unreleased` before a release is cut, `0.1.5 Release: ...` after.
+def _sections() -> dict[str, str]:
+    """Every `## ` section (`Unreleased` and each release), keyed by its heading line."""
+    parts = re.split(r"^(?=## )", CHANGELOG.read_text(encoding="utf-8"), flags=re.M)[1:]
+    return {p.splitlines()[0]: p for p in parts}
 
-    Targeting the first section rather than a literal heading keeps this test working across
-    the release commit that renames it.
-    """
-    lines = CHANGELOG.read_text(encoding="utf-8").splitlines()
-    start = next(i for i, line in enumerate(lines) if line.startswith("## "))
-    end = next((i for i, line in enumerate(lines) if i > start and line.startswith("## ")), len(lines))
-    return "\n".join(lines[start:end])
+
+def _release() -> str:
+    """The 0.1.5 section, found by heading so an `## Unreleased` added above it changes nothing."""
+    return next(s for h, s in _sections().items() if h.startswith("## 0.1.5 Release"))
 
 
 @pytest.mark.parametrize("pr", _PRS)
 def test_the_release_section_names_the_pr(pr):
-    assert f"#{pr}" in _section(), f"the release section has no entry citing #{pr}"
+    assert f"#{pr}" in _release(), f"the 0.1.5 section has no entry citing #{pr}"
 
 
-def test_every_group_heading_is_known_and_in_order():
+@pytest.mark.parametrize("heading", list(_sections()))
+def test_every_group_heading_is_known_and_in_order(heading):
     """`###` headings are the change groups only, in the fixed order; entries are bullets under them."""
-    heads = re.findall(r"^### (.+?)\s*$", _section(), re.M)
+    section = _sections()[heading]
+    heads = re.findall(r"^### (.+?)\s*$", section, re.M)
     unknown = [h for h in heads if h not in _GROUPS]
     assert not unknown, f"unknown group headings: {unknown}"
     assert heads == sorted(heads, key=_GROUPS.index), f"groups out of order: {heads}"
-    assert not re.search(r"^#### ", _section(), re.M), "entries are bullets, not #### headings"
+    assert not re.search(r"^#### ", section, re.M), "entries are bullets, not #### headings"
 
 
 def test_the_backfilled_entries_each_cite_a_pr():
     """The 0.1.5 backfill made every backfilled entry traceable: at least 25 bullets cite a PR."""
-    bullets = re.findall(r"^- .*(?:\n  .*)*", _section(), re.M)
+    bullets = re.findall(r"^- .*(?:\n  .*)*", _release(), re.M)
     assert sum(1 for b in bullets if re.search(r"#\d+", b)) >= 25, "the backfill should keep >= 25 PR-citing entries"
 
 

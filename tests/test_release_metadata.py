@@ -1,4 +1,7 @@
-"""The release commit's version, changelog heading and install wording agree."""
+"""The version, lock entry, installed distribution, changelog heading and install wording agree.
+
+The version is read from pyproject.toml, so these hold for every release, not just the one that added them.
+"""
 
 from __future__ import annotations
 
@@ -8,16 +11,12 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "0.1.5"
+VERSION = re.search(r'^version = "([^"]+)"$', (ROOT / "pyproject.toml").read_text(encoding="utf-8"), re.M).group(1)
 CHANGELOG = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
 
 
-def test_pyproject_version():
-    m = re.search(r'^version = "([^"]+)"$', (ROOT / "pyproject.toml").read_text(encoding="utf-8"), re.M)
-    assert m and m.group(1) == VERSION
-
-
 def test_installed_distribution_version_matches():
+    """Fails in a venv not re-synced after the version bump: `uv sync` fixes it."""
     assert importlib.metadata.version("sportsdataverse") == VERSION
 
 
@@ -25,13 +24,12 @@ def test_lockfile_self_entry_matches():
     assert f'name = "sportsdataverse"\nversion = "{VERSION}"' in (ROOT / "uv.lock").read_text(encoding="utf-8")
 
 
-def test_the_first_changelog_section_is_the_dated_release():
-    """This changelog titles a release `## <version> Release: <Month D, YYYY>` (not Keep-a-Changelog)."""
-    first = re.search(r"^## (.+)$", CHANGELOG, re.M).group(1)
+def test_the_newest_release_section_is_this_version_and_dated():
+    """This changelog titles a release `## <version> Release: <Month D, YYYY>`; an `## Unreleased` may sit above it."""
+    first = re.search(r"^## (\S+ Release: .+)$", CHANGELOG, re.M).group(1)
     m = re.fullmatch(rf"{re.escape(VERSION)} Release: (\w+ \d{{1,2}}, \d{{4}})", first)
-    assert m, f"first section is {first!r}"
+    assert m, f"newest release section is {first!r}, pyproject says {VERSION}"
     dt.datetime.strptime(m.group(1), "%B %d, %Y")
-    assert not re.search(r"^## Unreleased\b", CHANGELOG, re.M)
 
 
 def test_install_wording_names_the_mcp_extra():

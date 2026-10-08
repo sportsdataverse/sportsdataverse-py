@@ -188,11 +188,11 @@
   nullable `Int64`: `on_1b` / `on_2b` / `on_3b` were Float64 (`660271.0`), and pandas output from
   `parse_mlb_statcast_search` gives nullable `Int64` instead of numpy `int64`.
 - **NBA / WNBA:** `nba_stats_*` / `wnba_stats_*` raise `AssetFetchError` instead of returning `{}`
-  (404: `NoDataError`, 400 / 422: `ValueError`, also for `nba_live_*`, `nba_l2m*`,
-  `nba_referee_assignments`); `wnba_on_court` / `wnba_possessions` raise on a failed rotation fetch.
+  (404: `NoDataError`, 400 / 422: `ValueError`); `nba_live_*` / `nba_l2m*` / `nba_referee_assignments`
+  now raise `ValueError` on 400 / 422; `wnba_on_court` / `wnba_possessions` raise on a failed rotation fetch.
 - **NBA / WNBA:** `nba_stats_*` / `wnba_stats_*` season arguments default to the latest season with
   rows and each league's own default ids, so endpoints that summed every season (`drafthistory`,
-  `leaguegamefinder`, `playergamestreakfinder`, ...) return one season. (#391)
+  `leaguegamefinder`, `playergamestreakfinder`, ...) return one season.
 - **NFL:** the 11 per-type loaders deprecated since 0.0.68 (`load_nfl_ngs_passing` / `_rushing` /
   `_receiving` and eight `load_nfl_pfr_*` per-type and weekly variants) are removed, with their
   `sportsdataverse.parsed.nfl` aliases.
@@ -361,8 +361,7 @@
 ### Fixed
 
 - **CFB:** `load_cfb_passing`, `load_cfb_receiving` and `load_cfb_rushing` declare the columns the
-  assets gained (`dispersion_games`, `EPAplay_sd`, `boom_rate`, `stuff_rate`, ...). Under polars
-  2.0, `pl.read_parquet(url)` gets HTTP 501 from release URLs; loaders (`use_pyarrow=True`) work.
+  assets gained (`dispersion_games`, `EPAplay_sd`, `boom_rate`, `stuff_rate`, ...).
 - **CFB:** the NCAA mapper fixes quarter markers, the score walk, overtime interception flags,
   overturned yardage and same-row penalty enforcement; no-play rows carry no yardage, and
   block-printed tries go to the kicking team. (#557, #550, #560)
@@ -441,8 +440,10 @@
   `*_pbp` clock split, `start.down` / `start.distance` / `end.down` / `end.distance` cast to
   `Int64`, String-to-Date casts and `explode()` on empty lists.
 - **Polars:** on polars 2.0, a column R's arrow wrote with the `arrow.r.vctrs` extension type (such as
-  `game_json_url` in the NHL and PWHL schedules) reads as its storage type, not an `Extension` column no
-  `.str` op, comparison or join accepts; importing sportsdataverse registers it. (#723)
+  `game_json_url` in the NHL and PWHL schedules) reads as its storage type, not an `Extension` column,
+  which no `.str` op, comparison or join accepts; importing sportsdataverse registers it. (#723)
+- **Polars:** on polars 2.0, `pl.read_parquet(url)` gets HTTP 501 from GitHub release URLs; the release
+  loaders read with `use_pyarrow=True` and work.
 - **Soccer:** `soccer_open_events()` and `soccer_open_dataset()` no longer raise `AttributeError` in
   a fresh interpreter.
 - **stats.ncaa.org:** the fetch layer passes the new `/stats_terms` Terms gate without returning or
