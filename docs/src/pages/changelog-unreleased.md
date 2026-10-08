@@ -11,8 +11,14 @@ Merged to `main` since 0.1.5 and not yet released. Released versions are on the 
 ### Changed
 
 - **Tests:** warnings are errors. A test asserts an expected warning with `pytest.warns(match=)` or
-  filters an incidental one by exact message; live tests skip on a timeout or upstream 429/5xx, and the
-  live job runs on Ubuntu. (#726)
+  filters an incidental one by exact message; live tests skip on a timeout or upstream 429/5xx, the
+  live job runs on Ubuntu, and the `tests` extra needs pytest >= 7.4. (#726)
+
+### Deprecated
+
+- **NBA / WNBA:** `load_nba_stats_{pbp,possessions,lineups}_v3` and the four `load_wnba_stats_*` shims
+  (`lineups`, `player_season_stats`, `standings`, `team_season_stats`) now say they will be removed in
+  0.2.0; they named 0.1.0, which has shipped. A test fails if a removal version falls behind again. (#726)
 
 ### Fixed
 

@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Changed](#changed)
+  - [Deprecated](#deprecated)
   - [Fixed](#fixed)
 - [0.1.5 Release: October 8, 2026](#015-release-october-8-2026)
   - [Breaking changes](#breaking-changes)
@@ -24,7 +25,7 @@
   - [Breaking changes](#breaking-changes-1)
   - [Added](#added-2)
   - [Changed](#changed-3)
-  - [Deprecated](#deprecated)
+  - [Deprecated](#deprecated-1)
   - [Fixed](#fixed-5)
 - [0.0.75 Release: August 2, 2026](#0075-release-august-2-2026)
   - [Breaking changes](#breaking-changes-2)
@@ -45,7 +46,7 @@
   - [Breaking changes](#breaking-changes-5)
   - [Added](#added-5)
   - [Changed](#changed-7)
-  - [Deprecated](#deprecated-1)
+  - [Deprecated](#deprecated-2)
   - [Removed](#removed)
   - [Fixed](#fixed-9)
   - [Data](#data-2)
@@ -71,7 +72,7 @@
 - [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
   - [Breaking changes](#breaking-changes-6)
   - [Changed](#changed-12)
-  - [Deprecated](#deprecated-2)
+  - [Deprecated](#deprecated-3)
   - [Fixed](#fixed-15)
 - [0.0.64 Release: June 17, 2026](#0064-release-june-17-2026)
   - [Breaking changes](#breaking-changes-7)
@@ -106,7 +107,7 @@
   - [Breaking changes](#breaking-changes-9)
   - [Added](#added-16)
   - [Changed](#changed-17)
-  - [Deprecated](#deprecated-3)
+  - [Deprecated](#deprecated-4)
   - [Fixed](#fixed-23)
 - [0.0.53 Release: June 8, 2026](#0053-release-june-8-2026)
   - [Breaking changes](#breaking-changes-10)
@@ -126,7 +127,7 @@
   - [Breaking changes](#breaking-changes-12)
   - [Added](#added-20)
   - [Changed](#changed-21)
-  - [Deprecated](#deprecated-4)
+  - [Deprecated](#deprecated-5)
   - [Fixed](#fixed-26)
 - [0.0.40 Release: December 6, 2025](#0040-release-december-6-2025)
   - [Changed](#changed-22)
@@ -164,8 +165,14 @@
 ### Changed
 
 - **Tests:** warnings are errors. A test asserts an expected warning with `pytest.warns(match=)` or
-  filters an incidental one by exact message; live tests skip on a timeout or upstream 429/5xx, and the
-  live job runs on Ubuntu. (#726)
+  filters an incidental one by exact message; live tests skip on a timeout or upstream 429/5xx, the
+  live job runs on Ubuntu, and the `tests` extra needs pytest >= 7.4. (#726)
+
+### Deprecated
+
+- **NBA / WNBA:** `load_nba_stats_{pbp,possessions,lineups}_v3` and the four `load_wnba_stats_*` shims
+  (`lineups`, `player_season_stats`, `standings`, `team_season_stats`) now say they will be removed in
+  0.2.0; they named 0.1.0, which has shipped. A test fails if a removal version falls behind again. (#726)
 
 ### Fixed
 
