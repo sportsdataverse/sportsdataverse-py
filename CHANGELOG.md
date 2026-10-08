@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Unreleased](#unreleased)
+- [0.1.5 Release: October 8, 2026](#015-release-october-8-2026)
   - [Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes](#fixed--nhl-edge-top-10-boards-espn-transactions-nfl-fantasy-ranking-dtypes)
   - [Changed — every public function documents its return, and shows a returns table or says why not](#changed--every-public-function-documents-its-return-and-shows-a-returns-table-or-says-why-not)
   - [Changed — polars 2.x is allowed; the lock moves to polars 2.0.0](#changed--polars-2x-is-allowed-the-lock-moves-to-polars-200)
@@ -370,7 +370,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Unreleased
+## 0.1.5 Release: October 8, 2026
 
 ### Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes
 
