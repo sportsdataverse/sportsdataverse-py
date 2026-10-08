@@ -72,9 +72,3 @@ def test_the_changelog_names_every_removal():
     breaking = release.split("\n### Breaking changes\n", 1)[1].split("\n### ", 1)[0]
     for name in REMOVED:
         assert name in breaking, f"0.1.5 Breaking changes does not name {name}"
-
-
-def test_no_deprecation_is_still_overdue():
-    """No surviving alias may carry a removed_in that has already shipped."""
-    src = (PKG / "nfl" / "nfl_loaders.py").read_text(encoding="utf-8")
-    assert 'removed_in="0.1.0"' not in src

@@ -253,7 +253,7 @@ def load_wnba_stats_player_season_stats(seasons, return_as_pandas: bool = False)
     warn_deprecated(
         "load_wnba_stats_player_season_stats",
         replacement="the wnba_stats_leaguedash release's player_stats_* / player_master assets",
-        removed_in="0.1.0",
+        removed_in="0.2.0",
     )
     out = _stack_measures("load_wnba_stats_player_season_stats", "player_stats", _PLAYER_MEASURES, seasons)
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
@@ -287,7 +287,7 @@ def load_wnba_stats_lineups(seasons, return_as_pandas: bool = False) -> pl.DataF
     warn_deprecated(
         "load_wnba_stats_lineups",
         replacement="the wnba_stats_leaguedash release's lineups_* / lineups_master assets",
-        removed_in="0.1.0",
+        removed_in="0.2.0",
     )
     out = _stack_measures(
         "load_wnba_stats_lineups",
@@ -326,7 +326,7 @@ def load_wnba_stats_team_season_stats(seasons, return_as_pandas: bool = False) -
     warn_deprecated(
         "load_wnba_stats_team_season_stats",
         replacement="the wnba_stats_leaguedash release's team_stats_* / team_master assets",
-        removed_in="0.1.0",
+        removed_in="0.2.0",
     )
     out = _stack_measures("load_wnba_stats_team_season_stats", "team_stats", _TEAM_MEASURES, seasons)
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
@@ -358,7 +358,7 @@ def load_wnba_stats_standings(seasons, return_as_pandas: bool = False) -> pl.Dat
     warn_deprecated(
         "load_wnba_stats_standings",
         replacement="the wnba_stats_leaguedash release's standings asset",
-        removed_in="0.1.0",
+        removed_in="0.2.0",
     )
     frames, missing = [], []
     for season in _as_season_list(seasons):

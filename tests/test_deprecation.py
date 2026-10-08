@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import ast
 import os
+import re
 import warnings
+from pathlib import Path
 
 import pytest
 
@@ -112,3 +115,25 @@ def test_deprecated_decorator_name_override() -> None:
 
     with pytest.warns(DeprecationWarning, match="public_alias"):
         _impl()
+
+
+def _release(v: str) -> tuple[int, ...]:
+    return tuple(int(x) for x in v.split("."))
+
+
+def test_no_deprecation_names_a_release_that_has_shipped():
+    """A ``removed_in=`` naming the current release or an older one is a lie the warning tells.
+
+    0.1.5 shipped with the generated NBA/WNBA loader shims still saying "removed in 0.1.0".
+    Every call's ``removed_in`` keyword is read from the source (docstring examples are not calls).
+    """
+    root = Path(__file__).resolve().parents[1]
+    current = re.search(r'^version = "([^"]+)"$', (root / "pyproject.toml").read_text(encoding="utf-8"), re.M).group(1)
+    overdue = []
+    for path in (root / "sportsdataverse").rglob("*.py"):
+        for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+            for kw in getattr(node, "keywords", []) if isinstance(node, ast.Call) else []:
+                if kw.arg == "removed_in" and isinstance(kw.value, ast.Constant) and isinstance(kw.value.value, str):
+                    if _release(kw.value.value) <= _release(current):
+                        overdue.append(f"{path.relative_to(root)}:{node.lineno} removed_in={kw.value.value!r}")
+    assert not overdue, f"version {current} has shipped; re-date or remove:\n" + "\n".join(overdue)
