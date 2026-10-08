@@ -43,13 +43,6 @@ _SEASON_ARGS = (
     "    season_id: The HockeyTech season id, when it is already known.\n"
     "    return_as_pandas: Return a pandas DataFrame instead of polars.\n\n"
 )
-_SCHEDULE_ARGS = (
-    "Args:\n"
-    "    season: Season as an END year (2026 = the 2025-26 season). With neither ``season`` nor\n"
-    "        ``season_id``, no season filter is sent and the feed's whole recent window comes back.\n"
-    "    season_id: The HockeyTech season id, when it is already known.\n"
-    "    return_as_pandas: Return a pandas DataFrame instead of polars.\n\n"
-)
 _GAME_ARGS = (
     "Args:\n"
     "    game_id: The HockeyTech game id.\n"
@@ -130,24 +123,19 @@ def build_family(league: str) -> dict[str, Any]:
         return_as_pandas: bool = False,
     ) -> Any:
         """Schedule — one row per game."""
-        params: dict = {
-            "numberofdaysback": 10000,
-            "numberofdaysahead": 10000,
-            "limit": 10000,
-            "league_id": cfg.league_id,
-        }
-        if season is not None or season_id is not None:
-            params["season_id"] = resolve_season_id(lg, season=season, season_id=season_id)
-        return P.parse_schedule(hockeytech_api(lg, "modulekit", "scorebar", params), return_as_pandas)
+        sid = resolve_season_id(lg, season=_season_or_latest(season, season_id), season_id=season_id)
+        payload = hockeytech_api(lg, "modulekit", "schedule", {"season_id": sid})
+        return P.parse_schedule(payload, return_as_pandas, season_id=sid)
 
     _schedule.__name__ = f"{lg}_schedule"
     _schedule.__qualname__ = f"{lg}_schedule"
     _schedule.__doc__ = (
-        f"{cfg.name} schedule — one row per game.\n\n" + _SCHEDULE_ARGS + "Returns:\n"
+        f"{cfg.name} schedule — one row per game of one season.\n\n" + _SEASON_ARGS + "Returns:\n"
         "    polars.DataFrame: One row per game: ``game_id``, ``game_date``, ``game_status``,\n"
         "        ``home_team`` / ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` /\n"
-        "        ``away_score``, ``venue``, ``season_id`` and ``game_type`` (all String). With no season\n"
-        f"        given, the feed's whole recent window. {_PANDAS}" + _RAISES
+        "        ``away_score``, ``venue``, ``season_id`` and ``game_type`` (all String). Only the\n"
+        "        requested season's games: a regular season, its playoffs and its preseason are\n"
+        f"        separate season ids. {_PANDAS}" + _RAISES
     )
 
     # ------------------------------------------------------------------

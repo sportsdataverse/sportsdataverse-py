@@ -47,22 +47,52 @@ def test_resolve_season_id_passthrough_explicit_id():
     assert _leagues.resolve_season_id("pwhl", season_id=5) == 5
 
 
-def test_parse_schedule_one_row_per_game_with_core_cols():
+_SCHEDULE_COLS = [
+    "game_id",
+    "game_date",
+    "game_status",
+    "home_team",
+    "home_team_id",
+    "home_score",
+    "away_team",
+    "away_team_id",
+    "away_score",
+    "venue",
+    "season_id",
+    "game_type",
+]
+
+
+def test_parse_schedule_season_scoped_view_one_row_per_game():
+    from sportsdataverse.hockeytech._parsers import parse_schedule
+
+    df = parse_schedule(_load("pwhl_schedule_8"))
+    assert df.columns == _SCHEDULE_COLS
+    assert df.height == 120 and df["game_id"].n_unique() == 120
+    assert set(df["season_id"]) == {"8"}
+    assert set(df["game_status"]) == {"Final", "Final OT", "Final SO"}
+    first = df.row(0, named=True)
+    assert first["home_team"] and first["home_team_id"].isdigit() and first["away_score"].isdigit()
+
+
+def test_parse_schedule_scorebar_maps_to_the_same_columns():
     from sportsdataverse.hockeytech._parsers import parse_schedule
 
     df = parse_schedule(_load("pwhl_schedule_2025"))
-    assert isinstance(df, pl.DataFrame) and df.height > 0
-    for col in (
-        "game_id",
-        "game_date",
-        "home_team",
-        "home_team_id",
-        "away_team",
-        "away_team_id",
-        "home_score",
-        "away_score",
-    ):
-        assert col in df.columns
+    assert df.columns == _SCHEDULE_COLS
+    assert df.height == 200
+
+
+def test_parse_schedule_season_id_drops_other_seasons():
+    """Scorebar ignores ``season_id``: the reply asked for season 5 holds 6 seasons."""
+    from sportsdataverse.hockeytech._parsers import parse_schedule
+
+    raw = _load("pwhl_schedule_2025")
+    assert len({g["SeasonID"] for g in raw["SiteKit"]["Scorebar"]}) == 6
+    df = parse_schedule(raw, season_id=5)
+    assert df.height == 90
+    assert set(df["season_id"]) == {"5"}
+    assert parse_schedule(raw, return_as_pandas=True, season_id=5).shape == (90, len(_SCHEDULE_COLS))
 
 
 def test_parse_standings_has_team_rank_and_points():

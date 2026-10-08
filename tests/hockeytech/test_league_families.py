@@ -47,6 +47,7 @@ LEAGUES = [
 _FIXTURE_BY_VIEW = {
     "seasons": "pwhl_seasons",
     "scorebar": "pwhl_schedule_2025",
+    "schedule": "pwhl_schedule_8",
     "teams": "pwhl_standings_5",  # statviewfeed 'teams' view == standings
     "teamsbyseason": "pwhl_teams_5",
 }
@@ -75,9 +76,31 @@ def test_league_season_id(patched_api, lg):
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_schedule(patched_api, lg):
     mod = importlib.import_module(f"sportsdataverse.{lg}")
-    df = getattr(mod, f"{lg}_schedule")()
+    df = getattr(mod, f"{lg}_schedule")(season_id=8)
     assert isinstance(df, pl.DataFrame)
-    assert df.height > 0
+    assert df.height == 120
+    assert set(df["season_id"]) == {"8"}
+
+
+@pytest.mark.parametrize(
+    "module, fn", [("sportsdataverse.ahl", "ahl_schedule"), ("sportsdataverse.pwhl", "pwhl_schedule")]
+)
+def test_schedule_asks_the_season_scoped_view(monkeypatch, module, fn):
+    """``modulekit/schedule`` filters by season on the server; ``scorebar`` ignores ``season_id``."""
+    from sportsdataverse.hockeytech import _family
+    from sportsdataverse.pwhl import pwhl_api
+
+    calls = []
+
+    def fake_api(league, feed, view, params=None, **kwargs):
+        calls.append((feed, view, params))
+        return load_fixture("hockeytech", "pwhl_schedule_8")
+
+    for mod in (_family, pwhl_api):
+        monkeypatch.setattr(mod, "hockeytech_api", fake_api)
+    df = getattr(importlib.import_module(module), fn)(season_id=8)
+    assert calls == [("modulekit", "schedule", {"season_id": 8})]
+    assert df.height == 120
 
 
 # season_id=5 is passed explicitly to the season-aware wrappers: resolve_season_id

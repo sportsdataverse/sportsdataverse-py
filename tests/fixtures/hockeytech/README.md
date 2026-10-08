@@ -13,7 +13,8 @@ Captured JSON payloads from `lscluster.hockeytech.com` / `cluster.leaguestat.com
 
 | stem | league | endpoint | game/season |
 |------|--------|----------|-------------|
-| pwhl_schedule_2025 | pwhl | modulekit/scorebar | season_id 5 |
+| pwhl_schedule_2025 | pwhl | modulekit/scorebar | sent season_id 5; holds 200 rows across 6 seasons (90 in season 5), because scorebar ignores season_id |
+| pwhl_schedule_8 | pwhl | modulekit/schedule | season_id 8 (2025-26 regular season), all 120 games; live 2026-10-08 via `hockeytech_api`, key redacted |
 | pwhl_pbp_42 | pwhl | statviewfeed/gameCenterPlayByPlay | game_id 42 |
 | pwhl_gameshifts_42 | pwhl | modulekit/gameshifts | game_id 42 |
 | pwhl_seasons | pwhl | modulekit/seasons | all as committed 2026-06-09 (#95): ids 1-10, ending at the "2026-27 Pre-Season" (the live feed added id 11, the 2026-27 regular season, later). Kept as a real preseason-before-regular-season snapshot |

@@ -122,22 +122,43 @@ _SCOREBAR_RENAME = {
     "VisitorGoals": "away_score",
     "venue_name": "venue",
     "SeasonID": "season_id",
+    "game_type": "game_type",
+}
+
+# The same columns from ``modulekit/schedule``, the season-scoped view.
+_SCHEDULE_RENAME = {
+    "game_id": "game_id",
+    "GameDateISO8601": "game_date",
+    "game_status": "game_status",
+    "home_team_name": "home_team",
+    "home_team": "home_team_id",
+    "home_goal_count": "home_score",
+    "visiting_team_name": "away_team",
+    "visiting_team": "away_team_id",
+    "visiting_goal_count": "away_score",
+    "venue_name": "venue",
+    "season_id": "season_id",
+    "game_type": "game_type",
 }
 
 
-def parse_schedule(payload: Any, return_as_pandas: bool = False) -> Any:
-    """Parse a HockeyTech ``modulekit/scorebar`` JSON payload into a flat frame.
+def parse_schedule(payload: Any, return_as_pandas: bool = False, season_id: Optional[int] = None) -> Any:
+    """Parse a HockeyTech ``modulekit/schedule`` or ``modulekit/scorebar`` JSON payload.
 
-    One row per game. Returns a :class:`polars.DataFrame` by default; pass
-    ``return_as_pandas=True`` for a :class:`pandas.DataFrame`. An empty/None
-    payload returns a zero-row frame of the same type, never raises.
+    One row per game. ``schedule`` (``SiteKit.Schedule``) is the season-scoped view the
+    ``<league>_schedule`` functions call; a ``scorebar`` payload (``SiteKit.Scorebar``)
+    maps onto the same columns. ``season_id`` keeps only that season's games: ``scorebar``
+    ignores the ``season_id`` it is sent and returns every season in its date window.
+    Returns a :class:`polars.DataFrame` by default; pass ``return_as_pandas=True`` for a
+    :class:`pandas.DataFrame`. An empty/None payload returns a zero-row frame of the same
+    type, never raises.
     """
-    games = _sitekit(payload, "Scorebar") or []
-    rows = []
-    for g in games:
-        row = {new: g.get(old) for old, new in _SCOREBAR_RENAME.items()}
-        row["game_type"] = g.get("game_type")
-        rows.append(row)
+    games, rename = _sitekit(payload, "Schedule"), _SCHEDULE_RENAME
+    if not games:
+        games, rename = _sitekit(payload, "Scorebar") or [], _SCOREBAR_RENAME
+    rows = [{new: g.get(old) for old, new in rename.items()} for g in games]
+    if season_id is not None:
+        rows = [r for r in rows if str(r["season_id"]) == str(season_id)]
     return _to_frame(rows, return_as_pandas)
 
 
@@ -814,8 +835,8 @@ def parse_playoff_bracket(payload: Any, return_as_pandas: bool = False) -> Any:
 parse_scorebar = _flat_sitekit_parser("Scorebar")
 """Parse ``SiteKit.Scorebar`` into a flat frame (live scorebar).
 
-NOTE: for a richer schedule-oriented view use :func:`parse_schedule` which
-applies the canonical ``_SCOREBAR_RENAME`` mapping.
+NOTE: :func:`parse_schedule` maps the same rows onto the canonical schedule columns
+(``_SCOREBAR_RENAME``).
 """
 
 parse_stats = _flat_sitekit_parser("Statviewtype")
