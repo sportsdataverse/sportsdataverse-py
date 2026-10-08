@@ -294,3 +294,14 @@ def test_ff_loaders_return_string_ids_as_pandas(load, id_cols, padded, no_cache,
     if padded is not None:
         col, value = padded
         assert value in pdf[col].tolist()
+
+
+@pytest.mark.parametrize("kind", ["draft", "week"])
+def test_ff_rankings_types_a_column_empty_in_its_first_100_rows(kind, tmp_path, monkeypatch, no_cache):
+    """Early in a season the first 100+ ``rank_delta`` cells are empty. With polars'
+    default 100-row inference the column read as String; the whole file is scanned."""
+    rows = ["player,rank_delta"] + [f"p{i}," for i in range(120)] + [f"q{i},{i - 5}" for i in range(30)]
+    path = tmp_path / "ff.csv"
+    path.write_text("\n".join(rows) + "\n")
+    monkeypatch.setattr(_loaders.pl, "read_csv", lambda source, **kw: _read_csv(path, **kw))
+    assert load_nfl_ff_rankings(kind=kind).schema["rank_delta"] == pl.Int64

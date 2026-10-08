@@ -1751,12 +1751,14 @@ def load_nfl_ff_rankings(
         data = _read_csv_retry(
             NFL_FF_RANKINGS_DRAFT_URL,
             null_values=["NA", "NULL", ""],
+            infer_schema_length=None,  # a column empty in the first 100 rows would otherwise read as String
             schema_overrides=_FF_RANKINGS_ID_DTYPES["draft"],
         )
     elif effective == "week":
         data = _read_csv_retry(
             NFL_FF_RANKINGS_WEEK_URL,
             null_values=["NA", "NULL", ""],
+            infer_schema_length=None,  # a column empty in the first 100 rows would otherwise read as String
             schema_overrides=_FF_RANKINGS_ID_DTYPES["week"],
         )
     else:  # all
