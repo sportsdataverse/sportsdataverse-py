@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 from scipy.sparse import csr_matrix
-from sklearn.linear_model import RidgeCV
+from sklearn.linear_model import Ridge, RidgeCV
 
 # ---------------------------------------------------------------------------
 # Module-level constants
@@ -232,8 +232,10 @@ def nba_rapm(
 
     P = len(player_ids)
 
-    # Fit RidgeCV — accepts sparse csr_matrix with default solver="auto"
-    model = RidgeCV(alphas=alphas, fit_intercept=True)
+    # Fit RidgeCV — accepts sparse csr_matrix with default solver="auto". Its leave-one-out CV is
+    # undefined for a single possession (it divides by zero), so that case takes the grid's
+    # strongest prior, the shrink-to-zero the CV would pick anyway.
+    model = RidgeCV(alphas=alphas, fit_intercept=True) if X.shape[0] > 1 else Ridge(alpha=max(alphas))
     model.fit(X, y)
 
     coef: np.ndarray = model.coef_  # shape (2P,)
