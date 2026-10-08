@@ -335,7 +335,7 @@ def _docstring_param_descs(league_prefix: str, fn_name: str) -> dict[str, str]:
     import importlib
 
     try:
-        mod = importlib.import_module(f"sportsdataverse.{league_prefix}") if league_prefix else None
+        mod = importlib.import_module(f"sportsdataverse.{_league_module(league_prefix)}") if league_prefix else None
     except Exception:  # noqa: BLE001
         return {}
     fn = getattr(mod, fn_name, None) if mod is not None else None
@@ -1168,7 +1168,7 @@ def _handwritten_espn_names(prefix: str) -> set[str]:
     import importlib
 
     try:
-        pkg = importlib.import_module(f"sportsdataverse.{prefix}")
+        pkg = importlib.import_module(f"sportsdataverse.{_league_module(prefix)}")
     except Exception:
         return set()
     out: set[str] = set()
@@ -1282,7 +1282,7 @@ def reserved_names(prefix: str, exclude_modules: tuple[str, ...] = ()) -> set[st
     import importlib
 
     try:
-        mod = importlib.import_module(f"sportsdataverse.{prefix}")
+        mod = importlib.import_module(f"sportsdataverse.{_league_module(prefix)}")
     except Exception:
         return set()
     out: set[str] = set()
@@ -2087,7 +2087,7 @@ def _league_public_callables(league: str):
     ``__module__`` to live under ``sportsdataverse``."""
     import importlib
 
-    mod = importlib.import_module(f"sportsdataverse.{league}")
+    mod = importlib.import_module(f"sportsdataverse.{_league_module(league)}")
     out = []
     for name in sorted(dir(mod)):
         if name.startswith("_"):
@@ -2580,10 +2580,19 @@ _COVERAGE_LEAGUES = [
     "fox",
 ]
 
+
 # Mapping from doc/coverage prefix to actual Python module path for leagues
 # whose module moved under a sport-group container (Task 5+).
 # All other leagues default to f"sportsdataverse.{prefix}".
-_LEAGUE_MODULE: dict[str, str] = {lg: f"hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES}
+@functools.cache
+def _league_module(prefix: str) -> str:
+    """A league's module path under ``sportsdataverse``: the nested home for a name that moved
+    (``epl`` -> ``soccer.epl``, ``ahl`` -> ``hockey.ahl``), so codegen never imports the old
+    top-level alias and trips its DeprecationWarning. ``sportsdataverse._MOVED`` is the one list."""
+    from sportsdataverse import _MOVED
+
+    return _MOVED.get(prefix, prefix)
+
 
 _COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
 
@@ -2630,7 +2639,7 @@ def _coverage_scope_names() -> tuple[dict[str, set[str]], set[str]]:
     per_league: dict[str, set[str]] = {}
     all_league: set[str] = set()
     for lg in _COVERAGE_LEAGUES:
-        mod_path = _LEAGUE_MODULE.get(lg, lg)
+        mod_path = _league_module(lg)
         mod = importlib.import_module(f"sportsdataverse.{mod_path}")
         names = {n for n in dir(mod) if _coverage_in_scope(n, getattr(mod, n))}
         per_league[lg] = names
@@ -2727,7 +2736,7 @@ def _source_scope_objects() -> dict[tuple[str, str], str]:
     per_league, global_names = _coverage_scope_names()
     out: dict[tuple[str, str], str] = {}
     for lg in _COVERAGE_LEAGUES:
-        mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(lg, lg)}")
+        mod = importlib.import_module(f"sportsdataverse.{_league_module(lg)}")
         for n in per_league[lg]:
             out[(lg, n)] = getattr(getattr(mod, n), "__module__", "")
     top = importlib.import_module("sportsdataverse")
@@ -2807,7 +2816,7 @@ def _scope_callable(label: str, name: str):
     """The live object behind an in-scope ``(league_label, name)`` pair, or ``None``."""
     import importlib
 
-    mod_path = "sportsdataverse" if label == "global" else f"sportsdataverse.{_LEAGUE_MODULE.get(label, label)}"
+    mod_path = "sportsdataverse" if label == "global" else f"sportsdataverse.{_league_module(label)}"
     return getattr(importlib.import_module(mod_path), name, None)
 
 
@@ -3224,7 +3233,7 @@ def _league_source_rows(
             )
             hosts.setdefault(e.key, []).append(rel.bases.get(base, ""))
     if autodoc_names:
-        mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(prefix, prefix)}")
+        mod = importlib.import_module(f"sportsdataverse.{_league_module(prefix)}")
         hand: dict[str, int] = {}
         first: dict[str, str] = {}
         for n in autodoc_names:
@@ -3276,7 +3285,7 @@ def _league_category_rows(prefix: str, autodoc_names: list[str], moved: dict[str
 
     if not autodoc_names:
         return []
-    mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(prefix, prefix)}")
+    mod = importlib.import_module(f"sportsdataverse.{_league_module(prefix)}")
     page = _AUTODOC_PAGE[:-3]
     by_key: dict[str, list[dict]] = {}
     for n in sorted(autodoc_names):
@@ -4067,7 +4076,7 @@ def _autodoc_names(league: str | None, corpus: str) -> list[str]:
         return []
     else:
         names = per_league[league]
-        mod_path = _LEAGUE_MODULE.get(league, league)
+        mod_path = _league_module(league)
         mod = importlib.import_module(f"sportsdataverse.{mod_path}")
         allowed = allow.get(league, set())
     corpus = _without_release_mentions(corpus)
@@ -4095,7 +4104,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
     template can render Parameters/Returns/Example sections."""
     import importlib
 
-    _mod_path = _LEAGUE_MODULE.get(league, league) if league is not None else None
+    _mod_path = _league_module(league) if league is not None else None
     mod = importlib.import_module("sportsdataverse" if _mod_path is None else f"sportsdataverse.{_mod_path}")
     scope = "global" if league is None else league
     highlighted = frozenset(_highlighted_names(league, names))

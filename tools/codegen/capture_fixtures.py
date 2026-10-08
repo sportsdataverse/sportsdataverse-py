@@ -115,15 +115,13 @@ def _call(api: str, short: str, league: str):
     if api in generate.ESPN_APIS:
         # The generated module itself: a hand-written function of the same name (espn_nba_calendar)
         # shadows the wrapper on the league package and takes different arguments.
-        mod = importlib.import_module(
-            f"sportsdataverse.{generate._LEAGUE_MODULE.get(league, league)}.{league}_espn_ext"
-        )
+        mod = importlib.import_module(f"sportsdataverse.{generate._league_module(league)}.{league}_espn_ext")
     else:
         prefix = dict(generate.FLAT_APIS)[api]
         fa_module = spec.load_flat_api(
             generate.ENDPOINTS / f"{api}.yaml", spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
         ).module
-        mod = importlib.import_module(f"sportsdataverse.{generate._LEAGUE_MODULE.get(prefix, prefix)}.{fa_module}")
+        mod = importlib.import_module(f"sportsdataverse.{generate._league_module(prefix)}.{fa_module}")
     fn = getattr(mod, view.fn_name)
     # A wrapper with no parser returns the raw payload already and takes no return_parsed.
     raw = {"return_parsed": False} if "return_parsed" in inspect.signature(fn).parameters else {}
