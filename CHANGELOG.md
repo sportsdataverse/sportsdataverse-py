@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Changed — polars 2.x is allowed; the lock moves to polars 2.0.0](#changed--polars-2x-is-allowed-the-lock-moves-to-polars-200)
   - [Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid](#added--expected-threat-xthreat-soccer_xthreat_rate-and-a-bundled-grid)
   - [Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter](#fixed--soccer_open_events-and-soccer_open_dataset-failed-in-a-fresh-interpreter)
   - [Fixed — code that polars 2.0 rejects now runs on both 1.x and 2.0](#fixed--code-that-polars-20-rejects-now-runs-on-both-1x-and-20)
