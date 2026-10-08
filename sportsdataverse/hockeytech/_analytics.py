@@ -164,8 +164,8 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
 
     Rows with null ``x_coord`` or ``y_coord`` produce null for all ten columns.
     Rows whose side is unknown (no ``team_id`` / ``home_team_id`` column, or a
-    null in either, as on faceoffs) produce null for the right and vertical
-    columns.
+    null or empty id in either, as on faceoffs or a game without its summary)
+    produce null for the right and vertical columns.
 
     Parameters
     ----------
@@ -213,8 +213,11 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     # flips applied a 0-200 x 0-85 mirror to these centre-origin feet: home events landed
     # 100-300 ft out.) ``home_team_id`` arrives with the game-summary meta-join; without it,
     # or for an event with no team, the side is unknown and the right frame is null.
+    # enrich_pbp writes home_team_id as "" when the game summary is unavailable (MJHL's gc feed
+    # is access-denied), so an empty id is as unknown as a null one.
     if {"team_id", "home_team_id"} <= set(pbp.columns):
-        is_home = pl.col("team_id").cast(pl.Utf8) == pl.col("home_team_id").cast(pl.Utf8)
+        tid, hid = pl.col("team_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Utf8)
+        is_home = pl.when((tid.fill_null("") != "") & (hid.fill_null("") != "")).then(tid == hid)
     else:
         is_home = pl.lit(None, dtype=pl.Boolean)
     side = pl.when(is_home == True).then(-1.0).when(is_home == False).then(1.0)  # null when unknown

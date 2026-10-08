@@ -301,6 +301,9 @@ def test_add_coord_transforms_unknown_side_is_null():
     assert all(out[c] is None for c in ("x_coord_right", "y_coord_right", "x_coord_vertical", "y_coord_vertical"))
     no_home = add_coord_transforms(_one_event(60.0, 30.0, "1", "1").drop("home_team_id")).row(0, named=True)
     assert no_home["x_coord_right"] is None and no_home["x_coord_fixed"] == pytest.approx(80.0)
+    # enrich_pbp's home_team_id is "" when the game summary is unavailable
+    empty = add_coord_transforms(_one_event(60.0, 30.0, "1", "")).row(0, named=True)
+    assert empty["x_coord_right"] is None and empty["y_coord_vertical"] is None
 
 
 def test_add_coord_transforms_real_game_keeps_every_shot_on_the_rink():
