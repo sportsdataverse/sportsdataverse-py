@@ -110,7 +110,15 @@ PLAYER_N_OF: dict[str, dict[str, str]] = {
         "detmergame": "games",
         **_GAMES,
     },
-    "load_cfb_rushing": {"EPAplay": "carries", "success": "carries", "yardsplay": "carries", **_GAMES},
+    "load_cfb_rushing": {
+        "EPAplay": "carries",
+        "success": "carries",
+        "yardsplay": "carries",
+        # ONE_SCORE_MARGIN = 8 in the producer's tendencies.py, on pos_score_diff_start
+        "EPAplay_one_score": "carries with the offense within 8 points either way at the snap",
+        "EPAplay_not_one_score": "carries with the offense more than 8 points ahead or behind at the snap",
+        **_GAMES,
+    },
     "load_cfb_receiving": {
         "EPAplay": "targets",
         "success": "targets",

@@ -4,6 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from tests.conftest import skip_if_no_live
 from tools.codegen import generate
 
 
@@ -258,13 +259,24 @@ def test_loader_schema_refresh_captures_the_richest_season(tmp_path, monkeypatch
     )
     monkeypatch.setattr(generate, "ENDPOINTS", tmp_path / "endpoints")
     monkeypatch.setattr(generate.spec, "load_releases", lambda path: rel)
-    monkeypatch.setattr(pl, "read_parquet_schema", fake_schema)
+    monkeypatch.setattr(generate, "_remote_parquet_schema", fake_schema)
 
     assert generate.refresh_loader_schemas() == 0
 
     written = yaml.safe_load((tmp_path / "schemas" / "loader_schemas.yaml").read_text(encoding="utf-8"))
     assert [c["name"] for c in written["load_rich"]] == ["a", "b", "draft_round"], "richest season not captured"
     assert [c["name"] for c in written["load_tie"]] == ["a", "new"], "tie did not go to the newest season"
+
+
+@skip_if_no_live
+def test_remote_parquet_schema_reads_a_github_release_footer():
+    """GitHub's release CDN answers a suffix range with 501, which polars 2.0's own
+    HTTP reader sends for the footer -- so a bare ``pl.read_parquet_schema(url)`` raises."""
+    url = (
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
+        "espn_cfb_passing/cfb_passing_2025.parquet"
+    )
+    assert "player_id" in generate._remote_parquet_schema(url)
 
 
 def test_loader_notes_reach_the_docstring_and_the_page():

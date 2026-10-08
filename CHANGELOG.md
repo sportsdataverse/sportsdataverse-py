@@ -375,6 +375,22 @@ suite on the 2.0 lock passed 11,775 tests and failed 3, none because of polars. 
 server tests need the `mcp` extra (`anyio`) and pass once it is installed. A timing test that failed
 while the machine was under heavy load passes on re-run. Nothing else moved in the lock.
 
+### Fixed — CFB player loader schemas, and remote parquet reads under polars 2.0
+
+`load_cfb_passing`, `load_cfb_receiving` and `load_cfb_rushing` declare the columns the published
+assets gained: game-to-game dispersion of EPA per play (`dispersion_games`, `EPAplay_sd`,
+`EPAplay_p10`, `EPAplay_p90`, `boom_rate`, `bust_rate`, and boom-rate rank and percentiles), and
+for rushers the yardage tiers (`line_yards_share`, `second_level_share`, `open_field_share`),
+`stuff_rate` with its rank and percentiles, and EPA per carry split at one score. All 38 have
+returns-table descriptions taken from the producer.
+
+polars 2.0 asks for a parquet footer with a suffix range request (`Range: bytes=-N`), and GitHub's
+release-asset CDN answers that with HTTP 501. So under 2.0, `pl.read_parquet(url)`,
+`pl.scan_parquet(url)` and `pl.read_parquet_schema(url)` fail on a release URL. The loaders are not
+affected: they read with `use_pyarrow=True`, which works on both versions. Two other places were
+affected and are fixed: `generate.py --loader-schemas` now reads footers through an fsspec file, and
+the `paper_index_games` example passes `use_pyarrow=True`.
+
 ### Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid
 
 `XThreat` fits an Expected Threat grid from SPADL actions and `soccer_xthreat_rate(actions)` appends

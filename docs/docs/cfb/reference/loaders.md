@@ -192,7 +192,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_cfb_fpi_weekly](loaders/other.md#load_cfb_fpi_weekly) | Release: cfb_fpi_weekly · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_fpi_weekly/cfb_fpi_weekly_{season}.parquet` |
 | [load_cfb_power_index](loaders/other.md#load_cfb_power_index) | Release: espn_cfb_power_index · asset … |
 | [load_cfb_model_pbp](loaders/other.md#load_cfb_model_pbp) | Release: espn_cfb_model_pbp · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_model_pbp/model_pbp_{season}.parquet` |
-| [load_cfb_passing](loaders/other.md#load_cfb_passing) | Release: espn_cfb_passing · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_passing/cfb_passing_{season}.parquet` |
+| [load_cfb_passing](loaders/other-2.md#load_cfb_passing) | Release: espn_cfb_passing · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_passing/cfb_passing_{season}.parquet` |
 | [load_cfb_percentiles](loaders/other-2.md#load_cfb_percentiles) | Release: espn_cfb_percentiles · asset … |
 | [load_cfb_receiving](loaders/other-2.md#load_cfb_receiving) | Release: espn_cfb_receiving · asset … |
 | [load_cfb_rushing](loaders/other-2.md#load_cfb_rushing) | Release: espn_cfb_rushing · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_rushing/cfb_rushing_{season}.parquet` |
