@@ -44,7 +44,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Any, Literal, Optional, Protocol, Sequence, Union, overload
+from typing import Any, Callable, Literal, Optional, overload, Protocol, Sequence, Union
 
 import polars as pl
 
@@ -1096,13 +1096,26 @@ def parse_ncaa_bb_game_pbp(
     )
 
 
+#: A period model is either the ``(n_regulation_periods, regulation_seconds,
+#: overtime_seconds)`` triple or a callable that derives that triple from the
+#: fetched page (used by the WBB shims to tell halves-era pages from quarters-era
+#: pages when the caller does not know the season; see rules/wbb.yaml
+#: ``wbb-2016-four-quarters``).
+PeriodModel = Union["tuple[int, int, int]", Callable[[str], "tuple[int, int, int]"]]
+
+
+def _resolve_period_model(period_model: PeriodModel, html: str) -> "tuple[int, int, int]":
+    return period_model(html) if callable(period_model) else period_model
+
+
 def _fetch_and_parse(
     fetcher: _SupportsFetchGamePbp,
     game_id: object,
-    period_model: "tuple[int, int, int]",
+    period_model: PeriodModel,
 ) -> pl.DataFrame:
     try:
-        return parse_ncaa_bb_game_pbp(fetcher.fetch_game_pbp(game_id), str(game_id), period_model=period_model)
+        html = fetcher.fetch_game_pbp(game_id)
+        return parse_ncaa_bb_game_pbp(html, str(game_id), period_model=_resolve_period_model(period_model, html))
     except Exception:  # noqa: BLE001 — R tryCatch(-> NULL) parity (:1870-1872)
         logger.exception("scrape failed for game id %s", game_id)
         return _empty_pbp()
@@ -1112,7 +1125,7 @@ def _ncaa_bb_game_pbp(
     game_id: object,
     *,
     fetcher: Optional[_SupportsFetchGamePbp] = None,
-    period_model: "tuple[int, int, int]" = _MBB_PERIOD_MODEL,
+    period_model: PeriodModel = _MBB_PERIOD_MODEL,
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, Any]":
     """League-parameterized single-game scrape (wbb wrapper binds this later)."""
@@ -1123,7 +1136,7 @@ def _ncaa_bb_game_pbp(
             html = browser_fetcher.fetch_game_pbp(game_id)
     else:
         html = fetcher.fetch_game_pbp(game_id)
-    df = parse_ncaa_bb_game_pbp(html, str(game_id), period_model=period_model)
+    df = parse_ncaa_bb_game_pbp(html, str(game_id), period_model=_resolve_period_model(period_model, html))
     return df.to_pandas() if return_as_pandas else df
 
 
@@ -1131,7 +1144,7 @@ def _ncaa_bb_play_by_play(
     game_ids: "Sequence[object]",
     *,
     fetcher: Optional[_SupportsFetchGamePbp] = None,
-    period_model: "tuple[int, int, int]" = _MBB_PERIOD_MODEL,
+    period_model: PeriodModel = _MBB_PERIOD_MODEL,
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, Any]":
     """League-parameterized multi-game driver (bigballR ``get_play_by_play``)."""
