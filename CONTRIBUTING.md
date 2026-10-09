@@ -256,7 +256,9 @@ and are never touched by edits to `current`.
      not edit `CHANGELOG.md`, which holds released sections only. The group is
      one of `breaking`, `added`, `changed`, `deprecated`, `removed`, `fixed`,
      `security`, `data`; the slug is lowercase letters, digits, `.`, `_` and
-     `-` (no `/`: branch `fix/espn-rankings` becomes `fix-espn-rankings`), so
+     `-`; to use a branch name, lowercase it and turn `/` and any other
+     character into `-` (branch `Fix/ESPN-Rankings` becomes
+     `fix-espn-rankings`), so
      you need no PR number to name it. Write each change as one bullet,
      `- **<Area>:** <what changed for a user>. (#<PR>)`, at most three lines;
      the full write-up belongs in the PR description. A change that spans two
