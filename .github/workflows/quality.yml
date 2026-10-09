@@ -35,6 +35,14 @@ jobs:
         run: uv run --frozen ruff check sportsdataverse/ tests/ tools/
       - name: ruff format check
         run: uv run --frozen ruff format --check sportsdataverse/ tests/ tools/
+      - name: quality scoreboard (no metric may get worse than tools/quality/baseline.json)
+        run: uv run --frozen python tools/quality/scoreboard.py --compare tools/quality/baseline.json
+      - name: warn when this pull request loosens the quality baseline
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --depth=1 origin "${{ github.base_ref }}"
+          git show "origin/${{ github.base_ref }}:tools/quality/baseline.json" > /tmp/base-baseline.json 2>/dev/null || exit 0
+          uv run --frozen python tools/quality/scoreboard.py --compare /tmp/base-baseline.json --current tools/quality/baseline.json             || echo "::warning file=tools/quality/baseline.json::This PR loosens the quality baseline. Reviewers: check the diff of tools/quality/baseline.json."
       - name: mypy (typed-module gate)
         # File list comes from [tool.mypy] in pyproject.toml; it is a ratchet
         # that grows as modules reach clean typing.
