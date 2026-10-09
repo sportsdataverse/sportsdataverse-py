@@ -121,12 +121,14 @@ def test_yards_come_from_the_play_text(processed):
         if p["sack"]:
             # "sacked at PHI 42 for -1 yards" is -1, not -42 (the yard line)
             assert p["yds_sacked"] is not None and -20 <= p["yds_sacked"] <= 0
-    # team totals reconcile with ESPN's official box (CLE 87 / JAX 126 rushing)
+    # team totals reconcile with ESPN's official box (CLE 87 / JAX 126 rushing); the official
+    # box counts kneels as rushes, the advanced box (like CFB's) leaves them out of scrimmage
     espn = {e["team_id"]: e for e in out["advBoxScore"]["espn_team"]}
     for team in out["advBoxScore"]["team"]:
         e = espn[team["pos_team"]]
-        assert team["rush_yards"] == e["rushingYards"]
-        assert team["rushes"] == e["rushingAttempts"]
+        kneels = [p for p in plays if p["kneel_down"] and p["pos_team"] == team["pos_team"]]
+        assert team["rush_yards"] + sum(p["yds_rushed"] for p in kneels) == e["rushingYards"]
+        assert team["rushes"] + len(kneels) == e["rushingAttempts"]
         # gross passing yards vs ESPN net + sacks lost ("5-20" -> 20)
         sacks_lost = int(str(e["sacksYardsLost"]).split("-")[-1])
         assert abs(team["pass_yards"] - (e["netPassingYards"] + sacks_lost)) <= 8

@@ -2838,10 +2838,18 @@ class NFLPlayProcess(object):
                 play=pl.when(pl.col("type.text").is_in([*clock_stoppage_vec, "Penalty"]) == False)
                 .then(True)
                 .otherwise(False),
+                # NFL text: "J.Dart kneels to DAL 25 for -1 yards". A kneel is not a scrimmage
+                # play (the CFB processor's rule and nflverse's qb_kneel), so it stays out of
+                # every box rate: all are 0-or-worse rushes that read as stuffs and TFL havoc.
+                kneel_down=(pl.col("rush") == True)
+                .and_(pl.col("text").str.contains(r"(?i)\bkneels?\b"))
+                .fill_null(False),  # noqa: E712
             )
             .with_columns(
                 scrimmage_play=pl.when(
-                    (pl.col("sp") == False).and_(
+                    (pl.col("sp") == False)
+                    .and_(pl.col("kneel_down") == False)
+                    .and_(
                         pl.col("type.text").is_in(
                             [
                                 *clock_stoppage_vec,
@@ -2955,9 +2963,8 @@ class NFLPlayProcess(object):
         play_df = play_df.with_columns(scoring_exprs)
 
         play_df = play_df.with_columns(
-            # NFL text: "J.Dart kneels to DAL 25 for -1 yards"; ESPN never writes
-            # "hurried by" in the NFL feed, so qb_hurry is a parity column that stays False.
-            kneel_down=(pl.col("rush") == True).and_(pl.col("text").str.contains(r"(?i)\bkneels?\b")).fill_null(False),  # noqa: E712
+            # ESPN never writes "hurried by" in the NFL feed, so qb_hurry is a parity column
+            # that stays False.
             qb_hurry=pl.col("text").str.contains(r"(?i)\shurried by\s").fill_null(False),
             # ESPN folds the try into the touchdown row ("... TOUCHDOWN. J.Elliott
             # extra point is GOOD, ..."), so the XP flags ride on that row.
@@ -4540,9 +4547,14 @@ class NFLPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                rz_play=pl.when(pl.col("start.yardLine") <= 20).then(True).otherwise(False),
+                # ESPN's start.yardLine is home-relative (see the start.yard conversion), so it
+                # only reads as field position for the away offense; yards to the end zone is
+                # the offense's frame. Goal-to-go is the CFB equality: the line to gain is the goal.
+                rz_play=pl.when(pl.col("start.yardsToEndzone") <= 20).then(True).otherwise(False),
                 under_2=pl.when(pl.col("start.TimeSecsRem") <= 120).then(True).otherwise(False),
-                goal_to_go=pl.when(pl.col("start.yardLine") <= 10).then(True).otherwise(False),
+                goal_to_go=pl.when(pl.col("start.distance") == pl.col("start.yardsToEndzone"))
+                .then(True)
+                .otherwise(False),
                 scoring_opp=pl.when(pl.col("start.yardsToEndzone") <= 40).then(True).otherwise(False),
                 stuffed_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 0))
                 .then(True)
@@ -5946,7 +5958,10 @@ class NFLPlayProcess(object):
                 drive_stopped=pl.when(pl.col("drive.result").is_null())
                 .then(False)
                 .otherwise(
-                    pl.col("drive.result").str.to_lowercase().str.contains(r"(?i)punt|fumble|interception|downs"),
+                    # ESPN writes an interception drive as "INT" / "INT TD", never "interception"
+                    pl.col("drive.result")
+                    .str.to_lowercase()
+                    .str.contains(r"(?i)punt|fumble|interception|\bint\b|downs"),
                 ),
             )
             .with_columns(
@@ -6691,6 +6706,9 @@ class NFLPlayProcess(object):
             .agg(
                 passes=pl.col("pass").sum(),
                 pass_yards=pl.col("yds_receiving").sum(),
+                # passes / yards_per_pass count sacks as 0-yard dropbacks; their (negative) yards
+                # ride separately so a sack-inclusive yards per dropback can be built from both
+                sack_yards=pl.col("yds_sacked").sum(),
                 yards_per_pass=pl.col("yds_receiving").mean(),
                 passing_first_downs_created=pl.col("first_down_created").sum(),
                 passing_first_downs_created_rate=pl.col("first_down_created").mean(),
@@ -6994,6 +7012,9 @@ class NFLPlayProcess(object):
             )
         )
 
+        def _late_rate(num: str, den: str) -> pl.Expr:
+            return pl.when(pl.col(den).sum() > 0).then(pl.col(num).sum() / pl.col(den).sum())
+
         situation_box_late = (
             play_df.filter((pl.col("late_down") == True) & (pl.col("scrimmage_play") == True))
             .group_by(["pos_team"])
@@ -7007,8 +7028,10 @@ class NFLPlayProcess(object):
                 EPA_late_down=pl.col("EPA").sum(),
                 EPA_late_down_per_play=pl.col("EPA").mean(),
                 EPA_success_late_down_rate=pl.col("EPA_success_late_down").mean(),
-                EPA_success_late_down_pass_rate=pl.col("EPA_success_late_down_pass").mean(),
-                EPA_success_late_down_rush_rate=pl.col("EPA_success_late_down_rush").mean(),
+                # a pass (rush) success rate is over the late-down passes (rushes), not every
+                # late down: the two used to sum to the overall rate
+                EPA_success_late_down_pass_rate=_late_rate("EPA_success_late_down_pass", "late_down_pass"),
+                EPA_success_late_down_rush_rate=_late_rate("EPA_success_late_down_rush", "late_down_rush"),
                 late_down_pass_rate=pl.col("late_down_pass").mean(),
                 late_down_rush_rate=pl.col("late_down_rush").mean(),
             )
@@ -7077,6 +7100,29 @@ class NFLPlayProcess(object):
             drive_start=pl.col("drive_start").cast(pl.Float32),
         )
 
+        # Drive-level columns repeat on every play of a drive, so drive metrics take one row
+        # per drive (the CFB box's rules, so the leagues agree). ESPN files the snap after a
+        # turnover under the drive that just ended (drive.id spans both offenses): only the
+        # labelled owner's snaps count, unless none of the drive's snaps are the owner's
+        # (swapped labels). A start at yard line 0 is a missing start, not one in the end zone.
+        _scrimmage = play_df.filter(pl.col("scrimmage_play") == True)  # noqa: E712
+        if "drive.team.abbreviation" in _scrimmage.columns:
+            _owned = (
+                (
+                    pl.when(pl.col("drive.team.abbreviation") == pl.col("homeTeamAbbrev"))
+                    .then(pl.col("homeTeamId"))
+                    .when(pl.col("drive.team.abbreviation") == pl.col("awayTeamAbbrev"))
+                    .then(pl.col("awayTeamId"))
+                ).cast(pl.Int64)
+                == pl.col("pos_team").cast(pl.Int64)
+            ).fill_null(False)
+            _scrimmage = _scrimmage.filter(_owned | ~_owned.any().over("drive.id"))
+        drive_rows = (
+            _scrimmage.group_by(["pos_team", "def_pos_team", "drive.id"], maintain_order=True)
+            .agg(pl.col("drive_start", "drive.yards", "drive.offensivePlays", "drive_stopped").first())
+            .with_columns(drive_start=pl.when(pl.col("drive_start") > 0).then(pl.col("drive_start")))
+        )
+
         def_base_box = (
             play_df.filter(pl.col("scrimmage_play") == True)
             .group_by(["def_pos_team"])
@@ -7089,7 +7135,12 @@ class NFLPlayProcess(object):
                 havoc_total_rate=pl.col("havoc").mean(),
                 fumbles=pl.col("forced_fumble").sum(),
                 def_int=pl.col("int").sum(),
-                drive_stopped_rate=100 * pl.col("drive_stopped").mean(),
+            )
+            # one vote per drive faced, not per play: a long drive is still one stop or not
+            .join(
+                drive_rows.group_by(["def_pos_team"]).agg(drive_stopped_rate=100 * pl.col("drive_stopped").mean()),
+                on="def_pos_team",
+                how="left",
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(
@@ -7160,12 +7211,24 @@ class NFLPlayProcess(object):
         to_aux = (
             play_df.filter(pl.col("scrimmage_play") == True)
             .group_by(["pos_team"])
-            .agg(
-                pass_breakups=pl.col("pass_breakup").sum(),
-                total_fumbles=pl.col("fumble_or_muff").sum(),
-                fumbles_recovered=((pl.col("fumble_or_muff") == True) & (pl.col("is_turnover") == False)).sum(),
-            )
+            .agg(pass_breakups=pl.col("pass_breakup").sum())
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+        # Fumbles sit on the same plays as fumbles_lost (every play, kicks included) and on the
+        # team that put the ball on the ground: on a punt pos_team is the KICKING team, so a
+        # returner's muff grouped by pos_team lands on the wrong side.
+        _fumbler = (
+            pl.coalesce(pl.col("fumbling_team"), pl.col("pos_team"))
+            if "fumbling_team" in play_df.columns
+            else pl.col("pos_team")
+        )
+        _fumble_lost = (
+            pl.when(_fumbler == pl.col("pos_team")).then(pl.col("pos_fumble_lost")).otherwise(pl.col("def_fumble_lost"))
+        ).fill_null(False)
+        to_fum = (
+            play_df.filter(pl.col("fumble_or_muff") == True)  # noqa: E712
+            .group_by(_fumbler.cast(pl.Int32).alias("pos_team"))
+            .agg(total_fumbles=pl.len(), fumbles_recovered=(_fumble_lost == False).sum())  # noqa: E712
         )
 
         team_ids = [int(self.homeTeamId), int(self.awayTeamId)]
@@ -7173,6 +7236,7 @@ class NFLPlayProcess(object):
             pl.DataFrame({"pos_team": team_ids}, schema={"pos_team": pl.Int32})
             .join(to_lost, on="pos_team", how="left")
             .join(to_aux, on="pos_team", how="left")
+            .join(to_fum, on="pos_team", how="left")
             .fill_null(0)
             .with_columns(team_id=pl.col("pos_team"))
         )
@@ -7223,8 +7287,7 @@ class NFLPlayProcess(object):
         turnover_box_json = [by_id[t] for t in team_ids]
 
         drives_data = (
-            play_df.filter(pl.col("scrimmage_play") == True)
-            .group_by(["pos_team"])
+            drive_rows.group_by(["pos_team"])
             .agg(
                 drive_total_available_yards=pl.col("drive_start").sum(),
                 drive_total_gained_yards=pl.col("drive.yards").sum(),
@@ -7232,7 +7295,10 @@ class NFLPlayProcess(object):
                 plays_per_drive=pl.col("drive.offensivePlays").mean(),
                 yards_per_drive=pl.col("drive.yards").mean(),
                 drives=pl.col("drive.id").n_unique(),
-                drive_total_gained_yards_rate=100 * pl.col("drive.yards").sum() / pl.col("drive_start").sum(),
+                # the rate alone caps a drive's gain at what it had available
+                drive_total_gained_yards_rate=pl.when(pl.col("drive_start").sum() > 0).then(
+                    100 * pl.col("drive.yards").clip(0, pl.col("drive_start")).sum() / pl.col("drive_start").sum()
+                ),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(
