@@ -314,7 +314,7 @@ Every SportsDataverse package has one — browse them all at
 
 To cite the [**`sportsdataverse-py`**](https://py.sportsdataverse.org) Python package in publications, use:
 
-BibTex Citation
+BibTeX Citation
 
 ```bibtex
 @misc{gilani_sdvpy_2021,
