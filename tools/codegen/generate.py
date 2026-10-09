@@ -4869,8 +4869,9 @@ def _split_family_pages(
 
 # Relative to docs/docs, like _ANCHOR_MAP_REL: the file lands at docs/src/data/leagues.json.
 _LEAGUES_JSON_REL = "../src/data/leagues.json"
-# The three changelog pages rendered from the root CHANGELOG.md by tools/hooks/sync_docs_changelog.py (the
-# pre-commit hook stays the fast path when only CHANGELOG.md changes); relative to docs/docs.
+# The two committed changelog pages rendered from the root CHANGELOG.md by tools/hooks/sync_docs_changelog.py
+# (the pre-commit hook stays the fast path when only CHANGELOG.md changes); relative to docs/docs. The third,
+# changelog-unreleased.md, is gitignored and rendered from changelog.d/ by docs-deploy.yml, so it is not here.
 _CHANGELOG_PAGES_REL = "../src/pages/"
 _SPORTS = (
     ("football", "Football"),

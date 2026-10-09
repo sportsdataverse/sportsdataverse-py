@@ -14,6 +14,9 @@ on:
     branches: [main]
     paths:
       - "docs/**"
+      # The /changelog-unreleased page is rendered from these at build time (step below).
+      - "changelog.d/**"
+      - "tools/hooks/sync_docs_changelog.py"
       - ".github/workflows/docs-deploy.yml"
   workflow_dispatch:
 
@@ -58,6 +61,11 @@ jobs:
           sudo mkswap /mnt/sdv-swap > /dev/null
           sudo swapon /mnt/sdv-swap
           free -m
+
+      - name: Render the unreleased changelog page
+        # docs/src/pages/changelog-unreleased.md is gitignored and built here from changelog.d/, so a PR that
+        # adds a changelog fragment edits no shared file. The script is stdlib-only: no uv sync needed.
+        run: python3 ../tools/hooks/sync_docs_changelog.py --no-git-add
 
       - name: Build site
         run: |

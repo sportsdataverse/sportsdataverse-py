@@ -40,7 +40,7 @@ tests should pass without it.
 
 ## Documentation
 
-- [ ] CHANGELOG.md entry added
+- [ ] Changelog fragment added (`changelog.d/<slug>.<group>.md`; see `changelog.d/README.md`)
 - [ ] Docstring(s) updated
 - [ ] CLAUDE.md / copilot-instructions.md updated (only if a convention or pattern changes)
 

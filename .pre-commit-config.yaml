@@ -102,16 +102,17 @@ repos:
     hooks:
       - id: markdownlint-cli2
         args: ["--config", ".markdownlint-cli2.yaml"]
-  # Mirror the repo-root CHANGELOG.md onto the docs site whenever it is touched, as three pages: the newest
-  # releases (/CHANGELOG), what is merged but unreleased, and an archive of older releases. The script stages
-  # the pages so `git commit` sees them with CHANGELOG.md in the same commit.
+  # Mirror the repo-root CHANGELOG.md onto the docs site whenever it is touched, as the newest releases
+  # (/CHANGELOG) and an archive of older releases. The script stages those two pages so `git commit` sees them
+  # with CHANGELOG.md in the same commit. It also runs on changelog.d/ fragments, failing the commit on a
+  # misnamed or malformed one, and writes the gitignored /changelog-unreleased page for a local preview.
   - repo: local
     hooks:
       - id: sync-docs-changelog
         name: sync-docs-changelog
         entry: uv run --frozen python tools/hooks/sync_docs_changelog.py
         language: system
-        files: ^CHANGELOG\.md$
+        files: ^(CHANGELOG\.md|changelog\.d/.*)$
         pass_filenames: false
       # Gate: the committed generated wrappers must stay in sync with the codegen
       # metadata (endpoint YAML / schema / template). Runs `--check` (re-render to a

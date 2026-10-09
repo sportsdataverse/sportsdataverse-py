@@ -12,6 +12,9 @@ __pycache__
 */*.pyc
 *.pyc
 docs/node_modules
+# Rendered from changelog.d/ by docs-deploy.yml just before the site build; committing it would make every PR
+# that adds a changelog fragment rewrite the same file (tools/hooks/sync_docs_changelog.py).
+docs/src/pages/changelog-unreleased.md
 build
 dist
 # Notebook checkpoints + scratch notebooks at unconventional locations.

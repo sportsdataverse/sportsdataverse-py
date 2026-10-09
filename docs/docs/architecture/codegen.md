@@ -57,7 +57,7 @@ docs-coverage report).
 
 `build_docs()` → `_render_docs_all()` owns `docs/docs/<league>/`,
 `docs/docs/reference/`, the generated span of `docs/docs/intro.md`,
-`docs/static/anchor-map.json`, `docs/src/data/leagues.json` and the three
+`docs/static/anchor-map.json`, `docs/src/data/leagues.json` and the two committed
 changelog pages under `docs/src/pages/`. Conceptual pages outside those roots
 (this page, `intro.md`'s prose, `quality-of-life.md`, `architecture/`, `parsers/`)
 are hand-authored and preserved.
@@ -84,7 +84,10 @@ are hand-authored and preserved.
   any other generated page, rendered from live signatures and docstrings, with the
   returns table read offline from `schemas/autodoc/<scope>/<fn>.yaml`.
 - **Changelog render.** `tools/hooks/sync_docs_changelog.py` splits the root
-  `CHANGELOG.md` into three pages; `--check` covers their drift too.
+  `CHANGELOG.md` (released sections only) into `/CHANGELOG` and `/changelog-archive`;
+  `--check` covers their drift too. The third page, `/changelog-unreleased`, is built
+  from the `changelog.d/` fragments by `docs-deploy.yml` just before the site build and
+  is gitignored, so a PR that adds a fragment changes no generated file.
 - **Gates.** `_coverage_gaps()` fails on a public function that reaches no docs
   page; `_source_gaps()` fails on one that resolves to zero or two `sources.yaml`
   entries.
