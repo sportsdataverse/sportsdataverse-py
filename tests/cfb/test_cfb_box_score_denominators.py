@@ -106,3 +106,18 @@ def test_total_fumbles_counts_the_same_plays_as_fumbles_lost(fsu_ncsu):
     for r in to.values():
         assert r["total_fumbles"] >= r["fumbles_lost_pbp"]
         assert r["total_fumbles"] >= r["fumbles_recovered"]
+
+
+def test_fg_kicker_is_credited_on_field_goal_attempts_only():
+    # E6: ESPN's "kicker" participant also kicks off and tries PATs; feeding every one of
+    # them into fg_kicker_player_name counted kickoffs as field goals, under the
+    # RECEIVING team (kickoffs are filed under its possession).
+    parts = pl.read_json(FIX / "participants_401856682.json")
+    box, plays = _run(401856682, participants=parts)
+    not_fg = plays.filter((pl.col("fg_attempt") == False) & pl.col("fg_kicker_player_name").is_not_null())
+    assert not_fg.height == 0, not_fg.select("type.text", "fg_kicker_player_name").to_dicts()
+    fgs = plays.filter(pl.col("fg_attempt") == True)
+    credited = sum(r.get("field_goals", 0) for r in box["specialists"])
+    assert credited == fgs.height > 0
+    kicking = {int(t) for t in fgs["pos_team"].unique().to_list()}
+    assert {r["pos_team"] for r in box["specialists"] if r.get("field_goals")} <= kicking

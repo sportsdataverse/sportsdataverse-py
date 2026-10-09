@@ -605,6 +605,13 @@ def coalesce_participants(play_df: pl.DataFrame, parts: pl.DataFrame, *, prefer_
     take = ["play_id", *available_part_cols, *id_part_cols]
     parts_slim = parts.select(take).rename({c: f"{c}_part" for c in available_part_cols + id_part_cols})
     play_df = play_df.join(parts_slim, how="left", left_on="id", right_on="play_id")
+    if "fg_attempt" in play_df.columns:
+        # ESPN's "kicker" also kicks off and tries PATs; only a field-goal attempt
+        # makes him the FG kicker (fg_kicker_player_name / _id are fed from it).
+        kicker_parts = [c for c in ("kicker_player_name_part", "kicker_player_id_part") if c in play_df.columns]
+        play_df = play_df.with_columns(
+            [pl.when(pl.col("fg_attempt") == True).then(pl.col(c)).alias(c) for c in kicker_parts]  # noqa: E712
+        )
     coalesce_exprs = []
     for pbp_col, part_col, populate_if_null in _COALESCE_PAIRS:
         if pbp_col in play_df.columns and part_col in play_df.columns:
