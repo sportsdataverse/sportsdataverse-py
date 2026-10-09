@@ -218,5 +218,65 @@ def test_key_events_and_commentary_coordinates_agree():
     j = ke.join(cm.drop_nulls("play_id"), left_on="id", right_on="play_id", suffix="_cm")
     assert j.height > 0
     for c in ("field_position_x", "field_position_y"):
-        assert j[c].null_count() == 0 and j[c + "_cm"].null_count() == 0
-        assert (j[c] == j[c + "_cm"]).all()
+        # ESPN's (0.0, 0.0) "no location" pairs are null in BOTH frames (rules/epl.yaml
+        # epl-2009-espn-commentary-coverage-start); located values must agree exactly.
+        assert (j[c].is_null() == j[c + "_cm"].is_null()).all()
+        located = j.filter(pl.col(c).is_not_null())
+        assert located.height > 0
+        assert (located[c] == located[c + "_cm"]).all()
+
+
+# -- era-aware fixes (sdv-internal-refs rules/epl.yaml) -----------------------------
+def _commentary_payload() -> dict:
+    return {
+        "commentary": [
+            {
+                "sequence": 1,
+                "text": "unlocated era row",
+                "play": {
+                    "id": "1",
+                    "fieldPositionX": 0.0,
+                    "fieldPositionY": 0.0,
+                    "goalPositionX": 0.0,
+                    "goalPositionY": 0.0,
+                    "team": {"displayName": "Augsburg "},
+                    "participants": [{"athlete": {"id": "9", "displayName": "Caiuby "}}],
+                },
+            },
+            {
+                "sequence": 2,
+                "text": "located row",
+                "play": {
+                    "id": "2",
+                    "fieldPositionX": 0.42,
+                    "fieldPositionY": 0.0,
+                    "goalPositionX": 0.51,
+                    "goalPositionY": 0.33,
+                    "team": {"displayName": "Augsburg"},
+                    "participants": [{"athlete": {"id": "9", "displayName": "Caiuby"}}],
+                },
+            },
+        ]
+    }
+
+
+def test_commentary_zero_pair_is_unlocated_not_a_position() -> None:
+    """epl-2009-espn-commentary-coverage-start: ESPN's (0.0, 0.0) means 'no location'."""
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    df = parse_soccer_summary(_commentary_payload(), section="commentary").sort("sequence")
+    assert df["field_position_x"].to_list() == [None, 0.42]
+    assert df["field_position_y"].to_list() == [None, 0.0]  # a lone 0.0 beside a real x survives
+    assert df["goal_position_x"].to_list() == [None, 0.51]
+    assert df["goal_position_y"].to_list() == [None, 0.33]
+
+
+def test_summary_names_are_stripped() -> None:
+    """epl-2002-espn-athlete-names-trailing-space: 'Caiuby ' and 'Caiuby' are one player."""
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    df = parse_soccer_summary(_commentary_payload(), section="commentary")
+    assert set(df["athlete_name"].to_list()) == {"Caiuby"}
+    assert set(df["team_name"].to_list()) == {"Augsburg"}
+    frames = parse_soccer_summary(_commentary_payload())
+    assert set(frames["commentary"]["athlete_name"].to_list()) == {"Caiuby"}

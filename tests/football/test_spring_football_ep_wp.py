@@ -59,8 +59,32 @@ def test_sf_constants_downs():
 
 
 def test_sf_constants_no_pat_kick_ufl_xfl():
-    assert get_sf_constants("ufl").pat_kick is False
+    # XFL never kicked a PAT; the UFL did not either until the 33-yard kick returned in 2026
+    # (rules/ufl.yaml#ufl-2026-kick-pat-four-point-fg).
     assert get_sf_constants("xfl").pat_kick is False
+    assert get_sf_constants("ufl", season=2024).pat_kick is False
+    assert get_sf_constants("ufl", season=2025).pat_kick is False
+    assert get_sf_constants("ufl", season=2026).pat_kick is True
+    assert get_sf_constants("ufl").pat_kick is True
+
+
+def test_sf_constants_season_overrides_resolve_eras():
+    # rules/ufl.yaml ufl-2024-inaugural-ruleset / ufl-2025-kickoff-from-30-two-touchback-spots / ufl-2026-*
+    ufl24, ufl25, ufl26 = (get_sf_constants("ufl", season=s) for s in (2024, 2025, 2026))
+    assert (ufl24.kickoff_spot, ufl24.touchback_yardline, ufl24.touchback_yardline_landing_zone) == (20, 75, None)
+    assert (ufl25.kickoff_spot, ufl25.touchback_yardline, ufl25.touchback_yardline_landing_zone) == (30, 65, 80)
+    assert (ufl26.kickoff_spot, ufl26.touchback_yardline, ufl26.conversion_spots) == (30, 60, {1: 15, 2: 2, 3: 8})
+    key = lambda c: (c.kickoff_spot, c.touchback_yardline, c.pat_kick, c.conversion_spots)  # noqa: E731
+    assert key(get_sf_constants("ufl", season=2030)) == key(ufl26)
+    assert key(get_sf_constants("ufl", season=2020)) == key(ufl24)  # before the first override -> first era
+    # rules/cfl.yaml cfl-2015-convert-distances / cfl-2027-field-shortened-to-100-yards
+    assert get_sf_constants("cfl", season=2014).conversion_spots == {1: 5, 2: 5}
+    assert get_sf_constants("cfl", season=2015).conversion_spots == {1: 25, 2: 3}
+    assert get_sf_constants("cfl", season=2026).field_length == 110
+    assert get_sf_constants("cfl", season=2027).field_length == 100
+    # untouched fields survive dataclasses.replace
+    assert get_sf_constants("xfl", season=2020).ep_point_values.shape == (7,)
+    assert key(get_sf_constants("nfl_parity", season=2019)) == key(get_sf_constants("nfl_parity"))
 
 
 def test_sf_constants_ep_point_values_shape():
