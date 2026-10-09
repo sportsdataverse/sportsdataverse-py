@@ -8499,7 +8499,10 @@ class CFBPlayProcess(object):
                 drive_stopped=pl.when(pl.col("drive.result").is_null())
                 .then(False)
                 .otherwise(
-                    pl.col("drive.result").str.to_lowercase().str.contains(r"(?i)punt|fumble|interception|downs"),
+                    # ESPN writes an interception drive as "INT" / "INT TD", never "interception"
+                    pl.col("drive.result")
+                    .str.to_lowercase()
+                    .str.contains(r"(?i)punt|fumble|\bint\b|interception|downs"),
                 ),
             )
             .with_columns(

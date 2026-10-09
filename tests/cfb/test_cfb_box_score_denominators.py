@@ -70,3 +70,11 @@ def test_drive_metrics_are_per_drive(fsu_ncsu):
         assert 0 <= r["drive_total_gained_yards_rate"] <= 100
     # FSU's defense stopped 7 of NC State's 11 drives (5 punts, 2 turnovers on downs)
     assert _by(box["defensive"], "def_pos_team")[FSU]["drive_stopped_rate"] == pytest.approx(100 * 7 / 11, abs=0.01)
+
+
+def test_interception_drives_count_as_stopped(fsu_ncsu):
+    # ESPN's drive result is "INT" / "INT TD"; the stop pattern looked for "interception".
+    _, plays = fsu_ncsu
+    ints = plays.filter(pl.col("drive.result").is_in(["INT", "INT TD"]))
+    assert ints.height > 0
+    assert ints["drive_stopped"].all()
