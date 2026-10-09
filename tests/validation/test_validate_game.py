@@ -226,16 +226,7 @@ def _full_frame() -> pl.DataFrame:
 # --- real games -------------------------------------------------------------
 
 
-#: box_reconcile reads drives one row per drive; the CFB box still aggregates per play
-#: until the CFB box fix (lane S1) lands, which must drop this mark
-_CFB_DRIVES_PENDING = pytest.mark.xfail(strict=True, reason="CFB drive metrics still per play (lane S1)")
-
-
-@pytest.mark.parametrize(
-    ("league", "game_id", "rel"),
-    [pytest.param(*row, marks=_CFB_DRIVES_PENDING if row[0] == "cfb" else ()) for row in CLEAN],
-    ids=[f"{lg}-{gid}" for lg, gid, _ in CLEAN],
-)
+@pytest.mark.parametrize(("league", "game_id", "rel"), CLEAN, ids=[f"{lg}-{gid}" for lg, gid, _ in CLEAN])
 def test_real_games_pass(league, game_id, rel):
     """main's current output on six committed fixtures carries no error-severity finding."""
     proc, game = _process(league, game_id, rel)
