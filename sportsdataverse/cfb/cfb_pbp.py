@@ -9176,8 +9176,13 @@ class CFBPlayProcess(object):
                 EPA_late_down=pl.col("EPA").sum(),
                 EPA_late_down_per_play=pl.col("EPA").mean(),
                 EPA_success_late_down_rate=pl.col("EPA_success_late_down").mean(),
-                EPA_success_late_down_pass_rate=pl.col("EPA_success_late_down_pass").mean(),
-                EPA_success_late_down_rush_rate=pl.col("EPA_success_late_down_rush").mean(),
+                # over late-down passes / rushes, as the early-down splits do
+                EPA_success_late_down_pass_rate=pl.col("EPA_success_late_down_pass")
+                .filter(pl.col("late_down_pass") == True)
+                .mean(),
+                EPA_success_late_down_rush_rate=pl.col("EPA_success_late_down_rush")
+                .filter(pl.col("late_down_rush") == True)
+                .mean(),
                 late_down_pass_rate=pl.col("late_down_pass").mean(),
                 late_down_rush_rate=pl.col("late_down_rush").mean(),
             )

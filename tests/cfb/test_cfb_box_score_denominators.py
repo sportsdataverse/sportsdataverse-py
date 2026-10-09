@@ -1,0 +1,57 @@
+"""create_box_score rates and counts on their own denominators (offline).
+
+Fixtures: ``summary_401754598.json`` (Florida State @ NC State, 2025-11-21) and
+``summary_401856682.json`` + ``participants_401856682.json`` (Ohio State @ Texas).
+``download`` is patched to return the summary, so nothing hits the network.
+"""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import polars as pl
+import pytest
+
+from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+FIX = Path(__file__).parent / "fixtures"
+FSU, NCSU = 52, 152
+
+
+def _run(gid: int, participants=None):
+    summary = json.loads((FIX / f"summary_{gid}.json").read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
+        proc = CFBPlayProcess(gameId=gid, participants=participants, join_participants=False)
+        proc.espn_cfb_pbp()
+        out = proc.run_processing_pipeline()
+    return out["advBoxScore"], pl.from_dicts(out["plays"], infer_schema_length=None)
+
+
+@pytest.fixture(scope="module")
+def fsu_ncsu():
+    return _run(401754598)
+
+
+def _by(rows: list[dict], key: str) -> dict:
+    return {r[key]: r for r in rows}
+
+
+def test_late_down_pass_rush_success_rates_use_their_own_plays(fsu_ncsu):
+    # E1: the pass / rush rates were means over EVERY late-down play, so they summed
+    # to the overall rate (NC State 2/18 passes instead of 2/9).
+    box, _ = fsu_ncsu
+    for r in box["situational"]:
+        assert r["EPA_success_late_down_pass_rate"] == pytest.approx(
+            r["EPA_success_late_down_pass"] / r["late_down_pass"]
+        )
+        assert r["EPA_success_late_down_rush_rate"] == pytest.approx(
+            r["EPA_success_late_down_rush"] / r["late_down_rush"]
+        )
+    assert _by(box["situational"], "pos_team")[NCSU]["EPA_success_late_down_pass_rate"] == pytest.approx(2 / 9)
