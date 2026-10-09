@@ -43,6 +43,12 @@ def test_yardline_100():
     assert _yardline_100("BAL 32", None) is None
 
 
+def test_yardline_100_reads_the_2026_arizona_side_as_ari():
+    # the 2026 feed writes "AZ 25" while posteam is nflverse "ARI"; own 25 is 75 to score
+    assert _yardline_100("AZ 25", "ARI") == 75
+    assert _yardline_100("AZ 25", "SF") == 25
+
+
 def test_seconds_remaining_quarters():
     assert _seconds_remaining(1, 900) == (1800, 3600)  # start of game
     assert _seconds_remaining(2, 0) == (0, 1800)  # end of 1st half
