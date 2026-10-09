@@ -5,7 +5,9 @@ Every PR adds its own file, so two open PRs never conflict over the changelog.
 
 Name a fragment `<slug>.<group>.md`:
 
-- `<slug>` is anything lowercase (letters, digits, `.`, `_`, `-`); the branch name will do.
+- `<slug>` is lowercase letters, digits, `.`, `_` and `-` only. To use a branch name, lowercase it
+  and turn `/` and any other character into `-`: branch `Fix/ESPN-Rankings` gives
+  `fix-espn-rankings.fixed.md`.
 - `<group>` is one of `breaking`, `added`, `changed`, `deprecated`, `removed`, `fixed`,
   `security`, `data`. They become the release's `### Breaking changes`, `Added`, `Changed`,
   `Deprecated`, `Removed`, `Fixed`, `Security` and `Data` groups, in that order.
