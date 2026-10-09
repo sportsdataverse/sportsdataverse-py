@@ -154,7 +154,7 @@ pip install -e .
 
 To cite the [**`sportsdataverse-py`**](https://py.sportsdataverse.org) Python package in publications, use:
 
-BibTeX Citation
+BibTex Citation
 ```bibtex
 @misc{gilani_sdvpy_2021,
   author = {Gilani, Saiem},
