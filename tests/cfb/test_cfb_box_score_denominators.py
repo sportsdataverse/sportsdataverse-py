@@ -108,6 +108,17 @@ def test_total_fumbles_counts_the_same_plays_as_fumbles_lost(fsu_ncsu):
         assert r["total_fumbles"] >= r["fumbles_recovered"]
 
 
+def test_team_pass_box_carries_sack_yards(fsu_ncsu):
+    # GOP's sack-inclusive yards per dropback: passes counts sacks, pass_yards does not.
+    box, plays = fsu_ncsu
+    team = _by(box["team"], "pos_team")
+    sacks = plays.filter((pl.col("pos_team") == NCSU) & (pl.col("sack") == True) & (pl.col("scrimmage_play") == True))
+    assert sacks.height == 4
+    assert team[NCSU]["sack_yards"] == sacks["yds_sacked"].sum() == -28
+    assert team[FSU]["sack_yards"] == 0
+    assert team[NCSU]["yards_per_pass"] == pytest.approx(team[NCSU]["pass_yards"] / team[NCSU]["passes"])
+
+
 def test_fg_kicker_is_credited_on_field_goal_attempts_only():
     # E6: ESPN's "kicker" participant also kicks off and tries PATs; feeding every one of
     # them into fg_kicker_player_name counted kickoffs as field goals, under the

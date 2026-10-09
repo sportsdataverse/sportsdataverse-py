@@ -8881,6 +8881,7 @@ class CFBPlayProcess(object):
                 passes=pl.col("pass").sum(),
                 pass_yards=pl.col("yds_receiving").sum(),
                 yards_per_pass=pl.col("yds_receiving").mean(),
+                sack_yards=pl.col("yds_sacked").sum(),
                 passing_first_downs_created=pl.col("first_down_created").sum(),
                 passing_first_downs_created_rate=pl.col("first_down_created").mean(),
                 EPA_passing_overall=pl.col("EPA").sum(),
