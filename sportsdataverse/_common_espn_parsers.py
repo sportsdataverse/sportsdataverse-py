@@ -2345,6 +2345,37 @@ def _dict(value: Any) -> Dict:
     return value if isinstance(value, dict) else {}
 
 
+# parse_rankings' columns in order (documented in tools/codegen/schemas/rankings.yaml).
+# poll_id is an integer like parse_cdn_rankings'; team_id is a string, as across the ESPN parsers.
+_RANKINGS_SCHEMA = {
+    "poll_id": pl.Int64,
+    "poll_name": pl.Utf8,
+    "poll_short_name": pl.Utf8,
+    "poll_type": pl.Utf8,
+    "season": pl.Int64,
+    "season_type": pl.Int64,
+    "week": pl.Int64,
+    "week_display": pl.Utf8,
+    "poll_date": pl.Utf8,
+    "ranked": pl.Boolean,
+    "team_id": pl.Utf8,
+    "rank": pl.Int64,
+    "previous_rank": pl.Int64,
+    "points": pl.Float64,
+    "first_place_votes": pl.Int64,
+    "trend": pl.Utf8,
+    "record_summary": pl.Utf8,
+    "team_uid": pl.Utf8,
+    "team_location": pl.Utf8,
+    "team_name": pl.Utf8,
+    "team_nickname": pl.Utf8,
+    "team_abbreviation": pl.Utf8,
+    "team_color": pl.Utf8,
+    "team_logo": pl.Utf8,
+    "last_updated": pl.Utf8,
+}
+
+
 def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Site v2 ``rankings`` payload into one row per poll entry.
 
@@ -2362,7 +2393,8 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
         return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
 
     Returns:
-        pl.DataFrame: One row per (poll, team); zero rows when the payload carries no polls.
+        pl.DataFrame: One row per (poll, team), always with the same 25 columns and dtypes; zero
+        rows (with those columns) when the payload carries no polls.
 
     Example:
         Current AP poll::
@@ -2420,13 +2452,16 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
                         "last_updated": entry.get("lastUpdated"),
                     }
                 )
-    if not rows:
-        return _empty_frame(return_as_pandas)
-    df = pl.DataFrame(rows, infer_schema_length=None).with_columns(
-        # Integer like parse_cdn_rankings' poll_id; team_id stays a string, as across the ESPN parsers.
-        pl.col("poll_id", "week").cast(pl.Utf8).cast(pl.Int64, strict=False),
-        pl.col("team_id").cast(pl.Utf8),
-    )
+    if rows:
+        df = (
+            pl.DataFrame(rows, infer_schema_length=None)
+            .with_columns(pl.col("poll_id", "week").cast(pl.Utf8).cast(pl.Int64, strict=False))
+            # The declared dtypes, so a column a league never fills (wch ships no team
+            # colors) is not left as a Null column.
+            .cast(_RANKINGS_SCHEMA)
+        )
+    else:
+        df = pl.DataFrame(schema=_RANKINGS_SCHEMA)
     return df.to_pandas() if return_as_pandas else df
 
 

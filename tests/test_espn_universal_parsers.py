@@ -1086,6 +1086,37 @@ def test_recruiting_athletes_pandas_opt_in():
 # ranks + others per poll on the committed 2026-10-08 captures.
 _RANKINGS_ROWS = {"cfb": 208, "mbb": 77, "wbb": 75, "mch": 35, "wch": 20}
 
+# The documented columns (tools/codegen/schemas/rankings.yaml) and their dtypes, for every
+# league and for an empty payload: wch ships no team colors, and that must not make
+# team_color a Null column there.
+_RANKINGS_SCHEMA = {
+    "poll_id": pl.Int64,
+    "poll_name": pl.Utf8,
+    "poll_short_name": pl.Utf8,
+    "poll_type": pl.Utf8,
+    "season": pl.Int64,
+    "season_type": pl.Int64,
+    "week": pl.Int64,
+    "week_display": pl.Utf8,
+    "poll_date": pl.Utf8,
+    "ranked": pl.Boolean,
+    "team_id": pl.Utf8,
+    "rank": pl.Int64,
+    "previous_rank": pl.Int64,
+    "points": pl.Float64,
+    "first_place_votes": pl.Int64,
+    "trend": pl.Utf8,
+    "record_summary": pl.Utf8,
+    "team_uid": pl.Utf8,
+    "team_location": pl.Utf8,
+    "team_name": pl.Utf8,
+    "team_nickname": pl.Utf8,
+    "team_abbreviation": pl.Utf8,
+    "team_color": pl.Utf8,
+    "team_logo": pl.Utf8,
+    "last_updated": pl.Utf8,
+}
+
 
 def test_rankings_registered_to_dedicated_parser():
     from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, parse_rankings
@@ -1100,9 +1131,7 @@ def test_rankings_one_row_per_ranked_or_vote_receiving_team(league):
     payload = _load(f"rankings_{league}")
     df = parse_rankings(payload)
     assert df.height == _RANKINGS_ROWS[league]
-    assert df.schema["poll_id"] == pl.Int64
-    assert df.schema["team_id"] == pl.Utf8
-    assert df.schema["week"] == pl.Int64
+    assert dict(df.schema) == _RANKINGS_SCHEMA
     assert df["team_id"].null_count() == 0
     for poll in payload["rankings"]:
         rows = df.filter(pl.col("poll_id") == int(poll["id"]))
@@ -1137,9 +1166,24 @@ def test_rankings_week_is_the_occurrence_value_not_its_running_number():
 
 @pytest.mark.parametrize("payload", [{}, {"rankings": []}, {"rankings": [None, {"ranks": None}]}, {"code": 404}])
 def test_rankings_empty_or_malformed_payload_is_zero_rows(payload):
+    """Zero rows that still carry the documented columns, so a caller can select them."""
     from sportsdataverse._common_espn_parsers import parse_rankings
 
-    assert parse_rankings(payload).height == 0
+    df = parse_rankings(payload)
+    assert df.height == 0
+    assert dict(df.schema) == _RANKINGS_SCHEMA
+    pdf = parse_rankings(payload, return_as_pandas=True)
+    assert len(pdf) == 0
+    assert list(pdf.columns) == list(_RANKINGS_SCHEMA)
+
+
+def test_rankings_schema_is_the_documented_one():
+    from pathlib import Path
+
+    import yaml
+
+    doc = yaml.safe_load((Path(__file__).parents[1] / "tools/codegen/schemas/rankings.yaml").read_text("utf-8"))
+    assert [c["name"] for c in doc["columns"]] == list(_RANKINGS_SCHEMA)
 
 
 def test_rankings_pandas_opt_in():

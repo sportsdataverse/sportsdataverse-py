@@ -187,7 +187,7 @@
   75, mch 35, wch 20), with `poll_id`, `season`, `season_type`, `week` (the week within the season
   type, which ESPN's Core v2 rankings URL uses), `rank` (null on vote-receiving rows), `previous_rank`,
   `points`, `first_place_votes` and the team fields; `team_id` is a string. The college baseball and
-  softball wrappers route through it too, but ESPN answers their rankings URL with a 404.
+  softball wrappers route through it too, but ESPN answers their rankings URL with a 404. (#732)
 - **HockeyTech schedules returned other seasons' games.** `<league>_schedule(season=...)` for
   the 19 HockeyTech league families, and `pwhl_schedule`, read `modulekit/scorebar`. That view
   ignores the `season_id` it is sent, returns games oldest-first and stops at its 10,000-row
