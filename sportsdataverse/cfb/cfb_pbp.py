@@ -8649,7 +8649,8 @@ class CFBPlayProcess(object):
                 Att=pl.col("pass_attempt").sum(),
                 # cp_game_state, NOT cp: see __process_cpoe. Summing the hybrid
                 # would blend two scales within one passer and across passers.
-                xComp=pl.col("cp_game_state").sum(),
+                # Over attempts only, the plays Att counts: sacks carry a cp too.
+                xComp=pl.col("cp_game_state").filter(pl.col("pass_attempt") == True).sum(),
                 Yds=pl.col("yds_receiving").sum(),
                 Pass_TD=pl.col("pass_td").sum(),
                 Int=pl.col("int").sum(),

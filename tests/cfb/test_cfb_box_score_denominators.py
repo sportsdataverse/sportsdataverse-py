@@ -78,3 +78,19 @@ def test_interception_drives_count_as_stopped(fsu_ncsu):
     ints = plays.filter(pl.col("drive.result").is_in(["INT", "INT TD"]))
     assert ints.height > 0
     assert ints["drive_stopped"].all()
+
+
+def test_xcomp_sums_completion_probability_over_attempts_only(fsu_ncsu):
+    # E5: xComp summed cp over dropbacks INCLUDING sacks but divided by Att, which
+    # excludes them; a sacked passer's xCompPct ran high (and past 1.0 in 22 games of 2025).
+    box, plays = fsu_ncsu
+    bailey = next(r for r in box["pass"] if r["passer_player_name"] == "C.Bailey")
+    assert bailey["Sck"] == 4
+    attempts = plays.filter(
+        (pl.col("passer_player_name") == "C.Bailey")
+        & (pl.col("pass_attempt") == True)
+        & (pl.col("scrimmage_play") == True)
+    )
+    assert attempts.height == bailey["Att"]
+    assert bailey["xComp"] == pytest.approx(attempts["cp_game_state"].sum(), abs=0.01)
+    assert bailey["xCompPct"] == pytest.approx(bailey["xComp"] / bailey["Att"], abs=0.01)
