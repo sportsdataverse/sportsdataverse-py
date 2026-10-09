@@ -2341,6 +2341,133 @@ def parse_cdn_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     return df.to_pandas() if return_as_pandas else df
 
 
+def _dict(value: Any) -> Dict:
+    return value if isinstance(value, dict) else {}
+
+
+# parse_rankings' columns in order (documented in tools/codegen/schemas/rankings.yaml).
+# poll_id is an integer like parse_cdn_rankings'; team_id is a string, as across the ESPN parsers.
+_RANKINGS_SCHEMA = {
+    "poll_id": pl.Int64,
+    "poll_name": pl.Utf8,
+    "poll_short_name": pl.Utf8,
+    "poll_type": pl.Utf8,
+    "season": pl.Int64,
+    "season_type": pl.Int64,
+    "week": pl.Int64,
+    "week_display": pl.Utf8,
+    "poll_date": pl.Utf8,
+    "ranked": pl.Boolean,
+    "team_id": pl.Utf8,
+    "rank": pl.Int64,
+    "previous_rank": pl.Int64,
+    "points": pl.Float64,
+    "first_place_votes": pl.Int64,
+    "trend": pl.Utf8,
+    "record_summary": pl.Utf8,
+    "team_uid": pl.Utf8,
+    "team_location": pl.Utf8,
+    "team_name": pl.Utf8,
+    "team_nickname": pl.Utf8,
+    "team_abbreviation": pl.Utf8,
+    "team_color": pl.Utf8,
+    "team_logo": pl.Utf8,
+    "last_updated": pl.Utf8,
+}
+
+
+def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a Site v2 ``rankings`` payload into one row per poll entry.
+
+    The top-level ``rankings`` list holds one poll per entry (AP, Coaches, FCS, USCHO,
+    ...), each with ``ranks`` (the ranked teams) and ``others`` (teams receiving
+    votes). Both are emitted, told apart by ``ranked``. ``droppedOut`` is not: it
+    lists last week's teams, most of which reappear under ``others``. ``rank`` is null
+    on the vote-receiving rows (ESPN ships ``0``); ``previous_rank`` keeps ESPN's
+    ``0`` for a team unranked in the previous poll. ``week`` is the poll's week
+    within its ``season_type``, the value ESPN's own Core v2 rankings URL uses.
+
+    Args:
+        payload: Raw JSON dict from ``espn_cfb_rankings()`` (or the mbb / wbb /
+            mch / wch wrapper).
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        pl.DataFrame: One row per (poll, team), always with the same 25 columns and dtypes; zero
+        rows (with those columns) when the payload carries no polls.
+
+    Example:
+        Current AP poll::
+
+            import polars as pl
+            from sportsdataverse.cfb import espn_cfb_rankings
+
+            df = espn_cfb_rankings()
+            df.filter(pl.col("poll_name") == "AP Top 25").head()
+
+        Vote-receiving teams only::
+
+            df.filter(pl.col("ranked") == False)
+    """
+    polls = payload.get("rankings") if isinstance(payload, dict) else None
+    rows = []
+    for poll in polls if isinstance(polls, list) else []:
+        if not isinstance(poll, dict):
+            continue
+        season, occurrence = _dict(poll.get("season")), _dict(poll.get("occurrence"))
+        head = {
+            "poll_id": poll.get("id"),
+            "poll_name": poll.get("name"),
+            "poll_short_name": poll.get("shortName"),
+            "poll_type": poll.get("type"),
+            "season": season.get("year"),
+            "season_type": _dict(season.get("type")).get("type"),
+            "week": occurrence.get("value"),
+            "week_display": occurrence.get("displayValue"),
+            "poll_date": poll.get("date"),
+        }
+        for ranked, key in ((True, "ranks"), (False, "others")):
+            entries = poll.get(key)
+            for entry in entries if isinstance(entries, list) else []:
+                if not isinstance(entry, dict):
+                    continue
+                team = _dict(entry.get("team"))
+                color = team.get("color")
+                rows.append(
+                    {
+                        **head,
+                        "ranked": ranked,
+                        "team_id": team.get("id"),
+                        "rank": entry.get("current") if ranked else None,
+                        "previous_rank": entry.get("previous"),
+                        "points": entry.get("points"),
+                        "first_place_votes": entry.get("firstPlaceVotes"),
+                        "trend": entry.get("trend"),
+                        "record_summary": entry.get("recordSummary"),
+                        "team_uid": team.get("uid"),
+                        "team_location": team.get("location"),
+                        "team_name": team.get("name"),
+                        "team_nickname": team.get("nickname"),
+                        "team_abbreviation": team.get("abbreviation"),
+                        # ESPN ships the literal string "NULL" for some teams with no color.
+                        "team_color": None if color == "NULL" else color,
+                        "team_logo": team.get("logo"),
+                        "last_updated": entry.get("lastUpdated"),
+                    }
+                )
+    if rows:
+        df = (
+            pl.DataFrame(rows, infer_schema_length=None)
+            .with_columns(pl.col("poll_id", "week").cast(pl.Utf8).cast(pl.Int64, strict=False))
+            # The declared dtypes, so a column a league never fills (wch ships no team
+            # colors) is not left as a Null column.
+            .cast(_RANKINGS_SCHEMA)
+        )
+    else:
+        df = pl.DataFrame(schema=_RANKINGS_SCHEMA)
+    return df.to_pandas() if return_as_pandas else df
+
+
 # ===========================================================================
 # Endpoint -> parser registry
 # ===========================================================================
@@ -2444,7 +2571,7 @@ ENDPOINT_PARSERS = {
     "statistics_league": parse_items,
     "team_depthcharts": parse_items,
     "team_leaders": parse_items,
-    "rankings": parse_items,
+    "rankings": parse_rankings,
     "season_qbr": parse_items,
     "season_qbr_week": parse_items,
     "athlete_notes": parse_items,

@@ -28,6 +28,7 @@ from sportsdataverse._common_espn_parsers import (
     parse_items,
     parse_leaders,
     parse_news,
+    parse_rankings,
     parse_scoreboard,
     parse_single_entity,
     parse_standings,
@@ -1295,7 +1296,7 @@ def espn_cfb_rankings(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/football/college-football/rankings
 
     Args:
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_rankings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1320,7 +1321,7 @@ def espn_cfb_rankings(
         **kwargs,
     )
     if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
+        return parse_rankings(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
