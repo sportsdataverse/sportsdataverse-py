@@ -280,6 +280,14 @@ sport-specific coverage:
 - [baseballr](https://baseballr.sportsdataverse.org) — baseball (MLB + MiLB + NCAA)
 - [fastRhockey](https://fastRhockey.sportsdataverse.org) — hockey (NHL + WHL)
 
+For plots and simulation: [sdvplot](https://sdvplot.sportsdataverse.org) (team logos, wordmarks,
+headshots and colors for Python plots and tables) and its R and JavaScript counterparts
+[sdvplotR](https://sdvplotR.sportsdataverse.org) and [sdvplot-js](https://plot.sportsdataverse.org)
+(`@sportsdataverse/sdvplot`, `@sportsdataverse/sporty`, `@sportsdataverse/sdvtables`),
+[sportypy](https://sportypy.sportsdataverse.org) (playing surfaces), and
+[cfbseedR](https://cfbseedR.sportsdataverse.org) (college football season simulation and CFP
+seeding). The full directory is at [sportsdataverse.org/packages](https://sportsdataverse.org/packages).
+
 The NFL submodule is a near drop-in replacement for [nflreadpy](https://github.com/nflverse/nflreadpy);
 the broader [nflverse](https://nflverse.nflverse.com) ecosystem is the
 upstream data source for many of those loaders.

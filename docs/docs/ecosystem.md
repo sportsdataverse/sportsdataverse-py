@@ -161,10 +161,18 @@ Beyond the sport packages, the SportsDataverse spans languages and utilities:
 - **R umbrella & utilities** — [sportsdataverse-R](https://r.sportsdataverse.org)
   (the meta-package that loads them all), [oddsapiR](https://oddsapiR.sportsdataverse.org)
   (betting odds), [recruitR](https://recruitR.sportsdataverse.org) (recruiting),
-  and [sportyR](https://sportyR.sportsdataverse.org) (field/court/rink plots).
-- **Python siblings** — [sportypy](https://sportypy.sportsdataverse.org) (the
-  Python port of sportyR) and [collegebaseball](https://collegebaseball.readthedocs.io).
-- **Node.js** — [sportsdataverse.js](https://js.sportsdataverse.org).
+  [cfbseedR](https://cfbseedR.sportsdataverse.org) (college football season
+  simulation and CFP seeding), [sportyR](https://sportyR.sportsdataverse.org)
+  (field/court/rink plots), and [sdvplotR](https://sdvplotR.sportsdataverse.org)
+  (team logos, wordmarks, headshots and colors for ggplot2, gt and reactable).
+- **Python siblings** — [sdvplot](https://sdvplot.sportsdataverse.org) (team logos,
+  wordmarks, headshots and colors for Python plots and tables), [sportypy](https://sportypy.sportsdataverse.org)
+  (the Python port of sportyR) and [collegebaseball](https://collegebaseball.readthedocs.io).
+- **Node.js** — [sportsdataverse.js](https://js.sportsdataverse.org) and
+  [sdvplot-js](https://plot.sportsdataverse.org) (`@sportsdataverse/sdvplot`,
+  `@sportsdataverse/sporty` and `@sportsdataverse/sdvtables`).
+
+The full directory is at [sportsdataverse.org/packages](https://sportsdataverse.org/packages).
 
 ## nflverse and the wider Python ecosystem
 
