@@ -281,4 +281,4 @@ endpoints:
   returns_schema: rankings
   scope: ncaa
   path: /{sport}/{league}/rankings
-  parser: parse_items
+  parser: parse_rankings

@@ -1075,3 +1075,158 @@ def test_recruiting_athletes_pandas_opt_in():
     pdf = parse_items(_load("recruiting_athletes_mbb_2026"), return_as_pandas=True)
     assert isinstance(pdf, pd.DataFrame)
     assert len(pdf) > 0
+
+
+# ===========================================================================
+# Site v2 ``rankings`` (cfb / mbb / wbb / mch / wch): the polls sit in a
+# top-level ``rankings`` list, not the Core v2 ``{items: [...]}`` shape that
+# parse_items reads (it returned zero rows on every league).
+# ===========================================================================
+
+# ranks + others per poll on the committed 2026-10-08 captures.
+_RANKINGS_ROWS = {"cfb": 208, "mbb": 77, "wbb": 75, "mch": 35, "wch": 20}
+
+# The documented columns (tools/codegen/schemas/rankings.yaml) and their dtypes, for every
+# league and for an empty payload: wch ships no team colors, and that must not make
+# team_color a Null column there.
+_RANKINGS_SCHEMA = {
+    "poll_id": pl.Int64,
+    "poll_name": pl.Utf8,
+    "poll_short_name": pl.Utf8,
+    "poll_type": pl.Utf8,
+    "season": pl.Int64,
+    "season_type": pl.Int64,
+    "week": pl.Int64,
+    "week_display": pl.Utf8,
+    "poll_date": pl.Utf8,
+    "ranked": pl.Boolean,
+    "team_id": pl.Utf8,
+    "rank": pl.Int64,
+    "previous_rank": pl.Int64,
+    "points": pl.Float64,
+    "first_place_votes": pl.Int64,
+    "trend": pl.Utf8,
+    "record_summary": pl.Utf8,
+    "team_uid": pl.Utf8,
+    "team_location": pl.Utf8,
+    "team_name": pl.Utf8,
+    "team_nickname": pl.Utf8,
+    "team_abbreviation": pl.Utf8,
+    "team_color": pl.Utf8,
+    "team_logo": pl.Utf8,
+    "last_updated": pl.Utf8,
+}
+
+
+def test_rankings_registered_to_dedicated_parser():
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, parse_rankings
+
+    assert ENDPOINT_PARSERS["rankings"] is parse_rankings
+
+
+@pytest.mark.parametrize("league", sorted(_RANKINGS_ROWS))
+def test_rankings_one_row_per_ranked_or_vote_receiving_team(league):
+    from sportsdataverse._common_espn_parsers import parse_rankings
+
+    payload = _load(f"rankings_{league}")
+    df = parse_rankings(payload)
+    assert df.height == _RANKINGS_ROWS[league]
+    assert dict(df.schema) == _RANKINGS_SCHEMA
+    assert df["team_id"].null_count() == 0
+    for poll in payload["rankings"]:
+        rows = df.filter(pl.col("poll_id") == int(poll["id"]))
+        ranked = rows.filter(pl.col("ranked") == True)
+        assert ranked["rank"].to_list() == [e["current"] for e in poll["ranks"]]
+        assert ranked["team_id"].to_list() == [e["team"]["id"] for e in poll["ranks"]]
+        others = rows.filter(pl.col("ranked") == False)
+        assert others.height == len(poll["others"])
+        # ESPN ships current=0 for a vote-receiving team; 0 is not a rank.
+        assert others["rank"].null_count() == others.height
+
+
+def test_rankings_first_row_is_the_ap_number_one():
+    from sportsdataverse._common_espn_parsers import parse_rankings
+
+    row = parse_rankings(_load("rankings_cfb")).row(0, named=True)
+    assert row["poll_name"] == "AP Top 25"
+    assert (row["season"], row["season_type"], row["week"]) == (2026, 2, 6)
+    assert (row["rank"], row["team_id"], row["team_abbreviation"]) == (1, "251", "TEX")
+    assert row["first_place_votes"] == 61
+
+
+def test_rankings_week_is_the_occurrence_value_not_its_running_number():
+    """The MBB final poll is ``occurrence`` number 20 but value 3: its Core v2
+    ``$ref`` is ``types/3/weeks/3``, so ``week`` must be 3."""
+    from sportsdataverse._common_espn_parsers import parse_rankings
+
+    df = parse_rankings(_load("rankings_mbb"))
+    assert df["week"].unique().to_list() == [3]
+    assert df["season_type"].unique().to_list() == [3]
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {},
+        {"rankings": []},
+        {"rankings": [None, {"ranks": None}]},
+        {"rankings": [{"ranks": 1, "others": "x"}]},
+        {"code": 404},
+    ],
+)
+def test_rankings_empty_or_malformed_payload_is_zero_rows(payload):
+    """Zero rows that still carry the documented columns, so a caller can select them."""
+    from sportsdataverse._common_espn_parsers import parse_rankings
+
+    df = parse_rankings(payload)
+    assert df.height == 0
+    assert dict(df.schema) == _RANKINGS_SCHEMA
+    pdf = parse_rankings(payload, return_as_pandas=True)
+    assert len(pdf) == 0
+    assert list(pdf.columns) == list(_RANKINGS_SCHEMA)
+
+
+def test_rankings_team_color_null_sentinel_is_null():
+    """ESPN ships the literal string "NULL" as one mch team's color; that is no color."""
+    from sportsdataverse._common_espn_parsers import parse_rankings
+
+    payload = _load("rankings_mch")
+    sentinel = {
+        e["team"]["id"]
+        for p in payload["rankings"]
+        for k in ("ranks", "others")
+        for e in p[k]
+        if e["team"].get("color") == "NULL"
+    }
+    assert sentinel, "the capture no longer carries the sentinel"
+    df = parse_rankings(payload)
+    assert "NULL" not in df["team_color"].drop_nulls().to_list()
+    assert df.filter(pl.col("team_id").is_in(sorted(sentinel)))["team_color"].null_count() > 0
+
+
+def test_rankings_schema_is_the_documented_one():
+    from pathlib import Path
+
+    import yaml
+
+    doc = yaml.safe_load((Path(__file__).parents[1] / "tools/codegen/schemas/rankings.yaml").read_text("utf-8"))
+    assert [c["name"] for c in doc["columns"]] == list(_RANKINGS_SCHEMA)
+
+
+def test_rankings_pandas_opt_in():
+    import pandas as pd
+
+    from sportsdataverse._common_espn_parsers import parse_rankings
+
+    pdf = parse_rankings(_load("rankings_cfb"), return_as_pandas=True)
+    assert isinstance(pdf, pd.DataFrame)
+    assert len(pdf) == _RANKINGS_ROWS["cfb"]
+
+
+def test_rankings_wrapper_routes_through_parse_rankings(monkeypatch):
+    import sportsdataverse.cfb.cfb_espn_ext as ext
+
+    fixture = _load("rankings_cfb")
+    monkeypatch.setattr(ext, "_get", lambda *args, **kwargs: fixture)
+    assert ext.espn_cfb_rankings(return_parsed=False) is fixture
+    assert ext.espn_cfb_rankings().height == _RANKINGS_ROWS["cfb"]
