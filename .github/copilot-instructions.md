@@ -556,7 +556,9 @@ Regenerate after touching endpoint YAML, `schemas/**`, `templates/**`,
 `tools/codegen/*.py`, a public docstring, an `__all__` or `CHANGELOG.md`:
 `uv run python tools/codegen/generate.py` then `--check`. `sources.yaml` is the
 provider/category registry — a new public function in a new module needs a rule
-there or `--check` fails naming it. `sportsdataverse.parsed.*` is **deprecated**:
+there or `--check` fails naming it. A changelog entry is a `changelog.d/<slug>.<group>.md`
+fragment, never an `## Unreleased` section in `CHANGELOG.md` (see `changelog.d/README.md`).
+`sportsdataverse.parsed.*` is **deprecated**:
 wrappers return parsed frames by default, so call the league module directly.
 
 ## Cheat sheet

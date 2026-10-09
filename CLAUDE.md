@@ -1331,6 +1331,11 @@ The parts worth repeating here:
   `CHANGELOG.md`. `uv run python tools/codegen/generate.py` then `--check`. Both
   the `sdv-codegen` pre-commit hook and `codegen-drift-prepush` now watch
   `tools/codegen/*.py` and `CHANGELOG.md` as well, which they did not before 0.1.5.
+- **A changelog entry is a fragment, `changelog.d/<slug>.<group>.md`** (one bullet per
+  change; groups `breaking`/`added`/`changed`/`deprecated`/`removed`/`fixed`/`security`/`data`).
+  Never add an `## Unreleased` section to `CHANGELOG.md`: it holds released sections only, and
+  the renderer (so codegen) rejects one. `tools/release_changelog.py <x.y.z>` folds the
+  fragments into the release section. Details in `CONTRIBUTING.md` and `changelog.d/README.md`.
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.

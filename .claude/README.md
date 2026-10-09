@@ -11,7 +11,7 @@ Invoke with `/<name>`; Claude also auto-uses them when the description matches.
 | Skill | Purpose |
 |---|---|
 | `/ship` | Gated PR flow: regenerate codegen docs → lint → full pytest → push → CI green → confirm merge → **then** clean up the branch. |
-| `/release` | Cut a PyPI release: bump version → CHANGELOG entry → `yarn version:docs` snapshot → tag a GitHub Release (triggers `python-publish.yml`). |
+| `/release` | Cut a PyPI release: bump version → `tools/release_changelog.py` folds `changelog.d/` into CHANGELOG.md → `yarn version:docs` snapshot → tag a GitHub Release (triggers `python-publish.yml`). |
 | `/preflight` | Fast scoped sweep on changed files (ruff + mypy ratchet + targeted tests) before a commit/PR. |
 | `/address-bot-reviews` | Triage + resolve CodeRabbit / Copilot review threads on a PR (fix valid, decline convention-conflicts with a citation, reply + resolve). Used by `/ship` post-CI. |
 | `/reprocess` | OOM-safe bounded/resumable sweep methodology for the `-raw`/`-data` repos. **(user-level: `~/.claude/skills/reprocess/`)** |

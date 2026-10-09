@@ -252,27 +252,43 @@ and are never touched by edits to `current`.
      `architecture/*`, `parsers/*`) and the notebook intros are hand-authored
      — edit them directly.
    - **Home page**: `docs/src/pages/index.tsx`.
-   - **Changelog**: edit the repo-root `CHANGELOG.md`. Add each change as one
-     bullet under its group in the `## Unreleased` section. The groups are, in
-     this order, `### Breaking changes`, `Added`, `Changed`, `Deprecated`,
-     `Removed`, `Fixed`, `Security`, `Data`. Write a bullet as
+   - **Changelog**: add a fragment file, `changelog.d/<slug>.<group>.md`; do
+     not edit `CHANGELOG.md`, which holds released sections only. The group is
+     one of `breaking`, `added`, `changed`, `deprecated`, `removed`, `fixed`,
+     `security`, `data`; the slug is anything lowercase (the branch name will
+     do), so you need no PR number to name it. Write each change as one bullet,
      `- **<Area>:** <what changed for a user>. (#<PR>)`, at most three lines;
-     the full write-up belongs in the PR description. `tests/test_changelog.py`
-     enforces the groups and their order. The
-     `sync-docs-changelog` pre-commit hook splits it into
-     `docs/src/pages/CHANGELOG.md` (the newest releases, served at `/CHANGELOG`),
-     `changelog-unreleased.md` and `changelog-archive.md`. If the pages drift (no
-     hook ran), `uv run python tools/codegen/generate.py` (or
-     `python tools/hooks/sync_docs_changelog.py`) rewrites them.
+     the full write-up belongs in the PR description. A change that spans two
+     groups is two files. [`changelog.d/README.md`](changelog.d/README.md) has
+     an example. Because every PR adds its own file, two open PRs never conflict
+     on the changelog. `tests/test_sync_docs_changelog.py` rejects a misnamed
+     fragment or one that is not a bullet list. The docs site's
+     `/changelog-unreleased` page is built from the fragments when the site is
+     deployed (it is gitignored); `/CHANGELOG` and `/changelog-archive` are
+     rendered from `CHANGELOG.md` by the `sync-docs-changelog` pre-commit hook,
+     or by `uv run python tools/codegen/generate.py` if no hook ran.
 2. Commit (pre-commit runs the drift gate, doctoc, markdownlint, and the
    changelog sync). Preview locally with `cd docs && yarn build` if you like.
-3. Push to `main`. Vercel rebuilds and the change is live at the default
+3. Push to `main`. `docs-deploy.yml` builds the site (rendering
+   `/changelog-unreleased` from `changelog.d/` first) and publishes it to the
+   `gh-pages` branch, which Vercel serves as-is; the change is live at the default
    `/docs/` — because `current` **is** the default. **That's the whole
    workflow; a post-release docs commit is no different from any other.**
 
 ### At release time
 
-Freeze a permanent snapshot of the docs for that release, then keep going.
+Fold the changelog fragments into a release section first. The script writes
+`## <x.y.z> Release: <Month D, YYYY>` above the newest release, with the groups
+in order and each group's bullets sorted, deletes the fragments and stages both:
+
+```sh
+uv run python tools/release_changelog.py <x.y.z>   # --date YYYY-MM-DD for a date other than today
+# then: write the **Highlights** paragraph under the new heading,
+npx --yes doctoc@2 --github CHANGELOG.md
+uv run python tools/codegen/generate.py
+```
+
+Then freeze a permanent snapshot of the docs for that release, and keep going.
 **This had not been done since 0.0.75** — 0.1.0 through 0.1.4 have no snapshot,
 which 0.1.5 fixes. Only the three newest snapshots are built
 (`VERSIONS_TO_KEEP=3` in `docusaurus.config.ts`), so `/docs/0.0.50/` is no longer

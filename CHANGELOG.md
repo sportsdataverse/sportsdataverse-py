@@ -2,232 +2,159 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Unreleased](#unreleased)
-  - [Changed](#changed)
-  - [Deprecated](#deprecated)
-  - [Fixed](#fixed)
 - [0.1.5 Release: October 8, 2026](#015-release-october-8-2026)
   - [Breaking changes](#breaking-changes)
   - [Added](#added)
-  - [Changed](#changed-1)
-  - [Fixed](#fixed-1)
+  - [Changed](#changed)
+  - [Fixed](#fixed)
   - [Security](#security)
 - [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
   - [Added](#added-1)
-  - [Changed](#changed-2)
-  - [Fixed](#fixed-2)
+  - [Changed](#changed-1)
+  - [Fixed](#fixed-1)
   - [Data](#data)
 - [0.1.3 Release: August 28, 2026](#013-release-august-28-2026)
-  - [Fixed](#fixed-3)
+  - [Fixed](#fixed-2)
 - [0.1.2 Release: August 27, 2026](#012-release-august-27-2026)
-  - [Fixed](#fixed-4)
+  - [Fixed](#fixed-3)
 - [0.1.1 Release: August 27, 2026](#011-release-august-27-2026)
   - [Breaking changes](#breaking-changes-1)
   - [Added](#added-2)
-  - [Changed](#changed-3)
-  - [Deprecated](#deprecated-1)
-  - [Fixed](#fixed-5)
+  - [Changed](#changed-2)
+  - [Deprecated](#deprecated)
+  - [Fixed](#fixed-4)
 - [0.0.75 Release: August 2, 2026](#0075-release-august-2-2026)
   - [Breaking changes](#breaking-changes-2)
   - [Added](#added-3)
-  - [Changed](#changed-4)
-  - [Fixed](#fixed-6)
+  - [Changed](#changed-3)
+  - [Fixed](#fixed-5)
 - [0.0.74 Release: August 2, 2026](#0074-release-august-2-2026)
   - [Breaking changes](#breaking-changes-3)
-  - [Changed](#changed-5)
-  - [Fixed](#fixed-7)
+  - [Changed](#changed-4)
+  - [Fixed](#fixed-6)
   - [Data](#data-1)
 - [0.0.73 Release: August 1, 2026](#0073-release-august-1-2026)
   - [Breaking changes](#breaking-changes-4)
   - [Added](#added-4)
-  - [Changed](#changed-6)
-  - [Fixed](#fixed-8)
+  - [Changed](#changed-5)
+  - [Fixed](#fixed-7)
 - [0.0.72 Release: July 22, 2026](#0072-release-july-22-2026)
   - [Breaking changes](#breaking-changes-5)
   - [Added](#added-5)
-  - [Changed](#changed-7)
-  - [Deprecated](#deprecated-2)
+  - [Changed](#changed-6)
+  - [Deprecated](#deprecated-1)
   - [Removed](#removed)
-  - [Fixed](#fixed-9)
+  - [Fixed](#fixed-8)
   - [Data](#data-2)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
   - [Added](#added-6)
-  - [Changed](#changed-8)
-  - [Fixed](#fixed-10)
+  - [Changed](#changed-7)
+  - [Fixed](#fixed-9)
 - [0.0.70 Release: June 24, 2026](#0070-release-june-24-2026)
-  - [Changed](#changed-9)
+  - [Changed](#changed-8)
 - [0.0.69 Release: June 23, 2026](#0069-release-june-23-2026)
   - [Added](#added-7)
-  - [Fixed](#fixed-11)
+  - [Fixed](#fixed-10)
 - [0.0.68 Release: June 23, 2026](#0068-release-june-23-2026)
   - [Added](#added-8)
-  - [Changed](#changed-10)
-  - [Fixed](#fixed-12)
+  - [Changed](#changed-9)
+  - [Fixed](#fixed-11)
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Added](#added-9)
-  - [Changed](#changed-11)
-  - [Fixed](#fixed-13)
+  - [Changed](#changed-10)
+  - [Fixed](#fixed-12)
 - [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
-  - [Fixed](#fixed-14)
+  - [Fixed](#fixed-13)
 - [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
   - [Breaking changes](#breaking-changes-6)
-  - [Changed](#changed-12)
-  - [Deprecated](#deprecated-3)
-  - [Fixed](#fixed-15)
+  - [Changed](#changed-11)
+  - [Deprecated](#deprecated-2)
+  - [Fixed](#fixed-14)
 - [0.0.64 Release: June 17, 2026](#0064-release-june-17-2026)
   - [Breaking changes](#breaking-changes-7)
   - [Added](#added-10)
-  - [Changed](#changed-13)
+  - [Changed](#changed-12)
 - [0.0.63 Release: June 16, 2026](#0063-release-june-16-2026)
-  - [Fixed](#fixed-16)
+  - [Fixed](#fixed-15)
 - [0.0.62 Release: June 16, 2026](#0062-release-june-16-2026)
-  - [Fixed](#fixed-17)
+  - [Fixed](#fixed-16)
 - [0.0.61 Release: June 16, 2026](#0061-release-june-16-2026)
-  - [Fixed](#fixed-18)
+  - [Fixed](#fixed-17)
 - [0.0.60 Release: June 15, 2026](#0060-release-june-15-2026)
   - [Added](#added-11)
-  - [Fixed](#fixed-19)
+  - [Fixed](#fixed-18)
 - [0.0.59 Release: June 13, 2026](#0059-release-june-13-2026)
   - [Added](#added-12)
 - [0.0.58 Release: June 12, 2026](#0058-release-june-12-2026)
   - [Added](#added-13)
-  - [Changed](#changed-14)
-  - [Fixed](#fixed-20)
+  - [Changed](#changed-13)
+  - [Fixed](#fixed-19)
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
   - [Added](#added-14)
 - [0.0.56 Release: June 9, 2026](#0056-release-june-9-2026)
   - [Breaking changes](#breaking-changes-8)
   - [Added](#added-15)
+  - [Changed](#changed-14)
+  - [Fixed](#fixed-20)
+- [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
   - [Changed](#changed-15)
   - [Fixed](#fixed-21)
-- [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
-  - [Changed](#changed-16)
-  - [Fixed](#fixed-22)
 - [0.0.54 Release: June 8, 2026](#0054-release-june-8-2026)
   - [Breaking changes](#breaking-changes-9)
   - [Added](#added-16)
-  - [Changed](#changed-17)
-  - [Deprecated](#deprecated-4)
-  - [Fixed](#fixed-23)
+  - [Changed](#changed-16)
+  - [Deprecated](#deprecated-3)
+  - [Fixed](#fixed-22)
 - [0.0.53 Release: June 8, 2026](#0053-release-june-8-2026)
   - [Breaking changes](#breaking-changes-10)
   - [Added](#added-17)
-  - [Changed](#changed-18)
+  - [Changed](#changed-17)
   - [Removed](#removed-1)
-  - [Fixed](#fixed-24)
+  - [Fixed](#fixed-23)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [Added](#added-18)
-  - [Changed](#changed-19)
+  - [Changed](#changed-18)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
   - [Breaking changes](#breaking-changes-11)
   - [Added](#added-19)
-  - [Changed](#changed-20)
-  - [Fixed](#fixed-25)
+  - [Changed](#changed-19)
+  - [Fixed](#fixed-24)
 - [0.0.50 Release: May 7, 2026](#0050-release-may-7-2026)
   - [Breaking changes](#breaking-changes-12)
   - [Added](#added-20)
-  - [Changed](#changed-21)
-  - [Deprecated](#deprecated-5)
-  - [Fixed](#fixed-26)
+  - [Changed](#changed-20)
+  - [Deprecated](#deprecated-4)
+  - [Fixed](#fixed-25)
 - [0.0.40 Release: December 6, 2025](#0040-release-december-6-2025)
-  - [Changed](#changed-22)
+  - [Changed](#changed-21)
 - [0.0.38-39 Release: August 28, 2023](#0038-39-release-august-28-2023)
-  - [Changed](#changed-23)
+  - [Changed](#changed-22)
 - [0.0.36-37 Release: July 9, 2023](#0036-37-release-july-9-2023)
   - [Breaking changes](#breaking-changes-13)
   - [Added](#added-21)
 - [0.0.34-35 Release: May 7-9, 2023](#0034-35-release-may-7-9-2023)
   - [Breaking changes](#breaking-changes-14)
-  - [Changed](#changed-24)
+  - [Changed](#changed-23)
 - [0.0.18 Release: July 25, 2022](#0018-release-july-25-2022)
   - [Breaking changes](#breaking-changes-15)
   - [Added](#added-22)
 - [0.0.17 Release: July 9, 2022](#0017-release-july-9-2022)
   - [Breaking changes](#breaking-changes-16)
   - [Added](#added-23)
-  - [Changed](#changed-25)
-  - [Fixed](#fixed-27)
+  - [Changed](#changed-24)
+  - [Fixed](#fixed-26)
 - [0.0.15 Release: May 8, 2022](#0015-release-may-8-2022)
-  - [Changed](#changed-26)
+  - [Changed](#changed-25)
 - [0.0.14 Release: March 16, 2022](#0014-release-march-16-2022)
-  - [Changed](#changed-27)
+  - [Changed](#changed-26)
 - [0.0.12 Release: February 24, 2022](#0012-release-february-24-2022)
   - [Added](#added-24)
-  - [Changed](#changed-28)
-  - [Fixed](#fixed-28)
+  - [Changed](#changed-27)
+  - [Fixed](#fixed-27)
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
-  - [Changed](#changed-29)
+  - [Changed](#changed-28)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-## Unreleased
-
-### Changed
-
-- **Tests:** warnings are errors. A test asserts an expected warning with `pytest.warns(..., match=...)` or
-  filters an incidental one by exact message; live tests skip on a timeout or upstream 429/5xx, the
-  live job runs on Ubuntu, and the `tests` extra needs pytest >= 8.0. (#726)
-
-### Deprecated
-
-- **NBA / WNBA:** `load_nba_stats_{pbp,possessions,lineups}_v3` and the four `load_wnba_stats_*` shims
-  (`lineups`, `player_season_stats`, `standings`, `team_season_stats`) now say they will be removed in
-  0.2.0; they named 0.1.0, which has shipped. A test fails if a removal version falls behind again. (#726)
-
-### Fixed
-
-- **CFB:** `get_go_wp` returns NaN for a 4th-down row with no `yards_to_goal` or `distance`, instead of
-  a garbage go-for-it value from casting NaN to an integer; other plays are unchanged. (#726)
-- **CFB:** scoring zero rows (QBR on a live game's opening drive, `predict_from_card` on an empty frame)
-  no longer logs XGBoost's "Empty dataset" warning. (#726)
-- **ESPN rankings parsed to an empty frame.** `espn_{cfb,mbb,wbb,mch,wch}_rankings()` ran the Site v2
-  payload through `parse_items`, which reads a Core v2 `items` list; the polls sit in a top-level
-  `rankings` list, so every league returned zero rows. A dedicated `parse_rankings` now gives one row
-  per ranked or vote-receiving team per poll (live 2026-10-08: cfb 208 rows over 5 polls, mbb 77, wbb
-  75, mch 35, wch 20), with `poll_id`, `season`, `season_type`, `week` (the week within the season
-  type, which ESPN's Core v2 rankings URL uses), `rank` (null on vote-receiving rows), `previous_rank`,
-  `points`, `first_place_votes` and the team fields; `team_id` is a string. The college baseball and
-  softball wrappers route through it too, but ESPN answers their rankings URL with a 404. (#732)
-- **HockeyTech schedules returned other seasons' games.** `<league>_schedule(season=...)` for
-  the 19 HockeyTech league families, and `pwhl_schedule`, read `modulekit/scorebar`. That view
-  ignores the `season_id` it is sent, returns games oldest-first and stops at its 10,000-row
-  limit, so `ahl_schedule(season=2026)` returned 10,000 AHL games from 1995 to 2012 and none
-  from 2025-26; OHL and ECHL failed the same way, and PWHL returned every season's games. The
-  schedule functions now read `modulekit/schedule&season_id=<id>`, which the feed scopes to one
-  season (live 2026-10-08: AHL 2025-26 = 1,152 games, OHL = 682, PWHL = 120, each in that season
-  alone), and `parse_schedule(..., season_id=)` drops any row from another season (#727).
-  Behaviour changes:
-  - With neither `season` nor `season_id`, the schedule is the newest regular season, as in the
-    other season-aware functions. It used to be the feed's whole window.
-  - `game_status` now reads the schedule view's strings: `Final OT` where scorebar said
-    `Final 1st OT`, and the start time (`7:00 pm EST`) for an unplayed game.
-  - A season's playoffs and preseason are separate HockeyTech season ids; pass `season_id` for
-    them.
-  - An empty reply, or a season filter that keeps nothing, is zero rows with the 12 columns.
-- **HockeyTech derived coordinates put home-team events off the rink.** `add_coord_transforms`
-  (every `<league>_pbp` and `pwhl_pbp`) flipped home events with a 0-200 x 0-85 mirror applied
-  to centre-origin feet, so home `x_coord_right` ran 191 to 290 ft and `y_coord_right` 49 to
-  125 ft (PWHL game 42), and `y_coord_fixed` applied the y transform twice. The feed puts the
-  home team's attack toward x = 0 in every period (320 PWHL games; sdv-internal-refs #50), and
-  the columns are now rotations of the feet frame (#51): `x_coord_fixed` / `y_coord_fixed` =
-  (-x, -y), home team shooting right; `x_coord_right` / `y_coord_right` = home (-x, -y),
-  visitor (x, y); `x_coord_vertical` / `y_coord_vertical` = (-y_right, x_right). The right and
-  vertical columns are null when an event's side is unknown (no team, as on faceoffs, or a null
-  or empty home team id) instead of defaulting to the visitor's. `shot_distance`, `shot_angle`
-  and xG are unchanged. The published PWHL play-by-play releases keep the old values until they
-  are rebuilt.
-- **HockeyTech empty-net goals from a team's own half were measured to the wrong net.**
-  `add_shot_distance_angle` measures to the nearer net (`89 - |x|`), which per-event validation
-  showed is right for own-half events with a goalie in net: they are near-net events whose
-  coordinates the feed mirrored (own-half quality shots match ordinary ones at 10 / 24 / 35 ft).
-  An own-half empty-net goal is a genuine long shot (27 in 320 PWHL games; median 126 ft,
-  measured 59 ft). Empty-net goals (`empty_net` "1") now measure to the net their team attacks;
-  every other event is unchanged (sdv-internal-refs #52). `shot_distance`, `shot_angle`,
-  `scoring_chance` and the xG features of those goals change.
-- **NBA:** `logistic_fit_irls` no longer overflows on separable data, and `nba_rapm` fits a single
-  possession without a divide-by-zero warning. (#726)
-- **NFL:** `get_go_wp` on a full nflverse frame no longer raises pandas `PerformanceWarning`s; output is
-  unchanged. (#726)
 
 ## 0.1.5 Release: October 8, 2026
 
