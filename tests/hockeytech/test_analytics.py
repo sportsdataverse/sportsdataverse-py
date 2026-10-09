@@ -575,3 +575,11 @@ def test_empty_net_goals_measure_to_the_attacking_net():
     assert dist(-x_own, "3", "1") == pytest.approx(89 + x_own)  # visitor attacks +89
     assert dist(-80.0, "1", "1") == pytest.approx(9.0)  # attacking-half EN goal: unchanged
     assert dist(x_own, None, "1") == pytest.approx(89 - x_own)  # unknown side: nearer net
+
+
+def test_ot_period_length_matches_sourced_formats() -> None:
+    """Regular-season OT lengths per sdv-internal-refs rules/<league>.yaml (informational field, kept correct)."""
+    from sportsdataverse.hockeytech._leagues import LEAGUES
+
+    expected = {"pwhl": 300, "ahl": 300, "echl": 420, "ushl": 420, "bchl": 600, "ohl": 300, "whl": 300, "qmjhl": 300}
+    assert {lg: LEAGUES[lg].ot_period_length for lg in expected} == expected

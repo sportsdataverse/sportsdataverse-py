@@ -45,7 +45,13 @@ class LeagueConfig:
     site_id: int
     base_url: str
     pbp_style: Literal["hockeytech_a", "hockeytech_b"]
-    ot_period_length: int  # regulation-OT length in seconds (informational)
+    # Regular-season overtime length in seconds (informational; nothing reads it for
+    # parsing). Sourced per league in sdv-internal-refs rules/<league>.yaml (entries
+    # *-overtime-*): pwhl 300 (5-min 3v3, rulebook + raw store), ahl 300 (since 2016-17),
+    # echl 420 (since 2019-20), ushl 420 (7-min hybrid since 2016-17), bchl 600 (10-min
+    # 3v3 since 2023-24), CHL majors 300 (3v3 since 2016-17); the unsourced junior A
+    # leagues keep 300 until their format is sourced.
+    ot_period_length: int
 
 
 _LSCLUSTER = "https://lscluster.hockeytech.com/feed/index.php"
@@ -60,19 +66,19 @@ LEAGUES: Dict[str, LeagueConfig] = {
     # (centre ice at 300,150); a 2026-10-08 gameCenterPlayByPlay probe of PWHL, AHL, OHL
     # and ECHL found no value above 600 in x or 300 in y. New leagues take "hockeytech_b".
     # -- flagship / already-shipped (league_id + pbp_style curated) --
-    "pwhl": LeagueConfig("PWHL", "pwhl", "446521baf8c38984", 1, 0, _LSCLUSTER, "hockeytech_a", 600),
+    "pwhl": LeagueConfig("PWHL", "pwhl", "446521baf8c38984", 1, 0, _LSCLUSTER, "hockeytech_a", 300),
     "ahl": LeagueConfig("AHL", "ahl", "ccb91f29d6744675", 4, 3, _LSCLUSTER, "hockeytech_a", 300),
     "ohl": LeagueConfig("OHL", "ohl", "f1aa699db3d81487", 1, 1, _LSCLUSTER, "hockeytech_b", 300),
     "whl": LeagueConfig("WHL", "whl", "f1aa699db3d81487", 7, 0, _LSCLUSTER, "hockeytech_b", 300),
     "qmjhl": LeagueConfig("QMJHL", "lhjmq", "f322673b6bcae299", 6, 0, _LEAGUESTAT, "hockeytech_b", 300),
     # -- professional / major (added 2026-07-12) --
-    "echl": LeagueConfig("ECHL", "echl", "2c2b89ea7345cae8", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "echl": LeagueConfig("ECHL", "echl", "2c2b89ea7345cae8", 1, 0, _LSCLUSTER, "hockeytech_b", 420),
     "sphl": LeagueConfig("SPHL", "sphl", "8fa10d218c49ec96", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
     "chl": LeagueConfig("CHL", "chl", "ef96ea7d71574f2a", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
     # -- junior (added 2026-07-12) --
     # ushl: gameCenterPlayByPlay ships goals/penalties/goalie-changes only, no coordinates.
-    "ushl": LeagueConfig("USHL", "ushl", "e828f89b243dc43f", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
-    "bchl": LeagueConfig("BCHL", "bchl", "f3ed30007ad2124e", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "ushl": LeagueConfig("USHL", "ushl", "e828f89b243dc43f", 1, 0, _LSCLUSTER, "hockeytech_b", 420),
+    "bchl": LeagueConfig("BCHL", "bchl", "f3ed30007ad2124e", 1, 0, _LSCLUSTER, "hockeytech_b", 600),
     "ajhl": LeagueConfig("AJHL", "ajhl", "cbe60a1d91c44ade", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
     "sjhl": LeagueConfig("SJHL", "sjhl", "2fb5c2e84bf3e4a8", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
     "ojhl": LeagueConfig("OJHL", "ojhl", "cce66dd6bebf4790", 1, 0, _LSCLUSTER, "hockeytech_b", 300),

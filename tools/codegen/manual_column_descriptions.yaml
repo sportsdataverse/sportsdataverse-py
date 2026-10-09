@@ -17998,7 +17998,7 @@ load_mbb_pbp:
     on each game's final play.
   points_attempted: Point value at stake on the shot attempt (3 for threes, 2 for other field goals, 1 for free throws), from
     the ESPN play type.
-  pregame_home_prob: Model's pre-game win probability for the home team (0-1), constant within a game.
+  pregame_home_prob: Model's pre-game win probability for the home team (0-1), constant within a game. Present only on assets published with the WP model (2003, 2006-07 to 2019-20 and the 2021+ republishes); absent on other seasons (rules/mbb.yaml#mbb-2003-pbp-wp-columns).
   short_description: Shortened version of ESPN's play description text, without score context.
   start_period_seconds_remaining: Seconds left in the current period when the play started, computed as 60 times the game
     clock minutes plus the seconds, so 1200 at the tip of each 20-minute half and 300 at the start of an overtime.
@@ -25183,7 +25183,7 @@ load_wbb_pbp:
   home_timeout_called: Flag set on plays where a timeout was charged to the home team.
   points_attempted: Point value at stake on the shot attempt (3 for threes, 2 for other field goals, 1 for free throws), from
     the ESPN play type.
-  pregame_home_prob: Model's pre-game win probability for the home team (0-1), constant within a game.
+  pregame_home_prob: Model's pre-game win probability for the home team (0-1), constant within a game. Present only on assets published with the WP model (2012-13 onward); absent on earlier seasons (rules/wbb.yaml#wbb-2013-pbp-wp-columns).
   score_value: Point value of the attempt (1 / 2 / 3), carried even on misses (a missed free throw still shows 1); use scoring_play
     to identify points actually scored.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.

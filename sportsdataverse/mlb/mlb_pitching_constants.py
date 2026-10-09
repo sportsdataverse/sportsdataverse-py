@@ -15,6 +15,8 @@ lands — see each field's docstring note for its fitting task.
 
 from __future__ import annotations
 
+import warnings
+
 import datetime as dt
 from dataclasses import dataclass
 from typing import Dict, List
@@ -201,7 +203,8 @@ def get_baselines(season: int) -> PitchingConstants:
 
     Returns:
         PitchingConstants: The committed baseline for ``season``, or the
-        nearest committed season if ``season`` is not in ``LEAGUE_BASELINES``.
+        nearest committed season if ``season`` is not in ``LEAGUE_BASELINES``
+        (with a ``UserWarning`` naming both seasons).
 
     Example:
         Quick start::
@@ -212,4 +215,12 @@ def get_baselines(season: int) -> PitchingConstants:
     if season in LEAGUE_BASELINES:
         return LEAGUE_BASELINES[season]
     nearest = min(LEAGUE_BASELINES, key=lambda yr: abs(yr - season))
+    # rules/mlb.yaml#mlb-2021-pitching-baselines-committed-seasons: the fallback used to be silent,
+    # so a 2017 (pre-velocity-source switch) or 2026 (ABS) frame took 2021/2024 constants unnoticed.
+    warnings.warn(
+        f"No committed pitching baseline for {season}; using the nearest season {nearest} "
+        f"(committed: {sorted(LEAGUE_BASELINES)}).",
+        UserWarning,
+        stacklevel=2,
+    )
     return LEAGUE_BASELINES[nearest]

@@ -65,9 +65,8 @@ TOUCHBACK_YARDLINE_PRE_2016: int = 80
 #: nflfastR canonical: the touchback was moved to the 25-yard line (2016 rule
 #: change), so yards-to-endzone = 75.
 #:
-#: Note: ``nfl_pbp.py`` currently uses an inline ``season > 2013`` boundary
-#: instead of this 2016 boundary — aligning that call site to this constant
-#: is deferred to a later task (behavior-change + parity gate).
+#: ``nfl_pbp.py`` (``yds_kickoff_return``) shares this 2016 boundary; it used an
+#: inline ``season > 2013`` until 2026-10 (rules/nfl.yaml#nfl-2016-kickoff-touchback-to-25).
 #:
 #: **Dynamic-kickoff audit (2026-09-01).** The 2024 rule moved the kickoff
 #: touchback to the 30 (yards-to-endzone 70) and the 2025 rule to the 35 (65),

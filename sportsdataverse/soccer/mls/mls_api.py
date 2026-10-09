@@ -56,7 +56,7 @@ def mls_club(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -109,7 +109,7 @@ def mls_competition_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -160,7 +160,7 @@ def mls_competitions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -213,7 +213,7 @@ def mls_content_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -268,7 +268,7 @@ def mls_content_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -323,7 +323,7 @@ def mls_match(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -388,7 +388,7 @@ def mls_season_matches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -449,7 +449,7 @@ def mls_sportapi_club_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -503,7 +503,7 @@ def mls_sportapi_clubs_by_sportec_ids(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -556,7 +556,7 @@ def mls_sportapi_match(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -609,7 +609,7 @@ def mls_sportapi_matches_by_sportec_ids(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -670,7 +670,7 @@ def mls_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
+        sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, an unplayed match on ``/matches/{matchId}``, or a season before 2024 -- the stats-api serves 2024+ only; earlier seasons have no addressable ids).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

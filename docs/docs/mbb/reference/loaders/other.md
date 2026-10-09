@@ -75,7 +75,7 @@ Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/s
 | `athlete_name_2` | String | Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present. |
 | `athlete_name_3` | String | Display name of the third athlete in the ESPN play participants, when present. |
 | `media_id` | String | Media identifier (video / image). |
-| `pregame_home_prob` | Float64 | Model's pre-game win probability for the home team (0-1), constant within a game. |
+| `pregame_home_prob` | Float64 | Model's pre-game win probability for the home team (0-1), constant within a game. Present only on assets published with the WP model (2003, 2006-07 to 2019-20 and the 2021+ republishes); absent on other seasons (rules/mbb.yaml#mbb-2003-pbp-wp-columns). |
 | `home_win_prob` | Float64 |  |
 
 ```python

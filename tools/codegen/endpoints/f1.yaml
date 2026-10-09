@@ -242,7 +242,8 @@ endpoints:
     type: str
   returns_schema: native/f1/qualifying
   short: qualifying
-  summary: Qualifying classification (Q1/Q2/Q3).
+  summary: Qualifying classification (Q1/Q2/Q3 from 2006; 2003-2005 one-lap and earlier single-session
+    formats fill q1 only, so q2/q3 are null before 2006).
 - example_args:
     round: 1
     season: 2024

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pytest
 import datetime as dt
 
 import numpy as np
@@ -24,9 +25,11 @@ def test_get_baselines_resolves_known_season():
 
 
 def test_get_baselines_unknown_season_falls_back_to_nearest():
-    b = get_baselines(2030)
+    with pytest.warns(UserWarning, match="No committed pitching baseline for 2030; using the nearest season 2024"):
+        b = get_baselines(2030)
     assert b == get_baselines(2024)
-    b_early = get_baselines(1990)
+    with pytest.warns(UserWarning, match="No committed pitching baseline for 1990; using the nearest season 2021"):
+        b_early = get_baselines(1990)
     assert b_early == get_baselines(2021)
 
 

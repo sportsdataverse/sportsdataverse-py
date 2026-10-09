@@ -14,8 +14,8 @@ and nfl4th's headline ``go_boost`` number:
 * **field goal** — :func:`get_fg_wp` (nfl4th ``get_fg_wp``): the make
   probability comes from the self-trained ``fg_model`` (a ``binary:logistic``
   XGBoost re-train of the original mgcv GAM, features
-  ``[yardline_100, fg_roof, fg_era]`` where ``fg_roof = (roof == "outdoors")``
-  and ``fg_era = (season >= 2020)``) with the long-kick decay; it weights the
+  ``[yardline_100, fg_roof, era0..era4]`` where ``fg_roof = (roof == "outdoors")``
+  and ``era*`` are the ``ERA_SEASON_CUTS`` one-hots) with the long-kick decay; it weights the
   made-FG WP (opponent receives a kickoff, +3) against the missed-FG WP
   (opponent takes over at the spot).  Emits ``fg_make_prob`` / ``make_fg_wp`` /
   ``miss_fg_wp`` / ``fg_wp``.
@@ -102,11 +102,13 @@ __all__ = [
 _FD_MODEL_FILE = "fd_model.ubj"  # download-on-demand (multi:softprob, 76 classes)
 _WP_MODEL_FILE = "wp_model.ubj"  # download-on-demand (nfl4th home-WP, binary:logistic)
 _TWO_PT_MODEL_FILE = "two_pt_model.ubj"  # bundled (binary:logistic, 9 features)
-_FG_MODEL_FILE = "fg_model.ubj"  # bundled (binary:logistic, 3 features)
+_FG_MODEL_FILE = "fg_model.ubj"  # bundled (binary:logistic, 7 features)
 
 #: ``fg_model`` feature order (decision_models ``FG_FEATURES``).  The booster carries its
 #: own feature names, but the DMatrix is built in this exact order to match:
-#: ``fg_roof = 1`` when ``roof == "outdoors"``, ``fg_era = 1`` when ``season >= 2020``.
+#: ``fg_roof = 1`` when ``roof == "outdoors"``; ``era0``..``era4`` are the one-hot
+#: :data:`~sportsdataverse.nfl.model_vars.ERA_SEASON_CUTS` bins (2001/2005/2013/2017), the
+#: same era encoding as the EP/WP models (rules/nfl.yaml#nfl-2002-nflfastr-era-bins).
 FG_FEATURES: list[str] = [
     "yardline_100",
     "fg_roof",
@@ -193,7 +195,7 @@ def _fg_make_prob(yardline_100: np.ndarray, fg_roof: np.ndarray, era: np.ndarray
     """Predict the FG make probability from the bundled ``fg_model``.
 
     Builds the feature matrix in :data:`FG_FEATURES` order
-    (``yardline_100``, ``fg_roof``, ``fg_era``), predicts the ``binary:logistic``
+    (``yardline_100``, ``fg_roof``, ``era0``..``era4``), predicts the ``binary:logistic``
     make probability, and applies nfl4th's long-kick post-processing: shrink by
     0.9 at/beyond ``yardline_100 = 38`` and zero at/beyond ``yardline_100 = 45``
     (>= ~63-yard kicks).  Returns ``None`` when the model is unavailable.
@@ -855,7 +857,7 @@ def get_fg_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 
     The make probability comes from the self-trained ``fg_model`` (a
     ``binary:logistic`` XGBoost re-train of the original mgcv GAM, features
-    ``[yardline_100, fg_roof, fg_era]``), shrunk by 0.9 for kicks at/beyond
+    ``[yardline_100, fg_roof, era0..era4]``), shrunk by 0.9 for kicks at/beyond
     ``yardline_100 = 38`` and zeroed at/beyond ``yardline_100 = 45``
     (>= ~63-yard kicks).  The made-FG state (opponent receives a touchback
     kickoff at the 25, kicking team +3) and the missed-FG state (opponent takes

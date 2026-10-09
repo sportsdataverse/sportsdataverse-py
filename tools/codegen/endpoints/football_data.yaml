@@ -49,7 +49,9 @@ endpoints:
     type: str
   returns_schema: native/football_data/league_season
   short: league_season
-  summary: One league-season of results + closing odds (main leagues).
+  summary: One league-season of results + closing odds (main leagues); earlier seasons carry a
+    subset of the documented columns (7 in 1993-94, 45 from 2000-01, B365 odds from 2002-03,
+    closing / Max / Avg odds from 2019-20).
 getter_module: sportsdataverse.soccer.football_data_runtime
 host: https://www.football-data.co.uk
 module: football_data
