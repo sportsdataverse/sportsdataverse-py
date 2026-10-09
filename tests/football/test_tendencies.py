@@ -207,7 +207,8 @@ def test_pre_existing_split_epa_is_unchanged(plays):
     """
     t = tendencies(plays, league="nfl")
     got = {r["pos_team"]: (r["epa_early_down"], r["epa_per_play_neutral"]) for r in t.to_dicts()}
-    want = {5: (-1.4621596468205098, -0.8486290538567118), 30: (13.574272631376516, 0.6861752757104114)}
+    # 30's early-down EPA re-pinned when kneels left scrimmage_play (its three kneels were early downs)
+    want = {5: (-1.4621596468205098, -0.8486290538567118), 30: (14.84284443577053, 0.6861752757104114)}
     for team, (early, neutral) in want.items():
         assert abs(got[team][0] - early) < 1e-9 and abs(got[team][1] - neutral) < 1e-9, team
 
@@ -259,13 +260,14 @@ def test_split_counts_recount_from_the_plays(plays):
             "tied": 5,
             "trailing": 44,
         },
+        # 30's three kneels (own half, leading) are no longer scrimmage snaps
         30: {
-            "plays": 56,
+            "plays": 53,
             "red_zone": 3,
             "opp_half": 26,
-            "own_half": 30,
+            "own_half": 27,
             "one_score": 17,
-            "leading": 48,
+            "leading": 45,
             "tied": 8,
             "trailing": 0,
         },

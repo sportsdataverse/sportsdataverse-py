@@ -93,8 +93,10 @@ def _impute_clock(clock: Optional[str], desc: Optional[str]) -> Optional[str]:
 # it (ep/epa/wp). Enumerated across the 1999-2025 raw corpus:
 #   JAC -> JAX (Jaguars, 1999-2019), LAR -> LA (Rams, 2016+),
 #   BLT -> BAL / CLV -> CLE (2006). Each maps to exactly one nflverse abbr in
-#   every era it appears, so the rename is season-independent.
-_GAMEBOOK_TO_NFLVERSE: Dict[str, str] = {"JAC": "JAX", "LAR": "LA", "BLT": "BAL", "CLV": "CLE"}
+#   every era it appears, so the rename is season-independent. From 2026 the feed
+#   writes Arizona's side as the club's own "AZ" (posteam is nflverse "ARI"); a
+#   1999-2026 rescan of nfl-raw finds no other side token outside the game's two clubs.
+_GAMEBOOK_TO_NFLVERSE: Dict[str, str] = {"JAC": "JAX", "LAR": "LA", "BLT": "BAL", "CLV": "CLE", "AZ": "ARI"}
 
 
 def _yardline_100(yard_line: Optional[str], posteam: Optional[str]) -> Optional[int]:
