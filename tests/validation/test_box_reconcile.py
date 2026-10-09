@@ -77,12 +77,7 @@ def _fires(plays, box, rule, league="nfl"):
 # --- passing case: the real processor output reconciles ----------------------
 
 
-#: box_reconcile reads drives one row per drive; the CFB box still aggregates per play
-#: until the CFB box fix (lane S1) lands, which must drop this mark
-_CFB_DRIVES_PENDING = pytest.mark.xfail(strict=True, reason="CFB drive metrics still per play (lane S1)")
-
-
-@pytest.mark.parametrize("league", ["nfl", pytest.param("cfb", marks=_CFB_DRIVES_PENDING)])
+@pytest.mark.parametrize("league", ["nfl", "cfb"])
 def test_real_game_reconciles_on_every_rule(league, nfl_game, cfb_game):
     plays, _summary, box = nfl_game if league == "nfl" else cfb_game
     results = _by_rule(plays, box, league)
