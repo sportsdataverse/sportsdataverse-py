@@ -127,6 +127,7 @@ def test_a_misnamed_fragment_is_an_error_naming_it(tmp_path, name):
         ("### Fixed\n\n- **NFL:** b.\n", "line 1"),
         ("- **NFL:** b.\nnot indented\n", "line 2"),
         ("text first\n- **NFL:** b.\n", "line 1"),
+        ("- **NFL:** b.\n- \n", "line 2: an empty bullet"),
     ],
 )
 def test_a_fragment_that_is_not_bullets_is_an_error(tmp_path, body, why):

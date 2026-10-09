@@ -57,6 +57,15 @@ def test_release_refuses_a_version_the_renderer_cannot_read(tmp_path, version):
     assert log.read_text(encoding="utf-8") == TOC + "\n" + OLD
 
 
+def test_release_refuses_a_changelog_that_still_has_an_unreleased_section(tmp_path):
+    """The fragments are only consumed when the whole result is a changelog the renderer accepts."""
+    log, d = _tree(tmp_path, {"a.fixed.md": "- **NFL:** b. (#2)\n"})
+    log.write_text(TOC + "\n## Unreleased\n\n### Fixed\n\n- x\n\n" + OLD, encoding="utf-8")
+    with pytest.raises(ValueError, match="Unreleased"):
+        release_changelog.release("0.1.1", dt.date(2026, 10, 8), log, d)
+    assert (d / "a.fixed.md").exists()
+
+
 def test_release_refuses_a_version_that_is_already_released(tmp_path):
     log, d = _tree(tmp_path, {"a.fixed.md": "- **NFL:** b. (#2)\n"})
     with pytest.raises(ValueError, match="0.1.0 is already released"):

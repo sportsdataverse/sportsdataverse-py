@@ -86,6 +86,8 @@ def _bullets(name: str, text: str) -> list[str]:
     bullets: list[list[str]] = []
     for no, line in enumerate(text.splitlines(), 1):
         if line.startswith("- "):
+            if not line[2:].strip():
+                raise ValueError(f"{name} line {no}: an empty bullet")
             bullets.append([line])
         elif not line.strip():
             if bullets:
