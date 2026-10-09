@@ -384,6 +384,7 @@ from sportsdataverse.wbb import herhoopstats_team_stats as herhoopstats_team_sta
 from sportsdataverse.wbb import herhoopstats_teams as herhoopstats_teams  # noqa: F401
 from sportsdataverse.wbb import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.wbb import incorporate_height as incorporate_height  # noqa: F401
+from sportsdataverse.wbb import infer_wbb_period_model as infer_wbb_period_model  # noqa: F401
 from sportsdataverse.wbb import inject_luck as inject_luck  # noqa: F401
 from sportsdataverse.wbb import inject_rapm_into_players as inject_rapm_into_players  # noqa: F401
 from sportsdataverse.wbb import inject_starting_lineup_into_box as inject_starting_lineup_into_box  # noqa: F401
@@ -940,6 +941,7 @@ __all__ = [
     "herhoopstats_teams",
     "in_game_features",
     "incorporate_height",
+    "infer_wbb_period_model",
     "inject_luck",
     "inject_rapm_into_players",
     "inject_starting_lineup_into_box",

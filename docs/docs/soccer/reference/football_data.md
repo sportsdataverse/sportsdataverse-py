@@ -187,7 +187,7 @@ _Last validated n/a._
 
 ## football_data_league_season
 
-One league-season of results + closing odds (main leagues).
+One league-season of results + closing odds (main leagues); earlier seasons carry a subset of the documented columns (7 in 1993-94, 45 from 2000-01, B365 odds from 2002-03, closing / Max / Avg odds from 2019-20).
 
 **Endpoint URL:** `GET https://www.football-data.co.uk/mmz4281/{season}/{div}.csv`
 

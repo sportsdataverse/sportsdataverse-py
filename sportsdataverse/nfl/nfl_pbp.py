@@ -3125,12 +3125,15 @@ class NFLPlayProcess(object):
             yds_kickoff=pl.when(pl.col("kickoff_play") == True)
             .then(pl.col("text").str.extract(r"(?i)kickoff for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
+            # Touchback spot: the 20 through 2015, the 25 from 2016 (rules/nfl.yaml
+            # nfl-2016-kickoff-touchback-to-25); the boundary used to sit at 2013, which gave 2014-15
+            # touchbacks the 25. Shares model_vars.TOUCHBACK_YARDLINE_* with ep_wp.
             yds_kickoff_return=pl.when(
-                (pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") > 2013),
+                (pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") >= 2016),
             )
-            .then(25)
-            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") <= 2013))
-            .then(20)
+            .then(100 - TOUCHBACK_YARDLINE_POST_2016)
+            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") < 2016))
+            .then(100 - TOUCHBACK_YARDLINE_PRE_2016)
             .when(
                 (pl.col("kickoff_play") == True)
                 .and_(pl.col("fumble_vec") == False)

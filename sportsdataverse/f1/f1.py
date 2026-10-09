@@ -853,7 +853,7 @@ def f1_qualifying(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Qualifying classification (Q1/Q2/Q3).
+    """Qualifying classification (Q1/Q2/Q3 from 2006; 2003-2005 one-lap and earlier single-session formats fill q1 only, so q2/q3 are null before 2006).
 
     Endpoint: ``GET https://api.jolpi.ca/ergast/f1/{season}/{round}/qualifying.json``
     Example URL: https://api.jolpi.ca/ergast/f1/2024/1/qualifying.json

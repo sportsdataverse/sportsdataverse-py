@@ -14,7 +14,7 @@ Expected win probability of attempting a field goal (nfl4th `get_fg_wp`).
 
 The make probability comes from the self-trained `fg_model` (a
 `binary:logistic` XGBoost re-train of the original mgcv GAM, features
-`[yardline_100, fg_roof, fg_era]`), shrunk by 0.9 for kicks at/beyond
+`[yardline_100, fg_roof, era0..era4]`), shrunk by 0.9 for kicks at/beyond
 `yardline_100 = 38` and zeroed at/beyond `yardline_100 = 45`
 (>= ~63-yard kicks).  The made-FG state (opponent receives a touchback
 kickoff at the 25, kicking team +3) and the missed-FG state (opponent takes

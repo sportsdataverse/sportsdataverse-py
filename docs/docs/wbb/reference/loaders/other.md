@@ -82,7 +82,7 @@ Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse
 | `athlete_name_1` | String | Display name of the first athlete in the ESPN play participants (e.g., the shooter on a shot attempt). |
 | `athlete_name_2` | String | Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present. |
 | `athlete_name_3` | String | Display name of the third athlete in the ESPN play participants, when present. |
-| `pregame_home_prob` | Float64 | Model's pre-game win probability for the home team (0-1), constant within a game. |
+| `pregame_home_prob` | Float64 | Model's pre-game win probability for the home team (0-1), constant within a game. Present only on assets published with the WP model (2012-13 onward); absent on earlier seasons (rules/wbb.yaml#wbb-2013-pbp-wp-columns). |
 | `home_win_prob` | Float64 |  |
 
 ```python
