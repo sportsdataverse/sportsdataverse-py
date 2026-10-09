@@ -94,3 +94,15 @@ def test_xcomp_sums_completion_probability_over_attempts_only(fsu_ncsu):
     assert attempts.height == bailey["Att"]
     assert bailey["xComp"] == pytest.approx(attempts["cp_game_state"].sum(), abs=0.01)
     assert bailey["xCompPct"] == pytest.approx(bailey["xComp"] / bailey["Att"], abs=0.01)
+
+
+def test_total_fumbles_counts_the_same_plays_as_fumbles_lost(fsu_ncsu):
+    # E9: total_fumbles was scrimmage-only and keyed by pos_team, while fumbles_lost
+    # counts special teams too. FSU muffed one punt and fumbled a punt return: ESPN's
+    # box has FSU 2 fumbles / 2 lost; the box said 0 fumbles, and charged NC State 2.
+    box, _ = fsu_ncsu
+    to = _by(box["turnover"], "pos_team")
+    assert (to[FSU]["total_fumbles"], to[FSU]["fumbles_lost"]) == (2, 2)
+    for r in to.values():
+        assert r["total_fumbles"] >= r["fumbles_lost_pbp"]
+        assert r["total_fumbles"] >= r["fumbles_recovered"]

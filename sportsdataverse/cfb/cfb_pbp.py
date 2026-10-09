@@ -9376,10 +9376,25 @@ class CFBPlayProcess(object):
             .group_by(["pos_team"])
             .agg(
                 pass_breakups=pl.col("pass_breakup").sum(),
-                total_fumbles=pl.col("fumble_or_muff").sum(),
-                fumbles_recovered=((pl.col("fumble_or_muff") == True) & (pl.col("is_turnover") == False)).sum(),
             )
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+        # Fumbles on the play set fumbles_lost uses (every play, special teams too),
+        # charged to the team that fumbled: on a punt pos_team is the kicking team,
+        # so a returner's muff would otherwise land on the wrong side.
+        lost_by_fumbler = (
+            pl.when(pl.col("fumbling_team") == pl.col("pos_team"))
+            .then(pl.col("pos_fumble_lost"))
+            .otherwise(pl.col("def_fumble_lost"))
+        )
+        to_fum = (
+            play_df.filter((pl.col("fumble_or_muff") == True) & pl.col("fumbling_team").is_not_null())
+            .group_by(["fumbling_team"])
+            .agg(
+                total_fumbles=pl.len(),
+                fumbles_recovered=(lost_by_fumbler == False).sum(),
+            )
+            .select(pl.col("fumbling_team").cast(pl.Int32).alias("pos_team"), "total_fumbles", "fumbles_recovered")
         )
 
         team_ids = [int(self.homeTeamId), int(self.awayTeamId)]
@@ -9387,13 +9402,14 @@ class CFBPlayProcess(object):
             pl.DataFrame({"pos_team": team_ids}, schema={"pos_team": pl.Int32})
             .join(to_lost, on="pos_team", how="left")
             .join(to_aux, on="pos_team", how="left")
+            .join(to_fum, on="pos_team", how="left")
             .fill_null(0)
             .with_columns(team_id=pl.col("pos_team"))
         )
         turnover_box_json = json.loads(turnover_box.write_json())
 
         # identity-keyed margins / luck (never list index).
-        # Int here is all-play (from to_lost); pass_breakups/total_fumbles are scrimmage-only (to_aux).
+        # Int and total_fumbles are all-play (to_lost / to_fum); pass_breakups are scrimmage-only (to_aux).
         # Gained-side fields are the opponent's lost-side fields (a 2-team game: every
         # turnover one team loses, the other gains).
         by_id = {int(r["pos_team"]): r for r in turnover_box_json}
