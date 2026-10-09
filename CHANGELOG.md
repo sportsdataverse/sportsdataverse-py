@@ -180,6 +180,14 @@
   a garbage go-for-it value from casting NaN to an integer; other plays are unchanged. (#726)
 - **CFB:** scoring zero rows (QBR on a live game's opening drive, `predict_from_card` on an empty frame)
   no longer logs XGBoost's "Empty dataset" warning. (#726)
+- **ESPN rankings parsed to an empty frame.** `espn_{cfb,mbb,wbb,mch,wch}_rankings()` ran the Site v2
+  payload through `parse_items`, which reads a Core v2 `items` list; the polls sit in a top-level
+  `rankings` list, so every league returned zero rows. A dedicated `parse_rankings` now gives one row
+  per ranked or vote-receiving team per poll (live 2026-10-08: cfb 208 rows over 5 polls, mbb 77, wbb
+  75, mch 35, wch 20), with `poll_id`, `season`, `season_type`, `week` (the week within the season
+  type, which ESPN's Core v2 rankings URL uses), `rank` (null on vote-receiving rows), `previous_rank`,
+  `points`, `first_place_votes` and the team fields; `team_id` is a string. The college baseball and
+  softball wrappers route through it too, but ESPN answers their rankings URL with a 404.
 - **HockeyTech schedules returned other seasons' games.** `<league>_schedule(season=...)` for
   the 19 HockeyTech league families, and `pwhl_schedule`, read `modulekit/scorebar`. That view
   ignores the `season_id` it is sent, returns games oldest-first and stops at its 10,000-row

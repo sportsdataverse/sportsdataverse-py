@@ -37261,6 +37261,32 @@ quotes:
   person_twitter_handle: Twitter/X handle of the person, when listed.
   person_two_four_seven_profile: 247Sports profile link of the person, when listed.
 quotes_key:
+rankings:
+  poll_id: ESPN poll id, e.g. 1 = AP Top 25, 2 = Coaches Poll, 20 = FCS Coaches Poll, 10624 = USCHO Men's Poll.
+  poll_name: Full poll name, e.g. 'AP Top 25', 'AFCA Coaches Poll', "USCHO Women's Poll".
+  poll_short_name: Short poll label, e.g. 'AP Poll'.
+  poll_type: ESPN poll type code, e.g. 'ap', 'usa' (coaches), 'fcs', 'USCHOMENSPOLL'.
+  season: Season year of the poll (ESPN's ending year for a season that spans two calendar years, e.g. 2026 for 2025-26).
+  season_type: 'Season phase of the poll: 1 = preseason, 2 = regular season, 3 = postseason.'
+  week: Poll week within season_type (the week ESPN's Core v2 rankings URL uses).
+  week_display: Poll week as ESPN labels it, e.g. 'Week 6'.
+  poll_date: Date the poll was released (ISO 8601, UTC).
+  ranked: TRUE for the poll's ranked teams; FALSE for teams that only received votes.
+  team_id: ESPN team id as a string (the dtype of scoreboard home_id / away_id).
+  rank: Position in the poll (1 = top). Null on vote-receiving rows.
+  previous_rank: Position in the previous poll; 0 when the team was unranked then.
+  points: Poll points received (0 for polls ESPN ships without points, such as USCHO).
+  first_place_votes: First-place votes received. Null when the poll does not report them.
+  trend: Movement since the previous poll as ESPN prints it, e.g. '+3', '-2', or '-' for no change.
+  record_summary: Team's win-loss record at the poll date, e.g. '5-0'.
+  team_uid: ESPN universal team id, e.g. 's:20~l:23~t:251'.
+  team_location: Team location (school name), e.g. 'Texas'.
+  team_name: Team mascot name, e.g. 'Longhorns'.
+  team_nickname: Short team name ESPN displays, e.g. 'Texas'.
+  team_abbreviation: Short team code ESPN displays, e.g. 'TEX'.
+  team_color: Team primary color as a hex string without '#'. Null for teams ESPN ships without one.
+  team_logo: URL of the team logo on ESPN's CDN.
+  last_updated: When ESPN last updated this poll entry (ISO 8601, UTC).
 receiving_concept:
   base_targets: Total targets from the facet's unsplit base row, across all concepts.
   declined_penalties: Penalties committed by the player that were declined.

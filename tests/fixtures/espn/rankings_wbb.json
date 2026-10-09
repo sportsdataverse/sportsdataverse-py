@@ -1,0 +1,2533 @@
+{
+ "rankings": [
+  {
+   "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/types/3/weeks/3/rankings/1?lang=en&region=us",
+   "id": "1",
+   "name": "AP Top 25",
+   "shortName": "AP Poll",
+   "type": "ap",
+   "occurrence": {
+    "number": 20,
+    "type": "week",
+    "last": false,
+    "value": "3",
+    "displayValue": "Week 3"
+   },
+   "date": "2026-04-06T07:00Z",
+   "headline": "2026 NCAA Basketball Rankings - AP Top 25 Week 3",
+   "shortHeadline": "2026 : Week 3",
+   "season": {
+    "year": 2026,
+    "startDate": "2025-07-01T07:00Z",
+    "endDate": "2026-04-08T06:59Z",
+    "displayName": "2025-26",
+    "type": {
+     "type": 3,
+     "name": "Postseason",
+     "abbreviation": "post"
+    }
+   },
+   "lastUpdated": "2026-04-06T19:29Z",
+   "ranks": [
+    {
+     "current": 1,
+     "previous": 2,
+     "points": 775.0,
+     "firstPlaceVotes": 31,
+     "trend": "+1",
+     "team": {
+      "id": "26",
+      "uid": "s:40~l:54~t:26",
+      "location": "UCLA",
+      "name": "Bruins",
+      "nickname": "UCLA",
+      "abbreviation": "UCLA",
+      "color": "2774ae",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/26/ucla-bruins",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "37-1"
+    },
+    {
+     "current": 2,
+     "previous": 4,
+     "points": 739.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "2579",
+      "uid": "s:40~l:54~t:2579",
+      "location": "South Carolina",
+      "name": "Gamecocks",
+      "nickname": "South Carolina",
+      "abbreviation": "SC",
+      "color": "73000a",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2579/south-carolina-gamecocks",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2579.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "36-4"
+    },
+    {
+     "current": 3,
+     "previous": 1,
+     "points": 704.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "41",
+      "uid": "s:40~l:54~t:41",
+      "location": "UConn",
+      "name": "Huskies",
+      "nickname": "UConn",
+      "abbreviation": "CONN",
+      "color": "0c2340",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/41/uconn-huskies",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "38-1"
+    },
+    {
+     "current": 4,
+     "previous": 3,
+     "points": 696.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "251",
+      "uid": "s:40~l:54~t:251",
+      "location": "Texas",
+      "name": "Longhorns",
+      "nickname": "Texas",
+      "abbreviation": "TEX",
+      "color": "af5c37",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/251/texas-longhorns",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "35-4"
+    },
+    {
+     "current": 5,
+     "previous": 8,
+     "points": 641.0,
+     "firstPlaceVotes": 0,
+     "trend": "+3",
+     "team": {
+      "id": "150",
+      "uid": "s:40~l:54~t:150",
+      "location": "Duke",
+      "name": "Blue Devils",
+      "nickname": "Duke",
+      "abbreviation": "DUKE",
+      "color": "00539b",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/150/duke-blue-devils",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "27-9"
+    },
+    {
+     "current": 6,
+     "previous": 14,
+     "points": 582.0,
+     "firstPlaceVotes": 0,
+     "trend": "+8",
+     "team": {
+      "id": "2628",
+      "uid": "s:40~l:54~t:2628",
+      "location": "TCU",
+      "name": "Horned Frogs",
+      "nickname": "TCU",
+      "abbreviation": "TCU",
+      "color": "4d1979",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2628/tcu-horned-frogs",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2628.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "32-6"
+    },
+    {
+     "current": 7,
+     "previous": 9,
+     "points": 578.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "130",
+      "uid": "s:40~l:54~t:130",
+      "location": "Michigan",
+      "name": "Wolverines",
+      "nickname": "Michigan",
+      "abbreviation": "MICH",
+      "color": "00274c",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/130/michigan-wolverines",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "28-7"
+    },
+    {
+     "current": 8,
+     "previous": 5,
+     "points": 540.0,
+     "firstPlaceVotes": 0,
+     "trend": "-3",
+     "team": {
+      "id": "99",
+      "uid": "s:40~l:54~t:99",
+      "location": "LSU",
+      "name": "Tigers",
+      "nickname": "LSU",
+      "abbreviation": "LSU",
+      "color": "461d76",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/99/lsu-tigers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/99.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "29-6"
+    },
+    {
+     "current": 9,
+     "previous": 22,
+     "points": 524.0,
+     "firstPlaceVotes": 0,
+     "trend": "+13",
+     "team": {
+      "id": "87",
+      "uid": "s:40~l:54~t:87",
+      "location": "Notre Dame",
+      "name": "Fighting Irish",
+      "nickname": "Notre Dame",
+      "abbreviation": "ND",
+      "color": "062340",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/87/notre-dame-fighting-irish",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "25-11"
+    },
+    {
+     "current": 10,
+     "previous": 6,
+     "points": 518.0,
+     "firstPlaceVotes": 0,
+     "trend": "-4",
+     "team": {
+      "id": "238",
+      "uid": "s:40~l:54~t:238",
+      "location": "Vanderbilt",
+      "name": "Commodores",
+      "nickname": "Vanderbilt",
+      "abbreviation": "VAN",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/238/vanderbilt-commodores",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/238.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "29-5"
+    },
+    {
+     "current": 11,
+     "previous": 13,
+     "points": 438.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "97",
+      "uid": "s:40~l:54~t:97",
+      "location": "Louisville",
+      "name": "Cardinals",
+      "nickname": "Louisville",
+      "abbreviation": "LOU",
+      "color": "c9001f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/97/louisville-cardinals",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/97.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "29-8"
+    },
+    {
+     "current": 12,
+     "previous": 10,
+     "points": 425.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "201",
+      "uid": "s:40~l:54~t:201",
+      "location": "Oklahoma",
+      "name": "Sooners",
+      "nickname": "Oklahoma",
+      "abbreviation": "OU",
+      "color": "990000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/201/oklahoma-sooners",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/201.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "26-8"
+    },
+    {
+     "current": 13,
+     "previous": 15,
+     "points": 382.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "153",
+      "uid": "s:40~l:54~t:153",
+      "location": "North Carolina",
+      "name": "Tar Heels",
+      "nickname": "North Carolina",
+      "abbreviation": "UNC",
+      "color": "7bafd4",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/153/north-carolina-tar-heels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "28-8"
+    },
+    {
+     "current": 14,
+     "previous": 16,
+     "points": 360.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "96",
+      "uid": "s:40~l:54~t:96",
+      "location": "Kentucky",
+      "name": "Wildcats",
+      "nickname": "Kentucky",
+      "abbreviation": "UK",
+      "color": "0033a0",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/96/kentucky-wildcats",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "25-11"
+    },
+    {
+     "current": 15,
+     "previous": 18,
+     "points": 346.0,
+     "firstPlaceVotes": 0,
+     "trend": "+3",
+     "team": {
+      "id": "135",
+      "uid": "s:40~l:54~t:135",
+      "location": "Minnesota",
+      "name": "Golden Gophers",
+      "nickname": "Minnesota",
+      "abbreviation": "MINN",
+      "color": "5e0a2f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/135/minnesota-golden-gophers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/135.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "24-9"
+    },
+    {
+     "current": 16,
+     "previous": 7,
+     "points": 279.0,
+     "firstPlaceVotes": 0,
+     "trend": "-9",
+     "team": {
+      "id": "2294",
+      "uid": "s:40~l:54~t:2294",
+      "location": "Iowa",
+      "name": "Hawkeyes",
+      "nickname": "Iowa",
+      "abbreviation": "IOWA",
+      "color": "231f20",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2294/iowa-hawkeyes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "27-7"
+    },
+    {
+     "current": 17,
+     "previous": 12,
+     "points": 253.0,
+     "firstPlaceVotes": 0,
+     "trend": "-5",
+     "team": {
+      "id": "194",
+      "uid": "s:40~l:54~t:194",
+      "location": "Ohio State",
+      "name": "Buckeyes",
+      "nickname": "Ohio State",
+      "abbreviation": "OSU",
+      "color": "ba0c2f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/194/ohio-state-buckeyes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "27-8"
+    },
+    {
+     "current": 18,
+     "previous": 11,
+     "points": 246.0,
+     "firstPlaceVotes": 0,
+     "trend": "-7",
+     "team": {
+      "id": "277",
+      "uid": "s:40~l:54~t:277",
+      "location": "West Virginia",
+      "name": "Mountaineers",
+      "nickname": "West Virginia",
+      "abbreviation": "WVU",
+      "color": "eaaa00",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/277/west-virginia-mountaineers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/277.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "28-7"
+    },
+    {
+     "current": 19,
+     "previous": 0,
+     "points": 208.0,
+     "firstPlaceVotes": 0,
+     "trend": "+7",
+     "team": {
+      "id": "258",
+      "uid": "s:40~l:54~t:258",
+      "location": "Virginia",
+      "name": "Cavaliers",
+      "nickname": "Virginia",
+      "abbreviation": "UVA",
+      "color": "232d4b",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/258/virginia-cavaliers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/258.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "22-12"
+    },
+    {
+     "current": 20,
+     "previous": 17,
+     "points": 204.0,
+     "firstPlaceVotes": 0,
+     "trend": "-3",
+     "team": {
+      "id": "120",
+      "uid": "s:40~l:54~t:120",
+      "location": "Maryland",
+      "name": "Terrapins",
+      "nickname": "Maryland",
+      "abbreviation": "MD",
+      "color": "ce1126",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/120/maryland-terrapins",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/120.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "24-9"
+    },
+    {
+     "current": 21,
+     "previous": 19,
+     "points": 193.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "145",
+      "uid": "s:40~l:54~t:145",
+      "location": "Ole Miss",
+      "name": "Rebels",
+      "nickname": "Ole Miss",
+      "abbreviation": "MISS",
+      "color": "13294b",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/145/ole-miss-rebels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/145.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "24-12"
+    },
+    {
+     "current": 22,
+     "previous": 20,
+     "points": 145.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "127",
+      "uid": "s:40~l:54~t:127",
+      "location": "Michigan State",
+      "name": "Spartans",
+      "nickname": "Michigan St",
+      "abbreviation": "MSU",
+      "color": "173f35",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/127/michigan-state-spartans",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/127.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "23-9"
+    },
+    {
+     "current": 23,
+     "previous": 21,
+     "points": 88.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "239",
+      "uid": "s:40~l:54~t:239",
+      "location": "Baylor",
+      "name": "Bears",
+      "nickname": "Baylor",
+      "abbreviation": "BAY",
+      "color": "154734",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/239/baylor-bears",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/239.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "25-9"
+    },
+    {
+     "current": 24,
+     "previous": 0,
+     "points": 80.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "333",
+      "uid": "s:40~l:54~t:333",
+      "location": "Alabama",
+      "name": "Crimson Tide",
+      "nickname": "Alabama",
+      "abbreviation": "ALA",
+      "color": "9e1b32",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/333/alabama-crimson-tide",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "24-11"
+    },
+    {
+     "current": 25,
+     "previous": 0,
+     "points": 48.0,
+     "firstPlaceVotes": 0,
+     "trend": "+1",
+     "team": {
+      "id": "264",
+      "uid": "s:40~l:54~t:264",
+      "location": "Washington",
+      "name": "Huskies",
+      "nickname": "Washington",
+      "abbreviation": "WASH",
+      "color": "33006f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/264/washington-huskies",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:29Z",
+     "recordSummary": "22-11"
+    }
+   ],
+   "others": [
+    {
+     "current": 0,
+     "previous": 25,
+     "points": 22.0,
+     "firstPlaceVotes": 0,
+     "trend": "+25",
+     "team": {
+      "id": "2641",
+      "uid": "s:40~l:54~t:2641",
+      "location": "Texas Tech",
+      "name": "Lady Raiders",
+      "nickname": "Texas Tech",
+      "abbreviation": "TTU",
+      "color": "da291c",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2641/texas-tech-lady-raiders",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 23,
+     "points": 13.0,
+     "firstPlaceVotes": 0,
+     "trend": "+23",
+     "team": {
+      "id": "163",
+      "uid": "s:40~l:54~t:163",
+      "location": "Princeton",
+      "name": "Tigers",
+      "nickname": "Princeton",
+      "abbreviation": "PRIN",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/163/princeton-tigers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/163.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 11.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "197",
+      "uid": "s:40~l:54~t:197",
+      "location": "Oklahoma State",
+      "name": "Cowgirls",
+      "nickname": "Oklahoma St",
+      "abbreviation": "OKST",
+      "color": "fe5c00",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/197/oklahoma-state-cowgirls",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/197.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 7.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "356",
+      "uid": "s:40~l:54~t:356",
+      "location": "Illinois",
+      "name": "Fighting Illini",
+      "nickname": "Illinois",
+      "abbreviation": "ILL",
+      "color": "ff5f05",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/356/illinois-fighting-illini",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/356.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 24,
+     "points": 7.0,
+     "firstPlaceVotes": 0,
+     "trend": "+24",
+     "team": {
+      "id": "61",
+      "uid": "s:40~l:54~t:61",
+      "location": "Georgia",
+      "name": "Lady Bulldogs",
+      "nickname": "Georgia",
+      "abbreviation": "UGA",
+      "color": "ba0c2f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/61/georgia-lady-bulldogs",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 5.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2217",
+      "uid": "s:40~l:54~t:2217",
+      "location": "Fairfield",
+      "name": "Stags",
+      "nickname": "Fairfield",
+      "abbreviation": "FAIR",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2217/fairfield-stags",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2217.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 5.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "171",
+      "uid": "s:40~l:54~t:171",
+      "location": "Columbia",
+      "name": "Lions",
+      "nickname": "Columbia",
+      "abbreviation": "COLU",
+      "color": "7ba4db",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/171/columbia-lions",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/171.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 3.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "276",
+      "uid": "s:40~l:54~t:276",
+      "location": "Marshall",
+      "name": "Thundering Herd",
+      "nickname": "Marshall",
+      "abbreviation": "MRSH",
+      "color": "00b140",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/276/marshall-thundering-herd",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/276.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 3.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "222",
+      "uid": "s:40~l:54~t:222",
+      "location": "Villanova",
+      "name": "Wildcats",
+      "nickname": "Villanova",
+      "abbreviation": "VILL",
+      "color": "00205b",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/222/villanova-wildcats",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/222.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 2.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2483",
+      "uid": "s:40~l:54~t:2483",
+      "location": "Oregon",
+      "name": "Ducks",
+      "nickname": "Oregon",
+      "abbreviation": "ORE",
+      "color": "00934b",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2483/oregon-ducks",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2483.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 2.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "227",
+      "uid": "s:40~l:54~t:227",
+      "location": "Rhode Island",
+      "name": "Rams",
+      "nickname": "Rhode Island",
+      "abbreviation": "URI",
+      "color": "091f3f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/227/rhode-island-rams",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/227.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 2.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "152",
+      "uid": "s:40~l:54~t:152",
+      "location": "NC State",
+      "name": "Wolfpack",
+      "nickname": "NC State",
+      "abbreviation": "NCSU",
+      "color": "cc0000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/152/nc-state-wolfpack",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/152.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 1.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "183",
+      "uid": "s:40~l:54~t:183",
+      "location": "Syracuse",
+      "name": "Orange",
+      "nickname": "Syracuse",
+      "abbreviation": "SYR",
+      "color": "000e54",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/183/syracuse-orange",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/183.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    }
+   ],
+   "droppedOut": [
+    {
+     "current": 0,
+     "previous": 23,
+     "points": 13.0,
+     "firstPlaceVotes": 0,
+     "trend": "+23",
+     "team": {
+      "id": "163",
+      "uid": "s:40~l:54~t:163",
+      "location": "Princeton",
+      "name": "Tigers",
+      "nickname": "Princeton",
+      "abbreviation": "PRIN",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/163/princeton-tigers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/163.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 24,
+     "points": 7.0,
+     "firstPlaceVotes": 0,
+     "trend": "+24",
+     "team": {
+      "id": "61",
+      "uid": "s:40~l:54~t:61",
+      "location": "Georgia",
+      "name": "Lady Bulldogs",
+      "nickname": "Georgia",
+      "abbreviation": "UGA",
+      "color": "ba0c2f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/61/georgia-lady-bulldogs",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 25,
+     "points": 22.0,
+     "firstPlaceVotes": 0,
+     "trend": "+25",
+     "team": {
+      "id": "2641",
+      "uid": "s:40~l:54~t:2641",
+      "location": "Texas Tech",
+      "name": "Lady Raiders",
+      "nickname": "Texas Tech",
+      "abbreviation": "TTU",
+      "color": "da291c",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2641/texas-tech-lady-raiders",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T19:42Z",
+     "recordSummary": "0-0"
+    }
+   ],
+   "availability": {},
+   "firstOccurrence": {
+    "type": "week",
+    "value": "1"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/types/3/weeks/3/rankings/2?lang=en&region=us",
+   "id": "2",
+   "name": "Coaches Poll",
+   "shortName": "Coaches Poll",
+   "type": "usa",
+   "occurrence": {
+    "number": 21,
+    "type": "week",
+    "last": false,
+    "value": "3",
+    "displayValue": "Week 3"
+   },
+   "date": "2026-04-06T07:00Z",
+   "headline": "2026 NCAA Basketball Rankings - Coaches Poll Week 3",
+   "shortHeadline": "2026 : Week 3",
+   "season": {
+    "year": 2026,
+    "startDate": "2025-07-01T07:00Z",
+    "endDate": "2026-04-08T06:59Z",
+    "displayName": "2025-26",
+    "type": {
+     "type": 3,
+     "name": "Postseason",
+     "abbreviation": "post"
+    }
+   },
+   "lastUpdated": "2026-04-06T20:16Z",
+   "ranks": [
+    {
+     "current": 1,
+     "previous": 2,
+     "points": 775.0,
+     "firstPlaceVotes": 31,
+     "trend": "+1",
+     "team": {
+      "id": "26",
+      "uid": "s:40~l:54~t:26",
+      "location": "UCLA",
+      "name": "Bruins",
+      "nickname": "UCLA",
+      "abbreviation": "UCLA",
+      "color": "2774ae",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/26/ucla-bruins",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "37-1"
+    },
+    {
+     "current": 2,
+     "previous": 4,
+     "points": 744.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "2579",
+      "uid": "s:40~l:54~t:2579",
+      "location": "South Carolina",
+      "name": "Gamecocks",
+      "nickname": "South Carolina",
+      "abbreviation": "SC",
+      "color": "73000a",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2579/south-carolina-gamecocks",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2579.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "36-4"
+    },
+    {
+     "current": 3,
+     "previous": 1,
+     "points": 709.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "41",
+      "uid": "s:40~l:54~t:41",
+      "location": "UConn",
+      "name": "Huskies",
+      "nickname": "UConn",
+      "abbreviation": "CONN",
+      "color": "0c2340",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/41/uconn-huskies",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "38-1"
+    },
+    {
+     "current": 4,
+     "previous": 3,
+     "points": 686.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "251",
+      "uid": "s:40~l:54~t:251",
+      "location": "Texas",
+      "name": "Longhorns",
+      "nickname": "Texas",
+      "abbreviation": "TEX",
+      "color": "af5c37",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/251/texas-longhorns",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "35-4"
+    },
+    {
+     "current": 5,
+     "previous": 10,
+     "points": 602.0,
+     "firstPlaceVotes": 0,
+     "trend": "+5",
+     "team": {
+      "id": "150",
+      "uid": "s:40~l:54~t:150",
+      "location": "Duke",
+      "name": "Blue Devils",
+      "nickname": "Duke",
+      "abbreviation": "DUKE",
+      "color": "00539b",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/150/duke-blue-devils",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "27-9"
+    },
+    {
+     "current": 6,
+     "previous": 8,
+     "points": 584.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "130",
+      "uid": "s:40~l:54~t:130",
+      "location": "Michigan",
+      "name": "Wolverines",
+      "nickname": "Michigan",
+      "abbreviation": "MICH",
+      "color": "00274c",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/130/michigan-wolverines",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "28-7"
+    },
+    {
+     "current": 7,
+     "previous": 5,
+     "points": 568.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "99",
+      "uid": "s:40~l:54~t:99",
+      "location": "LSU",
+      "name": "Tigers",
+      "nickname": "LSU",
+      "abbreviation": "LSU",
+      "color": "461d76",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/99/lsu-tigers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/99.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "29-6"
+    },
+    {
+     "current": 8,
+     "previous": 6,
+     "points": 565.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "238",
+      "uid": "s:40~l:54~t:238",
+      "location": "Vanderbilt",
+      "name": "Commodores",
+      "nickname": "Vanderbilt",
+      "abbreviation": "VAN",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/238/vanderbilt-commodores",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/238.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "29-5"
+    },
+    {
+     "current": 9,
+     "previous": 12,
+     "points": 518.0,
+     "firstPlaceVotes": 0,
+     "trend": "+3",
+     "team": {
+      "id": "2628",
+      "uid": "s:40~l:54~t:2628",
+      "location": "TCU",
+      "name": "Horned Frogs",
+      "nickname": "TCU",
+      "abbreviation": "TCU",
+      "color": "4d1979",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2628/tcu-horned-frogs",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2628.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "32-6"
+    },
+    {
+     "current": 10,
+     "previous": 9,
+     "points": 474.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "201",
+      "uid": "s:40~l:54~t:201",
+      "location": "Oklahoma",
+      "name": "Sooners",
+      "nickname": "Oklahoma",
+      "abbreviation": "OU",
+      "color": "990000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/201/oklahoma-sooners",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/201.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "26-8"
+    },
+    {
+     "current": 11,
+     "previous": 14,
+     "points": 404.0,
+     "firstPlaceVotes": 0,
+     "trend": "+3",
+     "team": {
+      "id": "97",
+      "uid": "s:40~l:54~t:97",
+      "location": "Louisville",
+      "name": "Cardinals",
+      "nickname": "Louisville",
+      "abbreviation": "LOU",
+      "color": "c9001f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/97/louisville-cardinals",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/97.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "29-8"
+    },
+    {
+     "current": 12,
+     "previous": 7,
+     "points": 390.0,
+     "firstPlaceVotes": 0,
+     "trend": "-5",
+     "team": {
+      "id": "2294",
+      "uid": "s:40~l:54~t:2294",
+      "location": "Iowa",
+      "name": "Hawkeyes",
+      "nickname": "Iowa",
+      "abbreviation": "IOWA",
+      "color": "231f20",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2294/iowa-hawkeyes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "27-7"
+    },
+    {
+     "current": 13,
+     "previous": 15,
+     "points": 374.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "153",
+      "uid": "s:40~l:54~t:153",
+      "location": "North Carolina",
+      "name": "Tar Heels",
+      "nickname": "North Carolina",
+      "abbreviation": "UNC",
+      "color": "7bafd4",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/153/north-carolina-tar-heels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "28-8"
+    },
+    {
+     "current": 14,
+     "previous": 25,
+     "points": 352.0,
+     "firstPlaceVotes": 0,
+     "trend": "+11",
+     "team": {
+      "id": "87",
+      "uid": "s:40~l:54~t:87",
+      "location": "Notre Dame",
+      "name": "Fighting Irish",
+      "nickname": "Notre Dame",
+      "abbreviation": "ND",
+      "color": "062340",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/87/notre-dame-fighting-irish",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "25-11"
+    },
+    {
+     "current": 15,
+     "previous": 11,
+     "points": 350.0,
+     "firstPlaceVotes": 0,
+     "trend": "-4",
+     "team": {
+      "id": "194",
+      "uid": "s:40~l:54~t:194",
+      "location": "Ohio State",
+      "name": "Buckeyes",
+      "nickname": "Ohio State",
+      "abbreviation": "OSU",
+      "color": "ba0c2f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/194/ohio-state-buckeyes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "27-8"
+    },
+    {
+     "current": 16,
+     "previous": 13,
+     "points": 327.0,
+     "firstPlaceVotes": 0,
+     "trend": "-3",
+     "team": {
+      "id": "277",
+      "uid": "s:40~l:54~t:277",
+      "location": "West Virginia",
+      "name": "Mountaineers",
+      "nickname": "West Virginia",
+      "abbreviation": "WVU",
+      "color": "eaaa00",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/277/west-virginia-mountaineers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/277.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "28-7"
+    },
+    {
+     "current": 17,
+     "previous": 17,
+     "points": 315.0,
+     "firstPlaceVotes": 0,
+     "trend": "-",
+     "team": {
+      "id": "96",
+      "uid": "s:40~l:54~t:96",
+      "location": "Kentucky",
+      "name": "Wildcats",
+      "nickname": "Kentucky",
+      "abbreviation": "UK",
+      "color": "0033a0",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/96/kentucky-wildcats",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "25-11"
+    },
+    {
+     "current": 18,
+     "previous": 19,
+     "points": 290.0,
+     "firstPlaceVotes": 0,
+     "trend": "+1",
+     "team": {
+      "id": "135",
+      "uid": "s:40~l:54~t:135",
+      "location": "Minnesota",
+      "name": "Golden Gophers",
+      "nickname": "Minnesota",
+      "abbreviation": "MINN",
+      "color": "5e0a2f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/135/minnesota-golden-gophers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/135.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "24-9"
+    },
+    {
+     "current": 19,
+     "previous": 16,
+     "points": 246.0,
+     "firstPlaceVotes": 0,
+     "trend": "-3",
+     "team": {
+      "id": "120",
+      "uid": "s:40~l:54~t:120",
+      "location": "Maryland",
+      "name": "Terrapins",
+      "nickname": "Maryland",
+      "abbreviation": "MD",
+      "color": "ce1126",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/120/maryland-terrapins",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/120.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "24-9"
+    },
+    {
+     "current": 20,
+     "previous": 18,
+     "points": 197.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "127",
+      "uid": "s:40~l:54~t:127",
+      "location": "Michigan State",
+      "name": "Spartans",
+      "nickname": "Michigan St",
+      "abbreviation": "MSU",
+      "color": "173f35",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/127/michigan-state-spartans",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/127.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "23-9"
+    },
+    {
+     "current": 21,
+     "previous": 21,
+     "points": 166.0,
+     "firstPlaceVotes": 0,
+     "trend": "-",
+     "team": {
+      "id": "239",
+      "uid": "s:40~l:54~t:239",
+      "location": "Baylor",
+      "name": "Bears",
+      "nickname": "Baylor",
+      "abbreviation": "BAY",
+      "color": "154734",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/239/baylor-bears",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/239.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "25-9"
+    },
+    {
+     "current": 22,
+     "previous": 20,
+     "points": 161.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "145",
+      "uid": "s:40~l:54~t:145",
+      "location": "Ole Miss",
+      "name": "Rebels",
+      "nickname": "Ole Miss",
+      "abbreviation": "MISS",
+      "color": "13294b",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/145/ole-miss-rebels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/145.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:18Z",
+     "recordSummary": "24-12"
+    },
+    {
+     "current": 23,
+     "previous": 22,
+     "points": 89.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "2641",
+      "uid": "s:40~l:54~t:2641",
+      "location": "Texas Tech",
+      "name": "Lady Raiders",
+      "nickname": "Texas Tech",
+      "abbreviation": "TTU",
+      "color": "da291c",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2641/texas-tech-lady-raiders",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "26-8"
+    },
+    {
+     "current": 24,
+     "previous": 0,
+     "points": 51.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "258",
+      "uid": "s:40~l:54~t:258",
+      "location": "Virginia",
+      "name": "Cavaliers",
+      "nickname": "Virginia",
+      "abbreviation": "UVA",
+      "color": "232d4b",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/258/virginia-cavaliers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/258.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "22-12"
+    },
+    {
+     "current": 25,
+     "previous": 23,
+     "points": 46.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "163",
+      "uid": "s:40~l:54~t:163",
+      "location": "Princeton",
+      "name": "Tigers",
+      "nickname": "Princeton",
+      "abbreviation": "PRIN",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/163/princeton-tigers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/163.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:16Z",
+     "recordSummary": "26-4"
+    }
+   ],
+   "others": [
+    {
+     "current": 0,
+     "previous": 24,
+     "points": 29.0,
+     "firstPlaceVotes": 0,
+     "trend": "+24",
+     "team": {
+      "id": "61",
+      "uid": "s:40~l:54~t:61",
+      "location": "Georgia",
+      "name": "Lady Bulldogs",
+      "nickname": "Georgia",
+      "abbreviation": "UGA",
+      "color": "ba0c2f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/61/georgia-lady-bulldogs",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 28.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "333",
+      "uid": "s:40~l:54~t:333",
+      "location": "Alabama",
+      "name": "Crimson Tide",
+      "nickname": "Alabama",
+      "abbreviation": "ALA",
+      "color": "9e1b32",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/333/alabama-crimson-tide",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 14.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "264",
+      "uid": "s:40~l:54~t:264",
+      "location": "Washington",
+      "name": "Huskies",
+      "nickname": "Washington",
+      "abbreviation": "WASH",
+      "color": "33006f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/264/washington-huskies",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 6.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "356",
+      "uid": "s:40~l:54~t:356",
+      "location": "Illinois",
+      "name": "Fighting Illini",
+      "nickname": "Illinois",
+      "abbreviation": "ILL",
+      "color": "ff5f05",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/356/illinois-fighting-illini",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/356.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 4.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "66",
+      "uid": "s:40~l:54~t:66",
+      "location": "Iowa State",
+      "name": "Cyclones",
+      "nickname": "Iowa State",
+      "abbreviation": "ISU",
+      "color": "ae192d",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/66/iowa-state-cyclones",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/66.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 3.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2571",
+      "uid": "s:40~l:54~t:2571",
+      "location": "South Dakota State",
+      "name": "Jackrabbits",
+      "nickname": "S Dakota St",
+      "abbreviation": "SDST",
+      "color": "0033a0",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2571/south-dakota-state-jackrabbits",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2571.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 2.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "242",
+      "uid": "s:40~l:54~t:242",
+      "location": "Rice",
+      "name": "Owls",
+      "nickname": "Rice",
+      "abbreviation": "RICE",
+      "color": "00205b",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/242/rice-owls",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/242.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 2.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "171",
+      "uid": "s:40~l:54~t:171",
+      "location": "Columbia",
+      "name": "Lions",
+      "nickname": "Columbia",
+      "abbreviation": "COLU",
+      "color": "7ba4db",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/171/columbia-lions",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/171.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 1.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2217",
+      "uid": "s:40~l:54~t:2217",
+      "location": "Fairfield",
+      "name": "Stags",
+      "nickname": "Fairfield",
+      "abbreviation": "FAIR",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/2217/fairfield-stags",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2217.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 1.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "256",
+      "uid": "s:40~l:54~t:256",
+      "location": "James Madison",
+      "name": "Dukes",
+      "nickname": "James Madison",
+      "abbreviation": "JMU",
+      "color": "450084",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/256/james-madison-dukes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/256.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 1.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "152",
+      "uid": "s:40~l:54~t:152",
+      "location": "NC State",
+      "name": "Wolfpack",
+      "nickname": "NC State",
+      "abbreviation": "NCSU",
+      "color": "cc0000",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/152/nc-state-wolfpack",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/152.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 1.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "38",
+      "uid": "s:40~l:54~t:38",
+      "location": "Colorado",
+      "name": "Buffaloes",
+      "nickname": "Colorado",
+      "abbreviation": "COLO",
+      "color": "cfb87c",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/38/colorado-buffaloes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/38.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    }
+   ],
+   "droppedOut": [
+    {
+     "current": 0,
+     "previous": 24,
+     "points": 29.0,
+     "firstPlaceVotes": 0,
+     "trend": "+24",
+     "team": {
+      "id": "61",
+      "uid": "s:40~l:54~t:61",
+      "location": "Georgia",
+      "name": "Lady Bulldogs",
+      "nickname": "Georgia",
+      "abbreviation": "UGA",
+      "color": "ba0c2f",
+      "links": [
+       {
+        "href": "https://www.espn.com/womens-college-basketball/team/_/id/61/georgia-lady-bulldogs",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png"
+     },
+     "date": "2026-04-06T07:00Z",
+     "lastUpdated": "2026-04-06T20:26Z",
+     "recordSummary": "0-0"
+    }
+   ],
+   "availability": {},
+   "firstOccurrence": {
+    "type": "week",
+    "value": "1"
+   }
+  }
+ ]
+}

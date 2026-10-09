@@ -1256,9 +1256,35 @@ ESPN endpoint.
 
 ### Returns {#espn_college_softball_rankings-returns}
 
-**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
-No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (cfb, mbb, wbb, mch, wch, 2026-10-07); its rows sit under keys it does not read (top level: availableRankings, latestSeason, latestWeek, leagues, rankings, requestedSeason, sports, weekCounts).
+| col_name | type | description |
+|---|---|---|
+| `poll_id` | integer | ESPN poll id, e.g. 1 = AP Top 25, 2 = Coaches Poll, 20 = FCS Coaches Poll, 10624 = USCHO Men's Poll. |
+| `poll_name` | character | Full poll name, e.g. 'AP Top 25', 'AFCA Coaches Poll', "USCHO Women's Poll". |
+| `poll_short_name` | character | Short poll label, e.g. 'AP Poll'. |
+| `poll_type` | character | ESPN poll type code, e.g. 'ap', 'usa' (coaches), 'fcs', 'USCHOMENSPOLL'. |
+| `season` | integer | Season year of the poll (ESPN's ending year for a season that spans two calendar years, e.g. 2026 for 2025-26). |
+| `season_type` | integer | Season phase of the poll: 1 = preseason, 2 = regular season, 3 = postseason. |
+| `week` | integer | Poll week within season_type (the week ESPN's Core v2 rankings URL uses). |
+| `week_display` | character | Poll week as ESPN labels it, e.g. 'Week 6'. |
+| `poll_date` | character | Date the poll was released (ISO 8601, UTC). |
+| `ranked` | logical | TRUE for the poll's ranked teams; FALSE for teams that only received votes. |
+| `team_id` | character | ESPN team id as a string (the dtype of scoreboard home_id / away_id). |
+| `rank` | integer | Position in the poll (1 = top). Null on vote-receiving rows. |
+| `previous_rank` | integer | Position in the previous poll; 0 when the team was unranked then. |
+| `points` | double | Poll points received (0 for polls ESPN ships without points, such as USCHO). |
+| `first_place_votes` | integer | First-place votes received. Null when the poll does not report them. |
+| `trend` | character | Movement since the previous poll as ESPN prints it, e.g. '+3', '-2', or '-' for no change. |
+| `record_summary` | character | Team's win-loss record at the poll date, e.g. '5-0'. |
+| `team_uid` | character | ESPN universal team id, e.g. 's:20~l:23~t:251'. |
+| `team_location` | character | Team location (school name), e.g. 'Texas'. |
+| `team_name` | character | Team mascot name, e.g. 'Longhorns'. |
+| `team_nickname` | character | Short team name ESPN displays, e.g. 'Texas'. |
+| `team_abbreviation` | character | Short team code ESPN displays, e.g. 'TEX'. |
+| `team_color` | character | Team primary color as a hex string without '#'. Null for teams ESPN ships without one. |
+| `team_logo` | character | URL of the team logo on ESPN's CDN. |
+| `last_updated` | character | When ESPN last updated this poll entry (ISO 8601, UTC). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -1,0 +1,2595 @@
+{
+ "rankings": [
+  {
+   "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/mens-college-basketball/seasons/2026/types/3/weeks/3/rankings/1?lang=en&region=us",
+   "id": "1",
+   "name": "AP Top 25",
+   "shortName": "AP Poll",
+   "type": "ap",
+   "occurrence": {
+    "number": 20,
+    "type": "week",
+    "last": false,
+    "value": "3",
+    "displayValue": "Week 3"
+   },
+   "date": "2026-04-07T07:00Z",
+   "headline": "2026 NCAA Basketball Rankings - AP Top 25 Week 3",
+   "shortHeadline": "2026 : Week 3",
+   "season": {
+    "year": 2026,
+    "startDate": "2025-07-01T07:00Z",
+    "endDate": "2026-04-08T06:59Z",
+    "displayName": "2025-26",
+    "type": {
+     "type": 3,
+     "name": "Postseason",
+     "abbreviation": "post"
+    }
+   },
+   "lastUpdated": "2026-04-07T21:38Z",
+   "ranks": [
+    {
+     "current": 1,
+     "previous": 3,
+     "points": 1425.0,
+     "firstPlaceVotes": 57,
+     "trend": "+2",
+     "team": {
+      "id": "130",
+      "uid": "s:40~l:41~t:130",
+      "location": "Michigan",
+      "name": "Wolverines",
+      "nickname": "Michigan",
+      "abbreviation": "MICH",
+      "color": "00274c",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/130/michigan-wolverines",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "37-3"
+    },
+    {
+     "current": 2,
+     "previous": 7,
+     "points": 1352.0,
+     "firstPlaceVotes": 0,
+     "trend": "+5",
+     "team": {
+      "id": "41",
+      "uid": "s:40~l:41~t:41",
+      "location": "UConn",
+      "name": "Huskies",
+      "nickname": "UConn",
+      "abbreviation": "CONN",
+      "color": "0c2340",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/41/uconn-huskies",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "34-6"
+    },
+    {
+     "current": 3,
+     "previous": 2,
+     "points": 1311.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "12",
+      "uid": "s:40~l:41~t:12",
+      "location": "Arizona",
+      "name": "Wildcats",
+      "nickname": "Arizona",
+      "abbreviation": "ARIZ",
+      "color": "cc0033",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/12/arizona-wildcats",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/12.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "36-3"
+    },
+    {
+     "current": 4,
+     "previous": 1,
+     "points": 1237.0,
+     "firstPlaceVotes": 0,
+     "trend": "-3",
+     "team": {
+      "id": "150",
+      "uid": "s:40~l:41~t:150",
+      "location": "Duke",
+      "name": "Blue Devils",
+      "nickname": "Duke",
+      "abbreviation": "DUKE",
+      "color": "00539b",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/150/duke-blue-devils",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "35-3"
+    },
+    {
+     "current": 5,
+     "previous": 13,
+     "points": 1228.0,
+     "firstPlaceVotes": 0,
+     "trend": "+8",
+     "team": {
+      "id": "356",
+      "uid": "s:40~l:41~t:356",
+      "location": "Illinois",
+      "name": "Fighting Illini",
+      "nickname": "Illinois",
+      "abbreviation": "ILL",
+      "color": "ff5f05",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/356/illinois-fighting-illini",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/356.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "28-9"
+    },
+    {
+     "current": 6,
+     "previous": 8,
+     "points": 1113.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "2509",
+      "uid": "s:40~l:41~t:2509",
+      "location": "Purdue",
+      "name": "Boilermakers",
+      "nickname": "Purdue",
+      "abbreviation": "PUR",
+      "color": "ceb888",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2509/purdue-boilermakers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2509.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "30-9"
+    },
+    {
+     "current": 7,
+     "previous": 5,
+     "points": 1021.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "248",
+      "uid": "s:40~l:41~t:248",
+      "location": "Houston",
+      "name": "Cougars",
+      "nickname": "Houston",
+      "abbreviation": "HOU",
+      "color": "c8102e",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/248/houston-cougars",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/248.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "30-7"
+    },
+    {
+     "current": 8,
+     "previous": 6,
+     "points": 924.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "66",
+      "uid": "s:40~l:41~t:66",
+      "location": "Iowa State",
+      "name": "Cyclones",
+      "nickname": "Iowa State",
+      "abbreviation": "ISU",
+      "color": "ae192d",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/66/iowa-state-cyclones",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/66.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "29-8"
+    },
+    {
+     "current": 9,
+     "previous": 4,
+     "points": 909.0,
+     "firstPlaceVotes": 0,
+     "trend": "-5",
+     "team": {
+      "id": "57",
+      "uid": "s:40~l:41~t:57",
+      "location": "Florida",
+      "name": "Gators",
+      "nickname": "Florida",
+      "abbreviation": "FLA",
+      "color": "0021a5",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/57/florida-gators",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/57.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "27-8"
+    },
+    {
+     "current": 10,
+     "previous": 10,
+     "points": 891.0,
+     "firstPlaceVotes": 0,
+     "trend": "-",
+     "team": {
+      "id": "2599",
+      "uid": "s:40~l:41~t:2599",
+      "location": "St. John's",
+      "name": "Red Storm",
+      "nickname": "St John's",
+      "abbreviation": "SJU",
+      "color": "d10000",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2599/st-johns-red-storm",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2599.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "30-7"
+    },
+    {
+     "current": 11,
+     "previous": 11,
+     "points": 865.0,
+     "firstPlaceVotes": 0,
+     "trend": "-",
+     "team": {
+      "id": "127",
+      "uid": "s:40~l:41~t:127",
+      "location": "Michigan State",
+      "name": "Spartans",
+      "nickname": "Michigan St",
+      "abbreviation": "MSU",
+      "color": "173f35",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/127/michigan-state-spartans",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/127.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "27-8"
+    },
+    {
+     "current": 12,
+     "previous": 23,
+     "points": 756.0,
+     "firstPlaceVotes": 0,
+     "trend": "+11",
+     "team": {
+      "id": "2633",
+      "uid": "s:40~l:41~t:2633",
+      "location": "Tennessee",
+      "name": "Volunteers",
+      "nickname": "Tennessee",
+      "abbreviation": "TENN",
+      "color": "ff8200",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2633/tennessee-volunteers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2633.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "25-12"
+    },
+    {
+     "current": 13,
+     "previous": 14,
+     "points": 716.0,
+     "firstPlaceVotes": 0,
+     "trend": "+1",
+     "team": {
+      "id": "8",
+      "uid": "s:40~l:41~t:8",
+      "location": "Arkansas",
+      "name": "Razorbacks",
+      "nickname": "Arkansas",
+      "abbreviation": "ARK",
+      "color": "a32136",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/8/arkansas-razorbacks",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/8.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "28-9"
+    },
+    {
+     "current": 14,
+     "previous": 15,
+     "points": 696.0,
+     "firstPlaceVotes": 0,
+     "trend": "+1",
+     "team": {
+      "id": "158",
+      "uid": "s:40~l:41~t:158",
+      "location": "Nebraska",
+      "name": "Cornhuskers",
+      "nickname": "Nebraska",
+      "abbreviation": "NEB",
+      "color": "e31937",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/158/nebraska-cornhuskers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "28-7"
+    },
+    {
+     "current": 15,
+     "previous": 0,
+     "points": 620.0,
+     "firstPlaceVotes": 0,
+     "trend": "+11",
+     "team": {
+      "id": "2294",
+      "uid": "s:40~l:41~t:2294",
+      "location": "Iowa",
+      "name": "Hawkeyes",
+      "nickname": "Iowa",
+      "abbreviation": "IOWA",
+      "color": "231f20",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2294/iowa-hawkeyes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "24-13"
+    },
+    {
+     "current": 16,
+     "previous": 18,
+     "points": 617.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "333",
+      "uid": "s:40~l:41~t:333",
+      "location": "Alabama",
+      "name": "Crimson Tide",
+      "nickname": "Alabama",
+      "abbreviation": "ALA",
+      "color": "9e1b32",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/333/alabama-crimson-tide",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "25-10"
+    },
+    {
+     "current": 17,
+     "previous": 9,
+     "points": 530.0,
+     "firstPlaceVotes": 0,
+     "trend": "-8",
+     "team": {
+      "id": "258",
+      "uid": "s:40~l:41~t:258",
+      "location": "Virginia",
+      "name": "Cavaliers",
+      "nickname": "Virginia",
+      "abbreviation": "UVA",
+      "color": "232d4b",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/258/virginia-cavaliers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/258.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "30-6"
+    },
+    {
+     "current": 18,
+     "previous": 12,
+     "points": 459.0,
+     "firstPlaceVotes": 0,
+     "trend": "-6",
+     "team": {
+      "id": "2250",
+      "uid": "s:40~l:41~t:2250",
+      "location": "Gonzaga",
+      "name": "Bulldogs",
+      "nickname": "Gonzaga",
+      "abbreviation": "GONZ",
+      "color": "041e42",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2250/gonzaga-bulldogs",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2250.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "31-4"
+    },
+    {
+     "current": 19,
+     "previous": 16,
+     "points": 445.0,
+     "firstPlaceVotes": 0,
+     "trend": "-3",
+     "team": {
+      "id": "238",
+      "uid": "s:40~l:41~t:238",
+      "location": "Vanderbilt",
+      "name": "Commodores",
+      "nickname": "Vanderbilt",
+      "abbreviation": "VAN",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/238/vanderbilt-commodores",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/238.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "27-9"
+    },
+    {
+     "current": 20,
+     "previous": 17,
+     "points": 330.0,
+     "firstPlaceVotes": 0,
+     "trend": "-3",
+     "team": {
+      "id": "2305",
+      "uid": "s:40~l:41~t:2305",
+      "location": "Kansas",
+      "name": "Jayhawks",
+      "nickname": "Kansas",
+      "abbreviation": "KU",
+      "color": "0051ba",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2305/kansas-jayhawks",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2305.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "24-11"
+    },
+    {
+     "current": 21,
+     "previous": 20,
+     "points": 244.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "2641",
+      "uid": "s:40~l:41~t:2641",
+      "location": "Texas Tech",
+      "name": "Red Raiders",
+      "nickname": "Texas Tech",
+      "abbreviation": "TTU",
+      "color": "da291c",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2641/texas-tech-red-raiders",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "23-11"
+    },
+    {
+     "current": 22,
+     "previous": 0,
+     "points": 216.0,
+     "firstPlaceVotes": 0,
+     "trend": "+4",
+     "team": {
+      "id": "251",
+      "uid": "s:40~l:41~t:251",
+      "location": "Texas",
+      "name": "Longhorns",
+      "nickname": "Texas",
+      "abbreviation": "TEX",
+      "color": "af5c37",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/251/texas-longhorns",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "21-15"
+    },
+    {
+     "current": 23,
+     "previous": 23,
+     "points": 150.0,
+     "firstPlaceVotes": 0,
+     "trend": "-",
+     "team": {
+      "id": "97",
+      "uid": "s:40~l:41~t:97",
+      "location": "Louisville",
+      "name": "Cardinals",
+      "nickname": "Louisville",
+      "abbreviation": "LOU",
+      "color": "c9001f",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/97/louisville-cardinals",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/97.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "24-11"
+    },
+    {
+     "current": 24,
+     "previous": 25,
+     "points": 89.0,
+     "firstPlaceVotes": 0,
+     "trend": "+1",
+     "team": {
+      "id": "2390",
+      "uid": "s:40~l:41~t:2390",
+      "location": "Miami",
+      "name": "Hurricanes",
+      "nickname": "Miami",
+      "abbreviation": "MIA",
+      "color": "f47423",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2390/miami-hurricanes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "26-9"
+    },
+    {
+     "current": 25,
+     "previous": 19,
+     "points": 70.0,
+     "firstPlaceVotes": 0,
+     "trend": "-6",
+     "team": {
+      "id": "275",
+      "uid": "s:40~l:41~t:275",
+      "location": "Wisconsin",
+      "name": "Badgers",
+      "nickname": "Wisconsin",
+      "abbreviation": "WIS",
+      "color": "a00000",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/275/wisconsin-badgers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/275.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:38Z",
+     "recordSummary": "24-11"
+    }
+   ],
+   "others": [
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 51.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "139",
+      "uid": "s:40~l:41~t:139",
+      "location": "Saint Louis",
+      "name": "Billikens",
+      "nickname": "Saint Louis",
+      "abbreviation": "SLU",
+      "color": "00539C",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/139/saint-louis-billikens",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/139.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 51.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "26",
+      "uid": "s:40~l:41~t:26",
+      "location": "UCLA",
+      "name": "Bruins",
+      "nickname": "UCLA",
+      "abbreviation": "UCLA",
+      "color": "2774ae",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/26/ucla-bruins",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 45.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "328",
+      "uid": "s:40~l:41~t:328",
+      "location": "Utah State",
+      "name": "Aggies",
+      "nickname": "Utah State",
+      "abbreviation": "USU",
+      "color": "0f2439",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/328/utah-state-aggies",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/328.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 37.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2272",
+      "uid": "s:40~l:41~t:2272",
+      "location": "High Point",
+      "name": "Panthers",
+      "nickname": "High Point",
+      "abbreviation": "HPU",
+      "color": "330072",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2272/high-point-panthers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2272.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 29.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2670",
+      "uid": "s:40~l:41~t:2670",
+      "location": "VCU",
+      "name": "Rams",
+      "nickname": "VCU",
+      "abbreviation": "VCU",
+      "color": "ffaf00",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2670/vcu-rams",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2670.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 26.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "193",
+      "uid": "s:40~l:41~t:193",
+      "location": "Miami (OH)",
+      "name": "RedHawks",
+      "nickname": "Miami OH",
+      "abbreviation": "M-OH",
+      "color": "c41230",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/193/miami-oh-redhawks",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/193.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 15.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "252",
+      "uid": "s:40~l:41~t:252",
+      "location": "BYU",
+      "name": "Cougars",
+      "nickname": "BYU",
+      "abbreviation": "BYU",
+      "color": "0047ba",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/252/byu-cougars",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/252.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 21,
+     "points": 14.0,
+     "firstPlaceVotes": 0,
+     "trend": "+21",
+     "team": {
+      "id": "153",
+      "uid": "s:40~l:41~t:153",
+      "location": "North Carolina",
+      "name": "Tar Heels",
+      "nickname": "North Carolina",
+      "abbreviation": "UNC",
+      "color": "7bafd4",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/153/north-carolina-tar-heels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 14.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "96",
+      "uid": "s:40~l:41~t:96",
+      "location": "Kentucky",
+      "name": "Wildcats",
+      "nickname": "Kentucky",
+      "abbreviation": "UK",
+      "color": "0033a0",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/96/kentucky-wildcats",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 9.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2628",
+      "uid": "s:40~l:41~t:2628",
+      "location": "TCU",
+      "name": "Horned Frogs",
+      "nickname": "TCU",
+      "abbreviation": "TCU",
+      "color": "4d1979",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2628/tcu-horned-frogs",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2628.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 22,
+     "points": 7.0,
+     "firstPlaceVotes": 0,
+     "trend": "+22",
+     "team": {
+      "id": "2608",
+      "uid": "s:40~l:41~t:2608",
+      "location": "Saint Mary's",
+      "name": "Gaels",
+      "nickname": "Saint Mary's",
+      "abbreviation": "SMC",
+      "color": "d80024",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2608/saint-marys-gaels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2608.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 7.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "245",
+      "uid": "s:40~l:41~t:245",
+      "location": "Texas A&M",
+      "name": "Aggies",
+      "nickname": "Texas A&M",
+      "abbreviation": "TA&M",
+      "color": "500000",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/245/texas-am-aggies",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/245.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 3.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2006",
+      "uid": "s:40~l:41~t:2006",
+      "location": "Akron",
+      "name": "Zips",
+      "nickname": "Akron",
+      "abbreviation": "AKR",
+      "color": "041e42",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2006/akron-zips",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2006.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 2.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "194",
+      "uid": "s:40~l:41~t:194",
+      "location": "Ohio State",
+      "name": "Buckeyes",
+      "nickname": "Ohio State",
+      "abbreviation": "OSU",
+      "color": "ba0c2f",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/194/ohio-state-buckeyes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 1.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2",
+      "uid": "s:40~l:41~t:2",
+      "location": "Auburn",
+      "name": "Tigers",
+      "nickname": "Auburn",
+      "abbreviation": "AUB",
+      "color": "002b5c",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2/auburn-tigers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    }
+   ],
+   "droppedOut": [
+    {
+     "current": 0,
+     "previous": 21,
+     "points": 14.0,
+     "firstPlaceVotes": 0,
+     "trend": "+21",
+     "team": {
+      "id": "153",
+      "uid": "s:40~l:41~t:153",
+      "location": "North Carolina",
+      "name": "Tar Heels",
+      "nickname": "North Carolina",
+      "abbreviation": "UNC",
+      "color": "7bafd4",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/153/north-carolina-tar-heels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 22,
+     "points": 7.0,
+     "firstPlaceVotes": 0,
+     "trend": "+22",
+     "team": {
+      "id": "2608",
+      "uid": "s:40~l:41~t:2608",
+      "location": "Saint Mary's",
+      "name": "Gaels",
+      "nickname": "Saint Mary's",
+      "abbreviation": "SMC",
+      "color": "d80024",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2608/saint-marys-gaels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2608.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T21:43Z",
+     "recordSummary": "0-0"
+    }
+   ],
+   "availability": {},
+   "firstOccurrence": {
+    "type": "week",
+    "value": "1"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/mens-college-basketball/seasons/2026/types/3/weeks/3/rankings/2?lang=en&region=us",
+   "id": "2",
+   "name": "Coaches Poll",
+   "shortName": "Coaches Poll",
+   "type": "usa",
+   "occurrence": {
+    "number": 21,
+    "type": "week",
+    "last": false,
+    "value": "3",
+    "displayValue": "Week 3"
+   },
+   "date": "2026-04-07T07:00Z",
+   "headline": "2026 NCAA Basketball Rankings - Coaches Poll Week 3",
+   "shortHeadline": "2026 : Week 3",
+   "season": {
+    "year": 2026,
+    "startDate": "2025-07-01T07:00Z",
+    "endDate": "2026-04-08T06:59Z",
+    "displayName": "2025-26",
+    "type": {
+     "type": 3,
+     "name": "Postseason",
+     "abbreviation": "post"
+    }
+   },
+   "lastUpdated": "2026-04-07T19:55Z",
+   "ranks": [
+    {
+     "current": 1,
+     "previous": 3,
+     "points": 775.0,
+     "firstPlaceVotes": 31,
+     "trend": "+2",
+     "team": {
+      "id": "130",
+      "uid": "s:40~l:41~t:130",
+      "location": "Michigan",
+      "name": "Wolverines",
+      "nickname": "Michigan",
+      "abbreviation": "MICH",
+      "color": "00274c",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/130/michigan-wolverines",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "37-3"
+    },
+    {
+     "current": 2,
+     "previous": 7,
+     "points": 737.0,
+     "firstPlaceVotes": 0,
+     "trend": "+5",
+     "team": {
+      "id": "41",
+      "uid": "s:40~l:41~t:41",
+      "location": "UConn",
+      "name": "Huskies",
+      "nickname": "UConn",
+      "abbreviation": "CONN",
+      "color": "0c2340",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/41/uconn-huskies",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "34-6"
+    },
+    {
+     "current": 3,
+     "previous": 2,
+     "points": 713.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "12",
+      "uid": "s:40~l:41~t:12",
+      "location": "Arizona",
+      "name": "Wildcats",
+      "nickname": "Arizona",
+      "abbreviation": "ARIZ",
+      "color": "cc0033",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/12/arizona-wildcats",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/12.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "36-3"
+    },
+    {
+     "current": 4,
+     "previous": 1,
+     "points": 668.0,
+     "firstPlaceVotes": 0,
+     "trend": "-3",
+     "team": {
+      "id": "150",
+      "uid": "s:40~l:41~t:150",
+      "location": "Duke",
+      "name": "Blue Devils",
+      "nickname": "Duke",
+      "abbreviation": "DUKE",
+      "color": "00539b",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/150/duke-blue-devils",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "35-3"
+    },
+    {
+     "current": 5,
+     "previous": 12,
+     "points": 654.0,
+     "firstPlaceVotes": 0,
+     "trend": "+7",
+     "team": {
+      "id": "356",
+      "uid": "s:40~l:41~t:356",
+      "location": "Illinois",
+      "name": "Fighting Illini",
+      "nickname": "Illinois",
+      "abbreviation": "ILL",
+      "color": "ff5f05",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/356/illinois-fighting-illini",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/356.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "28-9"
+    },
+    {
+     "current": 6,
+     "previous": 5,
+     "points": 586.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "248",
+      "uid": "s:40~l:41~t:248",
+      "location": "Houston",
+      "name": "Cougars",
+      "nickname": "Houston",
+      "abbreviation": "HOU",
+      "color": "c8102e",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/248/houston-cougars",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/248.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "30-7"
+    },
+    {
+     "current": 7,
+     "previous": 13,
+     "points": 562.0,
+     "firstPlaceVotes": 0,
+     "trend": "+6",
+     "team": {
+      "id": "2509",
+      "uid": "s:40~l:41~t:2509",
+      "location": "Purdue",
+      "name": "Boilermakers",
+      "nickname": "Purdue",
+      "abbreviation": "PUR",
+      "color": "ceb888",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2509/purdue-boilermakers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2509.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "30-9"
+    },
+    {
+     "current": 8,
+     "previous": 6,
+     "points": 520.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "66",
+      "uid": "s:40~l:41~t:66",
+      "location": "Iowa State",
+      "name": "Cyclones",
+      "nickname": "Iowa State",
+      "abbreviation": "ISU",
+      "color": "ae192d",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/66/iowa-state-cyclones",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/66.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "29-8"
+    },
+    {
+     "current": 9,
+     "previous": 4,
+     "points": 497.0,
+     "firstPlaceVotes": 0,
+     "trend": "-5",
+     "team": {
+      "id": "57",
+      "uid": "s:40~l:41~t:57",
+      "location": "Florida",
+      "name": "Gators",
+      "nickname": "Florida",
+      "abbreviation": "FLA",
+      "color": "0021a5",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/57/florida-gators",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/57.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "27-8"
+    },
+    {
+     "current": 10,
+     "previous": 9,
+     "points": 491.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "2599",
+      "uid": "s:40~l:41~t:2599",
+      "location": "St. John's",
+      "name": "Red Storm",
+      "nickname": "St John's",
+      "abbreviation": "SJU",
+      "color": "d10000",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2599/st-johns-red-storm",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2599.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "30-7"
+    },
+    {
+     "current": 11,
+     "previous": 11,
+     "points": 465.0,
+     "firstPlaceVotes": 0,
+     "trend": "-",
+     "team": {
+      "id": "127",
+      "uid": "s:40~l:41~t:127",
+      "location": "Michigan State",
+      "name": "Spartans",
+      "nickname": "Michigan St",
+      "abbreviation": "MSU",
+      "color": "173f35",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/127/michigan-state-spartans",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/127.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "27-8"
+    },
+    {
+     "current": 12,
+     "previous": 25,
+     "points": 390.0,
+     "firstPlaceVotes": 0,
+     "trend": "+13",
+     "team": {
+      "id": "2633",
+      "uid": "s:40~l:41~t:2633",
+      "location": "Tennessee",
+      "name": "Volunteers",
+      "nickname": "Tennessee",
+      "abbreviation": "TENN",
+      "color": "ff8200",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2633/tennessee-volunteers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2633.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "25-12"
+    },
+    {
+     "current": 13,
+     "previous": 15,
+     "points": 387.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "8",
+      "uid": "s:40~l:41~t:8",
+      "location": "Arkansas",
+      "name": "Razorbacks",
+      "nickname": "Arkansas",
+      "abbreviation": "ARK",
+      "color": "a32136",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/8/arkansas-razorbacks",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/8.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "28-9"
+    },
+    {
+     "current": 14,
+     "previous": 14,
+     "points": 369.0,
+     "firstPlaceVotes": 0,
+     "trend": "-",
+     "team": {
+      "id": "158",
+      "uid": "s:40~l:41~t:158",
+      "location": "Nebraska",
+      "name": "Cornhuskers",
+      "nickname": "Nebraska",
+      "abbreviation": "NEB",
+      "color": "e31937",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/158/nebraska-cornhuskers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "28-7"
+    },
+    {
+     "current": 15,
+     "previous": 8,
+     "points": 294.0,
+     "firstPlaceVotes": 0,
+     "trend": "-7",
+     "team": {
+      "id": "258",
+      "uid": "s:40~l:41~t:258",
+      "location": "Virginia",
+      "name": "Cavaliers",
+      "nickname": "Virginia",
+      "abbreviation": "UVA",
+      "color": "232d4b",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/258/virginia-cavaliers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/258.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "30-6"
+    },
+    {
+     "current": 16,
+     "previous": 18,
+     "points": 292.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "333",
+      "uid": "s:40~l:41~t:333",
+      "location": "Alabama",
+      "name": "Crimson Tide",
+      "nickname": "Alabama",
+      "abbreviation": "ALA",
+      "color": "9e1b32",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/333/alabama-crimson-tide",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "25-10"
+    },
+    {
+     "current": 17,
+     "previous": 16,
+     "points": 289.0,
+     "firstPlaceVotes": 0,
+     "trend": "-1",
+     "team": {
+      "id": "238",
+      "uid": "s:40~l:41~t:238",
+      "location": "Vanderbilt",
+      "name": "Commodores",
+      "nickname": "Vanderbilt",
+      "abbreviation": "VAN",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/238/vanderbilt-commodores",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/238.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "27-9"
+    },
+    {
+     "current": 18,
+     "previous": 10,
+     "points": 286.0,
+     "firstPlaceVotes": 0,
+     "trend": "-8",
+     "team": {
+      "id": "2250",
+      "uid": "s:40~l:41~t:2250",
+      "location": "Gonzaga",
+      "name": "Bulldogs",
+      "nickname": "Gonzaga",
+      "abbreviation": "GONZ",
+      "color": "041e42",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2250/gonzaga-bulldogs",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2250.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "31-4"
+    },
+    {
+     "current": 19,
+     "previous": 0,
+     "points": 277.0,
+     "firstPlaceVotes": 0,
+     "trend": "+7",
+     "team": {
+      "id": "2294",
+      "uid": "s:40~l:41~t:2294",
+      "location": "Iowa",
+      "name": "Hawkeyes",
+      "nickname": "Iowa",
+      "abbreviation": "IOWA",
+      "color": "231f20",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2294/iowa-hawkeyes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "24-13"
+    },
+    {
+     "current": 20,
+     "previous": 17,
+     "points": 219.0,
+     "firstPlaceVotes": 0,
+     "trend": "-3",
+     "team": {
+      "id": "2305",
+      "uid": "s:40~l:41~t:2305",
+      "location": "Kansas",
+      "name": "Jayhawks",
+      "nickname": "Kansas",
+      "abbreviation": "KU",
+      "color": "0051ba",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2305/kansas-jayhawks",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2305.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "24-11"
+    },
+    {
+     "current": 21,
+     "previous": 19,
+     "points": 168.0,
+     "firstPlaceVotes": 0,
+     "trend": "-2",
+     "team": {
+      "id": "2641",
+      "uid": "s:40~l:41~t:2641",
+      "location": "Texas Tech",
+      "name": "Red Raiders",
+      "nickname": "Texas Tech",
+      "abbreviation": "TTU",
+      "color": "da291c",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2641/texas-tech-red-raiders",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "23-11"
+    },
+    {
+     "current": 22,
+     "previous": 23,
+     "points": 94.0,
+     "firstPlaceVotes": 0,
+     "trend": "+1",
+     "team": {
+      "id": "2390",
+      "uid": "s:40~l:41~t:2390",
+      "location": "Miami",
+      "name": "Hurricanes",
+      "nickname": "Miami",
+      "abbreviation": "MIA",
+      "color": "f47423",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2390/miami-hurricanes",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "26-9"
+    },
+    {
+     "current": 23,
+     "previous": 24,
+     "points": 70.0,
+     "firstPlaceVotes": 0,
+     "trend": "+1",
+     "team": {
+      "id": "97",
+      "uid": "s:40~l:41~t:97",
+      "location": "Louisville",
+      "name": "Cardinals",
+      "nickname": "Louisville",
+      "abbreviation": "LOU",
+      "color": "c9001f",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/97/louisville-cardinals",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/97.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "24-11"
+    },
+    {
+     "current": 24,
+     "previous": 0,
+     "points": 55.0,
+     "firstPlaceVotes": 0,
+     "trend": "+2",
+     "team": {
+      "id": "251",
+      "uid": "s:40~l:41~t:251",
+      "location": "Texas",
+      "name": "Longhorns",
+      "nickname": "Texas",
+      "abbreviation": "TEX",
+      "color": "af5c37",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/251/texas-longhorns",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "21-15"
+    },
+    {
+     "current": 25,
+     "previous": 20,
+     "points": 42.0,
+     "firstPlaceVotes": 0,
+     "trend": "-5",
+     "team": {
+      "id": "275",
+      "uid": "s:40~l:41~t:275",
+      "location": "Wisconsin",
+      "name": "Badgers",
+      "nickname": "Wisconsin",
+      "abbreviation": "WIS",
+      "color": "a00000",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/275/wisconsin-badgers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/275.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T19:55Z",
+     "recordSummary": "24-11"
+    }
+   ],
+   "others": [
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 37.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "328",
+      "uid": "s:40~l:41~t:328",
+      "location": "Utah State",
+      "name": "Aggies",
+      "nickname": "Utah State",
+      "abbreviation": "USU",
+      "color": "0f2439",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/328/utah-state-aggies",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/328.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 30.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "139",
+      "uid": "s:40~l:41~t:139",
+      "location": "Saint Louis",
+      "name": "Billikens",
+      "nickname": "Saint Louis",
+      "abbreviation": "SLU",
+      "color": "00539C",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/139/saint-louis-billikens",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/139.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 21,
+     "points": 28.0,
+     "firstPlaceVotes": 0,
+     "trend": "+21",
+     "team": {
+      "id": "153",
+      "uid": "s:40~l:41~t:153",
+      "location": "North Carolina",
+      "name": "Tar Heels",
+      "nickname": "North Carolina",
+      "abbreviation": "UNC",
+      "color": "7bafd4",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/153/north-carolina-tar-heels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 28.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "26",
+      "uid": "s:40~l:41~t:26",
+      "location": "UCLA",
+      "name": "Bruins",
+      "nickname": "UCLA",
+      "abbreviation": "UCLA",
+      "color": "2774ae",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/26/ucla-bruins",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 22,
+     "points": 16.0,
+     "firstPlaceVotes": 0,
+     "trend": "+22",
+     "team": {
+      "id": "2608",
+      "uid": "s:40~l:41~t:2608",
+      "location": "Saint Mary's",
+      "name": "Gaels",
+      "nickname": "Saint Mary's",
+      "abbreviation": "SMC",
+      "color": "d80024",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2608/saint-marys-gaels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2608.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 9.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "193",
+      "uid": "s:40~l:41~t:193",
+      "location": "Miami (OH)",
+      "name": "RedHawks",
+      "nickname": "Miami OH",
+      "abbreviation": "M-OH",
+      "color": "c41230",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/193/miami-oh-redhawks",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/193.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 8.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "252",
+      "uid": "s:40~l:41~t:252",
+      "location": "BYU",
+      "name": "Cougars",
+      "nickname": "BYU",
+      "abbreviation": "BYU",
+      "color": "0047ba",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/252/byu-cougars",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/252.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 7.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2272",
+      "uid": "s:40~l:41~t:2272",
+      "location": "High Point",
+      "name": "Panthers",
+      "nickname": "High Point",
+      "abbreviation": "HPU",
+      "color": "330072",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2272/high-point-panthers",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2272.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 4.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "222",
+      "uid": "s:40~l:41~t:222",
+      "location": "Villanova",
+      "name": "Wildcats",
+      "nickname": "Villanova",
+      "abbreviation": "VILL",
+      "color": "00205b",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/222/villanova-wildcats",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/222.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 3.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2116",
+      "uid": "s:40~l:41~t:2116",
+      "location": "UCF",
+      "name": "Knights",
+      "nickname": "UCF",
+      "abbreviation": "UCF",
+      "color": "000000",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2116/ucf-knights",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2116.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 3.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "96",
+      "uid": "s:40~l:41~t:96",
+      "location": "Kentucky",
+      "name": "Wildcats",
+      "nickname": "Kentucky",
+      "abbreviation": "UK",
+      "color": "0033a0",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/96/kentucky-wildcats",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 2.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2670",
+      "uid": "s:40~l:41~t:2670",
+      "location": "VCU",
+      "name": "Rams",
+      "nickname": "VCU",
+      "abbreviation": "VCU",
+      "color": "ffaf00",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2670/vcu-rams",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2670.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    }
+   ],
+   "droppedOut": [
+    {
+     "current": 0,
+     "previous": 21,
+     "points": 28.0,
+     "firstPlaceVotes": 0,
+     "trend": "+21",
+     "team": {
+      "id": "153",
+      "uid": "s:40~l:41~t:153",
+      "location": "North Carolina",
+      "name": "Tar Heels",
+      "nickname": "North Carolina",
+      "abbreviation": "UNC",
+      "color": "7bafd4",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/153/north-carolina-tar-heels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 22,
+     "points": 16.0,
+     "firstPlaceVotes": 0,
+     "trend": "+22",
+     "team": {
+      "id": "2608",
+      "uid": "s:40~l:41~t:2608",
+      "location": "Saint Mary's",
+      "name": "Gaels",
+      "nickname": "Saint Mary's",
+      "abbreviation": "SMC",
+      "color": "d80024",
+      "links": [
+       {
+        "href": "https://www.espn.com/mens-college-basketball/team/_/id/2608/saint-marys-gaels",
+        "text": "Clubhouse",
+        "rel": [
+         "clubhouse",
+         "desktop",
+         "team"
+        ]
+       }
+      ],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2608.png"
+     },
+     "date": "2026-04-07T07:00Z",
+     "lastUpdated": "2026-04-07T20:03Z",
+     "recordSummary": "0-0"
+    }
+   ],
+   "availability": {},
+   "firstOccurrence": {
+    "type": "week",
+    "value": "1"
+   }
+  }
+ ]
+}

@@ -1,0 +1,739 @@
+{
+ "rankings": [
+  {
+   "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/mens-college-hockey/seasons/2027/types/2/weeks/2/rankings/10624?lang=en&region=us",
+   "id": "10624",
+   "name": "USCHO Men's Poll",
+   "shortName": "USCHO Men's Poll",
+   "type": "USCHOMENSPOLL",
+   "occurrence": {
+    "number": 2,
+    "type": "week",
+    "last": false,
+    "value": "2",
+    "displayValue": "Week 2"
+   },
+   "date": "2026-10-05T07:00Z",
+   "headline": "2027 USCHO Men's Poll: Week 2",
+   "shortHeadline": "2027 USCHO Men's Poll: Week 2",
+   "season": {
+    "year": 2027,
+    "startDate": "2026-09-01T07:00Z",
+    "endDate": "2027-05-01T06:59Z",
+    "displayName": "2026-27",
+    "type": {
+     "type": 2,
+     "name": "Regular Season",
+     "abbreviation": "reg"
+    }
+   },
+   "ranks": [
+    {
+     "current": 1,
+     "previous": 1,
+     "points": 0.0,
+     "trend": "-",
+     "team": {
+      "id": "2172",
+      "uid": "s:70~l:91~t:2172",
+      "location": "Denver",
+      "name": "Pioneers",
+      "nickname": "Denver",
+      "abbreviation": "DEN",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2172.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "2-0"
+    },
+    {
+     "current": 2,
+     "previous": 2,
+     "points": 0.0,
+     "trend": "-",
+     "team": {
+      "id": "130",
+      "uid": "s:70~l:91~t:130",
+      "location": "Michigan",
+      "name": "Wolverines",
+      "nickname": "Michigan",
+      "abbreviation": "MICH",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "2-0"
+    },
+    {
+     "current": 3,
+     "previous": 3,
+     "points": 0.0,
+     "trend": "-",
+     "team": {
+      "id": "127",
+      "uid": "s:70~l:91~t:127",
+      "location": "Michigan State",
+      "name": "Spartans",
+      "nickname": "Michigan State",
+      "abbreviation": "MSU",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/127.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 4,
+     "previous": 4,
+     "points": 0.0,
+     "trend": "-",
+     "team": {
+      "id": "155",
+      "uid": "s:70~l:91~t:155",
+      "location": "North Dakota",
+      "name": "Fighting Hawks",
+      "nickname": "North Dakota",
+      "abbreviation": "UND",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/155.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 5,
+     "previous": 5,
+     "points": 0.0,
+     "trend": "-",
+     "team": {
+      "id": "134",
+      "uid": "s:70~l:91~t:134",
+      "location": "Minnesota Duluth",
+      "name": "Bulldogs",
+      "nickname": "Minnesota Duluth",
+      "abbreviation": "UMD",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/134.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "2-0"
+    },
+    {
+     "current": 6,
+     "previous": 7,
+     "points": 0.0,
+     "trend": "+1",
+     "team": {
+      "id": "2514",
+      "uid": "s:70~l:91~t:2514",
+      "location": "Quinnipiac",
+      "name": "Bobcats",
+      "nickname": "Quinnipiac",
+      "abbreviation": "QUIN",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2514.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "2-0"
+    },
+    {
+     "current": 7,
+     "previous": 6,
+     "points": 0.0,
+     "trend": "-1",
+     "team": {
+      "id": "275",
+      "uid": "s:70~l:91~t:275",
+      "location": "Wisconsin",
+      "name": "Badgers",
+      "nickname": "Wisconsin",
+      "abbreviation": "WISC",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/275.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "2-0"
+    },
+    {
+     "current": 8,
+     "previous": 8,
+     "points": 0.0,
+     "trend": "-",
+     "team": {
+      "id": "2711",
+      "uid": "s:70~l:91~t:2711",
+      "location": "Western Michigan",
+      "name": "Broncos",
+      "nickname": "Western Michigan",
+      "abbreviation": "WMU",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2711.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 9,
+     "previous": 9,
+     "points": 0.0,
+     "trend": "-",
+     "team": {
+      "id": "2507",
+      "uid": "s:70~l:91~t:2507",
+      "location": "Providence",
+      "name": "Friars",
+      "nickname": "Providence",
+      "abbreviation": "PROV",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2507.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 10,
+     "previous": 11,
+     "points": 0.0,
+     "trend": "+1",
+     "team": {
+      "id": "159",
+      "uid": "s:70~l:91~t:159",
+      "location": "Dartmouth",
+      "name": "Big Green",
+      "nickname": "Dartmouth",
+      "abbreviation": "DART",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/159.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 11,
+     "previous": 12,
+     "points": 0.0,
+     "trend": "+1",
+     "team": {
+      "id": "103",
+      "uid": "s:70~l:91~t:103",
+      "location": "Boston College",
+      "name": "Eagles",
+      "nickname": "Boston College",
+      "abbreviation": "BC",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/103.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 12,
+     "previous": 19,
+     "points": 0.0,
+     "trend": "+7",
+     "team": {
+      "id": "2392",
+      "uid": "s:70~l:91~t:2392",
+      "location": "Michigan Tech",
+      "name": "Huskies",
+      "nickname": "Michigan Tech",
+      "abbreviation": "MTU",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2392.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "2-0"
+    },
+    {
+     "current": 13,
+     "previous": 13,
+     "points": 0.0,
+     "trend": "-",
+     "team": {
+      "id": "172",
+      "uid": "s:70~l:91~t:172",
+      "location": "Cornell",
+      "name": "Big Red",
+      "nickname": "Cornell",
+      "abbreviation": "COR",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/172.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 14,
+     "previous": 16,
+     "points": 0.0,
+     "trend": "+2",
+     "team": {
+      "id": "104",
+      "uid": "s:70~l:91~t:104",
+      "location": "Boston University",
+      "name": "Terriers",
+      "nickname": "Boston University",
+      "abbreviation": "BU",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/104.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "2-0"
+    },
+    {
+     "current": 15,
+     "previous": 0,
+     "points": 0.0,
+     "trend": "+11",
+     "team": {
+      "id": "2144",
+      "uid": "s:70~l:91~t:2144",
+      "location": "Colorado College",
+      "name": "Tigers",
+      "nickname": "Colorado College",
+      "abbreviation": "COLC",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2144.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "2-0"
+    },
+    {
+     "current": 16,
+     "previous": 15,
+     "points": 0.0,
+     "trend": "-1",
+     "team": {
+      "id": "41",
+      "uid": "s:70~l:91~t:41",
+      "location": "UConn",
+      "name": "Huskies",
+      "nickname": "UConn",
+      "abbreviation": "CONN",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 17,
+     "previous": 17,
+     "points": 0.0,
+     "trend": "-",
+     "team": {
+      "id": "213",
+      "uid": "s:70~l:91~t:213",
+      "location": "Penn State",
+      "name": "Nittany Lions",
+      "nickname": "Penn State",
+      "abbreviation": "PSU",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/213.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 18,
+     "previous": 10,
+     "points": 0.0,
+     "trend": "-8",
+     "team": {
+      "id": "113",
+      "uid": "s:70~l:91~t:113",
+      "location": "Massachusetts",
+      "name": "Minutemen",
+      "nickname": "Massachusetts",
+      "abbreviation": "MASS",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/113.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-2"
+    },
+    {
+     "current": 19,
+     "previous": 18,
+     "points": 0.0,
+     "trend": "-1",
+     "team": {
+      "id": "2364",
+      "uid": "s:70~l:91~t:2364",
+      "location": "Minnesota State",
+      "name": "Mavericks",
+      "nickname": "Minnesota State",
+      "abbreviation": "MNST",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2364.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 20,
+     "previous": 14,
+     "points": 0.0,
+     "trend": "-6",
+     "team": {
+      "id": "135",
+      "uid": "s:70~l:91~t:135",
+      "location": "Minnesota",
+      "name": "Golden Gophers",
+      "nickname": "Minnesota",
+      "abbreviation": "MINN",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/135.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-2"
+    }
+   ],
+   "others": [
+    {
+     "current": 0,
+     "previous": 20,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+20",
+     "team": {
+      "id": "2771",
+      "uid": "s:70~l:91~t:2771",
+      "location": "Merrimack",
+      "name": "Warriors",
+      "nickname": "Merrimack",
+      "abbreviation": "MRMK",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2771.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2043",
+      "uid": "s:70~l:91~t:2043",
+      "location": "Augustana (SD)",
+      "name": "Vikings",
+      "nickname": "Augustana (SD)",
+      "abbreviation": "AUSD",
+      "color": "NULL",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2043.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "194",
+      "uid": "s:70~l:91~t:194",
+      "location": "Ohio State",
+      "name": "Buckeyes",
+      "nickname": "Ohio State",
+      "abbreviation": "OSU",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2900",
+      "uid": "s:70~l:91~t:2900",
+      "location": "St. Thomas",
+      "name": "Tommies",
+      "nickname": "St Thomas",
+      "abbreviation": "STMN",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2900.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2060",
+      "uid": "s:70~l:91~t:2060",
+      "location": "Bentley",
+      "name": "Falcons",
+      "nickname": "Bentley",
+      "abbreviation": "BENT",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2060.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "189",
+      "uid": "s:70~l:91~t:189",
+      "location": "Bowling Green",
+      "name": "Falcons",
+      "nickname": "Bowling Green",
+      "abbreviation": "BGSU",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/189.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "193",
+      "uid": "s:70~l:91~t:193",
+      "location": "Miami (OH)",
+      "name": "RedHawks",
+      "nickname": "Miami (OH)",
+      "abbreviation": "M-OH",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/193.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "111",
+      "uid": "s:70~l:91~t:111",
+      "location": "Northeastern",
+      "name": "Huskies",
+      "nickname": "Northeastern",
+      "abbreviation": "NE",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/111.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2137",
+      "uid": "s:70~l:91~t:2137",
+      "location": "Clarkson",
+      "name": "Golden Knights",
+      "nickname": "Clarkson",
+      "abbreviation": "CLAR",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2137.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "284",
+      "uid": "s:70~l:91~t:284",
+      "location": "Stonehill",
+      "name": "Stonehill",
+      "nickname": "Stonehill",
+      "abbreviation": "STONEHILL",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/284.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2529",
+      "uid": "s:70~l:91~t:2529",
+      "location": "Sacred Heart",
+      "name": "Pioneers",
+      "nickname": "Sacred Heart",
+      "abbreviation": "SHU",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2529.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2785",
+      "uid": "s:70~l:91~t:2785",
+      "location": "Union",
+      "name": "Dutchmen",
+      "nickname": "Union",
+      "abbreviation": "UNNY",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2785.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "2437",
+      "uid": "s:70~l:91~t:2437",
+      "location": "Omaha",
+      "name": "Mavericks",
+      "nickname": "Omaha",
+      "abbreviation": "OMA",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2437.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "311",
+      "uid": "s:70~l:91~t:311",
+      "location": "Maine",
+      "name": "Black Bears",
+      "nickname": "Maine",
+      "abbreviation": "ME",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/311.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    },
+    {
+     "current": 0,
+     "previous": 0,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+26",
+     "team": {
+      "id": "225",
+      "uid": "s:70~l:91~t:225",
+      "location": "Brown",
+      "name": "Bears",
+      "nickname": "Brown",
+      "abbreviation": "BRWN",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/225.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    }
+   ],
+   "droppedOut": [
+    {
+     "current": 0,
+     "previous": 20,
+     "points": 0.0,
+     "firstPlaceVotes": 0,
+     "trend": "+20",
+     "team": {
+      "id": "2771",
+      "uid": "s:70~l:91~t:2771",
+      "location": "Merrimack",
+      "name": "Warriors",
+      "nickname": "Merrimack",
+      "abbreviation": "MRMK",
+      "links": [],
+      "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2771.png"
+     },
+     "date": "2026-10-05T07:00Z",
+     "lastUpdated": "2026-10-05T19:39Z",
+     "recordSummary": "0-0"
+    }
+   ]
+  }
+ ]
+}

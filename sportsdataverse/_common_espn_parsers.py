@@ -2341,6 +2341,95 @@ def parse_cdn_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     return df.to_pandas() if return_as_pandas else df
 
 
+def _dict(value: Any) -> Dict:
+    return value if isinstance(value, dict) else {}
+
+
+def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a Site v2 ``rankings`` payload into one row per poll entry.
+
+    The top-level ``rankings`` list holds one poll per entry (AP, Coaches, FCS, USCHO,
+    ...), each with ``ranks`` (the ranked teams) and ``others`` (teams receiving
+    votes). Both are emitted, told apart by ``ranked``. ``droppedOut`` is not: it
+    lists last week's teams, most of which reappear under ``others``. ``rank`` is null
+    on the vote-receiving rows (ESPN ships ``0``); ``previous_rank`` keeps ESPN's
+    ``0`` for a team unranked in the previous poll. ``week`` is the poll's week
+    within its ``season_type``, the value ESPN's own Core v2 rankings URL uses.
+
+    Args:
+        payload: Raw JSON dict from ``espn_cfb_rankings()`` (or the mbb / wbb /
+            mch / wch wrapper).
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        pl.DataFrame: One row per (poll, team); zero rows when the payload carries no polls.
+
+    Example:
+        Current AP poll::
+
+            import polars as pl
+            from sportsdataverse.cfb import espn_cfb_rankings
+
+            df = espn_cfb_rankings()
+            df.filter(pl.col("poll_name") == "AP Top 25").head()
+
+        Vote-receiving teams only::
+
+            df.filter(pl.col("ranked") == False)
+    """
+    polls = payload.get("rankings") if isinstance(payload, dict) else None
+    rows = []
+    for poll in polls if isinstance(polls, list) else []:
+        if not isinstance(poll, dict):
+            continue
+        season, occurrence = _dict(poll.get("season")), _dict(poll.get("occurrence"))
+        head = {
+            "poll_id": poll.get("id"),
+            "poll_name": poll.get("name"),
+            "poll_short_name": poll.get("shortName"),
+            "poll_type": poll.get("type"),
+            "season": season.get("year"),
+            "season_type": _dict(season.get("type")).get("type"),
+            "week": occurrence.get("value"),
+            "week_display": occurrence.get("displayValue"),
+            "poll_date": poll.get("date"),
+        }
+        for ranked, key in ((True, "ranks"), (False, "others")):
+            for entry in poll.get(key) or []:
+                if not isinstance(entry, dict):
+                    continue
+                team = _dict(entry.get("team"))
+                rows.append(
+                    {
+                        **head,
+                        "ranked": ranked,
+                        "team_id": team.get("id"),
+                        "rank": entry.get("current") if ranked else None,
+                        "previous_rank": entry.get("previous"),
+                        "points": entry.get("points"),
+                        "first_place_votes": entry.get("firstPlaceVotes"),
+                        "trend": entry.get("trend"),
+                        "record_summary": entry.get("recordSummary"),
+                        "team_uid": team.get("uid"),
+                        "team_location": team.get("location"),
+                        "team_name": team.get("name"),
+                        "team_nickname": team.get("nickname"),
+                        "team_abbreviation": team.get("abbreviation"),
+                        "team_color": team.get("color"),
+                        "team_logo": team.get("logo"),
+                        "last_updated": entry.get("lastUpdated"),
+                    }
+                )
+    if not rows:
+        return _empty_frame(return_as_pandas)
+    df = pl.DataFrame(rows, infer_schema_length=None).with_columns(
+        # Integer like parse_cdn_rankings' poll_id; team_id stays a string, as across the ESPN parsers.
+        pl.col("poll_id", "week").cast(pl.Utf8).cast(pl.Int64, strict=False),
+        pl.col("team_id").cast(pl.Utf8),
+    )
+    return df.to_pandas() if return_as_pandas else df
+
+
 # ===========================================================================
 # Endpoint -> parser registry
 # ===========================================================================
@@ -2444,7 +2533,7 @@ ENDPOINT_PARSERS = {
     "statistics_league": parse_items,
     "team_depthcharts": parse_items,
     "team_leaders": parse_items,
-    "rankings": parse_items,
+    "rankings": parse_rankings,
     "season_qbr": parse_items,
     "season_qbr_week": parse_items,
     "athlete_notes": parse_items,
