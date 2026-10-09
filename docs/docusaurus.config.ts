@@ -325,6 +325,11 @@ const config: Config = {
               target: '_self',
             },
             {
+              label: 'sdvplot',
+              href: 'https://sdvplot.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
               label: 'sportypy',
               href: 'https://sportypy.sportsdataverse.org/',
               target: '_self',
@@ -348,6 +353,11 @@ const config: Config = {
             {
               label: 'sportsdataverse-R',
               href: 'https://r.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
+              label: 'sdvplotR',
+              href: 'https://sdvplotR.sportsdataverse.org/',
               target: '_self',
             },
             {
@@ -411,6 +421,11 @@ const config: Config = {
               target: '_self',
             },
             {
+              label: 'cfbseedR',
+              href: 'https://cfbseedR.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
               label: 'softballR',
               href: 'https://github.com/sportsdataverse/softballR/',
               target: '_self',
@@ -449,6 +464,11 @@ const config: Config = {
             {
               label: 'sportsdataverse.js',
               href: 'https://js.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
+              label: 'sdvplot-js',
+              href: 'https://plot.sportsdataverse.org/',
               target: '_self',
             },
             {
