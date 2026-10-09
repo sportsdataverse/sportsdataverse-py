@@ -58,6 +58,7 @@ from sportsdataverse.football.box import air_yards_box as _air_yards_box
 from sportsdataverse.football.box import _ordered_rows
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box
+from sportsdataverse.football.espn_box import espn_passes_defended as _espn_passes_defended
 from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_espn_player_box
 from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box
 from sportsdataverse._xgb import xgb_threads as _xgb_threads
@@ -7269,11 +7270,16 @@ class NFLPlayProcess(object):
             if isinstance(e.get("fumblesLost"), int):
                 r["fumbles_lost"] = e["fumblesLost"]
 
+        # Passes defended against each team's throws come from the opponent's ESPN box PD, which
+        # in the NFL already counts interceptions (every interceptor's PD >= his INTs). None where
+        # the box has no PD: the text formula stands.
+        box_pd = _espn_passes_defended(espn_box)
         for tid, r in by_id.items():
             r["Int"] = int(r.get("Int", 0))
-            r["expected_turnovers"] = (0.5 * r.get("total_fumbles", 0)) + (
-                0.22 * (r.get("pass_breakups", 0) + r.get("Int", 0))
-            )
+            r["passes_defended"] = box_pd.get(next((x for x in team_ids if x != tid), tid))
+            pd = r["passes_defended"]
+            defended = pd if pd is not None else r.get("pass_breakups", 0) + r["Int"]
+            r["expected_turnovers"] = (0.5 * r.get("total_fumbles", 0)) + 0.22 * defended
         for tid, r in by_id.items():
             others = [x for x in team_ids if x != tid]
             opp = by_id[others[0]] if others else r  # degenerate (home==away id): self as opponent

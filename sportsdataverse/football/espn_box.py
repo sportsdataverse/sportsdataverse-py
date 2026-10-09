@@ -9,7 +9,7 @@ can validate the play-by-play derivation against ESPN's own numbers.
 
 from __future__ import annotations
 
-__all__ = ["espn_num", "parse_espn_player_box", "parse_espn_team_box"]
+__all__ = ["espn_num", "espn_passes_defended", "parse_espn_player_box", "parse_espn_team_box"]
 
 
 def espn_num(value):
@@ -107,3 +107,19 @@ def parse_espn_player_box(boxscore):
                     row[k] = espn_num(v)
                 rows.append(row)
     return rows
+
+
+def espn_passes_defended(boxscore):
+    """ESPN's passes defended (``PD``) per defending team id, from the player box.
+
+    Sums the ``passesDefended`` column of each team's ``defensive`` category. A team whose
+    box has no such column, or no athlete under it, is left out, so a caller can tell
+    "ESPN publishes no PD here" from a real zero. ESPN's NFL PD counts a player's
+    interceptions; its college PD does not.
+    """
+    out = {}
+    for r in parse_espn_player_box(boxscore):
+        pd = r.get("passesDefended")
+        if r["category"] == "defensive" and isinstance(pd, int) and r["team_id"] is not None:
+            out[r["team_id"]] = out.get(r["team_id"], 0) + pd
+    return out

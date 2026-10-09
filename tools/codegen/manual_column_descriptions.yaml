@@ -6591,12 +6591,14 @@ load_cfb_adv_turnover:
     alternate provider, and no other provider is currently used.'
   expected_turnover_margin: The opponent's expected_turnovers minus this team's, so positive means the team was expected to
     win the turnover battle.
-  expected_turnovers: Turnover expectation for this team, computed as half its total fumbles plus 0.22 times the sum of its
-    pass breakups and interceptions.
+  expected_turnovers: Turnover expectation for this team, computed as half its total fumbles plus 0.22 times its passes_defended,
+    or 0.22 times its pass breakups plus interceptions where passes_defended is null.
   fumble_recoveries_gained: Opponent fumbles this team recovered, taken as the opponent's fumbles_lost.
   fumbles_lost_pbp: Fumbles-lost count derived from the play-by-play, kept alongside the ESPN-sourced fumbles_lost for reconciliation.
   pass_breakups: Passes thrown by this offense that the opposing defense broke up; it equals the opponent's row in the advanced
     defensive table exactly.
+  passes_defended: Passes thrown by this offense that the opposing defense defended, from ESPN's box score (the defense's
+    passesDefended, which excludes interceptions, plus Int). Null where ESPN's box has no passesDefended, mostly before 2023.
   pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
   st_turnovers_gained: Special-teams turnovers this team recovered, taken as the opponent's st_turnovers_lost.
   st_turnovers_lost: Turnovers the team lost on special-teams plays.

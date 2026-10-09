@@ -162,3 +162,27 @@ def test_espn_players_section_present(monkeypatch, gid):
     # the vast majority of rows are real athletes (allow a few null-name "Team" rows)
     named = [r for r in players if r.get("athlete")]
     assert len(named) >= 0.8 * len(players), f"gid={gid}: too many unnamed player rows"
+
+
+def _box_passes_defended(summary: dict) -> dict[int, int]:
+    """{defending team id -> sum of its players' ESPN ``passesDefended``}; absent when unpublished."""
+    out: dict[int, int] = {}
+    for pg in summary["boxscore"].get("players", []):
+        for cat in pg["statistics"]:
+            if cat["name"] == "defensive" and "passesDefended" in cat["keys"] and cat["athletes"]:
+                i = cat["keys"].index("passesDefended")
+                out[int(pg["team"]["id"])] = sum(int(a["stats"][i]) for a in cat["athletes"])
+    return out
+
+
+@pytest.mark.parametrize("gid", [401628455, 401032062])
+def test_expected_turnovers_take_passes_defended_from_espn_box(monkeypatch, gid):
+    """xTO's pass term is the opponent's ESPN box PD plus Int (college PD leaves out the
+    interceptions). 401032062 (2018) has no PD, so it keeps the text pass_breakups + Int."""
+    pd = _box_passes_defended(_load(gid))
+    for r in _box(monkeypatch, gid)["turnover"]:
+        opp_pd = next((v for k, v in pd.items() if k != r["team_id"]), None)
+        expected = None if opp_pd is None else opp_pd + r["Int"]
+        assert r["passes_defended"] == expected
+        defended = r["pass_breakups"] + r["Int"] if expected is None else expected
+        assert r["expected_turnovers"] == pytest.approx(0.5 * r["total_fumbles"] + 0.22 * defended)

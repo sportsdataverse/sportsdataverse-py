@@ -142,3 +142,19 @@ def test_team_pass_box_carries_sack_yards_beside_sack_inclusive_passes(jax_ind):
         assert team[tid]["sack_yards"] == sacks["yds_sacked"].sum()
         assert team[tid]["sack_yards"] < 0
     assert (team[30]["sack_yards"], team[5]["sack_yards"]) == (-11, -21)
+
+
+def test_expected_turnovers_take_passes_defended_from_espn_box(jax_ind):
+    # xTO's pass term is the opponent's ESPN box PD, which in the NFL already counts the INTs
+    summary = json.loads((FIX / "summary_401872922.json").read_text())
+    pd = {}
+    for pg in summary["boxscore"]["players"]:
+        for cat in pg["statistics"]:
+            if cat["name"] == "defensive":
+                i = cat["keys"].index("passesDefended")
+                pd[int(pg["team"]["id"])] = sum(int(a["stats"][i]) for a in cat["athletes"])
+    _, box = jax_ind
+    for tid, r in _rows(box, "turnover").items():
+        opp_pd = pd[5 if tid == 30 else 30]
+        assert r["passes_defended"] == opp_pd
+        assert r["expected_turnovers"] == pytest.approx(0.5 * r["total_fumbles"] + 0.22 * opp_pd)

@@ -1865,6 +1865,7 @@ from sportsdataverse.football.box import _ordered_rows  # noqa: E402
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box  # noqa: E402
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box  # noqa: E402
 from sportsdataverse.football.box import fill_missing as _fill_missing  # noqa: E402
+from sportsdataverse.football.espn_box import espn_passes_defended as _espn_passes_defended  # noqa: E402
 from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_espn_player_box  # noqa: E402
 from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box  # noqa: E402
 from sportsdataverse.football import espn_text as _espn_text  # noqa: E402
@@ -9439,11 +9440,19 @@ class CFBPlayProcess(object):
             if isinstance(e.get("fumblesLost"), int):
                 r["fumbles_lost"] = e["fumblesLost"]
 
+        # Passes defended against each team's throws come from the opponent's ESPN box PD.
+        # The text pass_breakups follow ESPN's "broken up by" wording, whose coverage swings
+        # by season and mid-season (2.2% of 2024 incompletions, 27% from 2025 week 9), and
+        # expected_turnovers swung with it. ESPN's college PD excludes interceptions (it equals
+        # pass_breakups once the wording is complete; ~70% of 2023-26 interceptors carry PD 0),
+        # so add Int. None where the box has no PD (pre-2019, most of 2019-22): text formula.
+        box_pd = _espn_passes_defended(espn_box)
         for tid, r in by_id.items():
             r["Int"] = int(r.get("Int", 0))
-            r["expected_turnovers"] = (0.5 * r.get("total_fumbles", 0)) + (
-                0.22 * (r.get("pass_breakups", 0) + r.get("Int", 0))
-            )
+            pd = box_pd.get(next((x for x in team_ids if x != tid), tid))
+            r["passes_defended"] = None if pd is None else pd + r["Int"]
+            defended = r["passes_defended"] if pd is not None else r.get("pass_breakups", 0) + r["Int"]
+            r["expected_turnovers"] = (0.5 * r.get("total_fumbles", 0)) + 0.22 * defended
         for tid, r in by_id.items():
             others = [x for x in team_ids if x != tid]
             opp = by_id[others[0]] if others else r  # degenerate (home==away id): self as opponent
