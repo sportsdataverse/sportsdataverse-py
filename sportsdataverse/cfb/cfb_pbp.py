@@ -9251,6 +9251,38 @@ class CFBPlayProcess(object):
             drive_start=pl.col("drive_start").cast(pl.Float32),
         )
 
+        # One row per drive for the drive-level columns, which repeat on every play of
+        # the drive (averaging them over plays weights a drive by its length). ESPN files
+        # the snap after a turnover under the drive that just ended, so a drive id can
+        # hold the other offense's snaps: keep the drive owner's rows only.
+        drive_abbr = pl.col("drive.team.abbreviation") if "drive.team.abbreviation" in play_df.columns else pl.lit(None)
+        drive_owner = (
+            pl.when(drive_abbr == pl.col("homeTeamAbbrev"))
+            .then(pl.col("homeTeamId"))
+            .when(drive_abbr == pl.col("awayTeamAbbrev"))
+            .then(pl.col("awayTeamId"))
+        )
+        per_drive = (
+            play_df.filter((pl.col("scrimmage_play") == True) & (drive_owner == pl.col("pos_team")).fill_null(True))
+            .group_by(["pos_team", "def_pos_team", "drive.id"])
+            .agg(pl.col("drive_start", "drive.yards", "drive.offensivePlays", "drive_stopped").first())
+            # ESPN ships start yardLine 0 on ~0.7% of drives: no drive starts in the end zone, so
+            # that is a missing start, not 0 available yards. A drive gains at most what it had
+            # available (the excess is penalty yardage or a misfiled start spot).
+            .with_columns(drive_start=pl.when(pl.col("drive_start") > 0).then(pl.col("drive_start")))
+            .with_columns(
+                _gained=pl.when(pl.col("drive_start").is_not_null()).then(
+                    pl.col("drive.yards").cast(pl.Float32).clip(0, pl.col("drive_start"))
+                ),
+            )
+        )
+        def_drive_box = (
+            per_drive.group_by(["def_pos_team"])
+            .agg(drive_stopped_rate=100 * pl.col("drive_stopped").mean())
+            .with_columns(pl.col(pl.Float32).round(2))
+            .with_columns(def_pos_team=pl.col("def_pos_team").cast(pl.Int32))
+        )
+
         def_base_box = (
             play_df.filter(pl.col("scrimmage_play") == True)
             .group_by(["def_pos_team"])
@@ -9263,7 +9295,6 @@ class CFBPlayProcess(object):
                 havoc_total_rate=pl.col("havoc").mean(),
                 fumbles=pl.col("forced_fumble").sum(),
                 def_int=pl.col("int").sum(),
-                drive_stopped_rate=100 * pl.col("drive_stopped").mean(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(
@@ -9301,7 +9332,7 @@ class CFBPlayProcess(object):
             )
         )
 
-        def_data_frames = [def_base_box, def_box_havoc_pass, def_box_havoc_rush]
+        def_data_frames = [def_base_box, def_drive_box, def_box_havoc_pass, def_box_havoc_rush]
         def_box = reduce(
             lambda left, right: left.join(right, on=["def_pos_team"], how="full", coalesce=True),
             def_data_frames,
@@ -9402,8 +9433,7 @@ class CFBPlayProcess(object):
         turnover_box_json = [by_id[t] for t in team_ids]
 
         drives_data = (
-            play_df.filter(pl.col("scrimmage_play") == True)
-            .group_by(["pos_team"])
+            per_drive.group_by(["pos_team"])
             .agg(
                 drive_total_available_yards=pl.col("drive_start").sum(),
                 drive_total_gained_yards=pl.col("drive.yards").sum(),
@@ -9411,7 +9441,7 @@ class CFBPlayProcess(object):
                 plays_per_drive=pl.col("drive.offensivePlays").mean(),
                 yards_per_drive=pl.col("drive.yards").mean(),
                 drives=pl.col("drive.id").n_unique(),
-                drive_total_gained_yards_rate=100 * pl.col("drive.yards").sum() / pl.col("drive_start").sum(),
+                drive_total_gained_yards_rate=100 * pl.col("_gained").sum() / pl.col("drive_start").sum(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(
