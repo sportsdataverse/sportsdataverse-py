@@ -118,7 +118,8 @@ def read_fragments(directory: Path = FRAGMENTS) -> dict[str, list[str]]:
             raise ValueError(
                 f"{name}: name a fragment <slug>.<group>.md, slug lowercase, group one of {', '.join(GROUPS)}"
             )
-        out.setdefault(m.group(1), []).extend(_bullets(name, path.read_text(encoding="utf-8")))
+        # utf-8-sig: a byte-order mark from a Windows editor is not part of the first bullet.
+        out.setdefault(m.group(1), []).extend(_bullets(name, path.read_text(encoding="utf-8-sig")))
     return out
 
 

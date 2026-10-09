@@ -25,7 +25,7 @@ def test_lockfile_self_entry_matches():
 
 
 def test_the_newest_release_section_is_this_version_and_dated():
-    """This changelog titles a release `## <version> Release: <Month D, YYYY>`; an `## Unreleased` may sit above it."""
+    """This changelog titles a release `## <version> Release: <Month D, YYYY>`; the first one is the newest."""
     first = re.search(r"^## (\S+ Release: .+)$", CHANGELOG, re.M).group(1)
     m = re.fullmatch(rf"{re.escape(VERSION)} Release: (\w+ \d{{1,2}}, \d{{4}})", first)
     assert m, f"newest release section is {first!r}, pyproject says {VERSION}"

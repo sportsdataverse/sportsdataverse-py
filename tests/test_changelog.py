@@ -73,13 +73,13 @@ _PRS = [
 
 
 def _sections() -> dict[str, str]:
-    """Every `## ` section (`Unreleased` and each release), keyed by its heading line."""
+    """Every `## ` release section, keyed by its heading line (unreleased changes live in changelog.d/)."""
     parts = re.split(r"^(?=## )", CHANGELOG.read_text(encoding="utf-8"), flags=re.M)[1:]
     return {p.splitlines()[0]: p for p in parts}
 
 
 def _release() -> str:
-    """The 0.1.5 section, found by heading so an `## Unreleased` added above it changes nothing."""
+    """The 0.1.5 section, found by heading so a newer release added above it changes nothing."""
     return next(s for h, s in _sections().items() if h.startswith("## 0.1.5 Release"))
 
 

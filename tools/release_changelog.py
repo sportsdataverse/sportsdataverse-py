@@ -27,7 +27,9 @@ ROOT = Path(__file__).resolve().parents[1]
 def release(version: str, date: dt.date, changelog: Path = sync.SOURCE, fragments: Path = sync.FRAGMENTS) -> list[Path]:
     """Write ``version``'s section into ``changelog`` from ``fragments`` and delete them; returns the deleted paths.
 
-    Raises ValueError, leaving both untouched, when there are no fragments or ``version`` is already released.
+    Raises ValueError, leaving both untouched, when there are no fragments, ``version`` is already released, or the
+    result is a changelog the docs renderer cannot read (a version such as ``v0.1.6``). If a delete fails after the
+    write (a locked file on Windows), `git checkout CHANGELOG.md changelog.d` restores both.
     """
     text = changelog.read_text(encoding="utf-8")
     if re.search(rf"^## {re.escape(version)} Release\b", text, re.M):
@@ -38,7 +40,9 @@ def release(version: str, date: dt.date, changelog: Path = sync.SOURCE, fragment
     section = sync.assemble(groups, f"{version} Release: {date:%B} {date.day}, {date.year}")
     first = re.search(r"^## ", text, re.M)
     at = first.start() if first else len(text)
-    changelog.write_text(text[:at] + section + "\n" + text[at:], encoding="utf-8", newline="\n")
+    new = text[:at] + section + "\n" + text[at:]
+    sync.split(new)  # the renderer's own check: a heading it would reject is never written
+    changelog.write_text(new, encoding="utf-8", newline="\n")
     removed = [p for p in sorted(fragments.iterdir()) if sync._FRAGMENT.fullmatch(p.name)]
     for path in removed:
         path.unlink()

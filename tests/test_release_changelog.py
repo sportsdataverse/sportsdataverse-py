@@ -47,6 +47,16 @@ def test_release_refuses_without_fragments(tmp_path):
     assert log.read_text(encoding="utf-8") == TOC + "\n" + OLD
 
 
+@pytest.mark.parametrize("version", ["v0.1.1", "0.1.1 ", ""])
+def test_release_refuses_a_version_the_renderer_cannot_read(tmp_path, version):
+    """A heading the docs renderer rejects is never written, and the fragments stay."""
+    log, d = _tree(tmp_path, {"a.fixed.md": "- **NFL:** b. (#2)\n"})
+    with pytest.raises(ValueError):
+        release_changelog.release(version, dt.date(2026, 10, 8), log, d)
+    assert (d / "a.fixed.md").exists()
+    assert log.read_text(encoding="utf-8") == TOC + "\n" + OLD
+
+
 def test_release_refuses_a_version_that_is_already_released(tmp_path):
     log, d = _tree(tmp_path, {"a.fixed.md": "- **NFL:** b. (#2)\n"})
     with pytest.raises(ValueError, match="0.1.0 is already released"):

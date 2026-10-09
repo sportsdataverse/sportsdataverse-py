@@ -269,7 +269,9 @@ and are never touched by edits to `current`.
      or by `uv run python tools/codegen/generate.py` if no hook ran.
 2. Commit (pre-commit runs the drift gate, doctoc, markdownlint, and the
    changelog sync). Preview locally with `cd docs && yarn build` if you like.
-3. Push to `main`. Vercel rebuilds and the change is live at the default
+3. Push to `main`. `docs-deploy.yml` builds the site (rendering
+   `/changelog-unreleased` from `changelog.d/` first) and publishes it to the
+   `gh-pages` branch, which Vercel serves as-is; the change is live at the default
    `/docs/` — because `current` **is** the default. **That's the whole
    workflow; a post-release docs commit is no different from any other.**
 

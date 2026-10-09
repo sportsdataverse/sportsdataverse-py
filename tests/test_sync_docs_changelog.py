@@ -102,6 +102,12 @@ def test_fragments_read_one_entry_per_bullet_in_file_order(tmp_path):
     }
 
 
+def test_a_fragment_saved_with_a_bom_reads_the_same(tmp_path):
+    """Windows editors may save a UTF-8 byte-order mark; it is not part of the bullet."""
+    d = _fragments(tmp_path, {"x.fixed.md": "﻿- **NFL:** b. (#2)\n"})
+    assert sync.read_fragments(d) == {"fixed": ["- **NFL:** b. (#2)"]}
+
+
 def test_no_fragments_reads_as_empty(tmp_path):
     assert sync.read_fragments(tmp_path) == {}
     assert sync.read_fragments(tmp_path / "absent") == {}
