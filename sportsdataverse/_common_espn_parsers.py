@@ -2427,10 +2427,12 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
             "poll_date": poll.get("date"),
         }
         for ranked, key in ((True, "ranks"), (False, "others")):
-            for entry in poll.get(key) or []:
+            entries = poll.get(key)
+            for entry in entries if isinstance(entries, list) else []:
                 if not isinstance(entry, dict):
                     continue
                 team = _dict(entry.get("team"))
+                color = team.get("color")
                 rows.append(
                     {
                         **head,
@@ -2447,7 +2449,8 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
                         "team_name": team.get("name"),
                         "team_nickname": team.get("nickname"),
                         "team_abbreviation": team.get("abbreviation"),
-                        "team_color": team.get("color"),
+                        # ESPN ships the literal string "NULL" for some teams with no color.
+                        "team_color": None if color == "NULL" else color,
                         "team_logo": team.get("logo"),
                         "last_updated": entry.get("lastUpdated"),
                     }

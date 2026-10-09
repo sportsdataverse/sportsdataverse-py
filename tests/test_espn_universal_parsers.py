@@ -1164,7 +1164,16 @@ def test_rankings_week_is_the_occurrence_value_not_its_running_number():
     assert df["season_type"].unique().to_list() == [3]
 
 
-@pytest.mark.parametrize("payload", [{}, {"rankings": []}, {"rankings": [None, {"ranks": None}]}, {"code": 404}])
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {},
+        {"rankings": []},
+        {"rankings": [None, {"ranks": None}]},
+        {"rankings": [{"ranks": 1, "others": "x"}]},
+        {"code": 404},
+    ],
+)
 def test_rankings_empty_or_malformed_payload_is_zero_rows(payload):
     """Zero rows that still carry the documented columns, so a caller can select them."""
     from sportsdataverse._common_espn_parsers import parse_rankings
@@ -1175,6 +1184,24 @@ def test_rankings_empty_or_malformed_payload_is_zero_rows(payload):
     pdf = parse_rankings(payload, return_as_pandas=True)
     assert len(pdf) == 0
     assert list(pdf.columns) == list(_RANKINGS_SCHEMA)
+
+
+def test_rankings_team_color_null_sentinel_is_null():
+    """ESPN ships the literal string "NULL" as one mch team's color; that is no color."""
+    from sportsdataverse._common_espn_parsers import parse_rankings
+
+    payload = _load("rankings_mch")
+    sentinel = {
+        e["team"]["id"]
+        for p in payload["rankings"]
+        for k in ("ranks", "others")
+        for e in p[k]
+        if e["team"].get("color") == "NULL"
+    }
+    assert sentinel, "the capture no longer carries the sentinel"
+    df = parse_rankings(payload)
+    assert "NULL" not in df["team_color"].drop_nulls().to_list()
+    assert df.filter(pl.col("team_id").is_in(sorted(sentinel)))["team_color"].null_count() > 0
 
 
 def test_rankings_schema_is_the_documented_one():
