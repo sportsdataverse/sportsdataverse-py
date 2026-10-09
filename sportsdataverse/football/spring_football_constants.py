@@ -47,6 +47,7 @@ is descriptive metadata only; no CFL model/pipeline ships from this module.
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+from typing import Any
 
 import numpy as np
 
@@ -163,7 +164,7 @@ SPRING_FOOTBALL_CONSTANTS: dict[str, SpringFootballConstants] = {
 # ufl-2025-kickoff-from-30-two-touchback-spots, ufl-2026-kick-pat-four-point-fg),
 # rules/xfl.yaml (xfl-2020-inaugural-ruleset, xfl-2023-relaunch-ruleset),
 # rules/cfl.yaml (cfl-2015-convert-distances, cfl-2027-field-shortened-to-100-yards).
-SPRING_FOOTBALL_SEASON_OVERRIDES: dict[str, dict[int, dict[str, object]]] = {
+SPRING_FOOTBALL_SEASON_OVERRIDES: dict[str, dict[int, dict[str, Any]]] = {
     "ufl": {
         # kickoffs from the 20, every touchback at the 25, no kicked PAT, 1/2/3 from the 2/5/10
         2024: {
