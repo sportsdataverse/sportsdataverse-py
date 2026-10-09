@@ -9259,16 +9259,19 @@ class CFBPlayProcess(object):
         # One row per drive for the drive-level columns, which repeat on every play of
         # the drive (averaging them over plays weights a drive by its length). ESPN files
         # the snap after a turnover under the drive that just ended, so a drive id can
-        # hold the other offense's snaps: keep the drive owner's rows only.
+        # hold the other offense's snaps: keep the drive owner's rows, unless none of the
+        # drive's snaps are the owner's (a mislabeled drive team, e.g. game 401634210).
         drive_abbr = pl.col("drive.team.abbreviation") if "drive.team.abbreviation" in play_df.columns else pl.lit(None)
-        drive_owner = (
+        owned = (
             pl.when(drive_abbr == pl.col("homeTeamAbbrev"))
             .then(pl.col("homeTeamId"))
             .when(drive_abbr == pl.col("awayTeamAbbrev"))
             .then(pl.col("awayTeamId"))
-        )
+            == pl.col("pos_team")
+        ).fill_null(False)
         per_drive = (
-            play_df.filter((pl.col("scrimmage_play") == True) & (drive_owner == pl.col("pos_team")).fill_null(True))
+            play_df.filter(pl.col("scrimmage_play") == True)
+            .filter(owned | ~owned.any().over("drive.id"))
             .group_by(["pos_team", "def_pos_team", "drive.id"])
             .agg(pl.col("drive_start", "drive.yards", "drive.offensivePlays", "drive_stopped").first())
             # ESPN ships start yardLine 0 on ~0.7% of drives: no drive starts in the end zone, so
@@ -9462,7 +9465,9 @@ class CFBPlayProcess(object):
                 plays_per_drive=pl.col("drive.offensivePlays").mean(),
                 yards_per_drive=pl.col("drive.yards").mean(),
                 drives=pl.col("drive.id").n_unique(),
-                drive_total_gained_yards_rate=100 * pl.col("_gained").sum() / pl.col("drive_start").sum(),
+                drive_total_gained_yards_rate=pl.when(pl.col("drive_start").sum() > 0).then(
+                    100 * pl.col("_gained").sum() / pl.col("drive_start").sum()
+                ),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(
