@@ -590,12 +590,41 @@ def _turnovers(plays: pl.DataFrame, box: dict[str, Any] | None) -> Any:
     )
 
 
+def _drive_rows(scrimmage: pl.DataFrame) -> pl.DataFrame:
+    """One row per drive, as ``create_box_score`` builds its drive metrics (CFB and NFL alike).
+
+    Drive-level columns repeat on every play, so they are read once per drive. ESPN files the
+    snap after a turnover under the drive that just ended, so only the labelled owner's snaps
+    (``drive.team.abbreviation`` matched to the home/away abbreviation) count, unless none of a
+    drive's snaps are the owner's (swapped labels). A ``drive_start`` of 0 or less is missing.
+    """
+    owner_cols = ("drive.team.abbreviation", "homeTeamAbbrev", "awayTeamAbbrev", "homeTeamId", "awayTeamId")
+    if all(col in scrimmage.columns for col in owner_cols):
+        owned = (
+            (
+                pl.when(c("drive.team.abbreviation") == c("homeTeamAbbrev"))
+                .then(c("homeTeamId"))
+                .when(c("drive.team.abbreviation") == c("awayTeamAbbrev"))
+                .then(c("awayTeamId"))
+            ).cast(pl.Int64, strict=False)
+            == c("pos_team").cast(pl.Int64, strict=False)
+        ).fill_null(False)
+        scrimmage = scrimmage.filter(owned | ~owned.any().over("drive.id"))
+    keep = [col for col in ("drive_start", "drive.yards") if col in scrimmage.columns]
+    keys = [col for col in ("pos_team", "def_pos_team", "drive.id") if col in scrimmage.columns]
+    rows = scrimmage.group_by(keys, maintain_order=True).agg(pl.col(keep).first())
+    if "drive_start" in rows.columns:
+        rows = rows.with_columns(drive_start=pl.when(c("drive_start") > 0).then(c("drive_start")))
+    return rows
+
+
 def _drives(plays: pl.DataFrame, box: dict[str, Any] | None, standing: pl.DataFrame | None) -> Any:
     """``box.drives_match_drive_rows`` -- the drive sections count the frame's drives."""
     full = _is_full_box(box)
     tally = _Tally()
     scrimmage = _filtered(plays, "scrimmage")
     if scrimmage is not None and "drive.id" in scrimmage.columns and "pos_team" in scrimmage.columns:
+        scrimmage = _drive_rows(scrimmage)
         rows = _section(box, "drives")
         checks = (
             ("drives", c("drive.id").n_unique(), ("drive.id",)),
