@@ -1,0 +1,3790 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-0.1.5 docs-doc-page docs-doc-id-yahoo/reference/yahoo_shangrila/other" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/0.1.5/yahoo/reference/yahoo_shangrila/other /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=0.1.5 /><meta data-rh=true name=docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true name=docsearch:version content=0.1.5 /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true property=og:title content="YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other | sdv-py"/><meta data-rh=true name=description content="YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other — function reference in sdv-py, the SportsDataverse Python package."/><meta data-rh=true property=og:description content="YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other — function reference in sdv-py, the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/0.1.5/yahoo/reference/yahoo_shangrila/other /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/yahoo/reference/yahoo_shangrila/other hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/yahoo/reference/yahoo_shangrila/other hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/leagues/other","name":"Other","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/yahoo/","name":"Yahoo Sports","position":2},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/yahoo/reference/yahoo_shangrila","name":"Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)","position":3},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/yahoo/reference/yahoo_shangrila/other","name":"Other","position":4}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/0.1.5/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/other>0.1.5</a><ul class=dropdown__menu><li><a class=dropdown__link href=/docs/yahoo/reference/yahoo_shangrila/other>main (latest)</a><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/other>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Expand sidebar category 'Basketball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Expand sidebar category 'Baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/0.1.5/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Collapse sidebar category 'Other'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/cricket/><span title=Cricket class=categoryLinkLabel_W154>Cricket</span></a><button aria-label="Expand sidebar category 'Cricket'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/odds/><span title="Betting odds" class=categoryLinkLabel_W154>Betting odds</span></a><button aria-label="Expand sidebar category 'Betting odds'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/cbs/><span title="CBS Sports" class=categoryLinkLabel_W154>CBS Sports</span></a><button aria-label="Expand sidebar category 'CBS Sports'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/0.1.5/yahoo/><span title="Yahoo Sports" class=categoryLinkLabel_W154>Yahoo Sports</span></a><button aria-label="Collapse sidebar category 'Yahoo Sports'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila><span title="Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)" class=categoryLinkLabel_W154>Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)</span></a><button aria-label="Collapse sidebar category 'Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/editorial><span title="Editorial: boxscore" class=linkLabel_WmDU>Editorial: boxscore</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/editorial-2><span title="Editorial: scoreboard" class=linkLabel_WmDU>Editorial: scoreboard</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/game><span title=Game class=linkLabel_WmDU>Game</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/league><span title=League class=linkLabel_WmDU>League</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/playbook><span title=Playbook class=linkLabel_WmDU>Playbook</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/player><span title=Player class=linkLabel_WmDU>Player</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/season><span title=Season class=linkLabel_WmDU>Season</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/team><span title=Team class=linkLabel_WmDU>Team</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/other><span title=Other class=linkLabel_WmDU>Other</span></a></ul></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/fox/><span title="Fox Sports" class=categoryLinkLabel_W154>Fox Sports</span></a><button aria-label="Expand sidebar category 'Fox Sports'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/euroleague/><span title=EuroLeague class=categoryLinkLabel_W154>EuroLeague</span></a><button aria-label="Expand sidebar category 'EuroLeague'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/f1/><span title="Formula 1" class=categoryLinkLabel_W154>Formula 1</span></a><button aria-label="Expand sidebar category 'Formula 1'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/espn_content/><span title="ESPN content (news)" class=categoryLinkLabel_W154>ESPN content (news)</span></a><button aria-label="Expand sidebar category 'ESPN content (news)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/thesportsdb/><span title=TheSportsDB class=categoryLinkLabel_W154>TheSportsDB</span></a><button aria-label="Expand sidebar category 'TheSportsDB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role=alert><div>This is documentation for <!-- -->sdv-py<!-- --> <b>0.1.5</b>, which is no longer actively maintained.</div><div class=margin-top--md>For up-to-date documentation, see the <b><a href=/docs/yahoo/reference/yahoo_shangrila/other>latest version</a></b> (<!-- -->main (latest)<!-- -->).</div></div><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/leagues/other><span>Other</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/yahoo/><span>Yahoo Sports</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/yahoo/reference/yahoo_shangrila><span>Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>Other</span></ul></nav><span class="theme-doc-version-badge badge badge--secondary">Version: 0.1.5</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other</h1></header>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_oly_medal_count>yahoo_oly_medal_count<a href=#yahoo_oly_medal_count class=hash-link aria-label="Direct link to yahoo_oly_medal_count" title="Direct link to yahoo_oly_medal_count" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>OlyMedalCount</code> -> one row per <code>olympics</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/OlyMedalCount</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/OlyMedalCount target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/OlyMedalCount</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>sortMethod</code><td><code>sort_method</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>sortMethod query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_oly_medal_count-returns>Returns<a href=#yahoo_oly_medal_count-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>display_name</code><td>character<td><tr><td><code>short_display_name</code><td>character<td><tr><td><code>start_date</code><td>character<td><tr><td><code>end_date</code><td>character<td><tr><td><code>season</code><td>integer<td><tr><td><code>alias</code><td>character<td>JSON-encoded Yahoo alias object for the entity, carrying the site URL, path and subpage routing used to build links to its page.<tr><td><code>olympic_team</code><td>character<td>JSON-encoded national team node whose medal count this row reports.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_oly_medal_count-example>Example<a href=#yahoo_oly_medal_count-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_oly_medal_count</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_oly_seasons>yahoo_oly_seasons<a href=#yahoo_oly_seasons class=hash-link aria-label="Direct link to yahoo_oly_seasons" title="Direct link to yahoo_oly_seasons" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>OlySeasons</code> -> one row per <code>olympics</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/OlySeasons</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/OlySeasons target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/OlySeasons</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>seasons</code><td><code>seasons</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>seasons query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_oly_seasons-returns>Returns<a href=#yahoo_oly_seasons-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season</code><td>integer<td><tr><td><code>display_name</code><td>character<td><tr><td><code>type</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_oly_seasons-example>Example<a href=#yahoo_oly_seasons-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_oly_seasons</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_alias>yahoo_alias<a href=#yahoo_alias class=hash-link aria-label="Direct link to yahoo_alias" title="Direct link to yahoo_alias" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>alias</code> -> one row per <code>pageMetaData</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/alias</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/alias target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/alias</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>alias</code><td><code>alias</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>alias query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_alias-returns>Returns<a href=#yahoo_alias-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>page_type</code><td>character<td><tr><td><code>league_short_name</code><td>character<td><tr><td><code>league_display_name</code><td>character<td>Display name of the league as rendered on the aliased page.<tr><td><code>entity_type</code><td>character<td>Kind of entity the alias record points at (e.g., "team", "player", "league").<tr><td><code>subpage_translation</code><td>character<td>Localized display label for the subpage this alias record describes.<tr><td><code>entity_alias</code><td>character<td>Alias template Yahoo serves the entity's own page under.<tr><td><code>subpage_alias</code><td>character<td>Alias template for the subpage this alias record describes.<tr><td><code>hotlist_data_desktop_space_id</code><td>character<td>Content-space identifier for the desktop hotlist module rendered on the aliased page.<tr><td><code>hotlist_data_tablet_space_id</code><td>character<td>Content-space identifier for the tablet hotlist module rendered on the aliased page.<tr><td><code>hotlist_data_mobile_space_id</code><td>character<td>Content-space identifier for the mobile hotlist module rendered on the aliased page.<tr><td><code>entity_list_id_desktop_list_id</code><td>character<td>Identifier of the curated desktop entity list rendered on the aliased page.<tr><td><code>entity_list_id_mobile_list_id</code><td>character<td>Identifier of the curated mobile entity list rendered on the aliased page.<tr><td><code>entity_list_id_tablet_list_id</code><td>character<td>Identifier of the curated tablet entity list rendered on the aliased page.<tr><td><code>game</code><td>character<td><tr><td><code>match</code><td>character<td>Alias template Yahoo serves the match page under for this league.<tr><td><code>race</code><td>character<td>Alias template Yahoo serves the motorsport race page under for this league.<tr><td><code>league</code><td>character<td><tr><td><code>team</code><td>character<td><tr><td><code>golf_tournament</code><td>character<td>Alias template Yahoo serves the golf-tournament page under for this league.<tr><td><code>tennis_tournament</code><td>character<td>Alias template Yahoo serves the tennis-tournament page under for this league.<tr><td><code>player</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_alias-example>Example<a href=#yahoo_alias-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_alias</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_article_list_card_players>yahoo_article_list_card_players<a href=#yahoo_article_list_card_players class=hash-link aria-label="Direct link to yahoo_article_list_card_players" title="Direct link to yahoo_article_list_card_players" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>articleListCardPlayers</code> -> one row per <code>players</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/articleListCardPlayers</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/articleListCardPlayers target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/articleListCardPlayers</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>playerIds</code><td><code>player_ids</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>playerIds query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_article_list_card_players-returns>Returns<a href=#yahoo_article_list_card_players-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>alias_path</code><td>character<td>Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/").<tr><td><code>alias_lang</code><td>character<td>Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US").<tr><td><code>alias_url</code><td>character<td>Absolute sports.yahoo.com URL of the entity's page (e.g., "<a href=https://sports.yahoo.com/ncaaf/players/464024/ target=_blank rel="noopener noreferrer" class="">https://sports.yahoo.com/ncaaf/players/464024/</a>").<tr><td><code>alias_domain</code><td>character<td>Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com").<tr><td><code>player_id</code><td>character<td><tr><td><code>display_name</code><td>character<td><tr><td><code>short_display_name</code><td>character<td><tr><td><code>player_cutout</code><td>character<td>JSON-encoded image node for the player's transparent cut-out portrait.<tr><td><code>team_alias</code><td>character<td>JSON-encoded alias object for the entity's team, carrying its Yahoo page URL and path.<tr><td><code>team_display_name</code><td>character<td><tr><td><code>team_primary_color</code><td>character<td>Primary brand color of the entity's team, as a hex RGB string without the leading hash.<tr><td><code>team_secondary_color</code><td>character<td>Secondary brand color of the entity's team, as a hex RGB string without the leading hash.<tr><td><code>team_team_id</code><td>character<td><tr><td><code>team_team_logo_white</code><td>character<td>JSON-encoded image node for the team's white knockout logo.<tr><td><code>team_team_logo</code><td>character<td>JSON-encoded image node for the team's standard logo.<tr><td><code>team_gametime_ticket_url</code><td>character<td>Gametime affiliate ticket-purchase URL for the team's home games.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_article_list_card_players-example>Example<a href=#yahoo_article_list_card_players-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_article_list_card_players</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_article_list_card_teams>yahoo_article_list_card_teams<a href=#yahoo_article_list_card_teams class=hash-link aria-label="Direct link to yahoo_article_list_card_teams" title="Direct link to yahoo_article_list_card_teams" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>articleListCardTeams</code> -> one row per <code>teams</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/articleListCardTeams</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/articleListCardTeams target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/articleListCardTeams</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>teamIds</code><td><code>team_ids</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>teamIds query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_article_list_card_teams-returns>Returns<a href=#yahoo_article_list_card_teams-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>alias_path</code><td>character<td>Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/").<tr><td><code>alias_lang</code><td>character<td>Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US").<tr><td><code>alias_url</code><td>character<td>Absolute sports.yahoo.com URL of the entity's page (e.g., "<a href=https://sports.yahoo.com/ncaaf/players/464024/ target=_blank rel="noopener noreferrer" class="">https://sports.yahoo.com/ncaaf/players/464024/</a>").<tr><td><code>alias_domain</code><td>character<td>Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com").<tr><td><code>display_name</code><td>character<td><tr><td><code>nickname</code><td>character<td><tr><td><code>primary_color</code><td>character<td><tr><td><code>secondary_color</code><td>character<td><tr><td><code>team_id</code><td>character<td><tr><td><code>team_logo_white_width</code><td>character<td>Pixel width of the team's white knockout logo image.<tr><td><code>team_logo_white_last_updated</code><td>character<td>Timestamp at which the team's white knockout logo asset was last refreshed.<tr><td><code>team_logo_white_image_type</code><td>character<td>File format of the team's white knockout logo asset (e.g., "png").<tr><td><code>team_logo_white_url</code><td>character<td>Absolute URL of the team's white knockout logo, the variant used on dark backgrounds.<tr><td><code>team_logo_white_height</code><td>character<td>Pixel height of the team's white knockout logo image.<tr><td><code>team_logo_white_team_id</code><td>character<td>Yahoo composite team id the white knockout logo asset belongs to.<tr><td><code>team_logo_width</code><td>character<td>Pixel width of the team's standard logo image.<tr><td><code>team_logo_last_updated</code><td>character<td>Timestamp at which the team's standard logo asset was last refreshed.<tr><td><code>team_logo_image_type</code><td>character<td>File format of the team's standard logo asset (e.g., "png").<tr><td><code>team_logo_url</code><td>character<td>Absolute URL of the team's standard logo image on Yahoo's image CDN.<tr><td><code>team_logo_height</code><td>character<td>Pixel height of the team's standard logo image.<tr><td><code>team_logo_team_id</code><td>character<td>Yahoo composite team id the standard logo asset belongs to.<tr><td><code>gametime_ticket_url</code><td>character<td>Gametime affiliate ticket-purchase URL for the event or team.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_article_list_card_teams-example>Example<a href=#yahoo_article_list_card_teams-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_article_list_card_teams</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_basic_players>yahoo_basic_players<a href=#yahoo_basic_players class=hash-link aria-label="Direct link to yahoo_basic_players" title="Direct link to yahoo_basic_players" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>basicPlayers</code> -> one row per <code>players</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/basicPlayers</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/basicPlayers target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/basicPlayers</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>players</code><td><code>players</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>players query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_basic_players-returns>Returns<a href=#yahoo_basic_players-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>player_id</code><td>character<td><tr><td><code>display_name</code><td>character<td><tr><td><code>suggested_headshot</code><td>character<td>JSON-encoded image node for the headshot Yahoo recommends for this player.<tr><td><code>alias_url</code><td>character<td>Absolute sports.yahoo.com URL of the entity's page (e.g., "<a href=https://sports.yahoo.com/ncaaf/players/464024/ target=_blank rel="noopener noreferrer" class="">https://sports.yahoo.com/ncaaf/players/464024/</a>").</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_basic_players-example>Example<a href=#yahoo_basic_players-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_basic_players</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_betting_disclaimer>yahoo_betting_disclaimer<a href=#yahoo_betting_disclaimer class=hash-link aria-label="Direct link to yahoo_betting_disclaimer" title="Direct link to yahoo_betting_disclaimer" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>bettingDisclaimer</code> -> one row per <code>bettingDisclaimers</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/bettingDisclaimer</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/bettingDisclaimer target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/bettingDisclaimer</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>bettingDisclaimerId</code><td><code>betting_disclaimer_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>bettingDisclaimerId query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_betting_disclaimer-returns>Returns<a href=#yahoo_betting_disclaimer-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>disclaimer_id</code><td>character<td>Identifier of the responsible-gambling disclaimer block to render alongside the odds.<tr><td><code>text</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_betting_disclaimer-example>Example<a href=#yahoo_betting_disclaimer-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_betting_disclaimer</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_combat_event_fights>yahoo_combat_event_fights<a href=#yahoo_combat_event_fights class=hash-link aria-label="Direct link to yahoo_combat_event_fights" title="Direct link to yahoo_combat_event_fights" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>combatEventFights</code> -> one row per <code>leagues</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/combatEventFights</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/combatEventFights target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/combatEventFights</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>eventGroupId</code><td><code>event_group_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>eventGroupId query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_combat_event_fights-returns>Returns<a href=#yahoo_combat_event_fights-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>short_name</code><td>character<td><tr><td><code>full_name</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_combat_event_fights-example>Example<a href=#yahoo_combat_event_fights-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_combat_event_fights</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_combat_schedule>yahoo_combat_schedule<a href=#yahoo_combat_schedule class=hash-link aria-label="Direct link to yahoo_combat_schedule" title="Direct link to yahoo_combat_schedule" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>combatSchedule</code> -> one row per <code>leagues</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/combatSchedule</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/combatSchedule target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/combatSchedule</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_combat_schedule-returns>Returns<a href=#yahoo_combat_schedule-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>short_name</code><td>character<td><tr><td><code>full_name</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_combat_schedule-example>Example<a href=#yahoo_combat_schedule-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_combat_schedule</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_common_pills>yahoo_common_pills<a href=#yahoo_common_pills class=hash-link aria-label="Direct link to yahoo_common_pills" title="Direct link to yahoo_common_pills" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>common/pills</code> (response body not captured; shape unknown)</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/common/pills</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/common/pills target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/common/pills</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>addTeamLogos</code><td><code>add_team_logos</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>addTeamLogos query parameter.<tr><td><code>date</code><td><code>date</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>date query parameter.<tr><td><code>teamIds</code><td><code>team_ids</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>teamIds query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_common_pills-returns>Returns<a href=#yahoo_common_pills-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_common_pills-example>Example<a href=#yahoo_common_pills-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_common_pills</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_consensus_rankings_php>yahoo_consensus_rankings_php<a href=#yahoo_consensus_rankings_php class=hash-link aria-label="Direct link to yahoo_consensus_rankings_php" title="Direct link to yahoo_consensus_rankings_php" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>consensus-rankings.php</code> (response body not captured; shape unknown)</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/consensus-rankings.php</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/consensus-rankings.php target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/consensus-rankings.php</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>sport</code><td><code>sport</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>sport query parameter.<tr><td><code>position</code><td><code>position</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>position query parameter.<tr><td><code>filters</code><td><code>filters</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>filters query parameter.<tr><td><code>experts</code><td><code>experts</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>experts query parameter.<tr><td><code>scoring</code><td><code>scoring</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>scoring query parameter.<tr><td><code>type</code><td><code>type</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>type query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_consensus_rankings_php-returns>Returns<a href=#yahoo_consensus_rankings_php-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_consensus_rankings_php-example>Example<a href=#yahoo_consensus_rankings_php-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_consensus_rankings_php</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_draft>yahoo_draft<a href=#yahoo_draft class=hash-link aria-label="Direct link to yahoo_draft" title="Direct link to yahoo_draft" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>draft</code> -> one row per <code>leagues</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/draft</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/draft target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/draft</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_draft-returns>Returns<a href=#yahoo_draft-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_draft-example>Example<a href=#yahoo_draft-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_draft</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_draft_prospects>yahoo_draft_prospects<a href=#yahoo_draft_prospects class=hash-link aria-label="Direct link to yahoo_draft_prospects" title="Direct link to yahoo_draft_prospects" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>draftProspects</code> -> one row per <code>leagues</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/draftProspects</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/draftProspects target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/draftProspects</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>imageHeight</code><td><code>image_height</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>imageHeight query parameter.<tr><td><code>imageWidth</code><td><code>image_width</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>imageWidth query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_draft_prospects-returns>Returns<a href=#yahoo_draft_prospects-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_draft_prospects-example>Example<a href=#yahoo_draft_prospects-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_draft_prospects</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_driver_results>yahoo_driver_results<a href=#yahoo_driver_results class=hash-link aria-label="Direct link to yahoo_driver_results" title="Direct link to yahoo_driver_results" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>driverResults</code> -> one row per <code>players</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/driverResults</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/driverResults target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/driverResults</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>playerId</code><td><code>player_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>playerId query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_driver_results-returns>Returns<a href=#yahoo_driver_results-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_driver_results-example>Example<a href=#yahoo_driver_results-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_driver_results</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_driver_splits>yahoo_driver_splits<a href=#yahoo_driver_splits class=hash-link aria-label="Direct link to yahoo_driver_splits" title="Direct link to yahoo_driver_splits" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>driverSplits</code> -> one row per <code>players</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/driverSplits</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/driverSplits target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/driverSplits</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>playerId</code><td><code>player_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>playerId query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_driver_splits-returns>Returns<a href=#yahoo_driver_splits-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_driver_splits-example>Example<a href=#yahoo_driver_splits-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_driver_splits</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_featured_game_ids>yahoo_featured_game_ids<a href=#yahoo_featured_game_ids class=hash-link aria-label="Direct link to yahoo_featured_game_ids" title="Direct link to yahoo_featured_game_ids" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>featuredGameIds</code> -> one row per <code>featuredGames</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/featuredGameIds</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/featuredGameIds target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/featuredGameIds</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description</thead></table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_featured_game_ids-returns>Returns<a href=#yahoo_featured_game_ids-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_featured_game_ids-example>Example<a href=#yahoo_featured_game_ids-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_featured_game_ids</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_gametime_game>yahoo_gametime_game<a href=#yahoo_gametime_game class=hash-link aria-label="Direct link to yahoo_gametime_game" title="Direct link to yahoo_gametime_game" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>gametimeGame</code> -> one row per <code>games</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/gametimeGame</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/gametimeGame target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/gametimeGame</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>gameId</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>gameId query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_gametime_game-returns>Returns<a href=#yahoo_gametime_game-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td><tr><td><code>gametime_ticket_url</code><td>character<td>Gametime affiliate ticket-purchase URL for the event or team.<tr><td><code>game_ticket_price</code><td>character<td>Lowest available ticket price for the game from the Gametime affiliate feed, in US dollars.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_gametime_game-example>Example<a href=#yahoo_gametime_game-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_gametime_game</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_gametime_team>yahoo_gametime_team<a href=#yahoo_gametime_team class=hash-link aria-label="Direct link to yahoo_gametime_team" title="Direct link to yahoo_gametime_team" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>gametimeTeam</code> -> one row per <code>teams</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/gametimeTeam</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/gametimeTeam target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/gametimeTeam</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>teamId</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>teamId query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_gametime_team-returns>Returns<a href=#yahoo_gametime_team-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>gametime_ticket_url</code><td>character<td>Gametime affiliate ticket-purchase URL for the event or team.<tr><td><code>team_id</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_gametime_team-example>Example<a href=#yahoo_gametime_team-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_gametime_team</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_golf_tournament_seasons>yahoo_golf_tournament_seasons<a href=#yahoo_golf_tournament_seasons class=hash-link aria-label="Direct link to yahoo_golf_tournament_seasons" title="Direct link to yahoo_golf_tournament_seasons" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>golfTournamentSeasons</code> (response body not captured; shape unknown)</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/golfTournamentSeasons</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/golfTournamentSeasons target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/golfTournamentSeasons</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>eventGroupId</code><td><code>event_group_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>eventGroupId query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_golf_tournament_seasons-returns>Returns<a href=#yahoo_golf_tournament_seasons-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_golf_tournament_seasons-example>Example<a href=#yahoo_golf_tournament_seasons-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_golf_tournament_seasons</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_golf_tournaments>yahoo_golf_tournaments<a href=#yahoo_golf_tournaments class=hash-link aria-label="Direct link to yahoo_golf_tournaments" title="Direct link to yahoo_golf_tournaments" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>golfTournaments</code> -> one row per <code>golfTournaments</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/golfTournaments</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/golfTournaments target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/golfTournaments</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>association</code><td><code>association</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>association query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>showDefendingChamps</code><td><code>show_defending_champs</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>showDefendingChamps query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_golf_tournaments-returns>Returns<a href=#yahoo_golf_tournaments-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>alias_url</code><td>character<td>Absolute sports.yahoo.com URL of the entity's page (e.g., "<a href=https://sports.yahoo.com/ncaaf/players/464024/ target=_blank rel="noopener noreferrer" class="">https://sports.yahoo.com/ncaaf/players/464024/</a>").<tr><td><code>alias_path</code><td>character<td>Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/").<tr><td><code>event_group_id</code><td>character<td>Yahoo identifier that groups the rounds or legs making up a single tournament.<tr><td><code>name</code><td>character<td><tr><td><code>display_name</code><td>character<td><tr><td><code>start_time</code><td>character<td><tr><td><code>start_date</code><td>character<td><tr><td><code>end_date</code><td>character<td><tr><td><code>status</code><td>character<td><tr><td><code>status_display_name</code><td>character<td>Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET").<tr><td><code>player_tournament_stats</code><td>character<td>JSON-encoded per-player statistics recorded at the golf tournament.<tr><td><code>purse</code><td>character<td>Total prize money on offer at the tournament, in US dollars.<tr><td><code>major</code><td>logical<td>Flag indicating that the golf tournament is one of the sport's majors.<tr><td><code>venue_display_name</code><td>character<td>Name of the venue hosting the event.<tr><td><code>venue_country</code><td>character<td>Country the venue is located in.<tr><td><code>venue_city</code><td>character<td><tr><td><code>venue_state</code><td>character<td><tr><td><code>par</code><td>integer<td>Par of the golf course in play for the tournament.<tr><td><code>yardage</code><td>integer<td>Total yardage of the golf course in play for the tournament.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_golf_tournaments-example>Example<a href=#yahoo_golf_tournaments-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_golf_tournaments</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_golf_tournaments_basic>yahoo_golf_tournaments_basic<a href=#yahoo_golf_tournaments_basic class=hash-link aria-label="Direct link to yahoo_golf_tournaments_basic" title="Direct link to yahoo_golf_tournaments_basic" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>golfTournamentsBasic</code> -> one row per <code>golfTournaments</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/golfTournamentsBasic</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/golfTournamentsBasic target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/golfTournamentsBasic</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>eventGroupId</code><td><code>event_group_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>eventGroupId query parameter.<tr><td><code>association</code><td><code>association</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>association query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_golf_tournaments_basic-returns>Returns<a href=#yahoo_golf_tournaments_basic-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>event_group_id</code><td>character<td>Yahoo identifier that groups the rounds or legs making up a single tournament.<tr><td><code>start_time</code><td>character<td><tr><td><code>start_date</code><td>character<td><tr><td><code>end_date</code><td>character<td><tr><td><code>season</code><td>integer<td><tr><td><code>clubs</code><td>character<td>JSON-encoded list of the golf clubs hosting the tournament.<tr><td><code>courses</code><td>character<td>JSON-encoded list of the courses in play at the tournament, with their par and yardage.<tr><td><code>name</code><td>character<td><tr><td><code>status</code><td>character<td><tr><td><code>alias_url</code><td>character<td>Absolute sports.yahoo.com URL of the entity's page (e.g., "<a href=https://sports.yahoo.com/ncaaf/players/464024/ target=_blank rel="noopener noreferrer" class="">https://sports.yahoo.com/ncaaf/players/464024/</a>").<tr><td><code>alias_path</code><td>character<td>Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/").<tr><td><code>association</code><td>character<td>Governing tour that sanctions the event (e.g., "pga").<tr><td><code>league_short_name</code><td>character<td><tr><td><code>league_full_name</code><td>character<td>Full league name (e.g., "NCAA Football").<tr><td><code>league_alias</code><td>character<td>JSON-encoded Yahoo alias object for the league, carrying its site URL and path.<tr><td><code>purse</code><td>character<td>Total prize money on offer at the tournament, in US dollars.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_golf_tournaments_basic-example>Example<a href=#yahoo_golf_tournaments_basic-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_golf_tournaments_basic</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_module_game>yahoo_module_game<a href=#yahoo_module_game class=hash-link aria-label="Direct link to yahoo_module_game" title="Direct link to yahoo_module_game" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>moduleGame</code> -> one row per <code>games</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/moduleGame</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/moduleGame target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/moduleGame</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>gameId</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>gameId query parameter.<tr><td><code>imageHeight</code><td><code>image_height</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>imageHeight query parameter.<tr><td><code>imageWidth</code><td><code>image_width</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>imageWidth query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_module_game-returns>Returns<a href=#yahoo_module_game-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td><tr><td><code>display_name</code><td>character<td><tr><td><code>league_name</code><td>character<td><tr><td><code>league_full_name</code><td>character<td>Full league name (e.g., "NCAA Football").<tr><td><code>league_display_abbr</code><td>character<td>Compact league abbreviation used in dense UI alongside the game.<tr><td><code>league_display_short</code><td>character<td>Short league label used in navigation and compact UI (e.g., "NCAA FB").<tr><td><code>league_short_name</code><td>character<td><tr><td><code>league_sport</code><td>character<td>Sport the league belongs to (e.g., "football").<tr><td><code>league_alias</code><td>character<td>JSON-encoded Yahoo alias object for the league, carrying its site URL and path.<tr><td><code>alias_url</code><td>character<td>Absolute sports.yahoo.com URL of the entity's page (e.g., "<a href=https://sports.yahoo.com/ncaaf/players/464024/ target=_blank rel="noopener noreferrer" class="">https://sports.yahoo.com/ncaaf/players/464024/</a>").<tr><td><code>away_team_id</code><td>character<td><tr><td><code>away_team_record</code><td>character<td><tr><td><code>away_team_full_name</code><td>character<td><tr><td><code>away_team_team_id</code><td>character<td>Yahoo composite team id of the away team (e.g., "ncaaf.t.29").<tr><td><code>away_team_primary_color</code><td>character<td>Primary brand color of the away team, as a hex RGB string without the leading hash.<tr><td><code>away_team_secondary_color</code><td>character<td>Secondary brand color of the away team, as a hex RGB string without the leading hash.<tr><td><code>away_team_display_name</code><td>character<td><tr><td><code>away_team_abbreviation</code><td>character<td><tr><td><code>away_team_location</code><td>character<td><tr><td><code>away_team_gametime_ticket_url</code><td>character<td>Gametime affiliate ticket-purchase URL for the away team's games.<tr><td><code>away_team_alias</code><td>character<td>JSON-encoded Yahoo alias object for the away team, carrying its site URL and path.<tr><td><code>away_team_nickname</code><td>character<td><tr><td><code>away_team_last_games</code><td>character<td>JSON-encoded list of the away team's most recently completed games.<tr><td><code>away_team_team_logo_white</code><td>character<td>JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds.<tr><td><code>away_team_team_logo</code><td>character<td>JSON-encoded image node for the away team's standard logo.<tr><td><code>away_team_team_standings</code><td>character<td>JSON-encoded standings node for the away team, carrying its record, position and streak.<tr><td><code>away_team_rank_polls</code><td>character<td>JSON-encoded list of the poll rankings the away team currently holds.<tr><td><code>away_team_playoff_seeds</code><td>character<td>JSON-encoded list of the away team's playoff-seed entries for the season.<tr><td><code>home_team_id</code><td>character<td><tr><td><code>home_team_record</code><td>character<td><tr><td><code>home_team_full_name</code><td>character<td><tr><td><code>home_team_team_id</code><td>character<td>Yahoo composite team id of the home team (e.g., "ncaaf.t.29").<tr><td><code>home_team_primary_color</code><td>character<td>Primary brand color of the home team, as a hex RGB string without the leading hash.<tr><td><code>home_team_secondary_color</code><td>character<td>Secondary brand color of the home team, as a hex RGB string without the leading hash.<tr><td><code>home_team_display_name</code><td>character<td><tr><td><code>home_team_abbreviation</code><td>character<td><tr><td><code>home_team_location</code><td>character<td><tr><td><code>home_team_gametime_ticket_url</code><td>character<td>Gametime affiliate ticket-purchase URL for the home team's games.<tr><td><code>home_team_alias</code><td>character<td>JSON-encoded Yahoo alias object for the home team, carrying its site URL and path.<tr><td><code>home_team_nickname</code><td>character<td><tr><td><code>home_team_last_games</code><td>character<td>JSON-encoded list of the home team's most recently completed games.<tr><td><code>home_team_team_logo_white</code><td>character<td>JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds.<tr><td><code>home_team_team_logo</code><td>character<td>JSON-encoded image node for the home team's standard logo.<tr><td><code>home_team_team_standings</code><td>character<td>JSON-encoded standings node for the home team, carrying its record, position and streak.<tr><td><code>home_team_rank_polls</code><td>character<td>JSON-encoded list of the poll rankings the home team currently holds.<tr><td><code>home_team_playoff_seeds</code><td>character<td>JSON-encoded list of the home team's playoff-seed entries for the season.<tr><td><code>away_score</code><td>integer<td><tr><td><code>home_score</code><td>integer<td><tr><td><code>start_time</code><td>character<td><tr><td><code>start_date</code><td>character<td><tr><td><code>if_necessary</code><td>character<td><tr><td><code>status</code><td>character<td><tr><td><code>status_display_name</code><td>character<td>Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET").<tr><td><code>season</code><td>integer<td><tr><td><code>season_phase</code><td>character<td>Phase of the season the game falls in (e.g., "season.phase.season").<tr><td><code>time_left</code><td>character<td><tr><td><code>tournament_id</code><td>character<td><tr><td><code>gametime_ticket_url</code><td>character<td>Gametime affiliate ticket-purchase URL for the event or team.<tr><td><code>game_ticket_price</code><td>character<td>Lowest available ticket price for the game from the Gametime affiliate feed, in US dollars.<tr><td><code>playoff_series</code><td>character<td>JSON-encoded playoff-series node the game belongs to.<tr><td><code>winning_team_id</code><td>character<td>Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29").<tr><td><code>broadcast_channels</code><td>character<td>JSON-encoded list of the channels broadcasting the event.<tr><td><code>news_break_subtext</code><td>character<td>Secondary line of the news-break banner attached to the game.<tr><td><code>news_break_title</code><td>character<td>Headline of the news-break banner attached to the game.<tr><td><code>news_break_url</code><td>character<td>URL of the article behind the game's news-break banner.<tr><td><code>news_break_uuid</code><td>character<td>Yahoo content UUID of the article behind the game's news-break banner.<tr><td><code>brief</code><td>character<td>Short editorial blurb summarizing the game's state or result.<tr><td><code>event_extended_display_name</code><td>character<td>Long-form event title used for marquee games, such as a bowl or rivalry name.<tr><td><code>bets</code><td>character<td>JSON-encoded list of the betting markets offered on the event (spread, moneyline and total).<tr><td><code>venue_display_name</code><td>character<td>Name of the venue hosting the event.<tr><td><code>venue_city</code><td>character<td><tr><td><code>venue_cover_type</code><td>character<td>Whether the venue is open-air, domed or fitted with a retractable roof.<tr><td><code>venue_state</code><td>character<td><tr><td><code>venue_venue_id</code><td>character<td>Yahoo identifier of the venue hosting the event.<tr><td><code>venue_country</code><td>character<td>Country the venue is located in.<tr><td><code>tv_coverage</code><td>character<td>Network carrying the game, as a short broadcast abbreviation (e.g., "CBS", "ESPN").<tr><td><code>weather</code><td>character<td><tr><td><code>away_line_score</code><td>character<td>JSON-encoded per-period scoring line for the away team.<tr><td><code>current_period_period</code><td>character<td>Ordinal number of the period currently in progress within the game.<tr><td><code>field_position</code><td>character<td>Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line.<tr><td><code>field_position_display_name</code><td>character<td>Ball spot rendered the way a scoreboard shows it (e.g., "MICH 35").<tr><td><code>home_line_score</code><td>character<td>JSON-encoded per-period scoring line for the home team.<tr><td><code>home_timeouts_remaining</code><td>integer<td><tr><td><code>away_timeouts_remaining</code><td>integer<td><tr><td><code>last_play</code><td>character<td><tr><td><code>game_stat_leaders</code><td>character<td>JSON-encoded pointer to the per-category statistical leaders for the game.<tr><td><code>team_possessing_ball</code><td>character<td>Yahoo team id of the side currently possessing the ball.<tr><td><code>recap_videos</code><td>character<td>JSON-encoded list of recap videos published for the game.<tr><td><code>week</code><td>integer<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_module_game-example>Example<a href=#yahoo_module_game-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_module_game</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_motorsport_standings>yahoo_motorsport_standings<a href=#yahoo_motorsport_standings class=hash-link aria-label="Direct link to yahoo_motorsport_standings" title="Direct link to yahoo_motorsport_standings" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>motorsportStandings</code> -> one row per <code>leagues</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/motorsportStandings</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/motorsportStandings target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/motorsportStandings</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_motorsport_standings-returns>Returns<a href=#yahoo_motorsport_standings-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>name</code><td>character<td><tr><td><code>full_name</code><td>character<td><tr><td><code>current_league_season</code><td>character<td>Yahoo league-season identifier for the season currently in progress.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_motorsport_standings-example>Example<a href=#yahoo_motorsport_standings-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_motorsport_standings</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_nascar_drivers>yahoo_nascar_drivers<a href=#yahoo_nascar_drivers class=hash-link aria-label="Direct link to yahoo_nascar_drivers" title="Direct link to yahoo_nascar_drivers" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>nascarDrivers</code> -> one row per <code>leagues</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/nascarDrivers</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/nascarDrivers target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/nascarDrivers</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_nascar_drivers-returns>Returns<a href=#yahoo_nascar_drivers-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>short_name</code><td>character<td><tr><td><code>players</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_nascar_drivers-example>Example<a href=#yahoo_nascar_drivers-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_nascar_drivers</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_nav_dropdown_tray>yahoo_nav_dropdown_tray<a href=#yahoo_nav_dropdown_tray class=hash-link aria-label="Direct link to yahoo_nav_dropdown_tray" title="Direct link to yahoo_nav_dropdown_tray" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>navDropdownTray</code> -> tables: nfl, nhl, nba, mlb, wnba, ncaab, ncaaf, ncaaw, sportsbook_legal_states</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/navDropdownTray</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/navDropdownTray target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/navDropdownTray</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>getSoccerData</code><td><code>get_soccer_data</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>getSoccerData query parameter.<tr><td><code>soccerLeagueIds</code><td><code>soccer_league_ids</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>soccerLeagueIds query parameter.<tr><td><code>soccerTeamIds</code><td><code>soccer_team_ids</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>soccerTeamIds query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_nav_dropdown_tray-returns>Returns<a href=#yahoo_nav_dropdown_tray-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — A dict of polars/pandas DataFrames keyed by the payload's <code>data</code> collections (one table per documented key below); pass <code>return_as_pandas=True</code> for a dict of <code>pandas.DataFrame</code>s (same keys).</p>
+<p><strong>nfl</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>short_name</code><td>character<td><tr><td><code>teams</code><td>character<td></table>
+<p><strong>nhl</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>short_name</code><td>character<td><tr><td><code>teams</code><td>character<td></table>
+<p><strong>nba</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>short_name</code><td>character<td><tr><td><code>teams</code><td>character<td></table>
+<p><strong>mlb</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>short_name</code><td>character<td><tr><td><code>teams</code><td>character<td></table>
+<p><strong>wnba</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>short_name</code><td>character<td><tr><td><code>teams</code><td>character<td></table>
+<p><strong>ncaab</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>poll_name</code><td>character<td><tr><td><code>rank</code><td>character<td><tr><td><code>team_id</code><td>character<td><tr><td><code>team</code><td>character<td></table>
+<p><strong>ncaaf</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>poll_name</code><td>character<td><tr><td><code>rank</code><td>character<td><tr><td><code>team_id</code><td>character<td><tr><td><code>team</code><td>character<td></table>
+<p><strong>ncaaw</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>poll_name</code><td>character<td><tr><td><code>rank</code><td>character<td><tr><td><code>team_id</code><td>character<td><tr><td><code>team</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_nav_dropdown_tray-example>Example<a href=#yahoo_nav_dropdown_tray-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_nav_dropdown_tray</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_pick_distribution>yahoo_pick_distribution<a href=#yahoo_pick_distribution class=hash-link aria-label="Direct link to yahoo_pick_distribution" title="Direct link to yahoo_pick_distribution" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>pickDistribution</code> -> one row per <code>leagues</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/pickDistribution</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/pickDistribution target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/pickDistribution</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.<tr><td><code>dates</code><td><code>dates</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).<tr><td><code>count</code><td><code>count</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>count query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_pick_distribution-returns>Returns<a href=#yahoo_pick_distribution-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>ncaaf_games</code><td>character<td>JSON-encoded list of NCAAF game nodes carrying the pick or odds distribution for the slate.<tr><td><code>conferences</code><td>character<td>JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_pick_distribution-example>Example<a href=#yahoo_pick_distribution-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_pick_distribution</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_playoff_bracket>yahoo_playoff_bracket<a href=#yahoo_playoff_bracket class=hash-link aria-label="Direct link to yahoo_playoff_bracket" title="Direct link to yahoo_playoff_bracket" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>playoffBracket</code> -> one row per <code>leagues.bracketSlots</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playoffBracket</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playoffBracket target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playoffBracket</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>tournament</code><td><code>tournament</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>tournament query parameter.<tr><td><code>type</code><td><code>type</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>type query parameter.<tr><td><code>playoffRounds</code><td><code>playoff_rounds</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>playoffRounds query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_playoff_bracket-returns>Returns<a href=#yahoo_playoff_bracket-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>conference</code><td>character<td><tr><td><code>id</code><td>character<td><tr><td><code>location</code><td>character<td><tr><td><code>playoff_round</code><td>character<td><tr><td><code>display_order</code><td>character<td>Position of the bracket slot within its round, controlling top-to-bottom rendering.<tr><td><code>season</code><td>character<td><tr><td><code>max_games</code><td>character<td>Maximum number of games the playoff series can run to.<tr><td><code>winner_bracket_slot_id</code><td>character<td>Identifier of the bracket slot the winner of this slot advances into.<tr><td><code>playoff_series</code><td>character<td>JSON-encoded playoff-series node the game belongs to.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_playoff_bracket-example>Example<a href=#yahoo_playoff_bracket-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_playoff_bracket</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_playoff_series_game>yahoo_playoff_series_game<a href=#yahoo_playoff_series_game class=hash-link aria-label="Direct link to yahoo_playoff_series_game" title="Direct link to yahoo_playoff_series_game" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>playoffSeriesGame</code> -> one row per <code>games</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playoffSeriesGame</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playoffSeriesGame target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playoffSeriesGame</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>gameId</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>gameId query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_playoff_series_game-returns>Returns<a href=#yahoo_playoff_series_game-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td><tr><td><code>playoff_series</code><td>character<td>JSON-encoded playoff-series node the game belongs to.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_playoff_series_game-example>Example<a href=#yahoo_playoff_series_game-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_playoff_series_game</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_polymarket_game>yahoo_polymarket_game<a href=#yahoo_polymarket_game class=hash-link aria-label="Direct link to yahoo_polymarket_game" title="Direct link to yahoo_polymarket_game" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>polymarketGame</code> -> one row per <code>games</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/polymarketGame</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/polymarketGame target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/polymarketGame</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>gameId</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>gameId query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_polymarket_game-returns>Returns<a href=#yahoo_polymarket_game-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td><tr><td><code>polymarket_url</code><td>character<td>Polymarket prediction-market URL for wagering on the game.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_polymarket_game-example>Example<a href=#yahoo_polymarket_game-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_polymarket_game</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_racing_schedule>yahoo_racing_schedule<a href=#yahoo_racing_schedule class=hash-link aria-label="Direct link to yahoo_racing_schedule" title="Direct link to yahoo_racing_schedule" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>racingSchedule</code> -> one row per <code>leagues</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/racingSchedule</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/racingSchedule target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/racingSchedule</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>today</code><td><code>today</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>today query parameter.<tr><td><code>hasSeries</code><td><code>has_series</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>hasSeries query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_racing_schedule-returns>Returns<a href=#yahoo_racing_schedule-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>league_seasons</code><td>character<td>JSON-encoded list of the seasons for which Yahoo carries data for this league.<tr><td><code>current_season</code><td>integer<td>Season the league is currently playing, as the four-digit starting year.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_racing_schedule-example>Example<a href=#yahoo_racing_schedule-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_racing_schedule</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_scoreboard_game>yahoo_scoreboard_game<a href=#yahoo_scoreboard_game class=hash-link aria-label="Direct link to yahoo_scoreboard_game" title="Direct link to yahoo_scoreboard_game" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>scoreboardGame</code> -> one row per <code>games</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/scoreboardGame</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/scoreboardGame target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/scoreboardGame</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>gameId</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>gameId query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>seasonPhase</code><td><code>season_phase</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>seasonPhase query parameter.<tr><td><code>statLeaderCount</code><td><code>stat_leader_count</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>statLeaderCount query parameter.<tr><td><code>singleStatLeader</code><td><code>single_stat_leader</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>singleStatLeader query parameter.<tr><td><code>betEventState</code><td><code>bet_event_state</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>betEventState query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_scoreboard_game-returns>Returns<a href=#yahoo_scoreboard_game-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td><tr><td><code>display_name</code><td>character<td><tr><td><code>league_name</code><td>character<td><tr><td><code>league_full_name</code><td>character<td>Full league name (e.g., "NCAA Football").<tr><td><code>league_display_short</code><td>character<td>Short league label used in navigation and compact UI (e.g., "NCAA FB").<tr><td><code>league_short_name</code><td>character<td><tr><td><code>league_sport</code><td>character<td>Sport the league belongs to (e.g., "football").<tr><td><code>league_alias</code><td>character<td>JSON-encoded Yahoo alias object for the league, carrying its site URL and path.<tr><td><code>league_league_logo</code><td>character<td>JSON-encoded image node for the league's logo.<tr><td><code>partner_url</code><td>character<td>Partner or affiliate deep link associated with the scoreboard game.<tr><td><code>alias_url</code><td>character<td>Absolute sports.yahoo.com URL of the entity's page (e.g., "<a href=https://sports.yahoo.com/ncaaf/players/464024/ target=_blank rel="noopener noreferrer" class="">https://sports.yahoo.com/ncaaf/players/464024/</a>").<tr><td><code>away_team_id</code><td>character<td><tr><td><code>away_team_full_name</code><td>character<td><tr><td><code>away_team_team_id</code><td>character<td>Yahoo composite team id of the away team (e.g., "ncaaf.t.29").<tr><td><code>away_team_display_name</code><td>character<td><tr><td><code>away_team_abbreviation</code><td>character<td><tr><td><code>away_team_alias</code><td>character<td>JSON-encoded Yahoo alias object for the away team, carrying its site URL and path.<tr><td><code>away_team_nickname</code><td>character<td><tr><td><code>away_team_team_logo_white</code><td>character<td>JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds.<tr><td><code>away_team_team_logo</code><td>character<td>JSON-encoded image node for the away team's standard logo.<tr><td><code>away_team_team_standings</code><td>character<td>JSON-encoded standings node for the away team, carrying its record, position and streak.<tr><td><code>away_team_rank_polls</code><td>character<td>JSON-encoded list of the poll rankings the away team currently holds.<tr><td><code>away_team_playoff_seeds</code><td>character<td>JSON-encoded list of the away team's playoff-seed entries for the season.<tr><td><code>away_team_record</code><td>character<td><tr><td><code>home_team_id</code><td>character<td><tr><td><code>home_team_full_name</code><td>character<td><tr><td><code>home_team_team_id</code><td>character<td>Yahoo composite team id of the home team (e.g., "ncaaf.t.29").<tr><td><code>home_team_display_name</code><td>character<td><tr><td><code>home_team_abbreviation</code><td>character<td><tr><td><code>home_team_alias</code><td>character<td>JSON-encoded Yahoo alias object for the home team, carrying its site URL and path.<tr><td><code>home_team_nickname</code><td>character<td><tr><td><code>home_team_team_logo_white</code><td>character<td>JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds.<tr><td><code>home_team_team_logo</code><td>character<td>JSON-encoded image node for the home team's standard logo.<tr><td><code>home_team_team_standings</code><td>character<td>JSON-encoded standings node for the home team, carrying its record, position and streak.<tr><td><code>home_team_rank_polls</code><td>character<td>JSON-encoded list of the poll rankings the home team currently holds.<tr><td><code>home_team_playoff_seeds</code><td>character<td>JSON-encoded list of the home team's playoff-seed entries for the season.<tr><td><code>home_team_record</code><td>character<td><tr><td><code>current_period_overtime</code><td>character<td>Flag indicating that the period in progress is an overtime period.<tr><td><code>current_period_short_display_name</code><td>character<td>Abbreviated label for the period in progress (e.g., "4th").<tr><td><code>away_score</code><td>integer<td><tr><td><code>home_score</code><td>integer<td><tr><td><code>start_time</code><td>character<td><tr><td><code>start_date</code><td>character<td><tr><td><code>if_necessary</code><td>character<td><tr><td><code>status</code><td>character<td><tr><td><code>status_display_name</code><td>character<td>Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET").<tr><td><code>full_status_display_name</code><td>character<td>Long-form game status label including overtime and date context (e.g., "Final/OT").<tr><td><code>season</code><td>integer<td><tr><td><code>season_phase</code><td>character<td>Phase of the season the game falls in (e.g., "season.phase.season").<tr><td><code>time_left</code><td>character<td><tr><td><code>tournament_id</code><td>character<td><tr><td><code>display_result</code><td>character<td><tr><td><code>playoff_series</code><td>character<td>JSON-encoded playoff-series node the game belongs to.<tr><td><code>winning_team_id</code><td>character<td>Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29").<tr><td><code>broadcast_channels</code><td>character<td>JSON-encoded list of the channels broadcasting the event.<tr><td><code>news_break_subtext</code><td>character<td>Secondary line of the news-break banner attached to the game.<tr><td><code>news_break_title</code><td>character<td>Headline of the news-break banner attached to the game.<tr><td><code>news_break_url</code><td>character<td>URL of the article behind the game's news-break banner.<tr><td><code>news_break_uuid</code><td>character<td>Yahoo content UUID of the article behind the game's news-break banner.<tr><td><code>news_break_type</code><td>character<td>Category of the news-break banner, such as an injury note, preview or recap.<tr><td><code>brief</code><td>character<td>Short editorial blurb summarizing the game's state or result.<tr><td><code>event_extended_display_name</code><td>character<td>Long-form event title used for marquee games, such as a bowl or rivalry name.<tr><td><code>special_event_type</code><td>character<td>Marker identifying a special framing for the game, such as a bowl game or neutral-site showcase.<tr><td><code>bets</code><td>character<td>JSON-encoded list of the betting markets offered on the event (spread, moneyline and total).<tr><td><code>venue_display_name</code><td>character<td>Name of the venue hosting the event.<tr><td><code>weather</code><td>character<td><tr><td><code>gametime_ticket_url</code><td>character<td>Gametime affiliate ticket-purchase URL for the event or team.<tr><td><code>game_ticket_price</code><td>character<td>Lowest available ticket price for the game from the Gametime affiliate feed, in US dollars.<tr><td><code>teams</code><td>character<td><tr><td><code>field_position</code><td>character<td>Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line.<tr><td><code>field_position_display_name</code><td>character<td>Ball spot rendered the way a scoreboard shows it (e.g., "MICH 35").<tr><td><code>team_possessing_ball</code><td>character<td>Yahoo team id of the side currently possessing the ball.<tr><td><code>week</code><td>integer<td><tr><td><code>passing_leader</code><td>character<td>JSON-encoded leading passer for the game or team, with the statistics that earned the billing.<tr><td><code>rushing_leader</code><td>character<td>JSON-encoded leading rusher for the game or team, with the statistics that earned the billing.<tr><td><code>receiving_leader</code><td>character<td>JSON-encoded leading receiver for the game or team, with the statistics that earned the billing.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_scoreboard_game-example>Example<a href=#yahoo_scoreboard_game-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_scoreboard_game</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_matches_by_date>yahoo_tennis_matches_by_date<a href=#yahoo_tennis_matches_by_date class=hash-link aria-label="Direct link to yahoo_tennis_matches_by_date" title="Direct link to yahoo_tennis_matches_by_date" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>tennisMatchesByDate</code> -> one row per <code>tennisTournaments</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisMatchesByDate</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisMatchesByDate target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisMatchesByDate</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>tournamentId</code><td><code>tournament_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>tournamentId query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>date</code><td><code>date</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>date query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_matches_by_date-returns>Returns<a href=#yahoo_tennis_matches_by_date-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>display_name</code><td>character<td><tr><td><code>tournament_status</code><td>character<td>State of the tournament, distinguishing scheduled, in-progress and completed events.<tr><td><code>start_time</code><td>character<td><tr><td><code>end_time</code><td>character<td><tr><td><code>events</code><td>character<td><tr><td><code>champions</code><td>character<td>JSON-encoded list of the current champions of the tennis event, one entry per draw.<tr><td><code>previous_champions</code><td>character<td>JSON-encoded list of the champions of the previous edition of the tennis event.<tr><td><code>venue_country</code><td>character<td>Country the venue is located in.<tr><td><code>venue_city</code><td>character<td><tr><td><code>venue_state</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_matches_by_date-example>Example<a href=#yahoo_tennis_matches_by_date-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_tennis_matches_by_date</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_tournament>yahoo_tennis_tournament<a href=#yahoo_tennis_tournament class=hash-link aria-label="Direct link to yahoo_tennis_tournament" title="Direct link to yahoo_tennis_tournament" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>tennisTournament</code> -> one row per <code>tennisTournaments</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournament</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournament target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournament</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>tournamentId</code><td><code>tournament_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>tournamentId query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_tournament-returns>Returns<a href=#yahoo_tennis_tournament-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>display_name</code><td>character<td><tr><td><code>tournament_status</code><td>character<td>State of the tournament, distinguishing scheduled, in-progress and completed events.<tr><td><code>start_time</code><td>character<td><tr><td><code>end_time</code><td>character<td><tr><td><code>events</code><td>character<td><tr><td><code>champions</code><td>character<td>JSON-encoded list of the current champions of the tennis event, one entry per draw.<tr><td><code>previous_champions</code><td>character<td>JSON-encoded list of the champions of the previous edition of the tennis event.<tr><td><code>venue_country</code><td>character<td>Country the venue is located in.<tr><td><code>venue_city</code><td>character<td><tr><td><code>venue_state</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_tournament-example>Example<a href=#yahoo_tennis_tournament-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_tennis_tournament</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_tournaments>yahoo_tennis_tournaments<a href=#yahoo_tennis_tournaments class=hash-link aria-label="Direct link to yahoo_tennis_tournaments" title="Direct link to yahoo_tennis_tournaments" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>tennisTournaments</code> -> one row per <code>tennisTournaments</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournaments</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournaments target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournaments</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>leagueId</code><td><code>league_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>leagueId query parameter.<tr><td><code>matchType</code><td><code>match_type</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>matchType query parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_tournaments-returns>Returns<a href=#yahoo_tennis_tournaments-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>gender</code><td>character<td><tr><td><code>event_group_id</code><td>character<td>Yahoo identifier that groups the rounds or legs making up a single tournament.<tr><td><code>display_name</code><td>character<td><tr><td><code>match_type</code><td>character<td>Format of the matches in the tennis draw (e.g., "SINGLES", "DOUBLES").<tr><td><code>surface</code><td>character<td><tr><td><code>start_time</code><td>character<td><tr><td><code>end_time</code><td>character<td><tr><td><code>tournament_status</code><td>character<td>State of the tournament, distinguishing scheduled, in-progress and completed events.<tr><td><code>champions</code><td>character<td>JSON-encoded list of the current champions of the tennis event, one entry per draw.<tr><td><code>alias_path</code><td>character<td>Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/").<tr><td><code>alias_lang</code><td>character<td>Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US").<tr><td><code>alias_url</code><td>character<td>Absolute sports.yahoo.com URL of the entity's page (e.g., "<a href=https://sports.yahoo.com/ncaaf/players/464024/ target=_blank rel="noopener noreferrer" class="">https://sports.yahoo.com/ncaaf/players/464024/</a>").<tr><td><code>alias_domain</code><td>character<td>Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com").<tr><td><code>previous_champions</code><td>character<td>JSON-encoded list of the champions of the previous edition of the tennis event.<tr><td><code>venue_country</code><td>character<td>Country the venue is located in.<tr><td><code>venue_city</code><td>character<td><tr><td><code>venue_state</code><td>character<td></table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_tournaments-example>Example<a href=#yahoo_tennis_tournaments-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_tennis_tournaments</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_tournaments_by_date>yahoo_tennis_tournaments_by_date<a href=#yahoo_tennis_tournaments_by_date class=hash-link aria-label="Direct link to yahoo_tennis_tournaments_by_date" title="Direct link to yahoo_tennis_tournaments_by_date" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>tennisTournamentsByDate</code> -> one row per <code>tennisTournaments</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournamentsByDate</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournamentsByDate target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournamentsByDate</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>date</code><td><code>date</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>date query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_tournaments_by_date-returns>Returns<a href=#yahoo_tennis_tournaments_by_date-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_tennis_tournaments_by_date-example>Example<a href=#yahoo_tennis_tournaments_by_date-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_tennis_tournaments_by_date</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_trending_event_ids>yahoo_trending_event_ids<a href=#yahoo_trending_event_ids class=hash-link aria-label="Direct link to yahoo_trending_event_ids" title="Direct link to yahoo_trending_event_ids" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>trendingEventIds</code> -> one row per <code>trendingEvents</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/trendingEventIds</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/trendingEventIds target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/trendingEventIds</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>count</code><td><code>count</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>count query parameter.<tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.<tr><td><code>dateFlipOffset</code><td><code>date_flip_offset</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>dateFlipOffset query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_trending_event_ids-returns>Returns<a href=#yahoo_trending_event_ids-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_trending_event_ids-example>Example<a href=#yahoo_trending_event_ids-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_trending_event_ids</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_trending_game_ids>yahoo_trending_game_ids<a href=#yahoo_trending_game_ids class=hash-link aria-label="Direct link to yahoo_trending_game_ids" title="Direct link to yahoo_trending_game_ids" translate=no>​</a></h2>
+<p>Yahoo shangrila persisted query <code>trendingGameIds</code> -> one row per <code>trendingGames</code> entry</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/trendingGameIds</code></p>
+<p><strong>Valid URL:</strong> <a href=https://graphite-secure.sports.yahoo.com/v1/query/shangrila/trendingGameIds target=_blank rel="noopener noreferrer" class="">https://graphite-secure.sports.yahoo.com/v1/query/shangrila/trendingGameIds</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>count</code><td><code>count</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>count query parameter.<tr><td><code>league</code><td><code>league</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>league query parameter.<tr><td><code>dateFlipOffset</code><td><code>date_flip_offset</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>dateFlipOffset query parameter.<tr><td><code>dates</code><td><code>dates</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_trending_game_ids-returns>Returns<a href=#yahoo_trending_game_ids-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_yahoo_shangrila</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=yahoo_trending_game_ids-example>Example<a href=#yahoo_trending_game_ids-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">yahoo_trending_game_ids</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/versioned_docs/version-0.1.5/yahoo/reference/yahoo_shangrila/other.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/0.1.5/yahoo/reference/yahoo_shangrila/team><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>Team</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/0.1.5/fox/><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>FOX</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#yahoo_oly_medal_count class="table-of-contents__link toc-highlight">yahoo_oly_medal_count</a><li><a href=#yahoo_oly_seasons class="table-of-contents__link toc-highlight">yahoo_oly_seasons</a><li><a href=#yahoo_alias class="table-of-contents__link toc-highlight">yahoo_alias</a><li><a href=#yahoo_article_list_card_players class="table-of-contents__link toc-highlight">yahoo_article_list_card_players</a><li><a href=#yahoo_article_list_card_teams class="table-of-contents__link toc-highlight">yahoo_article_list_card_teams</a><li><a href=#yahoo_basic_players class="table-of-contents__link toc-highlight">yahoo_basic_players</a><li><a href=#yahoo_betting_disclaimer class="table-of-contents__link toc-highlight">yahoo_betting_disclaimer</a><li><a href=#yahoo_combat_event_fights class="table-of-contents__link toc-highlight">yahoo_combat_event_fights</a><li><a href=#yahoo_combat_schedule class="table-of-contents__link toc-highlight">yahoo_combat_schedule</a><li><a href=#yahoo_common_pills class="table-of-contents__link toc-highlight">yahoo_common_pills</a><li><a href=#yahoo_consensus_rankings_php class="table-of-contents__link toc-highlight">yahoo_consensus_rankings_php</a><li><a href=#yahoo_draft class="table-of-contents__link toc-highlight">yahoo_draft</a><li><a href=#yahoo_draft_prospects class="table-of-contents__link toc-highlight">yahoo_draft_prospects</a><li><a href=#yahoo_driver_results class="table-of-contents__link toc-highlight">yahoo_driver_results</a><li><a href=#yahoo_driver_splits class="table-of-contents__link toc-highlight">yahoo_driver_splits</a><li><a href=#yahoo_featured_game_ids class="table-of-contents__link toc-highlight">yahoo_featured_game_ids</a><li><a href=#yahoo_gametime_game class="table-of-contents__link toc-highlight">yahoo_gametime_game</a><li><a href=#yahoo_gametime_team class="table-of-contents__link toc-highlight">yahoo_gametime_team</a><li><a href=#yahoo_golf_tournament_seasons class="table-of-contents__link toc-highlight">yahoo_golf_tournament_seasons</a><li><a href=#yahoo_golf_tournaments class="table-of-contents__link toc-highlight">yahoo_golf_tournaments</a><li><a href=#yahoo_golf_tournaments_basic class="table-of-contents__link toc-highlight">yahoo_golf_tournaments_basic</a><li><a href=#yahoo_module_game class="table-of-contents__link toc-highlight">yahoo_module_game</a><li><a href=#yahoo_motorsport_standings class="table-of-contents__link toc-highlight">yahoo_motorsport_standings</a><li><a href=#yahoo_nascar_drivers class="table-of-contents__link toc-highlight">yahoo_nascar_drivers</a><li><a href=#yahoo_nav_dropdown_tray class="table-of-contents__link toc-highlight">yahoo_nav_dropdown_tray</a><li><a href=#yahoo_pick_distribution class="table-of-contents__link toc-highlight">yahoo_pick_distribution</a><li><a href=#yahoo_playoff_bracket class="table-of-contents__link toc-highlight">yahoo_playoff_bracket</a><li><a href=#yahoo_playoff_series_game class="table-of-contents__link toc-highlight">yahoo_playoff_series_game</a><li><a href=#yahoo_polymarket_game class="table-of-contents__link toc-highlight">yahoo_polymarket_game</a><li><a href=#yahoo_racing_schedule class="table-of-contents__link toc-highlight">yahoo_racing_schedule</a><li><a href=#yahoo_scoreboard_game class="table-of-contents__link toc-highlight">yahoo_scoreboard_game</a><li><a href=#yahoo_tennis_matches_by_date class="table-of-contents__link toc-highlight">yahoo_tennis_matches_by_date</a><li><a href=#yahoo_tennis_tournament class="table-of-contents__link toc-highlight">yahoo_tennis_tournament</a><li><a href=#yahoo_tennis_tournaments class="table-of-contents__link toc-highlight">yahoo_tennis_tournaments</a><li><a href=#yahoo_tennis_tournaments_by_date class="table-of-contents__link toc-highlight">yahoo_tennis_tournaments_by_date</a><li><a href=#yahoo_trending_event_ids class="table-of-contents__link toc-highlight">yahoo_trending_event_ids</a><li><a href=#yahoo_trending_game_ids class="table-of-contents__link toc-highlight">yahoo_trending_game_ids</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

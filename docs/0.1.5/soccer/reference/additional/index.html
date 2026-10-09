@@ -1,0 +1,827 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-0.1.5 docs-doc-page docs-doc-id-soccer/reference/additional" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>SOCCER — additional Python functions | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/0.1.5/soccer/reference/additional /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=0.1.5 /><meta data-rh=true name=docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true name=docsearch:version content=0.1.5 /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true property=og:title content="SOCCER — additional Python functions | sdv-py"/><meta data-rh=true name=description content="SOCCER — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."/><meta data-rh=true property=og:description content="SOCCER — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/0.1.5/soccer/reference/additional /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/soccer/reference/additional hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/soccer/reference/additional hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/leagues/soccer","name":"Soccer","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/soccer/","name":"Soccer (all)","position":2},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/soccer/reference/additional","name":"Additional functions","position":3}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/0.1.5/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/0.1.5/soccer/reference/additional>0.1.5</a><ul class=dropdown__menu><li><a class=dropdown__link href=/docs/soccer/reference/additional>main (latest)</a><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/0.1.5/soccer/reference/additional>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Expand sidebar category 'Basketball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Expand sidebar category 'Baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/0.1.5/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Collapse sidebar category 'Soccer'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/0.1.5/soccer/><span title="Soccer (all)" class=categoryLinkLabel_W154>Soccer (all)</span></a><button aria-label="Collapse sidebar category 'Soccer (all)'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/soccer/reference/asa><span title="American Soccer Analysis (app.americansocceranalysis.com)" class=linkLabel_WmDU>American Soccer Analysis (app.americansocceranalysis.com)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/soccer/reference/fotmob><span title="FotMob data API (fotmob.com, unofficial)" class=linkLabel_WmDU>FotMob data API (fotmob.com, unofficial)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/soccer/reference/uefa><span title="UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)" class=linkLabel_WmDU>UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/soccer/reference/fifa><span title="FIFA public API v3 (api.fifa.com)" class=linkLabel_WmDU>FIFA public API v3 (api.fifa.com)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/soccer/reference/football_data><span title="Football-Data.co.uk CSV archive (football-data.co.uk)" class=linkLabel_WmDU>Football-Data.co.uk CSV archive (football-data.co.uk)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/soccer/reference/openligadb><span title="OpenLigaDB (api.openligadb.de, community German football)" class=linkLabel_WmDU>OpenLigaDB (api.openligadb.de, community German football)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/soccer/reference/site><span title="ESPN site API (v2)" class=linkLabel_WmDU>ESPN site API (v2)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/soccer/reference/web><span title="ESPN web API (v3)" class=linkLabel_WmDU>ESPN web API (v3)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/soccer/reference/core><span title="ESPN core API (v2)" class=categoryLinkLabel_W154>ESPN core API (v2)</span></a><button aria-label="Expand sidebar category 'ESPN core API (v2)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/soccer/reference/fitt><span title="ESPN FPI API (fitt v3)" class=linkLabel_WmDU>ESPN FPI API (fitt v3)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/0.1.5/soccer/reference/additional><span title="Additional functions" class=linkLabel_WmDU>Additional functions</span></a></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/epl/><span title=EPL class=categoryLinkLabel_W154>EPL</span></a><button aria-label="Expand sidebar category 'EPL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/laliga/><span title=LaLiga class=categoryLinkLabel_W154>LaLiga</span></a><button aria-label="Expand sidebar category 'LaLiga'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/bundesliga/><span title=Bundesliga class=categoryLinkLabel_W154>Bundesliga</span></a><button aria-label="Expand sidebar category 'Bundesliga'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/seriea/><span title="Serie A" class=categoryLinkLabel_W154>Serie A</span></a><button aria-label="Expand sidebar category 'Serie A'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/ligue1/><span title="Ligue 1" class=categoryLinkLabel_W154>Ligue 1</span></a><button aria-label="Expand sidebar category 'Ligue 1'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/mls/><span title=MLS class=categoryLinkLabel_W154>MLS</span></a><button aria-label="Expand sidebar category 'MLS'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/ligamx/><span title="Liga MX" class=categoryLinkLabel_W154>Liga MX</span></a><button aria-label="Expand sidebar category 'Liga MX'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/ucl/><span title=UCL class=categoryLinkLabel_W154>UCL</span></a><button aria-label="Expand sidebar category 'UCL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/uel/><span title=UEL class=categoryLinkLabel_W154>UEL</span></a><button aria-label="Expand sidebar category 'UEL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nwsl/><span title=NWSL class=categoryLinkLabel_W154>NWSL</span></a><button aria-label="Expand sidebar category 'NWSL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wwc/><span title=WWC class=categoryLinkLabel_W154>WWC</span></a><button aria-label="Expand sidebar category 'WWC'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wc/><span title=WC class=categoryLinkLabel_W154>WC</span></a><button aria-label="Expand sidebar category 'WC'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Expand sidebar category 'Other'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role=alert><div>This is documentation for <!-- -->sdv-py<!-- --> <b>0.1.5</b>, which is no longer actively maintained.</div><div class=margin-top--md>For up-to-date documentation, see the <b><a href=/docs/soccer/reference/additional>latest version</a></b> (<!-- -->main (latest)<!-- -->).</div></div><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/leagues/soccer><span>Soccer</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/soccer/><span>Soccer (all)</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>Additional functions</span></ul></nav><span class="theme-doc-version-badge badge badge--secondary">Version: 0.1.5</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>SOCCER — additional Python functions</h1></header>
+<p>Hand-written wrappers, loaders, and helpers in <code>sportsdataverse.soccer</code>
+not covered by the generated API-endpoint reference above.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=kloppy-open-event-data>kloppy open event data<a href=#kloppy-open-event-data class=hash-link aria-label="Direct link to kloppy open event data" title="Direct link to kloppy open event data" translate=no>​</a></h2>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=NotFittedError>NotFittedError<a href=#NotFittedError class=hash-link aria-label="Direct link to NotFittedError" title="Direct link to NotFittedError" translate=no>​</a></h3>
+<p><code>NotFittedError(...)</code></p>
+<p>The grid is all zeros: call <code>fit</code> or load a model first.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=XThreat>XThreat<a href=#XThreat class=hash-link aria-label="Direct link to XThreat" title="Direct link to XThreat" translate=no>​</a></h3>
+<p><code>XThreat(grid: 'Optional[np.ndarray]' = None, *, l: 'int' = 16, w: 'int' = 12, eps: 'float' = 1e-05, max_iter: 'int' = 1000, meta: 'Optional[dict[str, Any]]' = None) -> 'None'</code></p>
+<p>A fitted Expected Threat grid.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>grid</code><td><code>Optional[ndarray]</code><td><code>None</code><td>An existing <code>(w, l)</code> array (row 0 = the top of the pitch); <code>None</code> for an unfitted model.<tr><td><code>l</code><td><code>int</code><td><code>16</code><td>Cells along the pitch length.<tr><td><code>w</code><td><code>int</code><td><code>12</code><td>Cells across the pitch width.<tr><td><code>eps</code><td><code>float</code><td><code>1e-05</code><td>Convergence tolerance on the absolute change of every cell.<tr><td><code>max_iter</code><td><code>int</code><td><code>1000</code><td>Iteration cap; exceeding it raises <code>RuntimeError</code>.<tr><td><code>meta</code><td><code>Optional[dict[str, Any]]</code><td><code>None</code><td>Free-form provenance stored in the JSON.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> XThreat</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> soccer_spadl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">actions </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soccer_spadl</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"statsbomb"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>8658</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">model </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> XThreat</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">fit</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">actions</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">actions </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> actions</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">with_columns</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">model</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">rate</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">actions</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><strong>Methods</strong></p>
+<h4 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=xthreatfit>XThreat.fit<a href=#xthreatfit class=hash-link aria-label="Direct link to XThreat.fit" title="Direct link to XThreat.fit" translate=no>​</a></h4>
+<p><code>XThreat.fit(actions: 'pl.DataFrame') -> 'XThreat'</code></p>
+<p>Fit the grid on SPADL actions by value iteration.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>actions</code><td><code>DataFrame</code><td><td>SPADL actions with <code>type_name</code>, <code>result_name</code> and start/end coordinates.</table>
+<p><strong>Returns</strong></p>
+<p>This model, fitted in place.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> XThreat</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> soccer_spadl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">model </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> XThreat</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">fit</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">soccer_spadl</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"statsbomb"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>8658</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">model</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">iterations</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h4 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=xthreatfrom_json>XThreat.from_json<a href=#xthreatfrom_json class=hash-link aria-label="Direct link to XThreat.from_json" title="Direct link to XThreat.from_json" translate=no>​</a></h4>
+<p><code>XThreat.from_json(path: 'Union[str, Path]') -> 'XThreat'</code></p>
+<p>Read this module's format or socceraction's bare nested list.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>path</code><td><code>Union[str, Path]</code><td><td>A JSON file written by <code>to_json</code> or socceraction's <code>save_model</code>.</table>
+<p><strong>Returns</strong></p>
+<p>The loaded <code>XThreat</code>.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> XThreat</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">model </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> XThreat</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">from_json</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"xthreat.json"</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h4 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=xthreatrate>XThreat.rate<a href=#xthreatrate class=hash-link aria-label="Direct link to XThreat.rate" title="Direct link to XThreat.rate" translate=no>​</a></h4>
+<p><code>XThreat.rate(actions: 'pl.DataFrame') -> 'pl.Series'</code></p>
+<p>Rate each action: end-cell minus start-cell value for successful passes, dribbles and crosses.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>actions</code><td><code>DataFrame</code><td><td>SPADL actions with <code>type_name</code>, <code>result_name</code> and start/end coordinates.</table>
+<p><strong>Returns</strong></p>
+<p>A <code>Float64</code> series named <code>xt_value</code>; null for actions xT does not value.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_xthreat_model</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">actions </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> actions</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">with_columns</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">load_xthreat_model</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">rate</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">actions</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h4 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=xthreatto_json>XThreat.to_json<a href=#xthreatto_json class=hash-link aria-label="Direct link to XThreat.to_json" title="Direct link to XThreat.to_json" translate=no>​</a></h4>
+<p><code>XThreat.to_json(path: 'Union[str, Path]') -> 'None'</code></p>
+<p>Write <code>{"xT": grid, "w": .., "l": .., "meta": {..}}</code> (readable by <code>from_json</code>).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>path</code><td><code>Union[str, Path]</code><td><td>Destination file.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">model</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">to_json</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"xthreat.json"</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=load_xthreat_model>load_xthreat_model<a href=#load_xthreat_model class=hash-link aria-label="Direct link to load_xthreat_model" title="Direct link to load_xthreat_model" translate=no>​</a></h3>
+<p><code>load_xthreat_model() -> 'XThreat'</code></p>
+<p>The bundled grid fit on StatsBomb open data (see <code>meta</code> for competitions, counts and license).</p>
+<p><strong>Returns</strong></p>
+<p>The fitted <code>XThreat</code> shipped with the package.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_xthreat_model</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">model </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_xthreat_model</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">model</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">xT</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">shape</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> model</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">meta</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"matches"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=soccer_events_to_frame>soccer_events_to_frame<a href=#soccer_events_to_frame class=hash-link aria-label="Direct link to soccer_events_to_frame" title="Direct link to soccer_events_to_frame" translate=no>​</a></h3>
+<p><code>soccer_events_to_frame(dataset: 'Any', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'</code></p>
+<p>Turn a kloppy dataset (any provider, any file) into a tidy frame.</p>
+<p>The one place the package's column convention is applied to kloppy output: one row per
+event, columns snake-cased (kloppy's own names -- <code>event_id</code>, <code>event_type</code>,
+<code>period_id</code>, <code>timestamp</code>, <code>team_id</code>, <code>player_id</code>, <code>coordinates_x</code>,
+<code>coordinates_y</code>, ... -- already are, so this is a no-op guard for any extra column).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>dataset</code><td><code>Any</code><td><td>A kloppy <code>EventDataset</code> (or any dataset with <code>to_df</code>), e.g. from <code>kloppy.statsbomb.load(event_data=..., lineup_data=...)</code> or <code>kloppy.opta.load(...)</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>A polars DataFrame (pandas with <code>return_as_pandas=True</code>), one row per event. Coordinates are in the dataset's coordinate system -- kloppy's default is a 0-1 normalized pitch; pass <code>coordinates="statsbomb"</code> (etc.) to kloppy's loader to keep the provider's units.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>event_id</code><td>character<td><tr><td><code>event_type</code><td>character<td><tr><td><code>period_id</code><td>integer<td><tr><td><code>timestamp</code><td>character<td><tr><td><code>end_timestamp</code><td>character<td><tr><td><code>ball_state</code><td>character<td><tr><td><code>ball_owning_team</code><td>character<td><tr><td><code>team_id</code><td>character<td><tr><td><code>player_id</code><td>character<td><tr><td><code>coordinates_x</code><td>double<td><tr><td><code>coordinates_y</code><td>double<td><tr><td><code>result</code><td>character<td><tr><td><code>success</code><td>logical<td><tr><td><code>end_coordinates_x</code><td>double<td><tr><td><code>end_coordinates_y</code><td>double<td><tr><td><code>receiver_player_id</code><td>character<td><tr><td><code>set_piece_type</code><td>character<td><tr><td><code>body_part_type</code><td>character<td><tr><td><code>is_under_pressure</code><td>logical<td><tr><td><code>pass_type</code><td>character<td><tr><td><code>duel_type</code><td>character<td><tr><td><code>goalkeeper_type</code><td>character<td><tr><td><code>is_counter_attack</code><td>logical<td><tr><td><code>card_type</code><td>character<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> kloppy </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> statsbomb</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> soccer_events_to_frame</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">ds </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> statsbomb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">load</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">event_data</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>"8658.json"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> lineup_data</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>"lineups_8658.json"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soccer_events_to_frame</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">ds</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">shape</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Useful parameter combination</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df_pd </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soccer_events_to_frame</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">ds</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> return_as_pandas</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"event_type"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"SHOT"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"player_id"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"coordinates_x"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"coordinates_y"</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=soccer_open_dataset>soccer_open_dataset<a href=#soccer_open_dataset class=hash-link aria-label="Direct link to soccer_open_dataset" title="Direct link to soccer_open_dataset" translate=no>​</a></h3>
+<p><code>soccer_open_dataset(provider: 'str', match_id: 'Union[int, str]', **kwargs: 'Any') -> 'Any'</code></p>
+<p>Load one match of a provider's free open event data as a kloppy <code>EventDataset</code>.</p>
+<p><code>provider="statsbomb"</code> reads StatsBomb open data (<a href=https://github.com/statsbomb/open-data target=_blank rel="noopener noreferrer" class="">https://github.com/statsbomb/open-data</a>)
+through <code>kloppy.statsbomb.load_open_data(match_id=...)</code>. That data is free for research and
+non-commercial use only, under StatsBomb's open-data license -- read it before publishing
+anything built on it. This is the input <code>soccer_spadl</code> expects;
+<code>soccer_open_events</code> is the same load flattened to a frame.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>provider</code><td><code>str</code><td><td>Open-data provider key; currently <code>"statsbomb"</code>.<tr><td><code>match_id</code><td><code>Union[int, str]</code><td><td>The provider's match id (StatsBomb: e.g. <code>8658</code> -- France v Croatia, 2018 World Cup final).</table>
+<p><strong>Returns</strong></p>
+<p>A kloppy <code>EventDataset</code>.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> soccer_spadl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">dataset </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"statsbomb"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>8658</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">actions </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soccer_spadl</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">dataset</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">frame </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> dataset</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">to_df</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">engine</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>"polars"</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=soccer_open_events>soccer_open_events<a href=#soccer_open_events class=hash-link aria-label="Direct link to soccer_open_events" title="Direct link to soccer_open_events" translate=no>​</a></h3>
+<p><code>soccer_open_events(provider: 'str', match_id: 'Union[int, str]', *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame]'</code></p>
+<p>Load one match of a provider's free open event data as a tidy frame.</p>
+<p><code>provider="statsbomb"</code> reads StatsBomb open data (<a href=https://github.com/statsbomb/open-data target=_blank rel="noopener noreferrer" class="">https://github.com/statsbomb/open-data</a>)
+through <code>kloppy.statsbomb.load_open_data(match_id=...)</code>. That data is free for research and
+non-commercial use only, under StatsBomb's open-data license -- read it before publishing
+anything built on it. Other kloppy open samples (Metrica, SkillCorner) follow the same
+shape and are added on request.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>provider</code><td><code>str</code><td><td>Open-data provider key; currently <code>"statsbomb"</code>.<tr><td><code>match_id</code><td><code>Union[int, str]</code><td><td>The provider's match id (StatsBomb: e.g. <code>8658</code> -- France v Croatia, 2018 World Cup final).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>A polars DataFrame (pandas with <code>return_as_pandas=True</code>), one row per event; see <code>soccer_events_to_frame</code> for the columns.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>event_id</code><td>character<td><tr><td><code>event_type</code><td>character<td><tr><td><code>period_id</code><td>integer<td><tr><td><code>timestamp</code><td>character<td><tr><td><code>end_timestamp</code><td>character<td><tr><td><code>ball_state</code><td>character<td><tr><td><code>ball_owning_team</code><td>character<td><tr><td><code>team_id</code><td>character<td><tr><td><code>player_id</code><td>character<td><tr><td><code>coordinates_x</code><td>double<td><tr><td><code>coordinates_y</code><td>double<td><tr><td><code>result</code><td>character<td><tr><td><code>success</code><td>logical<td><tr><td><code>end_coordinates_x</code><td>double<td><tr><td><code>end_coordinates_y</code><td>double<td><tr><td><code>receiver_player_id</code><td>character<td><tr><td><code>set_piece_type</code><td>character<td><tr><td><code>body_part_type</code><td>character<td><tr><td><code>is_under_pressure</code><td>logical<td><tr><td><code>pass_type</code><td>character<td><tr><td><code>duel_type</code><td>character<td><tr><td><code>goalkeeper_type</code><td>character<td><tr><td><code>is_counter_attack</code><td>logical<td><tr><td><code>card_type</code><td>character<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> soccer_open_events</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soccer_open_events</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"statsbomb"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>8658</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">shape</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Useful parameter combination</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df_pd </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soccer_open_events</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"statsbomb"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>8658</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> coordinates</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>"statsbomb"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> return_as_pandas</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"event_type"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"SHOT"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">group_by</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"team_id"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">len</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=soccer_spadl>soccer_spadl<a href=#soccer_spadl class=hash-link aria-label="Direct link to soccer_spadl" title="Direct link to soccer_spadl" translate=no>​</a></h3>
+<p><code>soccer_spadl(dataset: 'Any', *, game_id: 'Optional[Union[int, str]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"</code></p>
+<p>Convert a kloppy event dataset to SPADL actions on the 105 x 68 pitch.</p>
+<p>Every action attacks left to right (kloppy <code>ACTION_EXECUTING_TEAM</code> orientation), so a
+frame from any provider kloppy reads is comparable. StatsBomb is the tested path.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>dataset</code><td><code>Any</code><td><td>A kloppy <code>EventDataset</code> (e.g. from <code>soccer_open_dataset</code>).<tr><td><code>game_id</code><td><code>Optional[Union[int, str]]</code><td><code>None</code><td>Game identifier when the dataset's metadata carries none.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>One row per on-ball action with the SPADL columns (<code>type_name</code>, <code>result_name</code>, <code>bodypart_name</code>, start/end coordinates in meters, <code>time_seconds</code> from the period's kick-off). Empty dataset -> zero-row frame with the same schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td><tr><td><code>original_event_id</code><td>character<td><tr><td><code>action_id</code><td>integer<td><tr><td><code>period_id</code><td>integer<td><tr><td><code>time_seconds</code><td>double<td><tr><td><code>team_id</code><td>character<td><tr><td><code>player_id</code><td>character<td><tr><td><code>start_x</code><td>double<td><tr><td><code>start_y</code><td>double<td><tr><td><code>end_x</code><td>double<td><tr><td><code>end_y</code><td>double<td><tr><td><code>bodypart_id</code><td>integer<td><tr><td><code>bodypart_name</code><td>character<td><tr><td><code>type_id</code><td>integer<td><tr><td><code>type_name</code><td>character<td><tr><td><code>result_id</code><td>integer<td><tr><td><code>result_name</code><td>character<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> soccer_spadl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">actions </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soccer_spadl</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"statsbomb"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>8658</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">actions</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">shape</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">actions</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"type_name"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"shot"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">group_by</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"team_id"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">len</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=soccer_xthreat_rate>soccer_xthreat_rate<a href=#soccer_xthreat_rate class=hash-link aria-label="Direct link to soccer_xthreat_rate" title="Direct link to soccer_xthreat_rate" translate=no>​</a></h3>
+<p><code>soccer_xthreat_rate(actions: 'pl.DataFrame', model: 'Optional[XThreat]' = None, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'</code></p>
+<p>Append <code>xt_value</code> (Expected Threat added by each successful pass, dribble or cross) to a SPADL frame.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>actions</code><td><code>DataFrame</code><td><td>SPADL actions from <code>soccer_spadl</code> (needs <code>type_name</code>, <code>result_name</code>, start/end coordinates).<tr><td><code>model</code><td><code>Optional[XThreat]</code><td><code>None</code><td>A fitted <code>XThreat</code>; <code>None</code> uses the bundled grid.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p><code>actions</code> with a <code>Float64</code> <code>xt_value</code> column (null for actions xT does not value).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td><tr><td><code>original_event_id</code><td>character<td><tr><td><code>action_id</code><td>integer<td><tr><td><code>period_id</code><td>integer<td><tr><td><code>time_seconds</code><td>double<td><tr><td><code>team_id</code><td>character<td><tr><td><code>player_id</code><td>character<td><tr><td><code>start_x</code><td>double<td><tr><td><code>start_y</code><td>double<td><tr><td><code>end_x</code><td>double<td><tr><td><code>end_y</code><td>double<td><tr><td><code>bodypart_id</code><td>integer<td><tr><td><code>bodypart_name</code><td>character<td><tr><td><code>type_id</code><td>integer<td><tr><td><code>type_name</code><td>character<td><tr><td><code>result_id</code><td>integer<td><tr><td><code>result_name</code><td>character<td><tr><td><code>xt_value</code><td>double<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">soccer </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> soccer_spadl</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> soccer_xthreat_rate</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">actions </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soccer_xthreat_rate</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">soccer_spadl</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">soccer_open_dataset</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"statsbomb"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>8658</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">actions</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">group_by</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"player_id"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">agg</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"xt_value"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">sum</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"xt_value"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/versioned_docs/version-0.1.5/soccer/reference/additional.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/0.1.5/soccer/reference/fitt><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>ESPN FPI API (fitt v3)</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/0.1.5/epl/><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>EPL</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#kloppy-open-event-data class="table-of-contents__link toc-highlight">kloppy open event data</a><ul><li><a href=#NotFittedError class="table-of-contents__link toc-highlight">NotFittedError</a><li><a href=#XThreat class="table-of-contents__link toc-highlight">XThreat</a><li><a href=#load_xthreat_model class="table-of-contents__link toc-highlight">load_xthreat_model</a><li><a href=#soccer_events_to_frame class="table-of-contents__link toc-highlight">soccer_events_to_frame</a><li><a href=#soccer_open_dataset class="table-of-contents__link toc-highlight">soccer_open_dataset</a><li><a href=#soccer_open_events class="table-of-contents__link toc-highlight">soccer_open_events</a><li><a href=#soccer_spadl class="table-of-contents__link toc-highlight">soccer_spadl</a><li><a href=#soccer_xthreat_rate class="table-of-contents__link toc-highlight">soccer_xthreat_rate</a></ul></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

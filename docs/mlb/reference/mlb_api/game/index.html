@@ -1,0 +1,1107 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-mlb/reference/mlb_api/game" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>MLB — MLB Stats API — Game | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/mlb/reference/mlb_api/game /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-default-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-current /><meta data-rh=true property=og:title content="MLB — MLB Stats API — Game | sdv-py"/><meta data-rh=true name=description content="MLB — MLB Stats API — Game — function reference in sdv-py, the SportsDataverse Python package."/><meta data-rh=true property=og:description content="MLB — MLB Stats API — Game — function reference in sdv-py, the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/mlb/reference/mlb_api/game /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/mlb/reference/mlb_api/game hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/mlb/reference/mlb_api/game hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/leagues/baseball","name":"Baseball","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/mlb/","name":"MLB","position":2},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/mlb/reference/mlb_api","name":"MLB Stats API","position":3},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/mlb/reference/mlb_api/game","name":"Game","position":4}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/mlb/reference/mlb_api/game>main (latest)</a><ul class=dropdown__menu><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/mlb/reference/mlb_api/game>main (latest)</a><li><a class=dropdown__link href=/docs/0.1.5/mlb/reference/mlb_api/game>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Expand sidebar category 'Basketball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Collapse sidebar category 'Baseball'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/mlb/><span title=MLB class=categoryLinkLabel_W154>MLB</span></a><button aria-label="Collapse sidebar category 'MLB'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/loaders><span title=Loaders class=linkLabel_WmDU>Loaders</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/mlb/reference/mlb_api><span title="MLB Stats API" class=categoryLinkLabel_W154>MLB Stats API</span></a><button aria-label="Collapse sidebar category 'MLB Stats API'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/mlb_api/all><span title=All class=linkLabel_WmDU>All</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/mlb_api/draft><span title=Draft class=linkLabel_WmDU>Draft</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/mlb/reference/mlb_api/game><span title=Game class=linkLabel_WmDU>Game</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/mlb_api/home><span title=Home class=linkLabel_WmDU>Home</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/mlb_api/play><span title=Play class=linkLabel_WmDU>Play</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/mlb_api/schedule><span title=Schedule class=linkLabel_WmDU>Schedule</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/mlb_api/team><span title=Team class=linkLabel_WmDU>Team</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/mlb_api/other><span title="Other: pbp–award_recipients" class=linkLabel_WmDU>Other: pbp–award_recipients</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/mlb_api/other-2><span title="Other: umpires–stats_metrics" class=linkLabel_WmDU>Other: umpires–stats_metrics</span></a></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/mlb/reference/mlb_statcast><span title="MLB Statcast (Baseball Savant)" class=categoryLinkLabel_W154>MLB Statcast (Baseball Savant)</span></a><button aria-label="Expand sidebar category 'MLB Statcast (Baseball Savant)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/site><span title="ESPN site API (v2)" class=linkLabel_WmDU>ESPN site API (v2)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/web><span title="ESPN web API (v3)" class=linkLabel_WmDU>ESPN web API (v3)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/mlb/reference/core><span title="ESPN core API (v2)" class=categoryLinkLabel_W154>ESPN core API (v2)</span></a><button aria-label="Expand sidebar category 'ESPN core API (v2)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/fitt><span title="ESPN FPI API (fitt v3)" class=linkLabel_WmDU>ESPN FPI API (fitt v3)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/cdn><span title="ESPN CDN API (cdn.espn.com)" class=linkLabel_WmDU>ESPN CDN API (cdn.espn.com)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/mlb/reference/additional><span title="Additional functions" class=categoryLinkLabel_W154>Additional functions</span></a><button aria-label="Expand sidebar category 'Additional functions'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/college_baseball/><span title="College baseball" class=categoryLinkLabel_W154>College baseball</span></a><button aria-label="Expand sidebar category 'College baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/college_softball/><span title="College softball" class=categoryLinkLabel_W154>College softball</span></a><button aria-label="Expand sidebar category 'College softball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Expand sidebar category 'Other'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/leagues/baseball><span>Baseball</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/mlb/><span>MLB</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/mlb/reference/mlb_api><span>MLB Stats API</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>Game</span></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>MLB — MLB Stats API — Game</h1></header>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_context_metrics>mlb_game_context_metrics<a href=#mlb_game_context_metrics class=hash-link aria-label="Direct link to mlb_game_context_metrics" title="Direct link to mlb_game_context_metrics" translate=no>​</a></h2>
+<p>GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://statsapi.mlb.com/api/v1/game/{game_pk}/contextMetrics</code></p>
+<p><strong>Valid URL:</strong> <a href=https://statsapi.mlb.com/api/v1/game/716390/contextMetrics target=_blank rel="noopener noreferrer" class="">https://statsapi.mlb.com/api/v1/game/716390/contextMetrics</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_pk</code><td><code>game_pk</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>game_pk path parameter.<tr><td><code>fields</code><td><code>fields</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>fields query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_context_metrics-returns>Returns<a href=#mlb_game_context_metrics-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_mlb_api_list</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_context_metrics-example>Example<a href=#mlb_game_context_metrics-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">mlb_game_context_metrics</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_pk</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>716390</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_content>mlb_game_content<a href=#mlb_game_content class=hash-link aria-label="Direct link to mlb_game_content" title="Direct link to mlb_game_content" translate=no>​</a></h2>
+<p>GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://statsapi.mlb.com/api/v1/game/{game_pk}/content</code></p>
+<p><strong>Valid URL:</strong> <a href=https://statsapi.mlb.com/api/v1/game/716390/content target=_blank rel="noopener noreferrer" class="">https://statsapi.mlb.com/api/v1/game/716390/content</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_pk</code><td><code>game_pk</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>game_pk path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_content-returns>Returns<a href=#mlb_game_content-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_mlb_api_list</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_content-example>Example<a href=#mlb_game_content-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">mlb_game_content</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_pk</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>716390</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_timestamps>mlb_game_timestamps<a href=#mlb_game_timestamps class=hash-link aria-label="Direct link to mlb_game_timestamps" title="Direct link to mlb_game_timestamps" translate=no>​</a></h2>
+<p>Retrieve all of the play timecodes for a game in GUMBO feed.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live/timestamps</code></p>
+<p><strong>Valid URL:</strong> <a href=https://statsapi.mlb.com/api/v1.1/game/716390/feed/live/timestamps target=_blank rel="noopener noreferrer" class="">https://statsapi.mlb.com/api/v1.1/game/716390/feed/live/timestamps</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_pk</code><td><code>game_pk</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>game_pk path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_timestamps-returns>Returns<a href=#mlb_game_timestamps-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>timecode</code><td>character<td>A timestamp string representing a specific point in time used to query the MLB Stats API for game state changes.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_timestamps-example>Example<a href=#mlb_game_timestamps-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">mlb_game_timestamps</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_pk</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>716390</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_changes>mlb_game_changes<a href=#mlb_game_changes class=hash-link aria-label="Direct link to mlb_game_changes" title="Direct link to mlb_game_changes" translate=no>​</a></h2>
+<p>View corrected non Statcast information for games</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://statsapi.mlb.com/api/v1/game/changes</code></p>
+<p><strong>Valid URL:</strong> <a href="https://statsapi.mlb.com/api/v1/game/changes?updatedSince=2023-09-01T00%3A00%3A00Z&sportId=1" target=_blank rel="noopener noreferrer" class="">https://statsapi.mlb.com/api/v1/game/changes?updatedSince=2023-09-01T00%3A00%3A00Z&sportId=1</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>updatedSince</code><td><code>updated_since</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>updatedSince query parameter.<tr><td><code>sportId</code><td><code>sport_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>sportId query parameter.<tr><td><code>fields</code><td><code>fields</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>fields query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_changes-returns>Returns<a href=#mlb_game_changes-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>schedule_date</code><td>character<td>The calendar date for which schedule changes are being reported, identifying when rescheduled or suspended games occurred.<tr><td><code>game_pk</code><td>integer<td>Unique game identifier.<tr><td><code>game_guid</code><td>character<td>Globally unique game identifier (GUID).<tr><td><code>link</code><td>character<td>API link to the game feed.<tr><td><code>game_type</code><td>character<td>Game type code (R, P, etc.).<tr><td><code>season</code><td>character<td>Season year.<tr><td><code>game_date</code><td>character<td>Game date (YYYY-MM-DD).<tr><td><code>official_date</code><td>character<td>Official game date (YYYY-MM-DD).<tr><td><code>is_tie</code><td>logical<td>Whether the game ended in a tie.<tr><td><code>game_number</code><td>integer<td>Game number within a doubleheader.<tr><td><code>public_facing</code><td>logical<td>Whether the game is public-facing.<tr><td><code>double_header</code><td>character<td>Doubleheader indicator ('N', 'S', 'Y').<tr><td><code>gameday_type</code><td>character<td>Gameday data feed type.<tr><td><code>tiebreaker</code><td>character<td>Whether the game is a tiebreaker.<tr><td><code>calendar_event_id</code><td>character<td>Calendar event identifier.<tr><td><code>season_display</code><td>character<td>Display string for the season.<tr><td><code>day_night</code><td>character<td>Day or night game indicator.<tr><td><code>scheduled_innings</code><td>integer<td>Scheduled number of innings.<tr><td><code>reverse_home_away_status</code><td>logical<td>Whether home/away teams are reversed.<tr><td><code>inning_break_length</code><td>integer<td>Length of inning breaks in seconds.<tr><td><code>games_in_series</code><td>double<td>Number of games in the series.<tr><td><code>series_game_number</code><td>double<td>Game number within the series.<tr><td><code>series_description</code><td>character<td>Description of the series.<tr><td><code>record_source</code><td>character<td>Source of the schedule record.<tr><td><code>if_necessary</code><td>character<td>Whether the game is played only if necessary.<tr><td><code>if_necessary_description</code><td>character<td>Description of the if-necessary status.<tr><td><code>status_abstract_game_state</code><td>character<td>Abstract game state (e.g. 'Final').<tr><td><code>status_coded_game_state</code><td>character<td>Coded game state.<tr><td><code>status_detailed_state</code><td>character<td>Detailed game state.<tr><td><code>status_status_code</code><td>character<td>Status code for the game.<tr><td><code>status_start_time_tbd</code><td>logical<td>Whether the start time is TBD.<tr><td><code>status_abstract_game_code</code><td>character<td>Abstract game state code.<tr><td><code>teams_away_team_id</code><td>integer<td>Away team MLBAM ID.<tr><td><code>teams_away_team_name</code><td>character<td>Away team name.<tr><td><code>teams_away_team_link</code><td>character<td>API link to the away team.<tr><td><code>teams_away_league_record_wins</code><td>integer<td>Away team league-record wins.<tr><td><code>teams_away_league_record_losses</code><td>integer<td>Away team league-record losses.<tr><td><code>teams_away_league_record_ties</code><td>integer<td>Away team league-record ties.<tr><td><code>teams_away_league_record_pct</code><td>character<td>Away team winning percentage.<tr><td><code>teams_away_score</code><td>integer<td>Away team score.<tr><td><code>teams_away_is_winner</code><td>logical<td>Whether the away team won.<tr><td><code>teams_away_split_squad</code><td>logical<td>Whether the away team is a split squad.<tr><td><code>teams_away_series_number</code><td>double<td>Away team's series number.<tr><td><code>teams_home_team_id</code><td>integer<td>Home team MLBAM ID.<tr><td><code>teams_home_team_name</code><td>character<td>Home team name.<tr><td><code>teams_home_team_link</code><td>character<td>API link to the home team.<tr><td><code>teams_home_league_record_wins</code><td>integer<td>Home team league-record wins.<tr><td><code>teams_home_league_record_losses</code><td>integer<td>Home team league-record losses.<tr><td><code>teams_home_league_record_ties</code><td>integer<td>Home team league-record ties.<tr><td><code>teams_home_league_record_pct</code><td>character<td>Home team winning percentage.<tr><td><code>teams_home_score</code><td>integer<td>Home team score.<tr><td><code>teams_home_is_winner</code><td>logical<td>Whether the home team won.<tr><td><code>teams_home_split_squad</code><td>logical<td>Whether the home team is a split squad.<tr><td><code>teams_home_series_number</code><td>double<td>Home team's series number.<tr><td><code>venue_id</code><td>integer<td>MLBAM venue ID.<tr><td><code>venue_name</code><td>character<td>Venue name.<tr><td><code>venue_link</code><td>character<td>API link to the venue.<tr><td><code>content_link</code><td>character<td>API link to the game content.<tr><td><code>rescheduled_from</code><td>character<td>Original date-time the game was rescheduled from.<tr><td><code>rescheduled_from_date</code><td>character<td>Original date the game was rescheduled from.<tr><td><code>description</code><td>character<td>Long-form description text.<tr><td><code>status_reason</code><td>character<td>Reason for the game status (e.g. 'Rain').<tr><td><code>resumed_from</code><td>character<td>Original date-time if the game was resumed.<tr><td><code>resumed_from_date</code><td>character<td>Original date if the game was resumed.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_changes-example>Example<a href=#mlb_game_changes-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">mlb_game_changes</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">sport_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> updated_since</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>'2023-09-01T00:00:00Z'</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_guids>mlb_game_guids<a href=#mlb_game_guids class=hash-link aria-label="Direct link to mlb_game_guids" title="Direct link to mlb_game_guids" translate=no>​</a></h2>
+<p>View Statcast data for a specific game.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://statsapi.mlb.com/api/v1/game/{game_pk}/guids</code></p>
+<p><strong>Valid URL:</strong> <a href=https://statsapi.mlb.com/api/v1/game/716390/guids target=_blank rel="noopener noreferrer" class="">https://statsapi.mlb.com/api/v1/game/716390/guids</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_pk</code><td><code>game_pk</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>game_pk path parameter.<tr><td><code>gameModeId</code><td><code>game_mode_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>gameModeId query parameter.<tr><td><code>updatedSince</code><td><code>updated_since</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>updatedSince query parameter.<tr><td><code>isPitch</code><td><code>is_pitch</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>isPitch query parameter.<tr><td><code>isHit</code><td><code>is_hit</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>isHit query parameter.<tr><td><code>isPickoff</code><td><code>is_pickoff</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>isPickoff query parameter.<tr><td><code>hydrate</code><td><code>hydrate</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>hydrate query parameter.<tr><td><code>parsed/raw</code><td><code>parsed_raw</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>parsed/raw query parameter.<tr><td><code>fields</code><td><code>fields</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>fields query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_guids-returns>Returns<a href=#mlb_game_guids-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — the output of <code>parse_mlb_api_list</code>; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+<p>No returns table is published for this endpoint: no capture: statsapi.mlb.com answers 406 to the datacenter IP and 401 'Please Login' through the residential proxy; the route needs an MLB login session the package does not hold.</p>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_guids-example>Example<a href=#mlb_game_guids-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">mlb_game_guids</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_pk</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>716390</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_color>mlb_game_color<a href=#mlb_game_color class=hash-link aria-label="Direct link to mlb_game_color" title="Direct link to mlb_game_color" translate=no>​</a></h2>
+<p>View game color commentary info.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color</code></p>
+<p><strong>Valid URL:</strong> <a href=https://statsapi.mlb.com/api/v1/game/716390/feed/color target=_blank rel="noopener noreferrer" class="">https://statsapi.mlb.com/api/v1/game/716390/feed/color</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_pk</code><td><code>game_pk</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>game_pk path parameter.<tr><td><code>timecode</code><td><code>timecode</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>timecode query parameter.<tr><td><code>fields</code><td><code>fields</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>fields query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_color-returns>Returns<a href=#mlb_game_color-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — the output of <code>parse_mlb_api_list</code>; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+<p>No returns table is published for this endpoint: no capture: statsapi.mlb.com answers 406 to the datacenter IP and 404 through the residential proxy with the documented example arguments (2026-10-07).</p>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_color-example>Example<a href=#mlb_game_color-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">mlb_game_color</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_pk</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>716390</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_color_diff>mlb_game_color_diff<a href=#mlb_game_color_diff class=hash-link aria-label="Direct link to mlb_game_color_diff" title="Direct link to mlb_game_color_diff" translate=no>​</a></h2>
+<p>View game color feed.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/diffPatch</code></p>
+<p><strong>Valid URL:</strong> <a href=https://statsapi.mlb.com/api/v1/game/716390/feed/color/diffPatch target=_blank rel="noopener noreferrer" class="">https://statsapi.mlb.com/api/v1/game/716390/feed/color/diffPatch</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_pk</code><td><code>game_pk</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>game_pk path parameter.<tr><td><code>startTimecode</code><td><code>start_timecode</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>startTimecode query parameter.<tr><td><code>endTimecode</code><td><code>end_timecode</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>endTimecode query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_color_diff-returns>Returns<a href=#mlb_game_color_diff-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — the output of <code>parse_mlb_api_list</code>; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+<p>No returns table is published for this endpoint: no capture: statsapi.mlb.com answers 406 to the datacenter IP and 404 through the residential proxy with the documented example arguments (2026-10-07).</p>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_color_diff-example>Example<a href=#mlb_game_color_diff-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">mlb_game_color_diff</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_pk</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>716390</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_color_timestamps>mlb_game_color_timestamps<a href=#mlb_game_color_timestamps class=hash-link aria-label="Direct link to mlb_game_color_timestamps" title="Direct link to mlb_game_color_timestamps" translate=no>​</a></h2>
+<p>View all of the color timecodes for a game.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/timestamps</code></p>
+<p><strong>Valid URL:</strong> <a href=https://statsapi.mlb.com/api/v1/game/716390/feed/color/timestamps target=_blank rel="noopener noreferrer" class="">https://statsapi.mlb.com/api/v1/game/716390/feed/color/timestamps</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_pk</code><td><code>game_pk</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>game_pk path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_color_timestamps-returns>Returns<a href=#mlb_game_color_timestamps-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — the output of <code>parse_mlb_api_timecodes</code>; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+<p>No returns table is published for this endpoint: no capture: statsapi.mlb.com answers 406 to the datacenter IP and 404 through the residential proxy with the documented example arguments (2026-10-07).</p>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_color_timestamps-example>Example<a href=#mlb_game_color_timestamps-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">mlb_game_color_timestamps</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_pk</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>716390</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_pace>mlb_game_pace<a href=#mlb_game_pace class=hash-link aria-label="Direct link to mlb_game_pace" title="Direct link to mlb_game_pace" translate=no>​</a></h2>
+<p>View time of game info.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://statsapi.mlb.com/api/v1/gamePace</code></p>
+<p><strong>Valid URL:</strong> <a href="https://statsapi.mlb.com/api/v1/gamePace?season=2023" target=_blank rel="noopener noreferrer" class="">https://statsapi.mlb.com/api/v1/gamePace?season=2023</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>teamIds</code><td><code>team_ids</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>teamIds query parameter.<tr><td><code>leagueIds</code><td><code>league_ids</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>leagueIds query parameter.<tr><td><code>leagueListId</code><td><code>league_list_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>leagueListId query parameter.<tr><td><code>sportId</code><td><code>sport_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>sportId query parameter.<tr><td><code>gameType</code><td><code>game_type</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>gameType query parameter.<tr><td><code>startDate</code><td><code>start_date</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>startDate query parameter.<tr><td><code>endDate</code><td><code>end_date</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>endDate query parameter.<tr><td><code>venueIds</code><td><code>venue_ids</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>venueIds query parameter.<tr><td><code>orgType</code><td><code>org_type</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>orgType query parameter.<tr><td><code>includeChildren</code><td><code>include_children</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>includeChildren query parameter.<tr><td><code>fields</code><td><code>fields</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>fields query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_pace-returns>Returns<a href=#mlb_game_pace-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>hits_per9_inn</code><td>double<td>Average number of hits allowed per nine innings across all games in the sample period.<tr><td><code>runs_per9_inn</code><td>double<td>Average number of runs scored per nine innings across all games in the sample period.<tr><td><code>pitches_per9_inn</code><td>double<td>Average number of pitches thrown per nine innings across all games in the sample period.<tr><td><code>plate_appearances_per9_inn</code><td>double<td>Average number of plate appearances occurring per nine innings across all games in the sample period.<tr><td><code>hits_per_game</code><td>double<td>Hits per game.<tr><td><code>runs_per_game</code><td>double<td>Runs per game.<tr><td><code>innings_played_per_game</code><td>double<td>Innings played per game.<tr><td><code>pitches_per_game</code><td>double<td>Pitches per game.<tr><td><code>pitchers_per_game</code><td>double<td>Pitchers used per game.<tr><td><code>plate_appearances_per_game</code><td>double<td>Plate appearances per game.<tr><td><code>total_game_time</code><td>character<td>Total game time (HHH:MM:SS).<tr><td><code>total_innings_played</code><td>double<td>Total innings played.<tr><td><code>total_hits</code><td>integer<td>Total hits.<tr><td><code>total_runs</code><td>integer<td>Total runs.<tr><td><code>total_plate_appearances</code><td>integer<td>Total plate appearances.<tr><td><code>total_pitchers</code><td>integer<td>Total pitchers used.<tr><td><code>total_pitches</code><td>integer<td>Total pitches thrown.<tr><td><code>total_games</code><td>integer<td>Total games on the date.<tr><td><code>total7_inn_games</code><td>integer<td>Total number of seven-inning games played (including doubleheader games).<tr><td><code>total9_inn_games</code><td>double<td>Total number of nine-inning games played in the sample period.<tr><td><code>total_extra_inn_games</code><td>integer<td>Total extra-inning games.<tr><td><code>time_per_game</code><td>character<td>Average time per game (HH:MM:SS).<tr><td><code>time_per_pitch</code><td>character<td>Average time per pitch (HH:MM:SS).<tr><td><code>time_per_hit</code><td>character<td>Average time per hit (HH:MM:SS).<tr><td><code>time_per_run</code><td>character<td>Average time per run (HH:MM:SS).<tr><td><code>time_per_plate_appearance</code><td>character<td>Average time per plate appearance (HH:MM:SS).<tr><td><code>time_per9_inn</code><td>character<td>Average elapsed clock time per nine-inning game formatted as hours and minutes.<tr><td><code>time_per77_plate_appearances</code><td>character<td>Average time per 77 plate appearances, used as a normalized pace benchmark by MLB.<tr><td><code>total_extra_inn_time</code><td>character<td>Total extra-inning time (HHH:MM:SS).<tr><td><code>time_per7_inn_game_without_extra_inn</code><td>character<td>Average elapsed clock time per seven-inning game excluding games that went to extra innings.<tr><td><code>total9_inn_games_completed_early</code><td>integer<td>Number of nine-inning games that were called or suspended before completing nine full innings.<tr><td><code>total9_inn_games_without_extra_inn</code><td>double<td>Number of nine-inning games completed without requiring extra innings.<tr><td><code>total9_inn_games_scheduled</code><td>integer<td>Total number of nine-inning games that were scheduled in the sample period.<tr><td><code>hits_per_run</code><td>double<td>Hits per run.<tr><td><code>pitches_per_pitcher</code><td>double<td>Pitches per pitcher.<tr><td><code>season</code><td>character<td>Season year.<tr><td><code>sport_id</code><td>integer<td>Sport MLBAM ID.<tr><td><code>sport_code</code><td>character<td>Short sport code (e.g. 'mlb', 'aaa').<tr><td><code>sport_link</code><td>character<td>API link to the sport.<tr><td><code>pr_portal_calculated_fields_total7_inn_games</code><td>integer<td>Calculated total count of seven-inning games as tallied by the MLB Stats API pace portal.<tr><td><code>pr_portal_calculated_fields_total9_inn_games</code><td>double<td>Calculated total count of nine-inning games as tallied by the MLB Stats API pace portal.<tr><td><code>pr_portal_calculated_fields_total_extra_inn_games</code><td>integer<td>Portal-calculated total extra-inning games.<tr><td><code>pr_portal_calculated_fields_time_per7_inn_game</code><td>character<td>Calculated average game time per seven-inning game as produced by the MLB Stats API pace portal.<tr><td><code>pr_portal_calculated_fields_time_per9_inn_game</code><td>character<td>Calculated average game time per nine-inning game as produced by the MLB Stats API pace portal.<tr><td><code>pr_portal_calculated_fields_time_per_extra_inn_game</code><td>character<td>Portal-calculated time per extra-inning game.<tr><td><code>time_per7_inn_game</code><td>character<td>Average elapsed clock time per seven-inning game formatted as hours and minutes.<tr><td><code>total7_inn_games_scheduled</code><td>double<td>Total number of seven-inning games that were scheduled in the sample period.<tr><td><code>total7_inn_games_without_extra_inn</code><td>double<td>Number of seven-inning games completed without requiring extra innings.<tr><td><code>total7_inn_games_completed_early</code><td>double<td>Number of seven-inning games that were called or completed before the full seven innings were played.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_game_pace-example>Example<a href=#mlb_game_pace-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">mlb_game_pace</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">season</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>'2023'</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/docs/mlb/reference/mlb_api/game.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/mlb/reference/mlb_api/draft><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>Draft</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/mlb/reference/mlb_api/home><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>Home</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#mlb_game_context_metrics class="table-of-contents__link toc-highlight">mlb_game_context_metrics</a><li><a href=#mlb_game_content class="table-of-contents__link toc-highlight">mlb_game_content</a><li><a href=#mlb_game_timestamps class="table-of-contents__link toc-highlight">mlb_game_timestamps</a><li><a href=#mlb_game_changes class="table-of-contents__link toc-highlight">mlb_game_changes</a><li><a href=#mlb_game_guids class="table-of-contents__link toc-highlight">mlb_game_guids</a><li><a href=#mlb_game_color class="table-of-contents__link toc-highlight">mlb_game_color</a><li><a href=#mlb_game_color_diff class="table-of-contents__link toc-highlight">mlb_game_color_diff</a><li><a href=#mlb_game_color_timestamps class="table-of-contents__link toc-highlight">mlb_game_color_timestamps</a><li><a href=#mlb_game_pace class="table-of-contents__link toc-highlight">mlb_game_pace</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

@@ -1,0 +1,428 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-0.1.5 docs-doc-page docs-doc-id-pwhl/reference/additional/models-and-calculators" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>PWHL — additional Python functions — Models and calculators | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/0.1.5/pwhl/reference/additional/models-and-calculators /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=0.1.5 /><meta data-rh=true name=docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true name=docsearch:version content=0.1.5 /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true property=og:title content="PWHL — additional Python functions — Models and calculators | sdv-py"/><meta data-rh=true name=description content="PWHL — additional Python functions — Models and calculators — function reference in sdv-py, the SportsDataverse Python package."/><meta data-rh=true property=og:description content="PWHL — additional Python functions — Models and calculators — function reference in sdv-py, the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/0.1.5/pwhl/reference/additional/models-and-calculators /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/pwhl/reference/additional/models-and-calculators hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/pwhl/reference/additional/models-and-calculators hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/leagues/hockey","name":"Hockey","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/pwhl/","name":"PWHL","position":2},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/pwhl/reference/additional","name":"Additional functions","position":3},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/pwhl/reference/additional/models-and-calculators","name":"Models and calculators","position":4}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/0.1.5/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/0.1.5/pwhl/reference/additional/models-and-calculators>0.1.5</a><ul class=dropdown__menu><li><a class=dropdown__link href=/docs/pwhl/reference/additional/models-and-calculators>main (latest)</a><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/0.1.5/pwhl/reference/additional/models-and-calculators>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Expand sidebar category 'Basketball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/0.1.5/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Collapse sidebar category 'Hockey'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nhl/><span title=NHL class=categoryLinkLabel_W154>NHL</span></a><button aria-label="Expand sidebar category 'NHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/mch/><span title=MCH class=categoryLinkLabel_W154>MCH</span></a><button aria-label="Expand sidebar category 'MCH'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wch/><span title=WCH class=categoryLinkLabel_W154>WCH</span></a><button aria-label="Expand sidebar category 'WCH'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/0.1.5/pwhl/><span title=PWHL class=categoryLinkLabel_W154>PWHL</span></a><button aria-label="Collapse sidebar category 'PWHL'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/pwhl/reference/loaders><span title=Loaders class=linkLabel_WmDU>Loaders</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/0.1.5/pwhl/reference/additional><span title="Additional functions" class=categoryLinkLabel_W154>Additional functions</span></a><button aria-label="Collapse sidebar category 'Additional functions'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/pwhl/reference/additional/sportsdataverse-data-releases><span title="sportsdataverse-data releases" class=linkLabel_WmDU>sportsdataverse-data releases</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/pwhl/reference/additional/hockeytech-leaguestat><span title="HockeyTech / LeagueStat" class=linkLabel_WmDU>HockeyTech / LeagueStat</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/0.1.5/pwhl/reference/additional/models-and-calculators><span title="Models and calculators" class=linkLabel_WmDU>Models and calculators</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/pwhl/reference/additional/analytics><span title=Analytics class=linkLabel_WmDU>Analytics</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/pwhl/reference/additional/dates-and-seasons><span title="Dates and seasons" class=linkLabel_WmDU>Dates and seasons</span></a></ul></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/ahl/><span title=AHL class=categoryLinkLabel_W154>AHL</span></a><button aria-label="Expand sidebar category 'AHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/ohl/><span title=OHL class=categoryLinkLabel_W154>OHL</span></a><button aria-label="Expand sidebar category 'OHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/whl/><span title=WHL class=categoryLinkLabel_W154>WHL</span></a><button aria-label="Expand sidebar category 'WHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/qmjhl/><span title=QMJHL class=categoryLinkLabel_W154>QMJHL</span></a><button aria-label="Expand sidebar category 'QMJHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/echl/><span title=ECHL class=categoryLinkLabel_W154>ECHL</span></a><button aria-label="Expand sidebar category 'ECHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/sphl/><span title=SPHL class=categoryLinkLabel_W154>SPHL</span></a><button aria-label="Expand sidebar category 'SPHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/chl/><span title=CHL class=categoryLinkLabel_W154>CHL</span></a><button aria-label="Expand sidebar category 'CHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/ushl/><span title=USHL class=categoryLinkLabel_W154>USHL</span></a><button aria-label="Expand sidebar category 'USHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/bchl/><span title=BCHL class=categoryLinkLabel_W154>BCHL</span></a><button aria-label="Expand sidebar category 'BCHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/ajhl/><span title=AJHL class=categoryLinkLabel_W154>AJHL</span></a><button aria-label="Expand sidebar category 'AJHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/sjhl/><span title=SJHL class=categoryLinkLabel_W154>SJHL</span></a><button aria-label="Expand sidebar category 'SJHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/ojhl/><span title=OJHL class=categoryLinkLabel_W154>OJHL</span></a><button aria-label="Expand sidebar category 'OJHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/cchl/><span title=CCHL class=categoryLinkLabel_W154>CCHL</span></a><button aria-label="Expand sidebar category 'CCHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/gojhl/><span title=GOJHL class=categoryLinkLabel_W154>GOJHL</span></a><button aria-label="Expand sidebar category 'GOJHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/mhl/><span title=MHL class=categoryLinkLabel_W154>MHL</span></a><button aria-label="Expand sidebar category 'MHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nojhl/><span title=NOJHL class=categoryLinkLabel_W154>NOJHL</span></a><button aria-label="Expand sidebar category 'NOJHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/vijhl/><span title=VIJHL class=categoryLinkLabel_W154>VIJHL</span></a><button aria-label="Expand sidebar category 'VIJHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/kijhl/><span title=KIJHL class=categoryLinkLabel_W154>KIJHL</span></a><button aria-label="Expand sidebar category 'KIJHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/mjhl/><span title=MJHL class=categoryLinkLabel_W154>MJHL</span></a><button aria-label="Expand sidebar category 'MJHL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Expand sidebar category 'Baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Expand sidebar category 'Other'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role=alert><div>This is documentation for <!-- -->sdv-py<!-- --> <b>0.1.5</b>, which is no longer actively maintained.</div><div class=margin-top--md>For up-to-date documentation, see the <b><a href=/docs/pwhl/reference/additional/models-and-calculators>latest version</a></b> (<!-- -->main (latest)<!-- -->).</div></div><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/leagues/hockey><span>Hockey</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/pwhl/><span>PWHL</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/pwhl/reference/additional><span>Additional functions</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>Models and calculators</span></ul></nav><span class="theme-doc-version-badge badge badge--secondary">Version: 0.1.5</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>PWHL — additional Python functions — Models and calculators</h1></header>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=LeagueConstants>LeagueConstants<a href=#LeagueConstants class=hash-link aria-label="Direct link to LeagueConstants" title="Direct link to LeagueConstants" translate=no>​</a></h3>
+<p><code>LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None</code></p>
+<p>Fitted, league-specific constants for the NHL/PWHL prediction spine.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>hfa</code><td><code>float</code><td><td>home-ice edge, expected-goals units.<tr><td><code>margin_sd</code><td><code>float</code><td><td>standard deviation of the final goal margin (deliberately WIDE for hockey).<tr><td><code>avg_xgf</code><td><code>float</code><td><td>league mean even-strength xG-for, per game.<tr><td><code>avg_total_goals</code><td><code>float</code><td><td>league mean total goals per game.<tr><td><code>total_scale</code><td><code>float</code><td><td>multiplier converting rating differential to total-goals deviation.<tr><td><code>shrink_k</code><td><code>float</code><td><td>games-played prior strength for rating shrinkage.<tr><td><code>prop_kappa</code><td><code>dict</code><td><td>empirical-Bayes shrinkage strength per player-prop stat family.<tr><td><code>pos_priors</code><td><code>dict</code><td><td>per-position (F/D) per-stat-family prior rates.<tr><td><code>prop_team_volume_slope</code><td><code>float</code><td><td>game-script tilt on a player-prop projection (favored team -> fewer late shots-for). SEEDED PLACEHOLDER (~0.04), not yet fitted -- a future prop-fit task should estimate it from the realized shots-vs-exp_margin slope, mirroring how fit_props.py fits prop_kappa/pos_priors.<tr><td><code>in_game_wp_artifact</code><td><code>str</code><td><td>filename of the bundled in-game win-probability model under <code>sportsdataverse/nhl/models/</code>.<tr><td><code>min_season</code><td><code>int</code><td><td>earliest season this league's prediction spine supports.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=as_of_ratings_split>as_of_ratings_split<a href=#as_of_ratings_split class=hash-link aria-label="Direct link to as_of_ratings_split" title="Direct link to as_of_ratings_split" translate=no>​</a></h3>
+<p><code>as_of_ratings_split(df: 'pl.DataFrame', cutoff_date: '_dt.date', *, date_col: 'str' = 'date') -> 'pl.DataFrame'</code></p>
+<p>Filter a frame to rows strictly before <code>cutoff_date</code> (the leakage boundary).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>df</code><td><code>DataFrame</code><td><td>a polars DataFrame with a date column.<tr><td><code>cutoff_date</code><td><code>date</code><td><td>the game date being predicted; only strictly-earlier rows are kept.<tr><td><code>date_col</code><td><code>str</code><td><code>'date'</code><td>name of the date column (default <code>"date"</code>).</table>
+<p><strong>Returns</strong></p>
+<p>The subset of <code>df</code> with <code>df[date_col] &lt; cutoff_date</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td>Unique game identifier.<tr><td><code>season</code><td>integer<td>Season year (echoed from arg).<tr><td><code>date</code><td>character<td>Game date (ISO 8601 datetime string).<tr><td><code>team</code><td>character<td>Team name.<tr><td><code>opp_team</code><td>character<td><tr><td><code>is_home</code><td>logical<td>Home-team flag.<tr><td><code>neutral_site</code><td>logical<td>Whether the game is at a neutral site.<tr><td><code>xgf</code><td>double<td><tr><td><code>xga</code><td>double<td><tr><td><code>gf</code><td>integer<td><tr><td><code>ga</code><td>integer<td>Goals against (goalies).</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> datetime </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> dt</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nhl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nhl_prediction_constants </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> as_of_ratings_split</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">DataFrame</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>{</span><span class="token string" style=color:#047857>"date"</span><span class="token punctuation" style=color:#4d5b74>:</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token plain">dt</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">date</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2023</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> dt</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">date</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2023</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>}</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">as_of_ratings_split</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> dt</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">date</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2023</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=brier_score>brier_score<a href=#brier_score class=hash-link aria-label="Direct link to brier_score" title="Direct link to brier_score" translate=no>​</a></h3>
+<p><code>brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'</code></p>
+<p>Mean squared error between predicted probabilities and binary outcomes.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>y_true</code><td><code>ndarray</code><td><td>Array of binary outcomes (0/1).<tr><td><code>p_pred</code><td><code>ndarray</code><td><td>Array of predicted probabilities in [0, 1].</table>
+<p><strong>Returns</strong></p>
+<p>The Brier score (0.0 is a perfect forecast).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> numpy </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> np</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">_common</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">metrics </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> brier_score</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">brier_score</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>0.9</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0.1</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=calibration_table>calibration_table<a href=#calibration_table class=hash-link aria-label="Direct link to calibration_table" title="Direct link to calibration_table" translate=no>​</a></h3>
+<p><code>calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'</code></p>
+<p>Bucket predicted probabilities into bins and compare to actual outcome rates.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>y_true</code><td><code>ndarray</code><td><td>Array of binary outcomes (0/1).<tr><td><code>p_pred</code><td><code>ndarray</code><td><td>Array of predicted probabilities in [0, 1].<tr><td><code>n_bins</code><td><code>int</code><td><code>10</code><td>Number of equal-width probability bins.</table>
+<p><strong>Returns</strong></p>
+<p>A <code>polars.DataFrame</code> with columns <code>bin_mid</code>, <code>mean_pred</code>, <code>mean_actual</code>, <code>n</code> (one row per non-empty bin).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>bin_mid</code><td>double<td><tr><td><code>mean_pred</code><td>double<td><tr><td><code>mean_actual</code><td>double<td><tr><td><code>n</code><td>integer<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> numpy </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> np</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">_common</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">metrics </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> calibration_table</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">calibration_table</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>0.9</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0.1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0.8</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0.2</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=log_loss_score>log_loss_score<a href=#log_loss_score class=hash-link aria-label="Direct link to log_loss_score" title="Direct link to log_loss_score" translate=no>​</a></h3>
+<p><code>log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'</code></p>
+<p>Binary cross-entropy loss between predicted probabilities and outcomes.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>y_true</code><td><code>ndarray</code><td><td>Array of binary outcomes (0/1).<tr><td><code>p_pred</code><td><code>ndarray</code><td><td>Array of predicted probabilities in [0, 1].<tr><td><code>eps</code><td><code>float</code><td><code>1e-15</code><td>Clipping bound to avoid <code>log(0)</code>.</table>
+<p><strong>Returns</strong></p>
+<p>The mean log loss.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> numpy </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> np</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">_common</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">metrics </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> log_loss_score</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">log_loss_score</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>0.9</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0.1</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mae>mae<a href=#mae class=hash-link aria-label="Direct link to mae" title="Direct link to mae" translate=no>​</a></h3>
+<p><code>mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'</code></p>
+<p>Mean absolute error between two arrays.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>a</code><td><code>ndarray</code><td><td>First array of values.<tr><td><code>b</code><td><code>ndarray</code><td><td>Second array of values (same length as <code>a</code>).</table>
+<p><strong>Returns</strong></p>
+<p>The mean absolute error.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> numpy </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> np</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">_common</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">metrics </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mae</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">mae</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>1.0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2.0</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>1.5</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2.5</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=pwhl_team_ratings>pwhl_team_ratings<a href=#pwhl_team_ratings class=hash-link aria-label="Direct link to pwhl_team_ratings" title="Direct link to pwhl_team_ratings" translate=no>​</a></h3>
+<p><code>pwhl_team_ratings(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'</code></p>
+<p>PWHL opponent-adjusted, shrunk even-strength xG team ratings.</p>
+<p>Delegates to <code>sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings</code>
+with <code>league="pwhl"</code> defaulted. Oracle gate deferred (no xG-bearing
+PWHL pbp yet -- see module docstring).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>seasons</code><td><code>Any</code><td><td>an int or iterable of seasons.<tr><td><code>league</code><td><code>str</code><td><code>'pwhl'</code><td>league key (defaults to <code>"pwhl"</code>).</table>
+<p><strong>Returns</strong></p>
+<p>The NHL core's ratings frame, computed with PWHL constants.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">pwhl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">pwhl_team_ratings </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> pwhl_team_ratings</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">ratings </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> pwhl_team_ratings</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=spearman_corr>spearman_corr<a href=#spearman_corr class=hash-link aria-label="Direct link to spearman_corr" title="Direct link to spearman_corr" translate=no>​</a></h3>
+<p><code>spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'</code></p>
+<p>Spearman rank correlation between two arrays.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>a</code><td><code>ndarray</code><td><td>First array of values.<tr><td><code>b</code><td><code>ndarray</code><td><td>Second array of values (same length as <code>a</code>).</table>
+<p><strong>Returns</strong></p>
+<p>The Spearman rank correlation coefficient.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> numpy </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> np</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">_common</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">metrics </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> spearman_corr</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">spearman_corr</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>3</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> np</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">array</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>3</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/versioned_docs/version-0.1.5/pwhl/reference/additional/models-and-calculators.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/0.1.5/pwhl/reference/additional/hockeytech-leaguestat><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>HockeyTech / LeagueStat</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/0.1.5/pwhl/reference/additional/analytics><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>Analytics</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#LeagueConstants class="table-of-contents__link toc-highlight">LeagueConstants</a><li><a href=#as_of_ratings_split class="table-of-contents__link toc-highlight">as_of_ratings_split</a><li><a href=#brier_score class="table-of-contents__link toc-highlight">brier_score</a><li><a href=#calibration_table class="table-of-contents__link toc-highlight">calibration_table</a><li><a href=#log_loss_score class="table-of-contents__link toc-highlight">log_loss_score</a><li><a href=#mae class="table-of-contents__link toc-highlight">mae</a><li><a href=#pwhl_team_ratings class="table-of-contents__link toc-highlight">pwhl_team_ratings</a><li><a href=#spearman_corr class="table-of-contents__link toc-highlight">spearman_corr</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

@@ -1,0 +1,1119 @@
+# SOCCER — ESPN site API (v2)
+
+> SOCCER — ESPN site API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package.
+
+`sportsdataverse.soccer` — 24 endpoints.
+
+## espn_soccer_scoreboard
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20240115&limit=500](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20240115&limit=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
+| `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `groups` | `groups` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_scoreboard-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character | ESPN event id for the match. |
+| `date` | character | Match start timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
+| `home_team` | character | Home team display name. |
+| `home_team_id` | character | Home team ESPN id. |
+| `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
+| `away_team` | character | Away team display name. |
+| `away_team_id` | character | Away team ESPN id. |
+| `away_score` | character | Away team's score. For cricket, the innings string. |
+| `status` | character | Status type name (e.g. STATUS_FINAL, STATUS_SCHEDULED, STATUS_IN_PROGRESS). |
+| `venue` | character | Full name of the venue where the match was played. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_scoreboard-example}
+
+```python
+espn_soccer_scoreboard(league='eng.1', dates='20240115')
+```
+
+_Last validated n/a._
+
+## espn_soccer_summary
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event` | `event_id` |  |  | `Y` | event query parameter. |
+
+### Returns {#espn_soccer_summary-returns}
+
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
+**header**
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `uid` | character |  |
+| `time_valid` | logical |  |
+| `season_year` | integer |  |
+| `season_type` | integer | ESPN season-phase numeric code (1=pre-season, 2=regular season, 3=postseason, 4=off-season). |
+| `season_slug` | character |  |
+| `league_id` | character | ESPN numeric identifier for the league or competition. |
+| `league_name` | character |  |
+| `league_abbreviation` | character | Abbreviation for the league or competition the game belongs to. |
+| `competition_id` | character | ESPN numeric identifier for the primary competition (game) in the header. |
+| `competition_date` | character | Date and time of the competition as recorded in the game header. |
+| `neutral_site` | logical |  |
+| `status_name` | character |  |
+| `status_description` | character |  |
+| `is_final` | logical | Boolean flag indicating whether the game has reached a final or completed status. |
+
+**lineups**
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `home_away` | character |  |
+| `athlete` | character | Reference or identifier string for the athlete associated with this row in the box score. |
+| `athlete_id` | character |  |
+| `position` | character |  |
+| `starter` | logical |  |
+| `jersey` | character |  |
+| `formation_place` | character | Starting formation position or role assigned to the player within the team lineup for the match. |
+| `subbed_in` | logical | Indicates whether the player entered the game as a substitute, or the minute of substitution. |
+| `subbed_out` | logical | Indicates whether the player was substituted out of the game, or the minute of substitution. |
+
+**key_events**
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `type` | character |  |
+| `type_id` | character |  |
+| `type_slug` | character |  |
+| `text` | character |  |
+| `short_text` | character |  |
+| `clock` | character |  |
+| `clock_value` | double |  |
+| `period` | integer |  |
+| `team_id` | character |  |
+| `team_name` | character | Full display name of the team. |
+| `scoring_play` | logical |  |
+| `field_position_x` | double | Distance of the event from the goal line the event's team attacks, as a fraction of half the pitch (penalty spot = 0.23); 0 together with a 0 y means ESPN recorded no location. |
+| `field_position_y` | double | Position of the event across the pitch from 0 to 1, where values below 0.5 are the attacking team's left; 0 together with a 0 x means ESPN recorded no location. |
+| `field_position2_x` | double | Distance of the event's end location from the goal line the team attacks, as a fraction of half the pitch, in the same frame as field_position_x; 0 when not recorded. |
+| `field_position2_y` | double | Position of the event's end location across the pitch from 0 to 1, in the same frame as field_position_y; 0 when not recorded. |
+| `goal_position_x` | double | Horizontal position at which a shot crossed the goal frame; 0 when not recorded. |
+| `goal_position_y` | double | Vertical position at which a shot crossed the goal frame; 0 when not recorded. |
+| `source_id` | character |  |
+| `source_description` | character |  |
+| `athlete_id` | character |  |
+| `athlete_name` | character |  |
+| `wallclock` | character |  |
+
+**team_stats**
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `team_name` | character | Full display name of the team. |
+| `team_abbreviation` | character |  |
+| `home_away` | character |  |
+| `fouls_committed` | character | Total number of fouls committed by the team during the match. |
+| `yellow_cards` | character | Total number of yellow cards received by the team during the match. |
+| `red_cards` | character | Total number of red cards received by the team during the match. |
+| `offsides` | character | Total number of offside calls against the team during the match. |
+| `won_corners` | character | Total number of corner kicks earned by the team during the match. |
+| `saves` | character |  |
+| `possession_pct` | character | Percentage of total ball possession time held by the team during the match. |
+| `total_shots` | character | Total number of shot attempts taken by the team during the match. |
+| `shots_on_target` | character | Number of the team's shot attempts that were on target, requiring a save or resulting in a goal. |
+| `shot_pct` | character | Percentage of the team's shot attempts that were on target during the match. |
+| `penalty_kick_goals` | character | Number of goals scored by the team from penalty kicks during the match. |
+| `penalty_kick_shots` | character | Number of penalty kick attempts taken by the team during the match. |
+| `accurate_passes` | character | Number of passes completed successfully by the team during the match. |
+| `total_passes` | character | Total number of passes attempted by the team during the match. |
+| `pass_pct` | character | Percentage of passes attempted by the team that were completed successfully. |
+| `accurate_crosses` | character | Number of crosses into the opponent's area completed successfully by the team. |
+| `total_crosses` | character | Total number of crossing attempts made by the team during the match. |
+| `cross_pct` | character | Percentage of the team's crossing attempts that were accurate during the match. |
+| `total_long_balls` | character | Total number of long-ball passes attempted by the team during the match. |
+| `accurate_long_balls` | character | Number of long-ball passes completed successfully by the team during the match. |
+| `longball_pct` | character | Percentage of long-ball attempts by the team that were accurate during the match. |
+| `blocked_shots` | character |  |
+| `effective_tackles` | character | Number of tackles by the team that successfully dispossessed the opposing player. |
+| `total_tackles` | character | Total tackles recorded by the player, including both solo and assisted tackles. |
+| `tackle_pct` | character | Percentage of the team's tackle attempts that were effective in winning possession. |
+| `interceptions` | character |  |
+| `effective_clearance` | character | Number of defensive clearances that successfully removed the ball from the danger area for the team. |
+| `total_clearance` | character | Total number of defensive clearances made by the team during the match. |
+
+**commentary**
+
+| col_name | type | description |
+|---|---|---|
+| `sequence` | integer |  |
+| `time_display` | character | Human-readable game clock time at which a match event occurred. |
+| `time_value` | double | Numeric game clock value at which a match event occurred. |
+| `text` | character |  |
+| `play_id` | character |  |
+| `play_type` | character |  |
+| `play_type_id` | character |  |
+| `play_type_slug` | character | ESPN's lowercase slug for the play type of the linked play, e.g. foul or goal. |
+| `play_text` | character |  |
+| `play_short_text` | character | ESPN's short label for the play linked to this commentary item, e.g. a player name followed by the event type. |
+| `period` | integer |  |
+| `clock` | character |  |
+| `clock_value` | double |  |
+| `scoring_play` | logical |  |
+| `team_name` | character | Full display name of the team. |
+| `athlete_id` | character |  |
+| `athlete_name` | character |  |
+| `field_position_x` | double | Distance of the event from the goal line the event's team attacks, as a fraction of half the pitch (penalty spot = 0.23); 0 together with a 0 y means ESPN recorded no location. |
+| `field_position_y` | double | Position of the event across the pitch from 0 to 1, where values below 0.5 are the attacking team's left; 0 together with a 0 x means ESPN recorded no location. |
+| `field_position2_x` | double | Distance of the event's end location from the goal line the team attacks, as a fraction of half the pitch, in the same frame as field_position_x; 0 when not recorded. |
+| `field_position2_y` | double | Position of the event's end location across the pitch from 0 to 1, in the same frame as field_position_y; 0 when not recorded. |
+| `goal_position_x` | double | Horizontal position at which a shot crossed the goal frame; 0 when not recorded. |
+| `goal_position_y` | double | Vertical position at which a shot crossed the goal frame; 0 when not recorded. |
+| `wallclock` | character |  |
+
+**leaders**
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `team_name` | character | Full display name of the team. |
+| `category` | character |  |
+| `category_slug` | character | Machine-readable slug identifying the statistical category the player entry belongs to in the box score. |
+| `athlete_id` | character |  |
+| `athlete` | character | Reference or identifier string for the athlete associated with this row in the box score. |
+| `athlete_position` | character |  |
+| `value` | character |  |
+| `main_stat_label` | character | Human-readable label for the primary statistic displayed for the player in the box score. |
+| `main_stat_value` | character | Value of the primary statistic displayed for the player in the box score. |
+| `summary` | character |  |
+
+**standings**
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character |  |
+| `team` | character |  |
+| `team_id` | character |  |
+| `team_uid` | character |  |
+| `games_played` | double |  |
+| `losses` | double |  |
+| `point_differential` | double |  |
+| `points` | double |  |
+| `ties` | double |  |
+| `wins` | double |  |
+| `rank` | double |  |
+| `overall` | character |  |
+
+**head_to_head**
+
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character |  |
+| `game_date` | character |  |
+| `at_vs` | character |  |
+| `score` | character |  |
+| `home_team_id` | character |  |
+| `away_team_id` | character |  |
+| `home_team_score` | character |  |
+| `away_team_score` | character |  |
+| `home_aggregate_score` | character | Aggregate score for the home team across both legs of the two-legged tie. |
+| `away_aggregate_score` | character | Aggregate score for the away team across both legs of the two-legged tie. |
+| `home_shootout_score` | character | Number of penalties scored by the home team in a shootout to decide the tie. |
+| `away_shootout_score` | character | Number of penalties scored by the away team in a shootout to decide the tie. |
+| `game_result` | character |  |
+| `match_note` | character | Optional editorial note or special circumstance annotation attached to this match in the series. |
+| `competition_name` | character | Full name of the competition or tournament to which this series match belongs. |
+| `round_name` | character | Name or label for the round or stage of the competition in which this series match is played. |
+| `league_name` | character |  |
+| `league_abbreviation` | character | Abbreviation for the league or competition the game belongs to. |
+| `opponent` | integer |  |
+| `perspective_team_id` | character | ESPN identifier for the team whose perspective is used to orient the series or match result display. |
+
+**last_five**
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `team_name` | character | Full display name of the team. |
+| `display_order` | integer | Numeric order in which the team or entry is displayed within the box score table. |
+| `event_id` | character |  |
+| `game_date` | character |  |
+| `at_vs` | character |  |
+| `score` | character |  |
+| `home_team_id` | character |  |
+| `away_team_id` | character |  |
+| `home_team_score` | character |  |
+| `away_team_score` | character |  |
+| `game_result` | character |  |
+| `competition_name` | character | Full name of the competition or tournament to which this series match belongs. |
+| `league_name` | character |  |
+| `league_abbreviation` | character | Abbreviation for the league or competition the game belongs to. |
+| `opponent` | integer |  |
+
+**game_info**
+
+| col_name | type | description |
+|---|---|---|
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_short_name` | character | Abbreviated or shortened display name for the venue where the game was played. |
+| `venue_city` | character |  |
+| `venue_country` | character | Country name for the venue where the game was played. |
+| `attendance` | integer |  |
+| `officials` | character |  |
+
+**shootout**
+
+| col_name | type | description |
+|---|---|---|
+| `team_entry_id` | character | ESPN identifier for the team entry associated with this shootout or penalty record. |
+| `team_name` | character | Full display name of the team. |
+| `shot_id` | character | ESPN identifier for an individual shootout or penalty kick attempt. |
+| `player_id` | character |  |
+| `player` | character |  |
+| `shot_number` | integer | Sequential number of the penalty kick or shootout attempt within the series. |
+| `did_score` | logical | Boolean flag indicating whether the penalty kick or shootout attempt resulted in a goal. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_summary-example}
+
+```python
+espn_soccer_summary(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_calendar
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/calendar`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/calendar](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/calendar)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_calendar-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_calendar-example}
+
+```python
+espn_soccer_calendar(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_news
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/news`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/news?limit=50](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/news?limit=50)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_news-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `byline` | character | Author byline string as published by ESPN. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_news-example}
+
+```python
+espn_soccer_news(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_injuries
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/injuries`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/injuries](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/injuries)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_injuries-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_injuries-example}
+
+```python
+espn_soccer_injuries(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_transactions
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/transactions`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/transactions?limit=500](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/transactions?limit=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_transactions-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `date` | character |  |
+| `description` | character |  |
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_id` | character |  |
+| `team_links` | character |  |
+| `team_location` | character |  |
+| `team_logos` | character |  |
+| `team_name` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_transactions-example}
+
+```python
+espn_soccer_transactions(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_conferences
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/groups`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/groups](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/groups)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_conferences-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_id` | character |  |
+| `name` | character |  |
+| `abbreviation` | character |  |
+| `short_name` | character |  |
+| `is_conference` | logical |  |
+| `parent_group_id` | character |  |
+| `depth` | integer |  |
+| `children_count` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_conferences-example}
+
+```python
+espn_soccer_conferences(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_statistics_league
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/statistics`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/statistics](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/statistics)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_statistics_league-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb, 2026-10-07); its rows sit under keys it does not read (top level: league, season, status, timestamp).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_statistics_league-example}
+
+```python
+espn_soccer_statistics_league(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_draft
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/draft`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/draft](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/draft)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_draft-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, nhl, wnba, 2026-10-07); its rows sit under keys it does not read (top level: breakingNews, broadcasts, displayName, picks, positions, rounds, shortDisplayName, status).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_draft-example}
+
+```python
+espn_soccer_draft(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_teams_site
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams?limit=1000](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams?limit=1000)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_teams_site-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | ESPN numeric identifier for the team. |
+| `display_name` | character | Full display name of the team (e.g. 'Los Angeles Lakers'). |
+| `abbreviation` | character | Team abbreviation. |
+| `location` | character | Team location/city. |
+| `name` | character | Short team name, typically the mascot (e.g. 'Lakers'). |
+| `short_display_name` | character | Short team display name. |
+| `nickname` | character | Alternative nickname used by ESPN for the team. |
+| `slug` | character | URL slug for the team. |
+| `uid` | character | ESPN universal id for the team. |
+| `color` | character | Primary team color (hex). |
+| `alternate_color` | character | Secondary team color (hex). |
+| `is_active` | logical | Whether the team is currently active. |
+| `is_all_star` | logical | Whether the team is an all-star side. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_teams_site-example}
+
+```python
+espn_soccer_teams_site(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_soccer_team-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_franchise_$ref` | character |  |
+| `team_franchise_abbreviation` | character |  |
+| `team_franchise_color` | character |  |
+| `team_franchise_display_name` | character |  |
+| `team_franchise_id` | character |  |
+| `team_franchise_is_active` | logical |  |
+| `team_franchise_location` | character |  |
+| `team_franchise_name` | character |  |
+| `team_franchise_short_display_name` | character |  |
+| `team_franchise_slug` | character |  |
+| `team_franchise_team_$ref` | character |  |
+| `team_franchise_uid` | character |  |
+| `team_franchise_venue_$ref` | character |  |
+| `team_franchise_venue_address_city` | character |  |
+| `team_franchise_venue_address_state` | character |  |
+| `team_franchise_venue_full_name` | character |  |
+| `team_franchise_venue_grass` | logical |  |
+| `team_franchise_venue_guid` | character |  |
+| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_images` | character |  |
+| `team_franchise_venue_indoor` | logical |  |
+| `team_franchise_venue_short_name` | character |  |
+| `team_groups_id` | character |  |
+| `team_groups_is_conference` | logical |  |
+| `team_groups_parent_id` | character |  |
+| `team_id` | character |  |
+| `team_is_active` | logical |  |
+| `team_links` | character |  |
+| `team_location` | character |  |
+| `team_logos` | character |  |
+| `team_name` | character |  |
+| `team_next_event` | character |  |
+| `team_record_items` | character |  |
+| `team_short_display_name` | character |  |
+| `team_slug` | character |  |
+| `team_standing_summary` | character |  |
+| `team_uid` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team-example}
+
+```python
+espn_soccer_team(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_roster
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}/roster`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/roster?limit=500](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/roster?limit=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_team_roster-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `athlete_id` | character | ESPN numeric identifier for the athlete. |
+| `uid` | character | ESPN universal id for the athlete. |
+| `first_name` | character | Athlete's first (given) name. |
+| `last_name` | character | Athlete's last (family) name. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `short_name` | character | Athlete's abbreviated display name (e.g. 'L. James'). |
+| `jersey` | character | Athlete's jersey number as a string. |
+| `age` | integer | Athlete age in years. |
+| `date_of_birth` | character | Athlete date of birth (ISO 8601). |
+| `height` | double | Athlete height in inches. |
+| `display_height` | character | Athlete height, formatted for display. |
+| `weight` | double | Athlete weight in pounds. |
+| `display_weight` | character | Athlete weight, formatted for display. |
+| `position` | character | Position abbreviation. |
+| `position_name` | character | Full position name (e.g. 'Point Guard', 'Goalkeeper'). |
+| `birth_city` | character | Athlete birth city. |
+| `birth_country` | character | Athlete birth country. |
+| `citizenship` | character | Athlete citizenship. |
+| `gender` | character | Athlete gender. |
+| `slug` | character | URL slug for the athlete. |
+| `status` | character | Roster status (e.g. Active). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_roster-example}
+
+```python
+espn_soccer_team_roster(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_schedule
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}/schedule`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/schedule](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/schedule)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+
+### Returns {#espn_soccer_team_schedule-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric event identifier. |
+| `date` | character | Event timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
+| `time_valid` | logical | Whether the event time is confirmed. |
+| `competitions` | character | Competition detail (list of dicts, stringified): competitors, venue, status. |
+| `links` | character | Related links (list, stringified). |
+| `season_year` | integer | Four-digit season year. |
+| `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
+| `season_type_id` | character | ESPN numeric identifier for the season type. |
+| `season_type_type` | integer | Season type numeric code. |
+| `season_type_name` | character | Season type name (e.g. Regular Season). |
+| `season_type_abbreviation` | character | Season type abbreviation. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_schedule-example}
+
+```python
+espn_soccer_team_schedule(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_record
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}/record`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/record](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/record)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_soccer_team_record-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_record-example}
+
+```python
+espn_soccer_team_record(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_depthcharts
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}/depthcharts`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/depthcharts](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/depthcharts)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_soccer_team_depthcharts-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb, 2026-10-07); its rows sit under keys it does not read (top level: depthchart, season, status, team, timestamp).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_depthcharts-example}
+
+```python
+espn_soccer_team_depthcharts(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_injuries
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}/injuries`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/injuries](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/injuries)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_soccer_team_injuries-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_injuries-example}
+
+```python
+espn_soccer_team_injuries(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_transactions
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}/transactions`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/transactions](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/transactions)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_soccer_team_transactions-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_transactions-example}
+
+```python
+espn_soccer_team_transactions(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_history
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}/history`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/history](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/history)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_soccer_team_history-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, mbb, wbb; 400 in cfb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_history-example}
+
+```python
+espn_soccer_team_history(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_news
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}/news`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/news?limit=50](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/news?limit=50)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_team_news-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `byline` | character | Author byline string as published by ESPN. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_news-example}
+
+```python
+espn_soccer_team_news(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_leaders
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/{team_id}/leaders`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/leaders](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/leaders)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_soccer_team_leaders-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_leaders-example}
+
+```python
+espn_soccer_team_leaders(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_player_info
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/athletes/{athlete_id}`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/athletes/4239](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/athletes/4239)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+
+### Returns {#espn_soccer_player_info-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_single_entity`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_player_info-example}
+
+```python
+espn_soccer_player_info(league='eng.1', athlete_id='4239')
+```
+
+_Last validated n/a._
+
+## espn_soccer_player_bio
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/athletes/{athlete_id}/bio`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/athletes/4239/bio](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/athletes/4239/bio)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+
+### Returns {#espn_soccer_player_bio-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_single_entity`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_player_bio-example}
+
+```python
+espn_soccer_player_bio(league='eng.1', athlete_id='4239')
+```
+
+_Last validated n/a._
+
+## espn_soccer_player_news
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/athletes/{athlete_id}/news`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/athletes/4239/news](https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/athletes/4239/news)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+
+### Returns {#espn_soccer_player_news-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `byline` | character | Author byline string as published by ESPN. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_player_news-example}
+
+```python
+espn_soccer_player_news(league='eng.1', athlete_id='4239')
+```
+
+_Last validated n/a._
+
+## espn_soccer_standings
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings`
+
+**Valid URL:** [https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings](https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
+| `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
+
+### Returns {#espn_soccer_standings-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
+| `team` | character | Display name of the team in this standings row. |
+| `team_id` | character | ESPN numeric identifier for the team. |
+| `team_abbreviation` | character | Team abbreviation. |
+| `note` | character | Standings note (e.g. qualification/relegation marker). |
+| `games_played` | double | Matches played. |
+| `losses` | double | Number of matches the team has lost. |
+| `point_differential` | double | Goal difference (for minus against). |
+| `points` | double | Competition points. |
+| `points_against` | double | Goals conceded. |
+| `points_for` | double | Goals (or runs) scored by the team. |
+| `ties` | double | Number of matches the team has drawn. |
+| `wins` | double | Number of matches the team has won. |
+| `advanced` | double | Whether the team has advanced/qualified. |
+| `deductions` | double | Points deducted. |
+| `ppg` | double | Points per game. |
+| `rank` | double | Position within the group/table. |
+| `rank_change` | double | Change in rank versus the previous update. |
+| `overall` | character | Overall record summary as published by ESPN. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_standings-example}
+
+```python
+espn_soccer_standings(league='eng.1')
+```
+
+_Last validated n/a._

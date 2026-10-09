@@ -1,0 +1,1330 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-0.1.5 docs-doc-page docs-doc-id-mbb/reference/additional/stats-ncaa-org-3" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-3 /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=0.1.5 /><meta data-rh=true name=docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true name=docsearch:version content=0.1.5 /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true property=og:title content="MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup | sdv-py"/><meta data-rh=true name=description content="MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."/><meta data-rh=true property=og:description content="MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-3 /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-3 hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-3 hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/leagues/basketball","name":"Basketball","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/mbb/","name":"MBB","position":2},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/mbb/reference/additional","name":"Additional functions","position":3},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-3","name":"stats.ncaa.org: ncaa_mbb–validate_lineup","position":4}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/0.1.5/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-3>0.1.5</a><ul class=dropdown__menu><li><a class=dropdown__link href=/docs/mbb/reference/additional/stats-ncaa-org-3>main (latest)</a><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-3>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/0.1.5/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Collapse sidebar category 'Basketball'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nba/><span title=NBA class=categoryLinkLabel_W154>NBA</span></a><button aria-label="Expand sidebar category 'NBA'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wnba/><span title=WNBA class=categoryLinkLabel_W154>WNBA</span></a><button aria-label="Expand sidebar category 'WNBA'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nbagl/><span title="NBA G League" class=categoryLinkLabel_W154>NBA G League</span></a><button aria-label="Expand sidebar category 'NBA G League'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/0.1.5/mbb/><span title=MBB class=categoryLinkLabel_W154>MBB</span></a><button aria-label="Collapse sidebar category 'MBB'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/mbb/reference/loaders><span title=Loaders class=categoryLinkLabel_W154>Loaders</span></a><button aria-label="Expand sidebar category 'Loaders'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/torvik><span title="Bart Torvik T-Rank (barttorvik.com)" class=linkLabel_WmDU>Bart Torvik T-Rank (barttorvik.com)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/kenpom><span title="KenPom (kenpom.com, subscription)" class=linkLabel_WmDU>KenPom (kenpom.com, subscription)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/site><span title="ESPN site API (v2)" class=linkLabel_WmDU>ESPN site API (v2)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/web><span title="ESPN web API (v3)" class=linkLabel_WmDU>ESPN web API (v3)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/mbb/reference/core><span title="ESPN core API (v2)" class=categoryLinkLabel_W154>ESPN core API (v2)</span></a><button aria-label="Expand sidebar category 'ESPN core API (v2)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/fitt><span title="ESPN FPI API (fitt v3)" class=linkLabel_WmDU>ESPN FPI API (fitt v3)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/cdn><span title="ESPN CDN API (cdn.espn.com)" class=linkLabel_WmDU>ESPN CDN API (cdn.espn.com)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/0.1.5/mbb/reference/additional><span title="Additional functions" class=categoryLinkLabel_W154>Additional functions</span></a><button aria-label="Collapse sidebar category 'Additional functions'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/highlights><span title=Highlights class=linkLabel_WmDU>Highlights</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/espn><span title=ESPN class=linkLabel_WmDU>ESPN</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/stats-ncaa-org><span title="stats.ncaa.org: BadLineupClump–enrich_shot" class=linkLabel_WmDU>stats.ncaa.org: BadLineupClump–enrich_shot</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-2><span title="stats.ncaa.org: enrich_stats–ncaa_mbb" class=linkLabel_WmDU>stats.ncaa.org: enrich_stats–ncaa_mbb</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-3><span title="stats.ncaa.org: ncaa_mbb–validate_lineup" class=linkLabel_WmDU>stats.ncaa.org: ncaa_mbb–validate_lineup</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/kenpom><span title=KenPom class=linkLabel_WmDU>KenPom</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/fox-sports-api><span title="Fox Sports API" class=linkLabel_WmDU>Fox Sports API</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/play-by-play-processing><span title="Play-by-play processing" class=linkLabel_WmDU>Play-by-play processing</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/models-and-calculators><span title="Models and calculators: AssistEvent–build_priors" class=linkLabel_WmDU>Models and calculators: AssistEvent–build_priors</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/models-and-calculators-2><span title="Models and calculators: build_productivity–slow_regression" class=linkLabel_WmDU>Models and calculators: build_productivity–slow_regression</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/models-and-calculators-3><span title="Models and calculators: spearman_corr–win_prob" class=linkLabel_WmDU>Models and calculators: spearman_corr–win_prob</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/analytics><span title="Analytics: ConcurrentClump–order_lineup" class=linkLabel_WmDU>Analytics: ConcurrentClump–order_lineup</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/analytics-2><span title="Analytics: pos_class–weighted_avg" class=linkLabel_WmDU>Analytics: pos_class–weighted_avg</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/mbb/reference/additional/ids-and-crosswalks><span title="IDs and crosswalks" class=linkLabel_WmDU>IDs and crosswalks</span></a></ul></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wbb/><span title=WBB class=categoryLinkLabel_W154>WBB</span></a><button aria-label="Expand sidebar category 'WBB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Expand sidebar category 'Baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Expand sidebar category 'Other'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role=alert><div>This is documentation for <!-- -->sdv-py<!-- --> <b>0.1.5</b>, which is no longer actively maintained.</div><div class=margin-top--md>For up-to-date documentation, see the <b><a href=/docs/mbb/reference/additional/stats-ncaa-org-3>latest version</a></b> (<!-- -->main (latest)<!-- -->).</div></div><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/leagues/basketball><span>Basketball</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/mbb/><span>MBB</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/mbb/reference/additional><span>Additional functions</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>stats.ncaa.org: ncaa_mbb–validate_lineup</span></ul></nav><span class="theme-doc-version-badge badge badge--secondary">Version: 0.1.5</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup</h1></header>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=ncaa_mbb_shot_locations>ncaa_mbb_shot_locations<a href=#ncaa_mbb_shot_locations class=hash-link aria-label="Direct link to ncaa_mbb_shot_locations" title="Direct link to ncaa_mbb_shot_locations" translate=no>​</a></h3>
+<p><code>ncaa_mbb_shot_locations(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGameBox]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"</code></p>
+<p>Scrape MBB shot locations for one or more games (bigballR</p>
+<p><code>get_shot_locations</code>, <code>get_shot_locations.R:3-89</code>).</p>
+<p>Fetches each game's <code>stats.ncaa.org/contests/{id}/box_score</code> page and
+parses the embedded shot-chart JS through <code>parse_ncaa_bb_shots</code>.
+NA ids are dropped up front (R <code>:5</code>); per-game "shots found" messages
+go to the module logger (R <code>message</code>, <code>:69-70</code>).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>game_ids</code><td><code>Sequence[object]</code><td><td>NCAA contest ids; <code>None</code>/NaN entries are dropped.<tr><td><code>fetcher</code><td><code>Optional[_SupportsFetchGameBox]</code><td><code>None</code><td>Optional injected fetcher exposing <code>fetch_game_box</code> (for tests/offline use). Defaults to a fresh <code>NcaaFetcher.with_browser()</code> context per call.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>All games' shots row-bound (zero-row <code>SHOTS_SCHEMA</code> frame when no ids survive or no charts are found).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td>Unique game identifier.<tr><td><code>period</code><td>integer<td>Period of the game (1-4 quarters; 5+ for OT).<tr><td><code>clock</code><td>character<td>Game clock value.<tr><td><code>game_seconds</code><td>integer<td><tr><td><code>team</code><td>character<td>Team-side label or team identifier.<tr><td><code>player</code><td>character<td>Player name.<tr><td><code>shot_result</code><td>character<td>Shot result ('Made' / 'Missed').<tr><td><code>x</code><td>double<td>X.<tr><td><code>y</code><td>double<td>Y.<tr><td><code>shot_dist</code><td>double<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_shots </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> ncaa_mbb_shot_locations</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> ncaa_mbb_shot_locations</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"6470186"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"6479639"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">shape</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Offline with an injected fetcher</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> ncaa_mbb_shot_locations</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"6470186"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> fetcher</span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain">my_fetcher</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">group_by</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"team"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">agg</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"shot_dist"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mean</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=ncaa_mbb_team_stats>ncaa_mbb_team_stats<a href=#ncaa_mbb_team_stats class=hash-link aria-label="Direct link to ncaa_mbb_team_stats" title="Direct link to ncaa_mbb_team_stats" translate=no>​</a></h3>
+<p><code>ncaa_mbb_team_stats(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'</code></p>
+<p>Aggregate bigballR-contract play-by-play into per-team game stats.</p>
+<p>Port of bigballR <code>get_team_stats</code> (<code>all_functions.R:2530-2538</code>): the
+ten on-court columns are blanked so every row shares one "lineup", then
+<code>get_lineups</code> (<code>ncaa_mbb_lineups</code>) runs per game and the lineup
+key columns are dropped — yielding two rows (one per team) per game.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pbp</code><td><code>DataFrame</code><td><td>Play-by-play frame in the sdv-py 35-column snake_case bigballR contract. May span multiple games.<tr><td><code>include_transition</code><td><code>bool</code><td><code>False</code><td>When True, append the trans<code>/half</code> split surface plus <code>o_trans_pct</code>/<code>d_trans_pct</code>.<tr><td><code>fix_tip_in</code><td><code>bool</code><td><code>True</code><td>When True (default), rim stats count the scrape engine's real <code>"Tip In"</code> vocabulary; <code>False</code> reproduces R's literal <code>"Tip-In"</code> bug for oracle parity.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a <code>pandas.DataFrame</code> instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p><code>pl.DataFrame</code> (or <code>pd.DataFrame</code>) with one row per team per game — <code>TEAM_STATS_COLUMNS</code> (73) or <code>TEAM_STATS_TRANSITION_COLUMNS</code> with <code>include_transition=True</code>. Games ordered by the Utf8 <code>game_id</code> byte sort (R's do() sorts a numeric ID — identical for equal-width ids), teams within a game byte-sorted. Empty input yields an empty frame with the documented schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>character<td>Unique game identifier.<tr><td><code>home</code><td>character<td>Home.<tr><td><code>away</code><td>character<td>Away record.<tr><td><code>team</code><td>character<td>Team-side label or team identifier.<tr><td><code>mins</code><td>double<td><tr><td><code>o_mins</code><td>double<td><tr><td><code>d_mins</code><td>double<td><tr><td><code>o_poss</code><td>double<td><tr><td><code>d_poss</code><td>double<td><tr><td><code>ortg</code><td>double<td><tr><td><code>drtg</code><td>double<td><tr><td><code>netrtg</code><td>double<td><tr><td><code>pts</code><td>double<td>Points scored.<tr><td><code>d_pts</code><td>double<td><tr><td><code>fga</code><td>double<td>Field goal attempts.<tr><td><code>d_fga</code><td>double<td><tr><td><code>fgm</code><td>double<td>Field goals made.<tr><td><code>d_fgm</code><td>double<td><tr><td><code>tpa</code><td>double<td><tr><td><code>d_tpa</code><td>double<td><tr><td><code>tpm</code><td>double<td><tr><td><code>d_tpm</code><td>double<td><tr><td><code>fta</code><td>double<td>Free throw attempts.<tr><td><code>d_fta</code><td>double<td><tr><td><code>ftm</code><td>double<td>Free throws made.<tr><td><code>d_ftm</code><td>double<td><tr><td><code>rima</code><td>double<td><tr><td><code>d_rima</code><td>double<td><tr><td><code>rimm</code><td>double<td><tr><td><code>d_rimm</code><td>double<td><tr><td><code>orb</code><td>double<td><tr><td><code>d_orb</code><td>double<td><tr><td><code>drb</code><td>double<td><tr><td><code>d_drb</code><td>double<td><tr><td><code>blk</code><td>double<td>Blocks.<tr><td><code>d_blk</code><td>double<td><tr><td><code>to</code><td>double<td>To.<tr><td><code>d_to</code><td>double<td><tr><td><code>ast</code><td>double<td>Assists.<tr><td><code>d_ast</code><td>double<td><tr><td><code>e_poss</code><td>double<td><tr><td><code>fg_pct</code><td>double<td>Field goal percentage (0-1).<tr><td><code>d_fg_pct</code><td>double<td><tr><td><code>tpp</code><td>double<td><tr><td><code>d_tpp</code><td>double<td><tr><td><code>ftp</code><td>double<td><tr><td><code>d_ftp</code><td>double<td><tr><td><code>efg_pct</code><td>double<td><tr><td><code>d_efg_pct</code><td>double<td><tr><td><code>ts_pct</code><td>double<td>True shooting percentage (0-1).<tr><td><code>d_ts_pct</code><td>double<td><tr><td><code>rim_pct</code><td>double<td><tr><td><code>d_rim_pct</code><td>double<td><tr><td><code>mid_pct</code><td>double<td><tr><td><code>d_mid_pct</code><td>double<td><tr><td><code>tp_rate</code><td>double<td><tr><td><code>d_tp_rate</code><td>double<td><tr><td><code>rim_rate</code><td>double<td><tr><td><code>d_rim_rate</code><td>double<td><tr><td><code>mid_rate</code><td>double<td><tr><td><code>d_mid_rate</code><td>double<td><tr><td><code>ft_rate</code><td>double<td>Ft rate.<tr><td><code>d_ft_rate</code><td>double<td><tr><td><code>ast_rate</code><td>double<td><tr><td><code>d_ast_rate</code><td>double<td><tr><td><code>to_rate</code><td>double<td>To rate.<tr><td><code>d_to_rate</code><td>double<td><tr><td><code>blk_rate</code><td>double<td><tr><td><code>o_blk_rate</code><td>double<td><tr><td><code>orb_pct</code><td>double<td>Offensive rebound percentage.<tr><td><code>drb_pct</code><td>double<td>Defensive rebound percentage.<tr><td><code>time_per_poss</code><td>double<td><tr><td><code>d_time_per_poss</code><td>double<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_stats_agg </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> ncaa_mbb_team_stats</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">teams </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> ncaa_mbb_team_stats</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pbp</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">teams</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">shape</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Transition splits, pandas out</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df_pd </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> ncaa_mbb_team_stats</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pbp</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> include_transition</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> return_as_pandas</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">teams</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"netrtg"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=phase1_shot_event_enrichment>phase1_shot_event_enrichment<a href=#phase1_shot_event_enrichment class=hash-link aria-label="Direct link to phase1_shot_event_enrichment" title="Direct link to phase1_shot_event_enrichment" translate=no>​</a></h3>
+<p><code>phase1_shot_event_enrichment(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]', second_half_override: 'Optional[set[int]]' = None) -> 'list[ShotEvent]'</code></p>
+<p>The court-geometry enrichment pass: ascending time, coordinate</p>
+<p>transform + geo synthesis, and the self-correcting side-flip re-run
+(<code>ShotEventParser.phase1_shot_event_enrichment</code>, <code>:415-528</code>).</p>
+<p>For each shot: compute the ascending game time, decide (from
+<code>is_team_shooting_left_to_start</code> + which half the period falls in)
+whether the shot's side needs flipping, run <code>transform_shot_location</code>
+to get both the believed-correct and alternative (mirrored) locations,
+keep whichever is closer to the basket (a >1.2x distance advantage for
+the "alternative" wins, or ANY shot taken with &lt;0.1 min left on the
+clock always keeps the original -- a half-court heave near the buzzer
+is plausible, so the tie-break favors trusting the raw geometry there),
+then synthesize a lat/lon.</p>
+<p>After all shots are processed, if any period had >=6 shots AND more than
+75% of them came back implausibly long-distance (>50ft), the whole pass
+re-runs ONCE with those periods' orientation flipped (the self-correcting
+part) -- <code>second_half_override</code> is <code>None</code> on the initial call and a
+non-<code>None</code> set on the one allowed retry, preventing infinite recursion.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>sorted_very_raw_events</code><td><code>list[tuple[int, ShotEvent]]</code><td><td>The chronologically-sorted (period, shot) pairs from <code>parse_shot_html</code>, pre-geometry-transform.<tr><td><code>second_half_override</code><td><code>Optional[set[int]]</code><td><code>None</code><td>The set of periods whose <code>second_half_switch</code> orientation should be inverted (the self-correction re-run's input); <code>None</code> on the first call.</table>
+<p><strong>Returns</strong></p>
+<p>The fully court-geometry-enriched shots, in the same order as <code>sorted_very_raw_events</code>.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_shot_parser </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> phase1_shot_event_enrichment</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">shots </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> phase1_shot_event_enrichment</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> very_raw_shot</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=playwright_transport>playwright_transport<a href=#playwright_transport class=hash-link aria-label="Direct link to playwright_transport" title="Direct link to playwright_transport" translate=no>​</a></h3>
+<p><code>playwright_transport(*, headless_new: 'bool' = True, challenge_wait_ms: 'int' = 8000, nav_timeout_ms: 'int' = 45000, user_agent: 'Optional[str]' = None, solve_attempts: 'int' = 3, relaunch_backoff: 'float' = 2.0) -> "'_PlaywrightTransport'"</code></p>
+<p>Build the <strong>suggested</strong> stats.ncaa.org game-detail scraping transport.</p>
+<p>Drives a real Chromium via Playwright in Chrome's new-headless mode
+(<code>--headless=new</code>) to clear the Akamai <code>bm-verify</code> challenge that
+<code>curl_cffi</code> cannot, then serves raw server HTML for the 5a-5e parsers.
+Playwright is a <strong>lazy optional import</strong> (not a hard dependency); a clear
+<code>ImportError</code> fires on first use if it is missing.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>headless_new</code><td><code>bool</code><td><code>True</code><td>Use <code>--headless=new</code> (real-GPU render, no window) -- the default and the proven-working mode. <code>False</code> runs old headless (<code>headless_shell</code>), which Akamai flags -- avoid.<tr><td><code>challenge_wait_ms</code><td><code>int</code><td><code>8000</code><td>Milliseconds to let the bm-verify sensor run after the first navigation.<tr><td><code>nav_timeout_ms</code><td><code>int</code><td><code>45000</code><td>Per-navigation timeout.<tr><td><code>user_agent</code><td><code>Optional[str]</code><td><code>None</code><td>Override the Chrome UA string.<tr><td><code>solve_attempts</code><td><code>int</code><td><code>3</code><td><tr><td><code>relaunch_backoff</code><td><code>float</code><td><code>2.0</code><td></table>
+<p><strong>Returns</strong></p>
+<p>A stateful, callable <code>FetchTransport</code> reusing one browser for the session. Close it when done (it is a context manager, has <code>close()</code>, and registers an <code>atexit</code> safety net).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_fetch </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> NcaaFetcher</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>with</span><span class="token plain"> NcaaFetcher</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">with_browser</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> fetcher</span><span class="token punctuation" style=color:#4d5b74>:</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    pbp </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> fetcher</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">fetch_game_pbp</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"1613299"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">               </span><span class="token comment" style=color:#4d5b74;font-style:italic># raw PBP HTML</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    box </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> fetcher</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">fetch_game_individual_stats</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"1613299"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># raw box HTML</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># -> feed to get_box_lineup / create_lineup_data (mbb_ncaa_*_parser)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=remove_diacritics>remove_diacritics<a href=#remove_diacritics class=hash-link aria-label="Direct link to remove_diacritics" title="Direct link to remove_diacritics" translate=no>​</a></h3>
+<p><code>remove_diacritics(fragment: 'str') -> 'str'</code></p>
+<p>Strip diacritical marks, e.g. <code>"Juhász"</code> -> <code>"Juhasz"</code></p>
+<p>(<code>ExtractorUtils.scala:38-43</code>: NFD normalization then removal of the
+combining-diacritical-marks block).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>fragment</code><td><code>str</code><td><td>Any string (a full player name or a name fragment).</table>
+<p><strong>Returns</strong></p>
+<p>The string with combining marks removed.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_stints </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> remove_diacritics</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">remove_diacritics</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"Dorka Juhász"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># "Dorka Juhasz"</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=remove_html_encoding>remove_html_encoding<a href=#remove_html_encoding class=hash-link aria-label="Direct link to remove_html_encoding" title="Direct link to remove_html_encoding" translate=no>​</a></h3>
+<p><code>remove_html_encoding(html_str: 'str') -> 'str'</code></p>
+<p>Undo a handful of literal HTML entity escapes (``ExtractorUtils</p>
+<p>.remove_html_encoding<code>, </code>ExtractorUtils.scala:25-33<code>). **Scope addition, Task 5e.5** -- the first consumer is </code>mbb_ncaa_shot_parser.parse_shot_html<code>(the</code>player<code>name / shooting team name extracted from an SVG shot's</code><title>` text).</title>
+<p>In practice bs4/lxml already decode standard HTML entities (<code>&amp;#39;</code>,
+<code>&amp;quot;</code>, `&``) while parsing text nodes, so this is usually a
+no-op by the time it runs on already-parsed text -- ported anyway for
+exact behavioral parity with any double-escaped input the upstream
+Scala guards against (JSoup has the same auto-decoding behavior, so the
+Scala original is equally a defensive no-op in the common case).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>html_str</code><td><code>str</code><td><td>Any string, typically already-parsed element text.</table>
+<p><strong>Returns</strong></p>
+<p><code>html_str</code> with <code>&amp;#39;</code>/<code>&amp;quot;</code>/<code>&amp;amp;</code> replaced by their literal characters, only if <code>"&"</code> appears at all (short-circuit matching the Scala's <code>if (html_str.indexOf("&") >= 0)</code> guard).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_stints </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> remove_html_encoding</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">remove_html_encoding</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"De&amp;#39;Shayne"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># "De'Shayne"</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">remove_html_encoding</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"Plain Name"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># "Plain Name" (unchanged)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=reorder_and_reverse>reorder_and_reverse<a href=#reorder_and_reverse class=hash-link aria-label="Direct link to reorder_and_reverse" title="Direct link to reorder_and_reverse" translate=no>​</a></h3>
+<p><code>reorder_and_reverse(reversed_partial_events: 'Iterable[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'</code></p>
+<p>Orders same-minute play-by-play events so subs never enclose the plays</p>
+<p>they logically precede/follow (<code>ExtractorUtils.scala:435-599</code>).</p>
+<p>Groups consecutive events sharing the same <code>min</code> into a block (the
+input arrives in descending/reverse-chronological order, so blocks are
+discovered and internally accumulated in reverse too), then -- for any
+block containing a sub -- reorders it via <code>inner_sort</code>: events
+referencing a subbed-OUT player (or scoring no higher than the sub) land
+in a pre-sub group, the subs themselves come next (in ascending-score
+order), and events referencing a subbed-IN player (or scoring higher
+than the sub) land in a trailing post-sub group. Free-throw attempts
+sharing the sub's inferred "direction" (team vs. opponent, inferred from
+the nearest preceding shot/FT/foul) are pulled into the pre-sub group
+unless the shooter is one of the players being subbed in. Blocks with no
+sub are returned unchanged apart from the initial score-based sort.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>reversed_partial_events</code><td><code>Iterable[PlayByPlayEvent]</code><td><td>Events for one lineup event, in reverse-chronological (descending-time) order -- the natural order encountered walking play-by-play text bottom-up.</table>
+<p><strong>Returns</strong></p>
+<p>The same events, forward-chronological (ascending time), with each same-minute block internally reordered so no sub encloses a play it logically shouldn't.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_models </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> Score</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_stints </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    OtherTeamEvent</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    SubInEvent</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    reorder_and_reverse</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">events </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    SubInEvent</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>0.4</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> Score</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"player1"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    OtherTeamEvent</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>0.4</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> Score</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"rebound"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">reorder_and_reverse</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">events</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># [OtherTeamEvent(...), SubInEvent(...)]</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=reset_config>reset_config<a href=#reset_config class=hash-link aria-label="Direct link to reset_config" title="Direct link to reset_config" translate=no>​</a></h3>
+<p><code>reset_config() -> 'NcaaFetchConfig'</code></p>
+<p>Reset the active config to its env-var-derived defaults.</p>
+<p><strong>Returns</strong></p>
+<p>The live singleton, now holding the env-var-derived defaults again.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_fetch </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> update_config</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> reset_config</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">update_config</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">timeout</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>5</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">reset_config</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=right_kind_of_shot>right_kind_of_shot<a href=#right_kind_of_shot class=hash-link aria-label="Direct link to right_kind_of_shot" title="Direct link to right_kind_of_shot" translate=no>​</a></h3>
+<p><code>right_kind_of_shot(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', strict: 'bool') -> 'bool'</code></p>
+<p>Whether <code>pbp_event</code>'s shot type is compatible with <code>shot</code>'s</p>
+<p>distance and make/miss (<code>ShotEnrichmentUtils.right_kind_of_shot</code>,
+<code>PlayByPlayUtils.scala:659-679</code>).</p>
+<p>The distance-in-the-data is approximate, so exact 2-vs-3 discrimination is
+impossible; this only rules out the <em>obvious</em> mismatches (a clearly-short
+shot matched to a 3, or vice versa) and always requires make/miss
+agreement.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>shot</code><td><code>ShotEvent</code><td><td>The shot being enriched (<code>pts</code>/<code>dist</code> read).<tr><td><code>pbp_event</code><td><code>MiscGameEvent</code><td><td>The candidate play-by-play event.<tr><td><code>strict</code><td><code>bool</code><td><td>If <code>True</code>, also apply the distance gate; if <code>False</code>, only the make/miss agreement is required.</table>
+<p><strong>Returns</strong></p>
+<p><code>True</code> if the event could plausibly be this shot.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_pbp_glue </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> right_kind_of_shot</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">right_kind_of_shot</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">shot</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> pbp_event</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> strict</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=run_iterative_adjustment_with_hca>run_iterative_adjustment_with_hca<a href=#run_iterative_adjustment_with_hca class=hash-link aria-label="Direct link to run_iterative_adjustment_with_hca" title="Direct link to run_iterative_adjustment_with_hca" translate=no>​</a></h3>
+<p><code>run_iterative_adjustment_with_hca(teams: 'Sequence[TeamDetail]', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', league_averages: 'LeagueAverages', poss_splits: 'dict[str, PossessionSplits]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'IterationResult'</code></p>
+<p>KenPom-style SoS + HCA fixed-point solver (<code>runIterativeAdjustmentWithHCA</code>, <code>ts:306-527</code>).</p>
+<p>Each iteration (Jacobi -- all teams read the <em>previous</em> iteration's
+adjustments, then commit together):</p>
+<ol>
+<li class="">Per team/field, adjust every game
+<code>adj_game = raw_game * (league / (opp_adj +/- hca))</code> and take the
+weighted mean; a field with no valid games keeps its current value.</li>
+<li class="">Re-estimate per-field HCA from home/away possession-imbalance residuals
+<code>hca = sum((raw - pred) * |imbalance|) / sum(|imbalance|)</code> over teams
+with <code>|imbalance| >= IMBALANCE_MIN</code>.</li>
+</ol>
+<p>Stops when the max per-team/field change drops below <code>tolerance</code> or after
+<code>max_iterations</code> sweeps (the HCA re-estimate still runs on the final
+sweep). The cross-guard on the per-game branch, the asymmetric residual
+prediction, and the cross-named opponent strengths are all preserved -- see
+the module docstring's landmine list.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>teams</code><td><code>Sequence[TeamDetail]</code><td><td>The teams to solve over.<tr><td><code>team_by_name</code><td><code>dict[str, TeamDetail]</code><td><td><code>{team_name: team_detail}</code> for opponent lookup.<tr><td><code>fields</code><td><code>Sequence[str]</code><td><td>The stat fields to solve.<tr><td><code>league_averages</code><td><code>LeagueAverages</code><td><td>Output of <code>compute_league_averages_from_per_game</code>.<tr><td><code>poss_splits</code><td><code>dict[str, PossessionSplits]</code><td><td><code>{team_name:</code> <code>PossessionSplits</code> <code>}</code>.<tr><td><code>max_iterations</code><td><code>int</code><td><code>100</code><td>Iteration cap (default <code>MAX_ITERATIONS</code>; pin to <code>1</code> to inspect a single sweep).<tr><td><code>tolerance</code><td><code>float</code><td><code>1e-06</code><td>Convergence tolerance (default <code>TOLERANCE</code>).</table>
+<p><strong>Returns</strong></p>
+<p>An <code>IterationResult</code> (<code>adj_values</code>, <code>hca_per_field</code>).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_strength </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    STRENGTH_ADJUSTED_FIELDS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    compute_league_averages_from_per_game</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    compute_possession_splits</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    run_iterative_adjustment_with_hca</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">by_name </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>{</span><span class="token plain">t</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"team_name"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>:</span><span class="token plain"> t </span><span class="token keyword" style=color:#02507f>for</span><span class="token plain"> t </span><span class="token keyword" style=color:#02507f>in</span><span class="token plain"> teams</span><span class="token punctuation" style=color:#4d5b74>}</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">league </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> compute_league_averages_from_per_game</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">teams</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">splits </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>{</span><span class="token plain">t</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"team_name"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>:</span><span class="token plain"> compute_possession_splits</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">t</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token keyword" style=color:#02507f>for</span><span class="token plain"> t </span><span class="token keyword" style=color:#02507f>in</span><span class="token plain"> teams</span><span class="token punctuation" style=color:#4d5b74>}</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">result </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> run_iterative_adjustment_with_hca</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    teams</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> by_name</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> STRENGTH_ADJUSTED_FIELDS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> league</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> splits</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">result</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">hca_per_field</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"3p"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"hca_off"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=same_school>same_school<a href=#same_school class=hash-link aria-label="Direct link to same_school" title="Direct link to same_school" translate=no>​</a></h3>
+<p><code>same_school(a: 'str', b: 'str') -> 'bool'</code></p>
+<p>Whether two team-name spellings denote the same school.</p>
+<p>Exact match, or both names inside one <code>team_name_equivalents</code> class.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>a</code><td><code>str</code><td><td>One team-name spelling.<tr><td><code>b</code><td><code>str</code><td><td>The other team-name spelling.</table>
+<p><strong>Returns</strong></p>
+<p><code>True</code> if the two names refer to the same school.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_data_quality </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> same_school</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">same_school</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"New Orleans"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"LSU New Orleans"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># True</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">same_school</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"Miami (FL)"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"Miami (OH)"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">        </span><span class="token comment" style=color:#4d5b74;font-style:italic># False</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=select_contains>select_contains<a href=#select_contains class=hash-link aria-label="Direct link to select_contains" title="Direct link to select_contains" translate=no>​</a></h3>
+<p><code>select_contains(root: 'Tag', selector: 'str', text: 'str') -> 'list[Tag]'</code></p>
+<p>JSoup <code>root.select(sel + ":contains(text)")</code>: candidates whose full</p>
+<p>text (own + every descendant's) case-insensitively CONTAINS <code>text</code> as
+a plain substring -- <strong>not</strong> a regex (Task 5e.2 addition; see the module
+docstring's "Critical divergence" note).</p>
+<p>JSoup's <code>:contains()</code> is documented case-insensitive substring
+containment; soupsieve's <code>:-soup-contains()</code> (the non-deprecated
+spelling of its <code>:contains()</code>) is case-SENSITIVE, with no
+case-insensitive variant of its own. Reproducing JSoup's actual
+semantics therefore needs this helper rather than <code>:-soup-contains()</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>root</code><td><code>Tag</code><td><td>The element to search within.<tr><td><code>selector</code><td><code>str</code><td><td>A plain (soupsieve-legal) CSS selector for the structural part of the match (everything before <code>:contains</code>).<tr><td><code>text</code><td><code>str</code><td><td>The plain substring each candidate's collapsed text must case-insensitively contain.</table>
+<p><strong>Returns</strong></p>
+<p>Every <code>selector</code> match whose <code>jsoup_text</code> case-insensitively contains <code>text</code>, in document order.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_html </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> parse_html</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> select_contains</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">soup </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> parse_html</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"&lt;td>game date:&lt;/td>&lt;td>Location:&lt;/td>"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">select_contains</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">soup</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"td"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"Game Date:"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># [&lt;td>game date:&lt;/td>]</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=select_matching>select_matching<a href=#select_matching class=hash-link aria-label="Direct link to select_matching" title="Direct link to select_matching" translate=no>​</a></h3>
+<p><code>select_matching(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'</code></p>
+<p>JSoup <code>root.select(sel + ":matches(regex)")</code>: candidates whose full</p>
+<p>text (own + every descendant's) matches <code>regex</code>.</p>
+<p>Soupsieve has no <code>:matches()</code> pseudo-class equivalent, so this runs the
+plain structural <code>selector</code> first, then filters by <code>re.search</code>
+over each candidate's <code>jsoup_text</code> (own text plus descendants',
+matching JSoup's <code>:matches()</code> semantics -- as opposed to
+<code>select_matching_own</code>'s own-text-only <code>:matchesOwn()</code>).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>root</code><td><code>Tag</code><td><td>The element to search within.<tr><td><code>selector</code><td><code>str</code><td><td>A plain (soupsieve-legal) CSS selector.<tr><td><code>regex</code><td><code>str</code><td><td>The pattern each candidate's collapsed text must <code>re.search</code>-match.</table>
+<p><strong>Returns</strong></p>
+<p>Every <code>selector</code> match whose <code>jsoup_text</code> contains a <code>regex</code> match, in document order.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_html </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> parse_html</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> select_matching</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">soup </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> parse_html</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"&lt;div>&lt;p>Home Team&lt;/p>&lt;p>Away Team&lt;/p>&lt;/div>"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">select_matching</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">soup</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"p"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>r"^Home"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># [&lt;p>Home Team&lt;/p>]</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=select_matching_own>select_matching_own<a href=#select_matching_own class=hash-link aria-label="Direct link to select_matching_own" title="Direct link to select_matching_own" translate=no>​</a></h3>
+<p><code>select_matching_own(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'</code></p>
+<p>JSoup <code>root.select(sel + ":matchesOwn(regex)")</code>: candidates whose</p>
+<p>OWN text only (excluding descendant elements' text) matches <code>regex</code>.</p>
+<p>JSoup's <code>Element.ownText()</code> walks only the element's direct
+<code>TextNode</code> children, not text nested inside child elements -- the
+same distinction bs4 draws between a tag's direct
+<code>bs4.NavigableString</code> children and its full <code>.get_text()</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>root</code><td><code>Tag</code><td><td>The element to search within.<tr><td><code>selector</code><td><code>str</code><td><td>A plain (soupsieve-legal) CSS selector.<tr><td><code>regex</code><td><code>str</code><td><td>The pattern each candidate's own (whitespace-collapsed) text must <code>re.search</code>-match.</table>
+<p><strong>Returns</strong></p>
+<p>Every <code>selector</code> match whose own text contains a <code>regex</code> match, in document order.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_html </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> parse_html</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> select_matching_own</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">soup </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> parse_html</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>'&lt;div class="card-header">Coach &lt;b>Info&lt;/b>&lt;/div>'</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">select_matching_own</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">soup</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"div.card-header"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>r"^Coach"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># [&lt;div class="card-header">Coach &lt;b>Info&lt;/b>&lt;/div>]</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=shot_js_to_html>shot_js_to_html<a href=#shot_js_to_html class=hash-link aria-label="Direct link to shot_js_to_html" title="Direct link to shot_js_to_html" translate=no>​</a></h3>
+<p><code>shot_js_to_html(js: 'str') -> 'list[Tag]'</code></p>
+<p>Converts client-side <code>addShot(...)</code> JS calls into parseable</p>
+<p><code>circle.shot</code> HTML, for pages where the shot map is built on the fly
+rather than baked into the initial HTML (<code>ShotEventParser .shot_js_to_html</code>, <code>:266-283</code>). See the module docstring's "Scala
+idiom decision" note -- the Scala's <code>builders</code>/<code>browser</code> parameters
+are dropped here since the Scala body never actually uses them.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>js</code><td><code>str</code><td><td>The concatenated <code>&lt;script></code> text containing one or more <code>addShot(x, y, ..., 'title', ...)</code> calls, one per line.</table>
+<p><strong>Returns</strong></p>
+<p>The <code>circle.shot</code> elements reconstructed from every matching line (non-matching lines, e.g. the <code>addShot</code> function definition line itself, are silently skipped).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_shot_parser </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> shot_js_to_html</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">js </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> </span><span class="token string" style=color:#047857>"addShot(27.0, 77.0, 392, false, 1, 'title text', 'class', false);"</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">circles </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> shot_js_to_html</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">js</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=start_time_from_period>start_time_from_period<a href=#start_time_from_period class=hash-link aria-label="Direct link to start_time_from_period" title="Direct link to start_time_from_period" translate=no>​</a></h3>
+<p><code>start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'</code></p>
+<p>The game-clock time (minutes elapsed) a period starts at</p>
+<p>(<code>ExtractorUtils.scala:272-281</code>).</p>
+<p>Women's games play four 10-minute quarters then 5-minute overtimes; men's
+games play two 20-minute halves then 5-minute overtimes.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>period</code><td><code>int</code><td><td>The 1-indexed period number (1/2 = halves for men, 1-4 = quarters for women, 5+ = overtimes for both).<tr><td><code>is_women_game</code><td><code>bool</code><td><td>Whether to use the women's (quarters) or men's (halves) period schedule.</table>
+<p><strong>Returns</strong></p>
+<p>The game-clock minute the period begins at.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_stints </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> start_time_from_period</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">start_time_from_period</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> is_women_game</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>False</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># 20.0 (men's 2nd half)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">start_time_from_period</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> is_women_game</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># 0.0 (women's 1st quarter)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">start_time_from_period</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>6</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> is_women_game</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>False</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># 45.0 (men's 2nd OT)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=sum_event_stats>sum_event_stats<a href=#sum_event_stats class=hash-link aria-label="Direct link to sum_event_stats" title="Direct link to sum_event_stats" translate=no>​</a></h3>
+<p><code>sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'</code></p>
+<p>Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models</p>
+<p>.LineupEventStats<code> (</code>protected def sum_event_stats<code>, </code>LineupUtils.scala
+:1534-1622<code>, debug-only -- the Scala's own docstring says "just used for debug"). The Scala builds this via </code>shapeless.Generic` field-zipping;
+this port is an explicit field-by-field call since Python has no
+equivalent generic-programming machinery.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>lhs</code><td><code>LineupEventStats</code><td><td>The left-hand stat tree.<tr><td><code>rhs</code><td><code>LineupEventStats</code><td><td>The right-hand stat tree.</table>
+<p><strong>Returns</strong></p>
+<p>A new <code>~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats</code> with every field summed (see the module's private sum_*<code>helpers for the</code>Optional`/nested-field summing rules).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_lineup_enrich </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> sum_event_stats</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_models </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> LineupEventStats</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">sum_event_stats</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">LineupEventStats</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">empty</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> LineupEventStats</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">empty</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">num_events</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=sum_shot_infos>sum_shot_infos<a href=#sum_shot_infos class=hash-link aria-label="Direct link to sum_shot_infos" title="Direct link to sum_shot_infos" translate=no>​</a></h3>
+<p><code>sum_shot_infos(shot_infos: 'list[PlayerShotInfo]') -> 'Optional[PlayerShotInfo]'</code></p>
+<p>Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models</p>
+<p>.PlayerShotInfo<code>\ s (</code>sum_shot_infos<code>, </code>LineupUtils.scala:1625-1655`,
+debug-only).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>shot_infos</code><td><code>list[PlayerShotInfo]</code><td><td>The list to combine, in order.</table>
+<p><strong>Returns</strong></p>
+<p><code>None</code> if <code>shot_infos</code> is empty; the single element if there's exactly one; otherwise a left-fold of pairwise field-wise sums (<code>reduceOption</code>).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_lineup_enrich </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> sum_shot_infos</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_models </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> PlayerShotInfo</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">sum_shot_infos</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token plain">PlayerShotInfo</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">ast_3pm</span><span class="token operator" style=color:#4d5b74>=</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> PlayerShotInfo</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">ast_3pm</span><span class="token operator" style=color:#4d5b74>=</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=td_at>td_at<a href=#td_at class=hash-link aria-label="Direct link to td_at" title="Direct link to td_at" translate=no>​</a></h3>
+<p><code>td_at(row: 'Tag', n: 'int') -> 'Optional[Tag]'</code></p>
+<p>JSoup <code>row >?> element("td:eq(n)")</code>: the <code>n</code>-th <code>&lt;td></code> child.</p>
+<p>Soupsieve has no <code>:eq()</code> positional pseudo-class (unlike JSoup), so
+this is a plain 0-indexed lookup into <code>row.find_all("td")</code>, guarded
+against an out-of-range index (JSoup's <code>>?></code> returns <code>None</code> rather
+than raising when the selector matches nothing).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>row</code><td><code>Tag</code><td><td>The row (or other container) element to search.<tr><td><code>n</code><td><code>int</code><td><td>The 0-indexed <code>&lt;td></code> position.</table>
+<p><strong>Returns</strong></p>
+<p>The <code>n</code>-th <code>&lt;td></code> descendant, or <code>None</code> if <code>row</code> has fewer than <code>n + 1</code> of them.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_html </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> parse_html</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> td_at</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">soup </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> parse_html</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"&lt;tr>&lt;td>A&lt;/td>&lt;td>B&lt;/td>&lt;/tr>"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">row </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> soup</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">find</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"tr"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">td_at</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">row</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">get_text</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># "B"</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">td_at</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">row</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>5</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain">  </span><span class="token comment" style=color:#4d5b74;font-style:italic># None</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=transform_shot_location>transform_shot_location<a href=#transform_shot_location class=hash-link aria-label="Direct link to transform_shot_location" title="Direct link to transform_shot_location" translate=no>​</a></h3>
+<p><code>transform_shot_location(x: 'float', y: 'float', second_half_switch: 'bool', team_shooting_left_in_first_period: 'bool', is_offensive: 'bool') -> 'tuple[float, float, float, float]'</code></p>
+<p>Transforms a raw SVG pixel location into feet from the basket, always</p>
+<p>oriented as if shooting towards the left goal (<code>ShotEventParser .transform_shot_location</code>, <code>:588-620</code>).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>x</code><td><code>float</code><td><td>Raw SVG <code>cx</code> pixel coordinate.<tr><td><code>y</code><td><code>float</code><td><td>Raw SVG <code>cy</code> pixel coordinate.<tr><td><code>second_half_switch</code><td><code>bool</code><td><td>Whether this shot is in the "other" half of the game from <code>team_shooting_left_in_first_period</code> (each <code>False</code> factor below flips which side is treated as "left").<tr><td><code>team_shooting_left_in_first_period</code><td><code>bool</code><td><td>Whether the team under analysis shot towards the left goal in the first period (see <code>is_team_shooting_left_to_start</code>).<tr><td><code>is_offensive</code><td><code>bool</code><td><td>Whether the team under analysis is shooting (an opponent shot flips the expected side again).</table>
+<p><strong>Returns</strong></p>
+<p><code>(x, y, alt_x, alt_y)</code> in feet -- the believed-correct location, then the alternative (mirror-image) location, both relative to the goal the shot is (believed to be) attacking.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_shot_parser </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> transform_shot_location</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">transform_shot_location</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>310.2</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>235</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token boolean" style=color:#be123c>False</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token boolean" style=color:#be123c>False</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=update_config>update_config<a href=#update_config class=hash-link aria-label="Direct link to update_config" title="Direct link to update_config" translate=no>​</a></h3>
+<p><code>update_config(**kwargs: 'object') -> 'NcaaFetchConfig'</code></p>
+<p>Update the active config in place.</p>
+<p><strong>Returns</strong></p>
+<p>The (mutated) global config object.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_fetch </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> update_config</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">update_config</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">proxy_url</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>"http://user:pass@1.2.3.4:8080"</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=validate_box_score>validate_box_score<a href=#validate_box_score class=hash-link aria-label="Direct link to validate_box_score" title="Direct link to validate_box_score" translate=no>​</a></h3>
+<p><code>validate_box_score(team: 'TeamId', lineup: 'list[str]') -> 'Union[list[PlayerCodeId], ParseError]'</code></p>
+<p>Checks there are no duplicates in the lineup (``BoxscoreParser</p>
+<p>.validate_box_score<code>, </code>:388-404``).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>team</code><td><code>TeamId</code><td><td>The team the lineup belongs to (feeds <code>~sportsdataverse.mbb.mbb_ncaa_stints.build_player_code</code>'s team-scoped misspelling corrections).<tr><td><code>lineup</code><td><code>list[str]</code><td><td>The raw player-name strings, in whatever order they were assembled by <code>inject_validated_players</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>lineup</code>, mapped to <code>~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId</code> (same order, no sort -- see the module docstring's "not sorted" note). When two teammates collide on the <code>{first-two-letters}{Surname}</code> scheme -- siblings, in practice -- <strong>only the colliding players</strong> are re-coded to <code>{First}{Last}</code> by disambiguate_sibling_codes<code>; every other player keeps the Scala-faithful code. This is a DELIBERATE divergence from </code>ExtractorUtils.scala<code>, which rejects the game: since a team's roster is the same all season, one sibling pair cost the team its ENTIRE season of lineups. A </code>~sportsdataverse.mbb.mbb_ncaa_data_quality.ParseError<code>is returned only when widening cannot separate them, i.e. two players with the SAME full name -- genuinely ambiguous, so still an error. Callers must not re-derive a code from a name after this point:</code>build_player_code<code>would undo the widening and silently drop one twin. Use</code>~sportsdataverse.mbb.mbb_ncaa_names.code_from_box`, which resolves against this roster.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_boxscore_parser </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> validate_box_score</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_models </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> TeamId</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">validate_box_score</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">TeamId</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"Team"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"Player One"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"Player Two"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=validate_lineup>validate_lineup<a href=#validate_lineup class=hash-link aria-label="Direct link to validate_lineup" title="Direct link to validate_lineup" translate=no>​</a></h3>
+<p><code>validate_lineup(lineup_event: 'LineupEvent', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'list[ValidationError]'</code></p>
+<p>Flags a lineup stint as internally inconsistent, via 3 independent</p>
+<p>checks (<code>LineupErrorAnalysisUtils.validate_lineup</code>, <code>:181-218</code>).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>lineup_event</code><td><code>LineupEvent</code><td><td>The lineup stint to validate.<tr><td><code>box_lineup</code><td><code>LineupEvent</code><td><td>The team's box-score lineup event (<code>players</code> is the full roster) -- used both to build the name-resolution context (see <code>~sportsdataverse.mbb.mbb_ncaa_names.build_tidy_player_context</code>) and, indirectly, as the source of <code>players_out</code> for jersey-number resolution inside <code>~sportsdataverse.mbb .mbb_ncaa_names.tidy_player</code>.<tr><td><code>valid_player_codes</code><td><code>set[str]</code><td><td>Every player code that's actually on the box score / roster for this team-season.</table>
+<p><strong>Returns</strong></p>
+<p>The failing <code>ValidationError</code>\ s, in declaration order (see the module docstring's "Return shape" note) -- empty if <code>lineup_event</code> is clean. * <code>ValidationError.WRONG_NUMBER_OF_PLAYERS</code> -- <code>lineup_event</code> doesn't have exactly 5 players on the floor. * <code>ValidationError.UNKNOWN_PLAYERS</code> -- some player on the floor isn't in <code>valid_player_codes</code>. * <code>ValidationError.INACTIVE_PLAYERS</code> -- some player mentioned in <code>lineup_event</code>'s own (team-side) raw game events resolves to a code not in <code>valid_player_codes</code> (i.e. isn't on the floor, per the lineup being validated).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mbb_ncaa_stint_validation </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> validate_lineup</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">errors </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> validate_lineup</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">lineup_event</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> box_lineup</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>{</span><span class="token string" style=color:#047857>"MiMitchell"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"BbBob"</span><span class="token punctuation" style=color:#4d5b74>}</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>assert</span><span class="token plain"> </span><span class="token keyword" style=color:#02507f>not</span><span class="token plain"> errors  </span><span class="token comment" style=color:#4d5b74;font-style:italic># a clean lineup returns []</span><br/></div></code></pre></div></div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/versioned_docs/version-0.1.5/mbb/reference/additional/stats-ncaa-org-3.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/0.1.5/mbb/reference/additional/stats-ncaa-org-2><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>stats.ncaa.org: enrich_stats–ncaa_mbb</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/0.1.5/mbb/reference/additional/kenpom><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>KenPom</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#ncaa_mbb_shot_locations class="table-of-contents__link toc-highlight">ncaa_mbb_shot_locations</a><li><a href=#ncaa_mbb_team_stats class="table-of-contents__link toc-highlight">ncaa_mbb_team_stats</a><li><a href=#phase1_shot_event_enrichment class="table-of-contents__link toc-highlight">phase1_shot_event_enrichment</a><li><a href=#playwright_transport class="table-of-contents__link toc-highlight">playwright_transport</a><li><a href=#remove_diacritics class="table-of-contents__link toc-highlight">remove_diacritics</a><li><a href=#remove_html_encoding class="table-of-contents__link toc-highlight">remove_html_encoding</a><li><a href=#reorder_and_reverse class="table-of-contents__link toc-highlight">reorder_and_reverse</a><li><a href=#reset_config class="table-of-contents__link toc-highlight">reset_config</a><li><a href=#right_kind_of_shot class="table-of-contents__link toc-highlight">right_kind_of_shot</a><li><a href=#run_iterative_adjustment_with_hca class="table-of-contents__link toc-highlight">run_iterative_adjustment_with_hca</a><li><a href=#same_school class="table-of-contents__link toc-highlight">same_school</a><li><a href=#select_contains class="table-of-contents__link toc-highlight">select_contains</a><li><a href=#select_matching class="table-of-contents__link toc-highlight">select_matching</a><li><a href=#select_matching_own class="table-of-contents__link toc-highlight">select_matching_own</a><li><a href=#shot_js_to_html class="table-of-contents__link toc-highlight">shot_js_to_html</a><li><a href=#start_time_from_period class="table-of-contents__link toc-highlight">start_time_from_period</a><li><a href=#sum_event_stats class="table-of-contents__link toc-highlight">sum_event_stats</a><li><a href=#sum_shot_infos class="table-of-contents__link toc-highlight">sum_shot_infos</a><li><a href=#td_at class="table-of-contents__link toc-highlight">td_at</a><li><a href=#transform_shot_location class="table-of-contents__link toc-highlight">transform_shot_location</a><li><a href=#update_config class="table-of-contents__link toc-highlight">update_config</a><li><a href=#validate_box_score class="table-of-contents__link toc-highlight">validate_box_score</a><li><a href=#validate_lineup class="table-of-contents__link toc-highlight">validate_lineup</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

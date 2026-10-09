@@ -1,0 +1,193 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-architecture/codegen" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>Codegen | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/architecture/codegen /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-default-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-current /><meta data-rh=true property=og:title content="Codegen | sdv-py"/><meta data-rh=true name=description content="How sdv-py's codegen produces both the API wrappers and this docs site, and how the two pipelines differ."/><meta data-rh=true property=og:description content="How sdv-py's codegen produces both the API wrappers and this docs site, and how the two pipelines differ."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/architecture/codegen /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/architecture/codegen hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/architecture/codegen hreflang=x-default /><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a class="navbar__item navbar__link" href=/docs/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/architecture/codegen>main (latest)</a><ul class=dropdown__menu><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/architecture/codegen>main (latest)</a><li><a class=dropdown__link href=/docs/0.1.5/architecture/codegen>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Codegen</h1></header>
+<p><code>tools/codegen/generate.py</code> is one CLI with two jobs: it emits the package's API
+wrappers, and it emits this docs site. They share the same inputs and the same
+drift gate, but they are not the same pipeline — see
+<a href=#how-the-two-differ class="">How the two differ</a>.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=inputs>Inputs<a href=#inputs class=hash-link aria-label="Direct link to Inputs" title="Direct link to Inputs" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Input<th>What it carries<tbody><tr><td><code>endpoints/leagues.yaml</code>, <code>endpoints/parameters.yaml</code><td>the league registry (30 leagues) and the shared parameter catalog<tr><td>the five ESPN YAMLs in <code>generate.ESPN_APIS</code><td><code>espn_site_v2</code>, <code>espn_web_v3</code>, <code>espn_core_v2</code>, <code>espn_fitt_v3</code>, <code>espn_cdn</code><tr><td>the 36 flat-API YAMLs in <code>generate.FLAT_APIS</code><td>one live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, the vendor networks)<tr><td><code>endpoints/releases.yaml</code><td>every dataset loader, its release <code>base</code>, tag and asset URL<tr><td><code>espn_rename_map.yaml</code><td>the ESPN short-name renames<tr><td><code>sources.yaml</code><td>provider / category registry: which source each public function belongs to<tr><td><code>schemas/&lt;name>.yaml</code>, <code>schemas/&lt;name>/&lt;league>.yaml</code>, <code>schemas/native/&lt;stem>/</code>, <code>schemas/autodoc/&lt;league>/</code><td>the returns tables, in four shapes<tr><td><code>manual_column_descriptions.yaml</code>, <code>r_column_descriptions.yaml</code><td>column descriptions (captured → manual → R, in that precedence)<tr><td><code>r_exports.yaml</code>, <code>r_parity_aliases.yaml</code>, <code>highlights.yaml</code>, <code>autodoc_example_args.yaml</code>, <code>coverage_allowlist.yaml</code><td>parity tables, curated "start here" sets, capture args, gate exclusions</table>
+<p>Upstream one-shot generators write some of those inputs rather than being run per
+build: <code>gen_asa</code> / <code>gen_cbs</code> / <code>gen_mls</code> / <code>gen_nwsl</code> / <code>gen_on3</code> / <code>gen_pff</code> /
+<code>gen_pff_api</code> / <code>gen_sports247*</code> / <code>gen_yahoo</code> and <code>openapi_to_endpoints</code> turn
+vendor OpenAPI specs into endpoint YAML; <code>gen_nba_stats</code> reads
+<code>inputs/nba_canonical_catalog.json</code>; <code>vendor_captures.py</code> copies sdv-internal-refs
+captures into <code>tests/fixtures/</code>; <code>gen_*_descriptions.py</code> mine column descriptions.
+<code>extract*.py</code> are historical bootstraps and no longer run.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=api-generation>API generation<a href=#api-generation class=hash-link aria-label="Direct link to API generation" title="Direct link to API generation" translate=no>​</a></h2>
+<p>A no-arg <code>uv run python tools/codegen/generate.py</code> runs six stages in order, and
+each one <code>ruff format</code>s exactly what it wrote:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Stage<th>Writes<tbody><tr><td><code>build()</code><td>the <code>tools/codegen/_generated/</code> staging copies<tr><td><code>build_live()</code><td><code>sportsdataverse/&lt;league>/&lt;prefix>_espn_ext.py</code> + the container <code>__init__</code> files<tr><td><code>build_parsed_live()</code><td><code>sportsdataverse/parsed/*.py</code> (the deprecated aliases)<tr><td><code>build_flat_live()</code><td><code>sportsdataverse/&lt;league>/&lt;stem>.py</code> from <code>api_module.py.jinja</code><tr><td><code>build_loaders_live()</code><td><code>sportsdataverse/&lt;lg>/&lt;lg>_loaders.py</code> for the 8 <code>_GENERATED_LOADER_LEAGUES</code><tr><td><code>build_docs()</code><td>the docs tree (below)</table>
+<p>Refresh flags are separate, deliberate, mostly-networked passes:
+<code>--schemas</code> (introspect the parsers against captured fixtures, offline),
+<code>--loader-schemas</code> (re-read release parquet footers), <code>--autodoc-schemas</code>
+(call the hand-written DataFrame functions live), <code>--audit-releases</code>
+(diff <code>releases.yaml</code> against the live release list), <code>--coverage</code> (the
+docs-coverage report).</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=docs-site-generation>Docs-site generation<a href=#docs-site-generation class=hash-link aria-label="Direct link to Docs-site generation" title="Direct link to Docs-site generation" translate=no>​</a></h2>
+<p><code>build_docs()</code> → <code>_render_docs_all()</code> owns <code>docs/docs/&lt;league>/</code>,
+<code>docs/docs/reference/</code>, the generated span of <code>docs/docs/intro.md</code>,
+<code>docs/static/anchor-map.json</code>, <code>docs/src/data/leagues.json</code> and the two committed
+changelog pages under <code>docs/src/pages/</code>. Conceptual pages outside those roots
+(this page, <code>intro.md</code>'s prose, <code>quality-of-life.md</code>, <code>architecture/</code>, <code>parsers/</code>)
+are hand-authored and preserved.</p>
+<ul>
+<li class=""><strong>Per-league pages.</strong> One <code>reference/&lt;slug>.md</code> per API (via
+<code>render_reference_page</code>), <code>reference/loaders.md</code>, <code>reference/additional.md</code>
+(<code>render_autodoc_page</code>, which introspects the importable package), then
+<code>index.md</code> (<code>render_league_index</code>): the Data sources table, one section per
+provider, Tools and helpers, Examples, Python ↔ R parity.</li>
+<li class=""><strong>Sources.</strong> Every row and section comes from <code>sources.yaml</code> through
+<code>sources.resolve()</code>; the Additional page's family headings are registry labels in
+registry order.</li>
+<li class=""><strong>Family split and anchor map.</strong> A page over <code>_PAGE_MD_BUDGET</code> (70 KB of
+markdown ≈ 300 KB of built HTML) keeps its URL as an overview and moves its
+function blocks to one page per family under <code>reference/&lt;page>/</code>.
+<code>docs/static/anchor-map.json</code> maps every old page URL's anchors to their new
+family slug, and <code>docs/src/clientModules/anchorForward.ts</code> forwards a stale deep
+link at runtime.</li>
+<li class=""><strong>League registry.</strong> <code>render_leagues_json()</code> writes <code>docs/src/data/leagues.json</code>
+— 58 leagues across six sports — which drives the sidebar's
+<code>sidebarItemsGenerator</code>, the home page's league grid and the per-league search
+contexts in <code>docusaurus.config.ts</code>.</li>
+<li class=""><strong>Autodoc pages.</strong> The <em>coverage gap</em>: in-scope public names not documented by
+any other generated page, rendered from live signatures and docstrings, with the
+returns table read offline from <code>schemas/autodoc/&lt;scope>/&lt;fn>.yaml</code>.</li>
+<li class=""><strong>Changelog render.</strong> <code>tools/hooks/sync_docs_changelog.py</code> splits the root
+<code>CHANGELOG.md</code> (released sections only) into <code>/CHANGELOG</code> and <code>/changelog-archive</code>;
+<code>--check</code> covers their drift too. The third page, <code>/changelog-unreleased</code>, is built
+from the <code>changelog.d/</code> fragments by <code>docs-deploy.yml</code> just before the site build and
+is gitignored, so a PR that adds a fragment changes no generated file.</li>
+<li class=""><strong>Gates.</strong> <code>_coverage_gaps()</code> fails on a public function that reaches no docs
+page; <code>_source_gaps()</code> fails on one that resolves to zero or two <code>sources.yaml</code>
+entries.</li>
+</ul>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=how-the-two-differ>How the two differ<a href=#how-the-two-differ class=hash-link aria-label="Direct link to How the two differ" title="Direct link to How the two differ" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th><th>API generation<th>Docs-site generation<tbody><tr><td>Unit of work<td>one file per spec object<td>whole trees, full-clobbered, stale files deleted<tr><td>Source of truth<td>the YAML only<td>the YAML <strong>plus</strong> the importable package (live signatures + docstrings)<tr><td>Failure mode<td>a stale wrapper<td>a stale page, an orphan file, or an undocumented/unsourced function<tr><td>Enforcement<td>byte-diff<td>byte-diff <strong>plus</strong> the coverage and sources gates</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=the-drift-gate>The drift gate<a href=#the-drift-gate class=hash-link aria-label="Direct link to The drift gate" title="Direct link to The drift gate" translate=no>​</a></h2>
+<p><code>uv run python tools/codegen/generate.py --check</code> re-renders everything to a temp
+dir and byte-diffs it, orphan-checks the generated roots, and runs both gates. It
+runs in three places:</p>
+<ul>
+<li class=""><code>.github/workflows/codegen.yml</code>, alongside <code>uv run pytest tests/codegen</code>;</li>
+<li class="">the <code>sdv-codegen</code> pre-commit hook;</li>
+<li class="">the <code>codegen-drift-prepush</code> pre-push hook, which also watches <code>docs/docs</code>.</li>
+</ul>
+<p>Both hooks' <code>files:</code> filters match <code>tools/codegen/(endpoints|schemas|templates)/**</code>,
+<code>tools/codegen/*.py</code> and <code>CHANGELOG.md</code> — so editing <code>generate.py</code> or the
+changelog triggers the gate, which it did not before 0.1.5.</p>
+<p>Regenerate before pushing. A stale tree is green locally and red in CI.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=downstream>Downstream<a href=#downstream class=hash-link aria-label="Direct link to Downstream" title="Direct link to Downstream" translate=no>​</a></h2>
+<p><code>tools/codegen/build_docs_index.py</code> imports <code>generate</code> and <code>spec</code> to build the
+sdv-docs MCP retrieval index (<code>sdv_docs_v1.sqlite</code>), published to the rolling
+<code>docs-index</code> release by <code>.github/workflows/docs-index.yml</code>. The index is a build
+artefact and is never committed; its inputs are already drift-gated here.</div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/docs/architecture/codegen.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#inputs class="table-of-contents__link toc-highlight">Inputs</a><li><a href=#api-generation class="table-of-contents__link toc-highlight">API generation</a><li><a href=#docs-site-generation class="table-of-contents__link toc-highlight">Docs-site generation</a><li><a href=#how-the-two-differ class="table-of-contents__link toc-highlight">How the two differ</a><li><a href=#the-drift-gate class="table-of-contents__link toc-highlight">The drift gate</a><li><a href=#downstream class="table-of-contents__link toc-highlight">Downstream</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

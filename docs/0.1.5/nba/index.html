@@ -1,0 +1,957 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-0.1.5 docs-doc-page docs-doc-id-nba/index" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>NBA | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/0.1.5/nba/ /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=0.1.5 /><meta data-rh=true name=docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true name=docsearch:version content=0.1.5 /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true property=og:title content="NBA | sdv-py"/><meta data-rh=true name=description content="sdv-py NBA: endpoint references, dataset loaders and parsers for NBA in the SportsDataverse Python package."/><meta data-rh=true property=og:description content="sdv-py NBA: endpoint references, dataset loaders and parsers for NBA in the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/0.1.5/nba/ /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/nba/ hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/nba/ hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/leagues/basketball","name":"Basketball","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/nba/","name":"NBA","position":2}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/0.1.5/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/0.1.5/nba/>0.1.5</a><ul class=dropdown__menu><li><a class=dropdown__link href=/docs/nba/>main (latest)</a><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/0.1.5/nba/>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/nba/>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/nba/>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/0.1.5/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Collapse sidebar category 'Basketball'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible menu__list-item-collapsible--active"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" aria-current=page tabindex=0 href=/docs/0.1.5/nba/><span title=NBA class=categoryLinkLabel_W154>NBA</span></a><button aria-label="Collapse sidebar category 'NBA'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nba/reference/loaders><span title=Loaders class=categoryLinkLabel_W154>Loaders</span></a><button aria-label="Expand sidebar category 'Loaders'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nba/reference/nba_stats><span title="NBA Stats API (stats.nba.com)" class=categoryLinkLabel_W154>NBA Stats API (stats.nba.com)</span></a><button aria-label="Expand sidebar category 'NBA Stats API (stats.nba.com)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/nba/reference/site><span title="ESPN site API (v2)" class=linkLabel_WmDU>ESPN site API (v2)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/nba/reference/web><span title="ESPN web API (v3)" class=linkLabel_WmDU>ESPN web API (v3)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nba/reference/core><span title="ESPN core API (v2)" class=categoryLinkLabel_W154>ESPN core API (v2)</span></a><button aria-label="Expand sidebar category 'ESPN core API (v2)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/nba/reference/fitt><span title="ESPN FPI API (fitt v3)" class=linkLabel_WmDU>ESPN FPI API (fitt v3)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/nba/reference/cdn><span title="ESPN CDN API (cdn.espn.com)" class=linkLabel_WmDU>ESPN CDN API (cdn.espn.com)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nba/reference/additional><span title="Additional functions" class=categoryLinkLabel_W154>Additional functions</span></a><button aria-label="Expand sidebar category 'Additional functions'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wnba/><span title=WNBA class=categoryLinkLabel_W154>WNBA</span></a><button aria-label="Expand sidebar category 'WNBA'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nbagl/><span title="NBA G League" class=categoryLinkLabel_W154>NBA G League</span></a><button aria-label="Expand sidebar category 'NBA G League'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/mbb/><span title=MBB class=categoryLinkLabel_W154>MBB</span></a><button aria-label="Expand sidebar category 'MBB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wbb/><span title=WBB class=categoryLinkLabel_W154>WBB</span></a><button aria-label="Expand sidebar category 'WBB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Expand sidebar category 'Baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Expand sidebar category 'Other'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role=alert><div>This is documentation for <!-- -->sdv-py<!-- --> <b>0.1.5</b>, which is no longer actively maintained.</div><div class=margin-top--md>For up-to-date documentation, see the <b><a href=/docs/nba/>latest version</a></b> (<!-- -->main (latest)<!-- -->).</div></div><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/leagues/basketball><span>Basketball</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>NBA</span></ul></nav><span class="theme-doc-version-badge badge badge--secondary">Version: 0.1.5</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>NBA (<code>sportsdataverse.nba</code>)</h1></header>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=data-sources>Data sources<a href=#data-sources class=hash-link aria-label="Direct link to Data sources" title="Direct link to Data sources" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Source<th>APIs / hosts<th style=text-align:right>Functions<th>Auth<tbody><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional#highlights>Highlights</a><td>curated "start here" functions<td style=text-align:right>8<td>—<tr><td><a href=#espn class="">ESPN</a><td><code>cdn.espn.com</code>, <code>site.api.espn.com</code>, <code>site.web.api.espn.com</code> +1 more<td style=text-align:right>122<td>none<tr><td><a href=#sportsdataverse-data-releases class="">sportsdataverse-data releases</a><td><code>github.com</code><td style=text-align:right>42<td>none<tr><td><a href=#nba-stats-api class="">NBA Stats API</a><td><code>stats.nba.com</code><td style=text-align:right>130<td>none (curl_cffi chrome TLS impersonation)<tr><td><a href=#fox-sports-api class="">Fox Sports API</a><td><code>api.foxsports.com</code><td style=text-align:right>26<td>none<tr><td><a href=#basketball-reference class="">Basketball-Reference</a><td><code>www.basketball-reference.com</code><td style=text-align:right>9<td>none (slow, owner agreement)<tr><td><a href=#realgm class="">RealGM</a><td><code>basketball.realgm.com</code><td style=text-align:right>18<td>none<tr><td><a href=#public-model-datasets class="">Public model datasets</a><td><code>dunksandthrees.com</code><td style=text-align:right>7<td>none<tr><td><a class="" href=/docs/0.1.5/nba/reference/additional>Additional functions</a><td>hand-written wrappers & helpers<td style=text-align:right>180<td>—</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn>ESPN<a href=#espn class=hash-link aria-label="Direct link to ESPN" title="Direct link to ESPN" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Reference<th style=text-align:right>Functions<tbody><tr><td><a class="" href=/docs/0.1.5/nba/reference/site>ESPN site API (v2)</a><td style=text-align:right>24<tr><td><a class="" href=/docs/0.1.5/nba/reference/web>ESPN web API (v3)</a><td style=text-align:right>5<tr><td><a class="" href=/docs/0.1.5/nba/reference/core>ESPN core API (v2)</a><td style=text-align:right>82<tr><td><a class="" href=/docs/0.1.5/nba/reference/fitt>ESPN FPI API (fitt v3)</a><td style=text-align:right>1<tr><td><a class="" href=/docs/0.1.5/nba/reference/cdn>ESPN CDN API (cdn.espn.com)</a><td style=text-align:right>4<tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/espn>Hand-written wrappers</a><td style=text-align:right>6</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=sportsdataverse-data-releases>sportsdataverse-data releases<a href=#sportsdataverse-data-releases class=hash-link aria-label="Direct link to sportsdataverse-data releases" title="Direct link to sportsdataverse-data releases" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Reference<th style=text-align:right>Functions<tbody><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders>sportsdataverse-data releases</a><td style=text-align:right>41<tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/sportsdataverse-data-releases>Hand-written wrappers</a><td style=text-align:right>1</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=nba-stats-api>NBA Stats API<a href=#nba-stats-api class=hash-link aria-label="Direct link to NBA Stats API" title="Direct link to NBA Stats API" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Reference<th style=text-align:right>Functions<tbody><tr><td><a class="" href=/docs/0.1.5/nba/reference/nba_stats>NBA Stats API (stats.nba.com)</a><td style=text-align:right>128<tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/nba-stats-api>Hand-written wrappers</a><td style=text-align:right>2</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=fox-sports-api>Fox Sports API<a href=#fox-sports-api class=hash-link aria-label="Direct link to Fox Sports API" title="Direct link to Fox Sports API" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Reference<th style=text-align:right>Functions<tbody><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api>Hand-written wrappers</a><td style=text-align:right>26</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=basketball-reference>Basketball-Reference<a href=#basketball-reference class=hash-link aria-label="Direct link to Basketball-Reference" title="Direct link to Basketball-Reference" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Reference<th style=text-align:right>Functions<tbody><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/basketball-reference>Hand-written wrappers</a><td style=text-align:right>9</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=realgm>RealGM<a href=#realgm class=hash-link aria-label="Direct link to RealGM" title="Direct link to RealGM" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Reference<th style=text-align:right>Functions<tbody><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm>Hand-written wrappers</a><td style=text-align:right>18</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=public-model-datasets>Public model datasets<a href=#public-model-datasets class=hash-link aria-label="Direct link to Public model datasets" title="Direct link to Public model datasets" translate=no>​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Reference<th style=text-align:right>Functions<tbody><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/public-model-datasets>Hand-written wrappers</a><td style=text-align:right>7</table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=tools-and-helpers>Tools and helpers<a href=#tools-and-helpers class=hash-link aria-label="Direct link to Tools and helpers" title="Direct link to Tools and helpers" translate=no>​</a></h2>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=play-by-play-processing>Play-by-play processing<a href=#play-by-play-processing class=hash-link aria-label="Direct link to Play-by-play processing" title="Direct link to Play-by-play processing" translate=no>​</a></h3>
+<ul>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/play-by-play-processing#build_athlete_identity_lookup><code>build_athlete_identity_lookup</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/play-by-play-processing#build_nba_player_identity_lookup><code>build_nba_player_identity_lookup</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/highlights#compile_nba_season><code>compile_nba_season</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/play-by-play-processing#nba_pbp_disk><code>nba_pbp_disk</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/play-by-play-processing#nba_v3_to_v2_pbp><code>nba_v3_to_v2_pbp</code></a></li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=models-and-calculators>Models and calculators<a href=#models-and-calculators class=hash-link aria-label="Direct link to Models and calculators" title="Direct link to Models and calculators" translate=no>​</a></h3>
+<ul>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#AdjRapmModel><code>AdjRapmModel</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#AgingCurve><code>AgingCurve</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#ExternalValidityResult><code>ExternalValidityResult</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#ForecastResult><code>ForecastResult</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#LeagueConstants><code>LeagueConstants</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#MeasureSpec><code>MeasureSpec</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#NbaBpmModel><code>NbaBpmModel</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#NbaSpmModel><code>NbaSpmModel</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#RidgeRapmModel><code>RidgeRapmModel</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#SpmCoefficients><code>SpmCoefficients</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#ValidationReport><code>ValidationReport</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#WalkForwardResult><code>WalkForwardResult</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#adjust_efficiency><code>adjust_efficiency</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#adjust_pace><code>adjust_pace</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#as_of_ratings_split><code>as_of_ratings_split</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#calibrate_pts_per_win><code>calibrate_pts_per_win</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#calibrate_replacement_level><code>calibrate_replacement_level</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#darko_forecast_accuracy><code>darko_forecast_accuracy</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#decay_weights><code>decay_weights</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#expected_possessions><code>expected_possessions</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#external_validity><code>external_validity</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#fit_aging_curve><code>fit_aging_curve</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#get_constants><code>get_constants</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#get_shrinkage_k><code>get_shrinkage_k</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#in_game_features><code>in_game_features</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#luck_adjusted_response><code>luck_adjusted_response</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_adj_rapm><code>nba_adj_rapm</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_aging_curve><code>nba_aging_curve</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_bpm><code>nba_bpm</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_career_trajectory><code>nba_career_trajectory</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_darko><code>nba_darko</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_decay_rapm><code>nba_decay_rapm</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_draft_model><code>nba_draft_model</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_expected_turnovers><code>nba_expected_turnovers</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_four_factor_rapm><code>nba_four_factor_rapm</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_in_game_win_prob><code>nba_in_game_win_prob</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_la_rapm><code>nba_la_rapm</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_matchup_drapm><code>nba_matchup_drapm</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_predict_games><code>nba_predict_games</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators#nba_rookie_projection><code>nba_rookie_projection</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#nba_spm><code>nba_spm</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#nba_team_ratings><code>nba_team_ratings</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#nba_war><code>nba_war</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#predict_margin><code>predict_margin</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#predict_total><code>predict_total</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#raw_game_efficiency><code>raw_game_efficiency</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#render_report><code>render_report</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#train_spm><code>train_spm</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#validate_model><code>validate_model</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#walk_forward><code>walk_forward</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/models-and-calculators-2#win_prob_from_margin><code>win_prob_from_margin</code></a></li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=analytics>Analytics<a href=#analytics class=hash-link aria-label="Direct link to Analytics" title="Direct link to Analytics" translate=no>​</a></h3>
+<ul>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#add_ctg_shot_zones><code>add_ctg_shot_zones</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#add_play_context><code>add_play_context</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#add_start_type_detail><code>add_start_type_detail</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#add_transition><code>add_transition</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#box_features><code>box_features</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#build_play_context_shots><code>build_play_context_shots</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#build_possession_shooting><code>build_possession_shooting</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#clutch_delta><code>clutch_delta</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#flag_garbage_time><code>flag_garbage_time</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#flag_heave_possessions><code>flag_heave_possessions</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#hoopshype_salaries><code>hoopshype_salaries</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#lineup_play_context><code>lineup_play_context</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#make_prob_by_context><code>make_prob_by_context</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#make_prob_joint><code>make_prob_joint</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_availability><code>nba_availability</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_box_logs><code>nba_box_logs</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_foul_drawing><code>nba_foul_drawing</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_l2m><code>nba_l2m</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_l2m_games><code>nba_l2m_games</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_play_context><code>nba_play_context</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_player_ages><code>nba_player_ages</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_player_identity><code>nba_player_identity</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_player_positions><code>nba_player_positions</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_player_props><code>nba_player_props</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_playtype_ratings><code>nba_playtype_ratings</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_ratings_panel><code>nba_ratings_panel</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_raw_store_season_frame><code>nba_raw_store_season_frame</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_referee_assignments><code>nba_referee_assignments</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nba_shot_value><code>nba_shot_value</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nba_shot_value_lineups><code>nba_shot_value_lineups</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nba_team_clutch><code>nba_team_clutch</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nba_tracking_drive_value><code>nba_tracking_drive_value</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nba_tracking_pass_value><code>nba_tracking_pass_value</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nba_tracking_reb_oe><code>nba_tracking_reb_oe</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nba_tracking_rim_protect_value><code>nba_tracking_rim_protect_value</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nba_tracking_shot_diet_value><code>nba_tracking_shot_diet_value</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nba_tracking_touch_value><code>nba_tracking_touch_value</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nbadraft_mock_draft><code>nbadraft_mock_draft</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#player_play_context><code>player_play_context</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#player_rates><code>player_rates</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#players_on_court_from_pbp><code>players_on_court_from_pbp</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#players_on_court_from_quarter_boxscores><code>players_on_court_from_quarter_boxscores</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#players_on_court_from_rotation><code>players_on_court_from_rotation</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#prob_over><code>prob_over</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#project_player_line><code>project_player_line</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#prop_distribution><code>prop_distribution</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#ratings_as_of><code>ratings_as_of</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#rotowire_injuries><code>rotowire_injuries</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#score_shot_xpoints><code>score_shot_xpoints</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#shooter_talent><code>shooter_talent</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#shot_selection_quality><code>shot_selection_quality</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#shrink_clutch><code>shrink_clutch</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#spotrac_team_cap><code>spotrac_team_cap</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#starters_on_court_counts><code>starters_on_court_counts</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#team_pace_projection><code>team_pace_projection</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#team_play_context><code>team_play_context</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#xpoints_baseline><code>xpoints_baseline</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#zone_value_map><code>zone_value_map</code></a></li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=dates-and-seasons>Dates and seasons<a href=#dates-and-seasons class=hash-link aria-label="Direct link to Dates and seasons" title="Direct link to Dates and seasons" translate=no>​</a></h3>
+<ul>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/highlights#most_recent_nba_season><code>most_recent_nba_season</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/dates-and-seasons#year_to_season><code>year_to_season</code></a></li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=ids-and-crosswalks>IDs and crosswalks<a href=#ids-and-crosswalks class=hash-link aria-label="Direct link to IDs and crosswalks" title="Direct link to IDs and crosswalks" translate=no>​</a></h3>
+<ul>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/ids-and-crosswalks#nba_player_crosswalk><code>nba_player_crosswalk</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/ids-and-crosswalks#nba_schedule_crosswalk><code>nba_schedule_crosswalk</code></a></li>
+<li class=""><a class="" href=/docs/0.1.5/nba/reference/additional/ids-and-crosswalks#nba_team_crosswalk><code>nba_team_crosswalk</code></a></li>
+</ul>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=examples>Examples<a href=#examples class=hash-link aria-label="Direct link to Examples" title="Direct link to Examples" translate=no>​</a></h2>
+<p>Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):</p>
+<ul>
+<li class=""><a class="" href=/docs/0.1.5/tutorials/quickstart>Quickstart</a></li>
+<li class=""><a class="" href=/docs/0.1.5/tutorials/nba_intro>NBA tutorial</a></li>
+</ul>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=python--r-parity>Python ↔ R parity<a href=#python--r-parity class=hash-link aria-label="Direct link to Python ↔ R parity" title="Direct link to Python ↔ R parity" translate=no>​</a></h2>
+<p>Each <code>sportsdataverse</code> function and its equivalent in the sister R package, <a href=https://github.com/sportsdataverse target=_blank rel="noopener noreferrer" class=""><code>hoopR</code></a>. Same-named where possible; the R column links the package's pkgdown reference.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th><code>sportsdataverse.nba</code> (Python)<th><code>hoopR</code> (R)<tbody><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/basketball-reference#bref_awards><code>bref_awards</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/bref_awards.html target=_blank rel="noopener noreferrer" class=""><code>bref_awards</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/basketball-reference#bref_draft><code>bref_draft</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/bref_draft.html target=_blank rel="noopener noreferrer" class=""><code>bref_draft</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/basketball-reference#bref_injuries><code>bref_injuries</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/bref_injuries.html target=_blank rel="noopener noreferrer" class=""><code>bref_injuries</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/basketball-reference#bref_player_bios><code>bref_player_bios</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/bref_player_bios.html target=_blank rel="noopener noreferrer" class=""><code>bref_player_bios</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/basketball-reference#bref_player_game_log><code>bref_player_game_log</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/bref_player_game_log.html target=_blank rel="noopener noreferrer" class=""><code>bref_player_game_log</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/highlights#bref_players_stats><code>bref_players_stats</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/bref_players_stats.html target=_blank rel="noopener noreferrer" class=""><code>bref_players_stats</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/highlights#bref_standings><code>bref_standings</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/bref_standings.html target=_blank rel="noopener noreferrer" class=""><code>bref_standings</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/basketball-reference#bref_team_roster><code>bref_team_roster</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/bref_team_roster.html target=_blank rel="noopener noreferrer" class=""><code>bref_team_roster</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/highlights#bref_teams_stats><code>bref_teams_stats</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/bref_teams_stats.html target=_blank rel="noopener noreferrer" class=""><code>bref_teams_stats</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_award><code>espn_nba_award</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_award.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_award</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_calendar><code>espn_nba_calendar</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_calendar.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_calendar</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_coach><code>espn_nba_coach</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_coach.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_coach</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_coach_record><code>espn_nba_coach_record</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_coach_record.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_coach_record</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_coach_season><code>espn_nba_coach_season</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_coach_season.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_coach_season</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_conferences><code>espn_nba_conferences</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_conferences.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_conferences</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_draft><code>espn_nba_draft</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_draft.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_draft</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_franchise><code>espn_nba_franchise</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_franchise.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_franchise</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_franchises><code>espn_nba_franchises</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_franchises.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_franchises</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_broadcasts><code>espn_nba_game_broadcasts</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_broadcasts.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_broadcasts</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_odds><code>espn_nba_game_odds</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_odds.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_odds</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_official_detail><code>espn_nba_game_official_detail</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_official_detail.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_official_detail</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_officials><code>espn_nba_game_officials</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_officials.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_officials</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_play><code>espn_nba_game_play</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_play.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_play</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_play_personnel><code>espn_nba_game_play_personnel</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_play_personnel.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_play_personnel</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_powerindex><code>espn_nba_game_powerindex</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_powerindex.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_powerindex</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_predictor><code>espn_nba_game_predictor</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_predictor.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_predictor</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_probabilities><code>espn_nba_game_probabilities</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_probabilities.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_probabilities</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_propbets><code>espn_nba_game_propbets</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_propbets.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_propbets</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/espn#espn_nba_game_rosters><code>espn_nba_game_rosters</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_rosters.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_rosters</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_situation><code>espn_nba_game_situation</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_situation.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_situation</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_team_leaders><code>espn_nba_game_team_leaders</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_team_leaders.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_team_leaders</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_team_linescores><code>espn_nba_game_team_linescores</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_team_linescores.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_team_linescores</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_team_roster><code>espn_nba_game_team_roster</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_team_roster.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_team_roster</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/game#espn_nba_game_team_statistics><code>espn_nba_game_team_statistics</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_game_team_statistics.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_game_team_statistics</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_injuries><code>espn_nba_injuries</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_injuries.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_injuries</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/web#espn_nba_leaders><code>espn_nba_leaders</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_leaders.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_leaders</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_news><code>espn_nba_news</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_news.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_news</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/espn#espn_nba_pbp><code>espn_nba_pbp</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_pbp.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_pbp</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/player#espn_nba_player_awards><code>espn_nba_player_awards</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_awards.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_awards</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/player#espn_nba_player_career_stats><code>espn_nba_player_career_stats</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_career_stats.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_career_stats</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/player#espn_nba_player_contracts><code>espn_nba_player_contracts</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_contracts.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_contracts</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/player#espn_nba_player_eventlog><code>espn_nba_player_eventlog</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_eventlog.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_eventlog</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/web#espn_nba_player_gamelog><code>espn_nba_player_gamelog</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_gamelog.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_gamelog</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_player_info><code>espn_nba_player_info</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_info.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_info</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/web#espn_nba_player_overview><code>espn_nba_player_overview</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_overview.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_overview</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/player#espn_nba_player_seasons><code>espn_nba_player_seasons</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_seasons.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_seasons</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/web#espn_nba_player_splits><code>espn_nba_player_splits</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_splits.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_splits</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/player#espn_nba_player_statisticslog><code>espn_nba_player_statisticslog</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_statisticslog.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_statisticslog</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/highlights#espn_nba_player_stats><code>espn_nba_player_stats</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_stats.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_stats</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/web#espn_nba_player_stats_v3><code>espn_nba_player_stats_v3</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_player_stats_v3.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_player_stats_v3</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_position><code>espn_nba_position</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_position.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_position</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_positions><code>espn_nba_positions</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_positions.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_positions</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_scoreboard><code>espn_nba_scoreboard</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_scoreboard.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_scoreboard</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_awards><code>espn_nba_season_awards</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_awards.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_awards</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_draft><code>espn_nba_season_draft</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_draft.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_draft</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_group><code>espn_nba_season_group</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_group.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_group</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_group_children><code>espn_nba_season_group_children</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_group_children.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_group_children</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_group_teams><code>espn_nba_season_group_teams</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_group_teams.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_group_teams</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_groups><code>espn_nba_season_groups</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_groups.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_groups</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_info><code>espn_nba_season_info</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_info.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_info</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_type><code>espn_nba_season_type</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_type.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_type</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_types><code>espn_nba_season_types</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_types.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_types</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_week><code>espn_nba_season_week</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_week.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_week</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/season#espn_nba_season_weeks><code>espn_nba_season_weeks</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_season_weeks.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_season_weeks</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_seasons><code>espn_nba_seasons</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_seasons.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_seasons</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_standings><code>espn_nba_standings</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_standings.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_standings</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_team><code>espn_nba_team</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_team.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_team</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_team_injuries><code>espn_nba_team_injuries</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_team_injuries.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_team_injuries</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_team_leaders><code>espn_nba_team_leaders</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_team_leaders.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_team_leaders</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_team_news><code>espn_nba_team_news</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_team_news.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_team_news</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_team_record><code>espn_nba_team_record</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_team_record.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_team_record</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_team_roster><code>espn_nba_team_roster</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_team_roster.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_team_roster</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_team_schedule><code>espn_nba_team_schedule</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_team_schedule.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_team_schedule</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/highlights#espn_nba_teams><code>espn_nba_teams</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_teams.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_teams</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_tournaments><code>espn_nba_tournaments</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_tournaments.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_tournaments</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/site#espn_nba_transactions><code>espn_nba_transactions</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_transactions.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_transactions</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/core/other#espn_nba_venues><code>espn_nba_venues</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/espn_nba_venues.html target=_blank rel="noopener noreferrer" class=""><code>espn_nba_venues</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api#fox_nba_boxscore><code>fox_nba_boxscore</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/fox_nba_boxscore.html target=_blank rel="noopener noreferrer" class=""><code>fox_nba_boxscore</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api#fox_nba_league_leaders><code>fox_nba_league_leaders</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/fox_nba_league_leaders.html target=_blank rel="noopener noreferrer" class=""><code>fox_nba_league_leaders</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api#fox_nba_odds><code>fox_nba_odds</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/fox_nba_odds.html target=_blank rel="noopener noreferrer" class=""><code>fox_nba_odds</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api#fox_nba_pbp><code>fox_nba_pbp</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/fox_nba_pbp.html target=_blank rel="noopener noreferrer" class=""><code>fox_nba_pbp</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api#fox_nba_standings><code>fox_nba_standings</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/fox_nba_standings.html target=_blank rel="noopener noreferrer" class=""><code>fox_nba_standings</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api#fox_nba_team_gamelog><code>fox_nba_team_gamelog</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/fox_nba_team_gamelog.html target=_blank rel="noopener noreferrer" class=""><code>fox_nba_team_gamelog</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api#fox_nba_team_roster><code>fox_nba_team_roster</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/fox_nba_team_roster.html target=_blank rel="noopener noreferrer" class=""><code>fox_nba_team_roster</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api#fox_nba_team_stats><code>fox_nba_team_stats</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/fox_nba_team_stats.html target=_blank rel="noopener noreferrer" class=""><code>fox_nba_team_stats</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/fox-sports-api#fox_nba_teams><code>fox_nba_teams</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/fox_nba_teams.html target=_blank rel="noopener noreferrer" class=""><code>fox_nba_teams</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#hoopshype_salaries><code>hoopshype_salaries</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/hoopshype_salaries.html target=_blank rel="noopener noreferrer" class=""><code>hoopshype_salaries</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_draft><code>load_nba_draft</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_draft.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_draft</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_game_rosters><code>load_nba_game_rosters</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_game_rosters.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_game_rosters</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_group_aliases><code>load_nba_group_aliases</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_group_aliases.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_group_aliases</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_group_seasons><code>load_nba_group_seasons</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_group_seasons.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_group_seasons</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_groups><code>load_nba_groups</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_groups.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_groups</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_officials><code>load_nba_officials</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_officials.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_officials</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_pbp><code>load_nba_pbp</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_pbp.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_pbp</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/player#load_nba_player_core><code>load_nba_player_core</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_player_core.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_player_core</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/player#load_nba_player_crosswalk><code>load_nba_player_crosswalk</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_player_crosswalk.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_player_crosswalk</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/player#load_nba_player_impact><code>load_nba_player_impact</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_player_impact.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_player_impact</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_rosters><code>load_nba_rosters</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_rosters.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_rosters</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_schedule><code>load_nba_schedule</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_schedule.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_schedule</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_schedule_crosswalk><code>load_nba_schedule_crosswalk</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_schedule_crosswalk.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_schedule_crosswalk</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_shots><code>load_nba_shots</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_shots.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_shots</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_standings><code>load_nba_standings</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_standings.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_standings</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_coaches><code>load_nba_stats_coaches</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_coaches.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_coaches</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_game_lineups><code>load_nba_stats_game_lineups</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_game_lineups.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_game_lineups</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_game_rosters><code>load_nba_stats_game_rosters</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_game_rosters.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_game_rosters</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/sportsdataverse-data-releases#load_nba_stats_leaguedash><code>load_nba_stats_leaguedash</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_leaguedash.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_leaguedash</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_lineups><code>load_nba_stats_lineups</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_lineups.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_lineups</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_officials><code>load_nba_stats_officials</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_officials.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_officials</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_pbp><code>load_nba_stats_pbp</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_pbp.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_pbp</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_player_boxscores><code>load_nba_stats_player_boxscores</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_player_boxscores.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_player_boxscores</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_player_game_logs><code>load_nba_stats_player_game_logs</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_player_game_logs.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_player_game_logs</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_player_season_stats><code>load_nba_stats_player_season_stats</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_player_season_stats.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_player_season_stats</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats#load_nba_stats_possessions><code>load_nba_stats_possessions</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_possessions.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_possessions</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats-2#load_nba_stats_rosters><code>load_nba_stats_rosters</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_rosters.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_rosters</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats-2#load_nba_stats_shots><code>load_nba_stats_shots</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_shots.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_shots</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats-2#load_nba_stats_standings><code>load_nba_stats_standings</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_standings.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_standings</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats-2#load_nba_stats_team_boxscores><code>load_nba_stats_team_boxscores</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_team_boxscores.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_team_boxscores</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/stats-2#load_nba_stats_team_season_stats><code>load_nba_stats_team_season_stats</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_stats_team_season_stats.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_stats_team_season_stats</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_team_crosswalk><code>load_nba_team_crosswalk</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_team_crosswalk.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_team_crosswalk</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/loaders/other#load_nba_team_group_seasons><code>load_nba_team_group_seasons</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/load_nba_team_group_seasons.html target=_blank rel="noopener noreferrer" class=""><code>load_nba_team_group_seasons</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/highlights#most_recent_nba_season><code>most_recent_nba_season</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/most_recent_nba_season.html target=_blank rel="noopener noreferrer" class=""><code>most_recent_nba_season</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_l2m><code>nba_l2m</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/nba_l2m.html target=_blank rel="noopener noreferrer" class=""><code>nba_l2m</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_l2m_games><code>nba_l2m_games</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/nba_l2m_games.html target=_blank rel="noopener noreferrer" class=""><code>nba_l2m_games</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/nba-stats-api#nba_live_boxscore><code>nba_live_boxscore</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/nba_live_boxscore.html target=_blank rel="noopener noreferrer" class=""><code>nba_live_boxscore</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/nba-stats-api#nba_live_pbp><code>nba_live_pbp</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/nba_live_pbp.html target=_blank rel="noopener noreferrer" class=""><code>nba_live_pbp</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/ids-and-crosswalks#nba_player_crosswalk><code>nba_player_crosswalk</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/nba_player_crosswalk.html target=_blank rel="noopener noreferrer" class=""><code>nba_player_crosswalk</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/analytics#nba_referee_assignments><code>nba_referee_assignments</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/nba_referee_assignments.html target=_blank rel="noopener noreferrer" class=""><code>nba_referee_assignments</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/ids-and-crosswalks#nba_schedule_crosswalk><code>nba_schedule_crosswalk</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/nba_schedule_crosswalk.html target=_blank rel="noopener noreferrer" class=""><code>nba_schedule_crosswalk</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/ids-and-crosswalks#nba_team_crosswalk><code>nba_team_crosswalk</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/nba_team_crosswalk.html target=_blank rel="noopener noreferrer" class=""><code>nba_team_crosswalk</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#nbadraft_mock_draft><code>nbadraft_mock_draft</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/nbadraft_mock_draft.html target=_blank rel="noopener noreferrer" class=""><code>nbadraft_mock_draft</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_coaches><code>realgm_coaches</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_coaches.html target=_blank rel="noopener noreferrer" class=""><code>realgm_coaches</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_draft><code>realgm_draft</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_draft.html target=_blank rel="noopener noreferrer" class=""><code>realgm_draft</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_draft_prospects><code>realgm_draft_prospects</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_draft_prospects.html target=_blank rel="noopener noreferrer" class=""><code>realgm_draft_prospects</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_early_entry><code>realgm_early_entry</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_early_entry.html target=_blank rel="noopener noreferrer" class=""><code>realgm_early_entry</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_future_free_agents><code>realgm_future_free_agents</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_future_free_agents.html target=_blank rel="noopener noreferrer" class=""><code>realgm_future_free_agents</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_gms><code>realgm_gms</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_gms.html target=_blank rel="noopener noreferrer" class=""><code>realgm_gms</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_individual_games><code>realgm_individual_games</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_individual_games.html target=_blank rel="noopener noreferrer" class=""><code>realgm_individual_games</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_individual_seasons><code>realgm_individual_seasons</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_individual_seasons.html target=_blank rel="noopener noreferrer" class=""><code>realgm_individual_seasons</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_player_stats><code>realgm_player_stats</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_player_stats.html target=_blank rel="noopener noreferrer" class=""><code>realgm_player_stats</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_players><code>realgm_players</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_players.html target=_blank rel="noopener noreferrer" class=""><code>realgm_players</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_players_abroad><code>realgm_players_abroad</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_players_abroad.html target=_blank rel="noopener noreferrer" class=""><code>realgm_players_abroad</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_rookie_scale><code>realgm_rookie_scale</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_rookie_scale.html target=_blank rel="noopener noreferrer" class=""><code>realgm_rookie_scale</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_salary_cap><code>realgm_salary_cap</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_salary_cap.html target=_blank rel="noopener noreferrer" class=""><code>realgm_salary_cap</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_standings><code>realgm_standings</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_standings.html target=_blank rel="noopener noreferrer" class=""><code>realgm_standings</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_team_stats><code>realgm_team_stats</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_team_stats.html target=_blank rel="noopener noreferrer" class=""><code>realgm_team_stats</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_teams><code>realgm_teams</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_teams.html target=_blank rel="noopener noreferrer" class=""><code>realgm_teams</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/realgm#realgm_transactions><code>realgm_transactions</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/realgm_transactions.html target=_blank rel="noopener noreferrer" class=""><code>realgm_transactions</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#rotowire_injuries><code>rotowire_injuries</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/rotowire_injuries.html target=_blank rel="noopener noreferrer" class=""><code>rotowire_injuries</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/analytics-2#spotrac_team_cap><code>spotrac_team_cap</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/spotrac_team_cap.html target=_blank rel="noopener noreferrer" class=""><code>spotrac_team_cap</code></a><tr><td><a class="" href=/docs/0.1.5/nba/reference/additional/dates-and-seasons#year_to_season><code>year_to_season</code></a><td><a href=https://hoopR.sportsdataverse.org/reference/year_to_season.html target=_blank rel="noopener noreferrer" class=""><code>year_to_season</code></a></table></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/versioned_docs/version-0.1.5/nba/index.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/0.1.5/leagues/basketball><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>Basketball</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/0.1.5/nba/reference/loaders><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>Loaders</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#data-sources class="table-of-contents__link toc-highlight">Data sources</a><li><a href=#espn class="table-of-contents__link toc-highlight">ESPN</a><li><a href=#sportsdataverse-data-releases class="table-of-contents__link toc-highlight">sportsdataverse-data releases</a><li><a href=#nba-stats-api class="table-of-contents__link toc-highlight">NBA Stats API</a><li><a href=#fox-sports-api class="table-of-contents__link toc-highlight">Fox Sports API</a><li><a href=#basketball-reference class="table-of-contents__link toc-highlight">Basketball-Reference</a><li><a href=#realgm class="table-of-contents__link toc-highlight">RealGM</a><li><a href=#public-model-datasets class="table-of-contents__link toc-highlight">Public model datasets</a><li><a href=#tools-and-helpers class="table-of-contents__link toc-highlight">Tools and helpers</a><ul><li><a href=#play-by-play-processing class="table-of-contents__link toc-highlight">Play-by-play processing</a><li><a href=#models-and-calculators class="table-of-contents__link toc-highlight">Models and calculators</a><li><a href=#analytics class="table-of-contents__link toc-highlight">Analytics</a><li><a href=#dates-and-seasons class="table-of-contents__link toc-highlight">Dates and seasons</a><li><a href=#ids-and-crosswalks class="table-of-contents__link toc-highlight">IDs and crosswalks</a></ul><li><a href=#examples class="table-of-contents__link toc-highlight">Examples</a><li><a href=#python--r-parity class="table-of-contents__link toc-highlight">Python ↔ R parity</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

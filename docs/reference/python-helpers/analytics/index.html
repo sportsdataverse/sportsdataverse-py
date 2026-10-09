@@ -1,0 +1,875 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-reference/python-helpers/analytics" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>Package — additional Python functions — Analytics | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/reference/python-helpers/analytics /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-default-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-current /><meta data-rh=true property=og:title content="Package — additional Python functions — Analytics | sdv-py"/><meta data-rh=true name=description content="Package — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."/><meta data-rh=true property=og:description content="Package — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/reference/python-helpers/analytics /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/reference/python-helpers/analytics hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/reference/python-helpers/analytics hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/reference/python-helpers","name":"Package helpers","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/reference/python-helpers/analytics","name":"Analytics","position":2}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/reference/python-helpers/analytics>main (latest)</a><ul class=dropdown__menu><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/reference/python-helpers/analytics>main (latest)</a><li><a class=dropdown__link href=/docs/0.1.5/reference/python-helpers/analytics>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Collapse sidebar category 'Package helpers'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/pff-premium-stats-legacy><span title="PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues" class=linkLabel_WmDU>PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/pff-premium-stats-legacy-2><span title="PFF Premium Stats (LEGACY): aaf_player–ncaa_facet" class=linkLabel_WmDU>PFF Premium Stats (LEGACY): aaf_player–ncaa_facet</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/pff-premium-stats-legacy-3><span title="PFF Premium Stats (LEGACY): ncaa_facet–nfl_facet" class=linkLabel_WmDU>PFF Premium Stats (LEGACY): ncaa_facet–nfl_facet</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/pff-premium-stats-legacy-4><span title="PFF Premium Stats (LEGACY): nfl_facet–ufl_facet" class=linkLabel_WmDU>PFF Premium Stats (LEGACY): nfl_facet–ufl_facet</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/pff-premium-stats-legacy-5><span title="PFF Premium Stats (LEGACY): ufl_facet–ufl_player" class=linkLabel_WmDU>PFF Premium Stats (LEGACY): ufl_facet–ufl_player</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/pff-premium-stats-legacy-6><span title="PFF Premium Stats (LEGACY): ufl_player–ufl_teams" class=linkLabel_WmDU>PFF Premium Stats (LEGACY): ufl_player–ufl_teams</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/stats-ncaa-org><span title=stats.ncaa.org class=linkLabel_WmDU>stats.ncaa.org</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/play-by-play-processing><span title="Play-by-play processing" class=linkLabel_WmDU>Play-by-play processing</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/models-and-calculators><span title="Models and calculators" class=linkLabel_WmDU>Models and calculators</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/reference/python-helpers/analytics><span title=Analytics class=linkLabel_WmDU>Analytics</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/cache-and-configuration><span title="Cache and configuration" class=linkLabel_WmDU>Cache and configuration</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/reference/python-helpers/validation><span title=Validation class=linkLabel_WmDU>Validation</span></a></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Expand sidebar category 'Basketball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Expand sidebar category 'Baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Expand sidebar category 'Other'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/reference/python-helpers><span>Package helpers</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>Analytics</span></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Package — additional Python functions — Analytics</h1></header>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=defense_vs_position>defense_vs_position<a href=#defense_vs_position class=hash-link aria-label="Direct link to defense_vs_position" title="Direct link to defense_vs_position" translate=no>​</a></h3>
+<p><code>defense_vs_position(pbp: 'pl.DataFrame', rosters: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'</code></p>
+<p>EPA/play, success and explosive rate each defense allowed to QBs, RBs, WRs and TEs.</p>
+<p>Population: plays from scrimmage on a numbered down (1-4) with an EPA, in the
+regular season or postseason -- CFB <code>EPA_scrimmage</code> not null and <code>seasonType</code>
+2/3 (the <code>sportsdataverse.rolling_windows</code> population), NFL <code>play_type</code>
+pass/run and <code>season_type</code> REG/POST. Filter season types first to narrow it.</p>
+<p>A dropback (<code>pass</code>: attempts and sacks, plus NFL scrambles) is the QB's; a
+carry (<code>rush</code>) goes to the rusher's roster group and a target to the
+receiver's, so one completion counts for QB and for its receiver's group. The
+roster is matched on <code>(season, player id)</code>: CFB <code>athlete_id</code> with
+<code>position_abbreviation</code> (or <code>position</code> when that is the abbreviation, the
+older shape), NFL <code>gsis_id</code> with <code>position</code>. A carrier or receiver with no
+roster row, an <code>other</code> position or two different groups that season counts
+in no group, and so does a target with no receiver id. CFB roster positions
+are usable from 2014; the 2004-2013 releases list nearly every player as
+unknown (<code>-</code>), so those seasons get QB dropbacks and little else.</p>
+<p>Rates: <code>success</code> is EPA > 0; <code>explosive</code> is a dropback with EPA >= 2.4 or
+a carry with EPA >= 1.8 (cfb_pbp's <code>EPA_explosive</code>). <code>sack_rate_allowed</code>
+is sacks per dropback, <code>rush_yards_per_carry_allowed</code> the carries' rushing
+yards (CFB <code>yds_rushed</code>, <code>statYardage</code> where it is null), <code>yards_per_target_allowed</code> receiving yards per target (0 on an
+incompletion or interception). Extras are null on groups whose plays do not
+make them real. <code>games</code> counts the games with at least one of the cell's
+plays, and <code>qualified</code> is <code>games >= MIN_GAMES</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pbp</code><td><code>pl.DataFrame</code><td><td>released plays, any number of seasons -- CFB <code>load_cfb_pbp</code> or NFL <code>load_nfl_model_pbp</code> (project to <code>PBP_COLUMNS[league]</code>).<tr><td><code>rosters</code><td><code>pl.DataFrame</code><td><td>the same seasons' rosters -- CFB <code>load_cfb_rosters</code> (<code>season</code>, <code>athlete_id</code>, <code>position_abbreviation</code> / <code>position</code>), NFL <code>load_nfl_rosters</code> (<code>season</code>, <code>gsis_id</code>, <code>position</code>).<tr><td><code>league</code><td><code>str</code><td><td><code>"cfb"</code> or <code>"nfl"</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per <code>(season, team_id, position_group)</code> the defense faced, <code>OUTPUT_SCHEMA</code>, sorted by those keys. <code>team_id</code> is the defense's ESPN team id as text (CFB <code>def_pos_team_id</code>) or its nflverse abbreviation (NFL <code>defteam</code>). Empty pbp gives an empty frame with the schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season</code><td>integer<td>Season of the plays, keyed as the source pbp keys it (CFB and NFL starting year).<tr><td><code>team_id</code><td>character<td>The DEFENSE, as text: its ESPN team id (CFB def_pos_team_id) or its nflverse abbreviation (NFL defteam).<tr><td><code>position_group</code><td>character<td>Group of the offensive player the plays went to: QB (every dropback, plus carries and targets of roster QBs), RB (roster RB or FB), WR or TE, from the season roster position.<tr><td><code>plays</code><td>integer<td>Plays in the cell, each counted once per group; a completion counts for QB and for its receiver's group.<tr><td><code>games</code><td>integer<td>Games with at least one of the cell's plays; the qualified floor counts these.<tr><td><code>epa_per_play_allowed</code><td>double<td>Mean offensive EPA of the cell's plays (higher is worse for the defense).<tr><td><code>success_rate_allowed</code><td>double<td>Share of the cell's plays with EPA > 0.<tr><td><code>explosive_rate_allowed</code><td>double<td>Share of the cell's plays that were explosive (a dropback with EPA >= 2.4 or a carry with EPA >= 1.8, as cfb_pbp's EPA_explosive).<tr><td><code>dropbacks</code><td>integer<td>QB rows only, null for other groups; dropbacks faced (pass attempts and sacks, plus NFL scrambles).<tr><td><code>sack_rate_allowed</code><td>double<td>QB rows only, null for other groups; sacks per dropback.<tr><td><code>carries</code><td>integer<td>RB rows only, null for other groups; carries by roster RBs and FBs.<tr><td><code>rush_yards_per_carry_allowed</code><td>double<td>RB rows only, null for other groups; rushing yards per carry (CFB yds_rushed, statYardage where ESPN left it null).<tr><td><code>targets</code><td>integer<td>WR and TE rows only, null for other groups; targets to the group's players that name a receiver.<tr><td><code>yards_per_target_allowed</code><td>double<td>WR and TE rows only, null for other groups; receiving yards per target, 0 on an incompletion or interception. ESPN CFB names no receiver on most incompletions and every interception, so CFB targets are mostly completions and run high.<tr><td><code>qualified</code><td>logical<td>True when games >= 3 (MIN_GAMES), the floor below which the producer gives no percentile.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">cfb </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_cfb_pbp</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> load_cfb_rosters</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">defense_vs_position </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> PBP_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> defense_vs_position</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">pbp </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_cfb_pbp</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">PBP_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"cfb"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">dvp </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> defense_vs_position</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pbp</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> load_cfb_rosters</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"cfb"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># The NFL twin (gsis ids, nflverse team abbreviations)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nfl </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_nfl_model_pbp</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> load_nfl_rosters</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">pbp </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_nfl_model_pbp</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">PBP_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"nfl"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">dvp_nfl </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> defense_vs_position</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pbp</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> load_nfl_rosters</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"nfl"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">dvp</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"position_group"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"TE"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>&</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"qualified"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"epa_per_play_allowed"</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=football_attempts>football_attempts<a href=#football_attempts class=hash-link aria-label="Direct link to football_attempts" title="Direct link to football_attempts" translate=no>​</a></h3>
+<p><code>football_attempts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'</code></p>
+<p>Field-goal, air-yards, fourth-down and down-x-distance attempts from released <code>espn_{cfb,nfl}_pbp</code>.</p>
+<p>Populations (regular season + postseason):</p>
+<ul>
+<li class=""><code>fg_pct_by_distance</code>: <code>fg_attempt</code> with a <code>yds_fg</code>; success = <code>fg_made</code>;
+player = the kicker.</li>
+<li class=""><code>cmp_pct_by_air_yards</code> / <code>epa_by_air_yards</code>: <code>pass_attempt</code> with
+<code>air_yards</code>; success = <code>completion</code> / <code>EPA_success</code>; player = the passer.
+CFB carries air yards from 2025 only (41% of attempts), so earlier seasons
+yield no rows.</li>
+<li class=""><code>fourth_conv_by_ytg</code>: fourth-down rushes and passes that stood (no nullifying
+penalty); success = a first down or the offense's own touchdown -- the
+<code>usage_box._standing_scrimmage</code> semantics. No player rows.</li>
+<li class=""><code>success_by_down_distance</code>: every standing scrimmage play on downs 1-4 with
+a distance; success = <code>EPA_success</code>; <code>down</code> is the second axis. No player
+rows. Distance follows standing_scrimmage<code>(clipped to 1-25, so ESPN's rare</code>distance == 0` lands in the 1-yard bucket).</li>
+</ul>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pbp</code><td><code>DataFrame</code><td><td>released pbp plays, any number of seasons (project to <code>FOOTBALL_ATTEMPT_COLUMNS</code>).</table>
+<p><strong>Returns</strong></p>
+<p>one row per attempt x metric, <code>ATTEMPT_SCHEMA</code>; ids are text.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season</code><td>integer<td>Season of the play or shot, keyed as the source asset keys it.<tr><td><code>metric</code><td>character<td>Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES).<tr><td><code>player_id</code><td>character<td>ESPN athlete id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays.<tr><td><code>player_name</code><td>character<td>Name of the credited player as the source carries it; null when no player is credited.<tr><td><code>team_id</code><td>character<td>ESPN id (text) of the team on offense, from pos_team_id.<tr><td><code>team_name</code><td>character<td>Offense's team label from the released pbp (pos_team).<tr><td><code>down</code><td>integer<td>Down of the play (1-4) for success_by_down_distance; null for every other metric.<tr><td><code>x</code><td>double<td>Position on the metric's axis in yards: yds_fg, air_yards or the standing-scrimmage distance to go.<tr><td><code>success</code><td>logical<td>Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot.<tr><td><code>epa</code><td>double<td>EPA of the play from the released pbp.<tr><td><code>id_source</code><td>character<td>Always "espn": the ids are ESPN athlete and team ids.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">cfb </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_cfb_pbp</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">metric_curves </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> FOOTBALL_ATTEMPT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> football_attempts</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">pbp </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_cfb_pbp</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">FOOTBALL_ATTEMPT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">att </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> football_attempts</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pbp</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">att</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"metric"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"fg_pct_by_distance"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">att</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">group_by</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"metric"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">agg</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">len</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"success"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mean</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=football_events>football_events<a href=#football_events class=hash-link aria-label="Direct link to football_events" title="Direct link to football_events" translate=no>​</a></h3>
+<p><code>football_events(pbp: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'</code></p>
+<p>Dropback / target / carry / team-play events from released <code>espn_{cfb,nfl}_pbp</code> plays.</p>
+<p>Population: plays from scrimmage on a numbered down (<code>EPA_scrimmage</code> not null,
+<code>down</code> 1-4) in the regular season or postseason -- the population sdv-db's
+player routes aggregate. <code>pass</code> includes sacks (a sack is a dropback); CFB has no
+scramble flag, so a scramble is a carry.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pbp</code><td><code>DataFrame</code><td><td>released pbp plays, any number of seasons (project to <code>FOOTBALL_PBP_COLUMNS</code>).<tr><td><code>game_dates</code><td><code>DataFrame</code><td><td><code>game_id</code> (int) and <code>game_date</code> (date) for every game in <code>pbp</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per event x metric (<code>epa</code>, <code>success_rate</code>), <code>EVENT_SCHEMA</code>.</p>
+<p>No returns table is published for this function: no capture: its game_dates input needs game_id with game_date, and no package function returns that pair (load_cfb_schedule carries start_date).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">cfb </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_cfb_pbp</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> load_cfb_schedule</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">rolling_windows </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> FOOTBALL_PBP_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> football_events</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">pbp </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_cfb_pbp</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">FOOTBALL_PBP_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">sched </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_cfb_schedule</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">game_dates </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> sched</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"game_id"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">cast</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">Int64</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    game_date</span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"start_date"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    </span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">str</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">to_datetime</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">time_zone</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>"UTC"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    </span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">dt</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">convert_time_zone</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"America/New_York"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    </span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">dt</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">date</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">ev </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> football_events</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pbp</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> game_dates</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">ev</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"window_unit"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"dropback"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">ev</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">group_by</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"entity_id"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"season"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">agg</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"value"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mean</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=metric_curves>metric_curves<a href=#metric_curves class=hash-link aria-label="Direct link to metric_curves" title="Direct link to metric_curves" translate=no>​</a></h3>
+<p><code>metric_curves(attempts: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'</code></p>
+<p>League, team and player rate curves from an <code>ATTEMPT_SCHEMA</code> frame.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>attempts</code><td><code>DataFrame</code><td><td>one row per attempt x metric (from an adapter), any number of seasons.<tr><td><code>league</code><td><code>str</code><td><td><code>"cfb"</code>, <code>"nfl"</code>, <code>"nba"</code> or <code>"wnba"</code>. The curves are league-agnostic; <code>league</code> only supplies the default <code>id_source</code> (<code>ID_SOURCE</code>) when the attempts frame carries no <code>id_source</code> column. An adapter's column wins, so the ESPN adapter on NFL pbp keeps <code>espn</code> whatever <code>league</code> says.</table>
+<p><strong>Returns</strong></p>
+<p>one row per (season, entity, metric, down, bucket), <code>OUTPUT_SCHEMA</code>: * <code>entity_type</code> <code>league</code> (<code>entity_id</code> null), <code>team</code> and <code>player</code> (only attempts credited to a player; <code>team_id</code> is the team of most of them). * <code>x_lo</code> / <code>x_hi</code>: the attempt's bucket, inclusive / exclusive. * <code>attempts</code>, <code>successes</code>, <code>rate = successes / attempts</code> (exact), <code>epa_per_att</code> (mean EPA of the attempts that have one, else null). * <code>down</code>: only set for <code>success_by_down_distance</code>. A bucket with no attempt has no row.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season</code><td>integer<td>Season the curve covers, keyed as the source asset keys it (CFB/NFL starting year, nba_stats ENDING year, WNBA calendar year).<tr><td><code>entity_type</code><td>character<td>Aggregation level of the row: "league" (every attempt), "team" or "player".<tr><td><code>entity_id</code><td>character<td>Text id of the entity the row describes, per entity_type: team rows carry the source's team id (ESPN pos_team_id, nflfastR posteam, stats.nba team_id) and player rows the source's player id (ESPN athlete id, nflfastR gsis id until the NFL producer re-keys it to ESPN, stats.nba person_id); null on league rows.<tr><td><code>entity_name</code><td>character<td>Display name of the player or team as the source pbp/shots carry it; null on league rows.<tr><td><code>team_id</code><td>character<td>On player rows, the team of most of the player's attempts that season (text id); null on league and team rows.<tr><td><code>id_source</code><td>character<td>Id system of the row's ids, stamped by the adapter that built the attempts (espn, gsis, nba_stats or wnba_stats); the league argument only supplies the default when the attempts frame carries no id_source column.<tr><td><code>metric</code><td>character<td>Curve name: fg_pct_by_distance, cmp_pct_by_air_yards, epa_by_air_yards, fourth_conv_by_ytg, success_by_down_distance or fg_pct_by_shot_distance.<tr><td><code>down</code><td>integer<td>Down (1-4), the second axis of success_by_down_distance; null for every other metric.<tr><td><code>x_lo</code><td>double<td>Inclusive lower edge of the bucket on the metric's axis, in yards (kick distance, air yards, yards to go) or feet (shot distance); the edges are fixed per metric in metric_curves.BUCKET_EDGES.<tr><td><code>x_hi</code><td>double<td>Exclusive upper edge of the bucket on the same axis as x_lo; an attempt at exactly x_hi belongs to the next bucket up.<tr><td><code>attempts</code><td>integer<td>Attempts in the bucket (field goals, pass attempts, fourth-down plays, scrimmage plays or shots); always positive, since an empty bucket has no row.<tr><td><code>successes</code><td>integer<td>Successful attempts in the bucket: makes, completions, EPA successes (EPA > 0), fourth-down conversions or made shots.<tr><td><code>rate</code><td>double<td>successes divided by attempts, computed exactly (no smoothing).<tr><td><code>epa_per_att</code><td>double<td>Mean EPA of the bucket's attempts that carry an EPA; null for shots and for kicks without EPA.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">cfb </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_cfb_pbp</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">metric_curves </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> FOOTBALL_ATTEMPT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> football_attempts</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> metric_curves</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">pbp </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_cfb_pbp</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">FOOTBALL_ATTEMPT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">curves </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> metric_curves</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">football_attempts</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pbp</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"cfb"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">curves</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"metric"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"fg_pct_by_distance"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>&</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"entity_type"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"league"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">curves</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"entity_type"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"player"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>&</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"attempts"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>>=</span><span class="token plain"> </span><span class="token number" style=color:#be123c>10</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"rate"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=nflfastr_attempts>nflfastr_attempts<a href=#nflfastr_attempts class=hash-link aria-label="Direct link to nflfastr_attempts" title="Direct link to nflfastr_attempts" translate=no>​</a></h3>
+<p><code>nflfastr_attempts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'</code></p>
+<p>The same attempts from <code>nfl_model_pbp</code> (the nflfastR shape), which carries air yards.</p>
+<p>Populations (<code>REG</code> + <code>POST</code>):</p>
+<ul>
+<li class=""><code>fg_pct_by_distance</code>: <code>field_goal_attempt</code> with a <code>kick_distance</code>; success =
+<code>field_goal_result == "made"</code>; player = the kicker.</li>
+<li class=""><code>cmp_pct_by_air_yards</code> / <code>epa_by_air_yards</code>: <code>pass_attempt == 1 & sack == 0</code>
+with <code>air_yards</code>; success = <code>complete_pass</code> / <code>epa > 0</code> (nflfastR's success);
+player = the passer.</li>
+<li class=""><code>fourth_conv_by_ytg</code>: fourth-down <code>play_type</code> <code>pass</code> / <code>run</code> (a nullified
+play is <code>no_play</code>); success = a rushing or passing first down or the
+offense's own touchdown. No player rows.</li>
+<li class=""><code>success_by_down_distance</code>: every <code>pass</code> / <code>run</code> play on downs 1-4 with a
+<code>ydstogo</code>; success = <code>epa > 0</code>. No player rows.</li>
+</ul>
+<p>Player ids are nflfastR gsis ids; the producer re-keys them to ESPN through the
+players master and keeps <code>gsis_id</code> beside <code>entity_id</code>. Teams are nflfastR
+abbreviations.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pbp</code><td><code>DataFrame</code><td><td><code>load_nfl_model_pbp</code> plays, any number of seasons (project to <code>NFLFASTR_ATTEMPT_COLUMNS</code>).</table>
+<p><strong>Returns</strong></p>
+<p>one row per attempt x metric, <code>ATTEMPT_SCHEMA</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season</code><td>integer<td>Season of the play or shot, keyed as the source asset keys it.<tr><td><code>metric</code><td>character<td>Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES).<tr><td><code>player_id</code><td>character<td>nflfastR gsis id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays.<tr><td><code>player_name</code><td>character<td>Name of the credited player as the source carries it; null when no player is credited.<tr><td><code>team_id</code><td>character<td>nflfastR abbreviation of the team on offense (posteam).<tr><td><code>team_name</code><td>character<td>nflfastR abbreviation of the team on offense (posteam), repeated as the label.<tr><td><code>down</code><td>integer<td>Down of the play (1-4) for success_by_down_distance; null for every other metric.<tr><td><code>x</code><td>double<td>Position on the metric's axis in yards: kick_distance, air_yards or ydstogo.<tr><td><code>success</code><td>logical<td>Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot.<tr><td><code>epa</code><td>double<td>EPA of the play from nfl_model_pbp.<tr><td><code>id_source</code><td>character<td>Always "gsis": player ids are nflfastR gsis ids and teams are nflfastR abbreviations.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nfl </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_nfl_model_pbp</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">metric_curves </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> NFLFASTR_ATTEMPT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> metric_curves</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> nflfastr_attempts</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">pbp </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_nfl_model_pbp</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">NFLFASTR_ATTEMPT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">curves </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> metric_curves</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">nflfastr_attempts</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pbp</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"nfl"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">curves</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"metric"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"cmp_pct_by_air_yards"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>&</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"entity_type"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"league"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=rolling_windows>rolling_windows<a href=#rolling_windows class=hash-link aria-label="Direct link to rolling_windows" title="Direct link to rolling_windows" translate=no>​</a></h3>
+<p><code>rolling_windows(events: 'pl.DataFrame', season: 'int', windows: 'dict[str, tuple[int, ...]] | None' = None) -> 'pl.DataFrame'</code></p>
+<p>Rolling-window form for every entity with an event in <code>season</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>events</code><td><code>DataFrame</code><td><td>an <code>EVENT_SCHEMA</code> frame covering every season up to <code>season</code> (the career history the baselines read).<tr><td><code>season</code><td><code>int</code><td><td>the season the rows describe; later seasons in <code>events</code> are ignored.<tr><td><code>windows</code><td><code>dict[str, tuple[int, ...]] | None</code><td><code>None</code><td><code>{window_unit: (sizes...)}</code>; defaults to <code>WINDOWS</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per (entity, unit, metric, window size), <code>OUTPUT_SCHEMA</code>. Null / NaN event values are dropped before any window is computed. Columns: * <code>cur</code>: the mean of the entity's last <code>window_n</code> events through <code>season</code>. * <code>prev</code>: the mean of the <code>window_n</code> events immediately before <code>cur</code>'s window; null unless a full window of earlier history exists. * <code>season_start</code>: the mean of the <code>window_n</code> events immediately before season <code>season</code> started -- i.e. the entity's form entering the season, not counting any event actually played in <code>season</code>. * <code>career_baseline</code>: the mean of every event before <code>cur</code>'s window, including earlier events within <code>season</code> itself; null unless at least one full window of history precedes it. * <code>qualified</code>: <code>True</code> iff <code>n == window_n</code> -- the window is fully populated (not padded by a short career). Consumers building a "hottest" list should filter on this first. * <code>team_id</code> / <code>entity_name</code>: taken from the entity's single latest event through <code>season</code>, so a player who changed teams mid-season is labelled with their current team. * <code>delta_prev_rank</code>: 1 = biggest riser, ties share the lowest rank; null unless <code>qualified</code> and <code>prev</code> exists.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season</code><td>integer<td><tr><td><code>entity_type</code><td>character<td>Kind of entity the alias record points at (e.g., "team", "player", "league").<tr><td><code>entity_id</code><td>character<td>Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8.<tr><td><code>entity_name</code><td>character<td><tr><td><code>team_id</code><td>character<td><tr><td><code>metric</code><td>character<td><tr><td><code>window_unit</code><td>character<td><tr><td><code>window_n</code><td>integer<td><tr><td><code>cur</code><td>double<td><tr><td><code>prev</code><td>double<td><tr><td><code>season_start</code><td>double<td><tr><td><code>career_baseline</code><td>double<td><tr><td><code>delta_prev</code><td>double<td><tr><td><code>delta_season</code><td>double<td><tr><td><code>delta_career</code><td>double<td><tr><td><code>delta_prev_rank</code><td>integer<td><tr><td><code>n</code><td>integer<td><tr><td><code>qualified</code><td>logical<td><tr><td><code>last_event_date</code><td>character<td><tr><td><code>as_of_date</code><td>character<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">cfb </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_cfb_pbp</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> load_cfb_schedule</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">rolling_windows </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> FOOTBALL_PBP_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> football_events</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> rolling_windows</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">pbp </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_cfb_pbp</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">FOOTBALL_PBP_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">sched </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_cfb_schedule</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">game_dates </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> sched</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"game_id"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">cast</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">Int64</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    game_date</span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"start_date"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    </span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">str</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">to_datetime</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">time_zone</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>"UTC"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    </span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">dt</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">convert_time_zone</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"America/New_York"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    </span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">dt</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">date</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">ev </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> football_events</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pbp</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> game_dates</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">rw </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> rolling_windows</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">ev</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">rw</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"window_unit"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"dropback"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">rw</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"qualified"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>&</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"delta_prev_rank"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">    </span><span class="token string" style=color:#047857>"entity_name"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"window_unit"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"window_n"</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=shot_attempts>shot_attempts<a href=#shot_attempts class=hash-link aria-label="Direct link to shot_attempts" title="Direct link to shot_attempts" translate=no>​</a></h3>
+<p><code>shot_attempts(shots: 'pl.DataFrame', league: 'str' = 'nba') -> 'pl.DataFrame'</code></p>
+<p><code>fg_pct_by_shot_distance</code> attempts from released <code>{nba,wnba}_stats_shots</code>.</p>
+<p>Regular-season (<code>season_type_id</code> <code>"2"</code>) and playoff (<code>"4"</code>) shots; success =
+<code>shot_result == "Made"</code>; player = the shooter (stats.nba <code>person_id</code>); no EPA.</p>
+<p>The distance binned is the exact release distance from the legacy coordinates,
+<code>sqrt(x_legacy^2 + y_legacy^2) / 10</code> feet (tenths of a foot, rim at the origin, the
+same on the NBA and WNBA feeds), not the feed's <code>shot_distance</code>: stats.nba
+<code>playbyplayv3</code> reports <code>shot_distance</code> 0 for every three released under 23.5 ft
+(15,378 NBA corner threes in 2025-26; most WNBA threes before the 2013 line move),
+which put them in the 0-1 ft bucket and emptied 22-24 ft, and its whole-foot
+rounding shifts every other bucket by half a foot. <code>shot_distance</code> is used only
+when a coordinate is null.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>shots</code><td><code>DataFrame</code><td><td><code>load_{nba,wnba}_stats_shots</code> rows, any number of seasons (project to <code>SHOT_ATTEMPT_COLUMNS</code>).<tr><td><code>league</code><td><code>str</code><td><code>'nba'</code><td><code>"nba"</code> (default) or <code>"wnba"</code> -- which stats site the ids come from; stamps <code>id_source</code> <code>nba_stats</code> / <code>wnba_stats</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per shot, <code>ATTEMPT_SCHEMA</code>; <code>season</code> is the asset's key (END year for the NBA).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season</code><td>integer<td>Season of the play or shot, keyed as the source asset keys it.<tr><td><code>metric</code><td>character<td>Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES).<tr><td><code>player_id</code><td>character<td>stats.nba person_id (text) of the shooter.<tr><td><code>player_name</code><td>character<td>Name of the credited player as the source carries it; null when no player is credited.<tr><td><code>team_id</code><td>character<td>stats.nba team_id (text) of the shooting team.<tr><td><code>team_name</code><td>character<td>Shooting team's tricode from the shot row (team_tricode).<tr><td><code>down</code><td>integer<td>Down of the play (1-4) for success_by_down_distance; null for every other metric.<tr><td><code>x</code><td>double<td>Shot distance in feet, as stats.nba records it.<tr><td><code>success</code><td>logical<td>Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot.<tr><td><code>epa</code><td>double<td>Always null: shots carry no EPA.<tr><td><code>id_source</code><td>character<td>"nba_stats" or "wnba_stats" per the league argument: the stats site whose person_id and team_id the row carries.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_nba_stats_shots</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">metric_curves </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> SHOT_ATTEMPT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> metric_curves</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> shot_attempts</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">shots </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_nba_stats_shots</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">SHOT_ATTEMPT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">curves </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> metric_curves</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">shot_attempts</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">shots</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"nba"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">curves</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"entity_type"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"player"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>&</span><span class="token plain"> </span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"entity_id"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"201939"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=shot_events>shot_events<a href=#shot_events class=hash-link aria-label="Direct link to shot_events" title="Direct link to shot_events" translate=no>​</a></h3>
+<p><code>shot_events(shots: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'</code></p>
+<p>Field-goal-attempt events from released <code>{nba,wnba}_stats_shots</code>.</p>
+<p>Population: regular-season (<code>season_type_id</code> <code>"2"</code>) and playoff (<code>"4"</code>) shots,
+the population <code>sportsdataverse.metric_curves.shot_attempts</code> keeps; play-in
+and NBA Cup final games do not count. Every attempt is an <code>fga</code> event (metric
+<code>fg_pct</code>); a three-point attempt is also an <code>fg3a</code> event (metric <code>fg3_pct</code>).
+<code>value</code> is 1.0 for a make, 0.0 for a miss. <code>seq</code> orders a game's shots by
+period, then game clock running down, then the provider's row order.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>shots</code><td><code>DataFrame</code><td><td>released shots, any number of seasons (project to <code>SHOT_COLUMNS</code>). <code>season</code> is the asset's key: the ENDING year for the NBA, the calendar year for the WNBA.<tr><td><code>game_dates</code><td><code>DataFrame</code><td><td><code>game_id</code> (text, <code>"0022400007"</code>) and <code>game_date</code> (date) for every game in <code>shots</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per attempt x unit, <code>EVENT_SCHEMA</code>. <code>entity_id</code> is the stats.nba / stats.wnba <code>person_id</code>, not an ESPN id; <code>entity_name</code> is the provider's name, which is the family name only (<code>"Curry"</code>).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season</code><td>integer<td><tr><td><code>entity_type</code><td>character<td>Kind of entity the alias record points at (e.g., "team", "player", "league").<tr><td><code>entity_id</code><td>character<td>Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8.<tr><td><code>entity_name</code><td>character<td><tr><td><code>team_id</code><td>character<td><tr><td><code>window_unit</code><td>character<td><tr><td><code>metric</code><td>character<td><tr><td><code>game_id</code><td>character<td><tr><td><code>event_date</code><td>character<td><tr><td><code>seq</code><td>integer<td><tr><td><code>value</code><td>double<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> polars </span><span class="token keyword" style=color:#02507f>as</span><span class="token plain"> pl</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> load_nba_stats_schedules</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> load_nba_stats_shots</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">rolling_windows </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> SHOT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> rolling_windows</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> shot_events</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">shots </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_nba_stats_shots</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2025</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">SHOT_COLUMNS</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">sched </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> load_nba_stats_schedules</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2025</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">game_dates </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> sched</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"game_id"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"game_date"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">str</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">slice</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>0</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>10</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">str</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">to_date</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">ev </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> shot_events</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">shots</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> game_dates</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">unique</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"game_id"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">rw </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> rolling_windows</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">ev</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2025</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">rw</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"window_unit"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"fg3a"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>&</span><span class="token plain"> pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"qualified"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"delta_prev_rank"</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/docs/reference/python-helpers/analytics.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/reference/python-helpers/models-and-calculators><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>Models and calculators</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/reference/python-helpers/cache-and-configuration><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>Cache and configuration</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#defense_vs_position class="table-of-contents__link toc-highlight">defense_vs_position</a><li><a href=#football_attempts class="table-of-contents__link toc-highlight">football_attempts</a><li><a href=#football_events class="table-of-contents__link toc-highlight">football_events</a><li><a href=#metric_curves class="table-of-contents__link toc-highlight">metric_curves</a><li><a href=#nflfastr_attempts class="table-of-contents__link toc-highlight">nflfastr_attempts</a><li><a href=#rolling_windows class="table-of-contents__link toc-highlight">rolling_windows</a><li><a href=#shot_attempts class="table-of-contents__link toc-highlight">shot_attempts</a><li><a href=#shot_events class="table-of-contents__link toc-highlight">shot_events</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

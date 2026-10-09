@@ -1,0 +1,1271 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-0.1.5 docs-doc-page docs-doc-id-wnba/reference/additional/analytics" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>WNBA — additional Python functions — Analytics | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/0.1.5/wnba/reference/additional/analytics /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=0.1.5 /><meta data-rh=true name=docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true name=docsearch:version content=0.1.5 /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-0.1.5 /><meta data-rh=true property=og:title content="WNBA — additional Python functions — Analytics | sdv-py"/><meta data-rh=true name=description content="WNBA — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."/><meta data-rh=true property=og:description content="WNBA — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/0.1.5/wnba/reference/additional/analytics /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/wnba/reference/additional/analytics hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.1.5/wnba/reference/additional/analytics hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/leagues/basketball","name":"Basketball","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/wnba/","name":"WNBA","position":2},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/wnba/reference/additional","name":"Additional functions","position":3},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/0.1.5/wnba/reference/additional/analytics","name":"Analytics","position":4}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/0.1.5/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/0.1.5/wnba/reference/additional/analytics>0.1.5</a><ul class=dropdown__menu><li><a class=dropdown__link href=/docs/wnba/reference/additional/analytics>main (latest)</a><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/0.1.5/wnba/reference/additional/analytics>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/0.1.5/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/0.1.5/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Collapse sidebar category 'Basketball'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nba/><span title=NBA class=categoryLinkLabel_W154>NBA</span></a><button aria-label="Expand sidebar category 'NBA'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/0.1.5/wnba/><span title=WNBA class=categoryLinkLabel_W154>WNBA</span></a><button aria-label="Collapse sidebar category 'WNBA'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wnba/reference/loaders><span title=Loaders class=categoryLinkLabel_W154>Loaders</span></a><button aria-label="Expand sidebar category 'Loaders'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wnba/reference/wnba_stats><span title="WNBA Stats API (stats.wnba.com)" class=categoryLinkLabel_W154>WNBA Stats API (stats.wnba.com)</span></a><button aria-label="Expand sidebar category 'WNBA Stats API (stats.wnba.com)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/site><span title="ESPN site API (v2)" class=linkLabel_WmDU>ESPN site API (v2)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/web><span title="ESPN web API (v3)" class=linkLabel_WmDU>ESPN web API (v3)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wnba/reference/core><span title="ESPN core API (v2)" class=categoryLinkLabel_W154>ESPN core API (v2)</span></a><button aria-label="Expand sidebar category 'ESPN core API (v2)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/fitt><span title="ESPN FPI API (fitt v3)" class=linkLabel_WmDU>ESPN FPI API (fitt v3)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/cdn><span title="ESPN CDN API (cdn.espn.com)" class=linkLabel_WmDU>ESPN CDN API (cdn.espn.com)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/0.1.5/wnba/reference/additional><span title="Additional functions" class=categoryLinkLabel_W154>Additional functions</span></a><button aria-label="Collapse sidebar category 'Additional functions'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/additional/espn><span title=ESPN class=linkLabel_WmDU>ESPN</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/additional/sportsdataverse-data-releases><span title="sportsdataverse-data releases" class=linkLabel_WmDU>sportsdataverse-data releases</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/additional/wnba-stats-api><span title="WNBA Stats API" class=linkLabel_WmDU>WNBA Stats API</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/additional/fox-sports-api><span title="Fox Sports API" class=linkLabel_WmDU>Fox Sports API</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/additional/play-by-play-processing><span title="Play-by-play processing" class=linkLabel_WmDU>Play-by-play processing</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/additional/models-and-calculators><span title="Models and calculators" class=linkLabel_WmDU>Models and calculators</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/0.1.5/wnba/reference/additional/analytics><span title=Analytics class=linkLabel_WmDU>Analytics</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/additional/dates-and-seasons><span title="Dates and seasons" class=linkLabel_WmDU>Dates and seasons</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/0.1.5/wnba/reference/additional/ids-and-crosswalks><span title="IDs and crosswalks" class=linkLabel_WmDU>IDs and crosswalks</span></a></ul></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/nbagl/><span title="NBA G League" class=categoryLinkLabel_W154>NBA G League</span></a><button aria-label="Expand sidebar category 'NBA G League'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/mbb/><span title=MBB class=categoryLinkLabel_W154>MBB</span></a><button aria-label="Expand sidebar category 'MBB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/0.1.5/wbb/><span title=WBB class=categoryLinkLabel_W154>WBB</span></a><button aria-label="Expand sidebar category 'WBB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Expand sidebar category 'Baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Expand sidebar category 'Other'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/0.1.5/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role=alert><div>This is documentation for <!-- -->sdv-py<!-- --> <b>0.1.5</b>, which is no longer actively maintained.</div><div class=margin-top--md>For up-to-date documentation, see the <b><a href=/docs/wnba/reference/additional/analytics>latest version</a></b> (<!-- -->main (latest)<!-- -->).</div></div><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/leagues/basketball><span>Basketball</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/wnba/><span>WNBA</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/0.1.5/wnba/reference/additional><span>Additional functions</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>Analytics</span></ul></nav><span class="theme-doc-version-badge badge badge--secondary">Version: 0.1.5</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>WNBA — additional Python functions — Analytics</h1></header>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=make_prob_by_context>make_prob_by_context<a href=#make_prob_by_context class=hash-link aria-label="Direct link to make_prob_by_context" title="Direct link to make_prob_by_context" translate=no>​</a></h3>
+<p><code>make_prob_by_context(ptshots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"</code></p>
+<p>Marginal FG% tables by defender distance and by shot clock.</p>
+<p>The public API exposes defender-distance and shot-clock only as aggregate
+bucket tables (<code>playerdashptshots</code>), not per-shot fields, so this
+aggregates <code>Σfgm/Σfga</code> across players within each bucket.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>ptshots</code><td><code>DataFrame</code><td><td>The stacked <code>playerdashptshots</code> fixture — one frame with a <code>result_set</code> tag (<code>ClosestDefenderShooting</code> / <code>ShotClockShooting</code>) plus <code>bucket, fga, fgm</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return pandas DataFrames instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p><code>{"defender": frame, "shot_clock": frame}</code> each with rows per <code>bucket</code> (<code>bucket, fga, fgm, fg_pct</code>). Missing result sets return the zero-row schema.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba_shot_value </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> make_prob_by_context</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">tables </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> make_prob_by_context</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">ptshots</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">tables</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"defender"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"fg_pct"</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=make_prob_joint>make_prob_joint<a href=#make_prob_joint class=hash-link aria-label="Direct link to make_prob_joint" title="Direct link to make_prob_joint" translate=no>​</a></h3>
+<p><code>make_prob_joint(defender: 'pl.DataFrame', shot_clock: 'pl.DataFrame', overall_fg_pct: 'float', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Independence-combined defender x shot-clock make probability.</p>
+<p>Combines the two marginal FG% tables under a conditional-independence
+assumption via odds multipliers: <code>odds(p) = p/(1-p)</code>;
+<code>odds_joint = odds_overall * (odds_def/odds_overall) * (odds_clock/odds_overall)</code>; <code>joint = odds_joint/(1+odds_joint)</code>. This
+assumes defender distance and shot-clock effects are independent given the
+league baseline — a simplification (a late clock correlates with tighter
+defense), documented here so callers weigh it.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>defender</code><td><code>DataFrame</code><td><td>The <code>"defender"</code> marginal table from <code>make_prob_by_context</code> (<code>bucket, fg_pct</code>).<tr><td><code>shot_clock</code><td><code>DataFrame</code><td><td>The <code>"shot_clock"</code> marginal table (<code>bucket, fg_pct</code>).<tr><td><code>overall_fg_pct</code><td><code>float</code><td><td>The league overall FG% baseline.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>One row per <code>(close_def_dist_range, shot_clock_range)</code>: <code>close_def_dist_range:Utf8, shot_clock_range:Utf8, joint_fg_pct:Float64</code>. Empty inputs return the zero-row schema.</p>
+<p>No returns table is published for this function: no capture: its inputs come from make_prob_by_context on stats.nba.com tracking data, which answers HTTP 403 to the datacenter IP the docs are built on.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba_shot_value </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> make_prob_by_context</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> make_prob_joint</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">t </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> make_prob_by_context</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">ptshots</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">joint </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> make_prob_joint</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">t</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"defender"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> t</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"shot_clock"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>0.47</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=score_shot_xpoints>score_shot_xpoints<a href=#score_shot_xpoints class=hash-link aria-label="Direct link to score_shot_xpoints" title="Direct link to score_shot_xpoints" translate=no>​</a></h3>
+<p><code>score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Score each shot with expected points from the league-average baseline.</p>
+<p>Joins the per-shot frame to the zone baseline (falling back to the
+within-<code>shot_zone_range</code> mean when a zone triple is unmatched) and adds
+<code>shot_value</code> (3 for a <code>3PT</code> shot else 2), <code>xpoints = base_fg_pct * shot_value</code>, and <code>actual_points = shot_made_flag * shot_value</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>shots</code><td><code>DataFrame</code><td><td>Per-shot <code>Shot_Chart_Detail</code> frame (needs <code>shot_type</code> + the three zone keys + <code>shot_made_flag</code>).<tr><td><code>league_avgs</code><td><code>DataFrame</code><td><td>The <code>LeagueAverages</code> frame (see <code>xpoints_baseline</code>).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>The input <code>shots</code> plus <code>shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64</code>. Empty input returns the augmented schema with zero rows.</p>
+<p>No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba_shot_value </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> score_shot_xpoints</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">scored </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> score_shot_xpoints</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">shots</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> league_avgs</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">scored</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">group_by</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"player_id"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">agg</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"xpoints"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">sum</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=shooter_talent>shooter_talent<a href=#shooter_talent class=hash-link aria-label="Direct link to shooter_talent" title="Direct link to shooter_talent" translate=no>​</a></h3>
+<p><code>shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Regressed shooter true-talent: make%-above-expected, shrunk to the mean.</p>
+<p>Aggregates <code>score_shot_xpoints</code> output per shooter and regresses the
+raw over-expected rate toward zero by <code>n/(n+k)</code> (<code>k = get_shrinkage_k(league_id)</code>, fitted split-half). <strong>As-of leakage
+boundary:</strong> to score a shooter's talent for shots after date <em>D</em>, pass
+only that shooter's shots before <em>D</em> -- this function does not enforce the
+cut itself.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>scored_shots</code><td><code>DataFrame</code><td><td><code>score_shot_xpoints</code> output (needs <code>player_id</code>, <code>shot_made_flag</code>, <code>base_fg_pct</code>, <code>xpoints</code>, <code>actual_points</code>).<tr><td><code>league_id</code><td><code>str</code><td><code>'00'</code><td><code>"00"</code> NBA, <code>"10"</code> WNBA, <code>"20"</code> G-League.<tr><td><code>min_attempts</code><td><code>int</code><td><code>50</code><td>Drop shooters with fewer attempts (unstable estimate).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>One row per <code>player_id</code>: <code>player_id:Int64, n_att:Int64, actual_makes:Int64, exp_makes:Float64, points_above_expected:Float64, raw_above_pct:Float64, talent_pct:Float64</code>. Empty input returns the zero-row schema.</p>
+<p>No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba_shot_value </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> score_shot_xpoints</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> shooter_talent</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">talent </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> shooter_talent</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">score_shot_xpoints</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">shots</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> league_avgs</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">talent</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"talent_pct"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>15</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=shot_selection_quality>shot_selection_quality<a href=#shot_selection_quality class=hash-link aria-label="Direct link to shot_selection_quality" title="Direct link to shot_selection_quality" translate=no>​</a></h3>
+<p><code>shot_selection_quality(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Player shot-selection quality: mean expected value vs the league mean.</p>
+<p><code>xev_per_shot</code> is a player's mean <code>xpoints</code> (the value of the LOOKS
+they take, independent of makes); <code>selection_quality</code> is that minus the
+league-wide mean <code>xpoints</code> over the same frame -- a rim-and-three diet
+scores positive, a mid-range diet negative.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>scored_shots</code><td><code>DataFrame</code><td><td><code>score_shot_xpoints</code> output (needs <code>player_id</code>, <code>xpoints</code>).<tr><td><code>min_attempts</code><td><code>int</code><td><code>50</code><td>Drop players with fewer attempts.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>One row per <code>player_id</code>: <code>player_id:Int64, n_att:Int64, xev_per_shot:Float64, league_xev_per_shot:Float64, selection_quality:Float64</code>. Empty input returns the zero-row schema.</p>
+<p>No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba_shot_value </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> score_shot_xpoints</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> shot_selection_quality</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">sel </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> shot_selection_quality</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">score_shot_xpoints</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">shots</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> league_avgs</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">sel</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"selection_quality"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>15</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_availability>wnba_availability<a href=#wnba_availability class=hash-link aria-label="Direct link to wnba_availability" title="Direct link to wnba_availability" translate=no>​</a></h3>
+<p><code>wnba_availability(seasons: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"</code></p>
+<p>WNBA availability -- the NBA core bound to <code>league="wnba"</code>.</p>
+<p>See <code>sportsdataverse.nba.nba_availability.nba_availability</code> for the
+full contract; <code>avail_pct</code> is availability, not skill.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>seasons</code><td><code>int | list[int]</code><td><td>A season (start year) or list of seasons.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>Frame <code>player_id:Utf8, season:Int64, avail_pct:Float64</code>.</p>
+<p>No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_availability</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">proj </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_availability</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2023</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_expected_turnovers>wnba_expected_turnovers<a href=#wnba_expected_turnovers class=hash-link aria-label="Direct link to wnba_expected_turnovers" title="Direct link to wnba_expected_turnovers" translate=no>​</a></h3>
+<p><code>wnba_expected_turnovers(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA expected turnovers / ball-security skill (<code>league_id="10"</code>).</p>
+<p>Thin wrapper binding
+<code>sportsdataverse.nba.nba_expected_turnovers.nba_expected_turnovers</code>
+to the women's league.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>season</code><td><code>str</code><td><td>Season string, e.g. <code>"2024"</code>.<tr><td><code>base</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Injected <code>nba_stats_leaguedashplayerstats</code> (<code>Base</code>) frame.<tr><td><code>player_mix</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Injected Synergy player-level offensive mix.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>Same schema as <code>sportsdataverse.nba.nba_expected_turnovers.nba_expected_turnovers</code>.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_expected_turnovers</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">t </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_expected_turnovers</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"2024"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">t</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"ball_security_skill"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_foul_drawing>wnba_foul_drawing<a href=#wnba_foul_drawing class=hash-link aria-label="Direct link to wnba_foul_drawing" title="Direct link to wnba_foul_drawing" translate=no>​</a></h3>
+<p><code>wnba_foul_drawing(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, advanced: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA foul-drawing / FT-generation (<code>league_id="10"</code>).</p>
+<p>Thin wrapper binding
+<code>sportsdataverse.nba.nba_foul_drawing.nba_foul_drawing</code> to the
+women's league.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>season</code><td><code>str</code><td><td>Season string, e.g. <code>"2024"</code>.<tr><td><code>base</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Injected <code>nba_stats_leaguedashplayerstats</code> (<code>Base</code>) frame.<tr><td><code>advanced</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Injected <code>Advanced</code>-measure frame.<tr><td><code>player_mix</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Injected Synergy player-level offensive mix.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>Same schema as <code>sportsdataverse.nba.nba_foul_drawing.nba_foul_drawing</code>.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_foul_drawing</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">f </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_foul_drawing</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"2024"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">f</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"foul_draw_skill"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_matchup_drapm>wnba_matchup_drapm<a href=#wnba_matchup_drapm class=hash-link aria-label="Direct link to wnba_matchup_drapm" title="Direct link to wnba_matchup_drapm" translate=no>​</a></h3>
+<p><code>wnba_matchup_drapm(season: 'str', *, matchups: "'Optional[pl.DataFrame]'" = None, config: "'Optional[PlaytypeConfig]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA matchup defensive RAPM (<code>league_id="10"</code>).</p>
+<p>Thin wrapper binding
+<code>sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm</code> to the
+women's league.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>season</code><td><code>str</code><td><td>Season string, e.g. <code>"2024"</code>.<tr><td><code>matchups</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Injected <code>nba_stats_leagueseasonmatchups</code>-shaped frame.<tr><td><code>config</code><td><code>Optional[PlaytypeConfig]</code><td><code>None</code><td><code>~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig</code> override.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>Same schema as <code>sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm</code>.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_matchup_drapm</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">d </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_matchup_drapm</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"2024"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">d</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"matchup_drapm"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_player_props>wnba_player_props<a href=#wnba_player_props class=hash-link aria-label="Direct link to wnba_player_props" title="Direct link to wnba_player_props" translate=no>​</a></h3>
+<p><code>wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'</code></p>
+<p>WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>season</code><td><code>int</code><td><td><tr><td><code>game_id</code><td><code>str</code><td><td><tr><td><code>home_team_id</code><td><code>str</code><td><td><tr><td><code>away_team_id</code><td><code>str</code><td><td><tr><td><code>league_id</code><td><code>str</code><td><code>'00'</code><td><tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td></table>
+<p><strong>Returns</strong></p>
+<p>One row per player on either team: <code>player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj</code>. Empty input returns that schema with zero rows.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>player_id</code><td>character<td>Unique player identifier.<tr><td><code>team_id</code><td>character<td>Unique team identifier.<tr><td><code>stat_pts_exp</code><td>double<td><tr><td><code>stat_reb_exp</code><td>double<td><tr><td><code>stat_ast_exp</code><td>double<td><tr><td><code>stat_fg3m_exp</code><td>double<td><tr><td><code>pace_proj</code><td>double<td></table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_playtype_ratings>wnba_playtype_ratings<a href=#wnba_playtype_ratings class=hash-link aria-label="Direct link to wnba_playtype_ratings" title="Direct link to wnba_playtype_ratings" translate=no>​</a></h3>
+<p><code>wnba_playtype_ratings(season: 'str', *, off_team: "'Optional[pl.DataFrame]'" = None, def_team: "'Optional[pl.DataFrame]'" = None, schedule: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA Synergy play-type-adjusted offense/defense (<code>league_id="10"</code>).</p>
+<p>Thin wrapper binding
+<code>sportsdataverse.nba.nba_playtype.nba_playtype_ratings</code> to the
+women's league. Synergy coverage is sparse for the WNBA; an empty upstream
+fetch degrades to a zero-row frame (never raises).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>season</code><td><code>str</code><td><td>Season string, e.g. <code>"2024"</code>.<tr><td><code>off_team</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Injected Synergy offensive team frame (bypasses the live fetch).<tr><td><code>def_team</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Injected Synergy defensive team frame.<tr><td><code>schedule</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Injected <code>team_id</code>/<code>opp_team_id</code> schedule frame.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>Same schema as <code>sportsdataverse.nba.nba_playtype.nba_playtype_ratings</code>.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_playtype_ratings</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">r </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_playtype_ratings</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"2024"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">r</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"adj_off"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_referee_assignments>wnba_referee_assignments<a href=#wnba_referee_assignments class=hash-link aria-label="Direct link to wnba_referee_assignments" title="Direct link to wnba_referee_assignments" translate=no>​</a></h3>
+<p><code>wnba_referee_assignments(date: 'str | _dt.date', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'</code></p>
+<p>Fetch and parse WNBA referee assignments for a given date from official.nba.com.</p>
+<p>Retrieves the referee crew assignments and replay center officials for all WNBA
+games on a given date. The <code>crew_position</code> column (1–4) represents the feed's
+slot order; slot 1 is inferred to be the crew chief. The <code>season</code> column is
+the WNBA single-year season (feed year converted as-is). This is a thin shim
+over <code>sportsdataverse.nba.nba_officiating.nba_referee_assignments</code> that
+sets <code>league="wnba"</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>date</code><td><code>str | date</code><td><td>The date to fetch assignments for (str in "YYYY-MM-DD" format or datetime.date).<tr><td><code>raw</code><td><code>bool</code><td><code>False</code><td>If True, return the raw JSON payload (dict) with all three leagues instead of parsed DataFrames.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>If True, return pandas DataFrames instead of polars.<tr><td><code>proxy</code><td><code>dict | None</code><td><code>None</code><td>Optional proxy dict passed through to the HTTP layer.</table>
+<p><strong>Returns</strong></p>
+<p>A dict with keys <code>"officials"</code> and <code>"replay_center"</code> mapping to DataFrames. If <code>raw=True</code>, returns the full three-league JSON payload instead.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>officials.league</code><td>character<td>League the assignment belongs to: nba, gl (G League), or wnba.<tr><td><code>officials.game_id</code><td>character<td>10-digit game id (zero-padded) for the assigned game.<tr><td><code>officials.game_date</code><td>date<td>Game date parsed from the feed's MM/DD/YYYY format.<tr><td><code>officials.season</code><td>integer<td>Season end year, converted from the feed's <season-type digit=""><start year=""> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons.</start></season-type><tr><td><code>officials.season_type</code><td>character<td>Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final.<tr><td><code>officials.game_code</code><td>character<td>League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations.<tr><td><code>officials.home_team_id</code><td>integer<td>10-digit team id of the home team.<tr><td><code>officials.home_team_abbr</code><td>character<td>Three-letter abbreviation of the home team.<tr><td><code>officials.away_team_id</code><td>integer<td>10-digit team id of the away team.<tr><td><code>officials.away_team_abbr</code><td>character<td>Three-letter abbreviation of the away team.<tr><td><code>officials.crew_position</code><td>integer<td>Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles.<tr><td><code>officials.official_id</code><td>integer<td>Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID.<tr><td><code>officials.official_name</code><td>character<td>Official's display name for this crew slot.<tr><td><code>officials.jersey_num</code><td>character<td>Official's jersey number as a string, from the feed's official{n}_JNum field.<tr><td><code>replay_center.league</code><td>character<td>League the replay-center staffing belongs to: nba, gl, or wnba.<tr><td><code>replay_center.game_date</code><td>date<td>Date the replay-center official worked; a date-level staffing record, not tied to one game.<tr><td><code>replay_center.official_id</code><td>integer<td>Numeric replay-center official id from the feed.<tr><td><code>replay_center.official_name</code><td>character<td>Replay-center official's display name for that date.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba_officiating </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_referee_assignments</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">result </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_referee_assignments</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"2026-06-13"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">officials </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> result</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"officials"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string-interpolation string" style=color:#047857>f"Found </span><span class="token string-interpolation interpolation punctuation" style=color:#4d5b74>{</span><span class="token string-interpolation interpolation">officials</span><span class="token string-interpolation interpolation punctuation" style=color:#4d5b74>.</span><span class="token string-interpolation interpolation">height</span><span class="token string-interpolation interpolation punctuation" style=color:#4d5b74>}</span><span class="token string-interpolation string" style=color:#047857> official slots"</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_shot_value>wnba_shot_value<a href=#wnba_shot_value class=hash-link aria-label="Direct link to wnba_shot_value" title="Direct link to wnba_shot_value" translate=no>​</a></h3>
+<p><code>wnba_shot_value(player_ids: "'list[int]'", season: 'str', *, include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"</code></p>
+<p>WNBA one-call shot-value spine (<code>league_id="10"</code>).</p>
+<p>Thin wrapper binding <code>sportsdataverse.nba.nba_shot_value.nba_shot_value</code>
+to the women's league; fetches each player's <code>shotchartdetail</code>, scores
+per-shot expected points from the free <code>LeagueAverages</code> zone table, and
+returns the scored shots plus shooter talent, selection quality, and
+zone-value maps (and the defender/shot-clock context tables when
+<code>include_context=True</code>). Women's court geometry + shrinkage constant are
+keyed <code>"10"</code> in <code>nba_shot_value_constants</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>player_ids</code><td><code>list[int]</code><td><td>Player ids to fetch.<tr><td><code>season</code><td><code>str</code><td><td>Season string, e.g. <code>"2024"</code>.<tr><td><code>include_context</code><td><code>bool</code><td><code>False</code><td>Also fetch + return the <code>playerdashptshots</code> defender/shot-clock context tables.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return pandas frames instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p><code>{"shots", "talent", "selection", "zones"}</code> (plus <code>"context"</code> when requested). An empty fetch returns a dict of zero-row frames.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_shot_value</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_shot_value</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token number" style=color:#be123c>1628886</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"2024"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out</span><span class="token punctuation" style=color:#4d5b74>[</span><span class="token string" style=color:#047857>"talent"</span><span class="token punctuation" style=color:#4d5b74>]</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_team_clutch>wnba_team_clutch<a href=#wnba_team_clutch class=hash-link aria-label="Direct link to wnba_team_clutch" title="Direct link to wnba_team_clutch" translate=no>​</a></h3>
+<p><code>wnba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'</code></p>
+<p>WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>season</code><td><code>int</code><td><td><tr><td><code>league_id</code><td><code>str</code><td><code>'00'</code><td><tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td></table>
+<p><strong>Returns</strong></p>
+<p>One row per team: <code>season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss</code>. Empty input returns that schema with zero rows.</p>
+<p>No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_tracking_drive_value>wnba_tracking_drive_value<a href=#wnba_tracking_drive_value class=hash-link aria-label="Direct link to wnba_tracking_drive_value" title="Direct link to wnba_tracking_drive_value" translate=no>​</a></h3>
+<p><code>wnba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA drive value + rim-pressure (<code>league_id="10"</code> by-reference shim).</p>
+<p>See <code>sportsdataverse.nba.nba_tracking_value.nba_tracking_drive_value</code>
+for the full recipe.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>seasons</code><td><code>int | str | list</code><td><td>A single season or list of seasons.<tr><td><code>league_id</code><td><code>str</code><td><code>'10'</code><td>Defaults to <code>"10"</code> (WNBA); pass <code>"20"</code> here for G-League.<tr><td><code>per_mode</code><td><code>str</code><td><code>'Totals'</code><td><code>per_mode_simple</code> passed to the fetch (default <code>"Totals"</code>).<tr><td><code>by_position</code><td><code>bool</code><td><code>True</code><td>Compute the baseline within role buckets (default); <code>False</code> forces one league-wide bucket.<tr><td><code>positions</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Optional pre-fetched positions frame.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a <code>pandas.DataFrame</code> instead of polars.<tr><td><code>_get_fn</code><td><code>Optional[Callable[..., dict]]</code><td><code>None</code><td>Injectable replacement for <code>nba_stats_leaguedashptstats</code>.</table>
+<p><strong>Returns</strong></p>
+<p>One row per player-season: <code>season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, drives:Float64, drive_pts:Float64, drive_baseline_rate:Float64, drive_expected:Float64, drive_pts_oe:Float64, drive_pts_oe_per_36:Float64, drive_fta:Float64, rim_pressure:Float64, drive_ast:Float64, drive_tov:Float64, league_id:Utf8</code>. Empty/malformed input returns a zero-row frame with this schema.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_tracking_drive_value</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_tracking_drive_value</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"drive_pts_oe"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_tracking_pass_value>wnba_tracking_pass_value<a href=#wnba_tracking_pass_value class=hash-link aria-label="Direct link to wnba_tracking_pass_value" title="Direct link to wnba_tracking_pass_value" translate=no>​</a></h3>
+<p><code>wnba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA expected-assists / passer value (<code>league_id="10"</code> by-reference shim).</p>
+<p>See <code>sportsdataverse.nba.nba_tracking_value.nba_tracking_pass_value</code>
+for the full recipe (Passing-measure proxy + optional <code>playerdashptpass</code>
+enrichment).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>seasons</code><td><code>int | str | list</code><td><td>A single season or list of seasons.<tr><td><code>league_id</code><td><code>str</code><td><code>'10'</code><td>Defaults to <code>"10"</code> (WNBA); pass <code>"20"</code> here for G-League.<tr><td><code>per_mode</code><td><code>str</code><td><code>'Totals'</code><td><code>per_mode_simple</code> passed to the fetch (default <code>"Totals"</code>).<tr><td><code>by_position</code><td><code>bool</code><td><code>True</code><td>Compute the baseline within role buckets (default); <code>False</code> forces one league-wide bucket.<tr><td><code>positions</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Optional pre-fetched positions frame.<tr><td><code>fetch_potential_assists</code><td><code>bool</code><td><code>False</code><td>Enrich the top passers with <code>playerdashptpass</code> potential-assist counts.<tr><td><code>max_players</code><td><code>int</code><td><code>0</code><td>Cap on per-player enrichment fetches; <code>0</code> disables enrichment regardless of <code>fetch_potential_assists</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a <code>pandas.DataFrame</code> instead of polars.<tr><td><code>_get_fn</code><td><code>Optional[Callable[..., dict]]</code><td><code>None</code><td>Injectable replacement for <code>nba_stats_leaguedashptstats</code>.<tr><td><code>_pass_get_fn</code><td><code>Optional[Callable[..., dict]]</code><td><code>None</code><td>Injectable replacement for <code>nba_stats_playerdashptpass</code>.</table>
+<p><strong>Returns</strong></p>
+<p>One row per player-season: <code>season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, ast:Float64, passes:Float64, ast_baseline_rate:Float64, ast_expected:Float64, ast_oe:Float64, ast_oe_per_36:Float64, ast_pts_created:Float64, league_id:Utf8</code>. Empty/malformed input returns a zero-row frame with this schema.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_tracking_pass_value</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_tracking_pass_value</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"ast_oe"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_tracking_reb_oe>wnba_tracking_reb_oe<a href=#wnba_tracking_reb_oe class=hash-link aria-label="Direct link to wnba_tracking_reb_oe" title="Direct link to wnba_tracking_reb_oe" translate=no>​</a></h3>
+<p><code>wnba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA rebounding-over-expected (<code>league_id="10"</code> by-reference shim).</p>
+<p>See <code>sportsdataverse.nba.nba_tracking_value.nba_tracking_reb_oe</code>
+for the full recipe (contest-difficulty-adjusted expected rebounds,
+role-bucket baseline).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>seasons</code><td><code>int | str | list</code><td><td>A single season or list of seasons.<tr><td><code>league_id</code><td><code>str</code><td><code>'10'</code><td>Defaults to <code>"10"</code> (WNBA); pass <code>"20"</code> here for G-League.<tr><td><code>per_mode</code><td><code>str</code><td><code>'Totals'</code><td><code>per_mode_simple</code> passed to the fetch (default <code>"Totals"</code>).<tr><td><code>by_position</code><td><code>bool</code><td><code>True</code><td>Compute the baseline within role buckets (default); <code>False</code> forces one league-wide bucket.<tr><td><code>positions</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Optional pre-fetched positions frame.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a <code>pandas.DataFrame</code> instead of polars.<tr><td><code>_get_fn</code><td><code>Optional[Callable[..., dict]]</code><td><code>None</code><td>Injectable replacement for <code>nba_stats_leaguedashptstats</code>.</table>
+<p><strong>Returns</strong></p>
+<p>One row per player-season: <code>season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, reb:Float64, reb_chances:Float64, reb_baseline_rate:Float64, reb_expected:Float64, reb_oe:Float64, reb_oe_per_36:Float64, oreb_oe:Float64, dreb_oe:Float64, league_id:Utf8</code>. Empty/malformed input returns a zero-row frame with this schema.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_tracking_reb_oe</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_tracking_reb_oe</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"reb_oe"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_tracking_rim_protect_value>wnba_tracking_rim_protect_value<a href=#wnba_tracking_rim_protect_value class=hash-link aria-label="Direct link to wnba_tracking_rim_protect_value" title="Direct link to wnba_tracking_rim_protect_value" translate=no>​</a></h3>
+<p><code>wnba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA rim-protection / shot-defend points-saved (<code>league_id="10"</code></p>
+<p>by-reference shim).</p>
+<p>See <code>sportsdataverse.nba.nba_tracking_value.nba_tracking_rim_protect_value</code>
+for the full recipe (bucket-mean defended-rate baseline; optional
+<code>playerdashptshotdefend</code> rim-band enrichment).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>seasons</code><td><code>int | str | list</code><td><td>A single season or list of seasons.<tr><td><code>league_id</code><td><code>str</code><td><code>'10'</code><td>Defaults to <code>"10"</code> (WNBA); pass <code>"20"</code> here for G-League.<tr><td><code>per_mode</code><td><code>str</code><td><code>'Totals'</code><td><code>per_mode_simple</code> passed to the fetch (default <code>"Totals"</code>).<tr><td><code>by_position</code><td><code>bool</code><td><code>True</code><td>Compute the baseline within role buckets (default); <code>False</code> forces one league-wide bucket.<tr><td><code>positions</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Optional pre-fetched positions frame.<tr><td><code>source</code><td><code>str</code><td><code>'leaguedash'</code><td><code>"leaguedash"</code> (default) or <code>"shotdefend"</code>.<tr><td><code>max_players</code><td><code>int</code><td><code>0</code><td>Cap on per-player <code>shotdefend</code> enrichment fetches; ignored unless <code>source="shotdefend"</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a <code>pandas.DataFrame</code> instead of polars.<tr><td><code>_get_fn</code><td><code>Optional[Callable[..., dict]]</code><td><code>None</code><td>Injectable replacement for <code>nba_stats_leaguedashptstats</code>.<tr><td><code>_defend_get_fn</code><td><code>Optional[Callable[..., dict]]</code><td><code>None</code><td>Injectable replacement for <code>nba_stats_playerdashptshotdefend</code>.</table>
+<p><strong>Returns</strong></p>
+<p>One row per player-season: <code>season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, d_fga:Float64, d_fgm:Float64, d_fg_pct:Float64, normal_fg_pct:Float64, rim_protect_pts_saved:Float64, rim_protect_pts_saved_per_36:Float64, source:Utf8, league_id:Utf8</code>. Empty/malformed input returns a zero-row frame with this schema.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_tracking_rim_protect_value</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_tracking_rim_protect_value</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"rim_protect_pts_saved"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_tracking_shot_diet_value>wnba_tracking_shot_diet_value<a href=#wnba_tracking_shot_diet_value class=hash-link aria-label="Direct link to wnba_tracking_shot_diet_value" title="Direct link to wnba_tracking_shot_diet_value" translate=no>​</a></h3>
+<p><code>wnba_tracking_shot_diet_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA catch-&-shoot vs pull-up points-over-expected (<code>league_id="10"</code></p>
+<p>by-reference shim).</p>
+<p>See <code>sportsdataverse.nba.nba_tracking_value.nba_tracking_shot_diet_value</code>
+for the full recipe.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>seasons</code><td><code>int | str | list</code><td><td>A single season or list of seasons.<tr><td><code>league_id</code><td><code>str</code><td><code>'10'</code><td>Defaults to <code>"10"</code> (WNBA); pass <code>"20"</code> here for G-League.<tr><td><code>per_mode</code><td><code>str</code><td><code>'Totals'</code><td><code>per_mode_simple</code> passed to each fetch (default <code>"Totals"</code>).<tr><td><code>by_position</code><td><code>bool</code><td><code>True</code><td>Compute each measure's baseline within role buckets (default); <code>False</code> forces one league-wide bucket.<tr><td><code>positions</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Optional pre-fetched positions frame.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a <code>pandas.DataFrame</code> instead of polars.<tr><td><code>_get_fn</code><td><code>Optional[Callable[..., dict]]</code><td><code>None</code><td>Injectable replacement for <code>nba_stats_leaguedashptstats</code>.</table>
+<p><strong>Returns</strong></p>
+<p>One row per player-season: <code>season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, cs_fga:Float64, cs_pts:Float64, cs_pts_oe:Float64, pu_fga:Float64, pu_pts:Float64, pu_pts_oe:Float64, shot_diet_delta:Float64, league_id:Utf8</code>. Empty/malformed input returns a zero-row frame with this schema.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_tracking_shot_diet_value</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_tracking_shot_diet_value</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"cs_pts_oe"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=wnba_tracking_touch_value>wnba_tracking_touch_value<a href=#wnba_tracking_touch_value class=hash-link aria-label="Direct link to wnba_tracking_touch_value" title="Direct link to wnba_tracking_touch_value" translate=no>​</a></h3>
+<p><code>wnba_tracking_touch_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>WNBA touch / possession-time value (<code>league_id="10"</code> by-reference shim).</p>
+<p>See <code>sportsdataverse.nba.nba_tracking_value.nba_tracking_touch_value</code>
+for the full recipe.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>seasons</code><td><code>int | str | list</code><td><td>A single season or list of seasons.<tr><td><code>league_id</code><td><code>str</code><td><code>'10'</code><td>Defaults to <code>"10"</code> (WNBA); pass <code>"20"</code> here for G-League.<tr><td><code>per_mode</code><td><code>str</code><td><code>'Totals'</code><td><code>per_mode_simple</code> passed to the fetch (default <code>"Totals"</code>).<tr><td><code>by_position</code><td><code>bool</code><td><code>True</code><td>Compute the baseline within role buckets (default); <code>False</code> forces one league-wide bucket.<tr><td><code>positions</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Optional pre-fetched positions frame.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a <code>pandas.DataFrame</code> instead of polars.<tr><td><code>_get_fn</code><td><code>Optional[Callable[..., dict]]</code><td><code>None</code><td>Injectable replacement for <code>nba_stats_leaguedashptstats</code>.</table>
+<p><strong>Returns</strong></p>
+<p>One row per player-season: <code>season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, touches:Float64, pts:Float64, touch_baseline_rate:Float64, touch_expected:Float64, pts_per_touch_oe:Float64, time_of_poss:Float64, time_of_poss_eff:Float64, league_id:Utf8</code>. Empty/malformed input returns a zero-row frame with this schema.</p>
+<p>No returns table is published for this function: no capture: it reads stats.nba.com (WNBA league id 10), which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">wnba </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> wnba_tracking_touch_value</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">df </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> wnba_tracking_touch_value</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">df</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"pts_per_touch_oe"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=zone_value_map>zone_value_map<a href=#zone_value_map class=hash-link aria-label="Direct link to zone_value_map" title="Direct link to zone_value_map" translate=no>​</a></h3>
+<p><code>zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Per-player per-zone value map: points and expected points per shot.</p>
+<p>Collapses <code>shot_zone_basic</code> to a canonical zone via <code>ZONE_COLLAPSE</code>
+(the two corner-3 zones merge) and aggregates realized vs expected points
+per shot in each zone.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>scored_shots</code><td><code>DataFrame</code><td><td><code>score_shot_xpoints</code> output (needs <code>player_id</code>, <code>shot_zone_basic</code>, <code>shot_made_flag</code>, <code>actual_points</code>, <code>xpoints</code>).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>One row per <code>(player_id, zone)</code>: <code>player_id:Int64, zone:Utf8, att:Int64, makes:Int64, pts:Float64, pps:Float64, xpps:Float64, pps_above_expected:Float64</code> (<code>pps</code> = points per shot, <code>xpps</code> = expected). Empty input returns the zero-row schema.</p>
+<p>No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">nba_shot_value </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> score_shot_xpoints</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> zone_value_map</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">zmap </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> zone_value_map</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">score_shot_xpoints</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">shots</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> league_avgs</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">zmap</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"zone"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token string" style=color:#047857>"corner_3"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"pps_above_expected"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/versioned_docs/version-0.1.5/wnba/reference/additional/analytics.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/0.1.5/wnba/reference/additional/models-and-calculators><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>Models and calculators</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/0.1.5/wnba/reference/additional/dates-and-seasons><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>Dates and seasons</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#make_prob_by_context class="table-of-contents__link toc-highlight">make_prob_by_context</a><li><a href=#make_prob_joint class="table-of-contents__link toc-highlight">make_prob_joint</a><li><a href=#score_shot_xpoints class="table-of-contents__link toc-highlight">score_shot_xpoints</a><li><a href=#shooter_talent class="table-of-contents__link toc-highlight">shooter_talent</a><li><a href=#shot_selection_quality class="table-of-contents__link toc-highlight">shot_selection_quality</a><li><a href=#wnba_availability class="table-of-contents__link toc-highlight">wnba_availability</a><li><a href=#wnba_expected_turnovers class="table-of-contents__link toc-highlight">wnba_expected_turnovers</a><li><a href=#wnba_foul_drawing class="table-of-contents__link toc-highlight">wnba_foul_drawing</a><li><a href=#wnba_matchup_drapm class="table-of-contents__link toc-highlight">wnba_matchup_drapm</a><li><a href=#wnba_player_props class="table-of-contents__link toc-highlight">wnba_player_props</a><li><a href=#wnba_playtype_ratings class="table-of-contents__link toc-highlight">wnba_playtype_ratings</a><li><a href=#wnba_referee_assignments class="table-of-contents__link toc-highlight">wnba_referee_assignments</a><li><a href=#wnba_shot_value class="table-of-contents__link toc-highlight">wnba_shot_value</a><li><a href=#wnba_team_clutch class="table-of-contents__link toc-highlight">wnba_team_clutch</a><li><a href=#wnba_tracking_drive_value class="table-of-contents__link toc-highlight">wnba_tracking_drive_value</a><li><a href=#wnba_tracking_pass_value class="table-of-contents__link toc-highlight">wnba_tracking_pass_value</a><li><a href=#wnba_tracking_reb_oe class="table-of-contents__link toc-highlight">wnba_tracking_reb_oe</a><li><a href=#wnba_tracking_rim_protect_value class="table-of-contents__link toc-highlight">wnba_tracking_rim_protect_value</a><li><a href=#wnba_tracking_shot_diet_value class="table-of-contents__link toc-highlight">wnba_tracking_shot_diet_value</a><li><a href=#wnba_tracking_touch_value class="table-of-contents__link toc-highlight">wnba_tracking_touch_value</a><li><a href=#zone_value_map class="table-of-contents__link toc-highlight">zone_value_map</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

@@ -1,0 +1,2632 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-mlb/reference/additional/analytics" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>MLB — additional Python functions — Analytics | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/mlb/reference/additional/analytics /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-default-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-current /><meta data-rh=true property=og:title content="MLB — additional Python functions — Analytics | sdv-py"/><meta data-rh=true name=description content="MLB — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."/><meta data-rh=true property=og:description content="MLB — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/mlb/reference/additional/analytics /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/mlb/reference/additional/analytics hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/mlb/reference/additional/analytics hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/leagues/baseball","name":"Baseball","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/mlb/","name":"MLB","position":2},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/mlb/reference/additional","name":"Additional functions","position":3},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/mlb/reference/additional/analytics","name":"Analytics","position":4}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.dc69c4d5.css /><script src=/assets/js/runtime~main.6d258d0f.js defer></script><script src=/assets/js/main.6f288025.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/mlb/reference/additional/analytics>main (latest)</a><ul class=dropdown__menu><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/mlb/reference/additional/analytics>main (latest)</a><li><a class=dropdown__link href=/docs/0.1.5/mlb/reference/additional/analytics>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Expand sidebar category 'Basketball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Collapse sidebar category 'Baseball'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/mlb/><span title=MLB class=categoryLinkLabel_W154>MLB</span></a><button aria-label="Collapse sidebar category 'MLB'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/loaders><span title=Loaders class=linkLabel_WmDU>Loaders</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/mlb/reference/mlb_api><span title="MLB Stats API" class=categoryLinkLabel_W154>MLB Stats API</span></a><button aria-label="Expand sidebar category 'MLB Stats API'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/mlb/reference/mlb_statcast><span title="MLB Statcast (Baseball Savant)" class=categoryLinkLabel_W154>MLB Statcast (Baseball Savant)</span></a><button aria-label="Expand sidebar category 'MLB Statcast (Baseball Savant)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/site><span title="ESPN site API (v2)" class=linkLabel_WmDU>ESPN site API (v2)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/web><span title="ESPN web API (v3)" class=linkLabel_WmDU>ESPN web API (v3)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/mlb/reference/core><span title="ESPN core API (v2)" class=categoryLinkLabel_W154>ESPN core API (v2)</span></a><button aria-label="Expand sidebar category 'ESPN core API (v2)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/fitt><span title="ESPN FPI API (fitt v3)" class=linkLabel_WmDU>ESPN FPI API (fitt v3)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/cdn><span title="ESPN CDN API (cdn.espn.com)" class=linkLabel_WmDU>ESPN CDN API (cdn.espn.com)</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/mlb/reference/additional><span title="Additional functions" class=categoryLinkLabel_W154>Additional functions</span></a><button aria-label="Collapse sidebar category 'Additional functions'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/additional/espn><span title=ESPN class=linkLabel_WmDU>ESPN</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/additional/mlb-stats-api><span title="MLB Stats API" class=linkLabel_WmDU>MLB Stats API</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/additional/baseball-savant-statcast><span title="Baseball Savant (Statcast)" class=linkLabel_WmDU>Baseball Savant (Statcast)</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/additional/fox-sports-api><span title="Fox Sports API" class=linkLabel_WmDU>Fox Sports API</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/additional/models-and-calculators><span title="Models and calculators" class=linkLabel_WmDU>Models and calculators</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/mlb/reference/additional/analytics><span title=Analytics class=linkLabel_WmDU>Analytics</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class=menu__link tabindex=0 href=/docs/mlb/reference/additional/dates-and-seasons><span title="Dates and seasons" class=linkLabel_WmDU>Dates and seasons</span></a></ul></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/college_baseball/><span title="College baseball" class=categoryLinkLabel_W154>College baseball</span></a><button aria-label="Expand sidebar category 'College baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/college_softball/><span title="College softball" class=categoryLinkLabel_W154>College softball</span></a><button aria-label="Expand sidebar category 'College softball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Expand sidebar category 'Other'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/leagues/baseball><span>Baseball</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/mlb/><span>MLB</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/mlb/reference/additional><span>Additional functions</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>Analytics</span></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>MLB — additional Python functions — Analytics</h1></header>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=add_sequence_features>add_sequence_features<a href=#add_sequence_features class=hash-link aria-label="Direct link to add_sequence_features" title="Direct link to add_sequence_features" translate=no>​</a></h3>
+<p><code>add_sequence_features(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Add within-game sequence, times-through-order, and workload features.</p>
+<p>Consumes the output of <code>pitch_features</code>. Within each plate
+appearance (<code>game_pk</code>, <code>pitcher</code>, <code>at_bat_number</code>, sorted by
+<code>pitch_number</code>), adds <code>prev_pitch_type</code>/<code>prev_release_pos_x</code>/
+<code>prev_release_pos_z</code>/<code>prev_plate_x</code>/<code>prev_plate_z</code> via
+<code>shift(1)</code>. Within each game (<code>game_pk</code>, <code>pitcher</code>, sorted by
+<code>at_bat_number</code> then <code>pitch_number</code>), adds <code>cum_pitches_game</code>
+(running pitch count), <code>batter_faced_index</code> (distinct-<code>at_bat_number</code>
+rank), and <code>times_through_order</code> (<code>min(3, (batter_faced_index-1)//9+1)</code>).
+Every lag/rank is <code>.over(...)</code> scoped to avoid cross-game leakage.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>feats</code><td><code>DataFrame</code><td><td>Output of <code>pitch_features</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>feats</code> plus the sequence/TTO/workload columns described above. Empty input returns a zero-row frame carrying the full schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>prev_pitch_type</code><td>character<td>Pitch type of the previous pitch in the same plate appearance (null on the first pitch).<tr><td><code>prev_release_pos_x</code><td>double<td>Horizontal release position of the previous pitch in the same plate appearance.<tr><td><code>prev_release_pos_z</code><td>double<td>Vertical release position of the previous pitch in the same plate appearance.<tr><td><code>prev_plate_x</code><td>double<td>Horizontal plate location of the previous pitch in the same plate appearance.<tr><td><code>prev_plate_z</code><td>double<td>Vertical plate location of the previous pitch in the same plate appearance.<tr><td><code>cum_pitches_game</code><td>integer<td>Running count of pitches thrown by this pitcher so far in this game (inclusive of the current pitch).<tr><td><code>batter_faced_index</code><td>integer<td>Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced).<tr><td><code>times_through_order</code><td>integer<td>Times through the batting order, min(3, (batter_faced_index-1)//9 + 1).</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_features </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> pitch_features</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> add_sequence_features</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">feats </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> add_sequence_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitch_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">raw</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">feats</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"times_through_order"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"cum_pitches_game"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">tail</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=advancement_opportunities>advancement_opportunities<a href=#advancement_opportunities class=hash-link aria-label="Direct link to advancement_opportunities" title="Direct link to advancement_opportunities" translate=no>​</a></h3>
+<p><code>advancement_opportunities(events: "'pl.DataFrame'") -> "'pl.DataFrame'"</code></p>
+<p>Extract first-to-third / second-to-home / tag-up opportunities and outcomes.</p>
+<p>One plate-appearance row (the terminal, non-null-<code>events</code> pitch of
+each <code>(game_pk, at_bat_number)</code>) is matched against the <em>next</em>
+plate appearance's pre-play occupancy (<code>on_1b</code>/<code>on_2b</code>/<code>on_3b</code>,
+shifted within <code>game_pk</code>) to read the post-play base state.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>events</code><td><code>DataFrame</code><td><td>Pitch-level frame (a <code>sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search</code> output) with <code>game_pk</code>, <code>at_bat_number</code>, <code>on_1b</code>, <code>on_2b</code>, <code>on_3b</code>, <code>events</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per detected opportunity. | Column | Type | Description | |---|---|---| | runner_id | Utf8 | MLBAM id of the runner facing the advancement decision | | opp_type | Utf8 | <code>first_to_third</code> | <code>second_to_home</code> | <code>tag_up</code> | | took_extra | Int8 | 1 if the runner advanced the extra base, else 0 |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>runner_id</code><td>character<td><tr><td><code>opp_type</code><td>character<td><tr><td><code>took_extra</code><td>integer<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_baserunning </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> advancement_opportunities</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">opps </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> advancement_opportunities</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=bip_trajectory_features>bip_trajectory_features<a href=#bip_trajectory_features class=hash-link aria-label="Direct link to bip_trajectory_features" title="Direct link to bip_trajectory_features" translate=no>​</a></h3>
+<p><code>bip_trajectory_features(bip: "'pl.DataFrame'") -> "'pl.DataFrame'"</code></p>
+<p>Add spray angle / hit distance / launch-angle bin / out label / position.</p>
+<p><code>spray_angle = atan2(hc_x - 125.42, 198.27 - hc_y)</code> (Savant's standard
+<code>hc_x</code>/<code>hc_y</code> transform, home plate at the origin, positive = toward
+first base).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>bip</code><td><code>DataFrame</code><td><td>Balls-in-play frame (<code>hc_x</code>, <code>hc_y</code>, <code>hit_distance_sc</code>, <code>launch_angle</code>, <code>events</code>, <code>hit_location</code>).</table>
+<p><strong>Returns</strong></p>
+<p><code>bip</code> with added <code>spray_angle</code> (Float64), <code>hit_dist</code> (Float64), <code>la_bin</code> (Int64), <code>is_out</code> (Int8), <code>position</code> (Int64).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>pitch_type</code><td>character<td>Abbreviation of the pitch type thrown (e.g. FF, SL, CH).<tr><td><code>game_date</code><td>character<td>Game date (YYYY-MM-DD).<tr><td><code>release_speed</code><td>double<td>Pitch velocity out of the hand (mph).<tr><td><code>release_pos_x</code><td>double<td>Horizontal release position of the ball, catcher's perspective (feet).<tr><td><code>release_pos_z</code><td>double<td>Vertical release position of the ball, catcher's perspective (feet).<tr><td><code>player_name</code><td>character<td>Player name.<tr><td><code>batter</code><td>integer<td>MLBAM player id of the batter.<tr><td><code>pitcher</code><td>integer<td>Whether the position is a pitcher.<tr><td><code>events</code><td>character<td>Nested list of non-game events.<tr><td><code>description</code><td>character<td>Long-form description text.<tr><td><code>spin_dir</code><td>double<td>Deprecated spin direction field, no longer populated.<tr><td><code>spin_rate_deprecated</code><td>double<td>Deprecated legacy spin-rate field, no longer populated.<tr><td><code>break_angle_deprecated</code><td>double<td>Deprecated legacy break-angle field, no longer populated.<tr><td><code>break_length_deprecated</code><td>double<td>Deprecated legacy break-length field, no longer populated.<tr><td><code>zone</code><td>double<td>Strike-zone region the pitch crossed (1-14 Gameday zone).<tr><td><code>des</code><td>character<td>Full text description of the play.<tr><td><code>game_type</code><td>character<td>Game type code (R, P, etc.).<tr><td><code>stand</code><td>character<td>Side of the plate the batter is standing (L or R).<tr><td><code>p_throws</code><td>character<td>Hand the pitcher throws with (L or R).<tr><td><code>home_team</code><td>character<td>Home team name.<tr><td><code>away_team</code><td>character<td>Away team name.<tr><td><code>type</code><td>character<td>Record type / category.<tr><td><code>hit_location</code><td>double<td>Fielder position number that fielded the ball.<tr><td><code>bb_type</code><td>character<td>Batted-ball type (ground_ball, line_drive, fly_ball, popup).<tr><td><code>balls</code><td>integer<td>Ball count before the pitch.<tr><td><code>strikes</code><td>integer<td>Strike count before the pitch.<tr><td><code>game_year</code><td>integer<td>Season year of the game.<tr><td><code>pfx_x</code><td>double<td>Horizontal pitch movement from the catcher's perspective (feet).<tr><td><code>pfx_z</code><td>double<td>Vertical pitch movement from the catcher's perspective (feet).<tr><td><code>plate_x</code><td>double<td>Horizontal position of the pitch crossing the plate (feet from center).<tr><td><code>plate_z</code><td>double<td>Vertical position of the pitch crossing the plate (feet above ground).<tr><td><code>on_3b</code><td>integer<td>MLBAM ID of the runner on third base, if any.<tr><td><code>on_2b</code><td>integer<td>MLBAM ID of the runner on second base, if any.<tr><td><code>on_1b</code><td>integer<td>MLBAM ID of the runner on first base, if any.<tr><td><code>outs_when_up</code><td>integer<td>Number of outs when the batter came to the plate.<tr><td><code>inning</code><td>integer<td>Inning number.<tr><td><code>inning_topbot</code><td>character<td>Half of the inning (Top or Bot).<tr><td><code>hc_x</code><td>double<td>Hit coordinate X on the field diagram.<tr><td><code>hc_y</code><td>double<td>Hit coordinate Y on the field diagram.<tr><td><code>tfs_deprecated</code><td>double<td>Deprecated time-from-start field, no longer populated.<tr><td><code>tfs_zulu_deprecated</code><td>double<td>Deprecated Zulu time-from-start field, no longer populated.<tr><td><code>umpire</code><td>double<td>Deprecated umpire field, no longer populated.<tr><td><code>sv_id</code><td>double<td>Deprecated Sportvision/Statcast pitch identifier, no longer populated.<tr><td><code>vx0</code><td>double<td>Velocity of the pitch in the x-direction at y=50 ft (ft/s).<tr><td><code>vy0</code><td>double<td>Velocity of the pitch in the y-direction at y=50 ft (ft/s).<tr><td><code>vz0</code><td>double<td>Velocity of the pitch in the z-direction at y=50 ft (ft/s).<tr><td><code>ax</code><td>double<td>Acceleration of the pitch in the x-direction at y=50 ft (ft/s^2).<tr><td><code>ay</code><td>double<td>Acceleration of the pitch in the y-direction at y=50 ft (ft/s^2).<tr><td><code>az</code><td>double<td>Acceleration of the pitch in the z-direction at y=50 ft (ft/s^2).<tr><td><code>sz_top</code><td>double<td>Top of the batter's strike zone for the pitch (feet).<tr><td><code>sz_bot</code><td>double<td>Bottom of the batter's strike zone for the pitch (feet).<tr><td><code>hit_distance_sc</code><td>double<td>Statcast-measured projected distance of the batted ball (feet).<tr><td><code>launch_speed</code><td>double<td>Exit velocity of the batted ball (mph).<tr><td><code>launch_angle</code><td>double<td>Vertical launch angle of the batted ball (degrees).<tr><td><code>effective_speed</code><td>double<td>Perceived velocity adjusted for release extension (mph).<tr><td><code>release_spin_rate</code><td>double<td>Spin rate of the pitch at release (rpm).<tr><td><code>release_extension</code><td>double<td>Distance toward the plate at release (feet).<tr><td><code>game_pk</code><td>integer<td>Unique game identifier.<tr><td><code>fielder_2</code><td>integer<td>MLBAM ID of the catcher.<tr><td><code>fielder_3</code><td>integer<td>MLBAM ID of the first baseman.<tr><td><code>fielder_4</code><td>integer<td>MLBAM ID of the second baseman.<tr><td><code>fielder_5</code><td>integer<td>MLBAM ID of the third baseman.<tr><td><code>fielder_6</code><td>integer<td>MLBAM ID of the shortstop.<tr><td><code>fielder_7</code><td>integer<td>MLBAM ID of the left fielder.<tr><td><code>fielder_8</code><td>integer<td>MLBAM ID of the center fielder.<tr><td><code>fielder_9</code><td>integer<td>MLBAM ID of the right fielder.<tr><td><code>release_pos_y</code><td>double<td>Release position of the ball toward the plate (feet).<tr><td><code>estimated_ba_using_speedangle</code><td>double<td>Expected batting average based on exit velocity and launch angle.<tr><td><code>estimated_woba_using_speedangle</code><td>double<td>Expected wOBA based on exit velocity and launch angle.<tr><td><code>woba_value</code><td>double<td>wOBA value assigned to the event.<tr><td><code>woba_denom</code><td>double<td>wOBA denominator (plate-appearance weight) for the event.<tr><td><code>babip_value</code><td>double<td>BABIP value assigned to the event (0 or 1).<tr><td><code>iso_value</code><td>double<td>Isolated power value assigned to the event.<tr><td><code>launch_speed_angle</code><td>double<td>Batted-ball classification code (1-6) from exit velocity and angle.<tr><td><code>at_bat_number</code><td>integer<td>Sequential plate-appearance number within the game.<tr><td><code>pitch_number</code><td>integer<td>Pitch number within the plate appearance.<tr><td><code>pitch_name</code><td>character<td>Full name of the pitch type (e.g. 4-Seam Fastball, Slider).<tr><td><code>home_score</code><td>integer<td>Home team run total after the play.<tr><td><code>away_score</code><td>integer<td>Away team run total after the play.<tr><td><code>bat_score</code><td>integer<td>Batting team score before the pitch.<tr><td><code>fld_score</code><td>integer<td>Fielding team score before the pitch.<tr><td><code>post_away_score</code><td>integer<td>Away team score after the pitch.<tr><td><code>post_home_score</code><td>integer<td>Home team score after the pitch.<tr><td><code>post_bat_score</code><td>integer<td>Batting team score after the pitch.<tr><td><code>post_fld_score</code><td>integer<td>Fielding team score after the pitch.<tr><td><code>if_fielding_alignment</code><td>character<td>Infield defensive alignment (Standard, Strategic, Infield shift).<tr><td><code>of_fielding_alignment</code><td>character<td>Outfield defensive alignment (Standard, Strategic, 4th outfielder).<tr><td><code>spin_axis</code><td>double<td>Spin axis of the pitch as a clock-face angle (degrees).<tr><td><code>delta_home_win_exp</code><td>double<td>Change in home team win expectancy on the play.<tr><td><code>delta_run_exp</code><td>double<td>Change in run expectancy on the play.<tr><td><code>bat_speed</code><td>double<td>Bat speed at the point of contact (mph).<tr><td><code>swing_length</code><td>double<td>Length of the swing path to contact (feet).<tr><td><code>miss_distance</code><td>double<td><tr><td><code>estimated_slg_using_speedangle</code><td>double<td>Expected slugging based on exit velocity and launch angle.<tr><td><code>delta_pitcher_run_exp</code><td>double<td>Change in run expectancy credited to the pitcher.<tr><td><code>hyper_speed</code><td>double<td>Adjusted (90th-percentile) exit velocity (mph).<tr><td><code>home_score_diff</code><td>integer<td>Home team score minus away team score before the pitch.<tr><td><code>bat_score_diff</code><td>integer<td>Batting team score minus fielding team score before the pitch.<tr><td><code>home_win_exp</code><td>double<td>Home team win expectancy before the play.<tr><td><code>bat_win_exp</code><td>double<td>Batting team win expectancy before the play.<tr><td><code>age_pit_legacy</code><td>integer<td>Pitcher age using the legacy calculation.<tr><td><code>age_bat_legacy</code><td>integer<td>Batter age using the legacy calculation.<tr><td><code>age_pit</code><td>integer<td>Pitcher age for the season.<tr><td><code>age_bat</code><td>integer<td>Batter age for the season.<tr><td><code>n_thruorder_pitcher</code><td>integer<td>Times through the order the pitcher is facing the lineup.<tr><td><code>n_priorpa_thisgame_player_at_bat</code><td>integer<td>Number of prior plate appearances by the batter in the game.<tr><td><code>pitcher_days_since_prev_game</code><td>double<td>Days since the pitcher's previous game appearance.<tr><td><code>batter_days_since_prev_game</code><td>integer<td>Days since the batter's previous game appearance.<tr><td><code>pitcher_days_until_next_game</code><td>double<td>Days until the pitcher's next game appearance.<tr><td><code>batter_days_until_next_game</code><td>double<td>Days until the batter's next game appearance.<tr><td><code>api_break_z_with_gravity</code><td>double<td>Vertical pitch break including gravity (inches).<tr><td><code>api_break_x_arm</code><td>double<td>Horizontal pitch break to the pitcher's arm side (inches).<tr><td><code>api_break_x_batter_in</code><td>double<td>Horizontal pitch break toward/away from the batter (inches).<tr><td><code>arm_angle</code><td>double<td>Pitcher's arm angle at release (degrees).<tr><td><code>attack_angle</code><td>double<td>Angle of the bat's path at contact (degrees).<tr><td><code>attack_direction</code><td>double<td>Horizontal direction of the swing at contact (degrees).<tr><td><code>swing_path_tilt</code><td>double<td>Vertical tilt of the swing path (degrees).<tr><td><code>intercept_ball_minus_batter_pos_x_inches</code><td>double<td>Horizontal offset of ball-bat intercept from batter position (inches).<tr><td><code>intercept_ball_minus_batter_pos_y_inches</code><td>double<td>Depth offset of ball-bat intercept from batter position (inches).<tr><td><code>spray_angle</code><td>double<td><tr><td><code>hit_dist</code><td>double<td><tr><td><code>la_bin</code><td>integer<td><tr><td><code>is_out</code><td>integer<td><tr><td><code>position</code><td>integer<td>Listed roster position (G, F, C, etc.).</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_fielding_oaa </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> bip_trajectory_features</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">feats </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> bip_trajectory_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">bip</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=called_strike_prob_grid>called_strike_prob_grid<a href=#called_strike_prob_grid class=hash-link aria-label="Direct link to called_strike_prob_grid" title="Direct link to called_strike_prob_grid" translate=no>​</a></h3>
+<p><code>called_strike_prob_grid(pitches: "'pl.DataFrame'", *, x_bin: 'float' = 0.1, z_bin: 'float' = 0.1, alpha: 'float' = 1.0) -> "'pl.DataFrame'"</code></p>
+<p>Empirical called-strike-probability grid over <code>(stand, plate_x, pz_norm)</code>.</p>
+<p>Pitch height is normalized within the batter's strike zone
+(<code>pz_norm = (plate_z - sz_bot) / (sz_top - sz_bot)</code>) so the grid is
+zone-relative and comparable across batters; <code>plate_x</code> is kept raw
+(feet from the plate's center). Rate per bin is Laplace-smoothed:
+<code>(strikes + alpha) / (n + 2 * alpha)</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Pitch-level takes frame (<code>plate_x</code>, <code>plate_z</code>, <code>sz_top</code>, <code>sz_bot</code>, <code>stand</code>, <code>description</code>).<tr><td><code>x_bin</code><td><code>float</code><td><code>0.1</code><td>Bin width for <code>plate_x</code>, in feet. Defaults to <code>0.1</code>.<tr><td><code>z_bin</code><td><code>float</code><td><code>0.1</code><td>Bin width for zone-normalized height. Defaults to <code>0.1</code>.<tr><td><code>alpha</code><td><code>float</code><td><code>1.0</code><td>Laplace smoothing strength. Defaults to <code>1.0</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per observed <code>(stand, px_bin, pz_bin)</code>. | Column | Type | Description | |---|---|---| | stand | Utf8 | Batter handedness (<code>L</code>/<code>R</code>) | | px_bin | Int64 | Horizontal plate-location bin index | | pz_bin | Int64 | Zone-normalized vertical bin index | | p_strike | Float64 | Laplace-smoothed empirical called-strike probability | | n | Int64 | Takes observed in this bin |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>stand</code><td>character<td>Side of the plate the batter is standing (L or R).<tr><td><code>px_bin</code><td>integer<td><tr><td><code>pz_bin</code><td>integer<td><tr><td><code>p_strike</code><td>double<td><tr><td><code>n</code><td>integer<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_catcher_framing </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> called_strike_prob_grid</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">grid </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> called_strike_prob_grid</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> alpha</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>1.0</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=catch_prob_surface>catch_prob_surface<a href=#catch_prob_surface class=hash-link aria-label="Direct link to catch_prob_surface" title="Direct link to catch_prob_surface" translate=no>​</a></h3>
+<p><code>catch_prob_surface(bip: "'pl.DataFrame'", *, dist_bin: 'float' = 10.0, spray_bin: 'float' = 0.1, alpha: 'float' = 2.0) -> "'pl.DataFrame'"</code></p>
+<p>Empirical catch-probability surface over <code>(position, distance, spray, launch angle)</code>.</p>
+<p>Rate per bin is Laplace-smoothed: <code>(outs + alpha) / (n + 2 * alpha)</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>bip</code><td><code>DataFrame</code><td><td>Balls-in-play frame (see <code>bip_trajectory_features</code>).<tr><td><code>dist_bin</code><td><code>float</code><td><code>10.0</code><td>Bin width for hit distance, in feet. Defaults to <code>10.0</code>.<tr><td><code>spray_bin</code><td><code>float</code><td><code>0.1</code><td>Bin width for spray angle, in radians. Defaults to <code>0.1</code>.<tr><td><code>alpha</code><td><code>float</code><td><code>2.0</code><td>Laplace smoothing strength. Defaults to <code>2.0</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per observed <code>(position, dist_b, spray_b, la_bin)</code>. | Column | Type | Description | |---|---|---| | position | Int64 | Responsible fielder position (Savant <code>hit_location</code>, 1-9) | | dist_b | Int64 | Hit-distance bin index | | spray_b | Int64 | Spray-angle bin index | | la_bin | Int64 | Launch-angle bin index (hang-time proxy) | | p_catch | Float64 | Laplace-smoothed empirical out (catch) probability | | n | Int64 | Balls in play observed in this bin |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>position</code><td>integer<td>Listed roster position (G, F, C, etc.).<tr><td><code>dist_b</code><td>integer<td><tr><td><code>spray_b</code><td>integer<td><tr><td><code>la_bin</code><td>integer<td><tr><td><code>p_catch</code><td>double<td><tr><td><code>n</code><td>integer<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_fielding_oaa </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> catch_prob_surface</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">surface </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> catch_prob_surface</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">bip</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> alpha</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>2.0</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=fit_zone_model>fit_zone_model<a href=#fit_zone_model class=hash-link aria-label="Direct link to fit_zone_model" title="Direct link to fit_zone_model" translate=no>​</a></h3>
+<p><code>fit_zone_model(pitches: 'pl.DataFrame') -> 'Dict[str, Any]'</code></p>
+<p>Fit a logistic P(called strike | zone coordinates) on called pitches.</p>
+<p>Compute-on-demand -- <strong>no artifact is bundled or cached to disk.</strong>
+L2-regularized (<code>1e-4</code>) mean log-loss, minimized via
+<code>scipy.optimize.minimize(method="L-BFGS-B")</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Frame of pitches with <code>description</code> (filtered to <code>{"called_strike", "ball"}</code>), <code>plate_x</code>, <code>plate_z</code>, <code>sz_top</code>, <code>sz_bot</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>{"coef": list[float] (7,), "intercept": float, "features": list[str]}</code>. <code>{"coef": [], "intercept": 0.0, "features": [...]}</code> if fewer than 2 called pitches are available (degenerate fit).</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_umpire_zone </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> fit_zone_model</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">model </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> fit_zone_model</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_baserunning_value>mlb_baserunning_value<a href=#mlb_baserunning_value class=hash-link aria-label="Direct link to mlb_baserunning_value" title="Direct link to mlb_baserunning_value" translate=no>​</a></h3>
+<p><code>mlb_baserunning_value(events: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", *, speed_bin: 'float' = 1.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Per-runner baserunning runs from extra-bases-taken above expected.</p>
+<p>Expected extra-base probability is an empirical rate by <code>(opp_type, speed_bin)</code>; <code>baserunning_runs = extra_bases_above_expected * RUN_VALUES["extra_base"]</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>events</code><td><code>DataFrame</code><td><td>Pitch-level frame passed to <code>advancement_opportunities</code>. MiLB feeds run through the same function -- there is no Savant baserunning leaderboard oracle for MiLB.<tr><td><code>sprint_speed</code><td><code>DataFrame</code><td><td>A <code>sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_sprint_speed</code> frame with <code>runner_id</code> (Utf8) and <code>sprint_speed</code>.<tr><td><code>speed_bin</code><td><code>float</code><td><code>1.0</code><td>Bin width (ft/sec) for the sprint-speed bucket. Defaults to <code>1.0</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>one row per runner. | Column | Type | Description | |---|---|---| | runner_id | Utf8 | Runner MLBAM id | | opportunities | Int64 | Advancement opportunities faced | | extra_bases_above_expected | Float64 | Sum of (took_extra - expected rate) | | baserunning_runs | Float64 | extra_bases_above_expected x RUN_VALUES["extra_base"] |</p>
+<p>No returns table is published for this function: no capture: it raises ColumnNotFoundError (runner_id) on its documented sprint-speed input, which carries player_id.</p>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_baserunning </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_baserunning_value</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">baserunning </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_baserunning_value</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> sprint_speed</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_catcher_blocking>mlb_catcher_blocking<a href=#mlb_catcher_blocking class=hash-link aria-label="Direct link to mlb_catcher_blocking" title="Direct link to mlb_catcher_blocking" translate=no>​</a></h3>
+<p><code>mlb_catcher_blocking(pitches: "'pl.DataFrame'", *, dirt_bin_width: 'float' = 0.2, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Per-catcher blocking runs from a dirt-pitch block-probability model.</p>
+<p>A block opportunity is a pitch below the strike zone (<code>pz_norm &lt; 0</code>)
+with a runner on base, or a pitch whose <code>des</code> narrates a wild
+pitch/passed ball (see module docstring for why <code>des</code>, not
+<code>events</code>). Expected block probability is the empirical block rate
+within the pitch's dirt-depth bin; <code>blocking_runs = blocks_above_expected * RUN_VALUES["wp_pb"]</code> (the documented fallback
+constant -- the narrating row's <code>delta_run_exp</code> bundles the primary
+batter outcome with the WP/PB and cannot isolate the latter's value).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Pitch-level frame with <code>plate_z</code>/<code>sz_top</code>/<code>sz_bot</code>, <code>fielder_2</code>, <code>des</code> (or <code>events</code> as a fallback), and (if present) <code>on_1b</code>/<code>on_2b</code>/<code>on_3b</code>. MiLB feeds (e.g. <code>sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors</code>) run through the same function -- there is no Savant blocking leaderboard oracle for MiLB.<tr><td><code>dirt_bin_width</code><td><code>float</code><td><code>0.2</code><td>Bin width for the below-zone depth bucket. Defaults to <code>0.2</code> (zone-normalized units).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id (Savant <code>fielder_2</code>) | | block_opps | Int64 | Dirt-pitch block opportunities faced | | blocks_above_expected | Float64 | Sum of (blocked - expected block rate) | | blocking_runs | Float64 | blocks_above_expected x RUN_VALUES["wp_pb"] |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>catcher_id</code><td>character<td><tr><td><code>block_opps</code><td>integer<td><tr><td><code>blocks_above_expected</code><td>double<td><tr><td><code>blocking_runs</code><td>double<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_catcher_defense </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_catcher_blocking</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">blocking </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_catcher_blocking</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">blocking</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"block_opps"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>>=</span><span class="token plain"> </span><span class="token number" style=color:#be123c>50</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"blocking_runs"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_catcher_framing>mlb_catcher_framing<a href=#mlb_catcher_framing class=hash-link aria-label="Direct link to mlb_catcher_framing" title="Direct link to mlb_catcher_framing" translate=no>​</a></h3>
+<p><code>mlb_catcher_framing(pitches: "'pl.DataFrame'", *, shadow_lo: 'float' = 0.1, shadow_hi: 'float' = 0.9, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Per-catcher framing runs from a smooth called-strike logistic (Savant method).</p>
+<p>A logistic P(called strike | zone location) is fit on all takes (the T6.4
+zone model, <code>sportsdataverse.mlb.mlb_umpire_zone.mlb_umpire_called_strike_prob</code>);
+then, over <strong>shadow-zone</strong> takes only -- those with <code>shadow_lo &lt;= P_strike &lt;= shadow_hi</code>, i.e. near the rulebook edge where receiving
+actually moves the call -- <code>framing_run = (actual_strike - P_strike) * strike_run_value(count)</code>. <code>strike_run_value</code> is the count's defensive
+run value from
+<code>sportsdataverse.mlb.mlb_run_values.count_strike_run_value</code>. Summed
+per catcher (Savant's <code>fielder_2</code>, cast <code>Utf8</code> at the boundary). The
+<code>takes</code> column counts <em>all</em> takes handled (workload), while the runs sum
+only over the frameable shadow-zone subset.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Pitch-level frame with the take columns (<code>plate_x</code>/<code>plate_z</code>/<code>sz_top</code>/<code>sz_bot</code>/<code>stand</code>/ <code>description</code>/<code>balls</code>/<code>strikes</code>/<code>delta_run_exp</code>/ <code>fielder_2</code>). MiLB feeds (e.g. <code>sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors</code>) run through the same function -- there is simply no Savant leaderboard oracle to gate MiLB output against.<tr><td><code>shadow_lo</code><td><code>float</code><td><code>0.1</code><td>Lower P(strike) bound of the frameable shadow zone. Defaults to <code>0.1</code>.<tr><td><code>shadow_hi</code><td><code>float</code><td><code>0.9</code><td>Upper P(strike) bound of the frameable shadow zone. Defaults to <code>0.9</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id (Savant <code>fielder_2</code>) | | takes | Int64 | Called-strike + ball takes caught (all, workload) | | framing_runs | Float64 | Sum over shadow-zone takes of (actual - P_strike) x count run-value | | strikes_gained | Float64 | Sum over shadow-zone takes of (actual - P_strike), run-value-free |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>catcher_id</code><td>character<td><tr><td><code>takes</code><td>integer<td><tr><td><code>framing_runs</code><td>double<td><tr><td><code>strikes_gained</code><td>double<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_catcher_framing </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_catcher_framing</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">framing </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_catcher_framing</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Useful parameter combination</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">framing_pd </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_catcher_framing</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> shadow_lo</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>0.15</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> shadow_hi</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>0.85</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> return_as_pandas</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">framing</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"takes"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>>=</span><span class="token plain"> </span><span class="token number" style=color:#be123c>500</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"framing_runs"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_catcher_throwing>mlb_catcher_throwing<a href=#mlb_catcher_throwing class=hash-link aria-label="Direct link to mlb_catcher_throwing" title="Direct link to mlb_catcher_throwing" translate=no>​</a></h3>
+<p><code>mlb_catcher_throwing(sb_attempts: "'pl.DataFrame'", poptime: "'Optional[pl.DataFrame]'" = None, *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Per-catcher caught-stealing (throwing) value = caught-stealing above average.</p>
+<p>Mirrors Savant's <code>catcher_stealing_runs</code> leaderboard: <code>throwing_runs = cs_above_expected * |RUN_VALUES["cs"] - RUN_VALUES["sb"]|</code> where
+<code>cs_above_expected</code> sums <code>(caught - expected CS rate)</code> over the
+catcher's attempts. <strong>The expected CS rate is catcher-INDEPENDENT</strong> -- the
+empirical league CS rate for the attempt's <em>difficulty</em> stratum (the
+attempted <code>base</code>, since a steal of 3rd is caught far more often than a
+steal of 2nd), NOT a function of the catcher's own pop time. The catcher's
+arm/pop time/exchange is the <em>skill</em> that produces caught-stealings above
+that baseline; the <strong>prior implementation conditioned the expectation on
+the catcher's own binned pop time, which cancelled exactly the signal
+Savant measures</strong> (it correlated ~0 / slightly negative with the
+leaderboard -- the fixed model correlates positively).</p>
+<p>Run value uses the documented <code>RUN_VALUES</code> fallback constants (see
+<code>sportsdataverse.mlb.mlb_stolen_base</code> for why a real-capture
+attempt's <code>delta_run_exp</code> cannot isolate the steal's own run value from
+the bundled primary batter outcome it is narrated alongside).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>sb_attempts</code><td><code>DataFrame</code><td><td>One row per stolen-base attempt (see <code>sportsdataverse.mlb.mlb_stolen_base.sb_attempts_from_pitches</code>), with <code>catcher_id</code> (Utf8), <code>outcome</code> (<code>"success"</code> \<tr><td><code>poptime</code><td><code>Optional[DataFrame]</code><td><code>None</code><td>Accepted for call-site compatibility and <strong>not used</strong> -- pop time is the catcher's own skill (the mechanism producing above-average CS), so it must never enter the <em>expected</em> CS model.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id | | attempts | Int64 | Stolen-base attempts caught behind the plate | | cs_above_expected | Float64 | Sum of (caught - per-base league CS rate) | | throwing_runs | Float64 | cs_above_expected x |RUN_VALUES["cs"] - RUN_VALUES["sb"]| |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>catcher_id</code><td>character<td><tr><td><code>attempts</code><td>integer<td>Number of batted-ball events (attempts).<tr><td><code>cs_above_expected</code><td>double<td><tr><td><code>throwing_runs</code><td>double<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_catcher_defense </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_catcher_throwing</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">throwing </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_catcher_throwing</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">sb_attempts</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_fielding_oaa>mlb_fielding_oaa<a href=#mlb_fielding_oaa class=hash-link aria-label="Direct link to mlb_fielding_oaa" title="Direct link to mlb_fielding_oaa" translate=no>​</a></h3>
+<p><code>mlb_fielding_oaa(bip: "'pl.DataFrame'", *, l2: 'float' = 0.0001, min_fit: 'int' = 50, by_direction: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Per-fielder outs above average from a per-position catch-probability logistic.</p>
+<p><code>oaa = sum(is_out - p_catch)</code> per <code>(fielder_id, position)</code>, where
+<code>p_catch</code> is a <strong>smooth per-position logistic</strong> P(out | landing
+distance, launch angle, exit velocity, spray angle) (exit velocity x
+launch angle proxy the hang time). A position with fewer than <code>min_fit</code>
+balls in play falls back to its mean out rate. This replaced a coarse
+empirical bin surface, roughly halving the gap to Savant's leaderboard
+(full-season Pearson ~0.40 -> ~0.60). The fielder id is resolved
+dynamically from the responsible position's <code>fielder_{position}</code> column
+(cast <code>Utf8</code> at the boundary).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>bip</code><td><code>DataFrame</code><td><td>Balls-in-play frame with <code>hc_x</code>/<code>hc_y</code>, <code>hit_distance_sc</code>, <code>launch_angle</code>, <code>launch_speed</code>, <code>hit_location</code>, <code>events</code>, and the <code>fielder_1</code>..<code>fielder_9</code> responsible-player columns. MiLB input (e.g. <code>sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors</code>) runs through the same function -- there is no Savant OAA leaderboard oracle for MiLB.<tr><td><code>l2</code><td><code>float</code><td><code>0.0001</code><td>L2 penalty for the per-position logistic. Defaults to <code>1e-4</code>.<tr><td><code>min_fit</code><td><code>int</code><td><code>50</code><td>Minimum balls in play for a position to fit its own logistic; below this the position's mean out rate is used. Defaults to <code>50</code>.<tr><td><code>by_direction</code><td><code>bool</code><td><code>False</code><td>Split each fielder-position into <code>in</code> / <code>back</code> / <code>lateral</code> buckets, using the position's own median landing spot as a stand-in for the fielder start coordinates the public feed lacks (a documented approximation). The split re-groups the same scored balls in play, so the three rows sum exactly to the undirected <code>oaa</code>. Defaults to <code>False</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>one row per <code>(fielder_id, position)</code> -- or per <code>(fielder_id, position, direction)</code> when <code>by_direction=True</code> -- with <code>opportunities</code> and <code>oaa</code>. The rendered column table comes from the committed returns schema (<code>tools/codegen/schemas/autodoc/mlb/mlb_fielding_oaa.yaml</code>); a Markdown table written here would be collapsed onto one line by the docs renderer, which joins the lines of a <code>Returns:</code> block.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>fielder_id</code><td>character<td>Responsible fielder's MLBAM id (the fielder charged with the ball in play).<tr><td><code>position</code><td>integer<td>Fielding position from Savant's <code>hit_location</code>, 1-9.<tr><td><code>direction</code><td>character<td>Movement direction the catch required -- <code>in</code>, <code>back</code> or <code>lateral</code>. Present only when the call passes <code>by_direction=True</code>; the three rows re-group the same scored balls in play, so they sum exactly to the undirected <code>oaa</code>.<tr><td><code>opportunities</code><td>integer<td>Balls in play charged to this fielder (the denominator of the OAA sum).<tr><td><code>oaa</code><td>double<td>Outs above average -- the sum of (out - expected catch probability) over this fielder's opportunities.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_fielding_oaa </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_fielding_oaa</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">oaa </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_fielding_oaa</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">bip</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Per-direction splits (sum to the undirected OAA)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">mlb_fielding_oaa</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">bip</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> by_direction</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step (one line)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">oaa</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"opportunities"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>>=</span><span class="token plain"> </span><span class="token number" style=color:#be123c>100</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"oaa"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_injury_risk>mlb_injury_risk<a href=#mlb_injury_risk class=hash-link aria-label="Direct link to mlb_injury_risk" title="Direct link to mlb_injury_risk" translate=no>​</a></h3>
+<p><code>mlb_injury_risk(pitches: 'pl.DataFrame', *, as_of_date: 'Optional[dt.date]' = None, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Composite pitcher injury-risk index from leakage-safe trailing trends.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Raw pitch frame (from <code>sportsdataverse.mlb.mlb_statcast_search</code>).<tr><td><code>as_of_date</code><td><code>Optional[date]</code><td><code>None</code><td>When given, restricts input to <code>game_date &lt; as_of_date</code> via <code>sportsdataverse.mlb.mlb_pitching_constants.as_of_split</code> before computing trends (an additional leakage boundary on top of the per-appearance trailing-window logic).<tr><td><code>window</code><td><code>int</code><td><code>5</code><td>Trailing-window size passed to <code>pitcher_appearance_trends</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>pitcher</code>, <code>game_pk</code>, <code>game_date</code>, <code>injury_risk_index</code> — equal-weighted sum of standardized adverse features (<code>-velo_trend</code>, <code>-velo_drop</code>, <code>trailing_workload</code>, <code>-days_rest</code>; higher = more risk). Empty input returns a zero-row frame with this schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>pitcher</code><td>integer<td>MLB Advanced Media (MLBAM) id for the pitcher.<tr><td><code>game_pk</code><td>integer<td>Game identifier.<tr><td><code>game_date</code><td>date<td>Calendar date of the game (YYYY-MM-DD).<tr><td><code>injury_risk_index</code><td>double<td>Equal-weighted composite of standardized adverse trailing features (higher = more risk).</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_injury </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_injury_risk</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_injury_risk</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">raw_pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">out</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"injury_risk_index"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> descending</span><span class="token operator" style=color:#4d5b74>=</span><span class="token boolean" style=color:#be123c>True</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_pitch_era>mlb_pitch_era<a href=#mlb_pitch_era class=hash-link aria-label="Direct link to mlb_pitch_era" title="Direct link to mlb_pitch_era" translate=no>​</a></h3>
+<p><code>mlb_pitch_era(pitches: 'pl.DataFrame', seasons: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Combined xERA + SIERA-like estimator (model ③).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Raw pitch frame (from <code>sportsdataverse.mlb.mlb_statcast_search</code>).<tr><td><code>seasons</code><td><code>int</code><td><td>Season year.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>pitcher</code>, <code>season</code>, <code>x_woba</code>, <code>x_era</code>, <code>k_pct</code>, <code>bb_pct</code>, <code>gb_pct</code>, <code>siera_like</code>. Empty input returns a zero-row frame with this schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>pitcher</code><td>integer<td>MLB Advanced Media (MLBAM) id for the pitcher.<tr><td><code>season</code><td>integer<td>MLB season (4-digit start year).<tr><td><code>x_woba</code><td>double<td>Mean estimated_woba_using_speedangle allowed on batted balls.<tr><td><code>x_era</code><td>double<td>Parametric xERA converted from x_woba via the season's league baselines.<tr><td><code>k_pct</code><td>double<td>Strikeout rate (strikeouts / batters faced).<tr><td><code>bb_pct</code><td>double<td>Walk rate (walks + HBP / batters faced).<tr><td><code>gb_pct</code><td>double<td>Ground-ball rate among batted balls.<tr><td><code>siera_like</code><td>double<td>SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_era </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_pitch_era</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_pitch_era</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">raw_pitches</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">out</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"pitcher"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"x_era"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"siera_like"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_pitch_tunneling>mlb_pitch_tunneling<a href=#mlb_pitch_tunneling class=hash-link aria-label="Direct link to mlb_pitch_tunneling" title="Direct link to mlb_pitch_tunneling" translate=no>​</a></h3>
+<p><code>mlb_pitch_tunneling(pitches: 'pl.DataFrame', *, eps: 'float' = 0.01, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Per-pitch release/plate distance from the previous pitch + tunnel ratio.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Output of <code>sportsdataverse.mlb.mlb_pitch_features.add_sequence_features</code> (needs <code>release_pos_x</code>/<code>release_pos_z</code>, <code>prev_release_pos_x</code>/ <code>prev_release_pos_z</code>, <code>plate_x</code>/<code>plate_z</code>, <code>prev_plate_x</code>/<code>prev_plate_z</code>).<tr><td><code>eps</code><td><code>float</code><td><code>0.01</code><td>Minimum <code>release_dist</code> denominator (avoids divide-by-zero).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>pitcher</code>, <code>game_pk</code>, <code>at_bat_number</code>, <code>pitch_number</code>, <code>release_dist</code>, <code>plate_dist</code>, <code>tunnel_ratio</code>. First pitch of a plate appearance (no previous pitch) has null geometry. Empty input returns a zero-row frame with this schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>pitcher</code><td>integer<td>MLB Advanced Media (MLBAM) id for the pitcher.<tr><td><code>game_pk</code><td>integer<td>Game identifier.<tr><td><code>at_bat_number</code><td>integer<td>Game-level plate-appearance sequence number.<tr><td><code>pitch_number</code><td>integer<td>Pitch sequence number within the plate appearance.<tr><td><code>release_dist</code><td>double<td>Euclidean distance between this pitch's release point and the previous pitch's release point.<tr><td><code>plate_dist</code><td>double<td>Euclidean distance between this pitch's plate location and the previous pitch's plate location.<tr><td><code>tunnel_ratio</code><td>double<td>plate_dist / max(release_dist, eps) -- higher means better tunneling (similar release, different result).</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_features </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> pitch_features</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> add_sequence_features</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_sequencing </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_pitch_tunneling</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">feats </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> add_sequence_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitch_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">raw_pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_pitch_tunneling</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">feats</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">out</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"tunnel_ratio"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">describe</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_sequence_run_value>mlb_sequence_run_value<a href=#mlb_sequence_run_value class=hash-link aria-label="Direct link to mlb_sequence_run_value" title="Direct link to mlb_sequence_run_value" translate=no>​</a></h3>
+<p><code>mlb_sequence_run_value(pitches: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Mean run value grouped by the ordered <code>(prev_pitch_type, pitch_type)</code> sequence.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Output of <code>sportsdataverse.mlb.mlb_pitch_features.add_sequence_features</code> (needs <code>prev_pitch_type</code>, <code>pitch_type</code>, <code>run_value</code> / <code>delta_run_exp</code>).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>prev_pitch_type</code>, <code>pitch_type</code>, <code>mean_run_value</code>, <code>n</code> — one row per observed ordered pair (rows with a null <code>prev_pitch_type</code>, i.e. the first pitch of a PA, are dropped). Empty input returns a zero-row frame with this schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>prev_pitch_type</code><td>character<td>Pitch type of the preceding pitch in the sequence.<tr><td><code>pitch_type</code><td>character<td>Pitch type of the current pitch.<tr><td><code>mean_run_value</code><td>double<td>Mean run value of the current pitch, grouped by the ordered (prev_pitch_type, pitch_type) pair.<tr><td><code>n</code><td>integer<td>Number of pitches observed for this ordered pair.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_sequencing </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_sequence_run_value</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_sequence_run_value</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">feats</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">out</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"mean_run_value"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_stolen_base_value>mlb_stolen_base_value<a href=#mlb_stolen_base_value class=hash-link aria-label="Direct link to mlb_stolen_base_value" title="Direct link to mlb_stolen_base_value" translate=no>​</a></h3>
+<p><code>mlb_stolen_base_value(sb_attempts: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Per-runner stolen-base run value: realized-vs-expected run contribution.</p>
+<p><code>sb_run_value = sum(p_success * RUN_VALUES["sb"] + (1 - p_success) * RUN_VALUES["cs"])</code> per attempt -- the documented fallback constants
+(see module docstring for why, not
+<code>sportsdataverse.mlb.mlb_run_values.event_run_value</code> on these
+bundled-<code>des</code> rows), weighted by the surface's modeled success
+probability for that attempt's bin.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>sb_attempts</code><td><code>DataFrame</code><td><td>One row per attempt (see <code>sb_attempts_from_pitches</code>). MiLB feeds run through the same function -- there is no Savant basestealing leaderboard oracle for MiLB.<tr><td><code>sprint_speed</code><td><code>DataFrame</code><td><td>Sprint-speed leaderboard frame (<code>runner_id</code>, <code>sprint_speed</code>).<tr><td><code>poptime</code><td><code>DataFrame</code><td><td>Pop-time leaderboard frame (<code>catcher_id</code>, <code>pop_col</code>).<tr><td><code>speed_bin</code><td><code>float</code><td><code>0.5</code><td>Sprint-speed bin width. Defaults to <code>0.5</code>.<tr><td><code>pop_bin</code><td><code>float</code><td><code>0.05</code><td>Pop-time bin width. Defaults to <code>0.05</code>.<tr><td><code>pop_col</code><td><code>str</code><td><code>'pop_2b_sba'</code><td>Pop-time column name in <code>poptime</code>. Defaults to <code>"pop_2b_sba"</code>.<tr><td><code>alpha</code><td><code>float</code><td><code>2.0</code><td>Laplace smoothing strength for the surface. Defaults to <code>2.0</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>one row per runner. | Column | Type | Description | |---|---|---| | runner_id | Utf8 | Runner MLBAM id | | attempts | Int64 | Stolen-base attempts | | p_success_mean | Float64 | Mean modeled success probability across attempts | | sb_run_value | Float64 | Sum of realized-vs-expected run contribution |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>runner_id</code><td>character<td><tr><td><code>attempts</code><td>integer<td>Number of batted-ball events (attempts).<tr><td><code>p_success_mean</code><td>double<td><tr><td><code>sb_run_value</code><td>double<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_stolen_base </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_stolen_base_value</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">sb_value </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_stolen_base_value</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">sb_attempts</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> sprint_speed</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> poptime</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_times_through_order>mlb_times_through_order<a href=#mlb_times_through_order class=hash-link aria-label="Direct link to mlb_times_through_order" title="Direct link to mlb_times_through_order" translate=no>​</a></h3>
+<p><code>mlb_times_through_order(pitches: 'pl.DataFrame', *, season: 'int' = 2024, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Per-pitch fitted times-through-order fatigue adjustment.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Output of <code>sportsdataverse.mlb.mlb_pitch_features.add_sequence_features</code> (needs <code>times_through_order</code>).<tr><td><code>season</code><td><code>int</code><td><code>2024</code><td>Season year, selects the fitted <code>tto_penalty</code> coefficients via <code>sportsdataverse.mlb.mlb_pitching_constants.get_baselines</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>pitcher</code>, <code>game_pk</code>, <code>at_bat_number</code>, <code>pitch_number</code>, <code>times_through_order</code>, <code>fatigue_rv_adj</code> (the fitted marginal penalty for that TTO level). Empty input returns a zero-row frame with this schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>pitcher</code><td>integer<td>MLB Advanced Media (MLBAM) id for the pitcher.<tr><td><code>game_pk</code><td>integer<td>Game identifier.<tr><td><code>at_bat_number</code><td>integer<td>Game-level plate-appearance sequence number.<tr><td><code>pitch_number</code><td>integer<td>Pitch sequence number within the plate appearance.<tr><td><code>times_through_order</code><td>integer<td>Times through the batting order (1-3).<tr><td><code>fatigue_rv_adj</code><td>double<td>Fitted per-TTO run-value marginal (mlb_pitching_constants.tto_penalty) for this pitch's TTO level.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_features </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> pitch_features</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> add_sequence_features</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_fatigue </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_times_through_order</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">feats </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> add_sequence_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitch_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">raw_pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_times_through_order</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">feats</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> season</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">out</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"times_through_order"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"fatigue_rv_adj"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">unique</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_umpire_bias>mlb_umpire_bias<a href=#mlb_umpire_bias class=hash-link aria-label="Direct link to mlb_umpire_bias" title="Direct link to mlb_umpire_bias" translate=no>​</a></h3>
+<p><code>mlb_umpire_bias(pitches: 'pl.DataFrame', *, model: 'Optional[Dict[str, Any]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"</code></p>
+<p>Per-umpire called-strike bias residual (observed minus expected).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Called pitches with <code>umpire_id</code>, <code>description</code>, <code>plate_x</code>, <code>plate_z</code>, <code>sz_top</code>, <code>sz_bot</code>.<tr><td><code>model</code><td><code>Optional[Dict[str, Any]]</code><td><code>None</code><td>Pre-fit model dict from <code>fit_zone_model</code>; fits on <code>pitches</code> itself when <code>None</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return <code>pandas.DataFrame</code> instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>one row per umpire. | Column | Type | Description | |---|---|---| | umpire_id | Utf8 | Umpire identifier | | n_called | Int64 | Called pitches observed for this umpire | | obs_strike_rate | Float64 | Realized called-strike rate | | exp_strike_rate | Float64 | Mean model-predicted called-strike probability | | bias | Float64 | obs_strike_rate - exp_strike_rate (positive = strike-generous) |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>umpire_id</code><td>character<td>Umpire identifier (statsapi people id, stringified).<tr><td><code>n_called</code><td>integer<td>Called pitches (strike or ball) observed for this umpire.<tr><td><code>obs_strike_rate</code><td>double<td>Realized called-strike rate for this umpire.<tr><td><code>exp_strike_rate</code><td>double<td>Mean model-predicted called-strike probability for this umpire's pitches.<tr><td><code>bias</code><td>double<td>obs_strike_rate minus exp_strike_rate (positive = strike-generous).</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_umpire_zone </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_umpire_bias</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">bias </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_umpire_bias</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=mlb_umpire_called_strike_prob>mlb_umpire_called_strike_prob<a href=#mlb_umpire_called_strike_prob class=hash-link aria-label="Direct link to mlb_umpire_called_strike_prob" title="Direct link to mlb_umpire_called_strike_prob" translate=no>​</a></h3>
+<p><code>mlb_umpire_called_strike_prob(pitches: 'pl.DataFrame', *, model: 'Optional[Dict[str, Any]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"</code></p>
+<p>P(called strike) per pitch from the zone logistic.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Frame with <code>plate_x</code>, <code>plate_z</code>, <code>sz_top</code>, <code>sz_bot</code> (one row per pitch, not required to be called pitches only).<tr><td><code>model</code><td><code>Optional[Dict[str, Any]]</code><td><code>None</code><td>Pre-fit model dict from <code>fit_zone_model</code>; fits on <code>pitches</code> itself when <code>None</code> (using only its called pitches).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return <code>pandas.DataFrame</code> instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>one row per input pitch. | Column | Type | Description | |---|---|---| | called_strike_prob | Float64 | P(called strike | pitch location) |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>called_strike_prob</code><td>double<td>P(called strike | pitch location) from the standardized zone-coordinate logistic.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_umpire_zone </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_umpire_called_strike_prob</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">prob </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_umpire_called_strike_prob</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=pitch_features>pitch_features<a href=#pitch_features class=hash-link aria-label="Direct link to pitch_features" title="Direct link to pitch_features" translate=no>​</a></h3>
+<p><code>pitch_features(pitches: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Build the per-pitch feature substrate every pitching model consumes.</p>
+<p>Standardizes physics (velocity/spin/movement/release/extension) within
+<code>pitcher</code>, derives strike-zone-relative location features, pins id
+columns to <code>Int64</code>, and passes Savant's per-pitch <code>delta_run_exp</code>
+through unchanged as <code>run_value</code> (the single run-value label used by
+Stuff+/Command+/TTO/tunneling).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Raw Savant pitch frame (e.g. from <code>sportsdataverse.mlb.mlb_statcast_search</code>), one row per pitch, carrying <code>pitcher</code>, <code>release_speed</code>, <code>release_spin_rate</code>, <code>pfx_x</code>, <code>pfx_z</code>, <code>release_pos_x</code>, <code>release_pos_z</code>, <code>release_extension</code>, <code>plate_x</code>, <code>plate_z</code>, <code>sz_top</code>, <code>sz_bot</code>, <code>delta_run_exp</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p>One row per pitch with the input columns plus <code>velo_z</code>, <code>spin_z</code>, <code>pfx_x_z</code>, <code>pfx_z_z</code>, <code>release_pos_x_z</code>, <code>release_pos_z_z</code>, <code>extension_z</code> (standardized within <code>pitcher</code>), <code>plate_z_norm</code>, <code>plate_x_abs</code>, <code>in_zone</code>, <code>dist_from_heart</code>, and <code>run_value</code>. Empty/malformed input returns a zero-row frame carrying the added schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>velo_z</code><td>double<td>Release speed standardized (z-score) within pitcher.<tr><td><code>spin_z</code><td>double<td>Release spin rate standardized (z-score) within pitcher.<tr><td><code>pfx_x_z</code><td>double<td>Horizontal movement (pfx_x) standardized (z-score) within pitcher.<tr><td><code>pfx_z_z</code><td>double<td>Vertical movement (pfx_z) standardized (z-score) within pitcher.<tr><td><code>release_pos_x_z</code><td>double<td>Horizontal release position standardized (z-score) within pitcher.<tr><td><code>release_pos_z_z</code><td>double<td>Vertical release position standardized (z-score) within pitcher.<tr><td><code>extension_z</code><td>double<td>Release extension standardized (z-score) within pitcher.<tr><td><code>run_value</code><td>double<td>Savant per-pitch delta_run_exp, passed through unchanged as the spine's single run-value label.<tr><td><code>plate_x_abs</code><td>double<td>Absolute horizontal plate location (distance from the center of the zone).<tr><td><code>plate_z_norm</code><td>double<td>Vertical plate location normalized to the batter's own strike zone, 0 = bottom, 1 = top.<tr><td><code>in_zone</code><td>integer<td>1 if the pitch crossed the strike zone (normalized location + horizontal bound), else 0.<tr><td><code>dist_from_heart</code><td>double<td>Euclidean distance from the normalized zone center (0, 0.5) -- lower is more hittable.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> mlb_statcast_search</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_features </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> pitch_features</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">raw </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> mlb_statcast_search</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"2024-06-15"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"2024-06-15"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> player_type</span><span class="token operator" style=color:#4d5b74>=</span><span class="token string" style=color:#047857>"pitcher"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">feats </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> pitch_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">raw</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">feats</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"pitch_type"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"in_zone"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"run_value"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token comment" style=color:#4d5b74;font-style:italic># Pipeline next step</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain" style=display:inline-block></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">feats</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token builtin">filter</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"in_zone"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"> </span><span class="token operator" style=color:#4d5b74>==</span><span class="token plain"> </span><span class="token number" style=color:#be123c>1</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">group_by</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"pitch_type"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">agg</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pl</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">col</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"run_value"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mean</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=pitcher_appearance_trends>pitcher_appearance_trends<a href=#pitcher_appearance_trends class=hash-link aria-label="Direct link to pitcher_appearance_trends" title="Direct link to pitcher_appearance_trends" translate=no>​</a></h3>
+<p><code>pitcher_appearance_trends(pitches: 'pl.DataFrame', *, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Leakage-safe per-appearance trailing velocity/workload trends.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Raw (or feature-substrate) pitch frame carrying <code>pitcher</code>, <code>game_pk</code>, <code>game_date</code>, <code>pitch_type</code>, <code>release_speed</code>.<tr><td><code>window</code><td><code>int</code><td><code>5</code><td>Number of trailing PRIOR appearances used for the rolling statistics (never includes the current appearance).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p>Per <code>(pitcher, game_pk, game_date)</code>: <code>fb_velo</code> (this game's mean fastball <code>release_speed</code>), <code>velo_trend</code> (OLS slope of <code>fb_velo</code> over the trailing <code>window</code> prior appearances), <code>velo_drop</code> (trailing-baseline mean minus this game's <code>fb_velo</code>), <code>pitches_game</code>, <code>trailing_workload</code> (mean <code>pitches_game</code> over the trailing window), <code>days_rest</code>. The first appearance for a pitcher has null trailing stats (no prior data). Empty input returns a zero-row frame with this schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>pitcher</code><td>integer<td>MLB Advanced Media (MLBAM) id for the pitcher.<tr><td><code>game_pk</code><td>integer<td>Game identifier.<tr><td><code>game_date</code><td>date<td>Calendar date of the game (YYYY-MM-DD).<tr><td><code>fb_velo</code><td>double<td>Mean fastball release speed for this appearance.<tr><td><code>velo_trend</code><td>double<td>OLS slope of fb_velo over the trailing prior appearances (leakage-safe).<tr><td><code>velo_drop</code><td>double<td>Trailing-baseline mean fb_velo minus this appearance's fb_velo.<tr><td><code>pitches_game</code><td>integer<td>Pitches thrown in this appearance.<tr><td><code>trailing_workload</code><td>double<td>Mean pitches_game over the trailing prior appearances (leakage-safe).<tr><td><code>days_rest</code><td>double<td>Days since the pitcher's previous appearance.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_injury </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> pitcher_appearance_trends</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> pitcher_appearance_trends</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">raw_pitches</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> window</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>5</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">out</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">select</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"game_date"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"velo_drop"</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token string" style=color:#047857>"days_rest"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">tail</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=predict_sb_success>predict_sb_success<a href=#predict_sb_success class=hash-link aria-label="Direct link to predict_sb_success" title="Direct link to predict_sb_success" translate=no>​</a></h3>
+<p><code>predict_sb_success(upcoming: "'pl.DataFrame'", history: "'pl.DataFrame'", cutoff_date: 'Any', *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>As-of-date predictive P(success): the surface is fit on history strictly before <code>cutoff_date</code>.</p>
+<p>The leakage boundary: <code>sportsdataverse.mlb.mlb_run_values.as_of_split</code>
+drops every <code>history</code> row with <code>game_date >= cutoff_date</code> before the
+success-rate grid is built, so <code>upcoming</code> attempts are scored only
+against what was knowable at that date.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>upcoming</code><td><code>DataFrame</code><td><td>Attempts to score, each carrying <code>runner_id</code>, <code>base</code>, <code>sprint_speed</code>, and the <code>pop_col</code> pop-time column.<tr><td><code>history</code><td><code>DataFrame</code><td><td>Prior attempts with <code>game_date</code>, <code>outcome</code>, <code>sprint_speed</code>, and <code>pop_col</code> -- used to fit the surface via <code>as_of_split</code>.<tr><td><code>cutoff_date</code><td><code>Any</code><td><td>Exclusive upper bound on <code>history["game_date"]</code>.<tr><td><code>speed_bin</code><td><code>float</code><td><code>0.5</code><td>Sprint-speed bin width. Defaults to <code>0.5</code>.<tr><td><code>pop_bin</code><td><code>float</code><td><code>0.05</code><td>Pop-time bin width. Defaults to <code>0.05</code>.<tr><td><code>pop_col</code><td><code>str</code><td><code>'pop_2b_sba'</code><td>Pop-time column name. Defaults to <code>"pop_2b_sba"</code>.<tr><td><code>alpha</code><td><code>float</code><td><code>2.0</code><td>Laplace smoothing strength. Defaults to <code>2.0</code>.<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>Return a pandas DataFrame instead of polars.</table>
+<p><strong>Returns</strong></p>
+<p>one row per scored attempt. | Column | Type | Description | |---|---|---| | runner_id | Utf8 | Runner MLBAM id | | base | Utf8 | Attempted base | | p_success | Float64 | Modeled success probability, as-of <code>cutoff_date</code> |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>runner_id</code><td>character<td><tr><td><code>base</code><td>character<td><tr><td><code>p_success</code><td>double<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_stolen_base </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> predict_sb_success</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">preds </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> predict_sb_success</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">upcoming</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> history</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> cutoff_date</span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain">dt</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">date</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>6</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>15</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=sb_attempts_from_pitches>sb_attempts_from_pitches<a href=#sb_attempts_from_pitches class=hash-link aria-label="Direct link to sb_attempts_from_pitches" title="Direct link to sb_attempts_from_pitches" translate=no>​</a></h3>
+<p><code>sb_attempts_from_pitches(pitches: "'pl.DataFrame'") -> "'pl.DataFrame'"</code></p>
+<p>Extract stolen-base / caught-stealing attempts from pitch-level Statcast rows.</p>
+<p>Detects attempts via a <code>des</code> regex (see module docstring for why --
+the <code>events</code> column does not carry these in the flat per-pitch search)
+and reads the attempting runner off the pre-play occupancy column
+implied by the attempted base (2B attempt -> <code>on_1b</code>, 3B -> <code>on_2b</code>,
+home -> <code>on_3b</code>).</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>A <code>sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search</code> frame with <code>des</code>, <code>fielder_2</code>, <code>on_1b</code>/<code>on_2b</code>/<code>on_3b</code>, and (if present) <code>game_date</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per attempt. | Column | Type | Description | |---|---|---| | game_date | Date | Game date (if present in the input) | | runner_id | Utf8 | Attempting runner's MLBAM id | | catcher_id | Utf8 | Catcher MLBAM id (Savant <code>fielder_2</code>) | | base | Utf8 | <code>2B</code> | <code>3B</code> | <code>HOME</code> | | outcome | Utf8 | <code>success</code> | <code>caught</code> |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_date</code><td>character<td>Game date (YYYY-MM-DD).<tr><td><code>runner_id</code><td>character<td><tr><td><code>catcher_id</code><td>character<td><tr><td><code>base</code><td>character<td><tr><td><code>outcome</code><td>character<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_stolen_base </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> sb_attempts_from_pitches</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">sb_attempts </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> sb_attempts_from_pitches</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=sb_success_surface>sb_success_surface<a href=#sb_success_surface class=hash-link aria-label="Direct link to sb_success_surface" title="Direct link to sb_success_surface" translate=no>​</a></h3>
+<p><code>sb_success_surface(sb_attempts: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0) -> "'pl.DataFrame'"</code></p>
+<p>Empirical P(stolen-base success) surface over <code>(sprint speed, pop time, base)</code>.</p>
+<p>Rate per bin is Laplace-smoothed: <code>(successes + alpha) / (n + 2 * alpha)</code>.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>sb_attempts</code><td><code>DataFrame</code><td><td>One row per attempt (<code>runner_id</code>, <code>catcher_id</code>, <code>base</code>, <code>outcome</code>).<tr><td><code>sprint_speed</code><td><code>DataFrame</code><td><td>A <code>sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_sprint_speed</code> frame with <code>runner_id</code> (Utf8) and <code>sprint_speed</code>.<tr><td><code>poptime</code><td><code>DataFrame</code><td><td>A <code>sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_poptime</code> frame with <code>catcher_id</code> (Utf8) and the pop-time column named by <code>pop_col</code>.<tr><td><code>speed_bin</code><td><code>float</code><td><code>0.5</code><td>Bin width (ft/sec) for sprint speed. Defaults to <code>0.5</code>.<tr><td><code>pop_bin</code><td><code>float</code><td><code>0.05</code><td>Bin width (seconds) for pop time. Defaults to <code>0.05</code>.<tr><td><code>pop_col</code><td><code>str</code><td><code>'pop_2b_sba'</code><td>Name of the pop-time column in <code>poptime</code>. Defaults to <code>"pop_2b_sba"</code>.<tr><td><code>alpha</code><td><code>float</code><td><code>2.0</code><td>Laplace smoothing strength. Defaults to <code>2.0</code>.</table>
+<p><strong>Returns</strong></p>
+<p>one row per observed <code>(speed_b, pop_b, base)</code>. | Column | Type | Description | |---|---|---| | speed_b | Int64 | Sprint-speed bin index | | pop_b | Int64 | Pop-time bin index | | base | Utf8 | Attempted base | | p_success | Float64 | Laplace-smoothed empirical success probability | | n | Int64 | Attempts observed in this bin |</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>speed_b</code><td>integer<td><tr><td><code>pop_b</code><td>integer<td><tr><td><code>base</code><td>character<td><tr><td><code>p_success</code><td>double<td><tr><td><code>n</code><td>integer<td></table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_stolen_base </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> sb_success_surface</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">surface </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> sb_success_surface</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">sb_attempts</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> sprint_speed</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> poptime</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=siera_like>siera_like<a href=#siera_like class=hash-link aria-label="Direct link to siera_like" title="Direct link to siera_like" translate=no>​</a></h3>
+<p><code>siera_like(pitches: 'pl.DataFrame', season: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>SIERA-like ERA estimator from K%/BB%/GB% (<strong>experimental / provisional</strong>).</p>
+<p>Evaluates the published SIERA functional form with
+<code>mlb_pitching_constants.siera_coef</code>, which are <strong>SEEDED literature
+placeholders</strong> (not yet OLS-fitted — the Task-4.2 next-season-ERA fit has
+not landed). Treat the output as directionally indicative, not a calibrated
+ERA; use <code>x_era</code> (oracle-gated vs Savant's xERA) for a fitted number.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>pitches</code><td><code>DataFrame</code><td><td>Raw pitch frame carrying <code>pitcher</code>, <code>events</code>, and (optionally) <code>bb_type</code>.<tr><td><code>season</code><td><code>int</code><td><td>Season year (unused in the formula itself, carried through for join convenience with <code>x_era</code>).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>pitcher</code>, <code>season</code>, <code>k_pct</code>, <code>bb_pct</code>, <code>gb_pct</code>, <code>siera_like</code>. Empty input returns a zero-row frame with this schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>pitcher</code><td>integer<td>MLB Advanced Media (MLBAM) id for the pitcher.<tr><td><code>season</code><td>integer<td>Season year (carried through for join convenience with x_era).<tr><td><code>k_pct</code><td>double<td>Strikeout rate (strikeouts / batters faced).<tr><td><code>bb_pct</code><td>double<td>Walk rate (walks + HBP / batters faced).<tr><td><code>gb_pct</code><td>double<td>Ground-ball rate among batted balls.<tr><td><code>siera_like</code><td>double<td>SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_era </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> siera_like</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> siera_like</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">raw_pitches</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> </span><span class="token number" style=color:#be123c>2024</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">out</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"siera_like"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">head</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=tto_penalty_table>tto_penalty_table<a href=#tto_penalty_table class=hash-link aria-label="Direct link to tto_penalty_table" title="Direct link to tto_penalty_table" translate=no>​</a></h3>
+<p><code>tto_penalty_table(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"</code></p>
+<p>Observed mean run value by times-through-order, with the penalty vs TTO=1.</p>
+<p><strong>Parameters</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Parameter<th>Type<th>Default<th>Description<tbody><tr><td><code>feats</code><td><code>DataFrame</code><td><td>Output of <code>sportsdataverse.mlb.mlb_pitch_features.add_sequence_features</code> (needs <code>times_through_order</code> and <code>run_value</code>).<tr><td><code>return_as_pandas</code><td><code>bool</code><td><code>False</code><td>When <code>True</code>, return a <code>pandas.DataFrame</code>.</table>
+<p><strong>Returns</strong></p>
+<p><code>times_through_order</code>, <code>mean_run_value</code>, <code>penalty_vs_first</code> (<code>mean_run_value</code> minus the TTO=1 mean run value), <code>n</code>. Empty input returns a zero-row frame with this schema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>times_through_order</code><td>integer<td>Times through the batting order (1-3).<tr><td><code>mean_run_value</code><td>double<td>Mean observed run value for pitches at this TTO level.<tr><td><code>penalty_vs_first</code><td>double<td>mean_run_value minus the TTO=1 mean run value.<tr><td><code>n</code><td>integer<td>Number of pitches observed at this TTO level.</table>
+<p><strong>Example</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_features </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> pitch_features</span><span class="token punctuation" style=color:#4d5b74>,</span><span class="token plain"> add_sequence_features</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>from</span><span class="token plain"> sportsdataverse</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">mlb_pitch_fatigue </span><span class="token keyword" style=color:#02507f>import</span><span class="token plain"> tto_penalty_table</span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">feats </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> add_sequence_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">pitch_features</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">raw_pitches</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain">out </span><span class="token operator" style=color:#4d5b74>=</span><span class="token plain"> tto_penalty_table</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">feats</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token plain"></span><br/></div><div class=token-line style=color:#0e1626><span class="token plain"></span><span class="token keyword" style=color:#02507f>print</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">out</span><span class="token punctuation" style=color:#4d5b74>.</span><span class="token plain">sort</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token string" style=color:#047857>"times_through_order"</span><span class="token punctuation" style=color:#4d5b74>)</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/docs/mlb/reference/additional/analytics.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/mlb/reference/additional/models-and-calculators><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>Models and calculators</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/mlb/reference/additional/dates-and-seasons><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>Dates and seasons</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#add_sequence_features class="table-of-contents__link toc-highlight">add_sequence_features</a><li><a href=#advancement_opportunities class="table-of-contents__link toc-highlight">advancement_opportunities</a><li><a href=#bip_trajectory_features class="table-of-contents__link toc-highlight">bip_trajectory_features</a><li><a href=#called_strike_prob_grid class="table-of-contents__link toc-highlight">called_strike_prob_grid</a><li><a href=#catch_prob_surface class="table-of-contents__link toc-highlight">catch_prob_surface</a><li><a href=#fit_zone_model class="table-of-contents__link toc-highlight">fit_zone_model</a><li><a href=#mlb_baserunning_value class="table-of-contents__link toc-highlight">mlb_baserunning_value</a><li><a href=#mlb_catcher_blocking class="table-of-contents__link toc-highlight">mlb_catcher_blocking</a><li><a href=#mlb_catcher_framing class="table-of-contents__link toc-highlight">mlb_catcher_framing</a><li><a href=#mlb_catcher_throwing class="table-of-contents__link toc-highlight">mlb_catcher_throwing</a><li><a href=#mlb_fielding_oaa class="table-of-contents__link toc-highlight">mlb_fielding_oaa</a><li><a href=#mlb_injury_risk class="table-of-contents__link toc-highlight">mlb_injury_risk</a><li><a href=#mlb_pitch_era class="table-of-contents__link toc-highlight">mlb_pitch_era</a><li><a href=#mlb_pitch_tunneling class="table-of-contents__link toc-highlight">mlb_pitch_tunneling</a><li><a href=#mlb_sequence_run_value class="table-of-contents__link toc-highlight">mlb_sequence_run_value</a><li><a href=#mlb_stolen_base_value class="table-of-contents__link toc-highlight">mlb_stolen_base_value</a><li><a href=#mlb_times_through_order class="table-of-contents__link toc-highlight">mlb_times_through_order</a><li><a href=#mlb_umpire_bias class="table-of-contents__link toc-highlight">mlb_umpire_bias</a><li><a href=#mlb_umpire_called_strike_prob class="table-of-contents__link toc-highlight">mlb_umpire_called_strike_prob</a><li><a href=#pitch_features class="table-of-contents__link toc-highlight">pitch_features</a><li><a href=#pitcher_appearance_trends class="table-of-contents__link toc-highlight">pitcher_appearance_trends</a><li><a href=#predict_sb_success class="table-of-contents__link toc-highlight">predict_sb_success</a><li><a href=#sb_attempts_from_pitches class="table-of-contents__link toc-highlight">sb_attempts_from_pitches</a><li><a href=#sb_success_surface class="table-of-contents__link toc-highlight">sb_success_surface</a><li><a href=#siera_like class="table-of-contents__link toc-highlight">siera_like</a><li><a href=#tto_penalty_table class="table-of-contents__link toc-highlight">tto_penalty_table</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>
