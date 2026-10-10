@@ -362,6 +362,7 @@ from sportsdataverse.cfb.cfb_wp_overtime import (
     adjust_wp as _adjust_wp,
     infer_second_possession as _infer_second,
     ot_first_team as _ot_first_team,
+    ot_forced_two_point as _ot_forced_two_point,
     ot_possession_over_wp as _ot_possession_over_wp,
     ot_shootout_attempt_wp as _ot_shootout_attempt_wp,
     ot_shootout_wp as _ot_shootout_wp,
@@ -395,6 +396,16 @@ def _ot_second(play_df, team_col: str):
     )["s"].to_numpy()
 
 
+def _ot_forced(play_df):
+    """Per row: must a touchdown in this period be followed by a two-point try? None when unknown."""
+    if not {"season", "period"}.issubset(play_df.columns):
+        return None
+    return _ot_forced_two_point(
+        play_df["season"].cast(pl.Float64, strict=False).to_numpy(),
+        play_df["period"].cast(pl.Float64, strict=False).to_numpy(),
+    )
+
+
 def _with_ot_second(play_df):
     """``play_df`` plus ``ot_second_possession`` (the fourth-down and two-point surfaces read it)."""
     second = _ot_second(play_df, "start.pos_team.id")
@@ -418,12 +429,15 @@ def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
     start.columns = names
     end = play_df[end_cols]
     end.columns = names
+    forced = _ot_forced(play_df)
     return (
-        _adjust_wp(model.predict(DMatrix(tb)), tb).astype(np.float32),
-        _adjust_wp(model.predict(DMatrix(start)), start, second=_ot_second(play_df, "start.pos_team.id")).astype(
-            np.float32
-        ),
-        _adjust_wp(model.predict(DMatrix(end)), end, second=_ot_second(play_df, "end.pos_team.id")).astype(np.float32),
+        _adjust_wp(model.predict(DMatrix(tb)), tb, forced=forced).astype(np.float32),
+        _adjust_wp(
+            model.predict(DMatrix(start)), start, second=_ot_second(play_df, "start.pos_team.id"), forced=forced
+        ).astype(np.float32),
+        _adjust_wp(
+            model.predict(DMatrix(end)), end, second=_ot_second(play_df, "end.pos_team.id"), forced=forced
+        ).astype(np.float32),
     )
 
 
@@ -454,10 +468,11 @@ def _ot_end_state_wp(play_df, naive: bool):
     )
     tie = _tie_value(None, n=f.height) if naive else _tie_value(f["start.pos_team_spread"].to_numpy())
     second = _infer_second(_ot_second(play_df, "start.pos_team.id"), f["pos_score_diff_start"].to_numpy())
+    forced = _ot_forced(play_df)
     wp = np.where(
         f["td"].to_numpy(),
-        _ot_touchdown_wp(f["pos_score_diff_start"].to_numpy(), tie, second),
-        _ot_possession_over_wp(f["end.pos_score_diff"].to_numpy(), tie, second),
+        _ot_touchdown_wp(f["pos_score_diff_start"].to_numpy(), tie, second, forced),
+        _ot_possession_over_wp(f["end.pos_score_diff"].to_numpy(), tie, second, forced),
     )
     return f["mask"].to_numpy(), wp
 

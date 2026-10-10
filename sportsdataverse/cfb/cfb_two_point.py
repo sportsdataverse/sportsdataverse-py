@@ -52,6 +52,7 @@ from xgboost import Booster, DMatrix
 
 from sportsdataverse.cfb.cfb_fourth_down import (
     FD_ERA_BOUNDS,
+    _ot_forced,
     _PBP_COLS,
     _flip_team_state,
     _posteam_total,
@@ -166,7 +167,7 @@ def _wp_after_pts(st: pd.DataFrame, pts: int) -> np.ndarray:
         margin = st["pos_score_diff_start"].to_numpy().astype(float)  # after the touchdown
         second = _infer_second(st["ot_second"].to_numpy() if "ot_second" in st.columns else None, margin - 6.0)
         tie = _tie_value(st["pos_team_spread"].to_numpy())
-        wp = np.where(ot, _ot_possession_over_wp(margin + pts, tie, second), wp)
+        wp = np.where(ot, _ot_possession_over_wp(margin + pts, tie, second, _ot_forced(st)), wp)
     return wp
 
 
@@ -195,6 +196,11 @@ def get_2pt_probs(pbp_df: Any) -> pd.DataFrame:
         * ``two_pt_recommendation`` -- ``"go_for_2"`` iff ``two_pt_wp > xp_wp``
           else ``"kick_xp"`` (None where the inputs are NaN).
         * ``two_pt_wp_diff`` -- ``two_pt_wp - xp_wp`` (positive => go for 2).
+
+        An overtime period whose rules force the two-point try
+        (:func:`sportsdataverse.cfb.cfb_wp_overtime.ot_forced_two_point`: the third
+        overtime on before 2021, the second from 2021) has no kick to choose: ``xp_wp``
+        and ``two_pt_wp_diff`` are null and the recommendation is ``"go_for_2"``.
 
         When the two-point model isn't bundled
         (:data:`TWO_PT_MODEL_AVAILABLE` is False) or the required state columns
@@ -243,11 +249,14 @@ def get_2pt_probs(pbp_df: Any) -> pd.DataFrame:
     prob_xp = _XP_MAKE_PROB
 
     two_pt_wp = prob_2pt * wp2 + (1.0 - prob_2pt) * wp0
-    xp_wp = prob_xp * wp1 + (1.0 - prob_xp) * wp0
+    # no kick to choose where the overtime rules force the two-point try
+    forced = _ot_forced(st)
+    xp_wp = np.where(forced, np.nan, prob_xp * wp1 + (1.0 - prob_xp) * wp0)
     two_pt_wp_diff = two_pt_wp - xp_wp
 
     rec = np.where(two_pt_wp > xp_wp, "go_for_2", "kick_xp")
     rec = np.where(np.isnan(two_pt_wp_diff), None, rec)
+    rec = np.where(forced & ~np.isnan(two_pt_wp), "go_for_2", rec)
 
     out = base.copy()
     out["two_pt_wp"] = two_pt_wp

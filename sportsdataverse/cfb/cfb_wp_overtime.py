@@ -35,9 +35,14 @@ A two-point shootout period (2019-20 from the fifth overtime, 2021+ from the thi
 one attempt each: :func:`ot_shootout_wp` values an attempt's result by the other team's
 single attempt, not a drive from the 25.
 
-``ponytail:`` a possession period still assumes a kicked extra point after a touchdown,
-but some force a two-point try (the second from 2021, the third and fourth in 2019-20,
-every one past the second before 2019). Model them when decisions there matter.
+Some possession periods force a two-point try after a touchdown
+(:data:`OT_TWO_POINT_FORCED_FROM`: the third overtime on before 2021, the second from
+2021). Every function that values a touchdown takes a per-row ``forced`` flag
+(:func:`ot_forced_two_point` derives it from season and period); where the kick is
+allowed the first team kicks (``p_extra_point``) and the second team takes the better
+of kick and two, where the try is forced both convert at ``p_two_point``. ``forced``
+left ``None`` means the kick is allowed, which is also what an older feed that files
+every overtime period as period 5 gets (``ponytail``: no overtime number, no rule).
 """
 
 from __future__ import annotations
@@ -57,10 +62,12 @@ from sportsdataverse.cfb.model_cards import _MODEL_DIR, load_model_card
 __all__ = [
     "DRIVE_DESIGN_COLUMNS",
     "NOT_A_SNAP",
+    "OT_TWO_POINT_FORCED_FROM",
     "adjust_wp",
     "drive_design",
     "infer_second_possession",
     "ot_first_team",
+    "ot_forced_two_point",
     "ot_live_wp",
     "ot_possession_over_wp",
     "ot_shootout_attempt_wp",
@@ -75,6 +82,12 @@ _CARD = "wp_ot_reach"
 #: Row types that don't say who has the ball: ESPN credits a stoppage or a flag to
 #: either team (a period can open with "Timeout <the other team>").
 NOT_A_SNAP = ("Timeout", "End Period", "Penalty")
+#: ``(first season, first overtime period)`` from which a touchdown must be followed by a
+#: two-point try (sdv-internal-refs ``rules/cfb.yaml``): from 1996 the third overtime on
+#: (``cfb-1996-overtime-introduced``); 2019-20 still the third and fourth, the fifth on being
+#: a two-point shootout (``cfb-2019-overtime-shootout-from-fifth``); from 2021 the second,
+#: the third on being a shootout (``cfb-2021-overtime-shootout-from-third``).
+OT_TWO_POINT_FORCED_FROM: tuple[tuple[int, int], ...] = ((1996, 3), (2019, 3), (2021, 2))
 #: The drive model's design, in the card's coefficient order (see :func:`drive_design`).
 DRIVE_DESIGN_COLUMNS = [
     "ytg/25",
@@ -129,6 +142,30 @@ def ot_first_team(columns: Any, keys: Optional[list[str]] = None) -> pl.Expr:
     if "type.text" in cols:
         snap = snap & ~pl.col("type.text").is_in(NOT_A_SNAP).fill_null(False)
     return pl.col("start.pos_team.id").filter(snap).first().over(keys)
+
+
+def ot_forced_two_point(season: npt.ArrayLike, period: npt.ArrayLike) -> np.ndarray:
+    """Whether a touchdown in this period must be followed by a two-point try.
+
+    Args:
+        season: The season (the rule table :data:`OT_TWO_POINT_FORCED_FROM` is keyed on it).
+        period: ESPN's period number (5 is the first overtime).
+
+    Returns:
+        A boolean array; regulation, a null season or a null period is ``False`` (the
+        kick is allowed).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_wp_overtime import ot_forced_two_point
+            ot_forced_two_point([2018, 2020, 2021], [6, 7, 6])  # False, True, True
+    """
+    s, p = np.broadcast_arrays(_f(season), _f(period))
+    cut = np.full(s.shape, np.inf)
+    for first_season, first_overtime in OT_TWO_POINT_FORCED_FROM:
+        cut = np.where(s >= first_season, float(first_overtime), cut)
+    return np.asarray(p - 4 >= cut, dtype=bool)
 
 
 def tie_value(spread: Optional[npt.ArrayLike] = None, n: Optional[int] = None) -> np.ndarray:
@@ -187,31 +224,42 @@ def _g(margin: np.ndarray, tie: Any) -> np.ndarray:
     return np.asarray(np.where(np.isnan(margin), np.nan, v), dtype=float)
 
 
-def _after_td(margin: np.ndarray, tie: Any) -> np.ndarray:
-    """Second team's touchdown at ``margin`` (six counted): the better of kick and go for two."""
+def _forced(forced: Optional[npt.ArrayLike]) -> Any:
+    """The per-row forced-two-point flag, ``False`` (the kick is allowed) when not given."""
+    return False if forced is None else np.asarray(forced, dtype=bool)
+
+
+def _after_td(margin: np.ndarray, tie: Any, forced: Optional[npt.ArrayLike] = None) -> np.ndarray:
+    """Second team's touchdown at ``margin`` (six counted): the better of kick and go for two,
+    or the two-point try where the period forces it."""
     p = _params()
     kick = p["p_xp"] * _g(margin + 1, tie) + (1 - p["p_xp"]) * _g(margin, tie)
     two = p["p_2pt"] * _g(margin + 2, tie) + (1 - p["p_2pt"]) * _g(margin, tie)
-    return np.asarray(np.maximum(kick, two), dtype=float)
+    return np.asarray(np.where(_forced(forced), two, np.maximum(kick, two)), dtype=float)
 
 
-def _answer(need: np.ndarray, tie_other: Any) -> np.ndarray:
+def _answer(need: np.ndarray, tie_other: Any, forced: Optional[npt.ArrayLike] = None) -> np.ndarray:
     """The other team's win probability, second in the period, from its 25 at ``need``."""
     p25 = _p25()
     return np.asarray(
-        p25[0] * _after_td(need + 6, tie_other) + p25[1] * _g(need + 3, tie_other) + p25[2] * _g(need, tie_other),
+        p25[0] * _after_td(need + 6, tie_other, forced)
+        + p25[1] * _g(need + 3, tie_other)
+        + p25[2] * _g(need, tie_other),
         dtype=float,
     )
 
 
-def ot_possession_over_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt.ArrayLike) -> np.ndarray:
+def ot_possession_over_wp(
+    margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt.ArrayLike, forced: Optional[npt.ArrayLike] = None
+) -> np.ndarray:
     """Win probability when the possession has just ended at ``margin`` (points counted).
 
     The second team's possession ends the period; the first team's hands the other
-    team its turn from the 25.
+    team its turn from the 25. ``forced`` (:func:`ot_forced_two_point`) says whether a
+    touchdown on that turn must be followed by a two-point try.
     """
     m, t = _f(margin), _f(tie)
-    return np.asarray(np.where(second, _g(m, t), 1.0 - _answer(-m, 1.0 - t)), dtype=float)
+    return np.asarray(np.where(second, _g(m, t), 1.0 - _answer(-m, 1.0 - t, forced)), dtype=float)
 
 
 def ot_shootout_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt.ArrayLike) -> np.ndarray:
@@ -232,12 +280,23 @@ def ot_shootout_attempt_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: np
     return np.asarray(p * ot_shootout_wp(m + 2, tie, second) + (1 - p) * ot_shootout_wp(m, tie, second), dtype=float)
 
 
-def ot_touchdown_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt.ArrayLike) -> np.ndarray:
-    """Win probability right after a touchdown, ``margin`` being the margin before it."""
+def ot_touchdown_wp(
+    margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt.ArrayLike, forced: Optional[npt.ArrayLike] = None
+) -> np.ndarray:
+    """Win probability right after a touchdown, ``margin`` being the margin before it.
+
+    The first team kicks where the kick is allowed and takes the forced two-point try
+    where it is not (``forced``, :func:`ot_forced_two_point`); the second team's try is
+    valued by :func:`_after_td` under the same rule.
+    """
     m, t = _f(margin), _f(tie)
-    p_xp = _params()["p_xp"]
-    first = p_xp * (1.0 - _answer(-(m + 7), 1.0 - t)) + (1 - p_xp) * (1.0 - _answer(-(m + 6), 1.0 - t))
-    return np.asarray(np.where(second, _after_td(m + 6, t), first), dtype=float)
+    p = _params()
+    p_xp, p_2pt = p["p_xp"], p["p_2pt"]
+    miss = 1.0 - _answer(-(m + 6), 1.0 - t, forced)
+    kick = p_xp * (1.0 - _answer(-(m + 7), 1.0 - t, forced)) + (1 - p_xp) * miss
+    two = p_2pt * (1.0 - _answer(-(m + 8), 1.0 - t, forced)) + (1 - p_2pt) * miss
+    first = np.where(_forced(forced), two, kick)
+    return np.asarray(np.where(second, _after_td(m + 6, t, forced), first), dtype=float)
 
 
 def ot_live_wp(
@@ -247,19 +306,22 @@ def ot_live_wp(
     ytg: npt.ArrayLike,
     tie: npt.ArrayLike,
     second: npt.ArrayLike,
+    forced: Optional[npt.ArrayLike] = None,
 ) -> np.ndarray:
     """Win probability of the team with the ball at a live overtime snap.
 
     Bounded to ``[live_bound, 1 - live_bound]`` (card): the rules make some snaps
     certain, but ESPN's overtime feed has possession and score errors that turn a
     certain call into a miss, so the bound is fitted on 2004-21 like everything else.
+    ``forced`` (:func:`ot_forced_two_point`) marks the periods whose touchdowns must be
+    followed by a two-point try.
     """
     m = _f(margin)
     p = _drive_probs(ytg, down, distance)
     v = (
-        p[:, 0] * ot_touchdown_wp(m, tie, second)
-        + p[:, 1] * ot_possession_over_wp(m + 3, tie, second)
-        + p[:, 2] * ot_possession_over_wp(m, tie, second)
+        p[:, 0] * ot_touchdown_wp(m, tie, second, forced)
+        + p[:, 1] * ot_possession_over_wp(m + 3, tie, second, forced)
+        + p[:, 2] * ot_possession_over_wp(m, tie, second, forced)
     )
     b = _params()["bound"]
     return np.asarray(np.clip(v, b, 1.0 - b), dtype=float)
@@ -274,7 +336,9 @@ def regulation_final_wp(
     return np.asarray(np.where(final, np.where(m > 0, 1.0, np.where(m < 0, 0.0, _f(tie))), _f(wp)), dtype=float)
 
 
-def adjust_wp(wp: npt.ArrayLike, X: Any, second: Optional[npt.ArrayLike] = None) -> np.ndarray:
+def adjust_wp(
+    wp: npt.ArrayLike, X: Any, second: Optional[npt.ArrayLike] = None, forced: Optional[npt.ArrayLike] = None
+) -> np.ndarray:
     """Turn a regulation booster's output into P(win | state).
 
     Args:
@@ -283,6 +347,9 @@ def adjust_wp(wp: npt.ArrayLike, X: Any, second: Optional[npt.ArrayLike] = None)
             set). The pregame spread is recovered from ``spread_time`` when the frame
             has it; the spread-free frame uses a coin-flip overtime.
         second: Optional per-row "second possession of the overtime period" flags.
+        forced: Optional per-row "a touchdown here must be followed by a two-point try"
+            flags (:func:`ot_forced_two_point` from season and period; the feature
+            frame carries no season). ``None`` allows the kick everywhere.
 
     Returns:
         Regulation rows mixed with the overtime they may reach; overtime rows valued
@@ -304,6 +371,6 @@ def adjust_wp(wp: npt.ArrayLike, X: Any, second: Optional[npt.ArrayLike] = None)
     if ot.any():
         margin = _f(X["pos_score_diff_start"])
         sec = infer_second_possession(second, margin)
-        live = ot_live_wp(margin, X["down"], X["distance"], X["yards_to_goal"], tie, sec)
+        live = ot_live_wp(margin, X["down"], X["distance"], X["yards_to_goal"], tie, sec, forced)
         out = np.where(ot, live, out)
     return np.asarray(out, dtype=float)
