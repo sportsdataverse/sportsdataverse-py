@@ -6716,9 +6716,11 @@ class NFLPlayProcess(object):
                 passes=pl.col("pass").sum(),
                 pass_yards=pl.col("yds_receiving").sum(),
                 # passes / yards_per_pass count sacks as 0-yard dropbacks; their (negative) yards
-                # ride separately so a sack-inclusive yards per dropback can be built from both
+                # ride separately, and yards_per_dropback adds them back: (pass_yards + sack_yards)
+                # over the same dropbacks, the basis of SDV's `yardsdropback`
                 sack_yards=pl.col("yds_sacked").sum(),
                 yards_per_pass=pl.col("yds_receiving").mean(),
+                yards_per_dropback=(pl.col("yds_receiving") + pl.col("yds_sacked")).mean(),
                 passing_first_downs_created=pl.col("first_down_created").sum(),
                 passing_first_downs_created_rate=pl.col("first_down_created").mean(),
                 EPA_passing_overall=pl.col("EPA").sum(),

@@ -119,6 +119,21 @@ def test_team_pass_box_carries_sack_yards(fsu_ncsu):
     assert team[NCSU]["yards_per_pass"] == pytest.approx(team[NCSU]["pass_yards"] / team[NCSU]["passes"])
 
 
+def test_team_pass_box_yards_per_dropback_counts_sack_yards(fsu_ncsu):
+    # SDV's `yardsdropback` basis: (pass_yards + sack_yards) / passes, beside the unchanged yards_per_pass
+    box, _ = fsu_ncsu
+    team = _by(box["team"], "pos_team")
+    for tid in (FSU, NCSU):
+        r = team[tid]
+        assert r["yards_per_dropback"] == pytest.approx((r["pass_yards"] + r["sack_yards"]) / r["passes"])
+    # NC State: 152 yards on 30 dropbacks, four sacks for -28: 124 / 30, under 152 / 30
+    assert (team[NCSU]["pass_yards"], team[NCSU]["passes"]) == (152, 30)
+    assert team[NCSU]["yards_per_dropback"] == pytest.approx(124 / 30)
+    assert team[NCSU]["yards_per_dropback"] < team[NCSU]["yards_per_pass"] == pytest.approx(152 / 30)
+    # Florida State was never sacked: the two agree
+    assert team[FSU]["yards_per_dropback"] == pytest.approx(team[FSU]["yards_per_pass"]) == pytest.approx(203 / 32)
+
+
 def test_fg_kicker_is_credited_on_field_goal_attempts_only():
     # E6: ESPN's "kicker" participant also kicks off and tries PATs; feeding every one of
     # them into fg_kicker_player_name counted kickoffs as field goals, under the
