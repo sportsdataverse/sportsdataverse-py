@@ -2983,6 +2983,7 @@ def load_cfb_adv_turnover(seasons, return_as_pandas: bool = False):
         |Int                      |Int64   |
         |fumbles_lost             |Int64   |
         |pass_breakups            |Int64   |
+        |passes_defended          |Int64   |
         |total_fumbles            |Int64   |
         |fumbles_recovered        |Int64   |
         |team_id                  |Int64   |

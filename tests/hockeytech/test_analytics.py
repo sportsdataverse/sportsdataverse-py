@@ -581,5 +581,5 @@ def test_ot_period_length_matches_sourced_formats() -> None:
     """Regular-season OT lengths per sdv-internal-refs rules/<league>.yaml (informational field, kept correct)."""
     from sportsdataverse.hockeytech._leagues import LEAGUES
 
-    expected = {"pwhl": 300, "ahl": 300, "echl": 420, "ushl": 420, "bchl": 600, "ohl": 300, "whl": 300, "qmjhl": 300}
+    expected = {"pwhl": 300, "ahl": 300, "echl": 420, "ushl": 300, "bchl": 600, "ohl": 300, "whl": 300, "qmjhl": 300}
     assert {lg: LEAGUES[lg].ot_period_length for lg in expected} == expected

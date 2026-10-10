@@ -420,6 +420,7 @@ Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdatave
 | `Int` | Int64 | Interceptions thrown. |
 | `fumbles_lost` | Int64 | Fumbles lost. |
 | `pass_breakups` | Int64 | Passes thrown by this offense that the opposing defense broke up; it equals the opponent's row in the advanced defensive table exactly. |
+| `passes_defended` | Int64 | Passes thrown by this offense that the opposing defense defended, from ESPN's box score (the defense's passesDefended, which excludes interceptions, plus Int). Null where ESPN's box has no passesDefended, mostly before 2023. |
 | `total_fumbles` | Int64 | Team total fumbles. |
 | `fumbles_recovered` | Int64 | Team fumbles recovered. |
 | `team_id` | Int64 | ESPN team id. |

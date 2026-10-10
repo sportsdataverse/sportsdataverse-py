@@ -119,7 +119,7 @@ Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary` and `actions` frames. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
 | `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
 | `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
 | `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
@@ -280,7 +280,7 @@ Per-player Goals Added (g+) with a per-action-type data[] breakdown.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary` and `actions` frames. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
 | `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
 | `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
 | `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |
@@ -584,7 +584,7 @@ Per-team Goals Added for/against with a per-action-type data[] breakdown.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
+| `league_slug` | `league_slug` |  | `Y` |  | ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary` and `actions` frames. USL Super League seasons use split-year labels (`season_name="2024-25"`). |
 | `season_name` | `season_name` |  |  | `Y` | Filter to one or more seasons. Comma-list accepted (`2022,2023`). |
 | `stage_name` | `stage_name` |  |  | `Y` | Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.** |
 | `minimum_minutes` | `minimum_minutes` |  |  | `Y` | Drop players/teams below this minutes-played threshold. |

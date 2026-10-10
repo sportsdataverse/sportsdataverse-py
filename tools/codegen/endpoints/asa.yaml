@@ -124,7 +124,8 @@ endpoints:
   path: /{league_slug}/goalkeepers/goals-added
   path_params:
   - description: 'ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+),
-      `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame.
+      `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary`
+      and `actions` frames.
       USL Super League seasons use split-year labels (`season_name="2024-25"`).'
     name: league_slug
     required: true
@@ -258,7 +259,8 @@ endpoints:
   path: /{league_slug}/players/goals-added
   path_params:
   - description: 'ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+),
-      `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame.
+      `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary`
+      and `actions` frames.
       USL Super League seasons use split-year labels (`season_name="2024-25"`).'
     name: league_slug
     required: true
@@ -513,7 +515,8 @@ endpoints:
   path: /{league_slug}/teams/goals-added
   path_params:
   - description: 'ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+),
-      `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame.
+      `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary`
+      and `actions` frames.
       USL Super League seasons use split-year labels (`season_name="2024-25"`).'
     name: league_slug
     required: true

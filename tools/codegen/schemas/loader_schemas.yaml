@@ -785,6 +785,8 @@ load_cfb_adv_turnover:
   type: Int64
 - name: pass_breakups
   type: Int64
+- name: passes_defended
+  type: Int64
 - name: total_fumbles
   type: Int64
 - name: fumbles_recovered

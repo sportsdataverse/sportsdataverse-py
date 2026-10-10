@@ -3129,10 +3129,10 @@ class NFLPlayProcess(object):
             # nfl-2016-kickoff-touchback-to-25); the boundary used to sit at 2013, which gave 2014-15
             # touchbacks the 25. Shares model_vars.TOUCHBACK_YARDLINE_* with ep_wp.
             yds_kickoff_return=pl.when(
-                (pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") >= 2016),
+                (pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") >= 2016),  # noqa: E712
             )
             .then(100 - TOUCHBACK_YARDLINE_POST_2016)
-            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") < 2016))
+            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") < 2016))  # noqa: E712
             .then(100 - TOUCHBACK_YARDLINE_PRE_2016)
             .when(
                 (pl.col("kickoff_play") == True)

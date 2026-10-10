@@ -188,7 +188,7 @@ def asa_goalkeepers_goals_added(
     Example URL: https://app.americansocceranalysis.com/api/v1/mls/goalkeepers/goals-added
 
     Args:
-        league_slug: ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`).
+        league_slug: ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary` and `actions` frames. USL Super League seasons use split-year labels (`season_name="2024-25"`).
         season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
         stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
         minimum_minutes: Drop players/teams below this minutes-played threshold.
@@ -454,7 +454,7 @@ def asa_players_goals_added(
     Example URL: https://app.americansocceranalysis.com/api/v1/mls/players/goals-added
 
     Args:
-        league_slug: ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`).
+        league_slug: ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary` and `actions` frames. USL Super League seasons use split-year labels (`season_name="2024-25"`).
         season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
         stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
         minimum_minutes: Drop players/teams below this minutes-played threshold.
@@ -933,7 +933,7 @@ def asa_teams_goals_added(
     Example URL: https://app.americansocceranalysis.com/api/v1/mls/teams/goals-added
 
     Args:
-        league_slug: ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns an empty frame. USL Super League seasons use split-year labels (`season_name="2024-25"`).
+        league_slug: ASA league slug: `mls` (2013+), `nwsl` (2016+), `uslc` (2017+), `usl1` (2019+), `mlsnp` (2022+), `nasl` (2017 only) or `usls`. A season before the league floor returns empty `summary` and `actions` frames. USL Super League seasons use split-year labels (`season_name="2024-25"`).
         season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
         stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
         minimum_minutes: Drop players/teams below this minutes-played threshold.

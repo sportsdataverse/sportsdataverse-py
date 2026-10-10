@@ -47,9 +47,10 @@ class LeagueConfig:
     pbp_style: Literal["hockeytech_a", "hockeytech_b"]
     # Regular-season overtime length in seconds (informational; nothing reads it for
     # parsing). Sourced per league in sdv-internal-refs rules/<league>.yaml (entries
-    # *-overtime-*): pwhl 300 (5-min 3v3, rulebook + raw store), ahl 300 (since 2016-17),
-    # echl 420 (since 2019-20), ushl 420 (7-min hybrid since 2016-17), bchl 600 (10-min
-    # 3v3 since 2023-24), CHL majors 300 (3v3 since 2016-17); the unsourced junior A
+    # *-overtime-*): pwhl 300 (5-min 3v3, rulebook + raw store), ahl 300 (5-min 3v3 since
+    # 2015-16), echl 420 (since 2019-20), ushl 300 (5-min 3v3 + best-of-3 shootout per the
+    # 2021-22 USHL Rules & Regulations, Exhibit C; the 7-min hybrid ran from 2016-17), bchl 600
+    # (10-min 3v3 since 2023-24), CHL majors 300 (3v3 since 2015-16); the unsourced junior A
     # leagues keep 300 until their format is sourced.
     ot_period_length: int
 
@@ -77,7 +78,7 @@ LEAGUES: Dict[str, LeagueConfig] = {
     "chl": LeagueConfig("CHL", "chl", "ef96ea7d71574f2a", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
     # -- junior (added 2026-07-12) --
     # ushl: gameCenterPlayByPlay ships goals/penalties/goalie-changes only, no coordinates.
-    "ushl": LeagueConfig("USHL", "ushl", "e828f89b243dc43f", 1, 0, _LSCLUSTER, "hockeytech_b", 420),
+    "ushl": LeagueConfig("USHL", "ushl", "e828f89b243dc43f", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
     "bchl": LeagueConfig("BCHL", "bchl", "f3ed30007ad2124e", 1, 0, _LSCLUSTER, "hockeytech_b", 600),
     "ajhl": LeagueConfig("AJHL", "ajhl", "cbe60a1d91c44ade", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
     "sjhl": LeagueConfig("SJHL", "sjhl", "2fb5c2e84bf3e4a8", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
