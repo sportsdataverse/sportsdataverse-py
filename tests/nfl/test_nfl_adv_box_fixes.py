@@ -144,6 +144,22 @@ def test_team_pass_box_carries_sack_yards_beside_sack_inclusive_passes(jax_ind):
     assert (team[30]["sack_yards"], team[5]["sack_yards"]) == (-11, -21)
 
 
+def test_team_pass_box_yards_per_dropback_counts_sack_yards(jax_ind):
+    # SDV's `yardsdropback` basis: (pass_yards + sack_yards) / passes, beside the unchanged yards_per_pass
+    _, box = jax_ind
+    team = _rows(box, "team")
+    for tid in (30, 5):
+        r = team[tid]
+        assert r["yards_per_dropback"] == pytest.approx((r["pass_yards"] + r["sack_yards"]) / r["passes"])
+        assert r["yards_per_dropback"] < r["yards_per_pass"]
+    # IND: 204 yards on 27 dropbacks, sacked for -21: 183 / 27 = 6.78, not 204 / 27 = 7.56
+    assert (team[5]["pass_yards"], team[5]["passes"]) == (204, 27)
+    assert team[5]["yards_per_dropback"] == pytest.approx(183 / 27)
+    assert team[5]["yards_per_pass"] == pytest.approx(204 / 27)
+    # JAX: 245 on 24, sacked for -11: 234 / 24 = 9.75
+    assert team[30]["yards_per_dropback"] == pytest.approx(9.75)
+
+
 def test_expected_turnovers_take_passes_defended_from_espn_box(jax_ind):
     # xTO's pass term is the opponent's ESPN box PD, which in the NFL already counts the INTs
     summary = json.loads((FIX / "summary_401872922.json").read_text())
