@@ -158,3 +158,16 @@ def test_expected_turnovers_take_passes_defended_from_espn_box(jax_ind):
         opp_pd = pd[5 if tid == 30 else 30]
         assert r["passes_defended"] == opp_pd
         assert r["expected_turnovers"] == pytest.approx(0.5 * r["total_fumbles"] + 0.22 * opp_pd)
+
+
+def test_rush_flags_gate_on_rush_and_opportunity_means_four_plus_yards(jax_ind):
+    # opportunity_run was `yds_rushed <= 4` (short runs counted as opportunities) and the three
+    # rush flags gated on type.text == "Rush", dropping rushing TDs; CFB gates on `rush` with >= 4
+    plays, box = jax_ind
+    runs = plays.filter(_t("rush") & _t("scrimmage_play"))
+    assert (runs["opportunity_run"] == (runs["yds_rushed"] >= 4)).all()
+    assert (runs["highlight_run"] == (runs["yds_rushed"] >= 8)).all()
+    team_box = _rows(box, "team")
+    for team, grp in runs.group_by("pos_team"):
+        row = team_box[int(team[0])]
+        assert row["rushing_opportunity_rate"] == pytest.approx((grp["yds_rushed"] >= 4).mean(), abs=0.005)
