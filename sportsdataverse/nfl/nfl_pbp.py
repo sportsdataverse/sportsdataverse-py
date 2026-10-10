@@ -4566,15 +4566,20 @@ class NFLPlayProcess(object):
                 stopped_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 2))
                 .then(True)
                 .otherwise(False),
-                opportunity_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 4))
+                # An opportunity is a carry that REACHED 4 yards (`>= 4`; it read `<= 4`, so short
+                # runs counted and the rate ran ~0.62 against the ladder's ~0.46). Gate on `rush`,
+                # as the CFB processor does: `type.text == "Rush"` drops "Rushing Touchdown" and
+                # fumbled rushes, so a 60-yard TD run was no highlight run and left
+                # adj_rush_yardage null while line_yards below gates on `rush`.
+                opportunity_run=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4))
                 .then(True)
                 .otherwise(False),
-                highlight_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") >= 8))
+                highlight_run=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
                 .then(True)
                 .otherwise(False),
-                adj_rush_yardage=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") > 8))
+                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
                 .then(8)
-                .when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 8))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 8))
                 .then(pl.col("yds_rushed"))
                 .otherwise(None),
             )

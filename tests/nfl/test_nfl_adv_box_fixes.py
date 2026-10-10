@@ -158,3 +158,32 @@ def test_expected_turnovers_take_passes_defended_from_espn_box(jax_ind):
         opp_pd = pd[5 if tid == 30 else 30]
         assert r["passes_defended"] == opp_pd
         assert r["expected_turnovers"] == pytest.approx(0.5 * r["total_fumbles"] + 0.22 * opp_pd)
+
+
+@pytest.mark.parametrize(
+    ("game_id", "name"),
+    [(401872922, "summary_401872922.json"), (401128075, "summary_401128075_trimmed.json.gz")],
+)
+def test_rush_flags_gate_on_rush_and_opportunity_means_four_plus_yards(game_id, name):
+    # opportunity_run was `yds_rushed <= 4` (short runs counted as opportunities) and the three
+    # rush flags gated on type.text == "Rush", dropping rushing TDs; CFB gates on `rush` with >= 4
+    plays, box = _process(game_id, name)
+    runs = plays.filter(_t("rush") & _t("scrimmage_play"))
+    yds = runs["yds_rushed"]
+    assert (runs["opportunity_run"] == (yds >= 4)).all()
+    assert (runs["highlight_run"] == (yds >= 8)).all()
+    assert (runs["adj_rush_yardage"] == pl.Series([min(y, 8) for y in yds.to_list()], dtype=pl.Float64)).all()
+    # the boundary is in the data and lands on the right side: 3 yards no, 4 yards yes
+    three, four = runs.filter(pl.col("yds_rushed") == 3), runs.filter(pl.col("yds_rushed") == 4)
+    assert three.height > 0 and four.height > 0
+    assert not three["opportunity_run"].any() and four["opportunity_run"].all()
+    if game_id == 401128075:
+        # a rushing TD is a rush the old type.text gate dropped
+        td = runs.filter(pl.col("type.text") == "Rushing Touchdown")
+        assert td.height > 0
+        assert (td["opportunity_run"] == (td["yds_rushed"] >= 4)).all()
+        assert td["adj_rush_yardage"].null_count() == 0
+    team_box = _rows(box, "team")
+    for team, grp in runs.group_by("pos_team"):
+        row = team_box[int(team[0])]
+        assert row["rushing_opportunity_rate"] == pytest.approx((grp["yds_rushed"] >= 4).mean(), abs=0.005)
