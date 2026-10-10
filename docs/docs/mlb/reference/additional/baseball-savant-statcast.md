@@ -315,6 +315,11 @@ html = mlb_statcast_player(592450, raw=True)
 
 Pitch-by-pitch MLB Statcast search (`/statcast_search/csv`), date-chunked.
 
+A window starting before `STATCAST_SEARCH_FLOOR` (2008-03-25, the first
+PITCHf/x regular-season day) is clamped to the floor with a `UserWarning`;
+Savant answers earlier dates with empty CSVs, which used to come back as a
+silent zero-row frame.
+
 Savant caps a single `/statcast_search/csv` response at **25,000 rows with
 no pagination**. This splits the date range into `chunk_days` windows,
 halving any window that hits the cap, and stitches the chunks back together.

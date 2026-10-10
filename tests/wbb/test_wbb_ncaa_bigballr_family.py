@@ -232,3 +232,51 @@ def test_return_as_pandas_passthrough(wbb_pbp: pl.DataFrame) -> None:
 
     assert isinstance(ncaa_wbb_team_ids(return_as_pandas=True), pd.DataFrame)
     assert isinstance(ncaa_wbb_possessions(wbb_pbp, return_as_pandas=True), pd.DataFrame)
+
+
+# -- era-aware period model (rules/wbb.yaml#wbb-2016-four-quarters) -------------
+# pbp_1613299 is a halves-era page (first-period clock runs from 20:00);
+# pbp_5722355 is a quarters-era page (from 10:00). Both are committed captures.
+HALVES_GAME = "1613299"
+QUARTERS_GAME = "5722355"
+
+
+def _html(game_id: str) -> str:
+    return (HTML_DIR / f"pbp_{game_id}.html").read_text(encoding="utf-8")
+
+
+def test_infer_wbb_period_model_from_page() -> None:
+    from sportsdataverse.wbb.wbb_ncaa_game_pbp import infer_wbb_period_model
+
+    assert infer_wbb_period_model(_html(HALVES_GAME)) == (2, 1200, 300)
+    assert infer_wbb_period_model(_html(QUARTERS_GAME)) == (4, 600, 300)
+    assert infer_wbb_period_model("<html></html>") == (4, 600, 300)
+
+
+def test_ncaa_wbb_game_pbp_halves_era_page_parses_rows() -> None:
+    """The defect: the quarters model on a halves page yields ZERO rows silently."""
+    from sportsdataverse.mbb.mbb_ncaa_game_pbp import parse_ncaa_bb_game_pbp
+
+    html = _html(HALVES_GAME)
+    assert parse_ncaa_bb_game_pbp(html, HALVES_GAME, period_model=(4, 600, 300)).height == 0
+    inferred = ncaa_wbb_game_pbp(HALVES_GAME, fetcher=FakePbpFetcher())
+    pinned = ncaa_wbb_game_pbp(HALVES_GAME, season=2015, fetcher=FakePbpFetcher())
+    expected = parse_ncaa_bb_game_pbp(html, HALVES_GAME, period_model=(2, 1200, 300))
+    assert inferred.height == expected.height > 0
+    assert inferred.equals(expected)
+    assert pinned.equals(expected)
+    assert inferred["period"].max() == 2
+
+
+def test_ncaa_wbb_play_by_play_mixed_eras() -> None:
+    df = ncaa_wbb_play_by_play([HALVES_GAME, QUARTERS_GAME], fetcher=FakePbpFetcher())
+    per_game = df.group_by("game_id").agg(pl.col("period").max()).sort("game_id")
+    assert per_game.height == 2
+    assert set(per_game["period"].to_list()) == {2, 4}
+
+
+def test_ncaa_wbb_game_pbp_season_pins_quarters() -> None:
+    from sportsdataverse.mbb.mbb_ncaa_game_pbp import parse_ncaa_bb_game_pbp
+
+    expected = parse_ncaa_bb_game_pbp(_html(QUARTERS_GAME), QUARTERS_GAME, period_model=(4, 600, 300))
+    assert ncaa_wbb_game_pbp(QUARTERS_GAME, season="2024-25", fetcher=FakePbpFetcher()).equals(expected)

@@ -15,15 +15,20 @@ from sportsdataverse.cricket.cricket_win_prob import (
 
 # --- Task 2.1: score-string parsing -------------------------------------------
 def test_parse_score_string() -> None:
-    assert _parse_score_string("161/5 (18/20 ov, target 156)") == (161, 5, 108, 156)
+    assert _parse_score_string("161/5 (18/20 ov, target 156)") == (161, 5, 108, 156, 120)
 
 
 def test_parse_score_string_partial_over() -> None:
-    assert _parse_score_string("88/3 (12.4/20 ov)") == (88, 3, 76, None)
+    assert _parse_score_string("88/3 (12.4/20 ov)") == (88, 3, 76, None, 120)
+
+
+def test_parse_score_string_dls_reduced_allocation() -> None:
+    # rules/cricket.yaml#cricket-1999-duckworth-lewis: the denominator is the REVISED allocation
+    assert _parse_score_string("88/3 (12.4/15 ov, target 101)") == (88, 3, 76, 101, 90)
 
 
 def test_parse_score_string_no_limit() -> None:
-    assert _parse_score_string("168/7 (20 ov)") == (168, 7, 120, None)
+    assert _parse_score_string("168/7 (20 ov)") == (168, 7, 120, None, None)
 
 
 def test_parse_score_string_bad() -> None:
@@ -156,3 +161,15 @@ def test_win_prob_odi_format() -> None:
         ]
     )
     assert 0.0 <= cricket_win_probability(st)["win_prob"].item() <= 1.0
+
+
+def test_cricket_match_state_dls_reduced_innings_uses_revised_allocation() -> None:
+    """rules/cricket.yaml#cricket-1999-duckworth-lewis: a 15-over chase carries a 90-ball budget, not 120."""
+    summary = _fake_summary()
+    comps = summary["header"]["competitions"][0]["competitors"]
+    comps[1]["score"] = "88/3 (12.4/15 ov, target 101)"
+    st = cricket_match_state(summary, fmt="t20")
+    second = st.filter(pl.col("innings_number") == 2).to_dicts()[0]
+    assert (second["balls_bowled"], second["balls_total"], second["target"]) == (76, 90, 101)
+    first = st.filter(pl.col("innings_number") == 1).to_dicts()[0]
+    assert first["balls_total"] == 120  # "(20 ov)" carries the allocation, matches the format default

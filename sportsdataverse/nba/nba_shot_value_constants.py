@@ -111,12 +111,36 @@ class ShotValueConfig:
     min_attempts_talent: int = 50
 
 
-# NBA (== G-League court) and WNBA geometry. Corner-3 loc_x and the 3pt radius
-# differ between the men's and women's court; the rim radius is shared.
+# NBA (== G-League court) and WNBA geometry for the CURRENT arc. Corner-3 loc_x
+# and the 3pt radius differ between the men's and women's court; the rim radius
+# is shared. Older seasons used shorter arcs -- see COURT_ERAS / get_court(season=).
 LEAGUE_COURT: "dict[str, CourtGeometry]" = {
     "00": CourtGeometry(rim_radius_ft=4.0, corner3_loc_x_abs=220, three_point_radius_ft=23.75),
     "20": CourtGeometry(rim_radius_ft=4.0, corner3_loc_x_abs=220, three_point_radius_ft=23.75),
     "10": CourtGeometry(rim_radius_ft=4.0, corner3_loc_x_abs=200, three_point_radius_ft=22.13),
+}
+
+# Three-point arc eras, keyed by the FIRST season (END year: 1995 = 1994-95)
+# the geometry applies to; a season maps to the latest era at or before it.
+# Seasons before the first key use the first era (the NBA's 1979-80 arc equals
+# the current one). Sources: sdv-internal-refs rules/nba.yaml
+# nba-1995-three-point-line-shortened / nba-1998-three-point-line-restored
+# (uniform 22 ft, 1994-95 through 1996-97, so the corner equals the arc);
+# rules/wnba.yaml wnba-2004-three-point-line-20-6 (19 ft 9 in 1997-2003,
+# 20 ft 6.25 in 2004-2012) and wnba-2013-three-point-line-fiba (22 ft 1.75 in,
+# corner 200 tenths, 2013+). The G League has always used the NBA court.
+COURT_ERAS: "dict[str, dict[int, CourtGeometry]]" = {
+    "00": {
+        1980: LEAGUE_COURT["00"],
+        1995: CourtGeometry(rim_radius_ft=4.0, corner3_loc_x_abs=220, three_point_radius_ft=22.0),
+        1998: LEAGUE_COURT["00"],
+    },
+    "20": {2002: LEAGUE_COURT["20"]},
+    "10": {
+        1997: CourtGeometry(rim_radius_ft=4.0, corner3_loc_x_abs=198, three_point_radius_ft=19.75),
+        2004: CourtGeometry(rim_radius_ft=4.0, corner3_loc_x_abs=200, three_point_radius_ft=20.52),
+        2013: LEAGUE_COURT["10"],
+    },
 }
 
 # ``"00"`` fitted split-half on the 2022-23 fixture
@@ -137,14 +161,18 @@ ZONE_COLLAPSE: "dict[str, str]" = {
 }
 
 
-def get_court(league_id: str) -> CourtGeometry:
-    """Court geometry for a league.
+def get_court(league_id: str, season: "int | None" = None) -> CourtGeometry:
+    """Court geometry for a league, for the three-point arc in force that season.
 
     Args:
         league_id: ``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League.
+        season: Season as the END year for the NBA / G League (``1996`` =
+            1995-96) or the calendar year for the WNBA. ``None`` returns the
+            current geometry.
 
     Returns:
-        The frozen :class:`CourtGeometry` for that league.
+        The frozen :class:`CourtGeometry` for that league and era
+        (:data:`COURT_ERAS`).
 
     Raises:
         ValueError: Unknown ``league_id``.
@@ -154,11 +182,18 @@ def get_court(league_id: str) -> CourtGeometry:
 
             from sportsdataverse.nba.nba_shot_value_constants import get_court
             get_court("00").corner3_loc_x_abs
+            get_court("00", season=1996).three_point_radius_ft  # 22.0
+            get_court("10", season=2010).three_point_radius_ft  # 20.52
     """
     try:
-        return LEAGUE_COURT[league_id]
+        eras = COURT_ERAS[league_id]
     except KeyError as exc:
         raise ValueError(f"unknown league_id {league_id!r}; expected one of {sorted(LEAGUE_COURT)}") from exc
+    if season is None:
+        return LEAGUE_COURT[league_id]
+    starts = sorted(eras)
+    applicable = [yr for yr in starts if yr <= season]
+    return eras[applicable[-1] if applicable else starts[0]]
 
 
 def get_shrinkage_k(league_id: str) -> float:

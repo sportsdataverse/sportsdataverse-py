@@ -196,6 +196,11 @@ def _search_core(
     return out
 
 
+#: First regular-season day with pitch tracking on Savant (PITCHf/x, 2008-03-25);
+#: earlier windows return empty CSVs (rules/mlb.yaml#mlb-2008-pitchfx-pitch-tracking).
+STATCAST_SEARCH_FLOOR = "2008-03-25"
+
+
 def mlb_statcast_search(
     start_dt: str,
     end_dt: str,
@@ -206,6 +211,11 @@ def mlb_statcast_search(
     **filters: Any,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Pitch-by-pitch MLB Statcast search (``/statcast_search/csv``), date-chunked.
+
+    A window starting before :data:`STATCAST_SEARCH_FLOOR` (2008-03-25, the first
+    PITCHf/x regular-season day) is clamped to the floor with a ``UserWarning``;
+    Savant answers earlier dates with empty CSVs, which used to come back as a
+    silent zero-row frame.
 
     Savant caps a single ``/statcast_search/csv`` response at **25,000 rows with
     no pagination**. This splits the date range into ``chunk_days`` windows,
@@ -241,6 +251,14 @@ def mlb_statcast_search(
             from sportsdataverse.mlb import mlb_statcast_search
             df = mlb_statcast_search("2024-06-15", "2024-06-16", batters_lookup=592450)
     """
+    if start_dt < STATCAST_SEARCH_FLOOR:
+        warnings.warn(
+            f"Statcast pitch tracking starts {STATCAST_SEARCH_FLOOR}; start_dt={start_dt!r} clamped to the floor "
+            "(earlier dates return empty CSVs).",
+            UserWarning,
+            stacklevel=2,
+        )
+        start_dt = STATCAST_SEARCH_FLOOR
     return _search_core(
         start_dt,
         end_dt,

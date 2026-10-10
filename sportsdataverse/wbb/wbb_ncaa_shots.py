@@ -70,6 +70,8 @@ def ncaa_wbb_shot_locations(
     def _run(f: Any) -> "list[pl.DataFrame]":
         frames: "list[pl.DataFrame]" = []
         for gid in ids:
+            # Quarters model only: stats.ncaa.org shot locations exist from 2019 (quarters era),
+            # so no halves-era page can reach this parser (rules/wbb.yaml#wbb-2019-ncaa-stats-shot-locations).
             df = parse_ncaa_bb_shots(f.fetch_game_box(gid), str(gid), period_model=_WBB_PERIOD_MODEL)
             found = sorted({t for t in df["team"].to_list() if t is not None})
             logger.info(

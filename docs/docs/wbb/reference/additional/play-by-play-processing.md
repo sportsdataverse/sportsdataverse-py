@@ -185,21 +185,51 @@ from sportsdataverse.mbb.mbb_shots_adapter import fit_espn_court_scale
 scale = fit_espn_court_scale(espn, league="mens", season=2025)
 ```
 
+### infer_wbb_period_model {#infer_wbb_period_model}
+
+`infer_wbb_period_model(html: 'str') -> "'tuple[int, int, int]'"`
+
+Tell a halves-era WBB page from a quarters-era one by its first-period clock.
+
+stats.ncaa.org serves one table per period after the line score; the first
+period table's clock column runs down from 20:00 in a halves game and from
+10:00 in a quarters game, so any clock above 600 seconds identifies the
+halves era. The line-score width alone cannot (halves + 2 OT and quarters
++ 0 OT both have six columns).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `html` | `str` |  | The raw play-by-play page. |
+
+**Returns**
+
+`(2, 1200, 300)` when a first-period clock above 10:00 is present, otherwise `(4, 600, 300)` (an unreadable page falls through to the modern model, matching `~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_ncaa_game_pbp import infer_wbb_period_model
+infer_wbb_period_model(open("pbp_1613299.html").read())  # (2, 1200, 300)
+```
+
 ### ncaa_wbb_game_pbp {#ncaa_wbb_game_pbp}
 
-`ncaa_wbb_game_pbp(game_id: 'object', *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`ncaa_wbb_game_pbp(game_id: 'object', *, season: 'Optional[object]' = None, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-Scrape one WBB game's play-by-play (wbigballR `scrape_game`, quarters fixed).
+Scrape one WBB game's play-by-play (wbigballR `scrape_game`, era-aware).
 
 Same engine as `sportsdataverse.mbb.mbb_ncaa_game_pbp.ncaa_mbb_game_pbp`
-with `period_model=(4, 600, 300)` bound (see the module docstring for why
-this deliberately diverges from wbigballR's halves math).
+with the WBB period model for the game's era bound: halves through 2014-15,
+quarters from 2015-16 (see the module docstring).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `object` |  | NCAA contest id (e.g. `"5722355"`). |
+| `season` | `Optional[object]` | `None` | Season as an ending year (`2015`) or span (`"2014-15"`). When omitted the era is inferred from the page's first-period clock (`infer_wbb_period_model`). |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp` (for tests/offline use). Defaults to a fresh `NcaaFetcher.with_browser()` context per call. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
@@ -251,23 +281,28 @@ The 35-column play-by-play frame (zero rows when the game is not found).
 from sportsdataverse.wbb.wbb_ncaa_game_pbp import ncaa_wbb_game_pbp
 df = ncaa_wbb_game_pbp("5722355")
 print(df.shape)
+
+# Pin the era explicitly for a 2014-15 (halves) game
+
+df = ncaa_wbb_game_pbp("1613299", season=2015)
 ```
 
 ### ncaa_wbb_play_by_play {#ncaa_wbb_play_by_play}
 
-`ncaa_wbb_play_by_play(game_ids: 'Sequence[object]', *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`ncaa_wbb_play_by_play(game_ids: 'Sequence[object]', *, season: 'Optional[object]' = None, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, quarters fixed).
+Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, era-aware).
 
 Same driver as `sportsdataverse.mbb.mbb_ncaa_game_pbp.ncaa_mbb_play_by_play`
 (drop missing ids, shared fetcher session, one retry per empty scrape) with
-the WBB quarter model `(4, 600, 300)` bound.
+the WBB period model for each game's era bound.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries are dropped. |
+| `season` | `Optional[object]` | `None` | Season shared by every id, as an ending year or span. When omitted each page's era is inferred from its first-period clock, so ids from both eras may be mixed. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 

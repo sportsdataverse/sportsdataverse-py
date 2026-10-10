@@ -57,28 +57,34 @@ STATE_SCHEMA: dict[str, pl.DataType] = {
 
 # ESPN cricket score strings look like ``"161/5 (18/20 ov, target 156)"`` or
 # ``"88/3 (12.4/20 ov)"``. No regex lookaround (Rust/polars unsupported); the
-# inline ``(?i)`` folds case. Groups: runs, wickets?, overs, partial-ball?, target?.
+# inline ``(?i)`` folds case. Groups: runs, wickets?, overs, partial-ball?,
+# overs-limit? (the DLS-reduced allocation when present), target?.
 _SCORE_RE = re.compile(
-    r"(?i)(\d+)(?:/(\d+))?\s*\(\s*(\d+)(?:\.(\d))?(?:\s*/\s*\d+)?\s*ov(?:er)?s?(?:,\s*target\s*(\d+))?\s*\)"
+    r"(?i)(\d+)(?:/(\d+))?\s*\(\s*(\d+)(?:\.(\d))?(?:\s*/\s*(\d+))?\s*ov(?:er)?s?(?:,\s*target\s*(\d+))?\s*\)"
 )
 
 
-def _parse_score_string(score: object) -> tuple[int, int, int, int | None] | None:
-    """Parse an ESPN cricket score string to ``(runs, wickets, balls, target)``.
+def _parse_score_string(score: object) -> tuple[int, int, int, int | None, int | None] | None:
+    """Parse an ESPN cricket score string to ``(runs, wickets, balls, target, balls_total)``.
 
     Args:
         score: A cricket score string, e.g. ``"161/5 (18/20 ov, target 156)"``.
 
     Returns:
-        ``(runs, wickets, balls_bowled, target)`` where ``balls_bowled`` is
-        ``overs * 6 + partial_ball`` and ``target`` is ``None`` in the first
-        innings; ``None`` if the string does not parse.
+        ``(runs, wickets, balls_bowled, target, balls_total)`` where
+        ``balls_bowled`` is ``overs * 6 + partial_ball``, ``target`` is ``None``
+        in the first innings, and ``balls_total`` is the over allocation after
+        the slash times six (``None`` when the string carries none). A
+        DLS-reduced innings shows its REVISED allocation, e.g.
+        ``"88/3 (12.4/15 ov)"`` -> 90, not the format's 120
+        (rules/cricket.yaml#cricket-1999-duckworth-lewis). ``None`` if the
+        string does not parse.
 
     Example:
         Quick start::
 
             from sportsdataverse.cricket.cricket_win_prob import _parse_score_string
-            _parse_score_string("161/5 (18/20 ov, target 156)")  # (161, 5, 108, 156)
+            _parse_score_string("161/5 (18/20 ov, target 156)")  # (161, 5, 108, 156, 120)
     """
     if not isinstance(score, str):
         return None
@@ -89,8 +95,9 @@ def _parse_score_string(score: object) -> tuple[int, int, int, int | None] | Non
     wickets = int(m.group(2)) if m.group(2) is not None else 0
     overs = int(m.group(3))
     partial = int(m.group(4)) if m.group(4) is not None else 0
-    target = int(m.group(5)) if m.group(5) is not None else None
-    return runs, wickets, overs * 6 + partial, target
+    balls_total = int(m.group(5)) * 6 if m.group(5) is not None else None
+    target = int(m.group(6)) if m.group(6) is not None else None
+    return runs, wickets, overs * 6 + partial, target, balls_total
 
 
 def _find_competition(summary: Any) -> dict:
@@ -154,7 +161,7 @@ def cricket_match_state(summary: dict, *, fmt: str, return_as_pandas: bool = Fal
         parsed = _parse_score_string(c.get("score")) if isinstance(c, dict) else None
         if parsed is None:
             continue
-        runs, wickets, balls, target = parsed
+        runs, wickets, balls, target, balls_total = parsed
         team_id = (c.get("team") or {}).get("id") if isinstance(c.get("team"), dict) else c.get("id")
         rows.append(
             {
@@ -164,7 +171,9 @@ def cricket_match_state(summary: dict, *, fmt: str, return_as_pandas: bool = Fal
                 "runs": runs,
                 "wickets": wickets,
                 "balls_bowled": balls,
-                "balls_total": fc.balls_total,
+                # the score string's own allocation wins over the format default: a DLS-reduced
+                # innings must not keep the full 120/300-ball budget against its revised target
+                "balls_total": fc.balls_total if balls_total is None else balls_total,
                 "target": target,
                 "fmt": fc.name,
             }

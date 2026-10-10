@@ -2,8 +2,10 @@ api: mls_api
 docstring:
   example_import: true
   raises:
-  - 'sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id,
-    or an unplayed match on ``/matches/{matchId}``).'
+  - 'sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an
+    unplayed match on ``/matches/{matchId}``). On the season-addressable stats-api endpoints
+    (``season_matches``, ``standings``, ``competition_seasons``) a season before 2024 has no
+    addressable id -- the stats-api serves 2024+ only.'
   see_also:
   - name: MLS
     note: the public site these hosts render

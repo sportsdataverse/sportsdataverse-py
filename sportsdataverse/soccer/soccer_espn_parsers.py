@@ -196,9 +196,37 @@ def _coords(block: dict) -> dict:
     return {col: block.get(key) for col, key in _COORD_KEYS.items()}
 
 
+_COORD_PAIRS = (
+    ("field_position_x", "field_position_y"),
+    ("field_position2_x", "field_position2_y"),
+    ("goal_position_x", "goal_position_y"),
+)
+
+
 def _float_coords(df: pl.DataFrame) -> pl.DataFrame:
-    # All-null columns would otherwise infer the Null dtype.
-    return df.with_columns(pl.col(list(_COORD_KEYS)).cast(pl.Float64))
+    # All-null columns would otherwise infer the Null dtype. ESPN emits (0.0, 0.0) for an
+    # UNLOCATED event (every commentary row before a competition's located era, and single
+    # unlocated rows after it); a real event at the exact corner origin does not occur, so the
+    # pair is nulled rather than passed through as a position
+    # (sdv-internal-refs rules/epl.yaml#epl-2009-espn-commentary-coverage-start).
+    out = df.with_columns(pl.col(list(_COORD_KEYS)).cast(pl.Float64))
+    unlocated = [(pl.col(x) == 0.0) & (pl.col(y) == 0.0) for x, y in _COORD_PAIRS]
+    return out.with_columns(
+        [
+            pl.when(mask).then(None).otherwise(pl.col(c)).alias(c)
+            for mask, (x, y) in zip(unlocated, _COORD_PAIRS)
+            for c in (x, y)
+        ]
+    )
+
+
+def _strip_strings(df: pl.DataFrame) -> pl.DataFrame:
+    # ESPN athlete / team displayNames carry trailing spaces in some seasons ("Caiuby ", "Adrián ");
+    # a join or group-by on the raw value silently splits one player in two
+    # (rules/epl.yaml#epl-2002-espn-athlete-names-trailing-space).
+    if df.height == 0 or not any(dt == pl.Utf8 for dt in df.schema.values()):
+        return df
+    return df.with_columns(pl.col(pl.Utf8).str.strip_chars())
 
 
 def _build_key_events(payload: dict) -> pl.DataFrame:
@@ -714,5 +742,5 @@ def parse_soccer_summary(
         builder = _SOCCER_SUMMARY_BUILDERS.get(section)
         if builder is None:
             return _out(pl.DataFrame(), return_as_pandas)
-        return _out(builder(p), return_as_pandas)
-    return {name: fn(p) for name, fn in _SOCCER_SUMMARY_BUILDERS.items()}
+        return _out(_strip_strings(builder(p)), return_as_pandas)
+    return {name: _strip_strings(fn(p)) for name, fn in _SOCCER_SUMMARY_BUILDERS.items()}

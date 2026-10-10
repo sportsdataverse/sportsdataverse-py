@@ -15,7 +15,7 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
 | [Her Hoop Stats](#her-hoop-stats) | `herhoopstats.com` | 5 | subscription |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 316 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 317 | — |
 
 ## ESPN {#espn}
 
@@ -67,6 +67,7 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 - [`classify_zone_type`](reference/additional/play-by-play-processing#classify_zone_type)
 - [`espn_shots_to_canonical`](reference/additional/play-by-play-processing#espn_shots_to_canonical)
 - [`fit_espn_court_scale`](reference/additional/play-by-play-processing#fit_espn_court_scale)
+- [`infer_wbb_period_model`](reference/additional/play-by-play-processing#infer_wbb_period_model)
 - [`ncaa_wbb_game_pbp`](reference/additional/play-by-play-processing#ncaa_wbb_game_pbp)
 - [`ncaa_wbb_play_by_play`](reference/additional/play-by-play-processing#ncaa_wbb_play_by_play)
 - [`shot_events_to_frame`](reference/additional/play-by-play-processing#shot_events_to_frame)

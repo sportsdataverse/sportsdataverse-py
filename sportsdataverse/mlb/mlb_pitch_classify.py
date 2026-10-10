@@ -87,8 +87,12 @@ def _cluster_one_pitcher(group: pl.DataFrame, *, max_components: int, seed: int)
     # several genuinely distinct pitches identically) -- disambiguate any
     # label collisions across clusters for this pitcher with a numeric
     # suffix so the reclass output still distinguishes the clusters.
+    # Savant retired the two-seam label (FT) into SI; mixed-era input would otherwise split one
+    # physical sinker cluster across two competing modal labels (rules/mlb.yaml
+    # mlb-2020-two-seam-sinker-merge).
     modal = (
-        group.group_by("_cluster_id", "pitch_type")
+        group.with_columns(pl.col("pitch_type").replace({"FT": "SI"}))
+        .group_by("_cluster_id", "pitch_type")
         .agg(pl.len().alias("n"))
         .sort("n", descending=True)
         .group_by("_cluster_id")

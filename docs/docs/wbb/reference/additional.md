@@ -190,8 +190,9 @@ not covered by the generated API-endpoint reference above.
 | [classify_zone_type](additional/play-by-play-processing.md#classify_zone_type) | Collapse a source shot-type label to `rim \| arc3 \| jump`. |
 | [espn_shots_to_canonical](additional/play-by-play-processing.md#espn_shots_to_canonical) | ESPN `load_mbb_shots` frame -> the canonical shot frame. |
 | [fit_espn_court_scale](additional/play-by-play-processing.md#fit_espn_court_scale) | Fit the ESPN raw-coordinate court scale: `(origin_x, origin_y, feet_per_unit)`. |
-| [ncaa_wbb_game_pbp](additional/play-by-play-processing.md#ncaa_wbb_game_pbp) | Scrape one WBB game's play-by-play (wbigballR `scrape_game`, quarters fixed). |
-| [ncaa_wbb_play_by_play](additional/play-by-play-processing.md#ncaa_wbb_play_by_play) | Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, quarters fixed). |
+| [infer_wbb_period_model](additional/play-by-play-processing.md#infer_wbb_period_model) | Tell a halves-era WBB page from a quarters-era one by its first-period clock. |
+| [ncaa_wbb_game_pbp](additional/play-by-play-processing.md#ncaa_wbb_game_pbp) | Scrape one WBB game's play-by-play (wbigballR `scrape_game`, era-aware). |
+| [ncaa_wbb_play_by_play](additional/play-by-play-processing.md#ncaa_wbb_play_by_play) | Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, era-aware). |
 | [shot_events_to_frame](additional/play-by-play-processing.md#shot_events_to_frame) | Flatten NCAA HTML `ShotEvent` objects to the canonical frame. |
 | [wbb_pbp_disk](additional/play-by-play-processing.md#wbb_pbp_disk) | Read a saved ESPN WBB play-by-play payload from disk. |
 

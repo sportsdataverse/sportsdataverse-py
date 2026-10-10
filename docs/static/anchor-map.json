@@ -4515,6 +4515,7 @@
   "herhoopstats_teams": "her-hoop-stats",
   "in_game_features": "models-and-calculators-2",
   "incorporate_height": "analytics",
+  "infer_wbb_period_model": "play-by-play-processing",
   "inject_luck": "analytics",
   "inject_rapm_into_players": "models-and-calculators-2",
   "inject_starting_lineup_into_box": "stats-ncaa-org-2",
