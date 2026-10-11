@@ -141,9 +141,18 @@ def _pytest(row: Dict[str, Any], root: Path) -> Dict[str, Any]:
     with tempfile.TemporaryDirectory(prefix="run-mutants-pycache-", ignore_cleanup_errors=True) as cache:
         env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1", "PYTHONPYCACHEPREFIX": cache}
         try:
-            # argv is a list built from the committed registry, run with shell=False (no shell parsing)
+            # argv is a list built from the committed registry, run with shell=False (no shell parsing).
+            # pytest's output is UTF-8; decoding it with the locale codec (cp1252 on Windows) raises in
+            # the reader thread and leaves proc.stdout None. `replace` keeps a stray byte from killing the run.
             proc = subprocess.run(  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
-                cmd, cwd=root, env=env, capture_output=True, text=True, timeout=ROW_TIMEOUT
+                cmd,
+                cwd=root,
+                env=env,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=ROW_TIMEOUT,
             )
         except subprocess.TimeoutExpired:
             return {"rc": None, "tail": f"timed out after {ROW_TIMEOUT}s"}

@@ -172,3 +172,22 @@ def test_a_test_that_selects_nothing_is_an_error_not_a_survivor(tree, capsys):
     assert run(rows) == 1
     out = capsys.readouterr().out
     assert "no tests collected (pytest rc 5)" in out and "FAIL nothing-selected" in out
+
+
+def test_utf8_output_from_the_child_pytest_is_classified_not_crashed_on(tree, capsys, monkeypatch):
+    """The child pytest's UTF-8 output must not crash the runner under a cp1252 Windows locale.
+
+    Decoded with the locale codec, the reader thread raised, `proc.stdout` came back None and the runner
+    died before classifying the row. "\u00c1" (UTF-8 C3 81) is the trigger: 0x81 is one of the five bytes
+    cp1252 leaves undefined, while "\u2713" and "\u00e9" only decode to mojibake.
+    """
+    root, run = tree
+    (root / "test_utf8.py").write_text(
+        'from mod import add\n\n\ndef test_add_utf8():\n    assert add(1, 2) == 3, "\u00c1 \u2713"\n',
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("PYTHONIOENCODING", "utf-8")  # the child writes UTF-8 whatever the platform locale
+    assert run([row("utf8-output", "test_utf8.py::test_add_utf8")]) == 0
+    out = capsys.readouterr().out
+    assert "KILLED" in out and "T-1: 1/1 mutants killed" in out and "-> OK" in out
+    assert (root / "mod.py").read_bytes() == SOURCE.encode("utf-8")
