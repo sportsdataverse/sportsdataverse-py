@@ -471,3 +471,5 @@ def test_null_score_mid_game_is_carried_forward(monkeypatch: pytest.MonkeyPatch)
     out = gp.score_win_prob(holed)
     assert out["home_win_prob"][i] == pytest.approx(base["home_win_prob"][i], abs=1e-9)
     assert (out["wp_delta"] - base["wp_delta"]).abs().max() < 1e-9
+    # the fill feeds the model only; the caller's score columns come back as given
+    assert out["home_score"][i] is None and out["away_score"][i] is None

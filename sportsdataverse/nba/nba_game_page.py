@@ -189,7 +189,8 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
         where the score is not tied, before ``wp_delta`` is taken; tied rows go to overtime and keep
         the model value. A frame without ``type_text`` is not settled. An empty input returns an
         empty frame with those columns. A null ``home_score`` / ``away_score`` means "no change" and is
-        carried forward within the game before scoring (a null before the first score is 0).
+        carried forward within the game for the model (a null before the first score is 0); the
+        returned ``home_score`` / ``away_score`` are left as given.
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If a required column is missing (``home_team_spread``,
@@ -232,23 +233,22 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
             pl.lit(None, dtype=pl.Float64).alias("home_win_prob"),
             pl.lit(None, dtype=pl.Float64).alias("wp_delta"),
         )
-    # a null score on a play means the score did not change; a null before the first score is 0-0
-    pbp = pbp.with_columns(pl.col("home_score", "away_score").forward_fill().fill_null(0))
-    first = pbp.row(0, named=True)
+    # a null score on a play means the score did not change; a null before the first score is 0-0.
+    # Only the model input is filled: the returned score columns stay as given.
+    filled = pbp.with_columns(pl.col("home_score", "away_score").forward_fill().fill_null(0))
+    first = filled.row(0, named=True)
     prior, source = home_prior(first["home_team_spread"], first["game_spread_available"], league_id=league_id)
-    tagged = ot_adjusted_seconds(pbp)
+    tagged = ot_adjusted_seconds(filled)
     scored = nba_in_game_win_prob(tagged, prior, league_id=league_id)
     wp = scored["home_win_prob"].cast(pl.Float64)
     if "type_text" in pbp.columns:
         # a period from the 4th on that ends with a lead ends the game; a tie goes to overtime
         ends = (
-            pbp["type_text"].is_in(["End Game", "End Period"])
-            & (pbp["period_number"] >= REGULATION_PERIODS)
-            & pbp["home_score"].is_not_null()
-            & pbp["away_score"].is_not_null()
-            & (pbp["home_score"] != pbp["away_score"])
+            filled["type_text"].is_in(["End Game", "End Period"])
+            & (filled["period_number"] >= REGULATION_PERIODS)
+            & (filled["home_score"] != filled["away_score"])
         ).fill_null(False)
-        settled = (pbp["home_score"] > pbp["away_score"]).cast(pl.Float64)
+        settled = (filled["home_score"] > filled["away_score"]).cast(pl.Float64)
         wp = pl.select(pl.when(ends).then(settled).otherwise(wp).alias("w")).to_series()
     return pbp.with_columns(
         pl.lit(prior, dtype=pl.Float64).alias("pregame_home_prob"),
