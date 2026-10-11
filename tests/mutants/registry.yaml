@@ -644,11 +644,21 @@
   group: frozen-clock
   finding: C-M14
   file: sportsdataverse/nfl/utils_date.py
-  snippet: '    return current_year if today >= season_start else current_year - 1'
-  mutant: '    return current_year if today > season_start else current_year - 1'
+  snippet: '    return current_year if today >= _labor_day(current_year) + timedelta(days=2) else current_year - 1'
+  mutant: '    return current_year if today > _labor_day(current_year) + timedelta(days=2) else current_year - 1'
   test: tests/nfl/test_utils_date_frozen.py
   expected: kill
   note: the nflreadr table catches a one-day slip of the season flip in every season
+
+- id: nfl-week-one-anchored-a-day-early
+  group: frozen-clock
+  finding: C-M22
+  file: sportsdataverse/nfl/utils_date.py
+  snippet: '        first_game = _labor_day(season_year) + timedelta(days=3)'
+  mutant: '        first_game = _labor_day(season_year) + timedelta(days=2)'
+  test: tests/nfl/test_utils_date_frozen.py
+  expected: kill
+  note: week 1 must start on the Thursday after Labor Day (nflreadr monday1_sep + 3); a Wednesday anchor reads one high
 
 - id: cfb-fourth-down-go-wp-scaled
   group: fourth-down-level
