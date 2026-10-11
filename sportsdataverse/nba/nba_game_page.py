@@ -39,6 +39,31 @@ REGULATION_PERIODS: int = 4
 COORD_SENTINEL: float = -1000.0
 
 
+#: League ids the game page can score (the in-game win-probability artifacts ship for these two).
+_SUPPORTED_LEAGUES = ("00", "10")
+
+_TEAM_RATES_SCHEMA: dict[str, pl.DataType] = {
+    "game_id": pl.Int32,
+    "team_id": pl.Int32,
+    "efg_pct": pl.Float64,
+    "tov_pct": pl.Float64,
+    "orb_pct": pl.Float64,
+    "ft_rate": pl.Float64,
+    "possessions": pl.Float64,
+    "off_rtg": pl.Float64,
+    "def_rtg": pl.Float64,
+    "pace": pl.Float64,
+    "total_turnovers": pl.Int32,
+    "game_minutes": pl.Int64,
+}
+_PLAYER_RATES_SCHEMA: dict[str, pl.DataType] = {
+    "game_id": pl.Int32,
+    "athlete_id": pl.Int32,
+    "team_id": pl.Int32,
+    "ts_pct": pl.Float64,
+    "usg_pct": pl.Float64,
+}
+
 _SCORE_COLS = (
     "home_team_spread",
     "game_spread_available",
@@ -50,6 +75,11 @@ _SCORE_COLS = (
     "team_id",
     "home_team_id",
 )
+
+
+def _check_league(league_id: str) -> None:
+    if league_id not in _SUPPORTED_LEAGUES:
+        raise ValueError(f"league_id {league_id!r} is not supported by the game page; use one of {_SUPPORTED_LEAGUES}")
 
 
 def home_prior(
@@ -69,13 +99,13 @@ def home_prior(
     Args:
         home_team_spread: Signed expected home margin, or ``None``.
         game_spread_available: Whether a real line backed that spread.
-        league_id: ``"00"`` NBA / ``"10"`` WNBA / ``"20"`` G League (selects the constants).
+        league_id: ``"00"`` NBA / ``"10"`` WNBA (selects the constants).
 
     Returns:
         ``(probability, source)`` with ``source`` ``"spread"`` or ``"hfa"``.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"``, ``"10"`` or ``"20"``.
+        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
 
     Example:
         Quick start::
@@ -83,7 +113,15 @@ def home_prior(
             from sportsdataverse.nba.nba_game_page import home_prior
             home_prior(3.0, True)      # (0.58, 'spread')
             home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
+            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
     """
+    _check_league(league_id)
     if game_spread_available and home_team_spread is not None and not math.isnan(float(home_team_spread)):
         return win_prob_from_margin(float(home_team_spread), league_id=league_id), "spread"
     return win_prob_from_margin(get_constants(league_id).hfa, league_id=league_id), "hfa"
@@ -110,9 +148,19 @@ def ot_adjusted_seconds(pbp: pl.DataFrame) -> pl.DataFrame:
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba.nba_game_page import ot_adjusted_seconds
+            from sportsdataverse.nba.nba_loaders import load_nba_pbp
+            pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
             tagged = ot_adjusted_seconds(pbp)
             tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining").head()
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
+            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
     """
     is_ot = pl.col("period_number") > REGULATION_PERIODS
     return pbp.with_columns(
@@ -132,7 +180,7 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
             ``game_spread_available``, ``period_number``, ``start_game_seconds_remaining``,
             ``start_quarter_seconds_remaining``, ``home_score``, ``away_score``, ``team_id``,
             ``home_team_id``), in play order.
-        league_id: ``"00"`` / ``"10"`` / ``"20"``.
+        league_id: ``"00"`` NBA / ``"10"`` WNBA (the only leagues with an in-game model).
 
     Returns:
         The input plus ``pregame_home_prob``, ``prior_source``, ``wp_regime``, ``home_win_prob``
@@ -140,18 +188,20 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
         settled to 1.0 / 0.0 on "End Game" / "End Period" rows (``type_text``) from the 4th period on
         where the score is not tied, before ``wp_delta`` is taken; tied rows go to overtime and keep
         the model value. A frame without ``type_text`` is not settled. An empty input returns an
-        empty frame with those columns.
+        empty frame with those columns. A null ``home_score`` / ``away_score`` means "no change" and is
+        carried forward within the game before scoring (a null before the first score is 0).
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If a required column is missing (``home_team_spread``,
             ``game_spread_available``, ``period_number``, ``start_game_seconds_remaining``,
             ``start_quarter_seconds_remaining``, ``home_score``, ``away_score``, ``team_id``,
             ``home_team_id``).
-        ValueError: If ``league_id`` is unknown, or ``pbp`` holds more than one ``game_id``.
+        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``pbp`` holds more than one ``game_id``.
 
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba.nba_game_page import score_win_prob
             from sportsdataverse.nba.nba_loaders import load_nba_pbp
             one = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
@@ -160,7 +210,15 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
         Biggest swings::
 
             wp.sort(pl.col("wp_delta").abs(), descending=True).select("text", "wp_delta").head(10)
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
+            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
     """
+    _check_league(league_id)
     for c in _SCORE_COLS:
         if c not in pbp.columns:
             raise pl.exceptions.ColumnNotFoundError(f"score_win_prob needs column {c!r}")
@@ -174,6 +232,8 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
             pl.lit(None, dtype=pl.Float64).alias("home_win_prob"),
             pl.lit(None, dtype=pl.Float64).alias("wp_delta"),
         )
+    # a null score on a play means the score did not change; a null before the first score is 0-0
+    pbp = pbp.with_columns(pl.col("home_score", "away_score").forward_fill().fill_null(0))
     first = pbp.row(0, named=True)
     prior, source = home_prior(first["home_team_spread"], first["game_spread_available"], league_id=league_id)
     tagged = ot_adjusted_seconds(pbp)
@@ -223,13 +283,23 @@ def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba.nba_game_page import shot_coordinates
+            from sportsdataverse.nba.nba_loaders import load_nba_pbp
+            pbp = load_nba_pbp([2025]).filter(pl.col("game_id") == 401766458)
             shots = shot_coordinates(pbp).filter(pl.col("x_legacy").is_not_null())
             shots.select("text", "x_legacy", "y_legacy").head()
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
+            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
     """
     located = (
         (pl.col("shooting_play") == True)
-        & ~pl.col("type_text").fill_null("").str.contains("(?i)free throw")
+        & (pl.col("type_text").fill_null("").str.contains("(?i)free throw") == False)
         & (pl.col("coordinate_x_raw").cast(pl.Float64) > COORD_SENTINEL)
         & (pl.col("coordinate_y_raw").cast(pl.Float64) > COORD_SENTINEL)
     )
@@ -239,29 +309,41 @@ def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def game_minutes(periods: int) -> int:
-    """Minutes played in a game of ``periods`` periods: 48, plus five per overtime.
+def game_minutes(periods: int, *, league_id: str = "00") -> int:
+    """Minutes played in a game of ``periods`` periods: the league's regulation length plus five per overtime.
 
-    This is NBA timing (48 + 5 per OT); WNBA (40 minutes) and G League callers must not use it
-    for pace.
+    Regulation is 48 minutes for the NBA (``"00"``) and 40 for the WNBA (``"10"``), read from
+    :func:`~sportsdataverse.nba.nba_prediction_constants.get_constants`; an overtime is 5 minutes in both.
 
     Args:
         periods: Highest period number played (``4`` for regulation, ``5`` for one OT, ...).
+        league_id: ``"00"`` NBA / ``"10"`` WNBA.
 
     Returns:
         Game minutes.
 
     Raises:
         TypeError: If ``periods`` is ``None`` or another non-numeric type.
-        ValueError: If ``periods`` is a string that is not an integer.
+        ValueError: If ``periods`` is a string that is not an integer, or ``league_id`` is unknown.
 
     Example:
         Quick start::
 
             from sportsdataverse.nba.nba_game_page import game_minutes
             game_minutes(5)  # 53
+
+        WNBA::
+
+            game_minutes(5, league_id="10")  # 45
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
+            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
     """
-    return 48 + 5 * max(int(periods) - REGULATION_PERIODS, 0)
+    return get_constants(league_id).game_minutes + 5 * max(int(periods) - REGULATION_PERIODS, 0)
 
 
 def _ratio(num: pl.Expr, den: pl.Expr) -> pl.Expr:
@@ -288,13 +370,20 @@ def _team_tov(cols: list[str]) -> pl.Expr:
     return pl.when(total.is_null()).then(own + team.fill_null(0)).when(doubled).then(own).otherwise(total)
 
 
-def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
+def _check_two_teams(team_box: pl.DataFrame, who: str) -> None:
+    if team_box.height != 2:
+        raise ValueError(f"{who} needs the two team rows of one game, got {team_box.height} team rows")
+    if team_box["game_id"].n_unique() != 1 or team_box["team_id"].n_unique() != 2:
+        raise ValueError(f"{who} needs two different teams of the same game_id")
+
+
+def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4, league_id: str = "00") -> pl.DataFrame:
     """Four factors, possessions, ratings and pace for both teams of one game.
 
     Dean Oliver's estimates on the ``load_nba_team_boxscore`` columns: possessions =
     FGA - ORB + TOV + 0.44 FTA, averaged over the two teams; eFG% = (FGM + 0.5 3PM) / FGA;
     TOV% = TOV / (FGA + 0.44 FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
-    ORtg / DRtg per 100 possessions; pace per 48 minutes. ``TOV`` is the team's player plus team turnovers:
+    ORtg / DRtg per 100 possessions; pace per regulation length (48 minutes NBA, 40 WNBA). ``TOV`` is the team's player plus team turnovers:
     ``total_turnovers``, except that when it is null it is ``turnovers + team_turnovers``, and when ESPN
     has duplicated the team turnover (``team_turnovers == turnovers`` and ``total_turnovers == 2 *
     turnovers``, measured on every 2002-2012 game, e.g. 17/17/34) it is ``turnovers``. Without the
@@ -305,6 +394,7 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame
         team_box: Exactly two rows (one per team) of one game in the ``load_nba_team_boxscore``
             schema.
         periods: Highest period played, for the pace denominator.
+        league_id: ``"00"`` NBA (48-minute regulation) / ``"10"`` WNBA (40); overtime is 5 minutes in both.
 
     Returns:
         One row per ``(game_id, team_id)`` with ``efg_pct, tov_pct, orb_pct, ft_rate,
@@ -312,7 +402,7 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame
 
     Raises:
         ValueError: If ``team_box`` does not hold exactly two rows, or the rows are not two different
-            ``team_id`` values of one ``game_id``.
+            ``team_id`` values of one ``game_id``, or ``league_id`` is unknown.
         polars.exceptions.ColumnNotFoundError: If a required box-score column is missing.
 
     Example:
@@ -323,11 +413,19 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame
             from sportsdataverse.nba.nba_loaders import load_nba_team_boxscore
             box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
             team_game_rates(box).select("team_id", "efg_pct", "off_rtg", "pace")
+
+        WNBA box (40-minute regulation)::
+
+            team_game_rates(box, league_id="10")
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
+            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
     """
-    if team_box.height != 2:
-        raise ValueError(f"team_game_rates needs the two team rows of one game, got {team_box.height}")
-    if team_box["game_id"].n_unique() != 1 or team_box["team_id"].n_unique() != 2:
-        raise ValueError("team_game_rates needs two different teams of the same game_id")
+    _check_two_teams(team_box, "team_game_rates")
     tov = _team_tov(team_box.columns)
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
     own = team_box.with_columns(
@@ -341,7 +439,8 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame
         pl.col("_own_poss").alias("_opp_poss"),
     )
     joined = own.join(opp, on="game_id", how="inner").filter(pl.col("team_id") != pl.col("_opp_id"))
-    minutes = game_minutes(periods)
+    minutes = game_minutes(periods, league_id=league_id)
+    regulation = get_constants(league_id).game_minutes
     poss = (pl.col("_own_poss") + pl.col("_opp_poss")) / 2.0
     return joined.select(
         "game_id",
@@ -353,39 +452,56 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame
         poss.alias("possessions"),
         _ratio(100.0 * pl.col("team_score"), poss).alias("off_rtg"),
         _ratio(100.0 * pl.col("_opp_score"), poss).alias("def_rtg"),
-        (48.0 * poss / float(minutes)).alias("pace"),
+        (float(regulation) * poss / float(minutes)).alias("pace"),
         tov.alias("total_turnovers"),
         pl.lit(minutes, dtype=pl.Int64).alias("game_minutes"),
     )
 
 
-def player_game_rates(player_box: pl.DataFrame, team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
+def player_game_rates(
+    player_box: pl.DataFrame, team_box: pl.DataFrame, *, periods: int = 4, league_id: str = "00"
+) -> pl.DataFrame:
     """True-shooting and usage for every boxed player of one game.
 
     TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
     (MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in :func:`team_game_rates`
     (``total_turnovers``, repaired where ESPN doubled or omitted it) and team
-    minutes = 5 x game minutes. A player with no shots, no minutes, or ``did_not_play`` gets
+    minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, 5 per overtime). A player with no shots, no minutes, or ``did_not_play`` gets
     ``null``.
 
     Args:
         player_box: One game in the ``load_nba_player_boxscore`` schema.
         team_box: The game's two ``load_nba_team_boxscore`` rows.
         periods: Highest period played.
+        league_id: ``"00"`` NBA / ``"10"`` WNBA.
 
     Returns:
         One row per ``(game_id, athlete_id)`` with ``team_id, ts_pct, usg_pct``.
 
     Raises:
+        ValueError: If ``team_box`` does not hold exactly two different teams of one ``game_id`` (a
+            duplicated team row would double the player rows), or ``league_id`` is unknown.
         polars.exceptions.ColumnNotFoundError: If a required box-score column is missing.
 
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba.nba_game_page import player_game_rates
+            from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore, load_nba_team_boxscore
+            team_box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
+            player_box = load_nba_player_boxscore([2025]).filter(pl.col("game_id") == 401766458)
             player_game_rates(player_box, team_box).sort("usg_pct", descending=True).head()
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
+            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
     """
-    team_minutes = 5.0 * game_minutes(periods)
+    _check_two_teams(team_box, "player_game_rates")
+    team_minutes = 5.0 * game_minutes(periods, league_id=league_id)
     team = team_box.select(
         "game_id",
         "team_id",
@@ -420,14 +536,16 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
 
     Args:
         final: The dict :func:`~sportsdataverse.nba.nba_pbp.espn_nba_pbp` returns.
-        league_id: ``"00"`` / ``"10"`` / ``"20"``.
+        league_id: ``"00"`` NBA / ``"10"`` WNBA (48 / 40-minute regulation for the rates).
 
     Returns:
         ``{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior"}``
         where ``prior`` is ``{"home_win_prob", "source", "home_team_spread",
-        "game_spread_available"}``.
+        "game_spread_available"}``. Before both team box rows exist, ``team_game_rates`` and
+        ``player_game_rates`` are empty frames with their documented columns.
 
     Raises:
+        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
         KeyError: If ``final`` lacks the ``header`` or ``plays`` keys the converters read.
         polars.exceptions.ColumnNotFoundError: If a converter frame lacks a column the
             derivations need.
@@ -435,11 +553,19 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
     Example:
         Quick start::
 
-            from sportsdataverse.nba import espn_nba_pbp
             from sportsdataverse.nba.nba_game_page import game_page_frames
+            from sportsdataverse.nba.nba_pbp import espn_nba_pbp
             frames = game_page_frames(espn_nba_pbp(401766458))
             frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
+            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
     """
+    _check_league(league_id)
     from sportsdataverse.nba.nba_play_by_play import helper_nba_play_by_play
     from sportsdataverse.nba.nba_player_box import helper_nba_player_box
     from sportsdataverse.nba.nba_team_box import helper_nba_team_box
@@ -459,11 +585,13 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
     return {
         "pbp": pbp,
         "team_box": team_box,
-        "team_game_rates": team_game_rates(team_box, periods=periods) if two_teams else team_box.clear(),
-        "player_box": player_box,
-        "player_game_rates": player_game_rates(player_box, team_box, periods=periods)
+        "team_game_rates": team_game_rates(team_box, periods=periods, league_id=league_id)
         if two_teams
-        else player_box.clear(),
+        else pl.DataFrame(schema=_TEAM_RATES_SCHEMA),
+        "player_box": player_box,
+        "player_game_rates": player_game_rates(player_box, team_box, periods=periods, league_id=league_id)
+        if two_teams
+        else pl.DataFrame(schema=_PLAYER_RATES_SCHEMA),
         "periods": periods,
         "prior": {
             "home_win_prob": prior_prob,

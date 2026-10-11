@@ -155,7 +155,7 @@ not covered by the generated API-endpoint reference above.
 | [expected_possessions](additional/models-and-calculators.md#expected_possessions) | Expected possessions for a matchup (Pythagorean-tempo blend). |
 | [external_validity](additional/models-and-calculators.md#external_validity) | Oracle 5: correlate a model's ratings against a published external metric. |
 | [fit_aging_curve](additional/models-and-calculators.md#fit_aging_curve) | Fit the aging curve by the delta method: avg YoY rating change grouped by starting age. |
-| [game_minutes](additional/models-and-calculators.md#game_minutes) | Minutes played in a game of `periods` periods: 48, plus five per overtime. |
+| [game_minutes](additional/models-and-calculators.md#game_minutes) | Minutes played in a game of `periods` periods: the league's regulation length plus five per overtime. |
 | [game_page_frames](additional/models-and-calculators.md#game_page_frames) | Everything the Game on Paper NBA game page needs, from one `espn_nba_pbp` payload. |
 | [get_constants](additional/models-and-calculators.md#get_constants) | Return the `LeagueConstants` for a `league_id`. |
 | [get_shrinkage_k](additional/models-and-calculators.md#get_shrinkage_k) | Shooter-talent shrinkage `k` for a league. |

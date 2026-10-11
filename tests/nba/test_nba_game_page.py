@@ -369,3 +369,105 @@ def test_usage_uses_the_repaired_team_turnovers() -> None:
     got = out.filter(pl.col("athlete_id") == p["athlete_id"])["usg_pct"][0]
     assert got == pytest.approx(usg(tm["turnovers"]))
     assert got != pytest.approx(usg(tm["total_turnovers"]))
+
+
+def test_wnba_regulation_is_40_minutes_and_overtime_5() -> None:
+    assert gp.game_minutes(4, league_id="10") == 40
+    assert gp.game_minutes(5, league_id="10") == 45
+    assert gp.game_minutes(5) == 53 and gp.game_minutes(4, league_id="00") == 48
+    with pytest.raises(ValueError, match="league_id"):
+        gp.game_minutes(4, league_id="99")
+
+
+def test_wnba_pace_and_usage_scale_with_the_shorter_game() -> None:
+    nba = gp.team_game_rates(_team_box(), periods=5).sort("team_id")
+    wnba = gp.team_game_rates(_team_box(), periods=5, league_id="10").sort("team_id")
+    assert wnba["game_minutes"][0] == 45
+    assert wnba["pace"][0] == pytest.approx(40 * wnba["possessions"][0] / 45)  # pace per 40 minutes
+    assert wnba["pace"][0] != pytest.approx(nba["pace"][0])
+    pb = pl.DataFrame(
+        {
+            "game_id": [401766458],
+            "athlete_id": [1],
+            "team_id": [1],
+            "minutes": [30.0],
+            "points": [11],
+            "field_goals_attempted": [10],
+            "free_throws_attempted": [0],
+            "turnovers": [0],
+            "did_not_play": [False],
+        }
+    )
+    u_nba = gp.player_game_rates(pb, _team_box())["usg_pct"][0]
+    u_wnba = gp.player_game_rates(pb, _team_box(), league_id="10")["usg_pct"][0]
+    assert u_wnba == pytest.approx(u_nba * 40 / 48)  # team minutes are 5 x 40, not 5 x 48
+
+
+def test_unsupported_league_ids_raise_value_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    with pytest.raises(ValueError, match="'00'.*'10'"):
+        gp.score_win_prob(_pbp([{}]), league_id="20")
+    with pytest.raises(ValueError, match="'00'.*'10'"):
+        gp.game_page_frames({}, league_id="20")
+
+
+def _no_teams_frames(monkeypatch: pytest.MonkeyPatch, league_id: str = "00") -> dict:
+    from sportsdataverse.nba import nba_pbp
+
+    summary = json.loads((FIX / "summary_nba.json").read_text(encoding="utf-8"))
+    summary["boxscore"]["teams"] = []
+    monkeypatch.setattr(nba_pbp, "download", lambda url, **kwargs: _Resp(copy.deepcopy(summary)))
+    return gp.game_page_frames(nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"])), league_id=league_id)
+
+
+def test_game_page_frames_without_team_rows_carries_the_rate_schemas(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.nba.nba_player_box import helper_nba_player_box
+    from sportsdataverse.nba.nba_team_box import helper_nba_team_box
+
+    summary = json.loads((FIX / "summary_nba.json").read_text(encoding="utf-8"))
+    tb, pb = helper_nba_team_box(summary), helper_nba_player_box(summary)
+    frames = _no_teams_frames(monkeypatch)
+    assert frames["team_box"].height == 0
+    assert frames["team_game_rates"].height == 0 and frames["player_game_rates"].height == 0
+    assert frames["team_game_rates"].schema == gp.team_game_rates(tb).schema
+    assert frames["player_game_rates"].schema == gp.player_game_rates(pb, tb).schema
+    assert frames["team_game_rates"].select("efg_pct").height == 0  # selectable before tip-off
+
+
+def test_player_game_rates_rejects_a_duplicated_team_row() -> None:
+    pb = pl.DataFrame(
+        {
+            "game_id": [401766458],
+            "athlete_id": [1],
+            "team_id": [1],
+            "minutes": [30.0],
+            "points": [11],
+            "field_goals_attempted": [10],
+            "free_throws_attempted": [0],
+            "turnovers": [0],
+            "did_not_play": [False],
+        }
+    )
+    dup = pl.concat([_team_box().head(1), _team_box().head(1), _team_box().tail(1)])
+    with pytest.raises(ValueError, match="team rows"):
+        gp.player_game_rates(pb, dup)
+    with pytest.raises(ValueError, match="same game_id"):
+        gp.player_game_rates(pb, _team_box().with_columns(pl.lit(19).alias("team_id")))
+
+
+def test_null_score_mid_game_is_carried_forward(monkeypatch: pytest.MonkeyPatch) -> None:
+    pbp = _fixture_pbp(monkeypatch)
+    base = gp.score_win_prob(pbp)
+    same = pbp.with_row_index("i").filter(
+        (pl.col("home_score") == pl.col("home_score").shift(1))
+        & (pl.col("period_number") == 2)
+        & (pl.col("type_text") != "End Period")
+    )
+    assert same.height
+    i = same["i"][same.height // 2]
+    holed = pbp.with_columns(
+        pl.when(pl.int_range(pl.len()) == i).then(None).otherwise(pl.col("home_score")).alias("home_score"),
+        pl.when(pl.int_range(pl.len()) == i).then(None).otherwise(pl.col("away_score")).alias("away_score"),
+    )
+    out = gp.score_win_prob(holed)
+    assert out["home_win_prob"][i] == pytest.approx(base["home_win_prob"][i], abs=1e-9)
+    assert (out["wp_delta"] - base["wp_delta"]).abs().max() < 1e-9

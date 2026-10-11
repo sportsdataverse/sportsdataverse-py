@@ -778,18 +778,19 @@ print(curve.delta(24))  # ~1.0
 
 ### game_minutes {#game_minutes}
 
-`game_minutes(periods: 'int') -> 'int'`
+`game_minutes(periods: 'int', *, league_id: 'str' = '00') -> 'int'`
 
-Minutes played in a game of `periods` periods: 48, plus five per overtime.
+Minutes played in a game of `periods` periods: the league's regulation length plus five per overtime.
 
-This is NBA timing (48 + 5 per OT); WNBA (40 minutes) and G League callers must not use it
-for pace.
+Regulation is 48 minutes for the NBA (`"00"`) and 40 for the WNBA (`"10"`), read from
+`~sportsdataverse.nba.nba_prediction_constants.get_constants`; an overtime is 5 minutes in both.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `periods` | `int` |  | Highest period number played (`4` for regulation, `5` for one OT, ...). |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA. |
 
 **Returns**
 
@@ -800,6 +801,10 @@ Game minutes.
 ```python
 from sportsdataverse.nba.nba_game_page import game_minutes
 game_minutes(5)  # 53
+
+# WNBA
+
+game_minutes(5, league_id="10")  # 45
 ```
 
 ### game_page_frames {#game_page_frames}
@@ -819,17 +824,17 @@ either source.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `final` | `dict` |  | The dict `~sportsdataverse.nba.nba_pbp.espn_nba_pbp` returns. |
-| `league_id` | `str` | `'00'` | `"00"` / `"10"` / `"20"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA (48 / 40-minute regulation for the rates). |
 
 **Returns**
 
-`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior"}` where `prior` is `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
+`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior"}` where `prior` is `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`. Before both team box rows exist, `team_game_rates` and `player_game_rates` are empty frames with their documented columns.
 
 **Example**
 
 ```python
-from sportsdataverse.nba import espn_nba_pbp
 from sportsdataverse.nba.nba_game_page import game_page_frames
+from sportsdataverse.nba.nba_pbp import espn_nba_pbp
 frames = game_page_frames(espn_nba_pbp(401766458))
 frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
 ```
@@ -898,7 +903,7 @@ prior is home-court advantage alone.
 |---|---|---|---|
 | `home_team_spread` | `Optional[float]` |  | Signed expected home margin, or `None`. |
 | `game_spread_available` | `Optional[bool]` |  | Whether a real line backed that spread. |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G League (selects the constants). |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA (selects the constants). |
 
 **Returns**
 
