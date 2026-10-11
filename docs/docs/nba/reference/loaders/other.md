@@ -409,8 +409,8 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `nba_home_team_id` | String | NBA Stats team id of the home team. |
 | `nba_away_team_id` | String | NBA Stats team id of the away team. |
 | `fox_game_id` | String | Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game. |
-| `fox_home_team_id` | String | FOX Sports team id of the home team in the crosswalk. |
-| `fox_away_team_id` | String | FOX Sports team id of the away team in the crosswalk. |
+| `fox_home_team_id` | String | Fox Sports team id of the side Fox calls home in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of home_espn_team_id. Null when fox_game_id is. |
+| `fox_away_team_id` | String | Fox Sports team id of the side Fox calls away in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of away_espn_team_id. Null when fox_game_id is. |
 | `yahoo_game_id` | String | Yahoo Sports game id, nba.g.<YYYYMMDD US-Eastern date><home ESPN team id, 2 digits> (Yahoo's NBA team ids equal ESPN's), from the 2014 season on; null for earlier seasons. |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |

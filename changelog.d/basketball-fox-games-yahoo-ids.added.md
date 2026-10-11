@@ -4,7 +4,7 @@
   ESPN files at 23:59 ET matches Fox's 00:00 ET a day apart); `nba_crosswalks_from_archive` /
   `wnba_crosswalks_from_archive(fox_games=True)` fill them for any season Fox serves. `yahoo=True` on the
   WNBA / MBB / WBB team and schedule crosswalks fills `yahoo_team_id` (Yahoo's listing joined to ESPN
-  by full name, school, then nickname; unmatched Yahoo teams are logged) and
+  by full name, short name, then nickname where the school names agree; unmatched Yahoo teams are logged) and
   `yahoo_game_id` = `{lg}.g.{YYYYMMDD ET}{home Yahoo id}`, checked against the ids Yahoo lists so a
-  neutral-site game takes Yahoo's home side. Both legs are opt-in and fail-soft: a failed fetch logs a
+  neutral-site game takes Yahoo's home side. Both legs are opt-in and fail-soft: any Fox or Yahoo failure logs a
   warning and leaves the columns null.

@@ -18853,8 +18853,8 @@ load_nba_schedule:
 load_nba_schedule_crosswalk:
   yahoo_game_id: Yahoo Sports game id, nba.g.<YYYYMMDD US-Eastern date><home ESPN team id, 2 digits> (Yahoo's NBA team ids equal ESPN's), from the 2014 season on; null for earlier seasons.
   fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
-  fox_away_team_id: FOX Sports team id of the away team in the crosswalk.
-  fox_home_team_id: FOX Sports team id of the home team in the crosswalk.
+  fox_away_team_id: Fox Sports team id of the side Fox calls away in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of away_espn_team_id. Null when fox_game_id is.
+  fox_home_team_id: Fox Sports team id of the side Fox calls home in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of home_espn_team_id. Null when fox_game_id is.
   nba_away_team_id: NBA Stats team id of the away team.
   nba_game_code: NBA game code (date and matchup string) from the NBA Stats API.
   nba_game_id: NBA Stats 10-character game id matched to the ESPN game in the crosswalk.
@@ -26254,8 +26254,8 @@ load_wnba_schedule:
 load_wnba_schedule_crosswalk:
   fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
   yahoo_game_id: 'Yahoo Sports game id, wnba.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 3 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team).'
-  fox_away_team_id: Away team identifier on Fox Sports for the matched game.
-  fox_home_team_id: Home team identifier on Fox Sports for the matched game.
+  fox_away_team_id: Fox Sports team id of the side Fox calls away in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of away_espn_team_id. Null when fox_game_id is.
+  fox_home_team_id: Fox Sports team id of the side Fox calls home in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of home_espn_team_id. Null when fox_game_id is.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   wnba_away_team_id: Away team identifier on stats.wnba.com for the matched game.
   wnba_game_code: stats.wnba.com game code (date/matchup slug) for the matched game.

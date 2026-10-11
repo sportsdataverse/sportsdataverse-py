@@ -174,6 +174,95 @@ def test_fox_games_resolve_through_the_team_crosswalk_ids(monkeypatch: pytest.Mo
     assert _by_game(out, "fox_game_id")["401810734"] == "44357"  # Houston at Washington
 
 
+def _fox_with(games: pl.DataFrame, *rows: Dict[str, Any]) -> pl.DataFrame:
+    return pl.concat([games, pl.DataFrame(list(rows), schema=fy.FOX_GAMES_SCHEMA)])
+
+
+def test_a_one_team_fox_game_never_takes_a_row_against_a_team_fox_lists(fox_calls: List[tuple]) -> None:
+    # Fox 263979 is Boise State vs Chaminade (not Division I, so only Boise resolves), Fox date
+    # 11-27; ESPN files it 11-26 23:59. Give Boise a second late tip: ESPN 11-27 vs Penn, Fox 11-28.
+    # Boise is the only team the 11-27 Fox game and that row share, but Fox lists Penn too, so the
+    # row is not the Chaminade game: it must take its own Fox game a day later.
+    games = _fox_with(
+        fy.fox_scoreboard_games("mbb", [THANKSGIVING]),
+        {
+            "fox_game_id": "900001",
+            "game_date": date(2025, 11, 28),
+            "fox_home_team_id": "95",
+            "fox_away_team_id": "9001",
+            "fox_home_team": "Boise State Broncos",
+            "fox_away_team": "Pennsylvania Quakers",
+        },
+    )
+    sched = pl.concat(
+        [
+            _schedule(),
+            _schedule()
+            .head(1)
+            .with_columns(
+                pl.lit(THANKSGIVING).alias("game_date"),
+                pl.lit(68, dtype=pl.Int32).alias("home_espn_team_id"),
+                pl.lit(219, dtype=pl.Int32).alias("away_espn_team_id"),
+                pl.lit("boise-penn").alias("espn_game_id"),
+            ),
+        ]
+    )
+    out = fy.attach_fox_games(sched, games, fy.fox_team_map(_teams(), games, FOX_DISPLAY_ALIAS))
+    fox = _by_game(out, "fox_game_id")
+    assert fox["boise-penn"] == "900001"
+    assert fox["401831203"] is None  # the Chaminade row: one team is not enough across dates
+    assert "263979" not in out["fox_game_id"].to_list()
+
+
+@pytest.mark.parametrize(("fox_day", "matched"), [(date(2025, 11, 28), True), (date(2025, 11, 26), False)])
+def test_fox_dates_match_a_day_late_never_a_day_early(fox_calls: List[tuple], fox_day: date, matched: bool) -> None:
+    # Duke-Arkansas is ESPN 11-27. Fox a day later is ESPN's 23:59 tip; Fox a day earlier is not.
+    games = fy.fox_scoreboard_games("mbb", [THANKSGIVING]).with_columns(
+        pl.when(pl.col("fox_game_id") == "260615")
+        .then(pl.lit(fox_day))
+        .otherwise(pl.col("game_date"))
+        .alias("game_date")
+    )
+    out = fy.attach_fox_games(_schedule(), games, fy.fox_team_map(_teams(), games, FOX_DISPLAY_ALIAS))
+    assert (_by_game(out, "fox_game_id")["401817234"] == "260615") is matched
+
+
+def test_fox_join_keys_are_cast_not_asserted(fox_calls: List[tuple]) -> None:
+    games = fy.fox_scoreboard_games("mbb", [THANKSGIVING])
+    fox_to_espn = fy.fox_team_map(_teams(), games, FOX_DISPLAY_ALIAS)
+    want = fy.attach_fox_games(_schedule(), games, fox_to_espn)
+    odd = _schedule().with_columns(pl.col("game_date").cast(pl.Datetime), pl.col("home_espn_team_id").cast(pl.Int64))
+    got = fy.attach_fox_games(odd, games, fox_to_espn)
+    assert got["fox_game_id"].to_list() == want["fox_game_id"].to_list()
+
+
+def test_fox_team_map_is_one_to_one(fox_calls: List[tuple]) -> None:
+    games = fy.fox_scoreboard_games("mbb", [THANKSGIVING])
+    duke = games.filter(pl.col("fox_game_id") == "260615").row(0, named=True)
+    # A second Fox id carrying Duke's name: neither id may claim Duke.
+    twin = _fox_with(games, {**duke, "fox_game_id": "900002", "fox_home_team_id": "9002"})
+    fox_to_espn = fy.fox_team_map(_teams(), twin, FOX_DISPLAY_ALIAS)
+    assert duke["fox_home_team_id"] not in fox_to_espn and "9002" not in fox_to_espn
+    assert len(set(fox_to_espn.values())) == len(fox_to_espn)
+    # A crosswalk fox_team_id owns its ESPN team; Fox's own id for Duke then maps nowhere.
+    claimed = _teams().with_columns(
+        pl.when(pl.col("espn_display_name") == "Duke Blue Devils").then(pl.lit("crosswalk-duke")).alias("fox_team_id")
+    )
+    fox_to_espn = fy.fox_team_map(claimed, games, FOX_DISPLAY_ALIAS)
+    assert fox_to_espn["crosswalk-duke"] == 150 and duke["fox_home_team_id"] not in fox_to_espn
+
+
+def test_a_malformed_fox_payload_warns_and_leaves_the_schedule(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    monkeypatch.setattr("sportsdataverse._fox_layout.fox_get", lambda *a, **k: {"sectionList": "not a list"})
+    sched = _schedule()
+    with caplog.at_level(logging.WARNING, logger=_LOG):
+        out = fy.with_fox_games("mbb", sched, _teams(), alias=FOX_DISPLAY_ALIAS)
+    assert out.equals(sched)
+    assert "Fox games unavailable" in caplog.text
+
+
 def test_fox_failure_warns_and_leaves_the_schedule(
     monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ) -> None:
@@ -290,6 +379,27 @@ def test_yahoo_teams_failure_leaves_the_columns_null(
         out = fy.with_yahoo_teams("mbb", team)
     assert out.equals(team)
     assert "Yahoo teams unavailable" in caplog.text
+
+
+def test_a_nickname_alone_never_pairs_two_schools(yahoo: List[Dict[str, Any]]) -> None:
+    yahoo_frame = fy.yahoo_teams("mbb")
+    # Miami pairs with "Miami (FL) Hurricanes" on the nickname tier because the schools agree;
+    # move ESPN's Miami to another school and the shared "Hurricanes" alone must not pair them.
+    moved = _teams().with_columns(
+        pl.when(pl.col("espn_display_name") == "Miami Hurricanes")
+        .then(pl.lit("Tulsa"))
+        .otherwise(pl.col("espn_location"))
+        .alias("espn_location")
+    )
+    matched = fy.match_yahoo_teams(moved, yahoo_frame)
+    assert 2390 not in matched["espn_team_id"].to_list()
+    assert "ncaab.t.355" not in matched["yahoo_team_id"].to_list()
+
+
+def test_a_malformed_yahoo_id_list_is_a_source_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", lambda **_: [])
+    with pytest.raises(CrosswalkSourceError, match="AttributeError"):
+        fy.yahoo_game_ids("mbb", 2026, [THANKSGIVING])
 
 
 def test_a_capped_yahoo_week_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
