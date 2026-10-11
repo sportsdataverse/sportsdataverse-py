@@ -90,3 +90,24 @@ def test_own_line_does_not_move_its_projection(monkeypatch, corpus):
         monkeypatch, _bump(logs, game["game_id"], player["player_id"]), ratings, game, player["player_id"]
     )
     assert bumped == pytest.approx(base, abs=1e-9), f"own +40 pts moved stat_pts_exp {base:.3f} -> {bumped:.3f}"
+
+
+@pytest.mark.xfail(
+    strict=True,
+    raises=AssertionError,
+    reason="C-M10 -> task 3.7: nba_player_props projects a game from its later box lines",
+)
+def test_a_later_line_does_not_move_its_projection(monkeypatch, corpus):
+    """A fix that drops only the target game (game_id != G) but keeps every later game still leaks;
+    the as-of filter the owner ruling mirrors from nhl_player_props is game_date < G's date."""
+    logs, ratings, game, player = corpus
+    later = (
+        logs.filter((pl.col("player_id") == player["player_id"]) & (pl.col("game_date") > game["date"]))
+        .sort("game_date")
+        .row(0, named=True)
+    )
+    base = _project(monkeypatch, logs, ratings, game, player["player_id"])
+    bumped = _project(
+        monkeypatch, _bump(logs, later["game_id"], player["player_id"]), ratings, game, player["player_id"]
+    )
+    assert bumped == pytest.approx(base, abs=1e-9), f"a later +40 pts moved stat_pts_exp {base:.3f} -> {bumped:.3f}"
