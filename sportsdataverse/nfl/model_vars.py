@@ -12,7 +12,10 @@ This module is the single source of truth for:
 
 from __future__ import annotations
 
+from typing import NamedTuple
+
 import numpy as np
+import polars as pl
 
 # ---------------------------------------------------------------------------
 # Shared numeric constants
@@ -50,36 +53,181 @@ ERA_SEASON_CUTS: tuple[int, int, int, int] = (2001, 2005, 2013, 2017)
 #: with the trainer's season span.
 #: 2026 review (2026-09-14): the 2026 season plays under the 2025 rulebook for
 #: everything the EP/WP features see -- dynamic kickoff with the touchback at
-#: the 35 (scored at the nflverse-parity spot below, as in 2024-2025) and the
-#: regular-season overtime format introduced in 2025 -- so it stays in ``era4``
+#: the 35 (:func:`touchback_yardline` resolves it, as for 2025) and the
+#: regular-season overtime format introduced in 2025 (:data:`OVERTIME_FORMATS`
+#: selects its closed form) -- so it stays in ``era4``
 #: without a new dummy. This bump is a coverage assertion, not a retrain: the
 #: era-aware corpus still ends at 2025.
 ERA_MAX_KNOWN_SEASON: int = 2026
 
-#: Kickoff-touchback starting yardline **before** the 2016 rule change.
-#: nflfastR canonical: the touchback was spotted at the 20-yard line, so
-#: yards-to-endzone = 80.
+#: Kickoff-touchback yards-to-endzone by the FIRST season each spot applied,
+#: newest first.  The rule spots (sdv-internal-refs ``rules/nfl.yaml``):
+#:
+#: * ``nfl-2016-kickoff-touchback-to-25`` -- the 25 (75) from 2016; the 20 (80) before.
+#: * ``nfl-2024-dynamic-kickoff`` -- the 30 (70) for the 2024 dynamic kickoff.
+#: * ``nfl-2025-kickoff-touchback-to-35`` -- the 35 (65) from 2025.
+#:
+#: **This is the rule spot, not nflfastR's.**  ``helper_add_ep_wp.R`` still
+#: substitutes ``ifelse(season < 2016, 80, 75)`` (L355 / L1047), so nflverse's
+#: published ``ep`` / ``wp`` on 2024+ kickoffs are scored at 75.  Until 2026-10
+#: sdv-py kept 75 as a parity convention; the catalog review moved every
+#: consumer to the rule spot through :func:`touchback_yardline`, and
+#: ``tests/nfl/test_nfl_ep_wp_real_rows.py`` pins the resulting, measured gap
+#: to nflverse on 2024-25 kickoff rows (and that re-scoring at 75 closes it).
+#: The EP/WP boosters were trained through 2025 on the recorded ``yardline_100``
+#: of real snaps, so a 1st-and-10 from the 30 / 35 is inside their domain --
+#: no refit is needed for the applier to spot a touchback where the rule does.
+TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2025, 65), (2024, 70), (2016, 75), (0, 80))
+
+#: Kickoff-touchback yards-to-endzone before 2016 (the 20).  Kept as a name for
+#: the pre-2016 era; new code resolves the spot with :func:`touchback_yardline`.
 TOUCHBACK_YARDLINE_PRE_2016: int = 80
 
-#: Kickoff-touchback starting yardline **2016 and later**.
-#: nflfastR canonical: the touchback was moved to the 25-yard line (2016 rule
-#: change), so yards-to-endzone = 75.
-#:
-#: ``nfl_pbp.py`` (``yds_kickoff_return``) shares this 2016 boundary; it used an
-#: inline ``season > 2013`` until 2026-10 (rules/nfl.yaml#nfl-2016-kickoff-touchback-to-25).
-#:
-#: **Dynamic-kickoff audit (2026-09-01).** The 2024 rule moved the kickoff
-#: touchback to the 30 (yards-to-endzone 70) and the 2025 rule to the 35 (65),
-#: but nflfastR's ``helper_add_ep_wp.R`` still substitutes
-#: ``ifelse(season < 2016, 80, 75)`` and nflverse's published ``ep`` / ``wp``
-#: on 2024–2025 kickoffs are therefore scored at 75.  This constant
-#: deliberately stays at 75 — it is a *parity convention with that oracle*,
-#: not the rule spot.  ``tests/nfl/test_nfl_ep_wp_real_rows.py`` pins both
-#: facts on committed real rows: sdv-py == nflverse on kickoff rows season by
-#: season, AND the data's actual post-touchback spot (75 → 70 → 65).  Moving
-#: to the rule-correct spot is a retrain-time decision — trainer and applier
-#: must move together.
+#: Kickoff-touchback yards-to-endzone 2016-2023 (the 25).  The name predates
+#: the 2024 / 2025 moves; it is NOT the spot for 2024+ -- resolve with
+#: :func:`touchback_yardline`.
 TOUCHBACK_YARDLINE_POST_2016: int = 75
+
+#: Dynamic-kickoff touchback spot, 2024 only (the 30).
+TOUCHBACK_YARDLINE_2024: int = 70
+
+#: Dynamic-kickoff touchback spot from 2025 (the 35).
+TOUCHBACK_YARDLINE_2025: int = 65
+
+
+def touchback_yardline(season: int) -> int:
+    """Kickoff-touchback yards-to-endzone for *season* (80 / 75 / 70 / 65).
+
+    Args:
+        season: NFL season year (the September year).
+
+    Returns:
+        80 before 2016, 75 for 2016-2023, 70 for 2024, 65 from 2025.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.model_vars import touchback_yardline
+
+            print([touchback_yardline(s) for s in (2015, 2016, 2024, 2025)])  # [80, 75, 70, 65]
+    """
+    for first_season, spot in TOUCHBACK_YARDLINE_BY_SEASON:
+        if season >= first_season:
+            return spot
+    return TOUCHBACK_YARDLINE_BY_SEASON[-1][1]  # pragma: no cover - the (0, 80) row always matches
+
+
+def touchback_yardline_expr(season: pl.Expr) -> pl.Expr:
+    """Polars form of :func:`touchback_yardline` for a ``season`` column expression.
+
+    Args:
+        season: Integer season expression (``pl.col("season")``).
+
+    Returns:
+        An ``Int64`` expression of the touchback yards-to-endzone per row.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.nfl.model_vars import touchback_yardline_expr
+
+            df = pl.DataFrame({"season": [2015, 2016, 2024, 2025]})
+            print(df.select(touchback_yardline_expr(pl.col("season"))).to_series().to_list())
+    """
+    expr = pl.lit(TOUCHBACK_YARDLINE_BY_SEASON[-1][1], dtype=pl.Int64)
+    for first_season, spot in reversed(TOUCHBACK_YARDLINE_BY_SEASON[:-1]):
+        expr = pl.when(season >= first_season).then(pl.lit(spot, dtype=pl.Int64)).otherwise(expr)
+    return expr
+
+
+#: Extra-point snap spot (yards-to-endzone) before 2015: the 2.
+#: rules/nfl.yaml ``nfl-2015-pat-snap-from-15``.  nflfastR scores the PAT make
+#: probability at ``yardline_100 = ifelse(season >= 2015, 15, 3)`` (L926; 3 is
+#: its FG-model convention for the 2-yard snap).  ``nfl_fourth_down.py`` shares
+#: these two names.
+PAT_YARDLINE_PRE_2015: int = 2
+
+#: Extra-point snap spot (yards-to-endzone) from 2015: the 15 (a 33-yard kick).
+#: ``ep_wp._apply_feature_substitution`` deliberately does NOT re-spot a try
+#: here (its docstring has the measurement); the PAT make model does.
+PAT_YARDLINE_POST_2015: int = 15
+
+
+# ---------------------------------------------------------------------------
+# Overtime formats
+# ---------------------------------------------------------------------------
+
+#: Pure sudden death: the first score of any kind wins.
+OT_SUDDEN_DEATH: str = "sudden_death"
+#: Modified sudden death: a first-possession field goal gives the other team a
+#: possession; a first-possession touchdown, or any later score, wins.
+OT_MODIFIED_SUDDEN_DEATH: str = "modified_sudden_death"
+#: Both teams possess: the opening possession never ends the game (a touchdown
+#: included) unless the kicking team scores a safety on it; sudden death after
+#: both have possessed.
+OT_BOTH_POSSESS: str = "both_possess"
+
+
+class OvertimeFormat(NamedTuple):
+    """One row of :data:`OVERTIME_FORMATS`."""
+
+    #: First season the row applies to (inclusive); rows are newest first.
+    first_season: int
+    #: :data:`OT_SUDDEN_DEATH`, :data:`OT_MODIFIED_SUDDEN_DEATH` or :data:`OT_BOTH_POSSESS`.
+    name: str
+    #: Length of one overtime period in seconds.  Documentation only: no
+    #: closed form in ``ep_wp`` carries a time term (``nfl-2017-overtime-ten-minutes``).
+    period_seconds: int
+    #: The ``rules/nfl.yaml`` entry that put the row here.
+    rule_id: str
+
+
+#: NFL overtime format by ``season_type`` (nflverse ``"REG"`` / ``"POST"``), newest
+#: row first; :func:`overtime_format` picks the first row whose ``first_season``
+#: is at or before the season.  Catalog: sdv-internal-refs ``rules/nfl.yaml``.
+OVERTIME_FORMATS: dict[str, tuple[OvertimeFormat, ...]] = {
+    "REG": (
+        OvertimeFormat(2025, OT_BOTH_POSSESS, 600, "nfl-2025-overtime-both-possess-regular-season"),
+        OvertimeFormat(2017, OT_MODIFIED_SUDDEN_DEATH, 600, "nfl-2017-overtime-ten-minutes"),
+        OvertimeFormat(2012, OT_MODIFIED_SUDDEN_DEATH, 900, "nfl-2012-overtime-modified-sudden-death-regular-season"),
+        OvertimeFormat(0, OT_SUDDEN_DEATH, 900, "nfl-2012-overtime-modified-sudden-death-regular-season"),
+    ),
+    "POST": (
+        OvertimeFormat(2022, OT_BOTH_POSSESS, 900, "nfl-2022-overtime-both-possess-postseason"),
+        OvertimeFormat(2010, OT_MODIFIED_SUDDEN_DEATH, 900, "nfl-2010-overtime-modified-sudden-death-postseason"),
+        OvertimeFormat(0, OT_SUDDEN_DEATH, 900, "nfl-2010-overtime-modified-sudden-death-postseason"),
+    ),
+}
+
+
+def overtime_format(season: int, season_type: str = "REG") -> OvertimeFormat:
+    """Resolve the NFL overtime format for a season and season type.
+
+    Args:
+        season: NFL season year.
+        season_type: nflverse ``season_type`` -- ``"REG"`` (default) or
+            ``"POST"``.  Anything else is treated as ``"REG"``.
+
+    Returns:
+        The matching :class:`OvertimeFormat` row of :data:`OVERTIME_FORMATS`.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.model_vars import overtime_format
+
+            print(overtime_format(2011).name, overtime_format(2011, "POST").name)
+            # sudden_death modified_sudden_death
+            print(overtime_format(2025).name, overtime_format(2025).period_seconds)
+            # both_possess 600
+    """
+    rows = OVERTIME_FORMATS["POST" if season_type == "POST" else "REG"]
+    for row in rows:
+        if season >= row.first_season:
+            return row
+    return rows[-1]  # pragma: no cover - the first_season == 0 row always matches
+
 
 #: Exponent multiplier in the spread-time decay formula::
 #:

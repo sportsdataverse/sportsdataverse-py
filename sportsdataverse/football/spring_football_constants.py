@@ -7,21 +7,18 @@ Ports the already-shipped, parity-validated NFL EP/WP suite
 derivation logic. This module documents the per-league RULE DELTAS from the
 NFL that a from-scratch port would need to account for.
 
-**Downscope note (Task 1.3):** ``touchback_yardline``, ``kickoff_spot``, and
-``conversion_point_values`` below are cited, rule-derived metadata but are
-NOT YET wired into scoring -- ``enrich_nfl_pbp``'s EP/WP/CP model loaders
-(``calculate_expected_points`` / ``calculate_win_probability`` /
-``calculate_completion_probability``) hard-code the NFL touchback spot and
-the NFL 7-class point-value vector with no override kwarg today, and adding
-one would mean threading new parameters through the parity-validated core
-NFL pipeline for what is, on the actual captured data (see
-``tests/fixtures/league_ports/FEASIBILITY.md``), a single fixture's worth of
-plays -- not a safe trade against the core pipeline's parity guarantee. The
-real down/distance/yardline/clock/score STATE fed into the models is genuine
-league-native ESPN data; only the kickoff-touchback spot and the
-point-value collapse use the NFL's numbers. UFL/XFL conversions do not
-appear as separate plays in the captured data (the result is folded into the
-touchdown play's text), so this does not bias the real score/state columns.
+**What is wired into scoring:** ``touchback_yardline`` and ``ep_point_values``
+are threaded by ``enrich_spring_football_pbp`` into ``enrich_nfl_pbp``'s
+keyword-only overrides (``touchback_yardline=`` for the kickoff EP feature
+substitution and the overtime re-score, ``ep_point_values=`` for the EP
+collapse) per league-season, and ``league`` gates the NFL overtime closed
+forms off (shootout overtime -> null ``wp``).  ``kickoff_spot``,
+``conversion_point_values`` and ``conversion_spots`` remain documented
+metadata: UFL/XFL conversions do not appear as separate plays in the captured
+data (the result is folded into the touchdown play's text), so nothing in the
+score/state columns needs them yet.  The NFL path is untouched by the
+overrides (its defaults resolve the NFL rule spots), which
+``tests/football/test_spring_football_parity.py`` proves byte-for-byte.
 
 UFL/XFL kickoff + conversion rules change by season; the base entries hold
 the CURRENT ruleset and :data:`SPRING_FOOTBALL_SEASON_OVERRIDES` the earlier
@@ -63,9 +60,9 @@ class SpringFootballConstants:
             ``"nfl_parity"`` test league).
         downs: Downs per set (4 for ufl/xfl, 3 for cfl).
         field_length: Field length in yards (100 for ufl/xfl, 110 for cfl).
-        touchback_yardline: Kickoff-touchback yards-to-endzone. Documented
-            rule metadata; see the module downscope note -- not yet wired
-            into scoring.
+        touchback_yardline: Kickoff-touchback yards-to-endzone, threaded by
+            ``enrich_spring_football_pbp`` into ``enrich_nfl_pbp`` (the EP
+            feature substitution on kickoff rows) per league-season.
         pat_kick: Whether the league kicks a traditional PAT (False for
             ufl/xfl -- they run 1/2/3-pt conversions instead).
         conversion_point_values: ``{points: success_rate}`` for the
@@ -73,8 +70,13 @@ class SpringFootballConstants:
             in scoring; refresh when conversion modeling lands.
         ep_point_values: 7-class EP point-value vector consumed by
             ``calculate_expected_points`` to collapse class probabilities
-            into a scalar ``ep``. Currently the NFL vector verbatim (see
-            downscope note).
+            into a scalar ``ep``; threaded in by ``enrich_spring_football_pbp``.
+            The NFL vector for every league today (FG class = 3).
+            ponytail: the UFL 2026 four-point field goal (60+ yards,
+            ``ufl-2026-kick-pat-four-point-fg``) has no class in the 7-class EP
+            model, so a 4-point make is folded into the 3-point class; the
+            ceiling is the (rare) 60+ yard make under-valued by one point, and
+            the upgrade is an 8-class retrain, not a vector edit.
         kickoff_spot: Standard kickoff line of scrimmage (yards from own
             goal line). Documented metadata only.
         model_dir: Import path of the league's model-bundle package.

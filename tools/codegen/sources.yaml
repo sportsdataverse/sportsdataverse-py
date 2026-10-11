@@ -477,6 +477,7 @@ categories:
       - sportsdataverse.cricket.cricket_win_prob
       - sportsdataverse.cricket.cricket_wpa
       - sportsdataverse.nfl.ep_wp
+      - sportsdataverse.nfl.model_vars
       - sportsdataverse.nfl.nfl_fourth_down
       - sportsdataverse.cfb.cfb_fourth_down
       - sportsdataverse.football.spring_football_ep_wp
