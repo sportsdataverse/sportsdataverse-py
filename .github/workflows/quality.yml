@@ -60,7 +60,7 @@ jobs:
           if git cat-file -e "FETCH_HEAD:baseline/scoreboard-devel.json" 2>/dev/null; then
             git show "FETCH_HEAD:baseline/scoreboard-devel.json" > /tmp/baseline/scoreboard-devel.json
           else
-            echo "::notice::$BASE_REF has no baseline/scoreboard-devel.json yet; using this PR's own (first landing)."
+            echo "::warning::BOOTSTRAP: baseline taken from this PR (origin/$BASE_REF has no baseline/scoreboard-devel.json yet). This is the only case where the PR's own file is trusted; once merged, every later PR reads the base branch."
             cp baseline/scoreboard-devel.json /tmp/baseline/scoreboard-devel.json
           fi
           topic="${BASE_REF#devel-}"
@@ -126,7 +126,7 @@ jobs:
               git show "FETCH_HEAD:baseline/coverage-devel.json" > /tmp/baseline/coverage-devel.json
               exit 0
             fi
-            echo "::notice::$BASE_REF has no baseline/coverage-devel.json yet; using this PR's own (first landing)."
+            echo "::warning::BOOTSTRAP: baseline taken from this PR (origin/$BASE_REF has no baseline/coverage-devel.json yet). This is the only case where the PR's own file is trusted; once merged, every later PR reads the base branch."
           fi
           cp baseline/coverage-devel.json /tmp/baseline/coverage-devel.json
       - name: Run the offline suite with coverage
