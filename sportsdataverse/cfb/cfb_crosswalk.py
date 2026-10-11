@@ -569,19 +569,19 @@ def _espn_team_name_keys(espn_team_id: Union[int, str], **kwargs: Any) -> set[st
 
     Used to find the ESPN team in Yahoo's team directory when the caller did not
     pass a Yahoo team id (Yahoo's full name, e.g. ``"Ohio State Buckeyes"``,
-    matches the ESPN display name after :func:`_norm_team`).
+    matches the ESPN display name after :func:`_norm_team`). ESPN's default
+    team directory is FBS only, so an FCS team is looked up in group 81.
     """
-    keys: set[str] = set()
     target = str(espn_team_id)
-    for r in _rows(espn_cfb_teams(**kwargs)):
-        if str(_pick(r, "team_id")) != target:
-            continue
-        for k in ("team_location", "team_display_name", "team_name", "team_nickname"):
-            nk = _norm_team(_pick(r, k))
-            if nk:
-                keys.add(nk)
-        break
-    return keys
+    for groups in (None, 81):  # the default (FBS) directory, then FCS
+        for r in _rows(espn_cfb_teams(groups=groups, **kwargs)):
+            if str(_pick(r, "team_id")) == target:
+                keys = {
+                    _norm_team(_pick(r, k))
+                    for k in ("team_location", "team_display_name", "team_name", "team_nickname")
+                }
+                return keys - {""}
+    return set()
 
 
 def _yahoo_team_id(espn_team_id: Union[int, str], season: int, **kwargs: Any) -> Optional[str]:
@@ -896,7 +896,14 @@ def _merge_rosters(
         (e, fox_by.get(e["person_key"]) if e.get("person_key") else None) for e in espn
     ]
     pairs += [(None, f) for f in fox_only]
-    ys = _match_yahoo([*espn, *fox_only], yahoo)
+    # An ESPN anchor without a jersey borrows its paired Fox player's jersey.
+    anchors = [
+        {**e, "jersey_key": f["jersey_key"]}
+        if e and f and not e.get("jersey_key") and f.get("jersey_key")
+        else (e or f)
+        for e, f in pairs
+    ]
+    ys = _match_yahoo([a for a in anchors if a is not None], yahoo)
     out = [row(e, f, y) for (e, f), y in zip(pairs, ys)]
     matched = {id(y) for y in ys if y is not None}
     out += [row(None, None, y) for y in yahoo if id(y) not in matched]  # Yahoo players neither ESPN nor Fox listed
@@ -908,9 +915,9 @@ def _match_yahoo(
 ) -> List[Optional[Mapping[str, Any]]]:
     """Pair each ESPN/Fox anchor with at most one Yahoo player of the same team (pure).
 
-    Pass 1 matches on name + jersey; pass 2 matches the leftovers on name alone,
-    but only when exactly one player on *each* side carries that name, so two
-    same-named teammates never trade ids. Names go through
+    Pass 1 matches on name + jersey, pass 2 on name alone; each pass pairs a
+    key only when exactly one player on *each* side carries it, so two
+    same-named teammates never trade ids by roster order. Names go through
     :func:`normalize_name` (drops "Jr."/"III" suffixes, folds punctuation).
     """
 
@@ -918,16 +925,16 @@ def _match_yahoo(
         return normalize_name(r.get("person_key"))
 
     out: List[Optional[Mapping[str, Any]]] = [None] * len(anchors)
-    used: set[int] = set()
+    left_nj = Counter((nk(a), a.get("jersey_key") or "") for a in anchors)
     by_name_jersey: Dict[tuple[str, str], List[Mapping[str, Any]]] = {}
     for y in yahoo:
         if nk(y) and y.get("jersey_key"):
             by_name_jersey.setdefault((nk(y), y["jersey_key"]), []).append(y)
     for i, a in enumerate(anchors):
-        hits = [y for y in by_name_jersey.get((nk(a), a.get("jersey_key") or ""), []) if id(y) not in used]
-        if hits:
+        key = (nk(a), a.get("jersey_key") or "")
+        hits = by_name_jersey.get(key, [])
+        if left_nj[key] == 1 and len(hits) == 1:
             out[i] = hits[0]
-            used.add(id(hits[0]))
     left = Counter(nk(a) for a in anchors)
     right: Dict[str, List[Mapping[str, Any]]] = {}
     for y in yahoo:

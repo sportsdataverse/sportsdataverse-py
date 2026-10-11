@@ -424,6 +424,53 @@ def test_merge_rosters_yahoo_name_jersey_then_unique_name() -> None:
     assert yahoo_only == ["y12"]
 
 
+def test_merge_rosters_yahoo_ambiguous_name_jersey_never_first_hit() -> None:
+    # two Yahoo players share name AND jersey -> neither attaches (no roster-order guess)
+    rows = _merge_rosters(
+        [_player("John Smith", "5", 1)], [], [_player("John Smith", "5", "ya"), _player("John Smith", "5", "yb")]
+    )
+    assert next(r for r in rows if r["espn_athlete_id"] == 1)["yahoo_athlete_id"] is None
+    assert sorted(r["yahoo_athlete_id"] for r in rows if r["matched_sources"] == "yahoo") == ["ya", "yb"]
+    # same on the anchor side: two ESPN players share name + jersey
+    rows = _merge_rosters(
+        [_player("John Smith", "5", 1), _player("John Smith", "5", 2)], [], [_player("John Smith", "5", "ya")]
+    )
+    assert all(r["yahoo_athlete_id"] is None for r in rows if r["espn_athlete_id"] is not None)
+
+
+def test_merge_rosters_yahoo_uses_fox_jersey_when_espn_has_none() -> None:
+    espn = [_player("Al Jones", "", 3)]
+    fox = [_player("Al Jones", "4", "f4")]
+    yahoo = [_player("Al Jones", "4", "y4"), _player("Al Jones", "8", "y8")]  # name alone is ambiguous
+    rows = _merge_rosters(espn, fox, yahoo)
+    row = next(r for r in rows if r["espn_athlete_id"] == 3)
+    assert row["fox_athlete_id"] == "f4" and row["yahoo_athlete_id"] == "y4"
+    assert row["espn_jersey"] is None  # the borrowed jersey is for matching only
+
+
+def test_yahoo_team_id_falls_back_to_fcs_directory(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[Any] = []
+
+    def fake_teams(groups: Any = None, **k: Any) -> pl.DataFrame:
+        calls.append(groups)
+        if groups == 81:
+            return pl.DataFrame(
+                {"team_id": [2], "team_location": ["Montana"], "team_display_name": ["Montana Grizzlies"]}
+            )
+        return pl.DataFrame(
+            {"team_id": [194], "team_location": ["Ohio State"], "team_display_name": ["Ohio State Buckeyes"]}
+        )
+
+    monkeypatch.setattr(cw, "espn_cfb_teams", fake_teams)
+    monkeypatch.setattr(
+        cw,
+        "yahoo_cfb_teams",
+        lambda season, week, **k: pl.DataFrame({"team_id": ["ncaaf.t.200"], "full_name": ["Montana Grizzlies"]}),
+    )
+    assert cw._yahoo_team_id(2, 2026) == "ncaaf.t.200"
+    assert calls == [None, 81]
+
+
 def test_merge_odds_matches_to_espn() -> None:
     mk = _matchup_key("ohio state buckeyes", "akron zips")
     events = [
