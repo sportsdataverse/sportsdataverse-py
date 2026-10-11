@@ -22,8 +22,11 @@ model needs, plus the committed calibration fixture:
    ``sigma_set`` / ``sigma_chase`` (probit scale that minimises training log-loss
    for the parametric raw win-prob ``Phi((proj_final - benchmark) / sigma)``),
    printed for pasting into ``FORMAT_TABLE`` (pooled) and ``REGIME_CONSTANTS``
-   (per ODI regime, fitted on that regime's matches with the pooled surface;
-   rules/cricket.yaml#cricket-2012-odi-two-new-balls-four-out).
+   (per ODI regime with 100+ training matches and a thick grid -- the runtime's
+   ``_usable_regimes`` rule -- fitted on that regime's matches projected through
+   its own grid; rules/cricket.yaml#cricket-2012-odi-two-new-balls-four-out).
+   The calibrator (3) is fitted on the raw probabilities the runtime produces,
+   regime sigma where a regime is applied and pooled sigma elsewhere.
 
 3. **Isotonic calibration surface** per ``(fmt, phase)`` mapping the parametric
    raw win-prob to the empirical win rate — this is what makes the shipped
@@ -65,6 +68,7 @@ from scipy.stats import norm
 from sklearn.isotonic import IsotonicRegression
 
 from sportsdataverse.cricket.cricket_model_constants import ODI_REGIMES, POOLED_REGIME, T20_REGIME
+from sportsdataverse.cricket.cricket_win_prob import _usable_regimes
 
 ROOT = Path(__file__).resolve().parents[2]
 CORPUS = ROOT / "dev/cricket/.cache/deliveries_all.parquet"
@@ -166,13 +170,38 @@ def _surface_frame(grid: np.ndarray, over_limit: int, fmt: str, regime: str, sup
 # --------------------------------------------------------------------------- #
 # projection + parametric raw win-prob
 # --------------------------------------------------------------------------- #
-def _project(states: pl.DataFrame, surface: pl.DataFrame, par: dict[str, float]) -> pl.DataFrame:
+def _project(
+    states: pl.DataFrame,
+    surface: pl.DataFrame,
+    par: dict[str, float],
+    regime_par: dict[str, float] | None = None,
+    usable: set[str] | None = None,
+) -> pl.DataFrame:
+    """Projection as the runtime does it: a usable regime's own grid and par, else the pooled ones.
+
+    ``use_regime`` marks the rows whose regime constants apply (ODI regimes in ``regime_par``).
+    """
+    regime_par = regime_par or {}
+    usable = usable or set()
     par_expr = pl.col("fmt").replace_strict(par, default=None).cast(pl.Float64)
-    pooled = surface.filter(pl.col("regime") == POOLED_REGIME).select("fmt", "overs_left", "wickets_left", "resource")
-    s = states.with_columns(
-        overs_left=((pl.col("balls_total") - pl.col("legal_balls")) // 6).cast(pl.Int64),
-        wickets_left=(10 - pl.col("wickets")).cast(pl.Int64),
-    ).join(pooled, on=["fmt", "overs_left", "wickets_left"], how="left")
+    for regime, value in regime_par.items():
+        if regime in usable:
+            par_expr = pl.when(pl.col("regime") == regime).then(pl.lit(value)).otherwise(par_expr)
+    grid = surface.rename({"regime": "surface_regime"}).select(
+        "fmt", "surface_regime", "overs_left", "wickets_left", "resource"
+    )
+    s = (
+        states.with_columns(
+            overs_left=((pl.col("balls_total") - pl.col("legal_balls")) // 6).cast(pl.Int64),
+            wickets_left=(10 - pl.col("wickets")).cast(pl.Int64),
+            surface_regime=pl.when(pl.col("regime").is_in(list(usable)) if usable else pl.lit(False))
+            .then(pl.col("regime"))
+            .otherwise(pl.lit(POOLED_REGIME)),
+            use_regime=pl.col("regime").is_in([r for r in regime_par if r in usable] or [""]),
+        )
+        .join(grid, on=["fmt", "surface_regime", "overs_left", "wickets_left"], how="left")
+        .drop("surface_regime")
+    )
     s = s.with_columns(resources_left=pl.col("resource").fill_null(0.0))
     s = s.with_columns(proj_final=(pl.col("runs") + pl.col("resources_left") * par_expr).cast(pl.Float64))
     benchmark = pl.when(pl.col("innings_number") == 2).then(pl.col("target").cast(pl.Float64)).otherwise(par_expr)
@@ -215,6 +244,7 @@ def _holdout_states(states: pl.DataFrame) -> pl.DataFrame:
         balls_total=pl.col("balls_total"),
         target=pl.col("target"),
         fmt=pl.col("fmt"),
+        match_date=pl.col("match_date"),
         chasing_won=pl.col("batting_team_won"),
     )
 
@@ -238,6 +268,7 @@ def _wpa_holdout_states(states: pl.DataFrame, match_ids: list[str]) -> pl.DataFr
         balls_total=pl.col("balls_total"),
         target=pl.col("target"),
         fmt=pl.col("fmt"),
+        match_date=pl.col("match_date"),
         chasing_won=pl.col("batting_team_won"),
         innings_final_runs=pl.col("innings_final_runs"),
     )
@@ -278,46 +309,68 @@ def main() -> None:
         )
     surface = pl.concat(surfaces, how="vertical")
 
-    proj_train = _project(train_df, surface, par).with_columns(phase=_phase(pl.col("innings_number")))
+    # pooled sigma per format, on the pooled projection (what a fallen-back row gets at runtime)
+    proj_pooled = _project(train_df, surface, par).with_columns(phase=_phase(pl.col("innings_number")))
     for fmt in OVER_LIMIT:
         sigma_hi = 70.0 if fmt == "t20" else 120.0
-        s_set = proj_train.filter((pl.col("fmt") == fmt) & (pl.col("phase") == "set"))
-        s_ch = proj_train.filter((pl.col("fmt") == fmt) & (pl.col("phase") == "chase"))
+        s_set = proj_pooled.filter((pl.col("fmt") == fmt) & (pl.col("phase") == "set"))
+        s_ch = proj_pooled.filter((pl.col("fmt") == fmt) & (pl.col("phase") == "chase"))
         sigmas[fmt] = (
             _fit_sigma(s_set["z"].to_numpy(), s_set["batting_team_won"].to_numpy().astype(float), sigma_hi),
             _fit_sigma(s_ch["z"].to_numpy(), s_ch["batting_team_won"].to_numpy().astype(float), sigma_hi),
         )
 
-    # 1b) per-regime par / sigma on the pooled surface (REGIME_CONSTANTS); the calibrator stays
-    #     pooled per (fmt, phase)
-    regime_consts: dict[str, dict[str, float]] = {}
+    # 1b) per-regime par (100+ training matches), then the runtime's whole-regime rule (thick grid AND
+    #     constants) decides which regimes are applied; their sigma is fitted on their own projection
+    regime_par: dict[str, float] = {}
     for regime in sorted(r for r in train_df["regime"].unique().to_list() if r != T20_REGIME):
-        rtrain = proj_train.filter(pl.col("regime") == regime)
+        rtrain = train_df.filter(pl.col("regime") == regime)
         if rtrain["match_id"].n_unique() < 100:
             continue
-        r_par = float(
-            rtrain.filter(pl.col("innings_number") == 1)
-            .group_by("match_id")
-            .agg(pl.col("innings_final_runs").first())["innings_final_runs"]
-            .mean()
+        regime_par[regime] = round(
+            float(
+                rtrain.filter(pl.col("innings_number") == 1)
+                .group_by("match_id")
+                .agg(pl.col("innings_final_runs").first())["innings_final_runs"]
+                .mean()
+            ),
+            1,
         )
+    usable = _usable_regimes(surface, {r: {} for r in regime_par})
+    regime_par = {r: v for r, v in regime_par.items() if r in usable}
+    proj_train = _project(train_df, surface, par, regime_par, usable).with_columns(
+        phase=_phase(pl.col("innings_number"))
+    )
+    regime_consts: dict[str, dict[str, float]] = {}
+    for regime, r_par in regime_par.items():
+        rtrain = proj_train.filter(pl.col("regime") == regime)
         r_set = rtrain.filter(pl.col("phase") == "set")
         r_ch = rtrain.filter(pl.col("phase") == "chase")
         regime_consts[regime] = {
-            "par_score": round(r_par, 1),
+            "par_score": r_par,
             "sigma_set": _fit_sigma(r_set["z"].to_numpy(), r_set["batting_team_won"].to_numpy().astype(float), 120.0),
             "sigma_chase": _fit_sigma(r_ch["z"].to_numpy(), r_ch["batting_team_won"].to_numpy().astype(float), 120.0),
         }
 
-    # 2) parametric raw win-prob on train + per-(fmt, phase) isotonic calibrator
+    # 2) parametric raw win-prob exactly as the runtime computes it (regime sigma where a regime is
+    #    applied, pooled sigma elsewhere) + per-(fmt, phase) isotonic calibrator on it
     def raw_prob(frame: pl.DataFrame) -> np.ndarray:
         fa = frame["fmt"].to_numpy()
         ph = frame["phase"].to_numpy()
+        rg = frame["regime"].to_numpy()
+        ur = frame["use_regime"].to_numpy()
         za = frame["z"].to_numpy()
         out = np.zeros(len(za))
         for fmt, (sig_set, sig_ch) in sigmas.items():
-            out[(fa == fmt) & (ph == "set")] = norm.cdf(za[(fa == fmt) & (ph == "set")] / sig_set)
-            out[(fa == fmt) & (ph == "chase")] = norm.cdf(za[(fa == fmt) & (ph == "chase")] / sig_ch)
+            m_set = (fa == fmt) & (ph == "set") & ~ur
+            m_ch = (fa == fmt) & (ph == "chase") & ~ur
+            out[m_set] = norm.cdf(za[m_set] / sig_set)
+            out[m_ch] = norm.cdf(za[m_ch] / sig_ch)
+        for regime, consts in regime_consts.items():
+            m_set = ur & (rg == regime) & (ph == "set")
+            m_ch = ur & (rg == regime) & (ph == "chase")
+            out[m_set] = norm.cdf(za[m_set] / consts["sigma_set"])
+            out[m_ch] = norm.cdf(za[m_ch] / consts["sigma_chase"])
         return out
 
     ptr = raw_prob(proj_train)
@@ -336,7 +389,7 @@ def main() -> None:
     calib = pl.DataFrame(calib_rows).with_columns(pl.col("x").cast(pl.Float64), pl.col("y").cast(pl.Float64))
 
     # 3) evaluate on holdout (report + gate floor)
-    proj_test = _project(test_df, surface, par).with_columns(phase=_phase(pl.col("innings_number")))
+    proj_test = _project(test_df, surface, par, regime_par, usable).with_columns(phase=_phase(pl.col("innings_number")))
     proj_test = proj_test.filter(pl.col("legal_balls") % 6 == 0)  # over boundaries, mirrors the fixture
     pte = raw_prob(proj_test)
     fa_te, ph_te = proj_test["fmt"].to_numpy(), proj_test["phase"].to_numpy()
@@ -368,6 +421,7 @@ def main() -> None:
             f"par_score={par[fmt]:.1f}, sigma_set={sig_set:.1f}, sigma_chase={sig_ch:.1f}),"
         )
     print("\n=== fitted ODI regime constants (paste into REGIME_CONSTANTS) ===")
+    print(f"  applied whole (thick grid + 100 matches): {sorted(usable)}; the rest fall back to pooled")
     for regime, consts in regime_consts.items():
         print(f'    "{regime}": {consts},')
     print(f"\nwrote {SURFACE_OUT}")

@@ -10,10 +10,13 @@ Pipeline for each state row:
 0. ``regime = cricket_regime(fmt, match_date)`` — the ODI fielding-restriction
    regime of the match (``rules/cricket.yaml``: 2005 powerplays, the 2011 window,
    2012 two new balls / four out, 2015 batting powerplay removed; T20I is one
-   regime, no date is the pooled corpus). The surface is keyed on it; a regime
-   whose own grid has fewer than :data:`MIN_REGIME_CELLS` cells with at least
-   :data:`MIN_CELL_SUPPORT` states falls back to the pooled 2002-2026 surface,
-   and the par/sigma come from ``get_format(fmt, regime)``.
+   regime, no date is the pooled corpus). A regime is applied whole or not at
+   all: its own grid AND its fitted par/sigma (``REGIME_CONSTANTS``, via
+   ``get_format(fmt, regime)``). A regime whose grid has fewer than
+   :data:`MIN_REGIME_CELLS` cells with at least :data:`MIN_CELL_SUPPORT` states,
+   or that has no fitted constants (the fit emits them only for 100+ matches;
+   the 13-month ``odi_2011`` window has none), uses the pooled 2002-2026 surface
+   and constants.
 1. ``resources_left = resource(fmt, regime, overs_left, wickets_left)`` — bundled
    Duckworth/Lewis-style surface (fraction of the innings total still to come).
 2. ``proj_final = runs + resources_left * par_score`` — an unbiased, par-centred
@@ -46,7 +49,13 @@ import polars as pl
 from scipy.stats import norm
 
 from sportsdataverse._temporal import as_date
-from sportsdataverse.cricket.cricket_model_constants import ODI_REGIMES, POOLED_REGIME, T20_REGIME, get_format
+from sportsdataverse.cricket.cricket_model_constants import (
+    ODI_REGIMES,
+    POOLED_REGIME,
+    REGIME_CONSTANTS,
+    T20_REGIME,
+    get_format,
+)
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -238,15 +247,21 @@ def _load_surface() -> pl.DataFrame:
     )
 
 
-def _usable_regimes(surface: pl.DataFrame) -> set[str]:
-    """Regimes whose own grid is thick enough to use (see :data:`MIN_REGIME_CELLS`)."""
+def _usable_regimes(surface: pl.DataFrame, constants: dict[str, dict[str, float]] | None = None) -> set[str]:
+    """Regimes applied whole: a thick grid (:data:`MIN_REGIME_CELLS` cells with
+    :data:`MIN_CELL_SUPPORT`+ states) AND fitted constants (``constants``, default
+    :data:`~sportsdataverse.cricket.cricket_model_constants.REGIME_CONSTANTS`; the T20
+    regime is the pooled T20 fit and needs none). Anything else falls back to the pooled
+    surface and constants, so a regime's grid and its par/sigma never come from
+    different corpora."""
+    fitted = REGIME_CONSTANTS if constants is None else constants
     counts = (
         surface.filter(pl.col("regime") != POOLED_REGIME)
         .group_by("regime")
         .agg((pl.col("support").fill_null(0) >= MIN_CELL_SUPPORT).sum().alias("cells"))
         .filter(pl.col("cells") >= MIN_REGIME_CELLS)
     )
-    return set(counts["regime"].to_list())
+    return {r for r in counts["regime"].to_list() if r == T20_REGIME or r in fitted}
 
 
 def _regime_expr() -> pl.Expr:
@@ -342,8 +357,11 @@ def cricket_win_probability(state: pl.DataFrame, *, return_as_pandas: bool = Fal
         .then(pl.col("regime"))
         .otherwise(pl.lit(POOLED_REGIME))
     )
-    # par / sigma per (fmt, regime): the pooled constants unless REGIME_CONSTANTS has the regime
-    consts = {(f, r): get_format(f, r) for f, r in sorted(set(zip(df["fmt"].to_list(), df["regime"].to_list())))}
+    # par / sigma per (fmt, regime): the regime's constants only where the regime is applied whole
+    consts = {
+        (f, r): get_format(f, r if r in usable else None)
+        for f, r in sorted(set(zip(df["fmt"].to_list(), df["regime"].to_list())))
+    }
     par_expr = pl.lit(None, pl.Float64)
     for (f, r), fc in consts.items():
         par_expr = (

@@ -4,11 +4,11 @@ sdv-internal-refs rules/cricket.yaml: ``cricket-2005-odi-powerplays``,
 ``cricket-2011-odi-powerplay-window``, ``cricket-2012-odi-two-new-balls-four-out``,
 ``cricket-2015-odi-batting-powerplay-removed``.
 
-The bundled surface carries the regime key but its regime rows are copies of the pooled
-2002-2026 grid with null support (the Cricsheet corpus is not committed; the per-regime
-refit is ``dev/league_ports/fit_cricket_resource_surface.py``). So the plumbing is tested
-end to end -- date -> regime -> surface row -> constants -- and the pooled fallback is
-pinned: today every regime falls back and the numbers are the pooled numbers.
+The bundled surface and ``REGIME_CONSTANTS`` are the Cricsheet refit
+(``dev/league_ports/fit_cricket_resource_surface.py``, male ODIs 2002-2026). A regime is
+applied whole -- its own grid AND its fitted constants -- or not at all: the 13-month
+``odi_2011`` window has a thick enough grid but fewer than 100 matches, so the fit emits no
+constants for it and every 2011-12 ODI falls back to the pooled surface and constants.
 """
 
 from __future__ import annotations
@@ -21,6 +21,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse.cricket import cricket_win_prob as mod
 from sportsdataverse.cricket.cricket_model_constants import (
     FORMAT_TABLE,
     ODI_REGIMES,
@@ -43,6 +44,8 @@ from sportsdataverse.cricket.cricket_win_prob import (
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures"
 HOLDOUT = FIX / "league_ports/cricket_holdout.parquet"
+FITTED = {"odi_pre2005", "odi_2005", "odi_2012", "odi_2015"}
+THIN = "odi_2011"
 
 
 @pytest.mark.parametrize(
@@ -71,21 +74,28 @@ def test_t20_is_one_regime_and_test_is_deferred():
         cricket_regime("test", None)
 
 
-def test_regime_constants_fall_back_to_the_pooled_format_table():
-    assert REGIME_CONSTANTS == {}  # placeholder until the per-regime refit
-    for regime, _ in ODI_REGIMES:
-        assert get_format("odi", regime) == FORMAT_TABLE["odi"]
-    assert get_format("odi", POOLED_REGIME) == FORMAT_TABLE["odi"]
+def test_fitted_regime_constants_and_the_thin_window_without_them():
+    assert set(REGIME_CONSTANTS) == FITTED and THIN not in REGIME_CONSTANTS
+    pooled = FORMAT_TABLE["odi"]
+    for regime in FITTED:
+        fc = get_format("odi", regime)
+        assert set(REGIME_CONSTANTS[regime]) == {"par_score", "sigma_set", "sigma_chase"}
+        assert (fc.par_score, fc.sigma_set, fc.sigma_chase) != (pooled.par_score, pooled.sigma_set, pooled.sigma_chase)
+        assert (fc.balls_total, fc.max_wickets, fc.name) == (300, 10, "odi")
+    assert get_format("odi", THIN) == pooled
+    assert get_format("odi", POOLED_REGIME) == pooled
+    # the pooled par straddles the fitted regimes (rules/cricket.yaml#cricket-2012-odi-two-new-balls-four-out)
+    assert REGIME_CONSTANTS["odi_pre2005"]["par_score"] < pooled.par_score < REGIME_CONSTANTS["odi_2015"]["par_score"]
 
 
 def test_regime_constants_override_when_present(monkeypatch):
-    monkeypatch.setitem(REGIME_CONSTANTS, "odi_2015", {"par_score": 270.0, "sigma_set": 65.0})
-    fc = get_format("odi", "odi_2015")
+    monkeypatch.setitem(REGIME_CONSTANTS, THIN, {"par_score": 270.0, "sigma_set": 65.0})
+    fc = get_format("odi", THIN)
     assert (fc.par_score, fc.sigma_set, fc.sigma_chase) == (270.0, 65.0, FORMAT_TABLE["odi"].sigma_chase)
     assert get_format("odi") == FORMAT_TABLE["odi"]
 
 
-def test_bundled_surface_carries_every_regime_and_the_pooled_grid():
+def test_bundled_surface_carries_every_regime_with_support():
     surf = _load_surface_regimes()
     assert surf.columns == ["fmt", "regime", "overs_left", "wickets_left", "resource", "support"]
     counts = {(r["fmt"], r["regime"]): r["len"] for r in surf.group_by("fmt", "regime").len().iter_rows(named=True)}
@@ -94,9 +104,17 @@ def test_bundled_surface_carries_every_regime_and_the_pooled_grid():
         assert counts[("odi", regime)] == 51 * 11
     assert counts[("t20", T20_REGIME)] == 21 * 11
     assert _load_surface().shape == (51 * 11 + 21 * 11, 4)
-    # the regime rows are copies of the pooled grid with no support: none is usable yet
-    assert surf["support"].is_null().all()
-    assert _usable_regimes(surf) == set()
+    assert surf["support"].is_not_null().all() and (surf["support"] >= 0).all()
+    # every ODI regime grid is thick by cells; the whole-regime rule still drops the one without constants
+    cells = surf.group_by("regime").agg((pl.col("support") >= MIN_CELL_SUPPORT).sum().alias("c"))
+    assert (cells["c"] >= MIN_REGIME_CELLS).all()
+    assert _usable_regimes(surf) == FITTED | {T20_REGIME}
+    assert _usable_regimes(surf, {THIN: {}}) == {THIN, T20_REGIME}
+    # the regime grids are real fits, not copies of the pooled grid
+    pooled = surf.filter(pl.col("regime") == POOLED_REGIME).select("fmt", "overs_left", "wickets_left", "resource")
+    for regime in FITTED:
+        own = surf.filter(pl.col("regime") == regime).join(pooled, on=["fmt", "overs_left", "wickets_left"])
+        assert (own["resource"] - own["resource_right"]).abs().max() > 0.01
 
 
 def test_thin_regime_rule_uses_the_stated_thresholds():
@@ -121,19 +139,26 @@ def test_match_state_carries_the_match_date_from_a_real_summary():
     assert cricket_win_probability(st)["regime"].to_list() == [T20_REGIME]
 
 
-def test_holdout_without_dates_scores_on_the_pooled_regime():
+def test_holdout_dates_select_every_regime_and_no_date_is_pooled():
     h = pl.read_parquet(HOLDOUT)
+    assert h.schema["match_date"] == pl.Date and h["match_date"].is_not_null().all()
     out = cricket_win_probability(h)
-    assert out.schema["regime"] == pl.Utf8
-    assert set(out.filter(pl.col("fmt") == "odi")["regime"].to_list()) == {POOLED_REGIME}
+    assert set(out.filter(pl.col("fmt") == "odi")["regime"].to_list()) == FITTED | {THIN}
     assert set(out.filter(pl.col("fmt") == "t20")["regime"].to_list()) == {T20_REGIME}
-    # the fixture has no match_date column at all; that is the same as a null date
-    assert "match_date" not in h.columns
-    assert out.equals(cricket_win_probability(h.with_columns(match_date=pl.lit(None, pl.Date))))
+    undated = cricket_win_probability(h.drop("match_date"))
+    assert set(undated.filter(pl.col("fmt") == "odi")["regime"].to_list()) == {POOLED_REGIME}
+    null_dated = cricket_win_probability(h.with_columns(match_date=pl.lit(None, pl.Date)))
+    assert undated.drop("match_date").equals(null_dated.drop("match_date"))
+    # the thin 2011-12 window is scored exactly as the pooled regime
+    thin = out.filter(pl.col("regime") == THIN)
+    assert thin.height > 1000
+    same = undated.filter(out["regime"] == THIN)
+    assert thin.drop("regime", "match_date").equals(same.drop("regime", "match_date"))
 
 
-def test_dated_odi_states_select_their_regime_and_fall_back_to_the_pooled_surface():
-    odi = pl.read_parquet(HOLDOUT).filter(pl.col("fmt") == "odi").head(3000)
+def test_dated_odi_states_select_their_regime_grid_and_constants():
+    odi = pl.read_parquet(HOLDOUT).filter((pl.col("fmt") == "odi") & (pl.col("balls_bowled") < 240)).drop("match_date")
+    odi = odi.head(3000)
     pooled = cricket_win_probability(odi)
     for date, regime in (
         (dt.date(2003, 3, 1), "odi_pre2005"),
@@ -142,28 +167,22 @@ def test_dated_odi_states_select_their_regime_and_fall_back_to_the_pooled_surfac
     ):
         dated = cricket_win_probability(odi.with_columns(match_date=pl.lit(date)))
         assert set(dated["regime"].to_list()) == {regime}
-        # the regime grid is a copy of the pooled one today, so the numbers are the pooled numbers
-        assert dated["resources_left"].equals(pooled["resources_left"])
-        assert dated["win_prob"].equals(pooled["win_prob"])
+        assert (dated["resources_left"] != pooled["resources_left"]).mean() > 0.5
+        assert (dated["win_prob"] != pooled["win_prob"]).mean() > 0.5
+    thin = cricket_win_probability(odi.with_columns(match_date=pl.lit(dt.date(2012, 1, 1))))
+    assert set(thin["regime"].to_list()) == {THIN}
+    assert thin["resources_left"].equals(pooled["resources_left"]) and thin["win_prob"].equals(pooled["win_prob"])
 
 
-def test_a_usable_regime_grid_is_actually_selected(monkeypatch):
-    # Give odi_2015 a thick grid whose resource is the pooled one plus 0.01: a 2024 state must
-    # read it, a 2003 state must not.
+def test_a_regime_whose_grid_goes_thin_falls_back_to_the_pooled_surface(monkeypatch):
     surf = _load_surface_regimes()
-    bumped = surf.with_columns(
-        resource=pl.when(pl.col("regime") == "odi_2015").then(pl.col("resource") + 0.01).otherwise(pl.col("resource")),
-        support=pl.when(pl.col("regime") == "odi_2015").then(MIN_CELL_SUPPORT).otherwise(None).cast(pl.Int64),
-    )
-    from sportsdataverse.cricket import cricket_win_prob as mod
-
-    monkeypatch.setattr(mod, "_load_surface_regimes", lambda: bumped)
-    odi = pl.read_parquet(HOLDOUT).filter((pl.col("fmt") == "odi") & (pl.col("balls_bowled") < 240)).head(500)
+    monkeypatch.setattr(mod, "_load_surface_regimes", lambda: surf.with_columns(support=pl.lit(None, pl.Int64)))
+    odi = pl.read_parquet(HOLDOUT).filter((pl.col("fmt") == "odi") & (pl.col("balls_bowled") < 240)).drop("match_date")
+    odi = odi.head(500)
     pooled = cricket_win_probability(odi)
-    new = cricket_win_probability(odi.with_columns(match_date=pl.lit(dt.date(2024, 6, 15))))
-    old = cricket_win_probability(odi.with_columns(match_date=pl.lit(dt.date(2003, 3, 1))))
-    assert (new["resources_left"] - pooled["resources_left"]).round(6).unique().to_list() == [0.01]
-    assert old["resources_left"].equals(pooled["resources_left"])
+    dated = cricket_win_probability(odi.with_columns(match_date=pl.lit(dt.date(2024, 6, 15))))
+    assert set(dated["regime"].to_list()) == {"odi_2015"}
+    assert dated["resources_left"].equals(pooled["resources_left"]) and dated["win_prob"].equals(pooled["win_prob"])
 
 
 def test_trimmed_summary_fixture_round_trip():

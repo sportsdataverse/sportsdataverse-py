@@ -130,7 +130,7 @@ class FormatConstants:
 
 
 # par_score / sigma_* are FITTED on the real Cricsheet corpus (male T20I + ODI,
-# 2002-2026) by dev/league_ports/fit_cricket_resource_surface.py. Re-running that
+# 2002-2026; refit 2026-10-10, 3,581 T20I + 2,589 ODI) by dev/league_ports/fit_cricket_resource_surface.py. Re-running that
 # script rewrites both this block and the bundled parquet artifacts; keep them in
 # sync. balls_total / max_wickets are rule-fixed, not fitted.
 FORMAT_TABLE: dict[str, FormatConstants] = {
@@ -138,17 +138,17 @@ FORMAT_TABLE: dict[str, FormatConstants] = {
         name="t20",
         balls_total=120,
         max_wickets=10,
-        par_score=149.2,
-        sigma_set=43.0,
-        sigma_chase=34.0,
+        par_score=149.5,
+        sigma_set=42.0,
+        sigma_chase=33.0,
     ),
     "odi": FormatConstants(
         name="odi",
         balls_total=300,
         max_wickets=10,
-        par_score=248.7,
-        sigma_set=71.0,
-        sigma_chase=58.0,
+        par_score=249.3,
+        sigma_set=76.0,
+        sigma_chase=59.0,
     ),
 }
 
@@ -178,11 +178,19 @@ ODI_REGIMES: tuple[tuple[str, dt.date], ...] = (
     ("odi_2012", dt.date(2012, 10, 30)),
     ("odi_2015", dt.date(2015, 7, 5)),
 )
-#: Per-regime ``par_score`` / ``sigma_set`` / ``sigma_chase`` overriding :data:`FORMAT_TABLE`.
-#: Empty until the per-regime refit (``dev/league_ports/fit_cricket_resource_surface.py``
-#: prints the block to paste here from a corpus carrying ``match_date``); a regime without an
-#: entry uses the pooled 2002-2026 constants.
-REGIME_CONSTANTS: dict[str, dict[str, float]] = {}
+#: Per-regime ``par_score`` / ``sigma_set`` / ``sigma_chase`` overriding :data:`FORMAT_TABLE`,
+#: fitted 2026-10-10 by ``dev/league_ports/fit_cricket_resource_surface.py`` on Cricsheet male ODIs
+#: 2002-2026 (2,589 matches) for every regime with 100+ training matches and a thick grid (the
+#: runtime's whole-regime rule, ``cricket_win_prob._usable_regimes``), each on its own grid. The
+#: 13-month ``odi_2011`` window (rules/cricket.yaml#cricket-2011-odi-powerplay-window) has no entry
+#: and falls back to the pooled surface and constants. Regimes per ``cricket-2005-odi-powerplays`` /
+#: ``cricket-2012-odi-two-new-balls-four-out`` / ``cricket-2015-odi-batting-powerplay-removed``.
+REGIME_CONSTANTS: dict[str, dict[str, float]] = {
+    "odi_pre2005": {"par_score": 228.6, "sigma_set": 45.0, "sigma_chase": 44.0},
+    "odi_2005": {"par_score": 242.8, "sigma_set": 63.0, "sigma_chase": 53.0},
+    "odi_2012": {"par_score": 256.6, "sigma_set": 64.0, "sigma_chase": 61.0},
+    "odi_2015": {"par_score": 255.3, "sigma_set": 91.0, "sigma_chase": 63.0},
+}
 
 
 def cricket_regime(fmt: str, match_date: Optional[dt.date]) -> str:
