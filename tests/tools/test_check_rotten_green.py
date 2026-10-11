@@ -31,6 +31,11 @@ def test_skips(df):
         pytest.skip("empty")
     assert df["x"].to_list() == [1]
 
+def test_xfails_itself(df):
+    if df.is_empty():
+        pytest.xfail("empty")
+    assert df["x"].to_list() == [1]
+
 class TestThings:
     def test_not_none(self, x):
         assert x is not None
@@ -41,7 +46,7 @@ def test_flags_weak_conditional_and_skipping_tests(tmp_path):
     path = tmp_path / "test_sample.py"
     path.write_text(_SRC, encoding="utf-8")
     flagged = [line.split(": ")[1] for line in rg.check(path)]
-    assert flagged == ["test_weak_only", "test_conditional", "test_skips", "test_not_none"]
+    assert flagged == ["test_weak_only", "test_conditional", "test_skips", "test_xfails_itself", "test_not_none"]
 
 
 def test_main_prints_the_count_and_exits_nonzero(tmp_path, capsys):

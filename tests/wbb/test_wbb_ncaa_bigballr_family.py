@@ -224,7 +224,7 @@ def test_ncaa_wbb_on_off_delegates(wbb_lineups: pl.DataFrame) -> None:
 def test_ncaa_wbb_player_stats_delegates(wbb_pbp: pl.DataFrame) -> None:
     got = ncaa_wbb_player_stats(wbb_pbp)
     # per-game rows here; the R golden is the multi-game aggregate, so compare the totals
-    assert got.height == 74
+    assert got.height == 74  # observed count (players x games); the golden has no per-game rows
     assert got["pts"].sum() == _golden("player_stats")["PTS"].sum()
     assert_frame_equal(got, ncaa_mbb_player_stats(wbb_pbp))
 

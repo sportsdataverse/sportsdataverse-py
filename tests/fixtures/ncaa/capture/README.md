@@ -10,4 +10,4 @@
 
 | file | source | notes |
 |---|---|---|
-| `access_denied_box_score_385627.html` | `GET https://stats.ncaa.org/contests/385627/box_score` with plain `requests` and a desktop Chrome user agent, captured 2026-10-11 | HTTP 403, `text/html`, 405 bytes: Akamai's "Access Denied" page, what a client that has not solved the bot-manager challenge gets instead of the box score. Byte-for-byte except the two Akamai reference ids, replaced with `REDACTED` (they encode request/edge addresses). `capture._is_clean` must reject it (B-M36). |
+| `access_denied_box_score_385627.html` | `GET https://stats.ncaa.org/contests/385627/box_score` with plain `requests` and a desktop Chrome user agent, captured 2026-10-11 | HTTP 403, `text/html`, 405 bytes as served (335 after redaction): Akamai's "Access Denied" page, what a client that has not solved the bot-manager challenge gets instead of the box score. Byte-for-byte except the two Akamai reference ids, replaced with `REDACTED` (they encode request/edge addresses). `capture._is_clean` must reject it (B-M36). |

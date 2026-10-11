@@ -9,7 +9,10 @@ function's own output.
 
 A case the code fails today is a strict xfail naming its finding id and the task that fixes it:
 B-H2 / B-M12 / B-M14 / B-M16 (shape half) / B-M24 / B-M25 / B-GB-21 in task 2.9, B-M16 (dtype
-half) in task 5.1. A fix turns the xfail into XPASS(strict) and the fixing PR flips it.
+half) in task 5.1. A fix turns the xfail into XPASS(strict) and the fixing PR flips it. Each
+mark pins the failure mode measured today (``raises=``): an assertion for the value cases, the
+exception the parser raises for each malformed-event case, so a fix that trades one crash for
+another, or a new crash, fails the test instead of staying XFAIL.
 """
 
 from __future__ import annotations
@@ -76,8 +79,8 @@ SCHEDULE_IDS: Dict[str, Dict[str, tuple]] = {
 TEAMS_IDS = {"team_id": _STR, "team_uid": _STR}
 
 
-def _xfail(finding: str, why: str) -> Any:
-    return pytest.mark.xfail(strict=True, raises=AssertionError, reason=f"{finding}: {why}")
+def _xfail(finding: str, why: str, raises: Any = AssertionError) -> Any:
+    return pytest.mark.xfail(strict=True, raises=raises, reason=f"{finding}: {why}")
 
 
 def _documented(league: str, family: str) -> List[str]:
@@ -92,8 +95,8 @@ def _payload(name: str) -> Dict[str, Any]:
 def _call(league: str, family: str, monkeypatch, body: Dict[str, Any], **kwargs: Any):
     """Serve ``body`` to ``espn_<league>_<family>`` and return ``(frame, urls hit)``.
 
-    Any exception is re-raised as an AssertionError naming the case, so a strict xfail
-    (``raises=AssertionError``) fails loudly if the code breaks in a NEW way.
+    Exceptions propagate unchanged, so each strict xfail's ``raises=`` names the one failure mode
+    it expects; a return that is not a DataFrame (B-H2's ``None``) is an AssertionError.
     """
     calls = _route(monkeypatch, lambda url: (200, json.dumps(body), "application/json"))
     fn = getattr(importlib.import_module(f"sportsdataverse.{league}.{league}_{family}"), f"espn_{league}_{family}")
@@ -101,8 +104,6 @@ def _call(league: str, family: str, monkeypatch, body: Dict[str, Any], **kwargs:
     clear()
     try:
         out = fn(**kwargs)
-    except Exception as exc:  # noqa: BLE001 -- re-raised as the assertion this test makes
-        raise AssertionError(f"espn_{league}_{family} raised on a real payload: {exc!r}") from exc
     finally:
         clear()  # never leave a served fixture in the cache for another test
     assert isinstance(out, pl.DataFrame), f"espn_{league}_{family} returned {type(out).__name__}, not a DataFrame"
@@ -131,6 +132,13 @@ def _no_season(event: Dict[str, Any]) -> None:
 
 
 #: Mutations of ONE real event (B-M24's proof test): the other events of the day must survive.
+#: The exception each copy without a per-event guard raises on it today (the strict xfail's ``raises=``).
+EVENT_MUTATION_RAISES = {
+    "event_missing_notes": KeyError,
+    "event_one_competitor": IndexError,
+    "event_empty_competitions": IndexError,
+    "event_missing_season": AttributeError,
+}
 EVENT_MUTATIONS: Dict[str, Callable[[Dict[str, Any]], None]] = {
     "event_missing_notes": _drop_notes,
     "event_one_competitor": _one_competitor,
@@ -163,7 +171,9 @@ def schedule_cases(league: str) -> List[Any]:
     cases.append(pytest.param("empty_slate", marks=empty_marks))
     for name in EVENT_MUTATIONS:
         guarded = league == "mlb" or (league == "cfb" and name == "event_empty_competitions")
-        marks = [] if guarded else [_xfail("B-M24", "one malformed event discards the whole day; task 2.9")]
+        raises = EVENT_MUTATION_RAISES[name]
+        why = f"one malformed event discards the whole day ({raises.__name__}); task 2.9"
+        marks = [] if guarded else [_xfail("B-M24", why, raises=raises)]
         cases.append(pytest.param(name, marks=marks))
     if league != "mlb":  # mlb emits no linescores
         canceled_marks = [] if league == "cfb" else [_xfail("B-GB-21", "only Postponed is masked; task 2.9")]

@@ -73,11 +73,8 @@ def test_espn_cfb_teams_site_returns_many_teams():
     payload = espn_cfb_teams_site(return_parsed=False)
     sports = payload.get("sports", [{}])
     teams = sports[0].get("leagues", [{}])[0].get("teams") or []
-    if not teams:
-        # ESPN Site v2 occasionally returns an empty teams list on a transient upstream
-        # hiccup (observed on CI, not reproducible locally). Report it as an expected
-        # failure, never a skip: a skip hides the regression this test exists to catch.
-        pytest.xfail("B-GB-26: ESPN CFB teams_site returned no teams (transient upstream response)")
+    # B-GB-26: no escape hatch for an empty answer -- an empty teams list is the regression this
+    # test exists to catch (a transient upstream hiccup was once skipped here and stayed green).
     assert len(teams) >= 200, f"expected >=200 CFB teams, got {len(teams)}"
 
 
@@ -475,25 +472,20 @@ def test_espn_cfb_team_roster_live():
     assert "position_group" in df.columns, "CFB roster should be position-grouped (offense/defense/specialTeam)"
 
 
-def _skip_if_espn_publishes_no_roster(fetch, team_id, league):
-    """Skip only when ESPN itself ships zero athletes.
+def _published_roster(fetch, team_id, league):
+    """The raw athletes, asserting an empty list only in ESPN's between-seasons window (B-GB-26).
 
-    Between seasons ESPN rolls the roster endpoint to the next season year and
-    serves it EMPTY until programs are repopulated -- observed 2026-07-28, when
-    every sampled MBB program (Duke, UNC, Kansas, Michigan St, Florida St,
-    Kentucky) returned 0 athletes under season=2027 while WBB was still serving
-    2026 rosters normally.
-
-    Checking the RAW payload keeps the failure mode honest: an upstream-empty
-    response skips, but a payload that carries athletes which the parser then
-    drops still fails, which is the regression this test exists to catch.
+    Between seasons ESPN rolls the roster endpoint to the next season year and serves it EMPTY
+    until programs are repopulated -- observed 2026-07-28, when every sampled MBB program (Duke,
+    UNC, Kansas, Michigan St, Florida St, Kentucky) returned 0 athletes under season=2027 while WBB
+    was still serving 2026 rosters. An empty roster is accepted only for a PRESEASON payload
+    (season type 1); the caller then asserts the parser emits exactly the athletes ESPN shipped.
     """
     raw = fetch(team_id=team_id, return_parsed=False)
     athletes = (raw or {}).get("athletes") or []
-    if not athletes:
-        season = ((raw or {}).get("season") or {}).get("year")
-        # an expected failure, never a skip: a skip hides the regression this test exists to catch
-        pytest.xfail(f"B-GB-26: ESPN publishes no {league} roster for team {team_id} (season={season}, offseason)")
+    season = (raw or {}).get("season") or {}
+    assert athletes or season.get("type") == 1, f"ESPN shipped no {league} roster for team {team_id} in {season}"
+    return athletes
 
 
 def test_espn_mbb_team_roster_live():
@@ -501,19 +493,19 @@ def test_espn_mbb_team_roster_live():
     groups), matching NBA / WNBA convention."""
     from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_team_roster
 
-    _skip_if_espn_publishes_no_roster(espn_mbb_team_roster, 150, "MBB")  # Duke
+    athletes = _published_roster(espn_mbb_team_roster, 150, "MBB")  # Duke
     df = espn_mbb_team_roster(team_id=150, return_parsed=True)
-    assert df.height >= 10, f"expected >=10 MBB roster rows, got {df.height}"
-    assert "first_name" in df.columns or "last_name" in df.columns
+    assert df.height == len(athletes), f"{len(athletes)} athletes shipped, {df.height} parsed"
+    assert not athletes or ("first_name" in df.columns or "last_name" in df.columns)
 
 
 def test_espn_wbb_team_roster_live():
     from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_team_roster
 
     # WBB hits the same offseason-empty window as MBB, just on a different date.
-    _skip_if_espn_publishes_no_roster(espn_wbb_team_roster, 41, "WBB")  # UConn
+    athletes = _published_roster(espn_wbb_team_roster, 41, "WBB")  # UConn
     df = espn_wbb_team_roster(team_id=41, return_parsed=True)
-    assert df.height >= 8, f"expected >=8 WBB roster rows, got {df.height}"
+    assert df.height == len(athletes), f"{len(athletes)} athletes shipped, {df.height} parsed"
 
 
 def test_espn_cfb_news_live():
@@ -628,9 +620,7 @@ def test_espn_cfb_summary_live_uses_football_pattern():
     # ESPN intermittently returns an empty summary for this fixed historical game
     # (transient 200 / rate-limit). The football-vs-basketball pattern can't be
     # verified without data, so skip rather than hard-fail on an empty payload.
-    if out["drives"].height == 0 and out["drive_plays"].height == 0:
-        # an expected failure, never a skip: a skip hides the regression this test exists to catch
-        pytest.xfail("B-GB-26: ESPN returned an empty CFB summary for 401677192 (transient)")
+    # B-GB-26: no escape hatch for an empty summary -- that is the regression this test exists to catch.
     # CFB football: top-level plays[] is empty, drives.previous[] populated
     assert out["plays"].height == 0
     assert out["drives"].height >= 10, f"expected >=10 drives, got {out['drives'].height}"

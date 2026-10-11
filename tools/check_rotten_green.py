@@ -5,9 +5,10 @@ A test is rotten green when every assertion it makes unconditionally is a *weak*
 ``isinstance(...)``, ``x is not None``, ``len(x) > 0`` / ``x.height > 0`` / ``not x.is_empty()``
 or a bare truthiness check -- so an empty or wrong frame of the right type passes. Asserts
 under an ``if`` (``if df.height > 0: assert ...``) do not count: they never run on the empty
-frame they were meant to catch. A ``pytest.skip(...)`` call in a test body is flagged too: a
-test that skips itself when the data comes back empty reports "skipped" for exactly the
-regression it exists to catch (mark it ``xfail(strict=False)`` with a reason instead).
+frame they were meant to catch. A ``pytest.skip(...)`` or imperative ``pytest.xfail(...)`` call in a
+test body is flagged too: a test that bails out when the data comes back empty reports
+"skipped" / "xfailed" for exactly the regression it exists to catch, and never runs its assertion
+(assert the condition instead, or use a strict ``@pytest.mark.xfail(raises=...)``).
 
 Usage::
 
@@ -97,7 +98,7 @@ def _skips(fn: ast.AST) -> List[int]:
         if (
             isinstance(node, ast.Call)
             and isinstance(node.func, ast.Attribute)
-            and node.func.attr == "skip"
+            and node.func.attr in ("skip", "xfail")
             and isinstance(node.func.value, ast.Name)
             and node.func.value.id == "pytest"
         ):
@@ -124,7 +125,7 @@ def check(path: Path) -> List[str]:
         if found and not any(not isinstance(a, ast.Assert) or not _weak(a.test) for a in firm):
             out.append(f"{path}:{fn.lineno}: {fn.name}: only weak or conditional asserts")
         for line in _skips(fn):
-            out.append(f"{path}:{line}: {fn.name}: pytest.skip() in the test body")
+            out.append(f"{path}:{line}: {fn.name}: pytest.skip() / pytest.xfail() in the test body")
     return out
 
 
