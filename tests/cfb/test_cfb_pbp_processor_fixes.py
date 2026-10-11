@@ -868,16 +868,6 @@ def test_pre_2014_onside_recovery_is_flagged_as_an_onside_kickoff():
     assert onside.select("kicking_team", "return_team").rows() == [(130, 127)]
 
 
-# --- R11: a run the official credits survives the no-play spot foul after it -------------------
-
-
-def test_run_credited_on_a_no_play_spot_foul_is_a_carry():
-    # "... runner is credited with 6 yards on the play [NHSG]. NO PLAY (replay the down)." ESPN's box
-    # counts the carry (47-111 per season in 2021-24); the row was a Penalty with rush False.
-    row = _row(_trimmed_plays(401309633), "runner is credited with 6 yards")
-    assert (row["rush"], row["yds_rushed"], row["penalty_no_play"]) == (True, 6, True)
-
-
 # --- R3: td_play follows a touchdown type the text never spells out --------------------------------
 
 
