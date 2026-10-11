@@ -1,6 +1,8 @@
 """The mutation runner itself can fail: a killable row passes, a test that cannot fail fails the run."""
 
 import importlib.util
+import os
+import py_compile
 import sys
 from pathlib import Path
 
@@ -38,7 +40,7 @@ def row(id_, test, expected="kill", snippet="return a + b", mutant="return a - b
 def tree(tmp_path, monkeypatch):
     (tmp_path / "mod.py").write_bytes(SOURCE.encode("utf-8"))  # bytes: no CRLF translation on Windows
     (tmp_path / "test_mod.py").write_text(TESTS, encoding="utf-8")
-    # the scratch tree is not a uv project: run pytest straight from this interpreter
+    # pinned explicitly so these tests also run against an older runner that defaulted to `uv run`
     monkeypatch.setattr(rm, "PYTEST_CMD", [sys.executable, "-m", "pytest"])
 
     def run(rows, *extra):
@@ -129,3 +131,44 @@ def test_registry_rejects_identity_mutants_duplicate_ids_and_duplicate_keys(tree
     twice_expected += "  expected:\n    survive_until: '9.9'\n"
     with pytest.raises(yaml.constructor.ConstructorError, match="duplicate key"):
         run(twice_expected, "--list")
+
+
+def test_a_same_length_mutant_written_in_the_same_second_is_still_killed(tree, capsys, monkeypatch):
+    """The green baseline must not leave bytecode the mutated run then imports (re-review F1).
+
+    A ``.pyc`` is keyed on the source's integer-second mtime and its size; `return a - b` is as long
+    as `return a + b`. Pinning the source mtime before every pytest run makes "both writes in the
+    same second" deterministic instead of a timing coin flip.
+    """
+    root, run = tree
+    real = rm._pytest
+    pinned = 1_700_000_000
+
+    def same_second(row_, root_):
+        os.utime(root_ / row_["file"], (pinned, pinned))
+        return real(row_, root_)
+
+    monkeypatch.setattr(rm, "_pytest", same_second)
+    assert run([row("same-second", "test_mod.py::test_add")]) == 0
+    assert "KILLED" in capsys.readouterr().out
+    assert not (root / "__pycache__").exists()  # the runner wrote no bytecode next to the source
+
+
+def test_a_stale_pyc_from_an_earlier_run_is_never_imported(tree, capsys):
+    """PYTHONDONTWRITEBYTECODE alone is not enough: an existing pyc must be ignored too (re-review F1)."""
+    root, run = tree
+    src = root / "mod.py"
+    pyc = root / "__pycache__" / f"mod.{sys.implementation.cache_tag}.pyc"
+    # an unchecked-hash pyc of the ORIGINAL source: CPython imports it without looking at the source
+    py_compile.compile(str(src), cfile=str(pyc), invalidation_mode=py_compile.PycInvalidationMode.UNCHECKED_HASH)
+    assert run([row("stale-pyc", "test_mod.py::test_add")]) == 0
+    assert "KILLED" in capsys.readouterr().out
+
+
+def test_a_test_that_selects_nothing_is_an_error_not_a_survivor(tree, capsys):
+    """A survive_until row whose `-k` stops matching must not stay green (re-review F2)."""
+    _, run = tree
+    rows = [row("nothing-selected", 'test_mod.py -k "no_such_test"', expected={"survive_until": "9.9"})]
+    assert run(rows) == 1
+    out = capsys.readouterr().out
+    assert "no tests collected (pytest rc 5)" in out and "FAIL nothing-selected" in out

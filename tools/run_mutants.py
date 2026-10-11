@@ -13,9 +13,16 @@ cannot run: ``git checkout -- <file>`` restores the site; CI checkouts are dispo
 
 Exit status is 1 iff a ``kill`` row survived, or ANY row could not be applied: the snippet
 drifted or is duplicated, the test file is gone, the mutant does not compile, a ``kill`` row's
-test is already red without the mutant, or pytest crashed / hung. An error is never an
+test is already red without the mutant, the test selects nothing (pytest rc 5), or pytest
+crashed / hung. An error is never an
 expected outcome, whatever ``expected`` says: otherwise a refactor would orphan a
 ``survive_until`` row with CI green.
+
+Every pytest subprocess (the unmutated baseline and the mutated run alike) gets its own fresh
+``PYTHONPYCACHEPREFIX`` directory plus ``PYTHONDONTWRITEBYTECODE=1``. Without that, a baseline run
+leaves a ``.pyc`` keyed on the source's integer-second mtime and size, and a same-length mutant
+written in the same second imports the ORIGINAL bytecode (a false SURVIVED); a ``.pyc`` left by an
+earlier run or step is ignored the same way.
 
 Usage::
 
@@ -28,9 +35,11 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import os
 import shlex
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -39,8 +48,9 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "tests" / "mutants" / "registry.yaml"
-#: The test command; a test overrides it to run pytest in a scratch tree without uv.
-PYTEST_CMD = ["uv", "run", "--frozen", "pytest"]
+#: The test command: this interpreter (CI runs the runner under ``uv run --frozen python``), so a
+#: timeout kills pytest itself rather than a ``uv`` wrapper that could leave it running.
+PYTEST_CMD = [sys.executable, "-m", "pytest"]
 PYTEST_ARGS = ["-x", "-q", "-p", "no:cacheprovider"]
 #: Seconds one pytest run may take before the row is an error (and the source is restored).
 ROW_TIMEOUT = 900
@@ -48,7 +58,7 @@ ROW_TIMEOUT = 900
 #: (collection errors under a mutant that breaks an import land here; a mutant that does not
 #: compile is rejected before pytest runs, and a `kill` row's test must be green beforehand).
 KILLED_RCS = (1, 2)
-SURVIVED_RCS = (0, 5)  # 5 = nothing collected: the test cannot have gone red
+SURVIVED_RCS = (0,)  # 5 (nothing collected) is an error: a test that selects nothing proves nothing
 
 
 class _StrictLoader(yaml.SafeLoader):
@@ -127,11 +137,14 @@ def check_site(row: Dict[str, Any], root: Path) -> Optional[str]:
 
 
 def _pytest(row: Dict[str, Any], root: Path) -> Dict[str, Any]:
+    # argv list, no shell; every token comes from the committed registry
     cmd = [*PYTEST_CMD, *shlex.split(row["test"]), *PYTEST_ARGS]
-    try:
-        proc = subprocess.run(cmd, cwd=root, capture_output=True, text=True, timeout=ROW_TIMEOUT)
-    except subprocess.TimeoutExpired:
-        return {"rc": None, "tail": f"timed out after {ROW_TIMEOUT}s"}
+    with tempfile.TemporaryDirectory(prefix="run-mutants-pycache-", ignore_cleanup_errors=True) as cache:
+        env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1", "PYTHONPYCACHEPREFIX": cache}
+        try:
+            proc = subprocess.run(cmd, cwd=root, env=env, capture_output=True, text=True, timeout=ROW_TIMEOUT)
+        except subprocess.TimeoutExpired:
+            return {"rc": None, "tail": f"timed out after {ROW_TIMEOUT}s"}
     tail = (proc.stdout + proc.stderr).strip().splitlines()[-1:]
     return {"rc": proc.returncode, "tail": tail[0] if tail else ""}
 
@@ -163,6 +176,8 @@ def run_row(row: Dict[str, Any], root: Path) -> Dict[str, Any]:
         status, detail = "killed", ""
     elif rc in SURVIVED_RCS:
         status, detail = "survived", run["tail"]
+    elif rc == 5:
+        status, detail = "error", f"no tests collected (pytest rc 5): {run['tail']}"
     else:
         status, detail = "error", run["tail"]
     return {"status": status, "rc": rc, "seconds": time.monotonic() - t0, "detail": detail}

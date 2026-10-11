@@ -155,7 +155,7 @@ jobs:
     # source file and runs the test that must go red. A `kill` row whose test stays green fails
     # the job; `survive_until` rows document audit-measured test gaps until their plan task lands.
     # Per-row timings are printed; the whole registry runs on every PR while it stays well under
-    # the ~15 min budget (today ~4.5 min locally) -- split `kill` rows per PR / `survive_until` rows nightly
+    # the ~15 min budget (today ~6.5 min locally) -- split `kill` rows per PR / `survive_until` rows nightly
     # only if it grows past that.
     name: mutation registry
     runs-on: ubuntu-latest
