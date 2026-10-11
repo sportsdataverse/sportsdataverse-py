@@ -7,6 +7,7 @@ pandas when return_as_pandas=True; empty/malformed payloads return a zero-row fr
 
 from __future__ import annotations
 
+import warnings
 from typing import Any, Dict, Optional, Union
 
 import pandas as pd
@@ -75,18 +76,40 @@ def parse_soccer_standings(payload: Any, *, return_as_pandas: bool = False):
     return _out(pl.DataFrame(rows), return_as_pandas)
 
 
+def _tournament(season_label: Optional[str]) -> Optional[str]:
+    """``"apertura"`` / ``"clausura"`` from an ESPN season-type slug or name, else None.
+
+    Liga MX (and other split-season leagues) crown two champions per ESPN season id;
+    the season ``types`` list is ESPN's only discriminator (``torneo-apertura``,
+    ``apertura-2024-quarterfinals``, ``Clausura 2025 - Finals``), see
+    rules/ligamx.yaml#ligamx-1996-two-short-tournaments-per-season. Single-tournament
+    leagues carry neither word and get null.
+    """
+    label = (season_label or "").lower()
+    # ponytail: the 1996-2002 Invierno/Verano names are not mapped; ESPN mex.1 data starts 2000-01
+    # and no season-type slug with them has been captured.
+    for name in ("apertura", "clausura"):
+        if name in label:
+            return name
+    return None
+
+
 def parse_soccer_scoreboard(payload: Any, *, return_as_pandas: bool = False):
     events = (payload or {}).get("events") if isinstance(payload, dict) else None
     rows = []
     for ev in events or []:
         comp = (ev.get("competitions") or [{}])[0]
         home, away = _competitor(comp, "home"), _competitor(comp, "away")
+        season = ev.get("season") or {}
         rows.append(
             {
                 "event_id": ev.get("id"),
                 "date": ev.get("date"),
                 "name": ev.get("name"),
                 "short_name": ev.get("shortName"),
+                "season_type": season.get("type"),
+                "season_slug": season.get("slug"),
+                "tournament": _tournament(season.get("slug")),
                 "home_team": (home.get("team") or {}).get("displayName"),
                 "home_team_id": (home.get("team") or {}).get("id"),
                 "home_score": home.get("score"),
@@ -129,6 +152,8 @@ def _build_header(payload: dict) -> pl.DataFrame:
         row["season_year"] = season.get("year")
         row["season_type"] = season.get("type")
         row["season_slug"] = season.get("slug")
+        # the summary header carries the season-type NAME ("2024-25 Liga BBVA MX, Torneo Apertura"), not the slug
+        row["tournament"] = _tournament(season.get("name") or season.get("slug"))
         league = hd.get("league") or {}
         row["league_id"] = league.get("id")
         row["league_name"] = league.get("name")
@@ -723,6 +748,12 @@ def parse_soccer_summary(
         ``Dict[str, pl.DataFrame]`` when ``section`` is None;
         a single DataFrame when a section name is provided.
 
+    Warns:
+        UserWarning: With ``section=None``, when the payload has a match header
+            but ``key_events``, ``commentary`` and ``lineups`` are all empty --
+            ESPN lists seasons it has no event data for (usa.nwsl 2014-2018),
+            so the zero-row frames are a coverage gap, not a parse failure.
+
     Example:
         Quick start::
 
@@ -743,4 +774,28 @@ def parse_soccer_summary(
         if builder is None:
             return _out(pl.DataFrame(), return_as_pandas)
         return _out(_strip_strings(builder(p)), return_as_pandas)
-    return {name: _strip_strings(fn(p)) for name, fn in _SOCCER_SUMMARY_BUILDERS.items()}
+    frames = {name: _strip_strings(fn(p)) for name, fn in _SOCCER_SUMMARY_BUILDERS.items()}
+    _warn_if_detail_empty(p, frames)
+    return frames
+
+
+#: The sections that hold match DETAIL (events, narrative, rosters). ESPN serves a header for
+#: every match it lists, but for whole seasons -- usa.nwsl 2014-2018 -- ships none of these
+#: (rules/nwsl.yaml#nwsl-2013-espn-season-coverage-start); the zero-row frames used to be silent.
+_SOCCER_SUMMARY_DETAIL_SECTIONS = ("key_events", "commentary", "lineups")
+
+
+def _warn_if_detail_empty(payload: dict, frames: Dict[str, pl.DataFrame]) -> None:
+    if frames["header"].height == 0:
+        return  # not a match payload at all (empty / malformed input) -- the zero-row contract covers it
+    empty = [s for s in _SOCCER_SUMMARY_DETAIL_SECTIONS if frames[s].height == 0]
+    if len(empty) < len(_SOCCER_SUMMARY_DETAIL_SECTIONS):
+        return
+    event_id = (payload.get("header") or {}).get("id")
+    warnings.warn(
+        f"ESPN soccer summary for event {event_id} carries a header but no match detail: "
+        f"{', '.join(empty)} are all empty. ESPN has no event data for some seasons it lists "
+        "(e.g. usa.nwsl 2014-2018); the zero-row frames are the provider's coverage gap, not a parse failure.",
+        UserWarning,
+        stacklevel=3,
+    )

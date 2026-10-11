@@ -141,17 +141,20 @@ def touchback_yardline_expr(season: pl.Expr) -> pl.Expr:
     return expr
 
 
-#: Extra-point snap spot (yards-to-endzone) before 2015: the 2.
-#: rules/nfl.yaml ``nfl-2015-pat-snap-from-15``.  nflfastR scores the PAT make
-#: probability at ``yardline_100 = ifelse(season >= 2015, 15, 3)`` (L926; 3 is
-#: its FG-model convention for the 2-yard snap).  ``nfl_fourth_down.py`` shares
-#: these two names.
-PAT_YARDLINE_PRE_2015: int = 2
+#: ``yardline_100`` at which the FG model scores a one-point PAT **before 2015**.
+#: The kick was snapped from the 2; nflfastR ``helper_add_ep_wp.R`` (``add_wp_variables``,
+#: L926) scores it at ``ifelse(season >= 2015, 15, 3)``, and 3 is that FG-model convention,
+#: not the snap spot (rules/nfl.yaml#nfl-2015-pat-snap-from-15). ``nfl_fourth_down.py`` is
+#: the consumer; ``ep_wp._apply_feature_substitution`` deliberately does NOT re-spot a try
+#: (its docstring has the measurement).
+PAT_YARDLINE_PRE_2015: int = 3
 
-#: Extra-point snap spot (yards-to-endzone) from 2015: the 15 (a 33-yard kick).
-#: ``ep_wp._apply_feature_substitution`` deliberately does NOT re-spot a try
-#: here (its docstring has the measurement); the PAT make model does.
+#: ``yardline_100`` at which the FG model scores a one-point PAT **2015 and later**:
+#: the May 2015 rule moved the snap to the 15 (a 33-yard kick); two-point tries stayed at the 2.
 PAT_YARDLINE_POST_2015: int = 15
+
+#: First season of the 15-yard PAT (effective 2015-09-10).
+PAT_FIRST_SEASON_FROM_15: int = 2015
 
 
 # ---------------------------------------------------------------------------

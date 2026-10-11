@@ -1,7 +1,9 @@
 """Women's college basketball shot locations from stats.ncaa.org.
 
-WBB binding of :mod:`sportsdataverse.mbb.mbb_ncaa_shots` with the quarters
-``period_model=(4, 600, 300)``. This surface is a deliberate EXTENSION:
+WBB binding of :mod:`sportsdataverse.mbb.mbb_ncaa_shots` with the WBB
+``period_model`` -- quarters ``(4, 600, 300)`` by default, halves
+``(2, 1200, 300)`` when ``season=`` names a pre-2016 season
+(rules/wbb.yaml#wbb-2016-four-quarters). This surface is a deliberate EXTENSION:
 wbigballR ships ``get_shot_locations``/``join_pbp_shots`` but exports
 neither (``dev/bigballr_port/design.md``); the shared parser is validated on
 real WBB captures (100% chart→pbp join match on the fixture games — only
@@ -20,6 +22,7 @@ from sportsdataverse.mbb.mbb_ncaa_shots import (
     ncaa_mbb_join_pbp_shots,
     parse_ncaa_bb_shots,
 )
+from sportsdataverse.scrape.ncaa.parse import wbb_period_model
 
 if TYPE_CHECKING:  # pragma: no cover
     import pandas as pd
@@ -37,6 +40,7 @@ __all__ = [
 def ncaa_wbb_shot_locations(
     game_ids: Sequence[object],
     *,
+    season: Optional[object] = None,
     fetcher: Optional[Any] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
@@ -44,12 +48,19 @@ def ncaa_wbb_shot_locations(
 
     Same driver as
     :func:`sportsdataverse.mbb.mbb_ncaa_shots.ncaa_mbb_shot_locations` with
-    the quarters ``period_model`` bound — see the mbb sibling for the parse
-    algorithm and the :data:`~sportsdataverse.mbb.mbb_ncaa_shots.SHOTS_SCHEMA`
-    contract.
+    the WBB ``period_model`` for the game's era bound — see the mbb sibling for
+    the parse algorithm and the :data:`~sportsdataverse.mbb.mbb_ncaa_shots.SHOTS_SCHEMA`
+    contract. The default is the quarters model: stats.ncaa.org shot locations
+    only exist from 2019 (rules/wbb.yaml#wbb-2019-ncaa-stats-shot-locations),
+    so unlike :func:`~sportsdataverse.wbb.wbb_ncaa_game_pbp.ncaa_wbb_game_pbp`
+    there is no page inference; ``season`` resolves the model through
+    :func:`sportsdataverse.scrape.ncaa.parse.wbb_period_model` (halves through
+    2014-15, quarters from 2015-16, rules/wbb.yaml#wbb-2016-four-quarters).
 
     Args:
         game_ids: NCAA contest ids; ``None``/NaN entries are dropped.
+        season: Season as an ending year (``2015``) or span (``"2014-15"``);
+            applies to every game in ``game_ids``. ``None`` binds quarters.
         fetcher: Optional injected fetcher exposing ``fetch_game_box``
             (tests/offline). Defaults to a fresh
             ``NcaaFetcher.with_browser()`` context per call.
@@ -66,13 +77,12 @@ def ncaa_wbb_shot_locations(
             print(shots.shape)
     """
     ids = [g for g in game_ids if g is not None and g == g]
+    period_model = _WBB_PERIOD_MODEL if season is None else wbb_period_model(str(season))
 
     def _run(f: Any) -> "list[pl.DataFrame]":
         frames: "list[pl.DataFrame]" = []
         for gid in ids:
-            # Quarters model only: stats.ncaa.org shot locations exist from 2019 (quarters era),
-            # so no halves-era page can reach this parser (rules/wbb.yaml#wbb-2019-ncaa-stats-shot-locations).
-            df = parse_ncaa_bb_shots(f.fetch_game_box(gid), str(gid), period_model=_WBB_PERIOD_MODEL)
+            df = parse_ncaa_bb_shots(f.fetch_game_box(gid), str(gid), period_model=period_model)
             found = sorted({t for t in df["team"].to_list() if t is not None})
             logger.info(
                 "Game_ID: %s || %s v. %s || %d shots found",
