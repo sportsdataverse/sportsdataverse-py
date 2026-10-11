@@ -7,6 +7,7 @@ the ESPN schedule / game-roster parquet.
 
 from __future__ import annotations
 
+import json
 from datetime import date
 from pathlib import Path
 
@@ -183,9 +184,15 @@ def _stub_fox(monkeypatch: pytest.MonkeyPatch, current: int, *, fail: bool = Fal
             raise ConnectionError("fox down")
         return pl.DataFrame(_FOX_ROSTERS[str(team_id)], schema=_FOX_ROSTER_COLUMNS, orient="row")
 
+    def segment(path: str, params: object = None, **_: object) -> dict:
+        if fail:
+            raise ConnectionError("fox down")
+        return json.loads((F / f"fox_nba_scores_segment_{path.rsplit('/', 1)[-1]}.json").read_text())
+
     monkeypatch.setattr("sportsdataverse.nba.nba_schedule.most_recent_nba_season", lambda: current)
     monkeypatch.setattr("sportsdataverse.nba.nba_fox_ext.fox_nba_teams", lambda **_: _FOX_TEAMS)
     monkeypatch.setattr("sportsdataverse.nba.nba_fox_ext.fox_nba_team_roster", roster)
+    monkeypatch.setattr("sportsdataverse._fox_layout.fox_get", segment)
 
 
 def _fox_ids(out: dict) -> tuple[dict, dict]:
@@ -208,6 +215,15 @@ def test_fox_legs_fill_teams_and_current_season_players(monkeypatch: pytest.Monk
     assert curry["nba_player_id"].to_list() == ["201939"]  # the Stats match is untouched
     assert out["player"].width == PLAYER_COLUMNS
     assert out["player"].schema["fox_athlete_id"] == pl.Utf8
+
+
+def test_fox_leg_fills_game_ids_for_a_past_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Fox serves NBA scoreboards back to 1947; the 2015 Finals segments are real captures.
+    _stub_fox(monkeypatch, current=2027)
+    schedule, rosters = _espn("nba")
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox_games=True)
+    games = out["schedule"].select("espn_game_id", "fox_game_id", "fox_home_team_id", "fox_away_team_id").rows()
+    assert sorted(games) == [("400796849", "102609", "21", "11"), ("400796850", "102824", "11", "21")]
 
 
 def test_fox_players_stay_null_for_a_past_season(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -233,6 +249,10 @@ def test_fox_off_by_default_and_failures_leave_columns_null(
     assert team == {5: "11", 9: "21"}
     assert set(player.values()) == {None}
     assert "Fox rosters unavailable" in caplog.text
+    assert out["schedule"]["fox_game_id"].null_count() == 2  # fox alone fetches no games
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox_games=True)
+    assert out["schedule"]["fox_game_id"].null_count() == 2
+    assert "Fox games unavailable" in caplog.text
 
     def down(**_: object) -> pl.DataFrame:
         raise ConnectionError("fox down")

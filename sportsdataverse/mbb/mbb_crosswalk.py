@@ -3,7 +3,8 @@
 Port of ``hoopR/R/mbb_crosswalk.R``. ESPN is the anchor: one row per ESPN team
 per season, joined to Fox Sports (normalized full mascot name via a curated
 alias bridge), Bart Torvik and KenPom (each on the normalized school/location
-name after its own curated alias pass). Yahoo columns are null placeholders.
+name after its own curated alias pass). Fox game ids and the Yahoo
+team / game ids are opt-in (``fox=True`` / ``yahoo=True``).
 
 The three alias tables below are **transcribed verbatim from the R source** --
 they are data, not logic. Do not re-derive or "fix" entries.
@@ -33,6 +34,7 @@ from sportsdataverse._common_crosswalk_basketball import (
     pair_key,
     str_id,
 )
+from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games, with_yahoo_games, with_yahoo_teams
 from sportsdataverse._crosswalk_basketball_sources import (
     bart_super_sked,
     espn_scoreboard_games,
@@ -497,9 +499,10 @@ def mbb_team_crosswalk(
     kenpom: Optional[pl.DataFrame] = None,
     return_as_pandas: bool = False,
     strict: bool = False,
+    yahoo: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom).
+    """Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom / Yahoo).
 
     One row per ESPN team, keyed on ``espn_team_id``. Fox joins on the
     normalized mascot name via :data:`FOX_DISPLAY_ALIAS`; Torvik and KenPom
@@ -527,6 +530,10 @@ def mbb_team_crosswalk(
         strict: Accepted for parity with the schedule and player crosswalks,
             which forward it; the team build has no per-item fetch loop to
             relax, so every source failure raises.
+        yahoo: Fill ``yahoo_team_id`` / ``yahoo_team_name`` from Yahoo's
+            Division I listing (one call), joined on the full name, then the
+            school, then the nickname. A failed Yahoo fetch logs a warning and
+            leaves them null; Yahoo teams no ESPN team took are logged.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -592,6 +599,8 @@ def mbb_team_crosswalk(
     out = _assemble_team_crosswalk(espn, fox, bart, kenpom, season)
     if out["fox_section"].is_not_null().any():
         out = drop_unconfirmed_fox_sections(out, next_season_movers("mbb", season))
+    if yahoo:
+        out = with_yahoo_teams("mbb", out, **kwargs)
     return out.to_pandas() if return_as_pandas else out
 
 
@@ -600,9 +609,11 @@ def mbb_schedule_crosswalk(
     *,
     return_as_pandas: bool = False,
     strict: bool = False,
+    fox: bool = False,
+    yahoo: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Build the MBB cross-source schedule crosswalk (ESPN / Torvik).
+    """Build the MBB cross-source schedule crosswalk (ESPN / Torvik / Fox / Yahoo).
 
     One row per game. Dates reduce to the Eastern-Time game date before
     joining and Torvik's unordered ``team1``/``team2`` join through a sorted
@@ -619,6 +630,17 @@ def mbb_schedule_crosswalk(
             skipped) instead of skipping isolated failures. Default ``False`` matches the R
             producers; a provider whose every item failed raises either way. An item
             the host *answered* -- including a 404 -- counts as answered.
+        fox: Fill ``fox_game_id`` from Fox's Division I scoreboard, one Fox call
+            per game date. A Fox game matches the row on the same US-Eastern
+            date holding every Fox team that resolves to ESPN (by name, through
+            :data:`FOX_DISPLAY_ALIAS`), in either home/away order. A failed Fox
+            fetch logs a warning and leaves the column null.
+        yahoo: Fill ``yahoo_game_id`` = ``ncaab.g.{YYYYMMDD ET}{home Yahoo id, 4
+            digits}``, checked against the ids Yahoo lists for the season's
+            dates so a neutral-site game takes Yahoo's home side and a game
+            Yahoo does not list (a non-Division-I home team) stays null. A
+            failed Yahoo fetch logs a warning; without the team listing the ids
+            stay null, without the id list the unverified home-side id is kept.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -649,11 +671,15 @@ def mbb_schedule_crosswalk(
     from sportsdataverse.mbb.mbb_schedule import most_recent_mbb_season
 
     season = int(season) if season is not None else most_recent_mbb_season()
-    team_xwalk = mbb_team_crosswalk(season=season, fox=pl.DataFrame(), strict=strict, **kwargs)
+    team_xwalk = mbb_team_crosswalk(season=season, fox=pl.DataFrame(), strict=strict, yahoo=yahoo, **kwargs)
     bart_games = bart_super_sked("mbb", season, **kwargs)
     dates = sorted({d for d in bart_games["game_date"].to_list() if d is not None})
     espn_games = espn_scoreboard_games("mbb", dates, strict=strict, **kwargs)
     out = _assemble_schedule_crosswalk(espn_games, bart_games, team_xwalk, season)
+    if fox:
+        out = with_fox_games("mbb", out, team_xwalk, alias=FOX_DISPLAY_ALIAS, **kwargs)
+    if yahoo:
+        out = with_yahoo_games("mbb", season, out, team_xwalk, **kwargs)
     return out.to_pandas() if return_as_pandas else out
 
 

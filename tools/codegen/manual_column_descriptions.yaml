@@ -16602,6 +16602,12 @@ kijhl_season_id:
   season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
     "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
     next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+load_mbb_team_crosswalk:
+  yahoo_team_id: Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched.
+  yahoo_team_name: Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is.
+mbb_team_crosswalk:
+  yahoo_team_id: Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched.
+  yahoo_team_name: Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is.
 mhl_season_id:
   game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
     (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
@@ -18456,6 +18462,8 @@ load_mbb_schedule:
   home_linescores: Period-by-period scores for the home team as a delimited string from ESPN's schedule feed.
   home_records: Record strings (overall and split records) for the home team from ESPN's schedule feed.
 load_mbb_schedule_crosswalk:
+  fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
+  yahoo_game_id: 'Yahoo Sports game id, ncaab.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 4 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team).'
   kp_game_id: KenPom game id (string), matched by hoopR-mbb-data on the game date and the unordered pair of ESPN team ids.
     Null where KenPom lists no matching game, and for every row when the build ran without the private KenPom capture.
 load_mbb_shots:
@@ -18843,8 +18851,10 @@ load_nba_schedule:
   home_linescores: Period-by-period points for the home team, stringified from ESPN's linescores array.
   home_records: Home team's records at game time (overall, home, away), stringified from ESPN.
 load_nba_schedule_crosswalk:
-  fox_away_team_id: FOX Sports team id of the away team in the crosswalk.
-  fox_home_team_id: FOX Sports team id of the home team in the crosswalk.
+  yahoo_game_id: Yahoo Sports game id, nba.g.<YYYYMMDD US-Eastern date><home ESPN team id, 2 digits> (Yahoo's NBA team ids equal ESPN's), from the 2014 season on; null for earlier seasons.
+  fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
+  fox_away_team_id: Fox Sports team id of the side Fox calls away in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of away_espn_team_id. Null when fox_game_id is.
+  fox_home_team_id: Fox Sports team id of the side Fox calls home in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of home_espn_team_id. Null when fox_game_id is.
   nba_away_team_id: NBA Stats team id of the away team.
   nba_game_code: NBA game code (date and matchup string) from the NBA Stats API.
   nba_game_id: NBA Stats 10-character game id matched to the ESPN game in the crosswalk.
@@ -20025,6 +20035,7 @@ load_nba_stats_team_season_stats:
 load_nba_team_boxscore:
   lead_percentage: Percentage of the game the team held the lead, from ESPN's team box score stats.
 load_nba_team_crosswalk:
+  yahoo_team_id: Yahoo Sports team id, nba.t.<espn_team_id> (Yahoo's NBA ids equal ESPN's), from the 2014 season on; null for earlier seasons.
   nba_conference: Team's conference as listed by the NBA Stats API.
   nba_division: Team's division as listed by the NBA Stats API.
   nba_team_abbreviation: Team abbreviation as listed by the NBA Stats API.
@@ -26087,6 +26098,8 @@ load_wbb_schedule:
   officials_json_url: raw.githubusercontent.com URL of the game's officials JSON payload in wehoop-wbb-raw.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wbb_schedule_crosswalk:
+  fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
+  yahoo_game_id: 'Yahoo Sports game id, ncaaw.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 4 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team).'
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wbb_shots:
   athlete_name_1: Display name of the shooter credited on the attempt in ESPN's play participants.
@@ -26104,6 +26117,8 @@ load_wbb_team_boxscore:
   lead_percentage: Share of game time the team held the lead, as reported in ESPN's team boxscore.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wbb_team_crosswalk:
+  yahoo_team_id: Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched.
+  yahoo_team_name: Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wbb_team_group_seasons:
   conference_id: SDV group_id of the team's conference that season; null where the team had no conference (an independent,
@@ -26237,8 +26252,10 @@ load_wnba_schedule:
   home_records: Stringified list of the home team's record summaries (overall/home/away) from the ESPN schedule feed.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wnba_schedule_crosswalk:
-  fox_away_team_id: Away team identifier on Fox Sports for the matched game.
-  fox_home_team_id: Home team identifier on Fox Sports for the matched game.
+  fox_game_id: Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game.
+  yahoo_game_id: 'Yahoo Sports game id, wnba.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 3 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team).'
+  fox_away_team_id: Fox Sports team id of the side Fox calls away in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of away_espn_team_id. Null when fox_game_id is.
+  fox_home_team_id: Fox Sports team id of the side Fox calls home in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of home_espn_team_id. Null when fox_game_id is.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   wnba_away_team_id: Away team identifier on stats.wnba.com for the matched game.
   wnba_game_code: stats.wnba.com game code (date/matchup slug) for the matched game.
@@ -26371,6 +26388,9 @@ load_wnba_team_boxscore:
   lead_percentage: Share of game time the team spent in the lead, as reported by ESPN.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wnba_team_crosswalk:
+  yahoo_team_id: Dotted Yahoo Sports team id (e.g. 'wnba.t.4'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched.
+  yahoo_team_name: Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is.
+  yahoo_team_abbreviation: Yahoo Sports team abbreviation for yahoo_team_id; null when yahoo_team_id is.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wnba_team_group_seasons:
   conference_id: SDV group_id of the team's conference that season; null where the team had no conference (an independent,
@@ -27024,6 +27044,7 @@ nba_referee_assignments:
   replay_center.official_id: Numeric replay-center official id from the feed.
   replay_center.official_name: Replay-center official's display name for that date.
 nba_team_crosswalk:
+  yahoo_team_id: Yahoo Sports team id, nba.t.<espn_team_id> (Yahoo's NBA ids equal ESPN's), from the 2014 season on; null for earlier seasons.
   nba_conference: Team's conference as NBA Stats labels it (conference) from nba_stats_leaguestandingsv3; null when no Stats
     team matched the ESPN team.
   nba_division: Team's division as NBA Stats labels it (division) from nba_stats_leaguestandingsv3; null when no Stats team

@@ -136,5 +136,5 @@ not covered by the generated API-endpoint reference above.
 |---|---|
 | [wnba_crosswalks_from_archive](additional/ids-and-crosswalks.md#wnba_crosswalks_from_archive) | Build the WNBA team, schedule and player crosswalks for a past season, offline. |
 | [wnba_player_crosswalk](additional/ids-and-crosswalks.md#wnba_player_crosswalk) | Build the WNBA cross-source player crosswalk (ESPN / WNBA Stats / Fox). |
-| [wnba_schedule_crosswalk](additional/ids-and-crosswalks.md#wnba_schedule_crosswalk) | Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats). |
-| [wnba_team_crosswalk](additional/ids-and-crosswalks.md#wnba_team_crosswalk) | Build the WNBA cross-source team crosswalk (ESPN / WNBA Stats / Fox). |
+| [wnba_schedule_crosswalk](additional/ids-and-crosswalks.md#wnba_schedule_crosswalk) | Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats / Fox / Yahoo). |
+| [wnba_team_crosswalk](additional/ids-and-crosswalks.md#wnba_team_crosswalk) | Build the WNBA cross-source team crosswalk (ESPN / WNBA Stats / Fox / Yahoo). |

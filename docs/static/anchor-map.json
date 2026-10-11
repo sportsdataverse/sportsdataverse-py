@@ -1748,10 +1748,10 @@
   "load_mbb_schedule_crosswalk": "other",
   "load_mbb_shots": "other",
   "load_mbb_standings": "other",
-  "load_mbb_team_boxscore": "other",
-  "load_mbb_team_crosswalk": "other",
-  "load_mbb_team_group_seasons": "other",
-  "load_mbb_team_season_stats": "other",
+  "load_mbb_team_boxscore": "team",
+  "load_mbb_team_crosswalk": "team",
+  "load_mbb_team_group_seasons": "team",
+  "load_mbb_team_season_stats": "team",
   "load_ncaa_mbb_lineups": "ncaa",
   "load_ncaa_mbb_matchup_stints": "ncaa",
   "load_ncaa_mbb_pbp": "ncaa",
@@ -2608,10 +2608,10 @@
   "load_nba_stats_standings": "stats-2",
   "load_nba_stats_team_boxscores": "stats-2",
   "load_nba_stats_team_season_stats": "stats-2",
-  "load_nba_team_boxscore": "other",
-  "load_nba_team_crosswalk": "other",
-  "load_nba_team_group_seasons": "other",
-  "load_nba_team_season_stats": "other"
+  "load_nba_team_boxscore": "team",
+  "load_nba_team_crosswalk": "team",
+  "load_nba_team_group_seasons": "team",
+  "load_nba_team_season_stats": "team"
  },
  "/docs/nba/reference/nba_stats": {
   "nba_stats_alltimeleadersgrids": "other",
@@ -4827,10 +4827,10 @@
   "load_wbb_schedule_crosswalk": "other",
   "load_wbb_shots": "other",
   "load_wbb_standings": "other",
-  "load_wbb_team_boxscore": "other",
-  "load_wbb_team_crosswalk": "other",
-  "load_wbb_team_group_seasons": "other",
-  "load_wbb_team_season_stats": "other"
+  "load_wbb_team_boxscore": "team",
+  "load_wbb_team_crosswalk": "team",
+  "load_wbb_team_group_seasons": "team",
+  "load_wbb_team_season_stats": "team"
  },
  "/docs/wc/reference/core": {
   "espn_wc_award": "other",
