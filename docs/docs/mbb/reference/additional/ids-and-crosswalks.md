@@ -466,8 +466,8 @@ each join on the normalized school name after `BART_ALIAS` /
 | `bart_conf` | character | Torvik conference abbreviation (NA if unmatched). |
 | `kp_team` | character | KenPom team name (NA if unmatched). |
 | `kp_conf` | character | KenPom conference abbreviation (NA if unmatched). |
-| `yahoo_team_id` | character | Yahoo team id (NA placeholder). |
-| `yahoo_team_name` | character | Yahoo team name (NA placeholder). |
+| `yahoo_team_id` | character | Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched. |
+| `yahoo_team_name` | character | Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is. |
 | `fox_match_confidence` | double | 1 for matched, NA for unmatched. |
 | `bart_match_confidence` | double | 1 for matched, NA for unmatched. |
 | `kp_match_confidence` | double | 1 for matched, NA for unmatched. |

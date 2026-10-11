@@ -215,7 +215,7 @@ historical relocations are not back-modelled.
 | `nba_division` | character | Team's division as NBA Stats labels it (division) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
 | `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
 | `fox_team_name` | character | Fox team name (NA if unmatched). |
-| `yahoo_team_id` | character | Yahoo team id (NA placeholder). |
+| `yahoo_team_id` | character | Yahoo Sports team id, nba.t.<espn_team_id> (Yahoo's NBA ids equal ESPN's), from the 2014 season on; null for earlier seasons. |
 | `yahoo_team_abbreviation` | character | Yahoo abbreviation (NA placeholder). |
 | `yahoo_team_name` | character | Yahoo team name (NA placeholder). |
 | `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
