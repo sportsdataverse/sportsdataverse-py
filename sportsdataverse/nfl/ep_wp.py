@@ -58,15 +58,18 @@ from sportsdataverse.errors import EraCoverageWarning
 from sportsdataverse.nfl.model_vars import (
     _EP_POINT_VALUES,
     ERA_MAX_KNOWN_SEASON,
+    OT_BOTH_POSSESS,
+    OT_MODIFIED_SUDDEN_DEATH,
+    OT_SUDDEN_DEATH,
+    OVERTIME_FORMATS,
     SPREAD_TIME_DECAY_EXPONENT,
-    TOUCHBACK_YARDLINE_POST_2016,
-    TOUCHBACK_YARDLINE_PRE_2016,
     clock_stoppage_vec,
     defense_score_vec,
     end_change_vec,
     kickoff_turnovers,
     kickoff_vec,
     offense_score_vec,
+    touchback_yardline_expr,
 )
 
 # ---------------------------------------------------------------------------
@@ -939,6 +942,7 @@ def _espn_xyac_features(
 def calculate_expected_points(
     pbp_data: pl.DataFrame,
     *,
+    ep_point_values: Union[np.ndarray, None] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Compute expected points for provided plays.
@@ -952,6 +956,11 @@ def calculate_expected_points(
             ``half_seconds_remaining``, ``yardline_100``, ``down``,
             ``ydstogo``, ``posteam_timeouts_remaining``,
             ``defteam_timeouts_remaining``.
+        ep_point_values: Optional 7-class point vector (class order
+            ``td, opp_td, fg, opp_fg, safety, opp_safety, no_score``) used to
+            collapse the class probabilities into ``ep``.  ``None`` (default)
+            is the NFL vector ``model_vars._EP_POINT_VALUES``; the
+            spring-football port passes its league's vector.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
@@ -985,7 +994,10 @@ def calculate_expected_points(
     if probs.ndim == 1:
         probs = probs.reshape(-1, 7)
 
-    ep = np.clip(probs @ _EP_POINT_VALUES, -10.0, 10.0)
+    point_values = _EP_POINT_VALUES if ep_point_values is None else np.asarray(ep_point_values, dtype=np.float64)
+    if point_values.shape != _EP_POINT_VALUES.shape:
+        raise ValueError(f"ep_point_values must have shape {_EP_POINT_VALUES.shape}, got {point_values.shape}")
+    ep = np.clip(probs @ point_values, -10.0, 10.0)
 
     prob_frame = pl.DataFrame(
         {name: pl.Series(name, probs[:, i], dtype=pl.Float64) for i, name in enumerate(_EP_CLASS_NAMES)}
@@ -1082,7 +1094,7 @@ def calculate_win_probability(
 
 
 # ---------------------------------------------------------------------------
-# Overtime WP overlay — nflfastR add_wp_variables L820-899
+# Overtime WP overlay — nflfastR add_wp_variables L820-899, by rule format
 # ---------------------------------------------------------------------------
 
 #: nflfastR's overtime win probability is the sum of the three
@@ -1090,9 +1102,103 @@ def calculate_win_probability(
 #: ``Sudden_Death_WP <- fg_prob + td_prob + safety_prob``.
 OT_WP_EP_CLASSES: tuple[str, str, str] = ("fg_prob", "td_prob", "safety_prob")
 
+#: The touchback re-score the modified-sudden-death and both-possess forms
+#: need (nflfastR ``overtime_df_ko``, L853-883): the team starting 1st-and-10
+#: at the touchback spot, its ``td_prob`` (``ot_tb_td_prob``) and nflfastR's
+#: ``Win_Back = No_Score + Opp_Field_Goal + Opp_Safety + Opp_Touchdown``
+#: (``ot_win_back``, = 1 - td - fg - safety of that re-score).  Attached by
+#: :func:`_ot_touchback_rescore` and dropped again; a frame that already
+#: carries both columns is scored on them (the unit-test seam).
+OT_TOUCHBACK_COLUMNS: tuple[str, str] = ("ot_tb_td_prob", "ot_win_back")
 
-def _apply_ot_wp_overlay(df: pl.DataFrame) -> pl.DataFrame:
-    """Replace ``wp`` / ``vegas_wp`` on overtime rows with nflfastR's closed form.
+#: Both-possess formats: the share of games the opening-possession team still
+#: wins once its touchdown is answered by a touchdown.  The answering team
+#: either goes for two (nflfastR's ``pat_go_for_2`` rate is 0.4735, so the
+#: opener keeps ~0.53) or kicks the tie and kicks off into sudden death, where
+#: the opener receives (a little over one half).  The two branches straddle
+#: one half.
+#: ponytail: one constant for the try / tie split; the upgrade is a per-row
+#: re-score of the ensuing sudden death once an answered both-possess TD
+#: exists in a committed fixture (none does as of 2026-10).
+OT_ANSWERED_TD_WIN_SHARE: float = 0.5
+
+
+def _overtime_format_expr(season: pl.Expr, season_type: pl.Expr) -> pl.Expr:
+    """Per-row :data:`~sportsdataverse.nfl.model_vars.OVERTIME_FORMATS` name.
+
+    Args:
+        season: Integer season expression.
+        season_type: nflverse ``season_type`` expression (``"REG"`` / ``"POST"``);
+            anything but ``"POST"`` resolves through the regular-season rows.
+
+    Returns:
+        A ``Utf8`` expression holding ``OT_SUDDEN_DEATH`` /
+        ``OT_MODIFIED_SUDDEN_DEATH`` / ``OT_BOTH_POSSESS`` per row.
+    """
+    expr: pl.Expr = pl.lit(OT_SUDDEN_DEATH)
+    for stype, rows in OVERTIME_FORMATS.items():
+        is_type = (season_type == "POST") if stype == "POST" else (season_type != "POST")
+        # Oldest row first so each newer row wraps (and therefore beats) the older ones.
+        for row in reversed(rows):
+            expr = pl.when(is_type & (season >= row.first_season)).then(pl.lit(row.name)).otherwise(expr)
+    return expr
+
+
+def _ot_touchback_rescore(
+    df: pl.DataFrame,
+    is_ot: pl.Expr,
+    touchback_yardline: Union[int, None],
+) -> pl.DataFrame:
+    """Attach :data:`OT_TOUCHBACK_COLUMNS` — nflfastR's ``overtime_df_ko`` re-score.
+
+    Every overtime row is scored again by the EP model as 1st-and-10 at the
+    kickoff-touchback spot (``helper_add_ep_wp.R`` L853-883).  As upstream,
+    the possession team is **not** flipped: the EP features carry no score, so
+    the re-score differs from the true receiving-team view only through
+    ``home`` and the timeout columns.  Rows outside overtime get null.
+
+    Args:
+        df: Frame carrying the EP model inputs.
+        is_ot: Boolean expression selecting the overtime rows.
+        touchback_yardline: Fixed touchback yards-to-endzone, or ``None`` to
+            resolve it per row from ``season`` with
+            :func:`~sportsdataverse.nfl.model_vars.touchback_yardline_expr`.
+
+    Returns:
+        ``df`` plus ``ot_tb_td_prob`` and ``ot_win_back``.
+    """
+    idx = "__ot_row_idx"
+    spot = (
+        pl.lit(touchback_yardline, dtype=pl.Int64)
+        if touchback_yardline is not None
+        else touchback_yardline_expr(pl.col("season"))
+    )
+    tb = (
+        df.with_row_index(idx)
+        .filter(is_ot)
+        .with_columns(
+            spot.alias("yardline_100"),
+            pl.lit(1, dtype=pl.Int64).alias("down"),
+            pl.lit(10, dtype=pl.Int64).alias("ydstogo"),
+        )
+    )
+    scored = calculate_expected_points(tb).select(
+        pl.col(idx),
+        pl.col("td_prob").cast(pl.Float64).alias(OT_TOUCHBACK_COLUMNS[0]),
+        (1.0 - (pl.col("td_prob") + pl.col("fg_prob") + pl.col("safety_prob")))
+        .cast(pl.Float64)
+        .alias(OT_TOUCHBACK_COLUMNS[1]),
+    )
+    return df.with_row_index(idx).join(scored, on=idx, how="left").drop(idx)
+
+
+def _apply_ot_wp_overlay(
+    df: pl.DataFrame,
+    *,
+    league: str = "nfl",
+    touchback_yardline: Union[int, None] = None,
+) -> pl.DataFrame:
+    """Replace ``wp`` / ``vegas_wp`` on overtime rows with the closed form of the rule format.
 
     **nflfastR never scores overtime with the WP models.**
     ``helper_add_ep_wp.R::add_wp_variables`` (L820-899) splits the frame before
@@ -1103,49 +1209,128 @@ def _apply_ot_wp_overlay(df: pl.DataFrame) -> pl.DataFrame:
     bit-for-bit on 313/324 overtime rows (96.6 %) against 0.033 % in
     regulation.
 
-    We apply the **sudden-death form only**::
+    The form depends on the overtime **rule format**, resolved per row from
+    ``season`` and ``season_type`` through
+    :data:`~sportsdataverse.nfl.model_vars.OVERTIME_FORMATS` (a frame without
+    ``season_type`` is scored as regular season).  Writing ``td`` / ``fg`` /
+    ``saf`` for the posteam-scores-next classes of the row, ``tb_td`` /
+    ``win_back`` for the touchback re-score of :func:`_ot_touchback_rescore`,
+    ``dd`` for the row's drive minus the first overtime drive **of its game**
+    (nflfastR's ``Drive_Diff``, scoped per game — see below) and ``sd`` for the
+    score differential:
 
-        wp = vegas_wp = fg_prob + td_prob + safety_prob
+    * **Pure sudden death** (regular season before 2012, postseason before
+      2010; ``nfl-2010-overtime-modified-sudden-death-postseason``) — the
+      first score of any kind wins::
 
-    The R source also carries a ``One_FG_WP = td_prob + fg_prob * Win_Back``
-    branch for ``game_year >= 2012``, selected when the play is on the first
-    overtime drive (or the second while trailing by exactly 3).  **It is not
-    implemented, because implementing it makes parity worse — measured, not
-    assumed.**  ``First_Drive`` upstream is ``min(overtime_df$drive)`` over
-    *every* overtime row in the frame ``add_wp_variables`` was handed, and
-    nflfastR calls it once on the whole rbound multi-game batch, so
-    ``Drive_Diff == 0`` is reachable only in whichever game happened to carry
-    the batch's lowest overtime drive number.  The branch is therefore close to
-    dead in the data nflverse publishes.  Overtime ``wp`` MAE against nflverse,
-    same harness, three seasons::
+          wp = td + fg + saf                                   (Sudden_Death_WP)
 
-        First_Drive scoping                       2016     2022     2025
-        per overtime game (the R code's intent)  0.1609   0.1102   0.1431
-        frame-global over overtime rows          0.0394   0.0503   0.0594
-        sudden death only (shipped)              0.0513   0.0534   0.0599
+    * **Modified sudden death** (postseason 2010-2021, regular season
+      2012-2024; ``nfl-2012-overtime-modified-sudden-death-regular-season``)
+      — nflfastR's ``One_FG_WP`` on the opening drive and on the second drive
+      when trailing by exactly three, ``Sudden_Death_WP`` elsewhere::
 
-    The frame-global variant scores best but is **frame-dependent**: enriching
-    one game gives a different ``wp`` than enriching the season that contains
-    it, and ``build_nfl_season`` enriches per game — under which it degrades to
-    the worst row.  Among deterministic, per-game-stable options the
-    sudden-death form wins by 2-3x, so that is what ships.  Narrower One-FG
-    gates were tried and are also worse (only the trailing-by-3 clause: 0.0735
-    / 0.0585 / 0.0809).
+          dd == 0 or (dd == 1 and sd == -3):  wp = td + fg * win_back  (One_FG_WP)
+          otherwise:                          wp = td + fg + saf
 
-    The gap this leaves is real and is documented rather than papered over:
-    from 2012 a first-possession field goal no longer ends the game, so an
-    unconditional sudden-death WP overstates the kicking team's chances on the
-    opening overtime drive.  nflverse's published values carry the same
-    overstatement; matching them is the contract of this path.
+      A first-possession field goal only wins if the opponent then fails to
+      score (``win_back``); as upstream, the opponent's tying field goal is
+      folded into a loss and the posteam's own safety is left out of the
+      opening-drive form.
 
-    Rows outside overtime are untouched.  A frame with no ``qtr > 4`` rows, or
-    missing an input the overlay needs, is returned unchanged with a
-    ``RuntimeWarning`` naming what was missing — never silently.
+    * **Both teams possess** (postseason from 2022,
+      ``nfl-2022-overtime-both-possess-postseason``; regular season from 2025,
+      ``nfl-2025-overtime-both-possess-regular-season``) — the opening
+      possession never ends the game, a touchdown included, unless the
+      kicking team scores a safety on it; sudden death once both have
+      possessed.  Derived from the same next-score classes:
+
+      - opening possession, tied (``dd == 0``, ``sd == 0``): a touchdown
+        (``td``) hands the opponent a possession that it must answer with a
+        touchdown — ``tb_td`` from the touchback spot — after which the opener
+        keeps :data:`OT_ANSWERED_TD_WIN_SHARE` of the games; a field goal
+        (``fg``) wins only if the opponent then fails to score
+        (``win_back``, the One_FG convention); a safety by the posteam as the
+        next score (``saf``) can only happen after a turnover, i.e. once both
+        have possessed, so it ends the game::
+
+            wp = td * (1 - OT_ANSWERED_TD_WIN_SHARE * tb_td) + fg * win_back + saf
+
+      - opening possession after its own touchdown (``dd == 0``, ``sd >= 6``;
+        the try rows): the opponent must answer with a touchdown::
+
+            wp = 1 - OT_ANSWERED_TD_WIN_SHARE * tb_td
+
+        and after its own field goal (``dd == 0``, ``0 < sd < 6``)::
+
+            wp = win_back
+
+      - answering possession trailing by three (``dd == 1``, ``sd == -3``):
+        exactly nflfastR's ``One_FG_Game`` case — a touchdown wins, a field
+        goal ties and the opener receives in sudden death::
+
+            wp = td + fg * win_back
+
+      - answering possession trailing by a touchdown (``dd == 1``,
+        ``sd <= -6``): only a touchdown keeps the answering team alive, and
+        the try / tie split leaves it the complement of the opener's share::
+
+            wp = td * OT_ANSWERED_TD_WIN_SHARE
+
+      - everything else (``dd == 1`` tied after an empty opening possession,
+        or ``dd >= 2``): both have possessed, next score wins::
+
+            wp = td + fg + saf
+
+      Hand check (``td=0.31, fg=0.22, saf=0.02, tb_td=0.40, win_back=0.55``):
+      sudden death ``0.55``, One_FG ``0.431``, both-possess opening drive
+      ``0.31*0.8 + 0.22*0.55 + 0.02 = 0.389`` — the rule-right ordering
+      ``both_possess < modified < sudden_death`` on the opening drive, which
+      ``tests/nfl/test_nfl_ot_wp.py`` pins.
+
+    No form carries a time term, so the 10-minute regular-season period
+    (``nfl-2017-overtime-ten-minutes``) changes nothing here; the period
+    length is recorded on each
+    :class:`~sportsdataverse.nfl.model_vars.OvertimeFormat` row as
+    documentation.
+
+    **``Drive_Diff`` is scoped per game.**  Upstream's ``First_Drive`` is
+    ``min(overtime_df$drive)`` over *every* overtime row of the multi-game
+    batch ``add_wp_variables`` was handed, so in nflverse's published data the
+    One_FG branch is reachable only in whichever game carried the batch's
+    lowest overtime drive number — effectively dead, which is why the
+    published values sit close to the pure sudden-death form on every opening
+    drive.  sdv-py scopes the minimum to the overtime rows of each
+    ``game_id`` (the R code's evident intent), so the rule-format forms fire on
+    every game's opening drive.  That is a deliberate, owner-accepted
+    divergence from nflverse: on opening drives from 2012 nflverse overstates
+    the kicking team's chances, and ``tests/nfl/test_nfl_ot_wp.py`` pins both
+    the agreement on rows where every format reduces to sudden death and the
+    direction of the opening-drive gap.
+
+    **Spring football is gated off.**  For ``league`` other than ``"nfl"``
+    (``"xfl"`` / ``"ufl"`` / ``"cfl"`` from ``enrich_spring_football_pbp``)
+    overtime is a shootout of untimed conversion attempts
+    (``rules/xfl.yaml`` ``xfl-2020-overtime-five-round-shootout``), so no NFL
+    closed form applies: ``wp`` / ``vegas_wp`` are set to null on ``qtr > 4``
+    rows rather than left as a booster extrapolation.
+
+    Rows outside overtime are untouched.  A frame with no ``qtr > 4`` rows is
+    returned unchanged.  Missing ``wp`` / ``vegas_wp`` / class probabilities
+    leave the frame unchanged with a ``RuntimeWarning``; missing format inputs
+    (``season``, ``drive``, ``score_differential``, ``game_id``) fall back to
+    the pure sudden-death form on every overtime row, also with a
+    ``RuntimeWarning`` — never silently.
 
     Args:
         df: Frame carrying ``wp`` / ``vegas_wp`` (as produced by
-            :func:`calculate_win_probability`) plus ``qtr`` and the three
-            :data:`OT_WP_EP_CLASSES` probability columns.
+            :func:`calculate_win_probability`) plus ``qtr``, the seven
+            ``_EP_CLASS_NAMES`` probability columns, and the format inputs
+            above.  ``season_type`` is optional.
+        league: ``"nfl"`` (default) applies the NFL formats; anything else
+            nulls overtime WP (see above).
+        touchback_yardline: Fixed touchback spot for the re-score; ``None``
+            resolves it per row by season (``touchback_yardline_expr``).
 
     Returns:
         The frame with ``wp`` / ``vegas_wp`` replaced on ``qtr > 4`` rows.
@@ -1156,6 +1341,10 @@ def _apply_ot_wp_overlay(df: pl.DataFrame) -> pl.DataFrame:
     n_ot = int(df.select(is_ot.sum()).item() or 0)
     if n_ot == 0:
         return df
+
+    wp_cols = [c for c in ("wp", "vegas_wp") if c in df.columns]
+    if league != "nfl":
+        return df.with_columns([pl.when(is_ot).then(None).otherwise(pl.col(c)).alias(c) for c in wp_cols])
 
     required = ("wp", "vegas_wp", *OT_WP_EP_CLASSES)
     missing = [c for c in required if c not in df.columns]
@@ -1168,11 +1357,56 @@ def _apply_ot_wp_overlay(df: pl.DataFrame) -> pl.DataFrame:
         )
         return df
 
-    ot_wp = sum((pl.col(c) for c in OT_WP_EP_CLASSES[1:]), start=pl.col(OT_WP_EP_CLASSES[0])).cast(pl.Float64)
-    return df.with_columns(
-        pl.when(is_ot).then(ot_wp).otherwise(pl.col("wp")).alias("wp"),
-        pl.when(is_ot).then(ot_wp).otherwise(pl.col("vegas_wp")).alias("vegas_wp"),
+    td, fg, saf = pl.col("td_prob"), pl.col("fg_prob"), pl.col("safety_prob")
+    sudden_death = (fg + td + saf).cast(pl.Float64)
+
+    format_inputs = ("season", "drive", "score_differential", "game_id")
+    missing_fmt = [c for c in format_inputs if c not in df.columns]
+    if missing_fmt:
+        warnings.warn(
+            f"overtime WP overlay: missing {missing_fmt!r}; the {n_ot} overtime rows get the pure "
+            "sudden-death form (the rule-format forms need the drive and score state).",
+            RuntimeWarning,
+            stacklevel=2,
+        )
+        return df.with_columns([pl.when(is_ot).then(sudden_death).otherwise(pl.col(c)).alias(c) for c in wp_cols])
+
+    supplied = all(c in df.columns for c in OT_TOUCHBACK_COLUMNS)
+    work = df if supplied else _ot_touchback_rescore(df, is_ot, touchback_yardline)
+
+    season_type = pl.col("season_type").cast(pl.Utf8) if "season_type" in work.columns else pl.lit("REG")
+    fmt = _overtime_format_expr(pl.col("season"), season_type)
+    first_drive = pl.when(is_ot).then(pl.col("drive")).min().over("game_id")
+    dd = pl.col("drive") - first_drive
+    sd = pl.col("score_differential")
+    tb_td, win_back = pl.col(OT_TOUCHBACK_COLUMNS[0]), pl.col(OT_TOUCHBACK_COLUMNS[1])
+
+    one_fg = td + fg * win_back
+    answered_td = OT_ANSWERED_TD_WIN_SHARE * tb_td
+    modified = pl.when((dd == 0) | ((dd == 1) & (sd == -3))).then(one_fg).otherwise(sudden_death)
+    both = (
+        pl.when((dd == 0) & (sd >= 6))
+        .then(1.0 - answered_td)
+        .when((dd == 0) & (sd > 0))
+        .then(win_back)
+        .when(dd == 0)
+        .then(td * (1.0 - answered_td) + fg * win_back + saf)
+        .when((dd == 1) & (sd == -3))
+        .then(one_fg)
+        .when((dd == 1) & (sd <= -6))
+        .then(td * OT_ANSWERED_TD_WIN_SHARE)
+        .otherwise(sudden_death)
     )
+    ot_wp = (
+        pl.when(fmt == OT_MODIFIED_SUDDEN_DEATH)
+        .then(modified)
+        .when(fmt == OT_BOTH_POSSESS)
+        .then(both)
+        .otherwise(sudden_death)
+        .cast(pl.Float64)
+    )
+    out = work.with_columns([pl.when(is_ot).then(ot_wp).otherwise(pl.col(c)).alias(c) for c in wp_cols])
+    return out if supplied else out.drop(list(OT_TOUCHBACK_COLUMNS))
 
 
 def calculate_completion_probability(
@@ -2657,24 +2891,60 @@ def _validate_enrich_input(df: pl.DataFrame) -> None:
         )
 
 
-def _apply_feature_substitution(df: pl.DataFrame) -> pl.DataFrame:
+def _apply_feature_substitution(
+    df: pl.DataFrame,
+    *,
+    touchback_yardline: Union[int, None] = None,
+) -> pl.DataFrame:
     """Substitute EP model features for kickoffs and down-NA (PAT/2pt) plays.
 
     Mirrors nflfastR ``add_ep_variables`` (``helper_add_ep_wp.R`` L351-391):
     kickoff plays are scored as if receiving a touchback — ``yardline_100`` set
-    to the touchback yardline (80 for ``season < 2016`` else 75), ``down`` set
-    to 1, ``ydstogo`` set to 10.  Other plays with a missing ``down`` (PATs,
-    two-point conversions) are likewise scored on a 1st-and-10 substitution at
-    the touchback spot so the EP model never sees a NA ``down``.  Normal,
-    downed plays are left untouched.
+    to the touchback spot, ``down`` set to 1, ``ydstogo`` set to 10.  The spot
+    is the **rule** spot for the season
+    (:func:`~sportsdataverse.nfl.model_vars.touchback_yardline`: 80 / 75 / 70
+    / 65 — ``nfl-2016-kickoff-touchback-to-25``, ``nfl-2024-dynamic-kickoff``,
+    ``nfl-2025-kickoff-touchback-to-35``), not nflfastR's ``ifelse(season <
+    2016, 80, 75)``; see ``model_vars.TOUCHBACK_YARDLINE_BY_SEASON`` for the
+    measured parity cost on 2024-25 kickoff rows.
 
-    The substitution is written to *copies* of the feature columns so the
-    returned frame still carries the original raw values for the EPA overlays.
+    Other plays with a missing ``down`` (PATs, two-point conversions) are
+    likewise scored on a 1st-and-10 substitution at the touchback spot so the
+    EP model never sees a NA ``down``.  That is deliberately NOT the
+    extra-point snap spot (``model_vars.PAT_YARDLINE_PRE_2015`` /
+    ``PAT_YARDLINE_POST_2015``, ``nfl-2015-pat-snap-from-15``): nflfastR does
+    not run the EP model on a try at all — ``add_ep_variables`` L411-500
+    zeroes its classes and sets ``ep`` to the PAT make probability (FG model
+    at the snap spot) or ``2 * 0.4735`` for a two-point try, about 0.95 either
+    way.  Measured on the 18 try rows of ``tests/fixtures/nfl_ep_wp/
+    overtime_games.parquet``: the touchback 1st-and-10 proxy sits 0.31 from
+    nflverse's ``ep``, a 1st-and-10 at the snap spot 4.07 (a 1st-and-goal
+    from the 15 is worth ~4.5 points; a try is worth ~1).  The proxy stays;
+    the PAT make model belongs to ``nfl_fourth_down`` (which shares the two
+    snap-spot constants).
+    ponytail: ``ep`` on a try only feeds that row's ``1 - ep`` / ``2 - ep``
+    EPA overlay; a try-specific ``ep`` is the upgrade if it ever matters.
+
+    Normal, downed plays are left untouched.  The substitution is written to
+    *copies* of the feature columns so the returned frame still carries the
+    original raw values for the EPA overlays.
+
+    Args:
+        df: nflverse-shape frame with ``season``, ``down``, ``ydstogo``,
+            ``yardline_100`` and, optionally, ``kickoff_attempt`` /
+            ``play_type``.
+        touchback_yardline: Fixed touchback yards-to-endzone overriding the
+            per-season rule spot (the spring-football port passes its
+            league-season constant).  ``None`` (default) resolves by season.
+
+    Returns:
+        ``df`` with ``yardline_100`` / ``down`` / ``ydstogo`` substituted on
+        kickoff and down-null rows.
     """
     touchback = (
-        pl.when(pl.col("season") < 2016)
-        .then(pl.lit(TOUCHBACK_YARDLINE_PRE_2016))
-        .otherwise(pl.lit(TOUCHBACK_YARDLINE_POST_2016))
+        pl.lit(touchback_yardline, dtype=pl.Int64)
+        if touchback_yardline is not None
+        else touchback_yardline_expr(pl.col("season"))
     )
 
     is_kickoff = pl.lit(False)
@@ -2686,10 +2956,7 @@ def _apply_feature_substitution(df: pl.DataFrame) -> pl.DataFrame:
     needs_sub = is_kickoff | pl.col("down").is_null()
 
     return df.with_columns(
-        pl.when(needs_sub)
-        .then(touchback.cast(pl.Int64))
-        .otherwise(pl.col("yardline_100").cast(pl.Int64))
-        .alias("yardline_100"),
+        pl.when(needs_sub).then(touchback).otherwise(pl.col("yardline_100").cast(pl.Int64)).alias("yardline_100"),
         pl.when(needs_sub).then(pl.lit(1)).otherwise(pl.col("down")).cast(pl.Int64).alias("down"),
         pl.when(needs_sub).then(pl.lit(10)).otherwise(pl.col("ydstogo").cast(pl.Int64)).alias("ydstogo"),
     )
@@ -4013,6 +4280,9 @@ def enrich_nfl_pbp(
     method: str = "lead_diff",
     models_dir: Union[str, None] = None,
     add_fourth_down: bool = True,
+    league: str = "nfl",
+    touchback_yardline: Union[int, None] = None,
+    ep_point_values: Union[np.ndarray, None] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC.
@@ -4023,9 +4293,13 @@ def enrich_nfl_pbp(
     with grouped lead-differences (over ``game_id``) and the nflfastR scoring /
     end-of-half / OT overlays — it does **not** call ``calculate_epa`` /
     ``calculate_wpa`` (those consume ESPN-internal columns absent from a
-    nflverse frame).  Kickoffs and down-NA plays (PATs, two-point conversions)
-    have their EP model features substituted (touchback ``yardline_100``,
-    ``down=1``, ``ydstogo=10``) before EP scoring, matching nflfastR.
+    nflverse frame).  Kickoffs have their EP model features substituted
+    (the season's rule touchback ``yardline_100``, ``down=1``, ``ydstogo=10``)
+    before EP scoring and down-NA plays (PATs, two-point conversions) are
+    scored on their own spot as 1st-and-10 — see
+    :func:`_apply_feature_substitution`.  Overtime ``wp`` comes from the
+    closed form of the season's overtime rule format
+    (:func:`_apply_ot_wp_overlay`).
 
     The orchestrator is idempotent: stale ``ep`` / ``epa`` / ``wp`` / ``wpa`` /
     ``cp`` / ``cpoe`` / xYAC columns are recomputed on each call.
@@ -4054,6 +4328,20 @@ def enrich_nfl_pbp(
             download-on-demand; when they are unavailable offline the columns are
             emitted as all-null (with a ``RuntimeWarning``).  Set ``False`` to
             skip the step entirely.
+        league: ``"nfl"`` (default) applies the NFL overtime rule formats.
+            The spring-football port passes its league (``"xfl"`` / ``"ufl"``
+            / ``"cfl"``), whose shootout overtime has no NFL closed form:
+            overtime ``wp`` / ``vegas_wp`` are left null there.
+        touchback_yardline: Fixed kickoff-touchback yards-to-endzone for the
+            EP feature substitution and the overtime re-score.  ``None``
+            (default) resolves the NFL rule spot per season
+            (:func:`~sportsdataverse.nfl.model_vars.touchback_yardline`);
+            the spring-football port passes its league-season constant.
+        ep_point_values: 7-class point vector collapsing the EP class
+            probabilities into ``ep`` (see :func:`calculate_expected_points`).
+            ``None`` (default) is the NFL vector.  The air-yards / qb_epa
+            re-scores keep the NFL vector; today every league's vector equals
+            it, so nothing diverges.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
@@ -4189,8 +4477,10 @@ def enrich_nfl_pbp(
     # 1. EP — score on the feature-substituted frame (kickoff / down-NA), then
     #    keep ``ep`` as the start-of-play estimate.  We score a substituted COPY
     #    so the original raw feature columns survive for the EPA overlays.
-    substituted = _apply_feature_substitution(df)
-    scored = _self.calculate_expected_points(substituted)
+    substituted = _apply_feature_substitution(df, touchback_yardline=touchback_yardline)
+    # The NFL path calls the scorer exactly as before (test stubs rely on the bare call).
+    ep_kwargs = {} if ep_point_values is None else {"ep_point_values": ep_point_values}
+    scored = _self.calculate_expected_points(substituted, **ep_kwargs)
     # Carry the freshly-scored ``ep`` (+ class probs) back onto the ORIGINAL
     # (un-substituted) frame so downstream overlays read the real columns.
     ep_cols = ["ep", *_EP_CLASS_NAMES]
@@ -4218,9 +4508,10 @@ def enrich_nfl_pbp(
 
     # 3b. Overtime overlay — nflfastR runs the WP boosters on regulation only
     #     and gives qtr > 4 a closed form off the EP class probabilities
-    #     (add_wp_variables L820-899).  Without this, overtime WP is a
-    #     model extrapolation outside its own training domain.
-    raw = _self._apply_ot_wp_overlay(raw)
+    #     (add_wp_variables L820-899), here selected by the season's overtime
+    #     rule format.  Without this, overtime WP is a model extrapolation
+    #     outside its own training domain.  Spring-football leagues get null.
+    raw = _self._apply_ot_wp_overlay(raw, league=league, touchback_yardline=touchback_yardline)
 
     # 4. WPA + home/away/def WP — native lead-of-home-WP + posteam perspective.
     raw = raw.drop([c for c in ("home_wp", "away_wp", "def_wp", "wpa", "vegas_wpa") if c in raw.columns])

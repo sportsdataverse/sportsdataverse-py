@@ -18,7 +18,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [nflverse data releases](#nflverse-data-releases) | `github.com` | 46 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 21 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 166 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 167 | — |
 
 ## ESPN {#espn}
 
@@ -132,6 +132,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`pressure_pairs`](reference/additional/models-and-calculators-10#pressure_pairs)
 - [`special_teams_ratings`](reference/additional/models-and-calculators-10#special_teams_ratings)
 - [`team_pressure_rates`](reference/additional/models-and-calculators-10#team_pressure_rates)
+- [`touchback_yardline_expr`](reference/additional/models-and-calculators-10#touchback_yardline_expr)
 
 ### Analytics {#analytics}
 

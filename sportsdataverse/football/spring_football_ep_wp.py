@@ -326,21 +326,25 @@ def enrich_spring_football_pbp(
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Score a spring-football pbp frame with the NFL EP/WP/CP/xYAC pipeline.
 
-    Calls ``sportsdataverse.nfl.ep_wp.enrich_nfl_pbp`` UNCHANGED -- this is
-    the "by reference, do not re-implement" port: the same parity-validated
-    NFL scorers, run on genuine league-native down/distance/yardline/clock/
-    score state built by :func:`build_spring_football_pbp`. See
-    ``spring_football_constants`` for the documented rule-delta downscope
-    (kickoff-touchback spot and EP point-value collapse are not yet
-    league-specific).
+    Calls ``sportsdataverse.nfl.ep_wp.enrich_nfl_pbp`` -- this is the "by
+    reference, do not re-implement" port: the same parity-validated NFL
+    scorers, run on genuine league-native down/distance/yardline/clock/score
+    state built by :func:`build_spring_football_pbp`, with the league-season
+    rule constants of
+    :func:`~sportsdataverse.football.spring_football_constants.get_sf_constants`
+    threaded in: the kickoff-touchback spot (``touchback_yardline``) and the
+    EP point vector (``ep_point_values``).  Overtime ``wp`` / ``vegas_wp`` are
+    null for these leagues: their overtime is a conversion shootout
+    (``rules/xfl.yaml`` ``xfl-2020-overtime-five-round-shootout``), not a
+    possession format any NFL closed form describes.
 
     Args:
         pbp: Output of :func:`build_spring_football_pbp`.
         league: ``"ufl"``, ``"xfl"``, ``"cfl"``, or ``"nfl_parity"`` --
             validated via
-            :func:`~sportsdataverse.football.spring_football_constants.get_sf_constants`
-            (only used to validate the league; the constants aren't yet
-            threaded into scoring -- see the downscope note above).
+            :func:`~sportsdataverse.football.spring_football_constants.get_sf_constants`.
+            The constants of the frame's season (first row's ``season``) are
+            threaded into scoring; ``"nfl_parity"`` takes the plain NFL path.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
@@ -389,10 +393,28 @@ def enrich_spring_football_pbp(
     if pbp.height == 0:
         return pbp.to_pandas() if return_as_pandas else pbp
 
-    # Deliberately UNCHANGED -- no add_fourth_down=False here. Passing it would
-    # silence the per-call warning, but it also drops 15 columns and breaks the
-    # "calls enrich_nfl_pbp unchanged" property the nfl_parity tests exist to
-    # prove (test_nfl_parity_shared_core compares column sets exactly). The
+    # League-season rule constants threaded into the NFL pipeline: the kickoff
+    # touchback spot (EP feature substitution + overtime re-score) and the EP
+    # point vector (rules/ufl.yaml ufl-2024-inaugural-ruleset,
+    # ufl-2026-kick-pat-four-point-fg; rules/xfl.yaml xfl-2020-inaugural-ruleset).
+    # ponytail: one season per frame (the first row's) -- a spring-football
+    # frame is one game.  ``nfl_parity`` maps to the NFL path exactly (NFL
+    # overtime formats, per-season NFL touchback) so the parity gate stays
+    # byte-identical.
+    if league == "nfl_parity":
+        return enrich_nfl_pbp(pbp, return_as_pandas=return_as_pandas)
+    season = pbp["season"].drop_nulls()
+    constants = get_sf_constants(league, season=int(season[0]) if season.len() else None)
+
+    # Deliberately no add_fourth_down=False here. Passing it would silence the
+    # per-call warning, but it also drops 15 columns and breaks the column-set
+    # equality the nfl_parity tests prove (test_nfl_parity_shared_core). The
     # warning is the cheaper cost; see the Returns note for why the fourth-down
     # and air-yards outputs are null for these leagues.
-    return enrich_nfl_pbp(pbp, return_as_pandas=return_as_pandas)
+    return enrich_nfl_pbp(
+        pbp,
+        league=league,
+        touchback_yardline=constants.touchback_yardline,
+        ep_point_values=constants.ep_point_values,
+        return_as_pandas=return_as_pandas,
+    )

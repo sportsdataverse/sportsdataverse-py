@@ -87,8 +87,7 @@ from sportsdataverse.nfl.ep_wp import (
 )
 from sportsdataverse.nfl.model_vars import (
     SPREAD_TIME_DECAY_EXPONENT,
-    TOUCHBACK_YARDLINE_POST_2016,
-    TOUCHBACK_YARDLINE_PRE_2016,
+    touchback_yardline_expr,
     defense_score_vec,
     end_change_vec,
     ep_class_to_score_mapping,
@@ -3125,15 +3124,12 @@ class NFLPlayProcess(object):
             yds_kickoff=pl.when(pl.col("kickoff_play") == True)
             .then(pl.col("text").str.extract(r"(?i)kickoff for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
-            # Touchback spot: the 20 through 2015, the 25 from 2016 (rules/nfl.yaml
-            # nfl-2016-kickoff-touchback-to-25); the boundary used to sit at 2013, which gave 2014-15
-            # touchbacks the 25. Shares model_vars.TOUCHBACK_YARDLINE_* with ep_wp.
-            yds_kickoff_return=pl.when(
-                (pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") >= 2016),  # noqa: E712
-            )
-            .then(100 - TOUCHBACK_YARDLINE_POST_2016)
-            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") < 2016))  # noqa: E712
-            .then(100 - TOUCHBACK_YARDLINE_PRE_2016)
+            # Touchback spot by season (rules/nfl.yaml nfl-2016-kickoff-touchback-to-25,
+            # nfl-2024-dynamic-kickoff, nfl-2025-kickoff-touchback-to-35): the 20 through 2015,
+            # the 25 from 2016, the 30 in 2024, the 35 from 2025.  Shares
+            # model_vars.touchback_yardline_expr with ep_wp.
+            yds_kickoff_return=pl.when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True))  # noqa: E712
+            .then(100 - touchback_yardline_expr(pl.col("season")))
             .when(
                 (pl.col("kickoff_play") == True)
                 .and_(pl.col("fumble_vec") == False)
@@ -4809,13 +4805,12 @@ class NFLPlayProcess(object):
                 pl.lit(99).alias("start.yardsToEndzone.touchback"),
             )
             .with_columns(
-                # The 2016 rule change moved the touchback spot to the 25 (75 yards to
-                # the end zone); before 2016 it was the 20 (80 yards).  nflfastR keys
-                # this on the 2016 season boundary, NOT 2013.
-                pl.when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("season") >= 2016))
-                .then(TOUCHBACK_YARDLINE_POST_2016)
-                .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("season") < 2016))
-                .then(TOUCHBACK_YARDLINE_PRE_2016)
+                # Kickoff touchback spot by season (model_vars.touchback_yardline_expr): the 20
+                # through 2015, the 25 from 2016, the 30 in 2024, the 35 from 2025 -- the rule
+                # spots, not nflfastR's 80 / 75 pair (rules/nfl.yaml nfl-2024-dynamic-kickoff,
+                # nfl-2025-kickoff-touchback-to-35).
+                pl.when(pl.col("type.text").is_in(kickoff_vec))
+                .then(touchback_yardline_expr(pl.col("season")))
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone.touchback"),
             )

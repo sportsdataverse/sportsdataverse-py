@@ -221,3 +221,33 @@ def test_spring_enrichment_output_contract():
             f"{col} is now populated for spring football — the Returns note in "
             "enrich_spring_football_pbp says it cannot be, so one of them is wrong"
         )
+
+
+def test_enrich_xfl_scores_kickoffs_at_the_xfl_touchback_spot():
+    """The league-season touchback spot is threaded into the EP feature substitution.
+
+    rules/xfl.yaml xfl-2020-inaugural-ruleset: XFL touchbacks come out to the
+    35 (``yardline_100`` 65), the NFL's 2023 spot is the 25 (75).  On the real
+    2023 XFL fixture the seven kickoff rows must therefore score a different
+    ``ep`` through the port than through the plain NFL path, and the same
+    ``ep`` as the NFL path told to use 65 -- proving the override is the only
+    thing that moved.  Non-kickoff rows are identical.
+    """
+    from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
+
+    pbp = build_spring_football_pbp(_load_fixture("xfl_summary.json"), league="xfl")
+    assert get_sf_constants("xfl", season=int(pbp["season"][0])).touchback_yardline == 65
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        via_port = enrich_spring_football_pbp(pbp, league="xfl")
+        nfl_path = enrich_nfl_pbp(pbp)
+        nfl_at_65 = enrich_nfl_pbp(pbp, touchback_yardline=65)
+
+    ko = pl.col("kickoff_attempt") == 1
+    port_ko, nfl_ko, at65_ko = (d.filter(ko)["ep"] for d in (via_port, nfl_path, nfl_at_65))
+    assert port_ko.len() >= 5
+    assert bool(((port_ko - nfl_ko).abs() > 1e-6).all()), "the XFL spot did not move kickoff ep"
+    assert bool(((port_ko - at65_ko).abs() < 1e-9).all())
+    scrimmage = pl.col("down").is_not_null()
+    a, b = via_port.filter(scrimmage)["ep"], nfl_at_65.filter(scrimmage)["ep"]
+    assert bool(((a.fill_null(-99.0) - b.fill_null(-99.0)).abs() < 1e-9).all())

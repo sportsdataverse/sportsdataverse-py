@@ -60,8 +60,26 @@ def test_ufl_and_xfl_pbp_share_the_same_core(monkeypatch):
         xfl_out = xfl_pbp("401517780")
         ufl_out = ufl_pbp("401517780")
     assert xfl_out.height == ufl_out.height > 0
-    for col in ("ep", "epa", "wp", "wpa"):
-        assert (xfl_out[col].fill_null(-999) - ufl_out[col].fill_null(-999)).abs().max() < 1e-9
+    # Same core, different league-season constants: the only rows allowed to differ are the
+    # kickoffs, which the XFL (touchback at 65) and the UFL (its earliest ruleset, 2024: 75)
+    # score from different touchback spots (rules/xfl.yaml xfl-2020-inaugural-ruleset,
+    # rules/ufl.yaml ufl-2024-inaugural-ruleset).
+    # Same kickoff definition as ep_wp._apply_feature_substitution (a kickoff with a penalty
+    # carries play_type "kickoff" but kickoff_attempt 0).
+    ko = (xfl_out["kickoff_attempt"] == 1) | (xfl_out["play_type"] == "kickoff")
+    assert ko.sum() >= 5
+    assert bool(((xfl_out["ep"] - ufl_out["ep"]).abs() > 1e-6).filter(ko).all()), "league touchback not threaded"
+    scrimmage = xfl_out["down"].is_not_null()
+    for col in ("ep", "wp"):
+        d = (xfl_out[col].fill_null(-999) - ufl_out[col].fill_null(-999)).abs()
+        assert d.filter(scrimmage).max() < 1e-9, col
+    # epa / wpa lead into the next REAL play (a no-play row in between is skipped), so the
+    # one or two rows before a kickoff may also move.
+    ko_f = ko.fill_null(False)
+    before_ko = ko_f.shift(-1, fill_value=False) | ko_f.shift(-2, fill_value=False)
+    for col in ("epa", "wpa"):
+        d = (xfl_out[col].fill_null(-999) - ufl_out[col].fill_null(-999)).abs()
+        assert d.filter(scrimmage & ~before_ko).max() < 1e-9, col
 
 
 def test_xfl_pbp_return_as_pandas(monkeypatch):

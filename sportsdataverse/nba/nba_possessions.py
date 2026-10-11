@@ -179,7 +179,13 @@ def _event_detail(
     This keeps ``points == 2*fg2m + 3*fg3m + ftm`` exact now that technical
     FTs are ordinary inline events: a DEFENSE technical FT shooter is present
     in the group but its team != offense, so it contributes to NEITHER
-    ``points`` NOR ``ftm``.
+    ``points`` NOR ``ftm``.  The one league where the identity does not hold
+    is the G League from 2019-20 (``rules/nbagl.yaml``
+    ``nbagl-2020-single-free-throw``): a single ``'Free Throw 2PT'`` /
+    ``'3PT'`` attempt counts ``fta = ftm = 1`` but is worth 2 or 3 points.
+    ``points`` is a score DELTA (see :func:`_assemble`), so it is right either
+    way; only ``ftm`` is an attempt count there, never a point count
+    (``tests/nbagl/test_nbagl_engine.py::test_nbagl_single_free_throw_points_come_from_the_score``).
 
     ``oreb``/``dreb`` additionally require the rebound to be a *real* rebound
     (``ev.get("_is_real_rebound", True)`` — the placeholder-exclusion flag
@@ -831,7 +837,9 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
         computed by :func:`_event_detail` from the possession's events, each
         filtered to the offense team (except ``dreb``, which counts the
         defense's real rebounds); ``points == 2*fg2m + 3*fg3m + ftm`` holds
-        exactly on every possession.  Also includes three pbpstats-parity
+        exactly on every NBA / WNBA possession (``points`` is a score delta,
+        and in the G League a single free throw can be worth 2 or 3 -- see
+        :func:`_event_detail`).  Also includes three pbpstats-parity
         columns from :func:`_possession_start_type` / :func:`_count_as_possession`:
         ``number_in_period`` (Int64, the flat ``possession_number`` reset to 1
         at the start of each period -- pbpstats' ``number``), ``possession_start_type``

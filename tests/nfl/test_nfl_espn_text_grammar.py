@@ -349,13 +349,14 @@ def test_2026_plays_under_the_2025_rulebook_without_an_era_warning(processed):
     """The era bump is a coverage assertion: 2026 must score without
     EraCoverageWarning, and the data must still show the 2025 kickoff rule (the
     touchback spotted at the 35 -> 65 yards to the end zone, or the 20 -> 80 when
-    the kick lands short of the landing zone) while the EP substitution keeps the
-    nflverse-parity spot (75). If a 2026 kickoff lands anywhere else this fails
-    and the era needs a real review, not a bump."""
+    the kick lands short of the landing zone) and the EP substitution must use
+    that rule spot (``touchback_yardline(2026) == 65``, rules/nfl.yaml
+    nfl-2025-kickoff-touchback-to-35). If a 2026 kickoff lands anywhere else this
+    fails and the era needs a real review, not a bump."""
     import warnings as _w
 
     from sportsdataverse.errors import EraCoverageWarning
-    from sportsdataverse.nfl.model_vars import ERA_MAX_KNOWN_SEASON, TOUCHBACK_YARDLINE_POST_2016
+    from sportsdataverse.nfl.model_vars import ERA_MAX_KNOWN_SEASON, touchback_yardline
 
     proc, _ = processed
     assert ERA_MAX_KNOWN_SEASON >= 2026
@@ -363,9 +364,10 @@ def test_2026_plays_under_the_2025_rulebook_without_an_era_warning(processed):
     assert f["season"].unique().to_list() == [2026]
     tb = f.filter((pl.col("kickoff_play") == True) & (pl.col("kickoff_tb") == True))  # noqa: E712
     assert tb.height >= 1
-    assert set(tb["start.yardsToEndzone.touchback"].to_list()) == {TOUCHBACK_YARDLINE_POST_2016}
+    assert touchback_yardline(2026) == 65
+    assert set(tb["start.yardsToEndzone.touchback"].to_list()) == {touchback_yardline(2026)}
     summary = json.loads(FIX.read_text())
-    # the feed's own post-touchback spot (the processor substitutes the parity spot above)
+    # the feed's own post-touchback spot (the processor substitutes the rule spot above)
     raw_spots = {
         p["end"]["yardsToEndzone"]
         for d in summary["drives"]["previous"]

@@ -179,6 +179,7 @@ not covered by the generated API-endpoint reference above.
 | [pressure_pairs](additional/models-and-calculators-10.md#pressure_pairs) | Per (season, off_team, def_team) dropbacks + pressures (matchup grid). |
 | [special_teams_ratings](additional/models-and-calculators-10.md#special_teams_ratings) | One row per team: opponent-adjusted special-teams EPA per play. |
 | [team_pressure_rates](additional/models-and-calculators-10.md#team_pressure_rates) | Per (season, team) raw pressure rates, both sides of the ball. |
+| [touchback_yardline_expr](additional/models-and-calculators-10.md#touchback_yardline_expr) | Polars form of `touchback_yardline` for a `season` column expression. |
 
 ## Analytics
 
