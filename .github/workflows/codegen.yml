@@ -35,7 +35,8 @@ jobs:
       - name: Codegen drift check (generated files in sync with metadata)
         run: uv run --frozen python tools/codegen/generate.py --check
       - name: Codegen test suite
-        run: uv run --frozen pytest tests/codegen/ -q
+        # The subprocess --check test repeats the step above; it still guards a bare local `pytest`.
+        run: uv run --frozen pytest tests/codegen/ -q --deselect tests/codegen/test_check.py::test_codegen_drift_clean
 
   release-audit:
     name: release-manifest audit (informational)

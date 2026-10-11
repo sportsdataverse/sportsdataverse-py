@@ -281,10 +281,9 @@
   file: sportsdataverse/_codegen_runtime.py
   snippet: 'return pl.read_parquet(url, use_pyarrow=True)'
   mutant: 'return pl.read_parquet(url)'
-  test: tests/codegen/test_runtime_release.py
-  expected:
-    survive_until: "1.3"
-  note: rt A/releases (14 passed); 1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned)
+  test: tests/codegen/test_runtime_release.py -k pyarrow
+  expected: kill
+  note: rt A/releases (14 passed before 1.3); 1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned)
 
 # --- B-M36: the NCAA capture clean-page check has no behavioural test ---------------------------
 - id: ncaa-capture-is-clean-always-true
@@ -355,3 +354,170 @@
   expected:
     survive_until: "1.5"
   note: model-analytics-007; resume gates are rank-only
+
+# --- A-M1 / A-L2 / A-L53: the generate.py --check gates go red (ledger gate codegen-red-path-gates) ---
+- id: codegen-live-stale-returns-empty
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_live_")'
+  mutant: |2-
+        return []
+        tmp = _check_tmp("_check_live_")
+  test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and live"
+  expected: kill
+  note: the ledger gate's own mutation (making _live_stale return [] unconditionally)
+
+- id: codegen-flat-stale-returns-empty
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_flat_")'
+  mutant: |2-
+        return []
+        tmp = _check_tmp("_check_flat_")
+  test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and flat"
+  expected: kill
+
+- id: codegen-parsed-stale-returns-empty
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_parsed_")'
+  mutant: |2-
+        return []
+        tmp = _check_tmp("_check_parsed_")
+  test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and parsed"
+  expected: kill
+
+- id: codegen-loaders-stale-returns-empty
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_loaders_")'
+  mutant: |2-
+        return []
+        tmp = _check_tmp("_check_loaders_")
+  test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and loaders"
+  expected: kill
+
+- id: codegen-staging-check-returns-zero
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_")'
+  mutant: |2-
+        return 0
+        tmp = _check_tmp("_check_")
+  test: tests/codegen/test_check.py -k red_path_staging_check
+  expected: kill
+
+- id: codegen-docs-stale-no-orphans
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: 'stale.append(f"{f.relative_to(DOCS).as_posix()} (orphan)")'
+  mutant: pass
+  test: tests/codegen/test_check.py -k docs_stale
+  expected: kill
+
+- id: codegen-coverage-gaps-never-appended
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '            gaps.append((label, missing))'
+  mutant: '            pass'
+  test: tests/codegen/test_check.py -k coverage_gaps
+  expected: kill
+
+- id: codegen-main-check-rc-always-zero
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: |2-
+            return rc
+        build()
+  mutant: |2-
+            return 0
+        build()
+  test: tests/codegen/test_check.py -k rc_is_one
+  expected: kill
+
+- id: codegen-check-tmp-fixed-name
+  group: codegen-gates
+  finding: A-L2
+  file: tools/codegen/generate.py
+  snippet: '    return Path(tempfile.mkdtemp(prefix=prefix, dir=OUT))'
+  mutant: |2-
+        tmp = OUT / f"{prefix}fixed"
+        shutil.rmtree(tmp, ignore_errors=True)
+        tmp.mkdir()
+        return tmp
+  test: tests/codegen/test_check.py -k overlap
+  expected: kill
+  note: ANY fixed name (not only the historical _check_*_tmp) fails the in-process overlap test (review R2)
+
+- id: codegen-star-import-commented
+  group: codegen-gates
+  finding: A-L53
+  file: sportsdataverse/wnba/__init__.py
+  snippet: from sportsdataverse.wnba.wnba_espn_ext import *
+  mutant: '# from sportsdataverse.wnba.wnba_espn_ext import *'
+  test: tests/codegen/test_check.py -k star_imported
+  expected: kill
+
+# --- A-M5: the discovered error-vocabulary matrix (ledger gate discovered-vocabulary-matrix) -----
+- id: runtime-matrix-uefa-skips-status
+  group: codegen-gates
+  finding: A-M5
+  file: sportsdataverse/soccer/uefa_runtime.py
+  snippet: '    return _json_body(resp, url)'
+  mutant: '    return resp.json()'
+  test: tests/codegen/test_runtime_errors.py -k "discovered and uefa"
+  expected: kill
+
+# --- A-M2 / A-L14 / A-N14 / A-L55: parser and schema gates --------------------------------------
+- id: espn-to-output-keeps-list-cells
+  group: codegen-gates
+  finding: A-M2
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: 'str(v) if isinstance(v, (dict, list)) else v'
+  mutant: 'str(v) if isinstance(v, dict) else v'
+  test: tests/test_espn_universal_parsers.py -k dtype_snapshot
+  expected: kill
+  note: the ledger gate hostile-body-sweep's mutation (_to_output stringifies a list column differently)
+
+- id: espn-registry-extra-key
+  group: codegen-gates
+  finding: A-L14
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    "coaches": parse_coaches,'
+  mutant: |2-
+        "coaches": parse_coaches,
+        "coaches_x": parse_coaches,
+  test: tests/codegen/test_capture_fixtures.py -k equality
+  expected: kill
+
+- id: native-schema-column-renamed
+  group: codegen-gates
+  finding: A-N14
+  file: tools/codegen/schemas/native/nhl_api_web/standings.yaml
+  snippet: |
+    - name: conference_abbrev
+  mutant: |
+    - name: conference_abbrev_renamed
+  test: tests/codegen/test_native_schema_sweep.py -k "nhl_api_web and standings"
+  expected: kill
+
+- id: id-cast-empty-frame-cast
+  group: codegen-gates
+  finding: A-L55
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |2-
+        if df.height == 0:
+            return df
+        for col in cols:
+  mutant: '    for col in cols:'
+  test: tests/codegen/test_id_casts.py -k empty_frame_keeps
+  expected: kill
+  note: casting the empty frame too is task 5.2's fix; the strict xfail turns XPASS (red), which is the kill

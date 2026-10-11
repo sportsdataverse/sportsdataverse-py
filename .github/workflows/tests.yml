@@ -70,12 +70,12 @@ jobs:
       #
       # No --cov here: coverage instruments every call and this job exists for fast
       # feedback. It runs in the live job, which is not on the critical path.
-      # Excluded here because codegen.yml ALREADY runs both, on ubuntu, on the same
-      # triggers -- running them again costs ~11 min per CI run for no extra signal:
+      # Excluded here because codegen.yml ALREADY runs it, on ubuntu, on the same
+      # triggers -- running it again costs ~11 min per CI run for no extra signal:
       #   tests/codegen/                     <- codegen.yml "Codegen test suite"
-      #   test_codegen_drift_clean           <- codegen.yml "Codegen drift check"
-      #                                         (it shells out to generate.py --check)
-      # This is a CI-level dedupe only. A bare `uv run pytest` locally still runs
+      # (that includes tests/codegen/test_check.py::test_codegen_drift_clean, the
+      # subprocess generate.py --check, which codegen.yml deselects because its own
+      # "Codegen drift check" step already runs --check). This is a CI-level dedupe only. A bare `uv run pytest` locally still runs
       # everything, and the pre-push hook still gates the drift check.
       #
       # HOW "offline" IS ENFORCED -- there is deliberately no `-m` marker filter here.
@@ -97,7 +97,6 @@ jobs:
           uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -q
           -m "not whole_game"
           --ignore=tests/codegen
-          --deselect tests/test_mlb_statcast_codegen.py::test_codegen_drift_clean
 
   whole-game:
     name: pytest (whole-game oracles)
