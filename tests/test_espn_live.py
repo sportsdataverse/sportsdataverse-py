@@ -74,10 +74,10 @@ def test_espn_cfb_teams_site_returns_many_teams():
     sports = payload.get("sports", [{}])
     teams = sports[0].get("leagues", [{}])[0].get("teams") or []
     if not teams:
-        # ponytail: ESPN Site v2 occasionally returns an empty teams list on a
-        # transient upstream hiccup (observed on CI, not reproducible locally);
-        # skip rather than fail so the live-test job stays resilient to flakes.
-        pytest.skip("ESPN CFB teams_site returned no teams (transient upstream response)")
+        # ESPN Site v2 occasionally returns an empty teams list on a transient upstream
+        # hiccup (observed on CI, not reproducible locally). Report it as an expected
+        # failure, never a skip: a skip hides the regression this test exists to catch.
+        pytest.xfail("B-GB-26: ESPN CFB teams_site returned no teams (transient upstream response)")
     assert len(teams) >= 200, f"expected >=200 CFB teams, got {len(teams)}"
 
 
@@ -110,8 +110,7 @@ def test_espn_nba_scoreboard_returns_events_for_known_date():
     # Christmas Day 2024 — historically game-heavy
     payload = espn_nba_scoreboard(dates=20241225, return_parsed=False)
     events = payload.get("events") or []
-    assert isinstance(events, list), "events must be a list"
-    assert len(events) > 0, "expected at least one NBA event on 2024-12-25"
+    assert sorted(e["shortName"] for e in events) == ["DEN @ PHX", "LAL @ GS", "MIN @ DAL", "PHI @ BOS", "SA @ NY"]
 
 
 def test_espn_mlb_scoreboard_returns_events_for_known_date():
@@ -120,8 +119,9 @@ def test_espn_mlb_scoreboard_returns_events_for_known_date():
     # Opening Day 2024 — full slate of games
     payload = espn_mlb_scoreboard(dates=20240320, return_parsed=False)
     events = payload.get("events") or []
-    assert isinstance(events, list), "events must be a list"
-    assert len(events) > 0, "expected at least one MLB event on 2024-03-20"
+    # the Seoul Series opener plus the spring-training slate
+    assert len(events) == 13, len(events)
+    assert ("401568469", "LAD VS SD") in [(e["id"], e["shortName"]) for e in events]
 
 
 # ===========================================================================
@@ -134,11 +134,7 @@ def test_espn_nba_player_overview_lebron():
 
     # LeBron James ESPN id = 1966
     payload = espn_nba_player_overview(athlete_id=1966, return_parsed=False)
-    assert isinstance(payload, dict), "expected a dict response"
-    assert len(payload) > 0, "payload is empty for LeBron James (id=1966)"
-    # Web v3 overview always includes athlete and statsSummary (or similar)
-    top_keys = set(payload.keys())
-    assert top_keys, "payload has no top-level keys"
+    assert {"statistics", "gameLog", "news", "awards"} <= set(payload), sorted(payload)
 
 
 def test_espn_mlb_player_overview_aaron_judge():
@@ -146,10 +142,7 @@ def test_espn_mlb_player_overview_aaron_judge():
 
     # Aaron Judge ESPN id = 33192
     payload = espn_mlb_player_overview(athlete_id=33192, return_parsed=False)
-    assert isinstance(payload, dict), "expected a dict response"
-    assert len(payload) > 0, "payload is empty for Aaron Judge (id=33192)"
-    top_keys = set(payload.keys())
-    assert top_keys, "payload has no top-level keys"
+    assert {"statistics", "gameLog", "news", "awards"} <= set(payload), sorted(payload)
 
 
 # ===========================================================================
@@ -188,12 +181,9 @@ def test_nhl_web_schedule_returns_game_week():
 
     # A specific past regular-season date guaranteed to have games
     payload = nhl_web_schedule(date="2024-01-15", return_parsed=False)
-    assert isinstance(payload, dict), "expected a dict response"
     game_week = payload.get("gameWeek") or []
-    assert isinstance(game_week, list), "'gameWeek' must be a list"
-    # At least one day in the returned week should have games
-    all_games = [g for day in game_week for g in (day.get("games") or [])]
-    assert len(all_games) > 0, "expected at least one NHL game in the week of 2024-01-15"
+    assert [day["date"] for day in game_week] == [f"2024-01-{d}" for d in range(15, 22)]
+    assert [len(day.get("games") or []) for day in game_week] == [10, 8, 2, 11, 4, 12, 6]
 
 
 def test_nhl_web_roster_toronto_2024():
@@ -235,7 +225,10 @@ def test_mlb_schedule_opening_day_2024_returns_games():
     payload = mlb_schedule(date="2024-03-20", sport_id=1)
     dates = payload.get("dates") or []
     all_games = [g for d in dates for g in (d.get("games") or [])]
-    assert len(all_games) > 0, "expected MLB games on Opening Day 2024-03-20, got none"
+    assert len(all_games) == 13, len(all_games)
+    seoul = next(g for g in all_games if g["gamePk"] == 745444)
+    teams = (seoul["teams"]["away"]["team"]["name"], seoul["teams"]["home"]["team"]["name"])
+    assert teams == ("Los Angeles Dodgers", "San Diego Padres")
 
 
 # ===========================================================================
@@ -247,26 +240,9 @@ def test_statcast_leaderboard_expected_statistics_2024_nonempty():
     from sportsdataverse.mlb import mlb_statcast_leaderboard_expected_stats
 
     result = mlb_statcast_leaderboard_expected_stats(type="batter", year=2024)
-    # Returns a parsed polars DataFrame by default (return_parsed=True), or a
-    # pandas DataFrame with return_as_pandas=True.
-    try:
-        import polars as pl
-
-        if isinstance(result, pl.DataFrame):
-            assert result.shape[0] > 0, "expected non-empty polars frame for xStats 2024"
-            return
-    except ImportError:
-        pass
-    try:
-        import pandas as pd
-
-        if isinstance(result, pd.DataFrame):
-            assert len(result) > 0, "expected non-empty pandas frame for xStats 2024"
-            return
-    except ImportError:
-        pass
-    # Fallback: if some other collection-like (list, dict, etc.)
-    assert result is not None, "mlb_statcast_leaderboard_expected_stats returned None"
+    # a parsed polars frame by default: one qualified batter per row
+    assert {"player_id", "year", "pa", "ba", "est_ba", "woba"} <= set(result.columns), result.columns
+    assert result.height >= 100 and result["year"].cast(int).unique().to_list() == [2024]
     # If it's a dict with a non-empty content, accept that too
     if hasattr(result, "__len__"):
         assert len(result) > 0, f"result is empty: {type(result)}"
@@ -347,10 +323,7 @@ def test_parse_scoreboard_handles_wnba_payload():
     raw = espn_wnba_scoreboard(dates=20240707, return_parsed=False)
     df = parse_scoreboard(raw)
     assert isinstance(df, pl.DataFrame)
-    # If the date has games (it does, historically) we expect rows; otherwise
-    # parse_scoreboard returns an empty frame (which is itself valid behaviour).
-    if raw.get("events") or []:
-        assert df.height > 0, "scoreboard had events but parse_scoreboard returned 0 rows"
+    assert df["game_id"].to_list() == [e["id"] for e in raw["events"]] and df.height == 4
 
 
 def test_parse_standings_handles_wnba_payload():
@@ -376,11 +349,10 @@ def test_parse_athlete_overview_handles_wnba_payload():
     raw = espn_wnba_player_overview(athlete_id=3149391, return_parsed=False)
     df = parse_athlete_overview(raw)
     assert isinstance(df, pl.DataFrame), f"expected polars frame, got {type(df)}"
-    # Overview parser flattens to a single-row summary OR a multi-row stats
-    # table — both are valid; assert "at least one row OR an empty frame
-    # because Web v3 returned an empty payload" rather than strict > 0
-    if raw:
-        assert df.height >= 0, "parse_athlete_overview returned a malformed frame"
+    # one row per statistics split, with the split's own games-played cell
+    splits = raw["statistics"]["splits"]
+    assert df["split_name"].to_list() == [sp["displayName"] for sp in splits] and len(splits) > 0
+    assert df["games_played"].to_list() == [sp["stats"][0] for sp in splits]
 
 
 def test_parse_leaders_handles_wnba_payload():
@@ -392,10 +364,7 @@ def test_parse_leaders_handles_wnba_payload():
     raw = espn_wnba_leaders(return_parsed=False)
     df = parse_leaders(raw)
     assert isinstance(df, pl.DataFrame)
-    # Leaders endpoint always returns multiple stat categories × multiple
-    # leaders — tolerate emptiness during the off-season but reject malformed
-    if raw.get("leaders") or raw.get("categories") or raw.get("items"):
-        assert df.height >= 0, "parse_leaders returned a malformed frame"
+    assert df["pagination_count"].to_list() == [raw["pagination"]["count"]]
 
 
 # ===========================================================================
@@ -463,9 +432,8 @@ def test_parse_edge_top10_handles_live_leaderboard():
     raw = nhl_edge_skater_shot_speed_top_10(positions="all", sort_by="maxSpeed", return_parsed=False)
     df = parse_edge_top10(raw)
     assert isinstance(df, pl.DataFrame), f"expected polars DataFrame, got {type(df)}"
-    # Off-season may return empty; in-season expect rows.
-    if any(isinstance(v, list) and v for v in (raw or {}).values()):
-        assert df.height > 0, "non-empty raw payload but parse_edge_top10 returned 0 rows"
+    rows = next(v for v in raw.values() if isinstance(v, list))
+    assert df.height == len(rows) == 10
 
 
 def test_parser_for_edge_falls_back_to_generic():
@@ -524,7 +492,8 @@ def _skip_if_espn_publishes_no_roster(fetch, team_id, league):
     athletes = (raw or {}).get("athletes") or []
     if not athletes:
         season = ((raw or {}).get("season") or {}).get("year")
-        pytest.skip(f"ESPN publishes no {league} roster for team {team_id} (season={season}, offseason window)")
+        # an expected failure, never a skip: a skip hides the regression this test exists to catch
+        pytest.xfail(f"B-GB-26: ESPN publishes no {league} roster for team {team_id} (season={season}, offseason)")
 
 
 def test_espn_mbb_team_roster_live():
@@ -560,6 +529,7 @@ def test_espn_mbb_news_live():
 
     df = espn_mbb_news(limit=5, return_parsed=True)
     assert df.height >= 1, f"expected >=1 MBB article, got {df.height}"
+    assert df["headline"].null_count() == 0
 
 
 def test_espn_wbb_news_live():
@@ -567,6 +537,7 @@ def test_espn_wbb_news_live():
 
     df = espn_wbb_news(limit=5, return_parsed=True)
     assert df.height >= 1, f"expected >=1 WBB article, got {df.height}"
+    assert df["headline"].null_count() == 0
 
 
 def test_espn_cfb_team_schedule_live():
@@ -658,7 +629,8 @@ def test_espn_cfb_summary_live_uses_football_pattern():
     # (transient 200 / rate-limit). The football-vs-basketball pattern can't be
     # verified without data, so skip rather than hard-fail on an empty payload.
     if out["drives"].height == 0 and out["drive_plays"].height == 0:
-        pytest.skip("ESPN returned an empty CFB summary for 401677192 (transient); skipping shape checks")
+        # an expected failure, never a skip: a skip hides the regression this test exists to catch
+        pytest.xfail("B-GB-26: ESPN returned an empty CFB summary for 401677192 (transient)")
     # CFB football: top-level plays[] is empty, drives.previous[] populated
     assert out["plays"].height == 0
     assert out["drives"].height >= 10, f"expected >=10 drives, got {out['drives'].height}"
@@ -939,10 +911,8 @@ def test_espn_nhl_schedule_default_args_returns_frame():
 
     df = espn_nhl_schedule()
     assert isinstance(df, pl.DataFrame), f"expected polars DataFrame, got {type(df)}"
-    # Today's slate may legitimately be empty (off-day) — a valid empty
-    # frame is correct behaviour. When games exist we get >0 columns.
-    if df.height > 0:
-        assert df.width > 0, "non-empty NHL schedule frame must have columns"
+    # Today's slate may legitimately be empty (off-day); a slate with games carries its ids.
+    assert df.height == 0 or {"game_id", "home_id", "away_id"} <= set(df.columns), df.columns
 
 
 def test_espn_nhl_schedule_known_date_returns_games():
@@ -1041,7 +1011,7 @@ def test_espn_cricket_scoreboard_param_league_answers():
 
     # a broadly-available cricket league slug; raw Dict
     payload = espn_cricket_scoreboard(league="8048", return_parsed=False)  # 8048 = IPL on ESPN
-    assert isinstance(payload, dict)
+    assert [lg.get("id") for lg in payload["leagues"]] == ["8048"]
 
 
 def test_espn_soccer_scoreboard_parsed_is_dataframe():
