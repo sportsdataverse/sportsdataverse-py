@@ -30,6 +30,7 @@ against the NBA league. Used by `tests/test_espn_universal_parsers.py`.
 | `rankings_mch.json` | Site v2 `hockey/mens-college-hockey/rankings` (captured 2026-10-08) | 1 poll (USCHO Men's), 2026-27 week 2; 20 ranked + 15 receiving votes; no `firstPlaceVotes` on ranked entries |
 | `rankings_wch.json` | Site v2 `hockey/womens-college-hockey/rankings` (captured 2026-10-08) | 1 poll (USCHO Women's), 2026-27 week 3; 15 ranked + 5 receiving votes |
 | `summary_nba.json`           | Site v2 `summary?event=401585607`              | 2024-03-17 regular season TOR@ORL; ~700KB, 19 top-level sections |
+| `summary_nba_2007_team_box.json` | Site v2 `summary?event=271128023` (<https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=271128023>), read from hoopR-nba-raw `nba/json/raw/271128023.json` at commit d17c1ab | 2007-11-29 regular season GS@SAC; trimmed to `header` + `boxscore` (teams and players), plays and the rest dropped; ESPN doubles the team turnover here: `turnovers=17 teamTurnovers=17 totalTurnovers=34` (GS), `20/20/40` (SAC) |
 | `summary_mlb.json`           | Site v2 `summary?event=401701044`              | 2024 World Series G5 LAD@NYY; ~1.8MB, 22 top-level sections |
 | `summary_nfl.json`           | Site v2 `summary?event=401671889`              | Super Bowl LIX KC@PHI; ~950KB, 19 sections (uses drives.previous[]) |
 | `summary_nhl.json`           | Site v2 `summary?event=401675111`              | 2024 Stanley Cup Final G7 EDM@FLA; ~880KB, 19 sections (no winprob) |
@@ -125,4 +126,3 @@ which keeps every parsed column). `generate.py --schemas` turns each into `schem
 | `transactions_nba.json` | espn_site_v2 `transactions` | nba | <https://site.api.espn.com/apis/site/v2/sports/basketball/nba/transactions?limit=500> |
 | `venue_nfl.json` | espn_core_v2 `venue` | nfl | <https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/venues/3663> |
 | `venues_nba.json` | espn_core_v2 `venues` | nba | <https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues?limit=1000> |
-| `summary_nba_2007_team_box.json` | hoopR-nba-raw `nba/json/raw/271128023.json` (ESPN summary, GS @ SAC, 2007-11-29), trimmed to `header` + `boxscore.teams` | nba | game 271128023; ESPN ships `turnovers=17 teamTurnovers=17 totalTurnovers=34` (GS) and `20/20/40` (SAC) |

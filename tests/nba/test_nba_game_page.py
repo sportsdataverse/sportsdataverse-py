@@ -310,18 +310,24 @@ def test_pre_2013_doubled_team_turnovers_are_undone() -> None:
     assert sorted(zip(box["turnovers"], box["team_turnovers"], box["total_turnovers"])) == [(17, 17, 34), (20, 20, 40)]
     out = gp.team_game_rates(box).sort("team_id")
     assert out["total_turnovers"].to_list() == [17, 20]
-    # measured 111.6 on the real payload (130 with the doubled 34/40); 85-105 in the brief was not met by this game
+    # 111.6 is this game's pace (176 FGA, 37 turnovers, 62 FTA; 130 with the doubled 34/40); a 360-game raw sample of
+    # 2007/2009/2012 averages 95-96 possessions with corrected turnovers
     assert 85 < out["pace"][0] < 115
 
 
 def test_null_total_turnovers_is_player_plus_team() -> None:
     box = _team_box_from("summary_nba_2007_team_box.json").with_columns(
-        pl.lit(None, dtype=pl.Int32).alias("total_turnovers"), (pl.col("team_turnovers") - 15).alias("team_turnovers")
+        pl.lit(None, dtype=pl.Int32).alias("total_turnovers"),
+        pl.when(pl.col("team_id") == pl.col("team_id").min())
+        .then(None)
+        .otherwise(pl.col("team_turnovers") - 15)
+        .cast(pl.Int32)
+        .alias("team_turnovers"),
     )
     out = gp.team_game_rates(box).sort("team_id")
     assert (
         out["total_turnovers"].to_list()
-        == (box.sort("team_id")["turnovers"] + box.sort("team_id")["team_turnovers"]).to_list()
+        == (box.sort("team_id")["turnovers"] + box.sort("team_id")["team_turnovers"].fill_null(0)).to_list()
     )
 
 
@@ -330,3 +336,23 @@ def test_modern_total_turnovers_unchanged() -> None:
     assert (box["total_turnovers"] == box["turnovers"] + box["team_turnovers"]).all()
     out = gp.team_game_rates(box.head(2)).sort("team_id")
     assert out["total_turnovers"].to_list() == box.head(2).sort("team_id")["total_turnovers"].to_list()
+
+
+def test_usage_uses_the_repaired_team_turnovers() -> None:
+    from sportsdataverse.nba.nba_player_box import helper_nba_player_box
+
+    final = json.loads((FIX / "summary_nba_2007_team_box.json").read_text(encoding="utf-8"))
+    team_box, player_box = _team_box_from("summary_nba_2007_team_box.json"), helper_nba_player_box(final)
+    out = gp.player_game_rates(player_box, team_box)
+    p = player_box.filter((pl.col("minutes") > 20) & (pl.col("did_not_play") == False)).row(0, named=True)  # noqa: E712
+    tm = team_box.filter(pl.col("team_id") == p["team_id"]).row(0, named=True)
+    assert tm["turnovers"] in (17, 20) and tm["total_turnovers"] == 2 * tm["turnovers"]
+
+    def usg(tov: float) -> float:
+        tsa = p["field_goals_attempted"] + 0.44 * p["free_throws_attempted"]
+        team_tsa = tm["field_goals_attempted"] + 0.44 * tm["free_throws_attempted"] + tov
+        return 100.0 * (tsa + p["turnovers"]) * (240 / 5) / (p["minutes"] * team_tsa)
+
+    got = out.filter(pl.col("athlete_id") == p["athlete_id"])["usg_pct"][0]
+    assert got == pytest.approx(usg(tm["turnovers"]))
+    assert got != pytest.approx(usg(tm["total_turnovers"]))

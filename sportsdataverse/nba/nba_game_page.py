@@ -183,7 +183,7 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
         # a period from the 4th on that ends with a lead ends the game; a tie goes to overtime
         ends = (
             pbp["type_text"].is_in(["End Game", "End Period"])
-            & (pbp["period_number"] >= 4)
+            & (pbp["period_number"] >= REGULATION_PERIODS)
             & pbp["home_score"].is_not_null()
             & pbp["away_score"].is_not_null()
             & (pbp["home_score"] != pbp["away_score"])
