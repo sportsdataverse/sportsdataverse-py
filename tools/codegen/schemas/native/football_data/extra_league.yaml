@@ -11,7 +11,7 @@ columns:
 - description: Match Date (dd/mm/yy)
   name: date
   type: character
-- description: Time of match kick off
+- description: Time of match kick off (from 2019-20)
   name: time
   type: character
 - description: ''
@@ -29,49 +29,49 @@ columns:
 - description: Full Time Result (H=Home Win, D=Draw, A=Away Win)
   name: res
   type: character
-- description: Closing Pinnacle home win odds
+- description: Closing Pinnacle home win odds (closing odds, from 2012-13)
   name: psch
   type: numeric
-- description: Closing Pinnacle draw odds
+- description: Closing Pinnacle draw odds (closing odds, from 2012-13)
   name: pscd
   type: numeric
-- description: Closing Pinnacle away win odds
+- description: Closing Pinnacle away win odds (closing odds, from 2012-13)
   name: psca
   type: numeric
-- description: Closing Market maximum home win odds
+- description: Closing Market maximum home win odds (closing odds, from 2019-20)
   name: max_ch
   type: numeric
-- description: Closing Market maximum draw win odds
+- description: Closing Market maximum draw win odds (closing odds, from 2019-20)
   name: max_cd
   type: numeric
-- description: Closing Market maximum away win odds
+- description: Closing Market maximum away win odds (closing odds, from 2019-20)
   name: max_ca
   type: numeric
-- description: Closing Market average home win odds
+- description: Closing Market average home win odds (closing odds, from 2019-20)
   name: avg_ch
   type: numeric
-- description: Closing Market average draw win odds
+- description: Closing Market average draw win odds (closing odds, from 2019-20)
   name: avg_cd
   type: numeric
-- description: Closing Market average away win odds
+- description: Closing Market average away win odds (closing odds, from 2019-20)
   name: avg_ca
   type: numeric
-- description: Closing Betfair Exchange home win odds
+- description: Closing Betfair Exchange home win odds (closing odds, from 2019-20)
   name: bfech
   type: character
-- description: Closing Betfair Exchange draw odds
+- description: Closing Betfair Exchange draw odds (closing odds, from 2019-20)
   name: bfecd
   type: character
-- description: Closing Betfair Exchange away win odds
+- description: Closing Betfair Exchange away win odds (closing odds, from 2019-20)
   name: bfeca
   type: character
-- description: Closing Bet365 home win odds
+- description: Closing Bet365 home win odds (closing odds, from 2019-20)
   name: b365_ch
   type: character
-- description: Closing Bet365 draw odds
+- description: Closing Bet365 draw odds (closing odds, from 2019-20)
   name: b365_cd
   type: character
-- description: Closing Bet365 away win odds
+- description: Closing Bet365 away win odds (closing odds, from 2019-20)
   name: b365_ca
   type: character
 kind: dataframe

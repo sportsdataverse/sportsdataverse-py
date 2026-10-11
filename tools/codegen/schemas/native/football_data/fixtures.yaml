@@ -5,7 +5,7 @@ columns:
 - description: Match Date (dd/mm/yy)
   name: date
   type: character
-- description: Time of match kick off
+- description: Time of match kick off (from 2019-20)
   name: time
   type: character
 - description: Home Team
@@ -14,25 +14,25 @@ columns:
 - description: Away Team
   name: away_team
   type: character
-- description: Match Referee
+- description: Match Referee (from 2000-01, results-only files before)
   name: referee
   type: character
-- description: Bet365 home win odds
+- description: Bet365 home win odds (from 2002-03)
   name: b365_h
   type: numeric
-- description: Bet365 draw odds
+- description: Bet365 draw odds (from 2002-03)
   name: b365_d
   type: numeric
-- description: Bet365 away win odds
+- description: Bet365 away win odds (from 2002-03)
   name: b365_a
   type: numeric
-- description: Betfred home win odds
+- description: Betfred home win odds (from 2025-26)
   name: bfdh
   type: numeric
-- description: Betfred draw odds
+- description: Betfred draw odds (from 2025-26)
   name: bfdd
   type: numeric
-- description: Betfred away win odds
+- description: Betfred away win odds (from 2025-26)
   name: bfda
   type: numeric
 - description: Betvictor home win odds
@@ -71,49 +71,59 @@ columns:
 - description: ''
   name: skba
   type: numeric
-- description: Market maximum home win odds
+- description: Market maximum home win odds (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: max_h
   type: numeric
-- description: Market maximum draw win odds
+- description: Market maximum draw win odds (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: max_d
   type: numeric
-- description: Market maximum away win odds
+- description: Market maximum away win odds (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: max_a
   type: numeric
-- description: Market average home win odds
+- description: Market average home win odds (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: avg_h
   type: numeric
-- description: Market average draw win odds
+- description: Market average draw win odds (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: avg_d
   type: numeric
-- description: Market average away win odds
+- description: Market average away win odds (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: avg_a
   type: numeric
-- description: Betfair Exchange home win odds
+- description: Betfair Exchange home win odds (from 2024-25)
   name: bfeh
   type: numeric
-- description: Betfair Exchange draw odds
+- description: Betfair Exchange draw odds (from 2024-25)
   name: bfed
   type: numeric
-- description: Betfair Exchange away win odds
+- description: Betfair Exchange away win odds (from 2024-25)
   name: bfea
   type: numeric
-- description: Bet365 over 2.5 goals
+- description: Bet365 over 2.5 goals (from 2002-03)
   name: b365>2.5
   type: numeric
-- description: Bet365 under 2.5 goals
+- description: Bet365 under 2.5 goals (from 2002-03)
   name: b365<2.5
   type: numeric
-- description: Market maximum over 2.5 goals
+- description: Market maximum over 2.5 goals (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: max>2.5
   type: numeric
-- description: Market maximum under 2.5 goals
+- description: Market maximum under 2.5 goals (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: max<2.5
   type: numeric
-- description: Market average over 2.5 goals
+- description: Market average over 2.5 goals (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: avg>2.5
   type: numeric
-- description: Market average under 2.5 goals
+- description: Market average under 2.5 goals (from 2005-06, as Betbrain Bb* averages
+    until 2018-19 and under the Max/Avg names from 2019-20)
   name: avg<2.5
   type: numeric
 - description: ''
@@ -125,22 +135,26 @@ columns:
 - description: Market size of handicap (home team) (since 2019/2020)
   name: a_hh
   type: numeric
-- description: Bet365 Asian handicap home team odds
+- description: Bet365 Asian handicap home team odds (from 2002-03)
   name: b365_ahh
   type: numeric
-- description: Bet365 Asian handicap away team odds
+- description: Bet365 Asian handicap away team odds (from 2002-03)
   name: b365_aha
   type: numeric
-- description: Market maximum Asian handicap home team odds
+- description: Market maximum Asian handicap home team odds (from 2005-06, as Betbrain
+    Bb* averages until 2018-19 and under the Max/Avg names from 2019-20)
   name: max_ahh
   type: numeric
-- description: Market maximum Asian handicap away team odds
+- description: Market maximum Asian handicap away team odds (from 2005-06, as Betbrain
+    Bb* averages until 2018-19 and under the Max/Avg names from 2019-20)
   name: max_aha
   type: numeric
-- description: Market average Asian handicap home team odds
+- description: Market average Asian handicap home team odds (from 2005-06, as Betbrain
+    Bb* averages until 2018-19 and under the Max/Avg names from 2019-20)
   name: avg_ahh
   type: numeric
-- description: Market average Asian handicap away team odds
+- description: Market average Asian handicap away team odds (from 2005-06, as Betbrain
+    Bb* averages until 2018-19 and under the Max/Avg names from 2019-20)
   name: avg_aha
   type: numeric
 - description: ''
@@ -149,40 +163,40 @@ columns:
 - description: ''
   name: bfeaha
   type: numeric
-- description: Closing Bet365 home win odds
+- description: Closing Bet365 home win odds (closing odds, from 2019-20)
   name: b365_ch
   type: character
-- description: Closing Bet365 draw odds
+- description: Closing Bet365 draw odds (closing odds, from 2019-20)
   name: b365_cd
   type: character
-- description: Closing Bet365 away win odds
+- description: Closing Bet365 away win odds (closing odds, from 2019-20)
   name: b365_ca
   type: character
-- description: Closing Betfred home win odds
+- description: Closing Betfred home win odds (closing odds, from 2019-20)
   name: bfdch
   type: character
-- description: Closing Betfred draw odds
+- description: Closing Betfred draw odds (closing odds, from 2019-20)
   name: bfdcd
   type: character
-- description: Closing Betfred away win odds
+- description: Closing Betfred away win odds (closing odds, from 2019-20)
   name: bfdca
   type: character
-- description: Closing Betvictor home win odds
+- description: Closing Betvictor home win odds (closing odds, from 2019-20)
   name: bvch
   type: character
-- description: Closing Betvictor draw odds
+- description: Closing Betvictor draw odds (closing odds, from 2019-20)
   name: bvcd
   type: character
-- description: Closing Betvictor away win odds
+- description: Closing Betvictor away win odds (closing odds, from 2019-20)
   name: bvca
   type: character
-- description: Closing Bet&Win home win odds
+- description: Closing Bet&Win home win odds (closing odds, from 2019-20)
   name: bwch
   type: character
-- description: Closing Bet&Win draw odds
+- description: Closing Bet&Win draw odds (closing odds, from 2019-20)
   name: bwcd
   type: character
-- description: Closing Bet&Win away win odds
+- description: Closing Bet&Win away win odds (closing odds, from 2019-20)
   name: bwca
   type: character
 - description: Closing Paddy Power home win odds
@@ -203,49 +217,49 @@ columns:
 - description: ''
   name: skbca
   type: character
-- description: Closing Market maximum home win odds
+- description: Closing Market maximum home win odds (closing odds, from 2019-20)
   name: max_ch
   type: character
-- description: Closing Market maximum draw win odds
+- description: Closing Market maximum draw win odds (closing odds, from 2019-20)
   name: max_cd
   type: character
-- description: Closing Market maximum away win odds
+- description: Closing Market maximum away win odds (closing odds, from 2019-20)
   name: max_ca
   type: character
-- description: Closing Market average home win odds
+- description: Closing Market average home win odds (closing odds, from 2019-20)
   name: avg_ch
   type: character
-- description: Closing Market average draw win odds
+- description: Closing Market average draw win odds (closing odds, from 2019-20)
   name: avg_cd
   type: character
-- description: Closing Market average away win odds
+- description: Closing Market average away win odds (closing odds, from 2019-20)
   name: avg_ca
   type: character
-- description: Closing Betfair Exchange home win odds
+- description: Closing Betfair Exchange home win odds (closing odds, from 2019-20)
   name: bfech
   type: character
-- description: Closing Betfair Exchange draw odds
+- description: Closing Betfair Exchange draw odds (closing odds, from 2019-20)
   name: bfecd
   type: character
-- description: Closing Betfair Exchange away win odds
+- description: Closing Betfair Exchange away win odds (closing odds, from 2019-20)
   name: bfeca
   type: character
-- description: Closing Bet365 over 2.5 goals
+- description: Closing Bet365 over 2.5 goals (closing odds, from 2019-20)
   name: b365_c>2.5
   type: character
-- description: Closing Bet365 under 2.5 goals
+- description: Closing Bet365 under 2.5 goals (closing odds, from 2019-20)
   name: b365_c<2.5
   type: character
-- description: Closing Market maximum over 2.5 goals
+- description: Closing Market maximum over 2.5 goals (closing odds, from 2019-20)
   name: max_c>2.5
   type: character
-- description: Closing Market maximum under 2.5 goals
+- description: Closing Market maximum under 2.5 goals (closing odds, from 2019-20)
   name: max_c<2.5
   type: character
-- description: Closing Market average over 2.5 goals
+- description: Closing Market average over 2.5 goals (closing odds, from 2019-20)
   name: avg_c>2.5
   type: character
-- description: Closing Market average under 2.5 goals
+- description: Closing Market average under 2.5 goals (closing odds, from 2019-20)
   name: avg_c<2.5
   type: character
 - description: ''
@@ -257,22 +271,26 @@ columns:
 - description: Closing Market size of handicap (home team) (since 2019/2020)
   name: ah_ch
   type: character
-- description: Closing Bet365 Asian handicap home team odds
+- description: Closing Bet365 Asian handicap home team odds (closing odds, from 2019-20)
   name: b365_cahh
   type: character
-- description: Closing Bet365 Asian handicap away team odds
+- description: Closing Bet365 Asian handicap away team odds (closing odds, from 2019-20)
   name: b365_caha
   type: character
-- description: Closing Market maximum Asian handicap home team odds
+- description: Closing Market maximum Asian handicap home team odds (closing odds,
+    from 2019-20)
   name: max_cahh
   type: character
-- description: Closing Market maximum Asian handicap away team odds
+- description: Closing Market maximum Asian handicap away team odds (closing odds,
+    from 2019-20)
   name: max_caha
   type: character
-- description: Closing Market average Asian handicap home team odds
+- description: Closing Market average Asian handicap home team odds (closing odds,
+    from 2019-20)
   name: avg_cahh
   type: character
-- description: Closing Market average Asian handicap away team odds
+- description: Closing Market average Asian handicap away team odds (closing odds,
+    from 2019-20)
   name: avg_caha
   type: character
 - description: ''
