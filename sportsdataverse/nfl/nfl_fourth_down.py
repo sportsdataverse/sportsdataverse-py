@@ -78,6 +78,11 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_expected_points,
     calculate_win_probability,
 )
+from sportsdataverse.nfl.model_vars import (
+    PAT_FIRST_SEASON_FROM_15,
+    PAT_YARDLINE_POST_2015,
+    PAT_YARDLINE_PRE_2015,
+)
 
 if TYPE_CHECKING:  # pragma: no cover
     from xgboost import Booster
@@ -569,8 +574,11 @@ def _two_pt_components(d: pd.DataFrame) -> Optional[pd.DataFrame]:
     ).astype(np.float32)
     conv_2pt = two_pt.predict(DMatrix(x2, feature_names=TWO_PT_FEATURES))
 
-    # PAT make probability: the FG model at yardline_100 = 15 (the PAT spot).
-    pat_yl: np.ndarray = np.full(n, 15, dtype=float)
+    # PAT make probability: the FG model at the PAT spot -- 15 from 2015, nflfastR's 3 before
+    # (rules/nfl.yaml#nfl-2015-pat-snap-from-15; the pre-2015 kick was snapped from the 2).
+    pat_yl: np.ndarray = np.where(
+        d["season"].to_numpy() >= PAT_FIRST_SEASON_FROM_15, PAT_YARDLINE_POST_2015, PAT_YARDLINE_PRE_2015
+    ).astype(float)
     conv_1pt = _fg_make_prob(pat_yl, d["fg_roof"].to_numpy(), d[["era0", "era1", "era2", "era3", "era4"]].to_numpy())
     if conv_1pt is None:  # FG model unobtainable on the re-load (race/eviction) — emit NaN, never crash
         return None

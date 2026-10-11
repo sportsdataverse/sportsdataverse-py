@@ -256,3 +256,55 @@ def test_go_wp_on_a_full_nflverse_frame_is_not_fragmented():
     fourth = pbp.filter((pl.col("down") == 4) & pl.col("ydstogo").is_not_null() & pl.col("yardline_100").is_not_null())
     out = get_go_wp(fourth)
     assert len(out) == fourth.height and out["go_wp"].notna().all()
+
+
+# --------------------------------------------------------------------------- #
+# PAT spot by season (rules/nfl.yaml#nfl-2015-pat-snap-from-15)
+# --------------------------------------------------------------------------- #
+def _real_try_rows() -> pl.DataFrame:
+    """Real nflverse PAT / 2-pt try rows (2014 BUF-CHI, 2019 DET-ARI) from the committed
+    overtime-games capture, in the post-touchdown state shape ``get_2pt_wp`` takes."""
+    from pathlib import Path
+
+    from sportsdataverse.nfl.nfl_fourth_down import _EPWP_IN
+
+    pbp = pl.read_parquet(Path(__file__).parents[1] / "fixtures" / "nfl_ep_wp" / "overtime_games.parquet")
+    keep = [c for c in _EPWP_IN if c not in ("half_seconds_remaining", "game_seconds_remaining", "down")]
+    return (
+        pbp.filter(
+            ((pl.col("extra_point_attempt") == 1) | (pl.col("two_point_attempt") == 1))
+            & pl.col("season").is_in([2014, 2019])
+            & pl.col("posteam").is_not_null()
+        )
+        .select([*keep, *[c for c in ("play_id", "qtr", "quarter_seconds_remaining") if c not in keep]])
+        .with_columns(pl.lit(4).alias("down"), pl.lit(2).alias("ydstogo"), pl.lit(2).alias("yardline_100"))
+        .sort("season", "play_id")
+    )
+
+
+@requires_models
+def test_pat_make_prob_scored_at_3_before_2015_and_15_after(monkeypatch) -> None:
+    from sportsdataverse.nfl import nfl_fourth_down as mod
+    from sportsdataverse.nfl.nfl_fourth_down import _prepare, _two_pt_components
+
+    rows = _real_try_rows()
+    assert rows["season"].unique().sort().to_list() == [2014, 2019]
+    td = _prepare(rows.to_pandas()).reset_index(drop=True)
+    td["go_index"] = np.arange(len(td))
+
+    seen: dict = {}
+    real = mod._fg_make_prob
+
+    def _spy(yl, roof, era):
+        seen["yl"] = np.asarray(yl)
+        return real(yl, roof, era)
+
+    monkeypatch.setattr(mod, "_fg_make_prob", _spy)
+    out = _two_pt_components(td)
+    assert out is not None
+    season = td["season"].to_numpy()
+    assert np.array_equal(seen["yl"][season < 2015], np.full(int((season < 2015).sum()), 3.0))
+    assert np.array_equal(seen["yl"][season >= 2015], np.full(int((season >= 2015).sum()), 15.0))
+    # A 21-yard kick converts more often than a 33-yard one: the pre-2015 PAT is the surer point.
+    conv = out.set_index("go_index").loc[np.arange(len(td)), "conv_1pt"].to_numpy()
+    assert conv[season < 2015].min() > conv[season >= 2015].max()

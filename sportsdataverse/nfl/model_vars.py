@@ -81,6 +81,19 @@ TOUCHBACK_YARDLINE_PRE_2016: int = 80
 #: must move together.
 TOUCHBACK_YARDLINE_POST_2016: int = 75
 
+#: ``yardline_100`` at which the FG model scores a one-point PAT **before 2015**.
+#: The kick was snapped from the 2; nflfastR ``helper_add_ep_wp.R`` (``add_wp_variables``)
+#: scores it at ``ifelse(season >= 2015, 15, 3)``, and this is the parity spot, not the
+#: snap spot (rules/nfl.yaml#nfl-2015-pat-snap-from-15).
+PAT_YARDLINE_PRE_2015: int = 3
+
+#: ``yardline_100`` at which the FG model scores a one-point PAT **2015 and later**:
+#: the May 2015 rule moved the snap to the 15 (a 33-yard kick); two-point tries stayed at the 2.
+PAT_YARDLINE_POST_2015: int = 15
+
+#: First season of the 15-yard PAT (effective 2015-09-10).
+PAT_FIRST_SEASON_FROM_15: int = 2015
+
 #: Exponent multiplier in the spread-time decay formula::
 #:
 #:     spread_time     = spread             * exp(SPREAD_TIME_DECAY_EXPONENT * elapsed_share)
