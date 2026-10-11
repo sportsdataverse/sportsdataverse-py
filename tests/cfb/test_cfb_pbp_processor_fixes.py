@@ -852,3 +852,26 @@ def test_two_point_pass_the_defence_returned_is_not_a_kick():
     row = _row(_trimmed_plays(272650152), "pass attempt failed (intercepted), returned by Hamlin")
     assert row["type.text"] == "Defensive 2pt Conversion"
     assert row["xp_attempt"] is False
+
+
+# --- R7: fumble_lost reads who recovered, not whether possession changed ---------------------------
+
+
+def _fixture_plays(game_id: int) -> pl.DataFrame:
+    trimmed = FIX / f"summary_{game_id}_trimmed.json.gz"
+    return _trimmed_plays(game_id) if trimmed.exists() else _plays(game_id)
+
+
+@pytest.mark.parametrize(
+    "game_id, needle, lost",
+    [
+        # the returner recovers his own punt fumble: possession changed on the punt, nothing was lost
+        (401628439, "Anthony Evans III fumbled, recovered by UGA Anthony Evans III", False),
+        # a muffed punt the kicking team recovers: possession did not change, the receiving team lost it
+        (401754598, "muffed by #24 K.Kirkland at FSU35 recovered", True),
+    ],
+)
+def test_fumble_lost_follows_the_recovering_team(game_id, needle, lost):
+    row = _row(_fixture_plays(game_id), needle)
+    assert row["fumble_lost"] is lost
+    assert row["fumble_recovered"] is (row["fumble_vec"] and not lost)

@@ -7003,13 +7003,24 @@ class CFBPlayProcess(object):
 
     def __add_attribution_cols(self, play_df):
         """Resolve the credited team per play (shared football attribution, CFB text parsers)."""
-        return _add_attribution_cols(
+        play_df = _add_attribution_cols(
             play_df,
             parse_recovery_abbrevs=_parse_recovery_abbrevs,
             parse_recovery_sides=_parse_recovery_sides,
             parse_penalty_team_side=_parse_penalty_team_side,
             parse_penalty_spot=_parse_penalty_spot,
         )
+        if {"pos_fumble_lost", "def_fumble_lost"} <= set(play_df.columns):
+            # fumble_lost was "a fumble and the ball changed hands", which calls a punt returner who
+            # recovers his own fumble a loss and misses a muffed punt the kicking team recovers. The
+            # recovering team read from the text matches ESPN's box: 2014-20 team fumbles lost
+            # 79.5% -> 97.9% exact.
+            lost = (pl.col("pos_fumble_lost") == True) | (pl.col("def_fumble_lost") == True)  # noqa: E712
+            play_df = play_df.with_columns(
+                fumble_lost=lost,
+                fumble_recovered=(pl.col("fumble_vec") == True) & ~lost,  # noqa: E712
+            )
+        return play_df
 
     def __refine_play_types_post_attribution(self, play_df):
         """Correct two play-type labels that need the post-attribution turnover signal."""
