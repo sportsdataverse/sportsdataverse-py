@@ -410,7 +410,7 @@ def _process_game(
         except Exception as exc:
             attempts.append(Attempt(src, False, f"{type(exc).__name__}: {exc}", time.perf_counter() - t0))
             continue
-        report: ContractReport = _validate_summary(adapted.summary, league)
+        report: ContractReport = _validate_summary(adapted.summary, league, source=src)
         if not report.ok:
             attempts.append(
                 Attempt(
