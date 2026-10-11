@@ -458,3 +458,12 @@ def test_distance_non_negative_still_catches_a_real_scrimmage_violation():
     f = _findings_by_rule(definitional.run("cfb_model_pbp", frame, _ctx()))["distance_non_negative"]
     assert f.severity is Severity.ERROR
     assert f.metric == 2.0  # the sentinel row is excluded, the two real ones are not
+
+
+def test_a_lost_muff_satisfies_fumble_lost_implies_fumble():
+    # a muffed punt the kicking team recovers is lost without the word "fumble" (fumble_vec False)
+    frame = pl.DataFrame(
+        {"game_id": [1, 1], "fumble_lost": [True, True], "fumble_vec": [False, False], "fumble_or_muff": [True, False]}
+    )
+    f = _findings_by_rule(definitional.run("cfb_pbp", frame, _ctx(dataset="cfb_pbp")))["fumble_lost_implies_fumble"]
+    assert f.metric == 1.0

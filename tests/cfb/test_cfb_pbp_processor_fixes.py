@@ -918,3 +918,23 @@ def test_summary_format_touchdown_is_a_td_play():
     # neither "touchdown" nor "for a TD", so td_play stayed False beside its touchdown type.
     row = _row(_trimmed_plays(400547673), "Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)")
     assert (row["type.text"], row["touchdown"], row["td_play"]) == ("Interception Return Touchdown", True, True)
+
+
+@pytest.mark.parametrize("game_id, spot", [(282432641, 80), (322590228, 75)])
+def test_kickoff_touchback_end_spot_follows_the_era(game_id, spot):
+    # The END state of a touchback was 75 in every season, while the start used 80 before 2012:
+    # a phantom +0.26 EPA on every 2004-11 kickoff touchback.
+    tbs = _fixture_plays(game_id).filter((pl.col("kickoff_play") == True) & (pl.col("kickoff_tb") == True))
+    assert tbs.height > 0
+    assert tbs["end.yardsToEndzone"].unique().to_list() == [spot]
+
+
+@pytest.mark.parametrize(
+    "game_id, needle, yards",
+    [
+        (302540025, "Giorgio Tavecchio kickoff for 52 yards out-of-bounds.", 40),  # receiver's 40 before 2012
+        (400876049, "Rigoberto Sanchez kickoff for 55 yds out of bounds.", 35),  # the 35 from 2012
+    ],
+)
+def test_kickoff_out_of_bounds_spot_follows_the_era(game_id, needle, yards):
+    assert _row(_fixture_plays(game_id), needle)["yds_kickoff_return"] == yards
