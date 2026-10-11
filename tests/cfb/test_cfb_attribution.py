@@ -1388,3 +1388,78 @@ def test_parse_recovery_sides_first_name_is_not_a_subsequence_match():
 )
 def test_parse_recovery_sides_recoverer_name_is_not_the_school(text, teams, expected):
     assert _sides(text, teams) == expected
+
+
+# --- Pre-2014 "<TEAM> penalty N yard <foul>" form (real texts) ----------------------------
+
+_HAW_USC = {  # 302450062 (2010): USC at Hawai'i
+    "homeTeamAbbrev": "HAW",
+    "awayTeamAbbrev": "USC",
+    "homeTeamName": "Hawai'i",
+    "awayTeamName": "USC",
+    "homeTeamNameAlt": None,
+    "awayTeamNameAlt": None,
+    "homeTeamMascot": "Rainbow Warriors",
+    "awayTeamMascot": "Trojans",
+}
+
+
+@pytest.mark.parametrize(
+    "text, expected",
+    [
+        (
+            "Allen Bradford rush for 9 yards to the Hawa 15, HAWAII penalty 15 yard personal foul accepted for a 1ST "
+            "down.",
+            "home",
+        ),
+        ("Scott Enos on-side kick recovered by USC at the Hawa 44, HAWAII penalty 5 yard offside accepted.", "home"),
+        ("USC penalty 10 yard holding accepted, no play.", "away"),
+        (
+            "Bryant Moniz pass complete to Greg Salas for 12 yards to the USC 9, USC penalty 10 yard roughing passer "
+            "accepted for a 1ST down.",
+            "away",
+        ),
+    ],
+)
+def test_penalty_team_side_pre_2014_suffix_form(text, expected):
+    from sportsdataverse.cfb.cfb_pbp import _parse_penalty_team_side
+
+    assert _parse_penalty_team_side({"text": text, **_HAW_USC}) == expected
+
+
+def test_pre_2014_offensive_foul_on_a_run_is_charged_to_the_flagged_team():
+    """302450062: "HAWAII penalty 15 yard personal foul" on a USC carry is Hawai'i's foul, not the offense's."""
+    out = _attr(
+        [
+            _base(
+                pos_team=30,
+                def_pos_team=62,
+                homeTeamId=62,
+                awayTeamId=30,
+                fumble_vec=False,
+                penalty_detail="Personal Foul",
+                **_HAW_USC,
+                text="Allen Bradford rush for 9 yards to the Hawa 15, HAWAII penalty 15 yard personal foul accepted "
+                "for a 1ST down.",
+            )
+        ]
+    )
+    assert out.to_dicts()[0]["penalized_team"] == 62
+
+
+def test_penalty_team_side_pre_2014_parenthesised_school():
+    """ "Miami (OH) penalty 10 yard holding": the suffix form takes the parentheses, like "Miami (OH) Penalty,"."""
+    from sportsdataverse.cfb.cfb_pbp import _parse_penalty_team_side
+
+    teams = {
+        "homeTeamAbbrev": "M-OH",
+        "awayTeamAbbrev": "KENT",
+        "homeTeamName": "Miami (OH)",
+        "awayTeamName": "Kent State",
+        "homeTeamNameAlt": None,
+        "awayTeamNameAlt": None,
+        "homeTeamMascot": "RedHawks",
+        "awayTeamMascot": "Golden Flashes",
+    }
+    assert _parse_penalty_team_side({"text": "Miami (OH) penalty 10 yard holding accepted.", **teams}) == "home"
+    assert _parse_penalty_team_side({"text": "TEAM penalty 5 yard delay of game accepted.", **teams}) is None

@@ -6,10 +6,12 @@ import importlib
 from pathlib import Path
 from unittest.mock import patch
 
+import polars as pl
 import pytest
 
 from sportsdataverse import _codegen_runtime as runtime
-from sportsdataverse.errors import NoDataError
+from sportsdataverse.errors import NoDataError, SeasonNotFoundError
+from sportsdataverse.nhl import nhl_loaders
 
 from tools.codegen import generate, spec
 
@@ -82,3 +84,24 @@ def test_loader_modules_render_valid_python():
     for league, loaders in by_league.items():
         src = generate.render_loader_module(league, loaders, rel.bases)
         ast.parse(src)  # raises on malformed
+
+
+@pytest.mark.parametrize("season", [2010, 2015, 2024])
+def test_nhl_game_rosters_accepts_published_seasons(season):
+    roster = pl.DataFrame({"player_id": [8471675], "season": [season], "shoots_catches": ["L"]})
+    with patch.object(nhl_loaders, "_read_release_parquet", return_value=roster) as reader:
+        out = nhl_loaders.load_nhl_game_rosters(seasons=season)
+
+    assert out.equals(roster)
+    reader.assert_called_once_with(
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
+        f"nhl_game_rosters/game_rosters_{season}.parquet"
+    )
+
+
+def test_nhl_game_rosters_rejects_seasons_before_first_release():
+    with patch.object(nhl_loaders, "_read_release_parquet") as reader:
+        with pytest.raises(SeasonNotFoundError):
+            nhl_loaders.load_nhl_game_rosters(seasons=2009)
+
+    reader.assert_not_called()
