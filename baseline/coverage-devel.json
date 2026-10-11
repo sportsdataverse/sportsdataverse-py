@@ -1,6 +1,6 @@
 {
-  "commit": "2897ecd864 (CI run 38120995479)",
-  "measured_at": "2026-10-11T07:36:38+00:00",
+  "commit": "a82b236cb3 (CI run 38124059017, offline suite without tests/codegen)",
+  "measured_at": "2026-10-11T08:29:54+00:00",
   "metrics": {
     "handwritten_files": {
       "value": 686,
@@ -113,7 +113,7 @@
       "label": "Functions with over 50 statements (ruff PLR0915)"
     },
     "coverage_handwritten_percent": {
-      "value": 84.94,
+      "value": 84.66,
       "better": "higher",
       "label": "Line coverage of hand-written code (%)"
     },
@@ -138,7 +138,7 @@
       "label": "Line coverage of sportsdataverse/nfl/ep_wp.py (%)"
     },
     "coverage_nfl_loaders_percent": {
-      "value": 70.33,
+      "value": 55.5,
       "better": "higher",
       "label": "Line coverage of sportsdataverse/nfl/nfl_loaders.py (%)"
     },
@@ -148,7 +148,7 @@
       "label": "Line coverage of sportsdataverse/nfl/nfl_stats.py (%)"
     },
     "coverage__common_espn_parsers_percent": {
-      "value": 51.29,
+      "value": 51.18,
       "better": "higher",
       "label": "Line coverage of sportsdataverse/_common_espn_parsers.py (%)"
     },
