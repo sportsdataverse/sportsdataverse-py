@@ -1,4 +1,4 @@
-"""Offline tests: generated mlb_statcast wrappers are importable + drift gate is clean."""
+"""Offline tests: generated mlb_statcast wrappers are importable (the drift gate lives in tests/codegen/test_check.py)."""
 
 from __future__ import annotations
 
@@ -63,16 +63,3 @@ def test_old_statcast_names_removed():
         "statcast_player_page",
     ):
         assert not hasattr(mlb, old), f"{old} should have been renamed to mlb_statcast_*"
-
-
-def test_codegen_drift_clean():
-    import subprocess
-    import sys
-
-    r = subprocess.run(
-        [sys.executable, "tools/codegen/generate.py", "--check"],
-        cwd=".",
-        capture_output=True,
-        text=True,
-    )
-    assert r.returncode == 0, r.stderr
