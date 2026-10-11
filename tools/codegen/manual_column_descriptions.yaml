@@ -18678,6 +18678,32 @@ load_mlb_runners:
   rbi: Whether the run was credited as an RBI to the batter.
   earned: Whether the run was earned against the responsible pitcher.
   responsible_pitcher_id: statsapi person id of the pitcher charged with the runner.
+load_mlb_schedule:
+  game_pk: statsapi game identifier; the join key to every other MLB release.
+  game_date: Official game date (YYYY-MM-DD, local to the venue).
+  game_datetime: Scheduled first-pitch time as an ISO-8601 UTC timestamp string (e.g. `2024-02-22T20:10:00Z`).
+  season: MLB season year the game belongs to (the asset's season).
+  game_type: statsapi game-type code (`R` regular season, `S` spring training, `E` exhibition, `A` All-Star, `F`/`D`/`L`/`W`
+    wild card / division series / LCS / World Series).
+  abstract_state: Coarse game state (`Preview`, `Live` or `Final`).
+  home_score: Home team's final run total (null for a game not yet played).
+  away_score: Away team's final run total (null for a game not yet played).
+load_mlb_statcast:
+  player_name: Batter name, `Last, First` (Baseball Savant's batter-side `player_name`).
+  pitcher: MLBAM player id of the pitcher.
+  events: Plate-appearance result on the pitch that ended it (e.g. `single`, `strikeout`, `walk`); null on every other pitch.
+  description: Pitch outcome (e.g. `ball`, `called_strike`, `swinging_strike`, `foul`, `hit_into_play`).
+  type: Pitch result class -- `B` ball, `S` strike (including fouls), `X` ball in play.
+  game_type: Game-type code; spring training (`S`) and exhibition (`E`) games are included alongside `R` and the postseason.
+  home_team: Home team abbreviation (e.g. `SF`).
+  away_team: Away team abbreviation (e.g. `LAD`).
+  home_score: Home team score before the pitch (see post_home_score).
+  away_score: Away team score before the pitch (see post_away_score).
+  on_1b: MLBAM ID of the runner on first base, if any; published as a float and cast to Int64 by the loader.
+  on_2b: MLBAM ID of the runner on second base, if any; published as a float and cast to Int64 by the loader.
+  on_3b: MLBAM ID of the runner on third base, if any; published as a float and cast to Int64 by the loader.
+  umpire: Deprecated umpire field; always null.
+  miss_distance: How far the bat missed the ball on a swing and miss (Savant bat tracking); null on every other pitch and before bat tracking.
 load_mlb_stuff_plus:
   stuff_plus: Stuff+ on the 100-is-average scale, exactly 100 minus 10 times (stuff_rv_hat minus the league mean) over the
     league SD, so higher is better and outlier run-value predictions can push it well below zero.
