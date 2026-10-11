@@ -4,3 +4,6 @@ columns:
 - name: called_strike_prob
   type: double
   description: ''
+- name: abs_era
+  type: logical
+  description: ''
