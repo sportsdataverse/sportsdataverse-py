@@ -318,10 +318,11 @@
   file: sportsdataverse/nhl/nhl_faceoff_value.py
   snippet: 'if taker_rows.height < 20 or len(feature_names) == 0:'
   mutant: 'if True:'
-  test: tests/nhl/test_nhl_faceoff_value.py
-  expected:
-    survive_until: "1.5"
-  note: model-analytics-002 (4 passed with the fit skipped; the model then predicts 0.5 everywhere)
+  test: tests/nhl/test_nhl_faceoff_value.py::test_context_fit_reproduces_real_cell_win_rates
+  expected: kill
+  note: >-
+    model-analytics-002 (4 passed with the fit skipped; the model then predicts 0.5 everywhere).
+    Killed by 1.5's real-slice cell gate (7,016 api-web faceoffs; power play 0.553 vs 0.5).
 
 # --- C-L21 / C-L22 / C-L34: rank-only ratings gates (ledger gate level-gates-beside-rank-gates) ---
 - id: nfl-ratings-adj-net-scaled
@@ -331,9 +332,8 @@
   snippet: 'with_columns(adj_net=pl.col("adj_off_epa") - pl.col("adj_def_epa"))'
   mutant: 'with_columns(adj_net=(pl.col("adj_off_epa") - pl.col("adj_def_epa")) * 10 + 5)'
   test: tests/nfl/test_nfl_ratings_oracle.py
-  expected:
-    survive_until: "1.5"
-  note: model-models-004; both NFL ratings gates are rank-only
+  expected: kill
+  note: model-models-004; both NFL ratings gates are rank-only. Killed by 1.5's level gate vs raw team EPA
 
 - id: nba-team-ratings-no-opponent-adjustment
   group: ratings-level
@@ -342,9 +342,11 @@
   snippet: 'for _ in range(max_iter):'
   mutant: 'for _ in range(0):'
   test: tests/nba/test_nba_team_ratings_oracle.py
-  expected:
-    survive_until: "1.5"
-  note: model-models-005; a no-op opponent adjustment passes rho >= 0.95, bpi >= 0.85, mae <= 0.75
+  expected: kill
+  note: >-
+    model-models-005. This snippet is the PACE fixed point (the net-rating fixed point lives in
+    _common/ratings.py: row nba-ratings-no-net-adjustment). Killed by 1.5's adj_pace level gate
+    (MAE vs stats.nba.com PACE 1.3388 -> 1.3477).
 
 - id: cfb-resume-sos-affine
   group: ratings-level
@@ -353,9 +355,8 @@
   snippet: 'pl.col("opp_adj_net").mean().alias("sos"),'
   mutant: '(pl.col("opp_adj_net").mean() * 5 + 3).alias("sos"),'
   test: tests/cfb/test_cfb_resume_oracle.py
-  expected:
-    survive_until: "1.5"
-  note: model-analytics-007; resume gates are rank-only
+  expected: kill
+  note: model-analytics-007; resume gates are rank-only. Killed by 1.5's mean-opponent-adj_net level gate
 
 # --- A-M1 / A-L2 / A-L53: the generate.py --check gates go red (ledger gate codegen-red-path-gates) ---
 - id: codegen-live-stale-returns-empty
@@ -627,3 +628,167 @@
   test: tests/test_dl_utils.py::TestDownload::test_download_valid_url_with_short_timeout
   expected: kill
   note: the short-timeout test is now offline and deterministic (an injected session raises the Timeout)
+
+# --- task 1.5: model and analytics gates (ledger test-harness.md) ------------------------------------
+- id: nba-ratings-no-net-adjustment
+  group: ratings-adjuster
+  finding: C-L22
+  file: sportsdataverse/_common/ratings.py
+  snippet: '    for _ in range(max_iter):'
+  mutant: '    for _ in range(0):'
+  test: tests/nba/test_nba_team_ratings_oracle.py::test_opponent_adjustment_moves_net_toward_the_adjusted_oracle
+  expected: kill
+  note: the audit's no-op opponent adjustment (adj_net == raw net); mean |adj - raw| 0.3253 -> 0
+
+- id: nfl-current-season-flips-a-day-late
+  group: frozen-clock
+  finding: C-M14
+  file: sportsdataverse/nfl/utils_date.py
+  snippet: '    return current_year if today >= season_start else current_year - 1'
+  mutant: '    return current_year if today > season_start else current_year - 1'
+  test: tests/nfl/test_utils_date_frozen.py
+  expected: kill
+  note: the nflreadr table catches a one-day slip of the season flip in every season
+
+- id: cfb-fourth-down-go-wp-scaled
+  group: fourth-down-level
+  finding: gap-C-124
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: '    out["go_wp"] = go["go_wp"].to_numpy()'
+  mutant: '    out["go_wp"] = go["go_wp"].to_numpy() * 0.98'
+  test: tests/cfb/test_cfb_fourth_down.py -k oracle
+  expected: kill
+  note: >-
+    correlation stays 0.99741; MAE 0.0171 -> 0.0213 fails the level floor (the C-L21/C-L22 trap).
+    The NFL twin is hand-run only: its oracle test needs the download-on-demand nfl4th boosters,
+    which CI does not cache, so a registry row would read SURVIVED there.
+
+- id: cfb-fourth-down-punt-spread-sign
+  group: fourth-down-level
+  finding: gap-C-124
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: '    s["pos_team_spread"] = -s["pos_team_spread"].to_numpy().astype(float)'
+  mutant: '    s["pos_team_spread"] = s["pos_team_spread"].to_numpy().astype(float)'
+  test: tests/cfb/test_cfb_fourth_down.py -k oracle
+  expected: kill
+  note: the spread-sign class (gap-C-034) a bounds-only test cannot see
+
+- id: third-down-curve-scaled
+  group: analytics-level
+  finding: C-L38
+  file: sportsdataverse/football/usage_box.py
+  snippet: '        return pl.read_parquet(f)'
+  mutant: '        return pl.read_parquet(f).with_columns(pl.col("rate") * 0.8)'
+  test: tests/football/test_usage_box.py::test_nfl_third_down_curve_level_vs_nflverse
+  expected: kill
+  note: model-analytics-011; the band test passed a 0.8-scaled curve
+
+- id: adj-rapm-prior-dropped
+  group: analytics-level
+  finding: C-L39
+  file: sportsdataverse/nba/nba_adj_rapm.py
+  snippet: '    prior_mean = np.asarray(prior_mean, dtype=np.float64)'
+  mutant: '    prior_mean = np.zeros_like(np.asarray(prior_mean, dtype=np.float64))'
+  test: tests/nba/test_nba_adj_rapm.py -k real
+  expected: kill
+  note: model-analytics-012; the no-op prior on the real three-game possessions
+
+- id: player-crosswalk-no-fuzzy-matches
+  group: analytics-level
+  finding: C-L47
+  file: sportsdataverse/_common_crosswalk_basketball.py
+  snippet: '            if best >= min_confidence:'
+  mutant: '            if best > 1.0:'
+  test: tests/test_basketball_crosswalk_parity.py -k match_rate
+  expected: kill
+  note: sdvpy-ids-003; the fuzzy pass off drops the matched share below the R golden's
+
+- id: validate-game-rush-and-pass-never-fires
+  group: analytics-level
+  finding: C-L51
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '            _t("rush") & _t("pass"),'
+  mutant: '            _t("rush") & _t("pass") & pl.lit(False),'
+  test: tests/validation/test_validate_game.py -k planted
+  expected: kill
+  note: sdvpy-validation-002; a real processed game driven red
+
+- id: rds-date-class-dropped
+  group: analytics-level
+  finding: C-L58
+  file: sportsdataverse/_rds.py
+  snippet: 'attributes=[writer.class_attr(["Date"])]'
+  mutant: 'attributes=[writer.class_attr(["IDate"])]'
+  test: tests/release/test_release_parity.py::test_rds_branch_byte_golden
+  expected: kill
+  note: sdvpy-release-003; the R 4.6.1 byte oracle for the Date/Datetime/Int64/Null/Categorical branches
+
+- id: participants-cap-ignored
+  group: analytics-level
+  finding: supp-007
+  file: sportsdataverse/football/play_participants.py
+  snippet: '        missing = missing.head(max_fetches)'
+  mutant: '        missing = missing'
+  test: tests/football/test_play_participants_resolve.py
+  expected: kill
+
+- id: nfl-props-boundary-inclusive
+  group: analytics-level
+  finding: supp-009
+  file: sportsdataverse/nfl/nfl_player_props.py
+  snippet: '    past = player_stats.filter(pl.col("week") < as_of_week)'
+  mutant: '    past = player_stats.filter(pl.col("week") <= as_of_week)'
+  test: tests/nfl/test_nfl_player_props.py -k real
+  expected: kill
+  note: the leakage boundary on a real load_nfl_player_stats slice
+
+- id: spadl-x-axis-flipped
+  group: spadl-offline
+  finding: supp-010
+  file: sportsdataverse/soccer/spadl.py
+  snippet: '        x = (pt[0] - x0) / (x1 - x0) * FIELD_LENGTH'
+  mutant: '        x = FIELD_LENGTH - (pt[0] - x0) / (x1 - x0) * FIELD_LENGTH'
+  test: tests/soccer/test_soccer_spadl.py -k "full_match or oracle"
+  expected: kill
+  note: the ledger gate's own mutation; the row-level parity now runs offline
+
+- id: xgb-threads-unclamped
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/_xgb.py
+  snippet: '    return n if n >= 1 else 1'
+  mutant: '    return n'
+  test: tests/test_xgb.py
+  expected: kill
+  note: the ledger names `_xgb.load_booster`, which does not exist; _xgb has xgb_threads + apply_thread_env
+
+- id: mch-ratings-wrong-league
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/hockey/mch/mch_ratings.py
+  snippet: 'league="mch", return_as_pandas'
+  mutant: 'league="wch", return_as_pandas'
+  test: tests/hockey/test_mch_ratings.py
+  expected: kill
+
+- id: mbb-season-wp-pregame-anchor-dropped
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/mbb/mbb_win_prob.py
+  snippet: '        p0 = pmap.get(str(gid), fallback)'
+  mutant: '        p0 = fallback'
+  test: tests/mbb/test_mbb_win_prob.py -k real_season
+  expected: kill
+  note: the pregame Brier on real outcomes rises to the HFA-only anchor's, above the floor
+
+- id: nfl-qbr-trainer-order
+  group: qbr-order
+  finding: gap-C-083
+  file: sportsdataverse/nfl/model_vars.py
+  snippet: 'qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "spread"]'
+  mutant: 'qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]'
+  test: tests/nfl/test_qbr_feature_order.py
+  expected: kill
+  note: >-
+    task 2.7's reorder: the strict xfail turns XPASS (red), which is the kill; 2.7 flips the xfail to a
+    plain assert in the same PR and points this row at its named-booster guard
