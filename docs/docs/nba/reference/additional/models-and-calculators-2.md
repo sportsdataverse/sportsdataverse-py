@@ -1,10 +1,85 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_spm–win_prob"
-sidebar_label: "Models and calculators: nba_spm–win_prob"
+title: "NBA — additional Python functions — Models and calculators: nba_predict–win_prob"
+sidebar_label: "Models and calculators: nba_predict–win_prob"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: nba_spm–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_predict–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_spm–win_prob
+# NBA — additional Python functions — Models and calculators: nba_predict–win_prob
+
+### nba_predict_games {#nba_predict_games}
+
+`nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Vectorized pregame predictions for a schedule of games.
+
+Joins the ratings frame twice (home/away) and applies the closed-form
+`predict_margin` / `win_prob_from_margin` / `predict_total`
+math column-wise.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | One row per game with `game_id`, `home_team_id`, `away_team_id` and optionally `neutral_site` (missing column means every game is a true home game). Team-id dtypes must match `ratings['team_id']` exactly. |
+| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace` (the `~sportsdataverse.nba.nba_team_ratings.nba_team_ratings` output for one season/as-of date). |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
+
+No returns table is published for this function: no capture: it raises a join-key dtype mismatch on a real schedule (the schedule's home_team_id is Int32, nba_team_ratings' team_id is String).
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import nba_predict_games
+from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
+preds = nba_predict_games(games, nba_team_ratings(2024))
+```
+
+### nba_rookie_projection {#nba_rookie_projection}
+
+`nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
+
+Project rookie/sophomore value by composing draft x aging x availability.
+
+Composition (no re-derived features -- each term is the verbatim public
+output of ①②③):
+
+- `base = nba_draft_model(...).proj_career_value * rookie_fraction`
+  (`rookie_fraction` from the bundled residual artifact -- the share of
+  career value realized in a single rookie season).
+- `proj_rookie_value = base * rel_value(rookie_age) / rel_value(peak_age)
+  + residual[pro_tier]`; `proj_soph_value` uses `rookie_age + 1`.
+- `proj_avail_pct` from `sportsdataverse.nba.nba_availability.nba_availability`
+  at rookie age -- reported separately, **never** multiplied into the
+  value columns (availability is availability, not skill).
+- `proj_rookie_min = games_full_season * proj_avail_pct * expected_mpg(pro_tier)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year or list of years. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional college-side prior frame, forwarded verbatim to `sportsdataverse.nba.nba_draft_model.nba_draft_model`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_rookie_projection
+board = nba_rookie_projection(2019)
+print(board.sort("proj_rookie_value", descending=True).head())
+```
 
 ### nba_spm {#nba_spm}
 
@@ -160,6 +235,87 @@ repl = calibrate_replacement_level(
 war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
 ```
 
+### ot_adjusted_seconds {#ot_adjusted_seconds}
+
+`ot_adjusted_seconds(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Tag overtime rows and give them the OT period clock as their seconds remaining.
+
+The in-game model clips `start_game_seconds_remaining` at zero, so every overtime play
+(negative in the hoopR frame) would score as "game over at the current margin". Each OT period
+is scored as its own five-minute endgame instead: `start_game_seconds_remaining` becomes
+`start_quarter_seconds_remaining` on rows with `period_number > 4`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | One game in the `load_nba_pbp` schema. |
+
+**Returns**
+
+The frame with `wp_regime` (`"reg"` / `"ot"`) and the adjusted seconds column.
+
+| col_name | type | description |
+|---|---|---|
+| `wp_regime` | character | "reg" for regulation plays; "ot" for overtime plays, which are scored on the overtime period clock as a five-minute endgame. |
+| `start_game_seconds_remaining` | double | Seconds remaining the model sees: the game clock in regulation, the overtime period clock on overtime plays. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import ot_adjusted_seconds
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+tagged = ot_adjusted_seconds(pbp)
+tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining").head()
+```
+
+### player_game_rates {#player_game_rates}
+
+`player_game_rates(player_box: 'pl.DataFrame', team_box: 'pl.DataFrame', *, periods: 'int' = 4, league_id: 'str' = '00') -> 'pl.DataFrame'`
+
+True-shooting and usage for every boxed player of one game.
+
+TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
+(MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in `team_game_rates`
+(`total_turnovers`, repaired where ESPN doubled or omitted it) and team
+minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, 5 per overtime). A player with no shots, no minutes, or `did_not_play` gets
+`null`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_box` | `DataFrame` |  | One game in the `load_nba_player_boxscore` schema. |
+| `team_box` | `DataFrame` |  | The game's two `load_nba_team_boxscore` rows. |
+| `periods` | `int` | `4` | Highest period played. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA. |
+
+**Returns**
+
+One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | ESPN game id, the join key to the play-by-play and box-score frames. |
+| `athlete_id` | integer | ESPN athlete id, the join key to the player box score. |
+| `team_id` | integer | ESPN team id, the join key to the team box score. |
+| `ts_pct` | double | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
+| `usg_pct` | double | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes or a DNP. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import player_game_rates
+from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore, load_nba_team_boxscore
+team_box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
+player_box = load_nba_player_boxscore([2025]).filter(pl.col("game_id") == 401766458)
+player_game_rates(player_box, team_box).sort("usg_pct", descending=True).head()
+```
+
 ### predict_margin {#predict_margin}
 
 `predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
@@ -294,6 +450,141 @@ print(md)
 
 with open("validation_card.md", "w") as f:
     f.write(render_report(rep))
+```
+
+### score_win_prob {#score_win_prob}
+
+`score_win_prob(pbp: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'pl.DataFrame'`
+
+Per-play home win probability, its play-to-play delta, and the prior, for one game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | One game in the `load_nba_pbp` schema (needs `home_team_spread`, `game_spread_available`, `period_number`, `start_game_seconds_remaining`, `start_quarter_seconds_remaining`, `home_score`, `away_score`, `team_id`, `home_team_id`), in play order. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA (the only leagues with an in-game model). |
+
+**Returns**
+
+The input plus `pregame_home_prob`, `prior_source`, `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). `home_win_prob` is settled to 1.0 / 0.0 on "End Game" / "End Period" rows (`type_text`) from the 4th period on where the score is not tied, before `wp_delta` is taken; tied rows go to overtime and keep the model value. A frame without `type_text` is not settled. An empty input returns an empty frame with those columns. A null `home_score` / `away_score` means "no change" and is carried forward within the game for the model (a null before the first score is 0); the returned `home_score` / `away_score` are left as given.
+
+| col_name | type | description |
+|---|---|---|
+| `pregame_home_prob` | double | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone. |
+| `prior_source` | character | Where the prior came from: "spread" (a real line) or "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model). |
+| `wp_regime` | character | "reg" for regulation plays; "ot" for overtime plays, which are scored on the overtime period clock as a five-minute endgame. |
+| `home_win_prob` | double | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |
+| `wp_delta` | double | Change in home win probability from the previous play; the first play's delta is measured from the pregame prior. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import score_win_prob
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+one = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+wp = score_win_prob(one)
+
+# Biggest swings
+
+wp.sort(pl.col("wp_delta").abs(), descending=True).select("text", "wp_delta").head(10)
+```
+
+### shot_coordinates {#shot_coordinates}
+
+`shot_coordinates(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Shot locations in the court frame the Game on Paper hex chart uses.
+
+ESPN's play coordinates are feet across the court with the hoop at `(25, 0)` and `y`
+growing toward half court (measured on 401766458: dunks at `y` about 2, a 22-foot corner
+three at `(3, 0)`). The chart wants tenths of a foot with the hoop at the origin, so
+`x_legacy = (x - 25) * 10` and `y_legacy = y * 10`. Free throws carry no real location
+(`load_nba_pbp` pins them to `(25, 13.75)`) and ESPN's missing-coordinate sentinel is a
+large negative number; both become `null`, as does every non-shooting play.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Plays in the `load_nba_pbp` schema (`shooting_play`, `type_text`, `coordinate_x_raw`, `coordinate_y_raw`). |
+
+**Returns**
+
+The input plus `x_legacy` and `y_legacy` (Float64).
+
+| col_name | type | description |
+|---|---|---|
+| `x_legacy` | double | Shot location in tenths of a foot with the hoop at the origin, x across the court; null for free throws, unlocated shots and non-shooting plays. |
+| `y_legacy` | double | Shot location in tenths of a foot with the hoop at the origin, y toward half court; null for free throws, unlocated shots and non-shooting plays. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import shot_coordinates
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+pbp = load_nba_pbp([2025]).filter(pl.col("game_id") == 401766458)
+shots = shot_coordinates(pbp).filter(pl.col("x_legacy").is_not_null())
+shots.select("text", "x_legacy", "y_legacy").head()
+```
+
+### team_game_rates {#team_game_rates}
+
+`team_game_rates(team_box: 'pl.DataFrame', *, periods: 'int' = 4, league_id: 'str' = '00') -> 'pl.DataFrame'`
+
+Four factors, possessions, ratings and pace for both teams of one game.
+
+Dean Oliver's estimates on the `load_nba_team_boxscore` columns: possessions =
+FGA - ORB + TOV + 0.44 FTA, averaged over the two teams; eFG% = (FGM + 0.5 3PM) / FGA;
+TOV% = TOV / (FGA + 0.44 FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
+ORtg / DRtg per 100 possessions; pace per regulation length (48 minutes NBA, 40 WNBA). `TOV` is the team's player plus team turnovers:
+`total_turnovers`, except that when it is null it is `turnovers + team_turnovers`, and when ESPN
+has duplicated the team turnover (`team_turnovers == turnovers` and `total_turnovers == 2 *
+turnovers`, measured on every 2002-2012 game, e.g. 17/17/34) it is `turnovers`. Without the
+`turnovers` / `team_turnovers` columns it is `total_turnovers` as given. A zero denominator
+gives `null`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_box` | `DataFrame` |  | Exactly two rows (one per team) of one game in the `load_nba_team_boxscore` schema. |
+| `periods` | `int` | `4` | Highest period played, for the pace denominator. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (48-minute regulation) / `"10"` WNBA (40); overtime is 5 minutes in both. |
+
+**Returns**
+
+One row per `(game_id, team_id)` with `efg_pct, tov_pct, orb_pct, ft_rate, possessions, off_rtg, def_rtg, pace, total_turnovers, game_minutes`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | ESPN game id, the join key to the play-by-play and box-score frames. |
+| `team_id` | integer | ESPN team id, the join key to the team box score. |
+| `efg_pct` | double | Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts. |
+| `tov_pct` | double | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive. |
+| `orb_pct` | double | Offensive rebound rate, own ORB / (own ORB + opponent DRB); null when the denominator is not positive. |
+| `ft_rate` | double | Free-throw rate, FTA / FGA; null with no attempts. |
+| `possessions` | double | Oliver's possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams. |
+| `off_rtg` | double | Points scored per 100 possessions; null when possessions are not positive. |
+| `def_rtg` | double | Points allowed per 100 possessions; null when possessions are not positive. |
+| `pace` | double | Possessions per 48 minutes (overtime minutes included in the denominator). |
+| `total_turnovers` | integer | The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 total is repaired to the player count. |
+| `game_minutes` | integer | Minutes played in the game: 48 plus five per overtime. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import team_game_rates
+from sportsdataverse.nba.nba_loaders import load_nba_team_boxscore
+box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
+team_game_rates(box).select("team_id", "efg_pct", "off_rtg", "pace")
+
+# WNBA box (40-minute regulation)
+
+team_game_rates(box, league_id="10")
 ```
 
 ### train_spm {#train_spm}

@@ -186,7 +186,7 @@ def test_offline_build_end_to_end(tmp_path, request):
     )
     assert one("SELECT type FROM columns WHERE function='load_nhl_pbp' AND name='event_type'") == ("String",)
     assert one("SELECT count(*) FROM columns WHERE function='load_cfb_drives' AND name='drive_id'") == (1,)
-    assert one("SELECT tag, min_season FROM datasets WHERE loader='load_nhl_shifts'") == ("nhl_shifts", 2025)
+    assert one("SELECT tag, min_season FROM datasets WHERE loader='load_nhl_shifts'") == ("nhl_shifts", 2010)
     assert one(
         "SELECT r_function, match FROM equivalents WHERE py_function='load_nfl_pbp' AND r_package='nflreadr'"
     ) == ("load_pbp", "alias")
