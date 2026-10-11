@@ -24,12 +24,17 @@ Oracle per column
     define the kicker. Asserted on the 85 captures whose feed opens period 1 with a kickoff (43 kicked
     by the home team). On the other 41 (32 feeds from 2004-2012 that file a scrimmage play first, and 9
     later feeds that lack the opening kickoff or number a later play ahead of it) nothing is asserted.
-    XFAIL C-NF-2 / C-M13 on every one of the 85 (row 1 names the receiving team; later rows the away
-    team).
-``start/end.pos_team_receives_2H_kickoff`` (first-half rows)
-    cfbfastR ``cfbd_pbp_data.R:1329-1332``: true exactly when the possession team is the opening
-    kicker. Second-half rows are not asserted: cfbfastR leaves the flag ungated there while nflfastR
-    gates it to the first half, and the phase-2 port (plan task 2.6) makes that choice. XFAIL C-NF-2.
+    Green since task 2.6 (C-NF-2 / C-M13: it was a per-row expression naming the receiving team on row 1
+    and the away team on every later row). A second oracle reads period 3 alone: the opening kicker
+    receives the second-half kickoff, so it takes the first period-3 snap. Asserted on 118 captures,
+    34 of them among the 41 above (``_opening_kicker``'s first-snap-defense fallback); 6 are
+    undetermined (the half's start missing or misnumbered, an onside or return-touchdown kickoff) and 2
+    contradict their own period 1 (``_P3_CONTRADICTS_P1``).
+``start/end.pos_team_receives_2H_kickoff``
+    First-half rows: cfbfastR ``cfbd_pbp_data.R:1329-1332``, true exactly when the possession team is
+    the opening kicker (the 85 captures above). Rows after the first half: false on every capture,
+    nflfastR's ``receive_2h_ko`` gate (cfbfastR leaves the flag ungated there; task 2.6 chose the
+    nflfastR rule, as the NFL processor does). Green since task 2.6 (C-NF-2).
 ``start.yardsToEndzone.touchback`` (kickoff rows)
     The NCAA rule, sdv-internal-refs ``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``: 80 through
     2011, 75 from 2012. Owner ruling: through 2011 the RULE is the oracle, not cfbfastR -- cfbfastR's
@@ -165,6 +170,8 @@ class Feed:
     home_id: int
     away_id: int
     opening_kicker: int | None
+    #: the team that received the second-half kickoff, read from period 3 alone; ``None`` when undetermined
+    second_half_receiver: int | None
     play_ids: frozenset[int]
     #: (play id, next snap's start.down, next snap's start.yardsToEndzone)
     degenerate_ends: tuple[tuple[int, int, int], ...]
@@ -202,12 +209,48 @@ def _opening_kicker(period1: list[dict], home: int, away: int) -> int | None:
     return labelled
 
 
+def _clock_secs(play: dict) -> int | None:
+    hit = re.match(r"^(\d{1,2}):(\d{2})$", (play.get("clock") or {}).get("displayValue") or "")
+    return int(hit.group(1)) * 60 + int(hit.group(2)) if hit else None
+
+
+def _second_half_receiver(period3: list[dict]) -> int | None:
+    """The team that received the second-half kickoff, read from period 3 alone, or ``None``.
+
+    The receiver snaps first: the first scrimmage snap of period 3 belongs to it, whether or not the
+    feed files the kickoff (a 2025 feed types it "Pass Completion"; the text still says kickoff).
+    ``None`` (6 captures) when the feed's first period-3 play comes after the opening minute (the
+    half's start is missing, 242972641 and 252740026, or a later play is numbered first, 322430041 and
+    401425418), or the kickoff is onside, ends in a turnover or a return touchdown, or a second kickoff
+    comes before any snap: then the first snap says nothing about who received (400548250, 272650194).
+    """
+    rows = [p for p in period3 if not re.search(r"(?i)timeout|end of|end period|coin toss|penalty", _type(p))]
+    if not rows or (_clock_secs(rows[0]) or 0) < 14 * 60:
+        return None
+    kicked = False
+    for play in rows:
+        kickoff = _KICKOFF_TYPE.search(_type(play)) or re.search(r"(?i)\bkickoff\b", play.get("text") or "")
+        if kickoff:
+            if kicked or re.search(r"(?i)fumble|recover|muff|onside|touchdown", play.get("text") or ""):
+                return None
+            kicked = True
+            continue
+        if _NOT_A_SNAP.search(_type(play)) or not (play.get("start") or {}).get("down"):
+            continue
+        return int(play["start"]["team"]["id"])
+    return None
+
+
 def _feed(game_id: int, summary: dict) -> Feed:
     plays = [p for d in (summary.get("drives") or {}).get("previous", []) for p in d.get("plays", [])]
-    period1 = sorted(
-        (p for p in plays if (p.get("period") or {}).get("number") == 1),
-        key=lambda p: int(p.get("sequenceNumber") or 0),
-    )
+
+    def period(n: int) -> list[dict]:
+        return sorted(
+            (p for p in plays if (p.get("period") or {}).get("number") == n),
+            key=lambda p: int(p.get("sequenceNumber") or 0),
+        )
+
+    period1 = period(1)
     sides = {c["homeAway"]: int(c["team"]["id"]) for c in summary["header"]["competitions"][0]["competitors"]}
     kicker = _opening_kicker(period1, sides["home"], sides["away"])
 
@@ -236,6 +279,7 @@ def _feed(game_id: int, summary: dict) -> Feed:
         home_id=sides["home"],
         away_id=sides["away"],
         opening_kicker=kicker,
+        second_half_receiver=_second_half_receiver(period(3)),
         play_ids=frozenset(int(p["id"]) for p in plays),
         degenerate_ends=tuple(ends),
         texts=tuple(p.get("text") or "" for p in plays),
@@ -310,19 +354,10 @@ def _params(game_ids, red: dict[int, str] | None = None) -> list:
 # --- C-NF-2 / C-M13: the opening-kickoff team and the 2H-kickoff flag -------------------------------
 
 _KICKOFF_DEFINED = tuple(gid for gid in CAPTURES if FEEDS[gid].opening_kicker is not None)
-_NF2 = (
-    "C-NF-2 / C-M13: firstHalfKickoffTeamId is a per-row expression (cfb_pbp.py:2865-2873): row 1 names the "
-    "receiving team and every later row the away team, so it is the opening kicker on no row-1 and on "
-    "no row at all when the home team kicked"
-)
-_NF2_FLAG = (
-    "C-NF-2: pos_team_receives_2H_kickoff reads the per-row firstHalfKickoffTeamId (cfb_pbp.py:4323-4330): "
-    "row 1 always, and every first-half row when the home team kicked, carry the inverted flag"
-)
 
 
-@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED, dict.fromkeys(_KICKOFF_DEFINED, _NF2)))
-def test_first_half_kickoff_team_is_the_opening_kicker_on_every_row(game_id):
+@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED))
+def test_first_half_kickoff_team_constant_is_the_opening_kicker(game_id):
     kicker = FEEDS[game_id].opening_kicker
     df = _frame(game_id)
     named = df["firstHalfKickoffTeamId"].cast(pl.Int64)
@@ -332,7 +367,7 @@ def test_first_half_kickoff_team_is_the_opening_kicker_on_every_row(game_id):
     assert wrong == 0, f"{wrong} of {df.height} rows name a team other than the opening kicker {kicker}"
 
 
-@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED, dict.fromkeys(_KICKOFF_DEFINED, _NF2_FLAG)))
+@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED))
 def test_receives_2h_kickoff_on_first_half_rows_is_the_opening_kicker(game_id):
     kicker = FEEDS[game_id].opening_kicker
     first_half = _frame(game_id).filter(pl.col("period") <= 2)
@@ -342,6 +377,48 @@ def test_receives_2h_kickoff_on_first_half_rows_is_the_opening_kicker(game_id):
         got = first_half[f"{side}.pos_team_receives_2H_kickoff"]
         wrong = int(expected.ne_missing(got).sum())
         assert wrong == 0, f"{side}: {wrong} of {first_half.height} first-half rows carry the inverted flag"
+
+
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
+def test_receives_2h_kickoff_is_false_after_the_first_half(game_id):
+    """Nobody is still waiting for the second-half kickoff once it has happened (nflfastR's gate)."""
+    later = _frame(game_id).filter(pl.col("period") > 2)
+    # every committed capture, trimmed or not, keeps rows after the first half; without them this passes vacuously
+    assert later.height > 0, "no rows after the first half to check"
+    for side in ("start", "end"):
+        flagged = int(later[f"{side}.pos_team_receives_2H_kickoff"].ne_missing(False).sum())
+        assert flagged == 0, f"{side}: {flagged} of {later.height} rows after the first half carry the flag"
+
+
+#: Feeds whose period 3 contradicts their period 1: the same team takes the first snap of both halves
+_P3_CONTRADICTS_P1 = {
+    262522509: "2006: Miami (OH) snaps first in both halves; period 3 opens with Purdue's kickoff",
+    322590228: "2012: Furman snaps first in both halves; the feed files no kickoff before either snap",
+}
+_RECEIVER_DEFINED = tuple(
+    gid for gid in CAPTURES if FEEDS[gid].second_half_receiver is not None and gid not in _P3_CONTRADICTS_P1
+)
+
+
+@pytest.mark.parametrize("game_id", _params(_RECEIVER_DEFINED))
+def test_first_half_kickoff_team_received_the_second_half_kickoff(game_id):
+    """The opening kicker receives the second-half kickoff, read from period 3 alone (R781-3).
+
+    Independent of period 1, so it also covers the captures with no opening kickoff, where
+    ``_opening_kicker`` falls back to the first snap's defense.
+    """
+    receiver = FEEDS[game_id].second_half_receiver
+    named = _frame(game_id)["firstHalfKickoffTeamId"].cast(pl.Int64)
+    wrong = int(named.ne_missing(receiver).sum())
+    assert wrong == 0, f"{wrong} of {named.len()} rows name a team other than the second-half receiver {receiver}"
+
+
+def test_the_second_half_oracle_covers_the_fallback_captures():
+    """Guard the guard: 118 captures checked, 34 of them without an opening kickoff in period 1."""
+    assert len(_RECEIVER_DEFINED) == 118
+    fallback = [FEEDS[g] for g in _RECEIVER_DEFINED if g not in _KICKOFF_DEFINED]
+    assert len(fallback) == 34
+    assert {f.second_half_receiver == f.home_id for f in fallback} == {True, False}
 
 
 def test_the_kickoff_oracle_covers_the_captures_it_should():

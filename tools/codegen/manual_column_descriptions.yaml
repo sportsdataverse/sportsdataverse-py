@@ -9469,7 +9469,7 @@ load_cfb_pbp:
   fg_team: Team id attempting the field goal (the kicking team).
   fg_wp: Make-probability-weighted win probability of attempting the field goal.
   fg_wp_diff: fg_wp minus the recommended option's WP (0 when the field goal is the recommendation, otherwise <= 0).
-  firstHalfKickoffTeamId: ESPN id of the team that received the opening kickoff.
+  firstHalfKickoffTeamId: ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game.
   first_down_created: True when the play produced a first down for the offense.
   first_down_earned: Whether the play earned a first down by means other than yardage (e.g. by penalty).
   first_down_prob: Modeled probability of converting the fourth down when going for it.
