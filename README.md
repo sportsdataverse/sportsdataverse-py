@@ -137,7 +137,7 @@ With optional extras (defined in `[project.optional-dependencies]` in
 
 ```bash
 pip install "sportsdataverse[all]"      # everything below EXCEPT mcp
-pip install "sportsdataverse[models]"   # no-op since 0.1.6: the model stack is a base dependency
+pip install "sportsdataverse[models]"   # no-op (kept so sportsdataverse[models] installs keep working)
 pip install "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
 pip install "sportsdataverse[nflpro]"   # NFL Pro (pro.nfl.com) Next Gen Stats
 pip install "sportsdataverse[pff]"      # PFF Developer + Premium clients

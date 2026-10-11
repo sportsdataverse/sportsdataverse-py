@@ -92,6 +92,9 @@ tests = [
     "ruff>=0.1.0",
     # tests/soccer/test_soccer_events.py loads a StatsBomb fixture through kloppy.
     "kloppy[polars]>=3.19",
+    # tests/test_metric_registry.py and the codegen tests import yaml; it used to arrive
+    # through pycln, which left this extra. `pip install -e .[tests]` is a documented path.
+    "pyyaml>=6.0",
 ]
 soccer = [
     # kloppy reads ~15 event/tracking providers (StatsBomb, Opta, Wyscout, Sportec,
