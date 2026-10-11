@@ -104,3 +104,30 @@ def test_score_win_prob_tie_at_ot_start_is_near_half() -> None:
 def test_score_win_prob_on_an_empty_frame_keeps_the_schema() -> None:
     out = gp.score_win_prob(_pbp([]).clear())
     assert out.height == 0 and "home_win_prob" in out.columns
+
+
+def test_shot_coordinates_convert_feet_to_legacy_tenths_and_null_everything_else() -> None:
+    df = pl.DataFrame(
+        {
+            "shooting_play": [True, True, True, False],
+            "type_text": ["Jump Shot", "Free Throw - 1 of 2", "Layup Shot", "Substitution"],
+            "coordinate_x_raw": [3.0, 25.0, 48.0, 10.0],
+            "coordinate_y_raw": [0.0, 13.75, 11.0, 5.0],
+        }
+    )
+    out = gp.shot_coordinates(df)
+    # ESPN: feet across the court, hoop at (25, 0): (3,0) is a left-corner three 22 ft out
+    assert out["x_legacy"].to_list() == [-220.0, None, 230.0, None]
+    assert out["y_legacy"].to_list() == [0.0, None, 110.0, None]
+
+
+def test_shot_coordinates_treat_the_espn_sentinel_as_no_location() -> None:
+    df = pl.DataFrame(
+        {
+            "shooting_play": [True],
+            "type_text": ["Jump Shot"],
+            "coordinate_x_raw": [-214748340.0],
+            "coordinate_y_raw": [-214748365.0],
+        }
+    )
+    assert gp.shot_coordinates(df)["x_legacy"].to_list() == [None]

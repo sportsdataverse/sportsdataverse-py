@@ -25,6 +25,7 @@ __all__ = [
     "home_prior",
     "ot_adjusted_seconds",
     "score_win_prob",
+    "shot_coordinates",
 ]
 
 #: Oliver's free-throw possession weight, used by every rate below.
@@ -161,4 +162,44 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
         tagged["wp_regime"],
         wp.alias("home_win_prob"),
         (wp - wp.shift(n=1, fill_value=prior)).alias("wp_delta"),
+    )
+
+
+def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Shot locations in the court frame the Game on Paper hex chart uses.
+
+    ESPN's play coordinates are feet across the court with the hoop at ``(25, 0)`` and ``y``
+    growing toward half court (measured on 401766458: dunks at ``y`` about 2, a 22-foot corner
+    three at ``(3, 0)``). The chart wants tenths of a foot with the hoop at the origin, so
+    ``x_legacy = (x - 25) * 10`` and ``y_legacy = y * 10``. Free throws carry no real location
+    (``load_nba_pbp`` pins them to ``(25, 13.75)``) and ESPN's missing-coordinate sentinel is a
+    large negative number; both become ``null``, as does every non-shooting play.
+
+    Args:
+        pbp: Plays in the ``load_nba_pbp`` schema (``shooting_play``, ``type_text``,
+            ``coordinate_x_raw``, ``coordinate_y_raw``).
+
+    Returns:
+        The input plus ``x_legacy`` and ``y_legacy`` (Float64).
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If a required column is missing (``shooting_play``,
+            ``type_text``, ``coordinate_x_raw``, ``coordinate_y_raw``).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_game_page import shot_coordinates
+            shots = shot_coordinates(pbp).filter(pl.col("x_legacy").is_not_null())
+            shots.select("text", "x_legacy", "y_legacy").head()
+    """
+    located = (
+        (pl.col("shooting_play") == True)
+        & ~pl.col("type_text").fill_null("").str.contains("(?i)free throw")
+        & (pl.col("coordinate_x_raw").cast(pl.Float64) > COORD_SENTINEL)
+        & (pl.col("coordinate_y_raw").cast(pl.Float64) > COORD_SENTINEL)
+    )
+    return pbp.with_columns(
+        pl.when(located).then((pl.col("coordinate_x_raw").cast(pl.Float64) - 25.0) * 10.0).alias("x_legacy"),
+        pl.when(located).then(pl.col("coordinate_y_raw").cast(pl.Float64) * 10.0).alias("y_legacy"),
     )
