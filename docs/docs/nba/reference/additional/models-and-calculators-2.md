@@ -231,6 +231,36 @@ tagged = ot_adjusted_seconds(pbp)
 tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining").head()
 ```
 
+### player_game_rates {#player_game_rates}
+
+`player_game_rates(player_box: 'pl.DataFrame', team_box: 'pl.DataFrame', *, periods: 'int' = 4) -> 'pl.DataFrame'`
+
+True-shooting and usage for every boxed player of one game.
+
+TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
+(MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV = `total_turnovers` and team
+minutes = 5 x game minutes. A player with no shots, no minutes, or `did_not_play` gets
+`null`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_box` | `DataFrame` |  | One game in the `load_nba_player_boxscore` schema. |
+| `team_box` | `DataFrame` |  | The game's two `load_nba_team_boxscore` rows. |
+| `periods` | `int` | `4` | Highest period played. |
+
+**Returns**
+
+One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import player_game_rates
+player_game_rates(player_box, team_box).sort("usg_pct", descending=True).head()
+```
+
 ### predict_margin {#predict_margin}
 
 `predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
@@ -428,9 +458,9 @@ shots = shot_coordinates(pbp).filter(pl.col("x_legacy").is_not_null())
 shots.select("text", "x_legacy", "y_legacy").head()
 ```
 
-### team_rates {#team_rates}
+### team_game_rates {#team_game_rates}
 
-`team_rates(team_box: 'pl.DataFrame', *, periods: 'int' = 4) -> 'pl.DataFrame'`
+`team_game_rates(team_box: 'pl.DataFrame', *, periods: 'int' = 4) -> 'pl.DataFrame'`
 
 Four factors, possessions, ratings and pace for both teams of one game.
 
@@ -455,10 +485,10 @@ One row per `(game_id, team_id)` with `efg_pct, tov_pct, orb_pct, ft_rate, posse
 
 ```python
 import polars as pl
-from sportsdataverse.nba.nba_game_page import team_rates
+from sportsdataverse.nba.nba_game_page import team_game_rates
 from sportsdataverse.nba.nba_loaders import load_nba_team_boxscore
 box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
-team_rates(box).select("team_id", "efg_pct", "off_rtg", "pace")
+team_game_rates(box).select("team_id", "efg_pct", "off_rtg", "pace")
 ```
 
 ### train_spm {#train_spm}

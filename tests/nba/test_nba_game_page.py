@@ -154,8 +154,8 @@ def _team_box() -> pl.DataFrame:
     )
 
 
-def test_team_rates_match_hand_arithmetic() -> None:
-    out = gp.team_rates(_team_box()).sort("team_id")
+def test_team_game_rates_match_hand_arithmetic() -> None:
+    out = gp.team_game_rates(_team_box()).sort("team_id")
     atl, orl = out.row(0, named=True), out.row(1, named=True)
     poss_atl = 84 - 9 + 8 + 0.44 * 34
     poss_orl = 91 - 12 + 10 + 0.44 * 27
@@ -170,24 +170,24 @@ def test_team_rates_match_hand_arithmetic() -> None:
     assert atl["pace"] == pytest.approx(48 * poss / 48) and atl["game_minutes"] == 48
 
 
-def test_team_rates_pace_uses_overtime_minutes() -> None:
-    out = gp.team_rates(_team_box(), periods=5)
+def test_team_game_rates_pace_uses_overtime_minutes() -> None:
+    out = gp.team_game_rates(_team_box(), periods=5)
     assert out["game_minutes"][0] == 53
     assert out["pace"][0] == pytest.approx(48 * out["possessions"][0] / 53)
 
 
-def test_team_rates_zero_denominator_is_null() -> None:
+def test_team_game_rates_zero_denominator_is_null() -> None:
     tb = _team_box().with_columns(pl.lit(0).alias("field_goals_attempted"))
-    out = gp.team_rates(tb)
+    out = gp.team_game_rates(tb)
     assert out["efg_pct"].to_list() == [None, None] and out["ft_rate"].to_list() == [None, None]
 
 
-def test_team_rates_rejects_non_two_row_input() -> None:
+def test_team_game_rates_rejects_non_two_row_input() -> None:
     with pytest.raises(ValueError, match="two team rows"):
-        gp.team_rates(_team_box().head(1))
+        gp.team_game_rates(_team_box().head(1))
 
 
-def test_player_rates_match_hand_arithmetic_and_null_the_dnp() -> None:
+def test_player_game_rates_match_hand_arithmetic_and_null_the_dnp() -> None:
     pb = pl.DataFrame(
         {
             "game_id": [401766458] * 3,
@@ -201,7 +201,7 @@ def test_player_rates_match_hand_arithmetic_and_null_the_dnp() -> None:
             "did_not_play": [False, False, True],
         }
     )
-    out = gp.player_rates(pb, _team_box()).sort("athlete_id")
+    out = gp.player_game_rates(pb, _team_box()).sort("athlete_id")
     team_tsa = 84 + 0.44 * 34 + 8
     assert out["ts_pct"][0] == pytest.approx(11 / (2 * (10 + 0.44 * 0)))
     assert out["usg_pct"][0] == pytest.approx(100 * ((10 + 0 + 0) * (240 / 5)) / (33 * team_tsa))
@@ -228,8 +228,8 @@ def test_game_page_frames_on_the_espn_fixture(monkeypatch: pytest.MonkeyPatch) -
     assert pbp.height == 450 and "home_win_prob" in pbp.columns and "x_legacy" in pbp.columns
     assert frames["prior"]["source"] == "hfa"  # this fixture ships no pickcenter line
     assert frames["periods"] == 4
-    assert frames["team_rates"].height == 2 and set(frames["team_rates"]["team_id"]) == {19, 28}
-    assert frames["player_rates"].height == frames["player_box"].height
+    assert frames["team_game_rates"].height == 2 and set(frames["team_game_rates"]["team_id"]) == {19, 28}
+    assert frames["player_game_rates"].height == frames["player_box"].height
     assert pbp["wp_delta"].abs().max() > 0.0
     # every located shot came from a shooting play that is not a free throw
     shots = pbp.filter(pl.col("x_legacy").is_not_null())

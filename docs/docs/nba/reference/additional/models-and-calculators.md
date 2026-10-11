@@ -807,7 +807,7 @@ Everything the Game on Paper NBA game page needs, from one `espn_nba_pbp` payloa
 
 Runs the hoopR converters (`helper_nba_play_by_play` / `helper_nba_team_box` /
 `helper_nba_player_box`) and then `score_win_prob`, `shot_coordinates`,
-`team_rates` and `player_rates`. The sdv-db nightly stage calls those four
+`team_game_rates` and `player_game_rates`. The sdv-db nightly stage calls those four
 directly on the warehouse's copies of the same frames, so a game renders identically from
 either source.
 
@@ -820,7 +820,7 @@ either source.
 
 **Returns**
 
-`{"pbp", "team_box", "team_rates", "player_box", "player_rates", "periods", "prior"}` where `prior` is `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
+`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior"}` where `prior` is `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
 
 **Example**
 

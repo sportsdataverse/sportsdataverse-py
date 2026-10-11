@@ -23,8 +23,8 @@ __all__ = [
     "REGULATION_PERIODS",
     "COORD_SENTINEL",
     "game_minutes",
-    "team_rates",
-    "player_rates",
+    "team_game_rates",
+    "player_game_rates",
     "home_prior",
     "ot_adjusted_seconds",
     "score_win_prob",
@@ -241,7 +241,7 @@ def _ratio(num: pl.Expr, den: pl.Expr) -> pl.Expr:
     )
 
 
-def team_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
+def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
     """Four factors, possessions, ratings and pace for both teams of one game.
 
     Dean Oliver's estimates on the ``load_nba_team_boxscore`` columns: possessions =
@@ -267,13 +267,13 @@ def team_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
         Quick start::
 
             import polars as pl
-            from sportsdataverse.nba.nba_game_page import team_rates
+            from sportsdataverse.nba.nba_game_page import team_game_rates
             from sportsdataverse.nba.nba_loaders import load_nba_team_boxscore
             box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
-            team_rates(box).select("team_id", "efg_pct", "off_rtg", "pace")
+            team_game_rates(box).select("team_id", "efg_pct", "off_rtg", "pace")
     """
     if team_box.height != 2:
-        raise ValueError(f"team_rates needs the two team rows of one game, got {team_box.height}")
+        raise ValueError(f"team_game_rates needs the two team rows of one game, got {team_box.height}")
     tov = pl.col("total_turnovers")
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
     own = team_box.with_columns(
@@ -305,7 +305,7 @@ def team_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
     )
 
 
-def player_rates(player_box: pl.DataFrame, team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
+def player_game_rates(player_box: pl.DataFrame, team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
     """True-shooting and usage for every boxed player of one game.
 
     TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
@@ -327,8 +327,8 @@ def player_rates(player_box: pl.DataFrame, team_box: pl.DataFrame, *, periods: i
     Example:
         Quick start::
 
-            from sportsdataverse.nba.nba_game_page import player_rates
-            player_rates(player_box, team_box).sort("usg_pct", descending=True).head()
+            from sportsdataverse.nba.nba_game_page import player_game_rates
+            player_game_rates(player_box, team_box).sort("usg_pct", descending=True).head()
     """
     team_minutes = 5.0 * game_minutes(periods)
     team = team_box.select(
@@ -359,7 +359,7 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
 
     Runs the hoopR converters (``helper_nba_play_by_play`` / ``helper_nba_team_box`` /
     ``helper_nba_player_box``) and then :func:`score_win_prob`, :func:`shot_coordinates`,
-    :func:`team_rates` and :func:`player_rates`. The sdv-db nightly stage calls those four
+    :func:`team_game_rates` and :func:`player_game_rates`. The sdv-db nightly stage calls those four
     directly on the warehouse's copies of the same frames, so a game renders identically from
     either source.
 
@@ -368,7 +368,7 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
         league_id: ``"00"`` / ``"10"`` / ``"20"``.
 
     Returns:
-        ``{"pbp", "team_box", "team_rates", "player_box", "player_rates", "periods", "prior"}``
+        ``{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior"}``
         where ``prior`` is ``{"home_win_prob", "source", "home_team_spread",
         "game_spread_available"}``.
 
@@ -402,9 +402,11 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
     return {
         "pbp": pbp,
         "team_box": team_box,
-        "team_rates": team_rates(team_box, periods=periods) if two_teams else team_box.clear(),
+        "team_game_rates": team_game_rates(team_box, periods=periods) if two_teams else team_box.clear(),
         "player_box": player_box,
-        "player_rates": player_rates(player_box, team_box, periods=periods) if two_teams else player_box.clear(),
+        "player_game_rates": player_game_rates(player_box, team_box, periods=periods)
+        if two_teams
+        else player_box.clear(),
         "periods": periods,
         "prior": {
             "home_win_prob": prior_prob,

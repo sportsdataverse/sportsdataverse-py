@@ -180,13 +180,14 @@ not covered by the generated API-endpoint reference above.
 | [nba_team_ratings](additional/models-and-calculators-2.md#nba_team_ratings) | Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware. |
 | [nba_war](additional/models-and-calculators-2.md#nba_war) | Points-above-replacement -> wins for each player. |
 | [ot_adjusted_seconds](additional/models-and-calculators-2.md#ot_adjusted_seconds) | Tag overtime rows and give them the OT period clock as their seconds remaining. |
+| [player_game_rates](additional/models-and-calculators-2.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
 | [predict_margin](additional/models-and-calculators-2.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
 | [predict_total](additional/models-and-calculators-2.md#predict_total) | Expected total points from adjusted ratings and paces. |
 | [raw_game_efficiency](additional/models-and-calculators-2.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
 | [render_report](additional/models-and-calculators-2.md#render_report) | Render a `ValidationReport` as a human-readable markdown validation card. |
 | [score_win_prob](additional/models-and-calculators-2.md#score_win_prob) | Per-play home win probability, its play-to-play delta, and the prior, for one game. |
 | [shot_coordinates](additional/models-and-calculators-2.md#shot_coordinates) | Shot locations in the court frame the Game on Paper hex chart uses. |
-| [team_rates](additional/models-and-calculators-2.md#team_rates) | Four factors, possessions, ratings and pace for both teams of one game. |
+| [team_game_rates](additional/models-and-calculators-2.md#team_game_rates) | Four factors, possessions, ratings and pace for both teams of one game. |
 | [train_spm](additional/models-and-calculators-2.md#train_spm) | Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions). |
 | [validate_model](additional/models-and-calculators-2.md#validate_model) | Run the selected oracles and assemble a `ValidationReport`. |
 | [walk_forward](additional/models-and-calculators-2.md#walk_forward) | Oracle 6: time-ordered "predict tomorrow" retrodiction. |
