@@ -149,3 +149,35 @@ jobs:
           path: |
             coverage.json
             scoreboard-ci.json
+
+  mutants:
+    # The mutation registry (tests/mutants/registry.yaml): each row applies a text mutant to a
+    # source file and runs the test that must go red. A `kill` row whose test stays green fails
+    # the job; `survive_until` rows document audit-measured test gaps until their plan task lands.
+    # Per-row timings are printed; the whole registry runs on every PR while it stays well under
+    # the ~15 min budget (today ~6.5 min locally) -- split `kill` rows per PR / `survive_until` rows nightly
+    # only if it grows past that.
+    name: mutation registry
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # pytest runs PR-controlled code; it must not inherit the checkout token
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --locked --python 3.13.2
+      - name: run the registry (a `kill` row that survives fails the job)
+        env:
+          PYTHONUNBUFFERED: "1"
+        run: |
+          set -o pipefail
+          uv run --frozen python tools/run_mutants.py | tee -a "$GITHUB_STEP_SUMMARY"
