@@ -158,6 +158,9 @@ _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\
 #: A loss stated after the number -- ESPN's 2021+ vendor text, "rush middle for 3 yards loss", "caught
 #: at ARK23, for 1 yard loss", "for a 2 yard loss" -- which the "for N" readers take as a gain.
 _FOR_N_YARDS_LOSS_RE = r"(?i)for (?:a )?(\d+) y(?:ar)?ds? loss"
+#: First season NCAA spotted a kickoff touchback at the receiver's 25 (the 20 before). Every
+#: 2012-13 fixture touchback's next snap starts at the 25.
+_KICKOFF_TB_AT_25_FROM = 2012
 
 #: The returner clause with no "for": "Shaun Carney return -2 yards to the AFA10" (2005-2007) and
 #: the vendor template's "#16 M.Beltran, Jr. return 18 yards", whatever the name's shape.
@@ -3331,7 +3334,7 @@ class CFBPlayProcess(object):
                     )
                     .and_(pl.col("_ko_pen_rekick_follows") == True),
                 )
-                .then(pl.when(pl.col("season") > 2013).then(pl.lit(75)).otherwise(pl.lit(80)))
+                .then(pl.when(pl.col("season") >= _KICKOFF_TB_AT_25_FROM).then(pl.lit(75)).otherwise(pl.lit(80)))
                 .when(
                     (pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)kickoff")))
                     .and_(pl.col("text").str.contains(r"(?i)penalty"))
@@ -5962,10 +5965,12 @@ class CFBPlayProcess(object):
             .then(pl.col("text").str.extract(r"(?i)kick(?:off)? for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
             yds_kickoff_return=pl.when(
-                (pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") > 2013),
+                (pl.col("kickoff_play") == True)
+                .and_(pl.col("kickoff_tb") == True)
+                .and_(pl.col("season") >= _KICKOFF_TB_AT_25_FROM),
             )
             .then(25)
-            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") <= 2013))
+            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True))
             .then(20)
             .when(
                 (pl.col("kickoff_play") == True)
@@ -7455,9 +7460,9 @@ class CFBPlayProcess(object):
                 pl.lit(99).alias("start.yardsToEndzone.touchback"),
             )
             .with_columns(
-                pl.when((kick_mask).and_(pl.col("season") > 2013))
+                pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_TB_AT_25_FROM))
                 .then(75)
-                .when((kick_mask).and_(pl.col("season") <= 2013))
+                .when(kick_mask)
                 .then(80)
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone.touchback"),

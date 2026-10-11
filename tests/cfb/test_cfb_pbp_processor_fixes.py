@@ -875,3 +875,16 @@ def test_fumble_lost_follows_the_recovering_team(game_id, needle, lost):
     row = _row(_fixture_plays(game_id), needle)
     assert row["fumble_lost"] is lost
     assert row["fumble_recovered"] is (row["fumble_vec"] and not lost)
+
+
+# --- R8: the kickoff touchback came out to the 25 from 2012, not 2014 -----------------------------
+
+
+@pytest.mark.parametrize("game_id", [322590228, 332570254])
+def test_2012_13_kickoff_touchbacks_are_spotted_at_the_25(game_id):
+    # NCAA moved the kickoff touchback to the 25 in 2012; the next snap in every 2012-13 fixture
+    # touchback starts at the receiver's 25, but the code switched from 20 only after 2013.
+    plays = _fixture_plays(game_id)
+    tbs = plays.filter((pl.col("kickoff_play") == True) & (pl.col("kickoff_tb") == True))
+    assert tbs.height > 0
+    assert tbs["yds_kickoff_return"].unique().to_list() == [25]
