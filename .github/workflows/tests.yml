@@ -106,12 +106,12 @@ jobs:
       - name: Set up Python
         run: uv python install 3.10
       # The package once stopped importing on the 3.9 floor without CI noticing
-      # (a `set[int] | str | None` evaluated at def time). This is the cheapest guard:
-      # import the package and the modules that have tripped before.
-      - name: Import the package on 3.10
-        run: >
-          uv run --python 3.10 --frozen python -c
-          "import sportsdataverse, sportsdataverse.cfb.cfb_drive_summary, sportsdataverse.scrape.ncaa.canary; print('IMPORT OK')"
+      # (a `set[int] | str | None` evaluated at def time). tests/test_import_sweep.py
+      # imports every module under sportsdataverse/ in a subprocess, so a 3.11+-only
+      # construct anywhere in the package fails here; no extras are installed, and
+      # the sweep treats a missing optional extra as a skip, not a failure.
+      - name: Import every module on 3.10
+        run: uv run --python 3.10 --frozen pytest tests/test_import_sweep.py -q -p no:cacheprovider
 
   live:
     name: pytest (live APIs)
