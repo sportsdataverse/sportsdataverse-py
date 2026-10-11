@@ -190,6 +190,11 @@ KNOWN_LOSSY: dict[tuple[str, str], tuple[str, ...]] = {
 }
 
 _CLOCK = re.compile(r"^\d{1,2}:\d{2}$")
+#: Share of sampled plays whose ``yardsToEndzone`` may disagree with ``yardLine`` before the
+#: field is called mirrored. Measured on the committed real ESPN summaries: at most 14.6%
+#: (the NFL fixture's timeout rows carry the previous spot), a fully mirrored one at least
+#: 95.6%, and an away-side-only mirror (B-H3) about the away share of snaps.
+_MIRRORED_SHARE = 0.25
 _MISSING = object()
 
 
@@ -317,6 +322,7 @@ def _check_values(report: ContractReport, summary: dict, plays: list[dict]) -> N
     """Value rules the processor silently depends on."""
     competitors = _get(summary, "header.competitions[0].competitors")
     team_ids: set[str] = set()
+    home_ids: set[str] = set()
     if isinstance(competitors, list):
         sides = [c.get("homeAway") for c in competitors if isinstance(c, dict)]
         if sorted(s for s in sides if s) != ["away", "home"]:
@@ -335,6 +341,8 @@ def _check_values(report: ContractReport, summary: dict, plays: list[dict]) -> N
                 report.invalid.append(f"competitors[{i}].team.id {tid!r} is not int-castable")
             else:
                 team_ids.add(str(tid))
+                if c.get("homeAway") == "home":
+                    home_ids.add(str(tid))
             if "name" in team and not team.get("name"):
                 report.invalid.append(f"competitors[{i}].team.name is empty: every Timeout row would match both teams")
 
@@ -378,6 +386,21 @@ def _check_values(report: ContractReport, summary: dict, plays: list[dict]) -> N
         }
         if foreign:
             report.invalid.append(f"play team ids not in header competitors: {sorted(foreign)}")
+
+    # ESPN measures ``yardLine`` from the home goal line: ``yardsToEndzone == 100 - yardLine``
+    # when the home team has the ball, ``== yardLine`` when the away team does. Spots on the goal
+    # lines are skipped (ESPN's pre-2005 CFB feeds ship ``yardsToEndzone == 0`` on every play).
+    sampled = mirrored = 0
+    for p in plays:
+        tid, line, to_go = (_get(p, f"start.{k}") for k in ("team.id", "yardLine", "yardsToEndzone"))
+        if tid in (_MISSING, None) or not all(isinstance(v, (int, float)) and 0 < v < 100 for v in (line, to_go)):
+            continue
+        sampled += 1
+        mirrored += to_go != ((100 - line) if str(tid) in home_ids else line)
+    if sampled and mirrored / sampled > _MIRRORED_SHARE:
+        report.invalid.append(
+            f"start.yardsToEndzone disagrees with yardLine on {mirrored} of {sampled} plays (mirrored field position?)"
+        )
 
 
 def _validate_summary(summary: Any, league: str) -> ContractReport:

@@ -161,3 +161,23 @@ def test_a_feed_with_no_drive_result_fields_still_renders(nfl_summary):
     report = _validate_summary(stripped, "nfl")
     assert report.ok and report.gop_ok, (report.missing, report.invalid, report.gop_missing)
     assert sum("Game on Paper falls back" in w for w in report.warnings) == 4
+
+
+def test_mirrored_field_position_is_invalid(cfb_summary):
+    """A summary whose ``yardLine`` is mirrored against ``yardsToEndzone`` fails the contract (B-GB-08).
+
+    The Fox backup (B-H3) mirrored every away-offense snap; the contract checked presence and
+    null rate only, so a real ESPN summary with every ``yardLine`` replaced by ``100 - yardLine``
+    still came back ``ok``. ESPN measures ``yardLine`` from the home goal line, so
+    ``yardsToEndzone == 100 - yardLine`` when the home team has the ball and ``== yardLine``
+    when the away team does.
+    """
+    mirrored = copy.deepcopy(cfb_summary)
+    for p in _all_plays(mirrored):
+        for side in ("start", "end"):
+            if p[side].get("yardLine") is not None:
+                p[side]["yardLine"] = 100 - p[side]["yardLine"]
+    assert _validate_summary(cfb_summary, "cfb").ok
+    report = _validate_summary(mirrored, "cfb")
+    assert not report.ok
+    assert any("yardsToEndzone disagrees with yardLine" in i for i in report.invalid), report.invalid

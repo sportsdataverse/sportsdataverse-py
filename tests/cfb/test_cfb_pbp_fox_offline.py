@@ -139,13 +139,40 @@ def test_home_snap_field_position_matches_fox_geometry():
     assert [got for _, got, _ in home] == [want for _, _, want in home]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="B-H3: away-offense snaps read the absolute yardStart as yards-to-goal (mirrored field); task 2.8",
-)
 def test_away_snap_field_position_matches_fox_geometry():
     away = _snaps_by_side()["away"]
     assert len(away) > 50
     wrong = [(text, got, want) for text, got, want in away if got != want]
     assert not wrong, f"{len(wrong)} of {len(away)} away snaps mirrored, e.g. {wrong[:2]}"
+
+
+def test_no_coverage_final_header_is_not_a_completed_game(monkeypatch):
+    """Fox answers an uncovered game with a FINAL header and ``pbp.sections == []`` (B-M6).
+
+    That means "Fox does not have this game", not "a completed game with no plays": the backup
+    must warn and hand back an uncompleted, zero-play result.
+    """
+    fox = _load_fox("fox/fox_cfb_no_coverage.json")
+    assert fox["header"]["eventStatus"] == 3 and fox["pbp"]["sections"] == []  # the real shape
+    _patch_fetch(monkeypatch, fox)
+    with pytest.warns(UserWarning, match="no play-by-play"):
+        out = fox_cfb_play_process(int(fox["header"]["id"]))
+    assert out["plays"] == []
+    assert out["header"]["competitions"][0]["status"]["type"]["completed"] is False
+
+
+def test_backup_makes_no_espn_request(monkeypatch):
+    """The ESPN-outage backup never reaches ESPN: no participants, roster or odds fetch (B-M28)."""
+    import requests
+
+    calls = []
+
+    def _record(self, method, url, *a, **k):
+        calls.append(url)
+        raise requests.exceptions.ConnectionError("network blocked in this test")
+
+    monkeypatch.setattr(requests.Session, "request", _record)
+    _patch_fetch(monkeypatch, _load_fox())
+    out = fox_cfb_play_process(41616)
+    assert len(out["plays"]) > 150
+    assert calls == []

@@ -303,14 +303,39 @@
   group: provider-gates
   finding: B-M37
   file: sportsdataverse/cfb/cfb_pbp_fox.py
-  snippet: 'return int(e["yardStart"])'
-  mutant: 'return 100 - int(e["yardStart"])'
+  snippet: 'ytg = None if spot is None else (spot if is_home_poss else 100 - spot)'
+  mutant: 'ytg = spot'
   test: tests/cfb/test_cfb_pbp_fox_offline.py
   expected: kill
   note: >-
-    B-H3 is live (away snaps mirrored); flipping the mirror onto the home snaps kept
-    test_fox_cfb_pbp_full_pipeline green. 1.4's home-snap assert goes red and its strict-xfail
-    away-snap assert goes XPASS(strict) under this mutant (ledger gate fox-away-snap-xfail).
+    Reading Fox's absolute yardStart as yards-to-endzone again (the B-H3 defect) mirrors every
+    away snap; test_fox_cfb_pbp_full_pipeline stayed green under it. Task 2.8 fixed B-H3 and
+    flipped 1.4's strict xfail: the away-snap assert goes red under this mutant (ledger gate
+    fox-cfb-field-position).
+
+- id: fox-cfb-no-coverage-completed
+  group: provider-gates
+  finding: B-M6
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: '(h.get("eventStatus") == 3) and covered'
+  mutant: '(h.get("eventStatus") == 3)'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py::test_no_coverage_final_header_is_not_a_completed_game
+  expected: kill
+  note: >-
+    The committed uncovered-game capture (FINAL header, pbp.sections == []) reports a completed
+    0-play game under this mutant (ledger gate fox-no-coverage-not-final).
+
+- id: contract-mirrored-field-position
+  group: provider-gates
+  finding: B-GB-08
+  file: sportsdataverse/football/sources/contract.py
+  snippet: '_MIRRORED_SHARE = 0.25'
+  mutant: '_MIRRORED_SHARE = 1.0'
+  test: tests/football/sources/test_contract.py::test_mirrored_field_position_is_invalid
+  expected: kill
+  note: >-
+    With the rule disabled the contract accepts a real ESPN summary with every yardLine
+    mirrored (ledger gate fox-cfb-field-position).
 
 # --- C-L30: the NHL faceoff gate cannot detect a skipped fit --------------------------------------
 - id: nhl-faceoff-skip-fit
