@@ -277,6 +277,9 @@ def parse_ncaa_bb_box(html: str, game_id: str) -> pl.DataFrame:
         return _empty_frame()
 
     background = _table_rows(tables[0])
+    # Another page type (lineups, a football box score) has >= 5 tables but not this layout: zero rows, not a raise.
+    if len(background) < 4 or not all(rows and "Name" in rows[0] for rows in map(_table_rows, tables[3:5])):
+        return _empty_frame()
     away_team = background[2][0]  # R background[3,1] (issue96, 10/17/2025)
     home_team = background[3][0]  # R background[4,1]
 
