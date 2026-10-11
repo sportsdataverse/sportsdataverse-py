@@ -6,9 +6,10 @@ against it:
 
 * nflfastR's R source (``nflverse-dev/nflfastR/R/helper_add_ep_wp.R:710-724``: a non-scoring play
   that ends a half, regulation or the game has ``epa == -ep``);
-* the team-summary producers' recompute of the rushing columns
-  (``cfbfastR-cfb-data/R/espn_cfb_15_team_summaries_creation.R:610-632`` and
-  ``nfl-data/python/nfl_team_summaries/build.py:247-275``, which agree);
+* the team-summary producers' ``opportunity_run``
+  (``cfbfastR-cfb-data/R/espn_cfb_15_team_summaries_creation.R:610``, ``nfl-data`` ``build.py:244``);
+* the standard adjusted-line-yards band (losses 120%, yards 0-4 at 100%, 5-10 at 50%, beyond 10 at
+  0%: the program's ruling for task 2.1; the producers' own ``line_yards`` reading is not it);
 * the CFB processor's fixed copy of the same stage (``cfb_pbp.py``: the ``-3`` rushing block of
   ``24dd2fdec6``, the kickoff-return ``end.down`` rewrite);
 * ESPN's own feed (``scoringPlay``, the play text, the summary's ``boxscore``);
@@ -16,8 +17,9 @@ against it:
   ESPN's play id is the game id followed by the GSIS ``play_id``.
 
 Snapshot ban: no expected value is a stored copy of this processor's output. A check that is red
-today carries ``xfail(strict=True, reason="<finding id>: ...")`` on exactly the games where it is
-red, so the fix turns it XPASS (a failure) and must drop the marker in the same PR; every other
+today carries ``xfail(strict=True, raises=AssertionError, reason="<finding id>: ...")`` on exactly
+the games where it is red, so the fix turns it XPASS (a failure) and must drop the marker in the
+same PR, and any other exception (a renamed column, a crash) still fails; every other
 game asserts the oracle plainly. Tolerances on model columns are the agreement measured on HEAD
 36f7a02f1b (2026-10-11), rounded one step toward failing; raise them as fixes land, never lower.
 """
@@ -40,10 +42,15 @@ def _t(name: str) -> pl.Expr:
     return (pl.col(name) == True).fill_null(False)  # noqa: E712
 
 
+def _xfail(reason: str) -> pytest.MarkDecorator:
+    """Red today on the oracle; only a failed assertion counts as the expected failure."""
+    return pytest.mark.xfail(strict=True, raises=AssertionError, reason=reason)
+
+
 def _cases(known: dict[int, str] | None = None, games=CAPTURES) -> list:
     """One param per game; the games in ``known`` (game -> "<finding>: <why>") are strict xfails."""
     known = known or {}
-    return [pytest.param(g, marks=pytest.mark.xfail(strict=True, reason=known[g])) if g in known else g for g in games]
+    return [pytest.param(g, marks=_xfail(known[g])) if g in known else g for g in games]
 
 
 def _all(reason: str) -> dict[int, str]:
@@ -104,23 +111,17 @@ def test_every_rush_has_all_three_parts(game_id):
 
 @pytest.mark.parametrize(
     "game_id",
-    _cases(_all("C-NF-3: line_yards is on a 0-3 / 4-8 / cap 5.5 band, not the producers' 0-4 / 5-10 / 11+")),
+    _cases(_all("C-NF-3: line_yards is on a 0-3 / 4-8 / cap 5.5 band, not the standard 0-4 / 5-10 / cap 7")),
 )
-def test_line_yards_on_the_summary_producers_band(game_id):
-    # Oracle: the producers' recompute, verbatim (R :611-622, python build.py:248-265): adj = min(y, 10);
-    # line_yards = 1.2*adj (y < 0), adj (0-4), 0.5*adj (5-10), 0 (11+). Note it is 0.5 * the whole
-    # carry on 5-10, not "cap 7"; second level / open field must then come by subtraction for C-H1.
-    adj = pl.when(_YDS > 10).then(10.0).otherwise(_YDS)
+def test_line_yards_on_the_standard_band(game_id):
+    # Oracle: standard adjusted line yards (Football Outsiders ALY, Connelly's college version, the
+    # plan's "cap 7"), per yard: losses 120%, yards 0-4 at 100%, yards 5-10 at 50%, beyond 10 at 0%.
+    # The program's ruling for task 2.1 (ClaudeCowork plan audit/EXECUTION-FINDINGS.md). The three
+    # summary producers' reading (0.5 * the whole carry on 5-10, 0 from 11) is not the standard: it
+    # credits a 5-yard run less than a 4-yard run.
     band = (
-        pl.when(_YDS < 0)
-        .then(1.2 * adj)
-        .when((_YDS >= 0) & (_YDS <= 4))
-        .then(adj)
-        .when((_YDS >= 5) & (_YDS <= 10))
-        .then(0.5 * adj)
-        .when(_YDS >= 11)
-        .then(0.0)
-    )
+        pl.when(_YDS < 0).then(1.2 * _YDS).when(_YDS <= 4).then(_YDS).when(_YDS <= 10).then(4 + 0.5 * (_YDS - 4))
+    ).otherwise(7.0)
     f = run(game_id).plays.filter(_RUSH & _YDS.is_not_null())
     assert _bad(f, (pl.col("line_yards") - band).abs() < 1e-9, ["yds_rushed", "line_yards"]) == []
 
@@ -142,9 +143,7 @@ _BOUNDARIES = [(g, "half") for g in CAPTURES] + [(g, "regulation") for g in _OT_
 @pytest.mark.parametrize(
     ("game_id", "boundary"),
     [
-        pytest.param(g, b, marks=pytest.mark.xfail(strict=True, reason=_HALF_END_KNOWN[(g, b)]))
-        if (g, b) in _HALF_END_KNOWN
-        else (g, b)
+        pytest.param(g, b, marks=_xfail(_HALF_END_KNOWN[(g, b)])) if (g, b) in _HALF_END_KNOWN else (g, b)
         for g, b in _BOUNDARIES
     ],
 )
@@ -180,6 +179,22 @@ def test_kickoff_return_ends_on_a_real_down(game_id):
     # Oracle: the CFB copy (cfb_pbp.py, __add_downs_data): a non-scoring kickoff ends at a down 1-4.
     f = run(game_id).plays.filter(pl.col("type.text").is_in(kickoff_vec) & ~_t("scoringPlay"))
     assert _bad(f, pl.col("end.down").is_in([1, 2, 3, 4]), ["type.text", "end.down"]) == []
+
+
+@pytest.mark.parametrize(
+    "game_id",
+    _cases(
+        dict.fromkeys(
+            (251113015, 260917021, 261022011, 261126002, 271209010, 301003002, 331103020),
+            "EX-1.1-c: a pre-2014 missed field goal keeps ESPN's end.down -1, so EP_end is scored at down -1",
+        )
+    ),
+)
+def test_missed_field_goal_ends_on_a_real_down(game_id):
+    # Oracle: the opponent takes over at a first down (the 2015+ feeds ship down 1 or 3); C-H5's
+    # mechanism on a second play type. Measured: 8 rows in 7 games, EPA off by 0.6-3.0 points.
+    f = run(game_id).plays.filter(pl.col("type.text").is_in(["Field Goal Missed", "Blocked Field Goal"]))
+    assert _bad(f.filter(~_t("scoringPlay")), pl.col("end.down").is_in([1, 2, 3, 4]), ["type.text", "end.down"]) == []
 
 
 @pytest.mark.parametrize(
@@ -230,8 +245,8 @@ def test_no_end_of_game_admin_row_is_a_play(game_id):
 # ---------------------------------------------------------------------------------------------
 
 _FEED_GAP = (
-    "new-1.1-b: ESPN's play feed mistypes or omits a passing TD that its box counts "
-    "(2005 'Fumble'-typed TD, 2006 'Pass Completion' stub, 2017 missing row) -- needs a finding id"
+    "EX-1.1-b: ESPN's play feed disagrees with its own box on passing TDs (251113015 MIA: a null-text "
+    "TD typed Fumble; 260917021 NYG: a 'Pass Completion' stub typed Passing Touchdown; 400951676 SEA: no TD row)"
 )
 
 
@@ -286,7 +301,10 @@ def _joined(game_id: int) -> pl.DataFrame:
     return joined
 
 
-_H3 = "C-H3: penalty_1st_conv needs the CFB phrase '1st down', so no penalty first down opens a series"
+_H3 = (
+    "C-H3 + C-M3: penalty_1st_conv needs the CFB phrase '1st down', so no penalty first down opens a "
+    "series; fd_gain keys on ESPN's stale end.down"
+)
 
 
 @pytest.mark.parametrize("game_id", _cases(dict.fromkeys(SLICES, _H3), games=tuple(SLICES)))
@@ -337,8 +355,9 @@ _EXACT_KNOWN = {
     (401671740, "td_play"): "C-NF-6: two replay-REVERSED scores keep td_play True (nflverse touchdown 0)",
     (401671740, "rush_td"): "C-NF-6: the replay-REVERSED 2-yard run keeps rush_td True",
     (401671740, "fixed_drive"): (
-        "new-1.1-a: fumble_lost is False on ESPN's 'Punt Team Fumble Recovery', so nflfastR "
-        "helper_add_fixed_drives.R:83-112 never opens a drive (20 vs 21) -- needs a finding id"
+        "EX-1.1-a: ESPN's muffed 'Punt' (RECOVERED by the kicking team) is re-typed 'Punt Team Fumble "
+        "Recovery' with fumble_vec / fumble_lost False, so nflfastR helper_add_fixed_drives.R:83-112 never "
+        "opens a drive (20 vs 21)"
     ),
 }
 
@@ -346,7 +365,7 @@ _EXACT_KNOWN = {
 @pytest.mark.parametrize(
     ("game_id", "ours", "theirs", "domain"),
     [
-        pytest.param(g, a, b, d, id=f"{g}-{a}", marks=pytest.mark.xfail(strict=True, reason=_EXACT_KNOWN[(g, a)]))
+        pytest.param(g, a, b, d, id=f"{g}-{a}", marks=_xfail(_EXACT_KNOWN[(g, a)]))
         if (g, a) in _EXACT_KNOWN
         else pytest.param(g, a, b, d, id=f"{g}-{a}")
         for g in SLICES
@@ -362,7 +381,9 @@ def test_play_column_equals_nflverse(game_id, ours, theirs, domain):
 
 # (corr floor, MAE ceiling, rows) per game and column: measured on HEAD, see the module docstring.
 # Rows that carry an open finding (C-H2/C-NF-12 half-ending plays, C-H5 kickoffs, C-M1/C-NF-6
-# negated scores) are left out so the floor is not loosened by them.
+# negated scores) are left out so the floor is not loosened by them. When 2.2 (C-H2), 2.3 (C-H5) and
+# 2.5 (C-M1/C-NF-6) land, each drops its exclusion in _open_finding_rows and re-measures the floors
+# here (raise only).
 _MODEL = {
     (401547449, "EP_start", "ep"): (0.996, 0.117, 167),  # 0.99611, 0.11615
     (401547449, "EPA", "epa"): (0.961, 0.247, 167),  # 0.96175, 0.24653

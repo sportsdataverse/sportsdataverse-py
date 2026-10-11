@@ -3,6 +3,12 @@
 Shared by ``test_nfl_whole_game_oracle.py`` and ``test_nfl_schema_allowlist.py`` (both are pinned
 to one xdist worker with ``xdist_group("nfl_whole_game")`` so the cache is shared). Provenance of
 every capture: ``tests/nfl/fixtures/README.md``.
+
+Hermetic by default: the two download-on-demand nfl4th boosters (``fd_model.ubj``,
+``wp_model.ubj``) are never loaded, whether or not a local cache holds them, so every machine
+checks the same columns and nothing reaches the network. Their outputs (the fourth-down and
+two-point decision columns) are null in these runs and no oracle test reads them; a test that
+needs them asks for ``run(game_id, fourth_down_models=True)`` and skips when they cannot load.
 """
 
 from __future__ import annotations
@@ -16,6 +22,7 @@ from typing import NamedTuple
 import polars as pl
 import pytest
 
+import sportsdataverse.nfl.nfl_fourth_down as nfl_fourth_down
 import sportsdataverse.nfl.nfl_pbp as nfl_pbp
 from sportsdataverse.nfl import NFLPlayProcess
 
@@ -42,7 +49,7 @@ def load_summary(game_id: int) -> dict:
 
 
 @functools.cache
-def run(game_id: int) -> Run:
+def run(game_id: int, fourth_down_models: bool = False) -> Run:
     summary = load_summary(game_id)
     seen: dict[str, pl.DataFrame] = {}
 
@@ -56,6 +63,8 @@ def run(game_id: int) -> Run:
     with pytest.MonkeyPatch.context() as mp:
         mp.setattr(nfl_pbp, "calculate_epa", record("epa", nfl_pbp.calculate_epa))
         mp.setattr(nfl_pbp, "calculate_wpa", record("wpa", nfl_pbp.calculate_wpa))
+        if not fourth_down_models:  # the download-on-demand resolver; bundled models load as usual
+            mp.setattr(nfl_fourth_down, "_try_load", lambda name: None)
         proc = NFLPlayProcess(gameId=game_id)
         proc.espn_nfl_pbp(summary=summary)  # a supplied summary never touches the network
         game = proc.run_processing_pipeline()

@@ -1,20 +1,15 @@
 # Columns of NFLPlayProcess(...).plays_frame allowed to differ across the 31 committed captures
 # (read by tests/nfl/test_nfl_schema_allowlist.py; provenance: tests/nfl/fixtures/README.md).
 #
-#   kind: dtype     present in every capture, with a different dtype in some
+#   kind: dtype     a different dtype in some captures
 #   kind: presence  absent from some captures
 #
-# Every row names the open finding that owns it. The list may only shrink: the test pins its
-# length and fails on a row that no capture needs any more, so the fix PR deletes its rows.
-# Measured on HEAD 36f7a02f1b (2026-10-11).
+# Every row names the open finding that owns it. The list may only shrink: the test pins the
+# committed set and fails on a row that no capture needs any more, so the fix PR deletes its rows.
+# Measured on HEAD 36f7a02f1b (2026-10-11), with the download-on-demand nfl4th boosters off (the
+# hermetic run). prob_2pt's dtype mix (C-M7) needs them, so it is a strict xfail of its own
+# (test_prob_2pt_has_one_documented_dtype), not a row here.
 
-- column: prob_2pt
-  kind: dtype
-  finding: C-M7
-  # the two-point model scores only when the download-on-demand nfl4th WP booster loads; without it
-  # prob_2pt is all null (Float64) in every capture and this row is not exercised
-  needs_model: wp_model.ubj
-  note: Float32 in the 15 captures where the two-point model scores, Float64 in the 16 where it is all null
 - column: teamParticipants
   kind: dtype
   finding: C-L10

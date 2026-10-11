@@ -19,7 +19,8 @@ Each `summary_<game_id>*` file is the ESPN Site v2 summary for one NFL game,
 `*_trimmed.json.gz` files come from the nfl-raw library (`sportsdataverse/nfl-raw`,
 `nfl/espn/raw/<season>/<game_id>.json.gz`) trimmed to the keys `NFLPlayProcess` reads (header,
 drives, boxscore, gameInfo, pickcenter, scoringPlays where present); `summary_401872922.json` is a
-full summary fetched from the URL above. "Committed" is the commit and date that added the file.
+full summary fetched from the URL above. "Committed" is the commit and date that added the file to this
+repository; the ESPN fetch date is not recorded with the fixtures.
 `tests/nfl/test_nfl_whole_game_oracle.py` and `test_nfl_schema_allowlist.py` run every one offline.
 
 | game_id | season | week (REG) | away @ home | file | committed |
@@ -72,8 +73,10 @@ exactly.
   `https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2023.parquet` and
   `.../play_by_play_2024.parquet`, as read by `sportsdataverse.nfl.load_nfl_pbp([season])` and
   written by nfl-data's `python/model_training/play_level/ingest.py:download_pbp` to
-  `nflverse-dev/nfl-data/python/data/pbp_2023.parquet` (sha256 `dd42da59...71f8a1`) and
-  `pbp_2024.parquet` (sha256 `418ceb1b...591844`), downloaded 2026-06-18.
+  `nflverse-dev/nfl-data/python/data/pbp_2023.parquet` (sha256
+  `dd42da597b12a47b00c4ced90888e7b7b16152f0019c8f5a059e9902a571f8a1`) and
+  `pbp_2024.parquet` (sha256 `418ceb1b794c61d6f9d23aecc76bb6c8cc2f3a63941a8b5aed0c5ee928591844`),
+  downloaded 2026-06-18.
 - **Trimmed** 2026-10-11, from the nfl-data checkout root, to one game and the 41 columns the tests read:
 
 ```sh
