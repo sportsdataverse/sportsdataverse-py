@@ -852,3 +852,14 @@ def test_two_point_pass_the_defence_returned_is_not_a_kick():
     row = _row(_trimmed_plays(272650152), "pass attempt failed (intercepted), returned by Hamlin")
     assert row["type.text"] == "Defensive 2pt Conversion"
     assert row["xp_attempt"] is False
+
+
+# --- R4: kick / punt flags follow the re-typed play, not ESPN's raw label ---------------------------
+
+
+def test_pre_2014_onside_recovery_is_flagged_as_an_onside_kickoff():
+    # 2004 files "Onside kick recovered by Wolverines" as "Kickoff Return (Defense)"; the label was
+    # normalised to Kickoff only after the kick flags were set, so kickoff_play / kickoff_onside
+    # stayed False on every one.
+    onside = _plays(243040130).filter(pl.col("text").str.starts_with("Onside kick recovered"))
+    assert onside.select("type.text", "kickoff_play", "kickoff_onside").rows() == [("Kickoff", True, True)]
