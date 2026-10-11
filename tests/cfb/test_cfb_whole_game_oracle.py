@@ -414,10 +414,10 @@ def test_first_half_kickoff_team_received_the_second_half_kickoff(game_id):
 
 
 def test_the_second_half_oracle_covers_the_fallback_captures():
-    """Guard the guard: 118 captures checked, 34 of them without an opening kickoff in period 1."""
-    assert len(_RECEIVER_DEFINED) == 118
+    """Guard the guard: 120 captures checked, 35 of them without an opening kickoff in period 1."""
+    assert len(_RECEIVER_DEFINED) == 120
     fallback = [FEEDS[g] for g in _RECEIVER_DEFINED if g not in _KICKOFF_DEFINED]
-    assert len(fallback) == 34
+    assert len(fallback) == 35
     assert {f.second_half_receiver == f.home_id for f in fallback} == {True, False}
 
 

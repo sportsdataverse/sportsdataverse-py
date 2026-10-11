@@ -149,7 +149,7 @@
   file: sportsdataverse/cfb/cfb_pbp.py
   snippet: 'in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)'
   mutant: 'in_shootout = (period >= 6) & ((period >= shootout_from) | ~last_td)'
-  test: tests/cfb/test_cfb_overtime_eras.py
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2021_on_every"
   expected: kill
   note: rt-C-processing-002; the nine period-5 attempts of 401628439 would weigh a kick
 
@@ -159,7 +159,7 @@
   file: sportsdataverse/cfb/cfb_pbp.py
   snippet: 'in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)'
   mutant: 'in_shootout = (period >= 7) & ((period >= shootout_from) | ~last_td)'
-  test: tests/cfb/test_cfb_overtime_eras.py
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2021_on_every"
   expected: kill
   note: the only shootout fixture before 3.2 (401282146) has its first attempt in period 7, so >= 7 survived there
 
@@ -201,7 +201,7 @@
   file: sportsdataverse/cfb/cfb_pbp.py
   snippet: 'in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)'
   mutant: 'in_shootout = (period >= 5) & (shootout_from.is_not_null() & ~last_td)'
-  test: tests/cfb/test_cfb_overtime_eras.py
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2019_20"
   expected: kill
   note: the pre-3.2 touchdown-before test, season-gated; 401112489 and 401628439 attempts after a misfiled touchdown
 
