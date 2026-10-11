@@ -345,7 +345,7 @@ A polars (or pandas) DataFrame, one row per pitch. A window with no games return
 | `release_speed` | double | Pitch velocity out of the hand (mph). |
 | `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
 | `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
-| `player_name` | character | Name of the player the search is keyed on, `Last, First` -- the batter under the default `player_type="batter"`, the pitcher under `player_type="pitcher"`. |
+| `player_name` | character | Name of the `player_type`-side player, `Last, First` -- the batter under the default `player_type="batter"`, the pitcher under `player_type="pitcher"`. |
 | `batter` | integer | MLBAM player id of the batter. |
 | `pitcher` | integer | MLBAM player id of the pitcher. |
 | `events` | character | Nested list of non-game events. |
@@ -501,7 +501,7 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 | `release_speed` | double | Pitch velocity out of the hand (mph). |
 | `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
 | `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
-| `player_name` | character | Name of the player the search is keyed on, `Last, First` -- the batter under the default `player_type="batter"`, the pitcher under `player_type="pitcher"`. |
+| `player_name` | character | Name of the `player_type`-side player, `Last, First` -- the batter under the default `player_type="batter"`, the pitcher under `player_type="pitcher"`. |
 | `batter` | integer | MLBAM player id of the batter. |
 | `pitcher` | integer | MLBAM player id of the pitcher. |
 | `events` | character | Nested list of non-game events. |
@@ -658,7 +658,7 @@ A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games re
 | `release_speed` | double | Pitch velocity out of the hand (mph). |
 | `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
 | `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
-| `player_name` | character | Name of the player the search is keyed on, `Last, First` -- the batter under the default `player_type="batter"`, the pitcher under `player_type="pitcher"`. |
+| `player_name` | character | Name of the `player_type`-side player, `Last, First` -- the batter under the default `player_type="batter"`, the pitcher under `player_type="pitcher"`. |
 | `batter` | integer | MLBAM player id of the batter. |
 | `pitcher` | integer | MLBAM player id of the pitcher. |
 | `events` | character | Nested list of non-game events. |

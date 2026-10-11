@@ -36,7 +36,7 @@ the filtered frame (unchanged if empty or missing `date_col`).
 | `release_speed` | double | Pitch velocity out of the hand (mph). |
 | `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
 | `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
-| `player_name` | character | Player name carried through from the input Statcast frame, `Last, First` -- the batter for a default mlb_statcast_search pull (the one documented here), the pitcher for a `player_type="pitcher"` search. |
+| `player_name` | character | Player name carried through from the input Statcast frame, `Last, First` -- the batter for a default mlb_statcast_search pull, the pitcher for a `player_type="pitcher"` search. |
 | `batter` | integer | MLBAM player id of the batter. |
 | `pitcher` | integer | MLBAM player id of the pitcher. |
 | `events` | character | Nested list of non-game events. |
