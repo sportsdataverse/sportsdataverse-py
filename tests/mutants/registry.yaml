@@ -204,6 +204,19 @@
     Ledger gate cfb-2h-kickoff-flag-truth: dropping the period <= 2 gate (nflfastR's receive_2h_ko,
     task 2.6) flags the opening kicker's second-half possessions again.
 
+- id: cfb-opening-kicker-fallback-reads-the-offense
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  # _opening_kicker's fallback when period 1 files a snap before any kickoff: the first snap's DEFENSE kicked
+  snippet: 'return away_id if int(team) == home_id else home_id'
+  mutant: 'return home_id if int(team) == home_id else away_id'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "received_the_second_half and (243040130 or 293182305 or 401628455)"
+  expected: kill
+  note: >-
+    Review R781-3: the period-1 kickoff oracle asserts nothing on the 41 captures without an opening
+    kickoff, so this branch went unchecked. The period-3 oracle (the opening kicker takes the first
+    second-half snap) covers 34 of them; the mutant (the first snap's offense) is red there.
+
 # --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012) ----------------
 - id: cfb-kickoff-touchback-75-from-2014
   group: cfb-touchback
