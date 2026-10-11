@@ -47,7 +47,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 |---|---|
 | [load_nhl_pbp](loaders/pbp.md#load_nhl_pbp) | Release: nhl_pbp_full · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_full/play_by_play_{season}.parquet` |
 | [load_nhl_pbp_full](loaders/pbp.md#load_nhl_pbp_full) | Release: nhl_pbp_full · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_full/play_by_play_{season}.parquet` |
-| [load_nhl_pbp_lite](loaders/pbp.md#load_nhl_pbp_lite) | Release: nhl_pbp_lite · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_lite/play_by_play_{season}_lite.parquet` |
+| [load_nhl_pbp_lite](loaders/pbp.md#load_nhl_pbp_lite) | Release: nhl_pbp_lite · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_lite/play_by_play_lite_{season}.parquet` |
 
 ## Other
 

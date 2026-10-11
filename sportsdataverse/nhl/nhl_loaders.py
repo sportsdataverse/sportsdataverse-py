@@ -408,7 +408,7 @@ def load_nhl_game_info(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_game_info
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -429,7 +429,7 @@ def load_nhl_game_info(seasons, return_as_pandas: bool = False):
         |game_state     |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -438,8 +438,8 @@ def load_nhl_game_info(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_game_info/game_info_{season}.parquet"
         )
@@ -516,7 +516,7 @@ def load_nhl_goalie_boxscores(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_goalie_boxscores
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -551,7 +551,7 @@ def load_nhl_goalie_boxscores(seasons, return_as_pandas: bool = False):
         |game_date                   |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -560,8 +560,8 @@ def load_nhl_goalie_boxscores(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_goalie_boxscores/goalie_box_{season}.parquet"
         )
@@ -583,7 +583,7 @@ def load_nhl_linescore(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_linescore
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -604,7 +604,7 @@ def load_nhl_linescore(seasons, return_as_pandas: bool = False):
         |has_shootout   |Boolean |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -613,8 +613,8 @@ def load_nhl_linescore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_linescore/linescore_{season}.parquet"
         )
@@ -636,7 +636,7 @@ def load_nhl_officials(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_officials
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -652,7 +652,7 @@ def load_nhl_officials(seasons, return_as_pandas: bool = False):
         |game_date |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -661,8 +661,8 @@ def load_nhl_officials(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_officials/officials_{season}.parquet"
         )
@@ -937,7 +937,7 @@ def load_nhl_pbp_lite(seasons, return_as_pandas: bool = False):
         if int(season) < 2010:
             raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_lite/play_by_play_{season}_lite.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_lite/play_by_play_lite_{season}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -957,7 +957,7 @@ def load_nhl_penalties(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_penalties
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1017,7 +1017,7 @@ def load_nhl_penalties(seasons, return_as_pandas: bool = False):
         |servedBy.sv                         |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1026,8 +1026,8 @@ def load_nhl_penalties(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_penalties/penalties_{season}.parquet"
         )
@@ -1260,7 +1260,7 @@ def load_nhl_scoring(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_scoring
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1322,7 +1322,7 @@ def load_nhl_scoring(seasons, return_as_pandas: bool = False):
         |highlightClipFr           |Int64   |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1331,8 +1331,8 @@ def load_nhl_scoring(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_scoring/scoring_{season}.parquet"
         )
@@ -1354,7 +1354,7 @@ def load_nhl_scratches(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_scratches
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1369,7 +1369,7 @@ def load_nhl_scratches(seasons, return_as_pandas: bool = False):
         |game_id   |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1378,8 +1378,8 @@ def load_nhl_scratches(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_scratches/scratches_{season}.parquet"
         )
@@ -1401,7 +1401,7 @@ def load_nhl_shifts(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_shifts
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1429,7 +1429,7 @@ def load_nhl_shifts(seasons, return_as_pandas: bool = False):
         |game_date              |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1438,8 +1438,8 @@ def load_nhl_shifts(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_shifts/shifts_{season}.parquet"
         )
@@ -1461,7 +1461,7 @@ def load_nhl_shootout(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_shootout
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1504,7 +1504,7 @@ def load_nhl_shootout(seasons, return_as_pandas: bool = False):
         |highlightClipFr           |Int64   |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1513,8 +1513,8 @@ def load_nhl_shootout(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_shootout/shootout_summary_{season}.parquet"
         )
@@ -1536,7 +1536,7 @@ def load_nhl_shots_by_period(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_shots_by_period
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1556,7 +1556,7 @@ def load_nhl_shots_by_period(seasons, return_as_pandas: bool = False):
         |game_date              |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1565,8 +1565,8 @@ def load_nhl_shots_by_period(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_shots_by_period/shots_by_period_{season}.parquet"
         )
@@ -1588,7 +1588,7 @@ def load_nhl_skater_boxscores(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_skater_boxscores
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1623,7 +1623,7 @@ def load_nhl_skater_boxscores(seasons, return_as_pandas: bool = False):
         |game_date            |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1632,8 +1632,8 @@ def load_nhl_skater_boxscores(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_skater_boxscores/skater_box_{season}.parquet"
         )
@@ -1717,7 +1717,7 @@ def load_nhl_three_stars(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_three_stars
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1752,7 +1752,7 @@ def load_nhl_three_stars(seasons, return_as_pandas: bool = False):
         |loser_name          |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1761,8 +1761,8 @@ def load_nhl_three_stars(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_three_stars/three_stars_{season}.parquet"
         )

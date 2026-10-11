@@ -2747,6 +2747,16 @@ class CFBPlayProcess(object):
                 lead_scoringPlay=pl.col("scoringPlay").shift(-1),
                 text_dupe=pl.lit(False),
             )
+            # Pre-2014 onside-kick-recovered rows ("Onside kick recovered by ...") carry the label
+            # "Kickoff Return (Defense)". Normalised here, before anything reads kickoff_vec: the
+            # possession flip below puts pos_team on the receiving team, as for every other onside
+            # kick, and the kick flags see a kickoff (renamed later, both were wrong).
+            .with_columns(
+                pl.when(pl.col("type.text") == "Kickoff Return (Defense)")
+                .then(pl.lit("Kickoff"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text")
+            )
             .with_columns(
                 text_dupe=pl.when(pl.col("id") == pl.col("id").shift(-1))
                 .then(pl.lit(True))
@@ -4554,11 +4564,6 @@ class CFBPlayProcess(object):
                 .and_(pl.col("text").str.contains(r"(?i)is good")),
             )
             .then(pl.lit("Extra Point Good"))
-            # Pre-2014 onside-kick-recovered rows ("Onside kick recovered by ...") carry the
-            # label "Kickoff Return (Defense)"; normalize to the generic kickoff label so
-            # they fall in kickoff_vec and get consistent kickoff handling.
-            .when(pl.col("type.text") == "Kickoff Return (Defense)")
-            .then(pl.lit("Kickoff"))
             .otherwise(pl.col("type.text"))
             .alias("type.text"),
         )
@@ -5034,9 +5039,12 @@ class CFBPlayProcess(object):
 
         # The touchdown flag was read off the feed's type before the retyping above; a row
         # that is a touchdown only by its new type (an own fumble taken in, a field goal or
-        # kickoff returned for the score) carries it too.
+        # kickoff returned for the score) carries it too. td_play follows: 2014+ summary text
+        # ("Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)") never says "touchdown".
+        _td_type = pl.col("type.text").str.contains("(?i)touchdown") & ~_touchdown_negated()
         play_df = play_df.with_columns(
-            touchdown=pl.col("type.text").str.contains("(?i)touchdown") & ~_touchdown_negated(),
+            touchdown=_td_type,
+            td_play=(pl.col("td_play") == True) | _td_type,  # noqa: E712
         )
         return play_df
 

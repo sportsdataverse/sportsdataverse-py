@@ -719,13 +719,6 @@ def test_unknown_missed_extra_point_reclassified():
     assert out["type.text"].to_list() == ["Extra Point Missed"]
 
 
-def test_kickoff_return_defense_normalized_to_kickoff():
-    out = _npt(
-        [_npt_base(**{"type.text": "Kickoff Return (Defense)", "text": "Onside kick recovered by Spiders."})],
-    )
-    assert out["type.text"].to_list() == ["Kickoff"]
-
-
 def test_unrecognized_unknown_left_alone():
     # Control: an "Unknown" with no recognizable text stays "Unknown" (graceful, not guessed).
     out = _npt([_npt_base(**{"type.text": "Unknown", "text": "some unparseable legacy text"})])

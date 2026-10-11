@@ -894,3 +894,27 @@ def test_2004_fumble_returned_for_a_touchdown_carries_its_yards():
     # 2004-06 write "returned for a 33 yard touchdown"; the reader only knew "return for N".
     row = _row(_fixture_plays(243110264), "recovered by Wilrey Fontenot (UA), returned for a 33 yard touchdown")
     assert row["yds_fumble_return"] == 33
+
+
+# --- R4: kick / punt flags follow the re-typed play, not ESPN's raw label ---------------------------
+
+
+def test_pre_2014_onside_recovery_is_flagged_as_an_onside_kickoff():
+    # 2004 files "Onside kick recovered by Wolverines" as "Kickoff Return (Defense)"; the label was
+    # normalised to Kickoff only after the kick flags were set, so kickoff_play / kickoff_onside
+    # stayed False on every one.
+    onside = _plays(243040130).filter(pl.col("text").str.starts_with("Onside kick recovered"))
+    assert onside.select("type.text", "kickoff_play", "kickoff_onside").rows() == [("Kickoff", True, True)]
+    # Michigan (130) kicked and recovered: renamed before the possession flip, the receiving team
+    # is Michigan State (127) as on every other onside kick, not the kicker.
+    assert onside.select("kicking_team", "return_team").rows() == [(130, 127)]
+
+
+# --- R3: td_play follows a touchdown type the text never spells out --------------------------------
+
+
+def test_summary_format_touchdown_is_a_td_play():
+    # 2014+ scoring-summary text: "Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)" says
+    # neither "touchdown" nor "for a TD", so td_play stayed False beside its touchdown type.
+    row = _row(_trimmed_plays(400547673), "Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)")
+    assert (row["type.text"], row["touchdown"], row["td_play"]) == ("Interception Return Touchdown", True, True)
