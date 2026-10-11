@@ -1180,3 +1180,185 @@ def test_penalty_side_three_letter_consonant_skeleton():
 def test_return_and_short_text_touchdowns_are_typed_by_who_scored(row: dict, expected: str) -> None:
     out = _npt([_npt_base(**row)])
     assert out["type.text"].to_list() == [expected]
+
+
+# --- Recovery team from mixed-case ESPN abbreviations (real texts) -------------------------
+
+_AUB_ALST = {  # 401012262 (2018): Alabama State at Auburn
+    "homeTeamAbbrev": "AUB",
+    "awayTeamAbbrev": "ALST",
+    "homeTeamName": "Auburn",
+    "awayTeamName": "Alabama State",
+    "homeTeamNameAlt": None,
+    "awayTeamNameAlt": None,
+    "homeTeamMascot": "Tigers",
+    "awayTeamMascot": "Hornets",
+}
+
+
+def _sides(text, teams=_AUB_ALST):
+    from sportsdataverse.cfb.cfb_pbp import _parse_recovery_sides
+
+    return _parse_recovery_sides({"_clean_text": text, **teams})
+
+
+@pytest.mark.parametrize(
+    "text, expected",
+    [
+        # 2014+ vendor text writes the recovering school in mixed case
+        (
+            "Anthony Craven punt for 29 yds , Griffin King returns for no gain to the Aub 16 "
+            "Griffin King fumbled, recovered by AlbSt Devon Booker",
+            ["away"],
+        ),
+        (
+            "Ian Shannon kickoff for 64 yds , De'Quan Johnson return for 16 yds to the AlbSt 14 De'Quan Johnson "
+            "fumbled, forced by Josh Marsh, recovered by Aub Matthew Hill  , return for 3 yds to the AlbSt 14",
+            ["home"],
+        ),
+        # the ALL-CAPS form keeps working
+        ("#4 S.White return 2 yards fumbled by #4 S.White recovered by ALST #4 T.Thomas", ["away"]),
+        ("#22 J.Doe run for 4 yards", []),
+    ],
+)
+def test_parse_recovery_sides_mixed_case(text, expected):
+    assert _sides(text) == expected
+
+
+def test_parse_recovery_sides_tennessee_vs_etsu():
+    teams = {
+        "homeTeamAbbrev": "TENN",
+        "awayTeamAbbrev": "ETSU",
+        "homeTeamName": "Tennessee",
+        "awayTeamName": "East Tennessee State",
+        "homeTeamNameAlt": None,
+        "awayTeamNameAlt": None,
+        "homeTeamMascot": "Volunteers",
+        "awayTeamMascot": "Buccaneers",
+    }
+    text = (  # 401012269 (2018)
+        "Joe Doyle punt for 34 yds , MJ Woods returns for no gain to the ETnSt 20 MJ Woods fumbled, "
+        "recovered by Tenn Micah Abernathy"
+    )
+    assert _sides(text, teams) == ["home"]
+
+
+def test_parse_recovery_sides_player_name_is_not_a_team():
+    """2004-06 texts name only the recoverer; a first name must not be read as a school."""
+    teams = {
+        "homeTeamAbbrev": "MICH",
+        "awayTeamAbbrev": "ND",
+        "homeTeamName": "Michigan",
+        "awayTeamName": "Notre Dame",
+        "homeTeamNameAlt": None,
+        "awayTeamNameAlt": None,
+        "homeTeamMascot": "Wolverines",
+        "awayTeamMascot": "Fighting Irish",
+    }
+    text = "Brady Quinn rush for no gain, fumbled at the Mich 25, recovered by Brady Quinn at the Mich 25."
+    assert _sides(text, teams) == [None]
+
+
+def test_mixed_case_punt_return_fumble_is_charged_to_the_returner():
+    """401012262: Auburn's returner fumbles, "recovered by AlbSt" -> Auburn lost it (ESPN box: AUB 4 lost)."""
+    out = _attr(
+        [
+            _base(
+                pos_team=2011,
+                def_pos_team=2,
+                homeTeamId=2,
+                awayTeamId=2011,
+                punt=True,
+                sp=True,
+                scrimmage_play=False,
+                **{k: v for k, v in _AUB_ALST.items()},
+                text="Anthony Craven punt for 29 yds , Griffin King returns for no gain to the Aub 16 "
+                "Griffin King fumbled, recovered by AlbSt Devon Booker",
+            )
+        ]
+    )
+    r = out.to_dicts()[0]
+    assert r["recovery_team"] == 2011
+    assert r["def_fumble_lost"] is True and r["turnover_team"] == 2
+
+
+def _teams(home_abbr, away_abbr, home, away, home_mascot, away_mascot):
+    return {
+        "homeTeamAbbrev": home_abbr,
+        "awayTeamAbbrev": away_abbr,
+        "homeTeamName": home,
+        "awayTeamName": away,
+        "homeTeamNameAlt": home,
+        "awayTeamNameAlt": away,
+        "homeTeamMascot": home_mascot,
+        "awayTeamMascot": away_mascot,
+    }
+
+
+@pytest.mark.parametrize(
+    "text, teams, expected",
+    [
+        # 242480201 (2004): the school follows the recoverer in parentheses; "Omar" alone is a
+        # letter subsequence of OKLAHOMASOONERS and used to charge Oklahoma
+        (
+            "Falcons fumble by Omar Jacobs (BGSU), recovered by Omar Jacobs (BGSU), advanced for no gain.",
+            _teams("OKLA", "BGSU", "Oklahoma", "Bowling Green", "Sooners", "Falcons"),
+            ["away"],
+        ),
+        # 242482306 (2004): the mascot alone
+        (
+            "Onside kick recovered by Hilltoppers, advanced 0 yards.",
+            _teams("KSU", "WKU", "Kansas State", "Western Kentucky", "Wildcats", "Hilltoppers"),
+            ["away"],
+        ),
+        # 272790130 (2007): vowel-dropped school name
+        (
+            "Zach Johnson on-side kick recovered by Eastrn Michigan at the EMich 43.",
+            _teams("MICH", "EMU", "Michigan", "Eastern Michigan", "Wolverines", "Eagles"),
+            ["away"],
+        ),
+    ],
+)
+def test_parse_recovery_sides_pre_2014_forms(text, teams, expected):
+    assert _sides(text, teams) == expected
+
+
+@pytest.mark.parametrize(
+    "text, teams, expected",
+    [
+        # 242970204 (2004): "(OSU)" is Oregon State's initialism, not a letter subsequence of Washington State
+        (
+            "Beavers fumble by Sam Paulescu (OSU), recovered by Sam Paulescu (OSU), advanced for no gain.",
+            _teams("ORST", "WSU", "Oregon State", "Washington State", "Beavers", "Cougars"),
+            ["home"],
+        ),
+        # 242480061 (2004): "(GA)" is Georgia, but Georgia Southern's GASO starts with it -- a two-letter
+        # code must not prefix-match, so it stays unresolved rather than charging the wrong side
+        (
+            "Eagles fumble by Chaz Williams (GSU), recovered by Gerald Anderson (GA), returned for no gain.",
+            _teams("UGA", "GASO", "Georgia", "Georgia Southern", "Bulldogs", "Eagles"),
+            [None],
+        ),
+        # 242480238 (2004): "(USC)" is South Carolina's initialism (abbreviation SC)
+        (
+            "Commodores fumble by Norval McKenzie (VAN), recovered by Moe Thompson (USC), returned for no gain.",
+            _teams("VAN", "SC", "Vanderbilt", "South Carolina", "Commodores", "Gamecocks"),
+            ["away"],
+        ),
+        # 243652653 (2004): "(TSU)" (Troy State) names neither side, so it stays unresolved
+        (
+            "Trojans fumble by D.T. McDowell (TSU), recovered by DeWhitt Betterson (TSU), advanced for no gain.",
+            _teams("NIU", "TROY", "Northern Illinois", "Troy", "Huskies", "Trojans"),
+            [None],
+        ),
+    ],
+)
+def test_parse_recovery_sides_parenthesised_codes(text, teams, expected):
+    assert _sides(text, teams) == expected
+
+
+def test_parse_recovery_sides_first_name_is_not_a_subsequence_match():
+    """252672641 (2005): "Chad" is a letter subsequence of a team candidate; a first name must not charge it."""
+    teams = _teams("TTU", "INST", "Texas Tech", "Indiana State", "Red Raiders", "Sycamores")
+    text = "Andre Forte rush for no gain, fumbled at the TexTc 44, recovered by Chad Hill at the TexTc 44."
+    assert _sides(text, teams) == [None]

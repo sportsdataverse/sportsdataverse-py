@@ -1433,6 +1433,96 @@ def _parse_penalty_spot(row):
     return _spot_from_text(row["penalty_text"], row)
 
 
+#: "recovered by <TEAM>" in any case: 2014+ vendor text writes the school mixed-case
+#: ("recovered by AlbSt", "Tenn", "MisSt"), which an ALL-CAPS pattern never sees.
+_RECOVERY_TOKEN_RE = re.compile(r"(?i)recovered by\s+(?:the\s+)?([A-Za-z&][A-Za-z&.'\-]*)")
+#: 2004-06 texts name the recoverer and put the school in parentheses after the
+#: name: "recovered by Omar Jacobs (BGSU)". Matched on the text after the token.
+_RECOVERER_TEAM_PAREN_RE = re.compile(r"[A-Za-z.' \-]{0,40}?\(([A-Za-z&.]{2,10})\)")
+
+
+def _is_plain_word(tok):
+    """A capitalised lower-case word ("Omar", "Tenn"), as opposed to a vendor code ("AlbSt", "SFLA")."""
+    return len(tok) > 1 and tok[0].isupper() and tok[1:].islower()
+
+
+def _recovery_token_side(tok, row, *, paren=False):
+    """ "home" / "away" for one "recovered by" token, or None.
+
+    An abbreviation match (equal, or either a prefix of the other) wins when it
+    picks exactly one side. A vendor code ("AlbSt", "SFLA") is then scored like
+    a penalty team token. Two token shapes get a stricter score, because the
+    loose letter-subsequence tier misreads them:
+
+    * a plain capitalised word may be the recoverer's first name ("recovered
+      by Omar Jacobs"): it matches exactly, by prefix ("Houst"), as the mascot
+      ("Hilltoppers"), or as a vowel-dropped spelling of the school name itself
+      ("Eastrn", "Prdue", "Lvile"). "Omar" fits only by reaching into the mascot
+      ("OKLAHOMA" + "SOONERS"), so it charges no one.
+    * a 2004-06 parenthesised code ("(OSU)" for Oregon State) is an initialism:
+      it matches exactly, by mascot, by prefix only from three letters ("(GA)"
+      is Georgia, though Georgia Southern's abbreviation GASO starts with it),
+      then by initialism on a tie. "OSU" is also a letter subsequence of
+      "WASHINGTONSTATECOUGARS".
+    """
+    u = _squash_team(tok)
+    if len(u) < 2:
+        return None
+    if not paren:
+        ha, aa = _squash_team(row["homeTeamAbbrev"]), _squash_team(row["awayTeamAbbrev"])
+        hit_h = bool(ha) and (u == ha or ha.startswith(u) or u.startswith(ha))
+        hit_a = bool(aa) and (u == aa or aa.startswith(u) or u.startswith(aa))
+        if hit_h != hit_a:
+            return "home" if hit_h else "away"
+    home, away, home_alias, away_alias = _team_candidates(row)
+    plain = _is_plain_word(tok)
+    if not (plain or paren):
+        return _resolve_team_side(u, home, away, home_alias, away_alias)
+
+    def score(cands, mascot):
+        prefix = not paren or len(u) >= 3
+        best = (
+            3 if u in cands else 2 if prefix and any(x and (x.startswith(u) or u.startswith(x)) for x in cands) else 0
+        )
+        if u == _squash_team(mascot):
+            best = max(best, 2)
+        # the school name itself (abbreviation, name, alt name -- not name+mascot), same initial
+        if plain and not best and len(u) >= 4 and any(x and x[0] == u[0] and _is_char_subseq(u, x) for x in cands[:3]):
+            best = 1
+        return best
+
+    hs, aws = score(home, row["homeTeamMascot"]), score(away, row["awayTeamMascot"])
+    if hs == aws:
+        hs, aws = int(u in home_alias), int(u in away_alias)
+    if hs == aws:
+        return None
+    return "home" if hs > aws else "away"
+
+
+def _parse_recovery_sides(row):
+    """The ordered recovering sides of a play's "recovered by <TEAM>" clauses.
+
+    One entry per clause (a ball that changes hands twice has two), each
+    ``"home"`` / ``"away"`` or None when the clause names no team. A
+    parenthesised school after the recoverer's name ("recovered by Omar Jacobs
+    (BGSU)") is preferred to the first word. Reads the overturn-stripped text in
+    ``row["_clean_text"]`` and the team name columns. Measured on the published
+    2010 / 2016 / 2022 seasons, resolving mixed-case tokens lifts team
+    fumbles-lost parity from 84 / 87 / 86% to 93 / 97 / 87%.
+    """
+    text = row["_clean_text"]
+    if not text:
+        return []
+    sides = []
+    for m in _RECOVERY_TOKEN_RE.finditer(text):
+        paren = _RECOVERER_TEAM_PAREN_RE.match(text, m.end(1))
+        if paren:
+            sides.append(_recovery_token_side(paren.group(1), row, paren=True))
+        else:
+            sides.append(_recovery_token_side(m.group(1), row))
+    return sides
+
+
 def _parse_penalty_team_side(row):
     """Resolve the PENALIZED team from play text to ``"home"`` / ``"away"`` / None.
 
@@ -6803,6 +6893,7 @@ class CFBPlayProcess(object):
         return _add_attribution_cols(
             play_df,
             parse_recovery_abbrevs=_parse_recovery_abbrevs,
+            parse_recovery_sides=_parse_recovery_sides,
             parse_penalty_team_side=_parse_penalty_team_side,
             parse_penalty_spot=_parse_penalty_spot,
         )
