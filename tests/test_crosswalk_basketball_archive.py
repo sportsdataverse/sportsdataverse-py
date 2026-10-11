@@ -221,7 +221,7 @@ def test_fox_leg_fills_game_ids_for_a_past_season(monkeypatch: pytest.MonkeyPatc
     # Fox serves NBA scoreboards back to 1947; the 2015 Finals segments are real captures.
     _stub_fox(monkeypatch, current=2027)
     schedule, rosters = _espn("nba")
-    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox=True)
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox_games=True)
     games = out["schedule"].select("espn_game_id", "fox_game_id", "fox_home_team_id", "fox_away_team_id").rows()
     assert sorted(games) == [("400796849", "102609", "21", "11"), ("400796850", "102824", "11", "21")]
 
@@ -249,8 +249,10 @@ def test_fox_off_by_default_and_failures_leave_columns_null(
     assert team == {5: "11", 9: "21"}
     assert set(player.values()) == {None}
     assert "Fox rosters unavailable" in caplog.text
-    assert "Fox games unavailable" in caplog.text
+    assert out["schedule"]["fox_game_id"].null_count() == 2  # fox alone fetches no games
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox_games=True)
     assert out["schedule"]["fox_game_id"].null_count() == 2
+    assert "Fox games unavailable" in caplog.text
 
     def down(**_: object) -> pl.DataFrame:
         raise ConnectionError("fox down")

@@ -32,9 +32,9 @@ the schedule crosswalk.
 With ``fox=True`` the Fox legs are added through the live builders' own code:
 ``fox_team_id`` joins on the normalized team name, and -- for the current season
 only, because Fox rosters are today's -- ``fox_athlete_id`` matches on name and
-jersey within each team. ``fox_game_id`` comes from Fox's scoreboard, one call per
-game date. A Fox fetch that fails leaves those columns null with a warning rather
-than failing the build.
+jersey within each team. With ``fox_games=True`` ``fox_game_id`` comes from Fox's
+scoreboard, one call per game date. A Fox fetch that fails leaves those columns null
+with a warning rather than failing the build.
 """
 
 from __future__ import annotations
@@ -610,8 +610,9 @@ def build_archive_crosswalks(
     min_confidence: float = 0.92,
     *,
     fox: bool = False,
+    fox_games: bool = False,
 ) -> Dict[str, pl.DataFrame]:
-    """Build the team, schedule and player crosswalks for one past season (no I/O unless ``fox``).
+    """Build the team, schedule and player crosswalks for one past season (no I/O unless ``fox`` / ``fox_games``).
 
     Args:
         league: ``"nba"`` or ``"wnba"``.
@@ -629,10 +630,12 @@ def build_archive_crosswalks(
             franchise names match today's Fox names (a relocated or renamed
             franchise stays null). The Fox player columns fill only when
             ``season`` is the league's current season, because Fox rosters are
-            today's; for any other season they stay null. ``fox_game_id`` /
-            ``fox_home_team_id`` / ``fox_away_team_id`` come from Fox's
-            scoreboard, one call per game date, matched on (US-Eastern date,
-            teams). A failed Fox fetch logs a warning and leaves the columns null.
+            today's; for any other season they stay null. A failed Fox fetch
+            logs a warning and leaves the columns null.
+        fox_games: Fill ``fox_game_id`` / ``fox_home_team_id`` /
+            ``fox_away_team_id`` from Fox's scoreboard, one call per game date,
+            matched on (US-Eastern date, teams). A failed fetch logs a warning
+            and leaves the columns null.
 
     Returns:
         ``{"team", "schedule", "player"}`` frames with the league module's
@@ -654,7 +657,8 @@ def build_archive_crosswalks(
     team, player = team.filter(franchises), player.filter(franchises)
     if fox:
         team = _with_fox_teams(league, season, team)
-        schedule = with_fox_games(league, schedule, team)
         if season == _current_season(league):
             player = _with_fox_players(league, season, team, player, min_confidence)
+    if fox_games:
+        schedule = with_fox_games(league, schedule, team)
     return {"team": team, "schedule": schedule, "player": player}
