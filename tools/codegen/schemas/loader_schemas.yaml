@@ -14497,6 +14497,35 @@ load_nba_stats_coaches:
   type: Int64
 - name: season_type
   type: String
+load_nba_stats_draft:
+- name: person_id
+  type: Int64
+- name: player_name
+  type: String
+- name: season
+  type: Int32
+- name: round_number
+  type: Int64
+- name: round_pick
+  type: Int64
+- name: overall_pick
+  type: Int64
+- name: draft_type
+  type: String
+- name: team_id
+  type: Int64
+- name: team_city
+  type: String
+- name: team_name
+  type: String
+- name: team_abbreviation
+  type: String
+- name: organization
+  type: String
+- name: organization_type
+  type: String
+- name: player_profile_flag
+  type: Int64
 load_nba_stats_game_lineups:
 - name: game_id
   type: String

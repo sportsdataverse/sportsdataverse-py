@@ -268,12 +268,24 @@ from sportsdataverse.nba import load_nba_schedule_crosswalk as load_nba_schedule
 from sportsdataverse.nba import load_nba_shots as load_nba_shots  # noqa: F401
 from sportsdataverse.nba import load_nba_standings as load_nba_standings  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_coaches as load_nba_stats_coaches  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_draft as load_nba_stats_draft  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_draft_combine_anthro as load_nba_stats_draft_combine_anthro  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_draft_combine_drills as load_nba_stats_draft_combine_drills  # noqa: F401
+from sportsdataverse.nba import (
+    load_nba_stats_draft_combine_nonstationary_shooting as load_nba_stats_draft_combine_nonstationary_shooting,
+)  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_draft_combine_spot_shooting as load_nba_stats_draft_combine_spot_shooting  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_draft_combine_stats as load_nba_stats_draft_combine_stats  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_game_lineups as load_nba_stats_game_lineups  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_game_matchups as load_nba_stats_game_matchups  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_game_rosters as load_nba_stats_game_rosters  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_hustle_player as load_nba_stats_hustle_player  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_hustle_team as load_nba_stats_hustle_team  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_leaguedash as load_nba_stats_leaguedash  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_lineups as load_nba_stats_lineups  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_lineups_v3 as load_nba_stats_lineups_v3  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_matchups as load_nba_stats_matchups  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_matchups_rollup as load_nba_stats_matchups_rollup  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_officials as load_nba_stats_officials  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_pbp as load_nba_stats_pbp  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_pbp_v3 as load_nba_stats_pbp_v3  # noqa: F401
@@ -286,6 +298,7 @@ from sportsdataverse.nba import load_nba_stats_rosters as load_nba_stats_rosters
 from sportsdataverse.nba import load_nba_stats_schedules as load_nba_stats_schedules  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_shots as load_nba_stats_shots  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_standings as load_nba_stats_standings  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_synergy as load_nba_stats_synergy  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_team_boxscores as load_nba_stats_team_boxscores  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_team_season_stats as load_nba_stats_team_season_stats  # noqa: F401
 from sportsdataverse.nba import load_nba_team_boxscore as load_nba_team_boxscore  # noqa: F401
@@ -654,12 +667,22 @@ __all__ = [
     "load_nba_shots",
     "load_nba_standings",
     "load_nba_stats_coaches",
+    "load_nba_stats_draft",
+    "load_nba_stats_draft_combine_anthro",
+    "load_nba_stats_draft_combine_drills",
+    "load_nba_stats_draft_combine_nonstationary_shooting",
+    "load_nba_stats_draft_combine_spot_shooting",
+    "load_nba_stats_draft_combine_stats",
     "load_nba_stats_game_lineups",
     "load_nba_stats_game_matchups",
     "load_nba_stats_game_rosters",
+    "load_nba_stats_hustle_player",
+    "load_nba_stats_hustle_team",
     "load_nba_stats_leaguedash",
     "load_nba_stats_lineups",
     "load_nba_stats_lineups_v3",
+    "load_nba_stats_matchups",
+    "load_nba_stats_matchups_rollup",
     "load_nba_stats_officials",
     "load_nba_stats_pbp",
     "load_nba_stats_pbp_v3",
@@ -672,6 +695,7 @@ __all__ = [
     "load_nba_stats_schedules",
     "load_nba_stats_shots",
     "load_nba_stats_standings",
+    "load_nba_stats_synergy",
     "load_nba_stats_team_boxscores",
     "load_nba_stats_team_season_stats",
     "load_nba_team_boxscore",

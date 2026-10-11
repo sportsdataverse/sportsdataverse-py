@@ -18840,6 +18840,250 @@ load_nba_stats_coaches:
   is_assistant: Numeric flag from the NBA Stats API distinguishing assistants from head coaches.
   sort_sequence: Sort order of the coach within the team's staff listing.
   sub_sort_sequence: Secondary sort order within the coach type.
+load_nba_stats_draft:
+  draft_type: Selection type as stats.nba.com reports it (e.g. 'Draft').
+  organization: School, club or team the player was drafted from.
+  organization_type: Kind of organization drafted from (e.g. 'College/University', 'Other Team/Club').
+  overall_pick: Overall pick number.
+  person_id: stats.nba.com player identifier (PERSON_ID) of the pick; Int64, joins to ``player_id`` elsewhere.
+  player_name: Drafted player's name.
+  player_profile_flag: 1 when stats.nba.com has a player profile page for the pick, else 0.
+  round_number: Draft round (1 or 2).
+  round_pick: Pick number within the round.
+  season: END year of the season the draft class enters (2026 = the June 2025 draft) -- one more than the ``seasons`` argument,
+    which is the draft year. Int32 in this asset.
+  team_abbreviation: Tricode of the team that made the pick.
+  team_city: City of the team that made the pick.
+  team_id: stats.nba.com identifier of the team that made the pick; Int64.
+  team_name: Nickname of the team that made the pick.
+load_nba_stats_draft_combine_anthro:
+  body_fat_pct: Body-fat percentage; null in combines that did not publish it.
+  first_name: Participant's first name.
+  hand_length: Hand length, in inches.
+  hand_width: Hand width (span), in inches.
+  height_w_shoes: Height in shoes, in inches; null in recent combines, which stopped measuring it.
+  height_w_shoes_ft_in: Height in shoes as feet-and-inches text; null when not measured.
+  height_wo_shoes: Height without shoes, in inches.
+  height_wo_shoes_ft_in: Height without shoes as feet-and-inches text (e.g. "6' 5.75''").
+  last_name: Participant's last name.
+  player_id: stats.nba.com player identifier (PERSON_ID); Int64.
+  player_name: Participant's full name.
+  position: Position listed by the combine (e.g. 'PG', 'SF-PF').
+  season: END year of the season the draft class enters (2025 = the May 2024 combine for the 2024 draft) -- one more than
+    the ``seasons`` argument.
+  standing_reach: Standing reach, in inches.
+  standing_reach_ft_in: Standing reach as feet-and-inches text.
+  temp_player_id: Combine participant id; equals ``player_id`` in every row checked.
+  weight: Weight in pounds, as text (e.g. '227.80').
+  wingspan: Wingspan, in inches.
+  wingspan_ft_in: Wingspan as feet-and-inches text.
+load_nba_stats_draft_combine_drills:
+  bench_press: Repetitions of the 185 lb bench press; null where not tested.
+  first_name: Participant's first name.
+  lane_agility_time: Lane agility drill time, in seconds.
+  last_name: Participant's last name.
+  max_vertical_leap: Running (max) vertical leap, in inches.
+  modified_lane_agility_time: Modified (shuttle) lane agility drill time, in seconds.
+  player_id: stats.nba.com player identifier (PERSON_ID); Int64.
+  player_name: Participant's full name.
+  position: Position listed by the combine (e.g. 'PG', 'SF-PF').
+  season: END year of the season the draft class enters (2025 = the May 2024 combine for the 2024 draft) -- one more than
+    the ``seasons`` argument.
+  standing_vertical_leap: No-step vertical leap, in inches.
+  temp_player_id: Combine participant id; equals ``player_id`` in every row checked.
+  three_quarter_sprint: Three-quarter-court sprint time, in seconds.
+load_nba_stats_draft_combine_nonstationary_shooting:
+  first_name: Participant's first name.
+  last_name: Participant's last name.
+  off_drib_college_break_left_attempt: Shots attempted in the off-the-dribble drill from the left break (wing) at college
+    three-point range; null if not run.
+  off_drib_college_break_left_made: Shots made in the off-the-dribble drill from the left break (wing) at college three-point
+    range; null if not run.
+  off_drib_college_break_left_pct: Shooting percentage (0-1) in the off-the-dribble drill from the left break (wing) at college
+    three-point range; null if not run.
+  off_drib_college_break_right_attempt: Shots attempted in the off-the-dribble drill from the right break (wing) at college
+    three-point range; null if not run.
+  off_drib_college_break_right_made: Shots made in the off-the-dribble drill from the right break (wing) at college three-point
+    range; null if not run.
+  off_drib_college_break_right_pct: Shooting percentage (0-1) in the off-the-dribble drill from the right break (wing) at
+    college three-point range; null if not run.
+  off_drib_college_top_key_attempt: Shots attempted in the off-the-dribble drill from the top of the key at college three-point
+    range; null if not run.
+  off_drib_college_top_key_made: Shots made in the off-the-dribble drill from the top of the key at college three-point range;
+    null if not run.
+  off_drib_college_top_key_pct: Shooting percentage (0-1) in the off-the-dribble drill from the top of the key at college
+    three-point range; null if not run.
+  off_drib_fifteen_break_left_attempt: Shots attempted in the off-the-dribble drill from the left break (wing) at 15-foot
+    range; null if not run.
+  off_drib_fifteen_break_left_made: Shots made in the off-the-dribble drill from the left break (wing) at 15-foot range; null
+    if not run.
+  off_drib_fifteen_break_left_pct: Shooting percentage (0-1) in the off-the-dribble drill from the left break (wing) at 15-foot
+    range; null if not run.
+  off_drib_fifteen_break_right_attempt: Shots attempted in the off-the-dribble drill from the right break (wing) at 15-foot
+    range; null if not run.
+  off_drib_fifteen_break_right_made: Shots made in the off-the-dribble drill from the right break (wing) at 15-foot range;
+    null if not run.
+  off_drib_fifteen_break_right_pct: Shooting percentage (0-1) in the off-the-dribble drill from the right break (wing) at
+    15-foot range; null if not run.
+  off_drib_fifteen_top_key_attempt: Shots attempted in the off-the-dribble drill from the top of the key at 15-foot range;
+    null if not run.
+  off_drib_fifteen_top_key_made: Shots made in the off-the-dribble drill from the top of the key at 15-foot range; null if
+    not run.
+  off_drib_fifteen_top_key_pct: Shooting percentage (0-1) in the off-the-dribble drill from the top of the key at 15-foot
+    range; null if not run.
+  on_move_college_attempt: Shots attempted in the on-the-move drill at college three-point range; null if not run.
+  on_move_college_made: Shots made in the on-the-move drill at college three-point range; null if not run.
+  on_move_college_pct: Shooting percentage (0-1) in the on-the-move drill at college three-point range; null if not run.
+  on_move_fifteen_attempt: Shots attempted in the on-the-move drill at 15-foot range; null if not run.
+  on_move_fifteen_made: Shots made in the on-the-move drill at 15-foot range; null if not run.
+  on_move_fifteen_pct: Shooting percentage (0-1) in the on-the-move drill at 15-foot range; null if not run.
+  player_id: stats.nba.com player identifier (PERSON_ID); Int64.
+  player_name: Participant's full name.
+  position: Position listed by the combine (e.g. 'PG', 'SF-PF').
+  season: END year of the season the draft class enters (2025 = the May 2024 combine for the 2024 draft) -- one more than
+    the ``seasons`` argument.
+  temp_player_id: Combine participant id; equals ``player_id`` in every row checked.
+load_nba_stats_draft_combine_spot_shooting:
+  college_break_left_attempt: Shots attempted in the spot-up drill from the left break (wing) at college three-point range;
+    null if not run.
+  college_break_left_made: Shots made in the spot-up drill from the left break (wing) at college three-point range; null if
+    not run.
+  college_break_left_pct: Shooting percentage (0-1) in the spot-up drill from the left break (wing) at college three-point
+    range; null if not run.
+  college_break_right_attempt: Shots attempted in the spot-up drill from the right break (wing) at college three-point range;
+    null if not run.
+  college_break_right_made: Shots made in the spot-up drill from the right break (wing) at college three-point range; null
+    if not run.
+  college_break_right_pct: Shooting percentage (0-1) in the spot-up drill from the right break (wing) at college three-point
+    range; null if not run.
+  college_corner_left_attempt: Shots attempted in the spot-up drill from the left corner at college three-point range; null
+    if not run.
+  college_corner_left_made: Shots made in the spot-up drill from the left corner at college three-point range; null if not
+    run.
+  college_corner_left_pct: Shooting percentage (0-1) in the spot-up drill from the left corner at college three-point range;
+    null if not run.
+  college_corner_right_attempt: Shots attempted in the spot-up drill from the right corner at college three-point range; null
+    if not run.
+  college_corner_right_made: Shots made in the spot-up drill from the right corner at college three-point range; null if not
+    run.
+  college_corner_right_pct: Shooting percentage (0-1) in the spot-up drill from the right corner at college three-point range;
+    null if not run.
+  college_top_key_attempt: Shots attempted in the spot-up drill from the top of the key at college three-point range; null
+    if not run.
+  college_top_key_made: Shots made in the spot-up drill from the top of the key at college three-point range; null if not
+    run.
+  college_top_key_pct: Shooting percentage (0-1) in the spot-up drill from the top of the key at college three-point range;
+    null if not run.
+  fifteen_break_left_attempt: Shots attempted in the spot-up drill from the left break (wing) at 15-foot range; null if not
+    run.
+  fifteen_break_left_made: Shots made in the spot-up drill from the left break (wing) at 15-foot range; null if not run.
+  fifteen_break_left_pct: Shooting percentage (0-1) in the spot-up drill from the left break (wing) at 15-foot range; null
+    if not run.
+  fifteen_break_right_attempt: Shots attempted in the spot-up drill from the right break (wing) at 15-foot range; null if
+    not run.
+  fifteen_break_right_made: Shots made in the spot-up drill from the right break (wing) at 15-foot range; null if not run.
+  fifteen_break_right_pct: Shooting percentage (0-1) in the spot-up drill from the right break (wing) at 15-foot range; null
+    if not run.
+  fifteen_corner_left_attempt: Shots attempted in the spot-up drill from the left corner at 15-foot range; null if not run.
+  fifteen_corner_left_made: Shots made in the spot-up drill from the left corner at 15-foot range; null if not run.
+  fifteen_corner_left_pct: Shooting percentage (0-1) in the spot-up drill from the left corner at 15-foot range; null if not
+    run.
+  fifteen_corner_right_attempt: Shots attempted in the spot-up drill from the right corner at 15-foot range; null if not run.
+  fifteen_corner_right_made: Shots made in the spot-up drill from the right corner at 15-foot range; null if not run.
+  fifteen_corner_right_pct: Shooting percentage (0-1) in the spot-up drill from the right corner at 15-foot range; null if
+    not run.
+  fifteen_top_key_attempt: Shots attempted in the spot-up drill from the top of the key at 15-foot range; null if not run.
+  fifteen_top_key_made: Shots made in the spot-up drill from the top of the key at 15-foot range; null if not run.
+  fifteen_top_key_pct: Shooting percentage (0-1) in the spot-up drill from the top of the key at 15-foot range; null if not
+    run.
+  first_name: Participant's first name.
+  last_name: Participant's last name.
+  nba_break_left_attempt: Shots attempted in the spot-up drill from the left break (wing) at NBA three-point range; null if
+    not run.
+  nba_break_left_made: Shots made in the spot-up drill from the left break (wing) at NBA three-point range; null if not run.
+  nba_break_left_pct: Shooting percentage (0-1) in the spot-up drill from the left break (wing) at NBA three-point range;
+    null if not run.
+  nba_break_right_attempt: Shots attempted in the spot-up drill from the right break (wing) at NBA three-point range; null
+    if not run.
+  nba_break_right_made: Shots made in the spot-up drill from the right break (wing) at NBA three-point range; null if not
+    run.
+  nba_break_right_pct: Shooting percentage (0-1) in the spot-up drill from the right break (wing) at NBA three-point range;
+    null if not run.
+  nba_corner_left_attempt: Shots attempted in the spot-up drill from the left corner at NBA three-point range; null if not
+    run.
+  nba_corner_left_made: Shots made in the spot-up drill from the left corner at NBA three-point range; null if not run.
+  nba_corner_left_pct: Shooting percentage (0-1) in the spot-up drill from the left corner at NBA three-point range; null
+    if not run.
+  nba_corner_right_attempt: Shots attempted in the spot-up drill from the right corner at NBA three-point range; null if not
+    run.
+  nba_corner_right_made: Shots made in the spot-up drill from the right corner at NBA three-point range; null if not run.
+  nba_corner_right_pct: Shooting percentage (0-1) in the spot-up drill from the right corner at NBA three-point range; null
+    if not run.
+  nba_top_key_attempt: Shots attempted in the spot-up drill from the top of the key at NBA three-point range; null if not
+    run.
+  nba_top_key_made: Shots made in the spot-up drill from the top of the key at NBA three-point range; null if not run.
+  nba_top_key_pct: Shooting percentage (0-1) in the spot-up drill from the top of the key at NBA three-point range; null if
+    not run.
+  player_id: stats.nba.com player identifier (PERSON_ID); Int64.
+  player_name: Participant's full name.
+  position: Position listed by the combine (e.g. 'PG', 'SF-PF').
+  season: END year of the season the draft class enters (2025 = the May 2024 combine for the 2024 draft) -- one more than
+    the ``seasons`` argument.
+  temp_player_id: Combine participant id; equals ``player_id`` in every row checked.
+load_nba_stats_draft_combine_stats:
+  bench_press: Repetitions of the 185 lb bench press; null where not tested.
+  body_fat_pct: Body-fat percentage; null in combines that did not publish it.
+  first_name: Participant's first name.
+  hand_length: Hand length, in inches.
+  hand_width: Hand width (span), in inches.
+  height_w_shoes: Height in shoes, in inches; null in recent combines, which stopped measuring it.
+  height_w_shoes_ft_in: Height in shoes as feet-and-inches text; null when not measured.
+  height_wo_shoes: Height without shoes, in inches.
+  height_wo_shoes_ft_in: Height without shoes as feet-and-inches text (e.g. "6' 5.75''").
+  lane_agility_time: Lane agility drill time, in seconds.
+  last_name: Participant's last name.
+  max_vertical_leap: Running (max) vertical leap, in inches.
+  modified_lane_agility_time: Modified (shuttle) lane agility drill time, in seconds.
+  off_drib_college_break_left: Off-the-dribble shooting from the left break (wing) at college three-point range, as 'made-attempted'
+    text.
+  off_drib_college_break_right: Off-the-dribble shooting from the right break (wing) at college three-point range, as 'made-attempted'
+    text.
+  off_drib_college_top_key: Off-the-dribble shooting from the top of the key at college three-point range, as 'made-attempted'
+    text.
+  off_drib_fifteen_break_left: Off-the-dribble shooting from the left break (wing) at 15-foot range, as 'made-attempted' text.
+  off_drib_fifteen_break_right: Off-the-dribble shooting from the right break (wing) at 15-foot range, as 'made-attempted'
+    text.
+  off_drib_fifteen_top_key: Off-the-dribble shooting from the top of the key at 15-foot range, as 'made-attempted' text.
+  on_move_college: On-the-move shooting at college three-point range, as 'made-attempted' text.
+  on_move_fifteen: On-the-move shooting at 15-foot range, as 'made-attempted' text.
+  player_id: stats.nba.com player identifier (PERSON_ID); Int64.
+  player_name: Participant's full name.
+  position: Position listed by the combine (e.g. 'PG', 'SF-PF').
+  season: END year of the season the draft class enters (2025 = the May 2024 combine for the 2024 draft) -- one more than
+    the ``seasons`` argument.
+  spot_college_break_left: Spot-up shooting from the left break (wing) at college three-point range, as 'made-attempted' text.
+  spot_college_break_right: Spot-up shooting from the right break (wing) at college three-point range, as 'made-attempted'
+    text.
+  spot_college_corner_left: Spot-up shooting from the left corner at college three-point range, as 'made-attempted' text.
+  spot_college_corner_right: Spot-up shooting from the right corner at college three-point range, as 'made-attempted' text.
+  spot_college_top_key: Spot-up shooting from the top of the key at college three-point range, as 'made-attempted' text.
+  spot_fifteen_break_left: Spot-up shooting from the left break (wing) at 15-foot range, as 'made-attempted' text.
+  spot_fifteen_break_right: Spot-up shooting from the right break (wing) at 15-foot range, as 'made-attempted' text.
+  spot_fifteen_corner_left: Spot-up shooting from the left corner at 15-foot range, as 'made-attempted' text.
+  spot_fifteen_corner_right: Spot-up shooting from the right corner at 15-foot range, as 'made-attempted' text.
+  spot_fifteen_top_key: Spot-up shooting from the top of the key at 15-foot range, as 'made-attempted' text.
+  spot_nba_break_left: Spot-up shooting from the left break (wing) at NBA three-point range, as 'made-attempted' text.
+  spot_nba_break_right: Spot-up shooting from the right break (wing) at NBA three-point range, as 'made-attempted' text.
+  spot_nba_corner_left: Spot-up shooting from the left corner at NBA three-point range, as 'made-attempted' text.
+  spot_nba_corner_right: Spot-up shooting from the right corner at NBA three-point range, as 'made-attempted' text.
+  spot_nba_top_key: Spot-up shooting from the top of the key at NBA three-point range, as 'made-attempted' text.
+  standing_reach: Standing reach, in inches.
+  standing_reach_ft_in: Standing reach as feet-and-inches text.
+  standing_vertical_leap: No-step vertical leap, in inches.
+  three_quarter_sprint: Three-quarter-court sprint time, in seconds.
+  weight: Weight in pounds, as text (e.g. '227.80').
+  wingspan: Wingspan, in inches.
+  wingspan_ft_in: Wingspan as feet-and-inches text.
 load_nba_stats_game_lineups:
   away_player_1: NBA Stats player id of the away on-court player 1 of 5 for the row.
   away_player_2: NBA Stats player id of the away on-court player 2 of 5 for the row.
@@ -18909,6 +19153,64 @@ load_nba_stats_game_matchups:
 load_nba_stats_game_rosters:
   season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
     = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
+load_nba_stats_hustle_player:
+  age: Player age in years at the season's reference date, as stats.nba.com reports it.
+  box_out_player_rebs: Rebounds secured by the player himself on his own box-outs.
+  box_out_player_team_rebs: Rebounds secured by the player's team on the player's box-outs.
+  box_outs: Box-outs executed (offense plus defense).
+  charges_drawn: Offensive fouls (charges) drawn.
+  contested_shots: Shots the player (or team) contested.
+  contested_shots_2_pt: Two-point shots contested.
+  contested_shots_3_pt: Three-point shots contested.
+  def_boxouts: Box-outs on defense.
+  def_loose_balls_recovered: Loose balls recovered on defense.
+  deflections: Deflections of opponent passes or dribbles.
+  g: Games played in the split.
+  loose_balls_recovered: Loose balls recovered (offense plus defense).
+  min: Minutes played (per game in 'pergame' files, season total in 'totals' files).
+  off_boxouts: Box-outs on offense.
+  off_loose_balls_recovered: Loose balls recovered on offense.
+  pct_box_outs_def: Share (0-1) of box-outs made on defense.
+  pct_box_outs_off: Share (0-1) of box-outs made on offense.
+  pct_box_outs_reb: Share (0-1) of the player's box-outs that ended in his own rebound.
+  pct_box_outs_team_reb: Share (0-1) of the player's box-outs that ended in a team rebound.
+  pct_loose_balls_recovered_def: Share (0-1) of loose-ball recoveries made on defense.
+  pct_loose_balls_recovered_off: Share (0-1) of loose-ball recoveries made on offense.
+  per_mode: 'Aggregation of the source file: ''pergame'' (per-game averages) or ''totals'' (season totals); stamped from the
+    file name when the rows lack it.'
+  player_id: stats.nba.com player identifier (PERSON_ID); Int64, joins to every other nba_stats loader.
+  player_name: Player's full name as stats.nba.com lists it (e.g. 'Nikola Jokic').
+  screen_assists: Screens set that led directly to a teammate's made field goal.
+  screen_ast_pts: Points scored on field goals created by the screen assists.
+  season: END year of the NBA season (2025 = 2024-25) -- the published asset's own stamp, one more than the ``seasons`` argument.
+  season_type: 'Season type of the source file: ''regular-season'' or ''playoffs'' (the release file-name token).'
+  team_abbreviation: Team tricode (e.g. 'BOS').
+  team_id: stats.nba.com team identifier; Int64.
+load_nba_stats_hustle_team:
+  box_outs: Box-outs executed (offense plus defense).
+  charges_drawn: Offensive fouls (charges) drawn.
+  contested_shots: Shots the team contested.
+  contested_shots_2_pt: Two-point shots contested.
+  contested_shots_3_pt: Three-point shots contested.
+  def_boxouts: Box-outs on defense.
+  def_loose_balls_recovered: Loose balls recovered on defense.
+  deflections: Deflections of opponent passes or dribbles.
+  loose_balls_recovered: Loose balls recovered (offense plus defense).
+  min: Minutes played (per game in 'pergame' files, season total in 'totals' files).
+  off_boxouts: Box-outs on offense.
+  off_loose_balls_recovered: Loose balls recovered on offense.
+  pct_box_outs_def: Share (0-1) of box-outs made on defense.
+  pct_box_outs_off: Share (0-1) of box-outs made on offense.
+  pct_loose_balls_recovered_def: Share (0-1) of loose-ball recoveries made on defense.
+  pct_loose_balls_recovered_off: Share (0-1) of loose-ball recoveries made on offense.
+  per_mode: 'Aggregation of the source file: ''pergame'' (per-game averages) or ''totals'' (season totals); stamped from the
+    file name when the rows lack it.'
+  screen_assists: Screens set that led directly to a teammate's made field goal.
+  screen_ast_pts: Points scored on field goals created by the screen assists.
+  season: END year of the NBA season (2025 = 2024-25) -- the published asset's own stamp, one more than the ``seasons`` argument.
+  season_type: 'Season type of the source file: ''regular-season'' or ''playoffs'' (the release file-name token).'
+  team_id: stats.nba.com team identifier; Int64.
+  team_name: Team nickname (e.g. 'Celtics').
 load_nba_stats_lineups:
   ast_pct_rank: League rank of the row's assist percentage (share of teammate field goals assisted while on the floor) for
     the season and split.
@@ -19068,6 +19370,69 @@ load_nba_stats_lineups_v3:
   home_player_3: NBA Stats player id of the home on-court player 3 of 5 for the row.
   home_player_4: NBA Stats player id of the home on-court player 4 of 5 for the row.
   home_player_5: NBA Stats player id of the home on-court player 5 of 5 for the row.
+load_nba_stats_matchups:
+  def_player_id: stats.nba.com identifier of the defender; Int64.
+  def_player_name: Defender's display name.
+  gp: Games played in the split.
+  help_blk: Help-defense blocks credited to the matchup; stats.nba.com ships 0 in every row checked.
+  help_fg_perc: Field-goal percentage against help defense; stats.nba.com ships 0 in every row checked.
+  help_fga: Field goals attempted against help defense; stats.nba.com ships 0 in every row checked.
+  help_fgm: Field goals made against help defense; stats.nba.com ships 0 in every row checked.
+  matchup_ast: Assists by the offensive player while guarded by the defender.
+  matchup_blk: Blocks by the defender on the offensive player's shots.
+  matchup_fg3_a: Three-pointers attempted by the offensive player against the defender.
+  matchup_fg3_m: Three-pointers made by the offensive player against the defender.
+  matchup_fg3_pct: Three-point percentage (0-1) of the offensive player against the defender.
+  matchup_fg_pct: Field-goal percentage (0-1) of the offensive player against the defender.
+  matchup_fga: Field goals attempted by the offensive player against the defender.
+  matchup_fgm: Field goals made by the offensive player against the defender.
+  matchup_fta: Free throws attempted by the offensive player on fouls by the defender.
+  matchup_ftm: Free throws made by the offensive player on fouls by the defender.
+  matchup_min: 'Time matched up: ''MM:SS'' text in ''totals'' files, decimal minutes in ''pergame'' files (String when both
+    are loaded together).'
+  matchup_time_sec: Time matched up in seconds; present only in early 'totals' files (e.g. 2017-18).
+  matchup_tov: Turnovers by the offensive player while guarded by the defender.
+  off_player_id: stats.nba.com identifier of the offensive player in the matchup; Int64.
+  off_player_name: Offensive player's display name.
+  partial_poss: Possessions the pair was matched up for, apportioned by time (fractional).
+  per_mode: 'Aggregation of the source file: ''pergame'' (per-game averages) or ''totals'' (season totals); stamped from the
+    file name when the rows lack it.'
+  player_pts: Points the offensive player scored while guarded by the defender.
+  season: END year of the NBA season (2025 = 2024-25) -- the published asset's own stamp, one more than the ``seasons`` argument.
+  season_id: 'stats.nba.com season code: a season-type digit (2 = regular season, 4 = playoffs) followed by the season''s
+    START year, e.g. ''22024'' = the 2024-25 regular season.'
+  season_type: 'Season type of the source file: ''regular-season'' or ''playoffs'' (the release file-name token).'
+  sfl: Shooting fouls committed by the defender on the offensive player.
+  team_pts: Points the offensive player's team scored while the pair was matched up.
+load_nba_stats_matchups_rollup:
+  def_player_id: stats.nba.com identifier of the defender; Int64.
+  def_player_name: Defender's display name.
+  gp: Games played in the split.
+  matchup_ast: Assists by the guarded players of this position.
+  matchup_blk: Blocks by the defender against this position.
+  matchup_fg3_a: Three-pointers attempted against the defender by this position.
+  matchup_fg3_m: Three-pointers made against the defender by this position.
+  matchup_fg3_pct: Three-point percentage (0-1) allowed to this position.
+  matchup_fg_pct: Field-goal percentage (0-1) allowed to this position.
+  matchup_fga: Field goals attempted against the defender by this position.
+  matchup_fgm: Field goals made against the defender by this position.
+  matchup_fta: Free throws attempted by this position on the defender's fouls.
+  matchup_ftm: Free throws made by this position on the defender's fouls.
+  matchup_min: 'Time the defender spent guarding this position: ''MM:SS'' text in ''totals'' files, decimal minutes in ''pergame''
+    files (String when both are loaded together).'
+  matchup_tov: Turnovers by the guarded players of this position.
+  partial_poss: Possessions the defender spent on this position, apportioned by time (fractional).
+  per_mode: 'Aggregation of the source file: ''pergame'' (per-game averages) or ''totals'' (season totals); stamped from the
+    file name when the rows lack it.'
+  percent_of_time: Share (0-1) of the defender's matchup time spent on this position ('TOTAL' = 1).
+  player_pts: Points scored by the offensive players of this position while guarded by the defender.
+  position: 'Offensive position bucket the defender guarded: ''G'', ''F'' or ''C'', plus a ''TOTAL'' row summing the three.'
+  season: END year of the NBA season (2025 = 2024-25) -- the published asset's own stamp, one more than the ``seasons`` argument.
+  season_id: 'stats.nba.com season code: a season-type digit (2 = regular season, 4 = playoffs) followed by the season''s
+    START year, e.g. ''22024'' = the 2024-25 regular season.'
+  season_type: 'Season type of the source file: ''regular-season'' or ''playoffs'' (the release file-name token).'
+  sfl: Shooting fouls the defender committed against this position.
+  team_pts: Points scored by the opposing team while the defender guarded this position.
 load_nba_stats_officials:
   season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
     = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
@@ -19449,6 +19814,37 @@ load_nba_stats_standings:
   vs_southeast: Win-loss record against Southeast Division opponents.
   vs_southwest: Win-loss record against Southwest Division opponents.
   vs_west: Win-loss record against Western Conference opponents.
+load_nba_stats_synergy:
+  efg_pct: Effective field-goal percentage (0-1), weighting made threes by 1.5.
+  fg_pct: Field-goal percentage (0-1) on this play type.
+  fga: Field goals attempted on this play type.
+  fgm: Field goals made on this play type.
+  fgmx: Field goals missed on this play type.
+  ft_poss_pct: Share (0-1) of this play type's possessions that produced free throws.
+  gp: Games played in the split.
+  per_mode: 'Aggregation of the source file: ''pergame'' (per-game averages) or ''totals'' (season totals); stamped from the
+    file name when the rows lack it.'
+  percentile: Percentile rank (0-1) of the row's points per possession among players with this play type.
+  play_type: Synergy play type as stats.nba.com labels it, e.g. 'Isolation', 'PRBallHandler', 'Spotup', 'Transition'.
+  player_id: stats.nba.com player identifier (PERSON_ID); Int64, joins to every other nba_stats loader.
+  player_name: Player's full name as stats.nba.com lists it (e.g. 'Nikola Jokic').
+  plusone_poss_pct: Share (0-1) of this play type's possessions that ended in an and-one.
+  poss: Possessions of this play type (Int64 in 'totals' files, Float64 per game).
+  poss_pct: 'Frequency: share (0-1) of the player''s possessions that were this play type.'
+  ppp: Points per possession on this play type.
+  pts: Points scored on this play type.
+  score_poss_pct: Share (0-1) of this play type's possessions that scored at least one point.
+  season: END year of the NBA season (2025 = 2024-25) -- the published asset's own stamp, one more than the ``seasons`` argument.
+  season_id: 'stats.nba.com season code: a season-type digit (2 = regular season, 4 = playoffs) followed by the season''s
+    START year, e.g. ''22024'' = the 2024-25 regular season.'
+  season_type: 'Season type of the source file: ''regular-season'' or ''playoffs'' (the release file-name token).'
+  sf_poss_pct: Share (0-1) of this play type's possessions that drew a shooting foul.
+  team_abbreviation: Team tricode (e.g. 'BOS').
+  team_id: stats.nba.com team identifier; Int64.
+  team_name: Team nickname (e.g. 'Celtics').
+  tov_poss_pct: Share (0-1) of this play type's possessions that ended in a turnover.
+  type_grouping: '''Offensive'' (the player''s own possessions of this play type) or ''Defensive'' (opponent possessions of
+    this play type the player defended).'
 load_nba_stats_team_boxscores:
   season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
     = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
