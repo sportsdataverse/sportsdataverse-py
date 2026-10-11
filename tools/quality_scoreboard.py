@@ -14,8 +14,9 @@ gate), ``coverage-devel.json`` (the same plus coverage, the PR coverage job) and
 ``scoreboard-<topic>-base.json`` per topic branch (its merge gate). Re-seed with ``--write``.
 
 Coverage is read from an existing ``pytest --cov --cov-report=json:<path>`` file rather than
-re-running the suite (the full suite takes ~13 minutes). Without ``--coverage-json`` the
-coverage metrics are skipped, never treated as zero.
+re-running the suite (the full suite takes ~13 minutes). Without ``--coverage-json`` no coverage
+metric is measured, so checking against a baseline that has them fails as "not measured": a
+metric the baseline tracks can only disappear by re-seeding the baseline, never by omission.
 
 Generated code is excluded everywhere: ``*_espn_ext.py``, ``sportsdataverse/parsed/``, and any
 module whose first ten lines carry the codegen marker. Edit those through tools/codegen instead.
@@ -61,8 +62,9 @@ LINT_FAMILIES = {
 EXACT_CODES = {"F841", "C901", "PLR0912", "PLR0915"}
 NOQA_BUCKETS = ("NOQA_STALE", "NOQA_NOT_RUN")
 
-# Allowed noise before a "higher is better" percentage counts as a regression.
-TOLERANCE = {"coverage_handwritten_percent": 0.1}
+# Allowed noise before a coverage percentage counts as a regression (a date-dependent branch or
+# xdist worker ordering moves a module by a few hundredths). Counts stay strict.
+COVERAGE_TOLERANCE = 0.1
 
 HOTSPOTS = [  # the largest hand-written modules; their coverage is tracked one by one
     "sportsdataverse/cfb/cfb_pbp.py",
@@ -104,6 +106,7 @@ def lint_family(code: str) -> str | None:
 
 def ruff_findings(root: Path, *args: str) -> list[tuple[str, str, str]]:
     """(repo-relative path, rule code, message) per finding. --no-fix: the repo config sets fix = true."""
+    # argv is a static list (no shell=True, nothing from the environment); *args are the literal ruff flags below.
     cmd = [sys.executable, "-m", "ruff", "check", PACKAGE, "--no-fix", "--exit-zero", "--output-format", "json", *args]
     out = subprocess.run(cmd, cwd=root, capture_output=True, text=True, encoding="utf-8", check=True).stdout
     return [
@@ -271,7 +274,7 @@ def compare(baseline: dict, current: dict) -> list[str]:
             print(f"| {now['label']} | (new) | {now['value']} | | new |")
             continue
         delta = round(now["value"] - before["value"], 2)
-        allowed = TOLERANCE.get(name, 0)
+        allowed = COVERAGE_TOLERANCE if name.startswith("coverage_") and name.endswith("_percent") else 0
         if now["better"] == "info" or delta == 0:
             status = "info" if now["better"] == "info" else "same"
         elif (delta < 0) == (now["better"] == "lower"):
@@ -282,10 +285,10 @@ def compare(baseline: dict, current: dict) -> list[str]:
             status = "WORSE"
             regressions.append(f"{now['label']}: {before['value']} -> {now['value']}")
         print(f"| {now['label']} | {before['value']} | {now['value']} | {delta:+} | {status} |")
-    for name in baseline["metrics"].keys() - current["metrics"].keys():
-        print(
-            f"| {baseline['metrics'][name]['label']} | {baseline['metrics'][name]['value']} | (not measured) | | skipped |"
-        )
+    for name in sorted(baseline["metrics"].keys() - current["metrics"].keys()):
+        before = baseline["metrics"][name]
+        print(f"| {before['label']} | {before['value']} | (not measured) | | WORSE |")
+        regressions.append(f"{before['label']}: {before['value']} -> not measured (a tracked metric cannot be dropped)")
     return regressions
 
 
