@@ -13,8 +13,8 @@ NFL season convention (nflreadr):
   the previous calendar year (e.g. early Aug 2026 is still season 2025).
 * Roster year flips on March 15 instead.
 * Week 1 starts on the Thursday following Labor Day (`monday1_sep + 3` in
-  `get_current_week(use_date = TRUE)`, R/utils_date.R:94-118); week is 1-22
-  (1-18 regular season, 19-22 playoffs).
+  `get_current_week(use_date = TRUE)`, R/utils_date.R:94-118); calendar weeks
+  clamped to 1-22 as in nflreadr (17 regular-season weeks through 2020, 18 from 2021).
 """
 
 from __future__ import annotations
@@ -60,10 +60,10 @@ def get_current_nfl_season(roster: bool = False) -> int:
             schedule = load_nfl_schedule(seasons=[get_current_nfl_season()])
 
         See Also:
-            * `nflreadpy`_ -- mirrors this convention
+            * `nflreadr`_ -- the rule this ports (`most_recent_season()`)
             * `nflverse`_ -- full data ecosystem (R + Python)
 
-        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+        .. _nflreadr: https://nflreadr.nflverse.com/reference/latest_season.html
         .. _nflverse: https://nflverse.nflverse.com
     """
     if not isinstance(roster, bool):
@@ -89,7 +89,8 @@ def get_current_nfl_week(use_date: bool = True, roster: bool = False) -> int:
             season, as nflreadr's `get_current_week(use_date = TRUE)`). If
             False, hit the live schedule via `load_nfl_schedule()` and return
             the week of the next unplayed game (matches nflreadr's
-            `use_date = FALSE` path).
+            `use_date = FALSE` path). nflreadr defaults `use_date = FALSE`;
+            sdv-py keeps `True` so the bare call stays offline.
         roster: Forwarded to `get_current_nfl_season()` for season inference.
 
     Returns:
@@ -124,10 +125,10 @@ def get_current_nfl_week(use_date: bool = True, roster: bool = False) -> int:
             )
 
         See Also:
-            * `nflreadpy`_ -- mirrors this convention
+            * `nflreadr`_ -- the rule this ports (`get_current_week()`)
             * `nflverse`_ -- full data ecosystem (R + Python)
 
-        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+        .. _nflreadr: https://nflreadr.nflverse.com/reference/get_current_week.html
         .. _nflverse: https://nflverse.nflverse.com
     """
     if not isinstance(use_date, bool):

@@ -49,7 +49,7 @@ Return the current NFL week (1-22).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `use_date` | `bool` | `True` | If True (default), compute the week purely from the calendar (number of weeks since the Thursday after Labor Day of the current season, as nflreadr's `get_current_week(use_date = TRUE)`). If False, hit the live schedule via `load_nfl_schedule()` and return the week of the next unplayed game (matches nflreadr's `use_date = FALSE` path). |
+| `use_date` | `bool` | `True` | If True (default), compute the week purely from the calendar (number of weeks since the Thursday after Labor Day of the current season, as nflreadr's `get_current_week(use_date = TRUE)`). If False, hit the live schedule via `load_nfl_schedule()` and return the week of the next unplayed game (matches nflreadr's `use_date = FALSE` path). nflreadr defaults `use_date = FALSE`; sdv-py keeps `True` so the bare call stays offline. |
 | `roster` | `bool` | `False` | Forwarded to `get_current_nfl_season()` for season inference. |
 
 **Returns**
@@ -125,7 +125,7 @@ Return the current NFL week (1-22).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `use_date` | `bool` | `True` | If True (default), compute the week purely from the calendar (number of weeks since the Thursday after Labor Day of the current season, as nflreadr's `get_current_week(use_date = TRUE)`). If False, hit the live schedule via `load_nfl_schedule()` and return the week of the next unplayed game (matches nflreadr's `use_date = FALSE` path). |
+| `use_date` | `bool` | `True` | If True (default), compute the week purely from the calendar (number of weeks since the Thursday after Labor Day of the current season, as nflreadr's `get_current_week(use_date = TRUE)`). If False, hit the live schedule via `load_nfl_schedule()` and return the week of the next unplayed game (matches nflreadr's `use_date = FALSE` path). nflreadr defaults `use_date = FALSE`; sdv-py keeps `True` so the bare call stays offline. |
 | `roster` | `bool` | `False` | Forwarded to `get_current_nfl_season()` for season inference. |
 
 **Returns**
