@@ -231,3 +231,21 @@ def test_release_covers_the_bundled_seasons(league):
     release = xw._release_crosswalk(league)
     assert release is not None and dict(release.schema) == xw._SCHEMA
     assert set(xw._packaged_crosswalk(league)["season"]) <= set(release["season"])
+
+
+def test_failed_release_read_is_not_cached(monkeypatch):
+    """A transient release failure serves the bundled copy but is retried on the next call."""
+    import polars as pl
+
+    import sportsdataverse.mbb.mbb_ncaa_espn_crosswalk as mod
+
+    release = pl.DataFrame({"season": ["2026-27"], "ncaa_team_id": ["1"]})
+    calls = iter([None, release])
+    monkeypatch.setattr(mod, "_release_crosswalk", lambda league: next(calls))
+    monkeypatch.setattr(mod, "_CROSSWALK_CACHE", {})
+    first = mod.ncaa_espn_team_crosswalk(league="mbb")
+    assert first.height != release.height or first.columns != release.columns  # bundled copy
+    assert "mbb" not in mod._CROSSWALK_CACHE
+    second = mod.ncaa_espn_team_crosswalk(league="mbb")
+    assert second.equals(release)
+    assert mod._CROSSWALK_CACHE["mbb"].equals(release)

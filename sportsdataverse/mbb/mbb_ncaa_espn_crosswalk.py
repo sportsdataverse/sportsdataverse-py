@@ -133,10 +133,15 @@ def ncaa_espn_team_crosswalk(
     """
     if league not in _LEAGUE_PKG:
         raise ValueError(f"league must be one of {sorted(_LEAGUE_PKG)}, got {league!r}")
-    if league not in _CROSSWALK_CACHE:
+    df = _CROSSWALK_CACHE.get(league)
+    if df is None:
         release = _release_crosswalk(league)
-        _CROSSWALK_CACHE[league] = release if release is not None else _packaged_crosswalk(league)
-    df = _CROSSWALK_CACHE[league]
+        if release is not None:
+            _CROSSWALK_CACHE[league] = df = release
+        else:
+            # Not cached: a later call retries the release (a transient failure must not pin the
+            # bundled copy for the life of the process).
+            df = _packaged_crosswalk(league)
     return df.to_pandas() if return_as_pandas else df
 
 
