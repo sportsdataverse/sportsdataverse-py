@@ -195,6 +195,11 @@ _CLOCK = re.compile(r"^\d{1,2}:\d{2}$")
 #: (the NFL fixture's timeout rows carry the previous spot), a fully mirrored one at least
 #: 95.6%, and an away-side-only mirror (B-H3) about the away share of snaps.
 _MIRRORED_SHARE = 0.25
+#: Sources whose own ``yardLine`` orientation is not checked: ESPN's feed varies it by game and
+#: even within one (400876049 runs it from the other goal line on 188 of 192 plays, 401761665
+#: switches mid-game on 87 of 192), and the processors read ``yardsToEndzone``, so ESPN is never
+#: vetoed on it. ``None`` is a caller that did not name a source.
+_UNCHECKED_FIELD_SOURCES = (None, "espn")
 _MISSING = object()
 
 
@@ -322,7 +327,6 @@ def _check_values(report: ContractReport, summary: dict, plays: list[dict]) -> N
     """Value rules the processor silently depends on."""
     competitors = _get(summary, "header.competitions[0].competitors")
     team_ids: set[str] = set()
-    home_ids: set[str] = set()
     if isinstance(competitors, list):
         sides = [c.get("homeAway") for c in competitors if isinstance(c, dict)]
         if sorted(s for s in sides if s) != ["away", "home"]:
@@ -341,8 +345,6 @@ def _check_values(report: ContractReport, summary: dict, plays: list[dict]) -> N
                 report.invalid.append(f"competitors[{i}].team.id {tid!r} is not int-castable")
             else:
                 team_ids.add(str(tid))
-                if c.get("homeAway") == "home":
-                    home_ids.add(str(tid))
             if "name" in team and not team.get("name"):
                 report.invalid.append(f"competitors[{i}].team.name is empty: every Timeout row would match both teams")
 
@@ -387,9 +389,22 @@ def _check_values(report: ContractReport, summary: dict, plays: list[dict]) -> N
         if foreign:
             report.invalid.append(f"play team ids not in header competitors: {sorted(foreign)}")
 
-    # ESPN measures ``yardLine`` from the home goal line: ``yardsToEndzone == 100 - yardLine``
-    # when the home team has the ball, ``== yardLine`` when the away team does. Spots on the goal
-    # lines are skipped (ESPN's pre-2005 CFB feeds ship ``yardsToEndzone == 0`` on every play).
+
+def _check_field_position(report: ContractReport, summary: dict, plays: list[dict]) -> None:
+    """``yardsToEndzone`` must agree with ``yardLine`` (B-GB-08), sampled over the plays.
+
+    ``yardLine`` is measured from the home goal line, so ``yardsToEndzone == 100 - yardLine``
+    when the home team has the ball and ``== yardLine`` when the away team does. Spots on the
+    goal lines are skipped (ESPN's pre-2005 CFB feeds ship ``yardsToEndzone == 0`` everywhere).
+    Known limit: the share is over all plays, so a mirror of one side only is caught when that
+    side has more than ``_MIRRORED_SHARE`` of the plays.
+    """
+    competitors = _get(summary, "header.competitions[0].competitors")
+    home_ids = {
+        str((c.get("team") or {}).get("id"))
+        for c in (competitors if isinstance(competitors, list) else [])
+        if isinstance(c, dict) and c.get("homeAway") == "home"
+    }
     sampled = mirrored = 0
     for p in plays:
         tid, line, to_go = (_get(p, f"start.{k}") for k in ("team.id", "yardLine", "yardsToEndzone"))
@@ -403,12 +418,15 @@ def _check_values(report: ContractReport, summary: dict, plays: list[dict]) -> N
         )
 
 
-def _validate_summary(summary: Any, league: str) -> ContractReport:
+def _validate_summary(summary: Any, league: str, source: str | None = None) -> ContractReport:
     """Check a candidate ESPN-shaped summary against the processor + GOP contract.
 
     Args:
         summary: The dict an adapter produced (or a real ESPN summary payload).
         league: ``"nfl"`` or ``"cfb"``.
+        source: the source that produced ``summary`` (``"espn"``, ``"fox"``, ...). An adapted
+            source's ``yardsToEndzone`` must also agree with its ``yardLine``; ESPN's and an
+            unnamed source's are not checked (see ``_UNCHECKED_FIELD_SOURCES``).
 
     Returns:
         :class:`ContractReport`. ``report.ok`` means the processor can run it; ``report.gop_ok``
@@ -446,4 +464,6 @@ def _validate_summary(summary: Any, league: str) -> ContractReport:
         _check_rows(report, plays, PLAY_FIELDS, "plays[]")
 
     _check_values(report, summary, plays)
+    if source not in _UNCHECKED_FIELD_SOURCES:
+        _check_field_position(report, summary, plays)
     return report

@@ -54,6 +54,7 @@ from typing import Any, Dict, List, Optional
 
 from sportsdataverse.cfb.cfb_fox_ext import _fox_get
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+from sportsdataverse.errors import NoDataError
 from sportsdataverse.football.fox_common import _has_pbp, _pos
 
 __all__ = ["fox_cfb_play_process", "fox_to_espn_summary"]
@@ -286,7 +287,8 @@ def fox_to_espn_summary(fox_data: Dict[str, Any]) -> Dict[str, Any]:
     for s in secs:
         for g in s.get("groups") or []:
             off_name = (g.get("entityLink") or {}).get("imageAltText") or ""
-            off_id = name2id.get(off_name.strip())
+            # the drive's team from its contentUri (as fox_common does), the display name as fallback
+            off_id = _team_id(g) or name2id.get(off_name.strip())
             post: Dict[str, int] = {}
             for sc in g.get("scores") or []:
                 try:
@@ -306,8 +308,10 @@ def fox_to_espn_summary(fox_data: Dict[str, Any]) -> Dict[str, Any]:
                 pos_id = name2id.get(play_team.strip()) or off_id
                 # field-position side: the drive's team (the play's image names the team
                 # CREDITED -- the sacker, the interceptor), the kicker on a kickoff
-                is_home_poss = ((off_id or pos_id) == home_id) != ttext.startswith("Kickoff")
-                spot = _scrimmage_spot(p)
+                side_id = off_id or pos_id
+                is_home_poss = (side_id == home_id) != ttext.startswith("Kickoff")
+                # an unresolved side gets no field position rather than a guessed (mirrored) one
+                spot = None if side_id is None else _scrimmage_spot(p)
                 ytg = None if spot is None else (spot if is_home_poss else 100 - spot)
                 # _yards_gained is the displacement toward the away goal line (home's direction)
                 gained = _yards_gained(p) if is_home_poss else -_yards_gained(p)
@@ -474,6 +478,10 @@ def fox_cfb_play_process(
         :meth:`CFBPlayProcess.run_processing_pipeline`) with an added
         ``source="fox"`` key. When ``raw=True``, the adapted summary dict.
 
+    Raises:
+        NoDataError: Fox answered but carries no play-by-play for the game (it does not cover it,
+            e.g. an FCS-hosted game).
+
     Example:
         Quick start::
 
@@ -482,6 +490,9 @@ def fox_cfb_play_process(
             print(len(game["plays"]), game["source"])
     """
     fox_data = _fox_get(f"cfb/event/{event_id}/data", **kwargs)
+    if not _has_pbp(fox_data):
+        # HTTP 200 with a real (even FINAL) header and no plays: Fox does not cover this game
+        raise NoDataError(f"Fox carries no play-by-play for CFB event {event_id}: Fox does not cover this game")
 
     summary = fox_to_espn_summary(fox_data)
     if raw:

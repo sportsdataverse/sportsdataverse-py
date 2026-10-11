@@ -105,21 +105,30 @@ def test_fox_cfb_pbp_cleaning_pipeline(monkeypatch):
 _SPECIAL = ("Kickoff", "Punt", "Field Goal", "Extra Point", "Two-Point", "Timeout", "End ", "Penalty")
 
 
-def _snaps_by_side():
+# The two committed real captures: KENT @ FSU (full) and OKLA @ MICH (trimmed: the drive groups
+# carry only ``entityLink.contentUri`` and the plays no team logo, so the side must come from it).
+_CAPTURES = ("fox_cfb_event_41616_data.json", "fox/fox_cfb_401856679.json")
+
+
+def _fox_team_id(entity):
+    import re
+
+    uri = entity.get("uri") or entity.get("contentUri") or (entity.get("entityLink") or {}).get("contentUri") or ""
+    m = re.search(r"/teams/(\d+)", uri)
+    return m.group(1) if m else None
+
+
+def _snaps_by_side(name):
     from sportsdataverse.football.fox_common import _pos
 
-    fox = _load_fox()
+    fox = _load_fox(name)
     head = fox["header"]
-    names = {}
-    for team, side in ((head["leftTeam"], "away"), (head["rightTeam"], "home")):  # Fox: left = away
-        for key in (team.get("imageAltText"), team.get("longName"), team.get("name")):
-            if key:
-                names[key.strip()] = side
+    sides = {_fox_team_id(head["leftTeam"]): "away", _fox_team_id(head["rightTeam"]): "home"}  # Fox: left = away
     emitted = [p for d in fox_to_espn_summary(fox)["drives"]["previous"] for p in d["plays"]]
     raw = []
     for section in fox["pbp"]["sections"]:
         for group in section.get("groups") or []:
-            side = names.get(((group.get("entityLink") or {}).get("imageAltText") or "").strip())
+            side = sides.get(_fox_team_id(group.get("entityLink") or {}))
             raw.extend((side, play) for play in group.get("plays") or [])
     assert len(raw) == len(emitted)  # the adapter emits one play per Fox play, in order
     out = {"home": [], "away": []}
@@ -133,15 +142,18 @@ def _snaps_by_side():
     return out
 
 
-def test_home_snap_field_position_matches_fox_geometry():
-    home = _snaps_by_side()["home"]
-    assert len(home) > 60
-    assert [got for _, got, _ in home] == [want for _, _, want in home]
+@pytest.mark.parametrize("name", _CAPTURES)
+def test_home_snap_field_position_matches_fox_geometry(name):
+    home = _snaps_by_side(name)["home"]
+    assert len(home) > 40
+    wrong = [(text, got, want) for text, got, want in home if got != want]
+    assert not wrong, f"{len(wrong)} of {len(home)} home snaps mirrored, e.g. {wrong[:2]}"
 
 
-def test_away_snap_field_position_matches_fox_geometry():
-    away = _snaps_by_side()["away"]
-    assert len(away) > 50
+@pytest.mark.parametrize("name", _CAPTURES)
+def test_away_snap_field_position_matches_fox_geometry(name):
+    away = _snaps_by_side(name)["away"]
+    assert len(away) > 40
     wrong = [(text, got, want) for text, got, want in away if got != want]
     assert not wrong, f"{len(wrong)} of {len(away)} away snaps mirrored, e.g. {wrong[:2]}"
 
@@ -149,16 +161,20 @@ def test_away_snap_field_position_matches_fox_geometry():
 def test_no_coverage_final_header_is_not_a_completed_game(monkeypatch):
     """Fox answers an uncovered game with a FINAL header and ``pbp.sections == []`` (B-M6).
 
-    That means "Fox does not have this game", not "a completed game with no plays": the backup
-    must warn and hand back an uncompleted, zero-play result.
+    The fetch succeeded and the answer is "nothing here", so the backup raises ``NoDataError``
+    (never a completed 0-play game); the adapter alone warns and does not report it final.
     """
+    from sportsdataverse.errors import NoDataError
+
     fox = _load_fox("fox/fox_cfb_no_coverage.json")
     assert fox["header"]["eventStatus"] == 3 and fox["pbp"]["sections"] == []  # the real shape
     _patch_fetch(monkeypatch, fox)
+    with pytest.raises(NoDataError, match="no play-by-play"):
+        fox_cfb_play_process(int(fox["header"]["id"]))
     with pytest.warns(UserWarning, match="no play-by-play"):
-        out = fox_cfb_play_process(int(fox["header"]["id"]))
-    assert out["plays"] == []
-    assert out["header"]["competitions"][0]["status"]["type"]["completed"] is False
+        summary = fox_to_espn_summary(fox)
+    assert summary["drives"]["previous"] == []
+    assert summary["header"]["competitions"][0]["status"]["type"]["completed"] is False
 
 
 def test_backup_makes_no_espn_request(monkeypatch):
@@ -172,6 +188,8 @@ def test_backup_makes_no_espn_request(monkeypatch):
         raise requests.exceptions.ConnectionError("network blocked in this test")
 
     monkeypatch.setattr(requests.Session, "request", _record)
+    # download() backs off between retries; skip the waits so a regression fails fast
+    monkeypatch.setattr("sportsdataverse.dl_utils._retry_delay", lambda *a, **k: 0)
     _patch_fetch(monkeypatch, _load_fox())
     out = fox_cfb_play_process(41616)
     assert len(out["plays"]) > 150

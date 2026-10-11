@@ -325,6 +325,30 @@
     The committed uncovered-game capture (FINAL header, pbp.sections == []) reports a completed
     0-play game under this mutant (ledger gate fox-no-coverage-not-final).
 
+- id: fox-cfb-no-coverage-raises
+  group: provider-gates
+  finding: B-M6
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: 'if not _has_pbp(fox_data):'
+  mutant: 'if False:'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py::test_no_coverage_final_header_is_not_a_completed_game
+  expected: kill
+  note: >-
+    Without the coverage branch fox_cfb_play_process runs the processor on the uncovered capture
+    instead of raising NoDataError (ledger gate fox-no-coverage-not-final).
+
+- id: fox-cfb-backup-joins-espn-participants
+  group: provider-gates
+  finding: B-M28
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: 'join_participants=False,'
+  mutant: 'join_participants=True,'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py::test_backup_makes_no_espn_request
+  expected: kill
+  note: >-
+    The backup fetches ESPN participants for the Fox id again (the recorded requests list is
+    non-empty).
+
 - id: contract-mirrored-field-position
   group: provider-gates
   finding: B-GB-08

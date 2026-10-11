@@ -5,9 +5,9 @@ both Fox adapters share; this module is the CFB half: ESPN's college play-type v
 id resolver, and the dispatch registration for ``source="fox"``.
 
 This is a **rewrite**, not a wrapper around the shipped :mod:`sportsdataverse.cfb.cfb_pbp_fox`.
-That module reads Fox's absolute field coordinates as yards-to-goal and takes possession from
-``play.image.altText`` (the team *credited* with the play), which mirrors the field on every
-away-offense play: 50.0% / 53.7% of spots right and ``EP_start`` r 0.16 / 0.53 on the two 2026
+That module read Fox's absolute field coordinates as yards-to-goal (it now reads them through
+:mod:`sportsdataverse.football.fox_common`) and takes possession from ``play.image.altText`` (the
+team *credited* with the play); the coordinate reading mirrored the field on every away-offense play: 50.0% / 53.7% of spots right and ``EP_start`` r 0.16 / 0.53 on the two 2026
 games measured in ``2026-09-16-cfb-alt-sources/B_fox.md`` §7. Nothing here imports it.
 
 Fox is the **last** CFB source in ``...sources.dispatch.SOURCE_ORDER``: its play-by-play covers
