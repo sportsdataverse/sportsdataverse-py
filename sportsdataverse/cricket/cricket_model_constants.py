@@ -4,7 +4,10 @@ This module is the single home of:
 
 * the **format table** (:data:`FORMAT_TABLE` / :func:`get_format`) — per-format
   ball budgets and fitted par/sigma constants that parameterise the in-play
-  win-probability and WPA models (``cricket_win_prob`` / ``cricket_wpa``); and
+  win-probability and WPA models (``cricket_win_prob`` / ``cricket_wpa``);
+* the **ODI regime table** (:data:`ODI_REGIMES` / :func:`cricket_regime`) — the
+  fielding-restriction regimes a match date falls in, which key the per-regime
+  resource surface and the per-regime constants in :data:`REGIME_CONSTANTS`; and
 * the **calibration metrics** used by every cricket model gate.
 
 The four league-agnostic metrics (:func:`brier_score`, :func:`log_loss_score`,
@@ -21,7 +24,9 @@ raises :class:`ValueError` for ``"test"`` (and any other unknown format).
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import datetime as dt
+from dataclasses import dataclass, replace
+from typing import Optional
 
 import numpy as np
 
@@ -41,10 +46,15 @@ from sportsdataverse._common.metrics import (
 
 __all__ = [
     "FORMAT_TABLE",
+    "ODI_REGIMES",
+    "POOLED_REGIME",
+    "REGIME_CONSTANTS",
+    "T20_REGIME",
     "FormatConstants",
     "auc_score",
     "brier_score",
     "calibration_table",
+    "cricket_regime",
     "get_format",
     "log_loss_score",
     "mae",
@@ -143,14 +153,81 @@ FORMAT_TABLE: dict[str, FormatConstants] = {
 }
 
 
-def get_format(fmt: str) -> FormatConstants:
+#: The pooled 2002-2026 corpus: the regime of a state with no match date, and the surface a
+#: regime whose own grid is thin falls back to (``cricket_win_prob.MIN_REGIME_CELLS``).
+POOLED_REGIME = "pooled"
+#: T20 internationals are one regime.
+T20_REGIME = "t20"
+#: ODI fielding-restriction regimes as ``(regime id, first match date)``, in order; a match
+#: on or after a start date and before the next one is in that regime
+#: (sdv-internal-refs ``rules/cricket.yaml``):
+#:
+#: * ``odi_pre2005`` -- two fielders outside the circle for 15 overs (the 1992 rule);
+#: * ``odi_2005`` -- three powerplays, 10 + 5 + 5 (``cricket-2005-odi-powerplays``; the
+#:   catalogue pins the season, not a date, so the season start is used);
+#: * ``odi_2011`` -- the discretionary powerplays confined to overs 16-40 from 2011-10-01
+#:   (``cricket-2011-odi-powerplay-window``);
+#: * ``odi_2012`` -- bowling powerplay abolished, four fielders out, two new balls from
+#:   2012-10-30 (``cricket-2012-odi-two-new-balls-four-out``);
+#: * ``odi_2015`` -- batting powerplay removed, five fielders out in overs 41-50 from
+#:   2015-07-05 (``cricket-2015-odi-batting-powerplay-removed``).
+ODI_REGIMES: tuple[tuple[str, dt.date], ...] = (
+    ("odi_pre2005", dt.date.min),
+    ("odi_2005", dt.date(2005, 1, 1)),
+    ("odi_2011", dt.date(2011, 10, 1)),
+    ("odi_2012", dt.date(2012, 10, 30)),
+    ("odi_2015", dt.date(2015, 7, 5)),
+)
+#: Per-regime ``par_score`` / ``sigma_set`` / ``sigma_chase`` overriding :data:`FORMAT_TABLE`.
+#: Empty until the per-regime refit (``dev/league_ports/fit_cricket_resource_surface.py``
+#: prints the block to paste here from a corpus carrying ``match_date``); a regime without an
+#: entry uses the pooled 2002-2026 constants.
+REGIME_CONSTANTS: dict[str, dict[str, float]] = {}
+
+
+def cricket_regime(fmt: str, match_date: Optional[dt.date]) -> str:
+    """The fielding-restriction regime a match was played under.
+
+    Args:
+        fmt: Format slug (``"t20"`` / ``"odi"``).
+        match_date: The match date; ``None`` when unknown.
+
+    Returns:
+        :data:`T20_REGIME` for a T20, :data:`POOLED_REGIME` for an ODI without a date, else
+        the :data:`ODI_REGIMES` id whose window holds the date.
+
+    Raises:
+        ValueError: For ``"test"`` (deferred) or an unknown format.
+
+    Example:
+        Quick start::
+
+            import datetime as dt
+            from sportsdataverse.cricket.cricket_model_constants import cricket_regime
+            cricket_regime("odi", dt.date(2013, 2, 1))  # "odi_2012"
+    """
+    if get_format(fmt).name == T20_REGIME:
+        return T20_REGIME
+    if match_date is None:
+        return POOLED_REGIME
+    regime = ODI_REGIMES[0][0]
+    for name, start in ODI_REGIMES:
+        if match_date >= start:
+            regime = name
+    return regime
+
+
+def get_format(fmt: str, regime: Optional[str] = None) -> FormatConstants:
     """Resolve a format slug to its :class:`FormatConstants`.
 
     Args:
         fmt: Format slug — one of ``"t20"`` / ``"odi"`` (case-insensitive).
+        regime: Optional regime id (:func:`cricket_regime`); when it has an entry in
+            :data:`REGIME_CONSTANTS` the fitted per-regime par/sigma replace the pooled
+            ones, otherwise the pooled constants are returned unchanged.
 
     Returns:
-        The :class:`FormatConstants` for ``fmt``.
+        The :class:`FormatConstants` for ``fmt`` (and ``regime``).
 
     Raises:
         ValueError: If ``fmt`` is ``"test"`` (Test cricket is deferred) or any
@@ -168,4 +245,13 @@ def get_format(fmt: str) -> FormatConstants:
         raise ValueError("Test cricket deferred")
     if key not in FORMAT_TABLE:
         raise ValueError(f"Unknown cricket format {fmt!r}; expected one of {sorted(FORMAT_TABLE)}")
-    return FORMAT_TABLE[key]
+    fc = FORMAT_TABLE[key]
+    if regime is None or regime not in REGIME_CONSTANTS:
+        return fc
+    over = REGIME_CONSTANTS[regime]
+    return replace(
+        fc,
+        par_score=over.get("par_score", fc.par_score),
+        sigma_set=over.get("sigma_set", fc.sigma_set),
+        sigma_chase=over.get("sigma_chase", fc.sigma_chase),
+    )

@@ -30,6 +30,7 @@ import io
 import json
 import os
 import urllib.request
+import datetime as dt
 import zipfile
 from pathlib import Path
 
@@ -48,6 +49,7 @@ CORPUS_SCHEMA: dict[str, pl.DataType] = {
     "match_id": pl.Utf8,
     "fmt": pl.Utf8,
     "season_year": pl.Int64,
+    "match_date": pl.Date,  # info.dates[0]: keys the ODI fielding-restriction regime of the fit
     "innings_number": pl.Int64,
     "batting_team": pl.Utf8,
     "bowling_team": pl.Utf8,
@@ -105,6 +107,8 @@ def parse_match(match: dict, match_id: str, fmt: str, over_limit: int) -> list[d
     balls_total = over_limit * 6
     winner = info.get("outcome", {}).get("winner")  # None for tie/no-result
     season_year = _season_year(info.get("season"))
+    dates = info.get("dates") or []
+    match_date = dt.date.fromisoformat(str(dates[0])[:10]) if dates else None
     teams = info.get("teams", [])
 
     rows: list[dict] = []
@@ -133,6 +137,7 @@ def parse_match(match: dict, match_id: str, fmt: str, over_limit: int) -> list[d
                     "match_id": match_id,
                     "fmt": fmt,
                     "season_year": season_year,
+                    "match_date": match_date,
                     "innings_number": i,
                     "batting_team": batting_team,
                     "bowling_team": bowling_team,

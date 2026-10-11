@@ -10,13 +10,20 @@ model needs, plus the committed calibration fixture:
    (fixed overs) via cyclic isotonic regression. Keyed on
    ``(fmt, overs_left, wickets_left)`` — the resource at a given ``overs_left``
    differs by format, so format is part of the key (a deliberate correction to
-   the fmt-less join in the original plan sketch). Written to
+   the fmt-less join in the original plan sketch), and on ``regime`` -- the
+   pooled 2002-2026 grid (``regime = "pooled"``) plus one grid per ODI
+   fielding-restriction regime (``cricket_model_constants.ODI_REGIMES``, from the
+   corpus ``match_date``) and the single T20 regime, each with the per-cell
+   ``support`` (innings-states) the runtime's thin-grid fallback reads
+   (``cricket_win_prob.MIN_REGIME_CELLS`` / ``MIN_CELL_SUPPORT``). Written to
    ``sportsdataverse/cricket/models/cricket_resource_surface.parquet``.
 
 2. **Format constants** ``par_score`` (mean first-innings total) and
    ``sigma_set`` / ``sigma_chase`` (probit scale that minimises training log-loss
    for the parametric raw win-prob ``Phi((proj_final - benchmark) / sigma)``),
-   printed for pasting into ``FORMAT_TABLE``.
+   printed for pasting into ``FORMAT_TABLE`` (pooled) and ``REGIME_CONSTANTS``
+   (per ODI regime, fitted on that regime's matches with the pooled surface;
+   rules/cricket.yaml#cricket-2012-odi-two-new-balls-four-out).
 
 3. **Isotonic calibration surface** per ``(fmt, phase)`` mapping the parametric
    raw win-prob to the empirical win rate — this is what makes the shipped
@@ -57,6 +64,8 @@ import polars as pl
 from scipy.stats import norm
 from sklearn.isotonic import IsotonicRegression
 
+from sportsdataverse.cricket.cricket_model_constants import ODI_REGIMES, POOLED_REGIME, T20_REGIME
+
 ROOT = Path(__file__).resolve().parents[2]
 CORPUS = ROOT / "dev/cricket/.cache/deliveries_all.parquet"
 SURFACE_OUT = ROOT / "sportsdataverse/cricket/models/cricket_resource_surface.parquet"
@@ -81,19 +90,32 @@ def _complete_first_innings(df: pl.DataFrame, over_limit: int) -> pl.DataFrame:
     )
 
 
-def _empirical_grid(states: pl.DataFrame, over_limit: int) -> np.ndarray:
+def _empirical_grid(states: pl.DataFrame, over_limit: int) -> tuple[np.ndarray, np.ndarray]:
+    """``(resource, support)`` grids over ``(overs_left, wickets_left)``: cell mean and cell count."""
     s = states.with_columns(
         overs_left=((pl.col("balls_total") - pl.col("legal_balls")) // 6).cast(pl.Int64),
         wickets_left=(10 - pl.col("wickets")).cast(pl.Int64),
         resource=((pl.col("innings_final_runs") - pl.col("runs")) / pl.col("innings_final_runs")).clip(0.0, 1.0),
     ).filter((pl.col("overs_left") >= 0) & (pl.col("wickets_left") >= 0))
-    agg = s.group_by(["overs_left", "wickets_left"]).agg(pl.col("resource").mean().alias("resource"))
+    agg = s.group_by(["overs_left", "wickets_left"]).agg(
+        pl.col("resource").mean().alias("resource"), pl.len().alias("support")
+    )
     grid = np.full((over_limit + 1, 11), np.nan)
+    support = np.zeros((over_limit + 1, 11), dtype=np.int64)
     for row in agg.iter_rows(named=True):
         o, w = row["overs_left"], row["wickets_left"]
         if 0 <= o <= over_limit and 0 <= w <= 10:
             grid[o, w] = row["resource"]
-    return grid
+            support[o, w] = row["support"]
+    return grid, support
+
+
+def _regime_expr() -> pl.Expr:
+    """The corpus row's regime from ``fmt`` and ``match_date`` (``cricket_model_constants.ODI_REGIMES``)."""
+    odi = pl.lit(ODI_REGIMES[0][0])
+    for name, start in ODI_REGIMES[1:]:
+        odi = pl.when(pl.col("match_date") >= pl.lit(start)).then(pl.lit(name)).otherwise(odi)
+    return pl.when(pl.col("fmt") == T20_REGIME).then(pl.lit(T20_REGIME)).otherwise(odi)
 
 
 def _cyclic_isotonic(grid: np.ndarray, over_limit: int, n_iter: int = 60) -> np.ndarray:
@@ -120,14 +142,24 @@ def _cyclic_isotonic(grid: np.ndarray, over_limit: int, n_iter: int = 60) -> np.
     return np.clip(g, 0.0, 1.0)
 
 
-def _surface_frame(grid: np.ndarray, over_limit: int, fmt: str) -> pl.DataFrame:
+def _surface_frame(grid: np.ndarray, over_limit: int, fmt: str, regime: str, support: np.ndarray) -> pl.DataFrame:
     rows = [
-        {"fmt": fmt, "overs_left": o, "wickets_left": w, "resource": float(grid[o, w])}
+        {
+            "fmt": fmt,
+            "regime": regime,
+            "overs_left": o,
+            "wickets_left": w,
+            "resource": float(grid[o, w]),
+            "support": int(support[o, w]),
+        }
         for o in range(over_limit + 1)
         for w in range(11)
     ]
     return pl.DataFrame(rows).with_columns(
-        pl.col("overs_left").cast(pl.Int64), pl.col("wickets_left").cast(pl.Int64), pl.col("resource").cast(pl.Float64)
+        pl.col("overs_left").cast(pl.Int64),
+        pl.col("wickets_left").cast(pl.Int64),
+        pl.col("resource").cast(pl.Float64),
+        pl.col("support").cast(pl.Int64),
     )
 
 
@@ -136,10 +168,11 @@ def _surface_frame(grid: np.ndarray, over_limit: int, fmt: str) -> pl.DataFrame:
 # --------------------------------------------------------------------------- #
 def _project(states: pl.DataFrame, surface: pl.DataFrame, par: dict[str, float]) -> pl.DataFrame:
     par_expr = pl.col("fmt").replace_strict(par, default=None).cast(pl.Float64)
+    pooled = surface.filter(pl.col("regime") == POOLED_REGIME).select("fmt", "overs_left", "wickets_left", "resource")
     s = states.with_columns(
         overs_left=((pl.col("balls_total") - pl.col("legal_balls")) // 6).cast(pl.Int64),
         wickets_left=(10 - pl.col("wickets")).cast(pl.Int64),
-    ).join(surface, on=["fmt", "overs_left", "wickets_left"], how="left")
+    ).join(pooled, on=["fmt", "overs_left", "wickets_left"], how="left")
     s = s.with_columns(resources_left=pl.col("resource").fill_null(0.0))
     s = s.with_columns(proj_final=(pl.col("runs") + pl.col("resources_left") * par_expr).cast(pl.Float64))
     benchmark = pl.when(pl.col("innings_number") == 2).then(pl.col("target").cast(pl.Float64)).otherwise(par_expr)
@@ -212,6 +245,9 @@ def _wpa_holdout_states(states: pl.DataFrame, match_ids: list[str]) -> pl.DataFr
 
 def main() -> None:
     df = pl.read_parquet(CORPUS).filter(pl.col("batting_team_won").is_not_null())
+    if "match_date" not in df.columns:
+        raise SystemExit("corpus has no match_date: re-run dev/cricket/fetch_cricsheet.py (it now keeps info.dates[0])")
+    df = df.with_columns(regime=_regime_expr())
 
     # random match-level holdout (no match in both sides)
     mids = df.select("match_id").unique().sort("match_id").to_series().to_list()
@@ -224,11 +260,16 @@ def main() -> None:
     par: dict[str, float] = {}
     sigmas: dict[str, tuple[float, float]] = {}
 
-    # 1) surface + par + sigma per format (train)
+    # 1) surface + par + sigma per format (train): the pooled grid, then one grid per regime
+    #    with its cell support (the runtime falls back to the pooled grid when a regime is thin)
     for fmt, over_limit in OVER_LIMIT.items():
         ftrain = train_df.filter(pl.col("fmt") == fmt)
-        grid = _cyclic_isotonic(_empirical_grid(_complete_first_innings(ftrain, over_limit), over_limit), over_limit)
-        surfaces.append(_surface_frame(grid, over_limit, fmt))
+        grid, support = _empirical_grid(_complete_first_innings(ftrain, over_limit), over_limit)
+        surfaces.append(_surface_frame(_cyclic_isotonic(grid, over_limit), over_limit, fmt, POOLED_REGIME, support))
+        for regime in sorted(ftrain["regime"].unique().to_list()):
+            rtrain = ftrain.filter(pl.col("regime") == regime)
+            grid, support = _empirical_grid(_complete_first_innings(rtrain, over_limit), over_limit)
+            surfaces.append(_surface_frame(_cyclic_isotonic(grid, over_limit), over_limit, fmt, regime, support))
         par[fmt] = float(
             ftrain.filter(pl.col("innings_number") == 1)
             .group_by("match_id")
@@ -246,6 +287,27 @@ def main() -> None:
             _fit_sigma(s_set["z"].to_numpy(), s_set["batting_team_won"].to_numpy().astype(float), sigma_hi),
             _fit_sigma(s_ch["z"].to_numpy(), s_ch["batting_team_won"].to_numpy().astype(float), sigma_hi),
         )
+
+    # 1b) per-regime par / sigma on the pooled surface (REGIME_CONSTANTS); the calibrator stays
+    #     pooled per (fmt, phase)
+    regime_consts: dict[str, dict[str, float]] = {}
+    for regime in sorted(r for r in train_df["regime"].unique().to_list() if r != T20_REGIME):
+        rtrain = proj_train.filter(pl.col("regime") == regime)
+        if rtrain["match_id"].n_unique() < 100:
+            continue
+        r_par = float(
+            rtrain.filter(pl.col("innings_number") == 1)
+            .group_by("match_id")
+            .agg(pl.col("innings_final_runs").first())["innings_final_runs"]
+            .mean()
+        )
+        r_set = rtrain.filter(pl.col("phase") == "set")
+        r_ch = rtrain.filter(pl.col("phase") == "chase")
+        regime_consts[regime] = {
+            "par_score": round(r_par, 1),
+            "sigma_set": _fit_sigma(r_set["z"].to_numpy(), r_set["batting_team_won"].to_numpy().astype(float), 120.0),
+            "sigma_chase": _fit_sigma(r_ch["z"].to_numpy(), r_ch["batting_team_won"].to_numpy().astype(float), 120.0),
+        }
 
     # 2) parametric raw win-prob on train + per-(fmt, phase) isotonic calibrator
     def raw_prob(frame: pl.DataFrame) -> np.ndarray:
@@ -305,6 +367,9 @@ def main() -> None:
             f'  "{fmt}": FormatConstants(name="{fmt}", balls_total={OVER_LIMIT[fmt] * 6}, max_wickets=10, '
             f"par_score={par[fmt]:.1f}, sigma_set={sig_set:.1f}, sigma_chase={sig_ch:.1f}),"
         )
+    print("\n=== fitted ODI regime constants (paste into REGIME_CONSTANTS) ===")
+    for regime, consts in regime_consts.items():
+        print(f'    "{regime}": {consts},')
     print(f"\nwrote {SURFACE_OUT}")
     print(f"wrote {CALIB_OUT}")
     print(f"wrote {HOLDOUT_OUT} ({hold_fixture.height} states, {hold_fixture['event_id'].n_unique()} matches)")
