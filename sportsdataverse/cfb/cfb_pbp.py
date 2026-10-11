@@ -55,6 +55,36 @@ def _touchdown_negated() -> pl.Expr:
     )
 
 
+def _opening_kicker(plays: pl.DataFrame, home_id: int, away_id: int) -> int | None:
+    """The team that kicked the opening kickoff, i.e. the team that receives the second-half kickoff.
+
+    Read from the period-1 rows in order. ESPN's kickoff ``start.team.id`` names the kicking team,
+    except on a few opening kickoffs where it names the receiver (400559176), so the first scrimmage
+    snap settles it: with no turnover on the kick and no second kickoff before that snap (a return
+    touchdown), the receiver snaps first. A feed that files a scrimmage play before any kickoff gets
+    the first snap's defense (cfbfastR's and nflfastR's fallback). ``None`` when period 1 has no plays.
+    """
+    rows = plays.filter(pl.col("period.number") == 1).select("type.text", "text", "start.team.id", "start.down").rows()
+    labelled = None
+    for kind, text, team, down in rows:
+        kind = kind or ""
+        if team is None:
+            continue
+        if re.search(r"(?i)kickoff|onside", kind):
+            if labelled is not None:
+                return labelled
+            labelled = int(team)
+            if re.search(r"(?i)fumble|recover|muff|onside", text or ""):
+                return labelled
+            continue
+        if re.search(r"(?i)timeout|end of|end period|extra point|two.point|2pt|coin toss|penalty", kind) or not down:
+            continue
+        if labelled is None or int(team) == labelled:
+            return away_id if int(team) == home_id else home_id
+        return labelled
+    return labelled
+
+
 #: Infractions that WIPE OUT the play, measured by how often the down is
 #: replayed among plays with penalty text and no explicit outcome marker
 #: (no-penalty baseline 0.155): false start 0.976, ineligible downfield 0.968,
@@ -2810,6 +2840,7 @@ class CFBPlayProcess(object):
         _period_over = (pl.col("half").shift(-1) != pl.col("half")).fill_null(False) | (
             pl.col("half").shift(-1).is_null() & (pl.col("status_type_completed") == True)  # noqa: E712
         ).fill_null(False)
+        opening_kicker = _opening_kicker(pbp_txt["plays"], init["homeTeamId"], init["awayTeamId"])
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -2862,15 +2893,9 @@ class CFBPlayProcess(object):
                 .then(pl.col("end.awayTeamTimeouts"))
                 .otherwise(pl.col("end.homeTeamTimeouts"))
                 .alias("end.defPosTeamTimeouts"),
-                pl.when(
-                    (pl.col("game_play_number") == 1).and_(
-                        pl.col("type.text").is_in(kickoff_vec),
-                        pl.col("start.pos_team.id") == pl.col("homeTeamId"),
-                    ),
-                )
-                .then(pl.col("homeTeamId"))
-                .otherwise(pl.col("awayTeamId"))
-                .alias("firstHalfKickoffTeamId"),
+                # one game-wide constant: the opening kicker (it was a per-row expression that
+                # named the receiver on row 1 and the away team on every later row)
+                pl.lit(opening_kicker, dtype=pl.Int32).alias("firstHalfKickoffTeamId"),
                 pl.col("period.number").alias("period"),
                 pl.when(pl.col("start.team.id") == pl.col("homeTeamId"))
                 .then(pl.lit(100) - pl.col("start.yardLine"))
@@ -3320,14 +3345,7 @@ class CFBPlayProcess(object):
             )
             .drop(["_ret_spot", "_ret_y2ez", "_nxt_start", "_nxt_pos"])
         )
-        pbp_txt["firstHalfKickoffTeamId"] = np.where(
-            (pbp_txt["plays"]["game_play_number"] == 1)
-            & (pbp_txt["plays"]["type.text"].is_in(kickoff_vec))
-            & (pbp_txt["plays"]["start.team.id"] == init["homeTeamId"]),
-            init["homeTeamId"],
-            init["awayTeamId"],
-        )
-        pbp_txt["firstHalfKickoffTeamId"] = pbp_txt["firstHalfKickoffTeamId"][0]
+        pbp_txt["firstHalfKickoffTeamId"] = opening_kicker
 
         if "scoringType.displayName" in pbp_txt["plays"].columns:
             pbp_txt["plays"] = (
@@ -4320,11 +4338,12 @@ class CFBPlayProcess(object):
                 .then(pl.col("pos_score_diff"))
                 .otherwise(pl.col("pos_score_diff_start"))
                 .alias("pos_score_diff_start"),
-                pl.when(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId"))
+                # nflfastR's receive_2h_ko: only a first-half row can still be waiting for that kickoff
+                pl.when((pl.col("period") <= 2).and_(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId")))
                 .then(True)
                 .otherwise(False)
                 .alias("start.pos_team_receives_2H_kickoff"),
-                pl.when(pl.col("end.pos_team.id") == pl.col("firstHalfKickoffTeamId"))
+                pl.when((pl.col("period") <= 2).and_(pl.col("end.pos_team.id") == pl.col("firstHalfKickoffTeamId")))
                 .then(True)
                 .otherwise(False)
                 .alias("end.pos_team_receives_2H_kickoff"),

@@ -24,12 +24,13 @@ Oracle per column
     define the kicker. Asserted on the 85 captures whose feed opens period 1 with a kickoff (43 kicked
     by the home team). On the other 41 (32 feeds from 2004-2012 that file a scrimmage play first, and 9
     later feeds that lack the opening kickoff or number a later play ahead of it) nothing is asserted.
-    XFAIL C-NF-2 / C-M13 on every one of the 85 (row 1 names the receiving team; later rows the away
-    team).
-``start/end.pos_team_receives_2H_kickoff`` (first-half rows)
-    cfbfastR ``cfbd_pbp_data.R:1329-1332``: true exactly when the possession team is the opening
-    kicker. Second-half rows are not asserted: cfbfastR leaves the flag ungated there while nflfastR
-    gates it to the first half, and the phase-2 port (plan task 2.6) makes that choice. XFAIL C-NF-2.
+    Green since task 2.6 (C-NF-2 / C-M13: it was a per-row expression naming the receiving team on row 1
+    and the away team on every later row).
+``start/end.pos_team_receives_2H_kickoff``
+    First-half rows: cfbfastR ``cfbd_pbp_data.R:1329-1332``, true exactly when the possession team is
+    the opening kicker (the 85 captures above). Rows after the first half: false on every capture,
+    nflfastR's ``receive_2h_ko`` gate (cfbfastR leaves the flag ungated there; task 2.6 chose the
+    nflfastR rule, as the NFL processor does). Green since task 2.6 (C-NF-2).
 ``start.yardsToEndzone.touchback`` (kickoff rows)
     The NCAA rule, sdv-internal-refs ``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``: 80 through
     2011, 75 from 2012. Owner ruling: through 2011 the RULE is the oracle, not cfbfastR -- cfbfastR's
@@ -310,19 +311,10 @@ def _params(game_ids, red: dict[int, str] | None = None) -> list:
 # --- C-NF-2 / C-M13: the opening-kickoff team and the 2H-kickoff flag -------------------------------
 
 _KICKOFF_DEFINED = tuple(gid for gid in CAPTURES if FEEDS[gid].opening_kicker is not None)
-_NF2 = (
-    "C-NF-2 / C-M13: firstHalfKickoffTeamId is a per-row expression (cfb_pbp.py:2865-2873): row 1 names the "
-    "receiving team and every later row the away team, so it is the opening kicker on no row-1 and on "
-    "no row at all when the home team kicked"
-)
-_NF2_FLAG = (
-    "C-NF-2: pos_team_receives_2H_kickoff reads the per-row firstHalfKickoffTeamId (cfb_pbp.py:4323-4330): "
-    "row 1 always, and every first-half row when the home team kicked, carry the inverted flag"
-)
 
 
-@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED, dict.fromkeys(_KICKOFF_DEFINED, _NF2)))
-def test_first_half_kickoff_team_is_the_opening_kicker_on_every_row(game_id):
+@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED))
+def test_first_half_kickoff_team_constant_is_the_opening_kicker(game_id):
     kicker = FEEDS[game_id].opening_kicker
     df = _frame(game_id)
     named = df["firstHalfKickoffTeamId"].cast(pl.Int64)
@@ -332,7 +324,7 @@ def test_first_half_kickoff_team_is_the_opening_kicker_on_every_row(game_id):
     assert wrong == 0, f"{wrong} of {df.height} rows name a team other than the opening kicker {kicker}"
 
 
-@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED, dict.fromkeys(_KICKOFF_DEFINED, _NF2_FLAG)))
+@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED))
 def test_receives_2h_kickoff_on_first_half_rows_is_the_opening_kicker(game_id):
     kicker = FEEDS[game_id].opening_kicker
     first_half = _frame(game_id).filter(pl.col("period") <= 2)
@@ -342,6 +334,15 @@ def test_receives_2h_kickoff_on_first_half_rows_is_the_opening_kicker(game_id):
         got = first_half[f"{side}.pos_team_receives_2H_kickoff"]
         wrong = int(expected.ne_missing(got).sum())
         assert wrong == 0, f"{side}: {wrong} of {first_half.height} first-half rows carry the inverted flag"
+
+
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
+def test_receives_2h_kickoff_is_false_after_the_first_half(game_id):
+    """Nobody is still waiting for the second-half kickoff once it has happened (nflfastR's gate)."""
+    later = _frame(game_id).filter(pl.col("period") > 2)
+    for side in ("start", "end"):
+        flagged = int(later[f"{side}.pos_team_receives_2H_kickoff"].ne_missing(False).sum())
+        assert flagged == 0, f"{side}: {flagged} of {later.height} rows after the first half carry the flag"
 
 
 def test_the_kickoff_oracle_covers_the_captures_it_should():

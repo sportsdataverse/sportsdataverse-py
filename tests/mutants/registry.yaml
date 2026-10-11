@@ -163,28 +163,46 @@
     survive_until: "3.2"
   note: the only shootout fixture (401282146) has its first attempt in period 7, so >= 7 still passes
 
-# --- C-M13 / C-NF-2: the CFB opening-kickoff team can be inverted unnoticed ------------------------
+# --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13
   file: sportsdataverse/cfb/cfb_pbp.py
-  # the live frame expression (cfb_pbp.py:2865-2873) that start/end.pos_team_receives_2H_kickoff read;
-  # block scalars: the first line sets the indent, the later lines keep their 16 spaces
-  snippet: |-
-    .then(pl.col("homeTeamId"))
-                    .otherwise(pl.col("awayTeamId"))
-                    .alias("firstHalfKickoffTeamId"),
-  mutant: |-
-    .then(pl.col("awayTeamId"))
-                    .otherwise(pl.col("homeTeamId"))
-                    .alias("firstHalfKickoffTeamId"),
-  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400547699 or 400547865)"
+  # the game-wide constant (task 2.6) that start/end.pos_team_receives_2H_kickoff read
+  snippet: 'pl.lit(opening_kicker, dtype=pl.Int32).alias("firstHalfKickoffTeamId"),'
+  mutant: 'pl.lit(init["awayTeamId"] if opening_kicker == init["homeTeamId"] else init["homeTeamId"], dtype=pl.Int32).alias("firstHalfKickoffTeamId"),'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400547699 or 400547865 or 400547866)"
   expected: kill
   note: >-
-    C-NF-2. The row used to mutate the pbp_txt["firstHalfKickoffTeamId"] np.where at :3323-3330, a
-    dict key nothing reads or returns, so no test could ever kill it (tier C M13's "survives 242
-    tests" was measured there). The swap of the live expression makes the home-kicked captures
-    right, so their strict-xfail truth tests XPASS (red). Task 2.6 deletes the dead np.where block
-    and flips the test to a plain assert, which then kills the swap on every capture.
+    C-NF-2. The home/away swap of the opening kicker. Before task 2.6 the row mutated the per-row
+    expression at cfb_pbp.py:2865-2873 (and, earlier still, the pbp_txt["firstHalfKickoffTeamId"]
+    np.where nothing in the frame read); task 2.6 made the column one game-wide constant and turned
+    the strict xfails into plain asserts, so the swap is red on every one of the 85 captures (two
+    home-kicked, one away-kicked selected here).
+
+- id: cfb-opening-kicker-reads-the-receiver
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'select("type.text", "text", "start.team.id", "start.down")'
+  mutant: 'select("type.text", "text", "start.pos_team.id", "start.down")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400756970 or 401752844)"
+  expected: kill
+  note: >-
+    Ledger gate cfb-2h-kickoff-flag-truth: reading start.pos_team.id (the receiver) on the kickoff row.
+    The first-snap check in _opening_kicker repairs a receiver label whenever the receiver snaps
+    first, so this mutant is red only where the kick ends in a turnover or a second kickoff comes
+    before any snap: 6 of the 85 captures (400756970, 400869817, 401032062, 401309854, 401752844,
+    401761665), not on 400547866 as the ledger line guessed.
+
+- id: cfb-receives-2h-kickoff-period-gate
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'pl.when((pl.col("period") <= 2).and_(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId")))'
+  mutant: 'pl.when(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "receives_2h_kickoff_is_false_after_the_first_half and (400547866 or 400547699)"
+  expected: kill
+  note: >-
+    Ledger gate cfb-2h-kickoff-flag-truth: dropping the period <= 2 gate (nflfastR's receive_2h_ko,
+    task 2.6) flags the opening kicker's second-half possessions again.
 
 # --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012) ----------------
 - id: cfb-kickoff-touchback-75-from-2014
