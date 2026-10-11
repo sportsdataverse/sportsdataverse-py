@@ -287,28 +287,30 @@
 
 # --- B-M36: the NCAA capture clean-page check has no behavioural test ---------------------------
 - id: ncaa-capture-is-clean-always-true
+  group: provider-gates
   finding: B-M36
   file: sportsdataverse/scrape/ncaa/capture.py
   snippet: 'return len(html) > _MIN_BYTES and len(_TR_RE.findall(html)) > _MIN_ROWS'
   mutant: 'return True'
-  test: tests/scrape/test_scrape_ncaa_league.py
-  expected:
-    survive_until: "1.4"
-  note: rt-B-ncaa-stats-002 (175 passed); 1.4 adds tests/scrape/ncaa/test_capture_behaviour.py (ledger gate capture-behaviour)
+  test: tests/scrape/ncaa/test_capture_behaviour.py
+  expected: kill
+  note: >-
+    rt-B-ncaa-stats-002 (175 passed on test_scrape_ncaa_league.py); 1.4's capture tests write the
+    real Akamai "Access Denied" page as a bundle under this mutant (ledger gate capture-behaviour)
 
 # --- B-M37: the Fox CFB end-to-end test cannot tell which side's snaps are mirrored --------------
 - id: fox-cfb-yardline-mirror-flip
+  group: provider-gates
   finding: B-M37
   file: sportsdataverse/cfb/cfb_pbp_fox.py
   snippet: 'return int(e["yardStart"])'
   mutant: 'return 100 - int(e["yardStart"])'
   test: tests/cfb/test_cfb_pbp_fox_offline.py
-  expected:
-    survive_until: "1.4"
+  expected: kill
   note: >-
-    B-H3 is live (away snaps mirrored); flipping the mirror onto the home snaps keeps
-    test_fox_cfb_pbp_full_pipeline green. 1.4's strict-xfail away-snap assert (ledger gate
-    fox-away-snap-xfail) goes XPASS under this mutant, i.e. red.
+    B-H3 is live (away snaps mirrored); flipping the mirror onto the home snaps kept
+    test_fox_cfb_pbp_full_pipeline green. 1.4's home-snap assert goes red and its strict-xfail
+    away-snap assert goes XPASS(strict) under this mutant (ledger gate fox-away-snap-xfail).
 
 # --- C-L30: the NHL faceoff gate cannot detect a skipped fit --------------------------------------
 - id: nhl-faceoff-skip-fit
@@ -521,3 +523,107 @@
   test: tests/codegen/test_id_casts.py -k empty_frame_keeps
   expected: kill
   note: casting the empty frame too is task 5.2's fix; the strict xfail turns XPASS (red), which is the kill
+
+# --- task 1.4: hand-written provider gates (group provider-gates) -------------------------------
+- id: cfb-schedule-drop-null-competitor-guard
+  group: provider-gates
+  finding: B-M34
+  file: sportsdataverse/cfb/cfb_schedule.py
+  snippet: 'if not _comps or not (_comps[0].get("competitors") or []):'
+  mutant: 'if False:'
+  test: tests/cfb/test_cfb_schedule_teams_offline.py
+  expected: kill
+  note: >-
+    the real 2014 scoreboard's `{}` placeholder event (and an emptied competitions list) must not
+    discard the day (ledger gate espn-8-league-offline-snapshots; the 2010 capture no longer
+    carries a placeholder)
+
+- id: nba-schedule-returns-none
+  group: provider-gates
+  finding: B-M34
+  file: sportsdataverse/nba/nba_schedule.py
+  snippet: 'return ev.to_pandas() if return_as_pandas else ev'
+  mutant: 'return None'
+  test: tests/nba/test_nba_schedule_teams_offline.py
+  expected: kill
+  note: the offline snapshot on scoreboard_nba.json (task 1.4 evidence line)
+
+- id: player-stats-display-value-first
+  group: provider-gates
+  finding: B-M33
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: 'out[col] = num if num is not None else stat.get("displayValue")'
+  mutant: 'out[col] = stat.get("displayValue") if stat.get("displayValue") is not None else num'
+  test: tests/test_common_espn_player_stats.py
+  expected: kill
+  note: the pinned capture values (ledger gate player-stats-offline)
+
+- id: ncaa-parse-quarters-for-every-season
+  group: provider-gates
+  finding: B-M35
+  file: sportsdataverse/scrape/ncaa/parse.py
+  snippet: 'pbp_df = parse_ncaa_bb_game_pbp(pbp_html, contest_id, period_model=wbb_period_model(season))'
+  mutant: 'pbp_df = parse_ncaa_bb_game_pbp(pbp_html, contest_id, period_model=(4, 600, 300))'
+  test: tests/scrape/ncaa/test_parse_era.py
+  expected: kill
+  note: the 2015 halves-era bundle parses to 0 rows (ledger gate ncaa-era-integration)
+
+- id: ncaa-v1-name-last-dot-first
+  group: provider-gates
+  finding: B-L39
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: 'name = f"{first}.{last}"'
+  mutant: 'name = f"{last}.{first}"'
+  test: tests/scrape/ncaa/test_parse_era.py::test_v1_last_first_names_become_first_dot_last
+  expected: kill
+  note: the V1 LAST,FIRST branch on the real 2015 page
+
+- id: ncaa-capture-soft-ban-never-stops
+  group: provider-gates
+  finding: B-M36
+  file: sportsdataverse/scrape/ncaa/capture.py
+  snippet: 'if max_consecutive_failures and consecutive_failures >= max_consecutive_failures:'
+  mutant: 'if False:'
+  test: tests/scrape/ncaa/test_capture_behaviour.py
+  expected: kill
+  note: soft-ban stop
+
+- id: ncaa-capture-shard-rotation-offset
+  group: provider-gates
+  finding: B-M36
+  file: sportsdataverse/scrape/ncaa/capture.py
+  snippet: 'k = (shard_i * len(vendor["proxies"])) // shard_n'
+  mutant: 'k = 0'
+  test: tests/scrape/ncaa/test_capture_behaviour.py
+  expected: kill
+  note: every worker would start on the same sticky proxy
+
+- id: cbs-scoreboard-logo-order-swapped
+  group: provider-gates
+  finding: B-L61
+  file: sportsdataverse/football/cbs_common.py
+  snippet: '"away_cbs_team_id": teams[0] if len(teams) > 0 else None,'
+  mutant: '"away_cbs_team_id": teams[1] if len(teams) > 1 else None,'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py::test_the_first_card_logo_is_the_away_team_on_a_real_page
+  expected: kill
+  note: the away-first logo order on the real 2025 week-1 page
+
+- id: pff-strict-env-only-one
+  group: provider-gates
+  finding: B-L65
+  file: sportsdataverse/nfl/pff_api_runtime.py
+  snippet: 'in {"1", "true", "yes"}'
+  mutant: 'in {"1"}'
+  test: tests/nfl/test_pff_api_runtime.py
+  expected: kill
+  note: the audit's mutant (passed all 47 tests); the documented true/yes spellings are now pinned
+
+- id: dl-utils-timeout-not-forwarded
+  group: provider-gates
+  finding: test-harness R1 (progress.md 10-11 06:52)
+  file: sportsdataverse/dl_utils.py
+  snippet: 'response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)'
+  mutant: 'response = session.get(url, params=params, proxies=proxy, headers=headers)'
+  test: tests/test_dl_utils.py::TestDownload::test_download_valid_url_with_short_timeout
+  expected: kill
+  note: the short-timeout test is now offline and deterministic (an injected session raises the Timeout)
