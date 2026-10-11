@@ -52,4 +52,4 @@ def test_definition_text(col, phrase):
 
 def test_every_team_rank_says_when_it_is_unranked(schemas):
     ranks = [c["name"] for c in schemas["load_cfb_team_summaries"] if c["name"].endswith("_rank")]
-    assert [c for c in ranks if "unranked" not in (describe(c) or "unranked")] == []
+    assert [c for c in ranks if "unranked" not in (describe(c) or "")] == []
