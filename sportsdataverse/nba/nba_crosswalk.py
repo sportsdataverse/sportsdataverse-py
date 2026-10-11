@@ -648,6 +648,8 @@ def nba_crosswalks_from_archive(
     espn_game_rosters: pl.DataFrame,
     stats_dir: Union[str, Path],
     min_confidence: float = 0.92,
+    *,
+    fox: bool = False,
 ) -> Dict[str, pl.DataFrame]:
     """Build the NBA team, schedule and player crosswalks for a past season, offline.
 
@@ -670,8 +672,10 @@ def nba_crosswalks_from_archive(
       athlete per team. ``match_confidence`` is the share of that athlete's
       matched games that agree on the chosen ``nba_player_id``.
 
-    Yahoo team and game ids are computed from 2014 on; Fox and Yahoo player
-    columns stay null (they need per-game harvesting).
+    All-Star and other exhibition sides are left out of the team and player
+    crosswalks (they never play a franchise); their games stay in the
+    schedule. Yahoo team and game ids are computed from 2014 on; Yahoo player
+    columns stay null, and Fox columns stay null unless ``fox=True``.
 
     Args:
         season: Season, ending year (``2025`` = 2024-25).
@@ -679,6 +683,12 @@ def nba_crosswalks_from_archive(
         espn_game_rosters: That season's ESPN game rosters parquet.
         stats_dir: The stats archive's ``json`` root.
         min_confidence: Jaro-Winkler floor for a fuzzy player match.
+        fox: Fetch the Fox legs live (the only network call). ``fox_team_id`` /
+            ``fox_team_name`` join on the normalized team name, so they fill for
+            any season whose franchise names match today's Fox names. The Fox
+            player columns fill only for the current season (Fox rosters are
+            today's) and stay null otherwise. A failed Fox fetch logs a warning
+            and leaves the columns null; it never fails the build.
 
     Returns:
         ``{"team": ..., "schedule": ..., "player": ...}``, with the same columns
@@ -716,4 +726,4 @@ def nba_crosswalks_from_archive(
     stats = read_stats_archive(stats_dir, "nba", season)
     if stats["games"].height == 0:
         raise FileNotFoundError(f"no NBA box scores for season {season} under {stats_dir}")
-    return build_archive_crosswalks("nba", season, espn_schedule, espn_game_rosters, stats, min_confidence)
+    return build_archive_crosswalks("nba", season, espn_schedule, espn_game_rosters, stats, min_confidence, fox=fox)
