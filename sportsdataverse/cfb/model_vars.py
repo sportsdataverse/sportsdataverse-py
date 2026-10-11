@@ -279,7 +279,9 @@ qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "era0", "e
 #: (``cfb-2019-overtime-shootout-from-fifth``); the third, period 7, from 2021
 #: (``cfb-2021-overtime-shootout-from-third``). Source: NCAA, "Panel approves changes to
 #: overtime rules in football", 2021-04-22,
-#: https://www.ncaa.org/news/2021/4/22/panel-approves-changes-to-overtime-rules-in-football.aspx
-#: ("This is a change from the previous rule, which started to use 2-point plays in the fifth
-#: overtime period").
+#: https://www.ncaa.com/news/football/article/2021-04-22/panel-approves-changes-overtime-rules-football
+#: (the ncaa.org original, now redirected, archived at
+#: https://web.archive.org/web/20250430140415/https://www.ncaa.org/news/2021/4/22/panel-approves-changes-to-overtime-rules-in-football.aspx):
+#: "This is a change from the previous rule, which started to use 2-point plays in the fifth
+#: overtime period".
 OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))
