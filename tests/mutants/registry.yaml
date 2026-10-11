@@ -23,18 +23,23 @@
 # says: fix the row in the PR that moved the code.
 #
 # Every row was run on the branch point (36f7a02f1b): each `kill` row is killed, each
-# `survive_until` row survives (see the PR body of `ci: mutation registry and job`).
+# `survive_until` row survives (see the PR body of `ci: mutation registry and job`). The rows 1.1
+# added or flipped were run on its head (PR #758 body).
 
 # --- C-L12: cross-game `.over("game_id")` guards in nfl/ep_wp.py ---------------------------------
+# Killer (1.1): the frames the pipeline hands calculate_epa / calculate_wpa for two real captures
+# (401547449 + 401671740), stacked, must equal the per-game runs column by column.
 - id: ep-wp-lag-ep-end-over-game-id
   group: over-game-id
   finding: C-L12
   file: sportsdataverse/nfl/ep_wp.py
   snippet: 'lag_EP_end=pl.col("EP_end").shift(1).over("game_id"),'
   mutant: 'lag_EP_end=pl.col("EP_end").shift(1),'
-  test: tests/nfl/test_ep_wp_epa.py::test_no_cross_game_leak
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
   expected: kill
-  note: the one guard the suite pins today (rt-C-models-001); ledger gate real-concat-test (1.1)
+  note: >-
+    rt-C-models-001; ledger gate real-concat-test (1.1). Moved off the synthetic
+    test_ep_wp_epa.py::test_no_cross_game_leak, which 1.1 replaced with two real captures.
 
 - id: ep-wp-lag-change-of-pos-team-over-game-id
   group: over-game-id
@@ -42,10 +47,9 @@
   file: sportsdataverse/nfl/ep_wp.py
   snippet: 'lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1).over("game_id"),'
   mutant: 'lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1),'
-  test: tests/nfl/test_ep_wp_epa.py
-  expected:
-    survive_until: "1.1"
-  note: rt-C-models-001 (555 passed); 1.1's real two-game concat test is the killer
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
+  expected: kill
+  note: rt-C-models-001 (survived 555 synthetic tests); killed by 1.1's real two-game concat
 
 - id: ep-wp-scoring-play-shift-over-game-id
   group: over-game-id
@@ -53,10 +57,14 @@
   file: sportsdataverse/nfl/ep_wp.py
   snippet: 'pl.col("scoring_play").shift(1).over("game_id") == True,'
   mutant: 'pl.col("scoring_play").shift(1) == True,'
-  test: tests/nfl/test_ep_wp_epa.py
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
   expected:
-    survive_until: "1.1"
-  note: rt-C-models-002 (the EP_between / penalty branch)
+    survive_until: owner
+  note: >-
+    rt-C-models-002. Unreachable on real data: the guarded branch (a clock-stoppage row right
+    after a scoring play) only crosses a game boundary when a game OPENS on a clock-stoppage row,
+    and none of the 31 NFL captures does (they open on a kickoff or a scrimmage play). No plan
+    task can kill it with a real capture; the owner decides whether it keeps a row.
 
 - id: ep-wp-lead-wp-before-over-game-id
   group: over-game-id
@@ -64,10 +72,9 @@
   file: sportsdataverse/nfl/ep_wp.py
   snippet: 'lead_wp_before=pl.col("wp_before").shift(-1).over("game_id"),'
   mutant: 'lead_wp_before=pl.col("wp_before").shift(-1),'
-  test: tests/nfl/test_ep_wp_epa.py
-  expected:
-    survive_until: "1.1"
-  note: C-L12 (calculate_wpa was never mutated by the audit; WPA tests have no concat case)
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
+  expected: kill
+  note: C-L12 (calculate_wpa was never mutated by the audit); killed by 1.1's real two-game concat
 
 - id: ep-wp-lead-wp-before2-over-game-id
   group: over-game-id
@@ -75,9 +82,8 @@
   file: sportsdataverse/nfl/ep_wp.py
   snippet: 'lead_wp_before2=pl.col("wp_before").shift(-2).over("game_id"),'
   mutant: 'lead_wp_before2=pl.col("wp_before").shift(-2),'
-  test: tests/nfl/test_ep_wp_wpa.py
-  expected:
-    survive_until: "1.1"
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
+  expected: kill
   note: C-L12 measured 7-14 helper rows moving on real two-game concats
 
 - id: ep-wp-vegas-home-wpa-over-game-id
@@ -86,24 +92,54 @@
   file: sportsdataverse/nfl/ep_wp.py
   snippet: '(pl.col("vegas_home_wp").shift(-1).over(grp) - pl.col("vegas_home_wp"))'
   mutant: '(pl.col("vegas_home_wp").shift(-1) - pl.col("vegas_home_wp"))'
-  test: tests/nfl/test_ep_wp_wpa.py
-  expected:
-    survive_until: "1.1"
-  note: C-L12 measured vegas_home_wpa moving on 3 rows under this mutant
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs_nflverse_wpa
+  expected: kill
+  note: >-
+    C-L12 measured vegas_home_wpa moving on 3 rows; the nflverse-path _derive_wpa on the two
+    committed nflverse slices, stacked vs per game (1.1)
 
-# --- C-L20: a constant cp passes the ep_wp test module ------------------------------------------
+# --- C-L20: a constant cp passed the ep_wp test module ------------------------------------------
 - id: ep-wp-constant-cp
   finding: C-L20
   file: sportsdataverse/nfl/ep_wp.py
   snippet: 'pl.Series("cp", cp_preds.tolist(), dtype=pl.Float64)'
   mutant: 'pl.Series("cp", [0.5] * len(cp_preds), dtype=pl.Float64)'
-  test: tests/nfl/test_nfl_ep_wp.py
-  expected:
-    survive_until: "1.5"
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_completion_probability_reproduces_nflverse
+  expected: kill
   note: >-
-    rt-C-models-004: eleven return-type / not-null tests; nothing asserts a cp level on real pass
-    rows. C-L20 is listed only under task 1.6 in the plan (no task schedules the killing test);
-    1.5 (model gates) is the natural owner -- flagged in the 1.6 PR body.
+    rt-C-models-004: eleven return-type / not-null tests passed a constant cp. Killed early (the
+    row read survive_until 1.5) by 1.1's oracle: the CP booster on nflverse's own inputs must
+    reproduce nflverse's cp (corr >= 0.994 / 0.993, MAE <= 0.016 on the two slices).
+
+# --- C-M7 / C-M8: prob_2pt dtype mix across captures ----------------------------------------------
+- id: nfl-prob-2pt-float64
+  finding: C-M7
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'scored_pl = pl.from_pandas(scored).with_columns(pl.col("go_index").cast(pl.UInt32))'
+  mutant: 'scored_pl = pl.from_pandas(scored).with_columns(pl.col("go_index").cast(pl.UInt32), pl.col("prob_2pt").cast(pl.Float64))'
+  test: tests/nfl/test_nfl_schema_allowlist.py::test_prob_2pt_has_one_documented_dtype
+  expected: kill
+  note: >-
+    The 2.17 fix as a mutant: prob_2pt Float64 whether or not the two-point model scores turns
+    the C-M7 strict xfail (Float32 on 400791508, Float64 on 221013007) into XPASS. Needs the
+    download-on-demand nfl4th WP booster, which the test loads explicitly: without it the test
+    skips by name and the mutant survives. 2.17 drops the marker and rewrites this row (the
+    snippet then carries the cast).
+
+# --- C-H1: the phase-2 `-3` port flips 1.1's 31 strict xfails --------------------------------------
+- id: nfl-second-level-yards-port
+  finding: C-H1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 3))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_rushing_decomposition_sums_to_the_carry[401872922]
+  expected: kill
+  note: >-
+    The xfails are live: the CFB `-3` port makes line + second level + open field equal the carry
+    on every 4+ yard rush, so all 31 strict xfails XPASS (measured: 31 failed; the row runs one
+    game to stay cheap). 2.1 lands exactly
+    this, drops the markers and rewrites this row and nfl-second-level-yards-offset (snippet
+    `- 3)`, mutant `- 4)`, expected kill).
 
 # --- C-M6: CFB overtime shootout threshold is period-based only -----------------------------------
 - id: cfb-ot-shootout-threshold-6
