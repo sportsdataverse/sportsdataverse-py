@@ -29,7 +29,7 @@ import math
 import polars as pl
 import pytest
 
-from sportsdataverse.nfl.ep_wp import calculate_completion_probability
+from sportsdataverse.nfl.ep_wp import _derive_wpa, calculate_completion_probability, calculate_epa, calculate_wpa
 from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec
 from tests.nfl._whole_game import CAPTURES, FIX, run
 
@@ -424,3 +424,37 @@ def test_completion_probability_reproduces_nflverse(game_id):
     assert out.height >= rows
     assert not math.isnan(corr) and corr >= corr_floor, corr
     assert mae <= mae_ceiling, mae
+
+
+# ---------------------------------------------------------------------------------------------
+# C-L12: two real games concatenated give the per-game answer, column by column
+# ---------------------------------------------------------------------------------------------
+
+
+def _same_per_game(fn, frames: list[pl.DataFrame], key: str) -> list[str]:
+    """Columns where ``fn(concat)`` differs from ``concat(fn(each game))`` (row order kept)."""
+    flat = [f.select(c for c, t in f.schema.items() if not t.is_nested()) for f in frames]
+    both = pl.concat(flat, how="diagonal_relaxed")
+    joint = fn(both)
+    per_game = pl.concat([fn(both.filter(pl.col(key) == g)) for g in both[key].unique(maintain_order=True)])
+    assert joint.columns == per_game.columns and joint.height == per_game.height == both.height
+    return [c for c in joint.columns if not joint[c].equals(per_game[c], null_equal=True)]
+
+
+@pytest.mark.parametrize("step", ["calculate_epa", "calculate_wpa"])
+def test_real_concat_equals_per_game_runs(step):
+    # The pipeline's own inputs to the step, recorded for the two slice games and stacked.
+    fn = {"calculate_epa": calculate_epa, "calculate_wpa": calculate_wpa}[step]
+    frames = [getattr(run(g), f"{step.split('_')[1]}_input") for g in SLICES]
+    assert _same_per_game(fn, frames, "game_id") == []
+
+
+def test_real_concat_equals_per_game_runs_nflverse_wpa():
+    # The nflverse-path WPA derivation (enrich_nfl_pbp step 4) on the two committed slices.
+    frames = [
+        _nflverse(g).select(
+            "game_id", "posteam", "home_team", "down", "wp", "vegas_wp", "desc", "home_score", "away_score"
+        )
+        for g in SLICES
+    ]
+    assert _same_per_game(_derive_wpa, frames, "game_id") == []
