@@ -889,12 +889,13 @@
   file: sportsdataverse/nfl/nfl_pbp.py
   snippet: '& pl.col("type.text").is_in([*normalplay, "Penalty"]).fill_null(False)'
   mutant: '& pl.lit(False)'
-  test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_plain_snap_without_a_next_play_keeps_possession[401326132]
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_ending_snap or (plain_snap_without_a_next_play and 401326383)"
   expected: kill
   note: >-
     Review R785-2: with no next play in the half, the half's last plain snap kept ESPN's corrupt
     end team (2021: 41 of 160 first-half finales published as possession changes). 401326132's
-    4th-and-1 conversion at :02 is stated for JAX by ESPN; nflverse has DEN keeping the ball.
+    4th-and-1 conversion at :02 and 401326383's 2nd-and-17 run at :41 are stated for the other
+    team by ESPN; nflverse has the offense keeping the ball on both.
 
 - id: nfl-end-state-score-exception
   group: nfl-end-state
@@ -932,3 +933,16 @@
     Review R785-2: keeping ESPN's end.down on a half-ending snap whose team is now kept credits
     ESPN's garbled "1st & 10" as a first down (401326383's 6-yard run on 2nd & 17; 2021 first-half
     finales agree with nflverse 0.42 with the team alone, 1.0 with the snap's own gain).
+
+- id: nfl-end-state-half-end-turnover-text
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.map_elements(_nfl_turnover_in_text, return_dtype=pl.Boolean)'
+  mutant: '.map_elements(lambda r: False, return_dtype=pl.Boolean)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_ending_lateral_fumble_lost"
+  expected: kill
+  note: >-
+    Review R785-9: ESPN types a lateral fumbled away on the game's last snap "Pass Reception", so the
+    half-end keep-the-ball rule turned 4 lost fumbles (2021: 1, 2017: 3) into no possession change.
+    401326581 play 3846 (nflverse fumble_lost 1) pins it.

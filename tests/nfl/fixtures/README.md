@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [NFL test fixtures](#nfl-test-fixtures)
-  - [ESPN game summaries (the 36 whole-game captures)](#espn-game-summaries-the-36-whole-game-captures)
+  - [ESPN game summaries (the 37 whole-game captures)](#espn-game-summaries-the-37-whole-game-captures)
   - [nflverse slices (`nflverse/`)](#nflverse-slices-nflverse)
   - [Fourth-down and offline-model fixtures (task 1.5)](#fourth-down-and-offline-model-fixtures-task-15)
     - [Booster replay (`nfl4th_booster_replay.parquet`)](#booster-replay-nfl4th_booster_replayparquet)
@@ -14,7 +14,7 @@
 
 # NFL test fixtures
 
-## ESPN game summaries (the 36 whole-game captures)
+## ESPN game summaries (the 37 whole-game captures)
 
 Each `summary_<game_id>*` file is the ESPN Site v2 summary for one NFL game,
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`. The
@@ -22,9 +22,9 @@ Each `summary_<game_id>*` file is the ESPN Site v2 summary for one NFL game,
 `nfl/espn/raw/<season>/<game_id>.json.gz`) trimmed to the keys `NFLPlayProcess` reads (header,
 drives, boxscore, gameInfo, pickcenter, scoringPlays where present); `summary_401872922.json` is a
 full summary fetched from the URL above. "Committed" is the commit and date that added the file to this
-repository; the ESPN fetch date is not recorded with the fixtures, except for the five EX-1.5-d
+repository; the ESPN fetch date is not recorded with the fixtures, except for the six EX-1.5-d
 captures (400554340, 401030962, 401326467 at 2026-10-11 16:53 UTC; 401326132 at 20:00 and 401326383 at
-21:24 UTC, the review R785-2 half-end rows): fetched from the URL above, one request each (`curl -s -o summary_<id>_live.json "<url>"`), and trimmed to the same keys with
+21:24 UTC, the review R785-2 half-end rows; 401326581 at 23:17 UTC, the R785-9 lateral fumble): fetched from the URL above, one request each (`curl -s -o summary_<id>_live.json "<url>"`), and trimmed to the same keys with
 `json.dump({k: d[k] for k in ("header", "drives", "boxscore", "gameInfo", "pickcenter", "scoringPlays") if k in d}, gzip_fh, separators=(",", ":"))`.
 Every play's `end` object in those fetches is identical to the nfl-raw copy, so ESPN still serves
 the 2014-2021 end-state corruption they pin.
@@ -61,6 +61,7 @@ the 2014-2021 end-state corruption they pin.
 | 401326132 | 2021 | 2 | DEN @ JAX | `summary_401326132_trimmed.json.gz` | task 2.18, 2026-10-11 |
 | 401326383 | 2021 | 4 | CAR @ DAL | `summary_401326383_trimmed.json.gz` | task 2.18, 2026-10-11 |
 | 401326467 | 2021 | 10 | JAX @ IND | `summary_401326467_trimmed.json.gz` | task 2.18, 2026-10-11 |
+| 401326581 | 2021 | 17 | LAR @ BAL | `summary_401326581_trimmed.json.gz` | task 2.18, 2026-10-11 |
 | 401547449 | 2023 | 4 | LAR @ IND | `summary_401547449_trimmed.json.gz` | c921519970, 2026-09-19 |
 | 401671740 | 2024 | 4 | PHI @ TB | `summary_401671740_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
 | 401671835 | 2024 | 17 | DEN @ CIN | `summary_401671835_trimmed.json.gz` | 9310e773f9, 2026-09-17 |

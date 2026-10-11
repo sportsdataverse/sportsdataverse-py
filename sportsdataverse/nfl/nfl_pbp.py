@@ -446,6 +446,16 @@ def _nfl_timeout_side(text, home, away):
     return None
 
 
+def _nfl_turnover_in_text(row: dict) -> bool:
+    """An interception, or a fumble whose last recovery is the defense's, by the play text."""
+    text = row["text"] or ""
+    if re.search(r"(?i)intercept", text):
+        return True
+    codes = _nfl_parse_recovery_abbrevs(text)
+    side = _nfl_side_of_abbrev(codes[-1], row["homeTeamAbbrev"], row["awayTeamAbbrev"]) if codes else None
+    return side is not None and side != ("home" if row["_offense_home"] else "away")
+
+
 def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
     """A play ends where the next play of its game and half starts (EX-1.5-d).
 
@@ -455,12 +465,12 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
     off the next play; so does this, for ``end.team.id`` and ``end.down`` / ``end.distance``. No next
     play speaks for a score (its end is stated for the scorer and the try follows), the half's last
     play, or a play followed by a kickoff. A score keeps ESPN's ``end``. On the other two a plain
-    snap (``normalplay`` or a penalty, on downs 1-3 or a 4th down that gains the line) keeps the
-    ball, as nflfastR's possession does when a half ends (``helper_add_ep_wp.R:710-728`` scores
-    it ``0 - ep``; drives and series are grouped by ``game_half``,
-    ``helper_add_fixed_drives.R:29``), and a ``normalplay`` snap's down and distance follow from its
-    own gain (a penalty keeps ESPN's). Anything else keeps ESPN's ``end``. A down is only
-    replaced where ESPN states one (1-4): its ``-1`` on returned kickoffs and pre-2014
+    snap (``normalplay`` or a penalty with no interception or lost fumble in its text, on downs 1-3 or a
+    4th down that gains the line) keeps the ball, as nflfastR's possession does when a half ends
+    (``helper_add_ep_wp.R:710-728`` scores it ``0 - ep``; drives and series are grouped by
+    ``game_half``, ``helper_add_fixed_drives.R:29``), and a ``normalplay`` snap's down and distance
+    follow from its own gain (a penalty keeps ESPN's). Anything else keeps ESPN's ``end``. A down
+    is only replaced where ESPN states one (1-4): its ``-1`` on returned kickoffs and pre-2014
     missed field goals is C-H5 / EX-1.1-c (task 2.3).
     """
     stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
@@ -490,6 +500,10 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
         & ~score
         & ~use
         & pl.col("type.text").is_in([*normalplay, "Penalty"]).fill_null(False)
+        # ESPN types a lateral fumbled away at the gun "Pass Reception": a turnover in the text keeps ESPN's end
+        & ~pl.struct("text", "homeTeamAbbrev", "awayTeamAbbrev", home.alias("_offense_home"))
+        .map_elements(_nfl_turnover_in_text, return_dtype=pl.Boolean)
+        .fill_null(False)
         & (pl.col("start.down").is_between(1, 3) | ((pl.col("start.down") == 4) & gained)).fill_null(False)
     )
     held_snap = held & pl.col("type.text").is_in(normalplay).fill_null(False) & gain.is_not_null()

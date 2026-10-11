@@ -1,6 +1,6 @@
 """Oracle-anchored whole-game characterization of ``NFLPlayProcess`` (quality program task 1.1).
 
-Every committed ESPN capture (``tests/nfl/fixtures/README.md``: 36 games, 2002-2026) is run offline
+Every committed ESPN capture (``tests/nfl/fixtures/README.md``: 37 games, 2002-2026) is run offline
 through the full pipeline and each column that has an oracle OUTSIDE this processor is asserted
 against it:
 
@@ -176,7 +176,7 @@ def test_half_ending_play(game_id, boundary):
     "game_id",
     _cases(
         dict.fromkeys(
-            (400791590, 400874512, 401326132, 401326383, 401326467, 401671740),
+            (400791590, 400874512, 401326132, 401326383, 401326467, 401326581, 401671740),
             "C-H5: ESPN's end.down -1 on a returned kickoff reaches the EP model (CFB rewrites it to 1)",
         )
     ),
@@ -530,13 +530,13 @@ def test_EX_1_5_d_epa_agrees_with_nflverse(game_id):
 # over. 401326132 (2021_02_DEN_JAX) play 2030, "(:02) T.Bridgewater pass ... to JAX 23 for 30
 # yards" on 4th & 1, ends the half; ESPN states it for JAX, nflverse has posteam DEN, first_down 1
 # (review R785-2). The same rule covers 400951676's Q4 incompletion before a kickoff (R785-3).
+# ESPN's own type (before the processor re-types fumbles), no turnover in the text, downs 1-3 (the
+# converted 4th down is pinned row by row below).
 _HELD = (
-    pl.col("type.text").is_in([*normalplay, "Penalty"])
+    pl.col("orig_play_type").is_in([*normalplay, "Penalty"])
     & ~_t("scoringPlay")
-    & (
-        pl.col("start.down").is_between(1, 3)
-        | ((pl.col("start.down") == 4) & (pl.col("statYardage") >= pl.col("start.distance")))
-    )
+    & ~pl.col("text").str.contains(r"(?i)fumble|intercept")
+    & pl.col("start.down").is_between(1, 3)
 ).fill_null(False)
 
 
@@ -562,6 +562,17 @@ _HALF_END_ROWS = {(401326132, 4013261322030): True, (401326383, 4013263832167): 
 def test_EX_1_5_d_half_ending_snap_keeps_the_ball_and_its_own_first_down(game_id, play_id):
     row = run(game_id).plays.filter(pl.col("id") == play_id).row(0, named=True)
     assert (row["change_of_poss"], row["first_down_created"]) == (False, _HALF_END_ROWS[(game_id, play_id)])
+
+
+# ESPN types a lateral fumbled away on the last snap "Pass Reception"; a lost fumble is still a possession
+# change (review R785-9). nflverse 2021_17_LA_BAL play 3846: posteam BAL, fumble_lost 1, LA recovers.
+_HALF_END_TURNOVERS = [(401326581, 4013265813846)]
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), _HALF_END_TURNOVERS)
+def test_EX_1_5_d_half_ending_lateral_fumble_lost_changes_possession(game_id, play_id):
+    row = run(game_id).plays.filter(pl.col("id") == play_id).row(0, named=True)
+    assert row["change_of_poss"] is True
 
 
 # A score keeps ESPN's end (stated for the scorer; the try follows). An offensive score does not
