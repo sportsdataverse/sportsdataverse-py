@@ -191,6 +191,8 @@ _COPILOT_STALE = [
     "`yahoo_cfb_*` wraps Yahoo Sports",
     "Error vocabulary (0.1.0)",
     "Reference-docs build toolchain (codegen)",
+    "CI runs **Python 3.13.2 only**",
+    "No other version is exercised",
 ]
 
 _COPILOT_CURRENT = [
@@ -199,7 +201,9 @@ _COPILOT_CURRENT = [
     "111 wrappers",
     "[tool.mypy] files",
     "DO use `from __future__ import annotations`",
-    "Python 3.13.2 only",
+    "The suite runs on **3.13.2 only**",
+    "installs every extra and imports every module on the **3.10 floor** (`tests.yml` `floor-import`)",
+    "No other version runs the full suite",
     "fox_api",
     "107 multi-sport `yahoo_*`",
     "AssetFetchError",
@@ -280,11 +284,16 @@ _CONTRIBUTING_STALE = [
     "CI runs against the floor (3.9)",
     "there is no in-repo deploy workflow",
     "labelled `main`)",
+    "CI runs **3.13.2 only**",
+    "and ceiling (3.14) at minimum",
+    "No other version is exercised",
 ]
 
 _CONTRIBUTING_CURRENT = [
     "DO add `from __future__ import annotations`",
-    "CI runs **3.13.2 only**",
+    "The suite runs on **3.13.2 only**",
+    "installs every extra and imports every module on the **3.10 floor** (`tests.yml` `floor-import`)",
+    "No other version runs the full suite",
     "docs-deploy.yml",
     "main (latest)",
     "VERSIONS_TO_KEEP=3",
