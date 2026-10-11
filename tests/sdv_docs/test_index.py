@@ -2,6 +2,7 @@ import gzip
 import hashlib
 import json
 import os
+import sys
 import threading
 import time
 from pathlib import Path
@@ -303,7 +304,8 @@ def test_index_opens_a_path_with_uri_special_characters(tmp_path):
     from sdv_docs.index import Index
     from tests.sdv_docs.conftest import make_tiny_db
 
-    odd = tmp_path / "odd #1 50% ?dir"
+    # `?` is an invalid filename character on Windows; `#` and `%` are URI-special and valid there.
+    odd = tmp_path / ("odd #1 50% dir" if sys.platform == "win32" else "odd #1 50% ?dir")
     odd.mkdir()
     db = make_tiny_db(odd / "tiny.sqlite")
     with Index(db) as ix:
