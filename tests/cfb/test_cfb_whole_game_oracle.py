@@ -345,9 +345,9 @@ def test_receives_2h_kickoff_on_first_half_rows_is_the_opening_kicker(game_id):
 
 
 def test_the_kickoff_oracle_covers_the_captures_it_should():
-    """Guard the guard: the feed names the opening kicker on 85 of the 126 captures, 43 of them home."""
+    """Guard the guard: the feed names the opening kicker on 86 of the 128 captures, 43 of them home."""
     kicked = [FEEDS[g] for g in _KICKOFF_DEFINED]
-    assert len(kicked) == 85
+    assert len(kicked) == 86
     assert sum(1 for f in kicked if f.opening_kicker == f.home_id) == 43
     # 400547866 (Kansas @ West Virginia, 2014): the away team kicks, the home team receives
     assert FEEDS[400547866].opening_kicker == 2305

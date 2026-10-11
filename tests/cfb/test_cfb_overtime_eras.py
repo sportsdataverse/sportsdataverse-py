@@ -56,17 +56,17 @@ def test_the_rule_table_is_the_catalogued_one() -> None:
 
 
 def test_before_2019_an_overtime_try_is_its_touchdowns() -> None:
-    """243040130, Michigan State @ Michigan 2004, three overtimes: both second-overtime touchdowns
-    are followed by a kicked extra point. No shootout exists before 2019, so each try weighs the
-    kick and takes its touchdown's board."""
-    plays = _plays(243040130)
-    tries = plays.filter((pl.col("period") >= 5) & (pl.col("type.text") == "Extra Point Good"))
-    assert tries.height == 2
-    for r in tries.iter_rows(named=True):
-        td = _before(plays, r)
-        assert "touchdown" in td["type.text"].lower() and td["pos_team"] == r["pos_team"]
-        assert r["two_pt_recommendation"] is not None
-        assert r["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+    """272870068, Nevada @ Boise State 2007, four overtimes, every one filed as period 5. Nevada's
+    forced third-overtime try "Two-point conversion attempt, PASS FAILED." comes before the
+    touchdown it follows (ESPN files Luke Lippincott's 7-yard run after it), so a touchdown-before
+    test alone read it as a shootout attempt, which did not exist before 2019: no kick weighed, and
+    the attempt's board (0.0) instead of the touchdown's (0.1)."""
+    plays = _plays(272870068)
+    tries = plays.filter((pl.col("period") >= 5) & pl.col("type.text").str.contains("Conversion|Extra Point"))
+    assert tries.height == 6
+    forced = tries.filter(pl.col("text") == "Two-point conversion attempt, PASS FAILED.").row(0, named=True)
+    assert "touchdown" not in _before(plays, forced)["type.text"].lower()  # the misfiled touchdown
+    assert tries["two_pt_recommendation"].null_count() == 0  # every one a touchdown's try
 
 
 def test_2019_20_the_sixth_overtime_try_is_a_shootout_attempt() -> None:
@@ -105,3 +105,17 @@ def test_2021_on_the_third_overtime_opens_the_shootout() -> None:
     attempts = plays.filter((pl.col("period") >= 5) & pl.col("type.text").is_in(_TWO_POINT))
     assert attempts["period"].to_list() == [7, 7, 8]
     assert attempts["two_pt_recommendation"].null_count() == 3
+
+
+def test_2021_on_a_third_overtime_attempt_after_the_second_overtime_touchdown() -> None:
+    """401524025, Arizona @ USC 2023, three overtimes: "Caleb Williams Run for Two-Point Conversion"
+    (period 7, the third overtime) won it right after Austin Jones's second-overtime touchdown, whose
+    forced try ESPN folds into the touchdown row. Under the 2021 rule the third overtime is a
+    shootout, so the row is an attempt even with a touchdown before it; with the 2019-20 cut
+    (period 9) it read as that touchdown's try (``go_for_2``, the touchdown's board)."""
+    plays = _plays(401524025)
+    (r,) = plays.filter((pl.col("period") >= 5) & pl.col("type.text").is_in(_TWO_POINT)).iter_rows(named=True)
+    assert r["text"] == "Caleb Williams Run for Two-Point Conversion" and r["period"] == 7
+    td = _before(plays, r)
+    assert td["text"].startswith("Austin Jones 11 Yd Run") and td["period"] == 6
+    assert r["two_pt_recommendation"] is None

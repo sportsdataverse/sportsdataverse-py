@@ -163,9 +163,28 @@
   expected: kill
   note: the only shootout fixture before 3.2 (401282146) has its first attempt in period 7, so >= 7 survived there
 
-# The rule table itself: the 2019-20 rule set, and the period half of the gate (a shootout-period row
-# after a misfiled touchdown). The 2021 boundary (period 7 vs 9) is not separable on the committed
-# captures: every 2021+ attempt labelled 7-8 there follows a non-touchdown row.
+# The rule table itself, one row per rule set, and the period half of the gate (a shootout-period row
+# after a misfiled touchdown).
+- id: cfb-ot-table-shootout-from-2004
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))'
+  mutant: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2004, 9), (2021, 7))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "before_2019"
+  expected: kill
+  note: the pre-3.2 behaviour before 2019; 272870068's forced third-overtime try (filed before its touchdown) would be a shootout attempt
+
+- id: cfb-ot-table-2021-cut-9
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))'
+  mutant: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 9))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "third_overtime_attempt_after"
+  expected: kill
+  note: the 2019-20 cut in 2021+; 401524025's third-overtime attempt after the second-overtime touchdown would be that touchdown's try
+
 - id: cfb-ot-table-drops-2019
   group: cfb-ot-rule-table
   finding: C-M6
