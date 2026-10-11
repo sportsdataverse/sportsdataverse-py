@@ -131,3 +131,77 @@ def test_shot_coordinates_treat_the_espn_sentinel_as_no_location() -> None:
         }
     )
     assert gp.shot_coordinates(df)["x_legacy"].to_list() == [None]
+
+
+def _team_box() -> pl.DataFrame:
+    # 401766458 ATL @ ORL: scores, FGA, FTA, rebounds and turnovers are the Data API's rows
+    # (read 2026-10-11); FGM and 3PM are illustrative. The test is hand arithmetic on these inputs.
+    return pl.DataFrame(
+        {
+            "game_id": [401766458, 401766458],
+            "team_id": [1, 19],
+            "team_score": [95, 120],
+            "field_goals_made": [33, 44],
+            "field_goals_attempted": [84, 91],
+            "three_point_field_goals_made": [9, 14],
+            "free_throws_attempted": [34, 27],
+            "offensive_rebounds": [9, 12],
+            "defensive_rebounds": [33, 42],
+            "total_turnovers": [8, 10],
+        }
+    )
+
+
+def test_team_rates_match_hand_arithmetic() -> None:
+    out = gp.team_rates(_team_box()).sort("team_id")
+    atl, orl = out.row(0, named=True), out.row(1, named=True)
+    poss_atl = 84 - 9 + 8 + 0.44 * 34
+    poss_orl = 91 - 12 + 10 + 0.44 * 27
+    poss = (poss_atl + poss_orl) / 2
+    assert atl["efg_pct"] == pytest.approx((33 + 0.5 * 9) / 84)
+    assert atl["tov_pct"] == pytest.approx(8 / (84 + 0.44 * 34 + 8))
+    assert atl["orb_pct"] == pytest.approx(9 / (9 + 42))  # own ORB over own ORB + opponent DRB
+    assert atl["ft_rate"] == pytest.approx(34 / 84)
+    assert atl["possessions"] == pytest.approx(poss) and orl["possessions"] == pytest.approx(poss)
+    assert atl["off_rtg"] == pytest.approx(100 * 95 / poss) and atl["def_rtg"] == pytest.approx(100 * 120 / poss)
+    assert orl["off_rtg"] == pytest.approx(atl["def_rtg"])
+    assert atl["pace"] == pytest.approx(48 * poss / 48) and atl["game_minutes"] == 48
+
+
+def test_team_rates_pace_uses_overtime_minutes() -> None:
+    out = gp.team_rates(_team_box(), periods=5)
+    assert out["game_minutes"][0] == 53
+    assert out["pace"][0] == pytest.approx(48 * out["possessions"][0] / 53)
+
+
+def test_team_rates_zero_denominator_is_null() -> None:
+    tb = _team_box().with_columns(pl.lit(0).alias("field_goals_attempted"))
+    out = gp.team_rates(tb)
+    assert out["efg_pct"].to_list() == [None, None] and out["ft_rate"].to_list() == [None, None]
+
+
+def test_team_rates_rejects_non_two_row_input() -> None:
+    with pytest.raises(ValueError, match="two team rows"):
+        gp.team_rates(_team_box().head(1))
+
+
+def test_player_rates_match_hand_arithmetic_and_null_the_dnp() -> None:
+    pb = pl.DataFrame(
+        {
+            "game_id": [401766458] * 3,
+            "athlete_id": [1, 2, 3],
+            "team_id": [1, 1, 1],
+            "minutes": [33.0, 0.0, None],
+            "points": [11, 0, 0],
+            "field_goals_attempted": [10, 0, 0],
+            "free_throws_attempted": [0, 0, 0],
+            "turnovers": [0, 0, 0],
+            "did_not_play": [False, False, True],
+        }
+    )
+    out = gp.player_rates(pb, _team_box()).sort("athlete_id")
+    team_tsa = 84 + 0.44 * 34 + 8
+    assert out["ts_pct"][0] == pytest.approx(11 / (2 * (10 + 0.44 * 0)))
+    assert out["usg_pct"][0] == pytest.approx(100 * ((10 + 0 + 0) * (240 / 5)) / (33 * team_tsa))
+    assert out["ts_pct"][1] is None and out["usg_pct"][1] is None  # 0 FGA, 0 minutes
+    assert out["ts_pct"][2] is None and out["usg_pct"][2] is None  # DNP

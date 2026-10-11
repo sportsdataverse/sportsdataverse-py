@@ -22,6 +22,9 @@ __all__ = [
     "OT_PERIOD_SECONDS",
     "REGULATION_PERIODS",
     "COORD_SENTINEL",
+    "game_minutes",
+    "team_rates",
+    "player_rates",
     "home_prior",
     "ot_adjusted_seconds",
     "score_win_prob",
@@ -202,4 +205,148 @@ def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
     return pbp.with_columns(
         pl.when(located).then((pl.col("coordinate_x_raw").cast(pl.Float64) - 25.0) * 10.0).alias("x_legacy"),
         pl.when(located).then(pl.col("coordinate_y_raw").cast(pl.Float64) * 10.0).alias("y_legacy"),
+    )
+
+
+def game_minutes(periods: int) -> int:
+    """Minutes played in a game of ``periods`` periods: 48, plus five per overtime.
+
+    Args:
+        periods: Highest period number played (``4`` for regulation, ``5`` for one OT, ...).
+
+    Returns:
+        Game minutes.
+
+    Raises:
+        TypeError: If ``periods`` cannot be converted to an integer.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_game_page import game_minutes
+            game_minutes(5)  # 53
+    """
+    return 48 + 5 * max(int(periods) - REGULATION_PERIODS, 0)
+
+
+def _ratio(num: pl.Expr, den: pl.Expr) -> pl.Expr:
+    """``num / den`` as Float64, ``null`` when the denominator is zero or null."""
+    return (
+        pl.when(den > 0)
+        .then(num.cast(pl.Float64) / den.cast(pl.Float64))
+        .otherwise(pl.lit(None, dtype=pl.Float64))
+        .cast(pl.Float64)
+    )
+
+
+def team_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
+    """Four factors, possessions, ratings and pace for both teams of one game.
+
+    Dean Oliver's estimates on the ``load_nba_team_boxscore`` columns: possessions =
+    FGA - ORB + TOV + 0.44 FTA, averaged over the two teams; eFG% = (FGM + 0.5 3PM) / FGA;
+    TOV% = TOV / (FGA + 0.44 FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
+    ORtg / DRtg per 100 possessions; pace per 48 minutes. ``TOV`` is ``total_turnovers`` (player
+    plus team turnovers). A zero denominator gives ``null``.
+
+    Args:
+        team_box: Exactly two rows (one per team) of one game in the ``load_nba_team_boxscore``
+            schema.
+        periods: Highest period played, for the pace denominator.
+
+    Returns:
+        One row per ``(game_id, team_id)`` with ``efg_pct, tov_pct, orb_pct, ft_rate,
+        possessions, off_rtg, def_rtg, pace, total_turnovers, game_minutes``.
+
+    Raises:
+        ValueError: If ``team_box`` does not hold exactly two rows.
+        polars.exceptions.ColumnNotFoundError: If a required box-score column is missing.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.nba.nba_game_page import team_rates
+            from sportsdataverse.nba.nba_loaders import load_nba_team_boxscore
+            box = load_nba_team_boxscore([2025]).filter(pl.col("game_id") == 401766458)
+            team_rates(box).select("team_id", "efg_pct", "off_rtg", "pace")
+    """
+    if team_box.height != 2:
+        raise ValueError(f"team_rates needs the two team rows of one game, got {team_box.height}")
+    tov = pl.col("total_turnovers")
+    fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
+    own = team_box.with_columns(
+        (fga - pl.col("offensive_rebounds") + tov + FT_WEIGHT * fta).cast(pl.Float64).alias("_own_poss")
+    )
+    opp = own.select(
+        pl.col("game_id"),
+        pl.col("team_id").alias("_opp_id"),
+        pl.col("team_score").alias("_opp_score"),
+        pl.col("defensive_rebounds").alias("_opp_drb"),
+        pl.col("_own_poss").alias("_opp_poss"),
+    )
+    joined = own.join(opp, on="game_id", how="inner").filter(pl.col("team_id") != pl.col("_opp_id"))
+    minutes = game_minutes(periods)
+    poss = (pl.col("_own_poss") + pl.col("_opp_poss")) / 2.0
+    return joined.select(
+        "game_id",
+        "team_id",
+        _ratio(pl.col("field_goals_made") + 0.5 * pl.col("three_point_field_goals_made"), fga).alias("efg_pct"),
+        _ratio(tov, fga + FT_WEIGHT * fta + tov).alias("tov_pct"),
+        _ratio(pl.col("offensive_rebounds"), pl.col("offensive_rebounds") + pl.col("_opp_drb")).alias("orb_pct"),
+        _ratio(fta, fga).alias("ft_rate"),
+        poss.alias("possessions"),
+        _ratio(100.0 * pl.col("team_score"), poss).alias("off_rtg"),
+        _ratio(100.0 * pl.col("_opp_score"), poss).alias("def_rtg"),
+        (48.0 * poss / float(minutes)).alias("pace"),
+        tov.alias("total_turnovers"),
+        pl.lit(minutes, dtype=pl.Int64).alias("game_minutes"),
+    )
+
+
+def player_rates(player_box: pl.DataFrame, team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
+    """True-shooting and usage for every boxed player of one game.
+
+    TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
+    (MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV = ``total_turnovers`` and team
+    minutes = 5 x game minutes. A player with no shots, no minutes, or ``did_not_play`` gets
+    ``null``.
+
+    Args:
+        player_box: One game in the ``load_nba_player_boxscore`` schema.
+        team_box: The game's two ``load_nba_team_boxscore`` rows.
+        periods: Highest period played.
+
+    Returns:
+        One row per ``(game_id, athlete_id)`` with ``team_id, ts_pct, usg_pct``.
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If a required box-score column is missing.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_game_page import player_rates
+            player_rates(player_box, team_box).sort("usg_pct", descending=True).head()
+    """
+    team_minutes = 5.0 * game_minutes(periods)
+    team = team_box.select(
+        "game_id",
+        "team_id",
+        (pl.col("field_goals_attempted") + FT_WEIGHT * pl.col("free_throws_attempted") + pl.col("total_turnovers"))
+        .cast(pl.Float64)
+        .alias("_team_tsa"),
+    )
+    joined = player_box.join(team, on=["game_id", "team_id"], how="left")
+    fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
+    played = (pl.col("did_not_play").fill_null(False) == False) & (pl.col("minutes").fill_null(0.0) > 0)  # noqa: E712
+    tsa = fga + FT_WEIGHT * fta
+    usage_num = 100.0 * (tsa + pl.col("turnovers")) * (team_minutes / 5.0)
+    usage_den = pl.col("minutes").cast(pl.Float64) * pl.col("_team_tsa")
+    null_f = pl.lit(None, dtype=pl.Float64)
+    return joined.select(
+        "game_id",
+        "athlete_id",
+        "team_id",
+        pl.when(played).then(_ratio(pl.col("points"), 2.0 * tsa)).otherwise(null_f).cast(pl.Float64).alias("ts_pct"),
+        pl.when(played).then(_ratio(usage_num, usage_den)).otherwise(null_f).cast(pl.Float64).alias("usg_pct"),
     )
