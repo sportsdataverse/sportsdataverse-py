@@ -29,6 +29,7 @@ __all__ = [
     "ot_adjusted_seconds",
     "score_win_prob",
     "shot_coordinates",
+    "game_page_frames",
 ]
 
 #: Oliver's free-throw possession weight, used by every rate below.
@@ -218,7 +219,8 @@ def game_minutes(periods: int) -> int:
         Game minutes.
 
     Raises:
-        TypeError: If ``periods`` cannot be converted to an integer.
+        TypeError: If ``periods`` is ``None`` or another non-numeric type.
+        ValueError: If ``periods`` is a string that is not an integer.
 
     Example:
         Quick start::
@@ -338,7 +340,7 @@ def player_rates(player_box: pl.DataFrame, team_box: pl.DataFrame, *, periods: i
     )
     joined = player_box.join(team, on=["game_id", "team_id"], how="left")
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
-    played = (pl.col("did_not_play").fill_null(False) == False) & (pl.col("minutes").fill_null(0.0) > 0)  # noqa: E712
+    played = (pl.col("did_not_play").fill_null(False) == False) & (pl.col("minutes").fill_null(0.0) > 0)
     tsa = fga + FT_WEIGHT * fta
     usage_num = 100.0 * (tsa + pl.col("turnovers")) * (team_minutes / 5.0)
     usage_den = pl.col("minutes").cast(pl.Float64) * pl.col("_team_tsa")
@@ -350,3 +352,64 @@ def player_rates(player_box: pl.DataFrame, team_box: pl.DataFrame, *, periods: i
         pl.when(played).then(_ratio(pl.col("points"), 2.0 * tsa)).otherwise(null_f).cast(pl.Float64).alias("ts_pct"),
         pl.when(played).then(_ratio(usage_num, usage_den)).otherwise(null_f).cast(pl.Float64).alias("usg_pct"),
     )
+
+
+def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]:
+    """Everything the Game on Paper NBA game page needs, from one ``espn_nba_pbp`` payload.
+
+    Runs the hoopR converters (``helper_nba_play_by_play`` / ``helper_nba_team_box`` /
+    ``helper_nba_player_box``) and then :func:`score_win_prob`, :func:`shot_coordinates`,
+    :func:`team_rates` and :func:`player_rates`. The sdv-db nightly stage calls those four
+    directly on the warehouse's copies of the same frames, so a game renders identically from
+    either source.
+
+    Args:
+        final: The dict :func:`~sportsdataverse.nba.nba_pbp.espn_nba_pbp` returns.
+        league_id: ``"00"`` / ``"10"`` / ``"20"``.
+
+    Returns:
+        ``{"pbp", "team_box", "team_rates", "player_box", "player_rates", "periods", "prior"}``
+        where ``prior`` is ``{"home_win_prob", "source", "home_team_spread",
+        "game_spread_available"}``.
+
+    Raises:
+        KeyError: If ``final`` lacks the ``header`` or ``plays`` keys the converters read.
+        polars.exceptions.ColumnNotFoundError: If a converter frame lacks a column the
+            derivations need.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import espn_nba_pbp
+            from sportsdataverse.nba.nba_game_page import game_page_frames
+            frames = game_page_frames(espn_nba_pbp(401766458))
+            frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
+    """
+    from sportsdataverse.nba.nba_play_by_play import helper_nba_play_by_play
+    from sportsdataverse.nba.nba_player_box import helper_nba_player_box
+    from sportsdataverse.nba.nba_team_box import helper_nba_team_box
+
+    pbp = helper_nba_play_by_play(final)
+    periods = int(pbp["period_number"].max() or REGULATION_PERIODS) if pbp.height else REGULATION_PERIODS
+    pbp = shot_coordinates(score_win_prob(pbp, league_id=league_id))
+    team_box = helper_nba_team_box(final)
+    player_box = helper_nba_player_box(final)
+    first = pbp.row(0, named=True) if pbp.height else {}
+    prior_prob, prior_source = home_prior(
+        first.get("home_team_spread"), first.get("game_spread_available"), league_id=league_id
+    )
+    two_teams = team_box.height == 2
+    return {
+        "pbp": pbp,
+        "team_box": team_box,
+        "team_rates": team_rates(team_box, periods=periods) if two_teams else team_box.clear(),
+        "player_box": player_box,
+        "player_rates": player_rates(player_box, team_box, periods=periods) if two_teams else player_box.clear(),
+        "periods": periods,
+        "prior": {
+            "home_win_prob": prior_prob,
+            "source": prior_source,
+            "home_team_spread": first.get("home_team_spread"),
+            "game_spread_available": bool(first.get("game_spread_available") or False),
+        },
+    }

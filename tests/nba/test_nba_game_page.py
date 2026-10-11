@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import copy
+import json
 from pathlib import Path
 
 import polars as pl
@@ -205,3 +207,31 @@ def test_player_rates_match_hand_arithmetic_and_null_the_dnp() -> None:
     assert out["usg_pct"][0] == pytest.approx(100 * ((10 + 0 + 0) * (240 / 5)) / (33 * team_tsa))
     assert out["ts_pct"][1] is None and out["usg_pct"][1] is None  # 0 FGA, 0 minutes
     assert out["ts_pct"][2] is None and out["usg_pct"][2] is None  # DNP
+
+
+class _Resp:
+    def __init__(self, payload: dict) -> None:
+        self._p = payload
+
+    def json(self) -> dict:
+        return self._p
+
+
+def test_game_page_frames_on_the_espn_fixture(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.nba import nba_pbp
+
+    summary = json.loads((FIX / "summary_nba.json").read_text(encoding="utf-8"))
+    monkeypatch.setattr(nba_pbp, "download", lambda url, **kwargs: _Resp(copy.deepcopy(summary)))
+    final = nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"]))
+    frames = gp.game_page_frames(final)
+    pbp = frames["pbp"]
+    assert pbp.height == 450 and "home_win_prob" in pbp.columns and "x_legacy" in pbp.columns
+    assert frames["prior"]["source"] == "hfa"  # this fixture ships no pickcenter line
+    assert frames["periods"] == 4
+    assert frames["team_rates"].height == 2 and set(frames["team_rates"]["team_id"]) == {19, 28}
+    assert frames["player_rates"].height == frames["player_box"].height
+    assert pbp["wp_delta"].abs().max() > 0.0
+    # every located shot came from a shooting play that is not a free throw
+    shots = pbp.filter(pl.col("x_legacy").is_not_null())
+    assert shots.height > 100 and (shots["shooting_play"] == True).all()
+    assert not shots["type_text"].str.contains("(?i)free throw").any()

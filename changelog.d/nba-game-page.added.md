@@ -1,0 +1,1 @@
+- `sportsdataverse.nba.nba_game_page`: per-play in-game win probability with deltas and an overtime regime, the pregame prior from the spread, shot coordinates in the court frame, team four factors / ratings / pace, and player TS% / usage, for the Game on Paper NBA game page and the sdv-db nightly stage.

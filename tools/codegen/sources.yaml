@@ -500,6 +500,7 @@ categories:
       - sportsdataverse.cfb.cfb_game_predict
       - sportsdataverse.mbb.mbb_game_predict
       - sportsdataverse.nba.nba_game_predict
+      - sportsdataverse.nba.nba_game_page
       - sportsdataverse.wbb.wbb_game_predict
       - sportsdataverse.cfb.cfb_ratings
       - sportsdataverse.hockey.mch.mch_ratings
