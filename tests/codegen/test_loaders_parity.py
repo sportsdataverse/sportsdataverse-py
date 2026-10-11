@@ -105,3 +105,42 @@ def test_nhl_game_rosters_rejects_seasons_before_first_release():
             nhl_loaders.load_nhl_game_rosters(seasons=2009)
 
     reader.assert_not_called()
+
+
+# Every NHL season release publishes from 2010 (the 2009-10 season); the asset
+# paths are spelled out so a releases.yaml regression cannot pass by echo.
+_NHL_FIRST_SEASON_ASSETS = {
+    "load_nhl_game_info": "nhl_game_info/game_info_2010.parquet",
+    "load_nhl_game_rosters": "nhl_game_rosters/game_rosters_2010.parquet",
+    "load_nhl_goalie_boxscores": "nhl_goalie_boxscores/goalie_box_2010.parquet",
+    "load_nhl_linescore": "nhl_linescore/linescore_2010.parquet",
+    "load_nhl_officials": "nhl_officials/officials_2010.parquet",
+    "load_nhl_pbp_full": "nhl_pbp_full/play_by_play_2010.parquet",
+    "load_nhl_pbp_lite": "nhl_pbp_lite/play_by_play_lite_2010.parquet",
+    "load_nhl_penalties": "nhl_penalties/penalties_2010.parquet",
+    "load_nhl_player_boxscores": "nhl_player_boxscores/player_box_2010.parquet",
+    "load_nhl_rosters": "nhl_rosters/rosters_2010.parquet",
+    "load_nhl_schedules": "nhl_schedules/nhl_schedule_2010.parquet",
+    "load_nhl_scoring": "nhl_scoring/scoring_2010.parquet",
+    "load_nhl_scratches": "nhl_scratches/scratches_2010.parquet",
+    "load_nhl_shifts": "nhl_shifts/shifts_2010.parquet",
+    "load_nhl_shootout": "nhl_shootout/shootout_summary_2010.parquet",
+    "load_nhl_shots_by_period": "nhl_shots_by_period/shots_by_period_2010.parquet",
+    "load_nhl_skater_boxscores": "nhl_skater_boxscores/skater_box_2010.parquet",
+    "load_nhl_team_boxscores": "nhl_team_boxscores/team_box_2010.parquet",
+    "load_nhl_three_stars": "nhl_three_stars/three_stars_2010.parquet",
+}
+
+
+@pytest.mark.parametrize("fn,asset", sorted(_NHL_FIRST_SEASON_ASSETS.items()))
+def test_nhl_release_loaders_start_at_first_published_season(fn, asset):
+    loader = getattr(nhl_loaders, fn)
+    frame = pl.DataFrame({"season": [2010]})
+    with patch.object(nhl_loaders, "_read_release_parquet", return_value=frame) as reader:
+        loader(seasons=2010)
+    reader.assert_called_once_with("https://github.com/sportsdataverse/sportsdataverse-data/releases/download/" + asset)
+
+    with patch.object(nhl_loaders, "_read_release_parquet") as reader:
+        with pytest.raises(SeasonNotFoundError):
+            loader(seasons=2009)
+    reader.assert_not_called()
