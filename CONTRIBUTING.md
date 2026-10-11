@@ -93,8 +93,8 @@ including the conda-forge feedstock submission flow.
 ## Python version support
 
 Supported: 3.10, 3.11, 3.12, 3.13, 3.14. The suite runs on **3.13.2 only**; a separate
-job imports every module on the **3.10 floor** (`tests.yml` `floor-import`). No other
-version is exercised. New modules use modern type syntax
+job installs every extra and imports every module on the **3.10 floor** (`tests.yml`
+`floor-import`). No other version runs the full suite. New modules use modern type syntax
 (`dict[str, X]`, `X | None`). DO add `from __future__ import annotations` — 682 of
 729 modules already do, and it keeps `X | None` valid on the 3.10 floor.
 
