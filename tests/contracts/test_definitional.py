@@ -361,6 +361,7 @@ def test_cfb_pbp_zero_violation_rules_are_errors():
                 "target": True,
                 "fumble_lost": True,
                 "fumble_vec": False,
+                "fumble_or_muff": False,
                 "fg_made": True,
                 "fg_attempt": False,
                 "int": True,
