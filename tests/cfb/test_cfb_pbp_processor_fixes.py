@@ -754,3 +754,27 @@ def test_pre_2014_directional_rush_takes_espn_stat_yardage():
     assert rushes["yds_rushed"].null_count() == 0
     row = _row(plays, "Adam Muema rush up the middle for 21 yards to the SJSt 20")
     assert row["yds_rushed"] == 21
+
+
+def test_kneels_are_not_stuffed_or_stopped_runs():
+    # Kneels now carry their loss in yds_rushed; that must not make them stuffed / stopped carries.
+    kneels = _plays(401636929).filter(pl.col("kneel_down") == True)
+    assert kneels.height == 2
+    assert kneels["stuffed_run"].to_list() == [False, False]
+    assert kneels["stopped_run"].to_list() == [False, False]
+
+
+def test_yardless_rush_naming_a_foul_does_not_take_stat_yardage():
+    # A foul named without the word "penalty" leaves penalty_flag False but sets penalty_detail;
+    # statYardage there can carry the enforcement, so the fallback must not read it.
+    summary = _summary(401644749)
+    needle = re.compile(r"^[A-Z][a-z]+,[A-Za-z]+ rush (?:left|right|middle) \(")
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    target = next(p for p in plays if needle.search(p.get("text") or ""))
+    target["text"] = target["text"] + " Holding on #55 enforced."
+    proc = CFBPlayProcess(gameId=401644749)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    row = _row(proc.plays_frame, target["text"])
+    assert row["penalty_detail"] is not None
+    assert row["yds_rushed"] is None
