@@ -33,7 +33,7 @@ from __future__ import annotations
 import gzip
 import json
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import polars as pl
@@ -577,3 +577,29 @@ def test_upload_release_sidecars_passes_as_of_through():
     )
 
     assert json.loads(seen["timestamp.json"])["last_updated"].startswith("2023-03-05")
+
+
+def test_rds_branch_byte_golden(tmp_path):
+    """C-L58: the byte oracles above cover int / double / string / logical only.
+
+    ``rds_golden_branches.rds`` is R 4.6.1's ``saveRDS(compress = FALSE, version = 2)`` of the R
+    value each remaining writer branch must produce (``make_branch_golden.R``, which also checks
+    ``readRDS`` round-trips every column): Date, POSIXct with a ``tzone`` and without one, an Int64
+    column outside int32 (a double in R), an all-null column (logical NA) and a Categorical (character).
+    """
+    df = pl.DataFrame(
+        {
+            "d": pl.Series([date(2024, 1, 2), None, date(1969, 12, 31)], dtype=pl.Date),
+            "t_utc": pl.Series([1_704_164_400_000_000, None, -86_400_500_000], dtype=pl.Int64).cast(
+                pl.Datetime("us", "UTC")
+            ),
+            "t_naive": pl.Series([1_704_164_400_000_000, 0, None], dtype=pl.Int64).cast(pl.Datetime("us")),
+            "big": pl.Series([3_000_000_000, None, -3_000_000_001], dtype=pl.Int64),
+            "nul": pl.Series([None, None, None], dtype=pl.Null),
+            "cat": pl.Series(["a", "b", None], dtype=pl.Categorical),
+        }
+    )
+    out = tmp_path / "py_branches.rds"
+    write_rds(df, out, compress=False)
+    expected = (FIXTURE_DIR / "rds_golden_branches.rds").read_bytes()
+    assert out.read_bytes()[14:] == expected[14:]

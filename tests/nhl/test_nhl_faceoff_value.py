@@ -76,3 +76,32 @@ def test_empty_pbp_returns_schema() -> None:
     empty = nhl_faceoff_value(pl.DataFrame(schema={"type_desc_key": pl.Utf8}))
     assert empty.height == 0
     assert "faceoff_value" in empty.columns
+
+
+def test_context_fit_reproduces_real_cell_win_rates() -> None:
+    """C-L30: the four tests above passed with the fit skipped (`if True:` -> constant 0.5).
+
+    On the committed real 2024 api-web slice (`tests/fixtures/nhl_microstat/pbp_2024_slice.parquet`,
+    7,016 faceoffs; README there) the fitted context logistic must reproduce each cell's
+    empirical taker win rate. Observed 2026-10-11: power play 0.5527 (pred 0.5523), penalty
+    kill 0.4473 (0.4472), home/away by zone within 0.0006 of empirical. A constant 0.5 misses
+    the power-play cell by 0.053.
+    """
+    from pathlib import Path
+
+    from sportsdataverse.nhl.nhl_faceoff_value import _taker_perspective_rows, fit_faceoff_context
+
+    pbp = pl.read_parquet(Path(__file__).resolve().parents[1] / "fixtures" / "nhl_microstat" / "pbp_2024_slice.parquet")
+    faceoffs = extract_faceoffs(pbp)
+    assert faceoffs.height == 7016
+    rows = _taker_perspective_rows(faceoffs)
+    rows = rows.with_columns(fit_faceoff_context(faceoffs).predict(rows))
+    for keys in (["strength_state"], ["zone_code", "is_home"]):
+        cells = rows.group_by(keys).agg(
+            pl.col("won").mean().alias("empirical"), pl.col("expected_win").mean().alias("predicted")
+        )
+        worst = (cells["empirical"] - cells["predicted"]).abs().max()
+        assert worst <= 0.002, f"{keys}: worst cell gap {worst:.4f}\n{cells}"
+    pp = rows.filter(pl.col("strength_state") == "pp")["expected_win"].mean()
+    assert 0.545 <= pp <= 0.56, pp
+    print("NHL_FACEOFF_FIT_OK", round(pp, 4))

@@ -76,6 +76,29 @@ def test_bundled_third_down_curves():
     )
 
 
+def test_nfl_third_down_curve_level_vs_nflverse():
+    """C-L38: the band above (0.5 < rate(1) < 0.85, rate(10) < 0.4) passes a curve scaled by 0.8.
+
+    Level oracle: nflverse's own third-down conversions (`third_down_converted` on run/pass third
+    downs, `ydstogo` capped at 25) aggregated from the nflverse-data `play_by_play_2022` and
+    `_2023` release assets, committed as `fixtures/nflverse_third_down_2022_2023.csv` (README
+    there). Observed 2026-10-11 over distances 1-10: max |bundled - nflverse| 0.0579 (3rd and 1:
+    0.628 vs 0.686), mean 0.0223. A 0.8-scaled curve reads 0.184 / 0.097.
+    """
+    oracle = (
+        pl.read_csv(Path(__file__).parent / "fixtures" / "nflverse_third_down_2022_2023.csv")
+        .group_by("distance")
+        .agg(pl.col("attempts").sum(), pl.col("converted").sum())
+        .with_columns((pl.col("converted") / pl.col("attempts")).alias("nflverse_rate"))
+    )
+    c = load_third_down_curve("nfl").join(oracle, on="distance").filter(pl.col("distance") <= 10)
+    assert c.height == 10 and c["attempts"].min() >= 500
+    gap = (c["rate"] - c["nflverse_rate"]).abs()
+    assert gap.max() <= 0.0579, c
+    assert gap.mean() <= 0.0224, c
+    print("NFL_THIRD_DOWN_LEVEL_OK", round(gap.max(), 4), round(gap.mean(), 4))
+
+
 def test_advbox_carries_the_usage_sections(game):
     _, out, _ = game
     box = out["advBoxScore"]

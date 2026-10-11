@@ -14,6 +14,7 @@ offline through `kloppy.statsbomb.load(event_data=..., lineup_data=...)`.
 | File | Source | Trim |
 |---|---|---|
 | `statsbomb_8658_events.json` | `https://raw.githubusercontent.com/statsbomb/open-data/master/data/events/8658.json` | first 50 events + every `Half Start` / `Half End` + the first `Shot` (57 of 2,978) |
+| `statsbomb_8658_events_full.json.gz` | the same `events/8658.json`, downloaded 2026-10-11 (2,978 events, sha256 prefix `a9aa72c042153fa3`) | none: the whole file, `gzip -9`; read by `tests/soccer/test_soccer_spadl.py` for the offline full-match socceraction parity (supp-010) |
 | `statsbomb_8658_lineups.json` | `https://raw.githubusercontent.com/statsbomb/open-data/master/data/lineups/8658.json` | whole file |
 
 Match 8658 is France v Croatia, the 2018 FIFA World Cup final. Captured 2026-10-06 by
