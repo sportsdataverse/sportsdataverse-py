@@ -2,18 +2,21 @@
 
 Port of ``hoopR/R/nba_crosswalk.R``. ESPN is the anchor; the NBA Stats API is
 joined on ``espn_team_id`` (the Stats team directory already carries the ESPN
-linkage) and Fox on the normalized team name. Yahoo columns are null
-placeholders.
+linkage) and Fox on the normalized team name. Yahoo team and game ids are
+computed from ESPN's (Yahoo NBA team ids equal ESPN's), from 2014 on; the
+other Yahoo columns are null placeholders.
 
 Public surface:
 
 * :func:`nba_team_crosswalk` -- ESPN x Stats x Fox team-id crosswalk.
 * :func:`nba_schedule_crosswalk` -- ESPN x Stats game-id crosswalk.
 * :func:`nba_player_crosswalk` -- ESPN x Stats x Fox player-id crosswalk.
+* :func:`nba_crosswalks_from_archive` -- all three for a past season, offline.
 """
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 import polars as pl
@@ -37,6 +40,7 @@ __all__ = [
     "nba_team_crosswalk",
     "nba_schedule_crosswalk",
     "nba_player_crosswalk",
+    "nba_crosswalks_from_archive",
 ]
 
 TEAM_COLUMNS = [
@@ -81,6 +85,43 @@ SCHEDULE_COLUMNS = [
     "match_method",
     "match_confidence",
 ]
+
+# Yahoo's NBA history starts with the 2013-14 season; its 30 team ids equal
+# ESPN's, and a game id is the US-Eastern date plus the zero-padded home id
+# (probed 2026-10-11: 89/90, 98/98 and 85/85 games; the miss was a postponed
+# game, which keeps its original date).
+_YAHOO_FIRST_SEASON = 2014
+
+
+def _yahoo_team_id(season: int) -> pl.Expr:
+    """``yahoo_team_id`` = ``nba.t.{espn_team_id}`` for the 30 franchises, from 2014."""
+    team = pl.col("espn_team_id")
+    if season < _YAHOO_FIRST_SEASON:
+        return pl.lit(None, dtype=pl.Utf8).alias("yahoo_team_id")
+    return (
+        pl.when(team.is_between(1, 30))
+        .then(pl.lit("nba.t.") + team.cast(pl.Utf8))
+        .otherwise(pl.lit(None, dtype=pl.Utf8))
+        .alias("yahoo_team_id")
+    )
+
+
+def _yahoo_game_id(season: int) -> pl.Expr:
+    """``yahoo_game_id`` = ``nba.g.{YYYYMMDD ET}{home espn id, 2 digits}``, from 2014."""
+    home = pl.col("home_espn_team_id")
+    if season < _YAHOO_FIRST_SEASON:
+        return pl.lit(None, dtype=pl.Utf8).alias("yahoo_game_id")
+    return (
+        pl.when(home.is_between(1, 30) & pl.col("game_date").is_not_null())
+        .then(
+            pl.concat_str(
+                [pl.lit("nba.g."), pl.col("game_date").dt.strftime("%Y%m%d"), home.cast(pl.Utf8).str.zfill(2)]
+            )
+        )
+        .otherwise(pl.lit(None, dtype=pl.Utf8))
+        .alias("yahoo_game_id")
+    )
+
 
 _STATS_SCHEMA = {
     "espn_team_id": pl.Int32,
@@ -156,7 +197,7 @@ def _assemble_team_crosswalk(
         .join(fox2, on="team_key", how="left", maintain_order="left")
         .with_columns(
             pl.lit(season, dtype=pl.Int32).alias("season"),
-            pl.lit(None, dtype=pl.Utf8).alias("yahoo_team_id"),
+            _yahoo_team_id(season),
             pl.lit(None, dtype=pl.Utf8).alias("yahoo_team_abbreviation"),
             pl.lit(None, dtype=pl.Utf8).alias("yahoo_team_name"),
             pl.when(matched).then(pl.lit("exact_name")).otherwise(pl.lit("unmatched")).alias("match_method"),
@@ -226,7 +267,7 @@ def _assemble_schedule_crosswalk(
             pl.lit(None, dtype=pl.Utf8).alias("fox_game_id"),
             pl.lit(None, dtype=pl.Utf8).alias("fox_home_team_id"),
             pl.lit(None, dtype=pl.Utf8).alias("fox_away_team_id"),
-            pl.lit(None, dtype=pl.Utf8).alias("yahoo_game_id"),
+            _yahoo_game_id(season),
             pl.when(pl.col("espn_game_id").is_not_null() & pl.col("nba_game_id").is_not_null())
             .then(pl.lit("both"))
             .when(pl.col("espn_game_id").is_not_null())
@@ -599,3 +640,80 @@ def nba_player_crosswalk(
         )
     )
     return out.to_pandas() if return_as_pandas else out
+
+
+def nba_crosswalks_from_archive(
+    season: int,
+    espn_schedule: pl.DataFrame,
+    espn_game_rosters: pl.DataFrame,
+    stats_dir: Union[str, Path],
+    min_confidence: float = 0.92,
+) -> Dict[str, pl.DataFrame]:
+    """Build the NBA team, schedule and player crosswalks for a past season, offline.
+
+    The live builders read current-season endpoints, so they cannot produce
+    history. This one reads stored data only: the season's ESPN schedule and
+    ESPN game rosters (``espn_nba_schedules`` / ``espn_nba_game_rosters``
+    parquet, 2002+) and the local stats.nba.com JSON archive
+    (``hoopR-nba-stats-raw/nba_stats/json``: ``boxscoretraditionalv3``, with
+    ``boxscoresummaryv2`` / ``leaguegamelog`` for the game date).
+
+    * **Teams** pair by game-date co-occurrence (``match_method``
+      ``game_dates``; ``match_confidence`` is the share of the ESPN team's
+      home/away dates the Stats team shares), so relocated franchises resolve
+      without a name table.
+    * **Games** join on (US-Eastern date, home ESPN team, away ESPN team), as
+      :func:`nba_schedule_crosswalk` does (``both`` / ``espn_only`` /
+      ``stats_only``).
+    * **Players** match inside each matched (game, team) on normalized name,
+      tie-broken by jersey, then vote across the season into one row per ESPN
+      athlete per team. ``match_confidence`` is the share of that athlete's
+      matched games that agree on the chosen ``nba_player_id``.
+
+    Yahoo team and game ids are computed from 2014 on; Fox and Yahoo player
+    columns stay null (they need per-game harvesting).
+
+    Args:
+        season: Season, ending year (``2025`` = 2024-25).
+        espn_schedule: That season's ESPN schedule parquet.
+        espn_game_rosters: That season's ESPN game rosters parquet.
+        stats_dir: The stats archive's ``json`` root.
+        min_confidence: Jaro-Winkler floor for a fuzzy player match.
+
+    Returns:
+        ``{"team": ..., "schedule": ..., "player": ...}``, with the same columns
+        as :func:`nba_team_crosswalk`, :func:`nba_schedule_crosswalk` and
+        :func:`nba_player_crosswalk`.
+
+    Raises:
+        FileNotFoundError: ``stats_dir`` holds no box scores for ``season``.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.nba import nba_crosswalks_from_archive
+
+            out = nba_crosswalks_from_archive(
+                2015,
+                pl.read_parquet("nba/schedules/parquet/nba_schedule_2015.parquet"),
+                pl.read_parquet("nba/game_rosters/parquet/game_rosters_2015.parquet"),
+                "../hoopR-nba-stats-raw/nba_stats/json",
+            )
+            print(out["schedule"]["match_method"].value_counts())
+
+        Pipeline next step (one line)::
+
+            out["player"].filter(pl.col("match_method") == "unmatched").head()
+
+        See Also:
+            * `hoopR`_ -- R sister package with the live crosswalks
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    from sportsdataverse._crosswalk_basketball_archive import build_archive_crosswalks, read_stats_archive
+
+    stats = read_stats_archive(stats_dir, "nba", season)
+    if stats["games"].height == 0:
+        raise FileNotFoundError(f"no NBA box scores for season {season} under {stats_dir}")
+    return build_archive_crosswalks("nba", season, espn_schedule, espn_game_rosters, stats, min_confidence)
