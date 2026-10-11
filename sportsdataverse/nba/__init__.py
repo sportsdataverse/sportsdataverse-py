@@ -21,6 +21,7 @@ from sportsdataverse.nba.nba_player_stats import *
 from sportsdataverse.nba.nba_season_producers import *
 from sportsdataverse.nba.nba_shot_value import *
 from sportsdataverse.nba.nba_team_box import *
+from sportsdataverse.nba.nba_game_page import *  # noqa: F401
 from sportsdataverse.nba.nba_tracking_value import *
 from sportsdataverse.nba.nba_schedule import *
 from sportsdataverse.nba.nba_teams import *

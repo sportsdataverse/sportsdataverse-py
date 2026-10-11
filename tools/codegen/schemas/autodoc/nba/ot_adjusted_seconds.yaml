@@ -1,0 +1,10 @@
+schema: ot_adjusted_seconds
+kind: dataframe
+hand_authored: true
+columns:
+- name: wp_regime
+  type: character
+  description: ''
+- name: start_game_seconds_remaining
+  type: double
+  description: ''

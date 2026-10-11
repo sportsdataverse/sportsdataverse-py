@@ -6,6 +6,67 @@ description: "NBA — additional Python functions — IDs and crosswalks — fun
 ---
 # NBA — additional Python functions — IDs and crosswalks
 
+### nba_crosswalks_from_archive {#nba_crosswalks_from_archive}
+
+`nba_crosswalks_from_archive(season: 'int', espn_schedule: 'pl.DataFrame', espn_game_rosters: 'pl.DataFrame', stats_dir: 'Union[str, Path]', min_confidence: 'float' = 0.92) -> 'Dict[str, pl.DataFrame]'`
+
+Build the NBA team, schedule and player crosswalks for a past season, offline.
+
+The live builders read current-season endpoints, so they cannot produce
+history. This one reads stored data only: the season's ESPN schedule and
+ESPN game rosters (`espn_nba_schedules` / `espn_nba_game_rosters`
+parquet, 2002+) and the local stats.nba.com JSON archive
+(`hoopR-nba-stats-raw/nba_stats/json`: `boxscoretraditionalv3`, with
+`boxscoresummaryv2` / `leaguegamelog` for the game date).
+
+* **Teams** pair by game-date co-occurrence (`match_method`
+  `game_dates`; `match_confidence` is the share of the ESPN team's
+  home/away dates the Stats team shares), so relocated franchises resolve
+  without a name table.
+* **Games** join on (US-Eastern date, home ESPN team, away ESPN team), as
+  `nba_schedule_crosswalk` does (`both` / `espn_only` /
+  `stats_only`).
+* **Players** match inside each matched (game, team) on normalized name,
+  tie-broken by jersey, then vote across the season into one row per ESPN
+  athlete per team. `match_confidence` is the share of that athlete's
+  matched games that agree on the chosen `nba_player_id`.
+
+Yahoo team and game ids are computed from 2014 on; Fox and Yahoo player
+columns stay null (they need per-game harvesting).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season, ending year (`2025` = 2024-25). |
+| `espn_schedule` | `DataFrame` |  | That season's ESPN schedule parquet. |
+| `espn_game_rosters` | `DataFrame` |  | That season's ESPN game rosters parquet. |
+| `stats_dir` | `Union[str, Path]` |  | The stats archive's `json` root. |
+| `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for a fuzzy player match. |
+
+**Returns**
+
+`{"team": ..., "schedule": ..., "player": ...}`, with the same columns as `nba_team_crosswalk`, `nba_schedule_crosswalk` and `nba_player_crosswalk`.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import nba_crosswalks_from_archive
+
+out = nba_crosswalks_from_archive(
+    2015,
+    pl.read_parquet("nba/schedules/parquet/nba_schedule_2015.parquet"),
+    pl.read_parquet("nba/game_rosters/parquet/game_rosters_2015.parquet"),
+    "../hoopR-nba-stats-raw/nba_stats/json",
+)
+print(out["schedule"]["match_method"].value_counts())
+
+# Pipeline next step (one line)
+
+out["player"].filter(pl.col("match_method") == "unmatched").head()
+```
+
 ### nba_player_crosswalk {#nba_player_crosswalk}
 
 `nba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`

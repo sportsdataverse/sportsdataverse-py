@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_rookie"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_rookie"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_matchup"
 sidebar_position: 10
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_rookie — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_rookie
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -776,6 +776,69 @@ curve = fit_aging_curve(panel, ages, smooth=1)
 print(curve.delta(24))  # ~1.0
 ```
 
+### game_minutes {#game_minutes}
+
+`game_minutes(periods: 'int', *, league_id: 'str' = '00') -> 'int'`
+
+Minutes played in a game of `periods` periods: the league's regulation length plus five per overtime.
+
+Regulation is 48 minutes for the NBA (`"00"`) and 40 for the WNBA (`"10"`), read from
+`~sportsdataverse.nba.nba_prediction_constants.get_constants`; an overtime is 5 minutes in both.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `periods` | `int` |  | Highest period number played (`4` for regulation, `5` for one OT, ...). |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA. |
+
+**Returns**
+
+Game minutes.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import game_minutes
+game_minutes(5)  # 53
+
+# WNBA
+
+game_minutes(5, league_id="10")  # 45
+```
+
+### game_page_frames {#game_page_frames}
+
+`game_page_frames(final: 'dict', *, league_id: 'str' = '00') -> 'dict[str, object]'`
+
+Everything the Game on Paper NBA game page needs, from one `espn_nba_pbp` payload.
+
+Runs the hoopR converters (`helper_nba_play_by_play` / `helper_nba_team_box` /
+`helper_nba_player_box`) and then `score_win_prob`, `shot_coordinates`,
+`team_game_rates` and `player_game_rates`. The sdv-db nightly stage calls those four
+directly on the warehouse's copies of the same frames, so a game renders identically from
+either source.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `final` | `dict` |  | The dict `~sportsdataverse.nba.nba_pbp.espn_nba_pbp` returns. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA (48 / 40-minute regulation for the rates). |
+
+**Returns**
+
+`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior"}` where `prior` is `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`. Before both team box rows exist, `team_game_rates` and `player_game_rates` are empty frames with their documented columns.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import game_page_frames
+from sportsdataverse.nba.nba_pbp import espn_nba_pbp
+frames = game_page_frames(espn_nba_pbp(401766458))
+frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
+```
+
 ### get_constants {#get_constants}
 
 `get_constants(league_id: 'str') -> 'LeagueConstants'`
@@ -820,6 +883,38 @@ The pseudo-attempt shrinkage constant (fitted split-half).
 ```python
 from sportsdataverse.nba.nba_shot_value_constants import get_shrinkage_k
 get_shrinkage_k("00")
+```
+
+### home_prior {#home_prior}
+
+`home_prior(home_team_spread: 'Optional[float]', game_spread_available: 'Optional[bool]', *, league_id: 'str' = '00') -> 'tuple[float, str]'`
+
+Pregame home win probability for the in-game model, and where it came from.
+
+`home_team_spread` is the signed expected home margin that `load_nba_pbp` /
+`helper_nba_pbp_features` carry (positive when the home side is favoured). Both hoopR and
+`~sportsdataverse.nba.nba_pbp.helper_nba_pickcenter` substitute `+2.5` when no line
+exists, so the value is only trusted when `game_spread_available` is true; otherwise the
+prior is home-court advantage alone.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_team_spread` | `Optional[float]` |  | Signed expected home margin, or `None`. |
+| `game_spread_available` | `Optional[bool]` |  | Whether a real line backed that spread. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA (selects the constants). |
+
+**Returns**
+
+`(probability, source)` with `source` `"spread"` or `"hfa"`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import home_prior
+home_prior(3.0, True)      # (0.58, 'spread')
+home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
 ```
 
 ### in_game_features {#in_game_features}
@@ -1482,79 +1577,4 @@ d = nba_matchup_drapm("2023-24", matchups=matchups_df)
 # Pipeline next step
 
 d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
-```
-
-### nba_predict_games {#nba_predict_games}
-
-`nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Vectorized pregame predictions for a schedule of games.
-
-Joins the ratings frame twice (home/away) and applies the closed-form
-`predict_margin` / `win_prob_from_margin` / `predict_total`
-math column-wise.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `games` | `DataFrame` |  | One row per game with `game_id`, `home_team_id`, `away_team_id` and optionally `neutral_site` (missing column means every game is a true home game). Team-id dtypes must match `ratings['team_id']` exactly. |
-| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace` (the `~sportsdataverse.nba.nba_team_ratings.nba_team_ratings` output for one season/as-of date). |
-| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
-
-No returns table is published for this function: no capture: it raises a join-key dtype mismatch on a real schedule (the schedule's home_team_id is Int32, nba_team_ratings' team_id is String).
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_predict import nba_predict_games
-from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
-preds = nba_predict_games(games, nba_team_ratings(2024))
-```
-
-### nba_rookie_projection {#nba_rookie_projection}
-
-`nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
-
-Project rookie/sophomore value by composing draft x aging x availability.
-
-Composition (no re-derived features -- each term is the verbatim public
-output of ①②③):
-
-- `base = nba_draft_model(...).proj_career_value * rookie_fraction`
-  (`rookie_fraction` from the bundled residual artifact -- the share of
-  career value realized in a single rookie season).
-- `proj_rookie_value = base * rel_value(rookie_age) / rel_value(peak_age)
-  + residual[pro_tier]`; `proj_soph_value` uses `rookie_age + 1`.
-- `proj_avail_pct` from `sportsdataverse.nba.nba_availability.nba_availability`
-  at rookie age -- reported separately, **never** multiplied into the
-  value columns (availability is availability, not skill).
-- `proj_rookie_min = games_full_season * proj_avail_pct * expected_mpg(pro_tier)`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `draft_year` | `int \| list[int]` |  | A draft year or list of years. |
-| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
-| `college_prior` | `Optional[DataFrame]` | `None` | Optional college-side prior frame, forwarded verbatim to `sportsdataverse.nba.nba_draft_model.nba_draft_model`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_rookie_projection
-board = nba_rookie_projection(2019)
-print(board.sort("proj_rookie_value", descending=True).head())
 ```
