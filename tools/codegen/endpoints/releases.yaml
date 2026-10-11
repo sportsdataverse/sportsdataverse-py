@@ -594,6 +594,26 @@ loaders:
   min_season: 1988
   example_args:
     seasons: 2024
+- fn: load_mlb_statcast
+  league: mlb
+  base: sdv_releases
+  url: mlb_statcast/mlb_statcast_{season}.parquet
+  tag: mlb_statcast
+  min_season: 2015
+  example_args:
+    seasons: 2024
+  id_int64:
+  - on_1b
+  - on_2b
+  - on_3b
+- fn: load_mlb_schedule
+  league: mlb
+  base: sdv_releases
+  url: mlb_schedules/mlb_schedule_{season}.parquet
+  tag: mlb_schedules
+  min_season: 1988
+  example_args:
+    seasons: 2024
 - fn: load_mlb_expected_stats
   league: mlb
   base: sdv_releases
