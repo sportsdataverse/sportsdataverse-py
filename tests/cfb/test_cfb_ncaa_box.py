@@ -206,6 +206,8 @@ def test_scoring_summary_rows_and_running_score() -> None:
                 "Houston",
             ],
         ),
+        # the source alt is "Roosevelt " (trailing space): stripped, it joins the linescore name
+        ("5365797", ["Roosevelt"] * 2 + ["Valparaiso"] * 4 + ["Roosevelt"] * 3 + ["Valparaiso"] * 2),
     ],
 )
 def test_scoring_summary_team_from_logo_alt(contest_id: str, teams: "list[str]") -> None:

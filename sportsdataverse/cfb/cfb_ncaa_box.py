@@ -205,7 +205,8 @@ def parse_cfb_ncaa_scoring_summary(
     cells are flattened and re-chunked by the 9-column header (Period, Time,
     Has Ball, Play, Plays, Yards, TOP, away, home) and de-duplicated preserving
     order. ``period`` keeps overtime as 5, 6, … (``"1OT"`` -> 5); ``team`` ("Has
-    Ball") is the alt text of the cell's team logo (the cell has no text);
+    Ball") is the cell text, else its team logo's ``alt`` (the real page ships only
+    the logo), null when the cell has neither;
     ``play_text`` is null when the page leaves it blank (common on OT rows);
     ``score_away`` / ``score_home`` are the running score after the play.
 
@@ -243,7 +244,7 @@ def parse_cfb_ncaa_scoring_summary(
     if table is not None:
         # "Has Ball" is a bare team logo: the name is only in <img alt>, so text first, alt second.
         cells = [
-            c.get_text(" ", strip=True) or next((i.get("alt", "") for i in c.find_all("img")), "")
+            c.get_text(" ", strip=True) or next(((i.get("alt") or "").strip() for i in c.find_all("img")), "")
             for c in table.find_all(["th", "td"])
         ]
         flat = [c for c in cells if c != "Scoring Summary"]  # drop the title cell
