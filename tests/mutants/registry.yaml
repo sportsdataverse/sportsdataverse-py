@@ -834,3 +834,51 @@
   test: tests/test_xgb.py
   expected: kill
   note: an operator's explicit OMP_NUM_THREADS must win (review PR-774 R774-6)
+
+# --- EX-1.5-d (task 2.18): a play's end state comes from the next play --------------------------------
+- id: nfl-end-team-from-next-play
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.when(use).then(n.field("team")).otherwise(pl.col("end.team.id")).alias("end.team.id"),'
+  mutant: 'pl.col("end.team.id").alias("end.team.id"),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_change_of_poss_is_nflverse_possession_change[401326467]
+  expected: kill
+  note: >-
+    Reading ESPN's end.team again brings back the spurious possession changes of the 2014-2021
+    feed (67 of 118 snaps wrong on the 2021 capture before the fix).
+
+- id: nfl-end-down-from-next-play
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.when(real_down).then(n.field("down")).otherwise(pl.col("end.down")).alias("end.down"),'
+  mutant: 'pl.col("end.down").alias("end.down"),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_first_down_created_is_nflverse_first_down[401326467]
+  expected: kill
+  note: >-
+    ESPN's end.down disagrees with the next snap on 63% of 2021 plain plays; reading it again
+    drops first-down agreement with nflverse from 0.992 to 0.661 on the 2021 capture.
+
+- id: nfl-end-state-pipe
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.pipe(_end_state_from_next_play)'
+  mutant: '.pipe(lambda plays: plays)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_epa_agrees_with_nflverse[401326467]
+  expected: kill
+  note: the whole fix unwired; EPA corr with nflverse falls from 0.933 to 0.426 on the 2021 capture
+
+- id: nfl-end-down-only-where-espn-states-one
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'real_down = use & pl.col("end.down").is_between(1, 4) & n.field("down")'
+  mutant: 'real_down = use & n.field("down")'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_missed_field_goal_ends_on_a_real_down[251113015]
+  expected: kill
+  note: >-
+    The task 2.3 boundary: 2.18 replaces a down ESPN states, never its -1 (C-H5 kickoff returns,
+    EX-1.1-c pre-2014 missed field goals). Filling -1 too XPASSes 2.3's strict xfails; 2.3 owns
+    that fix and rewrites this row.

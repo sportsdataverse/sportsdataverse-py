@@ -397,11 +397,11 @@ def test_play_column_equals_nflverse(game_id, ours, theirs, domain):
 # here (raise only).
 _MODEL = {
     (401547449, "EP_start", "ep"): (0.996, 0.117, 167),  # 0.99611, 0.11615
-    (401547449, "EPA", "epa"): (0.961, 0.247, 167),  # 0.96175, 0.24653
+    (401547449, "EPA", "epa"): (0.990, 0.112, 167),  # 0.99021, 0.11114 (EX-1.5-d; was 0.96175, 0.24653)
     (401547449, "wp", "wp"): (0.993, 0.024, 167),  # 0.99339, 0.02345
     (401547449, "vegas_wp", "vegas_wp"): (0.987, 0.063, 167),  # 0.98767, 0.06284
-    (401671740, "EP_start", "ep"): (0.992, 0.126, 154),  # 0.99278, 0.12545
-    (401671740, "EPA", "epa"): (0.927, 0.328, 154),  # 0.92781, 0.32713
+    (401671740, "EP_start", "ep"): (0.996, 0.119, 154),  # 0.99609, 0.11813 (EX-1.5-d; was 0.99278, 0.12545)
+    (401671740, "EPA", "epa"): (0.972, 0.132, 154),  # 0.97255, 0.13099 (EX-1.5-d; was 0.92781, 0.32713)
     (401671740, "wp", "wp"): (0.999, 0.007, 154),  # 0.99980, 0.00649
     (401671740, "vegas_wp", "vegas_wp"): (0.991, 0.062, 154),  # 0.99174, 0.06128
 }
@@ -495,14 +495,9 @@ _END_STATE = {
     401030962: (122, 0, 1.0, 0.951, 0.197),  # 1.0, 0.95171, 0.19693
     401326467: (118, 0, 0.991, 0.932, 0.139),  # 0.99153, 0.93294, 0.13892
 }
-_EX_1_5_D = "EX-1.5-d: change_of_poss / first_down_created / EPA read ESPN's corrupt end.team and end.down"
 
 
-def _end_state_cases() -> list:
-    return [pytest.param(g, marks=_xfail(_EX_1_5_D)) for g in END_STATE_SLICES]
-
-
-@pytest.mark.parametrize("game_id", _end_state_cases())
+@pytest.mark.parametrize("game_id", list(END_STATE_SLICES))
 def test_EX_1_5_d_change_of_poss_is_nflverse_possession_change(game_id):
     s = _snaps(game_id)
     _require(s.height >= _END_STATE[game_id][0], f"{s.height} snaps")
@@ -511,14 +506,14 @@ def test_EX_1_5_d_change_of_poss_is_nflverse_possession_change(game_id):
     assert wrong.height <= _END_STATE[game_id][1], wrong.select("id", "text", "change_of_poss").rows()
 
 
-@pytest.mark.parametrize("game_id", _end_state_cases())
+@pytest.mark.parametrize("game_id", list(END_STATE_SLICES))
 def test_EX_1_5_d_first_down_created_is_nflverse_first_down(game_id):
     s = _snaps(game_id)
     agree = s.select((pl.col("first_down_created").cast(pl.Int64) == pl.col("first_down_nv")).mean()).item()
     assert agree >= _END_STATE[game_id][2], agree
 
 
-@pytest.mark.parametrize("game_id", _end_state_cases())
+@pytest.mark.parametrize("game_id", list(END_STATE_SLICES))
 def test_EX_1_5_d_epa_agrees_with_nflverse(game_id):
     s = _snaps(game_id).filter(pl.col("EPA").is_not_null() & pl.col("epa_nv").is_not_null())
     corr, mae = s.select(
