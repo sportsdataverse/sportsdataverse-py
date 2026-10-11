@@ -58,3 +58,25 @@ def test_wbb_join_pbp_shots_delegates() -> None:
     joined = ncaa_wbb_join_pbp_shots(pbp, shots)
     assert isinstance(joined, pl.DataFrame)
     assert joined.height == pbp.height
+
+
+def test_wbb_shot_locations_season_pins_the_period_model(monkeypatch) -> None:
+    """``season=`` resolves the era through ``wbb_period_model``; no season keeps quarters.
+
+    Shot locations only exist on stats.ncaa.org from 2019, so there is no halves-era
+    capture to parse: the check records the model handed to the (real-fixture-fed)
+    parser rather than counting rows (rules/wbb.yaml#wbb-2016-four-quarters).
+    """
+    from sportsdataverse.wbb import wbb_ncaa_shots as mod
+
+    seen: list = []
+
+    def _spy(html, gid, *, period_model):
+        seen.append(period_model)
+        return parse_ncaa_bb_shots(html, gid, period_model=period_model)
+
+    monkeypatch.setattr(mod, "parse_ncaa_bb_shots", _spy)
+    ncaa_wbb_shot_locations(["5728709"], fetcher=_FakeFetcher())
+    ncaa_wbb_shot_locations(["5728709"], season=2015, fetcher=_FakeFetcher())
+    ncaa_wbb_shot_locations(["5728709"], season="2015-16", fetcher=_FakeFetcher())
+    assert seen == [(4, 600, 300), (2, 1200, 300), (4, 600, 300)]
