@@ -6039,8 +6039,9 @@ class CFBPlayProcess(object):
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
             .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)"), before_fumble=True))
             .otherwise(None),
+            # "return for 3 yds" (2014+) and "returned for a 33 yard touchdown" (2004-06)
             yds_fumble_return=pl.when((pl.col("fumble_vec") == True).and_(pl.col("kickoff_play") == False))
-            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return(?:ed)?\s+for (.+)")))
             .otherwise(None),
             # The first number after "sacked" is the YARDLINE in 2004-2007 text --
             # "sacked by Pierre Bell at the ECaro 48 for a loss of 8 yards" -- so the

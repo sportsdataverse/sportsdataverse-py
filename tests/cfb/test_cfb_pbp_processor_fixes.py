@@ -888,3 +888,9 @@ def test_2012_13_kickoff_touchbacks_are_spotted_at_the_25(game_id):
     tbs = plays.filter((pl.col("kickoff_play") == True) & (pl.col("kickoff_tb") == True))
     assert tbs.height > 0
     assert tbs["yds_kickoff_return"].unique().to_list() == [25]
+
+
+def test_2004_fumble_returned_for_a_touchdown_carries_its_yards():
+    # 2004-06 write "returned for a 33 yard touchdown"; the reader only knew "return for N".
+    row = _row(_fixture_plays(243110264), "recovered by Wilrey Fontenot (UA), returned for a 33 yard touchdown")
+    assert row["yds_fumble_return"] == 33
