@@ -62,7 +62,9 @@ Extract over-level match state from an ESPN cricket summary/scoreboard payload.
 
 One row per innings with a parseable competitor score string. The batting
 side that carries a `target` in its score is the second innings (chasing);
-the other is the first innings (setting).
+the other is the first innings (setting). `match_date` is the competition's
+`date` (null when the payload has none); `cricket_win_probability`
+selects the ODI fielding-restriction regime from it.
 
 **Parameters**
 
@@ -107,12 +109,12 @@ In-play win probability for the batting/chasing team from match state.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `state` | `DataFrame` |  | Over-level match state carrying the documented state schema (`event_id, innings_number, batting_team_id, runs, wickets, balls_bowled, balls_total, target, fmt`) — e.g. the output of `cricket_match_state`. |
+| `state` | `DataFrame` |  | Over-level match state carrying the documented state schema (`event_id, innings_number, batting_team_id, runs, wickets, balls_bowled, balls_total, target, fmt, match_date`) — e.g. the output of `cricket_match_state`. `match_date` (Date, or a parseable string) selects the ODI regime; absent or null means the pooled surface. |
 | `return_as_pandas` | `bool` | `False` | When True, return a `pandas.DataFrame`. |
 
 **Returns**
 
-The input rows plus `overs_left:Int64`, `wickets_left:Int64`, `resources_left:Float64`, `proj_final:Float64`, `win_prob_raw:Float64` (parametric core) and `win_prob:Float64` (calibrated, the shipped estimate). A zero-row input returns the schema with these columns appended (all null).
+The input rows plus `regime:Utf8` (the match's regime id, `~sportsdataverse.cricket.cricket_model_constants.cricket_regime`), `overs_left:Int64`, `wickets_left:Int64`, `resources_left:Float64`, `proj_final:Float64`, `win_prob_raw:Float64` (parametric core) and `win_prob:Float64` (calibrated, the shipped estimate). A zero-row input returns the schema with these columns appended (all null).
 
 | col_name | type | description |
 |---|---|---|

@@ -325,13 +325,16 @@ Fit a logistic P(called strike | zone coordinates) on called pitches.
 
 Compute-on-demand -- **no artifact is bundled or cached to disk.**
 L2-regularized (`1e-4`) mean log-loss, minimized via
-`scipy.optimize.minimize(method="L-BFGS-B")`.
+`scipy.optimize.minimize(method="L-BFGS-B")`. Pitches from 2026 on
+(`game_year` / `game_date`) are excluded with a `UserWarning`: their
+locations are middle-of-plate against the ABS zone, not the frame the rest
+of the corpus is in (`rules/mlb.yaml#mlb-2026-savant-plate-location-middle-of-plate`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pitches` | `DataFrame` |  | Frame of pitches with `description` (filtered to `{"called_strike", "ball"}`), `plate_x`, `plate_z`, `sz_top`, `sz_bot`. |
+| `pitches` | `DataFrame` |  | Frame of pitches with `description` (filtered to `{"called_strike", "ball"}`), `plate_x`, `plate_z`, `sz_top`, `sz_bot`, and `game_year` or `game_date` when the frame spans the 2026 boundary. |
 
 **Returns**
 
@@ -439,6 +442,14 @@ per catcher (Savant's `fielder_2`, cast `Utf8` at the boundary). The
 `takes` column counts *all* takes handled (workload), while the runs sum
 only over the frameable shadow-zone subset.
 
+From 2026 every call is challengeable and Savant's location frame moves to
+the middle of the plate (`rules/mlb.yaml#mlb-2026-abs-challenge-system`,
+`#mlb-2026-savant-plate-location-middle-of-plate`): the location logistic
+is fit on pre-2026 takes only (a `UserWarning` when 2026+ rows are
+present) and a catcher's 2026+ takes are summed on their own row,
+`abs_era = True`, so framing runs earned against challengeable calls are
+never added to pre-2026 ones.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -450,11 +461,12 @@ only over the frameable shadow-zone subset.
 
 **Returns**
 
-one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id (Savant `fielder_2`) | | takes | Int64 | Called-strike + ball takes caught (all, workload) | | framing_runs | Float64 | Sum over shadow-zone takes of (actual - P_strike) x count run-value | | strikes_gained | Float64 | Sum over shadow-zone takes of (actual - P_strike), run-value-free |
+one row per catcher and era (one per catcher on a frame that does not span 2026). | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id (Savant `fielder_2`) | | abs_era | Boolean | The takes are from 2026 on: challengeable calls, middle-of-plate frame | | takes | Int64 | Called-strike + ball takes caught (all, workload) | | framing_runs | Float64 | Sum over shadow-zone takes of (actual - P_strike) x count run-value | | strikes_gained | Float64 | Sum over shadow-zone takes of (actual - P_strike), run-value-free |
 
 | col_name | type | description |
 |---|---|---|
 | `catcher_id` | character |  |
+| `abs_era` | logical | The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row. |
 | `takes` | integer |  |
 | `framing_runs` | double |  |
 | `strikes_gained` | double |  |
@@ -815,11 +827,12 @@ Per-umpire called-strike bias residual (observed minus expected).
 
 **Returns**
 
-one row per umpire. | Column | Type | Description | |---|---|---| | umpire_id | Utf8 | Umpire identifier | | n_called | Int64 | Called pitches observed for this umpire | | obs_strike_rate | Float64 | Realized called-strike rate | | exp_strike_rate | Float64 | Mean model-predicted called-strike probability | | bias | Float64 | obs_strike_rate - exp_strike_rate (positive = strike-generous) |
+one row per umpire and era (`abs_era` splits an umpire's 2026+ calls from the earlier ones; a frame on one side of 2026 keeps one row per umpire). | Column | Type | Description | |---|---|---| | umpire_id | Utf8 | Umpire identifier | | abs_era | Boolean | The calls are from 2026 on: challengeable, scored in the new plate frame | | n_called | Int64 | Called pitches observed for this umpire | | obs_strike_rate | Float64 | Realized called-strike rate | | exp_strike_rate | Float64 | Mean model-predicted called-strike probability | | bias | Float64 | obs_strike_rate - exp_strike_rate (positive = strike-generous) |
 
 | col_name | type | description |
 |---|---|---|
 | `umpire_id` | character | Umpire identifier (statsapi people id, stringified). |
+| `abs_era` | logical | The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row. |
 | `n_called` | integer | Called pitches (strike or ball) observed for this umpire. |
 | `obs_strike_rate` | double | Realized called-strike rate for this umpire. |
 | `exp_strike_rate` | double | Mean model-predicted called-strike probability for this umpire's pitches. |
@@ -848,11 +861,12 @@ P(called strike) per pitch from the zone logistic.
 
 **Returns**
 
-one row per input pitch. | Column | Type | Description | |---|---|---| | called_strike_prob | Float64 | P(called strike \| pitch location) |
+one row per input pitch. | Column | Type | Description | |---|---|---| | called_strike_prob | Float64 | P(called strike \| pitch location) | | abs_era | Boolean | The pitch is from 2026 on: middle-of-plate location, ABS zone, challengeable call |
 
 | col_name | type | description |
 |---|---|---|
 | `called_strike_prob` | double | P(called strike \| pitch location) from the standardized zone-coordinate logistic. |
+| `abs_era` | logical | The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row. |
 
 **Example**
 
@@ -868,10 +882,18 @@ prob = mlb_umpire_called_strike_prob(pitches)
 Build the per-pitch feature substrate every pitching model consumes.
 
 Standardizes physics (velocity/spin/movement/release/extension) within
-`pitcher`, derives strike-zone-relative location features, pins id
-columns to `Int64`, and passes Savant's per-pitch `delta_run_exp`
-through unchanged as `run_value` (the single run-value label used by
-Stuff+/Command+/TTO/tunneling).
+`pitcher` and season (`game_year`, else the year of `game_date`),
+derives strike-zone-relative location features, pins id columns to
+`Int64`, and passes Savant's per-pitch `delta_run_exp` through
+unchanged as `run_value` (the single run-value label used by
+Stuff+/Command+/TTO/tunneling). The season is part of the standardization
+key because Savant's `release_speed` (and release point / spin) switched
+from PITCHf/x readings at 50 ft to TrackMan readings at release in 2017, a
+level shift of about +0.5-1 mph
+(`rules/mlb.yaml#mlb-2017-release-speed-statcast`); pooling a pitcher's
+2016 and 2017 pitches in one mean would read the source change as a
+velocity change. A frame with neither season column standardizes within
+`pitcher` alone.
 
 **Parameters**
 
@@ -882,7 +904,7 @@ Stuff+/Command+/TTO/tunneling).
 
 **Returns**
 
-One row per pitch with the input columns plus `velo_z`, `spin_z`, `pfx_x_z`, `pfx_z_z`, `release_pos_x_z`, `release_pos_z_z`, `extension_z` (standardized within `pitcher`), `plate_z_norm`, `plate_x_abs`, `in_zone`, `dist_from_heart`, and `run_value`. Empty/malformed input returns a zero-row frame carrying the added schema.
+One row per pitch with the input columns plus `velo_z`, `spin_z`, `pfx_x_z`, `pfx_z_z`, `release_pos_x_z`, `release_pos_z_z`, `extension_z` (standardized within `pitcher` and season), `plate_z_norm`, `plate_x_abs`, `in_zone`, `dist_from_heart`, and `run_value`. Empty/malformed input returns a zero-row frame carrying the added schema.
 
 | col_name | type | description |
 |---|---|---|
