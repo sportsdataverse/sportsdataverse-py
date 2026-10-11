@@ -8,6 +8,14 @@ the game-state spine that consumes Baseball Savant pitch location
 (:func:`sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search`);
 everything else in this spine is statsapi-native.
 
+From 2026 Savant reports ``plate_x``/``plate_z`` at the middle of the plate against
+the batter's ABS zone and every call is challengeable
+(``rules/mlb.yaml#mlb-2026-savant-plate-location-middle-of-plate``,
+``#mlb-2026-abs-challenge-system``). The fit therefore uses pre-2026 pitches only
+(:func:`sportsdataverse.mlb._savant_eras.drop_abs_era_rows`, a ``UserWarning`` when
+rows are dropped); every output row carries ``abs_era`` so a consumer can see which
+probabilities and residuals describe challengeable calls in the new frame.
+
 See Also:
     * `baseballr`_ -- R sibling package for MLB sabermetrics.
     * Baseball Savant (baseballsavant.mlb.com) -- source of the
@@ -26,9 +34,12 @@ import pandas as pd
 import polars as pl
 from scipy.optimize import minimize
 
-_CALLED_STRIKE_PROB_SCHEMA = {"called_strike_prob": pl.Float64}
+from sportsdataverse.mlb._savant_eras import abs_era_expr, drop_abs_era_rows
+
+_CALLED_STRIKE_PROB_SCHEMA = {"called_strike_prob": pl.Float64, "abs_era": pl.Boolean}
 _BIAS_SCHEMA = {
     "umpire_id": pl.Utf8,
+    "abs_era": pl.Boolean,
     "n_called": pl.Int64,
     "obs_strike_rate": pl.Float64,
     "exp_strike_rate": pl.Float64,
@@ -80,12 +91,16 @@ def fit_zone_model(pitches: pl.DataFrame) -> Dict[str, Any]:
 
     Compute-on-demand -- **no artifact is bundled or cached to disk.**
     L2-regularized (``1e-4``) mean log-loss, minimized via
-    ``scipy.optimize.minimize(method="L-BFGS-B")``.
+    ``scipy.optimize.minimize(method="L-BFGS-B")``. Pitches from 2026 on
+    (``game_year`` / ``game_date``) are excluded with a ``UserWarning``: their
+    locations are middle-of-plate against the ABS zone, not the frame the rest
+    of the corpus is in (``rules/mlb.yaml#mlb-2026-savant-plate-location-middle-of-plate``).
 
     Args:
         pitches: Frame of pitches with ``description`` (filtered to
             ``{"called_strike", "ball"}``), ``plate_x``, ``plate_z``,
-            ``sz_top``, ``sz_bot``.
+            ``sz_top``, ``sz_bot``, and ``game_year`` or ``game_date`` when the
+            frame spans the 2026 boundary.
 
     Returns:
         dict: ``{"coef": list[float] (7,), "intercept": float, "features": list[str]}``.
@@ -99,7 +114,7 @@ def fit_zone_model(pitches: pl.DataFrame) -> Dict[str, Any]:
             model = fit_zone_model(pitches)
     """
     feature_names = ["plate_x", "plate_x_sq", "z_norm", "z_norm_sq", "plate_x_z_norm", "abs_plate_x", "abs_z_dev"]
-    called = _called_pitches(pitches)
+    called = _called_pitches(drop_abs_era_rows(pitches, what="fit_zone_model"))
     if called.height < 2:
         return {"coef": [0.0] * len(feature_names), "intercept": 0.0, "features": feature_names}
 
@@ -147,6 +162,7 @@ def mlb_umpire_called_strike_prob(
         | Column | Type | Description |
         |---|---|---|
         | called_strike_prob | Float64 | P(called strike \\| pitch location) |
+        | abs_era | Boolean | The pitch is from 2026 on: middle-of-plate location, ABS zone, challengeable call |
 
     Example:
         Quick start::
@@ -159,7 +175,9 @@ def mlb_umpire_called_strike_prob(
         return out.to_pandas() if return_as_pandas else out
     fitted = model or fit_zone_model(pitches)
     probs = _score(pitches, fitted)
-    out = pl.DataFrame({"called_strike_prob": probs})
+    out = pl.DataFrame({"called_strike_prob": probs}).with_columns(
+        pitches.with_columns(abs_era_expr(pitches.columns).alias("abs_era"))["abs_era"]
+    )
     return out.to_pandas() if return_as_pandas else out
 
 
@@ -179,11 +197,14 @@ def mlb_umpire_bias(
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
-        pl.DataFrame: one row per umpire.
+        pl.DataFrame: one row per umpire and era (``abs_era`` splits an umpire's
+        2026+ calls from the earlier ones; a frame on one side of 2026 keeps one
+        row per umpire).
 
         | Column | Type | Description |
         |---|---|---|
         | umpire_id | Utf8 | Umpire identifier |
+        | abs_era | Boolean | The calls are from 2026 on: challengeable, scored in the new plate frame |
         | n_called | Int64 | Called pitches observed for this umpire |
         | obs_strike_rate | Float64 | Realized called-strike rate |
         | exp_strike_rate | Float64 | Mean model-predicted called-strike probability |
@@ -204,15 +225,17 @@ def mlb_umpire_bias(
     called = called.with_columns(
         (pl.col("description") == "called_strike").cast(pl.Float64).alias("observed_strike"),
         pl.Series("exp_prob", _score(called, fitted)),
+        abs_era_expr(called.columns).alias("abs_era"),
     )
     out = (
-        called.group_by("umpire_id")
+        called.group_by("umpire_id", "abs_era")
         .agg(
             pl.len().alias("n_called"),
             pl.col("observed_strike").mean().alias("obs_strike_rate"),
             pl.col("exp_prob").mean().alias("exp_strike_rate"),
         )
         .with_columns((pl.col("obs_strike_rate") - pl.col("exp_strike_rate")).alias("bias"))
-        .sort("umpire_id")
+        .select(list(_BIAS_SCHEMA))
+        .sort("umpire_id", "abs_era")
     )
     return out.to_pandas() if return_as_pandas else out

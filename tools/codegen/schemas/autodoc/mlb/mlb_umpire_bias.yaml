@@ -4,6 +4,9 @@ columns:
 - name: umpire_id
   type: character
   description: ''
+- name: abs_era
+  type: logical
+  description: ''
 - name: n_called
   type: integer
   description: ''

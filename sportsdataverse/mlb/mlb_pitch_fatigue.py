@@ -88,6 +88,14 @@ def add_velo_drop_from_start(feats: pl.DataFrame) -> pl.DataFrame:
     of the game (a fatigue signal). Computed within ``(game_pk, pitcher)``,
     sorted by ``(at_bat_number, pitch_number)`` -- no cross-game leakage.
 
+    A within-game delta is robust to Savant's 2017 velocity-source change
+    (PITCHf/x at 50 ft adjusted to release -> TrackMan at release, about
+    +0.5-1 mph; ``rules/mlb.yaml#mlb-2017-release-speed-statcast``) because
+    both pitches of a difference come from one game. Raw ``release_speed``
+    LEVELS are not: compare a pitcher's velocity across seasons only within
+    one side of 2017, or through the season-keyed ``velo_z`` from
+    :func:`sportsdataverse.mlb.mlb_pitch_features.pitch_features`.
+
     Args:
         feats: Output of
             :func:`sportsdataverse.mlb.mlb_pitch_features.add_sequence_features`

@@ -16,6 +16,8 @@ from typing import TYPE_CHECKING, List, Union
 
 import polars as pl
 
+from sportsdataverse.mlb._savant_eras import season_expr
+
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports
     import pandas as pd
 
@@ -24,7 +26,11 @@ __all__ = ["pitch_features", "add_sequence_features"]
 #: id columns pinned to Int64 at the substrate boundary (join-key discipline).
 _ID_INT: tuple = ("pitcher", "batter", "game_pk", "at_bat_number", "pitch_number", "balls", "strikes", "inning")
 
-#: raw physics columns standardized within ``pitcher`` -> their z-score name.
+#: raw physics columns standardized within ``pitcher`` and season -> their z-score name.
+#: The season is in the key because Savant's velocity / release-point / spin source changed in
+#: 2017 (PITCHf/x at 50 ft adjusted to release -> TrackMan at release, about +0.5-1 mph;
+#: rules/mlb.yaml#mlb-2017-release-speed-statcast): a pitcher's 2016 and 2017 pitches must
+#: never share one mean.
 _STD_ZNAME: dict = {
     "release_speed": "velo_z",
     "release_spin_rate": "spin_z",
@@ -65,9 +71,9 @@ _SEQ_SCHEMA: dict = {
 }
 
 
-def _standardize(col: str) -> pl.Expr:
-    mu = pl.col(col).mean().over("pitcher")
-    sd = pl.col(col).std().over("pitcher")
+def _standardize(col: str, keys: "List[Union[str, pl.Expr]]") -> pl.Expr:
+    mu = pl.col(col).mean().over(keys)
+    sd = pl.col(col).std().over(keys)
     return pl.when(sd > 0).then((pl.col(col) - mu) / sd).otherwise(0.0).alias(_STD_ZNAME[col])
 
 
@@ -88,10 +94,18 @@ def pitch_features(pitches: pl.DataFrame, *, return_as_pandas: bool = False) -> 
     """Build the per-pitch feature substrate every pitching model consumes.
 
     Standardizes physics (velocity/spin/movement/release/extension) within
-    ``pitcher``, derives strike-zone-relative location features, pins id
-    columns to ``Int64``, and passes Savant's per-pitch ``delta_run_exp``
-    through unchanged as ``run_value`` (the single run-value label used by
-    Stuff+/Command+/TTO/tunneling).
+    ``pitcher`` and season (``game_year``, else the year of ``game_date``),
+    derives strike-zone-relative location features, pins id columns to
+    ``Int64``, and passes Savant's per-pitch ``delta_run_exp`` through
+    unchanged as ``run_value`` (the single run-value label used by
+    Stuff+/Command+/TTO/tunneling). The season is part of the standardization
+    key because Savant's ``release_speed`` (and release point / spin) switched
+    from PITCHf/x readings at 50 ft to TrackMan readings at release in 2017, a
+    level shift of about +0.5-1 mph
+    (``rules/mlb.yaml#mlb-2017-release-speed-statcast``); pooling a pitcher's
+    2016 and 2017 pitches in one mean would read the source change as a
+    velocity change. A frame with neither season column standardizes within
+    ``pitcher`` alone.
 
     Args:
         pitches: Raw Savant pitch frame (e.g. from
@@ -105,7 +119,7 @@ def pitch_features(pitches: pl.DataFrame, *, return_as_pandas: bool = False) -> 
     Returns:
         One row per pitch with the input columns plus ``velo_z``, ``spin_z``,
         ``pfx_x_z``, ``pfx_z_z``, ``release_pos_x_z``, ``release_pos_z_z``,
-        ``extension_z`` (standardized within ``pitcher``), ``plate_z_norm``,
+        ``extension_z`` (standardized within ``pitcher`` and season), ``plate_z_norm``,
         ``plate_x_abs``, ``in_zone``, ``dist_from_heart``, and ``run_value``.
         Empty/malformed input returns a zero-row frame carrying the added
         schema.
@@ -133,7 +147,9 @@ def pitch_features(pitches: pl.DataFrame, *, return_as_pandas: bool = False) -> 
         return out.to_pandas() if return_as_pandas else out
 
     df = pitches.with_columns([pl.col(c).cast(pl.Int64) for c in _ID_INT if c in pitches.columns])
-    df = df.with_columns([_standardize(c) for c in _STD_ZNAME if c in df.columns])
+    season = season_expr(df.columns)
+    keys: "List[Union[str, pl.Expr]]" = ["pitcher"] if season is None else ["pitcher", season]
+    df = df.with_columns([_standardize(c, keys) for c in _STD_ZNAME if c in df.columns])
 
     zone_h = pl.col("sz_top") - pl.col("sz_bot")
     df = df.with_columns(

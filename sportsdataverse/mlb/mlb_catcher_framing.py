@@ -32,6 +32,7 @@ from typing import TYPE_CHECKING, Union
 
 import polars as pl
 
+from sportsdataverse.mlb._savant_eras import abs_era_expr
 from sportsdataverse.mlb.mlb_run_values import count_strike_run_value
 from sportsdataverse.mlb.mlb_umpire_zone import mlb_umpire_called_strike_prob
 
@@ -51,6 +52,7 @@ _GRID_SCHEMA = {
 
 _FRAMING_SCHEMA = {
     "catcher_id": pl.Utf8,
+    "abs_era": pl.Boolean,
     "takes": pl.Int64,
     "framing_runs": pl.Float64,
     "strikes_gained": pl.Float64,
@@ -139,6 +141,14 @@ def mlb_catcher_framing(
     ``takes`` column counts *all* takes handled (workload), while the runs sum
     only over the frameable shadow-zone subset.
 
+    From 2026 every call is challengeable and Savant's location frame moves to
+    the middle of the plate (``rules/mlb.yaml#mlb-2026-abs-challenge-system``,
+    ``#mlb-2026-savant-plate-location-middle-of-plate``): the location logistic
+    is fit on pre-2026 takes only (a ``UserWarning`` when 2026+ rows are
+    present) and a catcher's 2026+ takes are summed on their own row,
+    ``abs_era = True``, so framing runs earned against challengeable calls are
+    never added to pre-2026 ones.
+
     Args:
         pitches: Pitch-level frame with the take columns
             (``plate_x``/``plate_z``/``sz_top``/``sz_bot``/``stand``/
@@ -154,11 +164,13 @@ def mlb_catcher_framing(
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        pl.DataFrame: one row per catcher.
+        pl.DataFrame: one row per catcher and era (one per catcher on a frame
+        that does not span 2026).
 
         | Column | Type | Description |
         |---|---|---|
         | catcher_id | Utf8 | Catcher MLBAM id (Savant ``fielder_2``) |
+        | abs_era | Boolean | The takes are from 2026 on: challengeable calls, middle-of-plate frame |
         | takes | Int64 | Called-strike + ball takes caught (all, workload) |
         | framing_runs | Float64 | Sum over shadow-zone takes of (actual - P_strike) x count run-value |
         | strikes_gained | Float64 | Sum over shadow-zone takes of (actual - P_strike), run-value-free |
@@ -194,6 +206,7 @@ def mlb_catcher_framing(
         pl.col("fielder_2").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("catcher_id"),
         pl.col("balls").cast(pl.Int64),
         pl.col("strikes").cast(pl.Int64),
+        abs_era_expr(pitches.columns).alias("abs_era"),
     )
     if takes.height == 0:
         out = pl.DataFrame(schema=_FRAMING_SCHEMA)
@@ -220,13 +233,13 @@ def mlb_catcher_framing(
         )
     )
     out = (
-        scored.group_by("catcher_id")
+        scored.group_by("catcher_id", "abs_era")
         .agg(
             pl.len().alias("takes"),
             pl.col("framing_run").sum().alias("framing_runs"),
             pl.col("strike_gain").sum().alias("strikes_gained"),
         )
         .sort("framing_runs", descending=True)
-        .select("catcher_id", "takes", "framing_runs", "strikes_gained")
+        .select(list(_FRAMING_SCHEMA))
     )
     return out.to_pandas() if return_as_pandas else out

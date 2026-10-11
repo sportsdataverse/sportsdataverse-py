@@ -62,7 +62,7 @@ def test_framing_runs_catcher_ordering_and_schema():
     out = mlb_catcher_framing(_two_catchers_frame())
     assert out.schema["catcher_id"] == pl.Utf8
     assert out.schema["framing_runs"] == pl.Float64
-    assert set(out.columns) == {"catcher_id", "takes", "framing_runs", "strikes_gained"}
+    assert set(out.columns) == {"catcher_id", "abs_era", "takes", "framing_runs", "strikes_gained"}
     c1 = out.filter(pl.col("catcher_id") == "1").row(0, named=True)
     c2 = out.filter(pl.col("catcher_id") == "2").row(0, named=True)
     # catcher 1 stole strikes on low pitches (framing positive);
@@ -73,7 +73,7 @@ def test_framing_runs_catcher_ordering_and_schema():
 def test_framing_empty_input_returns_schema():
     out = mlb_catcher_framing(pl.DataFrame(schema={"plate_x": pl.Float64}))
     assert out.height == 0
-    assert set(out.columns) == {"catcher_id", "takes", "framing_runs", "strikes_gained"}
+    assert set(out.columns) == {"catcher_id", "abs_era", "takes", "framing_runs", "strikes_gained"}
 
 
 def test_framing_return_as_pandas():

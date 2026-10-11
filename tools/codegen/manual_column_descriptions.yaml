@@ -25600,6 +25600,8 @@ mjhl_standings:
     such as '14' or '-10'.
   percentage: 'Points percentage (feed header ''Percentage''): points earned divided by the maximum points available from games
     played, as a three-decimal string, e.g. ''0.833'' for 5 of 6 possible points; ''0.000'' before a team has played.'
+mlb_catcher_framing:
+  abs_era: The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row.
 mlb_command_plus:
   command_plus: Plus-scale Command+/Location+ score, 100 = league average, higher = better.
   location_rv_hat: Predicted per-pitch run value from the bundled Command+/Location+ xgboost model (location + count/handedness/pitch-type
@@ -25706,12 +25708,14 @@ mlb_times_through_order:
   pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
   times_through_order: Times through the batting order (1-3).
 mlb_umpire_bias:
+  abs_era: The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row.
   bias: obs_strike_rate minus exp_strike_rate (positive = strike-generous).
   exp_strike_rate: Mean model-predicted called-strike probability for this umpire's pitches.
   n_called: Called pitches (strike or ball) observed for this umpire.
   obs_strike_rate: Realized called-strike rate for this umpire.
   umpire_id: Umpire identifier (statsapi people id, stringified).
 mlb_umpire_called_strike_prob:
+  abs_era: The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row.
   called_strike_prob: P(called strike | pitch location) from the standardized zone-coordinate logistic.
 mlb_win_expectancy:
   at_bat_index: Game-global sequential plate-appearance index.

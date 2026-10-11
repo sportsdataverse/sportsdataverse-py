@@ -85,6 +85,7 @@ from sportsdataverse.cfb.model_vars import (
 from sportsdataverse.cfb.cfb_wp_overtime import (
     adjust_wp as _adjust_wp,
     infer_second_possession as _infer_second,
+    ot_forced_two_point as _ot_forced_two_point,
     ot_live_wp as _ot_live_wp,
     ot_possession_over_wp as _ot_possession_over_wp,
     ot_touchdown_wp as _ot_touchdown_wp,
@@ -355,19 +356,25 @@ def _predict_wp(state: pd.DataFrame, ep: np.ndarray) -> np.ndarray:
     # Every caller scores the state a decision LEADS to. The booster never saw a game
     # that reached overtime (see cfb_wp_overtime), and a state with no regulation time
     # left after the play is decided outright: a win, a loss, or overtime if level.
-    wp = _adjust_wp(_wp_model.predict(DMatrix(X)), X)
+    wp = _adjust_wp(_wp_model.predict(DMatrix(X)), X, forced=_ot_forced(state))
     return _regulation_final_wp(
         wp, pos_diff, adj, state["period"].to_numpy(), _tie_value(state["pos_team_spread"].to_numpy())
     )
 
 
+def _ot_forced(st: pd.DataFrame) -> np.ndarray:
+    """Per row: must a touchdown in this period be followed by a two-point try? (season + period)"""
+    season = st["season"].to_numpy().astype(float) if "season" in st.columns else np.nan
+    return _ot_forced_two_point(season, st["period"].to_numpy().astype(float))
+
+
 def _ot_rows(st: pd.DataFrame):
-    """Overtime rows of ``st`` with their margin, tie value and possession order."""
+    """Overtime rows of ``st`` with their margin, tie value, possession order and forced-try flag."""
     ot = st["period"].to_numpy().astype(float) >= 5
     margin = st["pos_score_diff_start"].to_numpy().astype(float)
     tie = _tie_value(st["pos_team_spread"].to_numpy())
     second = _infer_second(st["ot_second"].to_numpy() if "ot_second" in st.columns else None, margin)
-    return ot, margin, tie, second
+    return ot, margin, tie, second, _ot_forced(st)
 
 
 def _end_game_clamp(
@@ -635,13 +642,13 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
     # Overtime has no clock, and a possession that ends -- stopped on downs, or a
     # touchdown and its try -- hands the other team the ball at the 25 or ends the
     # period. The regulation states built above (the opponent at the spot) don't exist.
-    ot, margin0, tie0, second0 = _ot_rows(st)
+    ot, margin0, tie0, second0, forced0 = _ot_rows(st)
     if ot.any():
-        m, w, sec = margin0[play_idx], tie0[play_idx], second0[play_idx]
+        m, w, sec, fz = margin0[play_idx], tie0[play_idx], second0[play_idx], forced0[play_idx]
         ot_wp = np.where(
             to_mask,
-            _ot_possession_over_wp(m, w, sec),
-            np.where(td_mask, _ot_touchdown_wp(m, w, sec), _ot_live_wp(m, 1, distance, ytg, w, sec)),
+            _ot_possession_over_wp(m, w, sec, fz),
+            np.where(td_mask, _ot_touchdown_wp(m, w, sec, fz), _ot_live_wp(m, 1, distance, ytg, w, sec, fz)),
         )
         wp = np.where(ot[play_idx], ot_wp, wp)
 
@@ -845,9 +852,9 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
     )
 
     # overtime: a punt only ends the possession (see get_go_wp)
-    ot, margin, tie, second = _ot_rows(st)
+    ot, margin, tie, second, forced = _ot_rows(st)
     idx = supported["play_idx"].to_numpy()
-    wp = np.where(ot[idx], _ot_possession_over_wp(margin[idx], tie[idx], second[idx]), wp)
+    wp = np.where(ot[idx], _ot_possession_over_wp(margin[idx], tie[idx], second[idx], forced[idx]), wp)
 
     agg = (
         pd.DataFrame({"play_idx": supported["play_idx"].to_numpy(), "wt_wp": pct * wp})
@@ -1017,9 +1024,9 @@ def get_fg_wp(pbp_df) -> pd.DataFrame:
     )
 
     # overtime: the kick ends the possession either way (see get_go_wp)
-    ot, margin, tie, second = _ot_rows(st)
-    wp_make = np.where(ot, _ot_possession_over_wp(margin + 3.0, tie, second), wp_make)
-    wp_miss = np.where(ot, _ot_possession_over_wp(margin, tie, second), wp_miss)
+    ot, margin, tie, second, forced = _ot_rows(st)
+    wp_make = np.where(ot, _ot_possession_over_wp(margin + 3.0, tie, second, forced), wp_make)
+    wp_miss = np.where(ot, _ot_possession_over_wp(margin, tie, second, forced), wp_miss)
 
     fg_wp = make_prob * wp_make + (1.0 - make_prob) * wp_miss
     out = base.copy()

@@ -4,6 +4,9 @@ columns:
 - name: catcher_id
   type: character
   description: ''
+- name: abs_era
+  type: logical
+  description: ''
 - name: takes
   type: integer
   description: ''
