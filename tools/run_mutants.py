@@ -7,9 +7,15 @@ the ``mutant`` text that replaces the snippet, the pytest ``test`` that must go 
 ``expected: {survive_until: <task>}`` rows document a test gap the audit measured and are
 reported, never fatal, until that task lands (an early kill is reported as ``killed early``).
 
-The mutation is a plain text replacement applied in place and restored in a ``finally``;
-no mutmut, no extra dependency. Exit status is 1 iff a ``kill`` row survived, errored or
-could not be applied.
+The mutation is a plain text replacement applied in place and restored in a ``finally``; no
+mutmut, no extra dependency. If the runner is killed hard (SIGKILL, power loss) the ``finally``
+cannot run: ``git checkout -- <file>`` restores the site; CI checkouts are disposable.
+
+Exit status is 1 iff a ``kill`` row survived, or ANY row could not be applied: the snippet
+drifted or is duplicated, the test file is gone, the mutant does not compile, a ``kill`` row's
+test is already red without the mutant, or pytest crashed / hung. An error is never an
+expected outcome, whatever ``expected`` says: otherwise a refactor would orphan a
+``survive_until`` row with CI green.
 
 Usage::
 
@@ -36,14 +42,28 @@ REGISTRY = ROOT / "tests" / "mutants" / "registry.yaml"
 #: The test command; a test overrides it to run pytest in a scratch tree without uv.
 PYTEST_CMD = ["uv", "run", "--frozen", "pytest"]
 PYTEST_ARGS = ["-x", "-q", "-p", "no:cacheprovider"]
+#: Seconds one pytest run may take before the row is an error (and the source is restored).
+ROW_TIMEOUT = 900
 #: pytest exit codes read as "the mutant made the test red": 1 = tests failed, 2 = interrupted
-#: (collection errors under a mutant that breaks an import land here).
+#: (collection errors under a mutant that breaks an import land here; a mutant that does not
+#: compile is rejected before pytest runs, and a `kill` row's test must be green beforehand).
 KILLED_RCS = (1, 2)
 SURVIVED_RCS = (0, 5)  # 5 = nothing collected: the test cannot have gone red
 
 
+class _StrictLoader(yaml.SafeLoader):
+    """SafeLoader that rejects a mapping key given twice (safe_load would keep the last one)."""
+
+    def construct_mapping(self, node, deep=False):  # type: ignore[override]
+        keys = [self.construct_object(k, deep=deep) for k, _ in node.value]
+        dupes = sorted({k for k in keys if keys.count(k) > 1})
+        if dupes:
+            raise yaml.constructor.ConstructorError(None, None, f"duplicate key(s) {dupes}", node.start_mark)
+        return super().construct_mapping(node, deep=deep)
+
+
 def load_registry(path: Path) -> List[Dict[str, Any]]:
-    rows = yaml.safe_load(path.read_text(encoding="utf-8"))
+    rows = yaml.load(path.read_text(encoding="utf-8"), Loader=_StrictLoader)  # noqa: S506 -- SafeLoader subclass
     if not isinstance(rows, list) or not rows:
         raise SystemExit(f"{path}: expected a non-empty list of rows")
     seen = set()
@@ -82,45 +102,70 @@ def select(rows: List[Dict[str, Any]], only: Optional[str]) -> List[Dict[str, An
     return picked
 
 
+def mutate(text: str, row: Dict[str, Any]) -> str:
+    return text.replace(row["snippet"], row["mutant"], 1)
+
+
 def check_site(row: Dict[str, Any], root: Path) -> Optional[str]:
     """Why the mutant cannot be applied, or None."""
     src = root / row["file"]
     if not src.is_file():
         return f"file not found: {row['file']}"
-    n = src.read_text(encoding="utf-8").count(row["snippet"])
+    text = src.read_text(encoding="utf-8")
+    n = text.count(row["snippet"])
     if n != 1:
         return f"snippet occurs {n} times in {row['file']} (need exactly 1)"
+    if src.suffix == ".py":
+        try:
+            compile(mutate(text, row), row["file"], "exec")
+        except SyntaxError as e:
+            return f"mutant does not compile: {e.msg} (line {e.lineno})"
     test_file = shlex.split(row["test"])[0].split("::")[0]
     if not (root / test_file).exists():
         return f"test not found: {test_file}"
     return None
 
 
+def _pytest(row: Dict[str, Any], root: Path) -> Dict[str, Any]:
+    cmd = [*PYTEST_CMD, *shlex.split(row["test"]), *PYTEST_ARGS]
+    try:
+        proc = subprocess.run(cmd, cwd=root, capture_output=True, text=True, timeout=ROW_TIMEOUT)
+    except subprocess.TimeoutExpired:
+        return {"rc": None, "tail": f"timed out after {ROW_TIMEOUT}s"}
+    tail = (proc.stdout + proc.stderr).strip().splitlines()[-1:]
+    return {"rc": proc.returncode, "tail": tail[0] if tail else ""}
+
+
 def run_row(row: Dict[str, Any], root: Path) -> Dict[str, Any]:
-    """Apply the mutant, run the test, restore the file. Returns status/rc/seconds."""
+    """Apply the mutant, run the test, restore the file. Returns status/rc/seconds/detail."""
     why = check_site(row, root)
     if why:
         return {"status": "error", "detail": why, "seconds": 0.0}
     src = root / row["file"]
     original = src.read_bytes()
-    mutated = original.decode("utf-8").replace(row["snippet"], row["mutant"], 1).encode("utf-8")
-    cmd = [*PYTEST_CMD, *shlex.split(row["test"]), *PYTEST_ARGS]
     t0 = time.monotonic()
+    if row["expected"] == "kill":  # a red test proves nothing about the mutant
+        base = _pytest(row, root)
+        if base["rc"] != 0:
+            return {
+                "status": "error",
+                "rc": base["rc"],
+                "seconds": time.monotonic() - t0,
+                "detail": f"test is not green without the mutant: {base['tail']}",
+            }
     try:
-        src.write_bytes(mutated)
-        proc = subprocess.run(cmd, cwd=root, capture_output=True, text=True)
+        src.write_bytes(mutate(original.decode("utf-8"), row).encode("utf-8"))
+        run = _pytest(row, root)
     finally:
         src.write_bytes(original)
-    secs = time.monotonic() - t0
-    rc = proc.returncode
+    rc = run["rc"]
     if rc in KILLED_RCS:
-        status = "killed"
+        status, detail = "killed", ""
     elif rc in SURVIVED_RCS:
-        status = "survived"
+        status, detail = "survived", run["tail"]
     else:
-        status = "error"
-    tail = (proc.stdout + proc.stderr).strip().splitlines()[-1:] if status != "killed" else []
-    return {"status": status, "rc": rc, "seconds": secs, "detail": tail[0] if tail else ""}
+        status, detail = "error", run["tail"]
+    return {"status": status, "rc": rc, "seconds": time.monotonic() - t0, "detail": detail}
 
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -152,14 +197,14 @@ def main(argv: Optional[List[str]] = None) -> int:
     for r in rows:
         res = run_row(r, args.root)
         until = survive_until(r)
-        if until is None:
+        if res["status"] == "error":
+            verdict = "FAIL"  # never expected, whatever `expected` says
+        elif until is None:
             verdict = "OK" if res["status"] == "killed" else "FAIL"
         else:
-            verdict = {"killed": "killed early", "survived": f"expected (until {until})"}.get(res["status"], "FAIL")
-            if res["status"] == "error":
-                verdict = f"error (until {until})"
+            verdict = "killed early" if res["status"] == "killed" else f"expected (until {until})"
         results.append((r, res, verdict))
-        rc = f" rc={res['rc']}" if "rc" in res else ""
+        rc = f" rc={res['rc']}" if res.get("rc") is not None else ""
         detail = f"  {res['detail']}" if res.get("detail") else ""
         print(
             f"{res['status'].upper():<9} {r['id']:<42} {r['finding']:<8} {res['seconds']:6.1f}s{rc}  [{verdict}]{detail}"
@@ -174,8 +219,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     fatal = [r["id"] for r, res, v in results if v == "FAIL"]
     killed = sum(res["status"] == "killed" for _, res, _ in results)
     early = sum(v == "killed early" for _, _, v in results)
+    errors = sum(res["status"] == "error" for _, res, _ in results)
     print(
-        f"MUTANTS: {killed} killed ({early} early), {len(results) - killed} survived/errored, "
+        f"MUTANTS: {killed} killed ({early} early), {len(results) - killed - errors} survived, {errors} errors, "
         f"{len(fatal)} unexpected -> {'FAIL ' + ', '.join(fatal) if fatal else 'OK'}"
     )
     return 1 if fatal else 0

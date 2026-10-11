@@ -155,12 +155,16 @@ jobs:
     # source file and runs the test that must go red. A `kill` row whose test stays green fails
     # the job; `survive_until` rows document audit-measured test gaps until their plan task lands.
     # Per-row timings are printed; the whole registry runs on every PR while it stays well under
-    # the ~15 min budget (today ~7 min locally, the cfb offline file is 3 of them) -- split `kill` rows per PR / `survive_until` rows nightly
+    # the ~15 min budget (today ~4.5 min locally) -- split `kill` rows per PR / `survive_until` rows nightly
     # only if it grows past that.
     name: mutation registry
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
+        with:
+          # pytest runs PR-controlled code; it must not inherit the checkout token
+          persist-credentials: false
       - name: Install uv
         uses: astral-sh/setup-uv@v8.1.0
         with:

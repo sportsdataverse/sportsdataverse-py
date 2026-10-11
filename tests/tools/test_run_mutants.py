@@ -14,16 +14,21 @@ rm = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(rm)
 
 SOURCE = "def add(a, b):\n    return a + b\n"
-TESTS = "from mod import add\n\n\ndef test_add():\n    assert add(1, 2) == 3\n\n\ndef test_always():\n    assert True\n"
+TESTS = (
+    "from mod import add\n\n\n"
+    "def test_add():\n    assert add(1, 2) == 3\n\n\n"
+    "def test_always():\n    assert True\n\n\n"
+    "def test_red():\n    assert add(1, 1) == 3\n"
+)
 
 
-def row(id_, test, expected="kill", snippet="return a + b"):
+def row(id_, test, expected="kill", snippet="return a + b", mutant="return a - b"):
     return {
         "id": id_,
         "finding": "T-1",
         "file": "mod.py",
         "snippet": snippet,
-        "mutant": "return a - b",
+        "mutant": mutant,
         "test": test,
         "expected": expected,
     }
@@ -31,14 +36,14 @@ def row(id_, test, expected="kill", snippet="return a + b"):
 
 @pytest.fixture
 def tree(tmp_path, monkeypatch):
-    (tmp_path / "mod.py").write_text(SOURCE, encoding="utf-8")
+    (tmp_path / "mod.py").write_bytes(SOURCE.encode("utf-8"))  # bytes: no CRLF translation on Windows
     (tmp_path / "test_mod.py").write_text(TESTS, encoding="utf-8")
     # the scratch tree is not a uv project: run pytest straight from this interpreter
     monkeypatch.setattr(rm, "PYTEST_CMD", [sys.executable, "-m", "pytest"])
 
     def run(rows, *extra):
         reg = tmp_path / "registry.yaml"
-        reg.write_text(yaml.safe_dump(rows, sort_keys=False), encoding="utf-8")
+        reg.write_text(rows if isinstance(rows, str) else yaml.safe_dump(rows, sort_keys=False), encoding="utf-8")
         return rm.main(["--registry", str(reg), "--root", str(tmp_path), *extra])
 
     return tmp_path, run
@@ -49,7 +54,7 @@ def test_killable_row_is_killed_and_the_source_is_restored(tree, capsys):
     assert run([row("kill-me", "test_mod.py::test_add")]) == 0
     out = capsys.readouterr().out
     assert "KILLED" in out and "T-1: 1/1 mutants killed" in out and "-> OK" in out
-    assert (root / "mod.py").read_text(encoding="utf-8") == SOURCE
+    assert (root / "mod.py").read_bytes() == SOURCE.encode("utf-8")
 
 
 def test_a_test_that_cannot_fail_fails_the_run(tree, capsys):
@@ -57,7 +62,7 @@ def test_a_test_that_cannot_fail_fails_the_run(tree, capsys):
     assert run([row("cannot-fail", "test_mod.py::test_always")]) == 1
     out = capsys.readouterr().out
     assert "SURVIVED" in out and "[FAIL]" in out and "FAIL cannot-fail" in out
-    assert (root / "mod.py").read_text(encoding="utf-8") == SOURCE
+    assert (root / "mod.py").read_bytes() == SOURCE.encode("utf-8")
 
 
 def test_survive_until_rows_are_reported_never_fatal(tree, capsys):
@@ -69,6 +74,28 @@ def test_survive_until_rows_are_reported_never_fatal(tree, capsys):
     assert run(rows) == 0
     out = capsys.readouterr().out
     assert "[expected (until 9.9)]" in out and "[killed early]" in out and "0 unexpected -> OK" in out
+
+
+def test_an_orphaned_survive_until_row_is_fatal(tree, capsys):
+    """A refactor that moves the snippet must not leave a documented gap silently green (R1)."""
+    _, run = tree
+    rows = [
+        row("drifted", "test_mod.py::test_always", expected={"survive_until": "9.9"}, snippet="return a * b"),
+        row("test-gone", "gone_test.py::test_x", expected={"survive_until": "9.9"}),
+    ]
+    assert run(rows) == 1
+    out = capsys.readouterr().out
+    assert "snippet occurs 0 times" in out and "test not found: gone_test.py" in out
+    assert "2 errors, 2 unexpected -> FAIL drifted, test-gone" in out
+
+
+def test_a_kill_row_needs_a_green_baseline_and_a_compiling_mutant(tree, capsys):
+    """A red-before-the-mutant test or a SyntaxError mutant is an error, never a kill (R2)."""
+    _, run = tree
+    assert run([row("already-red", "test_mod.py::test_red")]) == 1
+    assert "test is not green without the mutant" in capsys.readouterr().out
+    assert run([row("syntax", "test_mod.py::test_add", mutant="return a +")]) == 1
+    assert "mutant does not compile" in capsys.readouterr().out
 
 
 def test_only_selects_by_id_finding_or_group(tree, capsys):
@@ -90,3 +117,15 @@ def test_dry_run_rejects_an_unmatched_snippet_and_a_line_keyed_row(tree, capsys)
     assert "DRY-RUN: 1/1 rows applicable" in capsys.readouterr().out
     with pytest.raises(SystemExit, match="keyed on line"):
         run([{**row("by-line", "test_mod.py::test_add"), "line": 2}], "--list")
+
+
+def test_registry_rejects_identity_mutants_duplicate_ids_and_duplicate_keys(tree):
+    _, run = tree
+    with pytest.raises(SystemExit, match="mutant equals snippet"):
+        run([row("same", "test_mod.py::test_add", mutant="return a + b")], "--list")
+    with pytest.raises(SystemExit, match="duplicate id"):
+        run([row("twice", "test_mod.py::test_add"), row("twice", "test_mod.py::test_always")], "--list")
+    twice_expected = yaml.safe_dump([row("k", "test_mod.py::test_add")], sort_keys=False)
+    twice_expected += "  expected:\n    survive_until: '9.9'\n"
+    with pytest.raises(yaml.constructor.ConstructorError, match="duplicate key"):
+        run(twice_expected, "--list")
