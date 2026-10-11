@@ -280,3 +280,67 @@ def test_summary_names_are_stripped() -> None:
     assert set(df["team_name"].to_list()) == {"Augsburg"}
     frames = parse_soccer_summary(_commentary_payload())
     assert set(frames["commentary"]["athlete_name"].to_list()) == {"Caiuby"}
+
+
+# ---------------------------------------------------------------------------
+# Rule-catalog era fixes: empty-detail warning (NWSL 2014-2018) + split-season tournament
+# ---------------------------------------------------------------------------
+
+
+def test_parse_soccer_summary_warns_when_match_detail_is_empty() -> None:
+    import pytest
+
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    # Real capture: NWSL 2016-07-01 (event 445418) -- a season ESPN lists but ships no detail
+    # for (rules/nwsl.yaml#nwsl-2013-espn-season-coverage-start): header, team rows with no
+    # statistics, rosters with no players, no keyEvents / commentary.
+    payload = json.loads((FIX / "usa.nwsl" / "site-v2" / "summary_445418.json").read_text(encoding="utf-8"))
+    with pytest.warns(UserWarning, match=r"event 445418 .*key_events, commentary, lineups are all empty"):
+        frames = parse_soccer_summary(payload)
+    assert frames["header"].height == 1
+    assert frames["header"]["season_year"][0] == 2016
+    assert frames["header"]["tournament"][0] is None
+    assert all(frames[s].height == 0 for s in ("key_events", "commentary", "lineups"))
+
+
+def test_parse_soccer_summary_populated_capture_does_not_warn() -> None:
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    # pytest.ini turns warnings into errors: a populated capture that warned would fail here.
+    for league in ("eng.1", "usa.1", "uefa.champions"):
+        frames = parse_soccer_summary(_summary(league))
+        assert frames["key_events"].height > 0
+        assert frames["header"]["tournament"][0] is None
+
+
+def test_parse_soccer_scoreboard_tournament_from_season_slug() -> None:
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_scoreboard
+
+    # Real Liga MX capture (?dates=20241110): season.slug == "torneo-apertura" on every event
+    # (rules/ligamx.yaml#ligamx-1996-two-short-tournaments-per-season).
+    payload = json.loads((FIX / "mex.1" / "site-v2" / "scoreboard_20241110.json").read_text(encoding="utf-8"))
+    df = parse_soccer_scoreboard(payload)
+    assert df.height == 3
+    assert df["season_type"].to_list() == [12640] * 3
+    assert df["season_slug"].to_list() == ["torneo-apertura"] * 3
+    assert df["tournament"].to_list() == ["apertura"] * 3
+
+
+def test_parse_soccer_scoreboard_tournament_null_for_single_tournament_leagues() -> None:
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_scoreboard
+
+    for league in ("eng.1", "usa.1", "uefa.champions"):
+        df = parse_soccer_scoreboard(_load(league, "site-v2", "scoreboard"))
+        assert df["season_slug"].null_count() == 0
+        assert df["tournament"].null_count() == df.height
+
+
+def test_tournament_helper_reads_slugs_and_names() -> None:
+    from sportsdataverse.soccer.soccer_espn_parsers import _tournament
+
+    assert _tournament("torneo-clausura") == "clausura"
+    assert _tournament("apertura-2024-quarterfinals") == "apertura"
+    assert _tournament("Clausura 2025 - Finals") == "clausura"
+    assert _tournament("2025-26 English Premier League") is None
+    assert _tournament(None) is None

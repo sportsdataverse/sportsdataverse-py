@@ -21,6 +21,9 @@ frames:
   - name: season_slug
     type: character
     description: ''
+  - name: tournament
+    type: character
+    description: ''
   - name: league_id
     type: character
     description: ''

@@ -13,6 +13,15 @@ columns:
 - name: short_name
   type: character
   description: ''
+- name: season_type
+  type: integer
+  description: ''
+- name: season_slug
+  type: character
+  description: ''
+- name: tournament
+  type: character
+  description: ''
 - name: home_team
   type: character
   description: ''

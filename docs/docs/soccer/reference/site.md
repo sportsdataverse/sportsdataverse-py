@@ -35,6 +35,9 @@ ESPN endpoint.
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
+| `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
+| `season_slug` | character | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
+| `tournament` | character | Short tournament the match belongs to, derived from the season-type slug: 'apertura' (July-December) or 'clausura' (January-May) for split-season leagues such as Liga MX, null for single-tournament leagues. |
 | `home_team` | character | Home team display name. |
 | `home_team_id` | character | Home team ESPN id. |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
@@ -80,6 +83,7 @@ ESPN endpoint.
 | `season_year` | integer |  |
 | `season_type` | integer | ESPN season-phase numeric code (1=pre-season, 2=regular season, 3=postseason, 4=off-season). |
 | `season_slug` | character |  |
+| `tournament` | character | Short tournament the match belongs to, derived from the header season-type name: 'apertura' (July-December) or 'clausura' (January-May) for split-season leagues such as Liga MX, null for single-tournament leagues; soccer summaries only. |
 | `league_id` | character | ESPN numeric identifier for the league or competition. |
 | `league_name` | character |  |
 | `league_abbreviation` | character | Abbreviation for the league or competition the game belongs to. |
