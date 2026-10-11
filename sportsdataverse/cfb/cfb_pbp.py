@@ -1438,6 +1438,8 @@ def _parse_penalty_spot(row):
 _RECOVERY_TOKEN_RE = re.compile(r"(?i)recovered by\s+(?:the\s+)?([A-Za-z&][A-Za-z&.'\-]*)")
 #: 2004-06 texts name the recoverer and put the school in parentheses after the
 #: name: "recovered by Omar Jacobs (BGSU)". Matched on the text after the token.
+#: The run of capitalised words starting at the token ("AlbSt Kimar Martin", "Troy Smith").
+_CAPITALISED_RUN_RE = re.compile(r"[A-Z][A-Za-z&.'\-]*(?:\s+[A-Z][A-Za-z&.'\-]*){0,2}")
 _RECOVERER_TEAM_PAREN_RE = re.compile(r"[A-Za-z.' \-]{0,40}?\(([A-Za-z&.]{2,10})\)")
 
 
@@ -1468,7 +1470,7 @@ def _recovery_token_side(tok, row, *, paren=False):
     u = _squash_team(tok)
     if len(u) < 2:
         return None
-    if not paren:
+    if not paren and not (_is_plain_word(tok) and len(u) < 3):  # "Al" is a name, not ALA's prefix
         ha, aa = _squash_team(row["homeTeamAbbrev"]), _squash_team(row["awayTeamAbbrev"])
         hit_h = bool(ha) and (u == ha or ha.startswith(u) or u.startswith(ha))
         hit_a = bool(aa) and (u == aa or aa.startswith(u) or u.startswith(aa))
@@ -1516,11 +1518,38 @@ def _parse_recovery_sides(row):
     sides = []
     for m in _RECOVERY_TOKEN_RE.finditer(text):
         paren = _RECOVERER_TEAM_PAREN_RE.match(text, m.end(1))
+        tok = m.group(1)
         if paren:
             sides.append(_recovery_token_side(paren.group(1), row, paren=True))
+            continue
+        run = _CAPITALISED_RUN_RE.match(text, m.start(1))
+        words = run.group(0).split() if run else [tok]
+        if len(words) == 2 and not tok.isupper():
+            # Exactly two capitalised words then a clause ("recovered by Troy Smith at the ...")
+            # is the recoverer's name, not school + player ("recovered by AlbSt Kimar Martin").
+            # It names a team only as a whole school spelling ("Eastrn Michigan").
+            sides.append(_two_word_school_side("".join(words), row))
         else:
-            sides.append(_recovery_token_side(m.group(1), row))
+            sides.append(_recovery_token_side(tok, row))
     return sides
+
+
+def _two_word_school_side(run, row):
+    """ "home" / "away" when a two-word run spells one side's school name, else None.
+
+    The run must fit inside the school name -- as a prefix, or letter by letter with the
+    same initial -- so "EASTRNMICHIGAN" is Eastern Michigan while "TROYSMITH" is no team.
+    """
+    u = _squash_team(run)
+    home, away, _, _ = _team_candidates(row)
+
+    def fits(cands):
+        return any(x and x[0] == u[0] and (x.startswith(u) or _is_char_subseq(u, x)) for x in cands[1:3])
+
+    hit_h, hit_a = fits(home), fits(away)
+    if hit_h == hit_a:
+        return None
+    return "home" if hit_h else "away"
 
 
 def _parse_penalty_team_side(row):

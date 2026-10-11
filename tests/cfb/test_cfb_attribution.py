@@ -1362,3 +1362,29 @@ def test_parse_recovery_sides_first_name_is_not_a_subsequence_match():
     teams = _teams("TTU", "INST", "Texas Tech", "Indiana State", "Red Raiders", "Sycamores")
     text = "Andre Forte rush for no gain, fumbled at the TexTc 44, recovered by Chad Hill at the TexTc 44."
     assert _sides(text, teams) == [None]
+
+
+@pytest.mark.parametrize(
+    "text, teams, expected",
+    [
+        # pre-2014 text names the recoverer; a first name that is also a school must not charge it
+        (
+            "Kenny Smith rush for 3 yards, fumbled at the Troy 30, recovered by Troy Smith at the Troy 25.",
+            _teams("UGA", "TROY", "Georgia", "Troy", "Bulldogs", "Trojans"),
+            [None],
+        ),
+        (
+            "Jim Brown rush for 2 yards, fumbled at the Bama 40, recovered by Al Jones at the Bama 40.",
+            _teams("ALA", "MCN", "Alabama", "McNeese", "Crimson Tide", "Cowboys"),
+            [None],
+        ),
+        # an internal capital is no vendor code when it is a name: "McCoy" fits McNeese only via the mascot
+        (
+            "Jim Brown rush for 2 yards, fumbled at the Bama 40, recovered by McCoy Smith at the Bama 40.",
+            _teams("ALA", "MCN", "Alabama", "McNeese", "Crimson Tide", "Cowboys"),
+            [None],
+        ),
+    ],
+)
+def test_parse_recovery_sides_recoverer_name_is_not_the_school(text, teams, expected):
+    assert _sides(text, teams) == expected
