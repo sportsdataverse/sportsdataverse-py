@@ -321,7 +321,7 @@ def _touchback_rule(season: int) -> int:
 )
 def test_kickoff_touchback_spot_follows_the_rule(game_id):
     season = FEEDS[game_id].season
-    kickoffs = _frame(game_id).filter(pl.col("kickoff_play") == True)  # noqa: E712
+    kickoffs = _frame(game_id).filter(pl.col("kickoff_play") == True)
     assert kickoffs.height > 0
     spots = sorted(set(kickoffs["start.yardsToEndzone.touchback"].to_list()))
     assert spots == [_touchback_rule(season)], f"{season}: kickoff touchback spot {spots}"
@@ -427,7 +427,7 @@ def _line_yards_oracle(yards: pl.Expr) -> pl.Expr:
 def _rushes(game_id: int) -> pl.DataFrame:
     return (
         _frame(game_id)
-        .filter(pl.col("rush") == True)  # noqa: E712
+        .filter(pl.col("rush") == True)
         .with_columns(
             pl.col("yds_rushed").cast(pl.Float64),
             pl.col("line_yards").cast(pl.Float64),
