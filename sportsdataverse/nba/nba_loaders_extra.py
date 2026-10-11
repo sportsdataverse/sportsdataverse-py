@@ -432,7 +432,8 @@ def load_nba_stats_synergy(
     ]
     if not assets:
         raise ValueError(f"load_nba_stats_synergy: no {groupings} split is published for play_type {play_types}")
-    if play_type is not None:
+    # Only when the caller named BOTH: play_type alone means "wherever it is published".
+    if play_type is not None and type_grouping is not None:
         unpublished = [
             f"{pt}/{tg}" for tg in groupings for pt in play_types if pt not in NBA_STATS_SYNERGY_PLAY_TYPES[tg]
         ]

@@ -58,6 +58,14 @@ def test_synergy_unknown_filter_raises_before_the_network(urls, kwargs):
     assert urls == []
 
 
+def test_synergy_explicit_unpublished_pair_warns_and_reads_the_rest(urls):
+    with pytest.warns(UserWarning, match="cut/defensive"):
+        x.load_nba_stats_synergy(
+            2024, season_type="playoffs", per_mode="totals", type_grouping="defensive", play_type=["cut", "isolation"]
+        )
+    assert urls == [BASE + "nba_stats_synergy/playoffs_isolation_defensive_totals_2025.parquet"]
+
+
 def test_synergy_unpublished_combination_raises(urls):
     with pytest.raises(ValueError, match="no .* split is published"):
         x.load_nba_stats_synergy(2024, type_grouping="defensive", play_type="transition")
