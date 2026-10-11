@@ -141,27 +141,69 @@
     `- 3)`, mutant `- 4)`, expected kill).
 
 # --- C-M6: CFB overtime shootout threshold is period-based only -----------------------------------
+# Killer (3.2): tests/cfb/test_cfb_overtime_eras.py on the OT-era captures. The floor's mutants die on
+# 401628439 (2024), whose shootout attempts ESPN labels period 5.
 - id: cfb-ot-shootout-threshold-6
   group: cfb-ot-thresholds
   finding: C-M6
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: 'return (pl.col("period.number") >= 5) & ~last_td'
-  mutant: 'return (pl.col("period.number") >= 6) & ~last_td'
-  test: tests/cfb/test_cfb_pbp_offline.py -k "overtime or shootout"
-  expected:
-    survive_until: "3.2"
-  note: rt-C-processing-002; 1.2 commits one capture per OT rule set, 3.2 adds test_cfb_overtime_eras.py
+  snippet: 'in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)'
+  mutant: 'in_shootout = (period >= 6) & ((period >= shootout_from) | ~last_td)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2021_on_every"
+  expected: kill
+  note: rt-C-processing-002; the nine period-5 attempts of 401628439 would weigh a kick
 
 - id: cfb-ot-shootout-threshold-7
   group: cfb-ot-thresholds
   finding: C-M6
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: 'return (pl.col("period.number") >= 5) & ~last_td'
-  mutant: 'return (pl.col("period.number") >= 7) & ~last_td'
-  test: tests/cfb/test_cfb_pbp_offline.py -k "overtime or shootout"
-  expected:
-    survive_until: "3.2"
-  note: the only shootout fixture (401282146) has its first attempt in period 7, so >= 7 still passes
+  snippet: 'in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)'
+  mutant: 'in_shootout = (period >= 7) & ((period >= shootout_from) | ~last_td)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2021_on_every"
+  expected: kill
+  note: the only shootout fixture before 3.2 (401282146) has its first attempt in period 7, so >= 7 survived there
+
+# The rule table itself, one row per rule set, and the period half of the gate (a shootout-period row
+# after a misfiled touchdown).
+- id: cfb-ot-table-shootout-from-2004
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))'
+  mutant: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2004, 9), (2021, 7))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "before_2019"
+  expected: kill
+  note: the pre-3.2 behaviour before 2019; 272870068's forced third-overtime try (filed before its touchdown) would be a shootout attempt
+
+- id: cfb-ot-table-2021-cut-9
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))'
+  mutant: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 9))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "third_overtime_attempt_after"
+  expected: kill
+  note: the 2019-20 cut in 2021+; 401524025's third-overtime attempt after the second-overtime touchdown would be that touchdown's try
+
+- id: cfb-ot-table-drops-2019
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))'
+  mutant: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2021, 7),)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2019_20"
+  expected: kill
+  note: 401112489's sixth-overtime try would be the misfiled touchdown's try again
+
+- id: cfb-ot-gate-ignores-period
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)'
+  mutant: 'in_shootout = (period >= 5) & (shootout_from.is_not_null() & ~last_td)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2019_20"
+  expected: kill
+  note: the pre-3.2 touchdown-before test, season-gated; 401112489 and 401628439 attempts after a misfiled touchdown
 
 # --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap

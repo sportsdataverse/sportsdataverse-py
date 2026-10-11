@@ -331,6 +331,7 @@ from sportsdataverse.cfb.model_vars import (
     ep_final_names,
     ep_start_columns,
     ep_start_touchback_columns,
+    OT_SHOOTOUT_FROM_PERIOD,
     int_vec,
     kickoff_turnovers,
     kickoff_vec,
@@ -690,11 +691,18 @@ _DEFENSIVE_TRY_RETURN = (
 
 
 def _ot_no_touchdown_before(columns) -> pl.Expr:
-    """Overtime rows whose last play (dead-ball rows skipped) was not a touchdown.
+    """Overtime rows where a try row is a two-point shootout attempt, not a touchdown's try.
 
-    A try row there is a two-point shootout attempt (2019-26), not a touchdown's try. A
-    touchdown ESPN typed as the play ("... fumbled, recovered by Navy Jake Zuzek in the end
-    zone for a TD", typed "Rush", 322802005 in overtime) counts by its text.
+    The season's rule set (:data:`~sportsdataverse.cfb.model_vars.OT_SHOOTOUT_FROM_PERIOD`)
+    decides: none before 2019; in 2019-20 every period from the fifth overtime (period 9) on,
+    from 2021 every period from the third (period 7) on. ESPN's period label is not reliable
+    in overtime, so a shootout-era row labelled earlier also counts when its last play
+    (dead-ball rows skipped) was not a touchdown: 401628439 (2024) files its attempts as
+    period 5. And a row labelled inside the shootout counts even after a touchdown, which
+    ESPN files out of order (401112489's winning try, period 10, follows the two
+    second-overtime touchdowns). A touchdown ESPN typed as the play ("... fumbled, recovered
+    by Navy Jake Zuzek in the end zone for a TD", typed "Rush", 322802005 in overtime)
+    counts by its text.
     """
     dead = pl.col("type.text").is_in(_CLOCK_STOPPAGES) | _penalty_before_try()
 
@@ -704,7 +712,12 @@ def _ot_no_touchdown_before(columns) -> pl.Expr:
     last_td = last("type.text").str.contains("(?i)touchdown").fill_null(False)
     if "td_play" in columns:
         last_td = last_td | (last("td_play") == True).fill_null(False)  # noqa: E712
-    return (pl.col("period.number") >= 5) & ~last_td
+    shootout_from = pl.lit(None, dtype=pl.Int64)
+    for first_season, first_period in OT_SHOOTOUT_FROM_PERIOD:
+        shootout_from = pl.when(pl.col("season") >= first_season).then(first_period).otherwise(shootout_from)
+    period = pl.col("period.number")
+    in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)
+    return shootout_from.is_not_null() & in_shootout
 
 
 def _ot_shootout_state_wp(play_df, naive: bool):
@@ -833,8 +846,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     takes_over = (t.is_in(_TRY_TYPES) & (td_end == team)) | (
         before_try & ((td_end == team) | (td_end == _next(team, dead_ball)))
     )
-    # An overtime shootout attempt (2019-26, periods 5+: alternating "Two Point Pass|Rush"
-    # rows, no touchdown before them) is not a try after a touchdown. ESPN often leaves its
+    # An overtime shootout attempt (``_ot_no_touchdown_before``: the season's rule set,
+    # ``model_vars.OT_SHOOTOUT_FROM_PERIOD``) is not a try after a touchdown. ESPN often leaves its
     # team empty and the fill copies the previous attempt's (401282146: Finley's and Young's
     # attempts both 333), so each attempt took the other team's end state (17 of 31 pairs).
     if "period.number" in play_df.columns:

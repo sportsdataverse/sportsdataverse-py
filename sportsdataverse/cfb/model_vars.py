@@ -271,3 +271,17 @@ kickoff_turnovers = ["Kickoff Team Fumble Recovery", "Kickoff Team Fumble Recove
 # on identical plays. The box score still emits `spread` as a column; the model
 # no longer reads it.
 qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "era0", "era1", "era2", "era3"]
+
+#: ``(first season, first period)`` from which every overtime period is a two-point shootout:
+#: one alternating two-point play per team, no possession from the 25 (ESPN period 5 is the
+#: first overtime). No shootout before 2019 (sdv-internal-refs ``rules/cfb.yaml``
+#: ``cfb-1996-overtime-introduced``); the fifth overtime, period 9, in 2019-20
+#: (``cfb-2019-overtime-shootout-from-fifth``); the third, period 7, from 2021
+#: (``cfb-2021-overtime-shootout-from-third``). Source: NCAA, "Panel approves changes to
+#: overtime rules in football", 2021-04-22,
+#: https://www.ncaa.com/news/football/article/2021-04-22/panel-approves-changes-overtime-rules-football
+#: (the ncaa.org original, now redirected, archived at
+#: https://web.archive.org/web/20250430140415/https://www.ncaa.org/news/2021/4/22/panel-approves-changes-to-overtime-rules-in-football.aspx):
+#: "This is a change from the previous rule, which started to use 2-point plays in the fifth
+#: overtime period".
+OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))

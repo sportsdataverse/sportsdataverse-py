@@ -86,8 +86,19 @@ overtime its rule is about; `tools/check_ot_era_captures.py` checks them.
 | 2021+ | `cfb-2021-overtime-shootout-from-third` | 401282146 | Alabama @ Auburn, 2021: four overtimes, the shootout from the third |
 
 The check reads ESPN's period LABEL, not an overtime count: on 401112489 ESPN files overtimes 1-5 as
-period 5, so the label alone cannot tell the third overtime from the fifth. Plan task 3.2's era tests
-must derive the overtime number from the possession sequence.
+period 5, so the label alone cannot tell the third overtime from the fifth. The processor's gate
+(`_ot_no_touchdown_before`, table `model_vars.OT_SHOOTOUT_FROM_PERIOD`) therefore takes a try as a
+shootout attempt when the season has a shootout and the row is either labelled inside it or not
+preceded by a touchdown; `tests/cfb/test_cfb_overtime_eras.py` holds one test per rule set (401628439,
+whose attempts are labelled 5, 9 and 12, covers 2021+ alongside 401282146). Two captures pin the table's
+cuts, both trimmed from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json` (committed there 2026-07-29,
+`5c7cc45df3`) for task 3.2:
+
+- **272870068** (Nevada @ Boise State, 2007, four overtimes all filed as period 5): Nevada's forced
+  third-overtime try "Two-point conversion attempt, PASS FAILED." is filed before its touchdown; no
+  shootout before 2019, so it is the touchdown's try.
+- **401524025** (Arizona @ USC, 2023, three overtimes): "Caleb Williams Run for Two-Point Conversion"
+  (period 7) follows the second-overtime touchdown; from 2021 the third overtime is a shootout.
 
 Other overtime captures: 252600087, 262522509, 322802005, 332570254, 400547980, 400869264,
 400869817, 401112081, 401301042, 401628439 (eight overtimes), 401752854, 401754543, 401754554,
@@ -148,6 +159,7 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 | 262940151 | 2006 | SMU Mustangs @ East Carolina Pirates | 4 | full summary | `summary_262940151.json` | `bc28eda428` 2026-08-29 |
 | 272650152 | 2007 | Clemson Tigers @ NC State Wolfpack | 4 | trimmed | `summary_272650152_trimmed.json.gz` | `edd88af3b2` 2026-09-26 #580 |
 | 272650194 | 2007 | Northwestern Wildcats @ Ohio State Buckeyes | 4 | trimmed | `summary_272650194_trimmed.json.gz` | `99484724be` 2026-10-01 #651 |
+| 272870068 | 2007 | Nevada Wolf Pack @ Boise State Broncos | 5 | trimmed | `summary_272870068_trimmed.json.gz` | task 3.2 (#792), 2026-10-11, from `cfbfastR-cfb-raw` `5c7cc45df3` |
 | 282410024 | 2008 | Oregon State Beavers @ Stanford Cardinal | 4 | trimmed | `summary_282410024_trimmed.json.gz` | `50d24c9978` 2026-09-26 #588 |
 | 282430151 | 2008 | Virginia Tech Hokies @ East Carolina Pirates | 4 | trimmed | `summary_282430151_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
 | 282432641 | 2008 | Eastern Washington Eagles @ Texas Tech Red Raiders | 4 | trimmed | `summary_282432641_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
@@ -205,6 +217,7 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 | 401424416 | 2022 | Albany Great Danes @ Baylor Bears | 4 | full summary | `summary_401424416.json` | `a0c17d9a5e` 2026-08-29 |
 | 401425418 | 2022 | Grambling Tigers @ Arkansas State Red Wolves | 4 | full summary | `summary_401425418.json` | `4b2d0b4676` 2026-08-29 |
 | 401520349 | 2023 | Massachusetts Minutemen @ Army Black Knights | 4 | trimmed | `summary_401520349_trimmed.json.gz` | `d7ba21f92e` 2026-09-27 #596 |
+| 401524025 | 2023 | Arizona Wildcats @ USC Trojans | 7 | trimmed | `summary_401524025_trimmed.json.gz` | task 3.2 (#792), 2026-10-11, from `cfbfastR-cfb-raw` `5c7cc45df3` |
 | 401525860 | 2023 | UCF Knights @ Kansas Jayhawks | 4 | trimmed | `summary_401525860_trimmed.json.gz` | `edd88af3b2` 2026-09-26 #580 |
 | 401525903 | 2023 | Kansas Jayhawks @ Cincinnati Bearcats | 4 | trimmed | `summary_401525903_trimmed.json.gz` | `50d24c9978` 2026-09-26 #588 |
 | 401628334 | 2024 | USC Trojans @ LSU Tigers | 4 | full summary | `summary_401628334.json` | `fd65da22d9` 2026-06-30 #148 |
