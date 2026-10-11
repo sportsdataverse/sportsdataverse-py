@@ -44294,3 +44294,6 @@ wnba_referee_assignments:
   replay_center.league: 'League the replay-center staffing belongs to: nba, gl, or wnba.'
   replay_center.official_id: Numeric replay-center official id from the feed.
   replay_center.official_name: Replay-center official's display name for that date.
+espn_mlb_schedule:
+  away_score: 'Away team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string).'
+  home_score: 'Home team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string).'
