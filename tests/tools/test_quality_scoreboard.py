@@ -4,9 +4,6 @@ import importlib.util
 import json
 from pathlib import Path
 
-import pytest
-
-pytest.importorskip("tomllib", reason="quality_scoreboard reads pyproject.toml with tomllib (Python 3.11+)")
 
 _spec = importlib.util.spec_from_file_location(
     "quality_scoreboard", Path(__file__).resolve().parents[2] / "tools" / "quality_scoreboard.py"
