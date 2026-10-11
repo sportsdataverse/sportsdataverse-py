@@ -100,12 +100,13 @@ is the sole attributable contributor.
   are no `[[tool.mypy.overrides]]` blocks — do not add one; a whole-package
   override would make the gate permanently red on the untyped legacy surface.
 - DO use `from __future__ import annotations`: 682 of 729 modules already do,
-  and it keeps `X | None` working on the 3.9 floor. Modern type syntax
+  and it keeps `X | None` working on the 3.10 floor. Modern type syntax
   (`dict[str, X]`, `X | None`, `list[int]`) is allowed everywhere.
 
 ## DataFrame Engine — Polars 1.x and 2.x
 
-Runtime is `polars>=1.0,<3` (lock: 2.0 on Python >= 3.10, 1.36 on 3.9); code must run on both
+Runtime is `polars>=1.0,<3` (the lock resolves 2.0 on every supported Python, 3.10+; the floor
+stays 1.0); code must run on both
 (see `CLAUDE.md`, "Polars version"). Use the modern API surface:
 
 | Use this | Don't use this (0.18-era) |
@@ -371,7 +372,7 @@ Mirror their structure for any new ESPN-endpoint module:
 - Warnings are errors (`pytest.ini`): assert an expected warning with
   `pytest.warns(..., match=...)`; filter an incidental one by exact message, with a
   comment naming the test that asserts it.
-- CI runs **Python 3.13.2 only**; the `[project]` target range is 3.9-3.14.
+- CI runs **Python 3.13.2 only**; the `[project]` target range is 3.10-3.14.
 - Assertion style: prefer **subset** column checks (`expected_cols.issubset(set(df.columns))`)
   rather than exact equality, so upstream column additions don't fail tests.
 - Smoke tests for live endpoints assert shape (row count > 0, expected
