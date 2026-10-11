@@ -40,16 +40,12 @@ requirements:
     # bounds -- conda-forge requires explicit lower bounds to be re-renderable.
     # `uv run python tools/check_recipe_mirror.py` diffs the two lists and the
     # version; CI's conda-build job builds the recipe on every PR touching it.
-    - attrs >=20.3.0
     - beautifulsoup4 >=4.11.0
-    - inflection >=0.5.1
     - lxml >=4.9.0
-    - matplotlib-base >=3.5.0
     - numpy >=1.23.0
     - pandas >=2.0.0
     - polars >=1.0,<3
     - pyarrow >=14.0.0
-    - pyjanitor >=0.23.1
     - requests >=2.30.0
     - scipy >=1.10.0
     - tqdm >=4.50.0

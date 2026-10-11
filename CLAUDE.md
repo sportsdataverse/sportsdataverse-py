@@ -1175,9 +1175,6 @@ code at the source; never blanket-ignore a category.
 - **Polars literal-from-numpy no longer auto-broadcasts in 1.x.** Use
   `pl.lit(np_array).first()` to extract a scalar, or pass a Python value
   directly.
-- **`pyjanitor 0.32.18+` silently switched to pandas 3.x.** Keep the
-  defensive `pyjanitor<0.32.18` upper bound in `pyproject.toml` until
-  pandas 3 is the project floor.
 - **ESPN injuries come from the LEAGUE endpoint, never the game summary.**
   The per-game `summary` payload has an `injuries` key that is present and
   always `[]` — a producer stage built on it runs green forever and emits zero
