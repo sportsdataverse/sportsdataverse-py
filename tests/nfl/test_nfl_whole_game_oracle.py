@@ -1,6 +1,6 @@
 """Oracle-anchored whole-game characterization of ``NFLPlayProcess`` (quality program task 1.1).
 
-Every committed ESPN capture (``tests/nfl/fixtures/README.md``: 31 games, 2002-2026) is run offline
+Every committed ESPN capture (``tests/nfl/fixtures/README.md``: 34 games, 2002-2026) is run offline
 through the full pipeline and each column that has an oracle OUTSIDE this processor is asserted
 against it:
 
@@ -13,7 +13,7 @@ against it:
 * the CFB processor's fixed copy of the same stage (``cfb_pbp.py``: the ``-3`` rushing block of
   ``24dd2fdec6``, the kickoff-return ``end.down`` rewrite);
 * ESPN's own feed (``scoringPlay``, the play text, the summary's ``boxscore``);
-* the committed nflverse slices of two of the games (``fixtures/nflverse/``), joined play by play:
+* the committed nflverse slices of five of the games (``fixtures/nflverse/``), joined play by play:
   ESPN's play id is the game id followed by the GSIS ``play_id``.
 
 Snapshot ban: no expected value is a stored copy of this processor's output. A check that is red
@@ -176,7 +176,7 @@ def test_half_ending_play(game_id, boundary):
     "game_id",
     _cases(
         dict.fromkeys(
-            (400791590, 400874512, 401671740),
+            (400791590, 400874512, 401326467, 401671740),
             "C-H5: ESPN's end.down -1 on a returned kickoff reaches the EP model (CFB rewrites it to 1)",
         )
     ),
@@ -289,11 +289,14 @@ def test_team_box_touchdowns_match_espn_box(game_id):
 # ---------------------------------------------------------------------------------------------
 
 SLICES = {401547449: "2023_04_LA_IND", 401671740: "2024_04_PHI_TB"}
-_MATCHED = {401547449: 171, 401671740: 159}  # ESPN rows carrying a GSIS play_id nflverse has
+# EX-1.5-d: one capture from each season ESPN's play `end` state is corrupt in (2014-2021)
+END_STATE_SLICES = {400554340: "2014_11_MIN_CHI", 401030962: "2018_13_IND_JAX", 401326467: "2021_10_JAX_IND"}
+# ESPN rows carrying a GSIS play_id nflverse has
+_MATCHED = {401547449: 171, 401671740: 159, 400554340: 152, 401030962: 164, 401326467: 171}
 
 
 def _nflverse(game_id: int) -> pl.DataFrame:
-    return pl.read_parquet(FIX / "nflverse" / f"{SLICES[game_id]}.parquet")
+    return pl.read_parquet(FIX / "nflverse" / f"{(SLICES | END_STATE_SLICES)[game_id]}.parquet")
 
 
 def _joined(game_id: int) -> pl.DataFrame:
@@ -453,6 +456,76 @@ def test_completion_probability_reproduces_nflverse(game_id):
     assert out.height >= rows
     assert not math.isnan(corr) and corr >= corr_floor, corr
     assert mae <= mae_ceiling, mae
+
+
+# ---------------------------------------------------------------------------------------------
+# EX-1.5-d (task 2.18): a play ends where the next play starts, not where ESPN's `end` says
+# ---------------------------------------------------------------------------------------------
+# From 2014 to 2021 ESPN's `end` object carries the defense's team id and a down/distance that does
+# not follow from the play on a growing share of plays (2021: 30% of plain scrimmage plays; the yard
+# line stays right). The oracle is nflverse on the same plays: a possession change is a posteam
+# that differs from the next play's, a first down is nflverse's `first_down`. The domain is a
+# pass or run that is not a touchdown and whose next play is in the same half.
+
+
+def _snaps(game_id: int) -> pl.DataFrame:
+    half = pl.when(pl.col("qtr") <= 2).then(1).when(pl.col("qtr") <= 4).then(2).otherwise(pl.col("qtr"))
+    nxt = (
+        _nflverse(game_id)
+        .filter(pl.col("play_type").is_not_null())
+        .sort("play_id")
+        .select(
+            pl.col("play_id").cast(pl.Int64),
+            next_posteam=pl.col("posteam").shift(-1),
+            same_half=(half == half.shift(-1)).fill_null(False),
+        )
+    )
+    joined = _joined(game_id)
+    _require(joined.schema["play_id"] == nxt.schema["play_id"], "play_id dtypes differ")
+    return joined.join(nxt, on="play_id").filter(
+        pl.col("play_type_nv").is_in(["pass", "run"]) & (pl.col("touchdown_nv") == 0) & pl.col("same_half")
+    )
+
+
+# (snaps, change_of_poss disagreements, first-down agreement floor, EPA corr floor, EPA MAE ceiling)
+# Measured after the fix (before it: 17 / 23 / 67 wrong possession changes, first downs 0.886 /
+# 0.869 / 0.661, EPA corr 0.756 / 0.771 / 0.426), rounded one step toward failing.
+_END_STATE = {
+    400554340: (114, 0, 1.0, 0.761, 0.430),  # 1.0, 0.76179, 0.42959
+    401030962: (122, 0, 1.0, 0.951, 0.197),  # 1.0, 0.95171, 0.19693
+    401326467: (118, 0, 0.991, 0.932, 0.139),  # 0.99153, 0.93294, 0.13892
+}
+_EX_1_5_D = "EX-1.5-d: change_of_poss / first_down_created / EPA read ESPN's corrupt end.team and end.down"
+
+
+def _end_state_cases() -> list:
+    return [pytest.param(g, marks=_xfail(_EX_1_5_D)) for g in END_STATE_SLICES]
+
+
+@pytest.mark.parametrize("game_id", _end_state_cases())
+def test_EX_1_5_d_change_of_poss_is_nflverse_possession_change(game_id):
+    s = _snaps(game_id)
+    _require(s.height >= _END_STATE[game_id][0], f"{s.height} snaps")
+    ours = pl.col("change_of_poss").cast(pl.Boolean).fill_null(False)
+    wrong = s.filter(ours != (pl.col("posteam_nv") != pl.col("next_posteam")))
+    assert wrong.height <= _END_STATE[game_id][1], wrong.select("id", "text", "change_of_poss").rows()
+
+
+@pytest.mark.parametrize("game_id", _end_state_cases())
+def test_EX_1_5_d_first_down_created_is_nflverse_first_down(game_id):
+    s = _snaps(game_id)
+    agree = s.select((pl.col("first_down_created").cast(pl.Int64) == pl.col("first_down_nv")).mean()).item()
+    assert agree >= _END_STATE[game_id][2], agree
+
+
+@pytest.mark.parametrize("game_id", _end_state_cases())
+def test_EX_1_5_d_epa_agrees_with_nflverse(game_id):
+    s = _snaps(game_id).filter(pl.col("EPA").is_not_null() & pl.col("epa_nv").is_not_null())
+    corr, mae = s.select(
+        pl.corr("EPA", "epa_nv").alias("corr"), (pl.col("EPA") - pl.col("epa_nv")).abs().mean().alias("mae")
+    ).row(0)
+    assert corr >= _END_STATE[game_id][3], corr
+    assert mae <= _END_STATE[game_id][4], mae
 
 
 # ---------------------------------------------------------------------------------------------
