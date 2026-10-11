@@ -7343,6 +7343,43 @@ class NFLPlayProcess(object):
             box.update({k: [] for k in _USAGE_SECTIONS})
         return box
 
+    # ESPN's teamParticipants entry fields, in one order: the payload's own key order (and the
+    # optional statistics/playStatistics/timeout keys) varies by game, so the inferred List(Struct)
+    # dtype did too (C-L10). Missing fields are null.
+    _TEAM_PARTICIPANT_FIELDS = (
+        ("id", pl.Utf8),
+        ("order", pl.Int64),
+        ("team", pl.Struct({"$ref": pl.Utf8})),
+        ("type", pl.Utf8),
+        ("statistics", pl.Struct({"$ref": pl.Utf8})),
+        ("playStatistics", pl.Struct({"$ref": pl.Utf8})),
+        ("timeout", pl.Boolean),
+    )
+
+    def __documented_dtypes(self, play_df):
+        """Cast the processed plays to their documented dtypes, after every consumer has run.
+
+        The XGBoost scorers emit float32, so the WP family (``wp_before`` ... ``wpa``), the
+        fourth-down and two-point probabilities (``first_down_prob``, ``prob_2pt`` when the model
+        scored) and ``drive_start`` left as Float32 while their all-null twins and the documented
+        type are Float64 (C-M7). Widening here, not at the scorers, keeps the WP cascade and the
+        box score computing at the precision they always did; float32 -> float64 is exact, so no
+        value changes. ``teamParticipants`` gets one struct field order (C-L10).
+        """
+        play_df = play_df.with_columns(pl.col(pl.Float32).cast(pl.Float64))
+        if "teamParticipants" not in play_df.columns:
+            return play_df
+        fields = dict(self._TEAM_PARTICIPANT_FIELDS)
+        dtype = play_df.schema["teamParticipants"]
+        if isinstance(dtype, pl.List) and isinstance(dtype.inner, pl.Struct):
+            # a field ESPN adds later is kept (after the pinned ones), never dropped
+            fields.update({f.name: f.dtype for f in dtype.inner.fields if f.name not in fields})
+        # rebuilt by field name: the Series constructor fills a missing key with null
+        participants = pl.Series(
+            "teamParticipants", play_df["teamParticipants"].to_list(), dtype=pl.List(pl.Struct(fields))
+        )
+        return play_df.with_columns(participants)
+
     def __pipeline_input(self):
         """A pipeline replaces ``self.json`` with its result, so every run starts from a copy of
         the payload it was given (``espn_nfl_pbp`` / ``nfl_pbp_disk`` / the caller), never from
@@ -7474,6 +7511,7 @@ class NFLPlayProcess(object):
                 )
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
+                self.plays_json = self.plays_json.pipe(self.__documented_dtypes)
                 # Keep the enriched polars frame (see __init__): plays_json becomes
                 # a list of dicts below and callers mutate it.
                 self.plays_frame = self.plays_json

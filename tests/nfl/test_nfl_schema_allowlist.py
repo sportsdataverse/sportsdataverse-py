@@ -33,7 +33,8 @@ _PASSTHROUGH = (
     "penalty.type.slug", "penalty.type.text", "penalty.yards", "yardsAfterCatch", "review.type",
     "review.upheld", "review.team.$ref",
 )  # fmt: skip
-BASELINE = frozenset({("teamParticipants", "dtype"), *((c, "presence") for c in _PASSTHROUGH)})
+# ("teamParticipants", "dtype") was deleted by task 2.17 (C-L10: one struct field order).
+BASELINE = frozenset((c, "presence") for c in _PASSTHROUGH)
 
 
 @functools.cache
@@ -61,14 +62,22 @@ def test_processed_schema_is_identical_across_captures():
     assert sorted(_KEYS - differs) == [], "an allowlist row no capture needs any more: delete it"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="C-M7: prob_2pt is Float32 when the two-point model scores (2015+ captures), Float64 when all null",
-)
 def test_prob_2pt_has_one_documented_dtype():
-    # Documented `double` (the CFB twin is Float64). 400791508 scores tries, 221013007 (2002) does not.
+    # C-M7 (task 2.17). Documented `double`, Float64 when the model scored and when it did not:
+    # 400791508 scores tries and fourth downs, 221013007 (2002) does not. first_down_prob had the
+    # same Float32/Float64 split (TH-11).
     if _try_load(_WP_MODEL_FILE) is None:
         pytest.skip(f"{_WP_MODEL_FILE} cannot be loaded (offline, empty cache): the two-point model cannot score")
-    dtypes = {g: run(g, fourth_down_models=True).plays.schema["prob_2pt"] for g in (400791508, 221013007)}
+    dtypes = {
+        (g, c): run(g, fourth_down_models=True).plays.schema[c]
+        for g in (400791508, 221013007)
+        for c in ("prob_2pt", "first_down_prob")
+    }
     assert set(dtypes.values()) == {pl.Float64}, dtypes
+
+
+def test_processed_plays_carry_no_float32():
+    # C-M7 / task 2.17: the XGBoost scorers emit float32; every float the processor publishes
+    # (wp_before ... wpa, drive_start) is documented `double` and matches nflverse's Float64.
+    float32 = {(g, c) for g in CAPTURES for c, dtype in run(g).plays.schema.items() if dtype == pl.Float32}
+    assert sorted(float32) == []
