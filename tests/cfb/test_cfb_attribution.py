@@ -1237,3 +1237,21 @@ def test_pre_2014_offensive_foul_on_a_run_is_charged_to_the_flagged_team():
         ]
     )
     assert out.to_dicts()[0]["penalized_team"] == 62
+
+
+def test_penalty_team_side_pre_2014_parenthesised_school():
+    """ "Miami (OH) penalty 10 yard holding": the suffix form takes the parentheses, like "Miami (OH) Penalty,"."""
+    from sportsdataverse.cfb.cfb_pbp import _parse_penalty_team_side
+
+    teams = {
+        "homeTeamAbbrev": "M-OH",
+        "awayTeamAbbrev": "KENT",
+        "homeTeamName": "Miami (OH)",
+        "awayTeamName": "Kent State",
+        "homeTeamNameAlt": None,
+        "awayTeamNameAlt": None,
+        "homeTeamMascot": "RedHawks",
+        "awayTeamMascot": "Golden Flashes",
+    }
+    assert _parse_penalty_team_side({"text": "Miami (OH) penalty 10 yard holding accepted.", **teams}) == "home"
+    assert _parse_penalty_team_side({"text": "TEAM penalty 5 yard delay of game accepted.", **teams}) is None
