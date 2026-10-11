@@ -127,7 +127,7 @@ loaders:
   base: sdv_releases
   url: cfb_crosswalk/cfb_teams_crosswalk_{season}.parquet
   tag: cfb_crosswalk
-  min_season: 2014
+  min_season: 2013
   example_args:
     seasons: 2024
 - fn: load_cfb_schedule_crosswalk
@@ -135,7 +135,7 @@ loaders:
   base: sdv_releases
   url: cfb_crosswalk/cfb_schedule_crosswalk_{season}.parquet
   tag: cfb_crosswalk
-  min_season: 2014
+  min_season: 2013
   example_args:
     seasons: 2024
 # --- ESPN per-game / per-season datasets from the cfb-data python dual-write
