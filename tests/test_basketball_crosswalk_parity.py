@@ -344,7 +344,14 @@ def test_wnba_team_crosswalk_parity() -> None:
 
 
 def test_nba_team_crosswalk_parity() -> None:
-    want = golden("nba_team")
+    # The R golden predates the computed Yahoo team id (nba.t.{espn id}, the 30
+    # franchises, 2014+); every other column must still match it exactly.
+    want = golden("nba_team").with_columns(
+        pl.when(pl.col("espn_team_id").is_between(1, 30))
+        .then(pl.lit("nba.t.") + pl.col("espn_team_id").cast(pl.Utf8))
+        .otherwise(pl.lit(None, dtype=pl.Utf8))
+        .alias("yahoo_team_id")
+    )
     got = nba_crosswalk._assemble_team_crosswalk(
         espn_from(want),
         distinct_where(

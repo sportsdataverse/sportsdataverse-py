@@ -13,6 +13,7 @@ Public surface:
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 import polars as pl
@@ -35,6 +36,7 @@ __all__ = [
     "wnba_team_crosswalk",
     "wnba_schedule_crosswalk",
     "wnba_player_crosswalk",
+    "wnba_crosswalks_from_archive",
 ]
 
 TEAM_COLUMNS = [
@@ -483,3 +485,72 @@ def wnba_player_crosswalk(
         )
     )
     return out.to_pandas() if return_as_pandas else out
+
+
+def wnba_crosswalks_from_archive(
+    season: int,
+    espn_schedule: pl.DataFrame,
+    espn_game_rosters: pl.DataFrame,
+    stats_dir: Union[str, Path],
+    min_confidence: float = 0.92,
+) -> Dict[str, pl.DataFrame]:
+    """Build the WNBA team, schedule and player crosswalks for a past season, offline.
+
+    The live builders read current-season endpoints, so they cannot produce
+    history. This one reads stored data only: the season's ESPN schedule and
+    ESPN game rosters (``espn_wnba_schedules`` / ``espn_wnba_game_rosters``
+    parquet, 2002+) and the local stats.wnba.com JSON archive
+    (``wehoop-wnba-stats-raw/wnba_stats/json``: ``boxscoretraditionalv3``, with
+    ``boxscoresummaryv2`` / ``leaguegamelog`` for the game date).
+
+    Teams pair by game-date co-occurrence (``match_method`` ``game_dates``),
+    games join on (US-Eastern date, home ESPN team, away ESPN team), and
+    players match inside each matched (game, team) on normalized name and
+    jersey, then vote across the season into one row per ESPN athlete per
+    team (``match_confidence`` = the share of matched games that agree).
+    Fox and Yahoo columns stay null: Yahoo WNBA team ids differ from ESPN's.
+
+    Args:
+        season: Season (calendar year).
+        espn_schedule: That season's ESPN schedule parquet.
+        espn_game_rosters: That season's ESPN game rosters parquet.
+        stats_dir: The stats archive's ``json`` root.
+        min_confidence: Jaro-Winkler floor for a fuzzy player match.
+
+    Returns:
+        ``{"team": ..., "schedule": ..., "player": ...}``, with the same columns
+        as :func:`wnba_team_crosswalk`, :func:`wnba_schedule_crosswalk` and
+        :func:`wnba_player_crosswalk`.
+
+    Raises:
+        FileNotFoundError: ``stats_dir`` holds no box scores for ``season``.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.wnba import wnba_crosswalks_from_archive
+
+            out = wnba_crosswalks_from_archive(
+                2015,
+                pl.read_parquet("wnba/schedules/parquet/wnba_schedule_2015.parquet"),
+                pl.read_parquet("wnba/game_rosters/parquet/game_rosters_2015.parquet"),
+                "../wehoop-wnba-stats-raw/wnba_stats/json",
+            )
+            print(out["player"]["match_method"].value_counts())
+
+        Pipeline next step (one line)::
+
+            out["schedule"].filter(pl.col("match_method") != "both").head()
+
+        See Also:
+            * `wehoop`_ -- R sister package with the live crosswalks
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    from sportsdataverse._crosswalk_basketball_archive import build_archive_crosswalks, read_stats_archive
+
+    stats = read_stats_archive(stats_dir, "wnba", season)
+    if stats["games"].height == 0:
+        raise FileNotFoundError(f"no WNBA box scores for season {season} under {stats_dir}")
+    return build_archive_crosswalks("wnba", season, espn_schedule, espn_game_rosters, stats, min_confidence)
