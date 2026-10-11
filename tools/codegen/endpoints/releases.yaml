@@ -1444,7 +1444,7 @@ loaders:
   base: sdv_releases
   url: nhl_game_rosters/game_rosters_{season}.parquet
   tag: nhl_game_rosters
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_goalie_boxscores
