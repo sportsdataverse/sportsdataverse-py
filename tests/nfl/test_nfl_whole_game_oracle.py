@@ -64,6 +64,12 @@ _RUSH = _t("rush")
 _YDS = pl.col("yds_rushed")
 
 
+def _require(ok: bool, why: str) -> None:
+    """A broken precondition fails outright, never as an xfail's expected AssertionError."""
+    if not ok:
+        pytest.fail(why)
+
+
 def _bad(frame: pl.DataFrame, ok: pl.Expr, cols: list[str]) -> list[tuple]:
     return frame.filter(~ok.fill_null(False)).select("id", *cols).rows()
 
@@ -97,7 +103,7 @@ def test_rushing_decomposition_sums_to_the_carry(game_id):
     # level + open field is the carry, on every rush of 4+ yards.
     f = run(game_id).plays.filter(_RUSH & (_YDS >= 4))
     parts = pl.col("line_yards") + pl.col("second_level_yards") + pl.col("open_field_yards")
-    assert f.height > 0
+    _require(f.height > 0, "no 4+ yard rush in the capture")
     assert _bad(f, (parts - _YDS).abs() < 1e-9, ["yds_rushed", "line_yards", "second_level_yards"]) == []
 
 
@@ -274,7 +280,7 @@ def test_team_box_touchdowns_match_espn_box(game_id):
     for name, table, col in (("passing", "pass", "Pass_TD"), ("rushing", "rush", "Rush_TD")):
         for team_id, n in pl.DataFrame(r.game["advBoxScore"][table]).group_by("pos_team").agg(pl.col(col).sum()).rows():
             ours[(int(team_id), name)] = int(n)
-    assert len(espn) == 4
+    _require(len(espn) == 4, f"ESPN box lacks a team passing/rushing total: {espn}")
     assert {k: (v, ours.get(k, 0)) for k, v in espn.items() if ours.get(k, 0) != v} == {}
 
 
@@ -297,7 +303,9 @@ def _joined(game_id: int) -> pl.DataFrame:
         play_id=pl.col("id").cast(pl.Utf8).str.slice(len(str(game_id))).cast(pl.Int64)
     )
     joined = espn.join(nv.rename({c: f"{c}_nv" for c in nv.columns if c != "play_id"}), on="play_id", how="inner")
-    assert joined.height == _MATCHED[game_id]
+    _require(
+        joined.height == _MATCHED[game_id], f"{joined.height} ESPN rows match nflverse, expected {_MATCHED[game_id]}"
+    )
     return joined
 
 
@@ -374,7 +382,7 @@ _EXACT_KNOWN = {
 )
 def test_play_column_equals_nflverse(game_id, ours, theirs, domain):
     j = _joined(game_id).filter(domain)
-    assert j.height > 0
+    _require(j.height > 0, f"no {ours} rows in the comparison domain")
     left, right = pl.col(ours).cast(pl.Float64), pl.col(f"{theirs}_nv").cast(pl.Float64)
     assert j.filter(left.ne_missing(right)).select("id", ours, f"{theirs}_nv").rows() == []
 
