@@ -1,6 +1,6 @@
 {% set name = "sportsdataverse" %}
 {% set version = "0.0.51" %}
-{% set python_min = "3.9" %}
+{% set python_min = "3.10" %}
 
 # Conda recipe for the sportsdataverse-py package.
 #
@@ -52,6 +52,9 @@ requirements:
     - requests >=2.28.0
     - scipy >=1.10.0
     - tqdm >=4.50.0
+    # pyproject's `tomli>=2.0; python_version < '3.11'`: noarch recipes can't carry
+    # the selector, so it is listed unconditionally (a no-op on 3.11+).
+    - tomli >=2.0
     - xgboost >=2.0.0
     # pyproject's `tzdata; sys_platform == 'win32'` is intentionally omitted:
     # noarch recipes can't carry platform selectors, and conda's python
