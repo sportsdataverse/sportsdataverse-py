@@ -6,6 +6,7 @@
   - [ESPN game summaries (the 31 whole-game captures)](#espn-game-summaries-the-31-whole-game-captures)
   - [nflverse slices (`nflverse/`)](#nflverse-slices-nflverse)
   - [Fourth-down and offline-model fixtures (task 1.5)](#fourth-down-and-offline-model-fixtures-task-15)
+    - [Booster replay (`nfl4th_booster_replay.parquet`)](#booster-replay-nfl4th_booster_replayparquet)
   - [Other files](#other-files)
   - [Overtime rule sets (C-M6)](#overtime-rule-sets-c-m6)
 
@@ -125,6 +126,26 @@ o = o.rename({c: f"nfl4th_{c}" for c in ("go_boost", "go_wp", "punt_wp", "fg_wp"
 pbp.filter(pl.col("game_id") == "2022_01_BUF_LA").write_parquet(
     "tests/nfl/fixtures/nflverse/2022_01_BUF_LA_full.parquet", compression="zstd")
 ```
+
+### Booster replay (`nfl4th_booster_replay.parquet`)
+
+Read by `tests/nfl/test_nfl_fourth_down.py::test_nfl4th_oracle_replay_2022` through
+`tests/nfl/_booster_replay.py`, so the nfl4th oracle runs in CI without the two download-on-demand boosters
+(review PR-774 R774-1). It holds the raw outputs of `fd_model.ubj` (605 distinct feature rows, 76 class
+probabilities each) and `wp_model.ubj` (60,291 rows, one probability each) for every feature row
+`get_4th_down_probs` handed them on every 7th play of `nfl4th_2022_slice.parquet` (606 plays), keyed by the
+row's exact float32 bytes. Columns: `model, key, x (list[f32]), pred (list[f32])`.
+
+- **Boosters.** sportsdataverse-data release `nfl_4th_down_models` (sdv-py's xgboost conversions of
+  nfl4th's models), as cached 2026-06-24: `fd_model.ubj` sha256
+  `74020522809537e67a01e058215631c00fd4379d0c4e7db51386ccc5eec05f9d`, `wp_model.ubj` sha256
+  `56444fc03114dccd9f01fae791408b8eac6636503614b5310359c1a3ae74da1f`. The local-only test
+  `test_nfl4th_replay_was_recorded_from_the_cached_boosters_local_only` fails when the cached boosters
+  change; re-record then.
+- **Recorded** 2026-10-11 (xgboost 3.3.0, polars 2.0, Python 3.13) from the sdv-py root with
+  `PYTHONPATH=. uv run --frozen --all-extras python tests/nfl/fixtures/record_nfl4th_replay.py`. That
+  needs the boosters in the local model cache and never downloads them. The replayed scores equal the
+  live scores on all 606 plays.
 
 ## Other files
 

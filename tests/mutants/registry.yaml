@@ -792,3 +792,45 @@
   note: >-
     task 2.7's reorder: the strict xfail turns XPASS (red), which is the kill; 2.7 flips the xfail to a
     plain assert in the same PR and points this row at its named-booster guard
+
+- id: nfl-fourth-down-go-wp-scaled
+  group: fourth-down-level
+  finding: gap-C-125
+  file: sportsdataverse/nfl/nfl_fourth_down.py
+  snippet: '    out["go_wp"] = go["go_wp"].to_numpy()'
+  mutant: '    out["go_wp"] = go["go_wp"].to_numpy() * 0.98'
+  test: tests/nfl/test_nfl_fourth_down.py -k oracle_replay
+  expected: kill
+  note: >-
+    runs in CI now: the replay serves the nfl4th boosters' recorded outputs (review PR-774 R774-1).
+    Correlation stays 0.9985; MAE fails the level floor
+
+- id: nfl-fourth-down-wp-input-changed
+  group: fourth-down-level
+  finding: gap-C-125
+  file: sportsdataverse/nfl/nfl_fourth_down.py
+  snippet: '    diff_time_ratio = home_score_diff / np.exp(-4.0 * elapsed)'
+  mutant: '    diff_time_ratio = home_score_diff * np.exp(-4.0 * elapsed)'
+  test: tests/nfl/test_nfl_fourth_down.py -k oracle_replay
+  expected: kill
+  note: a booster input the recording never saw fails the replay (a changed input cannot pass silently)
+
+- id: xgb-threads-default-not-one
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/_xgb.py
+  snippet: '    raw = os.environ.get("SDV_XGB_THREADS", "1")'
+  mutant: '    raw = os.environ.get("SDV_XGB_THREADS", "2")'
+  test: tests/test_xgb.py
+  expected: kill
+  note: the measured default (1 thread; 50 -> 16.5 user CPU-seconds per two games), review PR-774 R774-6
+
+- id: xgb-thread-env-overrides-operator
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/_xgb.py
+  snippet: '        os.environ.setdefault(var, n)'
+  mutant: '        os.environ[var] = n'
+  test: tests/test_xgb.py
+  expected: kill
+  note: an operator's explicit OMP_NUM_THREADS must win (review PR-774 R774-6)
