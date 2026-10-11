@@ -703,3 +703,25 @@ def test_a_yards_loss_stated_after_the_turnover_clause_is_still_read():
     row = _row(_trimmed_plays(401520349), "Champ Harris run for 7 yds to the MASS 36")
     assert (row["start.yardsToEndzone"], row["end.yardsToEndzone"]) == (29, 36)
     assert row["yds_rushed"] == -7
+
+
+# --- R1: through 2013 an extra point is its own row; it carries the flags and the kicker ------------
+
+
+def test_standalone_pat_rows_carry_xp_flags_and_kicker_2004():
+    # "Extra point by Dave Rayner (MSU) is good." -- the 2014+ suffix parser never read these rows,
+    # so 46.6k pre-2014 PATs had xp_attempt False (39.8% of the expected flags).
+    pats = _plays(243040130).filter(pl.col("type.text").str.starts_with("Extra Point"))
+    assert pats.height == 8
+    assert pats["xp_attempt"].all() and pats["xp_made"].all()
+    rivas = pats.filter(pl.col("text") == "Extra point by Garrett Rivas (MICH) is good.")
+    assert rivas.height > 0 and rivas["xp_kicker_player_name"].to_list() == ["Garrett Rivas"] * rivas.height
+
+
+def test_standalone_pat_rows_carry_xp_flags_and_kicker_2008():
+    plays = _trimmed_plays(282432641)
+    cols = ["xp_attempt", "xp_made", "xp_kicker_player_name"]
+    good = plays.filter(pl.col("text") == "Felipe Macias extra point GOOD.").select(cols).unique().rows()
+    blocked = _row(plays, "Donnie Carona extra point BLOCKED.")
+    assert good == [(True, True, "Felipe Macias")]
+    assert tuple(blocked[k] for k in cols) == (True, False, "Donnie Carona")

@@ -6731,10 +6731,10 @@ class CFBPlayProcess(object):
         summary-only games and a 2025 stats.ncaa inline form
         ``#49 G.Meadors kick attempt good|failed``. Validated against the ESPN
         kicking box per (game, kicker): xpm 94.6-97.3% / xpa 93.0-95.1% exact
-        for every season 2014-2025, from a 9% baseline. Pre-2014 rows are
-        untouched (the paren patterns fire zero times there; the NCAA inline
-        pattern is season-gated because 2010-2013 old-NCAA texts contain it for
-        XPs that already have their own rows).
+        for every season 2014-2025, from a 9% baseline. Through 2013 the XP row
+        itself carries the flags and the kicker (the paren patterns fire zero
+        times there; the NCAA inline pattern is season-gated because 2010-2013
+        old-NCAA texts contain it for XPs that already have their own rows).
         """
         if "text" not in play_df.columns or "season" not in play_df.columns:
             return play_df
@@ -6789,10 +6789,30 @@ class CFBPlayProcess(object):
         ).fill_null(False)
         kicker = pl.coalesce(made_name, miss_kw_name, _guard(miss_bare_name), ncaa_name, old_name).str.strip_chars()
 
+        # Through 2013 the try is its own row: "Extra point by Dave Rayner (MSU) is good."
+        # (2004-06), "Felipe Macias extra point GOOD." (2007-13). The row is the attempt; its
+        # result is in the text, else in the type. 46.6k such rows had no flags.
+        standalone = (
+            (pl.col("season") <= 2013)
+            & pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
+            & ~is_td_row.fill_null(False)
+        ).fill_null(False)
+        sa_missed = pl.col("text").str.contains(r"(?i)missed|blocked|no good|failed").fill_null(False)
+        sa_good = (pl.col("text").str.contains(r"(?i)\bgood\b").fill_null(False) & ~sa_missed) | (
+            (pl.col("type.text") == "Extra Point Good") & ~sa_missed
+        )
+        sa_name = r"([A-Z][\w'\.\-]*(?:\s[A-Z][\w'\.\-]+)*)"
+        sa_kicker = pl.coalesce(
+            pl.col("text").str.extract(r"(?i:extra point by)\s+" + sa_name, 1),
+            pl.col("text").str.extract(r"^" + sa_name + r"\s+(?i:extra point)", 1),
+        ).str.strip_chars()
+
         return play_df.with_columns(
-            pl.when(gated).then(made | missed).otherwise(False).alias("xp_attempt"),
-            pl.when(gated).then(made).otherwise(False).alias("xp_made"),
-            pl.when(gated & (made | missed))
+            pl.when(standalone).then(True).when(gated).then(made | missed).otherwise(False).alias("xp_attempt"),
+            pl.when(standalone).then(sa_good).when(gated).then(made).otherwise(False).alias("xp_made"),
+            pl.when(standalone)
+            .then(pl.when(sa_kicker.str.len_chars() > 0).then(sa_kicker))
+            .when(gated & (made | missed))
             .then(pl.when(kicker.str.len_chars() > 0).then(kicker))
             .otherwise(pl.lit(None, dtype=pl.Utf8))
             .alias("xp_kicker_player_name"),
