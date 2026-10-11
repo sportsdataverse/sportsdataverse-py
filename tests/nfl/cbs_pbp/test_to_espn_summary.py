@@ -497,3 +497,23 @@ def test_a_green_but_empty_napi_body_hands_over():
 
     with pytest.raises(SourceUnavailable, match="carries no plays"):
         adapter("nfl", CLE_JAX_ESPN_ID, _Ctx())
+
+
+def test_the_first_card_logo_is_the_away_team_on_a_real_page():
+    """B-L61: ``_parse_scoreboard`` takes a card's first logo as the away club and the second
+    as home. On the real 2025 week-1 page (trimmed to its 16 cards) every logo sits inside a
+    ``/nfl/teams/<CLUB>/`` link, which names the club independently of the card header."""
+    import re
+
+    html = gzip.decompress((CBS_FIX / "scoreboard_2025_regular_1.html.gz").read_bytes()).decode("utf-8")
+    hits = list(_CARD_RE.finditer(html))
+    cards = _parse_scoreboard(html, _CARD_RE)
+    assert len(cards) == len(hits) == 16
+    for i, card in enumerate(cards):
+        end = hits[i + 1].start() if i + 1 < len(hits) else len(html)
+        linked = re.findall(
+            r'/nfl/teams/([A-Z0-9]+)/[^"]*"[^<]*<img[^>]*team-logos/alt/(\d+)\.svg', html[hits[i].end() : end]
+        )
+        club_of = {logo: club for club, logo in linked}
+        assert len(club_of) == 2, card
+        assert (club_of[card["away_cbs_team_id"]], club_of[card["home_cbs_team_id"]]) == (card["away"], card["home"])

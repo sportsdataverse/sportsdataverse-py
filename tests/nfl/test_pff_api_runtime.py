@@ -139,6 +139,21 @@ def test_withheld_columns_raise_when_strict_by_kwarg_or_env(monkeypatch):
         rt._get(URL, api_key="k", transport=Recorder(200, RESTRICTED), strict=False)
 
 
+@pytest.mark.parametrize("value", ["1", "true", "TRUE", "yes", " Yes "])
+def test_every_documented_strict_env_spelling_raises(monkeypatch, value):
+    # B-L65: the documented spellings are 1/true/yes (case- and space-insensitive)
+    monkeypatch.setenv("SDV_PY_PFF_STRICT", value)
+    with pytest.raises(AssetFetchError, match="withheld columns"):
+        rt._get(URL, api_key="k", transport=Recorder(200, RESTRICTED))
+
+
+@pytest.mark.parametrize("value", ["0", "false", "no", ""])
+def test_other_strict_env_values_only_warn(monkeypatch, value):
+    monkeypatch.setenv("SDV_PY_PFF_STRICT", value)
+    with pytest.warns(UserWarning, match="withheld columns"):
+        rt._get(URL, api_key="k", transport=Recorder(200, RESTRICTED))
+
+
 def test_empty_restricted_list_is_silent(recwarn):
     rt._get(URL, api_key="k", transport=Recorder(200, json.dumps({"leagues": [], "restricted": []})))
     assert not [w for w in recwarn if "withheld" in str(w.message)]
