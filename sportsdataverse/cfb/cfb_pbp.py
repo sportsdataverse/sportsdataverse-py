@@ -5709,6 +5709,27 @@ class CFBPlayProcess(object):
                 .and_(pl.col("cleaned_text").str.contains("(?i)touchdown") == True),
             )
             .then(_gain_text.str.extract(r"(?i)for a (\d+) yard").cast(pl.Int32))
+            # Kneels: "Kneel down by TEAM at WVU48 (team loss of 2)", "... for loss of 2 yards",
+            # or "D. Brown takes a knee" with no number. The text wins -- 2024 vendor kneels
+            # often carry statYardage 0 beside "(team loss of 2)" -- then ESPN's statYardage.
+            .when((pl.col("rush") == True).and_(pl.col("kneel_down") == True))
+            .then(
+                pl.coalesce(
+                    -1 * pl.col("cleaned_text").str.extract(r"(?i)loss of (\d+)").cast(pl.Int32),
+                    pl.col("statYardage").cast(pl.Int32),
+                )
+            )
+            # A vendor rush that states no yardage at all ("Wolff,Hayden rush left
+            # (Murdock,Red)."): statYardage equals the text-parsed yards on 99.98% of plain
+            # rushes, so it stands in. Not on fumbles or flags, where it can carry the return
+            # or the enforcement.
+            .when(
+                (pl.col("rush") == True)
+                .and_(pl.col("cleaned_text").str.contains(r"\d") == False)
+                .and_(pl.col("fumble_vec") != True)
+                .and_(pl.col("penalty_flag") != True)
+            )
+            .then(pl.col("statYardage").cast(pl.Int32))
             .otherwise(None),
             # Receiving yardage reads cleaned_text so the "complete to" guard fires
             # on modern "complete short middle to ..." phrasing (raw `text` left it

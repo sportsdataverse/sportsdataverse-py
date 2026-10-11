@@ -703,3 +703,40 @@ def test_a_yards_loss_stated_after_the_turnover_clause_is_still_read():
     row = _row(_trimmed_plays(401520349), "Champ Harris run for 7 yds to the MASS 36")
     assert (row["start.yardsToEndzone"], row["end.yardsToEndzone"]) == (29, 36)
     assert row["yds_rushed"] == -7
+
+
+# --- R10: kneel-downs and yardless vendor rushes carry their yardage ----------------------------
+
+
+@pytest.mark.parametrize(
+    "game_id, expected",
+    [
+        (401636929, [-2, -2]),  # 2024 "[NHSG] Kneel down by TEAM at WVU48 (team loss of 2)."
+        (401752746, [-2, -1]),  # 2025 "Kneel down by #12 A.Daniels at ARK48 for loss of 2 yards"
+        (401628455, [-2]),  # "D. Brown takes a knee": the text has no number; ESPN's statYardage does
+        (401752844, [-3, -3]),
+    ],
+)
+def test_kneel_down_yardage_is_parsed(game_id, expected):
+    # Every 2022-25 kneel came out with null yds_rushed (383 / 801 / 960 / 1,027 rows), which dropped
+    # the victory-formation losses from team rushing; ESPN's box counts them. 2025 team rushing yards
+    # matched the box in 45.9% of team-games before this, 63.9% after.
+    kneels = _plays(game_id).filter(pl.col("text").str.contains(r"(?i)kneel down|takes a knee"))
+    assert kneels["kneel_down"].to_list() == [True] * len(expected)
+    assert kneels["yds_rushed"].to_list() == expected
+
+
+def test_kneel_text_loss_wins_over_a_zero_stat_yardage():
+    # 2024 vendor kneels often carry statYardage 0 beside "(team loss of 2)": the text is the record.
+    row = _row(_plays(401636929), "Kneel down by TEAM at WVU48 (team loss of 2)")
+    assert row["yds_rushed"] == -2
+
+
+def test_yardless_vendor_rush_takes_espn_stat_yardage():
+    # "Wolff,Hayden rush left (Murdock,Red)." states no yardage at all; ESPN's statYardage agrees
+    # with the text-parsed yards on 99.98% of plain rushes, so it is the fallback.
+    plays = _plays(401644749).filter(
+        pl.col("text").str.contains(r"^[A-Z][a-z]+,[A-Za-z]+ rush (?:left|right|middle) \(")
+    )
+    assert plays.height > 0
+    assert plays["yds_rushed"].to_list() == plays["statYardage"].to_list()
