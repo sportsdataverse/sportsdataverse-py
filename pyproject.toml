@@ -10,7 +10,7 @@ description = "Retrieve Sports data in Python"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE", "NOTICE"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = [
     # Leagues + sports
     "nba",
@@ -48,7 +48,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -308,9 +307,9 @@ line-ending = "lf"
 
 
 [tool.mypy]
-# 3.12 (not the 3.9 floor): modern dep stubs (numpy 2.3+, which itself requires py3.11+)
+# 3.12 (not the 3.10 floor): modern dep stubs (numpy 2.3+, which itself requires py3.11+)
 # use PEP 695 `type` aliases that mypy rejects under an older target. The curated modules
-# below stay 3.9-compatible regardless; this only sets the type-checker's target syntax.
+# below stay 3.10-compatible regardless; this only sets the type-checker's target syntax.
 python_version = "3.12"
 # Strict-typing ratchet via ``files`` (NOT ``[[tool.mypy.overrides]]``): the gate
 # checks ONLY the curated modules listed below, in isolation. This is deliberate

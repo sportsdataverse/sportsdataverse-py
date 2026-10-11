@@ -65,7 +65,7 @@ When this guide differs from current repository docs, treat
 
 - **License:** MIT
 - **Branch:** `main` is the default branch and release branch.
-- **Python target:** 3.9, 3.10, 3.11, 3.12, 3.13, 3.14
+- **Python target:** 3.10, 3.11, 3.12, 3.13, 3.14
 - **Packaging:** uv (PEP 621 `[project]` + PEP 735 `[dependency-groups]`)
 - **DataFrame engine:** polars 1.x and 2.x (the `0.36-live` branch is a parallel
   pandas-based line of development; see "Branches" below)
@@ -932,8 +932,9 @@ two a missing file is — and never let a 403 take the "absent" branch.
 
 ### Polars version
 
-Constrained to `polars>=1.0,<3`. The lock resolves **2.0** on Python >= 3.10 and **1.36** on
-Python 3.9 (polars 2.0 needs 3.10), so every change must run on both. All seven `*_pbp.py`
+Constrained to `polars>=1.0,<3`. With the 3.10 floor the lock resolves **2.0** on every supported
+Python (the 1.36 resolution went with Python 3.9), but the `>=1.0` floor stays, so every change
+must still run on both 1.x and 2.0. All seven `*_pbp.py`
 modules were migrated from the 0.18 surface to 1.x in May 2026 (about 165 call sites) and made
 2.0-safe in #719. A 0.18-style API in this codebase is a bug, not a style preference.
 
@@ -1210,7 +1211,7 @@ code at the source; never blanket-ignore a category.
 - `CONTRIBUTING.md` is the canonical contributor onboarding file (covers
   uv, conda, lint/typecheck, dep-bumping flow).
 - `README.md` has Standard pip / Modern uv / Development install paths plus the
-  runtime notes (Python 3.9-3.14, polars 1.x/2.x, NFL cache). There is no Conda
+  runtime notes (Python 3.10-3.14, polars 1.x/2.x, NFL cache). There is no Conda
   section in the README; the recipe lives in `recipe/`.
 - `recipe/meta.yaml` + `recipe/README.md` ship the conda-build recipe and
   document the conda-forge feedstock submission flow. The local-source

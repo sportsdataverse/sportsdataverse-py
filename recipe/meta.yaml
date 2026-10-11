@@ -1,6 +1,6 @@
 {% set name = "sportsdataverse" %}
 {% set version = "0.0.51" %}
-{% set python_min = "3.9" %}
+{% set python_min = "3.10" %}
 
 # Conda recipe for the sportsdataverse-py package.
 #
