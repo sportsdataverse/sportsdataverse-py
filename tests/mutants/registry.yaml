@@ -1,0 +1,217 @@
+# Mutation registry: the "mutation that must go red" line of every gate in the quality program's
+# ledgers (ClaudeCowork plans/2026-10-08-sdv-py-quality-refactor/gates/*.md), run by
+# tools/run_mutants.py (CI: .github/workflows/quality.yml `mutants` job).
+#
+# Row fields:
+#   id        unique slug
+#   group     optional label for `--only <group>` and the "<group>: k/n mutants killed" summary
+#   finding   the audit finding id (CONSOLIDATED-TIER-{A,B,C}.md row)
+#   file      source file, relative to the repo root
+#   snippet   text that occurs EXACTLY ONCE in `file` (never a line number)
+#   mutant    the replacement text
+#   test      the pytest target that must go red (a file or node id, `-k` allowed)
+#   expected  `kill` -- the job fails if `test` stays green under `mutant`
+#             `{survive_until: <task>}` -- the audit measured that `test` stays green today; the
+#             row documents the gap until that plan task lands its killing test (then flip the
+#             row to `kill`, pointing `test` at it). An early kill is reported, never fatal.
+#   note      why the row exists / what flips it
+#
+# Every row was run on the branch point (36f7a02f1b): each `kill` row is killed, each
+# `survive_until` row survives (see the PR body of `ci: mutation registry and job`).
+
+# --- C-L12: cross-game `.over("game_id")` guards in nfl/ep_wp.py ---------------------------------
+- id: ep-wp-lag-ep-end-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'lag_EP_end=pl.col("EP_end").shift(1).over("game_id"),'
+  mutant: 'lag_EP_end=pl.col("EP_end").shift(1),'
+  test: tests/nfl/test_ep_wp_epa.py::test_no_cross_game_leak
+  expected: kill
+  note: the one guard the suite pins today (rt-C-models-001); ledger gate real-concat-test (1.1)
+
+- id: ep-wp-lag-change-of-pos-team-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1).over("game_id"),'
+  mutant: 'lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1),'
+  test: tests/nfl/test_ep_wp_epa.py
+  expected:
+    survive_until: "1.1"
+  note: rt-C-models-001 (555 passed); 1.1's real two-game concat test is the killer
+
+- id: ep-wp-scoring-play-shift-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'pl.col("scoring_play").shift(1).over("game_id") == True,'
+  mutant: 'pl.col("scoring_play").shift(1) == True,'
+  test: tests/nfl/test_ep_wp_epa.py
+  expected:
+    survive_until: "1.1"
+  note: rt-C-models-002 (the EP_between / penalty branch)
+
+- id: ep-wp-lead-wp-before-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'lead_wp_before=pl.col("wp_before").shift(-1).over("game_id"),'
+  mutant: 'lead_wp_before=pl.col("wp_before").shift(-1),'
+  test: tests/nfl/test_ep_wp_epa.py
+  expected:
+    survive_until: "1.1"
+  note: C-L12 (calculate_wpa was never mutated by the audit; WPA tests have no concat case)
+
+# --- C-L20: a constant cp passes the ep_wp test module ------------------------------------------
+- id: ep-wp-constant-cp
+  finding: C-L20
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'pl.Series("cp", cp_preds.tolist(), dtype=pl.Float64)'
+  mutant: 'pl.Series("cp", [0.5] * len(cp_preds), dtype=pl.Float64)'
+  test: tests/nfl/test_nfl_ep_wp.py
+  expected:
+    survive_until: "1.5"
+  note: >-
+    rt-C-models-004: eleven return-type / not-null tests; nothing asserts a cp level on real pass
+    rows. C-L20 is listed only under task 1.6 in the plan (no task schedules the killing test);
+    1.5 (model gates) is the natural owner -- flagged in the 1.6 PR body.
+
+# --- C-M6: CFB overtime shootout threshold is period-based only -----------------------------------
+- id: cfb-ot-shootout-threshold-6
+  group: cfb-ot-thresholds
+  finding: C-M6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return (pl.col("period.number") >= 5) & ~last_td'
+  mutant: 'return (pl.col("period.number") >= 6) & ~last_td'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "overtime or shootout"
+  expected:
+    survive_until: "3.2"
+  note: rt-C-processing-002; 1.2 commits one capture per OT rule set, 3.2 adds test_cfb_overtime_eras.py
+
+- id: cfb-ot-shootout-threshold-7
+  group: cfb-ot-thresholds
+  finding: C-M6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return (pl.col("period.number") >= 5) & ~last_td'
+  mutant: 'return (pl.col("period.number") >= 7) & ~last_td'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "overtime or shootout"
+  expected:
+    survive_until: "3.2"
+  note: the only shootout fixture (401282146) has its first attempt in period 7, so >= 7 still passes
+
+# --- C-M13: the CFB second-half-kickoff team can be inverted unnoticed ---------------------------
+- id: cfb-first-half-kickoff-team-swap
+  finding: C-M13
+  file: sportsdataverse/cfb/cfb_pbp.py
+  # block scalars: the first line sets the indent, the np.where arms keep their 12 spaces
+  snippet: |-
+    == init["homeTeamId"]),
+                init["homeTeamId"],
+                init["awayTeamId"],
+  mutant: |-
+    == init["homeTeamId"]),
+                init["awayTeamId"],
+                init["homeTeamId"],
+  test: tests/cfb/test_cfb_pbp_offline.py
+  expected:
+    survive_until: "2.6"
+  note: >-
+    rt-C-processing-001 (517 passed). 1.2 adds the strict-xfail truth test on 400547866 (C-NF-2);
+    it kills this swap once 2.6 ports the game-wide constant and flips it to a plain assert.
+
+# --- C-H1: NFL second_level_yards half-yard (the CFB `-3` port never reached NFL) ----------------
+- id: nfl-second-level-yards-offset
+  finding: C-H1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 5))'
+  test: tests/nfl/test_nfl_pbp_sweep_fixes.py
+  expected:
+    survive_until: "2.1"
+  note: >-
+    Today the shipped code IS the audit's mutant (`- 4`); no offline NFL test pins the
+    decomposition, so a further half-yard survives. 2.1 ports `- 3` and 1.1's decomposition-sum
+    xfail becomes a plain assert: rewrite this row then as snippet `- 3)` / mutant `- 4)`,
+    test tests/nfl/test_nfl_whole_game_oracle.py, expected kill.
+
+# --- A-M10: the release read must stay use_pyarrow=True (polars 2.0 suffix-range -> HTTP 501) ----
+- id: codegen-runtime-use-pyarrow
+  finding: A-M10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return pl.read_parquet(url, use_pyarrow=True)'
+  mutant: 'return pl.read_parquet(url)'
+  test: tests/codegen/test_runtime_release.py
+  expected:
+    survive_until: "1.3"
+  note: rt A/releases (14 passed); 1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned)
+
+# --- B-M36: the NCAA capture clean-page check has no behavioural test ---------------------------
+- id: ncaa-capture-is-clean-always-true
+  finding: B-M36
+  file: sportsdataverse/scrape/ncaa/capture.py
+  snippet: 'return len(html) > _MIN_BYTES and len(_TR_RE.findall(html)) > _MIN_ROWS'
+  mutant: 'return True'
+  test: tests/scrape/test_scrape_ncaa_league.py
+  expected:
+    survive_until: "1.4"
+  note: rt-B-ncaa-stats-002 (175 passed); 1.4 adds tests/scrape/ncaa/test_capture_behaviour.py (ledger gate capture-behaviour)
+
+# --- B-M37: the Fox CFB end-to-end test cannot tell which side's snaps are mirrored --------------
+- id: fox-cfb-yardline-mirror-flip
+  finding: B-M37
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: 'return int(e["yardStart"])'
+  mutant: 'return 100 - int(e["yardStart"])'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py
+  expected:
+    survive_until: "1.4"
+  note: >-
+    B-H3 is live (away snaps mirrored); flipping the mirror onto the home snaps keeps
+    test_fox_cfb_pbp_full_pipeline green. 1.4's strict-xfail away-snap assert (ledger gate
+    fox-away-snap-xfail) goes XPASS under this mutant, i.e. red.
+
+# --- C-L30: the NHL faceoff gate cannot detect a skipped fit --------------------------------------
+- id: nhl-faceoff-skip-fit
+  finding: C-L30
+  file: sportsdataverse/nhl/nhl_faceoff_value.py
+  snippet: 'if taker_rows.height < 20 or len(feature_names) == 0:'
+  mutant: 'if True:'
+  test: tests/nhl/test_nhl_faceoff_value.py
+  expected:
+    survive_until: "1.5"
+  note: model-analytics-002 (4 passed with the fit skipped; the model then predicts 0.5 everywhere)
+
+# --- C-L21 / C-L22 / C-L34: rank-only ratings gates (ledger gate level-gates-beside-rank-gates) ---
+- id: nfl-ratings-adj-net-scaled
+  group: ratings-level
+  finding: C-L21
+  file: sportsdataverse/nfl/nfl_ratings.py
+  snippet: 'with_columns(adj_net=pl.col("adj_off_epa") - pl.col("adj_def_epa"))'
+  mutant: 'with_columns(adj_net=(pl.col("adj_off_epa") - pl.col("adj_def_epa")) * 10 + 5)'
+  test: tests/nfl/test_nfl_ratings_oracle.py
+  expected:
+    survive_until: "1.5"
+  note: model-models-004; both NFL ratings gates are rank-only
+
+- id: nba-team-ratings-no-opponent-adjustment
+  group: ratings-level
+  finding: C-L22
+  file: sportsdataverse/nba/nba_team_ratings.py
+  snippet: 'for _ in range(max_iter):'
+  mutant: 'for _ in range(0):'
+  test: tests/nba/test_nba_team_ratings_oracle.py
+  expected:
+    survive_until: "1.5"
+  note: model-models-005; a no-op opponent adjustment passes rho >= 0.95, bpi >= 0.85, mae <= 0.75
+
+- id: cfb-resume-sos-affine
+  group: ratings-level
+  finding: C-L34
+  file: sportsdataverse/cfb/cfb_resume.py
+  snippet: 'pl.col("opp_adj_net").mean().alias("sos"),'
+  mutant: '(pl.col("opp_adj_net").mean() * 5 + 3).alias("sos"),'
+  test: tests/cfb/test_cfb_resume_oracle.py
+  expected:
+    survive_until: "1.5"
+  note: model-analytics-007; resume gates are rank-only
