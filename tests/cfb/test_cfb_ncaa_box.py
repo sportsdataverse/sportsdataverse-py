@@ -10,6 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.cfb.cfb_ncaa_box import (
     DRIVES_SCHEMA,
@@ -185,6 +186,40 @@ def test_scoring_summary_rows_and_running_score() -> None:
     assert (df.item(-1, "score_away"), df.item(-1, "score_home")) == (27, 24)  # final
     assert df.filter(pl.col("period") <= 4).get_column("play_text").is_not_null().all()
     assert df.filter(pl.col("period") == 5).get_column("play_text").is_null().all()  # blank OT Play cell
+
+
+@pytest.mark.parametrize(
+    ("contest_id", "teams"),
+    [
+        ("5362283", ["Auburn", "California", "California", "California", "Auburn"]),
+        (
+            "6386512",
+            [
+                "Oregon St.",
+                "Oregon St.",
+                "Houston",
+                "Houston",
+                "Oregon St.",
+                "Oregon St.",
+                "Houston",
+                "Houston",
+                "Houston",
+            ],
+        ),
+        # the source alt is "Roosevelt " (trailing space): stripped, it joins the linescore name
+        ("5365797", ["Roosevelt"] * 2 + ["Valparaiso"] * 4 + ["Roosevelt"] * 3 + ["Valparaiso"] * 2),
+    ],
+)
+def test_scoring_summary_team_from_logo_alt(contest_id: str, teams: "list[str]") -> None:
+    """B-H4: the "Has Ball" cell is a bare ``<img alt="...">``; its text is empty on every row."""
+    html = (FIX / f"mfb_box_score_{contest_id}.html").read_text(encoding="utf-8")
+    df = parse_cfb_ncaa_scoring_summary(html)
+    assert df.get_column("team").null_count() == 0
+    assert df.get_column("team").to_list() == teams
+    # rule check: every score on these two pages is an offensive score, so the side with the ball scored
+    side = dict(parse_cfb_ncaa_linescore(html).select("home_away", "team").unique().iter_rows())
+    away_scored = df.get_column("score_away").diff().fill_null(df.get_column("score_away")) > 0
+    assert [side["away"] if a else side["home"] for a in away_scored] == teams
 
 
 def test_period_num_overtime_label_variants() -> None:
