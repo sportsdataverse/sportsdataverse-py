@@ -1,4 +1,4 @@
-"""Run ``NFLPlayProcess`` offline over the 34 committed ESPN captures, once per pytest worker.
+"""Run ``NFLPlayProcess`` offline over the 36 committed ESPN captures, once per pytest worker.
 
 Shared by ``test_nfl_whole_game_oracle.py`` and ``test_nfl_schema_allowlist.py`` (both are pinned
 to one xdist worker with ``xdist_group("nfl_whole_game")`` so the cache is shared). Provenance of
@@ -28,7 +28,7 @@ from sportsdataverse.nfl import NFLPlayProcess
 
 FIX = Path(__file__).parent / "fixtures"
 
-# The 33 trimmed summaries (30 from nfl-raw, 3 fetched live) plus the one full summary (401872922).
+# The 35 trimmed summaries (30 from nfl-raw, 5 fetched live) plus the one full summary (401872922).
 CAPTURES: tuple[int, ...] = tuple(sorted(int(p.name.split("_")[1].split(".")[0]) for p in FIX.glob("summary_*.json*")))
 
 

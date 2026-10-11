@@ -840,8 +840,8 @@
   group: nfl-end-state
   finding: EX-1.5-d
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'pl.when(use).then(n.field("team")).otherwise(pl.col("end.team.id")).alias("end.team.id"),'
-  mutant: 'pl.col("end.team.id").alias("end.team.id"),'
+  snippet: '.then(n.field("team"))'
+  mutant: '.then(pl.col("end.team.id"))'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_change_of_poss_is_nflverse_possession_change[401326467]
   expected: kill
   note: >-
@@ -852,8 +852,8 @@
   group: nfl-end-state
   finding: EX-1.5-d
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'pl.when(real_down).then(n.field("down")).otherwise(pl.col("end.down")).alias("end.down"),'
-  mutant: 'pl.col("end.down").alias("end.down"),'
+  snippet: '.then(n.field("down"))'
+  mutant: '.then(pl.col("end.down"))'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_first_down_created_is_nflverse_first_down[401326467]
   expected: kill
   note: >-
@@ -882,3 +882,53 @@
     The task 2.3 boundary: 2.18 replaces a down ESPN states, never its -1 (C-H5 kickoff returns,
     EX-1.1-c pre-2014 missed field goals). Filling -1 too XPASSes 2.3's strict xfails; 2.3 owns
     that fix and rewrites this row.
+
+- id: nfl-end-state-half-end-held
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& pl.col("type.text").is_in([*normalplay, "Penalty"]).fill_null(False)'
+  mutant: '& pl.lit(False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_plain_snap_without_a_next_play_keeps_possession[401326132]
+  expected: kill
+  note: >-
+    Review R785-2: with no next play in the half, the half's last plain snap kept ESPN's corrupt
+    end team (2021: 41 of 160 first-half finales published as possession changes). 401326132's
+    4th-and-1 conversion at :02 is stated for JAX by ESPN; nflverse has DEN keeping the ball.
+
+- id: nfl-end-state-score-exception
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'use = ~stop & ~score & pl.col("_nxt").is_not_null()'
+  mutant: 'use = ~stop & pl.col("_nxt").is_not_null()'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "offensive_score_keeps_possession and (261022011 or 291018018)"
+  expected: kill
+  note: >-
+    Review R785-3: a score keeps ESPN's end. Reading the next play instead turns a field goal
+    (261022011) and an extra point (291018018) into possession changes.
+
+- id: nfl-end-state-kick-exception
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.col("_nxt").is_not_null() & (n.field("kick") == False)'
+  mutant: 'pl.col("_nxt").is_not_null()'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "plain_snap_without_a_next_play_keeps_possession and (400951676 or 261022011)"
+  expected: kill
+  note: >-
+    Review R785-3: a kickoff's start is the receiving team's, so it cannot speak for the play
+    before it. Reading it hands a plain snap followed by a kickoff to the receiver.
+
+- id: nfl-end-state-half-end-down-from-yardage
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.when(gained).then(1).otherwise(pl.col("start.down") + 1))'
+  mutant: '.then(pl.col("end.down"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_ending_snap and 401326383"
+  expected: kill
+  note: >-
+    Review R785-2: keeping ESPN's end.down on a half-ending snap whose team is now kept credits
+    ESPN's garbled "1st & 10" as a first down (401326383's 6-yard run on 2nd & 17; 2021 first-half
+    finales agree with nflverse 0.42 with the team alone, 1.0 with the snap's own gain).

@@ -143,6 +143,8 @@ def test_end_team_flip_on_a_kept_possession_keeps_the_next_plays_perspective(wsh
     # offense's frame, near the next snap's wp_before (measured max 0.141), never its complement
     assert (flipped["end.pos_team.id"] == flipped["start.pos_team.id"]).all()
     assert (flipped["wp_after"] - flipped["_lead_wp_before"]).abs().max() < 0.15
+    lead = flipped["_lead_wp_before"]
+    assert (((flipped["wp_after"] - (1 - lead)).abs() > 0.05) | ((lead - 0.5).abs() < 0.05)).all()
     assert flipped["wpa"].abs().max() < 0.25
 
 

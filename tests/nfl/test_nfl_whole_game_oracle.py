@@ -1,6 +1,6 @@
 """Oracle-anchored whole-game characterization of ``NFLPlayProcess`` (quality program task 1.1).
 
-Every committed ESPN capture (``tests/nfl/fixtures/README.md``: 34 games, 2002-2026) is run offline
+Every committed ESPN capture (``tests/nfl/fixtures/README.md``: 36 games, 2002-2026) is run offline
 through the full pipeline and each column that has an oracle OUTSIDE this processor is asserted
 against it:
 
@@ -32,7 +32,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse.nfl.ep_wp import _derive_wpa, calculate_completion_probability, calculate_epa, calculate_wpa
-from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec
+from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec, normalplay, offense_score_vec
 from tests.nfl._whole_game import CAPTURES, FIX, run
 
 pytestmark = [pytest.mark.whole_game, pytest.mark.xdist_group("nfl_whole_game")]
@@ -176,7 +176,7 @@ def test_half_ending_play(game_id, boundary):
     "game_id",
     _cases(
         dict.fromkeys(
-            (400791590, 400874512, 401326467, 401671740),
+            (400791590, 400874512, 401326132, 401326383, 401326467, 401671740),
             "C-H5: ESPN's end.down -1 on a returned kickoff reaches the EP model (CFB rewrites it to 1)",
         )
     ),
@@ -521,6 +521,57 @@ def test_EX_1_5_d_epa_agrees_with_nflverse(game_id):
     ).row(0)
     assert corr >= _END_STATE[game_id][3], corr
     assert mae <= _END_STATE[game_id][4], mae
+
+
+# No next play speaks for a half's last play or a play followed by a kickoff (whose start is the
+# receiving team's). nflfastR keeps the snapping team's possession through a play that ends the
+# half (helper_add_ep_wp.R:710-728 scores it 0 - ep; drives and series group by game_half,
+# helper_add_fixed_drives.R:29): a plain snap that is not a 4th-down failure cannot hand the ball
+# over. 401326132 (2021_02_DEN_JAX) play 2030, "(:02) T.Bridgewater pass ... to JAX 23 for 30
+# yards" on 4th & 1, ends the half; ESPN states it for JAX, nflverse has posteam DEN, first_down 1
+# (review R785-2). The same rule covers 400951676's Q4 incompletion before a kickoff (R785-3).
+_HELD = (
+    pl.col("type.text").is_in([*normalplay, "Penalty"])
+    & ~_t("scoringPlay")
+    & (
+        pl.col("start.down").is_between(1, 3)
+        | ((pl.col("start.down") == 4) & (pl.col("statYardage") >= pl.col("start.distance")))
+    )
+).fill_null(False)
+
+
+@pytest.mark.parametrize("game_id", CAPTURES)
+def test_EX_1_5_d_plain_snap_without_a_next_play_keeps_possession(game_id):
+    half = pl.when(pl.col("period.number") <= 2).then(1).otherwise(2)
+    f = (
+        run(game_id)
+        .plays.filter(_PLAY)
+        .with_columns(_h=half, _nh=half.shift(-1), _nk=pl.col("type.text").shift(-1).is_in(kickoff_vec))
+    )
+    ends = f.filter(_HELD & (pl.col("_nh").is_null() | (pl.col("_nh") != pl.col("_h")) | _t("_nk")))
+    assert _bad(ends, ~_t("change_of_poss"), ["type.text", "start.down", "change_of_poss"]) == []
+
+
+# The half's last snap, ESPN-stated for the other team on "1st & 10": its first down follows from its
+# own gain. nflverse: 2021_02_DEN_JAX play 2030 posteam DEN, 4th & 1, first_down 1; 2021_04_CAR_DAL
+# play 2167 posteam CAR, 2nd & 17, 6 yards, first_down 0.
+_HALF_END_ROWS = {(401326132, 4013261322030): True, (401326383, 4013263832167): False}
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_HALF_END_ROWS))
+def test_EX_1_5_d_half_ending_snap_keeps_the_ball_and_its_own_first_down(game_id, play_id):
+    row = run(game_id).plays.filter(pl.col("id") == play_id).row(0, named=True)
+    assert (row["change_of_poss"], row["first_down_created"]) == (False, _HALF_END_ROWS[(game_id, play_id)])
+
+
+# A score keeps ESPN's end (stated for the scorer; the try follows). An offensive score does not
+# hand the ball over on the play itself: the scorer kicks off next (R785-3).
+@pytest.mark.parametrize("game_id", CAPTURES)
+def test_EX_1_5_d_offensive_score_keeps_possession(game_id):
+    f = run(game_id).plays.filter(
+        _t("scoringPlay") & pl.col("type.text").is_in([*offense_score_vec, "Extra Point Good"])
+    )
+    assert _bad(f, ~_t("change_of_poss"), ["type.text", "change_of_poss"]) == []
 
 
 # ---------------------------------------------------------------------------------------------

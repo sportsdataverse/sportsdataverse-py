@@ -1,3 +1,3 @@
-- **NFL:** a play's end team/down/distance (so `change_of_poss`, `first_down_created`, EPA, WP-after) come
-  from the next play in the game and half, not ESPN's `end`, which is corrupt for 2014-2021 (2021: 30% of
-  plain plays); the published 2014-2021 ESPN NFL pbp and everything built from it need the reprocess.
+- **NFL:** `NFLPlayProcess` (ESPN and the CBS/Fox/Yahoo/Shield adapters) takes a play's end team/down/distance from
+  the next play in the game and half, and keeps a half-ending plain snap's possession, not ESPN's `end` (corrupt
+  2014-2021); the published 2014-2021 ESPN NFL pbp and everything built from it need the reprocess.

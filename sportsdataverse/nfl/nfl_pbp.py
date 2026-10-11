@@ -452,11 +452,16 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
     ESPN's 2014-2021 feed states a growing share of play ``end`` objects with the defense's team
     id and a down/distance that does not follow from the play (2021: 30% of plain scrimmage
     plays), while the yard line stays right. nflfastR reads possession change and the next state
-    off the next play; so does this, for ``end.team.id`` and ``end.down`` / ``end.distance``. ESPN's
-    ``end`` stays where no next play speaks for the play: the half's last play, a score (its end is
-    stated for the scorer and the try follows), and a play followed by a kickoff. A down is only
-    replaced where ESPN states one (1-4): its ``-1`` on returned kickoffs and pre-2014 missed field
-    goals is C-H5 / EX-1.1-c (task 2.3).
+    off the next play; so does this, for ``end.team.id`` and ``end.down`` / ``end.distance``. No next
+    play speaks for a score (its end is stated for the scorer and the try follows), the half's last
+    play, or a play followed by a kickoff. A score keeps ESPN's ``end``. On the other two a plain
+    snap (``normalplay`` or a penalty, on downs 1-3 or a 4th down that gains the line) keeps the
+    ball, as nflfastR's possession does when a half ends (``helper_add_ep_wp.R:710-728`` scores
+    it ``0 - ep``; drives and series are grouped by ``game_half``,
+    ``helper_add_fixed_drives.R:29``), and a ``normalplay`` snap's down and distance follow from its
+    own gain (a penalty keeps ESPN's). Anything else keeps ESPN's ``end``. A down is only
+    replaced where ESPN states one (1-4): its ``-1`` on returned kickoffs and pre-2014
+    missed field goals is C-H5 / EX-1.1-c (task 2.3).
     """
     stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
     # the next real play of the same game and half (clock stoppages in between skipped)
@@ -468,18 +473,46 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
     )
     plays = plays.with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("game_id", "half"))
     n = pl.col("_nxt").struct
-    use = (
+    # the snap's own gain, from ESPN's yard lines (right where its end team and down are not, and
+    # unlike statYardage it counts a lateral's whole gain); an incompletion gains nothing
+    home = pl.col("start.pos_team.id") == pl.col("homeTeamId")
+
+    def _to_go(side: str) -> pl.Expr:
+        line = pl.col(f"{side}.yardLine").cast(pl.Int64, strict=False)
+        return pl.when(home).then(100 - line).otherwise(line)
+
+    gain = pl.when(pl.col("type.text") == "Pass Incompletion").then(0).otherwise(_to_go("start") - _to_go("end"))
+    gained = gain >= pl.col("start.distance")
+    score = pl.col("scoringPlay").fill_null(False) | pl.col("type.text").is_in(scores_vec).fill_null(False)
+    use = ~stop & ~score & pl.col("_nxt").is_not_null() & (n.field("kick") == False)
+    held = (
         ~stop
-        & pl.col("_nxt").is_not_null()
-        & (n.field("kick") == False)  # noqa: E712
-        & ~pl.col("scoringPlay").fill_null(False)
-        & ~pl.col("type.text").is_in(scores_vec).fill_null(False)
+        & ~score
+        & ~use
+        & pl.col("type.text").is_in([*normalplay, "Penalty"]).fill_null(False)
+        & (pl.col("start.down").is_between(1, 3) | ((pl.col("start.down") == 4) & gained)).fill_null(False)
     )
+    held_snap = held & pl.col("type.text").is_in(normalplay).fill_null(False) & gain.is_not_null()
     real_down = use & pl.col("end.down").is_between(1, 4) & n.field("down").is_between(1, 4) & (n.field("dist") > 0)
     return plays.with_columns(
-        pl.when(use).then(n.field("team")).otherwise(pl.col("end.team.id")).alias("end.team.id"),
-        pl.when(real_down).then(n.field("down")).otherwise(pl.col("end.down")).alias("end.down"),
-        pl.when(real_down).then(n.field("dist")).otherwise(pl.col("end.distance")).alias("end.distance"),
+        pl.when(use)
+        .then(n.field("team"))
+        .when(held)
+        .then(pl.col("start.pos_team.id"))
+        .otherwise(pl.col("end.team.id"))
+        .alias("end.team.id"),
+        pl.when(real_down)
+        .then(n.field("down"))
+        .when(held_snap)
+        .then(pl.when(gained).then(1).otherwise(pl.col("start.down") + 1))
+        .otherwise(pl.col("end.down"))
+        .alias("end.down"),
+        pl.when(real_down)
+        .then(n.field("dist"))
+        .when(held_snap)
+        .then(pl.when(gained).then(10).otherwise(pl.col("start.distance") - gain))
+        .otherwise(pl.col("end.distance"))
+        .alias("end.distance"),
     ).drop("_nxt")
 
 
