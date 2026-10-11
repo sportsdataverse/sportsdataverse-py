@@ -1,6 +1,6 @@
 {
-  "commit": "64854a7de0",
-  "measured_at": "2026-10-11T07:16:19+00:00",
+  "commit": "037af00969 (devel-program-setup after #748)",
+  "measured_at": "2026-10-11T08:45:20+00:00",
   "metrics": {
     "handwritten_files": {
       "value": 686,
@@ -8,7 +8,7 @@
       "label": "Hand-written modules"
     },
     "handwritten_lines": {
-      "value": 241209,
+      "value": 241220,
       "better": "info",
       "label": "Hand-written lines"
     },
@@ -38,7 +38,7 @@
       "label": "Files in the mypy strict list"
     },
     "lint_outdated_syntax": {
-      "value": 6785,
+      "value": 6867,
       "better": "lower",
       "label": "Outdated syntax a newer Python spells shorter (ruff UP)"
     },
@@ -53,7 +53,7 @@
       "label": "Code with a simpler equivalent (ruff SIM)"
     },
     "lint_likely_bugs": {
-      "value": 13,
+      "value": 104,
       "better": "lower",
       "label": "Likely-bug patterns such as mutable defaults (ruff B)"
     },
@@ -73,7 +73,7 @@
       "label": "Slow loop patterns (ruff PERF)"
     },
     "lint_ruff_specific": {
-      "value": 307,
+      "value": 310,
       "better": "lower",
       "label": "Ruff-specific correctness and style rules (ruff RUF, without RUF100)"
     },
@@ -174,15 +174,17 @@
     "most_lint_findings_by_file": [
       {
         "file": "sportsdataverse/_fox_layout.py",
-        "total": 171,
+        "total": 178,
         "UP": 162,
+        "B": 7,
         "PERF": 9
       },
       {
         "file": "sportsdataverse/cfb/cfb_fox_ext.py",
-        "total": 153,
+        "total": 158,
         "UP": 147,
         "RUF": 1,
+        "B": 5,
         "PERF": 4,
         "C4": 1
       },
@@ -194,9 +196,10 @@
       },
       {
         "file": "sportsdataverse/nba/nba_lineups.py",
-        "total": 117,
+        "total": 121,
         "UP": 112,
         "ARG": 2,
+        "B": 4,
         "PERF": 2,
         "C901": 1
       },
@@ -213,8 +216,9 @@
       },
       {
         "file": "sportsdataverse/_common_espn_parsers.py",
-        "total": 112,
+        "total": 114,
         "UP": 89,
+        "B": 2,
         "RUF": 12,
         "F841": 1,
         "C901": 4,
@@ -233,7 +237,8 @@
       },
       {
         "file": "sportsdataverse/nfl/nfl_pbp.py",
-        "total": 105,
+        "total": 106,
+        "B": 1,
         "UP": 4,
         "C901": 2,
         "PLR0912": 2,
@@ -251,24 +256,35 @@
       },
       {
         "file": "sportsdataverse/cfb/cfb_ncaa_cfbfastr.py",
-        "total": 98,
+        "total": 100,
         "UP": 87,
         "C901": 2,
         "PLR0912": 2,
         "PLR0915": 1,
         "C4": 2,
+        "B": 2,
         "SIM": 1,
         "NOQA_NOT_RUN": 3
       },
       {
         "file": "sportsdataverse/football/fox_common.py",
-        "total": 97,
+        "total": 98,
         "UP": 90,
         "C901": 2,
         "PLR0912": 2,
         "PLR0915": 1,
         "ARG": 1,
-        "SIM": 1
+        "SIM": 1,
+        "B": 1
+      },
+      {
+        "file": "sportsdataverse/cfb/cfb_standings.py",
+        "total": 95,
+        "UP": 86,
+        "RUF": 1,
+        "C901": 1,
+        "PLR0912": 1,
+        "NOQA_NOT_RUN": 6
       },
       {
         "file": "sportsdataverse/odds/the_odds_api.py",
@@ -279,13 +295,27 @@
         "PERF": 1
       },
       {
-        "file": "sportsdataverse/cfb/cfb_standings.py",
-        "total": 93,
-        "UP": 84,
-        "RUF": 1,
-        "C901": 1,
-        "PLR0912": 1,
-        "NOQA_NOT_RUN": 6
+        "file": "sportsdataverse/nfl/cbs_pbp/to_espn_summary.py",
+        "total": 88,
+        "UP": 74,
+        "C901": 4,
+        "PLR0912": 3,
+        "PERF": 1,
+        "PLR0915": 1,
+        "B": 2,
+        "SIM": 1,
+        "ARG": 1,
+        "NOQA_NOT_RUN": 1
+      },
+      {
+        "file": "sportsdataverse/mbb/mbb_ncaa_schedule.py",
+        "total": 87,
+        "UP": 81,
+        "C4": 2,
+        "PLR0915": 1,
+        "B": 1,
+        "ARG": 1,
+        "RUF": 1
       },
       {
         "file": "sportsdataverse/mbb/mbb_fox_ext.py",
@@ -294,31 +324,23 @@
         "RUF": 1
       },
       {
-        "file": "sportsdataverse/mbb/mbb_ncaa_schedule.py",
+        "file": "sportsdataverse/wbb/wbb_fox_ext.py",
         "total": 86,
-        "UP": 81,
-        "C4": 2,
-        "PLR0915": 1,
-        "ARG": 1,
+        "UP": 85,
         "RUF": 1
       },
       {
-        "file": "sportsdataverse/nfl/cbs_pbp/to_espn_summary.py",
-        "total": 86,
-        "UP": 74,
-        "C901": 4,
+        "file": "sportsdataverse/cfb/cbs_pbp/to_espn_summary.py",
+        "total": 85,
+        "UP": 71,
+        "C901": 3,
         "PLR0912": 3,
+        "B": 3,
         "PERF": 1,
         "PLR0915": 1,
         "SIM": 1,
         "ARG": 1,
         "NOQA_NOT_RUN": 1
-      },
-      {
-        "file": "sportsdataverse/wbb/wbb_fox_ext.py",
-        "total": 86,
-        "UP": 85,
-        "RUF": 1
       },
       {
         "file": "sportsdataverse/nfl/yahoo_pbp/to_espn_summary.py",
@@ -327,18 +349,6 @@
         "C901": 3,
         "PLR0912": 3,
         "PLR0915": 2,
-        "ARG": 1,
-        "NOQA_NOT_RUN": 1
-      },
-      {
-        "file": "sportsdataverse/cfb/cbs_pbp/to_espn_summary.py",
-        "total": 82,
-        "UP": 71,
-        "C901": 3,
-        "PLR0912": 3,
-        "PERF": 1,
-        "PLR0915": 1,
-        "SIM": 1,
         "ARG": 1,
         "NOQA_NOT_RUN": 1
       },
@@ -353,6 +363,20 @@
         "NOQA_NOT_RUN": 1
       },
       {
+        "file": "sportsdataverse/cfb/cfb_pbp.py",
+        "total": 79,
+        "B": 1,
+        "RUF": 6,
+        "UP": 4,
+        "ARG": 2,
+        "C901": 4,
+        "PLR0912": 1,
+        "SIM": 4,
+        "PLR0915": 4,
+        "RET": 14,
+        "NOQA_NOT_RUN": 39
+      },
+      {
         "file": "sportsdataverse/nba/nba_fox_ext.py",
         "total": 79,
         "UP": 78,
@@ -365,31 +389,19 @@
         "RUF": 1
       },
       {
-        "file": "sportsdataverse/cfb/cfb_pbp.py",
-        "total": 78,
-        "RUF": 6,
-        "UP": 4,
-        "ARG": 2,
-        "C901": 4,
-        "PLR0912": 1,
-        "SIM": 4,
-        "PLR0915": 4,
-        "RET": 14,
-        "NOQA_NOT_RUN": 39
+        "file": "sportsdataverse/nba/nba_model_validation.py",
+        "total": 76,
+        "UP": 69,
+        "RUF": 3,
+        "ARG": 1,
+        "B": 2,
+        "C4": 1
       },
       {
         "file": "sportsdataverse/cfb/cfb_yahoo_ext.py",
         "total": 75,
         "UP": 74,
         "RUF": 1
-      },
-      {
-        "file": "sportsdataverse/nba/nba_v3_v2_adapter.py",
-        "total": 75,
-        "UP": 71,
-        "C901": 2,
-        "PLR0912": 1,
-        "PLR0915": 1
       }
     ]
   }
