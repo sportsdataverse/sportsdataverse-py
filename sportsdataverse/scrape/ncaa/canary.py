@@ -461,12 +461,15 @@ def scorecard(vendor: dict, rows: list[dict], n_games: int) -> str:
 
 
 def _toml_loads(text: str) -> dict[str, Any]:
-    """Parse TOML on every supported Python: ``tomllib`` is 3.11+, ``tomli`` covers 3.10."""
+    """Parse TOML on every supported Python: ``tomllib`` is 3.11+, ``tomli`` (declared for
+    ``python_version < '3.11'``) covers 3.10. The only TOML entry point in the package;
+    ``capture._vendor_fetcher`` reads the same vendor config through it.
+    """
     if sys.version_info >= (3, 11):
         import tomllib
 
         return tomllib.loads(text)
-    import tomli  # ponytail: 3.10 only; not a declared dep (pytest/mypy carry it on <3.11)
+    import tomli
 
     return tomli.loads(text)
 
