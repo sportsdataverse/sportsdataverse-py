@@ -84,7 +84,7 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 <!-- BEGIN generated: leagues-and-sources -->
 | League | Module | Data sources |
 |---|---|---|
-| [NBA](nba/) | `sportsdataverse.nba` | ESPN (122), sportsdataverse-data releases (42), NBA Stats API (130), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
+| [NBA](nba/) | `sportsdataverse.nba` | ESPN (122), sportsdataverse-data releases (53), NBA Stats API (130), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
 | [WNBA](wnba/) | `sportsdataverse.wnba` | ESPN (123), sportsdataverse-data releases (39), WNBA Stats API (113), Fox Sports API (26) |
 | [NBA G League](nbagl/) | `sportsdataverse.nbagl` | ESPN (112) |
 | [MBB](mbb/) | `sportsdataverse.mbb` | ESPN (128), sportsdataverse-data releases (34), stats.ncaa.org (118), KenPom (32), Bart Torvik T-Rank (5), Fox Sports API (27) |

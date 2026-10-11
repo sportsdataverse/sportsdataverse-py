@@ -30,6 +30,7 @@ __all__ = [
     "load_nba_rosters",
     "load_nba_stats_schedules",
     "load_nba_stats_coaches",
+    "load_nba_stats_draft",
     "load_nba_stats_game_rosters",
     "load_nba_stats_lineups",
     "load_nba_stats_lineups_v3",
@@ -1143,6 +1144,79 @@ def load_nba_stats_coaches(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_nba_stats_coaches: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_draft(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_draft (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_draft
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_draft(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
+
+        |col_name            |type   |
+        |:-------------------|:------|
+        |person_id           |Int64  |
+        |player_name         |String |
+        |season              |Int32  |
+        |round_number        |Int64  |
+        |round_pick          |Int64  |
+        |overall_pick        |Int64  |
+        |draft_type          |String |
+        |team_id             |Int64  |
+        |team_city           |String |
+        |team_name           |String |
+        |team_abbreviation   |String |
+        |organization        |String |
+        |organization_type   |String |
+        |player_profile_flag |Int64  |
+
+    Note:
+        ``seasons`` is the draft year: ``load_nba_stats_draft(2025)`` returns the June 2025 draft, read from ``draft_2026.parquet``, whose rows carry ``season`` 2026 (the END year of the 2025-26 season the picks enter). ``season`` is Int32 in this asset, not the Int64 of the other nba_stats loaders.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1996.
+
+    Example:
+        Quick start::
+
+            load_nba_stats_draft(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_draft/draft_{season + 1}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_draft: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
