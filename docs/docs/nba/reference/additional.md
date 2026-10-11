@@ -155,8 +155,11 @@ not covered by the generated API-endpoint reference above.
 | [expected_possessions](additional/models-and-calculators.md#expected_possessions) | Expected possessions for a matchup (Pythagorean-tempo blend). |
 | [external_validity](additional/models-and-calculators.md#external_validity) | Oracle 5: correlate a model's ratings against a published external metric. |
 | [fit_aging_curve](additional/models-and-calculators.md#fit_aging_curve) | Fit the aging curve by the delta method: avg YoY rating change grouped by starting age. |
+| [game_minutes](additional/models-and-calculators.md#game_minutes) | Minutes played in a game of `periods` periods: the league's regulation length plus five per overtime. |
+| [game_page_frames](additional/models-and-calculators.md#game_page_frames) | Everything the Game on Paper NBA game page needs, from one `espn_nba_pbp` payload. |
 | [get_constants](additional/models-and-calculators.md#get_constants) | Return the `LeagueConstants` for a `league_id`. |
 | [get_shrinkage_k](additional/models-and-calculators.md#get_shrinkage_k) | Shooter-talent shrinkage `k` for a league. |
+| [home_prior](additional/models-and-calculators.md#home_prior) | Pregame home win probability for the in-game model, and where it came from. |
 | [in_game_features](additional/models-and-calculators.md#in_game_features) | Per-play in-game win-probability features from a `load_nba_pbp` frame. |
 | [luck_adjusted_response](additional/models-and-calculators.md#luck_adjusted_response) | Attach a per-possession `la_points` expected-points response. |
 | [nba_adj_rapm](additional/models-and-calculators.md#nba_adj_rapm) | 5179.47467923,  13894.95494373,  37275.93720315, 100000.        ]), n_samples: 'int' = 200, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> … |
@@ -171,15 +174,20 @@ not covered by the generated API-endpoint reference above.
 | [nba_in_game_win_prob](additional/models-and-calculators.md#nba_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
 | [nba_la_rapm](additional/models-and-calculators.md#nba_la_rapm) | Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed). |
 | [nba_matchup_drapm](additional/models-and-calculators.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
-| [nba_predict_games](additional/models-and-calculators.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
-| [nba_rookie_projection](additional/models-and-calculators.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |
+| [nba_predict_games](additional/models-and-calculators-2.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
+| [nba_rookie_projection](additional/models-and-calculators-2.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |
 | [nba_spm](additional/models-and-calculators-2.md#nba_spm) | Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM. |
 | [nba_team_ratings](additional/models-and-calculators-2.md#nba_team_ratings) | Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware. |
 | [nba_war](additional/models-and-calculators-2.md#nba_war) | Points-above-replacement -> wins for each player. |
+| [ot_adjusted_seconds](additional/models-and-calculators-2.md#ot_adjusted_seconds) | Tag overtime rows and give them the OT period clock as their seconds remaining. |
+| [player_game_rates](additional/models-and-calculators-2.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
 | [predict_margin](additional/models-and-calculators-2.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
 | [predict_total](additional/models-and-calculators-2.md#predict_total) | Expected total points from adjusted ratings and paces. |
 | [raw_game_efficiency](additional/models-and-calculators-2.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
 | [render_report](additional/models-and-calculators-2.md#render_report) | Render a `ValidationReport` as a human-readable markdown validation card. |
+| [score_win_prob](additional/models-and-calculators-2.md#score_win_prob) | Per-play home win probability, its play-to-play delta, and the prior, for one game. |
+| [shot_coordinates](additional/models-and-calculators-2.md#shot_coordinates) | Shot locations in the court frame the Game on Paper hex chart uses. |
+| [team_game_rates](additional/models-and-calculators-2.md#team_game_rates) | Four factors, possessions, ratings and pace for both teams of one game. |
 | [train_spm](additional/models-and-calculators-2.md#train_spm) | Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions). |
 | [validate_model](additional/models-and-calculators-2.md#validate_model) | Run the selected oracles and assemble a `ValidationReport`. |
 | [walk_forward](additional/models-and-calculators-2.md#walk_forward) | Oracle 6: time-ordered "predict tomorrow" retrodiction. |

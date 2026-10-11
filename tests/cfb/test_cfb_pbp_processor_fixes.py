@@ -756,3 +756,78 @@ def test_team_is_not_an_extra_point_kicker():
     plays = _trimmed_plays_with_texts(282432641, {"Felipe Macias extra point GOOD.": ["Team extra point GOOD."]})
     row = _row(plays, "Team extra point GOOD.")
     assert (row["xp_attempt"], row["xp_made"], row["xp_kicker_player_name"]) == (True, True, None)
+
+
+# --- R10: kneel-downs and yardless vendor rushes carry their yardage ----------------------------
+
+
+@pytest.mark.parametrize(
+    "game_id, expected",
+    [
+        (401636929, [-2, -2]),  # 2024 "[NHSG] Kneel down by TEAM at WVU48 (team loss of 2)."
+        (401752746, [-2, -1]),  # 2025 "Kneel down by #12 A.Daniels at ARK48 for loss of 2 yards"
+        (401628455, [-2]),  # "D. Brown takes a knee": the text has no number; ESPN's statYardage does
+        (401752844, [-3, -3]),
+    ],
+)
+def test_kneel_down_yardage_is_parsed(game_id, expected):
+    # Every 2022-25 kneel came out with null yds_rushed (383 / 801 / 960 / 1,027 rows), which dropped
+    # the victory-formation losses from team rushing; ESPN's box counts them. 2025 team rushing yards
+    # matched the box in 45.9% of team-games before this, 63.9% after.
+    kneels = _plays(game_id).filter(pl.col("text").str.contains(r"(?i)kneel down|takes a knee"))
+    assert kneels["kneel_down"].to_list() == [True] * len(expected)
+    assert kneels["yds_rushed"].to_list() == expected
+
+
+def test_kneel_text_loss_wins_over_a_zero_stat_yardage():
+    # 2024 vendor kneels often carry statYardage 0 beside "(team loss of 2)": the text is the record.
+    row = _row(_plays(401636929), "Kneel down by TEAM at WVU48 (team loss of 2)")
+    assert row["yds_rushed"] == -2
+
+
+def test_yardless_vendor_rush_takes_espn_stat_yardage():
+    # "Wolff,Hayden rush left (Murdock,Red)." states no yardage at all; ESPN's statYardage agrees
+    # with the text-parsed yards on 99.98% of plain rushes, so it is the fallback.
+    plays = _plays(401644749).filter(
+        pl.col("text").str.contains(r"^[A-Z][a-z]+,[A-Za-z]+ rush (?:left|right|middle) \(")
+    )
+    assert plays.height > 0
+    assert plays["yds_rushed"].to_list() == plays["statYardage"].to_list()
+
+
+def test_pre_2014_directional_rush_takes_espn_stat_yardage():
+    # 2004-13 "Adam Muema rush up the middle for 21 yards to the SJSt 20" matched no "rush for"
+    # reader (the direction words sit between them): ~11k "up the middle" and ~9k "left/right side"
+    # rushes in 2007-13 had null yds_rushed. statYardage equals the text yards on 99.98% of plain
+    # rushes in those seasons, so every non-fumble, non-penalty rush now carries it.
+    plays = _plays(333130023)
+    rushes = plays.filter(
+        (pl.col("rush") == True) & (pl.col("fumble_vec") == False) & (pl.col("penalty_flag") == False)
+    )
+    assert rushes["yds_rushed"].null_count() == 0
+    row = _row(plays, "Adam Muema rush up the middle for 21 yards to the SJSt 20")
+    assert row["yds_rushed"] == 21
+
+
+def test_kneels_are_not_stuffed_or_stopped_runs():
+    # Kneels now carry their loss in yds_rushed; that must not make them stuffed / stopped carries.
+    kneels = _plays(401636929).filter(pl.col("kneel_down") == True)
+    assert kneels.height == 2
+    assert kneels["stuffed_run"].to_list() == [False, False]
+    assert kneels["stopped_run"].to_list() == [False, False]
+
+
+def test_yardless_rush_naming_a_foul_does_not_take_stat_yardage():
+    # A foul named without the word "penalty" leaves penalty_flag False but sets penalty_detail;
+    # statYardage there can carry the enforcement, so the fallback must not read it.
+    summary = _summary(401644749)
+    needle = re.compile(r"^[A-Z][a-z]+,[A-Za-z]+ rush (?:left|right|middle) \(")
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    target = next(p for p in plays if needle.search(p.get("text") or ""))
+    target["text"] = target["text"] + " Holding on #55 enforced."
+    proc = CFBPlayProcess(gameId=401644749)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    row = _row(proc.plays_frame, target["text"])
+    assert row["penalty_detail"] is not None
+    assert row["yds_rushed"] is None
