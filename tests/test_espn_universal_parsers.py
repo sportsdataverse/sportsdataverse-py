@@ -12,6 +12,10 @@ Live integration tests live in ``test_espn_live.py`` (gated by
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+from typing import Any, Dict, List
+
 import polars as pl
 import pytest
 
@@ -831,14 +835,24 @@ def _catalog_parser_names() -> set[str]:
     return {ep.parser for api in apis for ep in api.endpoints if ep.parser}
 
 
+def _ext_modules() -> list:
+    """Every generated ``*_espn_ext.py``, at any depth (the soccer leagues sit two levels down)."""
+    return sorted((Path(__file__).parents[1] / "sportsdataverse").rglob("*_espn_ext.py"))
+
+
+def _leagues() -> list:
+    from tools.codegen import generate, spec
+
+    return spec.load_leagues(generate.ENDPOINTS / "leagues.yaml").leagues
+
+
 def _generated_parser_imports() -> set[str]:
     """Every ``parse_*`` name imported from ``_common_espn_parsers`` by any
     generated ``*_espn_ext`` module."""
     import ast
-    from pathlib import Path
 
     out: set[str] = set()
-    for path in Path("sportsdataverse").glob("*/*_espn_ext.py"):
+    for path in _ext_modules():
         tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom) and node.module == "sportsdataverse._common_espn_parsers":
@@ -870,47 +884,31 @@ def test_generated_modules_import_only_defined_parsers():
     assert not undefined, f"generated modules import {len(undefined)} undefined parsers: {sorted(undefined)}"
 
 
-def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
+def test_parser_import_scan_covers_all_modules():
+    """A-L15: the scan reads every league's ext module (thirty today), not the 11 a depth-1 glob saw."""
+    stems = {p.stem for p in _ext_modules()}
+    assert stems == {f"{lg.prefix}_espn_ext" for lg in _leagues()} and len(stems) >= 30
+
+
+def test_return_parsed_shim_active_on_every_wrapper_all_modules():
     """The return_parsed kwarg must appear in the signature of every
-    bound wrapper across all 7 league extension modules."""
+    bound wrapper of every league module in leagues.yaml (A-L15, A-L54)."""
+    import importlib
     import inspect
 
-    import sportsdataverse.cfb.cfb_espn_ext as cfb_mod
-    import sportsdataverse.mbb.mbb_espn_ext as mbb_mod
-    import sportsdataverse.mlb.mlb_espn_ext as mlb_mod
-    import sportsdataverse.nba.nba_espn_ext as nba_mod
-    import sportsdataverse.nfl.nfl_espn_ext as nfl_mod
-    import sportsdataverse.wbb.wbb_espn_ext as wbb_mod
-    import sportsdataverse.wnba.wnba_espn_ext as wnba_mod
-    from sportsdataverse.cfb.cfb_espn_ext import __all__ as cfb_all
-    from sportsdataverse.mbb.mbb_espn_ext import __all__ as mbb_all
-    from sportsdataverse.mlb.mlb_espn_ext import __all__ as mlb_all
-    from sportsdataverse.nba.nba_espn_ext import __all__ as nba_all
-    from sportsdataverse.nfl.nfl_espn_ext import __all__ as nfl_all
-    from sportsdataverse.wbb.wbb_espn_ext import __all__ as wbb_all
-    from sportsdataverse.wnba.wnba_espn_ext import __all__ as wnba_all
-
-    leagues = [
-        ("nba", nba_all, nba_mod),
-        ("wnba", wnba_all, wnba_mod),
-        ("mbb", mbb_all, mbb_mod),
-        ("wbb", wbb_all, wbb_mod),
-        ("cfb", cfb_all, cfb_mod),
-        ("nfl", nfl_all, nfl_mod),
-        ("mlb", mlb_all, mlb_mod),
-    ]
     missing = []
     total = 0
-    for league, names, mod in leagues:
-        for name in names:
+    for lg in _leagues():
+        parts = [lg.group, lg.prefix] if lg.group else [lg.prefix]
+        mod = importlib.import_module(".".join(["sportsdataverse", *parts, f"{lg.prefix}_espn_ext"]))
+        for name in mod.__all__:
             fn = getattr(mod, name, None)
             if fn is None or not callable(fn):
                 continue
             total += 1
-            sig = inspect.signature(fn)
-            if "return_parsed" not in sig.parameters:
-                missing.append(f"{league}.{name}")
-    assert total >= 750, f"sanity check: expected >=750 wrappers across 7 leagues, got {total}"
+            if "return_parsed" not in inspect.signature(fn).parameters:
+                missing.append(f"{lg.prefix}.{name}")
+    assert total >= 3000, f"sanity check: expected >=3000 wrappers across {len(_leagues())} leagues, got {total}"
     assert not missing, f"{len(missing)} wrappers missing the return_parsed shim: {missing[:10]}..."
 
 
@@ -1230,3 +1228,206 @@ def test_rankings_wrapper_routes_through_parse_rankings(monkeypatch):
     monkeypatch.setattr(ext, "_get", lambda *args, **kwargs: fixture)
     assert ext.espn_cfb_rankings(return_parsed=False) is fixture
     assert ext.espn_cfb_rankings().height == _RANKINGS_ROWS["cfb"]
+
+
+# ===========================================================================
+# Hostile bodies and the dtype snapshot (A-M2, A-L16, A-L17, A-M13, A-M14, A-M15)
+# ===========================================================================
+#
+# Every registered parser (ENDPOINT_PARSERS plus the curated returns-schema parsers) is fed
+# five hostile bodies; the parser contract is a zero-row frame, or a vocabulary raise
+# (NoDataError / AssetFetchError) when the body is an error. The error envelope is ESPN's
+# own (tests/fixtures/runtime_errors/espn_site_roster_400.json). Every committed top-level
+# ESPN capture is parsed by its endpoint's parser and its (column, dtype) set compared with
+# tests/espn_parser_dtype_snapshot.json; regenerate that file with
+# ``python -m tests.test_espn_universal_parsers`` only for a deliberate dtype change.
+
+_SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
+_ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
+# Captures no registered parser reads (kept for other tests).
+_NO_PARSER = {"athlete_statslog_lbj", "depthcharts_mlb", "depthcharts_nba", "depthcharts_nfl", "depthcharts_nhl"}
+
+
+def _registered() -> Dict[str, Any]:
+    """``{short: parser}``: the registry, plus the curated returns-schema parsers it lacks (``teams``)."""
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS
+    from tools.codegen import generate
+
+    return {**{k: fn for k, (fn, _) in generate._return_schema_parsers().items()}, **ENDPOINT_PARSERS}
+
+
+def _parsers() -> Dict[str, Any]:
+    return {fn.__name__: fn for fn in _registered().values()}
+
+
+def _captures() -> Dict[str, str]:
+    """``{fixture stem: short}`` for every top-level ESPN capture a registered parser reads."""
+    shorts = sorted(_registered(), key=len, reverse=True)
+    out = {}
+    for fx in sorted(_ESPN_FIX.glob("*.json")):
+        short = next((s for s in shorts if fx.stem.startswith(s + "_")), None)
+        if short is not None:
+            out[fx.stem] = short
+    return out
+
+
+def _frames(out: Any) -> Dict[str, pl.DataFrame]:
+    if isinstance(out, pl.DataFrame):
+        return {"": out}
+    assert isinstance(out, dict) and all(isinstance(v, pl.DataFrame) for v in out.values()), type(out)
+    return out
+
+
+def _dtype_snapshot() -> Dict[str, Dict[str, Dict[str, str]]]:
+    reg = _registered()
+    return {
+        stem: {sec: {c: str(t) for c, t in df.schema.items()} for sec, df in _frames(reg[short](_load(stem))).items()}
+        for stem, short in _captures().items()
+    }
+
+
+_ENVELOPE = json.loads((Path(__file__).parent / "fixtures/runtime_errors/espn_site_roster_400.json").read_text("utf-8"))
+_HOSTILE = {"dict": {}, "list": [{}], "none": None, "empty_str": "", "error_envelope": _ENVELOPE}
+_L17 = "A-L17: a non-empty list body raises AttributeError instead of a zero-row frame; task 4.1"
+_M13 = "A-M13: ESPN's 200 error envelope parses to a one-row frame of code/message; task 4.1"
+_HOSTILE_KNOWN = {
+    **{
+        (p, "list"): _L17
+        for p in (
+            "parse_athlete_gamelog",
+            "parse_athlete_overview",
+            "parse_athlete_splits",
+            "parse_athlete_stats",
+            "parse_coaches",
+            "parse_draft",
+            "parse_event_competitor_linescores",
+            "parse_event_competitor_roster",
+            "parse_event_competitor_statistics",
+            "parse_event_plays",
+            "parse_fpi",
+            "parse_leaders",
+            "parse_scoreboard",
+            "parse_standings",
+            "parse_summary",
+            "parse_weekly_powerindex",
+        )
+    },
+    **{
+        (p, "error_envelope"): _M13
+        for p in (
+            "parse_athlete_overview",
+            "parse_athlete_splits",
+            "parse_athlete_stats",
+            "parse_event_competitor_statistics",
+            "parse_leaders",
+            "parse_single_entity",
+        )
+    },
+}
+
+
+def _hostile_params() -> List[Any]:
+    return [
+        pytest.param(
+            name,
+            shape,
+            id=f"{name}-{shape}",
+            marks=[pytest.mark.xfail(strict=True, reason=_HOSTILE_KNOWN[name, shape])]
+            if (name, shape) in _HOSTILE_KNOWN
+            else [],
+        )
+        for name in sorted(_parsers())
+        for shape in _HOSTILE
+    ]
+
+
+@pytest.mark.parametrize(("name", "shape"), _hostile_params())
+def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(name, shape):
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+
+    try:
+        out = _parsers()[name](_HOSTILE[shape])
+    except (NoDataError, AssetFetchError):
+        return
+    assert {sec: df.height for sec, df in _frames(out).items() if df.height} == {}
+
+
+def test_hostile_sweep_covers_every_registered_parser():
+    assert len(_parsers()) >= 30 and "parse_teams" in _parsers()
+    unread = {fx.stem for fx in _ESPN_FIX.glob("*.json")} - set(_captures())
+    assert unread == _NO_PARSER, "a new capture needs a parser (or a reason in _NO_PARSER)"
+
+
+def test_dtype_snapshot_matches_every_committed_capture():
+    """A-M2: column names AND dtypes per capture; a parser change that retypes a column fails here."""
+    want = json.loads(_SNAPSHOT.read_text(encoding="utf-8"))
+    got = _dtype_snapshot()
+    assert sorted(got) == sorted(want)
+    diffs = {stem: (want[stem], got[stem]) for stem in got if got[stem] != want[stem]}
+    assert not diffs, f"{len(diffs)} captures changed dtype: {sorted(diffs)[:5]}"
+
+
+def _id_cols(name: str) -> Dict[str, str]:
+    """``{capture/section/column: dtype}`` for every id column ``name`` emits on its captures."""
+    reg = _registered()
+    snap = json.loads(_SNAPSHOT.read_text(encoding="utf-8"))
+    return {
+        f"{stem}/{sec}/{col}": dtype
+        for stem, short in _captures().items()
+        if reg[short].__name__ == name
+        for sec, cols in snap[stem].items()
+        for col, dtype in cols.items()
+        if col == "id" or col.endswith("_id")
+    }
+
+
+# Parsers whose id columns are not Int64 on their captures today (String; parse_summary also
+# Float64). Task 5.2 makes every ESPN id Int64 at the parser boundary.
+_IDS_NOT_INT64 = {
+    "parse_athlete_gamelog",
+    "parse_athlete_overview",
+    "parse_event_plays",
+    "parse_fpi",
+    "parse_groups",
+    "parse_injuries",
+    "parse_items",
+    "parse_leaders",
+    "parse_news",
+    "parse_rankings",
+    "parse_scoreboard",
+    "parse_single_entity",
+    "parse_standings",
+    "parse_summary",
+    "parse_team_roster",
+    "parse_team_schedule",
+    "parse_teams",
+    "parse_transactions",
+}
+
+
+def _id_params(open_ids: set, reason: str) -> List[Any]:
+    return [
+        pytest.param(name, marks=[pytest.mark.xfail(strict=True, reason=reason)] if name in open_ids else [])
+        for name in sorted(_parsers())
+    ]
+
+
+@pytest.mark.parametrize(
+    "name",
+    _id_params(_IDS_NOT_INT64, "A-M15: ESPN ids are String here but Int64 in parse_weekly_powerindex; task 5.2"),
+)
+def test_dtype_snapshot_ids_are_int64(name):
+    assert {k: v for k, v in _id_cols(name).items() if v != "Int64"} == {}
+
+
+@pytest.mark.parametrize(
+    "name",
+    _id_params({"parse_summary"}, "A-M14: the pandas hop turns point_after_attempt_id into Float64; task 5.2"),
+)
+def test_dtype_snapshot_ids_are_never_float(name):
+    """A float id stringifies as ``"123.0"`` and joins nothing."""
+    assert {k: v for k, v in _id_cols(name).items() if v.startswith("Float")} == {}
+
+
+if __name__ == "__main__":  # regenerate the snapshot after a deliberate dtype change
+    _SNAPSHOT.write_text(json.dumps(_dtype_snapshot(), indent=1) + "\n", encoding="utf-8", newline="\n")
