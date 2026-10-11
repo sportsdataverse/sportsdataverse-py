@@ -1,10 +1,43 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_rookie–win_prob"
-sidebar_label: "Models and calculators: nba_rookie–win_prob"
+title: "NBA — additional Python functions — Models and calculators: nba_predict–win_prob"
+sidebar_label: "Models and calculators: nba_predict–win_prob"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: nba_rookie–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_predict–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_rookie–win_prob
+# NBA — additional Python functions — Models and calculators: nba_predict–win_prob
+
+### nba_predict_games {#nba_predict_games}
+
+`nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Vectorized pregame predictions for a schedule of games.
+
+Joins the ratings frame twice (home/away) and applies the closed-form
+`predict_margin` / `win_prob_from_margin` / `predict_total`
+math column-wise.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | One row per game with `game_id`, `home_team_id`, `away_team_id` and optionally `neutral_site` (missing column means every game is a true home game). Team-id dtypes must match `ratings['team_id']` exactly. |
+| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace` (the `~sportsdataverse.nba.nba_team_ratings.nba_team_ratings` output for one season/as-of date). |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
+
+No returns table is published for this function: no capture: it raises a join-key dtype mismatch on a real schedule (the schedule's home_team_id is Int32, nba_team_ratings' team_id is String).
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import nba_predict_games
+from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
+preds = nba_predict_games(games, nba_team_ratings(2024))
+```
 
 ### nba_rookie_projection {#nba_rookie_projection}
 
@@ -223,6 +256,11 @@ is scored as its own five-minute endgame instead: `start_game_seconds_remaining`
 
 The frame with `wp_regime` (`"reg"` / `"ot"`) and the adjusted seconds column.
 
+| col_name | type | description |
+|---|---|---|
+| `wp_regime` | character | "reg" for regulation plays; "ot" for overtime plays, which are scored on the overtime period clock as a five-minute endgame. |
+| `start_game_seconds_remaining` | double | Seconds remaining the model sees: the game clock in regulation, the overtime period clock on overtime plays. |
+
 **Example**
 
 ```python
@@ -253,6 +291,14 @@ minutes = 5 x game minutes. A player with no shots, no minutes, or `did_not_play
 **Returns**
 
 One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | ESPN game id, the join key to the play-by-play and box-score frames. |
+| `athlete_id` | integer | ESPN athlete id, the join key to the player box score. |
+| `team_id` | integer | ESPN team id, the join key to the team box score. |
+| `ts_pct` | double | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
+| `usg_pct` | double | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes or a DNP. |
 
 **Example**
 
@@ -414,6 +460,14 @@ Per-play home win probability, its play-to-play delta, and the prior, for one ga
 
 The input plus `pregame_home_prob`, `prior_source`, `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). An empty input returns an empty frame with those columns.
 
+| col_name | type | description |
+|---|---|---|
+| `pregame_home_prob` | double | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone. |
+| `prior_source` | character | Where the prior came from: "spread" (a real line) or "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model). |
+| `wp_regime` | character | "reg" for regulation plays; "ot" for overtime plays, which are scored on the overtime period clock as a five-minute endgame. |
+| `home_win_prob` | double | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |
+| `wp_delta` | double | Change in home win probability from the previous play; the first play's delta is measured from the pregame prior. |
+
 **Example**
 
 ```python
@@ -450,6 +504,11 @@ large negative number; both become `null`, as does every non-shooting play.
 
 The input plus `x_legacy` and `y_legacy` (Float64).
 
+| col_name | type | description |
+|---|---|---|
+| `x_legacy` | double | Shot location in tenths of a foot with the hoop at the origin, x across the court; null for free throws, unlocated shots and non-shooting plays. |
+| `y_legacy` | double | Shot location in tenths of a foot with the hoop at the origin, y toward half court; null for free throws, unlocated shots and non-shooting plays. |
+
 **Example**
 
 ```python
@@ -480,6 +539,21 @@ plus team turnovers). A zero denominator gives `null`.
 **Returns**
 
 One row per `(game_id, team_id)` with `efg_pct, tov_pct, orb_pct, ft_rate, possessions, off_rtg, def_rtg, pace, total_turnovers, game_minutes`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | ESPN game id, the join key to the play-by-play and box-score frames. |
+| `team_id` | integer | ESPN team id, the join key to the team box score. |
+| `efg_pct` | double | Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts. |
+| `tov_pct` | double | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers). |
+| `orb_pct` | double | Offensive rebound rate, own ORB / (own ORB + opponent DRB). |
+| `ft_rate` | double | Free-throw rate, FTA / FGA; null with no attempts. |
+| `possessions` | double | Oliver's possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams. |
+| `off_rtg` | double | Points scored per 100 possessions. |
+| `def_rtg` | double | Points allowed per 100 possessions. |
+| `pace` | double | Possessions per 48 minutes (overtime minutes included in the denominator). |
+| `total_turnovers` | integer | Player plus team turnovers, the count every rate above uses. |
+| `game_minutes` | integer | Minutes played in the game: 48 plus five per overtime. |
 
 **Example**
 

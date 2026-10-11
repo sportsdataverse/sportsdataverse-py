@@ -100,11 +100,11 @@ def test_score_win_prob_tie_at_ot_start_is_near_half() -> None:
     )
     out = gp.score_win_prob(df)
     assert out["wp_regime"][0] == "ot"
-    assert abs(out["home_win_prob"][0] - 0.5) < 0.15  # the clipped-at-zero model gave 0.39 here
+    assert abs(out["home_win_prob"][0] - 0.5) < 0.10  # the clipped-at-zero model gave 0.39 here
 
 
 def test_score_win_prob_on_an_empty_frame_keeps_the_schema() -> None:
-    out = gp.score_win_prob(_pbp([]).clear())
+    out = gp.score_win_prob(_pbp([{}]).clear())
     assert out.height == 0 and "home_win_prob" in out.columns
 
 
@@ -185,6 +185,26 @@ def test_team_game_rates_zero_denominator_is_null() -> None:
 def test_team_game_rates_rejects_non_two_row_input() -> None:
     with pytest.raises(ValueError, match="two team rows"):
         gp.team_game_rates(_team_box().head(1))
+
+
+def test_team_game_rates_rejects_mixed_games_and_duplicate_teams() -> None:
+    with pytest.raises(ValueError, match="same game_id"):
+        gp.team_game_rates(_team_box().with_columns(pl.Series("game_id", [1, 2])))
+    with pytest.raises(ValueError, match="same game_id"):
+        gp.team_game_rates(_team_box().with_columns(pl.lit(19).alias("team_id")))
+
+
+def test_score_win_prob_rejects_missing_columns_and_multi_game_frames() -> None:
+    with pytest.raises(pl.exceptions.ColumnNotFoundError):
+        gp.score_win_prob(_pbp([{}]).drop("home_team_spread"))
+    with pytest.raises(pl.exceptions.ColumnNotFoundError):
+        gp.score_win_prob(_pbp([{}]).drop("home_team_spread").clear())
+    with pytest.raises(ValueError, match="one game"):
+        gp.score_win_prob(_pbp([{"game_id": 1}, {"game_id": 2}]))
+
+
+def test_home_prior_nan_spread_falls_back_to_hfa() -> None:
+    assert gp.home_prior(float("nan"), True)[1] == "hfa"
 
 
 def test_player_game_rates_match_hand_arithmetic_and_null_the_dnp() -> None:

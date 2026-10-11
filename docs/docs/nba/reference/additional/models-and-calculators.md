@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_predict"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_predict"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_matchup"
 sidebar_position: 10
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_predict — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_predict
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -781,6 +781,9 @@ print(curve.delta(24))  # ~1.0
 `game_minutes(periods: 'int') -> 'int'`
 
 Minutes played in a game of `periods` periods: 48, plus five per overtime.
+
+This is NBA timing (48 + 5 per OT); WNBA (40 minutes) and G League callers must not use it
+for pace.
 
 **Parameters**
 
@@ -1569,37 +1572,4 @@ d = nba_matchup_drapm("2023-24", matchups=matchups_df)
 # Pipeline next step
 
 d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
-```
-
-### nba_predict_games {#nba_predict_games}
-
-`nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Vectorized pregame predictions for a schedule of games.
-
-Joins the ratings frame twice (home/away) and applies the closed-form
-`predict_margin` / `win_prob_from_margin` / `predict_total`
-math column-wise.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `games` | `DataFrame` |  | One row per game with `game_id`, `home_team_id`, `away_team_id` and optionally `neutral_site` (missing column means every game is a true home game). Team-id dtypes must match `ratings['team_id']` exactly. |
-| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace` (the `~sportsdataverse.nba.nba_team_ratings.nba_team_ratings` output for one season/as-of date). |
-| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
-
-No returns table is published for this function: no capture: it raises a join-key dtype mismatch on a real schedule (the schedule's home_team_id is Int32, nba_team_ratings' team_id is String).
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_predict import nba_predict_games
-from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
-preds = nba_predict_games(games, nba_team_ratings(2024))
 ```

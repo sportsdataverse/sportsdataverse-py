@@ -174,7 +174,7 @@ not covered by the generated API-endpoint reference above.
 | [nba_in_game_win_prob](additional/models-and-calculators.md#nba_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
 | [nba_la_rapm](additional/models-and-calculators.md#nba_la_rapm) | Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed). |
 | [nba_matchup_drapm](additional/models-and-calculators.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
-| [nba_predict_games](additional/models-and-calculators.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
+| [nba_predict_games](additional/models-and-calculators-2.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
 | [nba_rookie_projection](additional/models-and-calculators-2.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |
 | [nba_spm](additional/models-and-calculators-2.md#nba_spm) | Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM. |
 | [nba_team_ratings](additional/models-and-calculators-2.md#nba_team_ratings) | Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware. |

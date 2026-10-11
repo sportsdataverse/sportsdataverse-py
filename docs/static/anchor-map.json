@@ -2359,7 +2359,7 @@
   "nba_player_positions": "analytics",
   "nba_player_props": "analytics",
   "nba_playtype_ratings": "analytics",
-  "nba_predict_games": "models-and-calculators",
+  "nba_predict_games": "models-and-calculators-2",
   "nba_ratings_panel": "analytics",
   "nba_raw_store_season_frame": "analytics",
   "nba_referee_assignments": "analytics",

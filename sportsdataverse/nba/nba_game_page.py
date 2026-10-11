@@ -10,6 +10,7 @@ Paper Flask processor builds those frames live from ESPN through
 
 from __future__ import annotations
 
+import math
 from typing import Optional
 
 import polars as pl
@@ -19,7 +20,6 @@ from sportsdataverse.nba.nba_prediction_constants import get_constants
 
 __all__ = [
     "FT_WEIGHT",
-    "OT_PERIOD_SECONDS",
     "REGULATION_PERIODS",
     "COORD_SENTINEL",
     "game_minutes",
@@ -34,11 +34,22 @@ __all__ = [
 
 #: Oliver's free-throw possession weight, used by every rate below.
 FT_WEIGHT: float = 0.44
-#: An NBA overtime period is five minutes.
-OT_PERIOD_SECONDS: float = 300.0
 REGULATION_PERIODS: int = 4
 #: ESPN marks a missing play coordinate with ``-214748340``; anything below this is "no location".
 COORD_SENTINEL: float = -1000.0
+
+
+_SCORE_COLS = (
+    "home_team_spread",
+    "game_spread_available",
+    "period_number",
+    "start_game_seconds_remaining",
+    "start_quarter_seconds_remaining",
+    "home_score",
+    "away_score",
+    "team_id",
+    "home_team_id",
+)
 
 
 def home_prior(
@@ -73,7 +84,7 @@ def home_prior(
             home_prior(3.0, True)      # (0.58, 'spread')
             home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
     """
-    if game_spread_available and home_team_spread is not None:
+    if game_spread_available and home_team_spread is not None and not math.isnan(float(home_team_spread)):
         return win_prob_from_margin(float(home_team_spread), league_id=league_id), "spread"
     return win_prob_from_margin(get_constants(league_id).hfa, league_id=league_id), "hfa"
 
@@ -133,7 +144,7 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
             ``game_spread_available``, ``period_number``, ``start_game_seconds_remaining``,
             ``start_quarter_seconds_remaining``, ``home_score``, ``away_score``, ``team_id``,
             ``home_team_id``).
-        ValueError: If ``league_id`` is unknown.
+        ValueError: If ``league_id`` is unknown, or ``pbp`` holds more than one ``game_id``.
 
     Example:
         Quick start::
@@ -147,6 +158,11 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
 
             wp.sort(pl.col("wp_delta").abs(), descending=True).select("text", "wp_delta").head(10)
     """
+    for c in _SCORE_COLS:
+        if c not in pbp.columns:
+            raise pl.exceptions.ColumnNotFoundError(f"score_win_prob needs column {c!r}")
+    if "game_id" in pbp.columns and pbp.height and pbp["game_id"].n_unique() > 1:
+        raise ValueError(f"score_win_prob scores one game; got {pbp['game_id'].n_unique()} game_id values")
     if pbp.height == 0:
         return pbp.with_columns(
             pl.lit(None, dtype=pl.Float64).alias("pregame_home_prob"),
@@ -156,7 +172,7 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
             pl.lit(None, dtype=pl.Float64).alias("wp_delta"),
         )
     first = pbp.row(0, named=True)
-    prior, source = home_prior(first.get("home_team_spread"), first.get("game_spread_available"), league_id=league_id)
+    prior, source = home_prior(first["home_team_spread"], first["game_spread_available"], league_id=league_id)
     tagged = ot_adjusted_seconds(pbp)
     scored = nba_in_game_win_prob(tagged, prior, league_id=league_id)
     wp = scored["home_win_prob"].cast(pl.Float64)
@@ -212,6 +228,9 @@ def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
 def game_minutes(periods: int) -> int:
     """Minutes played in a game of ``periods`` periods: 48, plus five per overtime.
 
+    This is NBA timing (48 + 5 per OT); WNBA (40 minutes) and G League callers must not use it
+    for pace.
+
     Args:
         periods: Highest period number played (``4`` for regulation, ``5`` for one OT, ...).
 
@@ -260,7 +279,8 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame
         possessions, off_rtg, def_rtg, pace, total_turnovers, game_minutes``.
 
     Raises:
-        ValueError: If ``team_box`` does not hold exactly two rows.
+        ValueError: If ``team_box`` does not hold exactly two rows, or the rows are not two different
+            ``team_id`` values of one ``game_id``.
         polars.exceptions.ColumnNotFoundError: If a required box-score column is missing.
 
     Example:
@@ -274,6 +294,8 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame
     """
     if team_box.height != 2:
         raise ValueError(f"team_game_rates needs the two team rows of one game, got {team_box.height}")
+    if team_box["game_id"].n_unique() != 1 or team_box["team_id"].n_unique() != 2:
+        raise ValueError("team_game_rates needs two different teams of the same game_id")
     tov = pl.col("total_turnovers")
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
     own = team_box.with_columns(
@@ -394,10 +416,11 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
     pbp = shot_coordinates(score_win_prob(pbp, league_id=league_id))
     team_box = helper_nba_team_box(final)
     player_box = helper_nba_player_box(final)
-    first = pbp.row(0, named=True) if pbp.height else {}
-    prior_prob, prior_source = home_prior(
-        first.get("home_team_spread"), first.get("game_spread_available"), league_id=league_id
-    )
+    if pbp.height:
+        prior_prob, prior_source = pbp["pregame_home_prob"][0], pbp["prior_source"][0]
+        spread, available = pbp["home_team_spread"][0], bool(pbp["game_spread_available"][0] or False)
+    else:
+        (prior_prob, prior_source), spread, available = home_prior(None, None, league_id=league_id), None, False
     two_teams = team_box.height == 2
     return {
         "pbp": pbp,
@@ -411,7 +434,7 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
         "prior": {
             "home_win_prob": prior_prob,
             "source": prior_source,
-            "home_team_spread": first.get("home_team_spread"),
-            "game_spread_available": bool(first.get("game_spread_available") or False),
+            "home_team_spread": spread,
+            "game_spread_available": available,
         },
     }

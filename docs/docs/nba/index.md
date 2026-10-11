@@ -120,7 +120,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_in_game_win_prob`](reference/additional/models-and-calculators#nba_in_game_win_prob)
 - [`nba_la_rapm`](reference/additional/models-and-calculators#nba_la_rapm)
 - [`nba_matchup_drapm`](reference/additional/models-and-calculators#nba_matchup_drapm)
-- [`nba_predict_games`](reference/additional/models-and-calculators#nba_predict_games)
+- [`nba_predict_games`](reference/additional/models-and-calculators-2#nba_predict_games)
 - [`nba_rookie_projection`](reference/additional/models-and-calculators-2#nba_rookie_projection)
 - [`nba_spm`](reference/additional/models-and-calculators-2#nba_spm)
 - [`nba_team_ratings`](reference/additional/models-and-calculators-2#nba_team_ratings)
