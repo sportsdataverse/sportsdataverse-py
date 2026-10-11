@@ -446,7 +446,8 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
 
     pbp = helper_nba_play_by_play(final)
     periods = int(pbp["period_number"].max() or REGULATION_PERIODS) if pbp.height else REGULATION_PERIODS
-    pbp = shot_coordinates(score_win_prob(pbp, league_id=league_id))
+    if pbp.height:  # a game with 10 or fewer plays parses to a zero-column frame; nothing to score yet
+        pbp = shot_coordinates(score_win_prob(pbp, league_id=league_id))
     team_box = helper_nba_team_box(final)
     player_box = helper_nba_player_box(final)
     if pbp.height:

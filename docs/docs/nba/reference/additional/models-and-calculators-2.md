@@ -550,14 +550,14 @@ One row per `(game_id, team_id)` with `efg_pct, tov_pct, orb_pct, ft_rate, posse
 | `game_id` | integer | ESPN game id, the join key to the play-by-play and box-score frames. |
 | `team_id` | integer | ESPN team id, the join key to the team box score. |
 | `efg_pct` | double | Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts. |
-| `tov_pct` | double | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers). |
-| `orb_pct` | double | Offensive rebound rate, own ORB / (own ORB + opponent DRB). |
+| `tov_pct` | double | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive. |
+| `orb_pct` | double | Offensive rebound rate, own ORB / (own ORB + opponent DRB); null when the denominator is not positive. |
 | `ft_rate` | double | Free-throw rate, FTA / FGA; null with no attempts. |
 | `possessions` | double | Oliver's possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams. |
-| `off_rtg` | double | Points scored per 100 possessions. |
-| `def_rtg` | double | Points allowed per 100 possessions. |
+| `off_rtg` | double | Points scored per 100 possessions; null when possessions are not positive. |
+| `def_rtg` | double | Points allowed per 100 possessions; null when possessions are not positive. |
 | `pace` | double | Possessions per 48 minutes (overtime minutes included in the denominator). |
-| `total_turnovers` | integer | Player plus team turnovers, the count every rate above uses. |
+| `total_turnovers` | integer | The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 total is repaired to the player count. |
 | `game_minutes` | integer | Minutes played in the game: 48 plus five per overtime. |
 
 **Example**

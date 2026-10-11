@@ -257,6 +257,19 @@ def test_game_page_frames_on_the_espn_fixture(monkeypatch: pytest.MonkeyPatch) -
     assert not shots["type_text"].str.contains("(?i)free throw").any()
 
 
+def test_game_page_frames_before_tip_off_has_no_plays_to_score(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A live game with 10 or fewer plays parses to a zero-column pbp; the frames must still build."""
+    from sportsdataverse.nba import nba_pbp
+
+    summary = json.loads((FIX / "summary_nba.json").read_text(encoding="utf-8"))
+    summary["plays"] = summary["plays"][:5]  # the shape ESPN serves in the first seconds of a game
+    monkeypatch.setattr(nba_pbp, "download", lambda url, **kwargs: _Resp(copy.deepcopy(summary)))
+    frames = gp.game_page_frames(nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"])))
+    assert frames["pbp"].height == 0
+    assert frames["periods"] == gp.REGULATION_PERIODS
+    assert frames["prior"]["source"] == "hfa"
+
+
 def _fixture_pbp(monkeypatch: pytest.MonkeyPatch) -> pl.DataFrame:
     from sportsdataverse.nba import nba_pbp
     from sportsdataverse.nba.nba_play_by_play import helper_nba_play_by_play

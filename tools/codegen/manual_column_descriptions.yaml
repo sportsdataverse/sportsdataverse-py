@@ -26495,14 +26495,14 @@ team_game_rates:
   game_id: ESPN game id, the join key to the play-by-play and box-score frames.
   team_id: ESPN team id, the join key to the team box score.
   efg_pct: Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts.
-  tov_pct: Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers).
-  orb_pct: Offensive rebound rate, own ORB / (own ORB + opponent DRB).
+  tov_pct: Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive.
+  orb_pct: Offensive rebound rate, own ORB / (own ORB + opponent DRB); null when the denominator is not positive.
   ft_rate: Free-throw rate, FTA / FGA; null with no attempts.
   possessions: 'Oliver''s possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams.'
-  off_rtg: Points scored per 100 possessions.
-  def_rtg: Points allowed per 100 possessions.
+  off_rtg: Points scored per 100 possessions; null when possessions are not positive.
+  def_rtg: Points allowed per 100 possessions; null when possessions are not positive.
   pace: Possessions per 48 minutes (overtime minutes included in the denominator).
-  total_turnovers: Player plus team turnovers, the count every rate above uses.
+  total_turnovers: The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 total is repaired to the player count.
   game_minutes: 'Minutes played in the game: 48 plus five per overtime.'
 player_game_rates:
   game_id: ESPN game id, the join key to the play-by-play and box-score frames.
