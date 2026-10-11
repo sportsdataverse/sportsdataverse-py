@@ -8,7 +8,7 @@ description: "WNBA — additional Python functions — IDs and crosswalks — fu
 
 ### wnba_crosswalks_from_archive {#wnba_crosswalks_from_archive}
 
-`wnba_crosswalks_from_archive(season: 'int', espn_schedule: 'pl.DataFrame', espn_game_rosters: 'pl.DataFrame', stats_dir: 'Union[str, Path]', min_confidence: 'float' = 0.92) -> 'Dict[str, pl.DataFrame]'`
+`wnba_crosswalks_from_archive(season: 'int', espn_schedule: 'pl.DataFrame', espn_game_rosters: 'pl.DataFrame', stats_dir: 'Union[str, Path]', min_confidence: 'float' = 0.92, *, fox: 'bool' = False) -> 'Dict[str, pl.DataFrame]'`
 
 Build the WNBA team, schedule and player crosswalks for a past season, offline.
 
@@ -24,7 +24,10 @@ games join on (US-Eastern date, home ESPN team, away ESPN team), and
 players match inside each matched (game, team) on normalized name and
 jersey, then vote across the season into one row per ESPN athlete per
 team (`match_confidence` = the share of matched games that agree).
-Fox and Yahoo columns stay null: Yahoo WNBA team ids differ from ESPN's.
+All-Star and other exhibition sides are left out of the team and player
+crosswalks; their games stay in the schedule. Yahoo columns stay null
+(Yahoo WNBA team ids differ from ESPN's), and Fox columns stay null unless
+`fox=True`.
 
 **Parameters**
 
@@ -35,6 +38,7 @@ Fox and Yahoo columns stay null: Yahoo WNBA team ids differ from ESPN's.
 | `espn_game_rosters` | `DataFrame` |  | That season's ESPN game rosters parquet. |
 | `stats_dir` | `Union[str, Path]` |  | The stats archive's `json` root. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for a fuzzy player match. |
+| `fox` | `bool` | `False` | Fetch the Fox legs live (the only network call). `fox_team_id` / `fox_team_name` join on the normalized team name, so they fill for any season whose franchise names match today's Fox names. The Fox player columns fill only for the current season (Fox rosters are today's) and stay null otherwise. A failed Fox fetch logs a warning and leaves the columns null; it never fails the build. |
 
 **Returns**
 
