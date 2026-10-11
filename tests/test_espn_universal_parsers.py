@@ -1249,9 +1249,23 @@ def test_rankings_wrapper_routes_through_parse_rankings(monkeypatch):
 _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
 # Four snapshot entries pin zero columns (injuries_mbb, injuries_wbb, team_schedule_cfb, team_schedule_nhl):
 # their captures are empty and parse to zero-width frames. Task 5.1 gives empty frames their documented schema.
+# scoreboard_cfb_2014_placeholder carries ESPN's real `{}` placeholder event, which has no ids: its row comes back
+# all-null, so its id columns keep the String dtype of every other scoreboard (A-M15, task 5.2), but the pandas hop
+# turns six Int64 columns Float64 (season_year, season_type, status_period, attendance, home_rank, away_rank;
+# A-M14's class, task 5.2). The snapshot pins that measured state.
 _ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
-# Captures no registered parser reads (kept for other tests).
-_NO_PARSER = {"athlete_statslog_lbj", "depthcharts_mlb", "depthcharts_nba", "depthcharts_nfl", "depthcharts_nhl"}
+# Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
+# hand-written core-v2 stat pivot (tests/test_common_espn_player_stats.py) and ``error_404_body`` is
+# ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py).
+_NO_PARSER = {
+    "athlete_statistics_core_nba_1966_2024",
+    "athlete_statslog_lbj",
+    "depthcharts_mlb",
+    "depthcharts_nba",
+    "depthcharts_nfl",
+    "depthcharts_nhl",
+    "error_404_body",
+}
 _PKG = Path(__file__).parents[1] / "sportsdataverse"
 
 

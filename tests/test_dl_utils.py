@@ -107,33 +107,24 @@ class TestDownload:
     #     response = download(url, proxy=proxy)
     #     assert response.status_code == 200
 
-    # Tests that the function can download a valid URL with a very short timeout
+    # Tests that a request that outlives its timeout surfaces instead of hanging or retrying.
     def test_download_valid_url_with_short_timeout(self):
-        # `num_retries=0` so the test deterministically asserts the
-        # exception propagates instead of waiting on the default
-        # 16-attempt retry loop where a warmed connection pool can let
-        # one of the retries succeed and the test fails with "DID NOT
-        # RAISE".
-        #
-        # A fresh `requests.Session()` (not `download()`'s default shared
-        # module-level session) is required here too: the two preceding
-        # tests in this class already hit this same host through the
-        # shared session, so a keep-alive connection is warm by the time
-        # this test runs. Reusing it lets the request complete inside the
-        # 1ms budget on a fast CI network (observed on windows-latest),
-        # so the deadline never actually gets exercised. A cold session
-        # forces a real DNS+TCP(+TLS) handshake within the deadline.
-        #
-        # Accept either Timeout or ConnectionError: at a 1ms deadline the
-        # kernel can surface ENETUNREACH / ECONNRESET before requests has
-        # a chance to raise its own Timeout, depending on which stage of
-        # the TCP handshake the deadline fires in. Both outcomes prove
-        # the bounded-deadline behavior we care about — the call did not
-        # block past the budget.
-        url = "https://jsonplaceholder.typicode.com/posts"
-        timeout = 0.001
-        with pytest.raises((requests.exceptions.Timeout, requests.exceptions.ConnectionError)):
-            download(url, timeout=timeout, num_retries=0, session=requests.Session())
+        # Deterministic, offline: the injected session raises the Timeout a 1 ms deadline produces.
+        # This used to be a real request against jsonplaceholder with timeout=0.001, which raced
+        # the network (a warm keep-alive could answer inside 1 ms) and flaked under machine load
+        # in the offline suite. What the test owns is download()'s side of the contract: the
+        # timeout reaches the session unchanged, and with num_retries=0 the Timeout propagates
+        # after exactly one attempt.
+        seen = []
+
+        class _Session:
+            def get(self, url, **kwargs):
+                seen.append(kwargs.get("timeout"))
+                raise requests.exceptions.Timeout(f"read timed out (timeout={kwargs.get('timeout')})")
+
+        with pytest.raises(requests.exceptions.Timeout):
+            download("https://jsonplaceholder.typicode.com/posts", timeout=0.001, num_retries=0, session=_Session())
+        assert seen == [0.001]
 
     # Tests that the function handles an invalid URL
     def test_download_invalid_url(self):
