@@ -111,7 +111,7 @@ Release: [espn_cfb_adv_passing](https://github.com/sportsdataverse/sportsdataver
 | `passer_player_name` | String | Display name of the passer -- the FIRST participant in that role on the play. |
 | `Comp` | Int64 | Completed passes recorded in the advanced box score. |
 | `Att` | Int64 | Pass attempts recorded in the advanced box score. |
-| `xComp` | Float64 | Expected completions, summed from the per-play completion model. |
+| `xComp` | Float64 | Expected completions: the per-play completion probability (cp_game_state) summed over the passer's pass attempts, sacks excluded. |
 | `Yds` | Float64 | Passing yards from the advanced box score. |
 | `Pass_TD` | Int64 | Passing touchdowns. |
 | `Int` | Int64 | Interceptions thrown. |
@@ -122,8 +122,8 @@ Release: [espn_cfb_adv_passing](https://github.com/sportsdataverse/sportsdataver
 | `SR` | Float64 | Success rate on the passer's plays. |
 | `Sck` | Int64 | Times the passer was sacked. |
 | `CompPct` | Float64 | Completion percentage from the advanced box score. |
-| `xCompPct` | Float64 | Expected completion percentage from the per-play completion model. |
-| `CPOE` | Float64 | Completion percentage over expected -- actual minus modelled completion rate. |
+| `xCompPct` | Float64 | Expected completion rate on a 0-to-1 scale: xComp divided by Att (sacks excluded). 0 when Att is 0. |
+| `CPOE` | Float64 | Completion rate over expected: CompPct minus xCompPct, both over the passer's attempts (sacks excluded), as a 0-to-1 difference. |
 | `AirYds` | Int64 | Air yards -- distance the ball travelled in the air, past the line of scrimmage, summed over the player's attempts/targets. |
 | `aDOT` | Float64 | Average depth of target -- mean air yards per attempt/target. |
 | `CompAirYds` | Int64 | Air yards on completed passes only. |
@@ -227,7 +227,7 @@ Release: [espn_cfb_adv_defensive](https://github.com/sportsdataverse/sportsdatav
 | `havoc_total_rate` | Float64 | Share of the defense's scrimmage plays producing a havoc event, a 0-to-1 fraction equal to havoc_total divided by scrimmage_plays. |
 | `fumbles` | Int64 | Fumbles the defense forced, counted from plays whose narrative contains the phrase forced by, not the total number of fumbles on the play. |
 | `def_int` | Int64 | Interceptions the defense recorded, counted from plays ESPN types as Interception Return or Interception Return Touchdown. |
-| `drive_stopped_rate` | Float64 | Percentage from 0 to 100 of the defense's scrimmage plays that occurred on drives ending in a punt, fumble, interception, or turnover on downs; the denominator is plays, not drives. |
+| `drive_stopped_rate` | Float64 | Percentage from 0 to 100 of opponents' drives against this defense, one row per drive, that ended in a punt, fumble, interception (ESPN's INT or INT TD) or turnover on downs. |
 | `num_pass_plays` | Int64 | Number of pass scrimmage plays the defense faced, the denominator behind havoc_total_pass_rate and sacks_rate. |
 | `havoc_total_pass` | Int64 | Havoc events (tackle for loss, sack, interception, forced fumble, or pass breakup) recorded on the pass plays the defense faced. |
 | `havoc_total_pass_rate` | Float64 | havoc_total_pass divided by num_pass_plays, the defense's havoc rate against the pass as a 0-to-1 fraction. |
@@ -279,13 +279,13 @@ Release: [espn_cfb_adv_drives](https://github.com/sportsdataverse/sportsdatavers
 |---|---|---|
 | `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `drive_total_available_yards` | Float64 | Sum of each drive's starting distance to the opponent end zone taken across every scrimmage play, so a drive contributes its available yards once per play rather than once per drive. |
-| `drive_total_gained_yards` | Int64 | Sum of ESPN's per-drive yardage repeated across every scrimmage play of that drive, so a drive contributes its yardage once per play. |
-| `avg_field_position` | Float64 | Mean distance to the opponent end zone at drive start averaged over the team's scrimmage plays, exactly drive_total_available_yards divided by that play count. |
-| `plays_per_drive` | Float64 | Mean of ESPN's per-drive offensivePlays taken over plays rather than over drives, which weights every drive by its own length. |
-| `yards_per_drive` | Float64 | Mean of ESPN's per-drive yardage taken over plays rather than over drives, exactly drive_total_gained_yards divided by the team's scrimmage-play count. |
-| `drives` | Int64 | Number of distinct ESPN drive ids on which the team ran at least one scrimmage play. |
-| `drive_total_gained_yards_rate` | Float64 | Available-yards conversion as a percentage, 100 times drive_total_gained_yards over drive_total_available_yards with both sums play-weighted. |
+| `drive_total_available_yards` | Float64 | Sum over the team's drives of each drive's starting distance to the opponent end zone, one row per drive. A drive counts under ESPN's drive team (all its snaps when none are that team's), and a start of 0 counts as missing. |
+| `drive_total_gained_yards` | Int64 | Sum of ESPN's per-drive yardage over the team's drives, one row per drive. |
+| `avg_field_position` | Float64 | Mean distance to the opponent end zone at drive start over the team's drives with a known start, one row per drive. |
+| `plays_per_drive` | Float64 | Mean of ESPN's per-drive offensivePlays over the team's drives, one row per drive. |
+| `yards_per_drive` | Float64 | Mean of ESPN's per-drive yardage over the team's drives, one row per drive. |
+| `drives` | Int64 | Number of distinct ESPN drive ids credited to the team: drives ESPN labels with the team on which it ran at least one scrimmage play. |
+| `drive_total_gained_yards_rate` | Float64 | Available-yards conversion as a percentage from 0 to 100: each drive's yardage capped at its available yards, summed over the team's drives and divided by drive_total_available_yards. Null when no drive start is known. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
@@ -358,8 +358,8 @@ Release: [espn_cfb_adv_situational](https://github.com/sportsdataverse/sportsdat
 | `EPA_late_down` | Float64 | Total EPA the team generated on late downs. |
 | `EPA_late_down_per_play` | Float64 | EPA per play on late downs. |
 | `EPA_success_late_down_rate` | Float64 | Success rate on late downs -- the share of those plays ESPN scored as successful. |
-| `EPA_success_late_down_pass_rate` | Float64 | Success rate on late downs on pass plays -- the share of those plays ESPN scored as successful. |
-| `EPA_success_late_down_rush_rate` | Float64 | Success rate on late downs on rush plays -- the share of those plays ESPN scored as successful. |
+| `EPA_success_late_down_pass_rate` | Float64 | Success rate on late-down pass plays: EPA_success_late_down_pass divided by late_down_pass. Null when the team ran no late-down pass play. |
+| `EPA_success_late_down_rush_rate` | Float64 | Success rate on late-down rush plays: EPA_success_late_down_rush divided by late_down_rush. Null when the team ran no late-down rush play. |
 | `late_down_pass_rate` | Float64 | Share of the team's plays on late downs that were pass plays. |
 | `late_down_rush_rate` | Float64 | Share of the team's plays on late downs that were rush plays. |
 | `EPA_success_standard_down` | Int64 | Count of successful plays on standard downs (the team ahead of schedule for the series). Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
@@ -390,8 +390,8 @@ Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdat
 | `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `player_name` | String |  |
-| `field_goals` | Int64 | Number of field-goal attempts. |
-| `field_goals_yards` | Int64 | Sum of the field-goal attempt distances parsed out of the play text; it stays at zero when no distance could be parsed from the narrative. |
+| `field_goals` | Int64 | Field-goal attempts credited to this kicker, counted on field-goal attempts only (never kickoffs or PATs), under the kicking team. |
+| `field_goals_yards` | Int64 | Sum of the kicker's field-goal attempt distances parsed out of the play text; it stays at zero when no distance could be parsed from the narrative. |
 | `punts` | Int64 | Punts attempted. |
 | `punts_yards` | Int64 | Total gross punt yardage parsed from the play text for this punter, working out to roughly 42 yards per punt league-wide. |
 | `kick_returns` | Int64 | Number of kick returns. |
@@ -418,17 +418,17 @@ Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdatave
 | `turnovers` | Int64 | Turnovers total. |
 | `st_turnovers_lost` | Int64 | Turnovers the team lost on special-teams plays. |
 | `Int` | Int64 | Interceptions thrown. |
-| `fumbles_lost` | Int64 | Fumbles lost. |
+| `fumbles_lost` | Int64 | Fumbles this team lost to the opponent on every play, special teams included: ESPN's team box fumblesLost where the game has one, else the play-by-play count (fumbles_lost_pbp). |
 | `pass_breakups` | Int64 | Passes thrown by this offense that the opposing defense broke up; it equals the opponent's row in the advanced defensive table exactly. |
 | `passes_defended` | Int64 | Passes thrown by this offense that the opposing defense defended, from ESPN's box score (the defense's passesDefended, which excludes interceptions, plus Int). Null where ESPN's box has no passesDefended, mostly before 2023. |
-| `total_fumbles` | Int64 | Team total fumbles. |
-| `fumbles_recovered` | Int64 | Team fumbles recovered. |
+| `total_fumbles` | Int64 | Fumbles by this team on every play, special teams included, charged to the team that fumbled (a returner's muffed punt counts against the return team): the same plays fumbles_lost counts. |
+| `fumbles_recovered` | Int64 | Of total_fumbles, the ones this team recovered itself. |
 | `team_id` | Int64 | ESPN team id. |
 | `turnovers_pbp` | Int64 | Turnover count derived from the play-by-play, retained unchanged so it can be reconciled against the ESPN-sourced turnovers total. |
 | `Int_pbp` | Int64 | Interception count derived from the play-by-play, kept alongside the ESPN-sourced Int for reconciliation. |
 | `fumbles_lost_pbp` | Int64 | Fumbles-lost count derived from the play-by-play, kept alongside the ESPN-sourced fumbles_lost for reconciliation. |
 | `espn_sourced` | Boolean | CONSTANT: true on every published row. It records that the row was built from the ESPN feed rather than an alternate provider, and no other provider is currently used. |
-| `expected_turnovers` | Float64 | Turnover expectation for this team, computed as half its total fumbles plus 0.22 times its passes_defended, or 0.22 times its pass breakups plus interceptions where passes_defended is null. |
+| `expected_turnovers` | Float64 | Turnover expectation for this team, computed as `0.5 * total_fumbles + 0.22 * passes_defended` where passes_defended is present, otherwise `0.5 * total_fumbles + 0.22 * (pass_breakups + Int)`. |
 | `expected_turnover_margin` | Float64 | The opponent's expected_turnovers minus this team's, so positive means the team was expected to win the turnover battle. |
 | `turnover_margin` | Int64 | The opponent's turnovers minus this team's turnovers, positive when the team gained more possessions than it gave away. |
 | `turnover_luck` | Float64 | Points of scoring luck attributed to turnovers, five points per turnover times the gap between turnover_margin and expected_turnover_margin. |

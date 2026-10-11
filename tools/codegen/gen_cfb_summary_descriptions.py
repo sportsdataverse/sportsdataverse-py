@@ -42,8 +42,9 @@ BASES: dict[str, str] = {
     "EPAgame": "EPA per game (total EPA divided by games)",
     "early_down_EPA": "EPA per early-down play",
     "nonExplosiveEpaPerPlay": "EPA per play with explosive plays excluded",
-    "yards": "total yards gained",
-    "yardsplay": "yards gained per play",
+    # cfbfastR-cfb-data#139 (A3): an interception's statYardage is the return, so it counts 0
+    "yards": "total yards gained (an interception counts as 0 yards)",
+    "yardsplay": "yards gained per play (an interception counts as 0 yards)",
     "yardsgame": "yards gained per game",
     "yardsdrive": "yards gained per drive",
     "success": "success rate -- the share of plays flagged as successful by EPA",
@@ -53,9 +54,10 @@ BASES: dict[str, str] = {
     "third_down_distance": "average yards to go on third down",
     "havoc": "havoc rate -- the share of plays carrying the defensive-disruption flag",
     "explosive": "explosive-play rate -- the share of plays carrying the explosive flag",
-    "play_stuffed": "stuffed-play rate -- the share of plays carrying the stuffed flag",
+    # cfbfastR-cfb-data#139 (F1, C1): both are null on non-rush plays, so every mean is over rushes
+    "play_stuffed": "run-stuff rate -- the share of rushes stopped for 0 or fewer yards",
     "line_yards": "average line yards credited to the offensive line on rushes",
-    "opportunity_rate": "opportunity rate -- opportunity-flagged rushes as a share of all plays",
+    "opportunity_rate": "opportunity rate -- the share of rushes gaining 4 or more yards",
     "start_position": "average drive start position, measured in yards from the opponent goal line",
     # team_summaries.py::_drives -- mean ep over the side's OWNED drives; off rank descending,
     # def rank ascending (less EP handed to opponents ranks first), margin = off - def.
@@ -71,13 +73,23 @@ SIDE = {
 }
 PHASE = {"pass": " on pass plays", "rush": " on rush plays"}
 
-# Bases whose meaning changes by phase split. opportunity_run is
-# (rush == 1) & (yds_rushed >= 4) and False -- not null -- on every other play,
-# so the producer's mean runs over ALL plays in the split, not over rushes.
+# Bases whose meaning changes by phase split. opportunity_run and play_stuffed are
+# null on every non-rush play (cfbfastR-cfb-data#139), so the pass split has
+# nothing to average: the value is null and the rank unranked.
 PHASE_NOUNS: dict[tuple[str, str | None], str] = {
-    ("opportunity_rate", "pass"): "opportunity rate (always 0: only rushes carry the opportunity flag)",
-    ("opportunity_rate", "rush"): "opportunity rate -- the share of rushes carrying the opportunity flag",
+    ("opportunity_rate", "pass"): "opportunity rate (always null: only rushes carry the opportunity flag)",
+    ("play_stuffed", "pass"): "run-stuff rate (always null: only rushes carry the stuffed flag)",
 }
+
+#: the pass-split ``_n`` of a rush-only metric counts nothing
+ALWAYS_0: dict[tuple[str, str], str] = {
+    ("line_yards", "pass"): "line yards are credited only on rushes",
+    ("play_stuffed", "pass"): "only rushes carry the stuffed flag",
+    ("opportunity_rate", "pass"): "only rushes carry the opportunity flag",
+}
+
+#: cfbfastR-cfb-data#139 (C4): no rank for a null metric or a column with fewer than two distinct values
+UNRANKED = "Null when the metric is null or the column holds fewer than two distinct values: unranked, not last."
 
 _RE = re.compile(r"^(?P<base>.+?)_(?P<side>off|def|margin)(?:_(?P<phase>pass|rush))?(?P<suffix>_rank|_n)?$")
 
@@ -95,9 +107,9 @@ N_OF: dict[str, str] = {
     "explosive": "plays",
     "EPAplay": "plays",
     "yardsplay": "plays",
-    "play_stuffed": "plays",
+    "play_stuffed": "rushes",
     "success": "plays",
-    "opportunity_rate": "plays",
+    "opportunity_rate": "rushes",
     "red_zone_success": "red-zone plays",
     "third_down_success": "third-down plays",
     "third_down_distance": "third-down plays",
@@ -130,6 +142,10 @@ _ADJ = (
 _AVAIL = (
     "Available yards are the yards a drive could theoretically gain, summed from each drive's "
     "starting distance to the opponent goal line"
+)
+_AVAIL_START = (
+    " (ESPN's drive team). A drive's start is its header oriented to agree with its first snap, or that snap "
+    "when the header is a 0 or missing placeholder."
 )
 EXTRA: dict[str, str] = {
     "adj_off_epa": f"Offensive {_ADJ}.",
@@ -172,16 +188,26 @@ EXTRA: dict[str, str] = {
         "Regular-season week this cumulative snapshot covers -- the row reflects the team's state "
         "through the end of that week. One asset holds every week, so filter on this column."
     ),
-    "total_available_yards_off": f"{_AVAIL}. Total available yards on the team's own drives.",
-    "total_available_yards_def": f"{_AVAIL}. Total available yards on drives the team defended.",
-    "total_gained_yards_off": "Total yards the team actually gained across its own drives.",
-    "total_gained_yards_def": "Total yards the team allowed across the drives it defended.",
+    # team_summaries.py drive totals after cfbfastR-cfb-data#139 (E4)
+    "total_available_yards_off": f"{_AVAIL}. Total available yards on the team's own drives{_AVAIL_START}",
+    "total_available_yards_def": (
+        f"{_AVAIL}. Total available yards on opponents' drives against the team's defense{_AVAIL_START}"
+    ),
+    "total_gained_yards_off": (
+        "Total yards the team gained across its own drives, each drive's gain capped at its available yards."
+    ),
+    "total_gained_yards_def": (
+        "Total yards the team allowed across opponents' drives against its defense, each drive's gain capped at "
+        "its available yards."
+    ),
     "available_yards_pct_off": (
         "Share of available yards the team's offense actually gained (total_gained_yards_off "
-        "divided by total_available_yards_off). Higher is better."
+        "divided by total_available_yards_off), from 0 to 1. Null when no available yards are on record. "
+        "Higher is better."
     ),
     "available_yards_pct_def": (
-        "Share of available yards the team's defense allowed opponents to gain. Lower is better."
+        "Share of available yards the team's defense allowed opponents to gain (total_gained_yards_def divided "
+        "by total_available_yards_def), from 0 to 1. Null when no available yards are on record. Lower is better."
     ),
     "available_yards_pct_off_rank": "National rank of the team's offensive available-yards share, where 1 is best.",
     "available_yards_pct_def_rank": "National rank of the team's defensive available-yards share, where 1 is best.",
@@ -245,11 +271,18 @@ _XTO = (
     "half of every scrimmage fumble, plus interceptions at the season's national share of passes defensed "
     "(INT + PBU) that were intercepted"
 )
+# cfbfastR-cfb-data#140 (E7): MIN_BOX_PD_COVERAGE = 0.95 of the season's team-games
+_XTO_PBU = (
+    "Breakups come from ESPN's game box passesDefended (breakups only, so passes defensed = INT + PD) in seasons "
+    "where it covers at least 95% of team-games (2024 on), and from the play text otherwise."
+)
 EXTRA |= {
-    "expected_turnovers_off": f"Expected giveaways per game: {_XTO}, counted on the team's own plays. Lower is better.",
+    "expected_turnovers_off": (
+        f"Expected giveaways per game: {_XTO}, counted on the team's own plays. {_XTO_PBU} Lower is better."
+    ),
     "expected_turnovers_def": (
         f"Expected takeaways per game: {_XTO}, counted on opponents' plays against the team's defense. "
-        "Higher is better."
+        f"{_XTO_PBU} Higher is better."
     ),
     "expected_turnovers_off_rank": (
         "National rank of expected_turnovers_off, where 1 is best (fewest expected giveaways per game)."
@@ -351,6 +384,13 @@ def _metric_noun(metric: str) -> str:
 
 
 def describe(col: str) -> str | None:
+    d = _describe(col)
+    if d and col.endswith("_rank") and "unranked" not in d:
+        d = f"{d} {UNRANKED}"
+    return d
+
+
+def _describe(col: str) -> str | None:
     if col in EXTRA:
         return EXTRA[col]
     if col.endswith("_conf_pct"):
@@ -368,10 +408,10 @@ def describe(col: str) -> str | None:
     if suffix == "_n":
         if side == "margin" or base not in N_OF:
             return None
-        # line_yards is null on every non-rush play, so its pass split has nothing to average
-        always_0 = (
-            " Always 0 here: line yards are credited only on rushes." if (base, phase) == ("line_yards", "pass") else ""
-        )
+        # line_yards / play_stuffed / opportunity_rate are null on every non-rush play,
+        # so their pass split has nothing to average
+        why = ALWAYS_0.get((base, phase or ""))
+        always_0 = f" Always 0 here: {why}." if why else ""
         return (
             f"Sample size behind {col[:-2]}: the number of {N_OF[base]} it is computed over{ph}, {SIDE[side]}. "
             f"Null when the team has no rows in that split; read it as 0.{always_0}"

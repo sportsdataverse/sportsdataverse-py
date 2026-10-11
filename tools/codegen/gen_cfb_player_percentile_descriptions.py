@@ -94,9 +94,9 @@ MANUAL = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
 
 #: what a player ``_n`` counts, per loader -- transcribed from
 #: cfbfastR-cfb-data/python/cfb_data_build/team_summaries.py::PLAYER_SAMPLE_SIZES.
-#: CFB's passer ``success``/``yardsplay`` are counted over completions +
-#: incompletions (``att`` -- sacks AND interceptions are excluded from that
-#: frame). ``comppct`` counts throws including interceptions but excluding
+#: CFB's passer ``success`` is over dropbacks since cfbfastR-cfb-data#139 (D4);
+#: ``yardsplay`` is still over completions + incompletions (``att`` -- sacks AND
+#: interceptions are excluded from that frame). ``comppct`` counts throws including interceptions but excluding
 #: sacks (``att + pass_int``); a dropback is ``att + sacked + pass_int``.
 _GAMES = {m: "games" for m in ("EPAgame", "yardsgame", "playsgame")}
 PLAYER_N_OF: dict[str, dict[str, str]] = {
@@ -104,7 +104,7 @@ PLAYER_N_OF: dict[str, dict[str, str]] = {
         "EPAplay": "dropbacks (completions, incompletions, sacks and interceptions)",
         "yardsdropback": "dropbacks (completions, incompletions, sacks and interceptions)",
         "comppct": "throws (including interceptions, excluding sacks)",
-        "success": "completions and incompletions (interceptions and sacks excluded)",
+        "success": "dropbacks (completions, incompletions, sacks and interceptions)",
         "yardsplay": "completions and incompletions (interceptions and sacks excluded)",
         "detmer": "games",
         "detmergame": "games",
@@ -135,7 +135,6 @@ PLAYER_N_OF: dict[str, dict[str, str]] = {
 #: over ``plays`` (dropbacks), yardsplay over ``att`` (thrown balls -- input.py
 #: drops sacks from nflfastR's pass_attempt, interceptions stay in).
 NFL_NOTES = {
-    ("load_cfb_passing", "success"): "nfl-data's nfl_passing table counts its success_n over dropbacks instead.",
     ("load_cfb_passing", "yardsplay"): (
         "nfl-data's nfl_passing table counts its yardsplay_n over pass attempts instead: "
         "interceptions included, sacks still excluded."

@@ -27,7 +27,7 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 | `TEPA` | Float64 | Total EPA summed over every play. |
 | `EPAplay` | Float64 | EPA generated per play. |
 | `yards` | Float64 | Total yards gained on the drive. |
-| `success` | Float64 | Success rate across the team plays. |
+| `success` | Float64 | Success rate over the passer's dropbacks (completions, incompletions, sacks and interceptions), like EPAplay. A sack keeps its own success value; an interception is never a success. |
 | `comp` | Float64 | Completed passes. |
 | `att` | Float64 | Pass attempts thrown. |
 | `comppct` | Float64 | Completion percentage. |
@@ -87,7 +87,7 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 | `EPAplay_n` | Int64 | Sample size behind EPAplay: the number of dropbacks (completions, incompletions, sacks and interceptions) the passer's value is computed over. 0 where EPAplay is null. |
 | `yardsdropback_n` | Int64 | Sample size behind yardsdropback: the number of dropbacks (completions, incompletions, sacks and interceptions) the passer's value is computed over. 0 where yardsdropback is null. |
 | `comppct_n` | Int64 | Sample size behind comppct: the number of throws (including interceptions, excluding sacks) the passer's value is computed over. 0 where comppct is null. |
-| `success_n` | Int64 | Sample size behind success: the number of completions and incompletions (interceptions and sacks excluded) the passer's value is computed over. 0 where success is null. nfl-data's nfl_passing table counts its success_n over dropbacks instead. |
+| `success_n` | Int64 | Sample size behind success: the number of dropbacks (completions, incompletions, sacks and interceptions) the passer's value is computed over. 0 where success is null. |
 | `yardsplay_n` | Int64 | Sample size behind yardsplay: the number of completions and incompletions (interceptions and sacks excluded) the passer's value is computed over. 0 where yardsplay is null. nfl-data's nfl_passing table counts its yardsplay_n over pass attempts instead: interceptions included, sacks still excluded. |
 | `detmer_n` | Int64 | Sample size behind detmer: the number of games the passer's value is computed over. 0 where detmer is null. |
 | `detmergame_n` | Int64 | Sample size behind detmergame: the number of games the passer's value is computed over. 0 where detmergame is null. |
@@ -133,7 +133,7 @@ Release: [espn_cfb_percentiles](https://github.com/sportsdataverse/sportsdataver
 | `early_down_EPA` | Float64 | Value of EPA per early-down play at the percentile this row reports. |
 | `late_down_success` | Float64 | Value of success rate on late downs at the percentile this row reports. |
 | `success` | Float64 | Value of success rate across the team plays at the percentile this row reports. |
-| `yardsplay` | Float64 | Value of yards per play at the percentile this row reports. |
+| `yardsplay` | Float64 | Value of yards per play (an interception counts as 0 yards) at the percentile this row reports. |
 | `dropbacks` | Float64 | Value of dropbacks taken by the passer at the percentile this row reports. |
 | `rushes` | Float64 | Value of rushing attempts at the percentile this row reports. |
 | `EPAdropback` | Float64 | Value of EPA generated per dropback at the percentile this row reports. |
@@ -144,12 +144,12 @@ Release: [espn_cfb_percentiles](https://github.com/sportsdataverse/sportsdataver
 | `explosive` | Float64 | Value of explosive-play rate at the percentile this row reports. |
 | `third_down_success` | Float64 | Value of success rate on third down at the percentile this row reports. |
 | `red_zone_success` | Float64 | Value of success rate in the red zone at the percentile this row reports. |
-| `play_stuffed` | Float64 | Value of stuffed-play rate at the percentile this row reports. |
+| `play_stuffed` | Float64 | Value of run-stuff rate (the share of rushes stopped for 0 or fewer yards) at the percentile this row reports. |
 | `nonExplosiveEpaPerPlay` | Float64 | Value of EPA per play excluding explosive plays at the percentile this row reports. |
 | `havoc` | Float64 | Value of havoc rate at the percentile this row reports. |
 | `yardsrush` | Float64 | Value of yards per rush at the percentile this row reports. |
 | `lineyards` | Float64 | Value of line yards per rush at the percentile this row reports. |
-| `opportunity_run` | Float64 | Value of opportunity-run rate at the percentile this row reports. |
+| `opportunity_run` | Float64 | Value of opportunity-run rate (the share of rushes gaining 4 or more yards) at the percentile this row reports. |
 | `third_down_distance` | Float64 | Value of average yards to go on third down at the percentile this row reports. |
 
 ```python
@@ -170,28 +170,28 @@ Release: [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse
 | `season` | Int64 | Season (4-digit year). |
 | `player_id` | Int64 | ESPN player id from the roster entry. |
 | `receiver_player_name` | String | Display name of the targeted receiver -- the FIRST participant in that role on the play. |
-| `plays` | UInt32 | Total qualifying passing plays included in the WEPA calculation. |
+| `plays` | UInt32 | Attributed targets: pass plays naming the receiver as the target or the catcher. |
 | `games` | UInt32 | Number of games included in the ATS summary. |
 | `team_games` | UInt32 | Games the team played, used as the per-game denominator. |
 | `TEPA` | Float64 | Total EPA summed over every play. |
-| `EPAplay` | Float64 | EPA generated per play. |
+| `EPAplay` | Float64 | EPA per target. Null, with any _rank, _pct and _pos_pct, in seasons where more than 30% of incompletions name no receiver (2021-2024): those throws drop out of every receiver's targets, so per-target rates would read high. |
 | `yards` | Int64 | Total yards gained on the drive. |
-| `success` | Float64 | Success rate across the team plays. |
+| `success` | Float64 | Success rate over the receiver's targets. Null, with any _rank, _pct and _pos_pct, in seasons where more than 30% of incompletions name no receiver (2021-2024): those throws drop out of every receiver's targets, so per-target rates would read high. |
 | `comp` | UInt32 | Completed passes. |
-| `targets` | UInt32 |  |
+| `targets` | UInt32 | Attributed targets: passes ESPN charts to this receiver. An incompletion that names no receiver counts for nobody, so this undercounts real targets: 22-24% of incompletions name no receiver in 2014-2020, 42-77% in 2021-2024 and under 10% from 2025. |
 | `passing_td` | Float64 | Passing touchdowns thrown. |
 | `fumbles` | Float64 | Count of the receiver's targeted pass plays across the season whose play text mentions a fumble by either team. |
 | `playsgame` | Float64 | Plays per game. |
 | `EPAgame` | Float64 | EPA generated per game. |
-| `yardsplay` | Float64 | Yards per play. |
+| `yardsplay` | Float64 | Yards per target. Null, with any _rank, _pct and _pos_pct, in seasons where more than 30% of incompletions name no receiver (2021-2024): those throws drop out of every receiver's targets, so per-target rates would read high. |
 | `yardsgame` | Float64 | Yards per game. |
-| `catchpct` | Float64 | Catch rate on a 0-to-1 scale, receptions divided by targets for the season. |
+| `catchpct` | Float64 | Catch rate on a 0-to-1 scale, receptions divided by targets for the season. Null, with any _rank, _pct and _pos_pct, in seasons where more than 30% of incompletions name no receiver (2021-2024): those throws drop out of every receiver's targets, so per-target rates would read high. |
 | `dispersion_games` | Int64 | Games with at least one target by the receiver: the sample the dispersion columns (EPAplay_sd, EPAplay_p10, EPAplay_p90, boom_rate, bust_rate) are computed over. Those five are null below 3 games. |
-| `EPAplay_sd` | Float64 | Population standard deviation (ddof=0) of the receiver's per-game EPA per play (a game's EPA summed over the receiver's targets, divided by those targets), across dispersion_games. Null when dispersion_games is below 3. |
-| `EPAplay_p10` | Float64 | 10th percentile (the floor) of the receiver's per-game EPA per play (a game's EPA summed over the receiver's targets, divided by those targets), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games is below 3. |
-| `EPAplay_p90` | Float64 | 90th percentile (the ceiling) of the receiver's per-game EPA per play (a game's EPA summed over the receiver's targets, divided by those targets), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games is below 3. |
-| `boom_rate` | Float64 | Share of dispersion_games in which the receiver's EPA per play was more than one EPAplay_sd ABOVE their own unweighted per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust. Null when dispersion_games is below 3. |
-| `bust_rate` | Float64 | Share of dispersion_games in which the receiver's EPA per play was more than one EPAplay_sd BELOW their own unweighted per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust. Null when dispersion_games is below 3. |
+| `EPAplay_sd` | Float64 | Population standard deviation (ddof=0) of the receiver's per-game EPA per play (a game's EPA summed over the receiver's targets, divided by those targets), across dispersion_games. Null when dispersion_games is below 3. Null, with any _rank, _pct and _pos_pct, in seasons where more than 30% of incompletions name no receiver (2021-2024): those throws drop out of every receiver's targets, so per-target rates would read high. |
+| `EPAplay_p10` | Float64 | 10th percentile (the floor) of the receiver's per-game EPA per play (a game's EPA summed over the receiver's targets, divided by those targets), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games is below 3. Null, with any _rank, _pct and _pos_pct, in seasons where more than 30% of incompletions name no receiver (2021-2024): those throws drop out of every receiver's targets, so per-target rates would read high. |
+| `EPAplay_p90` | Float64 | 90th percentile (the ceiling) of the receiver's per-game EPA per play (a game's EPA summed over the receiver's targets, divided by those targets), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games is below 3. Null, with any _rank, _pct and _pos_pct, in seasons where more than 30% of incompletions name no receiver (2021-2024): those throws drop out of every receiver's targets, so per-target rates would read high. |
+| `boom_rate` | Float64 | Share of dispersion_games in which the receiver's EPA per play was more than one EPAplay_sd ABOVE their own unweighted per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust. Null when dispersion_games is below 3. Null, with any _rank, _pct and _pos_pct, in seasons where more than 30% of incompletions name no receiver (2021-2024): those throws drop out of every receiver's targets, so per-target rates would read high. |
+| `bust_rate` | Float64 | Share of dispersion_games in which the receiver's EPA per play was more than one EPAplay_sd BELOW their own unweighted per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust. Null when dispersion_games is below 3. Null, with any _rank, _pct and _pos_pct, in seasons where more than 30% of incompletions name no receiver (2021-2024): those throws drop out of every receiver's targets, so per-target rates would read high. |
 | `TEPA_rank` | Float64 | Rank of the receiver's total EPA summed over every play among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |
 | `EPAgame_rank` | Float64 | Rank of the receiver's EPA generated per game among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |
 | `EPAplay_rank` | Float64 | Rank of the receiver's EPA generated per play among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |

@@ -56,10 +56,10 @@ _DROPBACKS = "dropbacks (completions, incompletions, sacks and interceptions)"
     "loader,col,text",
     [
         (
+            # over dropbacks since cfbfastR-cfb-data#139 (D4), as nfl-data's nfl_passing counts it
             "load_cfb_passing",
             "success_n",
-            f"Sample size behind success: the number of {_ATT} {_TAIL} 0 where success is null. "
-            "nfl-data's nfl_passing table counts its success_n over dropbacks instead.",
+            f"Sample size behind success: the number of {_DROPBACKS} {_TAIL} 0 where success is null.",
         ),
         (
             "load_cfb_passing",
