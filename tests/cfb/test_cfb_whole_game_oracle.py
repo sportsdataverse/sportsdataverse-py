@@ -15,9 +15,10 @@ Oracle per column
     The ESPN feed: the kicking team (``start.team.id``) of the play the feed files first in period 1,
     when that play is a kickoff -- cfbfastR's rule (``cfbfastR/R/cfbd_pbp_data.R:1288``,
     ``receives_2H_kickoff`` from the defense of game play 1, i.e. the kicker). A game-wide constant.
-    Asserted on the captures whose feed opens with a kickoff; on the others (2004-2012 feeds that file
-    a scrimmage play first) the feed does not name the opening kicker and nothing is asserted.
-    XFAIL C-NF-2 on every one of them (row 1 names the receiving team; later rows the away team).
+    Asserted on the 85 captures whose feed opens period 1 with a kickoff. On the other 41 (32 feeds
+    from 2004-2012 that file a scrimmage play first, and 9 later feeds that lack the opening kickoff or
+    number a later play ahead of it) the feed does not name the opening kicker and nothing is asserted.
+    XFAIL C-NF-2 on every one of the 85 (row 1 names the receiving team; later rows the away team).
 ``start/end.pos_team_receives_2H_kickoff`` (first-half rows)
     cfbfastR ``cfbd_pbp_data.R:1329-1332``: true exactly when the possession team is the opening
     kicker. Second-half rows are not asserted: cfbfastR leaves the flag ungated there while nflfastR
