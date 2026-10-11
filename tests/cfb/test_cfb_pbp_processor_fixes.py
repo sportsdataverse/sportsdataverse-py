@@ -725,3 +725,34 @@ def test_standalone_pat_rows_carry_xp_flags_and_kicker_2008():
     blocked = _row(plays, "Donnie Carona extra point BLOCKED.")
     assert good == [(True, True, "Felipe Macias")]
     assert tuple(blocked[k] for k in cols) == (True, False, "Donnie Carona")
+
+
+def _trimmed_plays_with_texts(game_id: int, swaps: dict[str, list[str]]) -> pl.DataFrame:
+    """Process a trimmed fixture after rewriting the text of the plays named in ``swaps``."""
+    with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            if swaps.get(play.get("text")):
+                play["text"] = swaps[play["text"]].pop(0)
+    proc = CFBPlayProcess(gameId=game_id)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    return proc.plays_frame
+
+
+def test_two_point_try_typed_as_an_extra_point_is_not_a_kick():
+    # 2012-13 ESPN types "Johnny Manziel pass attempt failed ." as Extra Point Missed/Good: a
+    # two-point try, not a kick, so the kicking box must not count it.
+    tries = ["Johnny Manziel pass attempt failed .", "Clock 07:22, Terre Whitehead rush attempt good."]
+    plays = _trimmed_plays_with_texts(282432641, {"Felipe Macias extra point GOOD.": list(tries)})
+    rows = plays.filter(pl.col("text").is_in(tries))
+    assert rows.height == 2
+    assert rows["xp_attempt"].to_list() == [False, False]
+    assert rows["xp_kicker_player_name"].null_count() == 2
+
+
+def test_team_is_not_an_extra_point_kicker():
+    plays = _trimmed_plays_with_texts(282432641, {"Felipe Macias extra point GOOD.": ["Team extra point GOOD."]})
+    row = _row(plays, "Team extra point GOOD.")
+    assert (row["xp_attempt"], row["xp_made"], row["xp_kicker_player_name"]) == (True, True, None)

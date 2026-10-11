@@ -6796,6 +6796,8 @@ class CFBPlayProcess(object):
             (pl.col("season") <= 2013)
             & pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
             & ~is_td_row.fill_null(False)
+            # 2012-13 types two-point tries the same way ("Johnny Manziel pass attempt failed .")
+            & ~pl.col("text").str.contains(r"(?i)(?:pass|rush) attempt").fill_null(False)
         ).fill_null(False)
         sa_missed = pl.col("text").str.contains(r"(?i)missed|blocked|no good|failed").fill_null(False)
         sa_good = (pl.col("text").str.contains(r"(?i)\bgood\b").fill_null(False) & ~sa_missed) | (
@@ -6806,6 +6808,7 @@ class CFBPlayProcess(object):
             pl.col("text").str.extract(r"(?i:extra point by)\s+" + sa_name, 1),
             pl.col("text").str.extract(r"^" + sa_name + r"\s+(?i:extra point)", 1),
         ).str.strip_chars()
+        sa_kicker = pl.when(sa_kicker.str.to_lowercase() != "team").then(sa_kicker)  # "Team extra point GOOD."
 
         return play_df.with_columns(
             pl.when(standalone).then(True).when(gated).then(made | missed).otherwise(False).alias("xp_attempt"),
