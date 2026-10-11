@@ -205,8 +205,10 @@ def parse_cfb_ncaa_scoring_summary(
     cells are flattened and re-chunked by the 9-column header (Period, Time,
     Has Ball, Play, Plays, Yards, TOP, away, home) and de-duplicated preserving
     order. ``period`` keeps overtime as 5, 6, … (``"1OT"`` -> 5); ``team`` ("Has
-    Ball") and ``play_text`` are null when the page leaves them blank (common on
-    OT rows); ``score_away`` / ``score_home`` are the running score after the play.
+    Ball") is the cell text, else its team logo's ``alt`` (the real page ships only
+    the logo), null when the cell has neither;
+    ``play_text`` is null when the page leaves it blank (common on OT rows);
+    ``score_away`` / ``score_home`` are the running score after the play.
 
     Args:
         html: Raw HTML of the ``/contests/{id}/box_score`` page.
@@ -240,7 +242,11 @@ def parse_cfb_ncaa_scoring_summary(
     table = soup.find("table", id="scoring_summary_table")
     rows: "list[dict]" = []
     if table is not None:
-        cells = [c.get_text(" ", strip=True) for c in table.find_all(["th", "td"])]
+        # "Has Ball" is a bare team logo: the name is only in <img alt>, so text first, alt second.
+        cells = [
+            c.get_text(" ", strip=True) or next(((i.get("alt") or "").strip() for i in c.find_all("img")), "")
+            for c in table.find_all(["th", "td"])
+        ]
         flat = [c for c in cells if c != "Scoring Summary"]  # drop the title cell
         if len(flat) >= 9 and flat[0] == "Period":  # drop the 9-cell header
             flat = flat[9:]

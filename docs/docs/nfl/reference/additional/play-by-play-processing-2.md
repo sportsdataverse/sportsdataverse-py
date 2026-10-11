@@ -164,7 +164,7 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `start.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the start of the play. |
 | `end.posTeamTimeouts` | integer | ESPN's `posTeamTimeouts` value for the play state at the end of the play. |
 | `end.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the end of the play. |
-| `firstHalfKickoffTeamId` | integer | ESPN id of the team that received the opening kickoff. |
+| `firstHalfKickoffTeamId` | integer | ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game. |
 | `period` | integer |  |
 | `start.yard` | integer | ESPN's `yard` value for the play state at the start of the play. |
 | `end.yard` | integer | ESPN's `yard` value for the play state at the end of the play. |

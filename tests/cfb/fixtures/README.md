@@ -43,8 +43,9 @@ play ids match `cfbfastR-cfb-raw/cfb/json/raw/401112489.json` exactly (236 plays
 ## Games the whole-game oracle leans on
 
 - **400547866** (Kansas @ West Virginia, 2014) -- an away-kicked game (the home team receives) for
-  C-NF-2 / C-M13: the processor's row-1 value names the receiving team, so the column is not even a
-  game-wide constant. Its home-kicked partners 400547699 and 400547865 are wrong on every row.
+  C-NF-2 / C-M13: before task 2.6 the processor's row-1 value named the receiving team, so the column
+  was not even a game-wide constant, and its home-kicked partners 400547699 and 400547865 were wrong
+  on every row.
   `tests/cfb/test_cfb_whole_game_oracle.py` reads the opening kicker from the feed on 85 captures, 43
   of them kicked off by the home team.
 - **400559176** (West Alabama @ Jacksonville State, 2014) -- the feed contradicts itself: ESPN files

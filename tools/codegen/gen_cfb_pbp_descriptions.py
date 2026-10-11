@@ -113,7 +113,9 @@ STATIC: dict[str, str] = {
     # --- game / clock metadata --------------------------------------------
     "playType": "ESPN's play-type label for the play.",
     "period.number": "Period (quarter) number in which the play occurred.",
-    "firstHalfKickoffTeamId": "ESPN id of the team that received the opening kickoff.",
+    "firstHalfKickoffTeamId": (
+        "ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game."
+    ),
     "homeTimeoutCalled": "True when the home team called a timeout on the play.",
     "awayTimeoutCalled": "True when the away team called a timeout on the play.",
     "new_down": "Down after the play, including any penalty enforcement.",

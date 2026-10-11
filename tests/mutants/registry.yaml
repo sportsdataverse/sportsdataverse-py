@@ -205,28 +205,91 @@
   expected: kill
   note: the pre-3.2 touchdown-before test, season-gated; 401112489 and 401628439 attempts after a misfiled touchdown
 
-# --- C-M13 / C-NF-2: the CFB opening-kickoff team can be inverted unnoticed ------------------------
+# --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13
   file: sportsdataverse/cfb/cfb_pbp.py
-  # the live frame expression (cfb_pbp.py:2865-2873) that start/end.pos_team_receives_2H_kickoff read;
-  # block scalars: the first line sets the indent, the later lines keep their 16 spaces
-  snippet: |-
-    .then(pl.col("homeTeamId"))
-                    .otherwise(pl.col("awayTeamId"))
-                    .alias("firstHalfKickoffTeamId"),
-  mutant: |-
-    .then(pl.col("awayTeamId"))
-                    .otherwise(pl.col("homeTeamId"))
-                    .alias("firstHalfKickoffTeamId"),
-  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400547699 or 400547865)"
+  # the game-wide constant (task 2.6) that start/end.pos_team_receives_2H_kickoff read
+  snippet: 'pl.lit(opening_kicker, dtype=pl.Int32).alias("firstHalfKickoffTeamId"),'
+  mutant: 'pl.lit(init["awayTeamId"] if opening_kicker == init["homeTeamId"] else init["homeTeamId"], dtype=pl.Int32).alias("firstHalfKickoffTeamId"),'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400547699 or 400547865 or 400547866)"
   expected: kill
   note: >-
-    C-NF-2. The row used to mutate the pbp_txt["firstHalfKickoffTeamId"] np.where at :3323-3330, a
-    dict key nothing reads or returns, so no test could ever kill it (tier C M13's "survives 242
-    tests" was measured there). The swap of the live expression makes the home-kicked captures
-    right, so their strict-xfail truth tests XPASS (red). Task 2.6 deletes the dead np.where block
-    and flips the test to a plain assert, which then kills the swap on every capture.
+    C-NF-2. The home/away swap of the opening kicker. Before task 2.6 the row mutated the per-row
+    expression at cfb_pbp.py:2865-2873 (and, earlier still, the pbp_txt["firstHalfKickoffTeamId"]
+    np.where nothing in the frame read); task 2.6 made the column one game-wide constant and turned
+    the strict xfails into plain asserts, so the swap is red on every one of the 85 captures (two
+    home-kicked, one away-kicked selected here).
+
+- id: cfb-opening-kicker-reads-the-receiver
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'select("type.text", "text", "start.team.id", "start.down")'
+  mutant: 'select("type.text", "text", "start.pos_team.id", "start.down")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400756970 or 401752844)"
+  expected: kill
+  note: >-
+    Ledger gate cfb-2h-kickoff-flag-truth: reading start.pos_team.id (the receiver) on the kickoff row.
+    The first-snap check in _opening_kicker repairs a receiver label whenever the receiver snaps
+    first, so this mutant is red only where the kick ends in a turnover or a second kickoff comes
+    before any snap: 6 of the 85 captures (400756970, 400869817, 401032062, 401309854, 401752844,
+    401761665), not on 400547866 as the ledger line guessed.
+
+- id: cfb-receives-2h-kickoff-period-gate
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'pl.when((pl.col("period") <= 2).and_(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId")))'
+  mutant: 'pl.when(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "receives_2h_kickoff_is_false_after_the_first_half and (400547866 or 400547699)"
+  expected: kill
+  note: >-
+    Ledger gate cfb-2h-kickoff-flag-truth: dropping the period <= 2 gate (nflfastR's receive_2h_ko,
+    task 2.6) flags the opening kicker's second-half possessions again.
+
+- id: cfb-opening-kicker-fallback-reads-the-offense
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  # _opening_kicker's fallback when period 1 files a snap before any kickoff: the first snap's DEFENSE kicked
+  snippet: 'return away_id if int(team) == home_id else home_id'
+  mutant: 'return home_id if int(team) == home_id else away_id'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "received_the_second_half and (243040130 or 293182305 or 401628455)"
+  expected: kill
+  note: >-
+    Review R781-3: the period-1 kickoff oracle asserts nothing on the 41 captures without an opening
+    kickoff, so this branch went unchecked. The period-3 oracle (the opening kicker takes the first
+    second-half snap) covers 34 of them; the mutant (the first snap's offense) is red there.
+
+# --- C-NF-2 booster-input shim (review R781-1; removed by the task 3.8 retrain) ------------------
+- id: cfb-wp-shim-pipeline
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'tb, start, end = (_as_trained_2h_flag(x) for x in (tb, start, end))'
+  mutant: 'tb, start, end = tb, start, end'
+  test: tests/cfb/test_cfb_wp_endgame.py -k "regulation_surfaces and wp_before"
+  expected: kill
+  note: >-
+    The bundled WP boosters were trained with the flag equal to 1 - is_home on every row. Fed the
+    corrected flag, the pinned 401754554 wp_before / wp_before_naive move off their base values.
+
+- id: cfb-wp-shim-fourth-down
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: 'out["pos_team_receives_2H_kickoff"] = ~out["is_home"].astype(bool)'
+  mutant: 'pass'
+  test: tests/cfb/test_cfb_wp_endgame.py -k "regulation_surfaces and (punt_wp or go_wp or fg_wp)"
+  expected: kill
+  note: >-
+    The fourth-down state's WP input: fed the corrected flag, the pinned 401754554 punt/go/FG
+    values move off their base values.
+
+- id: cfb-wp-shim-calculator
+  finding: C-NF-2
+  file: sportsdataverse/cfb/model_calculators.py
+  snippet: 'scored = prepared.with_columns(flag)'
+  mutant: 'scored = prepared'
+  test: tests/cfb/test_model_calculators.py -k "as_the_boosters_were_trained"
+  expected: kill
+  note: calculate_win_probability scores the flag as 1 - is_home, whatever the caller's column says.
 
 # --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012) ----------------
 - id: cfb-kickoff-touchback-75-from-2014
@@ -345,14 +408,63 @@
   group: provider-gates
   finding: B-M37
   file: sportsdataverse/cfb/cfb_pbp_fox.py
-  snippet: 'return int(e["yardStart"])'
-  mutant: 'return 100 - int(e["yardStart"])'
+  snippet: 'ytg = None if spot is None else (spot if is_home_poss else 100 - spot)'
+  mutant: 'ytg = spot'
   test: tests/cfb/test_cfb_pbp_fox_offline.py
   expected: kill
   note: >-
-    B-H3 is live (away snaps mirrored); flipping the mirror onto the home snaps kept
-    test_fox_cfb_pbp_full_pipeline green. 1.4's home-snap assert goes red and its strict-xfail
-    away-snap assert goes XPASS(strict) under this mutant (ledger gate fox-away-snap-xfail).
+    Reading Fox's absolute yardStart as yards-to-endzone again (the B-H3 defect) mirrors every
+    away snap; test_fox_cfb_pbp_full_pipeline stayed green under it. Task 2.8 fixed B-H3 and
+    flipped 1.4's strict xfail: the away-snap assert goes red under this mutant (ledger gate
+    fox-cfb-field-position).
+
+- id: fox-cfb-no-coverage-completed
+  group: provider-gates
+  finding: B-M6
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: '(h.get("eventStatus") == 3) and covered'
+  mutant: '(h.get("eventStatus") == 3)'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py::test_no_coverage_final_header_is_not_a_completed_game
+  expected: kill
+  note: >-
+    The committed uncovered-game capture (FINAL header, pbp.sections == []) reports a completed
+    0-play game under this mutant (ledger gate fox-no-coverage-not-final).
+
+- id: fox-cfb-no-coverage-raises
+  group: provider-gates
+  finding: B-M6
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: 'if not _has_pbp(fox_data):'
+  mutant: 'if False:'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py::test_no_coverage_final_header_is_not_a_completed_game
+  expected: kill
+  note: >-
+    Without the coverage branch fox_cfb_play_process runs the processor on the uncovered capture
+    instead of raising NoDataError (ledger gate fox-no-coverage-not-final).
+
+- id: fox-cfb-backup-joins-espn-participants
+  group: provider-gates
+  finding: B-M28
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: 'join_participants=False,'
+  mutant: 'join_participants=True,'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py::test_backup_makes_no_espn_request
+  expected: kill
+  note: >-
+    The backup fetches ESPN participants for the Fox id again (the recorded requests list is
+    non-empty).
+
+- id: contract-mirrored-field-position
+  group: provider-gates
+  finding: B-GB-08
+  file: sportsdataverse/football/sources/contract.py
+  snippet: '_MIRRORED_SHARE = 0.25'
+  mutant: '_MIRRORED_SHARE = 1.0'
+  test: tests/football/sources/test_contract.py::test_mirrored_field_position_is_invalid
+  expected: kill
+  note: >-
+    With the rule disabled the contract accepts a real ESPN summary with every yardLine
+    mirrored (ledger gate fox-cfb-field-position).
 
 # --- C-L30: the NHL faceoff gate cannot detect a skipped fit --------------------------------------
 - id: nhl-faceoff-skip-fit

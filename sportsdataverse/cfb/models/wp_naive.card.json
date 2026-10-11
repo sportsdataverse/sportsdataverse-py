@@ -37,5 +37,8 @@
   "source": "cfb_final_json",
   "trained_date": "2026-08-02",
   "num_boost_round": 65,
-  "training_frame": "artifacts/pbp_full_v2.parquet"
+  "training_frame": "artifacts/pbp_full_v2.parquet",
+  "feature_semantics": {
+    "pos_team_receives_2H_kickoff": "Trained as 1 - is_home on every row, both halves (C-NF-2): the training frame's firstHalfKickoffTeamId was the away team on every row. Not the corrected published flag (true only on the opening kicker's first-half possessions). sdv-py feeds the booster 1 - is_home through a shim (cfb_pbp._as_trained_2h_flag) until the task 3.8 retrain."
+  }
 }
