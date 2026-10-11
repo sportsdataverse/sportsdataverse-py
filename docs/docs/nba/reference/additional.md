@@ -258,6 +258,7 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
+| [nba_crosswalks_from_archive](additional/ids-and-crosswalks.md#nba_crosswalks_from_archive) | Build the NBA team, schedule and player crosswalks for a past season, offline. |
 | [nba_player_crosswalk](additional/ids-and-crosswalks.md#nba_player_crosswalk) | Build the NBA cross-source player crosswalk (ESPN / NBA Stats / Fox). |
 | [nba_schedule_crosswalk](additional/ids-and-crosswalks.md#nba_schedule_crosswalk) | Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats). |
 | [nba_team_crosswalk](additional/ids-and-crosswalks.md#nba_team_crosswalk) | Build the NBA cross-source team crosswalk (ESPN / NBA Stats / Fox). |
