@@ -65,7 +65,9 @@ dependencies = [
     "polars>=1.0,<3",
     "pyarrow>=14.0.0",
     "pyjanitor>=0.23.1",
-    "requests>=2.28.0",
+    # 2.30 is the first requests that accepts urllib3 2.x; the urllib3 floor below is
+    # unsatisfiable with 2.28/2.29 (they pin urllib3<1.27).
+    "requests>=2.30.0",
     "scipy>=1.10.0",
     "tqdm>=4.50.0",
     "scikit-learn>=1.0.0",

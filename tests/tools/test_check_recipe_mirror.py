@@ -36,8 +36,15 @@ def test_committed_recipe_mirrors_pyproject(capsys):
             lambda s: s.replace("    - urllib3 >=2.8.0\n", "    - urllib3 >=2.8.0\n    - flask >=1.0\n"),
             "in recipe but not pyproject: flask",
         ),
+        (
+            # run_constrained: is an OPTIONAL pin; a dependency moved there is missing from the install
+            lambda s: s.replace("    - scikit-learn >=1.0.0\n", "").replace(
+                "\ntest:\n", "  run_constrained:\n    - scikit-learn >=1.0.0\n\ntest:\n"
+            ),
+            "missing from recipe: scikit-learn >=1.0.0",
+        ),
     ],
-    ids=["missing-dep", "stale-version", "lower-bound-drift", "extra-dep"],
+    ids=["missing-dep", "stale-version", "lower-bound-drift", "extra-dep", "moved-to-run-constrained"],
 )
 def test_drift_is_named_and_exits_1(tmp_path, capsys, mutation, expected):
     original = RECIPE.read_text(encoding="utf-8")

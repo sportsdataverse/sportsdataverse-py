@@ -18,8 +18,12 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-import tomllib
 from pathlib import Path
+
+if sys.version_info >= (3, 11):
+    import tomllib
+else:  # the 3.10 floor: tomli is declared for python_version < '3.11' (same split as scrape/ncaa/canary.py)
+    import tomli as tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -27,7 +31,9 @@ ROOT = Path(__file__).resolve().parents[1]
 CONDA_NAMES = {"matplotlib": "matplotlib-base"}
 
 _REQ = re.compile(r"^\s*([A-Za-z0-9][A-Za-z0-9._-]*)\s*(\[[^\]]*\])?\s*([^;]*?)\s*(?:;\s*(.*))?$")
-_RECIPE_RUN = re.compile(r"^  run:\n(.*?)(?=^\S|^  [a-z]+:)", re.M | re.S)
+# The block ends at the next top-level key or the next sibling under requirements:,
+# which includes `run_constrained:` (optional pins; never a runtime dependency).
+_RECIPE_RUN = re.compile(r"^  run:\n(.*?)(?=^\S|^  [a-z_]+:)", re.M | re.S)
 _RECIPE_DEP = re.compile(r"^\s*-\s*([A-Za-z0-9][A-Za-z0-9._-]*)\s*(.*?)\s*$", re.M)
 _RECIPE_VERSION = re.compile(r'\{%\s*set\s+version\s*=\s*"([^"]+)"\s*%\}')
 
