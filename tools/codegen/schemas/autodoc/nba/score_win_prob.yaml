@@ -1,0 +1,19 @@
+schema: score_win_prob
+kind: dataframe
+hand_authored: true
+columns:
+- name: pregame_home_prob
+  type: double
+  description: ''
+- name: prior_source
+  type: character
+  description: ''
+- name: wp_regime
+  type: character
+  description: ''
+- name: home_win_prob
+  type: double
+  description: ''
+- name: wp_delta
+  type: double
+  description: ''

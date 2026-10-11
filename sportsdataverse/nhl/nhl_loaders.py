@@ -461,7 +461,7 @@ def load_nhl_game_rosters(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_game_rosters
 
     Args:
-        seasons: an int or iterable of seasons (>= 2024).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -484,7 +484,7 @@ def load_nhl_game_rosters(seasons, return_as_pandas: bool = False):
         |shoots_catches |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2024.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -493,8 +493,8 @@ def load_nhl_game_rosters(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2024:
-            raise SeasonNotFoundError("season cannot be less than 2024")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_game_rosters/game_rosters_{season}.parquet"
         )

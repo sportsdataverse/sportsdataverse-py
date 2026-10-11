@@ -17,7 +17,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 181 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 189 | — |
 
 ## ESPN {#espn}
 
@@ -101,8 +101,11 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`expected_possessions`](reference/additional/models-and-calculators#expected_possessions)
 - [`external_validity`](reference/additional/models-and-calculators#external_validity)
 - [`fit_aging_curve`](reference/additional/models-and-calculators#fit_aging_curve)
+- [`game_minutes`](reference/additional/models-and-calculators#game_minutes)
+- [`game_page_frames`](reference/additional/models-and-calculators#game_page_frames)
 - [`get_constants`](reference/additional/models-and-calculators#get_constants)
 - [`get_shrinkage_k`](reference/additional/models-and-calculators#get_shrinkage_k)
+- [`home_prior`](reference/additional/models-and-calculators#home_prior)
 - [`in_game_features`](reference/additional/models-and-calculators#in_game_features)
 - [`luck_adjusted_response`](reference/additional/models-and-calculators#luck_adjusted_response)
 - [`nba_adj_rapm`](reference/additional/models-and-calculators#nba_adj_rapm)
@@ -117,15 +120,20 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_in_game_win_prob`](reference/additional/models-and-calculators#nba_in_game_win_prob)
 - [`nba_la_rapm`](reference/additional/models-and-calculators#nba_la_rapm)
 - [`nba_matchup_drapm`](reference/additional/models-and-calculators#nba_matchup_drapm)
-- [`nba_predict_games`](reference/additional/models-and-calculators#nba_predict_games)
-- [`nba_rookie_projection`](reference/additional/models-and-calculators#nba_rookie_projection)
+- [`nba_predict_games`](reference/additional/models-and-calculators-2#nba_predict_games)
+- [`nba_rookie_projection`](reference/additional/models-and-calculators-2#nba_rookie_projection)
 - [`nba_spm`](reference/additional/models-and-calculators-2#nba_spm)
 - [`nba_team_ratings`](reference/additional/models-and-calculators-2#nba_team_ratings)
 - [`nba_war`](reference/additional/models-and-calculators-2#nba_war)
+- [`ot_adjusted_seconds`](reference/additional/models-and-calculators-2#ot_adjusted_seconds)
+- [`player_game_rates`](reference/additional/models-and-calculators-2#player_game_rates)
 - [`predict_margin`](reference/additional/models-and-calculators-2#predict_margin)
 - [`predict_total`](reference/additional/models-and-calculators-2#predict_total)
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-2#raw_game_efficiency)
 - [`render_report`](reference/additional/models-and-calculators-2#render_report)
+- [`score_win_prob`](reference/additional/models-and-calculators-2#score_win_prob)
+- [`shot_coordinates`](reference/additional/models-and-calculators-2#shot_coordinates)
+- [`team_game_rates`](reference/additional/models-and-calculators-2#team_game_rates)
 - [`train_spm`](reference/additional/models-and-calculators-2#train_spm)
 - [`validate_model`](reference/additional/models-and-calculators-2#validate_model)
 - [`walk_forward`](reference/additional/models-and-calculators-2#walk_forward)

@@ -1,0 +1,40 @@
+schema: team_game_rates
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: efg_pct
+  type: double
+  description: ''
+- name: tov_pct
+  type: double
+  description: ''
+- name: orb_pct
+  type: double
+  description: ''
+- name: ft_rate
+  type: double
+  description: ''
+- name: possessions
+  type: double
+  description: ''
+- name: off_rtg
+  type: double
+  description: ''
+- name: def_rtg
+  type: double
+  description: ''
+- name: pace
+  type: double
+  description: ''
+- name: total_turnovers
+  type: integer
+  description: ''
+- name: game_minutes
+  type: integer
+  description: ''
