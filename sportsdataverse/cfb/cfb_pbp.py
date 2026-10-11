@@ -1511,7 +1511,7 @@ def _parse_recovery_sides(row):
     One entry per clause (a ball that changes hands twice has two), each
     ``"home"`` / ``"away"`` or None when the clause names no team. A
     parenthesised school after the recoverer's name ("recovered by Omar Jacobs
-    (BGSU)") is preferred to the first word. Reads the overturn-stripped text in
+    (BGSU)") is preferred to the first word when it names a side. Reads the overturn-stripped text in
     ``row["_clean_text"]`` and the team name columns. Measured on the published
     2010 / 2016 / 2022 seasons, resolving mixed-case tokens lifts team
     fumbles-lost parity from 84 / 87 / 86% to 93 / 97 / 87%.
@@ -1523,8 +1523,11 @@ def _parse_recovery_sides(row):
     for m in _RECOVERY_TOKEN_RE.finditer(text):
         paren = _RECOVERER_TEAM_PAREN_RE.match(text, m.end(1))
         tok = m.group(1)
-        if paren:
-            sides.append(_recovery_token_side(paren.group(1), row, paren=True))
+        # "(OH)" in "Miami (OH)" is part of the school's name, not a code: only a paren
+        # that resolves wins; otherwise the token reads as usual.
+        side = _recovery_token_side(paren.group(1), row, paren=True) if paren else None
+        if side:
+            sides.append(side)
             continue
         run = _CAPITALISED_RUN_RE.match(text, m.start(1))
         words = run.group(0).split() if run else [tok]

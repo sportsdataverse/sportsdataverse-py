@@ -1463,3 +1463,22 @@ def test_penalty_team_side_pre_2014_parenthesised_school():
     }
     assert _parse_penalty_team_side({"text": "Miami (OH) penalty 10 yard holding accepted.", **teams}) == "home"
     assert _parse_penalty_team_side({"text": "TEAM penalty 5 yard delay of game accepted.", **teams}) is None
+
+
+_MOH_KENT = {
+    "homeTeamAbbrev": "M-OH",
+    "awayTeamAbbrev": "KENT",
+    "homeTeamName": "Miami (OH)",
+    "awayTeamName": "Kent State",
+    "homeTeamNameAlt": None,
+    "awayTeamNameAlt": None,
+    "homeTeamMascot": "RedHawks",
+    "awayTeamMascot": "Golden Flashes",
+}
+
+
+def test_parse_recovery_sides_paren_that_is_no_team_falls_back_to_the_token():
+    # "(OH)" is part of the school's name, not a recoverer's school code: the token still resolves.
+    assert _sides("Kent State fumbled, recovered by Miami (OH) at the KENT 30.", _MOH_KENT) == ["home"]
+    # A real 2004-06 code still wins over the name before it.
+    assert _sides("Omar Jacobs fumbled, recovered by Joe Smith (KENT) at the M-OH 40.", _MOH_KENT) == ["away"]
