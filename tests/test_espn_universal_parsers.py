@@ -12,6 +12,9 @@ Live integration tests live in ``test_espn_live.py`` (gated by
 
 from __future__ import annotations
 
+import functools
+import importlib
+import inspect
 import json
 from pathlib import Path
 from typing import Any, Dict, List
@@ -1231,21 +1234,25 @@ def test_rankings_wrapper_routes_through_parse_rankings(monkeypatch):
 
 
 # ===========================================================================
-# Hostile bodies and the dtype snapshot (A-M2, A-L16, A-L17, A-M13, A-M14, A-M15)
+# Hostile bodies and the dtype snapshot (A-M2, A-L16, A-L17, A-M13, A-M14, A-M15, EX-1.3-a)
 # ===========================================================================
 #
-# Every registered parser (ENDPOINT_PARSERS plus the curated returns-schema parsers) is fed
-# five hostile bodies; the parser contract is a zero-row frame, or a vocabulary raise
-# (NoDataError / AssetFetchError) when the body is an error. The error envelope is ESPN's
-# own (tests/fixtures/runtime_errors/espn_site_roster_400.json). Every committed top-level
-# ESPN capture is parsed by its endpoint's parser and its (column, dtype) set compared with
-# tests/espn_parser_dtype_snapshot.json; regenerate that file with
+# Every public ``parse_*`` defined in a ``sportsdataverse/**/*_parsers.py`` module (214 today, the 30
+# ESPN registry parsers among them) is DISCOVERED and fed five hostile bodies, so a new parser is
+# swept with no edit here. The parser contract: the error envelope may raise the vocabulary's
+# failed-fetch errors (NoDataError / AssetFetchError) or return zero rows; the other four shapes must
+# return zero rows. The envelope is ESPN's own (tests/fixtures/runtime_errors/espn_site_roster_400.json).
+# Every committed top-level ESPN capture is parsed by its endpoint's parser and its (column, dtype)
+# set compared with tests/espn_parser_dtype_snapshot.json; regenerate that file with
 # ``python -m tests.test_espn_universal_parsers`` only for a deliberate dtype change.
 
 _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
+# Four snapshot entries pin zero columns (injuries_mbb, injuries_wbb, team_schedule_cfb, team_schedule_nhl):
+# their captures are empty and parse to zero-width frames. Task 5.1 gives empty frames their documented schema.
 _ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
 # Captures no registered parser reads (kept for other tests).
 _NO_PARSER = {"athlete_statslog_lbj", "depthcharts_mlb", "depthcharts_nba", "depthcharts_nfl", "depthcharts_nhl"}
+_PKG = Path(__file__).parents[1] / "sportsdataverse"
 
 
 def _registered() -> Dict[str, Any]:
@@ -1258,6 +1265,18 @@ def _registered() -> Dict[str, Any]:
 
 def _parsers() -> Dict[str, Any]:
     return {fn.__name__: fn for fn in _registered().values()}
+
+
+@functools.lru_cache(maxsize=1)
+def _public_parsers() -> Dict[str, Any]:
+    """``{"<module>.<parse_fn>": fn}`` for every public ``parse_*`` defined in a ``*_parsers.py`` module."""
+    out = {}
+    for path in sorted(_PKG.rglob("*_parsers.py")):
+        mod = ".".join(path.relative_to(_PKG.parent).with_suffix("").parts)
+        for name, fn in vars(importlib.import_module(mod)).items():
+            if name.startswith("parse_") and callable(fn) and getattr(fn, "__module__", "") == mod:
+                out[f"{mod.split('.', 1)[1]}.{name}"] = fn
+    return out
 
 
 def _captures() -> Dict[str, str]:
@@ -1288,72 +1307,279 @@ def _dtype_snapshot() -> Dict[str, Dict[str, Dict[str, str]]]:
 
 _ENVELOPE = json.loads((Path(__file__).parent / "fixtures/runtime_errors/espn_site_roster_400.json").read_text("utf-8"))
 _HOSTILE = {"dict": {}, "list": [{}], "none": None, "empty_str": "", "error_envelope": _ENVELOPE}
-_L17 = "A-L17: a non-empty list body raises AttributeError instead of a zero-row frame; task 4.1"
-_M13 = "A-M13: ESPN's 200 error envelope parses to a one-row frame of code/message; task 4.1"
-_HOSTILE_KNOWN = {
-    **{
-        (p, "list"): _L17
-        for p in (
-            "parse_athlete_gamelog",
-            "parse_athlete_overview",
-            "parse_athlete_splits",
-            "parse_athlete_stats",
-            "parse_coaches",
-            "parse_draft",
-            "parse_event_competitor_linescores",
-            "parse_event_competitor_roster",
-            "parse_event_competitor_statistics",
-            "parse_event_plays",
-            "parse_fpi",
-            "parse_leaders",
-            "parse_scoreboard",
-            "parse_standings",
-            "parse_summary",
-            "parse_weekly_powerindex",
-        )
+# Parsers that break the contract today, measured 2026-10-11 (polars 2.0): ``{parser: {shape: what the
+# case fails with}}``, AssertionError meaning it returned rows. The fixing task follows from the module.
+_HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
+    "_common_espn_parsers.parse_athlete_gamelog": {"list": AttributeError},
+    "_common_espn_parsers.parse_athlete_overview": {"error_envelope": AssertionError, "list": AttributeError},
+    "_common_espn_parsers.parse_athlete_splits": {"error_envelope": AssertionError, "list": AttributeError},
+    "_common_espn_parsers.parse_athlete_stats": {"error_envelope": AssertionError, "list": AttributeError},
+    "_common_espn_parsers.parse_coaches": {"list": AttributeError},
+    "_common_espn_parsers.parse_draft": {"list": AttributeError},
+    "_common_espn_parsers.parse_event_competitor_linescores": {"list": AttributeError},
+    "_common_espn_parsers.parse_event_competitor_roster": {"list": AttributeError},
+    "_common_espn_parsers.parse_event_competitor_statistics": {
+        "error_envelope": AssertionError,
+        "list": AttributeError,
     },
-    **{
-        (p, "error_envelope"): _M13
-        for p in (
-            "parse_athlete_overview",
-            "parse_athlete_splits",
-            "parse_athlete_stats",
-            "parse_event_competitor_statistics",
-            "parse_leaders",
-            "parse_single_entity",
-        )
+    "_common_espn_parsers.parse_event_plays": {"list": AttributeError},
+    "_common_espn_parsers.parse_fpi": {"list": AttributeError},
+    "_common_espn_parsers.parse_leaders": {"error_envelope": AssertionError, "list": AttributeError},
+    "_common_espn_parsers.parse_scoreboard": {"list": AttributeError},
+    "_common_espn_parsers.parse_single_entity": {"error_envelope": AssertionError},
+    "_common_espn_parsers.parse_standings": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_against_the_spread": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_broadcasts": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_drive_plays": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_drives": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_game_info": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_injuries": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_news": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_odds": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_officials": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_pickcenter": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_scoring_plays": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_season_series": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_standings": {"list": AttributeError},
+    "_common_espn_parsers.parse_weekly_powerindex": {"list": AttributeError},
+    "cbs.cbs_napi_parsers.parse_cbs_napi": {"error_envelope": AssertionError, "list": AssertionError},
+    "cfb.on3_parsers.parse_on3_rankings": {"list": AttributeError},
+    "cfb.on3_parsers.parse_on3_rdb": {"error_envelope": AssertionError, "list": AssertionError},
+    "cfb.on3_parsers.parse_on3_team_rankings": {"list": AttributeError},
+    "cfb.sports247_parsers.parse_sports247_institution_rankings": {
+        "error_envelope": AssertionError,
+        "list": AssertionError,
     },
+    "cfb.sports247_parsers.parse_sports247_result_set": {"error_envelope": AssertionError, "list": AssertionError},
+    "cfb.sports247_parsers.parse_sports247_teams": {"error_envelope": AssertionError, "list": AssertionError},
+    "cfb.sports247_site_pages_parsers.parse_sports247_site_page": {"error_envelope": AssertionError},
+    "espn_content.espn_content_parsers.parse_espn_content": {"error_envelope": AssertionError, "list": AssertionError},
+    "euroleague.euroleague_parsers.parse_euroleague": {"error_envelope": AssertionError},
+    "euroleague.euroleague_parsers.parse_euroleague_header": {"error_envelope": AssertionError},
+    "euroleague.euroleague_parsers.parse_euroleague_points": {"error_envelope": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_events": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_header": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_nav": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_polls": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_roster": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_search": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_standings": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_trending": {"list": AssertionError},
+    "hockeytech._parsers.parse_game_info": {"list": AttributeError},
+    "hockeytech._parsers.parse_game_summary": {
+        "dict": AssertionError,
+        "empty_str": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AttributeError,
+        "none": AssertionError,
+    },
+    "hockeytech._parsers.parse_leaders": {"list": AttributeError},
+    "hockeytech._parsers.parse_pbp": {"list": AssertionError},
+    "hockeytech._parsers.parse_player_box": {"list": AttributeError},
+    "hockeytech._parsers.parse_player_game_log": {"list": AttributeError},
+    "hockeytech._parsers.parse_player_info": {"list": AttributeError},
+    "hockeytech._parsers.parse_player_search": {"list": AttributeError},
+    "hockeytech._parsers.parse_player_stats": {"list": AttributeError},
+    "hockeytech._parsers.parse_playoff_bracket": {"list": AttributeError},
+    "hockeytech._parsers.parse_roster": {"list": AttributeError},
+    "hockeytech._parsers.parse_schedule": {"list": AttributeError},
+    "hockeytech._parsers.parse_scorebar": {"list": AttributeError},
+    "hockeytech._parsers.parse_seasons": {"list": AttributeError},
+    "hockeytech._parsers.parse_shifts": {"list": AttributeError},
+    "hockeytech._parsers.parse_stats": {"list": AttributeError},
+    "hockeytech._parsers.parse_streaks": {"list": AttributeError},
+    "hockeytech._parsers.parse_teams": {"list": AttributeError},
+    "hockeytech._parsers.parse_transactions": {"list": AttributeError},
+    "mlb.mlb_api_parsers.parse_mlb_api_draft_latest": {"error_envelope": AssertionError},
+    "mlb.mlb_api_parsers.parse_mlb_api_team_roster": {"list": AttributeError},
+    "mlb.mlb_api_parsers.parse_mlb_api_teams": {"list": AttributeError},
+    "mlb.mlb_api_parsers.parse_mlb_api_timecodes": {"list": AssertionError},
+    "mlb.mlb_api_parsers.parse_mlb_api_win_probability": {"list": AssertionError},
+    "mlb.mlb_statcast_parsers.parse_mlb_statcast_player": {"error_envelope": TypeError, "list": TypeError},
+    "nba.nba_stats_parsers.parse_nba_stats_commonallplayers": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nba.nba_stats_parsers.parse_nba_stats_leaguedashplayerstats": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nba.nba_stats_parsers.parse_nba_stats_playercareerstats": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nba.nba_stats_parsers.parse_nba_stats_result_sets": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_combine_profiles": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_draft_picks": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_game_details_by_slug": {"error_envelope": AssertionError},
+    "nfl.nfl_api_parsers.parse_nfl_game_details_v2": {"error_envelope": AssertionError},
+    "nfl.nfl_api_parsers.parse_nfl_game_summaries": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_injuries": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_rosters": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_standings": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_team": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_teams_history": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_weekly_game_details": {
+        "empty_str": AttributeError,
+        "list": AssertionError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_weeks": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_weeks_by_date": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "nfl.nflpro_parsers.parse_nfl_pro_stats": {"list": AssertionError},
+    "nfl.sleeper_parsers.parse_sleeper": {"error_envelope": AssertionError, "list": AssertionError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_draft_picks": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_landing": {"error_envelope": AssertionError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_pbp": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_player_game_log": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_player_landing": {"error_envelope": AssertionError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_player_spotlight": {"list": AssertionError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_score": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_standings": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_standings_season": {"list": AttributeError},
+    "nhl.nhl_edge_parsers.parse_edge_detail": {"error_envelope": AssertionError},
+    "nhl.nhl_edge_parsers.parse_edge_payload": {"error_envelope": AssertionError},
+    "nhl.nhl_edge_parsers.parse_edge_top10": {"list": AssertionError},
+    "nhl.nhl_edge_parsers.parse_edge_zone_time": {"error_envelope": AssertionError},
+    "odds.kalshi_parsers.parse_kalshi": {"error_envelope": AssertionError, "list": AssertionError},
+    "odds.polymarket_parsers.parse_polymarket": {"error_envelope": AssertionError, "list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_event_odds": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "odds.the_odds_api_parsers.parse_toa_event_odds_history": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "odds.the_odds_api_parsers.parse_toa_events": {"list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_events_history": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "odds.the_odds_api_parsers.parse_toa_odds": {"list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_odds_history": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "odds.the_odds_api_parsers.parse_toa_participants": {"list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_scores": {"list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_sports": {"list": AssertionError},
+    "soccer.asa_parsers.parse_asa": {"error_envelope": AssertionError},
+    "soccer.asa_parsers.parse_asa_goals_added": {"error_envelope": AssertionError},
+    "soccer.fifa_parsers.parse_fifa": {"error_envelope": AssertionError},
+    "soccer.fotmob_parsers.parse_fotmob": {"error_envelope": AssertionError},
+    "soccer.mls.mls_api_parsers.parse_mls_api": {"error_envelope": AssertionError},
+    "soccer.mls.mls_api_parsers.parse_mls_entity": {"error_envelope": AssertionError},
+    "soccer.openligadb_parsers.parse_openligadb": {"error_envelope": AssertionError, "list": AssertionError},
+    "soccer.uefa_parsers.parse_uefa": {"error_envelope": AssertionError},
+    "thesportsdb.thesportsdb_parsers.parse_thesportsdb": {"list": AssertionError},
 }
+# Plan v2.2: task 4.1 owns the ESPN parsers' zero-row contract (A-L17, A-M13), 4.9 narrows the
+# nhl/mlb/nba parsers' error handling (A-L60), and 4.1b owns every other provider parser (A-L17).
+_TASK_49 = ("nhl.nhl_edge_parsers.", "nhl.nhl_api_web_parsers.", "mlb.mlb_api_parsers.", "nba.nba_stats_parsers.")
+
+
+def _open(qual: str, shape: str) -> str:
+    """The finding id and fixing task of an open ``(parser, shape)`` case."""
+    if qual.startswith("_common_espn_parsers.") and qual.rsplit(".", 1)[1] in _parsers():
+        if shape == "error_envelope":
+            return "A-M13: ESPN's 200 error envelope parses to rows; task 4.1"
+        return "A-L17: a non-dict body raises instead of returning a zero-row frame; task 4.1"
+    task = "4.1" if qual.startswith("_common_espn_parsers.") else "4.9" if qual.startswith(_TASK_49) else "4.1b"
+    return f"EX-1.3-a: a hostile {shape} body breaks the zero-row contract; task {task}"
 
 
 def _hostile_params() -> List[Any]:
-    return [
-        pytest.param(
-            name,
-            shape,
-            id=f"{name}-{shape}",
-            marks=[pytest.mark.xfail(strict=True, reason=_HOSTILE_KNOWN[name, shape])]
-            if (name, shape) in _HOSTILE_KNOWN
-            else [],
-        )
-        for name in sorted(_parsers())
-        for shape in _HOSTILE
-    ]
+    params = []
+    for qual in sorted(_public_parsers()):
+        for shape in _HOSTILE:
+            exc = _HOSTILE_OPEN.get(qual, {}).get(shape)
+            marks = [pytest.mark.xfail(strict=True, raises=exc, reason=_open(qual, shape))] if exc else []
+            params.append(pytest.param(qual, shape, id=f"{qual}-{shape}", marks=marks))
+    return params
 
 
-@pytest.mark.parametrize(("name", "shape"), _hostile_params())
-def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(name, shape):
+@pytest.mark.parametrize(("qual", "shape"), _hostile_params())
+def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(qual, shape):
     from sportsdataverse.errors import AssetFetchError, NoDataError
 
-    try:
-        out = _parsers()[name](_HOSTILE[shape])
-    except (NoDataError, AssetFetchError):
-        return
+    parse = _public_parsers()[qual]
+    if shape == "error_envelope":  # a failed fetch: the one body the vocabulary lets a parser raise on
+        try:
+            out = parse(_HOSTILE[shape])
+        except (NoDataError, AssetFetchError):
+            return
+    else:
+        out = parse(_HOSTILE[shape])
     assert {sec: df.height for sec, df in _frames(out).items() if df.height} == {}
 
 
-def test_hostile_sweep_covers_every_registered_parser():
-    assert len(_parsers()) >= 30 and "parse_teams" in _parsers()
+def test_hostile_sweep_covers_every_public_parser():
+    parsers = _public_parsers()
+    assert len(parsers) >= 214 and {f"_common_espn_parsers.{n}" for n in _parsers()} <= set(parsers)
+    needs_more = [
+        q
+        for q, fn in parsers.items()
+        if any(
+            p.default is p.empty and p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)
+            for p in list(inspect.signature(fn).parameters.values())[1:]
+        )
+    ]
+    assert needs_more == [], "a parser needs more than its payload: give the sweep its arguments"
+    assert set(_HOSTILE_OPEN) <= set(parsers), sorted(set(_HOSTILE_OPEN) - set(parsers))
     unread = {fx.stem for fx in _ESPN_FIX.glob("*.json")} - set(_captures())
     assert unread == _NO_PARSER, "a new capture needs a parser (or a reason in _NO_PARSER)"
 
@@ -1363,8 +1589,15 @@ def test_dtype_snapshot_matches_every_committed_capture():
     want = json.loads(_SNAPSHOT.read_text(encoding="utf-8"))
     got = _dtype_snapshot()
     assert sorted(got) == sorted(want)
-    diffs = {stem: (want[stem], got[stem]) for stem in got if got[stem] != want[stem]}
-    assert not diffs, f"{len(diffs)} captures changed dtype: {sorted(diffs)[:5]}"
+    diffs = [
+        (stem, sec, col, want[stem].get(sec, {}).get(col), got[stem].get(sec, {}).get(col))
+        for stem in got
+        for sec in set(got[stem]) | set(want[stem])
+        for col in set(got[stem].get(sec, {})) | set(want[stem].get(sec, {}))
+        if want[stem].get(sec, {}).get(col) != got[stem].get(sec, {}).get(col)
+    ]
+    # Fix the parser, or regenerate only for a deliberate change: (capture, section, column, want, got).
+    assert not diffs, f"{len(diffs)} column dtypes changed, e.g. {sorted(diffs, key=str)[:8]}"
 
 
 def _id_cols(name: str) -> Dict[str, str]:
@@ -1407,7 +1640,10 @@ _IDS_NOT_INT64 = {
 
 def _id_params(open_ids: set, reason: str) -> List[Any]:
     return [
-        pytest.param(name, marks=[pytest.mark.xfail(strict=True, reason=reason)] if name in open_ids else [])
+        pytest.param(
+            name,
+            marks=[pytest.mark.xfail(strict=True, raises=AssertionError, reason=reason)] if name in open_ids else [],
+        )
         for name in sorted(_parsers())
     ]
 

@@ -30,6 +30,10 @@ from typing import Callable, Dict
 
 import pytest
 
+# The generate.py caches that read config a test monkeypatches; tests/codegen/test_check.py classifies
+# every other lru_cache in generate.py as deliberately kept warm.
+CLEARED_GENERATE_CACHES = ("_releases_cfg", "_apis_for", "_generated_origins", "_family_rank")
+
 
 @pytest.fixture(autouse=True)
 def _clear_codegen_caches():
@@ -46,8 +50,8 @@ def _clear_codegen_caches():
     from tools.codegen import generate, sources
 
     def clear() -> None:
-        for fn in (generate._releases_cfg, generate._apis_for, generate._generated_origins, generate._family_rank):
-            fn.cache_clear()
+        for name in CLEARED_GENERATE_CACHES:
+            getattr(generate, name).cache_clear()
         sources.load.cache_clear()
 
     clear()

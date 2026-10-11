@@ -9,7 +9,10 @@ column that holds a value. A parser crash on a committed capture fails the sweep
 Stems are discovered from ``tools/codegen/schemas/native/``, captures from the conventions
 the capture tooling writes (``native_fixture_map.yaml``, ``tests/fixtures/<stem>/<short>.json``,
 ``.../endpoints/<short>.json`` and the nba_stats overrides), so a new stem or a new capture
-is swept without a test edit. A stem whose captures live only in sdv-internal-refs is listed
+is swept without a test edit. That is more than ``--schemas`` reads (only
+``native_fixture_map.yaml``), which is why the sweep finds schemas ``--schemas`` never re-derives.
+``_doc_type`` is one more copy of the polars-to-docs type map task 3.9 unifies (A-L44); import that
+one when it lands. A stem whose captures live only in sdv-internal-refs is listed
 in ``_NO_COMMITTED_CAPTURE`` and must stay capture-free, or the sweep asks for its removal.
 """
 
@@ -62,12 +65,16 @@ def _cases() -> Tuple[List[Any], Dict[str, int]]:
             for cap in _captures(d.name, f.stem):
                 per_stem[d.name] += 1
                 stale = _STALE.get((d.name, f.stem))
-                marks = [pytest.mark.xfail(strict=True, reason=f"A-N14: {stale}; {_UNOWNED}")] if stale else []
+                marks = (
+                    [pytest.mark.xfail(strict=True, raises=AssertionError, reason=f"A-N14: {stale}; {_OWNER}")]
+                    if stale
+                    else []
+                )
                 cases.append(pytest.param(d.name, f.stem, cap, id=f"{d.name}/{f.stem}/{cap.name}", marks=marks))
     return cases, per_stem
 
 
-_UNOWNED = "no plan-v2.2 task owns the regeneration yet (owner to assign)"
+_OWNER = "regenerated in task 3.9 (and --schemas fails on a parser crash in task 4.9)"
 # Schemas that do not re-derive from the committed capture today (measured 2026-10-11).
 _STALE = {
     ("kalshi", "series"): "the schema names product_metadata_scope, which the parser does not emit on the capture",

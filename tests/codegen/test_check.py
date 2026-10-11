@@ -26,12 +26,12 @@ from typing import Callable, Iterator
 
 import pytest
 
+from tests.codegen.conftest import CLEARED_GENERATE_CACHES
 from tools.codegen import generate, spec
 
 pytestmark = pytest.mark.xdist_group("codegen_render")
 
 ROOT = generate.ROOT
-_UNOWNED = "no plan-v2.2 task owns the fix yet (owner to assign)"
 
 
 def _py_only(src: str, names: list[str]) -> list[str]:
@@ -159,6 +159,7 @@ def test_red_path_coverage_gaps_lists_an_undocumented_name(monkeypatch):
 
 @pytest.mark.xfail(
     strict=True,
+    raises=AssertionError,
     reason="A-M3: _is_documented counts any whole-word mention (a returns-table cell) as documented; task 3.9",
 )
 def test_red_path_is_documented_needs_a_reference_block_not_a_word_mention():
@@ -192,6 +193,25 @@ _RED = {
     "_source_gaps": ([("x", "fn_b", "why")], "public functions with no single source: x.fn_b: why"),
     "_returns_gaps": ([("x", "fn_c")], "public functions with no documented return: x.fn_c"),
 }
+
+
+def _main_check_gates() -> set:
+    """The gate calls inside ``main()``'s ``if args.check:`` block, read from its AST."""
+    import inspect
+    import textwrap
+
+    main = ast.parse(textwrap.dedent(inspect.getsource(generate.main))).body[0]
+    block = next(n for n in ast.walk(main) if isinstance(n, ast.If) and ast.unparse(n.test) == "args.check")
+    return {
+        n.func.id
+        for n in ast.walk(block)
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and hasattr(generate, n.func.id)
+    }
+
+
+def test_main_check_rc_covers_every_gate_main_runs():
+    """A tenth gate added to ``main()`` must join ``_CLEAN``/``_RED`` (or it runs for real, unaggregated, here)."""
+    assert _main_check_gates() == set(_CLEAN) == set(_RED)
 
 
 def _patch_gates(monkeypatch: pytest.MonkeyPatch, red: str = "") -> None:
@@ -235,7 +255,9 @@ def _red(gate: str) -> bool:
 
 
 @pytest.mark.parametrize("gate", sorted(_ORPHANS))
-@pytest.mark.xfail(strict=True, reason=f"A-L3: only _docs_stale reports an orphaned generated module; {_UNOWNED}")
+@pytest.mark.xfail(
+    strict=True, raises=AssertionError, reason="A-L3: only _docs_stale reports an orphaned generated module; task 3.9"
+)
 def test_red_path_stale_gate_reports_an_orphaned_generated_module(in_tree, gate):
     orphan, model = (in_tree / p for p in _ORPHANS[gate])
     try:
@@ -248,7 +270,8 @@ def test_red_path_stale_gate_reports_an_orphaned_generated_module(in_tree, gate)
 
 @pytest.mark.xfail(
     strict=True,
-    reason=f"A-N6: _euroleague_schemas.py (gen_euroleague.py) is owned by no --check gate; {_UNOWNED}",
+    raises=AssertionError,
+    reason="A-N6: _euroleague_schemas.py (gen_euroleague.py) is owned by no --check gate; task 3.9",
 )
 def test_red_path_flat_stale_owns_euroleague_schemas(in_tree):
     with _restored(in_tree / "sportsdataverse/euroleague/_euroleague_schemas.py") as f:
@@ -256,7 +279,9 @@ def test_red_path_flat_stale_owns_euroleague_schemas(in_tree):
         assert generate._flat_stale()
 
 
-@pytest.mark.xfail(strict=True, reason=f"A-L9: _ruff_format_dir ignores ruff's exit code; {_UNOWNED}")
+@pytest.mark.xfail(
+    strict=True, raises=pytest.fail.Exception, reason="A-L9: _ruff_format_dir ignores ruff's exit code; task 4.9"
+)
 def test_red_path_ruff_failure_is_raised(tmp_path):
     shutil.copy2(ROOT / "pyproject.toml", tmp_path / "pyproject.toml")
     (tmp_path / "broken.py").write_text("def f(:\n    pass\n", encoding="utf-8")
@@ -285,6 +310,27 @@ def test_stale_gates_never_delete_another_runs_tmp_dir(in_tree):
     finally:
         for p in planted:
             shutil.rmtree(p.parent, ignore_errors=True)
+
+
+def test_stale_gate_runs_that_overlap_both_stay_green(in_tree, monkeypatch):
+    """A-L2, for ANY fixed temp-dir name: a second ``check()`` starts and finishes inside the first one's render.
+
+    With a shared fixed dir the nested run deletes the outer run's rendered files, and the outer run then
+    reports them stale (or crashes); with a per-run ``mkdtemp`` both are green.
+    """
+    real = generate._render_all
+    nested: list = []
+
+    def render_and_overlap() -> dict:
+        out = real()
+        if not nested:  # the outer run's temp dir exists now; mark first, so the nested run does not recurse
+            nested.append(None)
+            nested[0] = generate.check()
+        return out
+
+    monkeypatch.setattr(generate, "_render_all", render_and_overlap)
+    assert generate.check() == 0
+    assert nested == [0]
 
 
 # --------------------------------------------------------------------------------------
@@ -487,7 +533,7 @@ def test_doc_view_never_raises_and_lists_class_methods():
 
 
 # Cleared by tests/codegen/conftest.py before and after every test: they read config a test monkeypatches.
-_CLEARED_CACHES = {"_releases_cfg", "_apis_for", "_generated_origins", "_family_rank"}
+_CLEARED_CACHES = set(CLEARED_GENERATE_CACHES)
 # Kept warm across tests on purpose: each is a pure function of committed files (or of its own
 # arguments), and clearing them would re-pay the ~40 s cold render in every codegen test.
 _KEPT_CACHES = {

@@ -504,18 +504,42 @@ _KNOWN: Dict[Tuple[str, str], str] = {
 }
 
 
+def _raises(stem: str, case: str) -> Any:
+    """What an open case fails with today: a getter that returns where it should raise fails
+    ``pytest.raises`` (DID NOT RAISE); nflpro raises its own types; pff_api raises on a 204."""
+    if stem == "nflpro_runtime" and case != "scalar_200":
+        from sportsdataverse.nfl.nflpro_runtime import NFLProAuthError
+
+        return {"403": NFLProAuthError, "204": ValueError, "empty_200": ValueError, "html_200": ValueError}.get(
+            case, requests.HTTPError
+        )
+    if stem == "pff_api_runtime":
+        return AssetFetchError
+    return pytest.fail.Exception
+
+
 def _matrix_params() -> List[Any]:
     out = []
     for mod in _RUNTIMES:
         stem = mod.rsplit(".", 1)[1]
         for case in _CASES:
-            marks = [pytest.mark.xfail(strict=True, reason=_KNOWN[stem, case])] if (stem, case) in _KNOWN else []
+            marks = (
+                [pytest.mark.xfail(strict=True, raises=_raises(stem, case), reason=_KNOWN[stem, case])]
+                if (stem, case) in _KNOWN
+                else []
+            )
             out.append(pytest.param(mod, case, id=f"{stem}-{case}", marks=marks))
     return out
 
 
-def _answer_every_transport(monkeypatch, status: int, body: str, ctype: str) -> List[str]:
-    """Serve one answer to requests AND curl_cffi; block every other socket. Returns the URLs hit."""
+def _answer_every_transport(monkeypatch, status: int, body: str, ctype: str) -> Tuple[List[str], List[str]]:
+    """Serve one answer to requests AND curl_cffi; refuse and record every other way out.
+
+    Below the two patched entry points, DNS, Python sockets and libcurl's ``Curl.perform`` (curl_cffi
+    bypasses Python sockets) all raise and are recorded, so a getter that finds another path to the
+    network fails the case even when its ``OSError`` would have surfaced as the expected
+    ``AssetFetchError``. Returns ``(urls served, attempts blocked)``.
+    """
     import socket
 
     import sportsdataverse.cache as _cache
@@ -532,21 +556,30 @@ def _answer_every_transport(monkeypatch, status: int, body: str, ctype: str) -> 
         resp.url = url
         return resp
 
+    blocked: List[str] = []
+
     def no_network(*a, **k):
+        blocked.append(repr(a[:2])[:120])
         raise OSError("network blocked in the vocabulary matrix")
 
     monkeypatch.setattr(requests.Session, "request", request)
     try:  # the stats.nba.com / 247Sports transports; absent, those getters raise ImportError loudly
         from curl_cffi import requests as curl
 
+        from curl_cffi.curl import Curl
+
         monkeypatch.setattr(curl.Session, "request", request)
+        monkeypatch.setattr(Curl, "perform", no_network)
     except ImportError:
         pass
+    for name in ("getaddrinfo", "gethostbyname", "create_connection"):
+        monkeypatch.setattr(socket, name, no_network)
     monkeypatch.setattr(socket.socket, "connect", no_network)
+    monkeypatch.setattr(socket.socket, "connect_ex", no_network)
     monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
     monkeypatch.setattr("time.sleep", lambda *a, **k: None)
     monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "0")
-    return calls
+    return calls, blocked
 
 
 def test_every_getter_module_is_a_discovered_runtime():
@@ -571,7 +604,7 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
 
     stem = mod.rsplit(".", 1)[1]
     status, body, ctype, want = _CASES[case]
-    calls = _answer_every_transport(monkeypatch, status, body, ctype)
+    calls, blocked = _answer_every_transport(monkeypatch, status, body, ctype)
     get = importlib.import_module(mod)._get
     kwargs = _KWARGS.get(stem, dict)()
     sig = inspect.signature(get).parameters
@@ -589,3 +622,4 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
             with pytest.raises(want):
                 get(url, **kwargs)
     assert calls, f"{mod}._get never reached the transport"
+    assert blocked == [], f"{mod}._get tried the network below the patched transports: {blocked}"
