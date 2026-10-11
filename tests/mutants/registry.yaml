@@ -795,13 +795,25 @@
   group: qbr-order
   finding: gap-C-083
   file: sportsdataverse/nfl/model_vars.py
-  snippet: 'qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "spread"]'
-  mutant: 'qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]'
-  test: tests/nfl/test_qbr_feature_order.py
+  snippet: 'qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]'
+  mutant: 'qbr_vars = ["qbr_epa", "sack_epa", "rush_epa", "pass_epa", "pen_epa", "spread"]'
+  test: tests/nfl/test_booster_feature_names.py
   expected: kill
   note: >-
-    task 2.7's reorder: the strict xfail turns XPASS (red), which is the kill; 2.7 flips the xfail to a
-    plain assert in the same PR and points this row at its named-booster guard
+    task 2.7's named re-save: swapping pass_epa and sack_epa no longer matches qbr_model.ubj's embedded
+    feature_names: the name assert fails, and the processor's named DMatrix raises at predict
+
+- id: nfl-qbr-trainer-order-oracle
+  group: qbr-order
+  finding: gap-C-083
+  file: sportsdataverse/nfl/model_vars.py
+  snippet: 'qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]'
+  mutant: 'qbr_vars = ["qbr_epa", "sack_epa", "rush_epa", "pass_epa", "pen_epa", "spread"]'
+  test: tests/nfl/test_qbr_oracle.py
+  expected: kill
+  note: >-
+    the same swap scored on the committed 2023 slice drops Spearman(exp_qbr, ESPN Total QBR) below the
+    post-reorder floor
 
 - id: nfl-fourth-down-go-wp-scaled
   group: fourth-down-level

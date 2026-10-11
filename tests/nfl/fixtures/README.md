@@ -7,6 +7,7 @@
   - [nflverse slices (`nflverse/`)](#nflverse-slices-nflverse)
   - [Fourth-down and offline-model fixtures (task 1.5)](#fourth-down-and-offline-model-fixtures-task-15)
     - [Booster replay (`nfl4th_booster_replay.parquet`)](#booster-replay-nfl4th_booster_replayparquet)
+  - [ESPN Total QBR slice (`espn_qbr_2023_slice.parquet`, task 2.7)](#espn-total-qbr-slice-espn_qbr_2023_sliceparquet-task-27)
   - [Other files](#other-files)
   - [Overtime rule sets (C-M6)](#overtime-rule-sets-c-m6)
 
@@ -146,6 +147,25 @@ row's exact float32 bytes. Columns: `model, key, x (list[f32]), pred (list[f32])
   `PYTHONPATH=. uv run --frozen --all-extras python tests/nfl/fixtures/record_nfl4th_replay.py`. That
   needs the boosters in the local model cache and never downloads them. The replayed scores equal the
   live scores on all 606 plays.
+
+## ESPN Total QBR slice (`espn_qbr_2023_slice.parquet`, task 2.7)
+
+The oracle for the NFL QBR feature order (`tests/nfl/test_qbr_oracle.py`, gap-C-083): 573 rows x 11
+columns, one per quarterback-game ESPN rated in 2023 (regular season and playoffs).
+
+- **ESPN Total QBR** (`qbr_total`, `season_type`, `player_id`, `passer`): nflverse's `espn_data` release
+  asset `https://github.com/nflverse/nflverse-data/releases/download/espn_data/qbr_week_level.parquet`, as
+  read by `load_nfl_espn_qbr([2023], summary_type="week")` on 2026-10-11.
+- **Model inputs** (`qbr_epa`, `pass_epa`, `rush_epa`, `sack_epa`, `pen_epa`, `spread`): `NFLPlayProcess` run
+  offline (devel-nfl ece03537a6) over nfl-raw's 286 committed 2023 ESPN summaries
+  (`sportsdataverse/nfl-raw` @ 4f85a779, `nfl/espn/raw/2023/<game_id>.json.gz`, added in 3ecf9147), read
+  back from `advBoxScore["pass"]`. The inputs do not depend on the feature order; 401616889 (the Pro Bowl
+  Games) has no passing box and is skipped.
+- **Join**: ESPN game id plus first initial + last name, case and punctuation folded ("B.Purdy" ==
+  Brock Purdy, "C.Stroud" == C.J. Stroud); all 573 ESPN rows matched, one row each.
+- **Recorded** 2026-10-11 with `PYTHONPATH=. uv run --frozen --all-extras python
+  tests/nfl/fixtures/record_espn_qbr_2023_slice.py <nfl-raw>/nfl/espn/raw/2023` (never loads a
+  download-on-demand model).
 
 ## Other files
 

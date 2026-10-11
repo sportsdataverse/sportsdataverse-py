@@ -613,4 +613,6 @@ end_change_vec = [
 ]
 kickoff_turnovers = ["Kickoff Team Fumble Recovery", "Kickoff Team Fumble Recovery Touchdown"]
 
-qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "spread"]
+# The trainer's column order (cfbfastR-dev/cfb_qbr/qbr_xgb.R:233), embedded in qbr_model.ubj's
+# feature_names, so a permuted DMatrix raises instead of scoring sack EPA as pass EPA (gap-C-083).
+qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]
