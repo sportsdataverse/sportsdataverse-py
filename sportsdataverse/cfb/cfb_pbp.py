@@ -1050,6 +1050,10 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
 _PENALTY_TOKEN_RES = [
     (re.compile(r"PENALTY[,:]?\s+(?:on\s+)?([A-Z][\w.&'-]*(?:\s+[A-Z][\w.&'-]*){0,2})"), "prefix"),
     (re.compile(r"([A-Z(][\w.&'()-]*(?:\s+[A-Z(][\w.&'()-]*){0,2})\s+Penalty,"), "suffix"),
+    # 2004-13: "HAWAII penalty 15 yard personal foul accepted", "Ucla penalty 32 yard ...".
+    # 92-96% of that era's penalty rows; without it every one fell to the foul-label
+    # fallback, which charges a non-defensive foul to the offense.
+    (re.compile(r"([A-Z][\w.&'-]*(?:\s+[A-Z][\w.&'-]*){0,2})\s+penalty\s+-?\d+\s+yard"), "suffix"),
 ]
 
 _SQUASH_RE = re.compile(r"[^A-Z0-9]")
