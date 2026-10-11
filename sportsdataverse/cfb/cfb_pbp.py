@@ -264,6 +264,30 @@ _PLAYER_NAME_GARBAGE = re.compile(
 #: fixes the emitted name column AND the join in one place.
 _PLAYER_NAME_TEAM_SUFFIX = re.compile(r"\s*\([A-Za-z][\w&'.\- ]{0,11}\)\s*$")
 
+#: A clause the regex name capture ran into, cut unconditionally: none of these can be part
+#: of a person's name (lowercase connectives, ESPN's glued "tackled"/"fumble", the clock and
+#: holder tags). The 25-30 character captures stop mid-clause, so the tail is a fragment --
+#: "Tommylee Lewistackled b", "Kevonte Martin-Manley for", "L.Webb (H: #19 S.Ashb" -- that the
+#: end-anchored narrative-tail rule never matched. 15% of 2007-13 kickoff returners and 19% of
+#: 2020-26 fumblers carried one in the published data.
+_PLAYER_NAME_CLAUSE_CUT = (
+    # connectives end at whitespace or the end, not \b: "\b" fires at an apostrophe, so "to\b"
+    # would cut a lowercase-typo "henry to'oto'o"
+    r"(?:(?i:tackled)|(?i:fumble)|(?i:,\s*clock)|\s+\(H:"
+    r"|\s+(?:to|at|in the|for|by|blocked|returned|recovered|the middle)(?:\s|$)"
+    r"|,\s*(?:forced|recovered|returned|lateral|up)(?:\s|$)|\.\s+Downed(?:\s|$)|\s+\d+\s+Yd(?:\s|$)).*$"
+)
+#: A capture that starts in a clause is no name at all ("to the MiaOh 21", "by Darrell Taylor",
+#: "up the middle"); a leading clock tag ("Clock 07:50, Kevin Kolb") is dropped.
+_PLAYER_NAME_CLAUSE_LEAD = (
+    r"^(?:(?i:clock)\s+\d{1,2}:\d{2},\s*"
+    r"|(?:to|by|at|for|in|the|up|lateral|complete|incomplete|direct|from|returned|recovered|fumbled|muffed)"
+    r"(?:\s|$).*$)"
+)
+#: After the cut, a name holding a digit (a spot such as "WAS30"), ESPN's "N/A" placeholder, or a
+#: single character is not a name.
+_PLAYER_NAME_NOT_A_NAME = r"\d|^N/A(?:[\s,.]|$)|^.$"
+
 #: Narrative tails that bleed into a captured name where the extraction regex
 #: has no stopword boundary: pass-direction phrases (``"Russell Wilson deep
 #: out"``, ``"Dominique Davis screen"``) and missing-space concatenations in
@@ -9937,10 +9961,32 @@ class CFBPlayProcess(object):
                     for nc in present_names
                 ],
             )
+            # 1b) cut a clause the capture ran into (unconditional, like the "(TEAM)" strip: no
+            #     piece of the cut can be part of a name), then null what is left if it is
+            #     not a name. Only a name the cut fires on is rewritten.
             play_df = play_df.with_columns(
                 [
                     pl.when(
-                        pl.col(nc).str.contains(_PLAYER_NAME_GARBAGE.pattern) | (pl.col(nc).str.len_chars() == 0),
+                        pl.col(nc).str.contains(_PLAYER_NAME_CLAUSE_CUT)
+                        | pl.col(nc).str.contains(_PLAYER_NAME_CLAUSE_LEAD)
+                    )
+                    .then(
+                        pl.col(nc)
+                        .str.replace(_PLAYER_NAME_CLAUSE_LEAD, "")
+                        .str.replace(_PLAYER_NAME_CLAUSE_CUT, "")
+                        .str.strip_chars(" ,.-")
+                    )
+                    .otherwise(pl.col(nc))
+                    .alias(nc)
+                    for nc in present_names
+                ],
+            )
+            play_df = play_df.with_columns(
+                [
+                    pl.when(
+                        pl.col(nc).str.contains(_PLAYER_NAME_GARBAGE.pattern)
+                        | pl.col(nc).str.contains(_PLAYER_NAME_NOT_A_NAME)
+                        | (pl.col(nc).str.len_chars() == 0),
                     )
                     .then(None)
                     .otherwise(pl.col(nc))
