@@ -255,3 +255,78 @@ def test_game_page_frames_on_the_espn_fixture(monkeypatch: pytest.MonkeyPatch) -
     shots = pbp.filter(pl.col("x_legacy").is_not_null())
     assert shots.height > 100 and (shots["shooting_play"] == True).all()
     assert not shots["type_text"].str.contains("(?i)free throw").any()
+
+
+def _fixture_pbp(monkeypatch: pytest.MonkeyPatch) -> pl.DataFrame:
+    from sportsdataverse.nba import nba_pbp
+    from sportsdataverse.nba.nba_play_by_play import helper_nba_play_by_play
+
+    summary = json.loads((FIX / "summary_nba.json").read_text(encoding="utf-8"))
+    monkeypatch.setattr(nba_pbp, "download", lambda url, **kwargs: _Resp(copy.deepcopy(summary)))
+    return helper_nba_play_by_play(nba_pbp.espn_nba_pbp(game_id=int(summary["header"]["id"])))
+
+
+def test_final_win_probability_settles_at_0_or_1(monkeypatch: pytest.MonkeyPatch) -> None:
+    wp = gp.score_win_prob(_fixture_pbp(monkeypatch))
+    last = wp.row(wp.height - 1, named=True)
+    assert last["type_text"] == "End Game"
+    assert last["home_score"] != last["away_score"]
+    assert last["home_win_prob"] == (1.0 if last["home_score"] > last["away_score"] else 0.0)
+    assert last["wp_delta"] == pytest.approx(last["home_win_prob"] - wp["home_win_prob"][wp.height - 2])
+    # 0 seconds alone does not settle: other plays keep the model value
+    pbp = _fixture_pbp(monkeypatch)
+    raw = gp.nba_in_game_win_prob(gp.ot_adjusted_seconds(pbp), wp["pregame_home_prob"][0])["home_win_prob"].cast(
+        pl.Float64
+    )
+    zero = (pbp["end_game_seconds_remaining"] == 0) & ~pbp["type_text"].is_in(["End Game", "End Period"])
+    assert zero.sum() > 0
+    assert wp["home_win_prob"].filter(zero).to_list() == raw.filter(zero).to_list()
+
+
+def test_tied_end_period_is_not_settled(monkeypatch: pytest.MonkeyPatch) -> None:
+    pbp = _fixture_pbp(monkeypatch)
+    ends = pbp.filter((pl.col("type_text") == "End Period") & (pl.col("period_number") >= 4))
+    assert ends.height, "fixture has a 4th-period End Period row"
+    i = ends.row(0, named=True)["sequence_number"]
+    tied = pbp.with_columns(
+        pl.when(pl.col("sequence_number") == i)
+        .then(pl.col("home_score"))
+        .otherwise(pl.col("away_score"))
+        .alias("away_score")
+    )
+    row = gp.score_win_prob(tied).filter(pl.col("sequence_number") == i).row(0, named=True)
+    assert row["home_win_prob"] not in (0.0, 1.0)
+
+
+def _team_box_from(name: str) -> pl.DataFrame:
+    from sportsdataverse.nba.nba_team_box import helper_nba_team_box
+
+    return helper_nba_team_box(json.loads((FIX / name).read_text(encoding="utf-8")))
+
+
+def test_pre_2013_doubled_team_turnovers_are_undone() -> None:
+    # 271128023 GS @ SAC (2007-11-29), ESPN's own payload: turnovers=17 teamTurnovers=17 totalTurnovers=34 (GS), 20/20/40 (SAC)
+    box = _team_box_from("summary_nba_2007_team_box.json")
+    assert sorted(zip(box["turnovers"], box["team_turnovers"], box["total_turnovers"])) == [(17, 17, 34), (20, 20, 40)]
+    out = gp.team_game_rates(box).sort("team_id")
+    assert out["total_turnovers"].to_list() == [17, 20]
+    # measured 111.6 on the real payload (130 with the doubled 34/40); 85-105 in the brief was not met by this game
+    assert 85 < out["pace"][0] < 115
+
+
+def test_null_total_turnovers_is_player_plus_team() -> None:
+    box = _team_box_from("summary_nba_2007_team_box.json").with_columns(
+        pl.lit(None, dtype=pl.Int32).alias("total_turnovers"), (pl.col("team_turnovers") - 15).alias("team_turnovers")
+    )
+    out = gp.team_game_rates(box).sort("team_id")
+    assert (
+        out["total_turnovers"].to_list()
+        == (box.sort("team_id")["turnovers"] + box.sort("team_id")["team_turnovers"]).to_list()
+    )
+
+
+def test_modern_total_turnovers_unchanged() -> None:
+    box = _team_box_from("summary_nba.json")
+    assert (box["total_turnovers"] == box["turnovers"] + box["team_turnovers"]).all()
+    out = gp.team_game_rates(box.head(2)).sort("team_id")
+    assert out["total_turnovers"].to_list() == box.head(2).sort("team_id")["total_turnovers"].to_list()

@@ -136,8 +136,11 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
 
     Returns:
         The input plus ``pregame_home_prob``, ``prior_source``, ``wp_regime``, ``home_win_prob``
-        and ``wp_delta`` (the first play's delta is measured from the prior). An empty input
-        returns an empty frame with those columns.
+        and ``wp_delta`` (the first play's delta is measured from the prior). ``home_win_prob`` is
+        settled to 1.0 / 0.0 on "End Game" / "End Period" rows (``type_text``) from the 4th period on
+        where the score is not tied, before ``wp_delta`` is taken; tied rows go to overtime and keep
+        the model value. A frame without ``type_text`` is not settled. An empty input returns an
+        empty frame with those columns.
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If a required column is missing (``home_team_spread``,
@@ -176,6 +179,17 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
     tagged = ot_adjusted_seconds(pbp)
     scored = nba_in_game_win_prob(tagged, prior, league_id=league_id)
     wp = scored["home_win_prob"].cast(pl.Float64)
+    if "type_text" in pbp.columns:
+        # a period from the 4th on that ends with a lead ends the game; a tie goes to overtime
+        ends = (
+            pbp["type_text"].is_in(["End Game", "End Period"])
+            & (pbp["period_number"] >= 4)
+            & pbp["home_score"].is_not_null()
+            & pbp["away_score"].is_not_null()
+            & (pbp["home_score"] != pbp["away_score"])
+        ).fill_null(False)
+        settled = (pbp["home_score"] > pbp["away_score"]).cast(pl.Float64)
+        wp = pl.select(pl.when(ends).then(settled).otherwise(wp).alias("w")).to_series()
     return pbp.with_columns(
         pl.lit(prior, dtype=pl.Float64).alias("pregame_home_prob"),
         pl.lit(source, dtype=pl.String).alias("prior_source"),
@@ -260,14 +274,32 @@ def _ratio(num: pl.Expr, den: pl.Expr) -> pl.Expr:
     )
 
 
+def _team_tov(cols: list[str]) -> pl.Expr:
+    """The team turnover count used for possessions, TOV% and usage.
+
+    ESPN doubles the team turnover in 2002-2012 (``team_turnovers == turnovers`` and
+    ``total_turnovers == 2 * turnovers``, e.g. 17/17/34) and leaves ``total_turnovers`` null in 2018.
+    """
+    total = pl.col("total_turnovers")
+    if "turnovers" not in cols or "team_turnovers" not in cols:
+        return total
+    own, team = pl.col("turnovers"), pl.col("team_turnovers")
+    doubled = (team == own) & (total == 2 * own) & (own > 0)
+    return pl.when(total.is_null()).then(own + team.fill_null(0)).when(doubled).then(own).otherwise(total)
+
+
 def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame:
     """Four factors, possessions, ratings and pace for both teams of one game.
 
     Dean Oliver's estimates on the ``load_nba_team_boxscore`` columns: possessions =
     FGA - ORB + TOV + 0.44 FTA, averaged over the two teams; eFG% = (FGM + 0.5 3PM) / FGA;
     TOV% = TOV / (FGA + 0.44 FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
-    ORtg / DRtg per 100 possessions; pace per 48 minutes. ``TOV`` is ``total_turnovers`` (player
-    plus team turnovers). A zero denominator gives ``null``.
+    ORtg / DRtg per 100 possessions; pace per 48 minutes. ``TOV`` is the team's player plus team turnovers:
+    ``total_turnovers``, except that when it is null it is ``turnovers + team_turnovers``, and when ESPN
+    has duplicated the team turnover (``team_turnovers == turnovers`` and ``total_turnovers == 2 *
+    turnovers``, measured on every 2002-2012 game, e.g. 17/17/34) it is ``turnovers``. Without the
+    ``turnovers`` / ``team_turnovers`` columns it is ``total_turnovers`` as given. A zero denominator
+    gives ``null``.
 
     Args:
         team_box: Exactly two rows (one per team) of one game in the ``load_nba_team_boxscore``
@@ -296,7 +328,7 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4) -> pl.DataFrame
         raise ValueError(f"team_game_rates needs the two team rows of one game, got {team_box.height}")
     if team_box["game_id"].n_unique() != 1 or team_box["team_id"].n_unique() != 2:
         raise ValueError("team_game_rates needs two different teams of the same game_id")
-    tov = pl.col("total_turnovers")
+    tov = _team_tov(team_box.columns)
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
     own = team_box.with_columns(
         (fga - pl.col("offensive_rebounds") + tov + FT_WEIGHT * fta).cast(pl.Float64).alias("_own_poss")
@@ -331,7 +363,8 @@ def player_game_rates(player_box: pl.DataFrame, team_box: pl.DataFrame, *, perio
     """True-shooting and usage for every boxed player of one game.
 
     TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
-    (MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV = ``total_turnovers`` and team
+    (MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in :func:`team_game_rates`
+    (``total_turnovers``, repaired where ESPN doubled or omitted it) and team
     minutes = 5 x game minutes. A player with no shots, no minutes, or ``did_not_play`` gets
     ``null``.
 
@@ -356,7 +389,7 @@ def player_game_rates(player_box: pl.DataFrame, team_box: pl.DataFrame, *, perio
     team = team_box.select(
         "game_id",
         "team_id",
-        (pl.col("field_goals_attempted") + FT_WEIGHT * pl.col("free_throws_attempted") + pl.col("total_turnovers"))
+        (pl.col("field_goals_attempted") + FT_WEIGHT * pl.col("free_throws_attempted") + _team_tov(team_box.columns))
         .cast(pl.Float64)
         .alias("_team_tsa"),
     )

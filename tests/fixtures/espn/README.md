@@ -125,3 +125,4 @@ which keeps every parsed column). `generate.py --schemas` turns each into `schem
 | `transactions_nba.json` | espn_site_v2 `transactions` | nba | <https://site.api.espn.com/apis/site/v2/sports/basketball/nba/transactions?limit=500> |
 | `venue_nfl.json` | espn_core_v2 `venue` | nfl | <https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/venues/3663> |
 | `venues_nba.json` | espn_core_v2 `venues` | nba | <https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues?limit=1000> |
+| `summary_nba_2007_team_box.json` | hoopR-nba-raw `nba/json/raw/271128023.json` (ESPN summary, GS @ SAC, 2007-11-29), trimmed to `header` + `boxscore.teams` | nba | game 271128023; ESPN ships `turnovers=17 teamTurnovers=17 totalTurnovers=34` (GS) and `20/20/40` (SAC) |

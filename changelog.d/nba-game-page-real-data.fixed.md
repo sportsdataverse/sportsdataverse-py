@@ -1,0 +1,2 @@
+- `nba_game_page.team_game_rates` / `player_game_rates`: undo ESPN's doubled pre-2013 team turnovers (`team_turnovers == turnovers`, `total_turnovers == 2 * turnovers`) and fill the null 2018 `total_turnovers` from `turnovers + team_turnovers`, so pace, ratings, TOV% and usage are no longer inflated or null in those seasons.
+- `nba_game_page.score_win_prob`: settle `home_win_prob` to 1.0 / 0.0 on "End Game" / "End Period" rows from the 4th period on when the score is not tied, before `wp_delta` is computed.

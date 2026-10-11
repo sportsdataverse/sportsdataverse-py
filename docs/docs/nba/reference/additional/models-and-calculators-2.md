@@ -276,7 +276,8 @@ tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining"
 True-shooting and usage for every boxed player of one game.
 
 TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
-(MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV = `total_turnovers` and team
+(MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in `team_game_rates`
+(`total_turnovers`, repaired where ESPN doubled or omitted it) and team
 minutes = 5 x game minutes. A player with no shots, no minutes, or `did_not_play` gets
 `null`.
 
@@ -458,7 +459,7 @@ Per-play home win probability, its play-to-play delta, and the prior, for one ga
 
 **Returns**
 
-The input plus `pregame_home_prob`, `prior_source`, `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). An empty input returns an empty frame with those columns.
+The input plus `pregame_home_prob`, `prior_source`, `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). `home_win_prob` is settled to 1.0 / 0.0 on "End Game" / "End Period" rows (`type_text`) from the 4th period on where the score is not tied, before `wp_delta` is taken; tied rows go to overtime and keep the model value. A frame without `type_text` is not settled. An empty input returns an empty frame with those columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -526,8 +527,12 @@ Four factors, possessions, ratings and pace for both teams of one game.
 Dean Oliver's estimates on the `load_nba_team_boxscore` columns: possessions =
 FGA - ORB + TOV + 0.44 FTA, averaged over the two teams; eFG% = (FGM + 0.5 3PM) / FGA;
 TOV% = TOV / (FGA + 0.44 FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
-ORtg / DRtg per 100 possessions; pace per 48 minutes. `TOV` is `total_turnovers` (player
-plus team turnovers). A zero denominator gives `null`.
+ORtg / DRtg per 100 possessions; pace per 48 minutes. `TOV` is the team's player plus team turnovers:
+`total_turnovers`, except that when it is null it is `turnovers + team_turnovers`, and when ESPN
+has duplicated the team turnover (`team_turnovers == turnovers` and `total_turnovers == 2 *
+turnovers`, measured on every 2002-2012 game, e.g. 17/17/34) it is `turnovers`. Without the
+`turnovers` / `team_turnovers` columns it is `total_turnovers` as given. A zero denominator
+gives `null`.
 
 **Parameters**
 
