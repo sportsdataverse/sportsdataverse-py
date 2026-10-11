@@ -22,7 +22,8 @@ FIX = Path(__file__).resolve().parents[1] / "fixtures"
 @pytest.mark.parametrize("page", ["ncaa/test_lineup.html", "cfb_ncaa/mfb_box_score_5362283.html"])
 def test_box_parser_other_page_type_is_zero_rows(page: str) -> None:
     """B-L44: real pages with >= 5 tables but no individual_stats layout (IndexError / ValueError before)."""
-    df = parse_ncaa_bb_box((FIX / page).read_text(encoding="utf-8"), "x")
+    with pytest.warns(UserWarning, match=r"parse_ncaa_bb_box: game id x is not an individual_stats page"):
+        df = parse_ncaa_bb_box((FIX / page).read_text(encoding="utf-8"), "x")
     assert df.height == 0
     assert df.columns == parse_ncaa_bb_box("", "x").columns
 
@@ -44,3 +45,11 @@ def test_bigballr_ports_non_html_payload_is_zero_rows(parse, payload) -> None:
     df = parse(payload)
     assert df.height == 0
     assert df.columns == parse("").columns
+
+
+def test_shots_parser_reads_bytes_like_str() -> None:
+    """R789-4: a bytes body parses like its str (the other ports parse bytes via parse_html)."""
+    page = FIX / "mbb_ncaa" / "bkb_box_score_5722355.html"
+    from_str = parse_ncaa_bb_shots(page.read_text(encoding="utf-8"), "5722355")
+    assert from_str.height == 129
+    assert parse_ncaa_bb_shots(page.read_bytes(), "5722355").equals(from_str)

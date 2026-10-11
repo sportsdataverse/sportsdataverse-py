@@ -193,6 +193,8 @@ def parse_ncaa_bb_shots(
     xs: "list[Optional[float]]" = []
     ys: "list[Optional[float]]" = []
 
+    if isinstance(html, bytes):  # parse_html (the other ports) reads bytes too
+        html = html.decode("utf-8", "replace")
     for call in _ADD_SHOT_RE.findall(html if isinstance(html, str) else ""):  # None/list/dict -> zero rows
         text = call
         for old, new in _SUFFIX_FIXES:
