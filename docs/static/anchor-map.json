@@ -2943,6 +2943,7 @@
   "team_game_pace": "analytics",
   "team_name_fn": "play-by-play-processing-4",
   "team_pressure_rates": "models-and-calculators-10",
+  "touchback_yardline_expr": "models-and-calculators-10",
   "update_config": "cache-and-configuration",
   "win_prob_from_margin": "analytics"
  },

@@ -8,7 +8,7 @@ description: "NFL — additional Python functions — Models and calculators: ca
 
 ### calculate_expected_points {#calculate_expected_points}
 
-`calculate_expected_points(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`calculate_expected_points(pbp_data: 'pl.DataFrame', *, ep_point_values: 'Union[np.ndarray, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Compute expected points for provided plays.
 
@@ -20,6 +20,7 @@ any existing `ep` / `*_prob` columns so the output is always fresh.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `pbp_data` | `DataFrame` |  | Play-by-play DataFrame with nflverse columns. Required: `season`, `posteam`, `home_team`, `roof`, `half_seconds_remaining`, `yardline_100`, `down`, `ydstogo`, `posteam_timeouts_remaining`, `defteam_timeouts_remaining`. |
+| `ep_point_values` | `Union[ndarray, None]` | `None` | Optional 7-class point vector (class order `td, opp_td, fg, opp_fg, safety, opp_safety, no_score`) used to collapse the class probabilities into `ep`. `None` (default) is the NFL vector `model_vars._EP_POINT_VALUES`; the spring-football port passes its league's vector. |
 | `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
 
 **Returns**

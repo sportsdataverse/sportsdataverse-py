@@ -8883,6 +8883,9 @@ class CFBPlayProcess(object):
                 pass_yards=pl.col("yds_receiving").sum(),
                 yards_per_pass=pl.col("yds_receiving").mean(),
                 sack_yards=pl.col("yds_sacked").sum(),
+                # sack-inclusive, the basis of SDV's `yardsdropback`: (pass_yards + sack_yards)
+                # over the same dropbacks. yards_per_pass counts a sack as a 0-yard dropback.
+                yards_per_dropback=(pl.col("yds_receiving") + pl.col("yds_sacked")).mean(),
                 passing_first_downs_created=pl.col("first_down_created").sum(),
                 passing_first_downs_created_rate=pl.col("first_down_created").mean(),
                 EPA_passing_overall=pl.col("EPA").sum(),

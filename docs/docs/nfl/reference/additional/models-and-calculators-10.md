@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Models and calculators: nfl_simulations–team_pressure"
-sidebar_label: "Models and calculators: nfl_simulations–team_pressure"
+title: "NFL — additional Python functions — Models and calculators: nfl_simulations–touchback_yardline"
+sidebar_label: "Models and calculators: nfl_simulations–touchback_yardline"
 sidebar_position: 23
-description: "NFL — additional Python functions — Models and calculators: nfl_simulations–team_pressure — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Models and calculators: nfl_simulations–touchback_yardline — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Models and calculators: nfl_simulations–team_pressure
+# NFL — additional Python functions — Models and calculators: nfl_simulations–touchback_yardline
 
 ### nfl_simulations {#nfl_simulations}
 
@@ -301,4 +301,30 @@ from sportsdataverse.nfl import load_nfl_pbp
 from sportsdataverse.nfl.nfl_line_grades import team_pressure_rates
 rates = team_pressure_rates(load_nfl_pbp([2023]))
 print(rates.sort("pressure_rate_generated", descending=True).head())
+```
+
+### touchback_yardline_expr {#touchback_yardline_expr}
+
+`touchback_yardline_expr(season: 'pl.Expr') -> 'pl.Expr'`
+
+Polars form of `touchback_yardline` for a `season` column expression.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Expr` |  | Integer season expression (`pl.col("season")`). |
+
+**Returns**
+
+An `Int64` expression of the touchback yards-to-endzone per row.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nfl.model_vars import touchback_yardline_expr
+
+df = pl.DataFrame({"season": [2015, 2016, 2024, 2025]})
+print(df.select(touchback_yardline_expr(pl.col("season"))).to_series().to_list())
 ```

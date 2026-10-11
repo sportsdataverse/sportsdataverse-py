@@ -374,6 +374,7 @@ from sportsdataverse.nfl import special_teams_ratings as special_teams_ratings  
 from sportsdataverse.nfl import team_game_pace as team_game_pace  # noqa: F401
 from sportsdataverse.nfl import team_name_fn as team_name_fn  # noqa: F401
 from sportsdataverse.nfl import team_pressure_rates as team_pressure_rates  # noqa: F401
+from sportsdataverse.nfl import touchback_yardline_expr as touchback_yardline_expr  # noqa: F401
 from sportsdataverse.nfl import underscore as underscore  # noqa: F401
 from sportsdataverse.nfl import update_config as update_config  # noqa: F401
 from sportsdataverse.nfl import win_prob_from_margin as win_prob_from_margin  # noqa: F401
@@ -730,6 +731,7 @@ __all__ = [
     "team_game_pace",
     "team_name_fn",
     "team_pressure_rates",
+    "touchback_yardline_expr",
     "underscore",
     "update_config",
     "win_prob_from_margin",

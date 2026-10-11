@@ -388,6 +388,41 @@ def test_nbagl_rapm_smoke(monkeypatch: pytest.MonkeyPatch) -> None:
 from tests.conftest import skip_if_no_nba_stats_live
 
 
+@pytest.mark.parametrize("game_id", GAMES)
+def test_nbagl_single_free_throw_points_come_from_the_score(game_id: str) -> None:
+    """G League single free throw (rules/nbagl.yaml nbagl-2020-single-free-throw).
+
+    Since 2019-20 one attempt replaces the trip and is worth 1, 2 or 3 points
+    (``'Free Throw 2PT'`` / ``'3PT'`` sub-types in the real 2024 payloads).
+    Possession ``points`` is a score delta, so a made 2PT single is 2 points
+    with ``fta = ftm = 1`` -- and the NBA identity ``points == 2*fg2m + 3*fg3m
+    + ftm`` is NOT a G League invariant.  Both facts pinned on the committed
+    captures (22 made N-PT singles across the two games).
+    """
+    payload = json.loads((FXR / game_id / "playbyplayv3.json").read_text())
+    enh = enhanced_pbp_from_payload(payload, league_id="20")
+    poss = build_possessions(enh)
+    singles = enh.filter(
+        pl.col("sub_type").str.contains(r"Free Throw [23]\s*PT")
+        & (
+            (pl.col("score_home").cast(pl.Utf8).str.strip_chars() != "")
+            | (pl.col("score_away").cast(pl.Utf8).str.strip_chars() != "")
+        )
+    )
+    assert singles.height >= 7, singles.height
+    for row in singles.iter_rows(named=True):
+        worth = int(re.search(r"Free Throw (\d)", row["sub_type"]).group(1))
+        p = poss.filter(
+            (pl.col("start_order_index") <= row["order_index"]) & (pl.col("end_order_index") >= row["order_index"])
+        )
+        assert p.height == 1, row["sub_type"]
+        assert p["points"][0] == worth, (row["sub_type"], p["points"][0])
+        assert (p["fta"][0], p["ftm"][0], p["fg2m"][0], p["fg3m"][0]) == (1, 1, 0, 0)
+    gap = int((poss["points"] - 2 * poss["fg2m"] - 3 * poss["fg3m"] - poss["ftm"]).sum())
+    extra = int(sum(int(re.search(r"Free Throw (\d)", s).group(1)) - 1 for s in singles["sub_type"].to_list()))
+    assert gap == extra > 0, (gap, extra)
+
+
 @skip_if_no_nba_stats_live
 def test_nbagl_on_court_live() -> None:
     oc = G.nbagl_on_court(GAMES[0])

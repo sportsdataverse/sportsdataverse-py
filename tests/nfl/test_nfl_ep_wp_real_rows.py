@@ -7,25 +7,29 @@ them with the bundled boosters and compare.
 
 What is pinned, and why
 -----------------------
-* **Kickoff touchback substitution stays nflfastR-parity (80 / 75).**  The 2024
-  dynamic kickoff moved the touchback to the 30 (yards-to-endzone 70) and 2025 to
-  the 35 (65).  Measured 2026-09-01 on the FULL 2023–2025 seasons
-  (``dev/kickoff_audit_extra.py``): nflverse's kickoff ``ep`` matches sdv-py
-  scored at 75 with mean|d| 0.103 / 0.103 / 0.105 (bias +0.05), but at the rule
-  spot the gap is 0.295 (2024 @ 70, bias +0.29) and 0.552 (2025 @ 65, bias
-  +0.55) — the oracle itself still substitutes 75 (``helper_add_ep_wp.R`` L355 /
-  L1047).  So the constant is a *parity convention*, and this file pins it AND
-  pins the data fact that the rule moved (modal next-play yardline after a
-  touchback: 80 → 75 → 70 → 65), so the day nflfastR moves, the convention pin
-  fails loudly instead of parity drifting quietly.
+* **Kickoff touchback substitution is the RULE spot (80 / 75 / 70 / 65).**  The
+  2024 dynamic kickoff moved the touchback to the 30 (yards-to-endzone 70) and
+  2025 to the 35 (65) — ``rules/nfl.yaml`` ``nfl-2024-dynamic-kickoff`` /
+  ``nfl-2025-kickoff-touchback-to-35`` — and ``model_vars.touchback_yardline``
+  resolves them.  The oracle does not: nflfastR still substitutes
+  ``ifelse(season < 2016, 80, 75)`` (``helper_add_ep_wp.R`` L355 / L1047), so
+  on 2024-25 kickoff rows sdv-py now diverges from nflverse ``ep`` BY DESIGN
+  (owner-accepted 2026-10: the rule beats the oracle).  Measured on this
+  fixture: 2024 mean|d| 0.3183 (bias +0.316, r 0.9532) and 2025 0.6027 (bias
+  +0.602, r 0.8596) against 0.1039 / 0.1398 when re-scored at nflfastR's 75 —
+  so this file pins (a) that the substitution IS the rule spot the data shows
+  (modal next-play yardline after a touchback), (b) per-season agreement bands
+  measured at the rule spot, and (c) that re-scoring 2024-25 at 75 brings the
+  gap back inside the 2018-2023 band, i.e. the spot is the whole divergence.
+  ``wp`` is barely touched (r ≥ 0.998 either way: a 5-10 yard spot shift at
+  1st-and-10 moves WP far less than EP).
 * **Per-season agreement floors** derived from the values observed on this
   fixture at gate time (40 kickoff rows / season, 2014–2025): kickoff-row ``ep``
-  r 0.906–0.990 and mean|d| 0.040–0.130 (2025 is the widest at 0.1296 — the
-  same model-vintage gap as 2018–2024, not a kickoff-rule gap: on the full
-  seasons 2024/2025 mean|d| 0.1027/0.1055 sit inside the 2018–2023 band
-  0.1028–0.1057); ``wp`` r ≥ 0.99701, ``vegas_wp`` r ≥ 0.99763.  Floors sit
-  strictly below the observed values (never-lower rule: a floor is lowered
-  only with a documented re-derivation, never to make a run pass).
+  r 0.937–0.986 and mean|d| 0.038–0.106 through 2023 (the model-vintage gap),
+  the 2024 / 2025 rule-spot bands above; ``wp`` r ≥ 0.99701, ``vegas_wp`` r ≥
+  0.99763.  Floors sit strictly on the passing side of the observed values
+  (never-lower rule: a floor moves only with a documented re-derivation, never
+  to make a run pass — the 2024-25 bands are that re-derivation).
 * **``distance_to_sticks = air_yards - ydstogo`` (nflfastR sign).**  The sign
   bit once (xYAC port).  On 300 real 2023 pass rows the bundled CP model agrees
   with nflverse ``cp`` at r 0.99618 with the nflfastR sign and only r 0.89913
@@ -53,13 +57,16 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_expected_points,
     calculate_win_probability,
 )
-from sportsdataverse.nfl.model_vars import TOUCHBACK_YARDLINE_POST_2016, TOUCHBACK_YARDLINE_PRE_2016
+from sportsdataverse.nfl.model_vars import TOUCHBACK_YARDLINE_POST_2016, touchback_yardline
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_ep_wp"
 
 # Floors — measured 2026-09-01 on these fixtures (see module docstring). Never lower.
-_KICKOFF_EP_R_FLOOR = 0.88  # observed min 0.90599 (2025)
-_KICKOFF_EP_MAD_CEILING = 0.16  # observed max 0.12956 (2025)
+_KICKOFF_EP_R_FLOOR = 0.88  # observed min 0.93741 (2015) at the rule spot
+_KICKOFF_EP_MAD_CEILING = 0.16  # observed max 0.10607 (2019) at the rule spot, seasons <= 2023
+# 2024-25 are scored at the rule spot (70 / 65) while nflverse scores at 75 — the measured,
+# owner-accepted divergence (2026-10-10): 2024 mean|d| 0.3183 r 0.9532; 2025 mean|d| 0.6027 r 0.8596.
+_KICKOFF_EP_RULE_SPOT_BANDS = {2024: (0.36, 0.93), 2025: (0.65, 0.84)}  # season: (mad ceiling, r floor)
 _KICKOFF_WP_R_FLOOR = 0.99  # observed min 0.99701 (2016)
 _KICKOFF_VEGAS_WP_R_FLOOR = 0.99  # observed min 0.99763 (2017)
 _CP_R_FLOOR = 0.99  # observed 0.99618 with the nflfastR sign
@@ -67,8 +74,8 @@ _CP_FLIPPED_R_CEILING = 0.95  # observed 0.89913 with the sign flipped
 _MIN_ROWS_PER_SEASON = 30  # 40 captured per season; guards a truncated fixture
 
 #: The spot the RULE put the ball on after a kickoff touchback, by season — read
-#: off the fixture (modal next-play yardline_100). The CONVENTION (what both
-#: nflfastR and sdv-py substitute) stays 75 from 2016 on.
+#: off the fixture (modal next-play yardline_100). sdv-py substitutes exactly
+#: this (``touchback_yardline``); nflfastR stays at 75 from 2016 on.
 _RULE_TOUCHBACK_SPOT = {2014: 80, 2015: 80, **{s: 75 for s in range(2016, 2024)}, 2024: 70, 2025: 65}
 
 
@@ -113,26 +120,30 @@ def pass_rows() -> pl.DataFrame:
 # ---------------------------------------------------------------------------
 
 
-def test_substitution_convention_is_80_pre_2016_then_75(kickoff_scored: pl.DataFrame) -> None:
-    """Every kickoff row is scored from 80 (< 2016) or 75 (2016+) — including 2024 and 2025.
+def test_substitution_is_the_rule_spot_by_season(kickoff_scored: pl.DataFrame) -> None:
+    """Every kickoff row is scored from the season's rule spot: 80 / 75 / 70 / 65.
 
-    The rule spot moved to 70 (2024) and 65 (2025) but the oracle did not; see
-    ``test_rule_spot_moved_but_convention_did_not`` for the data side of that.
+    rules/nfl.yaml nfl-2016-kickoff-touchback-to-25, nfl-2024-dynamic-kickoff,
+    nfl-2025-kickoff-touchback-to-35.  Until 2026-10 the 2024-25 rows were
+    scored at 75 as a parity convention with nflfastR; see
+    ``test_rule_spot_from_the_data_is_what_the_resolver_returns`` for the data side.
     """
     by_season = (
         kickoff_scored.group_by("season").agg(pl.col("substituted_yardline_100").unique().alias("spots")).sort("season")
     )
+    assert by_season.height == 12
     for season, spots in by_season.iter_rows():
-        expected = TOUCHBACK_YARDLINE_PRE_2016 if season < 2016 else TOUCHBACK_YARDLINE_POST_2016
+        expected = touchback_yardline(season)
         assert spots == [expected], f"{season}: substituted yardline {spots}, expected [{expected}]"
+        assert expected == _RULE_TOUCHBACK_SPOT[season]
 
 
-def test_rule_spot_moved_but_convention_did_not(kickoff_rows: pl.DataFrame) -> None:
-    """The data shows the touchback landing at 80 → 75 → 70 → 65; the substitution stays 75.
+def test_rule_spot_from_the_data_is_what_the_resolver_returns(kickoff_rows: pl.DataFrame) -> None:
+    """The data shows the touchback landing at 80 → 75 → 70 → 65, and so does ``touchback_yardline``.
 
-    This is the pin that turns the dynamic-kickoff finding into a test: if the
-    fixture is ever re-captured against a nflverse release where nflfastR moved
-    its substitution, the parity floors below fail and THIS test says why.
+    Modal next-play ``yardline_100`` after a real touchback, per season, against
+    the resolver every consumer routes through.  nflfastR's 75 is NOT the rule
+    spot from 2024 on — that is the divergence the per-season bands measure.
     """
     tb = (
         kickoff_rows.filter(pl.col("touchback") == 1)
@@ -143,9 +154,9 @@ def test_rule_spot_moved_but_convention_did_not(kickoff_rows: pl.DataFrame) -> N
     observed = dict(zip(tb["season"].to_list(), tb["rule_spot"].to_list()))
     assert observed == _RULE_TOUCHBACK_SPOT, observed
     assert (tb["n"] >= 10).all(), tb.to_dicts()
-    # The convention is NOT the rule spot from 2024 on — deliberately (parity with nflverse).
-    assert _RULE_TOUCHBACK_SPOT[2024] != TOUCHBACK_YARDLINE_POST_2016
-    assert _RULE_TOUCHBACK_SPOT[2025] != TOUCHBACK_YARDLINE_POST_2016
+    assert observed == {s: touchback_yardline(s) for s in observed}
+    assert touchback_yardline(2024) != TOUCHBACK_YARDLINE_POST_2016
+    assert touchback_yardline(2025) != TOUCHBACK_YARDLINE_POST_2016
 
 
 @pytest.mark.parametrize("season", sorted(_RULE_TOUCHBACK_SPOT))
@@ -160,26 +171,39 @@ def test_kickoff_row_parity_with_nflverse_per_season(kickoff_scored: pl.DataFram
     s = kickoff_scored.filter(pl.col("season") == season)
     assert s.height >= _MIN_ROWS_PER_SEASON, f"{season}: only {s.height} rows"
     r_ep, mad_ep = _r(s["sdv_ep"], s["nflverse_ep"]), _mad(s["sdv_ep"], s["nflverse_ep"])
-    assert r_ep >= _KICKOFF_EP_R_FLOOR, f"{season}: kickoff ep r {r_ep:.4f} < {_KICKOFF_EP_R_FLOOR}"
-    assert mad_ep <= _KICKOFF_EP_MAD_CEILING, f"{season}: kickoff ep mean|d| {mad_ep:.4f} > {_KICKOFF_EP_MAD_CEILING}"
+    mad_ceiling, r_floor = _KICKOFF_EP_RULE_SPOT_BANDS.get(season, (_KICKOFF_EP_MAD_CEILING, _KICKOFF_EP_R_FLOOR))
+    assert r_ep >= r_floor, f"{season}: kickoff ep r {r_ep:.4f} < {r_floor}"
+    assert mad_ep <= mad_ceiling, f"{season}: kickoff ep mean|d| {mad_ep:.4f} > {mad_ceiling}"
+    if season in _KICKOFF_EP_RULE_SPOT_BANDS:
+        # The rule-spot gap is real and in the expected direction: a shorter field at 1st-and-10
+        # is worth MORE, so sdv-py (70 / 65) sits above nflverse (75) on every 2024-25 kickoff row.
+        assert mad_ep > _KICKOFF_EP_MAD_CEILING, f"{season}: gap {mad_ep:.4f} vanished — did nflfastR move its spot?"
+        assert bool((s["sdv_ep"] > s["nflverse_ep"]).mean() > 0.95), season
     r_wp = _r(s["sdv_wp"], s["nflverse_wp"])
     assert r_wp >= _KICKOFF_WP_R_FLOOR, f"{season}: kickoff wp r {r_wp:.4f}"
     r_vwp = _r(s["sdv_vegas_wp"], s["nflverse_vegas_wp"])
     assert r_vwp >= _KICKOFF_VEGAS_WP_R_FLOOR, f"{season}: kickoff vegas_wp r {r_vwp:.4f}"
 
 
-def test_dynamic_kickoff_seasons_are_not_worse_than_the_prior_era(kickoff_scored: pl.DataFrame) -> None:
-    """2024–2025 kickoff-row agreement sits with 2018–2023, not below it.
+def test_dynamic_kickoff_gap_to_nflverse_is_the_spot_and_nothing_else(kickoff_rows: pl.DataFrame) -> None:
+    """Re-scoring 2024-25 kickoff rows at nflfastR's 75 puts them back inside the 2018-23 band.
 
-    Pooled (80 rows vs 240 rows) so the check is not at the mercy of one
-    40-row season: observed pooled mean|d| 2024–25 ≈ 0.116 vs 2018–23 ≈ 0.098
-    on this fixture (full seasons: 0.104 vs 0.104). A kickoff-rule-driven gap
-    would be ~0.3 (scored at 70) or ~0.55 (scored at 65) — see module docstring.
+    The rule-spot divergence (mean|d| 0.318 / 0.603 at 70 / 65) must collapse to
+    the model-vintage gap (observed 0.1039 / 0.1398 at 75, inside the <= 0.16
+    ceiling the 2018-2023 seasons hold) when the only thing changed is the
+    spot.  If it does not, something other than the touchback moved.
     """
-    recent = kickoff_scored.filter(pl.col("season") >= 2024)
-    prior = kickoff_scored.filter(pl.col("season").is_between(2018, 2023))
-    gap = _mad(recent["sdv_ep"], recent["nflverse_ep"]) - _mad(prior["sdv_ep"], prior["nflverse_ep"])
-    assert gap < 0.1, f"2024-25 kickoff ep mean|d| exceeds 2018-23 by {gap:.4f} — a rule-spot gap would be >= 0.19"
+    recent = kickoff_rows.filter(pl.col("season") >= 2024)
+    at_75 = _apply_feature_substitution(recent, touchback_yardline=TOUCHBACK_YARDLINE_POST_2016)
+    assert at_75["yardline_100"].unique().to_list() == [TOUCHBACK_YARDLINE_POST_2016]
+    ep_75 = calculate_expected_points(at_75)["ep"]
+    ep_rule = calculate_expected_points(_apply_feature_substitution(recent))["ep"]
+    for season in (2024, 2025):
+        m = (recent["season"] == season).to_numpy()
+        mad_75 = float(np.abs(ep_75.to_numpy()[m] - recent["nflverse_ep"].to_numpy()[m]).mean())
+        mad_rule = float(np.abs(ep_rule.to_numpy()[m] - recent["nflverse_ep"].to_numpy()[m]).mean())
+        assert mad_75 <= _KICKOFF_EP_MAD_CEILING, f"{season}: at 75 mean|d| {mad_75:.4f} — not the spot alone"
+        assert mad_rule - mad_75 >= 0.19, f"{season}: rule-spot gap only {mad_rule - mad_75:.4f}"
 
 
 # ---------------------------------------------------------------------------
