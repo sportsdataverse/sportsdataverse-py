@@ -12,10 +12,17 @@ sdv-internal-refs ``rules/*.yaml`` entries.
 
 CFB: overtime from the 25 since 1996, a two-point try forced from the third overtime; 2019-20 add the
 two-point shootout from the fifth overtime (period 9); from 2021 the try is forced from the second
-overtime and the shootout starts in the third (period 7). NFL, any overtime (period 5): a 15-minute
-regular-season overtime before 2017 (sudden death, modified from 2012), 10 minutes from 2017, and both
-teams possess from 2025. The quality-program ledger wrote the third set as 2024+; the catalogue dates
-the regular-season both-possess rule 2025 (2024 still played the 2017 rule), so the sets are cut there.
+overtime and the shootout starts in the third (period 7). The check reads ESPN's period LABEL, not an
+overtime count: 401112489 reaches "period 9" only through its winning try, labelled period 10, because
+ESPN files overtimes 1-5 as period 5 and the two touchdowns as period 6. A test that tells the CFB sets
+apart (plan task 3.2) must derive the overtime number from the possession sequence.
+
+NFL, any overtime (period 5), cut where the code's behaviour changes (``model_vars.OVERTIME_FORMATS``):
+sudden death before 2012, modified sudden death from 2012 (``nfl-2012-...``; the 2017 cut to 10 minutes
+changes only the period length, which no branch reads), both teams possess from 2025 (``nfl-2025-...``;
+the quality-program ledger wrote 2024+, but 2024 still played the 2012 rule). The 2012 cut is guarded
+only at season granularity: the nearest captures are 2007 and 2023, so moving the boundary anywhere in
+2008-2022 changes no capture's set until a 2012-16 overtime capture is committed.
 """
 
 from __future__ import annotations
@@ -37,8 +44,8 @@ ERAS: dict[str, list[tuple[str, int, int, int, str]]] = {
         ("2021+", 2021, 9999, 7, "cfb-2021-overtime-shootout-from-third"),
     ],
     "nfl": [
-        ("<2017", 1974, 2016, 5, "nfl-2012-overtime-modified-sudden-death-regular-season"),
-        ("2017-24", 2017, 2024, 5, "nfl-2017-overtime-ten-minutes"),
+        ("<2012", 1974, 2011, 5, "before nfl-2012-overtime-modified-sudden-death-regular-season"),
+        ("2012-24", 2012, 2024, 5, "nfl-2012-overtime-modified-sudden-death-regular-season"),
         ("2025+", 2025, 9999, 5, "nfl-2025-overtime-both-possess-regular-season"),
     ],
 }
