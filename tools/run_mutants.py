@@ -137,12 +137,14 @@ def check_site(row: Dict[str, Any], root: Path) -> Optional[str]:
 
 
 def _pytest(row: Dict[str, Any], root: Path) -> Dict[str, Any]:
-    # argv list, no shell; every token comes from the committed registry
     cmd = [*PYTEST_CMD, *shlex.split(row["test"]), *PYTEST_ARGS]
     with tempfile.TemporaryDirectory(prefix="run-mutants-pycache-", ignore_cleanup_errors=True) as cache:
         env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1", "PYTHONPYCACHEPREFIX": cache}
         try:
-            proc = subprocess.run(cmd, cwd=root, env=env, capture_output=True, text=True, timeout=ROW_TIMEOUT)
+            # argv is a list built from the committed registry, run with shell=False (no shell parsing)
+            proc = subprocess.run(  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
+                cmd, cwd=root, env=env, capture_output=True, text=True, timeout=ROW_TIMEOUT
+            )
         except subprocess.TimeoutExpired:
             return {"rc": None, "tail": f"timed out after {ROW_TIMEOUT}s"}
     tail = (proc.stdout + proc.stderr).strip().splitlines()[-1:]
