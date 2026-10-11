@@ -35,8 +35,6 @@ REGULATION_PERIODS: int = 4
 #: ESPN marks a missing play coordinate with ``-214748340``; anything below this is "no location".
 COORD_SENTINEL: float = -1000.0
 
-_WP_COLUMNS = ["pregame_home_prob", "prior_source", "wp_regime", "home_win_prob", "wp_delta"]
-
 
 def home_prior(
     home_team_spread: Optional[float],
@@ -59,6 +57,9 @@ def home_prior(
 
     Returns:
         ``(probability, source)`` with ``source`` ``"spread"`` or ``"hfa"``.
+
+    Raises:
+        ValueError: If ``league_id`` is not ``"00"``, ``"10"`` or ``"20"``.
 
     Example:
         Quick start::
@@ -85,6 +86,10 @@ def ot_adjusted_seconds(pbp: pl.DataFrame) -> pl.DataFrame:
 
     Returns:
         The frame with ``wp_regime`` (``"reg"`` / ``"ot"``) and the adjusted seconds column.
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If ``period_number``, ``start_game_seconds_remaining`` or
+            ``start_quarter_seconds_remaining`` is missing.
 
     Example:
         Quick start::
@@ -117,6 +122,13 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
         The input plus ``pregame_home_prob``, ``prior_source``, ``wp_regime``, ``home_win_prob``
         and ``wp_delta`` (the first play's delta is measured from the prior). An empty input
         returns an empty frame with those columns.
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If a required column is missing (``home_team_spread``,
+            ``game_spread_available``, ``period_number``, ``start_game_seconds_remaining``,
+            ``start_quarter_seconds_remaining``, ``home_score``, ``away_score``, ``team_id``,
+            ``home_team_id``).
+        ValueError: If ``league_id`` is unknown.
 
     Example:
         Quick start::
