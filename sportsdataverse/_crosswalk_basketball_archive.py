@@ -210,6 +210,8 @@ def read_stats_archive(stats_dir: Union[str, Path], league: str, season: int) ->
 
 
 def _espn_games(schedule: pl.DataFrame) -> pl.DataFrame:
+    """ESPN games keyed for the date join. ``game_date`` must already be the US-Eastern date,
+    as in the published ``espn_*_schedules`` (a UTC date would shift late West-coast games)."""
     return schedule.select(
         pl.col("game_id").cast(pl.Int64).cast(pl.Utf8).alias("espn_game_id"),
         as_date(pl.col("game_date")).alias("game_date"),
@@ -221,7 +223,8 @@ def _espn_games(schedule: pl.DataFrame) -> pl.DataFrame:
 def _espn_teams(schedule: pl.DataFrame) -> pl.DataFrame:
     """One row per ESPN team in the season schedule, as the season named it (latest game)."""
     sides = [
-        schedule.sort("game_date", nulls_last=True).select(
+        schedule.select(
+            pl.col("game_date"),
             pl.col(f"{s}_id").cast(pl.Int32).alias("espn_team_id"),
             pl.col(f"{s}_abbreviation").cast(pl.Utf8).alias("espn_abbreviation"),
             pl.col(f"{s}_display_name").cast(pl.Utf8).alias("espn_display_name"),
@@ -234,7 +237,9 @@ def _espn_teams(schedule: pl.DataFrame) -> pl.DataFrame:
     return (
         pl.concat(sides)
         .filter(pl.col("espn_team_id").is_not_null())
+        .sort("game_date", nulls_last=False, maintain_order=True)
         .unique("espn_team_id", keep="last", maintain_order=True)
+        .drop("game_date")
         .sort("espn_team_id")
     )
 
@@ -252,8 +257,8 @@ def _pair_teams(espn_games: pl.DataFrame, stats_games: pl.DataFrame, p: str) -> 
 
     e = long(espn_games, "home_espn_team_id", "away_espn_team_id", "espn_team_id")
     s = long(stats_games, f"{p}_home_team_id", f"{p}_away_team_id", f"{p}_team_id")
-    e = e.filter(pl.col("game_date").is_in(s["game_date"].unique().implode()))
     assert e.schema["game_date"] == s.schema["game_date"], "game_date dtype mismatch between ESPN and Stats"
+    e = e.filter(pl.col("game_date").is_in(s["game_date"].unique().implode()))
     appearances = e.group_by("espn_team_id").agg(pl.len().alias("n_espn"))
     counts = (
         e.join(s, on=["game_date", "side"])
@@ -402,8 +407,16 @@ def _player_crosswalk(
         .group_by(["espn_team_id", "left_id", "right_id"])
         .agg(pl.len().alias("n"), (pl.col("match_method") == "exact_name").sum().alias("n_exact"))
         .sort(["n", "n_exact", "right_id"], descending=[True, True, False])
+        # A tie between the top two candidates is left unmatched rather than guessed.
+        .with_columns(
+            ((pl.col("n").shift(-1) == pl.col("n")) & (pl.col("n_exact").shift(-1) == pl.col("n_exact")))
+            .over(["espn_team_id", "left_id"])
+            .fill_null(False)
+            .alias("_tied")
+        )
         .group_by(["espn_team_id", "left_id"], maintain_order=True)
         .first()
+        .filter(pl.col("_tied") == False)
         .join(games_seen, on=["espn_team_id", "left_id"])
         .select(
             pl.col("espn_team_id"),
@@ -420,14 +433,15 @@ def _player_crosswalk(
     latest_espn = espn.sort("game_date", nulls_last=False).unique(keys, keep="last", maintain_order=False)
     stats_latest = (
         stats_players.join(stats_games.select(f"{p}_game_id", "game_date"), on=f"{p}_game_id", how="left")
+        .join(to_espn, on=f"{p}_team_id")
         .sort("game_date", nulls_last=False)
-        .unique(pid, keep="last")
-        .select(pid, pname, pjersey, ppos)
+        .unique([pid, "espn_team_id"], keep="last")
+        .select(pid, "espn_team_id", pname, pjersey, ppos)
     )
     assert best.schema[pid] == stats_latest.schema[pid], f"{pid} dtype mismatch"
     out = (
         latest_espn.join(best, on=keys, how="left")
-        .join(stats_latest, on=pid, how="left")
+        .join(stats_latest, on=[pid, "espn_team_id"], how="left")
         .with_columns(
             pl.lit(season, dtype=pl.Int32).alias("season"),
             pl.col("espn_full_name")

@@ -13,7 +13,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from sportsdataverse._crosswalk_basketball_archive import read_stats_archive
+from sportsdataverse._crosswalk_basketball_archive import build_archive_crosswalks, read_stats_archive
 from sportsdataverse.nba import nba_crosswalk, nba_crosswalks_from_archive
 from sportsdataverse.wnba import wnba_crosswalk, wnba_crosswalks_from_archive
 
@@ -103,3 +103,18 @@ def test_yahoo_ids_only_for_franchises_from_2014() -> None:
     assert got.rows() == [("nba.t.9", "nba.g.2015061409"), (None, None)]
     early = frame.with_columns(nba_crosswalk._yahoo_team_id(2013), nba_crosswalk._yahoo_game_id(2013))
     assert early.select("yahoo_team_id", "yahoo_game_id").null_count().row(0) == (2, 2)
+
+
+def test_season_vote_tie_is_left_unmatched() -> None:
+    """LeBron carries a different Stats id in each Finals game: a 1-1 split must not pick one."""
+    schedule, rosters = _espn("nba")
+    stats = read_stats_archive(F / "nba_stats" / "json", "nba", 2015)
+    lebron = pl.col("nba_player_id") == "2544"
+    split = pl.when(lebron & (pl.col("nba_game_id") == "0041400406")).then(pl.lit("9999999"))
+    stats["players"] = stats["players"].with_columns(split.otherwise(pl.col("nba_player_id")).alias("nba_player_id"))
+    player = build_archive_crosswalks("nba", 2015, schedule, rosters, stats)["player"]
+    row = player.filter(pl.col("espn_athlete_id") == "1966")
+    assert row["nba_player_id"].to_list() == [None]
+    assert row["match_method"].to_list() == ["unmatched"]
+    ids = dict(zip(player["espn_athlete_id"], player["nba_player_id"]))
+    assert ids["3975"] == "201939"  # Curry, matched in both games, is untouched
