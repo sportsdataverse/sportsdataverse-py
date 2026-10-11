@@ -2748,6 +2748,16 @@ class CFBPlayProcess(object):
                 lead_scoringPlay=pl.col("scoringPlay").shift(-1),
                 text_dupe=pl.lit(False),
             )
+            # Pre-2014 onside-kick-recovered rows ("Onside kick recovered by ...") carry the label
+            # "Kickoff Return (Defense)". Normalised here, before anything reads kickoff_vec: the
+            # possession flip below puts pos_team on the receiving team, as for every other onside
+            # kick, and the kick flags see a kickoff (renamed later, both were wrong).
+            .with_columns(
+                pl.when(pl.col("type.text") == "Kickoff Return (Defense)")
+                .then(pl.lit("Kickoff"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text")
+            )
             .with_columns(
                 text_dupe=pl.when(pl.col("id") == pl.col("id").shift(-1))
                 .then(pl.lit(True))
@@ -4032,15 +4042,6 @@ class CFBPlayProcess(object):
         Creates the following columns in play_df:
             * Flags for fumbles, scores, kickoffs, punts, field goals
         """
-        # Pre-2014 onside-kick-recovered rows ("Onside kick recovered by ...") carry the label
-        # "Kickoff Return (Defense)". Normalise it here, before the kick flags read kickoff_vec;
-        # renamed later (in __add_new_play_types) the row kept kickoff_play / kickoff_onside False.
-        play_df = play_df.with_columns(
-            pl.when(pl.col("type.text") == "Kickoff Return (Defense)")
-            .then(pl.lit("Kickoff"))
-            .otherwise(pl.col("type.text"))
-            .alias("type.text")
-        )
         # --- Touchdown, Fumble, Special Teams flags -----------------
         play_df = (
             play_df.with_columns(

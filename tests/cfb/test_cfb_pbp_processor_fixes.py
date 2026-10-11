@@ -863,6 +863,9 @@ def test_pre_2014_onside_recovery_is_flagged_as_an_onside_kickoff():
     # stayed False on every one.
     onside = _plays(243040130).filter(pl.col("text").str.starts_with("Onside kick recovered"))
     assert onside.select("type.text", "kickoff_play", "kickoff_onside").rows() == [("Kickoff", True, True)]
+    # Michigan (130) kicked and recovered: renamed before the possession flip, the receiving team
+    # is Michigan State (127) as on every other onside kick, not the kicker.
+    assert onside.select("kicking_team", "return_team").rows() == [(130, 127)]
 
 
 # --- R11: a run the official credits survives the no-play spot foul after it -------------------
