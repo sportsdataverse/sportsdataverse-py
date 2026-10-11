@@ -41,12 +41,12 @@ _FLOOR_DIR = Path(__file__).parent / "parity_floors"
 DEFAULT_TOLERANCE_PP = 2.0
 
 #: Era buckets: pre-2007 text, the 2007-13 "Last, First" feed, the 2014-19
-#: vendor feed, and 2020+ (truncated / skipped-down feeds).
+#: vendor feed, and 2020 on (truncated / skipped-down feeds).
 ERAS: tuple[tuple[str, int, int], ...] = (
     ("2004-06", 2004, 2006),
     ("2007-13", 2007, 2013),
     ("2014-19", 2014, 2019),
-    ("2020-26", 2020, 2026),
+    ("2020+", 2020, 9999),  # open-ended: a new season must not fall out of the check
 )
 
 c = pl.col

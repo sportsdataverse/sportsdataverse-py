@@ -139,4 +139,13 @@ def test_athlete_id_dtype_mismatch_raises(wired):
 def test_committed_cfb_pbp_player_floors_are_real():
     payload = json.loads(bpp.floor_path("cfb_pbp").read_text(encoding="utf-8"))
     assert len(payload["floors"]) >= 15, "expected a floor per (category, stat)"
-    assert set(payload["floors"]["passing.completions"]) == {"2004-06", "2007-13", "2014-19", "2020-26"}
+    assert set(payload["floors"]["passing.completions"]) == {"2004-06", "2007-13", "2014-19", "2020+"}
+
+
+def test_newest_seasons_stay_in_the_check(wired):
+    """The last era is open-ended: a 2027 game must not silently fall out of the measurement."""
+    box = _box([{"category": "rushing", "athlete_id": 7, "rushingAttempts": "1", "rushingYards": "12"}])
+    wired(box.with_columns(season=pl.lit(2027)))
+    frame = _plays([{"season": 2027, "rush": True, "rusher_player_id": 7, "yds_rushed": 12}])
+    m = bpp.measure(frame, bpp.espn_player_lines(bpp.espn_box_glob()))
+    assert m.filter(pl.col("stat") == "rushingYards")["era"].to_list() == ["2020+"]

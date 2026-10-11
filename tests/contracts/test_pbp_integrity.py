@@ -150,3 +150,20 @@ def test_possession_change_inside_one_drive_id_is_not_a_skip():
         pl.when(pl.col("game_play_number") >= 2).then(20).otherwise(pl.col("pos_team_id")).alias("pos_team_id"),
     )
     assert _ind(g)["down_skips"] == 0
+
+
+def test_ceiling_scales_with_a_growing_season(tmp_path, monkeypatch):
+    """A season still in progress gains games every week: a count that grows with the
+    games is not a regression, a count that outgrows them is."""
+    monkeypatch.setattr(pi, "_FLOOR_DIR", tmp_path)
+    (tmp_path / "toy_integrity.json").write_text(
+        json.dumps({"ceilings": {"unparsed": {"2024": 10}}, "games": {"2024": 20}}), encoding="utf-8"
+    )
+    clean = [_game(n=8, game_id=g) for g in range(100, 120)]
+    bad = [_game(n=8, game_id=g).with_columns(rush=pl.lit(False)) for g in range(1, 21)]
+    # 40 games now (twice the 20 measured), 20 unparsed (twice the 10): proportional, no WARN
+    grown = pl.concat(clean + bad)
+    assert not [f for f in pi.run("toy", grown, _ctx()) if f.severity is Severity.WARN]
+    # 40 games, 40 unparsed: twice the measured rate
+    worse = pl.concat([g.with_columns(rush=pl.lit(False)) for g in clean] + bad)
+    assert [f for f in pi.run("toy", worse, _ctx()) if f.severity is Severity.WARN]

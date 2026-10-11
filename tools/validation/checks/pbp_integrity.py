@@ -18,7 +18,9 @@ or why. This check derives one row per game of feed and processing failures:
 
 Each indicator is counted per season (games, or names for ``garbled_names``)
 and compared with a committed ceiling measured from the current published
-data; a count above ceiling + tolerance is a WARN naming example games. The
+data, scaled by how many games the season has now against when it was
+measured (an in-progress season grows every week); a count above the scaled
+ceiling + tolerance is a WARN naming example games. The
 hard failures (unparsed, duplicated, frozen clock) are also reported as INFO
 whenever present, so the triage list never hides behind its own baseline.
 
@@ -259,12 +261,18 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
     fp = floor_path(dataset)
     if not fp.exists() or any(col not in frame.columns for col in _REQUIRED):
         return []
-    ceilings = json.loads(fp.read_text(encoding="utf-8")).get("ceilings", {})
+    snapshot = json.loads(fp.read_text(encoding="utf-8"))
+    ceilings, measured_games = snapshot.get("ceilings", {}), snapshot.get("games", {})
     frac = ctx.thresholds.get("pbp_integrity_tolerance_frac", 0.1)
+    games = game_indicators(frame)
+    games_now = dict(games.group_by("season").len().iter_rows())
     findings: list[Finding] = []
-    for row in season_counts(game_indicators(frame)).to_dicts():
+    for row in season_counts(games).to_dicts():
         examples = ", ".join(str(g) for g in row["game_ids"])
         ceiling = ceilings.get(row["indicator"], {}).get(str(row["season"]))
+        then = measured_games.get(str(row["season"]))
+        if ceiling is not None and then:
+            ceiling = ceiling * games_now.get(row["season"], then) / then
         loc = {"indicator": row["indicator"], "season": row["season"]}
         if ceiling is not None and row["count"] > ceiling + max(2, frac * ceiling):
             findings.append(
@@ -273,12 +281,12 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
                     Severity.WARN,
                     ctx.domain,
                     dataset,
-                    f"{row['indicator']} rose in {row['season']}: {row['count']} vs ceiling {ceiling} "
+                    f"{row['indicator']} rose in {row['season']}: {row['count']} vs ceiling {ceiling:.0f} "
                     f"(e.g. games {examples})",
                     locator=loc,
-                    expected=ceiling,
+                    expected=round(ceiling, 1),
                     actual=row["count"],
-                    metric=row["count"] - ceiling,
+                    metric=round(row["count"] - ceiling, 1),
                     needs_judgment=True,
                 )
             )
@@ -301,14 +309,16 @@ def _refresh(dataset: str) -> int:
     from tools.validation.registry import resolve
 
     frame, _ = resolve(dataset)
-    counts = season_counts(game_indicators(frame))
+    games = game_indicators(frame)
+    counts = season_counts(games)
     seasons = sorted(frame.get_column("season").drop_nulls().unique().to_list())
     ceilings: dict[str, dict[str, int]] = {name: {str(s): 0 for s in seasons} for name in INDICATORS}
     for row in counts.to_dicts():
         ceilings[row["indicator"]][str(row["season"])] = row["count"]
     _FLOOR_DIR.mkdir(parents=True, exist_ok=True)
     with floor_path(dataset).open("w", encoding="utf-8", newline="\n") as fh:
-        json.dump({"dataset": dataset, "ceilings": ceilings}, fh, indent=1, sort_keys=True)
+        n_games = {str(s): n for s, n in games.group_by("season").len().iter_rows()}
+        json.dump({"dataset": dataset, "ceilings": ceilings, "games": n_games}, fh, indent=1, sort_keys=True)
         fh.write("\n")
     print(f"wrote {floor_path(dataset)}")
     return 0
