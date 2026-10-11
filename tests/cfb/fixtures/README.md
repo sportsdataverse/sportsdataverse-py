@@ -85,8 +85,11 @@ overtime its rule is about; `tools/check_ot_era_captures.py` checks them.
 | 2021+ | `cfb-2021-overtime-shootout-from-third` | 401282146 | Alabama @ Auburn, 2021: four overtimes, the shootout from the third |
 
 The check reads ESPN's period LABEL, not an overtime count: on 401112489 ESPN files overtimes 1-5 as
-period 5, so the label alone cannot tell the third overtime from the fifth. Plan task 3.2's era tests
-must derive the overtime number from the possession sequence.
+period 5, so the label alone cannot tell the third overtime from the fifth. The processor's gate
+(`_ot_no_touchdown_before`, table `model_vars.OT_SHOOTOUT_FROM_PERIOD`) therefore takes a try as a
+shootout attempt when the season has a shootout and the row is either labelled inside it or not
+preceded by a touchdown; `tests/cfb/test_cfb_overtime_eras.py` holds one test per rule set (401628439,
+whose attempts are labelled 5, 9 and 12, covers 2021+ alongside 401282146).
 
 Other overtime captures: 252600087, 262522509, 322802005, 332570254, 400547980, 400869264,
 400869817, 401112081, 401301042, 401628439 (eight overtimes), 401752854, 401754543, 401754554,
