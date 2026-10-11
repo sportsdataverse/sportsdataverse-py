@@ -158,6 +158,10 @@ _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\
 #: A loss stated after the number -- ESPN's 2021+ vendor text, "rush middle for 3 yards loss", "caught
 #: at ARK23, for 1 yard loss", "for a 2 yard loss" -- which the "for N" readers take as a gain.
 _FOR_N_YARDS_LOSS_RE = r"(?i)for (?:a )?(\d+) y(?:ar)?ds? loss"
+#: A spot foul after a run that the officials let stand for the runner: "... PENALTY ASU Personal
+#: Foul ... runner is credited with 6 yards on the play. NO PLAY". ESPN's box counts the carry.
+#: Only this wording is safe; matching on spot enforcement also catches pre-snap fouls.
+_RUNNER_CREDITED_RE = r"(?i)runner is credited with (-?\d+) yards?"
 
 #: The returner clause with no "for": "Shaun Carney return -2 yards to the AFA10" (2005-2007) and
 #: the vendor template's "#16 M.Beltran, Jr. return 18 yards", whatever the name's shape.
@@ -4181,6 +4185,7 @@ class CFBPlayProcess(object):
                 pl.when(
                     (pl.col("type.text") == "Rush")
                     .or_(pl.col("type.text") == "Rushing Touchdown")
+                    .or_(pl.col("text").str.contains(_RUNNER_CREDITED_RE))
                     .or_(
                         (
                             pl.col("type.text").is_in(
@@ -5825,9 +5830,9 @@ class CFBPlayProcess(object):
             # Rush yardage reads cleaned_text (direction word stripped) so
             # "rush middle for 5 yards" -> "rush for 5 yards" matches; raw `text`
             # silently missed every direction-carrying rush on modern ESPN feeds.
-            yds_rushed=pl.when(
-                (pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for no gain"))
-            )
+            yds_rushed=pl.when((pl.col("rush") == True).and_(pl.col("text").str.contains(_RUNNER_CREDITED_RE)))
+            .then(pl.col("text").str.extract(_RUNNER_CREDITED_RE, 1).cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for no gain")))
             .then(0)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)for no gain")))
             .then(0)
