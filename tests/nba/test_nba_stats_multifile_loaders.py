@@ -196,3 +196,9 @@ def test_live_matchups_combine_and_draft_read_the_release():
     draft = load_nba_stats_draft(2025)
     first = draft.filter(pl.col("overall_pick") == 1)
     assert first["player_name"].to_list() == ["Cooper Flagg"], "seasons is the draft year"
+
+
+def test_pick_deduplicates_repeated_filter_values():
+    from sportsdataverse.nba.nba_loaders_extra import _pick
+
+    assert _pick("per_mode", ["totals", "totals", "pergame"], ("pergame", "totals")) == ("totals", "pergame")

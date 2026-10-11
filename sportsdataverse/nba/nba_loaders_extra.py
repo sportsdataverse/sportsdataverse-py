@@ -24,6 +24,7 @@ of a season and stamps any discriminator a file's rows do not already carry.
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
+import warnings
 from typing import Dict, Iterable, List, Literal, Optional, Sequence, Tuple, Union, overload
 
 import pandas as pd
@@ -287,7 +288,8 @@ def _pick(name: str, value: _Choice, valid: Sequence[str]) -> Tuple[str, ...]:
     """``None`` -> every valid value; a str or iterable -> those values, validated."""
     if value is None:
         return tuple(valid)
-    picked = (value,) if isinstance(value, str) else tuple(value)
+    # dict.fromkeys de-duplicates in order, so per_mode=["totals", "totals"] reads once
+    picked = tuple(dict.fromkeys((value,) if isinstance(value, str) else value))
     bad = [v for v in picked if v not in valid]
     if bad or not picked:
         raise ValueError(f"unknown {name} {bad or picked!r}; expected one of {', '.join(valid)}")
@@ -383,8 +385,8 @@ def load_nba_stats_synergy(
             returns a polars dataframe.
 
     Returns:
-        pl.DataFrame: One row per player per play type per season type per per
-        mode. ``season`` is the END year (``2025`` for 2024-25), the published
+        pl.DataFrame: One row per player per play type per type grouping per
+        season type per per mode. ``season`` is the END year (``2025`` for 2024-25), the published
         assets' own stamp; ``season_id`` is stats.nba.com's code (``22024``).
         An empty frame when no requested season is published.
 
@@ -430,6 +432,15 @@ def load_nba_stats_synergy(
     ]
     if not assets:
         raise ValueError(f"load_nba_stats_synergy: no {groupings} split is published for play_type {play_types}")
+    if play_type is not None:
+        unpublished = [
+            f"{pt}/{tg}" for tg in groupings for pt in play_types if pt not in NBA_STATS_SYNERGY_PLAY_TYPES[tg]
+        ]
+        if unpublished:
+            warnings.warn(
+                f"load_nba_stats_synergy: no published split for {', '.join(unpublished)}; skipped",
+                stacklevel=2,
+            )
     return _load_season_assets("load_nba_stats_synergy", "nba_stats_synergy", assets, seasons, 2015, return_as_pandas)
 
 
@@ -538,7 +549,7 @@ def load_nba_stats_hustle_team(
         Quick start::
 
             from sportsdataverse.nba import load_nba_stats_hustle_team
-            teams = load_nba_stats_hustle_team(2024, per_mode="pergame")
+            teams = load_nba_stats_hustle_team(2024, season_type="regular-season", per_mode="pergame")
             print(teams.shape)
 
         Pipeline next step (most screen assists per game)::
@@ -846,7 +857,7 @@ def load_nba_stats_draft_combine_spot_shooting(
 
         Pipeline next step (best corner-three shooters)::
 
-            spot.sort("nba_corner_left_pct", descending=True, nulls_last=True).head()
+            spot.sort("college_corner_left_pct", descending=True, nulls_last=True).head()
 
         See Also:
             * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for the same release

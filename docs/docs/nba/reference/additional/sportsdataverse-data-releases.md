@@ -260,7 +260,7 @@ print(spot.shape)
 
 # Pipeline next step (best corner-three shooters)
 
-spot.sort("nba_corner_left_pct", descending=True, nulls_last=True).head()
+spot.sort("college_corner_left_pct", descending=True, nulls_last=True).head()
 ```
 
 ### load_nba_stats_draft_combine_stats {#load_nba_stats_draft_combine_stats}
@@ -469,7 +469,7 @@ One row per team per season type per per mode, with `season` as the END year. An
 
 ```python
 from sportsdataverse.nba import load_nba_stats_hustle_team
-teams = load_nba_stats_hustle_team(2024, per_mode="pergame")
+teams = load_nba_stats_hustle_team(2024, season_type="regular-season", per_mode="pergame")
 print(teams.shape)
 
 # Pipeline next step (most screen assists per game)
@@ -779,7 +779,7 @@ rows do not carry them, so every row says which file it came from.
 
 **Returns**
 
-One row per player per play type per season type per per mode. `season` is the END year (`2025` for 2024-25), the published assets' own stamp; `season_id` is stats.nba.com's code (`22024`). An empty frame when no requested season is published.
+One row per player per play type per type grouping per season type per per mode. `season` is the END year (`2025` for 2024-25), the published assets' own stamp; `season_id` is stats.nba.com's code (`22024`). An empty frame when no requested season is published.
 
 | col_name | type | description |
 |---|---|---|
