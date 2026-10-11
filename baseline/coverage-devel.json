@@ -1,6 +1,6 @@
 {
-  "commit": "037af00969 (devel-program-setup after #748; coverage from CI run 38124059017)",
-  "measured_at": "2026-10-11T08:45:28+00:00",
+  "commit": "36f7a02f1b (devel-program-setup after #748/#751/#747/#752; CI run 38127530693)",
+  "measured_at": "2026-10-11T09:28:35+00:00",
   "metrics": {
     "handwritten_files": {
       "value": 686,
