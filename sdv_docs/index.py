@@ -43,7 +43,8 @@ class Index:
     """Read-only view of one index file."""
 
     def __init__(self, path: Path) -> None:
-        self.con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+        # as_uri() percent-encodes: a raw "?" or "#" in the path would end the URI's path and open another file
+        self.con = sqlite3.connect(Path(path).resolve().as_uri() + "?mode=ro", uri=True)
         self.con.row_factory = sqlite3.Row
 
     def close(self) -> None:

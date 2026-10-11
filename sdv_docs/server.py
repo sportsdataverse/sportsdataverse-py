@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import difflib
 import json
+import sqlite3
 import sys
 from typing import Any, Callable, Optional
 
@@ -29,8 +30,11 @@ def _with_index(run: Callable[[Index], str]) -> str:
         path = locate()
     except IndexUnavailable as e:
         return f"index unavailable: {e}; set SDV_DOCS_DB or check network"
-    with Index(path) as ix:
-        return run(ix)
+    try:
+        with Index(path) as ix:
+            return run(ix)
+    except sqlite3.DatabaseError as e:  # a truncated cache or an SDV_DOCS_DB that is not an sdv-docs index
+        return f"index unreadable: {e} ({path}); fix SDV_DOCS_DB or delete the cached index to re-download it"
 
 
 def _clamp(limit: int) -> int:
@@ -346,8 +350,8 @@ def main(argv: Optional[list[str]] = None) -> int:
         return 2
     try:
         server = build_server()
-    except ImportError:
-        print(INSTALL, file=sys.stderr)
+    except ImportError as e:  # also an installed but incompatible mcp: show which import failed
+        print(f"{INSTALL}\n({e})", file=sys.stderr)
         return 2
     server.run()
     return 0

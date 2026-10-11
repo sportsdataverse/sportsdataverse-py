@@ -339,3 +339,17 @@ def test_main_writes_index_and_prints_summary(tmp_path, monkeypatch, capsys):
     assert B.main(["--out", str(tmp_path), "--offline"]) == 0
     assert seen["offline"] is True and (tmp_path / MANIFEST).exists()
     assert capsys.readouterr().out.startswith(f"wrote {tmp_path / ASSET}")
+
+
+def test_reexported_third_party_objects_are_not_sdv_functions():
+    import functools
+    import typing
+
+    def sdv_fn():
+        pass
+
+    assert B._reexport("Any", typing.Any) and B._reexport("lru_cache", functools.lru_cache)
+    # SDV names whose __module__ is stdlib: a partial, and a type alias
+    assert not B._reexport("pwhl_xg", functools.partial(sdv_fn))
+    assert not B._reexport("ValueKey", typing.Literal["a", "b"])
+    assert not B._reexport("sdv_fn", sdv_fn)
