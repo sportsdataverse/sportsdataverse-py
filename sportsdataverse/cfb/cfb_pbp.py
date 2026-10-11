@@ -442,6 +442,18 @@ def _with_ot_second(play_df):
     return play_df if second is None else play_df.with_columns(pl.Series("ot_second_possession", second))
 
 
+def _as_trained_2h_flag(features: pl.DataFrame) -> pl.DataFrame:
+    """The booster input for ``pos_team_receives_2H_kickoff``: ``not is_home``, as the boosters were trained.
+
+    Shim for C-NF-2, removed by the task 3.8 retrain. The bundled ``wp_spread`` / ``wp_naive``
+    were trained on a frame where the flag was ``1 - is_home`` on every row, both halves, so they
+    learned it as a second home/away indicator. Feeding them the corrected published flag (true
+    only on the opening kicker's first-half possessions) degrades ``wp_before_naive``; feeding
+    the trained semantics keeps WP as it was while the published column stays correct.
+    """
+    return features.with_columns((~pl.col("is_home")).alias("pos_team_receives_2H_kickoff"))
+
+
 def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
     """Project the WP feature columns, rename to the booster's feature names, and
     predict the start-touchback / start / end win-probabilities. Shared by the
@@ -459,6 +471,7 @@ def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
     start.columns = names
     end = play_df[end_cols]
     end.columns = names
+    tb, start, end = (_as_trained_2h_flag(x) for x in (tb, start, end))
     forced = _ot_forced(play_df)
     return (
         _adjust_wp(model.predict(DMatrix(tb)), tb, forced=forced).astype(np.float32),
@@ -8495,6 +8508,7 @@ class CFBPlayProcess(object):
             def _board_at(pos_pts: float, exp_pts: float, model=model, names=names, cols=cols):
                 ko = _view(pos_pts, exp_pts).select(cols)
                 ko.columns = names
+                ko = _as_trained_2h_flag(ko)
                 return _adjust_wp(model.predict(DMatrix(ko)), ko).astype(np.float32)
 
             w0, w1, w2 = _board_at(0.0, 0.0), _board_at(1.0, 1.0), _board_at(2.0, 2.0)

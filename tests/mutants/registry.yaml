@@ -217,6 +217,38 @@
     kickoff, so this branch went unchecked. The period-3 oracle (the opening kicker takes the first
     second-half snap) covers 34 of them; the mutant (the first snap's offense) is red there.
 
+# --- C-NF-2 booster-input shim (review R781-1; removed by the task 3.8 retrain) ------------------
+- id: cfb-wp-shim-pipeline
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'tb, start, end = (_as_trained_2h_flag(x) for x in (tb, start, end))'
+  mutant: 'tb, start, end = tb, start, end'
+  test: tests/cfb/test_cfb_wp_endgame.py -k "regulation_surfaces and wp_before"
+  expected: kill
+  note: >-
+    The bundled WP boosters were trained with the flag equal to 1 - is_home on every row. Fed the
+    corrected flag, the pinned 401754554 wp_before / wp_before_naive move off their base values.
+
+- id: cfb-wp-shim-fourth-down
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: 'out["pos_team_receives_2H_kickoff"] = ~out["is_home"].astype(bool)'
+  mutant: 'pass'
+  test: tests/cfb/test_cfb_wp_endgame.py -k "regulation_surfaces and (punt_wp or go_wp or fg_wp)"
+  expected: kill
+  note: >-
+    The fourth-down state's WP input: fed the corrected flag, the pinned 401754554 punt/go/FG
+    values move off their base values.
+
+- id: cfb-wp-shim-calculator
+  finding: C-NF-2
+  file: sportsdataverse/cfb/model_calculators.py
+  snippet: 'scored = prepared.with_columns(flag)'
+  mutant: 'scored = prepared'
+  test: tests/cfb/test_model_calculators.py -k "as_the_boosters_were_trained"
+  expected: kill
+  note: calculate_win_probability scores the flag as 1 - is_home, whatever the caller's column says.
+
 # --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012) ----------------
 - id: cfb-kickoff-touchback-75-from-2014
   group: cfb-touchback

@@ -341,19 +341,21 @@ def test_q4_one_score_holdout_rows_hold_calibration_through_the_runtime():
 
 #: One late-fourth regulation value per published surface, pinned as observed on the committed
 #: card. With ``adjust_wp`` an identity in regulation every one of them moves (see the PR's
-#: mutation run), so none of these surfaces can drop the correction silently. The 401754554 rows
-#: were re-pinned by task 2.6 (C-NF-2): ``pos_team_receives_2H_kickoff`` is false after halftime,
-#: and every one still moves by 0.01 or more without the correction.
+#: mutation run), so none of these surfaces can drop the correction silently. They also guard the
+#: C-NF-2 booster-input shim (``cfb_pbp._as_trained_2h_flag`` and its twin in ``cfb_fourth_down._to_pandas``,
+#: removed by the task 3.8 retrain): fed the corrected flag instead of ``1 - is_home``, the 401754554
+#: rows move off these base values by up to 0.0077 (task 2.6 had re-pinned them there) and fail
+#: (registry rows ``cfb-wp-shim-pipeline`` / ``cfb-wp-shim-fourth-down``).
 REGULATION_PINS = [
-    # Virginia, tied 24-24, 2nd and 10 with 0:10 left: the booster alone reads ~0.66
-    (401754554, 171, "Chandler Morris pass complete", "wp_before", 0.5151),
-    (401754554, 171, "Chandler Morris pass complete", "wp_before_naive", 0.5377),
+    # Virginia, tied 24-24, 2nd and 10 with 0:10 left: the booster alone read ~0.7
+    (401754554, 171, "Chandler Morris pass complete", "wp_before", 0.5129),
+    (401754554, 171, "Chandler Morris pass complete", "wp_before_naive", 0.5300),
     # Louisville's kickoff right after its tying field goal, 1:08 left
-    (401754554, 165, "Nick Keller kickoff", "wp_before", 0.5217),
+    (401754554, 165, "Nick Keller kickoff", "wp_before", 0.5227),
     # Louisville up 3, 4th down at its own 44 with 4:31 left: the punt branch (and go / FG)
-    (401754554, 153, "Elijah Slibeck punt", "punt_wp", 0.6367),
-    (401754554, 153, "Elijah Slibeck punt", "go_wp", 0.5439),
-    (401754554, 153, "Elijah Slibeck punt", "fg_wp", 0.4953),
+    (401754554, 153, "Elijah Slibeck punt", "punt_wp", 0.6353),
+    (401754554, 153, "Elijah Slibeck punt", "go_wp", 0.5468),
+    (401754554, 153, "Elijah Slibeck punt", "fg_wp", 0.5002),
     # Kent State's touchdown at 2:04 to trail by two: the try boards (a two ties it)
     (401762856, 169, "B.Finley pass complete short", "xp_wp", 0.2669),
     (401762856, 169, "B.Finley pass complete short", "two_pt_wp", 0.3317),
