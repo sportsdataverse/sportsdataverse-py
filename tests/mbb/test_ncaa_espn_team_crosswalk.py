@@ -1,7 +1,9 @@
-"""Contract tests for the bundled stats.ncaa.org <-> ESPN team-id crosswalk.
+"""Contract tests for the stats.ncaa.org <-> ESPN team-id crosswalk.
 
-Covers both leagues from one file because the loader is league-parameterized
-and the alias table is shared.
+The contract tests read the copy bundled with sdv-py (the loader's fallback);
+the loader itself reads the ``{league}_crosswalk`` release first. Covers both
+leagues from one file because the loader is league-parameterized and the alias
+table is shared.
 """
 
 from __future__ import annotations
@@ -11,8 +13,11 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse.errors import AssetFetchError
+from sportsdataverse.mbb import mbb_ncaa_espn_crosswalk as xw
 from sportsdataverse.mbb import ncaa_espn_team_crosswalk, ncaa_mbb_team_ids
 from sportsdataverse.wbb import ncaa_wbb_team_ids
+from tests.conftest import skip_if_no_live
 
 LEAGUES = ("mbb", "wbb")
 ALIAS_CSV = Path(__file__).resolve().parents[2] / "tools" / "crosswalk" / "alias_ncaa_espn.csv"
@@ -33,7 +38,14 @@ def league(request) -> str:
 
 @pytest.fixture(scope="module")
 def crosswalks() -> "dict[str, pl.DataFrame]":
-    return {lg: ncaa_espn_team_crosswalk(league=lg) for lg in LEAGUES}
+    return {lg: xw._packaged_crosswalk(lg) for lg in LEAGUES}
+
+
+@pytest.fixture
+def offline(monkeypatch):
+    """The public loader without the network: no release, so the bundled copy answers."""
+    monkeypatch.setattr(xw, "_CROSSWALK_CACHE", {})
+    monkeypatch.setattr(xw, "_release_crosswalk", lambda league: None)
 
 
 def test_rejects_unknown_league():
@@ -49,7 +61,7 @@ def test_id_dtypes(crosswalks, league):
     assert df.schema["season"] == pl.Utf8
 
 
-def test_pandas_round_trip(league):
+def test_pandas_round_trip(league, offline):
     assert ncaa_espn_team_crosswalk(league=league, return_as_pandas=True).shape[1] == 13
 
 
@@ -182,3 +194,40 @@ def test_conference_columns_populated(crosswalks, league):
     both = df.filter(pl.col("conference_id").is_not_null())
     assert both["espn_conference_id"].null_count() == 0
     assert both["espn_conference_name"].null_count() == 0
+
+
+def _release_like(league: str) -> pl.DataFrame:
+    """What the release carries: the bundled rows plus ncaa_org_id and a season the bundle lacks."""
+    base = xw._packaged_crosswalk(league).with_columns(pl.lit(1, dtype=pl.Int64).alias("ncaa_org_id"))
+    extra = base.head(1).with_columns(
+        pl.lit("2026-27").alias("season"), pl.lit(999999, dtype=pl.Int64).alias("ncaa_team_id")
+    )
+    return pl.concat([base, extra])
+
+
+def test_reads_the_release_first(monkeypatch):
+    monkeypatch.setattr(xw, "_CROSSWALK_CACHE", {})
+    monkeypatch.setattr(xw, "_read_release_parquet", lambda url: _release_like("mbb"))
+    df = ncaa_espn_team_crosswalk(league="mbb")
+    assert df.columns == list(xw._SCHEMA) and dict(df.schema) == xw._SCHEMA
+    assert "2026-27" in df["season"].to_list()
+
+
+@pytest.mark.parametrize(
+    "read",
+    [lambda url: None, lambda url: (_ for _ in ()).throw(AssetFetchError("release asset fetch failed with HTTP 403"))],
+    ids=["absent", "fetch-failed"],
+)
+def test_falls_back_to_the_bundled_copy(monkeypatch, read):
+    monkeypatch.setattr(xw, "_CROSSWALK_CACHE", {})
+    monkeypatch.setattr(xw, "_read_release_parquet", read)
+    with pytest.warns(UserWarning, match="using the bundled copy"):
+        df = ncaa_espn_team_crosswalk(league="wbb")
+    assert df.equals(xw._packaged_crosswalk("wbb"))
+
+
+@skip_if_no_live
+def test_release_covers_the_bundled_seasons(league):
+    release = xw._release_crosswalk(league)
+    assert release is not None and dict(release.schema) == xw._SCHEMA
+    assert set(xw._packaged_crosswalk(league)["season"]) <= set(release["season"])
