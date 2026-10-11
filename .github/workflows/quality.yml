@@ -1,14 +1,18 @@
-# Static quality gate: lint (ruff), format check (ruff format), and type
+# Static quality gate: lint (ruff), format check (ruff format), type
 # checking (mypy on the curated, fully-typed module set configured in
-# pyproject.toml's [tool.mypy] `files`). These run on pre-commit locally, but
-# enforcing them in CI makes the bar real for every PR — not just for
-# contributors who installed the hooks. Fast (no test execution); the test
-# matrix lives in tests.yml.
+# pyproject.toml's [tool.mypy] `files`), and the quality scoreboard ratchet
+# (tools/quality_scoreboard.py against baseline/). These run on pre-commit
+# locally, but enforcing them in CI makes the bar real for every PR — not just
+# for contributors who installed the hooks. The lint job is fast (no test
+# execution); the parallel coverage job runs the offline suite once with
+# pytest-cov and posts the coverage delta to the step summary. The test matrix
+# lives in tests.yml.
 name: quality
 on:
   pull_request:
+    branches: [main, "devel-*"]
   push:
-    branches: [main]
+    branches: [main, "devel-*"]
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -35,9 +39,52 @@ jobs:
         run: uv run --frozen ruff check sportsdataverse/ tests/ tools/
       - name: ruff format check
         run: uv run --frozen ruff format --check sportsdataverse/ tests/ tools/
+      - name: quality scoreboard (no metric may get worse than baseline/scoreboard-devel.json)
+        run: uv run --frozen python tools/quality_scoreboard.py --check --baseline baseline/scoreboard-devel.json | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: warn when this pull request loosens the quality baseline
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --depth=1 origin "${{ github.base_ref }}"
+          git show "origin/${{ github.base_ref }}:baseline/scoreboard-devel.json" > /tmp/base-baseline.json 2>/dev/null || exit 0
+          uv run --frozen python tools/quality_scoreboard.py --check --baseline /tmp/base-baseline.json --current baseline/scoreboard-devel.json \
+            || echo "::warning file=baseline/scoreboard-devel.json::This PR loosens the quality baseline. Reviewers: check the diff of baseline/scoreboard-devel.json."
       - name: mypy (typed-module gate)
         # File list comes from [tool.mypy] in pyproject.toml; it is a ratchet
         # that grows as modules reach clean typing.
         run: uv run --frozen mypy
       - name: validation harness contract tests
         run: uv run --frozen pytest tests/contracts/ -q
+
+  coverage:
+    # Option A (owner decision 2026-10-09): a parallel job, not a step of the
+    # lint job, so the ~13 min suite never delays the fast lint feedback. The
+    # offline suite is enforced exactly as in tests.yml: live tests skip at
+    # collection time because SDV_PY_LIVE_TESTS is unset here.
+    name: coverage delta (offline suite)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --locked --python 3.13.2
+      - name: Run the offline suite with coverage
+        run: uv run --frozen pytest -n auto --dist loadgroup -q --cov=sportsdataverse --cov-report=json:coverage.json
+      - name: coverage delta (no metric may get worse than baseline/coverage-devel.json)
+        run: uv run --frozen python tools/quality_scoreboard.py --check --baseline baseline/coverage-devel.json --coverage-json coverage.json | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: snapshot the CI numbers (re-seed baseline/ from this artifact)
+        if: ${{ !cancelled() }}
+        run: uv run --frozen python tools/quality_scoreboard.py --write scoreboard-ci.json --coverage-json coverage.json > /dev/null
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: coverage-scoreboard
+          path: |
+            coverage.json
+            scoreboard-ci.json
