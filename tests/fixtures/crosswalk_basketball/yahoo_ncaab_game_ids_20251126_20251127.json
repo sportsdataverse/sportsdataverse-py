@@ -1,0 +1,563 @@
+{
+ "data": {
+  "leagues": [
+   {
+    "games": [
+     {
+      "gameId": "ncaab.g.202511260621",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T10:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260596",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T10:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511261594",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T10:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260615",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T11:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511261417",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T11:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260403",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T11:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260131",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T11:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511261147",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T11:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260592",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T12:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260470",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T12:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260277",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T12:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260594",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T12:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260066",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T12:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260253",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511261506",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260350",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260489",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260200",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260212",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260356",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260256",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260500",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260018",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260062",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511261132",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260526",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T13:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260284",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T14:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511261528",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T14:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260405",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T14:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260614",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T14:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260254",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T14:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260392",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T15:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260058",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T15:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260341",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T15:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260448",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T15:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260599",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T15:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260335",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T16:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260471",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T16:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260620",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T16:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260632",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T16:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260002",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T17:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511261424",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T17:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260174",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T17:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260265",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T17:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260580",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511261383",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260398",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260134",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260461",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260201",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260116",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260292",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260313",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260591",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260538",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260577",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T18:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260349",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T19:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260420",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T19:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260028",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T19:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260661",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T19:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260089",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T19:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260314",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T20:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260263",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T20:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260404",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T20:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260276",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T20:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260585",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T20:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260357",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T20:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260467",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T21:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260498",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T21:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260006",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T23:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260105",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T23:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511260365",
+      "startDate": "2025-11-26-06:00",
+      "startTime": "2025-11-26T23:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270220",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T10:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270178",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T11:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270613",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T11:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270269",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T12:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270499",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270133",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T13:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270538",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T13:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270210",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T14:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270630",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T15:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270492",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T15:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270358",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T15:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270355",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T16:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270657",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T16:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270526",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T16:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270502",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T18:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270157",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T18:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270173",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T19:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270648",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T19:00:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270545",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T20:30:00-06:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaab.g.202511270421",
+      "startDate": "2025-11-27-06:00",
+      "startTime": "2025-11-27T21:30:00-06:00",
+      "status": "FINAL"
+     }
+    ]
+   }
+  ]
+ },
+ "extensions": {}
+}

@@ -32,8 +32,9 @@ the schedule crosswalk.
 With ``fox=True`` the Fox legs are added through the live builders' own code:
 ``fox_team_id`` joins on the normalized team name, and -- for the current season
 only, because Fox rosters are today's -- ``fox_athlete_id`` matches on name and
-jersey within each team. A Fox fetch that fails leaves those columns null with a
-warning rather than failing the build.
+jersey within each team. ``fox_game_id`` comes from Fox's scoreboard, one call per
+game date. A Fox fetch that fails leaves those columns null with a warning rather
+than failing the build.
 """
 
 from __future__ import annotations
@@ -48,6 +49,7 @@ from typing import Any, Dict, List, Optional, Union
 import polars as pl
 
 from sportsdataverse._common_crosswalk_basketball import assemble_player_espn_fox, fuzzy_match, normalize_name
+from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games
 from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError, FetchTally, fox_rosters, require_source
 from sportsdataverse._temporal import as_date
 
@@ -627,8 +629,10 @@ def build_archive_crosswalks(
             franchise names match today's Fox names (a relocated or renamed
             franchise stays null). The Fox player columns fill only when
             ``season`` is the league's current season, because Fox rosters are
-            today's; for any other season they stay null. A failed Fox fetch
-            logs a warning and leaves the columns null.
+            today's; for any other season they stay null. ``fox_game_id`` /
+            ``fox_home_team_id`` / ``fox_away_team_id`` come from Fox's
+            scoreboard, one call per game date, matched on (US-Eastern date,
+            teams). A failed Fox fetch logs a warning and leaves the columns null.
 
     Returns:
         ``{"team", "schedule", "player"}`` frames with the league module's
@@ -650,6 +654,7 @@ def build_archive_crosswalks(
     team, player = team.filter(franchises), player.filter(franchises)
     if fox:
         team = _with_fox_teams(league, season, team)
+        schedule = with_fox_games(league, schedule, team)
         if season == _current_season(league):
             player = _with_fox_players(league, season, team, player, min_confidence)
     return {"team": team, "schedule": schedule, "player": player}

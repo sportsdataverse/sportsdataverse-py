@@ -45,7 +45,7 @@ columns stay null, and Fox columns stay null unless `fox=True`.
 | `espn_game_rosters` | `DataFrame` |  | That season's ESPN game rosters parquet. |
 | `stats_dir` | `Union[str, Path]` |  | The stats archive's `json` root. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for a fuzzy player match. |
-| `fox` | `bool` | `False` | Fetch the Fox legs live (the only network call). `fox_team_id` / `fox_team_name` join on the normalized team name, so they fill for any season whose franchise names match today's Fox names. The Fox player columns fill only for the current season (Fox rosters are today's) and stay null otherwise. A failed Fox fetch logs a warning and leaves the columns null; it never fails the build. |
+| `fox` | `bool` | `False` | Fetch the Fox legs live (the only network call). `fox_team_id` / `fox_team_name` join on the normalized team name, so they fill for any season whose franchise names match today's Fox names. The Fox player columns fill only for the current season (Fox rosters are today's) and stay null otherwise. `fox_game_id` and the Fox home/away team ids come from Fox's scoreboard (one call per game date, matched on US-Eastern date and teams) for any season Fox serves. A failed Fox fetch logs a warning and leaves the columns null; it never fails the build. |
 
 **Returns**
 
@@ -136,9 +136,9 @@ df.filter(pl.col("match_method") == "fuzzy_jw").head()
 
 ### nba_schedule_crosswalk {#nba_schedule_crosswalk}
 
-`nba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`nba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, fox: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats).
+Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats / Fox).
 
 One row per game. Both sides reduce to the Eastern-Time game date before
 joining on `(game_date, home_espn_team_id, away_espn_team_id)`. The
@@ -153,6 +153,7 @@ effectively current-season.
 | `stats_games` | `Optional[DataFrame]` | `None` | Pre-fetched Stats schedule frame; `None` fetches live. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 | `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `fox` | `bool` | `False` | Fill `fox_game_id` / `fox_home_team_id` / `fox_away_team_id` from Fox's scoreboard, one Fox call per game date. A Fox game matches the row with the same US-Eastern date and the same teams (in either home/away order); the Fox home/away ids are Fox's own. A failed Fox fetch logs a warning and leaves the columns null. |
 
 **Returns**
 

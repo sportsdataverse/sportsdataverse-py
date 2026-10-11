@@ -5,6 +5,7 @@
 - [Basketball crosswalk golden fixtures](#basketball-crosswalk-golden-fixtures)
   - [Known defect in the MBB team golden: all-null bart columns](#known-defect-in-the-mbb-team-golden-all-null-bart-columns)
   - [Re-capturing](#re-capturing)
+  - [Fox game and Yahoo id captures](#fox-game-and-yahoo-id-captures)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -97,3 +98,21 @@ torvik_ratings(year=2026).select(
 
 Update the capture date in the table above and re-measure `BART_JOINED` in the
 parity test; never lower it to make a failing run pass.
+
+## Fox game and Yahoo id captures
+
+Real responses for `tests/test_crosswalk_basketball_fox_yahoo.py`, captured
+2026-10-11 (UTC). Thanksgiving 2025 is used because 19 of its 20 Division I
+games were at neutral sites (Fox and Yahoo both call the other team home for
+nine of them) and three late West-coast tips sit on 2025-11-26 in ESPN's
+schedule (23:59 ET) but on 2025-11-27 in Fox's (00:00 ET).
+
+| Fixture | Source | Trim |
+|---|---|---|
+| `fox_cbk_scores_segment_20251127.json` | `bifrost/v1/cbk/league/scores-segment/20251127?groupId=2` | image, sort and favorite keys dropped (23 games kept) |
+| `fox_nba_scores_segment_20260302.json` | `bifrost/v1/nba/league/scores-segment/20260302` | same keys dropped (4 games) |
+| `yahoo_ncaab_league_teams_division1.json` | Yahoo shangrila `leagueTeams?league=ncaab&divisionIds=1&getTeamsByDivision=true` | 51 of 365 teams (the slate's, eight name-tier cases, and Queens, which no ESPN team takes); logo, color, alias and standings keys dropped |
+| `yahoo_ncaab_game_ids_20251126_20251127.json` | Yahoo shangrila `leagueGameIdsByDate?leagues=ncaab&startRange=2025-11-26&endRange=2025-11-27&season=2025` | unmodified (92 games) |
+| `espn_mbb_schedule_20251127.parquet` | `hoopR-mbb-data` `mbb_schedule_2026.parquet` (via `load_mbb_schedule`), the 2025-11-27 games plus the 2025-11-26 games tipping after 04:00 UTC | 8 columns |
+| `espn_mbb_teams_20251127.parquet` | `espn_team_directory("mbb")` | the slate's 42 Division I teams, the ESPN side of the eight name-tier cases, and Memphis (absent from the trimmed Yahoo listing, so two ESPN "Tigers" share a nickname); 4 columns |
+| `espn_nba_schedule_20260302.parquet` | `hoopR-nba-data` `nba_schedule_2026.parquet`, 2026-03-02 | 8 columns |
