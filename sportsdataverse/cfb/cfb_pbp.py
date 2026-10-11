@@ -264,6 +264,30 @@ _PLAYER_NAME_GARBAGE = re.compile(
 #: fixes the emitted name column AND the join in one place.
 _PLAYER_NAME_TEAM_SUFFIX = re.compile(r"\s*\([A-Za-z][\w&'.\- ]{0,11}\)\s*$")
 
+#: A clause the regex name capture ran into, cut unconditionally: none of these can be part
+#: of a person's name (lowercase connectives, ESPN's glued "tackled"/"fumble", the clock and
+#: holder tags). The 25-30 character captures stop mid-clause, so the tail is a fragment --
+#: "Tommylee Lewistackled b", "Kevonte Martin-Manley for", "L.Webb (H: #19 S.Ashb" -- that the
+#: end-anchored narrative-tail rule never matched. 15% of 2007-13 kickoff returners and 19% of
+#: 2020-26 fumblers carried one in the published data.
+_PLAYER_NAME_CLAUSE_CUT = (
+    # connectives end at whitespace or the end, not \b: "\b" fires at an apostrophe, so "to\b"
+    # would cut a lowercase-typo "henry to'oto'o"
+    r"(?:(?i:tackled)|(?i:fumble)|(?i:,\s*clock)|\s+\(H:"
+    r"|\s+(?:to|at|in the|for|by|blocked|returned|recovered|the middle)(?:\s|$)"
+    r"|,\s*(?:forced|recovered|returned|lateral|up)(?:\s|$)|\.\s+Downed(?:\s|$)|\s+\d+\s+Yd(?:\s|$)).*$"
+)
+#: A capture that starts in a clause is no name at all ("to the MiaOh 21", "by Darrell Taylor",
+#: "up the middle"); a leading clock tag ("Clock 07:50, Kevin Kolb") is dropped.
+_PLAYER_NAME_CLAUSE_LEAD = (
+    r"^(?:(?i:clock)\s+\d{1,2}:\d{2},\s*"
+    r"|(?:to|by|at|for|in|the|up|lateral|complete|incomplete|direct|from|returned|recovered|fumbled|muffed)"
+    r"(?:\s|$).*$)"
+)
+#: After the cut, a name holding a digit (a spot such as "WAS30"), ESPN's "N/A" placeholder, or a
+#: single character is not a name.
+_PLAYER_NAME_NOT_A_NAME = r"\d|^N/A(?:[\s,.]|$)|^.$"
+
 #: Narrative tails that bleed into a captured name where the extraction regex
 #: has no stopword boundary: pass-direction phrases (``"Russell Wilson deep
 #: out"``, ``"Dominique Davis screen"``) and missing-space concatenations in
@@ -1435,6 +1459,128 @@ def _parse_penalty_spot(row):
     both ("15 yards from OU 47 to NEB38"), and the from-spot is where the ball was.
     """
     return _spot_from_text(row["penalty_text"], row)
+
+
+#: "recovered by <TEAM>" in any case: 2014+ vendor text writes the school mixed-case
+#: ("recovered by AlbSt", "Tenn", "MisSt"), which an ALL-CAPS pattern never sees.
+_RECOVERY_TOKEN_RE = re.compile(r"(?i)recovered by\s+(?:the\s+)?([A-Za-z&][A-Za-z&.'\-]*)")
+#: 2004-06 texts name the recoverer and put the school in parentheses after the
+#: name: "recovered by Omar Jacobs (BGSU)". Matched on the text after the token.
+#: The run of capitalised words starting at the token ("AlbSt Kimar Martin", "Troy Smith").
+_CAPITALISED_RUN_RE = re.compile(r"[A-Z][A-Za-z&.'\-]*(?:\s+[A-Z][A-Za-z&.'\-]*){0,2}")
+_RECOVERER_TEAM_PAREN_RE = re.compile(r"[A-Za-z.' \-]{0,40}?\(([A-Za-z&.]{2,10})\)")
+
+
+def _is_plain_word(tok):
+    """A capitalised lower-case word ("Omar", "Tenn"), as opposed to a vendor code ("AlbSt", "SFLA")."""
+    return len(tok) > 1 and tok[0].isupper() and tok[1:].islower()
+
+
+def _recovery_token_side(tok, row, *, paren=False):
+    """ "home" / "away" for one "recovered by" token, or None.
+
+    An abbreviation match (equal, or either a prefix of the other) wins when it
+    picks exactly one side. A vendor code ("AlbSt", "SFLA") is then scored like
+    a penalty team token. Two token shapes get a stricter score, because the
+    loose letter-subsequence tier misreads them:
+
+    * a plain capitalised word may be the recoverer's first name ("recovered
+      by Omar Jacobs"): it matches exactly, by prefix ("Houst"), as the mascot
+      ("Hilltoppers"), or as a vowel-dropped spelling of the school name itself
+      ("Eastrn", "Prdue", "Lvile"). "Omar" fits only by reaching into the mascot
+      ("OKLAHOMA" + "SOONERS"), so it charges no one.
+    * a 2004-06 parenthesised code ("(OSU)" for Oregon State) is an initialism:
+      it matches exactly, by mascot, by prefix only from three letters ("(GA)"
+      is Georgia, though Georgia Southern's abbreviation GASO starts with it),
+      then by initialism on a tie. "OSU" is also a letter subsequence of
+      "WASHINGTONSTATECOUGARS".
+    """
+    u = _squash_team(tok)
+    if len(u) < 2:
+        return None
+    if not paren and not (_is_plain_word(tok) and len(u) < 3):  # "Al" is a name, not ALA's prefix
+        ha, aa = _squash_team(row["homeTeamAbbrev"]), _squash_team(row["awayTeamAbbrev"])
+        hit_h = bool(ha) and (u == ha or ha.startswith(u) or u.startswith(ha))
+        hit_a = bool(aa) and (u == aa or aa.startswith(u) or u.startswith(aa))
+        if hit_h != hit_a:
+            return "home" if hit_h else "away"
+    home, away, home_alias, away_alias = _team_candidates(row)
+    plain = _is_plain_word(tok)
+    if not (plain or paren):
+        return _resolve_team_side(u, home, away, home_alias, away_alias)
+
+    def score(cands, mascot):
+        prefix = not paren or len(u) >= 3
+        best = (
+            3 if u in cands else 2 if prefix and any(x and (x.startswith(u) or u.startswith(x)) for x in cands) else 0
+        )
+        if u == _squash_team(mascot):
+            best = max(best, 2)
+        # the school name itself (abbreviation, name, alt name -- not name+mascot), same initial
+        if plain and not best and len(u) >= 4 and any(x and x[0] == u[0] and _is_char_subseq(u, x) for x in cands[:3]):
+            best = 1
+        return best
+
+    hs, aws = score(home, row["homeTeamMascot"]), score(away, row["awayTeamMascot"])
+    if hs == aws:
+        hs, aws = int(u in home_alias), int(u in away_alias)
+    if hs == aws:
+        return None
+    return "home" if hs > aws else "away"
+
+
+def _parse_recovery_sides(row):
+    """The ordered recovering sides of a play's "recovered by <TEAM>" clauses.
+
+    One entry per clause (a ball that changes hands twice has two), each
+    ``"home"`` / ``"away"`` or None when the clause names no team. A
+    parenthesised school after the recoverer's name ("recovered by Omar Jacobs
+    (BGSU)") is preferred to the first word when it names a side. Reads the overturn-stripped text in
+    ``row["_clean_text"]`` and the team name columns. Measured on the published
+    2010 / 2016 / 2022 seasons, resolving mixed-case tokens lifts team
+    fumbles-lost parity from 84 / 87 / 86% to 93 / 97 / 87%.
+    """
+    text = row["_clean_text"]
+    if not text:
+        return []
+    sides = []
+    for m in _RECOVERY_TOKEN_RE.finditer(text):
+        paren = _RECOVERER_TEAM_PAREN_RE.match(text, m.end(1))
+        tok = m.group(1)
+        # "(OH)" in "Miami (OH)" is part of the school's name, not a code: only a paren
+        # that resolves wins; otherwise the token reads as usual.
+        side = _recovery_token_side(paren.group(1), row, paren=True) if paren else None
+        if side:
+            sides.append(side)
+            continue
+        run = _CAPITALISED_RUN_RE.match(text, m.start(1))
+        words = run.group(0).split() if run else [tok]
+        if len(words) == 2 and not tok.isupper():
+            # Exactly two capitalised words then a clause ("recovered by Troy Smith at the ...")
+            # is the recoverer's name, not school + player ("recovered by AlbSt Kimar Martin").
+            # It names a team only as a whole school spelling ("Eastrn Michigan").
+            sides.append(_two_word_school_side("".join(words), row))
+        else:
+            sides.append(_recovery_token_side(tok, row))
+    return sides
+
+
+def _two_word_school_side(run, row):
+    """ "home" / "away" when a two-word run spells one side's school name, else None.
+
+    The run must fit inside the school name -- as a prefix, or letter by letter with the
+    same initial -- so "EASTRNMICHIGAN" is Eastern Michigan while "TROYSMITH" is no team.
+    """
+    u = _squash_team(run)
+    home, away, _, _ = _team_candidates(row)
+
+    def fits(cands):
+        return any(x and x[0] == u[0] and (x.startswith(u) or _is_char_subseq(u, x)) for x in cands[1:3])
+
+    hit_h, hit_a = fits(home), fits(away)
+    if hit_h == hit_a:
+        return None
+    return "home" if hit_h else "away"
 
 
 def _parse_penalty_team_side(row):
@@ -6860,6 +7006,7 @@ class CFBPlayProcess(object):
         return _add_attribution_cols(
             play_df,
             parse_recovery_abbrevs=_parse_recovery_abbrevs,
+            parse_recovery_sides=_parse_recovery_sides,
             parse_penalty_team_side=_parse_penalty_team_side,
             parse_penalty_spot=_parse_penalty_spot,
         )
@@ -9844,10 +9991,32 @@ class CFBPlayProcess(object):
                     for nc in present_names
                 ],
             )
+            # 1b) cut a clause the capture ran into (unconditional, like the "(TEAM)" strip: no
+            #     piece of the cut can be part of a name), then null what is left if it is
+            #     not a name. Only a name the cut fires on is rewritten.
             play_df = play_df.with_columns(
                 [
                     pl.when(
-                        pl.col(nc).str.contains(_PLAYER_NAME_GARBAGE.pattern) | (pl.col(nc).str.len_chars() == 0),
+                        pl.col(nc).str.contains(_PLAYER_NAME_CLAUSE_CUT)
+                        | pl.col(nc).str.contains(_PLAYER_NAME_CLAUSE_LEAD)
+                    )
+                    .then(
+                        pl.col(nc)
+                        .str.replace(_PLAYER_NAME_CLAUSE_LEAD, "")
+                        .str.replace(_PLAYER_NAME_CLAUSE_CUT, "")
+                        .str.strip_chars(" ,.-")
+                    )
+                    .otherwise(pl.col(nc))
+                    .alias(nc)
+                    for nc in present_names
+                ],
+            )
+            play_df = play_df.with_columns(
+                [
+                    pl.when(
+                        pl.col(nc).str.contains(_PLAYER_NAME_GARBAGE.pattern)
+                        | pl.col(nc).str.contains(_PLAYER_NAME_NOT_A_NAME)
+                        | (pl.col(nc).str.len_chars() == 0),
                     )
                     .then(None)
                     .otherwise(pl.col(nc))
