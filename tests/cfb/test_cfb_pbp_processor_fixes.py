@@ -705,6 +705,59 @@ def test_a_yards_loss_stated_after_the_turnover_clause_is_still_read():
     assert row["yds_rushed"] == -7
 
 
+# --- R1: through 2013 an extra point is its own row; it carries the flags and the kicker ------------
+
+
+def test_standalone_pat_rows_carry_xp_flags_and_kicker_2004():
+    # "Extra point by Dave Rayner (MSU) is good." -- the 2014+ suffix parser never read these rows,
+    # so 46.6k pre-2014 PATs had xp_attempt False (39.8% of the expected flags).
+    pats = _plays(243040130).filter(pl.col("type.text").str.starts_with("Extra Point"))
+    assert pats.height == 8
+    assert pats["xp_attempt"].all() and pats["xp_made"].all()
+    rivas = pats.filter(pl.col("text") == "Extra point by Garrett Rivas (MICH) is good.")
+    assert rivas.height > 0 and rivas["xp_kicker_player_name"].to_list() == ["Garrett Rivas"] * rivas.height
+
+
+def test_standalone_pat_rows_carry_xp_flags_and_kicker_2008():
+    plays = _trimmed_plays(282432641)
+    cols = ["xp_attempt", "xp_made", "xp_kicker_player_name"]
+    good = plays.filter(pl.col("text") == "Felipe Macias extra point GOOD.").select(cols).unique().rows()
+    blocked = _row(plays, "Donnie Carona extra point BLOCKED.")
+    assert good == [(True, True, "Felipe Macias")]
+    assert tuple(blocked[k] for k in cols) == (True, False, "Donnie Carona")
+
+
+def _trimmed_plays_with_texts(game_id: int, swaps: dict[str, list[str]]) -> pl.DataFrame:
+    """Process a trimmed fixture after rewriting the text of the plays named in ``swaps``."""
+    with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            if swaps.get(play.get("text")):
+                play["text"] = swaps[play["text"]].pop(0)
+    proc = CFBPlayProcess(gameId=game_id)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    return proc.plays_frame
+
+
+def test_two_point_try_typed_as_an_extra_point_is_not_a_kick():
+    # 2012-13 ESPN types "Johnny Manziel pass attempt failed ." as Extra Point Missed/Good: a
+    # two-point try, not a kick, so the kicking box must not count it.
+    tries = ["Johnny Manziel pass attempt failed .", "Clock 07:22, Terre Whitehead rush attempt good."]
+    plays = _trimmed_plays_with_texts(282432641, {"Felipe Macias extra point GOOD.": list(tries)})
+    rows = plays.filter(pl.col("text").is_in(tries))
+    assert rows.height == 2
+    assert rows["xp_attempt"].to_list() == [False, False]
+    assert rows["xp_kicker_player_name"].null_count() == 2
+
+
+def test_team_is_not_an_extra_point_kicker():
+    plays = _trimmed_plays_with_texts(282432641, {"Felipe Macias extra point GOOD.": ["Team extra point GOOD."]})
+    row = _row(plays, "Team extra point GOOD.")
+    assert (row["xp_attempt"], row["xp_made"], row["xp_kicker_player_name"]) == (True, True, None)
+
+
 # --- R10: kneel-downs and yardless vendor rushes carry their yardage ----------------------------
 
 
@@ -778,3 +831,24 @@ def test_yardless_rush_naming_a_foul_does_not_take_stat_yardage():
     row = _row(proc.plays_frame, target["text"])
     assert row["penalty_detail"] is not None
     assert row["yds_rushed"] is None
+
+
+@pytest.mark.parametrize(
+    "game_id, text, kicker",
+    [
+        (282430151, "Ben Ryan extra point BLOCKED returned for 2 defensive point conversion", "Ben Ryan"),
+        (243392572, "Wendell Hunter (USM), missed PAT returned.", None),
+    ],
+)
+def test_kicked_try_the_defence_returned_is_a_missed_attempt(game_id, text, kicker):
+    # Retyped to Defensive 2pt Conversion before the XP flags; ESPN's box still counts the kick
+    # (2014+ carries it on the TD row's "(... PAT blocked, returned ...)" suffix).
+    row = _row(_trimmed_plays(game_id), text)
+    assert row["type.text"] == "Defensive 2pt Conversion"
+    assert (row["xp_attempt"], row["xp_made"], row["xp_kicker_player_name"]) == (True, False, kicker)
+
+
+def test_two_point_pass_the_defence_returned_is_not_a_kick():
+    row = _row(_trimmed_plays(272650152), "pass attempt failed (intercepted), returned by Hamlin")
+    assert row["type.text"] == "Defensive 2pt Conversion"
+    assert row["xp_attempt"] is False
