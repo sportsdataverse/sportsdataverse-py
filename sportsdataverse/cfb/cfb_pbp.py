@@ -6821,7 +6821,14 @@ class CFBPlayProcess(object):
         # result is in the text, else in the type. 46.6k such rows had no flags.
         standalone = (
             (pl.col("season") <= 2013)
-            & pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
+            & (
+                pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
+                # a kicked try the defence returned, retyped above; 2014+ counts it on the TD row
+                | (
+                    (pl.col("type.text") == "Defensive 2pt Conversion")
+                    & pl.col("text").str.contains(r"(?i)extra point|\bpat\b").fill_null(False)
+                )
+            )
             & ~is_td_row.fill_null(False)
             # 2012-13 types two-point tries the same way ("Johnny Manziel pass attempt failed .")
             & ~pl.col("text").str.contains(r"(?i)(?:pass|rush) attempt").fill_null(False)

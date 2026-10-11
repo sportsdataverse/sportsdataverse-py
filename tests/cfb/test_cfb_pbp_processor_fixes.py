@@ -831,3 +831,24 @@ def test_yardless_rush_naming_a_foul_does_not_take_stat_yardage():
     row = _row(proc.plays_frame, target["text"])
     assert row["penalty_detail"] is not None
     assert row["yds_rushed"] is None
+
+
+@pytest.mark.parametrize(
+    "game_id, text, kicker",
+    [
+        (282430151, "Ben Ryan extra point BLOCKED returned for 2 defensive point conversion", "Ben Ryan"),
+        (243392572, "Wendell Hunter (USM), missed PAT returned.", None),
+    ],
+)
+def test_kicked_try_the_defence_returned_is_a_missed_attempt(game_id, text, kicker):
+    # Retyped to Defensive 2pt Conversion before the XP flags; ESPN's box still counts the kick
+    # (2014+ carries it on the TD row's "(... PAT blocked, returned ...)" suffix).
+    row = _row(_trimmed_plays(game_id), text)
+    assert row["type.text"] == "Defensive 2pt Conversion"
+    assert (row["xp_attempt"], row["xp_made"], row["xp_kicker_player_name"]) == (True, False, kicker)
+
+
+def test_two_point_pass_the_defence_returned_is_not_a_kick():
+    row = _row(_trimmed_plays(272650152), "pass attempt failed (intercepted), returned by Hamlin")
+    assert row["type.text"] == "Defensive 2pt Conversion"
+    assert row["xp_attempt"] is False
