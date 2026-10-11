@@ -5,6 +5,7 @@
 - [CFB fixtures](#cfb-fixtures)
   - [Sources](#sources)
   - [Games the whole-game oracle leans on](#games-the-whole-game-oracle-leans-on)
+  - [cfbfastR R kicker oracle (`cfbfastr_r_opening_kickoff.csv`)](#cfbfastr-r-kicker-oracle-cfbfastr_r_opening_kickoffcsv)
   - [Overtime rule sets (C-M6)](#overtime-rule-sets-c-m6)
   - [Other files here](#other-files-here)
   - [Captures](#captures)
@@ -40,12 +41,36 @@ play ids match `cfbfastR-cfb-raw/cfb/json/raw/401112489.json` exactly (236 plays
 
 ## Games the whole-game oracle leans on
 
-- **400547866** (Kansas @ West Virginia, 2014) -- the opening-kickoff truth game for C-NF-2 / C-M13:
-  the away team (Kansas, 2305) kicks off and the home team receives, so the processor's row-1 value
-  names the wrong team. `tests/cfb/test_cfb_whole_game_oracle.py` reads the opening kicker from the
-  feed on 85 captures, 42 of them kicked off by the home team.
+- **400547866** (Kansas @ West Virginia, 2014) -- an away-kicked game (the home team receives) for
+  C-NF-2 / C-M13: the processor's row-1 value names the receiving team, so the column is not even a
+  game-wide constant. Its home-kicked partners 400547699 and 400547865 are wrong on every row.
+  `tests/cfb/test_cfb_whole_game_oracle.py` reads the opening kicker from the feed on 85 captures, 43
+  of them kicked off by the home team.
+- **400559176** (West Alabama @ Jacksonville State, 2014) -- the feed contradicts itself: ESPN files
+  the opening kickoff under the RECEIVING team (West Alabama, 2695: "N/A kickoff for 55 yds, Daryl
+  Collins return for 23 yds to the WAlab 33"), who then snaps first. Jacksonville State (55, home)
+  kicked; the oracle settles it from the snap order (`_opening_kicker`). Not in cfbfastR's R tree.
 - **401301042** -- the `summary_pickcenter` odds round trip (C-M19).
 - **401856682** -- the Q4 Fumble Recovery (Own) with ESPN's degenerate `end` block (supp-002).
+
+## cfbfastR R kicker oracle (`cfbfastr_r_opening_kickoff.csv`)
+
+A second, independent opening-kicker oracle: cfbfastR's own R output, not sdv-py's. For each of the 89
+captures from 2014-2026 found in `cfbfastR-dev/cfbfastR-data/data/rds/pbp_players_pos_<season>.rds`
+(written by `week.R` -> `cfbfastR::cfbd_pbp_data(year, week, epa_wpa = TRUE)` on CFBD data; that tree
+at commit `afd26c5`, 2026-10-11), the row holds the value of `receives_2H_kickoff` on cfbfastR's game
+play 1 (1 = the home team kicked off), the home and away schools, and play 1's `play_type` and
+`def_pos_team`. Extracted on 2026-10-11 with R 4.6.1:
+
+```r
+d <- readRDS(sprintf("data/rds/pbp_players_pos_%d.rds", season))
+x <- d[d$game_id == game_id, ]; x <- x[order(x$game_play_number), ]
+c(x$receives_2H_kickoff[1], x$home[1], x$away[1], x$play_type[1], x$def_pos_team[1])
+```
+
+The test compares it with the feed oracle where cfbfastR's play 1 is the kickoff (its rule falls back
+to the first scrimmage play's defense otherwise, which CFBD's play order makes unreliable) and the
+feed names the kicker: 64 of 64 agree.
 
 ## Overtime rule sets (C-M6)
 
@@ -57,6 +82,10 @@ overtime its rule is about; `tools/check_ot_era_captures.py` checks them.
 | <2019 | `cfb-1996-overtime-introduced` | 243040130 | Michigan State @ Michigan, 2004: three overtimes, the third forcing two-point tries; no shootout |
 | 2019-20 | `cfb-2019-overtime-shootout-from-fifth` | 401112489 | North Carolina @ Virginia Tech, 2019-10-19: six overtimes, the two-point shootout from the fifth. ESPN files every overtime-1-to-5 row as period 5, the two touchdowns as period 6 and the winning try as period 10 |
 | 2021+ | `cfb-2021-overtime-shootout-from-third` | 401282146 | Alabama @ Auburn, 2021: four overtimes, the shootout from the third |
+
+The check reads ESPN's period LABEL, not an overtime count: on 401112489 ESPN files overtimes 1-5 as
+period 5, so the label alone cannot tell the third overtime from the fifth. Plan task 3.2's era tests
+must derive the overtime number from the possession sequence.
 
 Other overtime captures: 252600087, 262522509, 322802005, 332570254, 400547980, 400869264,
 400869817, 401112081, 401301042, 401628439 (eight overtimes), 401752854, 401754543, 401754554,
