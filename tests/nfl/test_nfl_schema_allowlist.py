@@ -20,7 +20,7 @@ import yaml
 from sportsdataverse.nfl.nfl_fourth_down import _WP_MODEL_FILE, _try_load
 from tests.nfl._whole_game import CAPTURES, run
 
-pytestmark = pytest.mark.xdist_group("nfl_whole_game")
+pytestmark = [pytest.mark.whole_game, pytest.mark.xdist_group("nfl_whole_game")]
 
 ALLOWLIST = yaml.safe_load((Path(__file__).parent / "schema_allowlist.yaml").read_text(encoding="utf-8"))
 _KEYS = {(r["column"], r["kind"]) for r in ALLOWLIST}

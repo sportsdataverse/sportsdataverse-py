@@ -35,7 +35,7 @@ from sportsdataverse.nfl.ep_wp import _derive_wpa, calculate_completion_probabil
 from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec
 from tests.nfl._whole_game import CAPTURES, FIX, run
 
-pytestmark = pytest.mark.xdist_group("nfl_whole_game")
+pytestmark = [pytest.mark.whole_game, pytest.mark.xdist_group("nfl_whole_game")]
 
 
 def _t(name: str) -> pl.Expr:
