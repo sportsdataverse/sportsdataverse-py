@@ -7,6 +7,7 @@
   - [Games the whole-game oracle leans on](#games-the-whole-game-oracle-leans-on)
   - [cfbfastR R kicker oracle (`cfbfastr_r_opening_kickoff.csv`)](#cfbfastr-r-kicker-oracle-cfbfastr_r_opening_kickoffcsv)
   - [Overtime rule sets (C-M6)](#overtime-rule-sets-c-m6)
+  - [cfb4th oracle slice (`cfb4th_2023_slice.csv`, task 1.5)](#cfb4th-oracle-slice-cfb4th_2023_slicecsv-task-15)
   - [Other files here](#other-files-here)
   - [Captures](#captures)
 
@@ -90,6 +91,33 @@ must derive the overtime number from the possession sequence.
 Other overtime captures: 252600087, 262522509, 322802005, 332570254, 400547980, 400869264,
 400869817, 401112081, 401301042, 401628439 (eight overtimes), 401752854, 401754543, 401754554,
 401754585, 401761665, 401762461, 401762856, 401858224.
+
+## cfb4th oracle slice (`cfb4th_2023_slice.csv`, task 1.5)
+
+Read by `tests/cfb/test_cfb_fourth_down.py::test_cfb4th_oracle_2023` (gap-C-124). 302 rows x 24 cols.
+
+- **Oracle (`cfb4th_*` columns).** cfb4th 0.1.2 `add_4th_probs()` under R 4.6.1, run 2026-10-11 00:47 EDT by
+  the live-local check on `cfbfastR::load_cfb_pbp(2023)` (the R-produced `cfbfastR-data` release, 254,090
+  rows): fourth downs with a yard line, `spread` and `over_under` in periods 1-4 (21,851 rows),
+  `set.seed(7); f[sample(nrow(f), 500), ]`, 490 scored. Script (verbatim in the check's directory,
+  `cfb4th_oracle.R`):
+
+```r
+d <- cfbfastR::load_cfb_pbp(2023)
+f <- d %>% filter(down == 4, !is.na(yards_to_goal), !is.na(spread), !is.na(over_under), period <= 4)
+set.seed(7); f <- f[sample(nrow(f), 500), ] %>% arrange(game_id, id_play)
+p <- cfb4th::add_4th_probs(f)   # -> cfb4th_oracle_2023.csv (sha256 prefix 0c3f86e9ce1534d1)
+```
+
+- **Inputs (every other column).** The sdv-py release pbp the Python surface reads,
+  `sportsdataverse.cfb.load_cfb_pbp([2023])` (sportsdataverse-data `cfb_pbp` 2023 asset, read 2026-10-11),
+  restricted to `id` + the `_PBP_COLS` sources of `cfb/cfb_fourth_down.py` (the release has no
+  `ot_second_possession`; every row is regulation). Joined to the oracle on the play-state key
+  (`game_id, period, start.TimeSecsRem, start.down, start.distance, start.yardsToEndzone`; R ids are
+  float-rounded, so `id_play` cannot be the key), deduplicated on that key: 302 rows (255 of the 412
+  oracle games exist in the Python 2023 asset, W-H6), 293 with a finite oracle `go_wp`.
+- The R `spread` is NOT an input here: its sign is opposite ESPN's `homeTeamSpread` (substituting it
+  collapses `go_wp` corr to 0.39), so the Python inputs stay native.
 
 ## Other files here
 

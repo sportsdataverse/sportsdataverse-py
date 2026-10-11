@@ -5,6 +5,7 @@
 - [NFL test fixtures](#nfl-test-fixtures)
   - [ESPN game summaries (the 31 whole-game captures)](#espn-game-summaries-the-31-whole-game-captures)
   - [nflverse slices (`nflverse/`)](#nflverse-slices-nflverse)
+  - [Fourth-down and offline-model fixtures (task 1.5)](#fourth-down-and-offline-model-fixtures-task-15)
   - [Other files](#other-files)
   - [Overtime rule sets (C-M6)](#overtime-rule-sets-c-m6)
 
@@ -84,9 +85,51 @@ uv run python -c "import sys, polars as pl; src, gid, out = sys.argv[1:]; pl.rea
 # and the same with python/data/pbp_2024.parquet 2024_04_PHI_TB .../2024_04_PHI_TB.parquet
 ```
 
+## Fourth-down and offline-model fixtures (task 1.5)
+
+| file | rows x cols | read by |
+|---|---|---|
+| `nfl4th_2022_slice.parquet` | 4,239 x 25 | `tests/nfl/test_nfl_fourth_down.py::test_nfl4th_oracle_2022` (gap-C-125) |
+| `nflverse/2022_01_BUF_LA_full.parquet` | 160 x 372 | `tests/nfl/test_models_offline.py` (C-M15) |
+
+- **`nfl4th_2022_slice.parquet`: the oracle.** nfl4th's own published decision values for every 2022
+  fourth down: release `nfl4th_infrastructure`, asset
+  `https://github.com/nflverse/nfl4th/releases/download/nfl4th_infrastructure/pre_computed_go_boost.rds`
+  (all seasons, 50,384 rows; cols `game_id, play_id, go_boost, go_wp, punt_wp, fg_wp`), downloaded
+  2026-10-11 00:45 EDT by the live-local check (R 4.6.1, nfl4th 1.0.7; converted to parquet, sha256 prefix
+  `8ed65f364ad744c6`), filtered to `game_id` starting `2022_` (4,239 rows) and renamed `nfl4th_*`.
+- **Inputs.** The same rows of the nflverse-data release `pbp` asset
+  `https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2022.parquet` (read with
+  `sportsdataverse.nfl.load_nfl_pbp([2022])` on 2026-10-11), the 21 columns `get_4th_down_probs` reads:
+  `game_id, play_id, season, week, season_type, posteam, defteam, home_team, away_team, roof, qtr,
+  quarter_seconds_remaining, ydstogo, yardline_100, score_differential, posteam_timeouts_remaining,
+  defteam_timeouts_remaining, home_opening_kickoff, spread_line, total_line, down`; inner join on
+  (`game_id`, `play_id`) keeps all 4,239 rows.
+- **`nflverse/2022_01_BUF_LA_full.parquet`.** Every column of that same release for one game
+  (`game_id == "2022_01_BUF_LA"`, 160 plays, 8 fourth downs), so `enrich_nfl_pbp` runs end to end offline.
+- Rebuilt with (sdv-py root, `LIVE` = the live-local check's directory holding the oracle files):
+
+```python
+import polars as pl
+from sportsdataverse.nfl import load_nfl_pbp
+cols = ["game_id","play_id","season","week","season_type","posteam","defteam","home_team","away_team","roof",
+        "qtr","quarter_seconds_remaining","ydstogo","yardline_100","score_differential",
+        "posteam_timeouts_remaining","defteam_timeouts_remaining","home_opening_kickoff","spread_line",
+        "total_line","down"]
+pbp = load_nfl_pbp([2022])
+o = pl.read_parquet(f"{LIVE}/pre_computed_go_boost.parquet").filter(pl.col("game_id").str.starts_with("2022_"))
+o = o.rename({c: f"nfl4th_{c}" for c in ("go_boost", "go_wp", "punt_wp", "fg_wp")})
+(pbp.select(cols).with_columns(pl.col("play_id").cast(o.schema["play_id"]))
+    .join(o, on=["game_id", "play_id"], how="inner").sort("game_id", "play_id")
+    .write_parquet("tests/nfl/fixtures/nfl4th_2022_slice.parquet", compression="zstd"))
+pbp.filter(pl.col("game_id") == "2022_01_BUF_LA").write_parquet(
+    "tests/nfl/fixtures/nflverse/2022_01_BUF_LA_full.parquet", compression="zstd")
+```
+
 ## Other files
 
 - `plays_401872922.json.gz`, `box_401872925_espn_trimmed.json.gz`: see the tests that read them.
+- `athlete_refs_401872922.json.gz`: the Core v2 `$ref` payloads (`sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/<id>`) of the 7 athletes in `plays_401872922.json.gz` that the summary's athlete lookup misses, keyed by `$ref` URL; one request each, 2026-10-11, whole payloads. Read by `tests/football/test_play_participants_resolve.py` (supp-007).
 - `fox/`, `nfl_cbs/`, `yahoo_nfl/`: provider captures with their own READMEs where present.
 
 ## Overtime rule sets (C-M6)

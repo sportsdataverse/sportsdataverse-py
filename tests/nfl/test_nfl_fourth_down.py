@@ -3,13 +3,13 @@
 The synthetic-input tests run against the bundled 2-pt model + FG grid + punt
 distribution and the download-on-demand fd / wp models; they are gated on model
 availability so the suite stays green offline (no cache + no network).  The
-oracle-parity test (gated by ``SDV_PY_LIVE_TESTS=1``) validates against nfl4th's
-shipped ``pre_computed_go_boost`` outputs on a 2022 slice.
+nfl4th oracle test runs offline on the committed 2022 slice of nfl4th's shipped
+``pre_computed_go_boost`` outputs (every 2022 fourth down).
 """
 
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 import numpy as np
 import polars as pl
@@ -24,7 +24,6 @@ from sportsdataverse.nfl.nfl_fourth_down import (
     get_go_wp,
     get_punt_wp,
 )
-from tests.conftest import skip_if_no_live
 
 # fd + wp models are download-on-demand; the go / fg / punt / combiner paths all
 # need them, so gate those tests on availability.
@@ -212,39 +211,50 @@ def test_empty_input_returns_empty_decision_cols() -> None:
     assert "fourth_down_recommendation" in out.columns
 
 
-@skip_if_no_live
+# --------------------------------------------------------------------------- #
+# nfl4th oracle (gap-C-125; ledger gate fourth-down-oracles-committed)
+# --------------------------------------------------------------------------- #
+# The committed slice is nfl4th's own published output for every 2022 fourth down
+# (`nfl4th_infrastructure/pre_computed_go_boost.rds`, 4,239 rows: nfl4th_go_wp /
+# nfl4th_fg_wp / nfl4th_punt_wp / nfl4th_go_boost) joined to the nflverse-data
+# `play_by_play_2022` inputs on (game_id, play_id); provenance in
+# tests/nfl/fixtures/README.md. Floors are the values measured on the full slice
+# (2026-10-11, probe `get_4th_down_probs(slice)` vs the nfl4th columns, xgboost 3.3,
+# polars 2.0), rounded to the safe side at 1e-4 and never lowered. Correlation
+# alone survives an affine bias (`go_wp + 0.02`, `go_wp * 0.98` keep r = 0.9986),
+# so each component also carries a level floor: MAE and max |diff|.
+NFL4TH_SLICE = Path(__file__).resolve().parent / "fixtures" / "nfl4th_2022_slice.parquet"
+NFL4TH_FLOORS = {
+    # column: (min corr, max MAE, max |diff|)   measured corr / MAE / max
+    "go_wp": (0.995, 0.0122, 0.1097),  # 0.99862 / 0.012167 / 0.109654
+    "fg_wp": (0.995, 0.0130, 0.1078),  # 0.99829 / 0.012910 / 0.107780
+    "punt_wp": (0.995, 0.0125, 0.0945),  # 0.99849 / 0.012450 / 0.094482 (n=3,114 finite)
+    "go_boost": (0.957, 0.6820, 6.0470),  # 0.95799 / 0.681019 / 6.046908 (first difference, pct-pts)
+}
+
+
+@pytest.fixture(scope="module")
+def nfl4th_scored():
+    s = pl.read_parquet(NFL4TH_SLICE)
+    assert s.height == 4239 and (s["down"] == 4).all()
+    return get_4th_down_probs(s)
+
+
 @requires_models
-def test_oracle_parity_2022() -> None:
-    """Validate against nfl4th's shipped pre_computed_go_boost on a 2022 slice.
-
-    Components (go_wp / fg_wp / punt_wp) must clear corr > 0.99; go_boost is a
-    first-difference SNR-limited metric (corr ~0.98 ceiling, like wpa) so it is
-    asserted at a looser bar.
-    """
-    import pandas as pd
-
-    from sportsdataverse.nfl import load_nfl_pbp
-
-    oracle_path = os.path.join("dev", "nfl4th_artifacts", "pre_computed_go_boost.parquet")
-    if not os.path.exists(oracle_path):
-        pytest.skip("oracle parquet not present")
-    oracle = pd.read_parquet(oracle_path)
-    o22 = oracle[oracle["game_id"].str.startswith("2022_")]
-    pbp = load_nfl_pbp([2022]).to_pandas()
-    m = pbp.merge(o22[["game_id", "play_id"]], on=["game_id", "play_id"], how="inner")
-    m = m[(m["down"] == 4) & m["yardline_100"].notna() & m["spread_line"].notna()].reset_index(drop=True)
-    # keep the slice quick but representative
-    m = m.sample(n=min(800, len(m)), random_state=7).reset_index(drop=True)
-    res = get_4th_down_probs(m)
-    cmp = res[["game_id", "play_id", "go_wp", "fg_wp", "punt_wp", "go_boost"]].merge(
-        o22, on=["game_id", "play_id"], suffixes=("_mine", "_o")
-    )
-    for c, bar in (("go_wp", 0.99), ("fg_wp", 0.99), ("punt_wp", 0.99), ("go_boost", 0.95)):
-        a = cmp[c + "_mine"].to_numpy()
-        b = cmp[c + "_o"].to_numpy()
-        k = np.isfinite(a) & np.isfinite(b)
-        corr = np.corrcoef(a[k], b[k])[0, 1]
-        assert corr > bar, f"{c} corr={corr:.4f} below {bar}"
+@pytest.mark.parametrize("col", list(NFL4TH_FLOORS))
+def test_nfl4th_oracle_2022(nfl4th_scored, col) -> None:
+    """Every 2022 fourth down vs nfl4th's published values: correlation AND level floors."""
+    min_corr, max_mae, max_abs = NFL4TH_FLOORS[col]
+    a = nfl4th_scored[col].to_numpy(dtype=float)
+    b = nfl4th_scored[f"nfl4th_{col}"].to_numpy(dtype=float)
+    k = np.isfinite(a) & np.isfinite(b)
+    assert k.sum() >= (3000 if col == "punt_wp" else 4200), f"{col}: only {k.sum()} comparable rows"
+    d = np.abs(a[k] - b[k])
+    corr = np.corrcoef(a[k], b[k])[0, 1]
+    assert corr >= min_corr, f"{col} corr={corr:.5f} below {min_corr}"
+    assert d.mean() <= max_mae, f"{col} MAE={d.mean():.6f} above {max_mae}"
+    assert d.max() <= max_abs, f"{col} max|diff|={d.max():.6f} above {max_abs}"
+    print("NFL4TH_ORACLE_OK", col, round(corr, 5), round(d.mean(), 6), round(d.max(), 6))
 
 
 @pytest.mark.filterwarnings("error::pandas.errors.PerformanceWarning")

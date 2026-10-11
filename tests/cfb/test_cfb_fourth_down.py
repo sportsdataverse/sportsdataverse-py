@@ -8,6 +8,8 @@ or not the cfb4th GAM has been converted + bundled.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import polars as pl
 import pytest
@@ -443,3 +445,50 @@ def test_go_wp_is_nan_for_a_play_with_no_yard_line(fourth_down_rows):
     for c in ("go_wp", "first_down_prob", "wp_succeed", "wp_fail"):
         assert np.isnan(out[c].iloc[-1]), c
         np.testing.assert_allclose(out[c].to_numpy()[:-1], alone[c].to_numpy(), err_msg=c)
+
+
+# --------------------------------------------------------------------------- #
+# cfb4th oracle (gap-C-124; ledger gate fourth-down-oracles-committed)
+# --------------------------------------------------------------------------- #
+# The committed slice is cfb4th 0.1.2 `add_4th_probs()` (R 4.6.1) on 500 seeded 2023
+# fourth downs of cfbfastR::load_cfb_pbp(2023) (cfb4th_* columns), joined on the
+# play-state key to the sdv-py `load_cfb_pbp([2023])` release inputs the Python
+# surface reads (302 rows; 293 with a finite oracle); provenance in
+# tests/cfb/fixtures/README.md. Floors are the values measured on the slice
+# (2026-10-11, `get_4th_down_probs(slice)` vs the cfb4th columns), rounded to the
+# safe side at 1e-4 and never lowered. The surface is spread-sign-critical (the
+# live run: cfbfastR's opposite-sign `spread` collapses go_wp corr to 0.39), which a
+# bounds-only test cannot see; the level floors also catch an affine bias that keeps
+# the correlation at 1.0.
+CFB4TH_SLICE = Path(__file__).resolve().parent / "fixtures" / "cfb4th_2023_slice.csv"
+CFB4TH_FLOORS = {
+    # column: (min corr, max MAE, max |diff|, min comparable rows)   measured corr / MAE / max
+    "go_wp": (0.995, 0.0171, 0.1298, 290),  # 0.99741 / 0.017057 / 0.129716 (n=293)
+    "fg_wp": (0.995, 0.0183, 0.1368, 290),  # 0.99679 / 0.018219 / 0.136711 (n=293)
+    "punt_wp": (0.995, 0.0211, 0.1517, 215),  # 0.99579 / 0.021047 / 0.151642 (n=218)
+    "go_boost": (0.773, 0.9097, 6.7208, 290),  # 0.77304 / 0.909645 / 6.720766 (first difference, pct-pts)
+}
+
+
+@pytest.fixture(scope="module")
+def cfb4th_scored():
+    s = pl.read_csv(CFB4TH_SLICE, schema_overrides={"game_id": pl.Utf8, "id": pl.Utf8})
+    assert s.height == 302 and (s["start.down"] == 4).all()
+    return get_4th_down_probs(s)
+
+
+@requires_fd
+@pytest.mark.parametrize("col", list(CFB4TH_FLOORS))
+def test_cfb4th_oracle_2023(cfb4th_scored, col):
+    """Real 2023 fourth downs vs cfb4th: correlation AND level floors per component."""
+    min_corr, max_mae, max_abs, min_n = CFB4TH_FLOORS[col]
+    a = np.asarray(cfb4th_scored[col], dtype=float)
+    b = np.asarray(cfb4th_scored[f"cfb4th_{col}"], dtype=float)
+    k = np.isfinite(a) & np.isfinite(b)
+    assert k.sum() >= min_n, f"{col}: only {k.sum()} comparable rows"
+    d = np.abs(a[k] - b[k])
+    corr = np.corrcoef(a[k], b[k])[0, 1]
+    assert corr >= min_corr, f"{col} corr={corr:.5f} below {min_corr}"
+    assert d.mean() <= max_mae, f"{col} MAE={d.mean():.6f} above {max_mae}"
+    assert d.max() <= max_abs, f"{col} max|diff|={d.max():.6f} above {max_abs}"
+    print("CFB4TH_ORACLE_OK", col, round(corr, 5), round(d.mean(), 6), round(d.max(), 6))
