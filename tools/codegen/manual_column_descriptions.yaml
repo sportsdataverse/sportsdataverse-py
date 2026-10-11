@@ -1358,6 +1358,12 @@ allstar_skater_game:
 alltimeleadersgrids:
   is_active_flag: Flag indicating whether the player is currently active in the league.
   tov_rank: All-time league rank of the player's career turnover total on the leaders grid.
+as_of_split:
+  away_score: Away team score before the pitch (see post_away_score).
+  home_score: Home team score before the pitch (see post_home_score).
+  pitcher: MLBAM player id of the pitcher.
+  player_name: Player name carried through from the input Statcast frame, `Last, First` -- the batter for a default
+    mlb_statcast_search pull, the pitcher for a `player_type="pitcher"` search.
 away_team_record:
   goals_per_game: Average number of goals the team scored per road game over the recorded period.
 bchl_standings:
@@ -1365,6 +1371,12 @@ bchl_standings:
     such as '14' or '-10'.
   percentage: 'Points percentage (feed header ''Percentage''): points earned divided by the maximum points available from games
     played, as a three-decimal string, e.g. ''0.833'' for 5 of 6 possible points; ''0.000'' before a team has played.'
+bip_trajectory_features:
+  away_score: Away team score before the pitch (see post_away_score).
+  home_score: Home team score before the pitch (see post_home_score).
+  pitcher: MLBAM player id of the pitcher.
+  player_name: Player name carried through from the input Statcast frame, `Last, First` -- the batter for a default
+    mlb_statcast_search pull, the pitcher for a `player_type="pitcher"` search.
 blocking_summary:
   block_percent: Share of offensive snaps spent blocking.
   declined_penalties: Penalties committed by the player that were declined.
@@ -3806,6 +3818,9 @@ espn_nba_player_stats:
   offensive_avg48_three_point_field_goals_attempted: Player's average three-point field goal attempts per 48 minutes played.
   offensive_avg48_three_point_field_goals_made: Player's average three-point field goals made per 48 minutes played.
   offensive_avg48_turnovers: Player's average turnovers committed per 48 minutes played.
+espn_mlb_schedule:
+  away_score: 'Away team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string).'
+  home_score: 'Home team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string).'
 espn_nba_schedule:
   away_linescores: Period-by-period point totals for the away team, stored as a list of integer scores.
   away_records: Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference).
@@ -18515,6 +18530,7 @@ load_mlb_command_plus:
     mean) over the league SD; it grades where the pitch finished, not intent, since Statcast ships no catcher target.
   location_rv_hat: Mean predicted per-pitch run value from the bundled location model, which sees plate location, count, handedness
     and pitch type but no raw pitch physics; lower is better for the pitcher.
+  pitcher: MLBAM player id of the pitcher.
 load_mlb_expected_hr:
   hr_above_expected: Home runs actually hit minus xhr_neutral, so it grades over- and under-performance against the park-neutral
     expectation rather than the park-adjusted one.
@@ -18713,6 +18729,7 @@ load_mlb_statcast:
   umpire: Deprecated umpire field; always null.
   miss_distance: How far the bat missed the ball on a swing and miss (Savant bat tracking); null on every other pitch and before bat tracking.
 load_mlb_stuff_plus:
+  pitcher: MLBAM player id of the pitcher.
   stuff_plus: Stuff+ on the 100-is-average scale, exactly 100 minus 10 times (stuff_rv_hat minus the league mean) over the
     league SD, so higher is better and outlier run-value predictions can push it well below zero.
   stuff_rv_hat: Mean predicted per-pitch run value from the bundled xgboost stuff model over this pitcher's pitches of this
@@ -18744,6 +18761,7 @@ load_mlb_we_table:
     into the end buckets.
   thin: Whether the win-expectancy cell was estimated from a thin sample of historical games.
 load_mlb_xera:
+  pitcher: MLBAM player id of the pitcher.
   x_era: ERA-scale conversion of x_woba as league_era plus (x_woba minus league_woba) over woba_scale times pa_per_9, an exact
     linear function of x_woba that can go negative for extreme pitchers.
   x_woba: Expected weighted on-base average, derived from batted-ball quality rather than outcomes.
@@ -26544,14 +26562,29 @@ mlb_sequence_run_value:
   pitch_type: Pitch type of the current pitch.
   prev_pitch_type: Pitch type of the preceding pitch in the sequence.
 mlb_statcast_search:
+  away_score: Away team score before the pitch (see post_away_score).
+  home_score: Home team score before the pitch (see post_home_score).
   miss_distance: Distance between the bat and the ball on a swing-and-miss, in inches (Savant bat-tracking field); populated
     only on swinging-strike pitches and null on every other pitch.
+  pitcher: MLBAM player id of the pitcher.
+  player_name: Name of the `player_type`-side player, `Last, First` -- the batter under the default
+    `player_type="batter"`, the pitcher under `player_type="pitcher"`.
 mlb_statcast_search_minors:
+  away_score: Away team score before the pitch (see post_away_score).
+  home_score: Home team score before the pitch (see post_home_score).
   miss_distance: Distance between the bat and the ball on a swing-and-miss, in inches (Savant bat-tracking field); null on pitches
     without a tracked swing-and-miss (about 90% of sampled rows).
+  pitcher: MLBAM player id of the pitcher.
+  player_name: Name of the `player_type`-side player, `Last, First` -- the batter under the default
+    `player_type="batter"`, the pitcher under `player_type="pitcher"`.
 mlb_statcast_search_wbc:
+  away_score: Away team score before the pitch (see post_away_score).
+  home_score: Home team score before the pitch (see post_home_score).
   miss_distance: Distance between the bat and the ball on a swing-and-miss, in inches (Savant bat-tracking field); all null
     in the sampled WBC pitches (2023-03-08), and coverage for later WBC tournaments is unverified.
+  pitcher: MLBAM player id of the pitcher.
+  player_name: Name of the `player_type`-side player, `Last, First` -- the batter under the default
+    `player_type="batter"`, the pitcher under `player_type="pitcher"`.
 mlb_stuff_plus:
   pitch_type: Statcast pitch-type abbreviation.
   pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
