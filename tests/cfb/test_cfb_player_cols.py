@@ -539,5 +539,8 @@ def test_valid_names_are_untouched_by_the_clause_cut():
         "Chris Van de Water",
         "john Gibbs",  # a lowercase typo in ESPN's feed is still the player
         "Robert Griffin III",
+        "Henry To'oto'o",
+        "henry to'oto'o",  # a lowercase typo of an apostrophe name: "to" + "'" is no connective
+        "Byron Ford",
     ]
     assert _cleaned("rusher_player_name", names) == names
