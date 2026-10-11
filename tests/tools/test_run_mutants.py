@@ -217,3 +217,9 @@ def test_shard_runs_only_its_slice(tree, capsys):
     assert run(rows, "--shard", "2/2", "--list") == 0
     out = capsys.readouterr().out
     assert "REGISTRY: 1 rows" in out and "shard 2/2" in out and " r1 " in out and " r0 " not in out
+
+
+def test_a_shard_that_selects_no_rows_fails():
+    """A matrix wider than the registry must not yield a green job that ran nothing."""
+    with pytest.raises(SystemExit, match="selects no rows"):
+        rm.shard([{"id": "a"}, {"id": "b"}], "3/3")

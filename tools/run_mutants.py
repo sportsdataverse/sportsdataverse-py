@@ -123,7 +123,10 @@ def shard(rows: List[Dict[str, Any]], spec: Optional[str]) -> List[Dict[str, Any
         raise SystemExit(f"--shard {spec}: expected I/N, e.g. 2/4") from None
     if not 1 <= i <= n:
         raise SystemExit(f"--shard {spec}: need 1 <= I <= N")
-    return rows[i - 1 :: n]
+    picked = rows[i - 1 :: n]
+    if not picked:  # a matrix wider than the registry must not report a green shard that ran nothing
+        raise SystemExit(f"--shard {spec}: selects no rows ({len(rows)} rows across {n} shards)")
+    return picked
 
 
 def mutate(text: str, row: Dict[str, Any]) -> str:
