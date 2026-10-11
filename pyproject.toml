@@ -65,12 +65,18 @@ dependencies = [
     "polars>=1.0,<3",
     "pyarrow>=14.0.0",
     "pyjanitor>=0.23.1",
-    "requests>=2.28.0",
+    # 2.30 is the first requests that accepts urllib3 2.x; the urllib3 floor below is
+    # unsatisfiable with 2.28/2.29 (they pin urllib3<1.27).
+    "requests>=2.30.0",
     "scipy>=1.10.0",
     "tqdm>=4.50.0",
     "scikit-learn>=1.0.0",
     "xgboost>=2.0.0",
     "rapidfuzz>=3.13.0",
+    # requests' transport, on every dl_utils.download() path. Pinned directly so a
+    # pip resolution cannot land below 2.8.0 (GHSA-8988-9cw3-xx77, GHSA-gh4c-6fx4-qh6g,
+    # GHSA-vxq7-64xx-v4gw are all fixed there).
+    "urllib3>=2.8.0",
     # TOML reader for the NCAA vendor config on the 3.10 floor; tomllib is 3.11+.
     "tomli>=2.0; python_version < '3.11'",
     # IANA tz database for zoneinfo on Windows (release.py Toronto timestamps);
@@ -82,7 +88,8 @@ dependencies = [
 [project.optional-dependencies]
 tests = [
     "black>=22.3.0",
-    "curl_cffi>=0.6.0",
+    # stats.nba.com TLS impersonation runtime; >= 0.15.0 closes GHSA-qw2m-4pqf-rmpp (redirect SSRF).
+    "curl_cffi>=0.15.0",
     "flake8>=5.0.0",
     "isort>=5.10.1",
     "mypy>=1.0.0",
@@ -138,7 +145,8 @@ all = [
     # groups) because PEP 621 does not have a "union of groups" mechanism that
     # older pip / build-frontends understand uniformly.
     "black>=22.3.0",
-    "curl_cffi>=0.6.0",
+    # stats.nba.com TLS impersonation runtime; >= 0.15.0 closes GHSA-qw2m-4pqf-rmpp (redirect SSRF).
+    "curl_cffi>=0.15.0",
     "flake8>=5.0.0",
     "isort>=5.10.1",
     "mypy>=1.0.0",
