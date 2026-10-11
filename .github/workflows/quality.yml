@@ -133,7 +133,6 @@ jobs:
         run: >
           uv run --frozen pytest -n auto --dist loadgroup -q
           --ignore=tests/codegen
-          --deselect tests/test_mlb_statcast_codegen.py::test_codegen_drift_clean
           --cov=sportsdataverse --cov-report=json:coverage.json
       - name: coverage delta (no metric may get worse than the base branch's baseline)
         run: |
