@@ -108,8 +108,11 @@ jobs:
       # The package once stopped importing on the 3.9 floor without CI noticing
       # (a `set[int] | str | None` evaluated at def time). tests/test_import_sweep.py
       # imports every module under sportsdataverse/ in a subprocess, so a 3.11+-only
-      # construct anywhere in the package fails here; no extras are installed, and
-      # the sweep treats a missing optional extra as a skip, not a failure.
+      # construct anywhere in the package fails here. Every extra is installed so the
+      # sweep imports the extra-gated modules too (it treats a missing optional
+      # extra as a skip, not a failure, which would otherwise leave them unchecked).
+      - name: Install project + extras + dep groups on 3.10
+        run: uv sync --all-extras --all-groups --frozen --python 3.10
       - name: Import every module on 3.10
         run: uv run --python 3.10 --frozen pytest tests/test_import_sweep.py -q -p no:cacheprovider
 

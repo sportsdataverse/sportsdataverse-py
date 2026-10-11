@@ -1,6 +1,6 @@
 """The conda recipe is hand-mirrored from pyproject.toml; this is what notices when it drifts (A-M24).
 
-Before 0.1.6 the recipe said version 0.0.51 against a 0.1.5 pyproject and omitted scikit-learn, which
+Before #751 the recipe said version 0.0.51 against a 0.1.5 pyproject and omitted scikit-learn, which
 12 package modules import, so a conda install broke on every sklearn-using module and nothing diffed
 the two lists.
 """

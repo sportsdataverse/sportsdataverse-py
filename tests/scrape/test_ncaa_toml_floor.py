@@ -14,7 +14,9 @@ from pathlib import Path
 import sportsdataverse
 
 PKG = Path(sportsdataverse.__file__).parent
-_BARE_TOMLLIB = re.compile(r"^\s*(import tomllib|from tomllib import)\b", re.MULTILINE)
+# Horizontal whitespace only: under MULTILINE `^\s*` would also start at a blank line and swallow
+# its newline, so a top-level import after a blank line would be classified as indented.
+_BARE_TOMLLIB = re.compile(r"^[ \t]*(import tomllib|from tomllib import)\b", re.MULTILINE)
 
 
 def test_ncaa_vendor_modules_import_and_parse_toml():
@@ -22,6 +24,13 @@ def test_ncaa_vendor_modules_import_and_parse_toml():
 
     assert capture._vendor_fetcher is not None
     assert canary._toml_loads('[[vendor]]\nname = "x"\n') == {"vendor": [{"name": "x"}]}
+
+
+def test_bare_import_pattern_sees_a_top_level_import_after_a_blank_line():
+    # Red proof for the `^[ \t]*` form: with `^\s*` the match would be "\nimport tomllib" (indented).
+    matches = [m.group(0) for m in _BARE_TOMLLIB.finditer("import time\n\nimport tomllib\n")]
+    assert matches == ["import tomllib"]
+    assert [m.group(0) for m in _BARE_TOMLLIB.finditer("def f():\n    import tomllib\n")] == ["    import tomllib"]
 
 
 def test_only_the_guarded_helper_imports_tomllib():

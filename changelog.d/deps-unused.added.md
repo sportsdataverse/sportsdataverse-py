@@ -1,0 +1,1 @@
+- **Dependencies:** `pyyaml` joins the `all` extra. (#752)

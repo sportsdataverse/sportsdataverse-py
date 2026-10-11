@@ -121,9 +121,8 @@ pff = [
     "playwright>=1.40",
 ]
 mcp = [
-    # sdv-docs MCP server (sdv_docs/). mcp 2.x needs Python >= 3.10; on 3.9 the extra
-    # installs nothing and `sdv-docs` exits 2 with an install hint.
-    "mcp>=2.3,<3; python_version >= '3.10'",
+    # sdv-docs MCP server (sdv_docs/); Python >= 3.10 is the package floor.
+    "mcp>=2.3,<3",
 ]
 all = [
     # `tests` + `nflpro` + `pff` + `soccer` + the NCAA browser transport + pyyaml
@@ -234,12 +233,6 @@ include = ["sportsdataverse*", "sdv_docs*"]
 sportsdataverse = ["cfb/models/*", "cfb/ncaa_pbp/data/*", "cricket/models/*", "mbb/data/*", "mbb/models/*", "mlb/models/*", "nba/models/*", "nfl/models/*", "nfl/shield_pbp/data/*", "nhl/models/*", "soccer/models/*", "wbb/data/*", "registry/*.yaml", "schemas/raw/*.yaml", "validation/*.yaml", "py.typed"]
 
 
-[tool.isort]
-profile = "black"
-# Note: `known_first_party = ["functions", "queries", "db_utils"]` was the
-# copy-pasted starter; sdv-py's first-party package is `sportsdataverse`.
-known_first_party = ["sportsdataverse"]
-add_imports = ["from __future__ import annotations"]
 
 
 [tool.ruff]

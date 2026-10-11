@@ -372,7 +372,9 @@ Mirror their structure for any new ESPN-endpoint module:
 - Warnings are errors (`pytest.ini`): assert an expected warning with
   `pytest.warns(..., match=...)`; filter an incidental one by exact message, with a
   comment naming the test that asserts it.
-- CI runs **Python 3.13.2 only**; the `[project]` target range is 3.10-3.14.
+- The suite runs on **3.13.2 only**; a separate job installs every extra and imports every module
+  on the **3.10 floor** (`tests.yml` `floor-import`). No other version runs the full suite; the
+  `[project]` range is 3.10-3.14.
 - Assertion style: prefer **subset** column checks (`expected_cols.issubset(set(df.columns))`)
   rather than exact equality, so upstream column additions don't fail tests.
 - Smoke tests for live endpoints assert shape (row count > 0, expected
