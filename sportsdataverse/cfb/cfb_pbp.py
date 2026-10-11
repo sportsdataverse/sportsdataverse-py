@@ -5713,6 +5713,29 @@ class CFBPlayProcess(object):
                 .and_(pl.col("cleaned_text").str.contains("(?i)touchdown") == True),
             )
             .then(_gain_text.str.extract(r"(?i)for a (\d+) yard").cast(pl.Int32))
+            # Kneels: "Kneel down by TEAM at WVU48 (team loss of 2)", "... for loss of 2 yards",
+            # or "D. Brown takes a knee" with no number. The text wins -- 2024 vendor kneels
+            # often carry statYardage 0 beside "(team loss of 2)" -- then ESPN's statYardage.
+            .when((pl.col("rush") == True).and_(pl.col("kneel_down") == True).and_(pl.col("penalty_detail").is_null()))
+            .then(
+                pl.coalesce(
+                    -1 * pl.col("cleaned_text").str.extract(r"(?i)loss of (\d+)").cast(pl.Int32),
+                    pl.col("statYardage").cast(pl.Int32),
+                )
+            )
+            # Any other rush no reader matched: a vendor rush that states no yardage ("Wolff,Hayden
+            # rush left (Murdock,Red)."), a jersey-numbered one, or the 2004-13 directional form
+            # ("rush up the middle for 21 yards", the direction words between "rush" and "for").
+            # statYardage equals the text-parsed yards on 99.98% of plain rushes (2008, 2011,
+            # 2016, 2024, 2025), so it stands in. Not on fumbles or flags, where it can carry the
+            # return or the enforcement (a foul named without "penalty" sets only penalty_detail).
+            .when(
+                (pl.col("rush") == True)
+                .and_(pl.col("fumble_vec").fill_null(False) == False)
+                .and_(pl.col("penalty_flag").fill_null(False) == False)
+                .and_(pl.col("penalty_detail").is_null())
+            )
+            .then(pl.col("statYardage").cast(pl.Int32))
             .otherwise(None),
             # Receiving yardage reads cleaned_text so the "complete to" guard fires
             # on modern "complete short middle to ..." phrasing (raw `text` left it
@@ -6970,10 +6993,18 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 scoring_opp=pl.when(pl.col("start.yardsToEndzone") <= 40).then(True).otherwise(False),
-                stuffed_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 0))
+                stuffed_run=pl.when(
+                    (pl.col("type.text") == "Rush")
+                    .and_(pl.col("yds_rushed") <= 0)
+                    .and_(pl.col("kneel_down").fill_null(False) == False)
+                )
                 .then(True)
                 .otherwise(False),
-                stopped_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 2))
+                stopped_run=pl.when(
+                    (pl.col("type.text") == "Rush")
+                    .and_(pl.col("yds_rushed") <= 2)
+                    .and_(pl.col("kneel_down").fill_null(False) == False)
+                )
                 .then(True)
                 .otherwise(False),
                 # An "opportunity" is a carry where the blocking did its job, i.e. the run
