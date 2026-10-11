@@ -297,3 +297,14 @@ def test_sdv_docs_db_expands_tilde(monkeypatch, tmp_path):
     monkeypatch.setenv("USERPROFILE", str(tmp_path))
     monkeypatch.setenv("SDV_DOCS_DB", "~/d.sqlite")
     assert idx.locate() == tmp_path / "d.sqlite"
+
+
+def test_index_opens_a_path_with_uri_special_characters(tmp_path):
+    from sdv_docs.index import Index
+    from tests.sdv_docs.conftest import make_tiny_db
+
+    odd = tmp_path / "odd #1 50% ?dir"
+    odd.mkdir()
+    db = make_tiny_db(odd / "tiny.sqlite")
+    with Index(db) as ix:
+        assert ix.counts()["functions"] > 0

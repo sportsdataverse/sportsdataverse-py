@@ -221,6 +221,16 @@ def _add_python(
     return league
 
 
+def _reexport(name: str, obj: Any) -> bool:
+    """True for a stdlib or third-party object a module re-exports (``typing.Any``, ``xgboost.Booster``).
+
+    ``__module__`` alone cannot tell: SDV partials report ``functools`` and SDV type aliases ``typing``. A re-export is
+    the defining module's own object under the same name.
+    """
+    mod = getattr(obj, "__module__", None) or ""
+    return not mod.startswith("sportsdataverse") and getattr(sys.modules.get(mod), name, None) is obj
+
+
 def python_functions(
     wrappers: dict[str, Wrapper], loaders: dict[str, Any], anchors: dict[str, str], rows: Rows
 ) -> dict[str, str]:
@@ -233,7 +243,7 @@ def python_functions(
         mod = importlib.import_module(f"sportsdataverse.{discover._LEAF_TO_DOTTED.get(leaf, leaf)}")
         for name in names:
             obj = getattr(mod, name, None)
-            if name not in seen and obj is not None:
+            if name not in seen and obj is not None and not _reexport(name, obj):
                 seen[name] = _add_python(rows, name, obj, leaf, wrappers, loaders, anchors)
     for name, ld in loaders.items():  # loader-only leagues (e.g. pwhl) surface at the package top level
         obj = getattr(sportsdataverse, name, None)

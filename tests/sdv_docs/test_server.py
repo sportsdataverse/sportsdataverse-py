@@ -243,6 +243,15 @@ def test_every_tool_reports_a_missing_index(tmp_path, monkeypatch):
         assert call().startswith("index unavailable:")
 
 
+def test_an_unreadable_index_is_reported_not_raised(tmp_path, monkeypatch):
+    bad = tmp_path / "bad.sqlite"
+    bad.write_bytes(b"this is not a sqlite database" * 100)
+    monkeypatch.setenv("SDV_DOCS_DB", str(bad))
+    for call in (lambda: server.search("x"), lambda: server.get_function("x"), server.index_info):
+        out = call()
+        assert out.startswith("index unreadable:") and "SDV_DOCS_DB" in out
+
+
 def test_tools_tuple_is_complete():
     assert [f.__name__ for f in server.TOOLS] == [
         "search",
@@ -276,6 +285,17 @@ def test_main_exits_2_without_mcp(monkeypatch, capsys):
     monkeypatch.setattr(server, "build_server", no_mcp)
     assert server.main([]) == 2
     assert "sdv-docs needs Python >= 3.10" in capsys.readouterr().err
+
+
+def test_main_reports_why_mcp_failed_to_import(monkeypatch, capsys):
+    # an mcp that is installed but too old raises ImportError too: the hint alone would hide that
+    def old_mcp():
+        raise ImportError("cannot import name 'MCPServer' from 'mcp.server'")
+
+    monkeypatch.setattr(server, "build_server", old_mcp)
+    assert server.main([]) == 2
+    err = capsys.readouterr().err
+    assert "pip install 'sportsdataverse[mcp]'" in err and "cannot import name 'MCPServer'" in err
 
 
 def test_main_help_and_version_exit_without_serving(monkeypatch, capsys):
