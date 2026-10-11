@@ -128,27 +128,102 @@
     survive_until: "3.2"
   note: the only shootout fixture (401282146) has its first attempt in period 7, so >= 7 still passes
 
-# --- C-M13: the CFB second-half-kickoff team can be inverted unnoticed ---------------------------
+# --- C-M13 / C-NF-2: the CFB opening-kickoff team can be inverted unnoticed ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13
   file: sportsdataverse/cfb/cfb_pbp.py
-  # block scalars: the first line sets the indent, the np.where arms keep their 12 spaces
+  # the live frame expression (cfb_pbp.py:2865-2873) that start/end.pos_team_receives_2H_kickoff read;
+  # block scalars: the first line sets the indent, the later lines keep their 16 spaces
   snippet: |-
-    == init["homeTeamId"]),
-                init["homeTeamId"],
-                init["awayTeamId"],
+    .then(pl.col("homeTeamId"))
+                    .otherwise(pl.col("awayTeamId"))
+                    .alias("firstHalfKickoffTeamId"),
   mutant: |-
-    == init["homeTeamId"]),
-                init["awayTeamId"],
-                init["homeTeamId"],
-  test: tests/cfb/test_cfb_pbp_offline.py -k "kickoff or half"
-  expected:
-    survive_until: "2.6"
+    .then(pl.col("awayTeamId"))
+                    .otherwise(pl.col("homeTeamId"))
+                    .alias("firstHalfKickoffTeamId"),
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400547699 or 400547865)"
+  expected: kill
   note: >-
-    rt-C-processing-001 (517 passed; no offline test references the column, so the -k subset
-    survives identically at a fraction of the 176 s whole file). 1.2 adds the strict-xfail truth
-    test on 400547866 (C-NF-2) and repoints this row at it; it kills the swap once 2.6 ports the
-    game-wide constant and flips the test to a plain assert.
+    C-NF-2. The row used to mutate the pbp_txt["firstHalfKickoffTeamId"] np.where at :3323-3330, a
+    dict key nothing reads or returns, so no test could ever kill it (tier C M13's "survives 242
+    tests" was measured there). The swap of the live expression makes the home-kicked captures
+    right, so their strict-xfail truth tests XPASS (red). Task 2.6 deletes the dead np.where block
+    and flips the test to a plain assert, which then kills the swap on every capture.
+
+# --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012) ----------------
+- id: cfb-kickoff-touchback-75-from-2014
+  group: cfb-touchback
+  finding: C-H4
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    pl.when((kick_mask).and_(pl.col("season") > 2013))
+                    .then(75)
+  mutant: |-
+    pl.when((kick_mask).and_(pl.col("season") > 2013))
+                    .then(80)
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (400547866 or 401628455)"
+  expected: kill
+  note: a regression of the 2014+ spot; the 2012-13 rows stay strict-xfail until 3.1
+
+- id: cfb-kickoff-touchback-80-through-2011
+  group: cfb-touchback
+  finding: C-H4
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    .when((kick_mask).and_(pl.col("season") <= 2013))
+                    .then(80)
+  mutant: |-
+    .when((kick_mask).and_(pl.col("season") <= 2013))
+                    .then(75)
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (313090025 or 243040130 or 322590228)"
+  expected: kill
+  note: >-
+    cfbfastR's unconditional 75 (create_epa.R:233), the parity "fix" the owner ruled against: 2011's
+    313090025 and 2004's 243040130 go red, 2012's 322590228 strict-XPASSes
+
+# --- C-H1 (CFB twin) / C-NF-3: the CFB rushing decomposition --------------------------------------
+- id: cfb-second-level-yards-offset
+  group: cfb-rush-yards
+  finding: C-H1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 3))'
+  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "decomposition and (400547866 or 401628455)"
+  expected: kill
+  note: the half-yard C-H1 left in NFL; the CFB decomposition-sum test pins the fixed `-3`
+
+- id: cfb-line-yards-loss-credit
+  group: cfb-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(1.2 * pl.col("adj_rush_yardage"))'
+  mutant: '.then(pl.col("adj_rush_yardage"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "losses_and_gains and (400547866 or 401628455)"
+  expected: kill
+  note: the 120% loss credit of the per-yard band (EXECUTION-FINDINGS ruling for 2.1)
+
+- id: cfb-line-yards-loss-null
+  group: cfb-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(1.2 * pl.col("adj_rush_yardage"))'
+  mutant: '.then(None)'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "losses_and_gains and (400547866 or 401628455)"
+  expected: kill
+  note: >-
+    review of #760 (R2): a null line_yards on every loss survived 252/252 when the mismatch filters
+    dropped nulls; the null-aware filter kills it
+
+# --- C-T3 / R-010: the static season-literal gate -------------------------------------------------
+- id: season-literal-gate-new-literal
+  finding: C-T3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(pl.when(pl.col("season") > 2013).then(pl.lit(75)).otherwise(pl.lit(80)))'
+  mutant: '.then(pl.when(pl.col("season") > 2011).then(pl.lit(75)).otherwise(pl.lit(80)))'
+  test: tests/test_no_inline_season_literals.py
+  expected: kill
+  note: a literal without an allowlist row (and an allowlisted one gone) fails the gate
 
 # --- C-H1: NFL second_level_yards half-yard (the CFB `-3` port never reached NFL) ----------------
 - id: nfl-second-level-yards-offset
