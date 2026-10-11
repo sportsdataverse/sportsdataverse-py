@@ -5719,15 +5719,16 @@ class CFBPlayProcess(object):
                     pl.col("statYardage").cast(pl.Int32),
                 )
             )
-            # A vendor rush that states no yardage at all ("Wolff,Hayden rush left
-            # (Murdock,Red)."): statYardage equals the text-parsed yards on 99.98% of plain
-            # rushes, so it stands in. Not on fumbles or flags, where it can carry the return
-            # or the enforcement.
+            # Any other rush no reader matched: a vendor rush that states no yardage ("Wolff,Hayden
+            # rush left (Murdock,Red)."), a jersey-numbered one, or the 2004-13 directional form
+            # ("rush up the middle for 21 yards", the direction words between "rush" and "for").
+            # statYardage equals the text-parsed yards on 99.98% of plain rushes (2008, 2011,
+            # 2016, 2024, 2025), so it stands in. Not on fumbles or flags, where it can carry the
+            # return or the enforcement.
             .when(
                 (pl.col("rush") == True)
-                .and_(pl.col("cleaned_text").str.contains(r"\d") == False)
-                .and_(pl.col("fumble_vec") != True)
-                .and_(pl.col("penalty_flag") != True)
+                .and_(pl.col("fumble_vec").fill_null(False) == False)
+                .and_(pl.col("penalty_flag").fill_null(False) == False)
             )
             .then(pl.col("statYardage").cast(pl.Int32))
             .otherwise(None),

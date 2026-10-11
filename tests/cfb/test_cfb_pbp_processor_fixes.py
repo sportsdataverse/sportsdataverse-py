@@ -740,3 +740,17 @@ def test_yardless_vendor_rush_takes_espn_stat_yardage():
     )
     assert plays.height > 0
     assert plays["yds_rushed"].to_list() == plays["statYardage"].to_list()
+
+
+def test_pre_2014_directional_rush_takes_espn_stat_yardage():
+    # 2004-13 "Adam Muema rush up the middle for 21 yards to the SJSt 20" matched no "rush for"
+    # reader (the direction words sit between them): ~11k "up the middle" and ~9k "left/right side"
+    # rushes in 2007-13 had null yds_rushed. statYardage equals the text yards on 99.98% of plain
+    # rushes in those seasons, so every non-fumble, non-penalty rush now carries it.
+    plays = _plays(333130023)
+    rushes = plays.filter(
+        (pl.col("rush") == True) & (pl.col("fumble_vec") == False) & (pl.col("penalty_flag") == False)
+    )
+    assert rushes["yds_rushed"].null_count() == 0
+    row = _row(plays, "Adam Muema rush up the middle for 21 yards to the SJSt 20")
+    assert row["yds_rushed"] == 21
