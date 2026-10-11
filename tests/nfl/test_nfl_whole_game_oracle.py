@@ -478,6 +478,24 @@ def test_real_concat_equals_per_game_runs(step):
     assert _same_per_game(fn, frames, "game_id") == []
 
 
+def test_real_concat_reaches_the_post_score_clock_stoppage_guard():
+    """Reordered real rows: game 1 ends on a score, game 2 opens on its own first official timeout.
+
+    No capture opens on a clock-stoppage row, so the stacked captures above never reach the
+    ``scoring_play.shift(1).over("game_id")`` guard of ``calculate_epa``. Here every row is the
+    pipeline's own input for 401547449 / 401671740; only their order is changed (game 1 truncated
+    after its last scoring play, game 2's first clock-stoppage row moved to its head), and the
+    oracle is still the per-game run of the same rows.
+    """
+    first, second = run(401547449).epa_input, run(401671740).epa_input
+    last_score = first.with_row_index("_i").filter(_t("scoring_play"))["_i"].max()
+    first = first.head(last_score + 1)
+    stop = second.with_row_index("_i").filter(pl.col("type.text").is_in(clock_stoppage_vec))["_i"].min()
+    second = pl.concat([second.slice(stop, 1), second.slice(0, stop), second.slice(stop + 1)])
+    _require(first["scoring_play"][-1] is True, "game 1 must end on a scoring play")
+    assert _same_per_game(calculate_epa, [first, second], "game_id") == []
+
+
 def test_real_concat_equals_per_game_runs_nflverse_wpa():
     # The nflverse-path WPA derivation (enrich_nfl_pbp step 4) on the two committed slices.
     frames = [

@@ -57,14 +57,13 @@
   file: sportsdataverse/nfl/ep_wp.py
   snippet: 'pl.col("scoring_play").shift(1).over("game_id") == True,'
   mutant: 'pl.col("scoring_play").shift(1) == True,'
-  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
-  expected:
-    survive_until: owner
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_reaches_the_post_score_clock_stoppage_guard
+  expected: kill
   note: >-
-    rt-C-models-002. Unreachable on real data: the guarded branch (a clock-stoppage row right
-    after a scoring play) only crosses a game boundary when a game OPENS on a clock-stoppage row,
-    and none of the 31 NFL captures does (they open on a kickoff or a scrimmage play). No plan
-    task can kill it with a real capture; the owner decides whether it keeps a row.
+    rt-C-models-002 (the post-score clock-stoppage branch). No capture opens on a clock-stoppage
+    row, so the test reorders real rows: 401547449 truncated after its last scoring play,
+    401671740 with its own first official timeout moved to its head; the per-game run of the same
+    rows is the oracle. The mutant moves EP_start, EP_end, ep, ep_start and ep_end.
 
 - id: ep-wp-lead-wp-before-over-game-id
   group: over-game-id
