@@ -1,0 +1,19 @@
+schema: player_game_rates
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: athlete_id
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: ts_pct
+  type: double
+  description: ''
+- name: usg_pct
+  type: double
+  description: ''

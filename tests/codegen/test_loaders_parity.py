@@ -6,10 +6,12 @@ import importlib
 from pathlib import Path
 from unittest.mock import patch
 
+import polars as pl
 import pytest
 
 from sportsdataverse import _codegen_runtime as runtime
-from sportsdataverse.errors import NoDataError
+from sportsdataverse.errors import NoDataError, SeasonNotFoundError
+from sportsdataverse.nhl import nhl_loaders
 
 from tools.codegen import generate, spec
 
@@ -82,3 +84,63 @@ def test_loader_modules_render_valid_python():
     for league, loaders in by_league.items():
         src = generate.render_loader_module(league, loaders, rel.bases)
         ast.parse(src)  # raises on malformed
+
+
+@pytest.mark.parametrize("season", [2010, 2015, 2024])
+def test_nhl_game_rosters_accepts_published_seasons(season):
+    roster = pl.DataFrame({"player_id": [8471675], "season": [season], "shoots_catches": ["L"]})
+    with patch.object(nhl_loaders, "_read_release_parquet", return_value=roster) as reader:
+        out = nhl_loaders.load_nhl_game_rosters(seasons=season)
+
+    assert out.equals(roster)
+    reader.assert_called_once_with(
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
+        f"nhl_game_rosters/game_rosters_{season}.parquet"
+    )
+
+
+def test_nhl_game_rosters_rejects_seasons_before_first_release():
+    with patch.object(nhl_loaders, "_read_release_parquet") as reader:
+        with pytest.raises(SeasonNotFoundError):
+            nhl_loaders.load_nhl_game_rosters(seasons=2009)
+
+    reader.assert_not_called()
+
+
+# Every NHL season release publishes from 2010 (the 2009-10 season); the asset
+# paths are spelled out so a releases.yaml regression cannot pass by echo.
+_NHL_FIRST_SEASON_ASSETS = {
+    "load_nhl_game_info": "nhl_game_info/game_info_2010.parquet",
+    "load_nhl_game_rosters": "nhl_game_rosters/game_rosters_2010.parquet",
+    "load_nhl_goalie_boxscores": "nhl_goalie_boxscores/goalie_box_2010.parquet",
+    "load_nhl_linescore": "nhl_linescore/linescore_2010.parquet",
+    "load_nhl_officials": "nhl_officials/officials_2010.parquet",
+    "load_nhl_pbp_full": "nhl_pbp_full/play_by_play_2010.parquet",
+    "load_nhl_pbp_lite": "nhl_pbp_lite/play_by_play_lite_2010.parquet",
+    "load_nhl_penalties": "nhl_penalties/penalties_2010.parquet",
+    "load_nhl_player_boxscores": "nhl_player_boxscores/player_box_2010.parquet",
+    "load_nhl_rosters": "nhl_rosters/rosters_2010.parquet",
+    "load_nhl_schedules": "nhl_schedules/nhl_schedule_2010.parquet",
+    "load_nhl_scoring": "nhl_scoring/scoring_2010.parquet",
+    "load_nhl_scratches": "nhl_scratches/scratches_2010.parquet",
+    "load_nhl_shifts": "nhl_shifts/shifts_2010.parquet",
+    "load_nhl_shootout": "nhl_shootout/shootout_summary_2010.parquet",
+    "load_nhl_shots_by_period": "nhl_shots_by_period/shots_by_period_2010.parquet",
+    "load_nhl_skater_boxscores": "nhl_skater_boxscores/skater_box_2010.parquet",
+    "load_nhl_team_boxscores": "nhl_team_boxscores/team_box_2010.parquet",
+    "load_nhl_three_stars": "nhl_three_stars/three_stars_2010.parquet",
+}
+
+
+@pytest.mark.parametrize("fn,asset", sorted(_NHL_FIRST_SEASON_ASSETS.items()))
+def test_nhl_release_loaders_start_at_first_published_season(fn, asset):
+    loader = getattr(nhl_loaders, fn)
+    frame = pl.DataFrame({"season": [2010]})
+    with patch.object(nhl_loaders, "_read_release_parquet", return_value=frame) as reader:
+        loader(seasons=2010)
+    reader.assert_called_once_with("https://github.com/sportsdataverse/sportsdataverse-data/releases/download/" + asset)
+
+    with patch.object(nhl_loaders, "_read_release_parquet") as reader:
+        with pytest.raises(SeasonNotFoundError):
+            loader(seasons=2009)
+    reader.assert_not_called()
