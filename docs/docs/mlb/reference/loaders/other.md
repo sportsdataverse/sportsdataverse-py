@@ -416,7 +416,7 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | Int64 | Whether the position is a pitcher. |
+| `pitcher` | Int64 | MLBAM player id of the pitcher. |
 | `season` | Int64 | Season year. |
 | `x_woba` | Float64 | Expected weighted on-base average, derived from batted-ball quality rather than outcomes. |
 | `x_era` | Float64 | ERA-scale conversion of x_woba as league_era plus (x_woba minus league_woba) over woba_scale times pa_per_9, an exact linear function of x_woba that can go negative for extreme pitchers. |
@@ -432,7 +432,7 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | Int64 | Whether the position is a pitcher. |
+| `pitcher` | Int64 | MLBAM player id of the pitcher. |
 | `pitch_type` | String | Abbreviation of the pitch type thrown (e.g. FF, SL, CH). |
 | `stuff_rv_hat` | Float64 | Mean predicted per-pitch run value from the bundled xgboost stuff model over this pitcher's pitches of this type, on Savant's batter-perspective delta_run_exp scale so lower is better for the pitcher. |
 | `stuff_plus` | Float64 | Stuff+ on the 100-is-average scale, exactly 100 minus 10 times (stuff_rv_hat minus the league mean) over the league SD, so higher is better and outlier run-value predictions can push it well below zero. |
@@ -449,7 +449,7 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | Int64 | Whether the position is a pitcher. |
+| `pitcher` | Int64 | MLBAM player id of the pitcher. |
 | `location_rv_hat` | Float64 | Mean predicted per-pitch run value from the bundled location model, which sees plate location, count, handedness and pitch type but no raw pitch physics; lower is better for the pitcher. |
 | `command_plus` | Float64 | Command+/Location+ on the 100-is-average scale, exactly 100 minus 10 times (location_rv_hat minus the league mean) over the league SD; it grades where the pitch finished, not intent, since Statcast ships no catcher target. |
 | `season` | Int64 | Season year. |
