@@ -1,0 +1,1 @@
+- CFB pbp: pre-2014 onside recoveries (`Kickoff Return (Defense)`) now carry `kickoff_play` / `kickoff_onside`; a run the officials credit on a no-play spot foul ("runner is credited with 6 yards ... NO PLAY") is a carry with its credited yards; and `td_play` follows a touchdown type that 2014+ scoring-summary text never spells out ("12 Yd Interception Return (X Kick)").

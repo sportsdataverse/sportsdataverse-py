@@ -873,3 +873,13 @@ def test_run_credited_on_a_no_play_spot_foul_is_a_carry():
     # counts the carry (47-111 per season in 2021-24); the row was a Penalty with rush False.
     row = _row(_trimmed_plays(401309633), "runner is credited with 6 yards")
     assert (row["rush"], row["yds_rushed"], row["penalty_no_play"]) == (True, 6, True)
+
+
+# --- R3: td_play follows a touchdown type the text never spells out --------------------------------
+
+
+def test_summary_format_touchdown_is_a_td_play():
+    # 2014+ scoring-summary text: "Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)" says
+    # neither "touchdown" nor "for a TD", so td_play stayed False beside its touchdown type.
+    row = _row(_trimmed_plays(400547673), "Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)")
+    assert (row["type.text"], row["touchdown"], row["td_play"]) == ("Interception Return Touchdown", True, True)

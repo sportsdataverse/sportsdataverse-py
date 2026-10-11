@@ -5040,9 +5040,12 @@ class CFBPlayProcess(object):
 
         # The touchdown flag was read off the feed's type before the retyping above; a row
         # that is a touchdown only by its new type (an own fumble taken in, a field goal or
-        # kickoff returned for the score) carries it too.
+        # kickoff returned for the score) carries it too. td_play follows: 2014+ summary text
+        # ("Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)") never says "touchdown".
+        _td_type = pl.col("type.text").str.contains("(?i)touchdown") & ~_touchdown_negated()
         play_df = play_df.with_columns(
-            touchdown=pl.col("type.text").str.contains("(?i)touchdown") & ~_touchdown_negated(),
+            touchdown=_td_type,
+            td_play=(pl.col("td_play") == True) | _td_type,  # noqa: E712
         )
         return play_df
 
