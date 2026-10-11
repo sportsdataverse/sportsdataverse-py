@@ -65,9 +65,9 @@ METRIC = {
     "pass_explosive": "explosive-play rate on pass plays",
     "rush_explosive": "explosive-play rate on rush plays",
     "havoc": "havoc rate",
-    "play_stuffed": "stuffed-play rate",
+    "play_stuffed": "run-stuff rate (the share of rushes stopped for 0 or fewer yards)",
     "lineyards": "line yards per rush",
-    "opportunity_run": "opportunity-run rate",
+    "opportunity_run": "opportunity-run rate (the share of rushes gaining 4 or more yards)",
     "yardsplay": "yards per play",
     "yardsgame": "yards per game",
     "yardsrush": "yards per rush",
@@ -109,9 +109,15 @@ STATIC: dict[str, str] = {
     "Sck": "Times the passer was sacked.",
     "SR": "Success rate on the passer's plays.",
     "EPA_per_Play": "EPA per play on the passer's plays.",
-    "CPOE": "Completion percentage over expected -- actual minus modelled completion rate.",
-    "xComp": "Expected completions, summed from the per-play completion model.",
-    "xCompPct": "Expected completion percentage from the per-play completion model.",
+    "CPOE": (
+        "Completion rate over expected: CompPct minus xCompPct, both over the passer's attempts (sacks "
+        "excluded), as a 0-to-1 difference."
+    ),
+    "xComp": (
+        "Expected completions: the per-play completion probability (cp_game_state) summed over the passer's "
+        "pass attempts, sacks excluded."
+    ),
+    "xCompPct": "Expected completion rate on a 0-to-1 scale: xComp divided by Att (sacks excluded). 0 when Att is 0.",
     "exp_qbr": "Expected QBR for the passer.",
     "era0": "Rule-era indicator for the earliest modelled era.",
     "era1": "Rule-era indicator for the second modelled era.",
