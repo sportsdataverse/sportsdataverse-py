@@ -11,13 +11,13 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 8 | — |
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 122 | none |
-| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 42 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 53 | none |
 | [NBA Stats API](#nba-stats-api) | `stats.nba.com` | 130 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 189 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 199 | — |
 
 ## ESPN {#espn}
 
@@ -34,8 +34,8 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 
 | Reference | Functions |
 |---|---:|
-| [sportsdataverse-data releases](reference/loaders) | 41 |
-| [Hand-written wrappers](reference/additional/sportsdataverse-data-releases) | 1 |
+| [sportsdataverse-data releases](reference/loaders) | 42 |
+| [Hand-written wrappers](reference/additional/sportsdataverse-data-releases) | 11 |
 
 ## NBA Stats API {#nba-stats-api}
 
@@ -329,6 +329,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`load_nba_shots`](reference/loaders/other#load_nba_shots) | [`load_nba_shots`](https://hoopR.sportsdataverse.org/reference/load_nba_shots.html) |
 | [`load_nba_standings`](reference/loaders/other#load_nba_standings) | [`load_nba_standings`](https://hoopR.sportsdataverse.org/reference/load_nba_standings.html) |
 | [`load_nba_stats_coaches`](reference/loaders/stats#load_nba_stats_coaches) | [`load_nba_stats_coaches`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_coaches.html) |
+| [`load_nba_stats_draft`](reference/loaders/stats#load_nba_stats_draft) | [`load_nba_stats_draft`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_draft.html) |
 | [`load_nba_stats_game_lineups`](reference/loaders/stats#load_nba_stats_game_lineups) | [`load_nba_stats_game_lineups`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_game_lineups.html) |
 | [`load_nba_stats_game_rosters`](reference/loaders/stats#load_nba_stats_game_rosters) | [`load_nba_stats_game_rosters`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_game_rosters.html) |
 | [`load_nba_stats_leaguedash`](reference/additional/sportsdataverse-data-releases#load_nba_stats_leaguedash) | [`load_nba_stats_leaguedash`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_leaguedash.html) |
@@ -337,7 +338,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`load_nba_stats_pbp`](reference/loaders/stats#load_nba_stats_pbp) | [`load_nba_stats_pbp`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_pbp.html) |
 | [`load_nba_stats_player_boxscores`](reference/loaders/stats#load_nba_stats_player_boxscores) | [`load_nba_stats_player_boxscores`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_player_boxscores.html) |
 | [`load_nba_stats_player_game_logs`](reference/loaders/stats#load_nba_stats_player_game_logs) | [`load_nba_stats_player_game_logs`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_player_game_logs.html) |
-| [`load_nba_stats_player_season_stats`](reference/loaders/stats#load_nba_stats_player_season_stats) | [`load_nba_stats_player_season_stats`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_player_season_stats.html) |
+| [`load_nba_stats_player_season_stats`](reference/loaders/stats-2#load_nba_stats_player_season_stats) | [`load_nba_stats_player_season_stats`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_player_season_stats.html) |
 | [`load_nba_stats_possessions`](reference/loaders/stats#load_nba_stats_possessions) | [`load_nba_stats_possessions`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_possessions.html) |
 | [`load_nba_stats_rosters`](reference/loaders/stats-2#load_nba_stats_rosters) | [`load_nba_stats_rosters`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_rosters.html) |
 | [`load_nba_stats_shots`](reference/loaders/stats-2#load_nba_stats_shots) | [`load_nba_stats_shots`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_shots.html) |

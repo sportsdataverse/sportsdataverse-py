@@ -1060,6 +1060,17 @@ loaders:
   min_season: 1996
   example_args:
     seasons: 2025
+- fn: load_nba_stats_draft
+  league: nba
+  base: sdv_releases
+  # draft_{Y}.parquet holds the June Y-1 draft (draft_2026 = the 2025 draft), so
+  # the shared START -> END +1 makes ``seasons`` the draft year itself.
+  url: nba_stats_draft/draft_{season + 1}.parquet
+  tag: nba_stats_draft
+  min_season: 1996
+  notes: "``seasons`` is the draft year: ``load_nba_stats_draft(2025)`` returns the June 2025 draft, read from ``draft_2026.parquet``, whose rows carry ``season`` 2026 (the END year of the 2025-26 season the picks enter). ``season`` is Int32 in this asset, not the Int64 of the other nba_stats loaders."
+  example_args:
+    seasons: 2025
 - fn: load_nba_stats_game_rosters
   league: nba
   base: sdv_releases
