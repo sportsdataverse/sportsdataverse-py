@@ -26,6 +26,8 @@ FAMILIES = (
     "openligadb",
     "polymarket",
     "kalshi",
+    # SIHF (data.sihf.ch)
+    "sihf_api_web",
 )
 
 

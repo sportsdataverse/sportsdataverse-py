@@ -147,6 +147,10 @@
         {
           "prefix": "mjhl",
           "label": "MJHL"
+        },
+        {
+          "prefix": "sihf",
+          "label": "SIHF (Swiss hockey)"
         }
       ]
     },

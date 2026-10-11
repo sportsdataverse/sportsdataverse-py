@@ -142,6 +142,7 @@ _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
         "sportsdataverse.euroleague.euroleague_runtime",
+        "sportsdataverse.sihf.sihf_runtime",
         "sportsdataverse.thesportsdb.thesportsdb_runtime",
         "sportsdataverse.soccer.football_data_runtime",
         "sportsdataverse.soccer.uefa_runtime",
@@ -447,7 +448,7 @@ _LEAGUE_R_PACKAGE = {
 
 # Package homes that are not leagues: they carry flat-API families but no ESPN league, no
 # loaders and no R counterpart. Ordered, because _doc_leagues() appends them in this order.
-_NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_content", "thesportsdb")
+_NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_content", "thesportsdb", "sihf")
 
 
 # Flat-API families with NO R counterpart. Their columns never passed through an R package,
@@ -461,7 +462,7 @@ _NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_con
 # A blank cell is honest. A wrong one is worse than blank AND invisible to the description
 # ratchet, which counts it as covered.
 _NO_R_DICT_FAMILIES = frozenset(
-    {"espn_content", "thesportsdb", "football_data", "openligadb", "polymarket", "kalshi"},
+    {"espn_content", "thesportsdb", "football_data", "openligadb", "polymarket", "kalshi", "sihf_api_web"},
 )
 
 
@@ -1892,6 +1893,52 @@ def _refresh_sport_specific_return_schemas() -> int:
     return written
 
 
+def _write_native_schemas(nat: dict) -> int:
+    """Introspect each flat-API parser on its captured fixture -> ``schemas/native/<api>/<short>.yaml``.
+
+    ``nat`` is ``native_fixture_map.yaml``: ``{api: {fixture file: short}}``. A value may also be
+    a list of shorts, for one capture that several endpoints parse (the SIHF game page feeds six
+    parsers). Returns the number of schemas written."""
+    import importlib
+    import json
+
+    import yaml
+
+    written = 0
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    for api, files in nat.items():
+        fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
+        by_short = {e.short: e for e in fa.endpoints}
+        pmod = importlib.import_module(f"sportsdataverse.{fa.parser_module}")
+        for fname, shorts in files.items():
+            for short in [shorts] if isinstance(shorts, str) else shorts:
+                ep = by_short.get(short)
+                if ep is None or not ep.parser:
+                    continue
+                outdir = ROOT / "tools" / "codegen" / "schemas" / "native" / api
+                key = f"{fa.schema_prefix}{short}"  # what manual_column_descriptions.yaml is keyed by
+                try:
+                    payload = json.loads((ROOT / "tests" / "fixtures" / api / fname).read_text("utf-8"))
+                    df = getattr(pmod, ep.parser)(payload)
+                    if isinstance(df, dict):  # one frame per section (a KenPom page parses to {table_id: frame})
+                        doc = {
+                            "schema": key,
+                            "kind": "frames",
+                            "frames": [{"section": sec, "columns": _cols_from_frame(f, {})} for sec, f in df.items()],
+                        }
+                    else:
+                        doc = {"schema": key, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
+                except Exception as e:  # noqa: BLE001
+                    print(f"  native skip {api}/{short} ({fname}): {e}")
+                    continue
+                outdir.mkdir(parents=True, exist_ok=True)
+                (outdir / f"{short}.yaml").write_text(
+                    yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
+                )
+                written += 1
+    return written
+
+
 def refresh_return_schemas() -> int:
     """Run each parser on every per-league captured fixture and emit per-league
     column schemas under schemas/{name}/{league}.yaml. Descriptions are merged
@@ -1936,38 +1983,8 @@ def refresh_return_schemas() -> int:
     written += _write_auto_espn_schemas(_FIX, ROOT / "tools" / "codegen" / "schemas")
 
     # --- natives ---
-    import importlib
-
     nat = yaml.safe_load((ROOT / "tools" / "codegen" / "native_fixture_map.yaml").read_text("utf-8")) or {}
-    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
-    for api, files in nat.items():
-        fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
-        by_short = {e.short: e for e in fa.endpoints}
-        pmod = importlib.import_module(f"sportsdataverse.{fa.parser_module}")
-        for fname, short in files.items():
-            ep = by_short.get(short)
-            if ep is None or not ep.parser:
-                continue
-            try:
-                payload = json.loads((ROOT / "tests" / "fixtures" / api / fname).read_text("utf-8"))
-                df = getattr(pmod, ep.parser)(payload)
-                if isinstance(df, dict):  # one frame per section (a KenPom page parses to {table_id: frame})
-                    doc = {
-                        "schema": short,
-                        "kind": "frames",
-                        "frames": [{"section": sec, "columns": _cols_from_frame(f, {})} for sec, f in df.items()],
-                    }
-                else:
-                    doc = {"schema": short, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
-            except Exception as e:  # noqa: BLE001
-                print(f"  native skip {api}/{short} ({fname}): {e}")
-                continue
-            outdir = ROOT / "tools" / "codegen" / "schemas" / "native" / api
-            outdir.mkdir(parents=True, exist_ok=True)
-            (outdir / f"{short}.yaml").write_text(
-                yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
-            )
-            written += 1
+    written += _write_native_schemas(nat)
 
     # --- sport-specific ESPN parsers (soccer/cricket) ---
     sport_written = _refresh_sport_specific_return_schemas()
@@ -2193,6 +2210,8 @@ FLAT_APIS = [
     ("openligadb", "soccer"),
     ("polymarket", "odds"),
     ("kalshi", "odds"),
+    # Swiss Ice Hockey Federation statistics API (data.sihf.ch), every SIHF league
+    ("sihf_api_web", "sihf"),
 ]
 
 
@@ -2571,6 +2590,7 @@ _COVERAGE_LEAGUES = [
     "f1",
     "espn_content",
     "thesportsdb",
+    "sihf",
     # Joined in 0.1.5: each has hand-written modules, so until now the gates never
     # saw their functions and they had no Additional page.
     "soccer",
@@ -2958,6 +2978,7 @@ _FLAT_API_DOC = {
     "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
+    "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
     "football_data": "Football-Data.co.uk CSV archive (football-data.co.uk)",
     "openligadb": "OpenLigaDB (api.openligadb.de, community German football)",
     "polymarket": "Polymarket read APIs (gamma-api + clob.polymarket.com)",
@@ -4882,7 +4903,7 @@ _SPORTS = (
     ("other", "Other"),
 )
 # Sport of a documented league that leagues.yaml does not list (releases-only or hand-written modules).
-_EXTRA_LEAGUE_SPORT = {"pwhl": "hockey", **{lg: "hockey" for lg in _HOCKEYTECH_MODULE_LEAGUES}}
+_EXTRA_LEAGUE_SPORT = {"pwhl": "hockey", "sihf": "hockey", **{lg: "hockey" for lg in _HOCKEYTECH_MODULE_LEAGUES}}
 # Labels for prefixes that are not initials; every other prefix is upper-cased (nfl -> NFL).
 _LEAGUE_LABELS = {
     "bundesliga": "Bundesliga",
@@ -4900,6 +4921,7 @@ _LEAGUE_LABELS = {
     "f1": "Formula 1",
     "espn_content": "ESPN content (news)",
     "thesportsdb": "TheSportsDB",
+    "sihf": "SIHF (Swiss hockey)",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",

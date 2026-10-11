@@ -1,0 +1,287 @@
+{
+ "title": "Rangliste",
+ "description": null,
+ "pages": 0,
+ "selectedPage": 0,
+ "orderBy": "",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2025-03-02T13:01:58.3053767+01:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    }
+   ],
+   "selected": "2025",
+   "type": "Dropdown",
+   "alias": "Season"
+  }
+ ],
+ "secondaryMenu": null,
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [
+  {
+   "name": null,
+   "style": "line",
+   "rows": [
+    6,
+    10,
+    12
+   ]
+  }
+ ],
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "rank"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "GP",
+   "description": "Gespielte Spiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesPlayed"
+  },
+  {
+   "name": "PTS",
+   "description": "Punktetotal",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "points"
+  },
+  {
+   "name": "P/GP",
+   "description": "Punktetotal pro Spiel",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "pointsQuotient"
+  },
+  {
+   "name": "W",
+   "description": "Siege nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonInTime"
+  },
+  {
+   "name": "OTW",
+   "description": "Siege nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonExtraTime"
+  },
+  {
+   "name": "SOW",
+   "description": "Siege nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonPenalty"
+  },
+  {
+   "name": "SOL",
+   "description": "Niederlagen nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostPenalty"
+  },
+  {
+   "name": "OTL",
+   "description": "Niederlage nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostExtraTime"
+  },
+  {
+   "name": "L",
+   "description": "Niederlagen nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostInTime"
+  },
+  {
+   "name": "GF",
+   "description": "Tore geschossen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsFor"
+  },
+  {
+   "name": "GA",
+   "description": "Tore erhalten",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsAgainst"
+  },
+  {
+   "name": "GDF",
+   "description": "Tordifferenz",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsDifference"
+  },
+  {
+   "name": "Streak",
+   "description": "Letzte Spiele",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": false,
+   "alias": "streak"
+  }
+ ],
+ "data": [
+  [
+   "1",
+   {
+    "id": 101139,
+    "name": "ZSC Lions",
+    "acronym": "ZSC",
+    "signed": false,
+    "type": "team"
+   },
+   "26",
+   "41",
+   "1.577",
+   "10",
+   "2",
+   "2",
+   "2",
+   "1",
+   "9",
+   "71",
+   "62",
+   "9",
+   "W-W-L+W+L+L-L+W-L+L+"
+  ],
+  [
+   "2",
+   {
+    "id": 102126,
+    "name": "SC Bern",
+    "acronym": "SCB",
+    "signed": false,
+    "type": "team"
+   },
+   "26",
+   "40",
+   "1.538",
+   "10",
+   "1",
+   "0",
+   "3",
+   "5",
+   "7",
+   "72",
+   "71",
+   "1",
+   "W+W+W+L+L-L-L+W+W+L+"
+  ],
+  [
+   "3",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "26",
+   "39",
+   "1.500",
+   "10",
+   "2",
+   "1",
+   "2",
+   "1",
+   "10",
+   "59",
+   "67",
+   "-8",
+   "W+W+L-W+W+L-W+W-W-W+"
+  ],
+  [
+   "4",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": false,
+    "type": "team"
+   },
+   "26",
+   "38",
+   "1.462",
+   "10",
+   "3",
+   "0",
+   "1",
+   "1",
+   "11",
+   "70",
+   "67",
+   "3",
+   "L+L+W-L+L+L+W+L+W+L+"
+  ]
+ ],
+ "alias": "standing"
+}

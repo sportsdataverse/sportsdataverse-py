@@ -1339,7 +1339,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 36 families**, not three.
+- **`FLAT_APIS` has 37 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in
