@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import numpy as np
 import polars as pl
+import pytest
 from scipy.sparse import csr_matrix
 
 from sportsdataverse.nba.nba_adj_rapm import AdjRapmModel, _fit_prior_ridge, nba_adj_rapm
@@ -133,3 +134,69 @@ def test_adj_rapm_live_smoke() -> None:
         "off_poss",
         "def_poss",
     }
+
+
+# --- Real-corpus gates (C-L39): every test above runs on `_synthetic_possessions` ---------------
+# Possessions: the three committed real games under tests/fixtures/nba_engine/ (playbyplayv3 +
+# gamerotation + boxscoretraditionalv3; 597 possessions with full lineups), built the way the
+# play-context tests build them. Prior: the committed full-season 2023-24 stint-RAPM snapshot
+# tests/fixtures/nba_playtype/rapm_2024.parquet (per-100 o_rapm / d_rapm). Both READMEs carry provenance.
+
+
+@pytest.fixture(scope="module")
+def real_possessions_and_prior():
+    import json
+    import pathlib
+
+    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+    from sportsdataverse.nba.nba_lineups import (
+        boxscore_home_away,
+        parse_rotation_resultsets,
+        players_on_court_from_rotation,
+    )
+    from sportsdataverse.nba.nba_possessions import attach_possession_lineups, build_possessions
+
+    root = pathlib.Path(__file__).resolve().parents[1] / "fixtures"
+    frames = []
+    for g in ("0022100001", "0022200001", "0022300001"):
+        fx = root / "nba_engine" / g
+        enh = enhanced_pbp_from_payload(json.loads((fx / "playbyplayv3.json").read_text()))
+        home, away = boxscore_home_away(json.loads((fx / "boxscoretraditionalv3.json").read_text()))
+        oncourt = players_on_court_from_rotation(
+            enh,
+            parse_rotation_resultsets(json.loads((fx / "gamerotation.json").read_text())),
+            home_team_id=home,
+            away_team_id=away,
+        )
+        frames.append(attach_possession_lineups(build_possessions(enh), oncourt, enh, home_team_id=home))
+    poss = pl.concat(frames, how="diagonal_relaxed")
+    rapm = pl.read_parquet(root / "nba_playtype" / "rapm_2024.parquet")
+    prior = {int(p): (o, d) for p, o, d in rapm.select("player_id", "o_rapm", "d_rapm").iter_rows()}
+    return poss, prior, rapm
+
+
+def test_adj_rapm_shrinks_to_the_real_prior_under_a_huge_penalty(real_possessions_and_prior) -> None:
+    """With lambda -> infinity the data carries no weight: every estimate IS its prior (observed max
+    |diff| 1.7e-5 per 100 over the 51 prior-covered players). A fit that drops the prior reads ~0."""
+    poss, prior, rapm = real_possessions_and_prior
+    out = nba_adj_rapm(poss, prior, alphas=np.array([1e9]), n_samples=20, seed=0).join(
+        rapm.select("player_id", "o_rapm", "d_rapm"), on="player_id", how="inner"
+    )
+    assert out.height >= 50
+    assert (out["o_adj_rapm"] - out["o_rapm"]).abs().max() <= 1e-3
+    assert (out["d_adj_rapm"] - out["d_rapm"]).abs().max() <= 1e-3
+    print("ADJ_RAPM_PRIOR_TARGET_OK", out.height)
+
+
+def test_adj_rapm_prior_moves_the_real_fit(real_possessions_and_prior) -> None:
+    """At the default CV penalty the prior must still pull the estimates (corr with the prior net
+    0.2646 observed 2026-10-11) well above the prior-free fit on the same possessions (0.0761)."""
+    poss, prior, rapm = real_possessions_and_prior
+    net = rapm.select("player_id", (pl.col("o_rapm") + pl.col("d_rapm")).alias("prior_net"))
+    with_prior = nba_adj_rapm(poss, prior, n_samples=50, seed=0).join(net, on="player_id", how="inner")
+    no_prior = nba_adj_rapm(poss, {}, n_samples=50, seed=0).join(net, on="player_id", how="inner")
+    r_with = float(np.corrcoef(with_prior["adj_rapm"], with_prior["prior_net"])[0, 1])
+    r_without = float(np.corrcoef(no_prior["adj_rapm"], no_prior["prior_net"])[0, 1])
+    assert r_with >= 0.26, r_with
+    assert r_with - r_without >= 0.15, (r_with, r_without)
+    print("ADJ_RAPM_REAL_PRIOR_OK", round(r_with, 4), round(r_without, 4))
