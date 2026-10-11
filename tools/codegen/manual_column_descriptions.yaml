@@ -18427,6 +18427,11 @@ load_mbb_pbp:
   short_description: Shortened version of ESPN's play description text, without score context.
   start_period_seconds_remaining: Seconds left in the current period when the play started, computed as 60 times the game
     clock minutes plus the seconds, so 1200 at the tip of each 20-minute half and 300 at the start of an overtime.
+load_mbb_player_crosswalk:
+  kp_player_id: KenPom player id (string), matched by hoopR-mbb-data on the normalized name within the ESPN team (a repeated
+    name broken by jersey), then on last name plus jersey. Null for players KenPom does not list, which includes every ESPN
+    roster row without minutes, and for every row when the build ran without the private KenPom capture. Added by the data
+    repo, so the live player-crosswalk builder does not emit it.
 load_mbb_player_season_stats:
   stat_description: ESPN's prose glossary definition of the statistic named in stat_name, for example defining assists as
     a pass to a teammate that leads directly to a field goal.
@@ -18450,6 +18455,9 @@ load_mbb_schedule:
   home_current_rank: Poll ranking ESPN listed for the home team at game time (unranked teams carry a sentinel value).
   home_linescores: Period-by-period scores for the home team as a delimited string from ESPN's schedule feed.
   home_records: Record strings (overall and split records) for the home team from ESPN's schedule feed.
+load_mbb_schedule_crosswalk:
+  kp_game_id: KenPom game id (string), matched by hoopR-mbb-data on the game date and the unordered pair of ESPN team ids.
+    Null where KenPom lists no matching game, and for every row when the build ran without the private KenPom capture.
 load_mbb_shots:
   athlete_name_1: Display name of the shooter credited on the attempt in ESPN's play participants.
   athlete_name_2: Display name of the second athlete tied to the attempt (typically the assister), when present.

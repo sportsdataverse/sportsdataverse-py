@@ -669,8 +669,10 @@ def mbb_player_crosswalk(
 
     One row per ESPN athlete per team. Fox is matched by normalized name
     within each team block -- exact first (jersey-tiebroken, per hoopR), then
-    Jaro-Winkler at or above ``min_confidence``. KenPom and Torvik publish no
-    per-player tables, so neither is joined.
+    Jaro-Winkler at or above ``min_confidence``. Torvik is not joined, and
+    neither is KenPom: the published ``mbb_player_crosswalk`` asset
+    (:func:`load_mbb_player_crosswalk`) carries an 18th column,
+    ``kp_player_id``, which hoopR-mbb-data adds after this builder runs.
 
     Args:
         season: Season year (e.g. ``2026``). Defaults to the most recent MBB

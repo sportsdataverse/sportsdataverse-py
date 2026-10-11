@@ -12456,6 +12456,8 @@ load_mbb_player_crosswalk:
   type: String
 - name: yahoo_player_name
   type: String
+- name: kp_player_id
+  type: String
 - name: match_method
   type: String
 - name: match_confidence

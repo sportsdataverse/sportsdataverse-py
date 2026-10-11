@@ -488,7 +488,7 @@ Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `bart_team1` | String | Torvik team1 name (NA for espn-only rows). |
 | `bart_team2` | String | Torvik team2 name (NA for espn-only rows). |
 | `bart_winner` | String | Torvik winner name (NA for espn-only rows). |
-| `kp_game_id` | String | KenPom game id (NA unless kenpom enabled). |
+| `kp_game_id` | String | KenPom game id (string), matched by hoopR-mbb-data on the game date and the unordered pair of ESPN team ids. Null where KenPom lists no matching game, and for every row when the build ran without the private KenPom capture. |
 | `fox_game_id` | String | Fox game id (NA placeholder). |
 | `yahoo_game_id` | String | Yahoo game id (NA placeholder). |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
