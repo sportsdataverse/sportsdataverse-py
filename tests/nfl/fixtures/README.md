@@ -243,14 +243,16 @@ in a subdirectory so the whole-game captures above (`summary_*` in this director
 
 ## Touchdown-flag residuals (`td_flag_residuals/`, task 2.20)
 
-Three untrimmed ESPN Site v2 summaries, copied from `nflverse-dev/nfl-raw`
-`nfl/espn/raw/<season>/<game_id>.json.gz` (nfl-raw commit 044caca9, 2026-09-14; source
+Five untrimmed ESPN Site v2 summaries, copied from `nflverse-dev/nfl-raw`
+`nfl/espn/raw/<season>/<game_id>.json.gz` (nfl-raw commits 044caca9 and, for 271209034 / 291129016, 4f540c18, 2026-09-14; source
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`), each holding a row
-the task 2.5 touchdown rule got wrong (review PR-808, R808-2/3/4). The oracle is nflverse
+the task 2.5 touchdown rule got wrong (review PR-808, R808-2/3/4) or one task 2.20 must keep (review PR-840, R840-1/2). The oracle is nflverse
 (`nflverse-dev/nfl-data` `python/data/pbp_<season>.parquet`, joined on `game_id` + `play_id`).
 
 | game (nflverse) | play | ESPN type / scoringPlay | nflverse `touchdown` / `rush_touchdown` / `epa` | finding |
 |---|---|---|---|---|
-| 311218002 (`2011_15_MIA_BUF`) | 3112180024175, R.Bush 76-yard run, "TOUCHDOWN NULLIFIED by Penalty" (excessive celebration, enforced on the kickoff) | `Rushing Touchdown` / True; ESPN score 13-23 -> 13-24, next row a scored `Extra Point Good` | 1 / 1 / 6.450 | R808-2 |
+| 311218002 (`2011_15_MIA_BUF`) | 3112180024175, R.Bush 76-yard run, "TOUCHDOWN NULLIFIED by Penalty" (excessive celebration, enforced on the kickoff) | `Rushing Touchdown` / True; next row the try, a scored `Extra Point Good` | 1 / 1 / 6.450 | R808-2 |
 | 291126008 (`2009_12_GB_DET`) | 2911260083341, fumble-return TD reversed on challenge into a safety | `Safety` / True | 0 / 0 / -0.438 (`safety` 1) | R808-3 |
 | 401671715 (`2024_12_DAL_WAS`) | 4016717152262 (short of landing zone), 4016717154728 (onside kick) | `Kickoff Return Touchdown` / False | 0 / 0 / 0.926, 1.419 | R808-4 |
+| 291129016 (`2009_12_CHI_MIN`) | 2911290162862, C.Taylor 20-yard run, "TOUCHDOWN NULLIFIED by Penalty" (offensive holding); ESPN's score reads 27 the row before and 24 on it | `Rushing Touchdown` / True; next row a `Penalty`, no try | 0 / 0 / 0.474 | R840-2 |
+| 271209034 (`2007_14_TB_HOU`) | 2712090341856, A.Davis 97-yard kickoff return TD; ESPN's 2007 text is the bare "Kickoff" | `Kickoff Return Touchdown` / False | 1 / 0 / 6.057 (`return_touchdown` 1) | R840-1 (the 2009 floor) |

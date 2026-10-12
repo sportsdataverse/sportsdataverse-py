@@ -487,8 +487,7 @@ def test_td_flags_scored_row_keeps_a_touchdown_its_no_play_does_not_touch():
             "text": texts,
             "scoringPlay": [True, True],
             "type.text": ["Passing Touchdown", "Passing Touchdown"],
-            "homeScore": [7, 7],
-            "awayScore": [0, 0],
+            "game_id": [281214012, 400554293],
             "season": [2008, 2014],
         }
     )
@@ -500,14 +499,20 @@ def test_td_flags_scored_row_keeps_a_touchdown_its_no_play_does_not_touch():
 # values in the fixtures README) -> the (td_play, rush_td) the row must carry; pass_td is False on all four.
 _TD_RESIDUALS = {
     # R808-2: "TOUCHDOWN NULLIFIED by Penalty", but the excessive-celebration foul was enforced on the
-    # kickoff and the touchdown stood: ESPN's score rises on the row and a scored PAT follows (nflverse 1/1).
+    # kickoff and the touchdown stood: the next row is the try, "Extra Point Good" (nflverse 1/1).
     (311218002, 3112180024175): (True, True),
+    # R840-2: a scored "TOUCHDOWN NULLIFIED" row with no try after it (holding; nflverse 0). ESPN's raw score
+    # glitches on the row before (27 -> 24), which a score-movement signal would have read as a touchdown.
+    (291129016, 2911290162862): (False, False),
     # R808-3: a fumble-return touchdown reversed on challenge into a safety, which ESPN scores (nflverse 0).
     (291126008, 2911260083341): (False, False),
     # R808-4: a 2024 short-of-landing-zone kick and an onside kick, unscored, typed "Kickoff Return
     # Touchdown" with no touchdown in the text (nflverse 0).
     (401671715, 4016717152262): (False, False),
     (401671715, 4016717154728): (False, False),
+    # R840-1: the floor. A real 2007 kickoff return touchdown the bare-text feed writes as "Kickoff", unscored,
+    # with ESPN type "Kickoff Return Touchdown" (nflverse touchdown 1, return_touchdown 1); before 2009 it stands.
+    (271209034, 2712090341856): (True, False),
 }
 
 

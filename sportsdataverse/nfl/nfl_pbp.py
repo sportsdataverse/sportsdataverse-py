@@ -119,16 +119,18 @@ def _touchdown_did_not_stand() -> pl.Expr:
 
     On a row ESPN scored, the "No Play" belongs to the try or to the ruling a reversal INTO the
     touchdown overturned (2812140120518, 4005542932688), and the NFL text has no CFB "clock" tail to
-    cut those off at. Two markers still negate there. "Nullified by penalty" does unless ESPN's score
-    rises on the row (5 of 6 such rows 2006-24 have no rise); where it rises the touchdown stood and
-    the foul was enforced on the kickoff (3112180024175, R808-2). A rise, not any move: ESPN's raw
-    score can glitch down a row (27 -> 24 on 2911290162862, a nullified TD). A reversal negates when
-    ESPN types the row a Safety: the touchdown was reversed into one (2911260083341, R808-3). The
-    score is compared with the previous row's, so the frame is one game in play order.
+    cut those off at. Two markers still negate there. "Nullified by penalty" does unless the game's
+    next row is a try (Extra Point / Two Point, made or not): only a touchdown that stood is followed
+    by one, the foul having been enforced on the kickoff (3112180024175, R808-2). Of the 38 scored
+    "nullified" rows 2006-24 only that one has a try next; 2911290162862 (nflverse 0) does not. A
+    reversal negates when ESPN types the row a Safety: the touchdown was reversed into one
+    (2911260083341, R808-3). ``__add_play_type_flags`` stores the result once as
+    ``_td_did_not_stand`` (the next row is read within ``game_id``) for td_play, pass_td and rush_td.
     """
     text = pl.col("text")
-    total = pl.col("homeScore") + pl.col("awayScore")
-    score_rose = (total > total.shift(1)).fill_null(False)
+    try_follows = (
+        pl.col("type.text").shift(-1).over("game_id").str.contains(r"^(?:Extra Point|Two Point|Two-Point)")
+    ).fill_null(False)
     unscored = _PENALTY_NEGATED_TEXT + "|reversed"
     mistyped_return = (
         pl.col("type.text").is_in(["Kickoff Return Touchdown", "Punt Return Touchdown"])
@@ -138,7 +140,7 @@ def _touchdown_did_not_stand() -> pl.Expr:
     return (
         pl.when(pl.col("scoringPlay") == True)
         .then(
-            (text.str.contains("(?i)nullified by penalty") & ~score_rose)
+            (text.str.contains("(?i)nullified by penalty") & ~try_follows)
             | (text.str.contains("(?i)reversed") & (pl.col("type.text") == "Safety"))
         )
         .otherwise(text.str.contains(unscored) | mistyped_return)
@@ -1807,13 +1809,14 @@ class NFLPlayProcess(object):
         """
         # --- Touchdown, Fumble, Special Teams flags -----------------
         play_df = (
-            play_df.with_columns(
+            play_df.with_columns(_td_did_not_stand=_touchdown_did_not_stand())
+            .with_columns(
                 scoring_play=pl.when(pl.col("type.text").is_in(scores_vec)).then(True).otherwise(False),
                 td_play=(
                     pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
                     | pl.col("type.text").str.contains("Touchdown")
                 )
-                & ~_touchdown_did_not_stand(),
+                & ~pl.col("_td_did_not_stand"),
                 touchdown=pl.col("type.text").str.contains("(?i)touchdown"),
                 ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
                 td_check=pl.col("text").str.contains("(?i)touchdown"),
@@ -2958,7 +2961,7 @@ class NFLPlayProcess(object):
                 # ``type.text`` alone does not catch every one: ESPN labels some pick-sixes
                 # "Passing Touchdown" and some "Interception Return", so the text -- which
                 # says the ball was intercepted or lost and THEN scored -- gates first (O3).
-                pass_td=pl.when(_touchdown_did_not_stand())
+                pass_td=pl.when(pl.col("_td_did_not_stand"))
                 .then(False)
                 .when(_returned_for_touchdown("text"))
                 .then(False)
@@ -2971,7 +2974,7 @@ class NFLPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                rush_td=pl.when(_touchdown_did_not_stand())
+                rush_td=pl.when(pl.col("_td_did_not_stand"))
                 .then(False)
                 .when(_returned_for_touchdown("text"))
                 .then(False)
@@ -3041,6 +3044,7 @@ class NFLPlayProcess(object):
                 .str.extract(r"(\d+)")
                 .cast(pl.Int32),
             )
+            .drop("_td_did_not_stand")
             .with_columns(
                 # A field goal snaps from ESPN's own yard line; the kick distance is a
                 # fallback for the oldest feeds, and it is 18 yards longer than the

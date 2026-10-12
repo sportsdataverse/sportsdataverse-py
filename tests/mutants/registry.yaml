@@ -1275,24 +1275,48 @@
   group: nfl-td-flags
   finding: C-M1
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '                & ~_touchdown_did_not_stand(),'
+  snippet: '                & ~pl.col("_td_did_not_stand"),'
   mutant: '                & pl.lit(True),'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_nullified_touchdown_is_not_a_touchdown[291018018]
   expected: kill
   note: td_play True again on the three "TOUCHDOWN NULLIFIED by Penalty" rows of 291018018
 
 # --- R808-2 / R808-3 / R808-4 (task 2.20): touchdown-flag residuals -----------------------------------
-- id: nfl-td-nullified-scored-score-rose
+- id: nfl-td-nullified-scored-try-follows
   group: nfl-td-flags
   finding: R808-2
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '(text.str.contains("(?i)nullified by penalty") & ~score_rose)'
+  snippet: '(text.str.contains("(?i)nullified by penalty") & ~try_follows)'
   mutant: 'text.str.contains("(?i)nullified by penalty")'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[311218002-3112180024175]
   expected: kill
   note: >-
-    Without the score-rise guard the R.Bush 76-yard touchdown that stood (excessive celebration enforced
+    Without the try-follows guard the R.Bush 76-yard touchdown that stood (excessive celebration enforced
     on the kickoff; nflverse touchdown 1, rush_touchdown 1) is negated again: td_play / rush_td False.
+
+- id: nfl-td-nullified-scored-any-next-row
+  group: nfl-td-flags
+  finding: R840-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.col("type.text").shift(-1).over("game_id").str.contains(r"^(?:Extra Point|Two Point|Two-Point)")'
+  mutant: 'pl.col("type.text").shift(-1).over("game_id").is_not_null()'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[291129016-2911290162862]
+  expected: kill
+  note: >-
+    A guard that keeps any scored "nullified" row with a next row (not only a try) counts the 2009
+    C.Taylor holding-nullified run (nflverse touchdown 0) as a touchdown.
+
+- id: nfl-td-mistyped-return-season-floor
+  group: nfl-td-flags
+  finding: R840-1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[271209034-2712090341856]
+  expected: kill
+  note: >-
+    Without the 2009 floor the real 2007 kickoff return touchdown ESPN writes as a bare "Kickoff"
+    (nflverse touchdown 1) loses td_play.
 
 - id: nfl-td-reversed-into-safety
   group: nfl-td-flags
