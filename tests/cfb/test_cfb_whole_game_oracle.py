@@ -97,6 +97,7 @@ one.
 
 from __future__ import annotations
 
+import copy
 import functools
 import gzip
 import json
@@ -515,6 +516,34 @@ def test_timeout_ending_regulation_wp_after_is_overtime_wp_before():
     if nxt["start.pos_team.id"] != last["start.pos_team.id"]:
         pytest.fail("401761665's first overtime snap is no longer the same team's")
     assert abs(last["wp_after"] - nxt["wp_before"]) < 1e-9, (last["wp_after"], nxt["wp_before"])
+
+
+def test_timeout_ending_half_end_possession_change_wp_after_is_one_minus_next_plays():
+    # R832-4, an edited capture: 401234617's first half ends on a punt (Georgia Tech 59 -> Pitt 103)
+    # and ESPN's "End of 2nd Quarter" marker row; the edit retypes that marker row as a Timeout row
+    # (the game's own first Timeout's type, text re-clocked to 00:00), so the half ends on a Timeout.
+    # The punt changed possession and the next real play (Pitt's 2H kickoff return) is the other
+    # team's: the punt's wp_after is 1 - that play's wp_before, not 1 - the Timeout row's.
+    summary = copy.deepcopy(_load(PATHS[401234617]))
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    timeout = next(p for p in plays if (p.get("type") or {}).get("text") == "Timeout")
+    marker = next(p for p in plays if p["id"] == "401234617102997305")
+    if (marker.get("type") or {}).get("text") != "End of Half":
+        pytest.fail("401234617's first half no longer ends on an End of Half marker")
+    marker["type"] = copy.deepcopy(timeout["type"])
+    marker["text"] = "Timeout GEORGIA TECH, clock 00:00"
+    proc = CFBPlayProcess(gameId=401234617, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    f = proc.plays_frame.with_row_index("row")
+    i = f.filter(pl.col("id") == 401234617102997304)["row"].item()
+    punt, edited, nxt = (f.row(i + k, named=True) for k in range(3))
+    if edited["type.text"] != "Timeout" or nxt["type.text"] != "Kickoff":
+        pytest.fail(f"unexpected rows after the punt: {edited['type.text']}, {nxt['type.text']}")
+    if not (punt["start.pos_team.id"] != punt["end.pos_team.id"] == nxt["start.pos_team.id"]):
+        pytest.fail("the punt no longer hands the ball to the 2H kickoff's team")
+    assert punt["end_of_half"] is True and edited["end_of_half"] is False
+    assert abs(punt["wp_after"] - (1 - nxt["wp_before"])) < 1e-9, (punt["wp_after"], nxt["wp_before"])
 
 
 # --- supp-002: ESPN's degenerate end block --------------------------------------------------------

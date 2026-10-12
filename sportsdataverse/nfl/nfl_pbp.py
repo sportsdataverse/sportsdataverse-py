@@ -519,7 +519,7 @@ def _nfl_penalty_first_down() -> pl.Expr:
 
 
 def _end_of_game_row() -> pl.Expr:
-    """ESPN's "End of the game." admin row by its text: the 2002-04 feed ships it untyped (C-M2)."""
+    """ESPN's "End of the game." admin row by its text: the 2002-05 feeds ship it untyped (C-M2)."""
     return pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)
 
 

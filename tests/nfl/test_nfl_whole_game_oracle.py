@@ -27,6 +27,8 @@ game asserts the oracle plainly. Tolerances on model columns are the agreement m
 from __future__ import annotations
 
 import copy
+import gzip
+import json
 import math
 
 import polars as pl
@@ -61,7 +63,7 @@ def _all(reason: str) -> dict[int, str]:
     return dict.fromkeys(CAPTURES, reason)
 
 
-# ESPN admin row of the 2002-04 feed, typed "Unknown" (C-M2): not a play.
+# ESPN admin row of the 2002-05 feed, typed "Unknown" (C-M2): not a play.
 _ADMIN_END = pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)
 _PLAY = ~pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False) & ~_ADMIN_END
 _RUSH = _t("rush")
@@ -168,6 +170,56 @@ def test_final_play_epa_is_minus_ep_start(game_id, boundary):
     last = _half_ending_play(game_id, boundary)
     if last["scoringPlay"] is not True:
         assert last["EPA"] is not None and abs(last["EPA"] + last["EP_start"]) < 1e-9, (last["id"], last["EPA"])
+
+
+@pytest.mark.parametrize(
+    "game_id",
+    _cases(
+        {
+            261022011: (
+                "R832-10: ESPN labels the Q2 kickoff at 0:08 period 3 between two period-2 rows, so the half "
+                "'changes' on the field goal, the kickoff and the rush at 0:12-0:07 (base fired on the same 3)"
+            )
+        }
+    ),
+)
+def test_end_of_half_rows_two_per_game_three_with_overtime(game_id):
+    # R832-5: end_of_half fires on the first half's last play, regulation's last play when the game
+    # goes to overtime, and the game's last play, never on a clock-stoppage row (C-NF-12: 400791590's
+    # first half ends on a Timeout row, which must not take it from the play before it).
+    f = run(game_id).plays
+    _require(f["status_type_completed"].all(), "the capture is not a completed game")
+    stops = f.filter(pl.col("type.text").is_in(clock_stoppage_vec) & _t("end_of_half"))
+    assert stops.select("id", "type.text").rows() == []
+    expected = 3 if f["period.number"].max() >= 5 else 2
+    assert f.filter(_t("end_of_half")).height == expected, f.filter(_t("end_of_half")).select("id", "type.text").rows()
+
+
+# Games whose last real play is a scored try (fixtures/try_endings/, from nfl-raw; not whole-game captures)
+_TRY_ENDINGS = {291122008: "Extra Point Good", 271021004: "Two Point Pass"}
+
+
+@pytest.mark.parametrize("game_id", list(_TRY_ENDINGS))
+def test_try_ending_game_keeps_the_trys_own_epa(game_id):
+    # R832-3. Oracle: nflfastR helper_add_ep_wp.R:710-724 rewrites epa to 0 - ep only when sp == 0, and
+    # a good try is a scoring play (sp == 1), so the try that ends the game keeps its own EP_end -
+    # EP_start (+0.08 for a kick, +1.08 for two) instead of -EP_start (-0.92).
+    with gzip.open(FIX / "try_endings" / f"summary_{game_id}.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(nfl_fourth_down, "_try_load", lambda name: None)
+        proc = NFLPlayProcess(gameId=game_id)
+        proc.espn_nfl_pbp(summary=summary)
+        proc.run_processing_pipeline()
+    last = proc.plays_frame.filter(~pl.col("type.text").is_in(clock_stoppage_vec)).tail(1).row(0, named=True)
+    _require(last["type.text"] == _TRY_ENDINGS[game_id] and last["scoringPlay"] is True, str(last["type.text"]))
+    assert last["end_of_half"] is True
+    assert abs(last["EPA"] - (last["EP_end"] - last["EP_start"])) < 1e-9, (
+        last["EPA"],
+        last["EP_end"],
+        last["EP_start"],
+    )
+    assert last["EPA"] > 0, last["EPA"]
 
 
 # ---------------------------------------------------------------------------------------------
@@ -616,17 +668,18 @@ def test_play_column_equals_nflverse(game_id, ours, theirs, domain):
 # (corr floor, MAE ceiling, rows) per game and column: measured on HEAD, see the module docstring.
 # 2.2 (C-H2) dropped the half-ending exclusion and re-measured on every joined row (raise only):
 # EP_start on both games and EPA on 401547449 hold or raise their floors with the half-ending rows in.
-# Three (game, column) pairs would loosen a floor with them, for a reason that is not C-H2, so those
-# rows stay out of that pair only (_HELD_OUT); test_half_ending_epa_gap_is_the_ep_gap holds the EPA
-# on them to nflverse directly. 2.5 (C-M1/C-NF-6) dropped the negated-score exclusion (+2 rows per
+# Three (game, column) pairs would loosen a floor with a row, for a reason that is not C-H2, so that
+# row stays out of that pair only (_HELD_OUT) and gets its own bound in
+# test_held_out_row_sits_in_the_band (the #810 ruling: an excluded row is bounded, never dropped);
+# test_half_ending_epa_gap_is_the_ep_gap also holds the half-ending EPA to nflverse directly. 2.5 (C-M1/C-NF-6) dropped the negated-score exclusion (+2 rows per
 # game); 2.3 (C-H5) dropped the kickoff exclusion and checks the two returns it fixed separately
 # (_H5_RETURNS below).
 _MODEL = {
-    # measured on the 2.2 head, on the rows asserted: 401547449 171 (169 for wp), 401671740 157 (156 EPA)
+    # measured on the 2.2 head, on the rows asserted: 401547449 171 (170 for wp), 401671740 157 (156 EPA)
     (401547449, "EP_start", "ep"): (0.996, 0.117, 171),  # 0.99614, 0.11698
     (401547449, "EPA", "epa"): (0.990, 0.111, 171),  # 0.99049, 0.11083 (2.2; was 0.99018, 0.11118 on 169)
-    (401547449, "wp", "wp"): (0.993, 0.024, 169),  # 0.99339, 0.02323
-    (401547449, "vegas_wp", "vegas_wp"): (0.987, 0.063, 169),  # 0.98766, 0.06239
+    (401547449, "wp", "wp"): (0.993, 0.024, 170),  # 0.99338, 0.02335 (2.2 R832-1: +the regulation kneel)
+    (401547449, "vegas_wp", "vegas_wp"): (0.987, 0.063, 170),  # 0.98766, 0.06204 (the same)
     (401671740, "EP_start", "ep"): (0.996, 0.119, 157),  # 0.99617, 0.11820 (EX-1.5-d; was 0.99278, 0.12545)
     (401671740, "EPA", "epa"): (0.972, 0.132, 156),  # 0.97255, 0.13188 (EX-1.5-d; was 0.92781, 0.32713)
     (401671740, "wp", "wp"): (0.999, 0.007, 157),  # 0.99980, 0.00643
@@ -635,14 +688,28 @@ _MODEL = {
 # ESPN play ids the floors above leave out, per (game, column), with the value the pair reads with them:
 # * 401671740 EPA: the final kneel (EPA -3.998 == -EP_start, nflverse -4.205 == -ep): its 0.207 gap is
 #   the EP model's (EP_start 3.998 vs ep 4.205); 0.97429, 0.13236.
-# * 401547449 wp / vegas_wp: the regulation-ending kneel and the overtime touchdown. Start-of-play wp
-#   does not read end_of_half; sdv-py's wp sits below nflverse's on every overtime row of that game
-#   (0.53-0.63 vs 0.65-0.89, the rows already counted in the floors). With them: 0.99159, 0.02490 and
-#   0.98691, 0.06300.
+# * 401547449 wp / vegas_wp: the overtime touchdown. Start-of-play wp does not read end_of_half;
+#   sdv-py's wp sits below nflverse's on every overtime row of that game (0.48-0.63 vs 0.56-0.89, the
+#   other rows already counted in the floors; EX-2.2-a). With it: 0.99159, 0.02490 and 0.98691, 0.06300.
 _HELD_OUT = {
     (401671740, "EPA"): (4016717404375,),
-    (401547449, "wp"): (4015474494332, 4015474494565),
-    (401547449, "vegas_wp"): (4015474494332, 4015474494565),
+    (401547449, "wp"): (4015474494565,),
+    (401547449, "vegas_wp"): (4015474494565,),
+}
+# Each held-out row's bound: (band pair's ours, theirs, the asserted rows its error belongs with). The
+# kneel's EPA gap is its EP_start gap, so the EP_start pair's asserted rows bound it (max 0.960; the
+# kneel 0.207). The overtime touchdown is bounded by its pair's asserted overtime rows (wp max 0.2611,
+# vegas_wp 0.2301; the touchdown 0.2880 and 0.2262).
+_HELD_OUT_BAND = {
+    (401671740, "EPA", "epa", 4016717404375): ("EP_start", "ep", pl.lit(True)),
+    (401547449, "wp", "wp", 4015474494565): ("wp", "wp", pl.col("period") >= 5),
+    (401547449, "vegas_wp", "vegas_wp", 4015474494565): ("vegas_wp", "vegas_wp", pl.col("period") >= 5),
+}
+_HELD_OUT_BAND_KNOWN = {
+    (401547449, "wp", "wp", 4015474494565): (
+        "EX-2.2-a: sdv-py's overtime wp drifts below nflverse's down 401547449's overtime drive; the "
+        "touchdown misses by 0.288 against the overtime rows' 0.261"
+    ),
 }
 # The two kickoff returns 2.3 (C-H5) fixed in 401671740 (GSIS play_id). The floors above stay on the
 # population they were measured on (the returns left out); test_end_down_minus_one_returns_sit_in_the_
@@ -654,17 +721,47 @@ _H5_RETURNS = {401671740: (39, 2997)}
 @pytest.mark.parametrize(("game_id", "ours", "theirs"), list(_MODEL), ids=lambda v: str(v))
 def test_model_column_agrees_with_nflverse(game_id, ours, theirs):
     corr_floor, mae_ceiling, rows = _MODEL[(game_id, ours, theirs)]
-    j = _joined(game_id).filter(
-        ~pl.col("id").is_in(_HELD_OUT.get((game_id, ours), ()))
-        & ~pl.col("play_id").is_in(_H5_RETURNS.get(game_id, ()))
-        & pl.col(ours).is_not_null()
-        & pl.col(f"{theirs}_nv").is_not_null()
-    )
+    j = _asserted(game_id, ours, theirs)
     a, b = pl.col(ours).cast(pl.Float64), pl.col(f"{theirs}_nv").cast(pl.Float64)
     corr, mae = j.select(pl.corr(a, b).alias("corr"), (a - b).abs().mean().alias("mae")).row(0)
     assert j.height >= rows
     assert corr >= corr_floor, corr
     assert mae <= mae_ceiling, mae
+
+
+def _asserted(game_id: int, ours: str, theirs: str) -> pl.DataFrame:
+    """The rows test_model_column_agrees_with_nflverse asserts for one pair."""
+    return _joined(game_id).filter(
+        ~pl.col("id").is_in(_HELD_OUT.get((game_id, ours), ()))
+        & ~pl.col("play_id").is_in(_H5_RETURNS.get(game_id, ()))
+        & pl.col(ours).is_not_null()
+        & pl.col(f"{theirs}_nv").is_not_null()
+    )
+
+
+def _err(ours: str, theirs: str) -> pl.Expr:
+    return (pl.col(ours).cast(pl.Float64) - pl.col(f"{theirs}_nv").cast(pl.Float64)).abs()
+
+
+@pytest.mark.parametrize(
+    "key",
+    [
+        pytest.param(k, marks=_xfail(_HELD_OUT_BAND_KNOWN[k])) if k in _HELD_OUT_BAND_KNOWN else k
+        for k in _HELD_OUT_BAND
+    ],
+    ids=lambda k: f"{k[0]}-{k[1]}-{k[3]}",
+)
+def test_held_out_row_sits_in_the_band(key):
+    game_id, ours, theirs, play = key
+    band_ours, band_theirs, domain = _HELD_OUT_BAND[key]
+    assert {(g, c) for g, c, _, _ in _HELD_OUT_BAND} == set(_HELD_OUT), "every held-out pair has a band"
+    assert play in _HELD_OUT[(game_id, ours)]
+    row = _joined(game_id).filter(pl.col("id") == play)
+    _require(row.height == 1, f"{play} joins {row.height} nflverse rows")
+    band_rows = _asserted(game_id, band_ours, band_theirs).filter(domain)
+    _require(band_rows.height > 0, "no asserted rows to band against")
+    band = band_rows.select(_err(band_ours, band_theirs).max()).item()
+    assert row.select(_err(ours, theirs)).item() <= band
 
 
 @pytest.mark.parametrize("game_id", tuple(SLICES))
