@@ -8555,6 +8555,18 @@ class CFBPlayProcess(object):
             play_df = play_df.with_columns((pl.Null).alias(column))
         return play_df
 
+    def __documented_dtypes(self, play_df):
+        """Widen the Float32 columns the XGBoost scorers leave (the WP family, ``first_down_prob``,
+        ``prob_2pt``, ``drive_start``) to their documented Float64, after every consumer has run.
+
+        Twin of ``NFLPlayProcess.__documented_dtypes`` (the CFB-vs-NFL shared-column dtype test binds
+        the two processors). float32 -> float64 is exact, so no value changes. The widened names are
+        kept so :meth:`create_box_score` narrows them back when re-run on ``plays_frame``.
+        """
+        widened = [c for c, dtype in play_df.schema.items() if dtype == pl.Float32]
+        self._widened_float32 = tuple(dict.fromkeys((*getattr(self, "_widened_float32", ()), *widened)))
+        return play_df.with_columns(pl.col(pl.Float32).cast(pl.Float64))
+
     def create_box_score(self, play_df):
         """Build a per-team and per-player advanced box score from a processed
         plays frame.
@@ -8594,6 +8606,13 @@ class CFBPlayProcess(object):
         # have to run the pipeline before pulling this in
         if self.ran_pipeline == False:
             self.run_processing_pipeline()
+        # The box aggregates and rounds (``pl.col(pl.Float32).round(2)``) at the precision the
+        # scorers emit, but plays_frame publishes those columns Float64 (__documented_dtypes).
+        # Narrowing them back here lets a caller re-run the box on plays_frame (Game on Paper's
+        # ?span= boxes) and get advBoxScore's values; they are widened float32, so this is exact.
+        play_df = play_df.with_columns(
+            pl.col(c).cast(pl.Float32) for c in getattr(self, "_widened_float32", ()) if c in play_df.columns
+        )
 
         box_score_columns = [
             "completion",
@@ -10160,6 +10179,7 @@ class CFBPlayProcess(object):
                     self.plays_json = self.__add_two_pt_probs(self.plays_json)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
+                self.plays_json = self.plays_json.pipe(self.__documented_dtypes)
                 # Keep the enriched polars frame: plays_json becomes a list of
                 # dicts below (and callers mutate it), so consumers that need
                 # to re-aggregate windows (Game on Paper's ?span= boxes filter
@@ -10284,7 +10304,9 @@ class CFBPlayProcess(object):
         keep = ["__fourth_row_idx"] + [c for c in decision_cols if c in scored.columns]
         scored_pl = pl.from_pandas(scored[keep]).with_columns(pl.col("__fourth_row_idx").cast(pl.UInt32))
 
-        plays = plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
+        plays = self.__documented_dtypes(
+            plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
+        )
         # keep the retained frame in sync -- consumers re-aggregating windows
         # (see run_processing_pipeline) must see the added columns too
         self.plays_frame = plays
@@ -10331,7 +10353,9 @@ class CFBPlayProcess(object):
             # plain run already carries the columns; recompute here for explicit calls.
             self.run_processing_pipeline()
 
-        plays = self.__add_two_pt_probs(pl.DataFrame(self.plays_json, infer_schema_length=None))
+        plays = self.__documented_dtypes(
+            self.__add_two_pt_probs(pl.DataFrame(self.plays_json, infer_schema_length=None))
+        )
         # keep the retained frame in sync -- consumers re-aggregating windows
         # (see run_processing_pipeline) must see the added columns too
         self.plays_frame = plays

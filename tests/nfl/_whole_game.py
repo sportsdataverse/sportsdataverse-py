@@ -38,6 +38,7 @@ class Run(NamedTuple):
     summary: dict  # the capture as committed (ESPN's own boxscore is an oracle)
     epa_input: pl.DataFrame  # the frame the pipeline handed to ep_wp.calculate_epa
     wpa_input: pl.DataFrame  # the frame the pipeline handed to ep_wp.calculate_wpa
+    proc: NFLPlayProcess  # the processor itself (Game on Paper re-runs create_box_score on plays_frame)
 
 
 def load_summary(game_id: int) -> dict:
@@ -68,4 +69,4 @@ def run(game_id: int, fourth_down_models: bool = False) -> Run:
         proc = NFLPlayProcess(gameId=game_id)
         proc.espn_nfl_pbp(summary=summary)  # a supplied summary never touches the network
         game = proc.run_processing_pipeline()
-    return Run(proc.plays_frame.sort("game_play_number"), game, summary, seen["epa"], seen["wpa"])
+    return Run(proc.plays_frame.sort("game_play_number"), game, summary, seen["epa"], seen["wpa"], proc)

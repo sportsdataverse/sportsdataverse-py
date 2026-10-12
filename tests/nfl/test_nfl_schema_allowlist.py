@@ -10,6 +10,7 @@ such a model (C-M7, ``prob_2pt``) has its own test below, which loads it or skip
 from __future__ import annotations
 
 import functools
+import json
 from collections import defaultdict
 from pathlib import Path
 
@@ -81,3 +82,20 @@ def test_processed_plays_carry_no_float32():
     # (wp_before ... wpa, drive_start) is documented `double` and matches nflverse's Float64.
     float32 = {(g, c) for g in CAPTURES for c, dtype in run(g).plays.schema.items() if dtype == pl.Float32}
     assert sorted(float32) == []
+
+
+def _canon(v):
+    """advBoxScore with every list sorted (its group_by row order is not deterministic) and NaN named."""
+    if isinstance(v, list):
+        return sorted((_canon(x) for x in v), key=lambda x: json.dumps(x, sort_keys=True, default=str))
+    if isinstance(v, dict):
+        return {k: _canon(x) for k, x in v.items()}
+    return "nan" if isinstance(v, float) and v != v else v
+
+
+@pytest.mark.parametrize("game_id", CAPTURES)
+def test_box_score_rerun_on_plays_frame_reproduces_adv_box_score(game_id):
+    # R797-2 (task 2.17): Game on Paper's ?span= boxes re-run create_box_score on plays_frame, which
+    # publishes the WP family Float64; the box must still aggregate and round as advBoxScore did.
+    r = run(game_id)
+    assert _canon(r.proc.create_box_score(r.proc.plays_frame)) == _canon(r.game["advBoxScore"])

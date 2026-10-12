@@ -1,3 +1,3 @@
-- **NFL:** `NFLPlayProcess` plays keep their documented dtypes: the WP family, `first_down_prob`, `prob_2pt` and
-  `drive_start` are Float64 whether or not a model scored (Float32 when it did), and `teamParticipants` has one
-  struct field order; no value changes. (#797)
+- **NFL, CFB:** processed plays keep their documented Float64 for the EP/WP family and the model probabilities
+  (Float32 when a model scored), with no value change, and NFL `teamParticipants` has one struct field order;
+  `create_box_score(plays_frame)` still reproduces `advBoxScore` exactly. (#797)
