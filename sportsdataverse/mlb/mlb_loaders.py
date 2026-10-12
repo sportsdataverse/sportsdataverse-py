@@ -21,6 +21,8 @@ __all__ = [
     "load_mlb_pbp",
     "load_mlb_pitches",
     "load_mlb_runners",
+    "load_mlb_statcast",
+    "load_mlb_schedule",
     "load_mlb_expected_stats",
     "load_mlb_expected_hr",
     "load_mlb_batter_projection",
@@ -380,6 +382,234 @@ def load_mlb_runners(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mlb_runners: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mlb_statcast(seasons, return_as_pandas: bool = False):
+    """Load mlb_statcast (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_statcast
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2015).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                                 |type    |
+        |:----------------------------------------|:-------|
+        |pitch_type                               |String  |
+        |game_date                                |String  |
+        |release_speed                            |Float64 |
+        |release_pos_x                            |Float64 |
+        |release_pos_z                            |Float64 |
+        |player_name                              |String  |
+        |batter                                   |Int64   |
+        |pitcher                                  |Int64   |
+        |events                                   |String  |
+        |description                              |String  |
+        |spin_dir                                 |Float64 |
+        |spin_rate_deprecated                     |Float64 |
+        |break_angle_deprecated                   |Float64 |
+        |break_length_deprecated                  |Float64 |
+        |zone                                     |Float64 |
+        |des                                      |String  |
+        |game_type                                |String  |
+        |stand                                    |String  |
+        |p_throws                                 |String  |
+        |home_team                                |String  |
+        |away_team                                |String  |
+        |type                                     |String  |
+        |hit_location                             |Float64 |
+        |bb_type                                  |String  |
+        |balls                                    |Int64   |
+        |strikes                                  |Int64   |
+        |game_year                                |Int64   |
+        |pfx_x                                    |Float64 |
+        |pfx_z                                    |Float64 |
+        |plate_x                                  |Float64 |
+        |plate_z                                  |Float64 |
+        |on_3b                                    |Int64   |
+        |on_2b                                    |Int64   |
+        |on_1b                                    |Int64   |
+        |outs_when_up                             |Int64   |
+        |inning                                   |Int64   |
+        |inning_topbot                            |String  |
+        |hc_x                                     |Float64 |
+        |hc_y                                     |Float64 |
+        |tfs_deprecated                           |Float64 |
+        |tfs_zulu_deprecated                      |Float64 |
+        |umpire                                   |Float64 |
+        |sv_id                                    |String  |
+        |vx0                                      |Float64 |
+        |vy0                                      |Float64 |
+        |vz0                                      |Float64 |
+        |ax                                       |Float64 |
+        |ay                                       |Float64 |
+        |az                                       |Float64 |
+        |sz_top                                   |Float64 |
+        |sz_bot                                   |Float64 |
+        |hit_distance_sc                          |Float64 |
+        |launch_speed                             |Float64 |
+        |launch_angle                             |Float64 |
+        |effective_speed                          |Float64 |
+        |release_spin_rate                        |Float64 |
+        |release_extension                        |Float64 |
+        |game_pk                                  |Int64   |
+        |fielder_2                                |Int64   |
+        |fielder_3                                |Int64   |
+        |fielder_4                                |Int64   |
+        |fielder_5                                |Int64   |
+        |fielder_6                                |Int64   |
+        |fielder_7                                |Int64   |
+        |fielder_8                                |Int64   |
+        |fielder_9                                |Int64   |
+        |release_pos_y                            |Float64 |
+        |estimated_ba_using_speedangle            |Float64 |
+        |estimated_woba_using_speedangle          |Float64 |
+        |woba_value                               |Float64 |
+        |woba_denom                               |Float64 |
+        |babip_value                              |Float64 |
+        |iso_value                                |Float64 |
+        |launch_speed_angle                       |Float64 |
+        |at_bat_number                            |Int64   |
+        |pitch_number                             |Int64   |
+        |pitch_name                               |String  |
+        |home_score                               |Int64   |
+        |away_score                               |Int64   |
+        |bat_score                                |Int64   |
+        |fld_score                                |Int64   |
+        |post_away_score                          |Int64   |
+        |post_home_score                          |Int64   |
+        |post_bat_score                           |Int64   |
+        |post_fld_score                           |Int64   |
+        |if_fielding_alignment                    |String  |
+        |of_fielding_alignment                    |String  |
+        |spin_axis                                |Float64 |
+        |delta_home_win_exp                       |Float64 |
+        |delta_run_exp                            |Float64 |
+        |bat_speed                                |Float64 |
+        |swing_length                             |Float64 |
+        |miss_distance                            |Float64 |
+        |estimated_slg_using_speedangle           |Float64 |
+        |delta_pitcher_run_exp                    |Float64 |
+        |hyper_speed                              |Float64 |
+        |home_score_diff                          |Int64   |
+        |bat_score_diff                           |Int64   |
+        |home_win_exp                             |Float64 |
+        |bat_win_exp                              |Float64 |
+        |age_pit_legacy                           |Int64   |
+        |age_bat_legacy                           |Int64   |
+        |age_pit                                  |Int64   |
+        |age_bat                                  |Int64   |
+        |n_thruorder_pitcher                      |Int64   |
+        |n_priorpa_thisgame_player_at_bat         |Int64   |
+        |pitcher_days_since_prev_game             |Float64 |
+        |batter_days_since_prev_game              |Float64 |
+        |pitcher_days_until_next_game             |Float64 |
+        |batter_days_until_next_game              |Float64 |
+        |api_break_z_with_gravity                 |Float64 |
+        |api_break_x_arm                          |Float64 |
+        |api_break_x_batter_in                    |Float64 |
+        |arm_angle                                |Float64 |
+        |attack_angle                             |Float64 |
+        |attack_direction                         |Float64 |
+        |swing_path_tilt                          |Float64 |
+        |intercept_ball_minus_batter_pos_x_inches |Float64 |
+        |intercept_ball_minus_batter_pos_y_inches |Float64 |
+        |season                                   |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
+
+    Example:
+        Quick start::
+
+            load_mlb_statcast(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2015:
+            raise SeasonNotFoundError("season cannot be less than 2015")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_statcast/mlb_statcast_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mlb_statcast: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["on_1b", "on_2b", "on_3b"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mlb_schedule(seasons, return_as_pandas: bool = False):
+    """Load mlb_schedules (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_schedules
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1988).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name           |type   |
+        |:------------------|:------|
+        |game_pk            |Int64  |
+        |game_date          |String |
+        |game_datetime      |String |
+        |season             |Int64  |
+        |game_type          |String |
+        |status_code        |String |
+        |detailed_state     |String |
+        |abstract_state     |String |
+        |home_team_id       |Int64  |
+        |home_team_name     |String |
+        |home_score         |Int64  |
+        |away_team_id       |Int64  |
+        |away_team_name     |String |
+        |away_score         |Int64  |
+        |venue_id           |Int64  |
+        |venue_name         |String |
+        |double_header      |String |
+        |game_number        |Int64  |
+        |series_description |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1988.
+
+    Example:
+        Quick start::
+
+            load_mlb_schedule(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1988:
+            raise SeasonNotFoundError("season cannot be less than 1988")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_schedules/mlb_schedule_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mlb_schedule: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

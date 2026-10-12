@@ -143,6 +143,7 @@ Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `fox_position_group` | String | Fox position group label (NA if unmatched). |
 | `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
 | `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
+| `kp_player_id` | String | KenPom player id (string), matched by hoopR-mbb-data on the normalized name within the ESPN team (a repeated name broken by jersey), then on last name plus jersey. Null for players KenPom does not list, which includes every ESPN roster row without minutes, and for every row when the build ran without the private KenPom capture. Added by the data repo, so the live player-crosswalk builder does not emit it. |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 | `match_keys` | String | NA (reserved for future use). |

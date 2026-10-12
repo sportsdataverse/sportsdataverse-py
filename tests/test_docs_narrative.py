@@ -56,6 +56,13 @@ _CLAUDE_STALE = [
     "4-line files",
     "`docs`, `models`, `all`",
     "README has Standard pip / Modern uv / Conda",
+    # polars floor raised to 2 (2026-10-11): the 1.x-and-2.x framing must not come back.
+    "polars 1.x and 2.x",
+    "`polars>=1.0,<3`",
+    "the 1.36 resolution",
+    "run on both 1.x and 2.0",
+    "don't exist in 1.x",
+    "polars 1.x/2.x",
 ]
 
 _CLAUDE_CURRENT = [
@@ -70,6 +77,9 @@ _CLAUDE_CURRENT = [
     "architecture/codegen.md",
     "main (latest)",
     "VERSIONS_TO_KEEP=3",
+    "`polars>=2.0,<3`",
+    "polars 1.x is no longer supported",
+    "replacements are available now that the floor is 2.0",
 ]
 
 _CLAUDE_STRUCTURE_DIRS = [
@@ -193,6 +203,9 @@ _COPILOT_STALE = [
     "Reference-docs build toolchain (codegen)",
     "CI runs **Python 3.13.2 only**",
     "No other version is exercised",
+    "Polars 1.x and 2.x",
+    "`polars>=1.0,<3`",
+    "the floor stays 1.0",
 ]
 
 _COPILOT_CURRENT = [
@@ -210,6 +223,8 @@ _COPILOT_CURRENT = [
     "400 / 422",
     "architecture/codegen.md",
     "returns the last response",
+    "`polars>=2.0,<3`",
+    "polars 1.x is not supported",
 ]
 
 # Copilot uses Title Case headings; these match the file's own convention.
@@ -261,6 +276,7 @@ _README_STALE = [
     "once we add a PEP 735",
     "from the next release (0.1.5+)",
     "git+https://github.com/sportsdataverse/sportsdataverse-py' sdv-docs`",
+    "polars 1.x or 2.x",
 ]
 
 _README_CURRENT = [
@@ -276,6 +292,7 @@ _README_CURRENT = [
     "cbs_napi",
     "### Errors (0.1.5)",
     "AssetFetchError",
+    "polars 2.x (`polars>=2.0,<3`)",
 ]
 
 _CONTRIBUTING_STALE = [
@@ -287,6 +304,9 @@ _CONTRIBUTING_STALE = [
     "CI runs **3.13.2 only**",
     "and ceiling (3.14) at minimum",
     "No other version is exercised",
+    "Polars 1.x and 2.x",
+    "`polars>=1.0,<3`",
+    "the floor stays 1.0",
 ]
 
 _CONTRIBUTING_CURRENT = [
@@ -301,6 +321,8 @@ _CONTRIBUTING_CURRENT = [
     "`removed_in` is a commitment",
     "architecture/codegen.md",
     "sdv_docs/",
+    "`polars>=2.0,<3`",
+    "polars 1.x is not supported",
 ]
 
 
@@ -322,6 +344,12 @@ def test_contributing_drops_the_stale_claim(stale):
 @pytest.mark.parametrize("current", _CONTRIBUTING_CURRENT)
 def test_contributing_states_the_current_fact(current):
     assert current in flat("contributing")
+
+
+def test_docs_state_the_polars_floor_pyproject_declares():
+    """The four docs above assert `polars>=2.0,<3`; this keeps that string tied to the real pin."""
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert '"polars>=2.0,<3",' in pyproject
 
 
 # --- the docs-site conceptual pages ---------------------------------------

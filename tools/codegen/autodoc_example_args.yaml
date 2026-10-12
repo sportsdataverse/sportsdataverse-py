@@ -169,6 +169,16 @@ nba:
   fox_nba_team_roster: {team_id: '1'}  # 21 rows x 9 cols
   fox_nba_team_stats: {team_id: '1'}  # 16 rows x 6 cols
   load_nba_stats_leaguedash: {family: player_stats_advanced, seasons: 2024}  # 786 rows x 83 cols
+  load_nba_stats_synergy: {seasons: 2024}
+  load_nba_stats_hustle_player: {seasons: 2024}
+  load_nba_stats_hustle_team: {seasons: 2024}
+  load_nba_stats_matchups: {seasons: 2024}
+  load_nba_stats_matchups_rollup: {seasons: 2024}
+  load_nba_stats_draft_combine_stats: {seasons: 2024}
+  load_nba_stats_draft_combine_anthro: {seasons: 2024}
+  load_nba_stats_draft_combine_drills: {seasons: 2024}
+  load_nba_stats_draft_combine_spot_shooting: {seasons: 2024}
+  load_nba_stats_draft_combine_nonstationary_shooting: {seasons: 2024}
   nba_raw_store_season_frame: {endpoint: leaguegamelog, season: 2024, variant: regular-season, raw_store_dir: 'https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json'}  # 2460 rows x 29 cols
   load_darko_dpm: {path: tests/fixtures/nba_oracle/darko_dpm_sample.csv}  # 4 rows x 5 cols
   load_dunks_threes_stats: {path: tests/fixtures/nba_oracle/dunks_threes_sample.csv}  # 3 rows x 5 cols
@@ -211,6 +221,11 @@ nba:
   nba_war: {ratings: {$call: nba.nba_rapm.nba_rapm, args: {possessions: {$call: nba.nba_possessions.nba_possessions, args: {game_id: '0022300002', raw_store_dir: 'https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json'}}}}, poss: {$call: nba.nba_rapm.nba_rapm, args: {possessions: {$call: nba.nba_possessions.nba_possessions, args: {game_id: '0022300002', raw_store_dir: 'https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json'}}}}, rating_col: rapm, poss_col: off_poss, replacement_level: -2.0, pts_per_win: 250.0}  # 19 rows x 2 cols
   in_game_features: {pbp: {$call: nba.load_nba_pbp, args: {seasons: 2024}}, pregame_home_prob: 0.62}  # 614447 rows x 5 cols
   nba_in_game_win_prob: {pbp: {$call: nba.load_nba_pbp, args: {seasons: 2024}}, pregame_home_prob: 0.62}  # 614447 rows x 6 cols
+  score_win_prob: {pbp: {$call: nba.helper_nba_play_by_play, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458}}}}}
+  ot_adjusted_seconds: {pbp: {$call: nba.helper_nba_play_by_play, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458}}}}}
+  shot_coordinates: {pbp: {$call: nba.helper_nba_play_by_play, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458}}}}}
+  team_game_rates: {team_box: {$call: nba.helper_nba_team_box, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458}}}}}
+  player_game_rates: {player_box: {$call: nba.helper_nba_player_box, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458}}}}, team_box: {$call: nba.helper_nba_team_box, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458}}}}}
   realgm_coaches: {}  # 31 rows x 6 cols
   realgm_future_free_agents: {}  # 910 rows x 13 cols
   realgm_gms: {}  # 22 rows x 6 cols (needed SDV_PY_REALGM_DELAY=8)

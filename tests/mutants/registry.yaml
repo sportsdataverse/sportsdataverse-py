@@ -291,36 +291,38 @@
   expected: kill
   note: calculate_win_probability scores the flag as 1 - is_home, whatever the caller's column says.
 
-# --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012) ----------------
+# --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012; main's #778) ------
 - id: cfb-kickoff-touchback-75-from-2014
   group: cfb-touchback
   finding: C-H4
   file: sportsdataverse/cfb/cfb_pbp.py
   snippet: |-
-    pl.when((kick_mask).and_(pl.col("season") > 2013))
+    pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
                     .then(75)
   mutant: |-
-    pl.when((kick_mask).and_(pl.col("season") > 2013))
+    pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
                     .then(80)
-  test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (400547866 or 401628455)"
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (322590228 or 400547866 or 401628455)"
   expected: kill
-  note: a regression of the 2014+ spot; the 2012-13 rows stay strict-xfail until 3.1
+  note: >-
+    a regression of the 75 spot from 2012 (2012's 322590228, 2014+'s 400547866 / 401628455 go red).
+    Re-keyed on main's #778 (2b73fa5a5e) snippet; the id keeps its old name so ledgers still resolve.
 
 - id: cfb-kickoff-touchback-80-through-2011
   group: cfb-touchback
   finding: C-H4
   file: sportsdataverse/cfb/cfb_pbp.py
   snippet: |-
-    .when((kick_mask).and_(pl.col("season") <= 2013))
+    .when(kick_mask)
                     .then(80)
   mutant: |-
-    .when((kick_mask).and_(pl.col("season") <= 2013))
+    .when(kick_mask)
                     .then(75)
-  test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (313090025 or 243040130 or 322590228)"
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (313090025 or 243040130)"
   expected: kill
   note: >-
     cfbfastR's unconditional 75 (create_epa.R:233), the parity "fix" the owner ruled against: 2011's
-    313090025 and 2004's 243040130 go red, 2012's 322590228 strict-XPASSes
+    313090025 and 2004's 243040130 go red. Re-keyed on main's #778 (2b73fa5a5e) snippet.
 
 # --- C-H1 (CFB twin) / C-NF-3: the CFB rushing decomposition --------------------------------------
 - id: cfb-second-level-yards-offset
@@ -359,8 +361,8 @@
 - id: season-literal-gate-new-literal
   finding: C-T3
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '.then(pl.when(pl.col("season") > 2013).then(pl.lit(75)).otherwise(pl.lit(80)))'
-  mutant: '.then(pl.when(pl.col("season") > 2011).then(pl.lit(75)).otherwise(pl.lit(80)))'
+  snippet: 'kick_spot = pl.when(pl.col("season") <= 2004)'
+  mutant: 'kick_spot = pl.when(pl.col("season") <= 2005)'
   test: tests/test_no_inline_season_literals.py
   expected: kill
   note: a literal without an allowlist row (and an allowlisted one gone) fails the gate

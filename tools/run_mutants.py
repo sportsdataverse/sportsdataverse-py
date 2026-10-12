@@ -28,6 +28,7 @@ Usage::
 
     uv run --frozen python tools/run_mutants.py            # run every row
     uv run --frozen python tools/run_mutants.py --only ratings-level   # one group / finding / id
+    uv run --frozen python tools/run_mutants.py --shard 2/4  # rows 1, 5, 9, ... (0-based) of 4 CI shards
     uv run --frozen python tools/run_mutants.py --list     # print the rows, run nothing
     uv run --frozen python tools/run_mutants.py --dry-run  # validate snippets + tests, run nothing
 """
@@ -109,6 +110,22 @@ def select(rows: List[Dict[str, Any]], only: Optional[str]) -> List[Dict[str, An
     picked = [r for r in rows if only in (r["id"], r["finding"], group_of(r))]
     if not picked:
         raise SystemExit(f"--only {only}: no row has that id, finding or group")
+    return picked
+
+
+def shard(rows: List[Dict[str, Any]], spec: Optional[str]) -> List[Dict[str, Any]]:
+    """Shard ``I/N`` (1-based) of the rows, round-robin by registry order: the N shards partition the rows."""
+    if not spec:
+        return rows
+    try:
+        i, n = (int(x) for x in spec.split("/"))
+    except ValueError:
+        raise SystemExit(f"--shard {spec}: expected I/N, e.g. 2/4") from None
+    if not 1 <= i <= n:
+        raise SystemExit(f"--shard {spec}: need 1 <= I <= N")
+    picked = rows[i - 1 :: n]
+    if not picked:  # a matrix wider than the registry must not report a green shard that ran nothing
+        raise SystemExit(f"--shard {spec}: selects no rows ({len(rows)} rows across {n} shards)")
     return picked
 
 
@@ -199,12 +216,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--registry", type=Path, default=REGISTRY)
     ap.add_argument("--root", type=Path, default=ROOT, help="source tree the rows' paths are relative to")
     ap.add_argument("--only", help="run the rows with this id, finding or group only")
+    ap.add_argument("--shard", help="run shard I/N (1-based, round-robin) of the selected rows")
     ap.add_argument("--list", action="store_true", help="print the rows and exit")
     ap.add_argument("--dry-run", action="store_true", help="validate every snippet and test path; run nothing")
     args = ap.parse_args(argv)
 
-    rows = select(load_registry(args.registry), args.only)
-    print(f"REGISTRY: {len(rows)} rows ({args.registry})")
+    rows = shard(select(load_registry(args.registry), args.only), args.shard)
+    print(f"REGISTRY: {len(rows)} rows ({args.registry}){f' shard {args.shard}' if args.shard else ''}")
     if args.list or args.dry_run:
         bad = 0
         for r in rows:
