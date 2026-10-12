@@ -4,7 +4,7 @@
 # has no graded finding of its own. rule: the sdv-internal-refs rules/*.yaml id, when the catalogue has one.
 # The list may only shrink: main's #778 removed the C-H4 touchback rows (_KICKOFF_2012_RULES_FROM); plan task
 # 3.11 removes the other CFB/NFL processor rows. A literal that moves into a constant fails the gate until its
-# row is deleted.
+# row's count is lowered to the inline occurrences left, or the row is deleted when none remain.
 - file: sportsdataverse/cfb/cfb_pbp.py
   scope: 'CFBPlayProcess.__add_play_type_flags'
   snippet: 'pl.col("season") >= 2018'
