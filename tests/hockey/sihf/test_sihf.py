@@ -171,11 +171,26 @@ def test_a_phase_without_a_count_keeps_its_name():
     assert parse_sihf_phases(raw).rows() == [(2026, 657, "Regular Season", None)]
 
 
+@pytest.mark.parametrize(
+    "entry",
+    [
+        {"alias": "657"},
+        {"alias": "657", "name": "  "},
+        {"alias": "657", "name": ["x"]},
+        {"alias": "657", "name": {"a": 1}},
+    ],
+)
+def test_a_phase_name_of_the_wrong_type_is_null(entry):
+    raw = _load(PHASES)
+    raw["filters"][1]["entries"] = [entry]
+    assert parse_sihf_phases(raw).rows() == [(2026, 657, None, None)]
+
+
 @pytest.mark.parametrize("payload", [None, {}, [], "x", {"filters": [{"alias": "Season", "selected": "2026"}]}])
 def test_phases_parser_empty_keeps_its_columns(payload):
     df = parse_sihf_phases(payload)
     assert df.height == 0
-    assert df.columns == ["season", "phase_id", "phase_name", "n_games"]
+    assert df.schema == {"season": pl.Int64, "phase_id": pl.Int64, "phase_name": pl.String, "n_games": pl.Int64}
 
 
 # --- the game page ------------------------------------------------------------

@@ -2483,11 +2483,14 @@ def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
         result.setdefault("hockey", [])
         if ht not in result["hockey"]:
             result["hockey"].append(ht)
-    # And the homes nested from their first release (sihf), under their container.
-    for home, mod in _NESTED_HOMES.items():
-        members = result.setdefault(mod.split(".")[0], [])
-        if home not in members:
-            members.append(home)
+    # And the homes nested from their first release (sihf), under their container. The container
+    # imports its direct child, which is the home itself only one level down: ``a.b.home`` puts
+    # ``b`` under ``a`` (``b``'s own ``__init__`` then reaches ``home``).
+    for mod in _NESTED_HOMES.values():
+        container, child = mod.split(".")[:2]
+        members = result.setdefault(container, [])
+        if child not in members:
+            members.append(child)
     return {g: sorted(members) for g, members in result.items()}
 
 
@@ -4221,7 +4224,7 @@ def render_autodoc_page(prefix: str | None, corpus: str) -> str | None:
         module = "sportsdataverse"
     else:
         title = f"{_doc_display_name(prefix)} — additional Python functions"
-        module = f"sportsdataverse.{prefix}"
+        module = _home_module(prefix)
     template = render.ENV.get_template("autodoc_page.md.jinja")
     return template.render(title=title, module=module, sidebar_position=50, groups=groups)
 

@@ -153,6 +153,20 @@ def test_autodoc_heading_is_the_plain_name_and_the_signature_follows():
     assert "### espn_mbb_pbp {#espn_mbb_pbp}\n\n`espn_mbb_pbp(" in md
 
 
+def test_autodoc_page_names_a_nested_home_by_its_full_path(monkeypatch):
+    # A home nested two levels down must name its real import path, not ``sportsdataverse.<prefix>``.
+    monkeypatch.setattr(generate, "_home_module", lambda p: f"sportsdataverse.basketball.ncaa.{p}")
+    md = generate.render_autodoc_page("mbb", "")
+    assert "`sportsdataverse.basketball.ncaa.mbb`" in md
+
+
+def test_container_groups_list_a_two_level_home_by_its_direct_child(monkeypatch):
+    monkeypatch.setattr(generate, "_NESTED_HOMES", {"sihf": "hockey.sihf", "zzz": "hockey.swiss.zzz"})
+    hockey = generate._container_groups({})["hockey"]
+    assert "sihf" in hockey and "swiss" in hockey
+    assert "zzz" not in hockey
+
+
 def test_parameters_page_escapes_union_types():
     md = generate.render_parameters_page()
     assert "| Python | API | Type | Default | Pattern | Nullable |" in md
