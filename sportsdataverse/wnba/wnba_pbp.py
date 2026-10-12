@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._espn_basketball_pbp import period_end_seconds as _period_end_seconds
 from sportsdataverse._espn_basketball_pbp import pickcenter_odds as _pickcenter_odds
 from sportsdataverse._espn_basketball_pbp import team_timeout_called as _team_timeout_called
 from sportsdataverse._codegen_runtime import _download_json
@@ -318,8 +319,8 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
         .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
         .unnest("clock.mm")
         .with_columns(
-            pl.col("clock.minutes").cast(pl.Float32),
-            pl.col("clock.seconds").cast(pl.Float32),
+            pl.col("clock.minutes").cast(pl.Int32),
+            pl.col("clock.seconds").cast(pl.Float64),
             _team_timeout_called(pbp_txt["plays"].columns, init, "home").alias("homeTimeoutCalled"),
             _team_timeout_called(pbp_txt["plays"].columns, init, "away").alias("awayTimeoutCalled"),
         )
@@ -374,77 +375,10 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
         .get_column("id")
         .to_list()
     )
-    # Pos Team - Start and End Id
-    if is_halves_era:
-        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
-            pl.when(
-                (pl.col("game_play_number") == 1).or_((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2)),
-            )
-            .then(1200)
-            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 3))
-            .then(300)
-            .otherwise(pl.col("end.quarter_seconds_remaining"))
-            .alias("end.quarter_seconds_remaining"),
-            pl.when((pl.col("game_play_number") == 1))
-            .then(1200)
-            .when((pl.col("lag_half") == 1).and_(pl.col("half") == 2))
-            .then(1200)
-            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 3))
-            .then(300)
-            .otherwise(pl.col("end.half_seconds_remaining"))
-            .alias("end.half_seconds_remaining"),
-            pl.when((pl.col("game_play_number") == 1))
-            .then(2400)
-            .when((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
-            .then(1200)
-            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 3))
-            .then(300)
-            .otherwise(pl.col("end.game_seconds_remaining"))
-            .alias("end.game_seconds_remaining"),
-            pl.col("qtr").cast(pl.Int32).alias("period"),
-        )
-    else:
-        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
-            pl.when(
-                (pl.col("game_play_number") == 1)
-                .or_((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
-                .or_((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
-                .or_((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4)),
-            )
-            .then(600)
-            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
-            .then(300)
-            .otherwise(pl.col("end.quarter_seconds_remaining"))
-            .alias("end.quarter_seconds_remaining"),
-            pl.when((pl.col("game_play_number") == 1))
-            .then(1200)
-            .when((pl.col("lag_half") == 1).and_(pl.col("half") == 2))
-            .then(1200)
-            .when((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
-            .then(600)
-            .when((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
-            .then(1200)
-            .when((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4))
-            .then(600)
-            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
-            .then(300)
-            .otherwise(pl.col("end.half_seconds_remaining"))
-            .alias("end.half_seconds_remaining"),
-            pl.when((pl.col("game_play_number") == 1))
-            .then(2400)
-            .when((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
-            .then(1800)
-            .when((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
-            .then(1200)
-            .when((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4))
-            .then(600)
-            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
-            .then(300)
-            .otherwise(pl.col("end.game_seconds_remaining"))
-            .alias("end.game_seconds_remaining"),
-            pl.col("qtr").cast(pl.Int32).alias("period"),
-        )
-
+    pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+        *_period_end_seconds("quarter", ("half", "game")),
+        pl.col("qtr").cast(pl.Int32).alias("period"),
+    )
     return pbp_txt
 
 

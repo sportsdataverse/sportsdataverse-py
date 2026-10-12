@@ -874,3 +874,76 @@
   note: >-
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
+
+# --- 2.16: basketball period-boundary end seconds (C-M21) + clock-part dtypes (C-L7) -------------
+# Killer: tests/validation/test_basketball_clock_seconds.py on the committed MBB/NBA/WNBA/WBB
+# captures, through the public espn_<lg>_pbp and pbp_invariants group 13.
+- id: basketball-period-end-fill-on-first-row
+  group: basketball-end-seconds
+  finding: C-M21
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    ends_period = pl.col("period.number") != pl.col("period.number").shift(-1)'
+  mutant: '    ends_period = pl.col("period.number") != pl.col("period.number").shift(1)'
+  test: tests/validation/test_basketball_clock_seconds.py -k end_le_start
+  expected: kill
+  note: >-
+    The period-boundary fill back on a period's FIRST row (the pre-2.16 shape): a first play logged
+    after the opening second ends after it starts (WNBA 400927398 Q2 9:41, 1781 -> 1800).
+- id: basketball-period-end-row-test-dropped
+  group: basketball-end-seconds
+  finding: C-M21
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    ends_period = pl.col("period.number") != pl.col("period.number").shift(-1)'
+  mutant: '    ends_period = pl.lit(True)'
+  test: tests/validation/test_basketball_clock_seconds.py -k end_le_start
+  expected: kill
+  note: >-
+    Without the row test every row ends at its period's end, so no row ends where the next one
+    starts (seconds.*_end_is_next_start).
+- id: mbb-clock-minutes-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/mbb/mbb_pbp.py
+  snippet: '            pl.col("clock.minutes").cast(pl.Float64).cast(pl.Int32),'
+  mutant: '            pl.col("clock.minutes").cast(pl.Float64),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and mbb"
+  expected: kill
+  note: The release documents clock_minutes Int32 in every MBB season file.
+- id: nba-clock-minutes-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/nba/nba_pbp.py
+  snippet: '            pl.col("clock.minutes").cast(pl.Int32),'
+  mutant: '            pl.col("clock.minutes").cast(pl.Float32),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and nba and not wnba"
+  expected: kill
+  note: The pre-2.16 Float32; the release documents clock_minutes Int32 in every NBA season file.
+- id: wnba-clock-minutes-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/wnba/wnba_pbp.py
+  snippet: '            pl.col("clock.minutes").cast(pl.Int32),'
+  mutant: '            pl.col("clock.minutes").cast(pl.Float32),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and wnba"
+  expected: kill
+  note: The pre-2.16 Float32; the release documents clock_minutes Int32 in every WNBA season file.
+- id: wbb-clock-minutes-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/wbb/wbb_pbp.py
+  snippet: '            pl.col("clock.minutes").cast(pl.Int32),'
+  mutant: '            pl.col("clock.minutes").cast(pl.Float32),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and wbb"
+  expected: kill
+  note: The pre-2.16 Float32; the release documents clock_minutes Int32 in every WBB season file.
+- id: wbb-clock-seconds-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/wbb/wbb_pbp.py
+  snippet: '            pl.col("clock.seconds").cast(pl.Float64).cast(pl.Int32),'
+  mutant: '            pl.col("clock.seconds").cast(pl.Float64),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and wbb"
+  expected: kill
+  note: >-
+    WBB clocks are whole seconds and the release documents clock_seconds Int32 (NBA / WNBA keep
+    Float64: their sub-minute clocks carry tenths).
