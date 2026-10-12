@@ -288,3 +288,11 @@ def test_with_alt_game_legs_fills_fox_and_keeps_existing_legs(tmp_path):
     again = fill_game_legs(kept, m["games"], m["teams"], ("fox_game_id", "fox_home_team_id", "fox_away_team_id"))
     assert again.row(0, named=True)["fox_game_id"] == "live"
     assert again["fox_home_team_id"].null_count() == again.height  # a set game id keeps every leg as-is
+
+
+def test_parse_cbs_skips_a_basketball_box_under_a_football_id():
+    from sportsdataverse._crosswalk_alt import _cbs_players, _read
+
+    payload = _read(RAW / "cbs" / "cfb" / "game_boxscore" / "2017" / "2843743.json.gz")
+    assert any(isinstance(b.get("playerStats"), list) for b in payload["boxScores"])
+    assert _cbs_players(payload, 2017, "2843743") == []
