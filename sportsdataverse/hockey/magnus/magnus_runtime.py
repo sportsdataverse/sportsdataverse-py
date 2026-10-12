@@ -7,7 +7,9 @@ Two sources sit on one host, both measured live (2026-10-12):
   query parameter. Every answer is ``{"success": true, "data": ...}`` with HTTP 200, errors
   included, so :func:`_get` reads the envelope:
 
-  * ``{"success": false, "data": "Aucune donnée disponible"}`` -> :class:`NoDataError`;
+  * ``{"success": false, "data": "Aucune donnée disponible"}`` -> :class:`NoDataError` (the
+    message is matched ignoring accents, case and whitespace); ``success: false`` with any other ``data`` ->
+    :class:`AssetFetchError` (the request failed and the answer is unknown);
   * ``{"success": true, "data": ""}`` (a stub: a required parameter missing) -> :class:`NoDataError`;
   * ``{"success": true, "data": {"<param>": ["Le champ ... est invalide."]}}`` (a Laravel
     validation error naming the rejected parameter) -> :class:`ValueError`, like a 422;
@@ -16,8 +18,8 @@ Two sources sit on one host, both measured live (2026-10-12):
     competition, a ``get_competition_by_type`` row of another type, a ``get_liste_tours``
     row of another phase, a ``get_rencontrestours`` round of another phase or round),
     non-object rows, or a ``get_rencontres`` page that is not the whole list (``meta``
-    missing, or ``last_page != 1`` and ``total`` != the rows served) ->
-    :class:`AssetFetchError`. A row without the field to check is refused, never skipped.
+    missing, or not both an int ``last_page`` of 1 and an int ``total`` equal to the rows
+    served) -> :class:`AssetFetchError`. A row without the field to check is refused, never skipped.
 
 * **The game sheet page.** ``GET /rencontre/{id}/`` is text/html; the whole game sheet is
   the HTML-escaped JSON value of the Vue ``:data`` attribute on ``<live-rencontre-container>``.
@@ -35,11 +37,12 @@ Two sources sit on one host, both measured live (2026-10-12):
 case costs no request; an unseeded season triggers one lookup per process. Coverage starts in
 2020-21 (season 2021): an earlier season raises :class:`NoDataError` before any request.
 
-Every request waits for :func:`~sportsdataverse.hockey.euro_hockey_runtime._polite_wait`
-(at least 1 s per host). Everything else is the package error vocabulary of the shared
-getter: 404 -> :class:`NoDataError`, 400 / 422 (an unknown ``action`` answers 400 ``0``)
--> :class:`ValueError`, any other non-2xx, an empty or non-JSON 200 or a dead connection
--> :class:`AssetFetchError`.
+Every request, each retry included, goes through
+:data:`~sportsdataverse.hockey.euro_hockey_runtime.SESSION`, whose every attempt waits for
+:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite_wait` (at least 1 s per host).
+Everything else is the package error vocabulary of the shared getter: 404 ->
+:class:`NoDataError`, 400 / 422 (an unknown ``action`` answers 400 ``0``) -> :class:`ValueError`,
+any other non-2xx, an empty or non-JSON 200 or a dead connection -> :class:`AssetFetchError`.
 """
 
 from __future__ import annotations
@@ -48,12 +51,13 @@ import functools
 import html
 import json
 import re
+import unicodedata
 from typing import Any, Dict, List, Mapping, Optional
 from urllib.parse import urlsplit
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.errors import AssetFetchError, NoDataError
-from sportsdataverse.hockey.euro_hockey_runtime import _polite_wait
+from sportsdataverse.hockey import euro_hockey_runtime as _eh
 
 __all__: List[str] = []
 
@@ -71,6 +75,8 @@ _GAME_PATH = re.compile(r"^/rencontre/(\d+)/?$")
 # the game sheet (sdv-internal-refs ligue-magnus/tools/capture.py ``_DATA_ATTR``).
 _DATA_ATTR = re.compile(r'<live-rencontre-container\b[^>]*?\s:data="([^"]*)"')
 _ERROR_KEYS = frozenset({"error", "errors", "message", "code", "detail", "status"})
+#: The ``success: false`` message that means "no data" (accent-, case- and whitespace-folded).
+_NO_DATA_MESSAGE = "aucune donnee disponible"
 
 
 def _at(obj: Any, *keys: str) -> Any:
@@ -162,6 +168,17 @@ _SCOPE: Dict[str, List[Any]] = {
 }
 
 
+def _fold(text: str) -> str:
+    """``text`` without accents, case-folded, whitespace runs collapsed to one space."""
+    plain = "".join(c for c in unicodedata.normalize("NFKD", text) if not unicodedata.combining(c))
+    return " ".join(plain.casefold().split())
+
+
+def _is_no_data_message(data: Any) -> bool:
+    """True for the ``success: false`` "Aucune donnée disponible" message, however it is spelled."""
+    return isinstance(data, str) and _NO_DATA_MESSAGE in _fold(data)
+
+
 def _check_ajax(url: str, body: Any, params: Mapping[str, Any]) -> Any:
     """Return ``body`` when it is a complete, in-scope admin-ajax answer; raise otherwise."""
     where, action = _rt._where(url), params.get("action")
@@ -169,7 +186,10 @@ def _check_ajax(url: str, body: Any, params: Mapping[str, Any]) -> Any:
         raise AssetFetchError(f"{where} ({action}): the body is not a {{success, data}} envelope")
     data = body.get("data")
     if body["success"] is not True:
-        raise NoDataError(f"{where} ({action}) answered success=false: {_rt._excerpt(str(data))}")
+        detail = _rt._excerpt(data if isinstance(data, str) else json.dumps(data, ensure_ascii=False))
+        if _is_no_data_message(data):
+            raise NoDataError(f"{where} ({action}) answered success=false: {detail}")
+        raise AssetFetchError(f"{where} ({action}) answered success=false with an unknown message: {detail}")
     if data in ("", None, [], {}):
         raise NoDataError(f"{where} ({action}) answered an empty data stub (a required parameter missing or unknown)")
     if isinstance(data, dict) and set(data) <= set(params) and all(isinstance(v, list) for v in data.values()):
@@ -200,7 +220,9 @@ def _check_ajax(url: str, body: Any, params: Mapping[str, Any]) -> Any:
         meta = _at(data, "meta")
         if not isinstance(meta, dict):
             raise AssetFetchError(f"{where} ({action}): no paging meta, so the list cannot be verified complete")
-        if not (meta.get("last_page") == 1 or _int(meta.get("total")) == len(rows)):
+        last_page, total = meta.get("last_page"), meta.get("total")
+        # type-strict: a bool, a float or a digit string is not a page count (True == 1 in Python).
+        if not (type(last_page) is int and last_page == 1 and type(total) is int and total == len(rows)):
             raise AssetFetchError(
                 f"{where} ({action}): page {meta.get('current_page')}/{meta.get('last_page')} of "
                 f"{meta.get('total')} games served {len(rows)}; a partial schedule is not returned as a whole one"
@@ -229,7 +251,7 @@ def _game_sheet(url: str, game_id: str, **kwargs: Any) -> Dict[str, Any]:
     """Fetch ``/rencontre/{id}/`` and return its checked game sheet (see the module docstring)."""
     where = _rt._where(url)
     with _rt._transport_errors(url):
-        resp = _rt.download(url=url, **kwargs)
+        resp = _rt.download(url=url, **{"session": _eh.SESSION, **kwargs})
     sheet = _extract_game_sheet(_rt._text_body(resp, url))
     if sheet is None:
         raise AssetFetchError(f"{where}: no <live-rencontre-container :data> game sheet in the page")
@@ -264,16 +286,17 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         The admin-ajax ``{"success": true, "data": ...}`` body, or the game sheet object.
 
     Raises:
-        NoDataError: 404; ``success: false``; an empty ``data`` stub; zero rows; a season
-            outside the coverage; an unknown game id; a game without events.
+        NoDataError: 404; ``success: false`` "Aucune donnée disponible"; an empty ``data``
+            stub; zero rows; a season outside the coverage; an unknown game id; a game without
+            events.
         ValueError: 400 / 422, or a Laravel validation error naming a rejected parameter.
         AssetFetchError: any other non-2xx after retries, a dead connection, an empty or
-            non-JSON body, a body outside the requested scope, a partial schedule page, or a
-            game page without its embedded game sheet.
+            non-JSON body, ``success: false`` with any other message, a body outside the
+            requested scope, a partial schedule page, or a game page without its embedded
+            game sheet.
     """
-    _polite_wait(url)
     match = _GAME_PATH.match(urlsplit(url).path)
     if match:
         return _game_sheet(url, match.group(1), **kwargs)
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    return _check_ajax(url, _rt._get(url, clean, **kwargs), clean)
+    return _check_ajax(url, _eh._get(url, clean, **kwargs), clean)
