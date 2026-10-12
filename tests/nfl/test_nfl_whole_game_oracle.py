@@ -34,6 +34,7 @@ import pytest
 from sportsdataverse.nfl.ep_wp import _derive_wpa, calculate_completion_probability, calculate_epa, calculate_wpa
 from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec, normalplay, offense_score_vec
 from sportsdataverse.nfl import NFLPlayProcess
+from sportsdataverse.nfl.nfl_pbp import _touchdown_did_not_stand
 from tests.nfl._whole_game import CAPTURES, FIX, load_summary, run
 
 pytestmark = [pytest.mark.whole_game, pytest.mark.xdist_group("nfl_whole_game")]
@@ -204,33 +205,32 @@ def test_missed_field_goal_ends_on_a_real_down(game_id):
     assert _bad(f.filter(~_t("scoringPlay")), pl.col("end.down").is_in([1, 2, 3, 4]), ["type.text", "end.down"]) == []
 
 
-@pytest.mark.parametrize(
-    "game_id",
-    _cases(
-        dict.fromkeys(
-            (291018018, 401030824, 401671835),
-            "C-M1: td_play is True on 'TOUCHDOWN NULLIFIED by Penalty' rows (CFB has _touchdown_negated)",
-        )
-    ),
-)
-def test_nullified_touchdown_is_not_a_touchdown(game_id):
+@pytest.mark.parametrize("game_id", _cases())
+def test_td_flags_nullified_touchdown_is_not_a_touchdown(game_id):
     f = run(game_id).plays.filter(pl.col("text").str.contains(r"(?i)TOUCHDOWN NULLIFIED").fill_null(False))
     assert _bad(f, ~_t("td_play"), ["td_play", "scoringPlay"]) == []
 
 
-@pytest.mark.parametrize(
-    "game_id",
-    _cases(
-        dict.fromkeys(
-            (291018018, 400791590, 401128075, 401671740, 401772726),
-            "C-NF-6: a replay-REVERSED score (scoringPlay False) keeps td_play / pass_td / rush_td True",
-        )
-    ),
-)
-def test_reversed_touchdown_is_not_a_touchdown(game_id):
+@pytest.mark.parametrize("game_id", _cases())
+def test_td_flags_reversed_touchdown_is_not_a_touchdown(game_id):
     # Oracle: ESPN's own scoringPlay is False on these rows ("... and the play was REVERSED").
     f = run(game_id).plays.filter(pl.col("text").str.contains("(?i)REVERSED").fill_null(False) & ~_t("scoringPlay"))
     assert _bad(f, ~(_t("td_play") | _t("pass_td") | _t("rush_td")), ["type.text", "td_play"]) == []
+
+
+def test_td_flags_scored_row_keeps_a_touchdown_its_no_play_does_not_touch():
+    # Oracle: ESPN scored both rows (published nfl/espn/pbp 2008, 2014; no capture has the shape). The
+    # "No Play" is the overturned ruling's (a reversal INTO the touchdown) and the try's false start.
+    texts = [
+        "L.Johnson pass incomplete short right to T.Gonzalez.PENALTY on SD-E.Weddle, Defensive Pass "
+        "Interference, 3 yards, enforced at SD 4 - No Play.Kansas City challenged the pass completion ruling, "
+        "and the play was REVERSED.L.Johnson pass short right to T.Gonzalez for 4 yards, TOUCHDOWN.",
+        "(2:00) A.Smith pass deep left to A.Fasano for 19 yards, TOUCHDOWN. The Replay Official challenged the "
+        "runner broke the plane ruling, and the play was Upheld. (Kick formation) C.Santos extra point is GOOD. "
+        "PENALTY on KC-E.Fisher, False Start, 5 yards, enforced at OAK 2 - No Play.",
+    ]
+    f = pl.DataFrame({"text": texts, "scoringPlay": [True, True]})
+    assert f.select(_touchdown_did_not_stand()).to_series().to_list() == [False, False]
 
 
 @pytest.mark.parametrize(
@@ -259,17 +259,9 @@ _FEED_GAP = (
 
 @pytest.mark.parametrize(
     "game_id",
-    _cases(
-        {
-            **dict.fromkeys(
-                (291018018, 401128075, 401671740, 401772726),
-                "C-NF-6: a replay-REVERSED touchdown is counted in the team box Pass_TD / Rush_TD",
-            ),
-            **dict.fromkeys((251113015, 260917021, 400951676), _FEED_GAP),
-        }
-    ),
+    _cases(dict.fromkeys((251113015, 260917021, 400951676), _FEED_GAP)),
 )
-def test_team_box_touchdowns_match_espn_box(game_id):
+def test_box_td_parity_team_box_touchdowns_match_espn_box(game_id):
     r = run(game_id)
     espn = {}
     for team in r.summary["boxscore"]["players"]:
@@ -398,10 +390,7 @@ _EXACT = [
     ("rush_td", "rush_touchdown", pl.lit(True)),
     ("fixed_drive", "fixed_drive", pl.lit(True)),
 ]
-_EXACT_KNOWN = {
-    (401671740, "td_play"): "C-NF-6: two replay-REVERSED scores keep td_play True (nflverse touchdown 0)",
-    (401671740, "rush_td"): "C-NF-6: the replay-REVERSED 2-yard run keeps rush_td True",
-}
+_EXACT_KNOWN: dict[tuple[int, str], str] = {}
 
 
 @pytest.mark.parametrize(
@@ -422,19 +411,19 @@ def test_play_column_equals_nflverse(game_id, ours, theirs, domain):
 
 
 # (corr floor, MAE ceiling, rows) per game and column: measured on HEAD, see the module docstring.
-# Rows that carry an open finding (C-H2/C-NF-12 half-ending plays, C-H5 kickoffs, C-M1/C-NF-6
-# negated scores) are left out so the floor is not loosened by them. When 2.2 (C-H2), 2.3 (C-H5) and
-# 2.5 (C-M1/C-NF-6) land, each drops its exclusion in _open_finding_rows and re-measures the floors
-# here (raise only).
+# Rows that carry an open finding (C-H2/C-NF-12 half-ending plays, C-H5 kickoffs) are left out so the
+# floor is not loosened by them. When 2.2 (C-H2) and 2.3 (C-H5) land, each drops its exclusion in
+# _open_finding_rows and re-measures the floors here (raise only). 2.5 (C-M1/C-NF-6) dropped the
+# negated-score exclusion: +2 rows per game, every floor and ceiling still holds.
 _MODEL = {
-    (401547449, "EP_start", "ep"): (0.996, 0.117, 167),  # 0.99611, 0.11615
-    (401547449, "EPA", "epa"): (0.990, 0.112, 167),  # 0.99021, 0.11114 (EX-1.5-d; was 0.96175, 0.24653)
-    (401547449, "wp", "wp"): (0.993, 0.024, 167),  # 0.99339, 0.02345
-    (401547449, "vegas_wp", "vegas_wp"): (0.987, 0.063, 167),  # 0.98767, 0.06284
-    (401671740, "EP_start", "ep"): (0.996, 0.119, 154),  # 0.99609, 0.11813 (EX-1.5-d; was 0.99278, 0.12545)
-    (401671740, "EPA", "epa"): (0.972, 0.132, 154),  # 0.97255, 0.13099 (EX-1.5-d; was 0.92781, 0.32713)
-    (401671740, "wp", "wp"): (0.999, 0.007, 154),  # 0.99980, 0.00649
-    (401671740, "vegas_wp", "vegas_wp"): (0.991, 0.062, 154),  # 0.99174, 0.06128
+    (401547449, "EP_start", "ep"): (0.996, 0.117, 169),  # 0.99611, 0.11615
+    (401547449, "EPA", "epa"): (0.990, 0.112, 169),  # 0.99021, 0.11114 (EX-1.5-d; was 0.96175, 0.24653)
+    (401547449, "wp", "wp"): (0.993, 0.024, 169),  # 0.99339, 0.02345
+    (401547449, "vegas_wp", "vegas_wp"): (0.987, 0.063, 169),  # 0.98767, 0.06284
+    (401671740, "EP_start", "ep"): (0.996, 0.119, 156),  # 0.99609, 0.11813 (EX-1.5-d; was 0.99278, 0.12545)
+    (401671740, "EPA", "epa"): (0.972, 0.132, 156),  # 0.97255, 0.13099 (EX-1.5-d; was 0.92781, 0.32713)
+    (401671740, "wp", "wp"): (0.999, 0.007, 156),  # 0.99980, 0.00649
+    (401671740, "vegas_wp", "vegas_wp"): (0.991, 0.062, 156),  # 0.99174, 0.06128
 }
 
 
@@ -445,8 +434,7 @@ def _open_finding_rows(game_id: int) -> list[int]:
     if game_id in _OT_GAMES:
         ends.append(plays.filter(pl.col("period.number") == 4).tail(1)["id"].item())
     h5 = pl.col("type.text").is_in(kickoff_vec) & ~_t("scoringPlay") & ~pl.col("end.down").is_in([1, 2, 3, 4])
-    negated = pl.col("text").str.contains("(?i)NULLIFIED|REVERSED").fill_null(False)
-    return ends + f.filter(h5.fill_null(False) | negated)["id"].to_list()
+    return ends + f.filter(h5.fill_null(False))["id"].to_list()
 
 
 @pytest.mark.parametrize(("game_id", "ours", "theirs"), list(_MODEL), ids=lambda v: str(v))
