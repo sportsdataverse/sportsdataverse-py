@@ -238,6 +238,21 @@
   expected: kill
   note: the third unwrap (review R828-8); a shape-(1,) overUnder cannot persist as JSON odds_override
 
+# --- R828-9: DefaultOddsWarning never fires when the core odds endpoint has a spread ----------------
+# Killer (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py, `_download_json` mocked to an ESPN BET spread
+# with the warning set to error.
+- id: cfb-default-odds-warn-core-api-always
+  group: cfb-default-odds
+  finding: R828-9
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'if not gameSpreadAvailable:'
+  mutant: 'if True:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "default_odds_warning_not_on_core_odds_api_spread"
+  expected: kill
+  note: >-
+    an unconditional warning at the default/core site survived both earlier tests (review PR-828 M4);
+    live 2024+ games with an ESPN BET spread would then warn, or fail in strict mode
+
 # --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13

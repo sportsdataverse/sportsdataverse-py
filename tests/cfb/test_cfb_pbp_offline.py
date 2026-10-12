@@ -94,6 +94,22 @@ def test_default_odds_warning_not_on_pickcenter_capture():
         again._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(again.json))
 
 
+def test_default_odds_warning_not_on_core_odds_api_spread(monkeypatch):
+    """R828-9: an empty pickcenter whose core odds endpoint carries a spread (live 2024+) never warns."""
+    odds = {
+        "items": [
+            {"provider": {"name": "ESPN BET"}, "spread": -6.5, "overUnder": 51.5, "homeTeamOdds": {"favorite": True}}
+        ]
+    }
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp._download_json", lambda *a, **k: odds)
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DefaultOddsWarning)
+        init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert proc.odds_source == "core_odds_api"
+    assert init == {"gameSpread": -6.5, "overUnder": 51.5, "homeFavorite": True, "gameSpreadAvailable": True}
+
+
 def test_injected_odds_bypasses_network(monkeypatch):
     proc = CFBPlayProcess(
         gameId=401628455,
