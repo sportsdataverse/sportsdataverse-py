@@ -20,8 +20,8 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `type_id` | Int32 | Type identifier (numeric). |
 | `type_text` | String | Display text for the type field. |
 | `text` | String | Text description of the play / record. |
-| `away_score` | Int32 | Away team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). |
-| `home_score` | Int32 | Home team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). |
+| `away_score` | Int32 | Away team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value. |
+| `home_score` | Int32 | Home team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value. |
 | `period_number` | Int32 | Numeric period (1-4 for quarters; 5+ for OT). |
 | `period_display_value` | String | Period display label (e.g. '1st Quarter', 'OT'). |
 | `clock_display_value` | String | Game clock display string (e.g. '8:32'). |

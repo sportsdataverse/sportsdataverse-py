@@ -24,8 +24,9 @@ column and tolerates 0-3 participants where R assumes exactly 2.
 
 Running score: ``home_score``/``away_score`` are rebuilt from the scoring plays and kept
 only when the rebuild reproduces the header final; otherwise ESPN's per-play values are
-kept, and ``score_source`` (``"rebuilt"``/``"espn"``) says which. The same rule ships in
-the hoopR / wehoop R helpers (see ``_repair_running_score``).
+kept, and ``score_source`` (``"rebuilt"``/``"espn"``) says which. The same rule is ported
+to the hoopR / wehoop R helpers; their PRs land before any producer republish (see
+``_repair_running_score``).
 """
 
 from __future__ import annotations
