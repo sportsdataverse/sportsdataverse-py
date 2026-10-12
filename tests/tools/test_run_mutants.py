@@ -191,3 +191,35 @@ def test_utf8_output_from_the_child_pytest_is_classified_not_crashed_on(tree, ca
     out = capsys.readouterr().out
     assert "KILLED" in out and "T-1: 1/1 mutants killed" in out and "-> OK" in out
     assert (root / "mod.py").read_bytes() == SOURCE.encode("utf-8")
+
+
+@pytest.mark.parametrize("n", [1, 2, 3, 4, 5])
+def test_shards_partition_the_real_registry_exactly(n):
+    """CI runs `--shard i/4` per matrix job: every row must land in exactly one shard, none dropped."""
+    rows = rm.load_registry(rm.REGISTRY)
+    ids = [r["id"] for r in rows]
+    shards = [[r["id"] for r in rm.shard(rows, f"{i}/{n}")] for i in range(1, n + 1)]
+    flat = [x for s in shards for x in s]
+    assert sorted(flat) == sorted(ids) and len(flat) == len(ids)
+    assert max(map(len, shards)) - min(map(len, shards)) <= 1
+    assert rm.shard(rows, None) == rows
+
+
+@pytest.mark.parametrize("spec", ["0/4", "5/4", "1", "a/b", "1/0"])
+def test_a_bad_shard_spec_is_rejected(spec):
+    with pytest.raises(SystemExit, match="--shard"):
+        rm.shard([{"id": "x"}], spec)
+
+
+def test_shard_runs_only_its_slice(tree, capsys):
+    _, run = tree
+    rows = [row(f"r{i}", "test_mod.py::test_add") for i in range(3)]
+    assert run(rows, "--shard", "2/2", "--list") == 0
+    out = capsys.readouterr().out
+    assert "REGISTRY: 1 rows" in out and "shard 2/2" in out and " r1 " in out and " r0 " not in out
+
+
+def test_a_shard_that_selects_no_rows_fails():
+    """A matrix wider than the registry must not yield a green job that ran nothing."""
+    with pytest.raises(SystemExit, match="selects no rows"):
+        rm.shard([{"id": "a"}, {"id": "b"}], "3/3")
