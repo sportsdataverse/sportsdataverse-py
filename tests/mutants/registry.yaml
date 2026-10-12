@@ -948,7 +948,7 @@
     WBB clocks are whole seconds and the release documents clock_seconds Int32 (NBA / WNBA keep
     Float64: their sub-minute clocks carry tenths).
 
-# --- 2.16 PR2: basketball coordinates in the hoopR / wehoop convention (C-M20) ---------------------
+# --- 2.16 PR2: basketball coordinates in the hoopR / wehoop convention (C-M20) + R841-1 ---------
 # Killer: tests/validation/test_basketball_coordinates.py (R's case_when written row by row from
 # the committed captures) and the last-row rule's negative control in test_basketball_clock_seconds.
 - id: basketball-coords-ft-pin-dropped
@@ -1027,3 +1027,21 @@
   test: tests/validation/test_basketball_coordinates.py -k hoopr_convention
   expected: kill
   note: The pre-2.16 processor, ESPN's raw coordinates under wehoop's transformed names.
+- id: basketball-period-last-row-rule-scope-dropped
+  group: basketball-end-seconds
+  finding: R841-1
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '                c("__same_period") == False,'
+  mutant: '                pl.lit(False),'
+  test: tests/validation/test_basketball_clock_seconds.py -k clamp
+  expected: kill
+  note: The last-row rule checks nothing; a min(end, start) producer clamp passes group 13 again.
+- id: basketball-period-last-row-held-only-to-end-le-start
+  group: basketball-end-seconds
+  finding: R841-1
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '                (c(end) - (c(start) - c(clock))).abs() > _FLOAT32_EPS,'
+  mutant: '                c(end) > c(start) + _FLOAT32_EPS,'
+  test: tests/validation/test_basketball_clock_seconds.py -k clamp
+  expected: kill
+  note: The pre-R841-1 hold on a period's last row (end <= start only), which the clamp passes.

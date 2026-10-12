@@ -1554,8 +1554,9 @@ def _seconds_remaining(df: pl.DataFrame) -> list[RuleResult | None]:
     Every ``start.<scope>_seconds_remaining`` / ``end.<scope>_seconds_remaining`` pair is
     checked (basketball: quarter / period / half / game; a published file spells them
     ``start_<scope>_...``). ``end`` is the next row's ``start`` while the next row is in
-    the same period; a period's last row ends at the period's own end, so it is only held
-    to ``end <= start``. Rows are read in processor order, by ``game_id`` when the frame
+    the same period; a period's last row ends at the period's own end, 0:00 on the period
+    clock (``quarter`` / ``period``), so its ``end`` is ``start`` less that clock (a
+    ``min(end, start)`` clamp leaves it at ``start`` and fails). Rows are read in processor order, by ``game_id`` when the frame
     holds several games (a season file). The pair is the gate a basketball producer runs
     before publishing: one file whose ``end`` is the PREVIOUS row's start fails the second
     rule on most rows and the first on every row the clock moved.
@@ -1595,6 +1596,28 @@ def _seconds_remaining(df: pl.DataFrame) -> list[RuleResult | None]:
                 c("__same_period"),
                 (c(end) - c("__next_start")).abs() > _FLOAT32_EPS,
                 (period, start, end, "__next_start"),
+            )
+        )
+        clock = next(
+            (
+                f"start{m[1]}{p}_seconds_remaining"
+                for p in ("quarter", "period")
+                if f"start{m[1]}{p}_seconds_remaining" in df.columns
+            ),
+            None,
+        )
+        if clock is None:
+            continue
+        # the next row is in another period of the same game: this row ends at its period's 0:00
+        out.append(
+            _row_rule(
+                f,
+                f"seconds.{scope}_period_last_row_ends_at_zero",
+                13,
+                f"a period's last play ends at the period's 0:00 ({scope} seconds: start less the period clock)",
+                c("__same_period") == False,
+                (c(end) - (c(start) - c(clock))).abs() > _FLOAT32_EPS,
+                (period, clock, start, end),
             )
         )
     return out
