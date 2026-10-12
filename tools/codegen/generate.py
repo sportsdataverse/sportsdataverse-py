@@ -3264,6 +3264,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     page's ``sidebar_position`` so the league's Reference category orders Loaders
     first, then native APIs, then the ESPN APIs (site/web/core)."""
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    notes: list[str] = []
     if api in ESPN_APIS:
         cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
         league = next(lg for lg in cfg.leagues if lg.prefix == prefix)
@@ -3274,6 +3275,9 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
         fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
         endpoints = _flat_views(fa, league_prefix=prefix)
         label = _FLAT_API_DOC.get(fa.module, fa.module.replace("_", " "))
+        # The family's docstring ``notes`` (licence, owner rulings, sanctions flags) head the page too,
+        # not only every wrapper's docstring: the reference blocks have no Notes section.
+        notes = [" ".join(str(n).replace("``", "`").split()) for n in fa.docstring.get("notes") or []]
     template = render.ENV.get_template("reference_page.md.jinja")
     return template.render(
         prefix=prefix,
@@ -3283,6 +3287,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
         sidebar_position=position,
         count=len(endpoints),
         endpoints=endpoints,
+        notes=notes,
     )
 
 

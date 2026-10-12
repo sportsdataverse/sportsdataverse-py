@@ -222,3 +222,14 @@ def test_companion_notes_do_not_shadow_autodoc_names():
     in_scope = set(global_names).union(*per_league.values())
     shadowed = sorted(n for n in in_scope if generate._is_documented(n, notes))
     assert shadowed == [], shadowed
+
+
+def test_flat_reference_page_heads_with_the_family_notes():
+    # A family's docstring notes (licence, owner rulings, sanctions flags) must reach the docs
+    # site: the per-function reference blocks have no Notes section of their own.
+    from tools.codegen import generate as _gen
+
+    page = _gen.render_reference_page("khl", "khl_rest")
+    head = page.split("\n## ", 1)[0]
+    assert "> **Note:**" in head
+    assert "> **Note:**" not in _gen.render_reference_page("nhl", "nhl_api_web").split("\n## ", 1)[0]
