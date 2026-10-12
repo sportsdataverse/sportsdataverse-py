@@ -66,3 +66,37 @@ def team_timeout_called(columns: list[str], init: dict[str, Any], side: str) -> 
         name_match = pl.lit(False)
     called = pl.col("type.text").is_in(TEAM_TIMEOUT_TYPES) & pl.coalesce(team_id == init[f"{side}TeamId"], name_match)
     return called.fill_null(False)
+
+
+def period_end_seconds(period_scope: str, scopes: tuple[str, ...]) -> list[pl.Expr]:
+    """``end.<scope>_seconds_remaining`` with the period boundary on the row that ends the period.
+
+    ``end.*`` is the next row's ``start.*``. The last row of a period (by sequence: the
+    next row's ``period.number`` differs) has its next row in a period whose clock
+    starts over, so it ends where its own period ends, at 0:00 on the period clock:
+    ``start.<scope>`` less the ``start.<period_scope>`` seconds the period still had.
+    Every other row, a period's first included, ends where the next row starts. The
+    game's last row has no next row and stays null.
+
+    The boundary used to be filled on a period's FIRST row instead, setting its end to
+    the full period length, so a first play logged after the opening second ended later
+    than it started (WNBA 400927398 Q2 at 9:41: start 1781, end 1800).
+
+    Args:
+        period_scope: The scope counting down one period ("period" for MBB, "quarter"
+            for the others, where it is the period clock in a halves era too).
+        scopes: The wider scopes ("half", "game") filled the same way.
+
+    Returns:
+        One expression per scope, ``period_scope`` first, each aliased to its
+        ``end.<scope>_seconds_remaining`` column.
+    """
+    ends_period = pl.col("period.number") != pl.col("period.number").shift(-1)
+    left_in_period = pl.col(f"start.{period_scope}_seconds_remaining")
+    return [
+        pl.when(ends_period)
+        .then(pl.col(f"start.{s}_seconds_remaining") - left_in_period)
+        .otherwise(pl.col(f"end.{s}_seconds_remaining"))
+        .alias(f"end.{s}_seconds_remaining")
+        for s in (period_scope, *scopes)
+    ]
