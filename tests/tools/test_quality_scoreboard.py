@@ -139,3 +139,67 @@ def test_generated_marker_is_detected_only_in_the_header(tmp_path):
     (pkg / "mentions.py").write_text('"""Wraps the generated wrappers."""\n' + "\n" * 12 + f"# {qs.CODEGEN_MARKER}\n")
     (pkg / "nba_espn_ext.py").write_text("x = 1\n", encoding="utf-8")
     assert sorted(qs.handwritten_files(tmp_path)) == ["sportsdataverse/mentions.py"]
+
+
+# --- sync PRs: a metric fails only when it is worse than EVERY baseline (base + upstream) ---------
+def _named(commit, **values):
+    s = snap(**values)
+    s["commit"] = commit
+    return s
+
+
+def test_a_worse_metric_the_upstream_baseline_allows_passes():
+    base, upstream = _named("base", lint_likely_bugs=15), _named("upstream", lint_likely_bugs=20)
+    assert qs.compare(base, snap(lint_likely_bugs=18), upstream) == []
+    assert qs.compare(base, snap(lint_likely_bugs=20), upstream) == []
+
+
+def test_without_an_upstream_baseline_the_same_metric_fails():
+    """An ordinary task PR gets no upstream baseline from the workflow, so no allowance."""
+    assert qs.compare(_named("base", lint_likely_bugs=15), snap(lint_likely_bugs=18)) == ["lint_likely_bugs: 15 -> 18"]
+
+
+def test_a_metric_worse_than_both_baselines_fails_against_the_closer_one():
+    base, upstream = _named("base", lint_likely_bugs=15), _named("upstream", lint_likely_bugs=20)
+    assert qs.compare(base, snap(lint_likely_bugs=21), upstream) == [
+        "lint_likely_bugs: 20 -> 21 (vs baseline upstream)"
+    ]
+
+
+def test_higher_is_better_metrics_use_their_own_direction():
+    base = _named("base", coverage_handwritten_percent=85.0)
+    upstream = _named("upstream", coverage_handwritten_percent=84.0)
+    assert qs.compare(base, snap(coverage_handwritten_percent=84.0), upstream) == []
+    assert qs.compare(base, snap(coverage_handwritten_percent=84.0)) == ["coverage_handwritten_percent: 85.0 -> 84.0"]
+    assert qs.compare(base, snap(coverage_handwritten_percent=83.5), upstream) == [
+        "coverage_handwritten_percent: 84.0 -> 83.5 (vs baseline upstream)"
+    ]
+    # an upstream that is STRICTER than the base takes nothing away: the base still allows 84.95
+    assert (
+        qs.compare(base, snap(coverage_handwritten_percent=84.95), _named("up", coverage_handwritten_percent=90.0))
+        == []
+    )
+
+
+def test_an_upstream_that_does_not_track_a_metric_gives_no_allowance_for_it():
+    base, upstream = _named("base", modules_never_run_by_tests=0), _named("upstream", lint_likely_bugs=99)
+    assert qs.compare(base, snap(modules_never_run_by_tests=1), upstream) == [
+        "modules_never_run_by_tests: 0 -> 1 (vs baseline base)"
+    ]
+
+
+def test_cli_takes_baseline_more_than_once(tmp_path, monkeypatch, capsys):
+    import sys
+
+    base, upstream, now = tmp_path / "base.json", tmp_path / "up.json", tmp_path / "now.json"
+    base.write_text(json.dumps(_named("base", lint_likely_bugs=15)), encoding="utf-8")
+    upstream.write_text(json.dumps(_named("upstream", lint_likely_bugs=20)), encoding="utf-8")
+    now.write_text(json.dumps(snap(lint_likely_bugs=18)), encoding="utf-8")
+    argv = ["scoreboard", "--check", "--baseline", str(base), "--current", str(now)]
+    monkeypatch.setattr(sys, "argv", argv)
+    assert qs.main() == 1
+    capsys.readouterr()
+    monkeypatch.setattr(sys, "argv", [*argv, "--baseline", str(upstream)])
+    assert qs.main() == 0
+    out = capsys.readouterr().out
+    assert "| lint_likely_bugs | 20 | 18 | -2 | better | upstream |" in out

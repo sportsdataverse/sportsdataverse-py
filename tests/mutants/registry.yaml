@@ -836,3 +836,17 @@
   test: tests/test_xgb.py
   expected: kill
   note: an operator's explicit OMP_NUM_THREADS must win (review PR-774 R774-6)
+
+# --- CI harness: the scoreboard's sync-PR allowance (tools/quality_scoreboard.py compare()) -------
+- id: scoreboard-worse-than-all-not-any
+  group: ci-harness
+  finding: scoreboard-upstream-baseline
+  file: tools/quality_scoreboard.py
+  snippet: '        if all(status == "WORSE" for _, _, status in judged):  # worse than every baseline'
+  mutant: '        if any(status == "WORSE" for _, _, status in judged):  # worse than every baseline'
+  test: tests/tools/test_quality_scoreboard.py -k "upstream_baseline_allows or baseline_more_than_once or own_direction"
+  expected: kill
+  note: >-
+    A sync PR may match the upstream branch's baseline instead of the base's; "worse than any"
+    would take that allowance away and every sync PR would need a manual waiver again
+    (#784 #796 #800 #807 #811 #816).
