@@ -25,7 +25,8 @@ the per-sport ``*-alt-raw`` repos. This module is the next two steps:
      a tie between the top two candidates stays unmatched, never guessed.
 
 :func:`fill_player_legs` then writes the voted ids into an existing player crosswalk,
-only where its provider id is null, so an existing provider leg is never dropped.
+only where its provider id is null, so an existing provider leg is never dropped;
+:func:`fill_game_legs` does the same for a schedule crosswalk's game and team ids.
 
 Seasons follow SDV (basketball: ending year; WNBA and football: calendar year), as the
 harvester stores them.
@@ -40,7 +41,7 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple, Union
 
 import polars as pl
 
@@ -101,6 +102,11 @@ PLAYERS_SCHEMA: Dict[str, Any] = {
 BASKETBALL_PLAYER_LEGS: Dict[str, Dict[str, str]] = {
     "yahoo": {"yahoo_player_id": "player_id", "yahoo_player_name": "player_name"},
     "fox": {"fox_athlete_id": "player_id", "fox_player": "player_name"},
+}
+#: Basketball schedule-crosswalk legs per provider: (game id, home team id, away team id).
+BASKETBALL_GAME_LEGS: Dict[str, Tuple[str, Optional[str], Optional[str]]] = {
+    "yahoo": ("yahoo_game_id", None, None),
+    "fox": ("fox_game_id", "fox_home_team_id", "fox_away_team_id"),
 }
 
 #: Raw endpoint directory per provider, under ``{provider}/{league}/``.
@@ -459,6 +465,54 @@ def fill_player_legs(player_xwalk: pl.DataFrame, players: pl.DataFrame, columns:
     )
 
 
+def fill_game_legs(
+    schedule_xwalk: pl.DataFrame, games: pl.DataFrame, teams: pl.DataFrame, columns: Sequence[Optional[str]]
+) -> pl.DataFrame:
+    """Write matched provider game and team ids into a schedule crosswalk where its game id is null.
+
+    Rows join on ``espn_game_id``; the home / away provider team ids come from ``teams``
+    through ESPN's home / away team ids, so they follow ESPN's sides. A row whose
+    provider game id (``columns[0]``) is already set keeps every provider column.
+
+    Args:
+        schedule_xwalk: The crosswalk; must hold ``espn_game_id``, ``home_espn_team_id``,
+            ``away_espn_team_id`` and every named column of ``columns``.
+        games: :func:`match_season` ``games``.
+        teams: :func:`match_season` ``teams``.
+        columns: (game id, home team id, away team id) crosswalk columns; ``None`` skips a
+            team column (e.g. :data:`BASKETBALL_GAME_LEGS` ``["yahoo"]``).
+
+    Returns:
+        ``schedule_xwalk`` with the same columns, order and dtypes.
+    """
+    gid_col = columns[0]
+    assert gid_col is not None, "columns[0] must name the game id column"
+    out = schedule_xwalk.join(
+        games.select(
+            pl.col("espn_game_id").cast(schedule_xwalk.schema["espn_game_id"]), pl.col("game_id").alias("_gid")
+        ).unique("espn_game_id", keep="first"),
+        on="espn_game_id",
+        how="left",
+        maintain_order="left",
+    )
+    fills = {gid_col: "_gid"}
+    for col, side in zip(columns[1:], ("home", "away")):
+        if col is None:
+            continue
+        key = f"{side}_espn_team_id"
+        side_teams = teams.select(pl.col("espn_team_id").alias(key), pl.col("team_id").alias(f"_{side}"))
+        assert side_teams.schema[key] == out.schema[key], f"{key} dtype mismatch"
+        out = out.join(side_teams, on=key, how="left", maintain_order="left")
+        fills[col] = f"_{side}"
+    empty = pl.col(gid_col).is_null() & pl.col("_gid").is_not_null()
+    return out.with_columns(
+        [
+            pl.when(empty).then(pl.col(src).cast(schedule_xwalk.schema[dst])).otherwise(pl.col(dst)).alias(dst)
+            for dst, src in fills.items()
+        ]
+    ).select(schedule_xwalk.columns)
+
+
 def basketball_espn_side(espn_schedule: pl.DataFrame, espn_game_rosters: pl.DataFrame) -> tuple:
     """ESPN games + rosters for :func:`match_season` from the published basketball parquet."""
     from sportsdataverse._crosswalk_basketball_archive import _espn_games
@@ -497,6 +551,31 @@ def with_alt_player_legs(
         m = match_season(games, rosters, alt, min_confidence)
         log.info("%s %s %s: %s", league, season, provider, m["stats"])
         out = fill_player_legs(out, m["players"], columns)
+    return out
+
+
+def with_alt_game_legs(
+    league: str,
+    season: int,
+    schedule_xwalk: pl.DataFrame,
+    espn_schedule: pl.DataFrame,
+    espn_game_rosters: pl.DataFrame,
+    alt_root: Union[str, Path],
+) -> pl.DataFrame:
+    """Fill a basketball schedule crosswalk's Fox / Yahoo game legs from the parsed ``*-alt-data`` season.
+
+    The schedule twin of :func:`with_alt_player_legs`: providers without a parsed season
+    under ``alt_root`` are skipped, and existing ids are kept (:func:`fill_game_legs`).
+    """
+    games, rosters = basketball_espn_side(espn_schedule, espn_game_rosters)
+    out = schedule_xwalk
+    for provider, columns in BASKETBALL_GAME_LEGS.items():
+        alt = read_season(alt_root, provider, league, season)
+        if alt is None:
+            continue
+        m = match_season(games, rosters, alt)
+        log.info("%s %s %s games: %s", league, season, provider, m["stats"])
+        out = fill_game_legs(out, m["games"], m["teams"], columns)
     return out
 
 
