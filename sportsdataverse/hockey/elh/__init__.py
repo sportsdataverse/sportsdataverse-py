@@ -10,12 +10,13 @@ bucket holds every competition hokej.cz shows, not only the Extraliga.
 
 from __future__ import annotations
 
-# Nested from its first release (generate._NESTED_HOMES). The generated module is re-exported
-# here once codegen renders it; until then the package exports the parsers and the game-id lister.
+# Nested from its first release (generate._NESTED_HOMES): the generated wrappers plus the parsers.
+from sportsdataverse.hockey.elh import elh as _api
+from sportsdataverse.hockey.elh.elh import *  # noqa: F401,F403
 from sportsdataverse.hockey.elh import elh_parsers as _parsers
 from sportsdataverse.hockey.elh.elh_parsers import *  # noqa: F401,F403
 from sportsdataverse.hockey.elh.elh_runtime import elh_game_ids
 
 # Explicit, so ``from sportsdataverse.hockey.elh import *`` (the top-level package does it)
 # exports the parsers and never the submodule objects.
-__all__ = [*_parsers.__all__, "elh_game_ids"]
+__all__ = [*_api.__all__, *_parsers.__all__, "elh_game_ids"]

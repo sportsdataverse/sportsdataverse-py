@@ -16,6 +16,10 @@ Unofficial use of a public source: payloads are not redistributed as release ass
 
 from __future__ import annotations
 
-# Nested from its first release (generate._NESTED_HOMES). The generated module's import is added
-# by the integration codegen run; the parser module is re-exported here.
+# Nested from its first release (generate._NESTED_HOMES): the generated wrappers plus the parsers.
+from sportsdataverse.hockey.liiga import liiga as _api
+from sportsdataverse.hockey.liiga import liiga_parsers as _parsers
+from sportsdataverse.hockey.liiga.liiga import *  # noqa: F401,F403
 from sportsdataverse.hockey.liiga.liiga_parsers import *  # noqa: F401,F403
+
+__all__ = [*_api.__all__, *_parsers.__all__]

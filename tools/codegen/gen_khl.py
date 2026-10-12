@@ -9,9 +9,10 @@ Idempotent: same specs + same fixtures -> byte-identical output. Emits:
   endpoint, from running its parser over the committed fixture (``tests/fixtures/khl_*``): the FULL
   body under ``full/`` when there is one (dtypes from complete data), else the refs capture.
   Descriptions are left blank there on purpose.
-* ``tools/codegen/khl_column_descriptions.snippet.yaml`` -- the column descriptions, keyed like
-  ``manual_column_descriptions.yaml`` (schema key -> column -> text), from the refs ``khl-returns.md``
-  plus the columns the parsers rename or derive. Integration merges it into that file.
+
+The column descriptions (refs ``khl-returns.md`` plus the columns the parsers rename or derive) were
+merged into ``manual_column_descriptions.yaml`` at integration; edit them there. ``main`` still
+builds them, only to report the described count.
 
 The REST wrappers send their form fields as the getter's ``params``: the codegen always renders
 ``_get(url, params=...)``, and ``sportsdataverse.hockey.khl.khl_runtime._get`` POSTs them as the form.
@@ -35,7 +36,6 @@ from sportsdataverse.hockey.khl import khl_rest_parsers as rest
 from sportsdataverse.hockey.khl import khl_webcaster_parsers as wc
 
 FIXTURES = ROOT / "tests" / "fixtures"
-SNIPPET = ROOT / "tools" / "codegen" / "khl_column_descriptions.snippet.yaml"
 SANCTIONS = (
     "Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian "
     "operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any "
@@ -719,8 +719,8 @@ def main() -> None:
     notes: Dict[str, Dict[str, str]] = {}
     n_rest = build_rest(refs, docs, notes)
     n_wc = build_webcaster(refs, docs, notes)
-    write_yaml(SNIPPET, notes)
-    print(f"khl: {n_rest} khl_rest + {n_wc} khl_webcaster endpoints")
+    described = sum(1 for cols in notes.values() for v in cols.values() if v)
+    print(f"khl: {n_rest} khl_rest + {n_wc} khl_webcaster endpoints, {described} columns described")
 
 
 if __name__ == "__main__":

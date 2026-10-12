@@ -8,7 +8,14 @@ needs owner (sanctions / legal) sign-off first.
 
 from __future__ import annotations
 
-# Nested from its first release (generate._NESTED_HOMES). The generated modules (khl_rest,
-# khl_webcaster) are re-exported here by codegen once they exist.
+# Nested from its first release (generate._NESTED_HOMES): the generated wrappers plus the parsers.
+from sportsdataverse.hockey.khl import khl_rest as _khl_rest
+from sportsdataverse.hockey.khl import khl_webcaster as _khl_webcaster
+from sportsdataverse.hockey.khl import khl_rest_parsers as _khl_rest_parsers
+from sportsdataverse.hockey.khl import khl_webcaster_parsers as _khl_webcaster_parsers
+from sportsdataverse.hockey.khl.khl_rest import *  # noqa: F401,F403
+from sportsdataverse.hockey.khl.khl_webcaster import *  # noqa: F401,F403
 from sportsdataverse.hockey.khl.khl_rest_parsers import *  # noqa: F401,F403
 from sportsdataverse.hockey.khl.khl_webcaster_parsers import *  # noqa: F401,F403
+
+__all__ = [*_khl_rest.__all__, *_khl_webcaster.__all__, *_khl_rest_parsers.__all__, *_khl_webcaster_parsers.__all__]

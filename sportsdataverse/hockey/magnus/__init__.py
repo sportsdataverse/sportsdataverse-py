@@ -14,11 +14,12 @@ read the same ``/rencontre/{id}/`` page, so fetch it once and parse it as many w
 
 from __future__ import annotations
 
-# Nested from its first release (generate._NESTED_HOMES). The generated module
-# (``magnus.py``) is re-exported here once integration has rendered it.
+# Nested from its first release (generate._NESTED_HOMES): the generated wrappers plus the parsers.
+from sportsdataverse.hockey.magnus import magnus as _api
+from sportsdataverse.hockey.magnus.magnus import *  # noqa: F401,F403
 from sportsdataverse.hockey.magnus import magnus_parsers as _parsers
 from sportsdataverse.hockey.magnus.magnus_parsers import *  # noqa: F401,F403
 
 # Explicit, so ``from sportsdataverse.hockey.magnus import *`` (the top-level package does it)
 # exports the parsers and never the submodule objects.
-__all__ = [*_parsers.__all__]
+__all__ = [*_api.__all__, *_parsers.__all__]

@@ -13,6 +13,10 @@ release assets.
 
 from __future__ import annotations
 
-# Nested from its first release (generate._NESTED_HOMES). The generated module is re-exported here
-# once codegen has rendered it (integration); the parsers are importable now.
+# Nested from its first release (generate._NESTED_HOMES): the generated wrappers plus the parsers.
+from sportsdataverse.hockey.nl import nationalleague as _api
+from sportsdataverse.hockey.nl import nationalleague_parsers as _parsers
+from sportsdataverse.hockey.nl.nationalleague import *  # noqa: F401,F403
 from sportsdataverse.hockey.nl.nationalleague_parsers import *  # noqa: F403
+
+__all__ = [*_api.__all__, *_parsers.__all__]

@@ -23,11 +23,12 @@ Unofficial use of a public source: payloads are not redistributed as release ass
 
 from __future__ import annotations
 
-# Nested from its first release (generate._NESTED_HOMES). The generated module's import is added
-# by the integration codegen run; the parser module and the season helper are re-exported here.
+# Nested from its first release (generate._NESTED_HOMES): the generated wrappers plus the parsers.
+from sportsdataverse.hockey.vhl import vhl as _api
+from sportsdataverse.hockey.vhl.vhl import *  # noqa: F401,F403
 from sportsdataverse.hockey.vhl import vhl_parsers as _parsers
 from sportsdataverse.hockey.vhl.vhl_parsers import *  # noqa: F401,F403
 from sportsdataverse.hockey.vhl.vhl_runtime import vhl_tn
 
 # Explicit, so the top-level ``from sportsdataverse.hockey.vhl import *`` exports only these.
-__all__ = [*_parsers.__all__, "vhl_tn"]
+__all__ = [*_api.__all__, *_parsers.__all__, "vhl_tn"]

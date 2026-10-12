@@ -258,21 +258,21 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "native/openligadb": 139,
     "native/polymarket": 292,
     "native/kalshi": 157,
-    # European hockey intake families: refs returns md is English but partial; uncapped until
-    # the integration step measures each bucket and pins it (None = report, do not cap).
-    "native/del_esports": None,
-    "native/icehl_esports": None,
-    "native/eihl_esports": None,
-    "native/metal_esports": None,
-    "native/elh": None,
-    "native/liiga": None,
-    "native/shl": None,
-    "native/ha": None,
-    "native/nationalleague": None,
-    "native/magnus": None,
-    "native/khl_rest": None,
-    "native/khl_webcaster": None,
-    "native/vhl": None,
+    # European hockey intake families, pinned to their measured counts at integration (2026-10-12).
+    # Only KHL has blanks: columns the refs khl-returns.md leaves undescribed too.
+    "native/del_esports": 0,
+    "native/icehl_esports": 0,
+    "native/eihl_esports": 0,
+    "native/metal_esports": 0,
+    "native/elh": 0,
+    "native/liiga": 0,
+    "native/shl": 0,
+    "native/ha": 0,
+    "native/nationalleague": 0,
+    "native/magnus": 0,
+    "native/khl_rest": 73,
+    "native/khl_webcaster": 213,
+    "native/vhl": 0,
 }
 
 
