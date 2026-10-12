@@ -362,6 +362,7 @@ files = [
     "sportsdataverse/_crosswalk_basketball_sources.py",
     "sportsdataverse/_crosswalk_basketball_archive.py",
     "sportsdataverse/_crosswalk_basketball_fox_yahoo.py",
+    "sportsdataverse/_crosswalk_alt.py",
     "sportsdataverse/_crosswalk_history.py",
     "sportsdataverse/_espn_basketball_pbp.py",
     "sportsdataverse/mbb/mbb_crosswalk.py",
