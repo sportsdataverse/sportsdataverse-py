@@ -1,0 +1,187 @@
+{
+  "101": {
+    "league_name": "Tipsport extraliga",
+    "matches": [
+      {
+        "hokejcz_id": 2928321,
+        "onlajny_id": 532979,
+        "date": "11-10-2026",
+        "time": "15:00",
+        "stream_url": "md",
+        "bets": {
+          "fortuna": {
+            "home_win": null,
+            "draw": null,
+            "away_win": null
+          },
+          "tipsport": {
+            "home_win": 1.55,
+            "draw": 4.79,
+            "away_win": 4.79,
+            "link": "https://www.tipsport.cz/kurzy/zapas/ledni-hokej-sparta-praha-vitkovice/8261601",
+            "link_home_win": "https://www.tipsport.cz/vytvorit-tiket?bets=AKU+2284450697,2738605613&matchId=8261601&amount=500&pid=61&sid=45&tid=11962",
+            "link_draw": "https://www.tipsport.cz/vytvorit-tiket?bets=AKU+2284450697,2738605614&matchId=8261601&amount=500&pid=61&sid=45&tid=11962",
+            "link_away_win": "https://www.tipsport.cz/vytvorit-tiket?bets=AKU+2284450697,2738605615&matchId=8261601&amount=500&pid=61&sid=45&tid=11962",
+            "tid": 11962
+          },
+          "sazkabet": {
+            "home_win": null,
+            "draw": null,
+            "away_win": null,
+            "link": null
+          },
+          "chance": {
+            "home_win": 1.55,
+            "draw": 4.79,
+            "away_win": 4.79,
+            "link": "https://www.chance.cz/kurzy/zapas/ledni-hokej-sparta-praha-vitkovice/8261601"
+          }
+        },
+        "home": {
+          "hokejcz_id": 8,
+          "onlajny_id": 156,
+          "name": "HC Sparta Praha",
+          "short_name": "Sparta",
+          "shortcut": "SPA"
+        },
+        "visitor": {
+          "hokejcz_id": 7,
+          "onlajny_id": 168,
+          "name": "HC VÍTKOVICE RIDERA",
+          "short_name": "Vítkovice",
+          "shortcut": "VIT"
+        },
+        "score_home": 3,
+        "score_visitor": 0,
+        "score_periods": [
+          "2:0",
+          "0:0",
+          "1:0"
+        ],
+        "match_actual_time_alias": "K",
+        "match_actual_time_name": "konec zápasu",
+        "match_status": "po zápase"
+      },
+      {
+        "hokejcz_id": 2928319,
+        "onlajny_id": 532978,
+        "date": "11-10-2026",
+        "time": "16:00",
+        "stream_url": "md",
+        "bets": {
+          "fortuna": {
+            "home_win": null,
+            "draw": null,
+            "away_win": null
+          },
+          "tipsport": {
+            "home_win": 2.33,
+            "draw": 4.08,
+            "away_win": 2.6,
+            "link": "https://www.tipsport.cz/kurzy/zapas/ledni-hokej-mlada-boleslav-litvinov/8261600",
+            "link_home_win": "https://www.tipsport.cz/vytvorit-tiket?bets=AKU+2284452373,2738609765&matchId=8261600&amount=500&pid=61&sid=45&tid=11962",
+            "link_draw": "https://www.tipsport.cz/vytvorit-tiket?bets=AKU+2284452373,2738609767&matchId=8261600&amount=500&pid=61&sid=45&tid=11962",
+            "link_away_win": "https://www.tipsport.cz/vytvorit-tiket?bets=AKU+2284452373,2738609766&matchId=8261600&amount=500&pid=61&sid=45&tid=11962",
+            "tid": 11962
+          },
+          "sazkabet": {
+            "home_win": null,
+            "draw": null,
+            "away_win": null,
+            "link": null
+          },
+          "chance": {
+            "home_win": 2.33,
+            "draw": 4.08,
+            "away_win": 2.6,
+            "link": "https://www.chance.cz/kurzy/zapas/ledni-hokej-mlada-boleslav-litvinov/8261600"
+          }
+        },
+        "home": {
+          "hokejcz_id": 89,
+          "onlajny_id": 158,
+          "name": "BK Mladá Boleslav",
+          "short_name": "Mladá Boleslav",
+          "shortcut": "MBL"
+        },
+        "visitor": {
+          "hokejcz_id": 823,
+          "onlajny_id": 159,
+          "name": "HC Litvínov",
+          "short_name": "Litvínov",
+          "shortcut": "LIT"
+        },
+        "score_home": 2,
+        "score_visitor": 1,
+        "score_periods": [
+          "1:0",
+          "1:1",
+          "0:0"
+        ],
+        "match_actual_time_alias": "K",
+        "match_actual_time_name": "konec zápasu",
+        "match_status": "po zápase"
+      },
+      {
+        "hokejcz_id": 2928320,
+        "onlajny_id": 532982,
+        "date": "11-10-2026",
+        "time": "17:00",
+        "stream_url": "md",
+        "bets": {
+          "fortuna": {
+            "home_win": null,
+            "draw": null,
+            "away_win": null
+          },
+          "tipsport": {
+            "home_win": 2.88,
+            "draw": 4.21,
+            "away_win": 2.1,
+            "link": "https://www.tipsport.cz/kurzy/zapas/ledni-hokej-ceske-budejovice-liberec/8261602",
+            "link_home_win": "https://www.tipsport.cz/vytvorit-tiket?bets=AKU+2284452953,2738611372&matchId=8261602&amount=500&pid=61&sid=45&tid=11962",
+            "link_draw": "https://www.tipsport.cz/vytvorit-tiket?bets=AKU+2284452953,2738611373&matchId=8261602&amount=500&pid=61&sid=45&tid=11962",
+            "link_away_win": "https://www.tipsport.cz/vytvorit-tiket?bets=AKU+2284452953,2738611374&matchId=8261602&amount=500&pid=61&sid=45&tid=11962",
+            "tid": 11962
+          },
+          "sazkabet": {
+            "home_win": null,
+            "draw": null,
+            "away_win": null,
+            "link": null
+          },
+          "chance": {
+            "home_win": 2.88,
+            "draw": 4.21,
+            "away_win": 2.1,
+            "link": "https://www.chance.cz/kurzy/zapas/ledni-hokej-ceske-budejovice-liberec/8261602"
+          }
+        },
+        "home": {
+          "hokejcz_id": 1721,
+          "onlajny_id": 164,
+          "name": "BANES Motor České Budějovice",
+          "short_name": "Č. Budějovice",
+          "shortcut": "CEB"
+        },
+        "visitor": {
+          "hokejcz_id": 18,
+          "onlajny_id": 157,
+          "name": "Bílí Tygři Liberec",
+          "short_name": "Liberec",
+          "shortcut": "LIB"
+        },
+        "score_home": 4,
+        "score_visitor": 3,
+        "score_periods": [
+          "2:2",
+          "1:0",
+          "1:1"
+        ],
+        "match_actual_time_alias": "K",
+        "match_actual_time_name": "konec zápasu",
+        "match_status": "po zápase"
+      }
+    ]
+  }
+}
