@@ -7960,6 +7960,8 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)
                     .pipe(self.__add_description_features)
+                    # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
+                    .drop("_kick_spot", strict=False)
                 )
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {

@@ -1242,6 +1242,8 @@
                         .pipe(self.__add_series_data)
                         .pipe(self.__add_spread_time)
                         .pipe(self.__add_description_features)
+                        # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
+                        .drop("_kick_spot", strict=False)
                     )
   mutant: |-
     .pipe(self.__refine_play_types_post_attribution)
@@ -1251,6 +1253,8 @@
                         .pipe(self.__add_series_data)
                         .pipe(self.__add_spread_time)
                         .pipe(self.__add_description_features)
+                        # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
+                        .drop("_kick_spot", strict=False)
                     )
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_first_down_penalty_cleaning_pipeline[401547449]
   expected: kill
@@ -1348,3 +1352,16 @@
     a 2024+ landing-zone touchback (the receiving 20): 401671740 play 3563 ends at the 70 with EPA 0
     instead of the 80 and the owner's -0.600. It also re-spots the 2006-07 bare "KickOff" returns
     (R831-2), MAE vs nflverse 0.040 -> 0.519 on the 32 capture rows.
+
+- id: nfl-cleaning-pipeline-drops-kick-spot
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.drop("_kick_spot", strict=False)'
+  mutant: '.drop("_no_such_column", strict=False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_cleaning_pipeline_has_no_kick_spot_column
+  expected: kill
+  note: >-
+    The C-H5 block's _kick_spot flag rides to the EP block, which drops it; run_cleaning_pipeline
+    stops before the EP block, so without its own drop every cleaned play carries the temporary
+    column (CodeRabbit thread on #831).

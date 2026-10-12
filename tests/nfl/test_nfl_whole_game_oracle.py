@@ -946,6 +946,17 @@ def test_kickoff_touchback_without_a_next_snap_ends_at_the_season_spot(game_id, 
     assert abs(row["EPA"]) < 1e-3, row["EPA"]
 
 
+def test_kickoff_touchback_cleaning_pipeline_has_no_kick_spot_column():
+    # _kick_spot is carried from the C-H5 block to the EP block, which drops it; the cleaning pipeline
+    # stops before the EP block and must drop it itself (review thread on #831).
+    proc = NFLPlayProcess(gameId=401671740)
+    proc.espn_nfl_pbp(summary=load_summary(401671740))
+    plays = proc.run_cleaning_pipeline()["plays"]
+    _require(len(plays) > 0, "the cleaning pipeline returned no plays")
+    assert [c for c in plays[0] if c == "_kick_spot"] == []
+    assert "_kick_spot" not in run(401671740).plays.columns
+
+
 # nflverse's epa on every touchback kickoff of the captures that nflverse also flags as one
 # (fixtures/nflverse/kickoff_touchback_epa.csv, 124 rows, 2006-2025; the README has the provenance).
 # MAE before -> after the fix: pre-2016 0.328 -> 0.017, 2016-23 0.0005 -> 0.0005, 2024 0.469 -> 0.255,
