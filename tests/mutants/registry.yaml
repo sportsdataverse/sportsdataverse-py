@@ -850,3 +850,27 @@
     A sync PR may match the upstream branch's baseline instead of the base's; "worse than any"
     would take that allowance away and every sync PR would need a manual waiver again
     (#784 #796 #800 #807 #811 #816).
+
+- id: upstream-baseline-sync-needs-base-without-tip
+  group: ci-harness
+  finding: scoreboard-upstream-baseline
+  file: tools/upstream_baseline.sh
+  snippet: '  0:1) ;;'
+  mutant: '  0:?) ;;'
+  test: tests/tools/test_upstream_baseline.py
+  expected: kill
+  note: >-
+    A head that contains the upstream tip is a sync only when the base does NOT contain it yet; "0:?"
+    would give every task PR on an already-synced base the upstream allowance (review R824-1).
+
+- id: upstream-baseline-shallow-guard
+  group: ci-harness
+  finding: scoreboard-upstream-baseline
+  file: tools/upstream_baseline.sh
+  snippet: '[ "$(git rev-parse --is-shallow-repository)" = false ] || warn_none "history is still shallow"'
+  mutant: 'true'
+  test: tests/tools/test_upstream_baseline.py
+  expected: kill
+  note: >-
+    In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
+    history still shallow after the fetch must add no allowance (review R824-1).
