@@ -15,7 +15,8 @@ route below is the exact request `sihf_runtime._get` builds. The table bodies ar
 first rows (count below), and each `filters[].entries` list to its first 8 entries. The two
 game bodies are whole. Nothing else is edited.
 Season `2026` is 2025-26 (SIHF keys a season by its END year); `2027` is the season in progress
-on the capture date; league `1` is the National League.
+on the capture date; league `1` is the National League and league `100` the MyHockey League (one
+non-National-League table, because each league publishes its own table header).
 
 | File | Route | Rows kept |
 |---|---|---|
@@ -23,6 +24,7 @@ on the capture date; league `1` is the National League.
 | `table__results__2027__1.json` | `/table?alias=results&searchQuery=1//1&language=en&filterBy=Season,Date&filterQuery=2027/01.07.2026-30.06.2027` | 3 of 364 (current season) |
 | `table__standing__2026__1.json` | `/table?alias=standing&searchQuery=1//1&language=en&filterBy=Season,ContentType&filterQuery=2026/All` (captured 2026-10-12) | 14 of 14 |
 | `table__standing__2025__1.json` | `/table?alias=standing&searchQuery=1//1&language=en&filterBy=Season,ContentType&filterQuery=2025/All` (captured 2026-10-12) | 4 of 14 |
+| `table__standing__2026__100.json` | `/table?alias=standing&searchQuery=1//100&language=en&filterBy=Season,ContentType&filterQuery=2026/All` (MyHockey League, captured 2026-10-12) | 11 of 11 |
 | `table__player__2026__1.json` | `/table?alias=player&searchQuery=1//1&language=en&filterBy=Season&filterQuery=2026` | 3 of 427 |
 | `table__goalkeeper__2026__1.json` | `/table?alias=goalkeeper&searchQuery=1//1&language=en&filterBy=Season&filterQuery=2026` | 8 of 35 (row 7 is the league-average row) |
 | `gameoverview__20261105000325.json` | `/gameoverview?alias=gameDetail&searchQuery=20261105000325` | whole (has a goaltender change and a revoked goal) |

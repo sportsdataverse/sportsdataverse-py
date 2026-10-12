@@ -104,6 +104,13 @@ def test_standings_are_the_full_regular_season_table():
     assert set(parse_sihf_table(_load("table__standing__2025__1.json"))["games_played"]) == {52}
 
 
+def test_a_second_league_publishes_the_documented_standings_columns():
+    # The columns come from each league's own header; the MyHockey League's matches the National League's.
+    df = parse_sihf_table(_load("table__standing__2026__100.json"))
+    assert df.height == 11 and set(df["season"]) == {2026}
+    assert df.schema == parse_sihf_table(_load(TABLES["standings"])).schema
+
+
 def test_goalie_table_tags_the_league_average_row():
     df = parse_sihf_table(_load(TABLES["goalie_stats"]))
     avg = df.filter(pl.col("row_type") == "average")

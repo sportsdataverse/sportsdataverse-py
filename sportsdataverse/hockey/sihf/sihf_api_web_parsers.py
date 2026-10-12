@@ -286,8 +286,10 @@ def parse_sihf_table(
     """Parse a SIHF ``/table`` body (results, standings, player or goalie stats) into a tidy frame.
 
     Each positional row is keyed by its ``header`` alias, snake_cased (``gamesPlayed`` ->
-    ``games_played``). Typed cells expand: a ``team`` cell to ``{col}_id`` / ``{col}_name``
-    / ``{col}_acronym``, a ``result`` to ``{col}_home`` / ``{col}_away``, ``periods`` to
+    ``games_played``). The columns therefore follow the header the league publishes: the
+    documented ones are the National League's (the MyHockey League's standings header is the
+    same), and a league that publishes an extra alias gets an extra column. Typed cells
+    expand: a ``team`` cell to ``{col}_id`` / ``{col}_name`` / ``{col}_acronym``, a ``result`` to ``{col}_home`` / ``{col}_away``, ``periods`` to
     per-side ``List[Int64]`` columns, ``gameStatus`` to ``status_*`` plus the start / end /
     update timestamps, and ``linkToGameDetail`` to ``game_id``. Known count and rate columns
     are cast to ``Int64`` / ``Float64`` (``""`` and ``"-"`` become null) and ``date`` to a
