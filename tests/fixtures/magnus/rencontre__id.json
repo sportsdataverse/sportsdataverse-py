@@ -1,0 +1,949 @@
+{
+  "evenements": [
+    {
+      "id": "BUT99238",
+      "buteur": {
+        "id": 59613,
+        "participant_id": 618672,
+        "nom_complet": "HERVE Jordan",
+        "code_adherent": "210625",
+        "numero": "92",
+        "position": {
+          "code": "A",
+          "couleur": "#2196F3",
+          "libelle": "Attaquant"
+        },
+        "attributs": [],
+        "equipe_id": 553,
+        "personne": {
+          "id": 59613,
+          "nom_complet": "HERVE Jordan",
+          "code_adherent": "210625",
+          "numero": "17",
+          "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/59613_120042_photo_id.png"
+        }
+      },
+      "gardien": {
+        "id": 142988,
+        "participant_id": 618933,
+        "nom_complet": "RICHARD Samuel",
+        "code_adherent": "305534",
+        "numero": "33",
+        "position": {
+          "code": "GB",
+          "couleur": "#6aa84f",
+          "libelle": "Gardien de but"
+        },
+        "attributs": [],
+        "equipe_id": 3409,
+        "personne": {
+          "id": 142988,
+          "nom_complet": "RICHARD Samuel",
+          "code_adherent": "305534",
+          "numero": "33",
+          "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/142988_726280_photo_id.png"
+        }
+      },
+      "assistants": [
+        {
+          "id": 18581,
+          "participant_id": 618690,
+          "nom_complet": "GABORIT Robin",
+          "code_adherent": "095124",
+          "numero": "11",
+          "position": {
+            "code": "A",
+            "couleur": "#2196F3",
+            "libelle": "Attaquant"
+          },
+          "attributs": [
+            {
+              "code": "C",
+              "couleur": "#2196F3",
+              "libelle": "Capitaine"
+            }
+          ],
+          "equipe_id": 553,
+          "personne": {
+            "id": 18581,
+            "nom_complet": "GABORIT Robin",
+            "code_adherent": "095124",
+            "numero": "11",
+            "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/18581_640343_photo_id.png"
+          }
+        },
+        {
+          "id": 142816,
+          "participant_id": 618676,
+          "nom_complet": "ATKINSON Joshua",
+          "code_adherent": "305362",
+          "numero": "41",
+          "position": {
+            "code": "D",
+            "couleur": "#cc0000",
+            "libelle": "Défenseur"
+          },
+          "attributs": [],
+          "equipe_id": 553,
+          "personne": {
+            "id": 142816,
+            "nom_complet": "ATKINSON Joshua",
+            "code_adherent": "305362",
+            "numero": "'",
+            "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/142816_729091_photo_id.png"
+          }
+        }
+      ],
+      "joueurs_plus_ids": [
+        618682,
+        618690,
+        618672
+      ],
+      "joueurs_moins_ids": [
+        618933,
+        618931,
+        618937
+      ],
+      "equipe": {
+        "id": 553,
+        "libelle": "52007S - 52007S LES DUCS D'ANGERS",
+        "libelle_complet": "Ducs d'Angers",
+        "libelle_court": "ANGERS",
+        "abreviation": "ANG",
+        "logo": "https://hockeynet.fr/storage/logos_equipes/197/Zv0ZlavF4DHFurqwTySpECtE4Hj7NOQl4gPCQPlK.png",
+        "structure": {
+          "id": 381,
+          "created_at": "2020-07-03 10:38:52",
+          "updated_at": "2021-12-02 10:13:23",
+          "nom": "SASP LES DUCS D'ANGERS",
+          "nom_court": "SASP DUCS ANGERS",
+          "code": "52007S",
+          "etat": "A",
+          "type": "SOC",
+          "annuaire_web": 0,
+          "sites_partenaires": 1,
+          "correspondant_personne_id": null,
+          "correspondant_adresse_id": null,
+          "choix_correspondance": "ST",
+          "logo": "ySqoYzy26jgo3sqjFRklAAEaibhTdWncPCTSUodQ.png",
+          "id_import": null,
+          "code_import": null,
+          "est_club_federal": null,
+          "uuid": "01a0439c-ed8d-73b2-aa37-24ea05755489",
+          "TypeColorLabel": "info",
+          "EquivalentStructure": {
+            "nom": "Club",
+            "color": "primary",
+            "colorlabel": "primary",
+            "enfants": [
+              "SOC"
+            ],
+            "affiliable": true,
+            "filter_key": "C",
+            "code": "CLU"
+          }
+        }
+      },
+      "surnombre": {
+        "code": "EG",
+        "libelle": "EGAL - égalité numérique"
+      },
+      "surnombre_details": null,
+      "temps": 641,
+      "type": "BUT"
+    },
+    {
+      "id": "SANCTION129447",
+      "joueur": {
+        "id": 141305,
+        "participant_id": 618927,
+        "nom_complet": "SATO Kohei",
+        "code_adherent": "303851",
+        "numero": "18",
+        "position": {
+          "code": "A",
+          "couleur": "#2196F3",
+          "libelle": "Attaquant"
+        },
+        "attributs": [
+          {
+            "code": "A",
+            "couleur": "#2196F3",
+            "libelle": "Capitaine assistant"
+          }
+        ],
+        "equipe_id": 3409,
+        "personne": {
+          "id": 141305,
+          "nom_complet": "SATO Kohei",
+          "code_adherent": "303851",
+          "numero": "18",
+          "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/141305_515901_photo_id.png"
+        }
+      },
+      "tireur": null,
+      "substitution": null,
+      "equipe": {
+        "id": 3409,
+        "libelle": "93003S - DIABLES ROUGES BRIANÇON",
+        "libelle_complet": "DIABLES ROUGES BRIANÇON",
+        "libelle_court": "BRIANÇON",
+        "abreviation": "BRI",
+        "logo": "https://hockeynet.fr/storage/logos_equipes/394/ViMCUPL6rjozws3LVGEc2gdqMYgSXbrLZ694rDrQ.png",
+        "structure": {
+          "id": 394,
+          "created_at": "2020-07-03 10:38:52",
+          "updated_at": "2025-12-03 13:00:09",
+          "nom": "S.A. LES DIABLES ROUGES DE BRIANCON",
+          "nom_court": "S.A. LES DIABLES ROUGES DE BRIANCON",
+          "code": "93003S",
+          "etat": "A",
+          "type": "SOC",
+          "annuaire_web": 0,
+          "sites_partenaires": 1,
+          "correspondant_personne_id": null,
+          "correspondant_adresse_id": null,
+          "choix_correspondance": "ST",
+          "logo": "50/93/50932d8f-83b8-423c-9224-8b40448ed2ea.png",
+          "id_import": null,
+          "code_import": null,
+          "est_club_federal": null,
+          "uuid": "01a0439c-ed8f-72e5-8cd4-45839edaf419",
+          "TypeColorLabel": "info",
+          "EquivalentStructure": {
+            "nom": "Club",
+            "color": "primary",
+            "colorlabel": "primary",
+            "enfants": [
+              "SOC"
+            ],
+            "affiliable": true,
+            "filter_key": "C",
+            "code": "CLU"
+          }
+        }
+      },
+      "temps_penalite": 2,
+      "temps_debut_sanction": 279,
+      "temps_fin_sanction": 399,
+      "tir_associe": null,
+      "but_associe": null,
+      "sanction": {
+        "code": "CIN",
+        "libelle": "Cinglage (coup de crosse)",
+        "libelle_court": "Cinglage",
+        "actif": true
+      },
+      "temps": 279,
+      "type": "SANCTION"
+    },
+    {
+      "id": "TIR229839",
+      "tireur": {
+        "id": 120434,
+        "participant_id": 618665,
+        "nom_complet": "PRAPAVESSIS Matthew",
+        "code_adherent": "282982",
+        "numero": "7",
+        "position": {
+          "code": "D",
+          "couleur": "#cc0000",
+          "libelle": "Défenseur"
+        },
+        "attributs": [],
+        "equipe_id": 553,
+        "personne": {
+          "id": 120434,
+          "nom_complet": "PRAPAVESSIS Matthew",
+          "code_adherent": "282982",
+          "numero": "7",
+          "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/120434_897499_photo_id.png"
+        }
+      },
+      "gardien": {
+        "id": 142988,
+        "participant_id": 618933,
+        "nom_complet": "RICHARD Samuel",
+        "code_adherent": "305534",
+        "numero": "33",
+        "position": {
+          "code": "GB",
+          "couleur": "#6aa84f",
+          "libelle": "Gardien de but"
+        },
+        "attributs": [],
+        "equipe_id": 3409,
+        "personne": {
+          "id": 142988,
+          "nom_complet": "RICHARD Samuel",
+          "code_adherent": "305534",
+          "numero": "33",
+          "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/142988_726280_photo_id.png"
+        }
+      },
+      "equipe": {
+        "id": 553,
+        "libelle": "52007S - 52007S LES DUCS D'ANGERS",
+        "libelle_complet": "Ducs d'Angers",
+        "libelle_court": "ANGERS",
+        "abreviation": "ANG",
+        "logo": "https://hockeynet.fr/storage/logos_equipes/197/Zv0ZlavF4DHFurqwTySpECtE4Hj7NOQl4gPCQPlK.png",
+        "structure": {
+          "id": 381,
+          "created_at": "2020-07-03 10:38:52",
+          "updated_at": "2021-12-02 10:13:23",
+          "nom": "SASP LES DUCS D'ANGERS",
+          "nom_court": "SASP DUCS ANGERS",
+          "code": "52007S",
+          "etat": "A",
+          "type": "SOC",
+          "annuaire_web": 0,
+          "sites_partenaires": 1,
+          "correspondant_personne_id": null,
+          "correspondant_adresse_id": null,
+          "choix_correspondance": "ST",
+          "logo": "ySqoYzy26jgo3sqjFRklAAEaibhTdWncPCTSUodQ.png",
+          "id_import": null,
+          "code_import": null,
+          "est_club_federal": null,
+          "uuid": "01a0439c-ed8d-73b2-aa37-24ea05755489",
+          "TypeColorLabel": "info",
+          "EquivalentStructure": {
+            "nom": "Club",
+            "color": "primary",
+            "colorlabel": "primary",
+            "enfants": [
+              "SOC"
+            ],
+            "affiliable": true,
+            "filter_key": "C",
+            "code": "CLU"
+          }
+        }
+      },
+      "temps": 1200,
+      "type": "TIR"
+    },
+    {
+      "id": "ENGA237933",
+      "receveur": {
+        "id": 142859,
+        "participant_id": 618685,
+        "nom_complet": "DUKE Reid",
+        "code_adherent": "305405",
+        "numero": "96",
+        "position": {
+          "code": "A",
+          "couleur": "#2196F3",
+          "libelle": "Attaquant"
+        },
+        "attributs": [],
+        "equipe_id": 553,
+        "personne": {
+          "id": 142859,
+          "nom_complet": "DUKE Reid",
+          "code_adherent": "305405",
+          "numero": "96",
+          "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/142859_687752_photo_id.png"
+        }
+      },
+      "visiteur": {
+        "id": 38081,
+        "participant_id": 618925,
+        "nom_complet": "BONNARDEL Lucas",
+        "code_adherent": "153273",
+        "numero": "40",
+        "position": {
+          "code": "A",
+          "couleur": "#2196F3",
+          "libelle": "Attaquant"
+        },
+        "attributs": [
+          {
+            "code": "A",
+            "couleur": "#2196F3",
+            "libelle": "Capitaine assistant"
+          }
+        ],
+        "equipe_id": 3409,
+        "personne": {
+          "id": 38081,
+          "nom_complet": "BONNARDEL Lucas",
+          "code_adherent": "153273",
+          "numero": "40",
+          "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/38081_586158_photo_id.png"
+        }
+      },
+      "gagnant": {
+        "id": 38081,
+        "participant_id": 618925,
+        "nom_complet": "BONNARDEL Lucas",
+        "code_adherent": "153273",
+        "numero": "40",
+        "position": {
+          "code": "A",
+          "couleur": "#2196F3",
+          "libelle": "Attaquant"
+        },
+        "attributs": [
+          {
+            "code": "A",
+            "couleur": "#2196F3",
+            "libelle": "Capitaine assistant"
+          }
+        ],
+        "equipe_id": 3409,
+        "personne": {
+          "id": 38081,
+          "nom_complet": "BONNARDEL Lucas",
+          "code_adherent": "153273",
+          "numero": "40",
+          "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/38081_586158_photo_id.png"
+        }
+      },
+      "equipe_gagante_id": 3409,
+      "equipe": {
+        "id": 3409,
+        "libelle": "93003S - DIABLES ROUGES BRIANÇON",
+        "libelle_complet": "DIABLES ROUGES BRIANÇON",
+        "libelle_court": "BRIANÇON",
+        "abreviation": "BRI",
+        "logo": "https://hockeynet.fr/storage/logos_equipes/394/ViMCUPL6rjozws3LVGEc2gdqMYgSXbrLZ694rDrQ.png",
+        "sexe": "M",
+        "structure": {
+          "id": 394,
+          "nom": "S.A. LES DIABLES ROUGES DE BRIANCON",
+          "nom_court": "S.A. LES DIABLES ROUGES DE BRIANCON",
+          "code": "93003S",
+          "etat": "A",
+          "type": "SOC",
+          "logo": "50/93/50932d8f-83b8-423c-9224-8b40448ed2ea.png"
+        },
+        "id_compet": [
+          240,
+          256,
+          249
+        ]
+      },
+      "temps": 60,
+      "type": "ENGA"
+    }
+  ],
+  "est_debute": true,
+  "est_terminee": true,
+  "est_en_pause": true,
+  "scores": [
+    {
+      "id": 37050,
+      "sportif_rencontre_id": 77779,
+      "equipe_id": 553,
+      "participant_id": 9130,
+      "score": 3,
+      "created_at": "2026-08-12 16:15:25",
+      "updated_at": "2026-09-29 22:47:52"
+    },
+    {
+      "id": 37051,
+      "sportif_rencontre_id": 77779,
+      "equipe_id": 3409,
+      "participant_id": 9131,
+      "score": 4,
+      "created_at": "2026-08-12 16:15:25",
+      "updated_at": "2026-09-29 23:14:05"
+    }
+  ],
+  "receveur": {
+    "id": 553,
+    "libelle": "52007S - 52007S LES DUCS D'ANGERS",
+    "libelle_complet": "Ducs d'Angers",
+    "libelle_court": "ANGERS",
+    "abreviation": "ANG",
+    "logo": "https://hockeynet.fr/storage/logos_equipes/197/Zv0ZlavF4DHFurqwTySpECtE4Hj7NOQl4gPCQPlK.png",
+    "sexe": "M",
+    "structure": {
+      "id": 381,
+      "nom": "SASP LES DUCS D'ANGERS",
+      "nom_court": "SASP DUCS ANGERS",
+      "code": "52007S",
+      "etat": "A",
+      "type": "SOC",
+      "logo": "ySqoYzy26jgo3sqjFRklAAEaibhTdWncPCTSUodQ.png"
+    },
+    "id_compet": [
+      1,
+      19,
+      21
+    ]
+  },
+  "visiteur": {
+    "id": 3409,
+    "libelle": "93003S - DIABLES ROUGES BRIANÇON",
+    "libelle_complet": "DIABLES ROUGES BRIANÇON",
+    "libelle_court": "BRIANÇON",
+    "abreviation": "BRI",
+    "logo": "https://hockeynet.fr/storage/logos_equipes/394/ViMCUPL6rjozws3LVGEc2gdqMYgSXbrLZ694rDrQ.png",
+    "sexe": "M",
+    "structure": {
+      "id": 394,
+      "nom": "S.A. LES DIABLES ROUGES DE BRIANCON",
+      "nom_court": "S.A. LES DIABLES ROUGES DE BRIANCON",
+      "code": "93003S",
+      "etat": "A",
+      "type": "SOC",
+      "logo": "50/93/50932d8f-83b8-423c-9224-8b40448ed2ea.png"
+    },
+    "id_compet": [
+      240,
+      256,
+      249
+    ]
+  },
+  "periodes": {
+    "nombre": 3,
+    "duree": 20
+  },
+  "nombre_spectateurs": 3586,
+  "patinoire": "Angers IceParc",
+  "types_evenements": [
+    {
+      "code": "BUT",
+      "libelle": "Buts"
+    },
+    {
+      "code": "SANCTION",
+      "libelle": "Pénalités"
+    },
+    {
+      "code": "REMPLACANT",
+      "libelle": "Gardiens"
+    }
+  ],
+  "chronometre": {
+    "reference_debut": "2026-09-29T19:58:42.661Z",
+    "reference_fin": "2026-09-29T21:03:42.661Z",
+    "milisecondes_total": 3900000,
+    "en_pause": true
+  },
+  "tirs_aux_but": [
+    {
+      "id": 33605,
+      "tireur": {
+        "id": 39651,
+        "nom_complet": "MAIA Bastien",
+        "code_adherent": "158040",
+        "numero": "18",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/39651_393602_photo_id.png"
+      },
+      "gardien": {
+        "id": 142988,
+        "nom_complet": "RICHARD Samuel",
+        "code_adherent": "305534",
+        "numero": "33",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/142988_726280_photo_id.png"
+      },
+      "equipe": {
+        "id": 553,
+        "libelle": "52007S - 52007S LES DUCS D'ANGERS",
+        "libelle_complet": "Ducs d'Angers",
+        "libelle_court": "ANGERS",
+        "abreviation": "ANG",
+        "logo": "https://hockeynet.fr/storage/logos_equipes/197/Zv0ZlavF4DHFurqwTySpECtE4Hj7NOQl4gPCQPlK.png",
+        "structure": {
+          "id": 381,
+          "created_at": "2020-07-03 10:38:52",
+          "updated_at": "2021-12-02 10:13:23",
+          "nom": "SASP LES DUCS D'ANGERS",
+          "nom_court": "SASP DUCS ANGERS",
+          "code": "52007S",
+          "etat": "A",
+          "type": "SOC",
+          "annuaire_web": 0,
+          "sites_partenaires": 1,
+          "correspondant_personne_id": null,
+          "correspondant_adresse_id": null,
+          "choix_correspondance": "ST",
+          "logo": "ySqoYzy26jgo3sqjFRklAAEaibhTdWncPCTSUodQ.png",
+          "id_import": null,
+          "code_import": null,
+          "est_club_federal": null,
+          "uuid": "01a0439c-ed8d-73b2-aa37-24ea05755489",
+          "TypeColorLabel": "info",
+          "EquivalentStructure": {
+            "nom": "Club",
+            "color": "primary",
+            "colorlabel": "primary",
+            "enfants": [
+              "SOC"
+            ],
+            "affiliable": true,
+            "filter_key": "C",
+            "code": "CLU"
+          }
+        }
+      },
+      "numero": 1,
+      "marque": false
+    },
+    {
+      "id": 33606,
+      "tireur": {
+        "id": 143117,
+        "nom_complet": "NEILSON Logan",
+        "code_adherent": "305663",
+        "numero": "61",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/143117_539784_photo_id.png"
+      },
+      "gardien": {
+        "id": 138814,
+        "nom_complet": "DUBEAU Alex",
+        "code_adherent": "301360",
+        "numero": "31",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/138814_530643_photo_id.png"
+      },
+      "equipe": {
+        "id": 3409,
+        "libelle": "93003S - DIABLES ROUGES BRIANÇON",
+        "libelle_complet": "DIABLES ROUGES BRIANÇON",
+        "libelle_court": "BRIANÇON",
+        "abreviation": "BRI",
+        "logo": "https://hockeynet.fr/storage/logos_equipes/394/ViMCUPL6rjozws3LVGEc2gdqMYgSXbrLZ694rDrQ.png",
+        "structure": {
+          "id": 394,
+          "created_at": "2020-07-03 10:38:52",
+          "updated_at": "2025-12-03 13:00:09",
+          "nom": "S.A. LES DIABLES ROUGES DE BRIANCON",
+          "nom_court": "S.A. LES DIABLES ROUGES DE BRIANCON",
+          "code": "93003S",
+          "etat": "A",
+          "type": "SOC",
+          "annuaire_web": 0,
+          "sites_partenaires": 1,
+          "correspondant_personne_id": null,
+          "correspondant_adresse_id": null,
+          "choix_correspondance": "ST",
+          "logo": "50/93/50932d8f-83b8-423c-9224-8b40448ed2ea.png",
+          "id_import": null,
+          "code_import": null,
+          "est_club_federal": null,
+          "uuid": "01a0439c-ed8f-72e5-8cd4-45839edaf419",
+          "TypeColorLabel": "info",
+          "EquivalentStructure": {
+            "nom": "Club",
+            "color": "primary",
+            "colorlabel": "primary",
+            "enfants": [
+              "SOC"
+            ],
+            "affiliable": true,
+            "filter_key": "C",
+            "code": "CLU"
+          }
+        }
+      },
+      "numero": 1,
+      "marque": true
+    },
+    {
+      "id": 33607,
+      "tireur": {
+        "id": 99599,
+        "nom_complet": "HALLEY Philippe",
+        "code_adherent": "261775",
+        "numero": "71",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/99599_789062_photo_id.png"
+      },
+      "gardien": {
+        "id": 142988,
+        "nom_complet": "RICHARD Samuel",
+        "code_adherent": "305534",
+        "numero": "33",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/142988_726280_photo_id.png"
+      },
+      "equipe": {
+        "id": 553,
+        "libelle": "52007S - 52007S LES DUCS D'ANGERS",
+        "libelle_complet": "Ducs d'Angers",
+        "libelle_court": "ANGERS",
+        "abreviation": "ANG",
+        "logo": "https://hockeynet.fr/storage/logos_equipes/197/Zv0ZlavF4DHFurqwTySpECtE4Hj7NOQl4gPCQPlK.png",
+        "structure": {
+          "id": 381,
+          "created_at": "2020-07-03 10:38:52",
+          "updated_at": "2021-12-02 10:13:23",
+          "nom": "SASP LES DUCS D'ANGERS",
+          "nom_court": "SASP DUCS ANGERS",
+          "code": "52007S",
+          "etat": "A",
+          "type": "SOC",
+          "annuaire_web": 0,
+          "sites_partenaires": 1,
+          "correspondant_personne_id": null,
+          "correspondant_adresse_id": null,
+          "choix_correspondance": "ST",
+          "logo": "ySqoYzy26jgo3sqjFRklAAEaibhTdWncPCTSUodQ.png",
+          "id_import": null,
+          "code_import": null,
+          "est_club_federal": null,
+          "uuid": "01a0439c-ed8d-73b2-aa37-24ea05755489",
+          "TypeColorLabel": "info",
+          "EquivalentStructure": {
+            "nom": "Club",
+            "color": "primary",
+            "colorlabel": "primary",
+            "enfants": [
+              "SOC"
+            ],
+            "affiliable": true,
+            "filter_key": "C",
+            "code": "CLU"
+          }
+        }
+      },
+      "numero": 2,
+      "marque": false
+    }
+  ],
+  "competition": "Synerglace Ligue Magnus",
+  "phase": "Saison régulière",
+  "journee": 6,
+  "date_rencontre": "Mardi 29 septembre 2026",
+  "date_rencontre_non_formate": "2026-09-29 20:30:00",
+  "joueurs": [
+    {
+      "id": 66741,
+      "participant_id": 618664,
+      "nom_complet": "VILLARD Fiorenzo",
+      "code_adherent": "227505",
+      "numero": "61",
+      "position": {
+        "code": "D",
+        "couleur": "#cc0000",
+        "libelle": "Défenseur"
+      },
+      "attributs": [],
+      "equipe_id": 553,
+      "personne": {
+        "id": 66741,
+        "nom_complet": "VILLARD Fiorenzo",
+        "code_adherent": "227505",
+        "numero": "3",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/66741_733149_photo_id.png"
+      }
+    },
+    {
+      "id": 120434,
+      "participant_id": 618665,
+      "nom_complet": "PRAPAVESSIS Matthew",
+      "code_adherent": "282982",
+      "numero": "7",
+      "position": {
+        "code": "D",
+        "couleur": "#cc0000",
+        "libelle": "Défenseur"
+      },
+      "attributs": [],
+      "equipe_id": 553,
+      "personne": {
+        "id": 120434,
+        "nom_complet": "PRAPAVESSIS Matthew",
+        "code_adherent": "282982",
+        "numero": "7",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/120434_897499_photo_id.png"
+      }
+    },
+    {
+      "id": 137034,
+      "participant_id": 618666,
+      "nom_complet": "CENTAZZO Orrin",
+      "code_adherent": "299580",
+      "numero": "91",
+      "position": {
+        "code": "A",
+        "couleur": "#2196F3",
+        "libelle": "Attaquant"
+      },
+      "attributs": [],
+      "equipe_id": 553,
+      "personne": {
+        "id": 137034,
+        "nom_complet": "CENTAZZO Orrin",
+        "code_adherent": "299580",
+        "numero": "91",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/137034_259457_photo_id.png"
+      }
+    }
+  ],
+  "mvps": [
+    {
+      "id": 4693,
+      "sportif_rencontre_id": 77779,
+      "equipe_id": 553,
+      "participant_joueur_id": 618690,
+      "created_at": "2026-09-29 23:17:03",
+      "updated_at": "2026-09-29 23:17:03"
+    },
+    {
+      "id": 4694,
+      "sportif_rencontre_id": 77779,
+      "equipe_id": 3409,
+      "participant_joueur_id": 618924,
+      "created_at": "2026-09-29 23:17:03",
+      "updated_at": "2026-09-29 23:17:38"
+    }
+  ],
+  "staffs": [
+    {
+      "id": 9539,
+      "nom_complet": "M PAREDES Jonathan",
+      "nom": "PAREDES",
+      "prenom": "Jonathan",
+      "ddn": "DD/MM/YYYY",
+      "code_adherent": "048437",
+      "attributs": {
+        "id": 40,
+        "libelle": "Entraîneur principal",
+        "couleur": "#00BCD4"
+      },
+      "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/9539_553894_photo_id.png",
+      "equipe_id": 553
+    },
+    {
+      "id": 114937,
+      "nom_complet": "M TORQUATO Zachary",
+      "nom": "TORQUATO",
+      "prenom": "Zachary",
+      "ddn": "DD/MM/YYYY",
+      "code_adherent": "277503",
+      "attributs": {
+        "id": 41,
+        "libelle": "Entraîneur adjoint",
+        "couleur": "#00BCD4"
+      },
+      "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/114937_31788_photo_id.png",
+      "equipe_id": 553
+    },
+    {
+      "id": 70655,
+      "nom_complet": "M LAROCHE Guillaume",
+      "nom": "LAROCHE",
+      "prenom": "Guillaume",
+      "ddn": "DD/MM/YYYY",
+      "code_adherent": "231626",
+      "attributs": {
+        "id": 43,
+        "libelle": "Equipement manager",
+        "couleur": "#00BCD4"
+      },
+      "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/70655_23226_photo_id.png",
+      "equipe_id": 553
+    }
+  ],
+  "mouvements": [
+    {
+      "id": 39009,
+      "personne": {
+        "id": 142988,
+        "nom_complet": "RICHARD Samuel",
+        "code_adherent": "305534",
+        "numero": "33",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/142988_726280_photo_id.png"
+      },
+      "temps_rentree_secondes": 0,
+      "temps_sortie_secondes": null,
+      "equipe": {
+        "id": 3409,
+        "libelle": "93003S - DIABLES ROUGES BRIANÇON",
+        "libelle_complet": "DIABLES ROUGES BRIANÇON",
+        "libelle_court": "BRIANÇON",
+        "abreviation": "BRI",
+        "logo": "https://hockeynet.fr/storage/logos_equipes/394/ViMCUPL6rjozws3LVGEc2gdqMYgSXbrLZ694rDrQ.png",
+        "structure": {
+          "id": 394,
+          "created_at": "2020-07-03 10:38:52",
+          "updated_at": "2025-12-03 13:00:09",
+          "nom": "S.A. LES DIABLES ROUGES DE BRIANCON",
+          "nom_court": "S.A. LES DIABLES ROUGES DE BRIANCON",
+          "code": "93003S",
+          "etat": "A",
+          "type": "SOC",
+          "annuaire_web": 0,
+          "sites_partenaires": 1,
+          "correspondant_personne_id": null,
+          "correspondant_adresse_id": null,
+          "choix_correspondance": "ST",
+          "logo": "50/93/50932d8f-83b8-423c-9224-8b40448ed2ea.png",
+          "id_import": null,
+          "code_import": null,
+          "est_club_federal": null,
+          "uuid": "01a0439c-ed8f-72e5-8cd4-45839edaf419",
+          "TypeColorLabel": "info",
+          "EquivalentStructure": {
+            "nom": "Club",
+            "color": "primary",
+            "colorlabel": "primary",
+            "enfants": [
+              "SOC"
+            ],
+            "affiliable": true,
+            "filter_key": "C",
+            "code": "CLU"
+          }
+        }
+      }
+    },
+    {
+      "id": 39010,
+      "personne": {
+        "id": 138814,
+        "nom_complet": "DUBEAU Alex",
+        "code_adherent": "301360",
+        "numero": "31",
+        "photo_url": "https://hockeynet.fr/storage/photos_personnes/miniature/138814_530643_photo_id.png"
+      },
+      "temps_rentree_secondes": 0,
+      "temps_sortie_secondes": null,
+      "equipe": {
+        "id": 553,
+        "libelle": "52007S - 52007S LES DUCS D'ANGERS",
+        "libelle_complet": "Ducs d'Angers",
+        "libelle_court": "ANGERS",
+        "abreviation": "ANG",
+        "logo": "https://hockeynet.fr/storage/logos_equipes/197/Zv0ZlavF4DHFurqwTySpECtE4Hj7NOQl4gPCQPlK.png",
+        "structure": {
+          "id": 381,
+          "created_at": "2020-07-03 10:38:52",
+          "updated_at": "2021-12-02 10:13:23",
+          "nom": "SASP LES DUCS D'ANGERS",
+          "nom_court": "SASP DUCS ANGERS",
+          "code": "52007S",
+          "etat": "A",
+          "type": "SOC",
+          "annuaire_web": 0,
+          "sites_partenaires": 1,
+          "correspondant_personne_id": null,
+          "correspondant_adresse_id": null,
+          "choix_correspondance": "ST",
+          "logo": "ySqoYzy26jgo3sqjFRklAAEaibhTdWncPCTSUodQ.png",
+          "id_import": null,
+          "code_import": null,
+          "est_club_federal": null,
+          "uuid": "01a0439c-ed8d-73b2-aa37-24ea05755489",
+          "TypeColorLabel": "info",
+          "EquivalentStructure": {
+            "nom": "Club",
+            "color": "primary",
+            "colorlabel": "primary",
+            "enfants": [
+              "SOC"
+            ],
+            "affiliable": true,
+            "filter_key": "C",
+            "code": "CLU"
+          }
+        }
+      }
+    }
+  ],
+  "etat": "T",
+  "reserves": []
+}
