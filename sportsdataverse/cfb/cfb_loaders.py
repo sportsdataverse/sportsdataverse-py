@@ -1447,7 +1447,7 @@ def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2014).
+        seasons: an int or iterable of seasons (>= 2013).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1469,7 +1469,7 @@ def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
         |matched_sources    |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2014.
+        SeasonNotFoundError: if a requested season is below 2013.
 
     Example:
         Quick start::
@@ -1478,8 +1478,8 @@ def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2014:
-            raise SeasonNotFoundError("season cannot be less than 2014")
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_teams_crosswalk_{season}.parquet"
         )
@@ -1501,7 +1501,7 @@ def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2014).
+        seasons: an int or iterable of seasons (>= 2013).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1523,7 +1523,7 @@ def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |matched_sources      |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2014.
+        SeasonNotFoundError: if a requested season is below 2013.
 
     Example:
         Quick start::
@@ -1532,8 +1532,8 @@ def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2014:
-            raise SeasonNotFoundError("season cannot be less than 2014")
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_schedule_crosswalk_{season}.parquet"
         )

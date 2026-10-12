@@ -1,0 +1,10 @@
+schema: shot_coordinates
+kind: dataframe
+hand_authored: true
+columns:
+- name: x_legacy
+  type: double
+  description: ''
+- name: y_legacy
+  type: double
+  description: ''
