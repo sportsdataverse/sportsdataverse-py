@@ -379,8 +379,8 @@
   group: cfb-lows
   finding: C-L16
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '.or_((pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("(?i)sacked")))'
-  mutant: '.or_((pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("sacked")))'
+  snippet: '(pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("(?i)sacked"))'
+  mutant: '(pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("sacked"))'
   test: tests/cfb/test_cfb_pbp_offline.py -k "pass_flag_literals_fold_case"
   expected: kill
   note: a "SACKED" text on a recovered fumble would not be a pass play (R matches with ignore_case)
