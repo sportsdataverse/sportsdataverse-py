@@ -8,3 +8,5 @@
   phase with another one (`Season=1890` returns the current season), and only the body's
   filter echo shows it. The runtime compares that echo with the request and raises
   `NoDataError` when they differ, so a wrong season is never returned under the requested label.
+  `sihf_standings` counts every game by default (`venue="All"`; asked nothing, SIHF answers the
+  away-games table), and a table body with fewer rows than it announces raises `AssetFetchError`.
