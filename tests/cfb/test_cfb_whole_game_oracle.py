@@ -40,7 +40,7 @@ Oracle per column
     a play) and ``create_epa.R:361`` (a non-scoring half-ending play's EPA is ``-ep_before``). The
     first half is the run of rows before the first period-3 row (chronology, not the period label: an
     overtime touchdown ESPN labels period 2 must not stand in for the Q2 closer); the game end is
-    checked on games without overtime. XFAIL C-NF-12 where a Timeout row closes the half.
+    checked on games without overtime. Green since task 2.2 (C-NF-12) on the Timeout-closed halves too.
 ``end.down`` / ``end.yardsToEndzone`` where ESPN's end block is ``{down 0, yardLine 0, yardsToEndzone 0}``
     The ESPN feed: when the same team snaps next, the play ended where that snap starts. Asserted on
     feeds that carry end blocks (a feed whose end blocks are mostly degenerate, e.g. 252532751 from
@@ -97,6 +97,7 @@ one.
 
 from __future__ import annotations
 
+import copy
 import functools
 import gzip
 import json
@@ -273,6 +274,8 @@ _COLUMNS = (
     "open_field_yards",
     "end.down",
     "end.yardsToEndzone",
+    "wp_before",
+    "wp_after",
 )
 
 
@@ -407,14 +410,6 @@ def test_kickoff_touchback_spot_follows_the_rule(game_id):
 
 # --- C-NF-12: end_of_half on the last real play ---------------------------------------------------
 
-_NF12 = {
-    292810142: "C-NF-12: the game ends on 'Timeout MISSOURI, clock 0:24'; end_of_half lands on it, the rush before it keeps EPA 0.82",
-    401752753: "C-NF-12: the game ends on 'Timeout Arkansas'; the kneel before it keeps EPA -1.20, not -EP_start -4.99",
-    401761656: "C-NF-12: the game ends on 'Timeout App State'; the sack before it keeps EPA -2.55, not -0.36",
-    401858213: "C-NF-12: the game ends on 'Timeout Florida A&M'; the rush before it keeps EPA 0.95, not -1.27",
-    401762858: "C-NF-12: the first half ends on 'Timeout Buffalo, clock 00:04'; end_of_half lands on it, not the incompletion before it",
-}
-
 
 def _half_closers(df: pl.DataFrame) -> list[tuple[str, dict]]:
     """The last non-Timeout row of the first half and, without overtime, of the game.
@@ -434,7 +429,7 @@ def _half_closers(df: pl.DataFrame) -> list[tuple[str, dict]]:
     return out
 
 
-@pytest.mark.parametrize("game_id", _params(CAPTURES, _NF12))
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
 def test_end_of_half_lands_on_the_last_real_play(game_id):
     for which, row in _half_closers(_frame(game_id)):
         assert row["end_of_half"] is True, f"{which}: row {row['row']} ({row['type.text']}) is not end_of_half"
@@ -445,6 +440,110 @@ def test_end_of_half_lands_on_the_last_real_play(game_id):
             assert abs(epa + ep_start) <= HALF_END_EPA_ABS_TOL, (
                 f"{which}: row {row['row']} EPA {epa} != -EP_start {-ep_start}"
             )
+
+
+# Task 2.2 (C-NF-12) flipped 292810142, 401752753, 401761656, 401858213 (the game ends on a Timeout row)
+# and 401762858 (the first half does) in the test above. The Timeout-ending boundaries of the captures,
+# overtime games included: the Timeout row took end_of_half (EPA 0.0) and the play before it kept a
+# normal EP_end - EP_start.
+_TIMEOUT_ENDINGS = (
+    (292810142, "game"),
+    (401752753, "game"),
+    (401754585, "game"),
+    (401761656, "game"),
+    (401858213, "game"),
+    (401858224, "game"),
+    (401762858, "first half"),
+    (401761665, "regulation"),
+)
+
+
+def _boundary_rows(game_id: int, which: str) -> pl.DataFrame:
+    rows = _frame(game_id).with_row_index("row")
+    if which == "first half":
+        period = rows["period"].to_list()
+        start = next(i for i, p in enumerate(period) if p is not None and p <= 2)
+        end = next((i for i in range(start, len(period)) if period[i] is None or period[i] >= 3), len(period))
+        rows = rows.slice(start, end - start)
+    elif which == "regulation":
+        rows = rows.filter(pl.col("period") <= 4)
+    return rows
+
+
+@pytest.mark.parametrize(("game_id", "which"), _TIMEOUT_ENDINGS)
+def test_timeout_ending_boundary_ends_on_the_last_real_play(game_id, which):
+    rows = _boundary_rows(game_id, which)
+    timeout = rows.tail(1).row(0, named=True)
+    if timeout["type.text"] != "Timeout":
+        pytest.fail(f"{game_id} {which} no longer ends on a Timeout row ({timeout['type.text']})")
+    last = rows.filter(pl.col("type.text").fill_null("") != "Timeout").tail(1).row(0, named=True)
+    assert timeout["end_of_half"] is False, f"Timeout row {timeout['row']} took end_of_half"
+    assert last["end_of_half"] is True, f"row {last['row']} ({last['type.text']}) is not end_of_half"
+    if last["scoring_play"] is not True:
+        assert abs(last["EPA"] + last["EP_start"]) <= HALF_END_EPA_ABS_TOL, (last["row"], last["EPA"])
+
+
+def test_timeout_ending_401752753_last_scrimmage_play_scores_minus_ep_start():
+    # The kneel before 'Timeout Arkansas' kept EPA -1.195 (EP_end - EP_start); the play that ends the
+    # game without scoring scores -EP_start (the audit's measured -4.986, gaps-C p20/p24).
+    rows = _frame(401752753)
+    last = rows.filter(pl.col("type.text").fill_null("") != "Timeout").tail(1).row(0, named=True)
+    assert abs(last["EPA"] - -4.986) < 5e-4, last["EPA"]
+
+
+@pytest.mark.parametrize("game_id", [g for g, which in _TIMEOUT_ENDINGS if which == "game"])
+def test_timeout_ending_game_last_play_wp_after_is_the_result(game_id):
+    # The play that ends the game is followed by Timeout rows only; its wp_after is the result for
+    # the team that had the ball (ESPN's header names the winner). 401761656's game-ending sack read
+    # 0.064 for the team that won.
+    competitors = _load(PATHS[game_id])["header"]["competitions"][0]["competitors"]
+    winner = next(str(c["id"]) for c in competitors if c.get("winner"))
+    last = _frame(game_id).filter(pl.col("type.text") != "Timeout").tail(1).row(0, named=True)
+    expected = 1.0 if str(last["start.pos_team.id"]) == winner else 0.0
+    assert last["wp_after"] == expected, (last["id"], last["type.text"], last["wp_after"], expected)
+
+
+def test_timeout_ending_regulation_wp_after_is_overtime_wp_before():
+    # 401761665 ties at the end of regulation; ESPN files the Timeout row after the last play to the
+    # other team (start.pos_team 309), so borrowing the next ROW's wp_before read it as a possession
+    # change. The last real play's wp_after is the next real play's (overtime's first snap, the same
+    # team's) wp_before: WP does not move between two snaps nothing happened between.
+    f = _frame(401761665).with_row_index("row")
+    last = _boundary_rows(401761665, "regulation").filter(pl.col("type.text") != "Timeout").tail(1)
+    i = last["row"].item()
+    nxt = f.filter((pl.col("row") > i) & (pl.col("type.text") != "Timeout")).head(1).row(0, named=True)
+    last = last.row(0, named=True)
+    if nxt["start.pos_team.id"] != last["start.pos_team.id"]:
+        pytest.fail("401761665's first overtime snap is no longer the same team's")
+    assert abs(last["wp_after"] - nxt["wp_before"]) < 1e-9, (last["wp_after"], nxt["wp_before"])
+
+
+def test_timeout_ending_half_end_possession_change_wp_after_is_one_minus_next_plays():
+    # R832-4, an edited capture: 401234617's first half ends on a punt (Georgia Tech 59 -> Pitt 103)
+    # and ESPN's "End of 2nd Quarter" marker row; the edit retypes that marker row as a Timeout row
+    # (the game's own first Timeout's type, text re-clocked to 00:00), so the half ends on a Timeout.
+    # The punt changed possession and the next real play (Pitt's 2H kickoff return) is the other
+    # team's: the punt's wp_after is 1 - that play's wp_before, not 1 - the Timeout row's.
+    summary = copy.deepcopy(_load(PATHS[401234617]))
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    timeout = next(p for p in plays if (p.get("type") or {}).get("text") == "Timeout")
+    marker = next(p for p in plays if p["id"] == "401234617102997305")
+    if (marker.get("type") or {}).get("text") != "End of Half":
+        pytest.fail("401234617's first half no longer ends on an End of Half marker")
+    marker["type"] = copy.deepcopy(timeout["type"])
+    marker["text"] = "Timeout GEORGIA TECH, clock 00:00"
+    proc = CFBPlayProcess(gameId=401234617, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    f = proc.plays_frame.with_row_index("row")
+    i = f.filter(pl.col("id") == 401234617102997304)["row"].item()
+    punt, edited, nxt = (f.row(i + k, named=True) for k in range(3))
+    if edited["type.text"] != "Timeout" or nxt["type.text"] != "Kickoff":
+        pytest.fail(f"unexpected rows after the punt: {edited['type.text']}, {nxt['type.text']}")
+    if not (punt["start.pos_team.id"] != punt["end.pos_team.id"] == nxt["start.pos_team.id"]):
+        pytest.fail("the punt no longer hands the ball to the 2H kickoff's team")
+    assert punt["end_of_half"] is True and edited["end_of_half"] is False
+    assert abs(punt["wp_after"] - (1 - nxt["wp_before"])) < 1e-9, (punt["wp_after"], nxt["wp_before"])
 
 
 # --- supp-002: ESPN's degenerate end block --------------------------------------------------------

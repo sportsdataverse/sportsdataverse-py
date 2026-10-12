@@ -518,6 +518,28 @@ def _nfl_penalty_first_down() -> pl.Expr:
     )
 
 
+def _end_of_game_row() -> pl.Expr:
+    """ESPN's "End of the game." admin row by its text: the 2002-05 feeds ship it untyped (C-M2)."""
+    return pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)
+
+
+def _ends_a_half(half_play: pl.Expr) -> pl.Expr:
+    """The play that ends a half, among the rows ``half_play`` marks as plays.
+
+    The first half's last play, regulation's last play when the game goes to overtime, and a
+    finished game's last play (nflfastR helper_add_ep_wp.R:710-724: its EPA is -EP_start unless it
+    scored). It reads the next play, so a half that ends on a timeout ends on the play before it
+    (C-NF-12); compared with lead_half in that column's own fill, it read the unfilled null on the
+    game's last row (C-H2). Port of cfb_pbp.py __add_downs_data.
+    """
+    next_half = pl.when(half_play).then(pl.col("half")).shift(-1).backward_fill()
+    next_period = pl.when(half_play).then(pl.col("period")).shift(-1).backward_fill()
+    return half_play & (
+        ((next_half != pl.col("half")) | ((pl.col("period") == 4) & (next_period >= 5))).fill_null(False)
+        | (next_half.is_null() & (pl.col("status_type_completed") == True)).fill_null(False)
+    )
+
+
 def _missed_fg_unblocked() -> pl.Expr:
     """An unscored missed field goal; a blocked kick is a live ball, so text saying blocked is not one."""
     return (
@@ -1677,7 +1699,11 @@ class NFLPlayProcess(object):
             maintain_order=True,
         )
         play_df = play_df.filter(
-            pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
+            (
+                pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss")
+                | _end_of_game_row()
+            )
+            == False,
         )
         # ESPN ends a returned kickoff (2014 on) and a missed field goal (before 2014) at down -1,
         # and the EP and WP models read that as no down at all: 401282817's return to the 17 scored
@@ -1760,7 +1786,7 @@ class NFLPlayProcess(object):
             )
             .with_columns(
                 pl.when(pl.col("lead_half").is_null()).then(2).otherwise(pl.col("lead_half")).alias("lead_half"),
-                end_of_half=pl.col("half") != pl.col("lead_half"),
+                end_of_half=_ends_a_half(~stop),
                 down_1=pl.col("start.down") == 1,
                 down_2=pl.col("start.down") == 2,
                 down_3=pl.col("start.down") == 3,

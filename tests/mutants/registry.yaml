@@ -1285,6 +1285,113 @@
   expected: kill
   note: td_play True again on the three "TOUCHDOWN NULLIFIED by Penalty" rows of 291018018
 
+# --- C-H2 / C-M2 / C-NF-12 (task 2.2): the play that ends a half, regulation or the game ----------------
+- id: nfl-end-of-half-reads-unfilled-lead-half
+  group: nfl-end-of-half
+  finding: C-H2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'end_of_half=_ends_a_half(~stop),'
+  mutant: 'end_of_half=pl.col("half") != pl.col("lead_half"),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "end_of_half_on_the_half_ending_play and 401547449"
+  expected: kill
+  note: >-
+    The original: end_of_half compared with lead_half in the same with_columns as its fill, so it read
+    the unfilled null on the game's last row and False on 401547449's regulation-ending kneel.
+
+- id: nfl-end-of-game-admin-row-type-text-only
+  group: nfl-end-of-half
+  finding: C-M2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'return pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)'
+  mutant: 'return pl.lit(False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "admin_row_2002"
+  expected: kill
+  note: >-
+    The original filter read type.text only, so 221013007's untyped "End of the game." row survived as
+    a play with an EPA.
+
+- id: nfl-end-of-half-timeout-rule
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'end_of_half=_ends_a_half(~stop),'
+  mutant: 'end_of_half=_ends_a_half(pl.lit(True)),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_end_of_half_on_the_half_ending_play[400791590-half]
+  expected: kill
+  note: 400791590's first half ends on a Timeout row, which takes end_of_half from the play before it.
+
+- id: cfb-end-of-half-timeout-rule
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'half_play = pl.col("type.text").fill_null("") != "Timeout"'
+  mutant: 'half_play = pl.lit(True)'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "timeout_ending"
+  expected: kill
+  note: >-
+    The ledger gate cfb-timeout-ending-games: end_of_half back on the Timeout row (EPA 0.0) and
+    401752753's last scrimmage play at -1.195 instead of -4.986.
+
+- id: cfb-game-ender-last-real-play
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'last_play_number = pl.when(real_play).then(pl.col("game_play_number")).max()'
+  mutant: 'last_play_number = pl.col("game_play_number").max()'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "game_last_play_wp_after"
+  expected: kill
+  note: >-
+    A game that ends on a Timeout row ends on the play before it: keyed on the last ROW, the
+    game-ender branch skipped it and 401761656's game-ending sack read wp_after 0.064 for the winner.
+
+- id: cfb-half-end-wp-borrows-next-real-play
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.and_(pl.col("start.pos_team.id") == _next_play(pl.col("start.pos_team.id")))'
+  mutant: '.and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "regulation_wp_after"
+  expected: kill
+  note: >-
+    401761665's Timeout row before overtime is filed to the other team; reading the next ROW's team
+    took the model's wp_after (0.392) instead of overtime's first wp_before (0.466).
+
+- id: cfb-half-end-wp-possession-change-borrows-next-real-play
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(1 - _next_play(pl.col(wb)))'
+  mutant: '.then(1 - pl.col(lwb))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "half_end_possession_change"
+  expected: kill
+  note: >-
+    R832-4: a half-ending play that changes possession takes 1 - the next real play's wp_before. On the
+    edited 401234617 (its End of Half marker retyped as a Timeout row) the next ROW is the Timeout.
+
+- id: nfl-end-of-half-try-keeps-its-epa
+  group: nfl-end-of-half
+  finding: C-H2
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.when((pl.col("end_of_half") == True).and_(pl.col("type.text").is_in(_TRY_TYPES)))'
+  mutant: '.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "try_ending"
+  expected: kill
+  note: >-
+    R832-3: a good try that ends the game (291122008's extra point, 271021004's two-point pass) is a
+    scoring play in nflfastR (sp == 1) and keeps EP_end - EP_start; without the branch it scores -0.92.
+
+- id: nfl-end-of-half-never-on-a-stoppage-row
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    return half_play & ('
+  mutant: '    return pl.lit(True) & ('
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "end_of_half_rows and 400791590"
+  expected: kill
+  note: >-
+    R832-5: a Timeout row may take end_of_half alongside the play before it (400791590's first half);
+    the rule-of-the-next-play test alone stayed green.
+
 # --- CI harness: the scoreboard's sync-PR allowance (tools/quality_scoreboard.py compare()) -------
 - id: scoreboard-worse-than-all-not-any
   group: ci-harness

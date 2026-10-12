@@ -10,6 +10,7 @@
   - [ESPN Total QBR slice (`espn_qbr_2023_slice.parquet`, task 2.7)](#espn-total-qbr-slice-espn_qbr_2023_sliceparquet-task-27)
   - [Other files](#other-files)
   - [Overtime rule sets (C-M6)](#overtime-rule-sets-c-m6)
+  - [Games that end on a try (`try_endings/`, task 2.2)](#games-that-end-on-a-try-try_endings-task-22)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -251,3 +252,15 @@ quality-program ledger wrote the sets as <2017 / 2017-23 / 2024+; the catalogue 
 regular-season both-possess rule 2025 (2024 still played the 2012 rule). The 2012 cut is guarded only at
 season granularity: the nearest captures are 2007 and 2023, so moving the boundary anywhere in 2008-2022
 changes no capture's set until a 2012-16 overtime capture is committed.
+
+## Games that end on a try (`try_endings/`, task 2.2)
+
+Two untrimmed ESPN Site v2 summaries whose last real play is a scored try, copied from
+`nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (nfl-raw commit 4f540c18, 2026-09-14;
+source `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`). They sit
+in a subdirectory so the whole-game captures above (`summary_*` in this directory) do not pick them up.
+
+| game | last play | why |
+|---|---|---|
+| 291122008 | `Extra Point Good` ("J.Hanson extra point is GOOD") | R832-3: the try that ends the game keeps its own EPA (nflfastR `sp == 1`) |
+| 271021004 | `Two Point Pass` (scoringPlay True) | the same on a two-point try |

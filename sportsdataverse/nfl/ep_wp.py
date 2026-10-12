@@ -2402,6 +2402,12 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         .with_columns(
             EPA=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
             .then(0)
+            # nflfastR (helper_add_ep_wp.R:710-724) keeps a scoring play's epa (sp == 1), and a good
+            # try is sp == 1 though scoring_play leaves the try types out: a try that ends a half
+            # realises its own points, whatever penalty its text carries (a missed one's 0 - 0.92 is
+            # -EP_start anyway; R832-3)
+            .when((pl.col("end_of_half") == True).and_(pl.col("type.text").is_in(_TRY_TYPES)))
+            .then(pl.col("EP_end") - pl.col("EP_start"))
             .when((pl.col("scoring_play") == False).and_(pl.col("end_of_half") == True))
             .then(-1 * pl.col("EP_start"))
             .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("penalty_in_text") == True))
