@@ -16,8 +16,11 @@ else the sibling checkout) and emits:
   columns of its parser run over its committed fixture. The report frames read the FULL page
   ``tests/fixtures/vhl/full/report_899223.html``; every other wrapper its cut-down page. Each
   parser emits a fixed column list with dtypes pinned by name, so a fixture cannot mistype a
-  rate. Descriptions come from :data:`LOCAL` (the columns the parsers derive), then the
-  ``vhl-returns.md`` row of the same record path, then any row with that leaf.
+  rate. The schemas carry ``description: ''`` (descriptions never live in ``schemas/**``).
+* ``tools/codegen/vhl_column_descriptions.snippet.yaml`` -- ``{vhl_<short>: {column: text}}``,
+  the block for ``manual_column_descriptions.yaml``. Text comes from :data:`LOCAL` (the columns
+  the parsers derive, and the ones whose md row is too terse), then the ``vhl-returns.md`` row
+  of the same record path, then any row with that leaf. An empty or filler text fails the run.
 
 Run: ``python tools/codegen/gen_vhl.py``
 """
@@ -36,6 +39,13 @@ from sportsdataverse.hockey.vhl.vhl_runtime import ONLINE, REQUEST_KEY, STAGES
 
 HOST = "https://www.vhlru.ru"
 SPEC = "vhl.openapi.yaml"
+SNIPPET = ROOT / "tools" / "codegen" / "vhl_column_descriptions.snippet.yaml"
+#: Owner flag (sdv-internal-refs/vhl/README.md), rendered as a Notes item on every wrapper.
+SANCTIONS = (
+    "Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and "
+    "several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine "
+    "is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first."
+)
 FIXTURES = ROOT / "tests" / "fixtures" / "vhl"
 REPORT_FULL = "full/report_899223.html"
 
@@ -278,7 +288,19 @@ LOCAL: Dict[str, str] = {
     "calendar_team_season_id": "The team's team-season id in calendar_tn.",
     "roster_as_of": "Date the roster is valid for, as printed ('12.10.2026').",
     "born": "Birth date 'DD.MM.YYYY' as the public page prints it.",
+    # the md rows of these say only "Goals (G)." and the like
+    "scorer": "Goal scorer's name, 'Surname Given' as the report prints it.",
+    "goals": "Goals (G) the player scored in the row's scope: the game in a box score, the season stage "
+    "in stats and career rows.",
+    "assists": "Assists (A) credited to the player in the row's scope: the game in a box score, the season "
+    "stage in stats and career rows.",
+    "saves": "Saves (Sv): shots on goal the goalie stopped in the row's scope (the game, or the season stage "
+    "in stats and career rows).",
+    "shutouts": "Shutouts (SO): games in the row's scope in which the goalie allowed no goal.",
 }
+
+#: The manual-description quality rule (tests/codegen/test_manual_descriptions.py).
+_FILLER = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.I)
 
 _HEADING = re.compile(r"^## `https://[^/]+(/\S*)`")
 _ROW = re.compile(r"^\s*\|\s*`([^`]+)`\s*\|[^|]*\|(.*)\|\s*$")
@@ -335,7 +357,7 @@ def _frame(entry: Entry) -> Any:
         "players": "player",
         "teams": "team",
     }[entry[5]]
-    rec = P.page_record(kind, (FIXTURES / fixture).read_text(encoding="utf-8"))
+    rec = P._page_record(kind, (FIXTURES / fixture).read_text(encoding="utf-8"))
     rec[REQUEST_KEY] = dict(stamp)
     return parser(rec)
 
@@ -384,6 +406,7 @@ def main() -> None:
                 "sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page "
                 "asked for (another season, game or player; a missing table or header drift).",
             ],
+            "notes": [SANCTIONS],
             "see_also": [
                 {
                     "name": "VHL",
@@ -404,12 +427,22 @@ def main() -> None:
     md = _md_rows(refs / "vhl-returns.md")
     schema_dir = ROOT / "tools/codegen/schemas/native/vhl"
     rewrite_schema_dir(schema_dir)
+    snippet: Dict[str, Dict[str, str]] = {}
+    bad: List[str] = []
     for short, entry in ENDPOINTS.items():
         cols: List[Dict[str, str]] = columns_from_frame(_frame(entry), [], leaf_fallback=False)
+        block = snippet.setdefault(f"vhl_{short}", {})
         for col in cols:
-            col["description"] = _describe(col["name"], entry, md)
+            text = _describe(col["name"], entry, md).strip()
+            if len(text) < 15 or text.lower() == col["name"].lower() or _FILLER.match(text):
+                bad.append(f"vhl_{short}.{col['name']}: {text!r}")
+            block[col["name"]] = text
+            col["description"] = ""
         write_yaml(schema_dir / f"{short}.yaml", {"schema": f"vhl_{short}", "kind": "dataframe", "columns": cols})
-    print(f"vhl: {len(ENDPOINTS)} endpoints")
+    if bad:
+        raise SystemExit(f"vhl: empty or filler descriptions (add them to LOCAL): {bad}")
+    write_yaml(SNIPPET, snippet)
+    print(f"vhl: {len(ENDPOINTS)} endpoints, {sum(map(len, snippet.values()))} descriptions -> {SNIPPET.name}")
 
 
 if __name__ == "__main__":

@@ -1,109 +1,98 @@
 columns:
-- description: 'Game id (the calendar''s game_id; the report''s and the broadcast''s
-    idgame). The report and broadcast pages do not print it: it comes from the request.'
+- description: ''
   name: game_id
   type: integer
-- description: Season END year (2026 = 2025/26).
+- description: ''
   name: season
   type: integer
-- description: 'Season stage: regular or playoff.'
+- description: ''
   name: stage
   type: character
-- description: Official game number (from '№984'); checked against the request.
+- description: ''
   name: game_number
   type: integer
-- description: Tournament id of the season stage (2025/26 regular season = 1374, playoffs
-    = 1375); vhl_tn maps season + stage to it.
+- description: ''
   name: tn
   type: integer
-- description: Game date, ISO 'YYYY-MM-DD', parsed from date_text.
+- description: ''
   name: date
   type: character
-- description: Start time 'HH:MM' from date_text; local time zone unverified (likely
-    Moscow).
+- description: ''
   name: local_time
   type: character
-- description: Date line verbatim; RUSSIAN month and weekday even on /en/ ('18 Март
-    2026, Среда, 17:00'). The <time datetime> attribute is a constant placeholder
-    (2020-01-23 18:00) and is ignored.
+- description: ''
   name: date_text
   type: character
-- description: Attendance (from '910 sp').
+- description: ''
   name: attendance
   type: integer
-- description: Final score 'home:away' (the shootout counts as one goal).
+- description: ''
   name: score
   type: character
-- description: Home final goals.
+- description: ''
   name: home_score
   type: integer
-- description: Away final goals.
+- description: ''
   name: away_score
   type: integer
-- description: OT or SO when the game went past regulation; null otherwise.
+- description: ''
   name: decision
   type: character
-- description: 'Score of each period ''home:away'', overtime and shootout included
-    (SO game: ''0:2'',''0:0'',''2:0'',''0:0'',''0:1'').'
+- description: ''
   name: period_scores
   type: character
-- description: 'Home team page id. Team page id (vhlru.ru only): the {team_id} of
-    /en/teams/{team_id}/ (Toros = 390). Neither a club id nor a team-season id; it
-    joins nothing else (bridge: the calendar row of the same game_id).'
+- description: ''
   name: home_team_page_id
   type: integer
-- description: 'Home team name (Latin, FULL form: ''Kristall S''; the report''s tables
-    use the short ''Kristall'').'
+- description: ''
   name: home_team
   type: character
-- description: Home team short name (the report tables' form).
+- description: ''
   name: home_short
   type: character
-- description: Home team city.
+- description: ''
   name: home_city
   type: character
-- description: Home head coach, 'Surname Given'.
+- description: ''
   name: home_coach
   type: character
-- description: 'Away team page id. Team page id (vhlru.ru only): the {team_id} of
-    /en/teams/{team_id}/ (Toros = 390). Neither a club id nor a team-season id; it
-    joins nothing else (bridge: the calendar row of the same game_id).'
+- description: ''
   name: away_team_page_id
   type: integer
-- description: Away team name (Latin, FULL form).
+- description: ''
   name: away_team
   type: character
-- description: Away team short name (the report tables' form).
+- description: ''
   name: away_short
   type: character
-- description: Away team city.
+- description: ''
   name: away_city
   type: character
-- description: Away head coach, 'Surname Given'.
+- description: ''
   name: away_coach
   type: character
-- description: First referee's sweater number.
+- description: ''
   name: referee1_number
   type: integer
-- description: First referee, 'Surname Given'.
+- description: ''
   name: referee1
   type: character
-- description: Second referee's sweater number.
+- description: ''
   name: referee2_number
   type: integer
-- description: Second referee, 'Surname Given'.
+- description: ''
   name: referee2
   type: character
-- description: First linesman's sweater number.
+- description: ''
   name: linesman1_number
   type: integer
-- description: First linesman, 'Surname Given'.
+- description: ''
   name: linesman1
   type: character
-- description: Second linesman's sweater number.
+- description: ''
   name: linesman2_number
   type: integer
-- description: Second linesman, 'Surname Given'.
+- description: ''
   name: linesman2
   type: character
 kind: dataframe

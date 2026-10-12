@@ -1,108 +1,101 @@
 columns:
-- description: 'Game id (the calendar''s game_id; the report''s and the broadcast''s
-    idgame). The report and broadcast pages do not print it: it comes from the request.'
+- description: ''
   name: game_id
   type: integer
-- description: Season END year (2026 = 2025/26).
+- description: ''
   name: season
   type: integer
-- description: 'Season stage: regular or playoff.'
+- description: ''
   name: stage
   type: character
-- description: Official game number (from '№984'); checked against the request.
+- description: ''
   name: game_number
   type: integer
-- description: 'Side of the game the row belongs to: home or away.'
+- description: ''
   name: team_side
   type: character
-- description: Team page id (vhlru.ru /en/teams/{team_page_id}/), stable across seasons;
-    for report rows the page id of the row's side.
+- description: ''
   name: team_page_id
   type: integer
-- description: Team short name (Latin; the report tables' form).
+- description: ''
   name: team
   type: character
-- description: 'Position group: defense or forward.'
+- description: ''
   name: position_group
   type: character
-- description: Jersey number (integer).
+- description: ''
   name: jersey
   type: integer
-- description: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
-    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
-    player ids; whether it equals the same person''s khl.ru id is unverified.'
+- description: ''
   name: player_id
   type: integer
-- description: Player name, 'Surname Given' (Latin on /en/ pages).
+- description: ''
   name: player
   type: character
-- description: 'Captaincy marker from the name suffix: C (captain), A (alternate);
-    null otherwise.'
+- description: ''
   name: captaincy
   type: character
-- description: Games played (GP).
+- description: ''
   name: games_played
   type: integer
-- description: Goals (G).
+- description: ''
   name: goals
   type: integer
-- description: Assists (A).
+- description: ''
   name: assists
   type: integer
-- description: Points, goals + assists (PTS).
+- description: ''
   name: points
   type: integer
-- description: Plus/minus (+/-).
+- description: ''
   name: plus_minus
   type: integer
-- description: Penalty minutes (PIM).
+- description: ''
   name: penalty_minutes
   type: integer
-- description: Even-strength goals (ESG).
+- description: ''
   name: even_strength_goals
   type: integer
-- description: Power-play goals (PPG).
+- description: ''
   name: power_play_goals
   type: integer
-- description: Shorthanded goals (SHG).
+- description: ''
   name: shorthanded_goals
   type: integer
-- description: Overtime goals (OTG).
+- description: ''
   name: overtime_goals
   type: integer
-- description: Game-winning goals (GWG).
+- description: ''
   name: game_winning_goals
   type: integer
-- description: Shootout-deciding goals (SDS; the legend says 'Shootouts deciding shots').
+- description: ''
   name: shootout_deciding_goals
   type: integer
-- description: Shots on goal (SOG).
+- description: ''
   name: shots_on_goal
   type: integer
-- description: Shooting percentage, goals / shots on goal x 100 (%SOG); 0-100 scale;
-    null when the page shows '-'.
+- description: ''
   name: shot_pct
   type: numeric
-- description: Faceoffs taken (FO).
+- description: ''
   name: faceoffs
   type: integer
-- description: Faceoffs won (FOW).
+- description: ''
   name: faceoffs_won
   type: integer
-- description: Faceoff win percentage (%FO); 0-100 scale; null when the page shows
-    '-' (no faceoffs taken).
+- description: ''
   name: faceoff_pct
   type: numeric
-- description: Time on ice in this game (TOI/G with GP 1), 'mm:ss'.
+- description: ''
   name: toi_per_game
   type: character
-- description: Shifts in this game (Sft/G with GP 1).
+- description: ''
   name: shifts_per_game
   type: numeric
-- description: Body checks delivered (Hits).
+- description: ''
   name: hits
   type: integer
-- description: Blocked shots (BLS).
+- description: ''
   name: blocked_shots
   type: integer
 kind: dataframe

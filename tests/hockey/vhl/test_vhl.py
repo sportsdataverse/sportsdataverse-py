@@ -9,6 +9,7 @@ the runtime's raw-record shape. The runtime is driven through a fake transport
 
 from __future__ import annotations
 
+import functools
 import json
 import re
 import sys
@@ -30,6 +31,7 @@ ROOT = Path(__file__).parents[3]
 FIXTURES = ROOT / "tests" / "fixtures" / "vhl"
 YAML_PATH = ROOT / "tools" / "codegen" / "endpoints" / "vhl.yaml"
 SCHEMA_DIR = ROOT / "tools" / "codegen" / "schemas" / "native" / "vhl"
+MANUAL = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
 HOST = "https://www.vhlru.ru"
 
 sys.path.insert(0, str(ROOT / "tools" / "codegen"))
@@ -46,6 +48,16 @@ def _html(name: str) -> str:
 
 def _capture(name: str) -> Dict[str, Any]:
     return json.loads((FIXTURES / "captures" / name).read_text(encoding="utf-8"))
+
+
+@functools.lru_cache(maxsize=None)
+def _descriptions(key: str) -> Dict[str, str]:
+    """The ``vhl_<short>`` description block: manual_column_descriptions.yaml, else the gen snippet."""
+    loader = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+    block = (yaml.load(MANUAL.read_text(encoding="utf-8"), Loader=loader) or {}).get(key)
+    if block is None and gen_vhl.SNIPPET.exists():
+        block = (yaml.safe_load(gen_vhl.SNIPPET.read_text(encoding="utf-8")) or {}).get(key)
+    return block or {}
 
 
 def _id_cols(df: pl.DataFrame) -> List[str]:
@@ -72,8 +84,10 @@ def test_committed_schema_matches_the_parser(short):
     assert committed["schema"] == f"vhl_{short}"
     assert [c["name"] for c in committed["columns"]] == df.columns
     typed = {"integer": [pl.Int64], "numeric": [pl.Float64], "logical": [pl.Boolean]}
+    described = _descriptions(f"vhl_{short}")
     for col in committed["columns"]:
-        assert col["description"], col["name"]
+        assert col["description"] == "", col["name"]  # descriptions never live in schemas/**
+        assert len(described.get(col["name"]) or "") >= 15, col["name"]
         if col["type"] in typed:
             assert df.schema[col["name"]] in typed[col["type"]], col
 
@@ -92,7 +106,7 @@ def test_committed_schema_matches_the_parser(short):
     ],
 )
 def test_every_page_parses_to_its_record(kind, page):
-    rec = P.page_record(kind, _html(page))
+    rec = P._page_record(kind, _html(page))
     assert isinstance(rec, dict) and rec
 
 
@@ -121,7 +135,7 @@ def test_parsers_take_the_record_the_runtime_returns(parser, capture):
 
 def test_html_and_record_inputs_give_the_same_frame():
     page = _html(REPORT)
-    assert P.parse_vhl_goals(page).equals(P.parse_vhl_goals(P.page_record("report", page)))
+    assert P.parse_vhl_goals(page).equals(P.parse_vhl_goals(P._page_record("report", page)))
 
 
 @pytest.mark.parametrize("parser", ALL_PARSERS, ids=lambda f: f.__name__)
@@ -190,7 +204,7 @@ def test_goals_carry_on_ice_jerseys_and_the_scoring_side():
 
 
 def test_report_frames_share_the_game_key_from_the_request():
-    rec = P.page_record("report", _html(REPORT))
+    rec = P._page_record("report", _html(REPORT))
     rec[R.REQUEST_KEY] = {"season": 2026, "stage": "regular", "tn": 1374, "game_id": 899223}
     for parser in (P.parse_vhl_game_info, P.parse_vhl_goals, P.parse_vhl_penalties, P.parse_vhl_player_box):
         df = parser(rec)
@@ -206,7 +220,7 @@ def test_bare_report_html_has_no_game_id_but_keeps_its_season():
 
 def test_club_and_team_page_ids_bridge_only_through_game_id():
     sched = P.parse_vhl_schedule(_html("calendar_1374.html"))
-    rec = P.page_record("report", _html(REPORT))
+    rec = P._page_record("report", _html(REPORT))
     rec[R.REQUEST_KEY] = {"season": 2026, "stage": "regular", "tn": 1374, "game_id": 899223}
     info = P.parse_vhl_game_info(rec)
     assert sched.schema["game_id"] == info.schema["game_id"] == pl.Int64
@@ -261,7 +275,7 @@ def test_roster_is_cyrillic_and_fixture_birth_dates_are_masked():
 
 
 def test_tournament_table_lists_every_season_stage():
-    table = P.tournament_table(_html("tournaments.html"))
+    table = P._tournament_table(_html("tournaments.html"))
     assert len(table) == 33
     pairs = {(r["season"], r["stage"]): r["tn"] for r in table}
     assert pairs[(2011, "regular")] == 189 and pairs[(2011, "playoff")] == 190 and pairs[(2027, "regular")] == 1430
@@ -278,44 +292,44 @@ def test_table_reader_refuses_header_drift_short_rows_and_zero_rows():
         "<table><thead><tr><th>Time</th><th>Player</th><th></th><th>Penalty</th></tr></thead><tbody>{}</tbody></table>"
     )
     row = "<tr><td>01:00</td><td>1. A B</td><td>2</td><td>hooking</td></tr>"
-    table = P.parse_html(good.format(row)).find("table")
-    assert P.read_table(table, P.REPORT_PENALTIES, "p")[0]["minutes"] == 2
-    with pytest.raises(P.NotParsed, match="spans"):
-        P.read_table(
-            P.parse_html(good.format("<tr><td>01:00</td><td>x</td><td>2</td></tr>")).find("table"),
+    table = P._parse_html(good.format(row)).find("table")
+    assert P._read_table(table, P.REPORT_PENALTIES, "p")[0]["minutes"] == 2
+    with pytest.raises(P._NotParsed, match="spans"):
+        P._read_table(
+            P._parse_html(good.format("<tr><td>01:00</td><td>x</td><td>2</td></tr>")).find("table"),
             P.REPORT_PENALTIES,
             "p",
         )
-    with pytest.raises(P.NotParsed, match="zero rows"):
-        P.read_table(P.parse_html(good.format("")).find("table"), P.REPORT_PENALTIES, "p")
-    with pytest.raises(P.NotParsed, match="headers"):
-        P.read_table(
-            P.parse_html(good.replace("Penalty", "Infraction").format(row)).find("table"), P.REPORT_PENALTIES, "p"
+    with pytest.raises(P._NotParsed, match="zero rows"):
+        P._read_table(P._parse_html(good.format("")).find("table"), P.REPORT_PENALTIES, "p")
+    with pytest.raises(P._NotParsed, match="headers"):
+        P._read_table(
+            P._parse_html(good.replace("Penalty", "Infraction").format(row)).find("table"), P.REPORT_PENALTIES, "p"
         )
 
 
 def test_hidden_cells_are_dropped_and_deep_nesting_does_not_recurse():
     html = "<table><tr><th>#</th><th style='display: none'>x</th></tr><tr><td>7</td><td style='display:none'>9</td></tr></table>"
-    head, body = P.table_parts(P.parse_html(html).find("table"))
+    head, body = P._table_parts(P._parse_html(html).find("table"))
     assert [c.text() for c in head] == ["#"] and [c.text() for c in body[0]] == ["7"]
     deep = "<div>" * 5000 + "x" + "</div>" * 5000
-    assert P.parse_html(deep).text() == "x"
+    assert P._parse_html(deep).text() == "x"
 
 
 def test_record_identity_checks():
-    with pytest.raises(P.NotParsed, match="tournament"):
-        P.page_record("calendar", _html("calendar_1374.html"), {"tn": 1430})
-    with pytest.raises(P.NotParsed, match="game number"):
-        P.page_record("report", _html(REPORT), {"season": "2025/2026", "stage": "Regular Season", "game_number": 985})
-    with pytest.raises(P.NotParsed, match="season"):
-        P.page_record(
+    with pytest.raises(P._NotParsed, match="tournament"):
+        P._page_record("calendar", _html("calendar_1374.html"), {"tn": 1430})
+    with pytest.raises(P._NotParsed, match="game number"):
+        P._page_record("report", _html(REPORT), {"season": "2025/2026", "stage": "Regular Season", "game_number": 985})
+    with pytest.raises(P._NotParsed, match="season"):
+        P._page_record(
             "report", _html(REPORT), {"season": 2026, "stage": "Regular Season", "game_number": 984}
         )  # type-strict
-    with pytest.raises(P.NotParsed, match="player"):
-        P.page_record("player", _html("player_34418.html"), {"player_id": 34526})
-    shell = P.NotParsed
+    with pytest.raises(P._NotParsed, match="player"):
+        P._page_record("player", _html("player_34418.html"), {"player_id": 34526})
+    shell = P._NotParsed
     with pytest.raises(shell) as exc:
-        P.page_record("report", "<html><body><h1>Game summary</h1></body></html>")
+        P._page_record("report", "<html><body><h1>Game summary</h1></body></html>")
     assert exc.value.empty
 
 
@@ -341,6 +355,11 @@ def test_yaml_lists_every_route():
     }
     assert doc["getter_module"] == "sportsdataverse.hockey.vhl.vhl_runtime" and doc["schema_prefix"] == "vhl_"
     assert all((SCHEMA_DIR / f"{e['short']}.yaml").exists() for e in doc["endpoints"])
+
+
+def test_every_wrapper_carries_the_sanctions_flag():
+    notes = _yaml()["docstring"]["notes"]
+    assert notes == [gen_vhl.SANCTIONS] and "sanctioned" in notes[0] and "sign-off" in notes[0]
 
 
 def test_no_path_token_named_league_or_sport():
@@ -561,6 +580,24 @@ def test_retries_5xx_and_transport_errors_then_gives_up(site):
     site.pages[url] = [_Resp(502, "bad gateway")]
     with pytest.raises(AssetFetchError, match="502"):
         R._get(url, {})
+
+
+@pytest.mark.parametrize("status", [429, 503])
+def test_retry_after_is_honoured_on_429_and_503(site, monkeypatch, status):
+    slept: List[float] = []
+    monkeypatch.setattr(R.time, "sleep", slept.append)
+    url = f"{HOST}/en/players/34418/"
+    busy = _Resp(status, "busy")
+    busy.headers["retry-after"] = "30"
+    site.pages[url] = [busy, "player_34418.html"]
+    assert R._get(url, {})["player_id"] == 34418
+    assert slept == [30.0]  # Retry-After over the 2 s backoff
+    huge = _Resp(status, "busy")
+    huge.headers["retry-after"] = "86400"
+    site.pages[url] = [huge, "player_34418.html"]
+    slept.clear()
+    R._get(url, {})
+    assert slept == [R._MAX_RETRY_AFTER]
 
 
 def test_bad_arguments_are_refused(site):

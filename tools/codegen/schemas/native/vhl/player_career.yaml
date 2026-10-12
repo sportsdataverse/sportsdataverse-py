@@ -1,132 +1,119 @@
 columns:
-- description: Player id, read from the page's own /players/{id}/games/ tab link;
-    equals the requested id or the capture refuses.
+- description: ''
   name: player_id
   type: integer
-- description: Season END year (2026 = 2025/26).
+- description: ''
   name: season
   type: integer
-- description: 'Season stage: regular or playoff.'
+- description: ''
   name: stage
   type: character
-- description: Tournament id of the season stage (2025/26 regular season = 1374, playoffs
-    = 1375); vhl_tn maps season + stage to it.
+- description: ''
   name: tn
   type: integer
-- description: 'Team-season id (khl/ terminology): one id per team per tournament,
-    from the KHL''s sequence (khl/: Spartak = 14934 in 1369; here Metallurg = 15017
-    in 1374). The {id} of /calendar/{tn}/0/{id}/ and /stats/players/{tn}/all/{id}/.
-    Not the stable club id (*_club_id) and not the team page id. With tn, the bridge
-    from a player to every tournament team he played for.'
+- description: ''
   name: team_season_id
   type: integer
-- description: Team short name (Latin; the report tables' form).
+- description: ''
   name: team
   type: character
-- description: Jersey number worn for that team that season (#).
+- description: ''
   name: jersey
   type: integer
-- description: Games played (GP).
+- description: ''
   name: games_played
   type: integer
-- description: Goals (G).
+- description: ''
   name: goals
   type: integer
-- description: Assists (A).
+- description: ''
   name: assists
   type: integer
-- description: Points, goals + assists (PTS).
+- description: ''
   name: points
   type: integer
-- description: Plus/minus (+/-).
+- description: ''
   name: plus_minus
   type: integer
-- description: Penalty minutes (PIM).
+- description: ''
   name: penalty_minutes
   type: integer
-- description: Even-strength goals (ESG).
+- description: ''
   name: even_strength_goals
   type: integer
-- description: Power-play goals (PPG).
+- description: ''
   name: power_play_goals
   type: integer
-- description: Shorthanded goals (SHG).
+- description: ''
   name: shorthanded_goals
   type: integer
-- description: Overtime goals (OTG).
+- description: ''
   name: overtime_goals
   type: integer
-- description: Game-winning goals (GWG).
+- description: ''
   name: game_winning_goals
   type: integer
-- description: Shootout-deciding goals (SDS; the legend says 'Shootouts deciding shots').
+- description: ''
   name: shootout_deciding_goals
   type: integer
-- description: Shots on goal (SOG).
+- description: ''
   name: shots_on_goal
   type: integer
-- description: Shooting percentage, goals / shots on goal x 100 (%SOG); 0-100 scale;
-    null when the page shows '-'.
+- description: ''
   name: shot_pct
   type: numeric
-- description: Shots on goal per game (S/G).
+- description: ''
   name: shots_per_game
   type: numeric
-- description: Faceoffs taken (FO).
+- description: ''
   name: faceoffs
   type: integer
-- description: Faceoffs won (FOW).
+- description: ''
   name: faceoffs_won
   type: integer
-- description: Faceoff win percentage (%FO); 0-100 scale; null when the page shows
-    '-' (no faceoffs taken).
+- description: ''
   name: faceoff_pct
   type: numeric
-- description: Average time on ice per game (TOI/G), 'm:ss' / 'mm:ss' string; null
-    when the page shows '-'.
+- description: ''
   name: toi_per_game
   type: character
-- description: Average shifts per game (Sft/G); integer in a one-game report, decimal
-    in season tables.
+- description: ''
   name: shifts_per_game
   type: numeric
-- description: Body checks delivered (Hits).
+- description: ''
   name: hits
   type: integer
-- description: Blocked shots (BLS).
+- description: ''
   name: blocked_shots
   type: integer
-- description: Goalie wins (W).
+- description: ''
   name: wins
   type: integer
-- description: Goalie losses (L).
+- description: ''
   name: losses
   type: integer
-- description: Shootouts played (SOP).
+- description: ''
   name: shootouts_played
   type: integer
-- description: Shots on goal faced (the SOG column of goalie tables).
+- description: ''
   name: shots_against
   type: integer
-- description: Goals allowed (GA).
+- description: ''
   name: goals_against
   type: integer
-- description: Saves (Sv).
+- description: ''
   name: saves
   type: integer
-- description: Save percentage (%Sv); 0-100 scale (93.8 = 93.8 %); null when the page
-    shows '-'.
+- description: ''
   name: save_pct
   type: numeric
-- description: Goals-against average (GAA) = 60 x GA / TOI minutes; null when the
-    page shows '-'.
+- description: ''
   name: gaa
   type: numeric
-- description: Shutouts (SO).
+- description: ''
   name: shutouts
   type: integer
-- description: Time on ice (TOI), 'mm:ss' string; minutes run past 59 over a season
-    ('2314:48'); null when the page shows '-'.
+- description: ''
   name: toi
   type: character
 kind: dataframe
