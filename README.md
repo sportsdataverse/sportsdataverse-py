@@ -307,7 +307,7 @@ families, and what each one returns.
 
 📄 **[Download the sportsdataverse (Python) cheat sheet (PDF)](https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf)**
 
-Every SportsDataverse package has one — browse them all at
+Browse the other SportsDataverse cheat sheets at
 **[sportsdataverse.org/cheatsheets](https://sportsdataverse.org/cheatsheets)**.
 
 ## **Citations**
