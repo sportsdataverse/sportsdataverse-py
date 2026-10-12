@@ -1286,7 +1286,7 @@
   group: nfl-end-of-half
   finding: C-H2
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'end_of_half=half_end,'
+  snippet: 'end_of_half=_ends_a_half(~stop),'
   mutant: 'end_of_half=pl.col("half") != pl.col("lead_half"),'
   test: tests/nfl/test_nfl_whole_game_oracle.py -k "end_of_half_on_the_half_ending_play and 401547449"
   expected: kill
@@ -1298,8 +1298,8 @@
   group: nfl-end-of-half
   finding: C-M2
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'end_of_game_row = pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)'
-  mutant: 'end_of_game_row = pl.lit(False)'
+  snippet: 'return pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)'
+  mutant: 'return pl.lit(False)'
   test: tests/nfl/test_nfl_whole_game_oracle.py -k "admin_row_2002"
   expected: kill
   note: >-
@@ -1310,8 +1310,8 @@
   group: nfl-end-of-half
   finding: C-NF-12
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'half_play = ~stop'
-  mutant: 'half_play = pl.lit(True)'
+  snippet: 'end_of_half=_ends_a_half(~stop),'
+  mutant: 'end_of_half=_ends_a_half(pl.lit(True)),'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_end_of_half_on_the_half_ending_play[400791590-half]
   expected: kill
   note: 400791590's first half ends on a Timeout row, which takes end_of_half from the play before it.
