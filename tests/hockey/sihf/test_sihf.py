@@ -265,6 +265,40 @@ _MALFORMED_GAMES = [
 ]
 
 
+def _mutated(name: str, change: Any) -> Dict[str, Any]:
+    body = _load(name)
+    change(body)
+    return body
+
+
+def _team_stat_object(b: Dict[str, Any]) -> None:
+    next(t for t in b["stats"] if t.get("alias") == "gameTeamStats")["data"][0][0] = {"x": 1}
+
+
+def _mixed_table_cell(b: Dict[str, Any]) -> None:
+    b["data"][0][0] = ["Mo"]  # a list in one row, strings in the others
+
+
+# A leaf scalar of the wrong type (re-review R779-3): each used to raise polars' ComputeError.
+_WRONG_LEAF_TYPES = [
+    ("pbp", GAME, lambda b: b["summary"]["periods"][0].update(name={"x": 1})),
+    ("game_info", GAME, lambda b: b["details"]["homeTeam"].update(name={"x": 1})),
+    ("game_lineups", GAME, lambda b: b["details"]["homeAbsentees"][0].update(acronym=["SU"])),
+    ("game_info", GAME, lambda b: b["details"]["venue"].update(name=["x"])),
+    ("game_team_stats", GAME, _team_stat_object),
+    ("results", TABLES["results"], _mixed_table_cell),
+]
+
+
+@pytest.mark.parametrize(("short", "fname", "change"), _WRONG_LEAF_TYPES, ids=[s for s, _, _ in _WRONG_LEAF_TYPES])
+def test_a_leaf_of_the_wrong_type_becomes_null_without_raising(short, fname, change):
+    parser = GAME_PARSERS.get(short, parse_sihf_table)
+    clean = parser(_load(fname))
+    df = parser(_mutated(fname, change))
+    assert df.schema == clean.schema
+    assert df.height == clean.height
+
+
 def test_pbp_event_with_a_non_string_text_is_kept():
     df = parse_sihf_pbp({"gameId": 1, "summary": {"periods": [{"name": "1", "goals": [{"text": 5, "time": "01:00"}]}]}})
     assert df.height == 1
