@@ -21,6 +21,10 @@
 # It does so only when the PR head contains the upstream tip and the base does
 # not yet; an ordinary task PR gets no allowance. main keeps no baseline/, so
 # a main -> devel-program-setup sync still has the base's baseline only.
+# The allowance covers the WHOLE PR: one that merges the upstream tip AND
+# carries task commits is treated as a sync, so never merge the upstream into
+# a task PR. With two baselines the scoreboard table shows the change against
+# each, so whatever the allowance absorbs reads WORSE in the Base column.
 name: quality
 on:
   pull_request:
