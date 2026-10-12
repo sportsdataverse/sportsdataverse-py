@@ -220,6 +220,16 @@ columns, one per quarterback-game ESPN rated in 2023 (regular season and playoff
   (`nfl/espn/raw/2021/401326517.json.gz`, nfl-raw commit 5ca32021, 2026-09-14), trimmed to the same keys as the
   whole-game captures. It is NOT one of them (the name keeps it out of the `summary_*` glob): ESPN files the
   touchback kickoff 1442 between two PHI snaps of one drive, the case the kickoff net-spot possession check covers.
+- `kickoff_onside_400554238_trimmed.json.gz` (task 2.21 / R810-3, read by
+  `test_kickoff_kicking_team_recovery_ends_at_the_kickers_snap[onside]`): the ESPN summary of 400554238
+  (2014 week 4, TEN @ IND; nflverse 2014_04_TEN_IND) from the nfl-raw library
+  (`nfl/espn/raw/2014/400554238.json.gz`, nfl-raw commit f2d99262, 2026-09-14), trimmed the same way and
+  likewise outside the `summary_*` glob. Play 568 is an onside kick IND recovers (nflverse epa -3.798).
+- `kickoff_reversed_recovery_301114003_trimmed.json.gz` (task 2.21 / R810-3, read by
+  `test_kickoff_reversed_recovery_stays_the_receivers_ball`): the ESPN summary of 301114003 (2010 week 10,
+  MIN @ CHI; nflverse 2010_10_MIN_CHI) from the nfl-raw library (`nfl/espn/raw/2010/301114003.json.gz`,
+  nfl-raw commit 56da67ca, 2026-09-14), trimmed the same way. Play 3734 is a kickoff whose fumble recovery by
+  the kicking team was REVERSED (nflverse epa 0.399).
 
 ## Overtime rule sets (C-M6)
 

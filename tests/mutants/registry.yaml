@@ -1243,7 +1243,7 @@
                         .pipe(self.__add_spread_time)
                         .pipe(self.__add_description_features)
                         # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
-                        .drop("_kick_spot", strict=False)
+                        .drop("_kick_spot", "_kicker_recovers", strict=False)
                     )
   mutant: |-
     .pipe(self.__refine_play_types_post_attribution)
@@ -1254,7 +1254,7 @@
                         .pipe(self.__add_spread_time)
                         .pipe(self.__add_description_features)
                         # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
-                        .drop("_kick_spot", strict=False)
+                        .drop("_kick_spot", "_kicker_recovers", strict=False)
                     )
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_first_down_penalty_cleaning_pipeline[401547449]
   expected: kill
@@ -1357,7 +1357,7 @@
   group: nfl-end-state
   finding: EX-2.3-a
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '.drop("_kick_spot", strict=False)'
+  snippet: '.drop("_kick_spot", "_kicker_recovers", strict=False)'
   mutant: '.drop("_no_such_column", strict=False)'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_cleaning_pipeline_has_no_kick_spot_column
   expected: kill
@@ -1370,11 +1370,49 @@
   group: nfl-end-state
   finding: EX-2.3-a
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '& (pl.col("_nxt").struct.field("team") == pl.col("start.pos_team.id"))  # the receiver'
-  mutant: '& pl.lit(True)  # the receiver'
+  snippet: '& (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball'
+  mutant: '& pl.lit(True)  # the snap of the team with the ball'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_net_spot_is_the_receivers_next_snap
   expected: kill
   note: >-
     The owner's net spot is the RECEIVER's next snap. ESPN files 401326517's touchback 1442 between two
     PHI snaps; without the possession check the PHI snap at the NYJ 30 is read as NYJ's net spot and
     the touchback scores EPA +2.508 instead of 0 (nflverse 0.000).
+
+- id: nfl-kickoff-kicking-team-recovery
+  group: nfl-end-state
+  finding: R810-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'kickoff & (pl.col("type.text").is_in(kickoff_turnovers) | (recovered_by == kick_abbr))  # R810-3'
+  mutant: 'kickoff & pl.lit(False)  # R810-3'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kicking_team_recovery_ends_at_the_kickers_snap"
+  expected: kill
+  note: >-
+    Without the kicking-team branch the team with the ball after a muff or onside recovery is taken
+    to be the receiver: the kicker's next snap fails the possession check and EP_end is not flipped,
+    so 301003002/297 reads 0.625 (nflverse -3.890) and 400554238/568 -2.855 (nflverse -3.798).
+
+- id: nfl-epa-kicking-team-recovery-flip
+  group: nfl-end-state
+  finding: R810-3
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.when(pl.col("type.text").is_in(kickoff_vec) & kicker_recovers)'
+  mutant: '.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kicking_team_recovery_ends_at_the_kickers_snap and muff"
+  expected: kill
+  note: >-
+    A muff the kicking team recovers ends at the kicker's snap; EP_end is the kicker's and must be
+    flipped to the receiver's side (onside kicks and "Kickoff Team Fumble Recovery" have their own
+    clauses). Unflipped, 301003002/297 reads about +2.25 against nflverse -3.890.
+
+- id: nfl-kickoff-recovery-after-reversal
+  group: nfl-end-state
+  finding: R810-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'ruled = pl.col("text").str.split("REVERSED").list.last()  # the play as it stands'
+  mutant: 'ruled = pl.col("text")  # the play as it stands'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_reversed_recovery_stays_the_receivers_ball
+  expected: kill
+  note: >-
+    A recovery the replay REVERSED is not the kicking team's ball: 301114003/3734 read it and scored
+    EPA -1.289 against nflverse 0.399 (the one sample kickoff the kicking-team branch made worse).

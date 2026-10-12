@@ -952,25 +952,66 @@ def test_kickoff_touchback_without_a_next_snap_ends_at_the_season_spot(game_id, 
     assert abs(row["EPA"]) < 1e-3, row["EPA"]
 
 
+def _run_kickoff_fixture(name: str, game_id: int) -> pl.DataFrame:
+    """Run one of the kickoff fixtures that are not whole-game captures (README "Other files")."""
+    with gzip.open(FIX / name, "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    proc = NFLPlayProcess(gameId=game_id)
+    proc.espn_nfl_pbp(summary=summary)
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(nfl_fourth_down, "_try_load", lambda name: None)
+        proc.run_processing_pipeline()
+    return proc.plays_frame.sort("game_play_number")
+
+
 def test_kickoff_net_spot_is_the_receivers_next_snap():
     # The owner's model reads the net spot at the RECEIVER's next snap. ESPN files 401326517's touchback
     # 1442 (J.Elliott, PHI, 2021) between two PHI snaps of one drive, so the next row is PHI's 1st & 10
     # at the NYJ 30; without the possession check that was read as NYJ's net spot (EPA +2.508). The
     # check fails, so the touchback falls back to the season spot: EPA 0 (nflverse 0.000).
     # fixtures/kickoff_misfiled_401326517_trimmed.json.gz (README "Other files").
-    with gzip.open(FIX / "kickoff_misfiled_401326517_trimmed.json.gz", "rt", encoding="utf-8") as fh:
-        summary = json.load(fh)
-    proc = NFLPlayProcess(gameId=401326517)
-    proc.espn_nfl_pbp(summary=summary)
-    with pytest.MonkeyPatch.context() as mp:
-        mp.setattr(nfl_fourth_down, "_try_load", lambda name: None)
-        proc.run_processing_pipeline()
-    f = proc.plays_frame.sort("game_play_number")
+    f = _run_kickoff_fixture("kickoff_misfiled_401326517_trimmed.json.gz", 401326517)
     i = f["id"].cast(pl.Utf8).to_list().index("4013265171442")
     row, nxt = f.row(i, named=True), f.row(i + 1, named=True)
     assert row["kickoff_tb"] is True and nxt["start.pos_team.id"] != row["start.pos_team.id"]
     assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (1, 10, 75)
     assert abs(row["EPA"]) < 1e-3, row["EPA"]
+
+
+# The kicking team recovers (R810-3): the team with the ball after the kick is the kicker, its next
+# snap is the net spot and EP_end is the kicker's (calculate_epa flips it). nflverse epa and the error
+# before -> after (previous head 8a1cd9e57e, which read only the receiver's snap):
+# - 301003002/297 (2010, capture): "C.Ellis MUFFS catch, RECOVERED by NYJ", nflverse -3.890, ours
+#   0.625 -> -3.823 (error 4.52 -> 0.067); the kicker's snap is at the BUF 39.
+# - 400554238/568 (2014, fixtures/kickoff_onside_400554238_trimmed.json.gz): "kicks onside ... RECOVERED
+#   by IND", nflverse -3.798, ours -2.855 -> -3.498 (error 0.943 -> 0.300); IND's snap at the TEN 44.
+_KICKER_RECOVERS = [
+    (301003002, None, "3010030020297", 39, -3.890, 0.07),
+    (400554238, "kickoff_onside_400554238_trimmed.json.gz", "400554238568", 44, -3.798, 0.31),
+]
+
+
+@pytest.mark.parametrize(
+    ("game_id", "fixture", "play", "spot", "nflverse_epa", "ceiling"), _KICKER_RECOVERS, ids=["muff", "onside"]
+)
+def test_kickoff_kicking_team_recovery_ends_at_the_kickers_snap(game_id, fixture, play, spot, nflverse_epa, ceiling):
+    f = run(game_id).plays if fixture is None else _run_kickoff_fixture(fixture, game_id)
+    row = f.filter(pl.col("id").cast(pl.Utf8) == play).row(0, named=True)
+    kicker = row["start.team.id"]  # ESPN states a kickoff from the kicking team
+    assert row["end.pos_team.id"] == kicker != row["start.pos_team.id"]
+    assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (1, 10, spot)
+    assert abs(row["EPA"] - nflverse_epa) <= ceiling, row["EPA"]
+
+
+def test_kickoff_reversed_recovery_stays_the_receivers_ball():
+    # 301114003/3734 (2010): "... FUMBLES (C.Graham), RECOVERED by CHI ... the play was REVERSED. R.Gould
+    # kicks ... P.Harvin to MIN 28": only the ruling after REVERSED counts, so MIN keeps the ball and the
+    # net spot is MIN's next snap. Reading the reversed recovery gave EPA -1.289 against nflverse 0.399
+    # (0.418 when only the receiver's snap is read). fixtures/kickoff_reversed_recovery_301114003_trimmed.json.gz.
+    f = _run_kickoff_fixture("kickoff_reversed_recovery_301114003_trimmed.json.gz", 301114003)
+    row = f.filter(pl.col("id").cast(pl.Utf8) == "3011140033734").row(0, named=True)
+    assert row["end.pos_team.id"] == row["start.pos_team.id"] != row["start.team.id"]
+    assert abs(row["EPA"] - 0.399) <= 0.02, row["EPA"]
 
 
 def test_kickoff_touchback_cleaning_pipeline_has_no_kick_spot_column():
@@ -980,8 +1021,8 @@ def test_kickoff_touchback_cleaning_pipeline_has_no_kick_spot_column():
     proc.espn_nfl_pbp(summary=load_summary(401671740))
     plays = proc.run_cleaning_pipeline()["plays"]
     _require(len(plays) > 0, "the cleaning pipeline returned no plays")
-    assert [c for c in plays[0] if c == "_kick_spot"] == []
-    assert "_kick_spot" not in run(401671740).plays.columns
+    assert [c for c in plays[0] if c in ("_kick_spot", "_kicker_recovers")] == []
+    assert {"_kick_spot", "_kicker_recovers"}.isdisjoint(run(401671740).plays.columns)
 
 
 # nflverse's epa on every touchback kickoff of the captures that nflverse also flags as one

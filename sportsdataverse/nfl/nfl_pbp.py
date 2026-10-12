@@ -1697,17 +1697,27 @@ class NFLPlayProcess(object):
         # where that team's next snap starts (ESPN's end yard line is flipped on some returns, R810-5).
         # Pre-2014 play ids are not always in game order (R785-4), so the next snap by id must also be
         # the next snap by sequenceNumber in the same half, and not another kickoff; otherwise ESPN's
-        # end yard line stands. It must also be the RECEIVER's snap: a kickoff row's start.pos_team.id
-        # is the receiving team in every era (ESPN's start.team is the kicker), so the next snap's
-        # possession must equal it. ESPN files some kickoffs inside the kicking team's drive
-        # (401326517/1442); a muff the kicking team recovers fails it too (R810-3).
+        # end yard line stands. It must also be the snap of the team with the ball after the kick: a
+        # kickoff row's start.pos_team.id is the receiving team in every era (ESPN's start.team is the
+        # kicker), unless the kicking team recovers (an onside kick, a muff, "Kickoff Team Fumble
+        # Recovery"; R810-3): the play type says so, or the text's last "RECOVERED by XXX" names the
+        # team of its own "kicks ... from XXX"; only the text after a REVERSED ruling counts (a reversed
+        # recovery, 301114003/3734, is the receiver's ball). ESPN files some kickoffs inside the kicking
+        # team's drive (401326517/1442), whose next snap is then not the receiver's.
         kickoff = pl.col("type.text").is_in(kickoff_vec).fill_null(False)
+        kick_abbr = pl.col("text").str.extract(r"(?i)\bkicks\b.*?\bfrom\s+([A-Z]{2,3})\s+\d", 1)
+        ruled = pl.col("text").str.split("REVERSED").list.last()  # the play as it stands
+        recovered_by = ruled.str.extract_all(r"RECOVERED by [A-Z]{2,3}\b").list.last().str.slice(13)
+        kicker_recovers = (
+            kickoff & (pl.col("type.text").is_in(kickoff_turnovers) | (recovered_by == kick_abbr))  # R810-3
+        ).fill_null(False)
+        after_kick = pl.when(kicker_recovers).then(pl.col("start.team.id")).otherwise(pl.col("start.pos_team.id"))
         seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")
         nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=kickoff, r=seq_rank, team=pl.col("start.pos_team.id"))
         next_snap = (
             (pl.col("_nxt").struct.field("kick") == False)
             & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
-            & (pl.col("_nxt").struct.field("team") == pl.col("start.pos_team.id"))  # the receiver's snap
+            & (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball
         ).fill_null(False)
         # A missed field goal starts the other team's possession at a first down (the owner's
         # missed-field-goal model); its spot is set in __add_play_category_flags, once the kick's
@@ -1726,6 +1736,8 @@ class NFLPlayProcess(object):
             .with_columns(
                 _first_down=first_down.fill_null(False),
                 _kick_spot=(kickoff & unscored & next_snap).fill_null(False),
+                # read by calculate_epa (EP_end is the kicker's), dropped after it
+                _kicker_recovers=kicker_recovers,
             )
             .with_columns(
                 pl.when(pl.col("_kick_spot"))
@@ -5299,7 +5311,7 @@ class NFLPlayProcess(object):
         # calculate_epa also emits lowercase nflverse aliases (ep / epa / ep_start /
         # ep_end) the legacy __process_epa output never carried, so drop them to keep
         # the plays schema byte-identical; the EPA_* summary flags below stay inline.
-        play_df = calculate_epa(play_df).drop("ep", "epa", "ep_start", "ep_end")
+        play_df = calculate_epa(play_df).drop("ep", "epa", "ep_start", "ep_end", "_kicker_recovers", strict=False)
 
         play_df = play_df.with_columns(
             def_EPA=pl.col("EPA") * -1,
@@ -7973,7 +7985,7 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_spread_time)
                     .pipe(self.__add_description_features)
                     # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
-                    .drop("_kick_spot", strict=False)
+                    .drop("_kick_spot", "_kicker_recovers", strict=False)
                 )
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {
