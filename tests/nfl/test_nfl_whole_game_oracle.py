@@ -173,35 +173,50 @@ def test_half_ending_play(game_id, boundary):
 # ---------------------------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize(
-    "game_id",
-    _cases(
-        dict.fromkeys(
-            (400791590, 400874512, 401326132, 401326383, 401326467, 401326581, 401671740),
-            "C-H5: ESPN's end.down -1 on a returned kickoff reaches the EP model (CFB rewrites it to 1)",
-        )
-    ),
-)
-def test_kickoff_return_ends_on_a_real_down(game_id):
+@pytest.mark.parametrize("game_id", _cases())
+def test_end_down_minus_one_kickoff_return_ends_on_a_real_down(game_id):
     # Oracle: the CFB copy (cfb_pbp.py, __add_downs_data): a non-scoring kickoff ends at a down 1-4.
+    # C-H5 (task 2.3): 21 returns in 7 games ended at ESPN's -1.
     f = run(game_id).plays.filter(pl.col("type.text").is_in(kickoff_vec) & ~_t("scoringPlay"))
     assert _bad(f, pl.col("end.down").is_in([1, 2, 3, 4]), ["type.text", "end.down"]) == []
 
 
-@pytest.mark.parametrize(
-    "game_id",
-    _cases(
-        dict.fromkeys(
-            (251113015, 260917021, 261022011, 261126002, 271209010, 301003002, 331103020),
-            "EX-1.1-c: a pre-2014 missed field goal keeps ESPN's end.down -1, so EP_end is scored at down -1",
-        )
-    ),
-)
-def test_missed_field_goal_ends_on_a_real_down(game_id):
+@pytest.mark.parametrize("game_id", _cases())
+def test_end_down_minus_one_missed_field_goal_ends_on_a_real_down(game_id):
     # Oracle: the opponent takes over at a first down (the 2015+ feeds ship down 1 or 3); C-H5's
-    # mechanism on a second play type. Measured: 8 rows in 7 games, EPA off by 0.6-3.0 points.
+    # mechanism on a second play type. EX-1.1-c (task 2.3): 8 pre-2014 rows in 7 games.
     f = run(game_id).plays.filter(pl.col("type.text").is_in(["Field Goal Missed", "Blocked Field Goal"]))
     assert _bad(f.filter(~_t("scoringPlay")), pl.col("end.down").is_in([1, 2, 3, 4]), ["type.text", "end.down"]) == []
+
+
+@pytest.mark.parametrize("game_id", _cases())
+def test_end_down_minus_one_only_on_a_score(game_id):
+    # Oracle: ESPN's own feed. Only a score is followed by no snap of the same possession (a try or
+    # a kickoff), so only a score may end at down -1; on HEAD before task 2.3, 29 non-scoring plays
+    # did (21 kickoff returns, 8 missed field goals). Timeouts are not plays: nflverse carries no
+    # media timeout and gives a team timeout no down, so their -1 stands.
+    f = run(game_id).plays.filter(~_t("scoringPlay") & ~pl.col("type.text").is_in(clock_stoppage_vec))
+    assert _bad(f, pl.col("end.down") != -1, ["type.text", "end.down"]) == []
+
+
+# nflverse's epa on the 29 plays task 2.3 moves (fixtures/nflverse/end_down_minus_one_epa.csv; the
+# README has the provenance). Measured MAE on HEAD before -> after the fix: missed field goals
+# 1.720 -> 0.162 (8 rows), kickoff returns 0.952 -> 0.347 (21 rows); ceilings one step toward failing.
+_END_DOWN_EPA_MAE = {"field_goal": 0.17, "kickoff": 0.35}
+
+
+@pytest.mark.parametrize("play_type", list(_END_DOWN_EPA_MAE))
+def test_end_down_minus_one_epa_agrees_with_nflverse(play_type):
+    nv = pl.read_csv(FIX / "nflverse" / "end_down_minus_one_epa.csv").filter(pl.col("play_type") == play_type)
+    ours = pl.concat(
+        run(g)
+        .plays.select(pl.col("id").cast(pl.Utf8), pl.col("EPA").cast(pl.Float64))
+        .with_columns(espn_game_id=pl.lit(g, dtype=pl.Int64))
+        for g in nv["espn_game_id"].unique().sort()
+    ).with_columns(play_id=pl.col("id").str.slice(9).cast(pl.Int64))
+    j = nv.join(ours, on=["espn_game_id", "play_id"], how="inner")
+    _require(j.height == nv.height, f"{j.height} of {nv.height} nflverse plays matched")
+    assert (j["EPA"] - j["epa"]).abs().mean() <= _END_DOWN_EPA_MAE[play_type]
 
 
 @pytest.mark.parametrize(
@@ -422,8 +437,8 @@ def test_play_column_equals_nflverse(game_id, ours, theirs, domain):
 
 
 # (corr floor, MAE ceiling, rows) per game and column: measured on HEAD, see the module docstring.
-# Rows that carry an open finding (C-H2/C-NF-12 half-ending plays, C-H5 kickoffs, C-M1/C-NF-6
-# negated scores) are left out so the floor is not loosened by them. When 2.2 (C-H2), 2.3 (C-H5) and
+# Rows that carry an open finding (C-H2/C-NF-12 half-ending plays, C-M1/C-NF-6 negated scores) are
+# left out so the floor is not loosened by them (2.3 dropped the C-H5 kickoffs). When 2.2 (C-H2) and
 # 2.5 (C-M1/C-NF-6) land, each drops its exclusion in _open_finding_rows and re-measures the floors
 # here (raise only).
 _MODEL = {
@@ -436,6 +451,11 @@ _MODEL = {
     (401671740, "wp", "wp"): (0.999, 0.007, 154),  # 0.99980, 0.00649
     (401671740, "vegas_wp", "vegas_wp"): (0.991, 0.062, 154),  # 0.99174, 0.06128
 }
+# The two kickoff returns 2.3 (C-H5) fixed in 401671740 (GSIS play_id). The floors above stay on the
+# population they were measured on; test_end_down_minus_one_returns_sit_in_the_kickoff_band covers
+# these two against the game's other kickoffs instead (with them the floors read 0.99597/0.12087,
+# 0.97195/0.13462, 0.99979/0.00656, 0.99145/0.06162 on 156 rows).
+_H5_RETURNS = {401671740: (39, 2997)}
 
 
 def _open_finding_rows(game_id: int) -> list[int]:
@@ -444,9 +464,8 @@ def _open_finding_rows(game_id: int) -> list[int]:
     ends = [plays.tail(1)["id"].item()]
     if game_id in _OT_GAMES:
         ends.append(plays.filter(pl.col("period.number") == 4).tail(1)["id"].item())
-    h5 = pl.col("type.text").is_in(kickoff_vec) & ~_t("scoringPlay") & ~pl.col("end.down").is_in([1, 2, 3, 4])
     negated = pl.col("text").str.contains("(?i)NULLIFIED|REVERSED").fill_null(False)
-    return ends + f.filter(h5.fill_null(False) | negated)["id"].to_list()
+    return ends + f.filter(negated)["id"].to_list()
 
 
 @pytest.mark.parametrize(("game_id", "ours", "theirs"), list(_MODEL), ids=lambda v: str(v))
@@ -454,6 +473,7 @@ def test_model_column_agrees_with_nflverse(game_id, ours, theirs):
     corr_floor, mae_ceiling, rows = _MODEL[(game_id, ours, theirs)]
     j = _joined(game_id).filter(
         ~pl.col("id").is_in(_open_finding_rows(game_id))
+        & ~pl.col("play_id").is_in(_H5_RETURNS.get(game_id, ()))
         & pl.col(ours).is_not_null()
         & pl.col(f"{theirs}_nv").is_not_null()
     )
@@ -462,6 +482,22 @@ def test_model_column_agrees_with_nflverse(game_id, ours, theirs):
     assert j.height >= rows
     assert corr >= corr_floor, corr
     assert mae <= mae_ceiling, mae
+
+
+@pytest.mark.parametrize(("ours", "theirs"), [("EP_start", "ep"), ("EPA", "epa")])
+@pytest.mark.parametrize("game_id", list(_H5_RETURNS))
+def test_end_down_minus_one_returns_sit_in_the_kickoff_band(game_id, ours, theirs):
+    # 2.3 (C-H5): a fixed return agrees with nflverse no worse than the game's other kickoffs do.
+    # Measured on 401671740: returns ep 0.313/0.351, epa 0.224/0.605; other kickoffs max 0.466 / 0.630
+    # (before 2.3 the returns' epa was off 1.182/1.499).
+    err = (pl.col(ours).cast(pl.Float64) - pl.col(f"{theirs}_nv").cast(pl.Float64)).abs()
+    j = _joined(game_id).filter(
+        pl.col("type.text").is_in(kickoff_vec) & ~pl.col("id").is_in(_open_finding_rows(game_id))
+    )
+    returns = j.filter(pl.col("play_id").is_in(_H5_RETURNS[game_id]))
+    _require(returns.height == len(_H5_RETURNS[game_id]), f"{returns.height} returns joined")
+    band = j.filter(~pl.col("play_id").is_in(_H5_RETURNS[game_id])).select(err.max()).item()
+    assert returns.select(err.max()).item() <= band
 
 
 # C-L20: the CP booster scored on nflverse's own inputs must reproduce nflverse's cp (a constant
