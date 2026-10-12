@@ -540,6 +540,43 @@ def _ends_a_half(half_play: pl.Expr) -> pl.Expr:
     )
 
 
+def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Expr]:
+    """The kickoff net-spot read for ``__add_downs_data``: ``(kickoff, nxt, next_snap, kicker_recovers)``.
+
+    Kickoff EPA (the owner's model) is EP(1st & 10 at the net spot, for the team with the ball
+    after the kick) - EP(1st & 10 at the touchback spot), so every unscored kickoff (returned,
+    out of bounds, penalty spot, onside recovered by either side) ends at a first down whatever
+    down / distance ESPN ships; a touchback with no next snap to read is re-spotted later at the
+    season's touchback spot (kickoff_tb & ~_kick_spot, EX-2.3-a). The net spot is
+    where that team's next snap starts (ESPN's end yard line is flipped on some returns, R810-5).
+    Pre-2014 play ids are not always in game order (R785-4), so the next snap by id must also be
+    the next snap by sequenceNumber in the same half, and not another kickoff; otherwise ESPN's
+    end yard line stands. It must also be the snap of the team with the ball after the kick: a
+    kickoff row's start.pos_team.id is the receiving team in every era (ESPN's start.team is the
+    kicker), unless the kicking team recovers (an onside kick, a muff, "Kickoff Team Fumble
+    Recovery"; R810-3): the play type says so, or the text's last "RECOVERED by XXX" names the
+    team of its own "kicks ... from XXX"; only the text after a REVERSED ruling counts (a reversed
+    recovery, 301114003/3734, is the receiver's ball). ESPN files some kickoffs inside the kicking
+    team's drive (401326517/1442), whose next snap is then not the receiver's.
+    """
+    kickoff = pl.col("type.text").is_in(kickoff_vec).fill_null(False)
+    kick_abbr = pl.col("text").str.extract(r"(?i)\bkicks\b.*?\bfrom\s+([A-Z]{2,3})\s+\d", 1)
+    ruled = pl.col("text").str.split("REVERSED").list.last()  # the play as it stands
+    recovered_by = ruled.str.extract_all(r"RECOVERED by [A-Z]{2,3}\b").list.last().str.slice(13)
+    kicker_recovers = (
+        kickoff & (pl.col("type.text").is_in(kickoff_turnovers) | (recovered_by == kick_abbr))  # R810-3
+    ).fill_null(False)
+    after_kick = pl.when(kicker_recovers).then(pl.col("start.team.id")).otherwise(pl.col("start.pos_team.id"))
+    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")
+    nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=kickoff, r=seq_rank, team=pl.col("start.pos_team.id"))
+    next_snap = (
+        (pl.col("_nxt").struct.field("kick") == False)
+        & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
+        & (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball
+    ).fill_null(False)
+    return kickoff, nxt, next_snap, kicker_recovers
+
+
 def _missed_fg_unblocked() -> pl.Expr:
     """An unscored missed field goal; a blocked kick is a live ball, so text saying blocked is not one."""
     return (
@@ -1715,36 +1752,7 @@ class NFLPlayProcess(object):
         stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
         unscored = ~(pl.col("scoringPlay") == True).fill_null(False)
         no_down = (pl.col("end.down") == -1) & ~stop & unscored
-        # Kickoff EPA (the owner's model) is EP(1st & 10 at the net spot, for the team with the ball
-        # after the kick) - EP(1st & 10 at the touchback spot), so every unscored kickoff (returned,
-        # out of bounds, penalty spot, onside recovered by either side) ends at a first down whatever
-        # down / distance ESPN ships; a touchback with no next snap to read is re-spotted later at the
-        # season's touchback spot (kickoff_tb & ~_kick_spot, EX-2.3-a). The net spot is
-        # where that team's next snap starts (ESPN's end yard line is flipped on some returns, R810-5).
-        # Pre-2014 play ids are not always in game order (R785-4), so the next snap by id must also be
-        # the next snap by sequenceNumber in the same half, and not another kickoff; otherwise ESPN's
-        # end yard line stands. It must also be the snap of the team with the ball after the kick: a
-        # kickoff row's start.pos_team.id is the receiving team in every era (ESPN's start.team is the
-        # kicker), unless the kicking team recovers (an onside kick, a muff, "Kickoff Team Fumble
-        # Recovery"; R810-3): the play type says so, or the text's last "RECOVERED by XXX" names the
-        # team of its own "kicks ... from XXX"; only the text after a REVERSED ruling counts (a reversed
-        # recovery, 301114003/3734, is the receiver's ball). ESPN files some kickoffs inside the kicking
-        # team's drive (401326517/1442), whose next snap is then not the receiver's.
-        kickoff = pl.col("type.text").is_in(kickoff_vec).fill_null(False)
-        kick_abbr = pl.col("text").str.extract(r"(?i)\bkicks\b.*?\bfrom\s+([A-Z]{2,3})\s+\d", 1)
-        ruled = pl.col("text").str.split("REVERSED").list.last()  # the play as it stands
-        recovered_by = ruled.str.extract_all(r"RECOVERED by [A-Z]{2,3}\b").list.last().str.slice(13)
-        kicker_recovers = (
-            kickoff & (pl.col("type.text").is_in(kickoff_turnovers) | (recovered_by == kick_abbr))  # R810-3
-        ).fill_null(False)
-        after_kick = pl.when(kicker_recovers).then(pl.col("start.team.id")).otherwise(pl.col("start.pos_team.id"))
-        seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")
-        nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=kickoff, r=seq_rank, team=pl.col("start.pos_team.id"))
-        next_snap = (
-            (pl.col("_nxt").struct.field("kick") == False)
-            & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
-            & (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball
-        ).fill_null(False)
+        kickoff, nxt, next_snap, kicker_recovers = _kickoff_next_snap(stop)
         # A missed field goal starts the other team's possession at a first down (the owner's
         # missed-field-goal model); its spot is set in __add_play_category_flags, once the kick's
         # line of scrimmage is final.

@@ -2205,9 +2205,7 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
     )
     # A kickoff the kicking team recovers (NFLPlayProcess's _kicker_recovers, R810-3).
     kicker_recovers = (
-        (pl.col("_kicker_recovers") == True).fill_null(False)  # noqa: E712
-        if "_kicker_recovers" in df.columns
-        else pl.lit(False)
+        (pl.col("_kicker_recovers") == True).fill_null(False) if "_kicker_recovers" in df.columns else pl.lit(False)
     )
     kick_good = _lower.str.contains(r"kick\)")
     kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
