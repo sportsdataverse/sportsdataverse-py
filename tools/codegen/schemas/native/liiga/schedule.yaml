@@ -1,112 +1,108 @@
 columns:
-- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+- description: ''
   name: game_id
   type: integer
-- description: 'Tournament id, the same every season: 1188 regular season, 1189 playoffs,
-    1194 preseason, 1890 CHL.'
+- description: ''
   name: serie_id
   type: integer
-- description: Season END year (2026 = 2025-26).
+- description: ''
   name: season
   type: integer
-- description: Home team name.
+- description: ''
   name: home_team_name
   type: character
-- description: Away team name.
+- description: ''
   name: away_team_name
   type: character
-- description: Home team id (the number of the `<num>:<slug>` key).
+- description: ''
   name: home_team_id
   type: integer
-- description: Home team slug (e.g. hpk).
+- description: ''
   name: home_team_slug
   type: character
-- description: Away team id (the number of the `<num>:<slug>` key).
+- description: ''
   name: away_team_id
   type: integer
-- description: Away team slug (e.g. tps).
+- description: ''
   name: away_team_slug
   type: character
-- description: Home team placeholder.
+- description: ''
   name: home_team_placeholder
   type: character
-- description: Away team placeholder.
+- description: ''
   name: away_team_placeholder
   type: character
-- description: Home team goals.
+- description: ''
   name: home_team_goals
   type: integer
-- description: Away team goals.
+- description: ''
   name: away_team_goals
   type: integer
-- description: Home team's expected goals (xG) for the game, provider-computed (same
-    value as /games `homeTeam.expectedGoals`).
+- description: ''
   name: expected_home_team_goals
   type: numeric
-- description: Away team's expected goals (xG) for the game, provider-computed.
+- description: ''
   name: expected_away_team_goals
   type: numeric
-- description: 'Seconds from the start of the game. Regular season: 3900 (65:00) =
-    the end of the 5-minute overtime; playoff overtime runs past it.'
+- description: ''
   name: game_time
   type: integer
-- description: Game has started.
+- description: ''
   name: started
   type: logical
-- description: Game has ended.
+- description: ''
   name: ended
   type: logical
-- description: Home team won.
+- description: ''
   name: home_team_winner
   type: logical
-- description: Attendance.
+- description: ''
   name: spectators
   type: integer
-- description: Home team ranking.
+- description: ''
   name: home_team_ranking
-  type: character
-- description: Away team ranking.
+  type: integer
+- description: ''
   name: away_team_ranking
-  type: character
-- description: Playoff pairing number, else null.
+  type: integer
+- description: ''
   name: play_off_pair
-  type: character
-- description: Playoff round, else null.
+  type: integer
+- description: ''
   name: play_off_phase
-  type: character
-- description: Wins needed to take the series, else null.
+  type: integer
+- description: ''
   name: play_off_req_wins
   type: integer
-- description: Scheduled start, ISO 8601 UTC.
+- description: ''
   name: start
   type: character
-- description: Ticket link, else null.
+- description: ''
   name: buy_tickets_url
   type: character
-- description: 'How the game ended: ENDED_DURING_REGULAR_GAME_TIME, ENDED_DURING_EXTENDED_GAME_TIME
-    (overtime), ENDED_DURING_WINNING_SHOT_COMPETITION (shootout).'
+- description: ''
   name: finished_type
   type: character
-- description: 'Rink: rink id.'
+- description: ''
   name: ice_rink_id
   type: integer
-- description: 'Rink: rink name.'
+- description: ''
   name: ice_rink_name
   type: character
-- description: 'Rink: latitude.'
+- description: ''
   name: ice_rink_latitude
   type: numeric
-- description: 'Rink: longitude.'
+- description: ''
   name: ice_rink_longitude
   type: numeric
-- description: 'Rink: street address.'
+- description: ''
   name: ice_rink_street_address
   type: character
-- description: 'Rink: zip.'
+- description: ''
   name: ice_rink_zip
   type: character
-- description: 'Rink: city.'
+- description: ''
   name: ice_rink_city
   type: character
 kind: dataframe
-schema: schedule
+schema: liiga_schedule

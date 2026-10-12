@@ -1,133 +1,129 @@
 columns:
-- description: Player id; the same number in lineups, rosters, stat tables and the
-    profile (fihaId).
+- description: ''
   name: player_id
   type: integer
-- description: Season END year (2026 = 2025-26).
+- description: ''
   name: season
   type: integer
-- description: Tournament.
+- description: ''
   name: tournament
   type: character
-- description: Matchup label, e.g. `HPK - LUK`.
+- description: ''
   name: game_str
   type: character
-- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+- description: ''
   name: game_id
   type: integer
-- description: Game start, ISO 8601 UTC.
+- description: ''
   name: date
   type: character
-- description: Assists (player, all-time).
+- description: ''
   name: assists
   type: integer
-- description: Blocked or saved shots (player, this game).
+- description: ''
   name: blocked_or_saved_shots
   type: integer
-- description: Faceoffs total.
+- description: ''
   name: faceoffs_total
   type: integer
-- description: Faceoffs won.
+- description: ''
   name: faceoffs_won
   type: integer
-- description: Faceoffs percentage (player, that season and tournament). Percent,
-    0-100, sent as a STRING.
+- description: ''
   name: faceoffs_percentage
   type: numeric
-- description: Goals.
+- description: ''
   name: goals
   type: integer
-- description: On ice for goals against (the - of plus/minus).
+- description: ''
   name: minus
   type: integer
-- description: Total points (player, this game).
+- description: ''
   name: total_points
   type: integer
-- description: Home team name.
+- description: ''
   name: home_team_name
   type: character
-- description: Away team name.
+- description: ''
   name: away_team_name
   type: character
-- description: Penalty minutes.
+- description: ''
   name: penalty_minutes
   type: integer
-- description: Penaltykill assists (goalkeeper, this period).
+- description: ''
   name: penaltykill_assists
   type: integer
-- description: Penaltykill goals (player, this game).
+- description: ''
   name: penaltykill_goals
   type: integer
-- description: Penaltykill points (player, this game).
+- description: ''
   name: penaltykill_points
   type: integer
-- description: On ice for goals for (the + of plus/minus).
+- description: ''
   name: plus
   type: integer
-- description: plus minus minus.
+- description: ''
   name: plus_minus
   type: integer
-- description: Powerplay assists (goalkeeper, this period).
+- description: ''
   name: powerplay_assists
   type: integer
-- description: Powerplay goals.
+- description: ''
   name: powerplay_goals
   type: integer
-- description: Powerplay seconds (player, this game). Seconds.
+- description: ''
   name: powerplay_seconds
   type: integer
-- description: Time on ice (player, that season and tournament). Seconds.
+- description: ''
   name: time_on_ice
   type: integer
-- description: Saves (goalkeeper, this period).
+- description: ''
   name: saves
   type: integer
-- description: Save percentage (team, over the season range). Percent, 0-100.
+- description: ''
   name: save_percentage
   type: numeric
-- description: Block or saved shots percentage (player, this game). Percent, 0-100,
-    sent as a STRING.
+- description: ''
   name: block_or_saved_shots_percentage
   type: numeric
-- description: Shots (player, all-time).
+- description: ''
   name: shots
   type: integer
-- description: Shots into goal (player, that season and tournament).
+- description: ''
   name: shots_into_goal
   type: integer
-- description: Shut out.
+- description: ''
   name: shut_out
   type: integer
-- description: Shots saved (team, over the season range).
+- description: ''
   name: shots_saved
   type: integer
-- description: Shots saved by skater (player, this game).
+- description: ''
   name: shots_saved_by_skater
   type: integer
-- description: Shot percentage (player, all-time). Percent, 0-100.
+- description: ''
   name: shot_percentage
   type: numeric
-- description: Shot into goal percentage (player, that season and tournament). Percent,
-    0-100, sent as a STRING.
+- description: ''
   name: shot_into_goal_percentage
   type: numeric
-- description: Goals against (team, season to date in that table's tournament).
+- description: ''
   name: goals_against
   type: integer
-- description: Goalkeeper.
+- description: ''
   name: goalkeeper
   type: logical
-- description: Winning goals (player, that season and tournament).
+- description: ''
   name: winning_goals
   type: integer
-- description: Won (player, this game).
+- description: ''
   name: won
   type: integer
-- description: Tied (player, this game).
+- description: ''
   name: tied
   type: integer
-- description: Lost (player, this game).
+- description: ''
   name: lost
   type: integer
 kind: dataframe
-schema: player_game_log
+schema: liiga_player_game_log

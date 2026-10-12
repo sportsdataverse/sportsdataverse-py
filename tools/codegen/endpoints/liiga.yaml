@@ -494,3 +494,4 @@ passthrough_query: false
 qualifier: ''
 runtime_imports:
 - _get
+schema_prefix: liiga_

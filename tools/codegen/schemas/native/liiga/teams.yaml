@@ -1,48 +1,45 @@
 columns:
-- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
-    string, a bare integer or a digit string depending on the route).
+- description: ''
   name: team_id
   type: integer
-- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
-    (e.g. hpk).
+- description: ''
   name: team_slug
   type: character
-- description: Rink name.
+- description: ''
   name: name
   type: character
-- description: Contact info.
+- description: ''
   name: contact_info
   type: character
-- description: Externals.
+- description: ''
   name: externals
   type: character
-- description: 'Country: code.'
+- description: ''
   name: country_code
   type: character
-- description: 'Country: rink name.'
+- description: ''
   name: country_name
   type: character
-- description: Current venue capacity.
+- description: ''
   name: current_venue_capacity
   type: integer
-- description: General info.
+- description: ''
   name: general_info
   type: character
-- description: Url.
+- description: ''
   name: url
   type: character
-- description: Locality.
+- description: ''
   name: locality
   type: character
-- description: Logo.
+- description: ''
   name: logo
   type: character
-- description: Team abbreviation.
+- description: ''
   name: short_name
   type: character
-- description: Team totals per season and tournament, snake_case, percentages and
-    averages sent as STRINGS.
+- description: ''
   name: teamtournamentstats
   type: character
 kind: dataframe
-schema: teams
+schema: liiga_teams

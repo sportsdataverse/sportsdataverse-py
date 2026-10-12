@@ -1,77 +1,72 @@
 columns:
-- description: Player id; the same number in lineups, rosters, stat tables and the
-    profile (fihaId).
+- description: ''
   name: player_id
   type: integer
-- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
-    string, a bare integer or a digit string depending on the route).
+- description: ''
   name: team_id
   type: integer
-- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
-    (e.g. hpk).
+- description: ''
   name: team_slug
   type: character
-- description: Team display name.
+- description: ''
   name: team_name
   type: character
-- description: Country of birth, 3-letter code.
+- description: ''
   name: country_of_birth
   type: character
-- description: Place of birth.
+- description: ''
   name: place_of_birth
   type: character
-- description: Date of birth, YYYY-MM-DD.
+- description: ''
   name: date_of_birth
   type: character
-- description: Nationality, 3-letter code.
+- description: ''
   name: nationality
   type: character
-- description: First name.
+- description: ''
   name: first_name
   type: character
-- description: Last name.
+- description: ''
   name: last_name
   type: character
-- description: 'Position: CENTER, LEFT_WING, RIGHT_WING, LEFT_DEFENSEMAN, RIGHT_DEFENSEMAN,
-    SEVENTH_DEFENSEMAN, GOALIE.'
+- description: ''
   name: role
   type: character
-- description: 'Position code, Finnish: KH = centre, VL/OL = left/right wing, VP/OP
-    = left/right defence, 7. P = seventh defenceman, MV = goalkeeper.'
+- description: ''
   name: role_code
   type: character
-- description: Shoots LEFT or RIGHT.
+- description: ''
   name: handedness
   type: character
-- description: Height, cm.
+- description: ''
   name: height
   type: integer
-- description: Weight, kg.
+- description: ''
   name: weight
   type: integer
-- description: Rookie.
+- description: ''
   name: rookie
   type: logical
-- description: Jersey number.
+- description: ''
   name: jersey
   type: integer
-- description: Injured.
+- description: ''
   name: injured
   type: logical
-- description: Suspended.
+- description: ''
   name: suspended
   type: logical
-- description: Removed from the roster.
+- description: ''
   name: removed
   type: logical
-- description: Captain.
+- description: ''
   name: captain
   type: logical
-- description: Alternate captain.
+- description: ''
   name: alternate_captain
   type: logical
-- description: Photo URL.
+- description: ''
   name: picture_url
   type: character
 kind: dataframe
-schema: players_info
+schema: liiga_players_info

@@ -1,0 +1,16 @@
+[
+ "/games",
+ "/games/stats/{season}/{id}",
+ "/games/{season}/{id}",
+ "/gameweeks",
+ "/players/info",
+ "/players/info/{playerId}",
+ "/players/info/{playerId}/games/{season}",
+ "/players/stats/summed/{from}/{to}/{tournament}/{bool}",
+ "/schedule",
+ "/shotmap/{season}/{id}",
+ "/standings/",
+ "/teams/info",
+ "/teams/stats",
+ "/tournament"
+]

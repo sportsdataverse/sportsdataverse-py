@@ -1,195 +1,183 @@
 columns:
-- description: Season END year (2026 = 2025-26).
+- description: ''
   name: season
   type: integer
-- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+- description: ''
   name: game_id
   type: integer
-- description: home or away.
+- description: ''
   name: side
   type: character
-- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
-    string, a bare integer or a digit string depending on the route).
+- description: ''
   name: team_id
   type: integer
-- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
-    (e.g. hpk).
+- description: ''
   name: team_slug
   type: character
-- description: Period number.
+- description: ''
   name: period
   type: integer
-- description: Player id; the same number in lineups, rosters, stat tables and the
-    profile (fihaId).
+- description: ''
   name: player_id
   type: integer
-- description: Jersey number.
+- description: ''
   name: jersey
   type: integer
-- description: Row is a goalkeeper's (goalie columns filled).
+- description: ''
   name: is_goalie
   type: logical
-- description: Points (player, all-time).
+- description: ''
   name: points
   type: integer
-- description: Assists (player, all-time).
+- description: ''
   name: assists
   type: integer
-- description: Goals.
+- description: ''
   name: goals
   type: integer
-- description: plus minus minus, this period.
+- description: ''
   name: plusminus
   type: integer
-- description: On ice for goals for (the + of plus/minus).
+- description: ''
   name: plus
   type: integer
-- description: On ice for goals against (the - of plus/minus).
+- description: ''
   name: minus
   type: integer
-- description: Shots (player, all-time).
+- description: ''
   name: shots
   type: integer
-- description: Penaltyminutes (goalkeeper, this period).
+- description: ''
   name: penaltyminutes
   type: integer
-- description: Timeofice (goalkeeper, this period). Seconds.
+- description: ''
   name: timeofice
   type: integer
-- description: Powerplay goals.
+- description: ''
   name: powerplay_goals
   type: integer
-- description: Short handed goals.
+- description: ''
   name: short_handed_goals
   type: integer
-- description: Game-winning goal.
+- description: ''
   name: winning_goal
   type: logical
-- description: Blocked shots (goalkeeper, this period).
+- description: ''
   name: blocked_shots
   type: integer
-- description: Faceoffs total.
+- description: ''
   name: faceoffs_total
   type: integer
-- description: Faceoffs won.
+- description: ''
   name: faceoffs_won
   type: integer
-- description: Corsi (shot attempts) for (goalkeeper, this period).
+- description: ''
   name: corsi_for
   type: integer
-- description: Corsi (shot attempts) against (goalkeeper, this period).
+- description: ''
   name: corsi_against
   type: integer
-- description: Faceoffs center total.
+- description: ''
   name: faceoffs_center_total
   type: integer
-- description: Faceoffs center won.
+- description: ''
   name: faceoffs_center_won
   type: integer
-- description: Faceoffs defence total.
+- description: ''
   name: faceoffs_defence_total
   type: integer
-- description: Faceoffs defence won.
+- description: ''
   name: faceoffs_defence_won
   type: integer
-- description: Faceoffs offence total.
+- description: ''
   name: faceoffs_offence_total
   type: integer
-- description: Faceoffs offence won.
+- description: ''
   name: faceoffs_offence_won
   type: integer
-- description: Full-strength (fs, unverified) zone starts offensive zone (goalkeeper,
-    this period).
+- description: ''
   name: fs_zone_starts_oz
   type: integer
-- description: Full-strength (fs, unverified) zone starts defensive zone (goalkeeper,
-    this period).
+- description: ''
   name: fs_zone_starts_dz
   type: integer
-- description: Powerplay 2 goals (goalkeeper, this period).
+- description: ''
   name: powerplay2_goals
   type: integer
-- description: Penaltykill 2 goals (goalkeeper, this period).
+- description: ''
   name: penaltykill2_goals
   type: integer
-- description: Powerplay assists (goalkeeper, this period).
+- description: ''
   name: powerplay_assists
   type: integer
-- description: Penaltykill assists (goalkeeper, this period).
+- description: ''
   name: penaltykill_assists
   type: integer
-- description: Goals to empty goal (goalkeeper, this period).
+- description: ''
   name: goals_to_empty_goal
   type: integer
-- description: Full-strength (fs, unverified) team shots (goalkeeper, this period).
+- description: ''
   name: fs_team_shots
   type: integer
-- description: Full-strength (fs, unverified) team goals (goalkeeper, this period).
+- description: ''
   name: fs_team_goals
   type: integer
-- description: Full-strength (fs, unverified) team shots against (goalkeeper, this
-    period).
+- description: ''
   name: fs_team_shots_against
   type: integer
-- description: Full-strength (fs, unverified) team goals against (goalkeeper, this
-    period).
+- description: ''
   name: fs_team_goals_against
   type: integer
-- description: Distance (goalkeeper, this period). Distance; unit not stated (unverified).
+- description: ''
   name: distance
   type: numeric
-- description: Total passes.
+- description: ''
   name: total_passes
   type: integer
-- description: Successful passes.
+- description: ''
   name: successful_passes
   type: integer
-- description: Player passes under pressure.
+- description: ''
   name: player_passes_under_pressure
   type: integer
-- description: Player successful passes under pressure.
+- description: ''
   name: player_successful_passes_under_pressure
   type: integer
-- description: Player passes under high pressure.
+- description: ''
   name: player_passes_under_high_pressure
   type: integer
-- description: Player successful passes under high pressure.
+- description: ''
   name: player_successful_passes_under_high_pressure
   type: integer
-- description: Expected goals (xG) of the player's own shots in the period, provider-computed
-    (unverified scope).
+- description: ''
   name: expected_goals_player
   type: numeric
-- description: Team expected goals (xG) while the player was on ice in the period,
-    provider-computed (unverified scope).
+- description: ''
   name: expected_goals_team
   type: numeric
-- description: Expected goals against (xG) faced in the period, provider-computed.
+- description: ''
   name: expected_goals_against
   type: numeric
-- description: Expected goals against (xG) of the shots on goal only, provider-computed.
+- description: ''
   name: expected_goals_against_shot_on_goal
   type: numeric
-- description: Saves (goalkeeper, this period).
+- description: ''
   name: saves
   type: integer
-- description: Goals allowed (goalkeeper, this period).
+- description: ''
   name: goals_allowed
   type: integer
-- description: Save percentage, 0-100, sent as a STRING (e.g. "92.86"; "" when no
-    shots), this period.
+- description: ''
   name: saves_percentage
   type: numeric
-- description: Shots on goal (goalkeeper, this period).
+- description: ''
   name: shots_on_goal
   type: integer
-- description: Player's top skating speed in the game (unit not stated; values near
-    9 fit m/s).
+- description: ''
   name: top_speed
   type: numeric
-- description: Player's hardest shot in the game (unit not stated; values near 23
-    fit m/s).
+- description: ''
   name: hardest_shot
   type: numeric
 kind: dataframe
-schema: game_stats
+schema: liiga_game_stats

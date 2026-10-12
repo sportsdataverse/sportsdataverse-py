@@ -1,166 +1,150 @@
 columns:
-- description: Season END year (2026 = 2025-26).
+- description: ''
   name: season
   type: integer
-- description: Tournament.
+- description: ''
   name: tournament
   type: character
-- description: Team id (same number as team_id).
+- description: ''
   name: internal_id
   type: integer
-- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
-    string, a bare integer or a digit string depending on the route).
+- description: ''
   name: team_id
   type: integer
-- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
-    (e.g. hpk).
+- description: ''
   name: team_slug
   type: character
-- description: Team display name.
+- description: ''
   name: team_name
   type: character
-- description: 'Team logo: dark bg.'
+- description: ''
   name: team_logos_dark_bg
   type: character
-- description: 'Team logo: light bg.'
+- description: ''
   name: team_logos_light_bg
   type: character
-- description: 'Team logo: dark bg original.'
+- description: ''
   name: team_logos_dark_bg_original
   type: character
-- description: 'Team logo: light bg original.'
+- description: ''
   name: team_logos_light_bg_original
   type: character
-- description: Table position.
+- description: ''
   name: ranking
   type: integer
-- description: Table position counting games in progress.
+- description: ''
   name: live_ranking
   type: integer
-- description: Games (player, all-time).
+- description: ''
   name: games
   type: integer
-- description: Games counting games in progress (team, season to date in that table's
-    tournament).
+- description: ''
   name: live_games
   type: integer
-- description: Wins (team, season to date in that table's tournament).
+- description: ''
   name: wins
   type: integer
-- description: Wins counting games in progress (team, season to date in that table's
-    tournament).
+- description: ''
   name: live_wins
   type: integer
-- description: Overtime wins (team, season to date in that table's tournament).
+- description: ''
   name: overtime_wins
   type: integer
-- description: Losses (team, season to date in that table's tournament).
+- description: ''
   name: losses
   type: integer
-- description: Losses counting games in progress (team, season to date in that table's
-    tournament).
+- description: ''
   name: live_losses
   type: integer
-- description: Ties (team, season to date in that table's tournament).
+- description: ''
   name: ties
   type: integer
-- description: Ties counting games in progress (team, season to date in that table's
-    tournament).
+- description: ''
   name: live_ties
   type: integer
-- description: Overtime losses (team, season to date in that table's tournament).
+- description: ''
   name: overtime_losses
   type: integer
-- description: Points (player, all-time).
+- description: ''
   name: points
   type: integer
-- description: Points counting games in progress (team, season to date in that table's
-    tournament).
+- description: ''
   name: live_points
   type: integer
-- description: Goals.
+- description: ''
   name: goals
   type: integer
-- description: Goals against (team, season to date in that table's tournament).
+- description: ''
   name: goals_against
   type: integer
-- description: Goals counting games in progress (team, season to date in that table's
-    tournament).
+- description: ''
   name: live_goals
   type: integer
-- description: Goals against counting games in progress (team, season to date in that
-    table's tournament).
+- description: ''
   name: live_goals_against
   type: integer
-- description: Power play instances.
+- description: ''
   name: power_play_instances
   type: integer
-- description: Seconds on the power play, season to date.
+- description: ''
   name: power_play_time
   type: integer
-- description: Power play goals (team, this period).
+- description: ''
   name: power_play_goals
   type: integer
-- description: Short handed instances.
+- description: ''
   name: short_handed_instances
   type: integer
-- description: Seconds short-handed, season to date.
+- description: ''
   name: short_handed_time
   type: integer
-- description: Short handed goals against (team, this period).
+- description: ''
   name: short_handed_goals_against
   type: integer
-- description: Penalty minutes.
+- description: ''
   name: penalty_minutes
   type: integer
-- description: Two minute penalties (team, this period).
+- description: ''
   name: two_minute_penalties
   type: integer
-- description: Five minute penalties (team, this period).
+- description: ''
   name: five_minute_penalties
   type: integer
-- description: Ten minute penalties (team, this period).
+- description: ''
   name: ten_minute_penalties
   type: integer
-- description: Twenty minute penalties (team, this period).
+- description: ''
   name: twenty_minute_penalties
   type: integer
-- description: Twenty five minute penalties (team, season to date in that table's
-    tournament).
+- description: ''
   name: twenty_five_minute_penalties
   type: integer
-- description: Total penalties (team, season to date in that table's tournament).
+- description: ''
   name: total_penalties
   type: integer
-- description: Distance (goalkeeper, this period). Distance; unit not stated (unverified).
+- description: ''
   name: distance
   type: numeric
-- description: Tournament code, uppercase (RUNKOSARJA, PLAYOFFS, PRACTICE, ...); in
-    /schedule the integer tournament id instead (see serieId and Divergence notes).
+- description: ''
   name: serie
   type: character
-- description: Points per game counting games in progress (team, season to date in
-    that table's tournament).
+- description: ''
   name: live_points_per_game
   type: numeric
-- description: Power-play conversion, a 0-1 FRACTION sent as a STRING (e.g. "0.277"),
-    season to date.
+- description: ''
   name: power_play_percentage
   type: numeric
-- description: Penalty-kill success, a 0-1 FRACTION sent as a STRING (e.g. "0.815"),
-    season to date.
+- description: ''
   name: short_handed_percentage
   type: numeric
-- description: Distance per game (team, season to date in that table's tournament).
-    Distance; unit not stated (unverified).
+- description: ''
   name: distance_per_game
   type: numeric
-- description: Points per game (team, season to date in that table's tournament).
+- description: ''
   name: points_per_game
   type: numeric
-- description: Share of games won, a 0-1 FRACTION sent as a STRING (e.g. "0.583"),
-    season to date.
+- description: ''
   name: win_percentage
   type: numeric
 kind: dataframe
-schema: standings
+schema: liiga_standings
