@@ -1,0 +1,677 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Player",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "TOI_GP",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": 1,
+        "Player": 0,
+        "Team": 0,
+        "TOI_GP": "24:45",
+        "TOI": "21:26:54",
+        "GP": 52,
+        "PPTOI_GP": "2:46",
+        "SHTOI_GP": "2:12",
+        "PPTOIPerc": "11.21",
+        "SHTOIPerc": "8.91",
+        "info": {
+          "uuid": "qY6-5K1bja35c",
+          "fullName": "Robin Salo",
+          "firstName": "Robin",
+          "lastName": "Salo",
+          "birthDate": "1998-10-13",
+          "nationality": "FI",
+          "number": 42,
+          "position": "D",
+          "shoots": "L",
+          "gender": "male",
+          "weight": {
+            "value": 84,
+            "format": "kg"
+          },
+          "height": {
+            "value": 185,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 43130,
+            "mediaString": "image|ramses_sports|player_portrait_cb5d5bb6-29a9-4fe2-a181-308cbc8a78b742RobinSalo01.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "8e6f-8e6fUXJvi",
+            "name": "Malmö Redhawks",
+            "code": "MIF",
+            "media": "https://sportality.cdn.s8y.se/team-logos/mif1_mif.svg",
+            "ownerInstanceId": "mif1_mif",
+            "siteDisplayName": "Malmö Redhawks"
+          },
+          "teamCode": "MIF",
+          "teamId": "8e6f-8e6fUXJvi"
+        }
+      },
+      {
+        "Rank": 2,
+        "Player": 0,
+        "Team": 0,
+        "TOI_GP": "24:16",
+        "TOI": "4:02:44",
+        "GP": 10,
+        "PPTOI_GP": "2:44",
+        "SHTOI_GP": "0:36",
+        "PPTOIPerc": "11.29",
+        "SHTOIPerc": "2.44",
+        "info": {
+          "uuid": "qQ9-dcf2BH5vP",
+          "fullName": "Oscar Fantenberg",
+          "firstName": "Oscar",
+          "lastName": "Fantenberg",
+          "birthDate": "1991-10-07",
+          "nationality": "SE",
+          "number": 5,
+          "position": "D",
+          "shoots": "-",
+          "gender": "male",
+          "weight": {
+            "value": 98,
+            "format": "kg"
+          },
+          "height": {
+            "value": 184,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 42607,
+            "mediaString": "image|ramses_sports|player_portrait_d161fd76-21e6-4c23-8fc0-bedfd2aa7a55OscarFantenberghalvbild500x600.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "41c4-41c4BiYZU",
+            "name": "Linköping HC",
+            "code": "LHC",
+            "media": "https://sportality.cdn.s8y.se/team-logos/lhc1_lhc.svg",
+            "ownerInstanceId": "lhc1_lhc",
+            "siteDisplayName": "Linköping HC"
+          },
+          "teamCode": "LHC",
+          "teamId": "41c4-41c4BiYZU"
+        }
+      },
+      {
+        "Rank": 3,
+        "Player": 0,
+        "Team": 0,
+        "TOI_GP": "22:35",
+        "TOI": "19:11:43",
+        "GP": 51,
+        "PPTOI_GP": "2:21",
+        "SHTOI_GP": "1:08",
+        "PPTOIPerc": "10.40",
+        "SHTOIPerc": "5.02",
+        "info": {
+          "uuid": "qRm-KI57OWyn",
+          "fullName": "Johannes Kinnvall",
+          "firstName": "Johannes",
+          "lastName": "Kinnvall",
+          "birthDate": "1997-07-28",
+          "nationality": "SE",
+          "number": 28,
+          "position": "D",
+          "shoots": "R",
+          "gender": "male",
+          "weight": {
+            "value": 85,
+            "format": "kg"
+          },
+          "height": {
+            "value": 184,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 43170,
+            "mediaString": "image|ramses_sports|player_portrait_f00d98e7-c0de-4e0b-9349-1bf3b7248569Johannes Kinnvall.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "1ab8-1ab8bfj7N",
+            "name": "Brynäs IF",
+            "code": "BIF",
+            "media": "https://sportality.cdn.s8y.se/team-logos/bif1_bif.svg",
+            "ownerInstanceId": "bif1_bif",
+            "siteDisplayName": "Brynäs IF"
+          },
+          "teamCode": "BIF",
+          "teamId": "1ab8-1ab8bfj7N"
+        }
+      }
+    ],
+    "provider": "statnet",
+    "teams": {
+      "8e6f-8e6fUXJvi": {
+        "type": "team",
+        "id": "MIF",
+        "teamCode": "MIF",
+        "siteDisplayName": "Malmö Redhawks",
+        "name": "OHK",
+        "uuid": "8e6f-8e6fUXJvi",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "mif1-mif-d39e4",
+        "lastModified": "2026-01-14T15:50:25.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "mif1_mif",
+        "ownersite": "MIF",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/mif1_mif.svg",
+        "teamNames": {
+          "code": "MIF",
+          "short": "Malmö",
+          "long": "Malmö Redhawks",
+          "full": "Malmö Redhawks",
+          "codeSite": "MIF",
+          "shortSite": "Redhawks",
+          "fullSite": "Malmö Redhawks",
+          "longSite": "Malmö Redhawks"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "1972",
+          "golds": "2 st (1992, 1994)",
+          "finals": "2 st (1992, 1994)",
+          "retired_numbers": "# 01 Pekka Lindmark\r\n# 05 Roger Nordström\r\n# 18 Patrik Sylvegård\r\n# 25 Kaj Olsson\r\n# 66 Mats Lusth",
+          "address": "Hyllie Stationstorg 215 32  MALMÖ",
+          "phone": "+46 (0) 40 642 06 00",
+          "email": "info@malmoredhawks.com",
+          "chairman": "Mats Larsson",
+          "manager": "Patrik Sylvegård",
+          "accreditation": "Christian Winnbergchristian.winnberg@malmoredhawks.com+46 (0) 706 75 86 06",
+          "facebook": "https://facebook.com/redhawks247",
+          "instagram": "https://instagram.com/malmoredhawks"
+        },
+        "teamExtIds": [
+          {
+            "id": 21,
+            "extId": "MIF",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 22,
+            "extId": "17",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 21,
+            "extId": "MIF",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 22,
+            "extId": "17",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/mif1_mif.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "41c4-41c4BiYZU": {
+        "type": "team",
+        "id": "LHC",
+        "teamCode": "LHC",
+        "siteDisplayName": "Linköping HC",
+        "name": "LHC",
+        "uuid": "41c4-41c4BiYZU",
+        "createdAt": "2018-05-15T19:07:27.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "lhc1-lhc-e49a6",
+        "lastModified": "2025-03-25T10:52:21.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "lhc1_lhc",
+        "ownersite": "LHC",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/lhc1_lhc.svg",
+        "teamNames": {
+          "code": "LHC",
+          "short": "Linköping",
+          "long": "Linköping HC",
+          "full": "Linköping Hockey Club",
+          "codeSite": "LHC",
+          "shortSite": "Linköping",
+          "fullSite": "Linköping Hockey Club",
+          "longSite": "Linköping HC"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "1976",
+          "golds": "0 st",
+          "finals": "2 st (2007, 2008)",
+          "retired_numbers": "# 10 Mats Andersson\r\n# 15 Stefan Jacobsson\r\n# 16 Mike Helber\r\n# 33 Fredrik Emvall",
+          "address": "Stångebro Ishall, Gumpekullavägen 3 582 78 Linköping",
+          "phone": "013-37 12 00",
+          "fax": "013-37 12 99",
+          "email": "info@lhc.eu",
+          "chairman": "Roger Ekström",
+          "manager": "Niklas Persson",
+          "accreditation": "Gustaf Pettersson",
+          "facebook": "https://www.facebook.com/LinkopingHC/",
+          "instagram": "https://www.instagram.com/lhchockey/",
+          "twitter": "https://x.com/LHChockey"
+        },
+        "teamExtIds": [
+          {
+            "id": 15,
+            "extId": "LHC",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 16,
+            "extId": "1",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 15,
+            "extId": "LHC",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 16,
+            "extId": "1",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/lhc1_lhc.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "1ab8-1ab8bfj7N": {
+        "type": "team",
+        "id": "BIF",
+        "teamCode": "BIF",
+        "siteDisplayName": "Brynäs IF",
+        "name": "BIF",
+        "uuid": "1ab8-1ab8bfj7N",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "bif1-bif-713a5",
+        "lastModified": "2024-10-31T17:06:28.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "bif1_bif",
+        "ownersite": "BIF",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bif1_bif.svg",
+        "teamNames": {
+          "code": "BIF",
+          "short": "Brynäs",
+          "long": "Brynäs IF",
+          "full": "Brynäs Idrottsförening",
+          "code_site": "BIF",
+          "short_site": "Brynäs",
+          "full_site": "Brynäs Idrottsförening",
+          "long_site": "Brynäs IF"
+        },
+        "clubName": {
+          "code": "BIF",
+          "short": "Brynäs",
+          "long": "Brynäs IF",
+          "full": "Brynäs Idrottsförening"
+        },
+        "teamInfo": {
+          "founded": "1912",
+          "golds": "13 (1964, 1966, 1967, 1968, 1970, 1971, 1972, 1976, 1977, 1980, 1993, 1999, 2012).",
+          "finals": "11* (1966, 1967, 1975, 1976, 1977, 1980, 1993, 1995, 1999, 2012, 2017).\r\n\r\n*Vissa guld togs efter seriespel, därav färre antal finaler än SM-guld",
+          "retired_numbers": "#06 Tord Lundström\r\n#26 Anders Huss",
+          "address": "Brynäs IF, Gavlehovsvägen 13, 806 33 Gävle",
+          "email": "info@brynas.se",
+          "facebook": "https://www.facebook.com/brynasif/",
+          "instagram": "https://www.instagram.com/brynas__if/",
+          "twitter": "https://twitter.com/Brynas"
+        },
+        "teamExtIds": [
+          {
+            "id": 3,
+            "extId": "BIF",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 4,
+            "extId": "3",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 3,
+            "extId": "BIF",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 4,
+            "extId": "3",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/bif1_bif.svg",
+        "socialMedia": [],
+        "displayName": ""
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "athlete",
+    "totalCount": 425,
+    "players": {
+      "214": {
+        "type": "athlete",
+        "id": 214,
+        "firstName": "Nicklas",
+        "lastName": "Bäckström",
+        "jerseyNumber": 19,
+        "position": "F",
+        "shoots": "L",
+        "uuid": "evrn569cti",
+        "fullName": "Nicklas Bäckström",
+        "dateOfBirth": "1987-11-23",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 92,
+        "height": 184,
+        "playerMedia": {
+          "id": 43166,
+          "mediaString": "image|ramses_sports|player_portrait_01d993eb-0764-477e-b862-8d1d193289ceNicklas Bckstrm.png",
+          "type": "portrait",
+          "sortOrder": 0
+        },
+        "epUrl": ""
+      },
+      "524": {
+        "type": "athlete",
+        "id": 524,
+        "firstName": "Linus",
+        "lastName": "Omark",
+        "shoots": "L",
+        "uuid": "qQ9-3b0amwpx9",
+        "fullName": "Linus Omark",
+        "dateOfBirth": "1987-02-05",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 82,
+        "height": 180,
+        "playerMedia": {
+          "id": 38361,
+          "mediaString": "image|ramses_sports|player_portrait_fc63f756-65c7-4e4f-ba60-c68e785065a2Linus Omark.png",
+          "type": "portrait",
+          "sortOrder": 0
+        },
+        "epUrl": ""
+      },
+      "664": {
+        "type": "athlete",
+        "id": 664,
+        "firstName": "Per",
+        "lastName": "Åslund",
+        "jerseyNumber": 22,
+        "position": "F",
+        "shoots": "L",
+        "uuid": "qQ9-e9d5REkBM",
+        "fullName": "Per Åslund",
+        "dateOfBirth": "1986-08-21",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 83,
+        "height": 187,
+        "playerMedia": {
+          "id": 42565,
+          "mediaString": "image|ramses_sports|player_portrait_3db105f6-0c8b-4e81-a875-e925d3f2511e22PerAslundIMG0035.png",
+          "type": "portrait",
+          "sortOrder": 0
+        },
+        "epUrl": ""
+      }
+    }
+  }
+]

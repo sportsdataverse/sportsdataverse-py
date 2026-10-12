@@ -1,0 +1,42 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: 'Provider season code: the START year as a string (2025 = 2025/26).'
+  name: season_code
+  type: character
+- description: Season label (e.g. 2025/2026).
+  name: season_name
+  type: character
+- description: Game type record (uuid, code regular / playoff / qualdown, Swedish
+    name).
+  name: game_type
+  type: character
+- description: 'Game type label in Swedish: Grundserie = regular season, Slutspel
+    = playoffs, Kvalspel nedflyttning = relegation qualification, Kvalserien = the
+    old promotion/relegation series.'
+  name: game_type_name
+  type: character
+- description: Series code (SHL, CHL; HA and Kvalserien in old career logs).
+  name: series_code
+  type: character
+- description: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  name: ssgt_uuid
+  type: character
+- description: 'ssgt state: active (the current season) or closed.'
+  name: state
+  type: character
+- description: Season uuid (platform key space; code 2025 = 2025/2026); the seasonUuid
+    param of game-schedule.
+  name: season_uuid
+  type: character
+- description: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
+  name: series_uuid
+  type: character
+- description: Game type uuid (platform key space; regular qQ9-af37Ti40B); the gameTypeUuid
+    param of game-schedule.
+  name: game_type_uuid
+  type: character
+kind: dataframe
+schema: shl_layout_info

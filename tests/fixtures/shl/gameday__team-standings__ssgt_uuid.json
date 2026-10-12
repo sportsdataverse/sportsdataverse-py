@@ -1,0 +1,139 @@
+{
+  "ssgtUuid": "iuzqg7dqk9",
+  "season": 2025,
+  "gameType": "SHL",
+  "leagueStandings": [
+    {
+      "id": "SAIK",
+      "rank": 1,
+      "rankDiff": 0,
+      "GP": 52,
+      "W": 30,
+      "T": 12,
+      "L": 10,
+      "OTW": 6,
+      "OTL": 6,
+      "P": 108,
+      "GF": 182,
+      "GA": 121,
+      "Diff": 61,
+      "info": {
+        "code": "Skellefteå",
+        "teamId": "SAIK",
+        "teamInfo": {
+          "teamId": "SAIK",
+          "teamOwnerInstanceId": "saik1_saik",
+          "teamUuid": "50e6-50e6DYeWM",
+          "teamMedia": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+          "teamNames": {
+            "code": "SKE",
+            "short": "Skellefteå",
+            "long": "Skellefteå AIK",
+            "full": "Skellefteå AIK Hockey",
+            "code_site": "SKE",
+            "short_site": "Skellefteå",
+            "full_site": "Skellefteå AIK Hockey",
+            "long_site": "Skellefteå AIK"
+          },
+          "siteTeamDisplayName": "Skellefteå AIK",
+          "siteTeamDisplayCode": "Skellefteå",
+          "clubPageLink": "http://www.skellefteaaik.se/"
+        }
+      }
+    },
+    {
+      "id": "FHC",
+      "rank": 2,
+      "rankDiff": 0,
+      "GP": 52,
+      "W": 30,
+      "T": 7,
+      "L": 15,
+      "OTW": 4,
+      "OTL": 3,
+      "P": 101,
+      "GF": 161,
+      "GA": 106,
+      "Diff": 55,
+      "info": {
+        "code": "Frölunda ",
+        "teamId": "FHC",
+        "teamInfo": {
+          "teamId": "FHC",
+          "teamOwnerInstanceId": "fhc1_fhc",
+          "teamUuid": "087a-087aTQv9u",
+          "teamMedia": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+          "teamNames": {
+            "code": "FHC",
+            "short": "Frölunda ",
+            "long": "Frölunda HC",
+            "full": "Frölunda Hockey Club",
+            "code_site": "FHC",
+            "short_site": "Frölunda",
+            "full_site": "Frölunda Hockey Club / Herr",
+            "long_site": "Frölunda HC"
+          },
+          "siteTeamDisplayName": "Frölunda HC",
+          "siteTeamDisplayCode": "Frölunda ",
+          "clubPageLink": "http://www.frolundahockey.com/"
+        }
+      }
+    },
+    {
+      "id": "VLH",
+      "rank": 3,
+      "rankDiff": 0,
+      "GP": 52,
+      "W": 26,
+      "T": 10,
+      "L": 16,
+      "OTW": 6,
+      "OTL": 4,
+      "P": 94,
+      "GF": 150,
+      "GA": 136,
+      "Diff": 14,
+      "info": {
+        "code": "Växjö",
+        "teamId": "VLH",
+        "teamInfo": {
+          "teamId": "VLH",
+          "teamOwnerInstanceId": "vlh1_vlh",
+          "teamUuid": "fe02-fe02mf1FN",
+          "teamMedia": "https://sportality.cdn.s8y.se/team-logos/vlh1_vlh.svg",
+          "teamNames": {
+            "code": "VLH",
+            "short": "Växjö",
+            "long": "Växjö Lakers",
+            "full": "Växjö Lakers",
+            "code_site": "VLH",
+            "short_site": "Växjö Lakers",
+            "full_site": "Växjö Lakers",
+            "long_site": "Växjö Lakers"
+          },
+          "siteTeamDisplayName": "Växjö Lakers",
+          "siteTeamDisplayCode": "Växjö",
+          "clubPageLink": "http://www.vaxjolakers.se/"
+        }
+      }
+    }
+  ],
+  "provider": "statnet",
+  "groupings": [
+    {
+      "description": "Playoff",
+      "first": 1,
+      "last": 6
+    },
+    {
+      "description": "Playin",
+      "first": 7,
+      "last": 10
+    },
+    {
+      "description": "MissedPlayoff",
+      "first": 11,
+      "last": 12
+    }
+  ]
+}

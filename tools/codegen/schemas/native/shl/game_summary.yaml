@@ -1,0 +1,24 @@
+columns:
+- description: Previous meetings of the two teams.
+  name: team_head2_head
+  type: character
+- description: Image caption.
+  name: team_period_caption
+  type: character
+- description: Whether the game went to overtime.
+  name: team_period_overtime
+  type: logical
+- description: Whether the game went to a shootout.
+  name: team_period_shootout
+  type: logical
+- description: 'Team stats per period: rows with home and away values.'
+  name: team_period_stats
+  type: character
+- description: Top scorers of the game.
+  name: best_scorers
+  type: character
+- description: Stats provider of the data (statnet seen).
+  name: statistics_provider
+  type: character
+kind: dataframe
+schema: shl_game_summary

@@ -1,0 +1,154 @@
+columns:
+- description: Whether the site's team plays in the game.
+  name: instance_context_site_team_is_in_game
+  type: logical
+- description: Whether the site's team is the home team.
+  name: instance_context_site_team_is_home_team
+  type: logical
+- description: Whether the site's team is the away team.
+  name: instance_context_site_team_is_away_team
+  type: logical
+- description: Game uuid (platform key space, e.g. bdhvuc5tex); joins to schedule
+    gameInfo[].uuid and every gameday/{game_uuid} route. The StatNet number of the
+    same game is gameId.
+  name: game_info_game_uuid
+  type: character
+- description: StatNet game number as a string (StatNet key space); equals gameday
+    gameId. Numeric value sent as a string.
+  name: game_info_ext_id
+  type: integer
+- description: Scheduled start, local time (Europe/Stockholm).
+  name: game_info_start_date_time
+  type: character
+- description: Name of the arena hosting the game.
+  name: game_info_arena_name
+  type: character
+- description: Game state with an underscore (post_game seen); the schedule spells
+    it post-game.
+  name: game_info_state
+  type: character
+- description: Whether the game went to overtime.
+  name: game_info_overtime
+  type: logical
+- description: Whether the game went to a shootout.
+  name: game_info_shootout
+  type: logical
+- description: Series code of the game (SHL).
+  name: game_info_series_code
+  type: character
+- description: Series label of the game (SHL).
+  name: game_info_series_name
+  type: character
+- description: Schedule round (1 = first game day of the season).
+  name: game_info_round_number
+  type: integer
+- description: Round label (often empty). Empty string in every sample (placeholder).
+  name: game_info_round_label
+  type: character
+- description: Series label shown on the site (SHL).
+  name: game_info_series_display_name
+  type: character
+- description: Display abbreviation; differs from the team code for some clubs (SKE
+    vs SAIK, ÖRE vs OHK).
+  name: home_team_names_code
+  type: character
+- description: Short club name ('Herr' = men's team).
+  name: home_team_names_short
+  type: character
+- description: Long club name ('Herr' = men's team).
+  name: home_team_names_long
+  type: character
+- description: Full club name ('Herr' = men's team).
+  name: home_team_names_full
+  type: character
+- description: Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr').
+  name: home_team_names_code_site
+  type: character
+- description: Short club name as shown on the site ('Herr' = men's team).
+  name: home_team_names_short_site
+  type: character
+- description: Full club name as shown on the site ('Herr' = men's team).
+  name: home_team_names_full_site
+  type: character
+- description: Long club name as shown on the site ('Herr' = men's team).
+  name: home_team_names_long_site
+  type: character
+- description: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  name: home_team_uuid
+  type: character
+- description: Club site instance id (e.g. fhc1_fhc).
+  name: home_team_instance_id
+  type: character
+- description: Club founding date. Numeric value sent as a string.
+  name: home_team_founded_on
+  type: character
+- description: Club postal address.
+  name: home_team_address
+  type: character
+- description: Club email.
+  name: home_team_email
+  type: character
+- description: Logo URL.
+  name: home_team_icon
+  type: character
+- description: Goals scored by the team in the game.
+  name: home_team_score
+  type: integer
+- description: Display abbreviation; differs from the team code for some clubs (SKE
+    vs SAIK, ÖRE vs OHK).
+  name: away_team_names_code
+  type: character
+- description: Short club name ('Herr' = men's team).
+  name: away_team_names_short
+  type: character
+- description: Long club name ('Herr' = men's team).
+  name: away_team_names_long
+  type: character
+- description: Full club name ('Herr' = men's team).
+  name: away_team_names_full
+  type: character
+- description: Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr').
+  name: away_team_names_code_site
+  type: character
+- description: Short club name as shown on the site ('Herr' = men's team).
+  name: away_team_names_short_site
+  type: character
+- description: Full club name as shown on the site ('Herr' = men's team).
+  name: away_team_names_full_site
+  type: character
+- description: Long club name as shown on the site ('Herr' = men's team).
+  name: away_team_names_long_site
+  type: character
+- description: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  name: away_team_uuid
+  type: character
+- description: Club site instance id (e.g. fhc1_fhc).
+  name: away_team_instance_id
+  type: character
+- description: Club founding date. Numeric value sent as a string.
+  name: away_team_founded_on
+  type: character
+- description: Club postal address.
+  name: away_team_address
+  type: character
+- description: Club email.
+  name: away_team_email
+  type: character
+- description: Logo URL.
+  name: away_team_icon
+  type: character
+- description: Goals scored by the team in the game.
+  name: away_team_score
+  type: integer
+- description: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  name: ssgt_uuid
+  type: character
+- description: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk); the seriesUuid
+    param of game-schedule.
+  name: series_uuid
+  type: character
+kind: dataframe
+schema: shl_game_header

@@ -1,0 +1,126 @@
+columns:
+- description: Games played.
+  name: gp
+  type: numeric
+- description: Games played with ice time.
+  name: gpi
+  type: numeric
+- description: Goals against.
+  name: ga
+  type: numeric
+- description: Goals against average (per 60 minutes). Numeric, but sent as a string
+    in some rows and as a number in others.
+  name: gaa
+  type: numeric
+- description: Saves.
+  name: svs
+  type: numeric
+- description: Save %. Numeric, but sent as a string in some rows and as a number
+    in others.
+  name: svs_perc
+  type: numeric
+- description: Wins (meaning differs by table; see the module or route).
+  name: w
+  type: numeric
+- description: Ties (meaning differs by table; see the module or route).
+  name: t
+  type: numeric
+- description: Losses (meaning differs by table; see the module or route).
+  name: l
+  type: numeric
+- description: Shutouts.
+  name: so
+  type: numeric
+- description: Athlete uuid (platform key space) in player and goalie modules, team
+    uuid in team modules; joins to the athlete routes or /sports-v2/teams/{team_uuid}.
+  name: info_uuid
+  type: character
+- description: Given name and surname.
+  name: info_full_name
+  type: character
+- description: Given name.
+  name: info_first_name
+  type: character
+- description: Surname.
+  name: info_last_name
+  type: character
+- description: Date of birth (YYYY-MM-DD).
+  name: info_birth_date
+  type: character
+- description: Nationality (ISO country code).
+  name: info_nationality
+  type: character
+- description: Sex of the athlete or team (male / female).
+  name: info_gender
+  type: character
+- description: Age in years.
+  name: info_age_value
+  type: integer
+- description: 'Unit of value: years.'
+  name: info_age_format
+  type: character
+- description: Weight in kg.
+  name: info_weight_value
+  type: integer
+- description: 'Unit of value: kg.'
+  name: info_weight_format
+  type: character
+- description: Height in cm.
+  name: info_height_value
+  type: integer
+- description: 'Unit of value: cm.'
+  name: info_height_format
+  type: character
+- description: Shirt number.
+  name: info_jersey_number
+  type: character
+- description: Position code (CE = centre, LW, RW, D, GK, F); N/A in the athlete game
+    logs.
+  name: info_position
+  type: character
+- description: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
+  name: info_position_code
+  type: character
+- description: Shooting side (L / R; Left / Right).
+  name: info_shoots
+  type: character
+- description: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  name: info_team_uuid
+  type: character
+- description: Club site instance id (e.g. fhc1_fhc).
+  name: info_team_instance_id
+  type: character
+- description: Team name (e.g. Frölunda HC); empty in some rows.
+  name: info_team_name
+  type: character
+- description: Team code of the player's team (e.g. FHC).
+  name: info_team_code
+  type: character
+- description: Current-season stat rows of the player (empty in the sample).
+  name: info_season_stats
+  type: character
+- description: Career stat rows of the player (empty in the sample).
+  name: info_career_stats
+  type: character
+- description: Stats provider of the data (statnet seen).
+  name: info_statistics_provider
+  type: character
+- description: Whether the player is in the current squad.
+  name: info_is_in_squad
+  type: logical
+- description: 'isa (StatNet) player id as an INTEGER. Join trap: play-by-play sends
+    the same id as a STRING (player.playerId, pop/nep, assists) and map keys are strings;
+    cast before joining.'
+  name: info_player_id
+  type: integer
+- description: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  name: info_ssgt_uuid
+  type: character
+- description: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  name: info_team_id
+  type: character
+kind: dataframe
+schema: shl_athlete_career

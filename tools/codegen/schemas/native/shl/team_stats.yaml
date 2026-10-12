@@ -1,0 +1,45 @@
+columns:
+- description: home or away.
+  name: team_side
+  type: character
+- description: StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same
+    game as gameId.
+  name: game_source_id
+  type: character
+- description: StatNet game number (StatNet key space, e.g. 22003); keys stats-info
+    games{} and equals sports-v2 game-info extId. Not the game uuid.
+  name: game_id
+  type: integer
+- description: home or away.
+  name: place
+  type: character
+- description: Goals scored by the team in the game.
+  name: score
+  type: integer
+- description: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  name: team_id
+  type: character
+- description: Team name.
+  name: team_name
+  type: character
+- description: StatNet team code (SAIK, FHC).
+  name: team_code
+  type: character
+- description: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  name: game_uuid
+  type: character
+- description: 'Period: 0 = the whole game, 1-3 the periods, 4 and up overtime.'
+  name: period
+  type: integer
+- description: Goals.
+  name: g
+  type: numeric
+- description: Penalty minutes.
+  name: pim
+  type: numeric
+- description: Face-offs won.
+  name: fow
+  type: numeric
+kind: dataframe
+schema: shl_team_stats

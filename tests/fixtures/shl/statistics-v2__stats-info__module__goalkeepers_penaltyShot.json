@@ -1,0 +1,717 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Player",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "PSSVSPerc",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": 1,
+        "Player": 0,
+        "Team": 0,
+        "GP": 38,
+        "GPI": 26,
+        "PSA": 1,
+        "PSGA": 0,
+        "PSSVS": 1,
+        "PSSVSPerc": 100,
+        "SO_PSA": 2,
+        "SO_PSGA": 1,
+        "SO_PSSVS": 1,
+        "SO_PSSVSPerc": "50.00",
+        "info": {
+          "uuid": "qYE-auAb7JXF",
+          "fullName": "Marcus Gidlöf",
+          "firstName": "Marcus",
+          "lastName": "Gidlöf",
+          "birthDate": "2005-09-28",
+          "nationality": "SE",
+          "number": 1,
+          "position": "GK",
+          "shoots": "L",
+          "gender": "male",
+          "weight": {
+            "value": 98,
+            "format": "kg"
+          },
+          "height": {
+            "value": 200,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 43017,
+            "mediaString": "image|ramses_sports|player_portrait_028a4b6f-cb02-4b1e-bca2-0db5895edf9c1.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "9541-95418PpkP",
+            "name": "Leksands IF",
+            "code": "LIF",
+            "media": "https://sportality.cdn.s8y.se/team-logos/lif1_lif.svg",
+            "ownerInstanceId": "lif1_lif",
+            "siteDisplayName": "Leksands IF"
+          },
+          "teamCode": "LIF",
+          "teamId": "9541-95418PpkP"
+        }
+      },
+      {
+        "Rank": 2,
+        "Player": 0,
+        "Team": 0,
+        "GP": 42,
+        "GPI": 15,
+        "PSA": 1,
+        "PSGA": 0,
+        "PSSVS": 1,
+        "PSSVSPerc": 100,
+        "SO_PSA": 0,
+        "SO_PSGA": 0,
+        "SO_PSSVS": 0,
+        "SO_PSSVSPerc": 0,
+        "info": {
+          "uuid": "qRm-1ftj9VWJC",
+          "fullName": "Jakob Hellsten",
+          "firstName": "Jakob",
+          "lastName": "Hellsten",
+          "birthDate": "2000-02-02",
+          "nationality": "SE",
+          "number": 30,
+          "position": "GK",
+          "shoots": "-",
+          "gender": "male",
+          "weight": {
+            "value": 84,
+            "format": "kg"
+          },
+          "height": {
+            "value": 183,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 43532,
+            "mediaString": "image|ramses_sports|player_portrait_b9899dcf-9eb1-4af0-8dff-91117fb2f13130hellsten.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "9541-95418PpkP",
+            "name": "Leksands IF",
+            "code": "LIF",
+            "media": "https://sportality.cdn.s8y.se/team-logos/lif1_lif.svg",
+            "ownerInstanceId": "lif1_lif",
+            "siteDisplayName": "Leksands IF"
+          },
+          "teamCode": "LIF",
+          "teamId": "9541-95418PpkP"
+        }
+      },
+      {
+        "Rank": 3,
+        "Player": 0,
+        "Team": 0,
+        "GP": 48,
+        "GPI": 20,
+        "PSA": 1,
+        "PSGA": 0,
+        "PSSVS": 1,
+        "PSSVSPerc": 100,
+        "SO_PSA": 5,
+        "SO_PSGA": 3,
+        "SO_PSSVS": 2,
+        "SO_PSSVSPerc": "40.00",
+        "info": {
+          "uuid": "qQ9-8fcc4epep",
+          "fullName": "Joel Lassinantti",
+          "firstName": "Joel",
+          "lastName": "Lassinantti",
+          "birthDate": "1993-01-08",
+          "nationality": "SE",
+          "number": 34,
+          "position": "GK",
+          "shoots": "L",
+          "gender": "male",
+          "weight": {
+            "value": 80,
+            "format": "kg"
+          },
+          "height": {
+            "value": 175,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 42517,
+            "mediaString": "image|ramses_sports|player_portrait_50b858d0-15fe-4e40-9a13-f2aed8e9893134 Joel Lassinantti 2.jpg",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "1a71-1a71gTHKh",
+            "name": "Luleå Hockey",
+            "code": "LHF",
+            "media": "https://sportality.cdn.s8y.se/team-logos/lhf1_lhf.svg",
+            "ownerInstanceId": "lhf1_lhf",
+            "siteDisplayName": "Luleå Hockey"
+          },
+          "teamCode": "LHF",
+          "teamId": "1a71-1a71gTHKh"
+        }
+      }
+    ],
+    "provider": "statnet",
+    "teams": {
+      "9541-95418PpkP": {
+        "type": "team",
+        "id": "LIF",
+        "teamCode": "LIF",
+        "siteDisplayName": "Leksands IF",
+        "name": "LIF",
+        "uuid": "9541-95418PpkP",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "",
+        "graphicsLibrary": "lif1-lif-57923",
+        "lastModified": "2024-10-17T09:09:22.000Z",
+        "nationality": "SE",
+        "ownerInstanceId": "lif1_lif",
+        "ownersite": "LIF",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/lif1_lif.svg",
+        "teamNames": {
+          "code": "LIF",
+          "short": "Leksand",
+          "long": "Leksands IF",
+          "full": "Leksands Idrottsförening",
+          "code_site": "LIF",
+          "short_site": "Leksand",
+          "long_site": "Leksands IF Herr",
+          "full_site": "Leksands Idrottsförening"
+        },
+        "clubName": {
+          "code": "LIF",
+          "short": "Leksand",
+          "long": "Leksands IF Herr",
+          "full": "Leksands Idrottsförening"
+        },
+        "teamInfo": {
+          "founded": "1919",
+          "golds": "4 st (1969, 1973, 1974, 1975)",
+          "finals": "9 st (1959, 1964, 1969, 1971, 1972, 1973, 1974, 1975, 1989)",
+          "retired_numbers": "# 02 Åke Lassas\r\n# 18 Jonas Bergqvist\r\n\r\nHedrade spelare i taket\r\n# 01 Christer Abris\r\n# 02 Tomas Jonsson\r\n# 03 Vilgot Larsson\r\n# 06 Tommy Abrahamsson\r\n# 08 Magnus Svensson\r\n# 12 Mats Åhlberg\r\n# 15 Dan Söderström\r\n# 16 Niklas Eriksson\r\n# 22 Nisse Nilsson\r\n\r\nTränare\r\nRune Mases",
+          "address": "Postadress: Box 118, 793 23 Leksand\r\nBesöksadress: Arenavägen 9, 793 35 Leksand",
+          "phone": "0247-644 00",
+          "email": "Se personalsida",
+          "accreditation": "Fredrik Eklund fredrik.eklund@leksandsif.se"
+        },
+        "teamExtIds": [
+          {
+            "id": 19,
+            "extId": "LIF",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 20,
+            "extId": "15",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          },
+          {
+            "id": 218,
+            "extId": "36759",
+            "locked": true,
+            "extIdType": {
+              "uuid": "9f4c-1284S7mMn",
+              "code": "impleo_tournament-team-id",
+              "createdAt": "2016-12-01T17:20:56.000Z",
+              "createdBy": "ramses",
+              "deleted": false,
+              "lastModified": "2016-12-01T17:20:56.000Z",
+              "visible": true,
+              "name": "Impleo / Swehockey: Serie lagid"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 19,
+            "extId": "LIF",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 20,
+            "extId": "15",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          },
+          {
+            "id": 218,
+            "extId": "36759",
+            "locked": true,
+            "extIdType": {
+              "uuid": "9f4c-1284S7mMn",
+              "code": "impleo_tournament-team-id",
+              "createdAt": "2016-12-01T17:20:56.000Z",
+              "createdBy": "ramses",
+              "deleted": false,
+              "lastModified": "2016-12-01T17:20:56.000Z",
+              "visible": true,
+              "name": "Impleo / Swehockey: Serie lagid"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/lif1_lif.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "1a71-1a71gTHKh": {
+        "type": "team",
+        "id": "LHF",
+        "teamCode": "LHF",
+        "siteDisplayName": "Luleå Hockey",
+        "name": "LHF",
+        "uuid": "1a71-1a71gTHKh",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "lhf1-lhf-cc96a",
+        "lastModified": "2025-03-06T08:41:17.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "lhf1_lhf",
+        "ownersite": "LHF",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/lhf1_lhf.svg",
+        "teamNames": {
+          "code": "LHF",
+          "short": "Luleå",
+          "long": "Luleå Hockey",
+          "full": "Luleå Hockey",
+          "codeSite": "LHF",
+          "shortSite": "Luleå",
+          "fullSite": "Luleå Hockey",
+          "longSite": "Luleå Hockey"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "1977",
+          "golds": "1 st (1996)",
+          "finals": "4 st (1993, 1996, 1997, 2013)",
+          "retired_numbers": "# 12 Johan Strömwall\r\n# 35 Jarmo Myllys\r\n#  4  Stefan \"Skuggan\" Nilsson\r\n# 28 Roger Åkerström\r\n\r\n# 22 Hans Norberg förlamades under en match 1989 och sen dess har hans tröjnummer aldrig använts i Luleå Hockey",
+          "address": "Luleå Hockey\r\nOstrongatan 2\r\n973 34 Luleå",
+          "phone": "0920-52 82 00",
+          "fax": "0920–52 82 99",
+          "email": "info@luleahockey.se",
+          "chairman": "Anders Olofsson",
+          "manager": "Stefan Enbom",
+          "accreditation": "robert.hedlund@luleahockey.se",
+          "facebook": "https://www.facebook.com/LuleaHockey/",
+          "instagram": "https://www.instagram.com/LuleaHockey",
+          "twitter": "https://x.com/LuleaHockey"
+        },
+        "teamExtIds": [
+          {
+            "id": 17,
+            "extId": "LHF",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 18,
+            "extId": "8",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 17,
+            "extId": "LHF",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 18,
+            "extId": "8",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/lhf1_lhf.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "2459-2459QTs1f": {
+        "type": "team",
+        "id": "DIF",
+        "teamCode": "DIF",
+        "siteDisplayName": "Djurgårdens IF",
+        "name": "DIF",
+        "uuid": "2459-2459QTs1f",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "dif1-dif-896f9",
+        "lastModified": "2025-09-18T21:35:41.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "dif1_dif",
+        "ownersite": "DIF",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/dif1_dif.svg",
+        "teamNames": {
+          "code": "DIF",
+          "short": "Djurgården",
+          "long": "Djurgårdens IF",
+          "full": "Djurgården Hockey",
+          "codeSite": "DIF Herr",
+          "shortSite": "Djurgården Herr",
+          "fullSite": "Djurgården Hockey Herr",
+          "longSite": "Djurgården Hockey Herr"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "1891",
+          "golds": "16 st (1926, 1950, 1954, 1955, 1958, 1959, 1960, 1961, 1962, 1963, 1983, 1989, 1990, 1991, 2000, 2001)",
+          "finals": "26 st (1923, 1924, 1926, 1927, 1950, 1954, 1955, 1958, 1959, 1960, 1961, 1962, 1963, 1979, 1983, 1984, 1985, 1989, 1990, 1991, 1992, 1998, 2000, 2001, 2010, 2019)",
+          "retired_numbers": "#2 Roland Stoltz\r\n#2 Charles Berglund\r\n#5 Sven Tumba\r\n#11 Jens Öhling\r\n#12 Lasse Björn\r\n#16 Nichlas Falk\r\n#22 Håkan Södergren\r\n#25 Mikael Johansson\r\n#27 Thomas Eriksson",
+          "address": "Djurgården Hockey AB\r\nLindetorpsvägen 25\r\nBox 2\r\n121 25 STOCKHOLM-GLOBEN",
+          "phone": "08-600 81 00",
+          "fax": "08-600 81 99",
+          "chairman": "Kaarel Lehiste",
+          "accreditation": "Senast dagen före match till ackreditering@difhockey.se."
+        },
+        "teamExtIds": [
+          {
+            "id": 5,
+            "extId": "DIF",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 6,
+            "extId": "2",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 5,
+            "extId": "DIF",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 6,
+            "extId": "2",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/dif1_dif.svg",
+        "socialMedia": [],
+        "displayName": ""
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "athlete",
+    "totalCount": 16,
+    "players": {
+      "920": {
+        "type": "athlete",
+        "id": 920,
+        "firstName": "Jhonas",
+        "lastName": "Enroth",
+        "jerseyNumber": 88,
+        "position": "GK",
+        "shoots": "-",
+        "gpi": 31,
+        "epUrl": "",
+        "uuid": "qWU-6Jh6DlSa0",
+        "fullName": "Jhonas Enroth",
+        "dateOfBirth": "1988-06-25",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 74,
+        "height": 178,
+        "playerMedia": {
+          "id": 43232,
+          "mediaString": "image|ramses_sports|player_portrait_7e766add-2204-43ce-8921-0b100fb9a437Jhonas Enroth.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      },
+      "1558": {
+        "type": "athlete",
+        "id": 1558,
+        "firstName": "Joel",
+        "lastName": "Lassinantti",
+        "jerseyNumber": 34,
+        "position": "GK",
+        "shoots": "L",
+        "gpi": 20,
+        "epUrl": "",
+        "uuid": "qQ9-8fcc4epep",
+        "fullName": "Joel Lassinantti",
+        "dateOfBirth": "1993-01-08",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 80,
+        "height": 175,
+        "playerMedia": {
+          "id": 42517,
+          "mediaString": "image|ramses_sports|player_portrait_50b858d0-15fe-4e40-9a13-f2aed8e9893134 Joel Lassinantti 2.jpg",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      },
+      "1987": {
+        "type": "athlete",
+        "id": 1987,
+        "firstName": "Magnus",
+        "lastName": "Hellberg",
+        "jerseyNumber": 35,
+        "position": "GK",
+        "shoots": "L",
+        "gpi": 40,
+        "epUrl": "",
+        "uuid": "qQ9-06efrwQ9K",
+        "fullName": "Magnus Hellberg",
+        "dateOfBirth": "1991-04-04",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 84,
+        "height": 196,
+        "playerMedia": {
+          "id": 43104,
+          "mediaString": "image|ramses_sports|player_portrait_bb510aa0-5ee0-4d7f-ae35-1f04ab8bb85eMagnus Hellberg.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      }
+    }
+  }
+]

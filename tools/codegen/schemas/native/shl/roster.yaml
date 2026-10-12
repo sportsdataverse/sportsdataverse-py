@@ -1,0 +1,39 @@
+columns:
+- description: 'Position group label: Målvakter = goalkeepers, Backar = defencemen,
+    Forwards.'
+  name: position
+  type: character
+- description: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
+  name: position_code
+  type: character
+- description: Roster role of the player (unverified).
+  name: player_type
+  type: character
+- description: Sex of the athlete or team (male / female).
+  name: gender
+  type: character
+- description: Athlete uuid (platform key space; qQ9-... or 10-char form); joins to
+    the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy
+    id.
+  name: uuid
+  type: character
+- description: Given name.
+  name: first_name
+  type: character
+- description: Surname.
+  name: last_name
+  type: character
+- description: Given name and surname.
+  name: full_name
+  type: character
+- description: Nationality (ISO country code).
+  name: nationality
+  type: character
+- description: Shirt number.
+  name: jersey_number
+  type: integer
+- description: URL of the player's latest rendered portrait.
+  name: portrait_url
+  type: character
+kind: dataframe
+schema: shl_roster

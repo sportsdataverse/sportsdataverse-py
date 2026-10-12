@@ -1,0 +1,79 @@
+columns:
+- description: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  name: game_uuid
+  type: character
+- description: StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same
+    game as gameId.
+  name: home_team_game_source_id
+  type: character
+- description: StatNet game number (StatNet key space, e.g. 22003); keys stats-info
+    games{} and equals sports-v2 game-info extId. Not the game uuid.
+  name: home_team_game_id
+  type: integer
+- description: home or away.
+  name: home_team_place
+  type: character
+- description: Goals scored by the team in the game.
+  name: home_team_score
+  type: integer
+- description: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  name: home_team_team_id
+  type: character
+- description: Team display name (e.g. Frölunda HC).
+  name: home_team_team_name
+  type: character
+- description: Team code (FHC, LHC, ...).
+  name: home_team_team_code
+  type: character
+- description: Game uuid (platform key space, e.g. bdhvuc5tex); joins to schedule
+    gameInfo[].uuid and every gameday/{game_uuid} route. The StatNet number of the
+    same game is gameId.
+  name: home_team_game_uuid
+  type: character
+- description: StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same
+    game as gameId.
+  name: away_team_game_source_id
+  type: character
+- description: StatNet game number (StatNet key space, e.g. 22003); keys stats-info
+    games{} and equals sports-v2 game-info extId. Not the game uuid.
+  name: away_team_game_id
+  type: integer
+- description: home or away.
+  name: away_team_place
+  type: character
+- description: Goals scored by the team in the game.
+  name: away_team_score
+  type: integer
+- description: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  name: away_team_team_id
+  type: character
+- description: Team display name (e.g. Frölunda HC).
+  name: away_team_team_name
+  type: character
+- description: Team code (FHC, LHC, ...).
+  name: away_team_team_code
+  type: character
+- description: Game uuid (platform key space, e.g. bdhvuc5tex); joins to schedule
+    gameInfo[].uuid and every gameday/{game_uuid} route. The StatNet number of the
+    same game is gameId.
+  name: away_team_game_uuid
+  type: character
+- description: Home goals after this event (running score).
+  name: home_goals
+  type: integer
+- description: Away goals after this event (running score).
+  name: away_goals
+  type: integer
+- description: StatNet game state (GameEnded seen).
+  name: state
+  type: character
+- description: Period (1-3, 4 = overtime, 5 = shootout).
+  name: time_period
+  type: integer
+- description: Time in period (MM:SS). Clock/duration as an mm:ss string.
+  name: time_period_time
+  type: character
+kind: dataframe
+schema: shl_game_overview

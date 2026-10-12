@@ -1,0 +1,717 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Player",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "SVSPerc",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": 1,
+        "Player": 0,
+        "Team": 0,
+        "GP": 52,
+        "GPI": 24,
+        "GA": 40,
+        "MSA": 559,
+        "SFA": 9,
+        "SOGA": 522,
+        "SVS": 482,
+        "SVSPerc": "92.34",
+        "SSGA": 25,
+        "SSOGA": 213,
+        "SSSVSPerc": "88.26",
+        "ValidRanking": true,
+        "info": {
+          "uuid": "qd1-1JVKWgydZ",
+          "fullName": "Tobias Normann",
+          "firstName": "Tobias",
+          "lastName": "Normann",
+          "birthDate": "2001-08-03",
+          "nationality": "NO",
+          "number": 30,
+          "position": "GK",
+          "shoots": "L",
+          "gender": "male",
+          "weight": {
+            "value": 85,
+            "format": "kg"
+          },
+          "height": {
+            "value": 184,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 42550,
+            "mediaString": "image|ramses_sports|player_portrait_32e1d256-34f0-40fb-830f-7b66ef74551aTobias Normann.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "087a-087aTQv9u",
+            "name": "Frölunda HC",
+            "code": "FHC",
+            "media": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+            "ownerInstanceId": "fhc1_fhc",
+            "siteDisplayName": "Frölunda HC"
+          },
+          "teamCode": "FHC",
+          "teamId": "087a-087aTQv9u"
+        }
+      },
+      {
+        "Rank": 2,
+        "Player": 0,
+        "Team": 0,
+        "GP": 51,
+        "GPI": 42,
+        "GA": 80,
+        "MSA": 845,
+        "SFA": 23,
+        "SOGA": 925,
+        "SVS": 845,
+        "SVSPerc": "91.35",
+        "SSGA": 56,
+        "SSOGA": 377,
+        "SSSVSPerc": "85.15",
+        "ValidRanking": true,
+        "info": {
+          "uuid": "qZo-3nrVsP1kf",
+          "fullName": "Strauss Mann",
+          "firstName": "Strauss",
+          "lastName": "Mann",
+          "birthDate": "1998-08-18",
+          "nationality": "US",
+          "number": 38,
+          "position": "GK",
+          "shoots": "-",
+          "gender": "male",
+          "weight": {
+            "value": 79,
+            "format": "kg"
+          },
+          "height": {
+            "value": 183,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 43075,
+            "mediaString": "image|ramses_sports|player_portrait_d7c8b341-ca25-4374-842f-5b581f1bddd6Strauss Mann.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "50e6-50e6DYeWM",
+            "name": "Skellefteå AIK",
+            "code": "SKE",
+            "media": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+            "ownerInstanceId": "saik1_saik",
+            "siteDisplayName": "Skellefteå AIK"
+          },
+          "teamCode": "SAIK",
+          "teamId": "50e6-50e6DYeWM"
+        }
+      },
+      {
+        "Rank": 3,
+        "Player": 0,
+        "Team": 0,
+        "GP": 52,
+        "GPI": 28,
+        "GA": 60,
+        "MSA": 762,
+        "SFA": 15,
+        "SOGA": 655,
+        "SVS": 595,
+        "SVSPerc": "90.84",
+        "SSGA": 44,
+        "SSOGA": 264,
+        "SSSVSPerc": "83.33",
+        "ValidRanking": true,
+        "info": {
+          "uuid": "qQ9-349c7WDv6",
+          "fullName": "Lars Johansson",
+          "firstName": "Lars",
+          "lastName": "Johansson",
+          "birthDate": "1987-07-11",
+          "nationality": "SE",
+          "number": 1,
+          "position": "GK",
+          "shoots": "L",
+          "gender": "male",
+          "weight": {
+            "value": 90,
+            "format": "kg"
+          },
+          "height": {
+            "value": 185,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 42551,
+            "mediaString": "image|ramses_sports|player_portrait_620f514c-fc00-4f2b-b546-6c7b00e999f2Lars Johansson.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "087a-087aTQv9u",
+            "name": "Frölunda HC",
+            "code": "FHC",
+            "media": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+            "ownerInstanceId": "fhc1_fhc",
+            "siteDisplayName": "Frölunda HC"
+          },
+          "teamCode": "FHC",
+          "teamId": "087a-087aTQv9u"
+        }
+      }
+    ],
+    "provider": "statnet",
+    "teams": {
+      "087a-087aTQv9u": {
+        "type": "team",
+        "id": "FHC",
+        "teamCode": "FHC",
+        "siteDisplayName": "Frölunda HC",
+        "name": "FHC",
+        "uuid": "087a-087aTQv9u",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "fhc1-fhc-f7c59",
+        "lastModified": "2024-11-11T16:30:35.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "fhc1_fhc",
+        "ownersite": "FHC",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+        "teamNames": {
+          "code": "FHC",
+          "short": "Frölunda ",
+          "long": "Frölunda HC",
+          "full": "Frölunda Hockey Club",
+          "code_site": "FHC",
+          "short_site": "Frölunda",
+          "full_site": "Frölunda Hockey Club / Herr",
+          "long_site": "Frölunda HC"
+        },
+        "clubName": {
+          "code": "FHC",
+          "short": "Frölunda",
+          "long": "Frölunda HC",
+          "full": "Frölunda Hockey Club / Herr"
+        },
+        "teamInfo": {
+          "founded": "1944",
+          "golds": "5 st (1965, 2003, 2005, 2016, 2019)",
+          "finals": "7 st (1980, 1996, 2003, 2005, 2006, 2016, 2019)",
+          "retired_numbers": "#13 Lars-Erik Lundvall\r\n#14 Ronald Pettersson\r\n#14 Patrik Carnbäck\r\n#19 Jörgen Pettersson\r\n#23 Ronnie Sundin\r\n#24 Niklas Andersson\r\n#29 Stefan Larsson",
+          "address": "Frölunda HC\r\nFrölundaborgs Isstadion\r\nBox 12127\r\n402 42 Göteborg",
+          "phone": "031-708 16 80",
+          "fax": "031-18 97 06",
+          "email": "kontakt@frolundahockey.com",
+          "chairman": "Mats Grauers",
+          "manager": "Christian Lecthaler",
+          "accreditation": "peter.kymmer@frolundahockey.com",
+          "facebook": "https://www.facebook.com/frolundahc",
+          "instagram": "https://www.instagram.com/frolunda_hc/",
+          "twitter": "https://twitter.com/frolunda_hc"
+        },
+        "teamExtIds": [
+          {
+            "id": 9,
+            "extId": "FHC",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 10,
+            "extId": "5",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 9,
+            "extId": "FHC",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 10,
+            "extId": "5",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "50e6-50e6DYeWM": {
+        "type": "team",
+        "id": "SAIK",
+        "teamCode": "SAIK",
+        "siteDisplayName": "Skellefteå AIK",
+        "name": "SAIK",
+        "uuid": "50e6-50e6DYeWM",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "saik1-saik-ba23a",
+        "lastModified": "2024-11-18T09:21:40.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "saik1_saik",
+        "ownersite": "SAIK",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+        "teamNames": {
+          "code": "SKE",
+          "short": "Skellefteå",
+          "long": "Skellefteå AIK",
+          "full": "Skellefteå AIK Hockey",
+          "code_site": "SKE",
+          "short_site": "Skellefteå",
+          "full_site": "Skellefteå AIK Hockey",
+          "long_site": "Skellefteå AIK"
+        },
+        "clubName": {
+          "code": "SKE",
+          "short": "Skellefteå",
+          "long": "Skellefteå AIK",
+          "full": "Skellefteå AIK Hockey"
+        },
+        "teamInfo": {
+          "founded": "1921",
+          "golds": "3 st (1978, 2013, 2014)",
+          "finals": "8 st (1978, 2011, 2012, 2013, 2014, 2015, 2016, 2018)",
+          "address": "Skellefteå AIK, Skellefteå Kraft Arena, Mossgatan 27, Box 185, 931 22 Skellefteå",
+          "phone": "0910-79 20 00",
+          "fax": "0910-79 20 10",
+          "email": "info@skellefteaaik.se",
+          "chairman": "Kenneth Fahlgren",
+          "manager": "Pea Israelsson",
+          "accreditation": "Anna Hägglund, anna.hagglund@skellefteaaik.se",
+          "facebook": "https://www.facebook.com/skellefteaaikhockey",
+          "instagram": "https://www.instagram.com/skellefteaaik/",
+          "twitter": "https://twitter.com/skelleftea_aik"
+        },
+        "teamExtIds": [
+          {
+            "id": 29,
+            "extId": "SAIK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 30,
+            "extId": "10",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 29,
+            "extId": "SAIK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 30,
+            "extId": "10",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "fe02-fe02mf1FN": {
+        "type": "team",
+        "id": "VLH",
+        "teamCode": "VLH",
+        "siteDisplayName": "Växjö Lakers",
+        "name": "VLH",
+        "uuid": "fe02-fe02mf1FN",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "vlh1-vlh-8a4d0",
+        "lastModified": "2024-10-09T15:51:55.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "vlh1_vlh",
+        "ownersite": "VLH",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/vlh1_vlh.svg",
+        "teamNames": {
+          "code": "VLH",
+          "short": "Växjö",
+          "long": "Växjö Lakers",
+          "full": "Växjö Lakers",
+          "code_site": "VLH",
+          "short_site": "Växjö Lakers",
+          "full_site": "Växjö Lakers",
+          "long_site": "Växjö Lakers"
+        },
+        "clubName": {
+          "code": "VLH",
+          "short": "Växjö Lakers",
+          "long": "Växjö Lakers",
+          "full": "Växjö Lakers"
+        },
+        "teamInfo": {
+          "founded": "1997",
+          "golds": "3 st (2015, 2018, 2021)",
+          "finals": "3 st (2015, 2018, 2021)",
+          "retired_numbers": "# 38 Johan Markusson",
+          "address": "Storgatan 86\r\n352 46 Växjö",
+          "phone": "0470-32 97 00",
+          "fax": "0470-32 97 99",
+          "email": "kansli@vaxjolakers.se",
+          "chairman": "Jennie Isberg",
+          "manager": "Johan Markusson",
+          "accreditation": "press@vaxjolakers.se",
+          "contact": "Instagram: @vaxjolakers\r\nFacebook: @Växjö Lakers\r\nTwitter: @VLHlive\r\nTikTok: @vaxjolakers\r\nYouTube: @Växjö Lakers OFFICIAL",
+          "instagram": "@vaxjolakers",
+          "facebook": "@Växjö Lakers",
+          "twitter": "@vlhlive"
+        },
+        "teamExtIds": [
+          {
+            "id": 33,
+            "extId": "VLH",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 34,
+            "extId": "12",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 33,
+            "extId": "VLH",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 34,
+            "extId": "12",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/vlh1_vlh.svg",
+        "socialMedia": [],
+        "displayName": ""
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "athlete",
+    "totalCount": 36,
+    "players": {
+      "920": {
+        "type": "athlete",
+        "id": 920,
+        "firstName": "Jhonas",
+        "lastName": "Enroth",
+        "jerseyNumber": 88,
+        "position": "GK",
+        "shoots": "-",
+        "gpi": 31,
+        "validRanking": true,
+        "epUrl": "",
+        "uuid": "qWU-6Jh6DlSa0",
+        "fullName": "Jhonas Enroth",
+        "dateOfBirth": "1988-06-25",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 74,
+        "height": 178,
+        "playerMedia": {
+          "id": 43232,
+          "mediaString": "image|ramses_sports|player_portrait_7e766add-2204-43ce-8921-0b100fb9a437Jhonas Enroth.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      },
+      "1558": {
+        "type": "athlete",
+        "id": 1558,
+        "firstName": "Joel",
+        "lastName": "Lassinantti",
+        "jerseyNumber": 34,
+        "position": "GK",
+        "shoots": "L",
+        "gpi": 20,
+        "validRanking": false,
+        "epUrl": "",
+        "uuid": "qQ9-8fcc4epep",
+        "fullName": "Joel Lassinantti",
+        "dateOfBirth": "1993-01-08",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 80,
+        "height": 175,
+        "playerMedia": {
+          "id": 42517,
+          "mediaString": "image|ramses_sports|player_portrait_50b858d0-15fe-4e40-9a13-f2aed8e9893134 Joel Lassinantti 2.jpg",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      },
+      "1987": {
+        "type": "athlete",
+        "id": 1987,
+        "firstName": "Magnus",
+        "lastName": "Hellberg",
+        "jerseyNumber": 35,
+        "position": "GK",
+        "shoots": "L",
+        "gpi": 40,
+        "validRanking": true,
+        "epUrl": "",
+        "uuid": "qQ9-06efrwQ9K",
+        "fullName": "Magnus Hellberg",
+        "dateOfBirth": "1991-04-04",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 84,
+        "height": 196,
+        "playerMedia": {
+          "id": 43104,
+          "mediaString": "image|ramses_sports|player_portrait_bb510aa0-5ee0-4d7f-ae35-1f04ab8bb85eMagnus Hellberg.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      }
+    }
+  }
+]

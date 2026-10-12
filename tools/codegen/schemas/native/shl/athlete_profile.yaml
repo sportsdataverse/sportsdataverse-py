@@ -1,0 +1,104 @@
+columns:
+- description: Athlete uuid (platform key space, qQ9-... or 10-char form); joins to
+    the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy
+    id.
+  name: uuid
+  type: character
+- description: Given name and surname.
+  name: full_name
+  type: character
+- description: Given name.
+  name: first_name
+  type: character
+- description: Surname.
+  name: last_name
+  type: character
+- description: Date of birth (YYYY-MM-DD).
+  name: birth_date
+  type: character
+- description: Nationality (ISO country code).
+  name: nationality
+  type: character
+- description: Sex of the athlete or team (male / female).
+  name: gender
+  type: character
+- description: Age in years.
+  name: age_value
+  type: integer
+- description: 'Unit of value: years.'
+  name: age_format
+  type: character
+- description: Weight in kg.
+  name: weight_value
+  type: integer
+- description: 'Unit of value: kg.'
+  name: weight_format
+  type: character
+- description: Height in cm.
+  name: height_value
+  type: integer
+- description: 'Unit of value: cm.'
+  name: height_format
+  type: character
+- description: Shirt number.
+  name: jersey_number
+  type: integer
+- description: Position label in Swedish (Målvakt = goalkeeper).
+  name: position
+  type: character
+- description: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
+  name: position_code
+  type: character
+- description: Shooting side (L / R; Left / Right).
+  name: shoots
+  type: character
+- description: Platform team uuid.
+  name: team_uuid
+  type: character
+- description: Club site instance id (e.g. fhc1_fhc).
+  name: team_instance_id
+  type: character
+- description: Team name.
+  name: team_name
+  type: character
+- description: StatNet team code (SAIK, FHC).
+  name: team_code
+  type: character
+- description: Media URL or string.
+  name: team_media
+  type: character
+- description: Current-season stat rows of the player (empty in the sample).
+  name: season_stats
+  type: character
+- description: Career stat rows of the player (empty in the sample).
+  name: career_stats
+  type: character
+- description: Whether the player is in the current squad.
+  name: is_in_squad
+  type: logical
+- description: Portrait URL on the imgix CDN.
+  name: media_url
+  type: character
+- description: Image alt text. Empty string in every sample (placeholder).
+  name: media_alt
+  type: character
+- description: Responsive image srcset.
+  name: media_srcset
+  type: character
+- description: Image URL, original proportion.
+  name: media_url_img_original_proportion
+  type: character
+- description: Placeholder image URL. Empty string in every sample (placeholder).
+  name: media_url_placeholder_image
+  type: character
+- description: Link to a club video. Empty string in every sample (placeholder).
+  name: media_videourl
+  type: character
+- description: Image credit. Empty string in every sample (placeholder).
+  name: media_photographer
+  type: character
+- description: Image crop focal point.
+  name: media_focal_point
+  type: character
+kind: dataframe
+schema: shl_athlete_profile
