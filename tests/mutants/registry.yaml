@@ -158,8 +158,9 @@
     R797-2's CFB twin: the CFB box reads EPA*, wpa and drive_start, all Float32 in the pipeline and
     Float64 on plays_frame; without the narrowing the span boxes publish unrounded EPA / WPA.
 
-# --- C-H1: the phase-2 `-3` port flips 1.1's 31 strict xfails --------------------------------------
+# --- C-H1 / C-NF-3: the NFL rushing decomposition on the standard band (task 2.1) -----------------
 - id: nfl-second-level-yards-port
+  group: nfl-rush-yards
   finding: C-H1
   file: sportsdataverse/nfl/nfl_pbp.py
   snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
@@ -167,11 +168,42 @@
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_rushing_decomposition_sums_to_the_carry[401872922]
   expected: kill
   note: >-
-    The xfails are live: the CFB `-3` port makes line + second level + open field equal the carry
-    on every 4+ yard rush, so all 31 strict xfails XPASS (measured: 31 failed; the row runs one
-    game to stay cheap). 2.1 lands exactly
-    this, drops the markers and rewrites this row and nfl-second-level-yards-offset (snippet
-    `- 3)`, mutant `- 4)`, expected kill).
+    Task 2.1 kept `- 4` and moved the line band to 0-4 / 5-10 / cap 7 (EXECUTION-FINDINGS ruling),
+    so the old CFB `- 3` port is now the mutant: every 4+ carry sums to the carry plus 0.5.
+
+- id: nfl-line-yards-band-five-to-ten
+  group: nfl-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(4 + 0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(3 + 0.5 * (pl.col("adj_rush_yardage") - 3))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_line_yards_band_is_the_standard[401872922]
+  expected: kill
+  note: the pre-2.1 "100% through 3, 50% from 4" line credit on carries of 5-10 (0.5 high)
+
+- id: nfl-line-yards-cap-seven
+  group: nfl-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(7.0)'
+  mutant: '.then(5.5)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_line_yards_band_is_the_standard[401872922]
+  expected: kill
+  note: the pre-2.1 5.5 ceiling on carries past 10 (the standard band caps the line at 7)
+
+- id: nfl-adj-rush-yardage-cap-ten
+  group: nfl-rush-yards
+  finding: C-H1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: |-
+    adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                    .then(10)
+  mutant: |-
+    adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                    .then(8)
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_rushing_decomposition_sums_to_the_carry[401872922]
+  expected: kill
+  note: the pre-2.1 cap of 8 with the line capped at 7 over-credits every 11+ carry by one yard
 
 # --- C-M6: CFB overtime shootout threshold is period-based only -----------------------------------
 - id: cfb-ot-shootout-threshold-6
@@ -257,11 +289,47 @@
   group: cfb-rush-yards
   finding: C-H1
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 3))'
-  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 3))'
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "decomposition and (400547866 or 401628455)"
   expected: kill
-  note: the half-yard C-H1 left in NFL; the CFB decomposition-sum test pins the fixed `-3`
+  note: >-
+    task 2.1 moved the band to 0-4 / 5-10 / cap 7, so the carrier's half of yards 5-10 is
+    `adj - 4`; the old `- 3` now sums to the carry plus 0.5
+
+- id: cfb-line-yards-band-five-to-ten
+  group: cfb-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(4 + 0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(3 + 0.5 * (pl.col("adj_rush_yardage") - 3))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "line_yards_band and gains_of_four and (400547866 or 401628455)"
+  expected: kill
+  note: the pre-2.1 CFB line credit on carries of 5-10 (the gate's "old band in cfb_pbp.py only")
+
+- id: cfb-line-yards-cap-seven
+  group: cfb-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(7.0)'
+  mutant: '.then(5.5)'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "line_yards_band and gains_of_four and (400547866 or 401628455)"
+  expected: kill
+  note: the pre-2.1 5.5 ceiling on CFB carries past 10
+
+- id: cfb-adj-rush-yardage-cap-ten
+  group: cfb-rush-yards
+  finding: C-H1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                    .then(10)
+  mutant: |-
+    adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                    .then(8)
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "decomposition and (400547866 or 401628455)"
+  expected: kill
+  note: the pre-2.1 cap of 8 with the line capped at 7 over-credits every 11+ carry by one yard
 
 - id: cfb-line-yards-loss-credit
   group: cfb-rush-yards
@@ -297,18 +365,16 @@
 
 # --- C-H1: NFL second_level_yards half-yard (the CFB `-3` port never reached NFL) ----------------
 - id: nfl-second-level-yards-offset
+  group: nfl-rush-yards
   finding: C-H1
   file: sportsdataverse/nfl/nfl_pbp.py
   snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
   mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 5))'
-  test: tests/nfl/test_nfl_pbp_sweep_fixes.py
-  expected:
-    survive_until: "2.1"
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_rushing_decomposition_sums_to_the_carry[401872922]
+  expected: kill
   note: >-
-    Today the shipped code IS the audit's mutant (`- 4`); no offline NFL test pins the
-    decomposition, so a further half-yard survives. 2.1 ports `- 3` and 1.1's decomposition-sum
-    xfail becomes a plain assert: rewrite this row then as snippet `- 3)` / mutant `- 4)`,
-    test tests/nfl/test_nfl_whole_game_oracle.py, expected kill.
+    Flipped by task 2.1: the decomposition-sum xfails are plain asserts now, so a half-yard short
+    in the other direction (the pre-2.1 C-H1 shape) goes red.
 
 # --- A-M10: the release read must stay use_pyarrow=True (polars 2.0 suffix-range -> HTTP 501) ----
 - id: codegen-runtime-use-pyarrow

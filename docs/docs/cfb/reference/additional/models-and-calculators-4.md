@@ -372,10 +372,10 @@ A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `f
 | `stopped_run` | logical | True when the rush was stopped at or behind the line of scrimmage. |
 | `opportunity_run` | logical | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | logical | True when the rush gained 8 or more yards. |
-| `adj_rush_yardage` | double | Rushing yards capped at 8, the input to the line-yards decomposition. |
-| `line_yards` | double | Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that. |
-| `second_level_yards` | double | Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition. |
-| `open_field_yards` | double | Rushing yards gained beyond 8, credited to the ball carrier rather than the line. |
+| `adj_rush_yardage` | double | Rushing yards capped at 10, the input to the line-yards decomposition. |
+| `line_yards` | double | Yards credited to the offensive line on a rush, on the standard adjusted-line-yards band: 1.2x the yardage on a loss, all of yards 0-4, half of each yard from 5 to 10, and nothing beyond 10 (a 7-yard ceiling). Line, second-level and open-field yards sum to the carry on every gain. |
+| `second_level_yards` | double | The ball carrier's half of yards 5-10 of a rush (the line takes the other half); 0 on carries of 4 yards or fewer. |
+| `open_field_yards` | double | Rushing yards gained beyond 10, credited to the ball carrier rather than the line. |
 | `highlight_yards` | double | Second-level plus open-field yards -- the yardage credited to the carrier. |
 | `opp_highlight_yards` | double | Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could never co-occur with non-zero highlight yards. |
 | `short_rush_success` | character | True when a short-yardage rush gained the yardage needed. |

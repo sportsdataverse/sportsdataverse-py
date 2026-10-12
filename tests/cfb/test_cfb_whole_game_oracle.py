@@ -54,8 +54,8 @@ Oracle per column
     The standard per-yard adjusted-line-yards band (the ruling for plan task 2.1 in
     ``audit/EXECUTION-FINDINGS.md``; Action Network's ALY definition, Football Study Hall): a loss
     counts 120%, yards 0-4 100%, yards 5-10 50%, yards beyond 10 nothing, so a gain is capped at 7. Not
-    the summary producers' formula. Green on losses and on gains through 3 yards; XFAIL C-NF-3 on gains
-    of 4+ (the processor credits 100% through 3, 50% of 4-8, cap 5.5).
+    the summary producers' formula. Green on every carry since task 2.1 (C-NF-3: the processor credited
+    100% through 3, 50% of 4-8, cap 5.5).
 ``yds_rushed``
     The feed's text states every rush's yardage (a number, "no gain", "loss of N"); a rush row without
     it is a parse gap. XFAIL EX-1.2-a (a finding surfaced by this suite's null-aware review) on the 15
@@ -677,20 +677,14 @@ def test_every_rush_carries_its_yardage(game_id):
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES))
-def test_line_yards_on_losses_and_gains_through_three(game_id):
+def test_line_yards_band_on_losses_and_gains_through_three(game_id):
     short = _rushes(game_id).filter(pl.col("yds_rushed") <= 3)
     bad = short.filter(_off("line_yards", pl.col("oracle")))
     assert bad.height == 0, bad.select("yds_rushed", "line_yards", "oracle").rows()
 
 
-_NF3 = (
-    "C-NF-3: line_yards credits 100% through 3 yards and 50% of 4-8 (cap 5.5; cfb_pbp.py:7001-7009); "
-    "the standard per-yard band (EXECUTION-FINDINGS ruling for 2.1) is 100% of yards 0-4, 50% of 5-10 (cap 7)"
-)
-
-
-@pytest.mark.parametrize("game_id", _params(CAPTURES, dict.fromkeys(CAPTURES, _NF3)))
-def test_line_yards_on_gains_of_four_or_more(game_id):
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
+def test_line_yards_band_on_gains_of_four_or_more(game_id):
     long = _rushes(game_id).filter(pl.col("yds_rushed") >= 4)
     assert long.height > 0
     bad = long.filter(_off("line_yards", pl.col("oracle")))

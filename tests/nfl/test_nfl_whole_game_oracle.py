@@ -10,8 +10,8 @@ against it:
   (``cfbfastR-cfb-data/R/espn_cfb_15_team_summaries_creation.R:610``, ``nfl-data`` ``build.py:244``);
 * the standard adjusted-line-yards band (losses 120%, yards 0-4 at 100%, 5-10 at 50%, beyond 10 at
   0%: the program's ruling for task 2.1; the producers' own ``line_yards`` reading is not it);
-* the CFB processor's fixed copy of the same stage (``cfb_pbp.py``: the ``-3`` rushing block of
-  ``24dd2fdec6``, the kickoff-return ``end.down`` rewrite);
+* the CFB processor's fixed copy of the same stage (``cfb_pbp.py``: the kickoff-return ``end.down``
+  rewrite);
 * ESPN's own feed (``scoringPlay``, the play text, the summary's ``boxscore``);
 * the committed nflverse slices of five of the games (``fixtures/nflverse/``), joined play by play:
   ESPN's play id is the game id followed by the GSIS ``play_id``.
@@ -59,10 +59,6 @@ def _cases(known: dict[int, str] | None = None, games=CAPTURES) -> list:
     return [pytest.param(g, marks=_xfail(known[g])) if g in known else g for g in games]
 
 
-def _all(reason: str) -> dict[int, str]:
-    return dict.fromkeys(CAPTURES, reason)
-
-
 # ESPN admin row of the 2002-05 feed, typed "Unknown" (C-M2): not a play.
 _ADMIN_END = pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)
 _PLAY = ~pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False) & ~_ADMIN_END
@@ -100,13 +96,10 @@ def test_opportunity_run_is_a_rush_of_four_or_more(game_id):
 # ---------------------------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize(
-    "game_id",
-    _cases(_all("C-H1: second_level_yards is 0.5*(adj-4), the sum is 0.5 short on every 4+ carry")),
-)
+@pytest.mark.parametrize("game_id", _cases())
 def test_rushing_decomposition_sums_to_the_carry(game_id):
-    # Oracle: the CFB copy's fix (24dd2fdec6, cfb_pbp.py second_level_yards `- 3`): line + second
-    # level + open field is the carry, on every rush of 4+ yards.
+    # Oracle: the yards themselves -- line + second level + open field is the carry on every rush of
+    # 4+ yards (task 2.1 flipped all 31 C-H1 xfails: the old band summed to the carry minus 0.5).
     f = run(game_id).plays.filter(_RUSH & (_YDS >= 4))
     parts = pl.col("line_yards") + pl.col("second_level_yards") + pl.col("open_field_yards")
     _require(f.height > 0, "no 4+ yard rush in the capture")
@@ -121,11 +114,9 @@ def test_every_rush_has_all_three_parts(game_id):
     assert _bad(f, full, ["type.text", "yds_rushed"]) == []
 
 
-@pytest.mark.parametrize(
-    "game_id",
-    _cases(_all("C-NF-3: line_yards is on a 0-3 / 4-8 / cap 5.5 band, not the standard 0-4 / 5-10 / cap 7")),
-)
-def test_line_yards_on_the_standard_band(game_id):
+@pytest.mark.parametrize("game_id", _cases())
+def test_line_yards_band_is_the_standard(game_id):
+    # Task 2.1 flipped all 31 C-NF-3 xfails (the processor read 0-3 / 4-8 / cap 5.5).
     # Oracle: standard adjusted line yards (Football Outsiders ALY, Connelly's college version, the
     # plan's "cap 7"), per yard: losses 120%, yards 0-4 at 100%, yards 5-10 at 50%, beyond 10 at 0%.
     # The program's ruling for task 2.1 (ClaudeCowork plan audit/EXECUTION-FINDINGS.md). The three
