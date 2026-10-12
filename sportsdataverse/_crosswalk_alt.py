@@ -220,7 +220,10 @@ def _cbs_players(payload: Any, season: int, gid: str) -> List[Dict[str, Any]]:
     out: Dict[tuple, Dict[str, Any]] = {}
     for box in (payload or {}).get("boxScores") or []:
         team_id = _text(box.get("teamId"))
-        for entries in ((box or {}).get("playerStats") or {}).values():
+        stats = (box or {}).get("playerStats")
+        if not isinstance(stats, dict):  # CBS answers a few football ids with a basketball box (a list)
+            continue
+        for entries in stats.values():
             for entry in entries if isinstance(entries, list) else []:
                 p = (entry or {}).get("player") or {}
                 pid = _text(p.get("playerId"))
