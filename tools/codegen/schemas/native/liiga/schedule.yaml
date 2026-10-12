@@ -1,0 +1,112 @@
+columns:
+- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+  name: game_id
+  type: integer
+- description: 'Tournament id, the same every season: 1188 regular season, 1189 playoffs,
+    1194 preseason, 1890 CHL.'
+  name: serie_id
+  type: integer
+- description: Season END year (2026 = 2025-26).
+  name: season
+  type: integer
+- description: Home team name.
+  name: home_team_name
+  type: character
+- description: Away team name.
+  name: away_team_name
+  type: character
+- description: Home team id (the number of the `<num>:<slug>` key).
+  name: home_team_id
+  type: integer
+- description: Home team slug (e.g. hpk).
+  name: home_team_slug
+  type: character
+- description: Away team id (the number of the `<num>:<slug>` key).
+  name: away_team_id
+  type: integer
+- description: Away team slug (e.g. tps).
+  name: away_team_slug
+  type: character
+- description: Home team placeholder.
+  name: home_team_placeholder
+  type: character
+- description: Away team placeholder.
+  name: away_team_placeholder
+  type: character
+- description: Home team goals.
+  name: home_team_goals
+  type: integer
+- description: Away team goals.
+  name: away_team_goals
+  type: integer
+- description: Home team's expected goals (xG) for the game, provider-computed (same
+    value as /games `homeTeam.expectedGoals`).
+  name: expected_home_team_goals
+  type: numeric
+- description: Away team's expected goals (xG) for the game, provider-computed.
+  name: expected_away_team_goals
+  type: numeric
+- description: 'Seconds from the start of the game. Regular season: 3900 (65:00) =
+    the end of the 5-minute overtime; playoff overtime runs past it.'
+  name: game_time
+  type: integer
+- description: Game has started.
+  name: started
+  type: logical
+- description: Game has ended.
+  name: ended
+  type: logical
+- description: Home team won.
+  name: home_team_winner
+  type: logical
+- description: Attendance.
+  name: spectators
+  type: integer
+- description: Home team ranking.
+  name: home_team_ranking
+  type: character
+- description: Away team ranking.
+  name: away_team_ranking
+  type: character
+- description: Playoff pairing number, else null.
+  name: play_off_pair
+  type: character
+- description: Playoff round, else null.
+  name: play_off_phase
+  type: character
+- description: Wins needed to take the series, else null.
+  name: play_off_req_wins
+  type: integer
+- description: Scheduled start, ISO 8601 UTC.
+  name: start
+  type: character
+- description: Ticket link, else null.
+  name: buy_tickets_url
+  type: character
+- description: 'How the game ended: ENDED_DURING_REGULAR_GAME_TIME, ENDED_DURING_EXTENDED_GAME_TIME
+    (overtime), ENDED_DURING_WINNING_SHOT_COMPETITION (shootout).'
+  name: finished_type
+  type: character
+- description: 'Rink: rink id.'
+  name: ice_rink_id
+  type: integer
+- description: 'Rink: rink name.'
+  name: ice_rink_name
+  type: character
+- description: 'Rink: latitude.'
+  name: ice_rink_latitude
+  type: numeric
+- description: 'Rink: longitude.'
+  name: ice_rink_longitude
+  type: numeric
+- description: 'Rink: street address.'
+  name: ice_rink_street_address
+  type: character
+- description: 'Rink: zip.'
+  name: ice_rink_zip
+  type: character
+- description: 'Rink: city.'
+  name: ice_rink_city
+  type: character
+kind: dataframe
+schema: schedule

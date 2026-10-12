@@ -1,0 +1,229 @@
+columns:
+- description: Default sort is descending.
+  name: sort_desc
+  type: logical
+- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
+    string, a bare integer or a digit string depending on the route).
+  name: team_id
+  type: integer
+- description: Team display name.
+  name: team_name
+  type: character
+- description: Team abbreviation.
+  name: team_short_name
+  type: character
+- description: 'Team logo: dark bg.'
+  name: team_logos_dark_bg
+  type: character
+- description: 'Team logo: light bg.'
+  name: team_logos_light_bg
+  type: character
+- description: 'Team logo: dark bg original.'
+  name: team_logos_dark_bg_original
+  type: character
+- description: 'Team logo: light bg original.'
+  name: team_logos_light_bg_original
+  type: character
+- description: Games (player, all-time).
+  name: games
+  type: integer
+- description: Table position.
+  name: ranking
+  type: integer
+- description: Table position after the previous game day.
+  name: previous_game_day_ranking
+  type: integer
+- description: Shots (player, all-time).
+  name: shots
+  type: integer
+- description: Shots saved (team, over the season range).
+  name: shots_saved
+  type: integer
+- description: Shots at even strength (team, over the season range).
+  name: shots_even_strength
+  type: integer
+- description: Shots on the power play (team, over the season range).
+  name: shots_powerplay
+  type: integer
+- description: Shots on the penalty kill (team, over the season range).
+  name: shots_penalty_kill
+  type: integer
+- description: Shots against (team, over the season range).
+  name: shots_against
+  type: integer
+- description: Goals.
+  name: goals
+  type: integer
+- description: Goals against (team, season to date in that table's tournament).
+  name: goals_against
+  type: integer
+- description: Shots against at even strength (team, over the season range).
+  name: shots_against_even_strength
+  type: integer
+- description: Shots against on the power play (team, over the season range).
+  name: shots_against_powerplay
+  type: integer
+- description: Shots against on the penalty kill (team, over the season range).
+  name: shots_against_penalty_kill
+  type: integer
+- description: Non blocked shots (team, over the season range).
+  name: non_blocked_shots
+  type: integer
+- description: Non blocked shots at even strength (team, over the season range).
+  name: non_blocked_shots_even_strength
+  type: integer
+- description: Non blocked shots on the power play (team, over the season range).
+  name: non_blocked_shots_powerplay
+  type: integer
+- description: Non blocked shots on the penalty kill (team, over the season range).
+  name: non_blocked_shots_penalty_kill
+  type: integer
+- description: Non blocked shots against (team, over the season range).
+  name: non_blocked_shots_against
+  type: integer
+- description: Non blocked shots against at even strength (team, over the season range).
+  name: non_blocked_shots_against_even_strength
+  type: integer
+- description: Non blocked shots against on the power play (team, over the season
+    range).
+  name: non_blocked_shots_against_powerplay
+  type: integer
+- description: Non blocked shots against on the penalty kill (team, over the season
+    range).
+  name: non_blocked_shots_against_penalty_kill
+  type: integer
+- description: Powerplay goals.
+  name: powerplay_goals
+  type: integer
+- description: Powerplay goals against (team, that season and tournament).
+  name: powerplay_goals_against
+  type: integer
+- description: Penalty kill goals (team, over the season range).
+  name: penalty_kill_goals
+  type: integer
+- description: Penalty kill goals against (team, over the season range).
+  name: penalty_kill_goals_against
+  type: integer
+- description: Even strength goals (team, over the season range).
+  name: even_strength_goals
+  type: integer
+- description: Even strength goals against (team, over the season range).
+  name: even_strength_goals_against
+  type: integer
+- description: Goals as of the previous game day (team, over the season range).
+  name: previous_game_day_goals
+  type: integer
+- description: Shots as of the previous game day (team, over the season range).
+  name: previous_game_day_shots
+  type: integer
+- description: Shots percentage as of the previous game day (team, over the season
+    range). Percent, 0-100.
+  name: previous_game_day_shots_percentage
+  type: numeric
+- description: Shots percentage at even strength (team, over the season range). Percent,
+    0-100.
+  name: shots_percentage_even_strength
+  type: numeric
+- description: Shots percentage on the power play (team, over the season range). Percent,
+    0-100.
+  name: shots_percentage_powerplay
+  type: numeric
+- description: Shots percentage on the penalty kill (team, over the season range).
+    Percent, 0-100.
+  name: shots_percentage_penalty_kill
+  type: numeric
+- description: Shots difference at even strength (team, over the season range).
+  name: shots_difference_even_strength
+  type: integer
+- description: Shots difference on the power play (team, over the season range).
+  name: shots_difference_powerplay
+  type: integer
+- description: Shots difference on the penalty kill (team, over the season range).
+  name: shots_difference_penalty_kill
+  type: integer
+- description: Shots for shots against percentage (team, over the season range). Percent,
+    0-100.
+  name: shots_for_shots_against_percentage
+  type: numeric
+- description: Non blocked shots difference (team, over the season range).
+  name: non_blocked_shots_difference
+  type: integer
+- description: Save percentage at even strength (team, over the season range). Percent,
+    0-100.
+  name: save_percentage_even_strength
+  type: numeric
+- description: Save percentage on the power play (team, over the season range). Percent,
+    0-100.
+  name: save_percentage_powerplay
+  type: numeric
+- description: Save percentage on the penalty kill (team, over the season range).
+    Percent, 0-100.
+  name: save_percentage_penalty_kill
+  type: numeric
+- description: Shots difference (team, over the season range).
+  name: shots_difference
+  type: integer
+- description: PDO (on-ice shooting % + save %) on the penalty kill (team, over the
+    season range). Percent, 0-100.
+  name: pdo_penalty_kill
+  type: numeric
+- description: PDO (on-ice shooting % + save %) at even strength (team, over the season
+    range). Percent, 0-100.
+  name: pdo_even_strength
+  type: numeric
+- description: PDO (on-ice shooting % + save %) on the power play (team, over the
+    season range). Percent, 0-100.
+  name: pdo_powerplay
+  type: numeric
+- description: Shots percentage (team, over the season range). Percent, 0-100.
+  name: shots_percentage
+  type: numeric
+- description: Non blocked shots for shots against percentage at even strength (team,
+    over the season range). Percent, 0-100.
+  name: non_blocked_shots_for_shots_against_percentage_even_strength
+  type: numeric
+- description: Non blocked shots for shots against percentage on the power play (team,
+    over the season range). Percent, 0-100.
+  name: non_blocked_shots_for_shots_against_percentage_powerplay
+  type: numeric
+- description: Non blocked shots for shots against percentage on the penalty kill
+    (team, over the season range). Percent, 0-100.
+  name: non_blocked_shots_for_shots_against_percentage_penalty_kill
+  type: numeric
+- description: Shots for shots against percentage at even strength (team, over the
+    season range). Percent, 0-100.
+  name: shots_for_shots_against_percentage_even_strength
+  type: numeric
+- description: Shots for shots against percentage on the power play (team, over the
+    season range). Percent, 0-100.
+  name: shots_for_shots_against_percentage_powerplay
+  type: numeric
+- description: Shots for shots against percentage on the penalty kill (team, over
+    the season range). Percent, 0-100.
+  name: shots_for_shots_against_percentage_penalty_kill
+  type: numeric
+- description: Non blocked shots difference on the power play (team, over the season
+    range).
+  name: non_blocked_shots_difference_powerplay
+  type: integer
+- description: Non blocked shots difference on the penalty kill (team, over the season
+    range).
+  name: non_blocked_shots_difference_penalty_kill
+  type: integer
+- description: Non blocked shots for shots against percentage (team, over the season
+    range). Percent, 0-100.
+  name: non_blocked_shots_for_shots_against_percentage
+  type: numeric
+- description: PDO (on-ice shooting % + save %) (team, that season and tournament).
+    Percent, 0-100, sent as a STRING.
+  name: pdo
+  type: numeric
+- description: Non blocked shots difference at even strength (team, over the season
+    range).
+  name: non_blocked_shots_difference_even_strength
+  type: integer
+- description: Save percentage (team, over the season range). Percent, 0-100.
+  name: save_percentage
+  type: numeric
+kind: dataframe
+schema: team_stats

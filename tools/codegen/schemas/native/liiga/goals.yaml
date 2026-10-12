@@ -1,0 +1,97 @@
+columns:
+- description: Season END year (2026 = 2025-26).
+  name: season
+  type: integer
+- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+  name: game_id
+  type: integer
+- description: home or away.
+  name: side
+  type: character
+- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
+    string, a bare integer or a digit string depending on the route).
+  name: team_id
+  type: integer
+- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
+    (e.g. hpk).
+  name: team_slug
+  type: character
+- description: Wall-clock time the event was logged, ISO 8601 UTC.
+  name: log_time
+  type: character
+- description: Game-winning goal.
+  name: winning_goal
+  type: logical
+- description: 'Seconds from the start of the game. Regular season: 3900 (65:00) =
+    the end of the 5-minute overtime; playoff overtime runs past it.'
+  name: game_time
+  type: integer
+- description: Period number.
+  name: period
+  type: integer
+- description: Event id within the game.
+  name: event_id
+  type: integer
+- description: Home score after the event.
+  name: home_team_score
+  type: integer
+- description: Away score after the event.
+  name: away_team_score
+  type: integer
+- description: Scorer's season goal count after this goal.
+  name: goals_so_far_in_season
+  type: integer
+- description: Video clip url.
+  name: video_clip_url
+  type: character
+- description: Video clip playlist url.
+  name: video_clip_playlist_url
+  type: character
+- description: Video thumbnail url.
+  name: video_thumbnail_url
+  type: character
+- description: Scorer's player id.
+  name: scorer_player_id
+  type: integer
+- description: Scorer's first name.
+  name: scorer_first_name
+  type: character
+- description: Scorer's last name.
+  name: scorer_last_name
+  type: character
+- description: First assist's player id.
+  name: assist1_player_id
+  type: integer
+- description: First assist's first name.
+  name: assist1_first_name
+  type: character
+- description: First assist's last name.
+  name: assist1_last_name
+  type: character
+- description: First assister's season assist count after this goal.
+  name: assist1_season_assists
+  type: integer
+- description: Second assist's player id.
+  name: assist2_player_id
+  type: integer
+- description: Second assist's first name.
+  name: assist2_first_name
+  type: character
+- description: Second assist's last name.
+  name: assist2_last_name
+  type: character
+- description: Second assister's season assist count after this goal.
+  name: assist2_season_assists
+  type: integer
+- description: 'Goal type codes, comma-separated Finnish abbreviations: YV power play,
+    AV short-handed, TM empty net, RL penalty shot (others undocumented).'
+  name: goal_types
+  type: character
+- description: Jersey NUMBERS of this team's skaters on ice for the goal, space-separated.
+  name: plus_jerseys
+  type: character
+- description: Jersey NUMBERS of the other team's skaters on ice for the goal, space-separated.
+  name: minus_jerseys
+  type: character
+kind: dataframe
+schema: goals

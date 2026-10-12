@@ -1,0 +1,124 @@
+columns:
+- description: Player id; the same number in lineups, rosters, stat tables and the
+    profile (fihaId).
+  name: player_id
+  type: integer
+- description: Season END year (2026 = 2025-26).
+  name: season
+  type: integer
+- description: Games (player, all-time).
+  name: games
+  type: integer
+- description: Played games (player, that season and tournament).
+  name: played_games
+  type: integer
+- description: Goals.
+  name: goals
+  type: integer
+- description: Assists (player, all-time).
+  name: assists
+  type: integer
+- description: Points (player, all-time).
+  name: points
+  type: integer
+- description: Penalty minutes.
+  name: penalty_minutes
+  type: integer
+- description: On ice for goals for (the + of plus/minus).
+  name: plus
+  type: integer
+- description: On ice for goals against (the - of plus/minus).
+  name: minus
+  type: integer
+- description: plus minus minus.
+  name: plus_minus
+  type: integer
+- description: Power play goals (team, this period).
+  name: power_play_goals
+  type: integer
+- description: Short handed goals.
+  name: short_handed_goals
+  type: integer
+- description: Winning goals (player, that season and tournament).
+  name: winning_goals
+  type: integer
+- description: Shots (player, all-time).
+  name: shots
+  type: integer
+- description: Shots into goal (player, that season and tournament).
+  name: shots_into_goal
+  type: integer
+- description: Shot percentage (player, all-time). Percent, 0-100.
+  name: shot_percentage
+  type: numeric
+- description: Shot into goal percentage (player, that season and tournament). Percent,
+    0-100, sent as a STRING.
+  name: shot_into_goal_percentage
+  type: numeric
+- description: Tournament.
+  name: tournament
+  type: character
+- description: League name.
+  name: league_name
+  type: character
+- description: Team display name.
+  name: team_name
+  type: character
+- description: Period end, seconds from game start.
+  name: end_time
+  type: character
+- description: Team abbreviation.
+  name: team_short_name
+  type: character
+- description: Time on ice (player, that season and tournament). Seconds.
+  name: time_on_ice
+  type: integer
+- description: Save percentage (team, over the season range). Percent, 0-100.
+  name: save_percentage
+  type: numeric
+- description: Goals against average.
+  name: goals_against_average
+  type: numeric
+- description: Share of games won, a 0-1 FRACTION sent as a STRING (e.g. "0.583"),
+    season to date.
+  name: win_percentage
+  type: numeric
+- description: Shut out.
+  name: shut_out
+  type: character
+- description: Faceoffs won.
+  name: faceoffs_won
+  type: integer
+- description: Faceoffs percentage (player, that season and tournament). Percent,
+    0-100, sent as a STRING.
+  name: faceoffs_percentage
+  type: numeric
+- description: Wins (team, season to date in that table's tournament).
+  name: wins
+  type: integer
+- description: Losses (team, season to date in that table's tournament).
+  name: losses
+  type: integer
+- description: Ties (team, season to date in that table's tournament).
+  name: ties
+  type: integer
+- description: Goalkeeper wins (player, that season and tournament).
+  name: gk_wins
+  type: integer
+- description: Goalkeeper losses (player, that season and tournament).
+  name: gk_losses
+  type: integer
+- description: Goalkeeper ties (player, that season and tournament).
+  name: gk_ties
+  type: integer
+- description: Saves (goalkeeper, this period).
+  name: saves
+  type: integer
+- description: Goals against (team, season to date in that table's tournament).
+  name: goals_against
+  type: integer
+- description: Faceoff total (team, over the season range).
+  name: faceoff_total
+  type: integer
+kind: dataframe
+schema: player_career

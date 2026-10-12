@@ -1,0 +1,77 @@
+columns:
+- description: Player id; the same number in lineups, rosters, stat tables and the
+    profile (fihaId).
+  name: player_id
+  type: integer
+- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
+    string, a bare integer or a digit string depending on the route).
+  name: team_id
+  type: integer
+- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
+    (e.g. hpk).
+  name: team_slug
+  type: character
+- description: Team display name.
+  name: team_name
+  type: character
+- description: Country of birth, 3-letter code.
+  name: country_of_birth
+  type: character
+- description: Place of birth.
+  name: place_of_birth
+  type: character
+- description: Date of birth, YYYY-MM-DD.
+  name: date_of_birth
+  type: character
+- description: Nationality, 3-letter code.
+  name: nationality
+  type: character
+- description: First name.
+  name: first_name
+  type: character
+- description: Last name.
+  name: last_name
+  type: character
+- description: 'Position: CENTER, LEFT_WING, RIGHT_WING, LEFT_DEFENSEMAN, RIGHT_DEFENSEMAN,
+    SEVENTH_DEFENSEMAN, GOALIE.'
+  name: role
+  type: character
+- description: 'Position code, Finnish: KH = centre, VL/OL = left/right wing, VP/OP
+    = left/right defence, 7. P = seventh defenceman, MV = goalkeeper.'
+  name: role_code
+  type: character
+- description: Shoots LEFT or RIGHT.
+  name: handedness
+  type: character
+- description: Height, cm.
+  name: height
+  type: integer
+- description: Weight, kg.
+  name: weight
+  type: integer
+- description: Rookie.
+  name: rookie
+  type: logical
+- description: Jersey number.
+  name: jersey
+  type: integer
+- description: Injured.
+  name: injured
+  type: logical
+- description: Suspended.
+  name: suspended
+  type: logical
+- description: Removed from the roster.
+  name: removed
+  type: logical
+- description: Captain.
+  name: captain
+  type: logical
+- description: Alternate captain.
+  name: alternate_captain
+  type: logical
+- description: Photo URL.
+  name: picture_url
+  type: character
+kind: dataframe
+schema: players_info
