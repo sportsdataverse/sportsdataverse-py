@@ -267,18 +267,19 @@ def test_season_start_year():
 
 @pytest.fixture
 def serve(monkeypatch):
-    """Answer every request with ``(status, text)``; record the throttle calls."""
+    """Answer every request with ``(status, text)``; record each attempt sent over the throttled session."""
     waited = []
-    monkeypatch.setattr(euro_hockey_runtime, "_polite_wait", lambda url, *a: waited.append(url))
 
     def install(status, text):
         if not isinstance(text, str):
             text = json.dumps(text)
-        monkeypatch.setattr(
-            _codegen_runtime,
-            "download",
-            lambda url, **kw: SimpleNamespace(status_code=status, text=text, headers={}, json=lambda: json.loads(text)),
-        )
+
+        def download(url, **kw):
+            if kw.get("session") is euro_hockey_runtime.SESSION:  # SESSION waits for the host before every attempt
+                waited.append(url)
+            return SimpleNamespace(status_code=status, text=text, headers={}, json=lambda: json.loads(text))
+
+        monkeypatch.setattr(_codegen_runtime, "download", download)
         return waited
 
     return install

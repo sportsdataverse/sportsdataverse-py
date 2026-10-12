@@ -64,8 +64,9 @@ an empty 501 (``AssetFetchError``) and later 400 ``{"error": "InvalidSearchQuery
 Everything else is the package error vocabulary from the shared getter: 404 (the
 ``gameoverview`` ``{"error": "GameNotFound"}``) -> ``NoDataError``, 400
 (``MissingSearchQuery``) -> ``ValueError``, any other non-2xx, an empty or non-JSON 200 or a
-dead connection -> ``AssetFetchError``. Every request waits at least one second after the
-last one to the host (:func:`sportsdataverse.hockey.euro_hockey_runtime._polite_wait`).
+dead connection -> ``AssetFetchError``. Every request, each retry included, goes through
+:data:`sportsdataverse.hockey.euro_hockey_runtime.SESSION`, so every attempt waits at least one
+second after the last one to the host (:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite_wait`).
 """
 
 from __future__ import annotations
@@ -74,7 +75,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.errors import AssetFetchError, NoDataError
-from sportsdataverse.hockey.euro_hockey_runtime import _polite_wait
+from sportsdataverse.hockey import euro_hockey_runtime as _eh
 
 __all__: List[str] = []
 
@@ -198,8 +199,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
             ``gameoverview`` body whose ``gameId`` is not the requested game.
     """
     query, filters = _build_query(params)
-    _polite_wait(url)
-    raw = _rt._get(url, query, **kwargs)
+    raw = _eh._get(url, query, **kwargs)
     _check_body(url, raw, query)
     _check_table(url, raw, filters)
     _check_complete(url, raw)
