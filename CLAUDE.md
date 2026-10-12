@@ -192,6 +192,7 @@ sportsdataverse/
   pwhl/       # PWHL (HockeyTech flagship — richer surface, top-level)
   hockeytech/ # HockeyTech core (_client/_leagues/_family/_parsers/_analytics)
   hockey/     # 20 HockeyTech league families + college hockey (mch/wch, ESPN) + SIHF (sihf, Swiss)
+              #   + European leagues (del_, icehl, eihl, metal, elh, liiga, shl, ha, nl, magnus, khl, vhl)
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
@@ -775,6 +776,12 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
   Codegen nests it through `generate._NESTED_HOMES`, because `leagues.yaml` (ESPN) has no
   `sihf` and it never had a top-level `_MOVED` alias. `sihf_standings` always sends
   `ContentType` (`venue="All"`): without it SIHF answers the away-games table.
+- **The European leagues nest the same way** (`generate._EURO_HOCKEY_HOMES` -> `_NESTED_HOMES`):
+  `sportsdataverse.hockey.<lg>` for `icehl`, `eihl`, `metal`, `elh`, `liiga`, `shl`, `ha`, `nl`,
+  `magnus`, `khl`, `vhl`. DEL's docs prefix is `del` but its package is `hockey.del_`: `del` is a
+  Python keyword, so `import sportsdataverse.hockey.del` would not parse. Every runtime spaces
+  requests at least 1 s apart through `hockey/euro_hockey_runtime.py`, and takes the season as the
+  END year, mapping it to the provider's key at the boundary.
 
 ### MBB / WBB / CFB / college baseball — stats.ncaa.org families (0.0.72+)
 
@@ -1308,7 +1315,10 @@ RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
 event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
 TheSportsDB (`thesportsdb`), `euroleague`, SIHF (`sihf`), Jolpica (`f1`), `cbs_napi`,
-`yahoo_shangrila`, `fox_api`, HockeyTech, stats.ncaa.org, The Odds API, and the
+`yahoo_shangrila`, `fox_api`, HockeyTech, the European hockey leagues (the eSports
+hokejovyzapis S3 feeds `del_esports` / `icehl_esports` / `eihl_esports` / `metal_esports`,
+hokej.cz (`elh`), Liiga (`liiga`), SHL (`shl`), HockeyAllsvenskan (`ha`), National League
+(`nationalleague`), Ligue Magnus (`magnus`), KHL (`khl_rest`, `khl_webcaster`) and VHL (`vhl`)), stats.ncaa.org, The Odds API, and the
 prediction markets Polymarket (`polymarket`) and Kalshi (`kalshi`). ESPN's content API
 (`espn_content`) files under ESPN.
 
@@ -1344,7 +1354,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 37 families**, not three.
+- **`FLAT_APIS` has 50 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in

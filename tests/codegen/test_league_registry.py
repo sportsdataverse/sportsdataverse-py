@@ -22,6 +22,21 @@ def test_registry_sports_and_labels():
     assert by_sport["hockey"]["pwhl"] == "PWHL"
     assert "ahl" in by_sport["hockey"]
     assert by_sport["hockey"]["sihf"] == "SIHF (Swiss hockey)"
+    # The European leagues are hockey leagues, never "other"; DEL keeps its prefix (package del_).
+    assert {p: by_sport["hockey"][p] for p in generate._EURO_HOCKEY_HOMES} == {
+        "del": "DEL",
+        "icehl": "ICE Hockey League",
+        "eihl": "EIHL",
+        "metal": "Metal Ligaen",
+        "elh": "Czech Extraliga",
+        "liiga": "Liiga",
+        "shl": "SHL",
+        "ha": "HockeyAllsvenskan",
+        "nl": "National League",
+        "magnus": "Ligue Magnus",
+        "khl": "KHL",
+        "vhl": "VHL",
+    }
     assert by_sport["soccer"]["laliga"] == "LaLiga"
     assert by_sport["other"] == {
         "euroleague": "EuroLeague",
@@ -40,3 +55,19 @@ def test_the_committed_registry_is_current():
     """The sidebar, home grid and search contexts read the committed file: a stale one hides a new league everywhere."""
     committed = (generate.ROOT / "docs" / "src" / "data" / "leagues.json").read_text(encoding="utf-8")
     assert committed.rstrip("\n") == generate.render_leagues_json().rstrip("\n")
+
+
+def test_nested_homes_land_under_hockey_and_del_is_importable():
+    """Every European family renders into hockey/<lg>/; DEL's package dodges the ``del`` keyword."""
+    import importlib
+
+    homes = dict(generate.FLAT_APIS)
+    for stem in ("del_esports", "liiga", "nationalleague", "khl_rest", "khl_webcaster", "vhl"):
+        dest = generate._flat_dest(homes[stem], stem).relative_to(generate.ROOT)
+        assert dest.parts[:2] == ("sportsdataverse", "hockey"), dest
+    assert generate._flat_dest("del", "del_esports").parent.name == "del_"
+    assert generate._home_module("del") == "sportsdataverse.hockey.del_"
+    hockey = generate._container_groups({})["hockey"]
+    assert "del_" in hockey and "del" not in hockey  # ``from sportsdataverse.hockey import del`` cannot parse
+    for home in generate._EURO_HOCKEY_HOMES:
+        importlib.import_module(generate._home_module(home))

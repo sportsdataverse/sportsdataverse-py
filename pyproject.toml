@@ -335,6 +335,7 @@ files = [
     "sportsdataverse/hockey/sihf/__init__.py",
     "sportsdataverse/hockey/sihf/sihf_api_web_parsers.py",
     "sportsdataverse/hockey/sihf/sihf_runtime.py",
+    "sportsdataverse/hockey/euro_hockey_runtime.py",
     "sportsdataverse/validation/box_reconcile.py",
     "sportsdataverse/validation/findings.py",
     "sportsdataverse/validation/pbp_invariants.py",

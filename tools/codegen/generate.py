@@ -150,6 +150,7 @@ _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
         "sportsdataverse.euroleague.euroleague_runtime",
+        "sportsdataverse.hockey.euro_hockey_runtime",
         "sportsdataverse.hockey.sihf.sihf_runtime",
         "sportsdataverse.thesportsdb.thesportsdb_runtime",
         "sportsdataverse.soccer.football_data_runtime",
@@ -454,14 +455,36 @@ _LEAGUE_R_PACKAGE = {
     },
 }
 
-# Package homes that are not leagues: they carry flat-API families but no ESPN league, no
+# The European hockey league homes (sdv-internal-refs Phase A intake): one docs/registry prefix
+# each, nested under ``hockey/`` through _NESTED_HOMES below. Ordered as the docs list them.
+_EURO_HOCKEY_HOMES = ("del", "icehl", "eihl", "metal", "elh", "liiga", "shl", "ha", "nl", "magnus", "khl", "vhl")
+
+# Package homes that are not ESPN leagues: they carry flat-API families but no ESPN league, no
 # loaders and no R counterpart. Ordered, because _doc_leagues() appends them in this order.
-_NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_content", "thesportsdb", "sihf")
+_NONLEAGUE_HOMES = (
+    "odds",
+    "cbs",
+    "yahoo",
+    "fox",
+    "euroleague",
+    "f1",
+    "espn_content",
+    "thesportsdb",
+    "sihf",
+    *_EURO_HOCKEY_HOMES,
+)
 
 # Homes that live inside a sport-group container from their first release, so they have no
 # top-level alias in ``sportsdataverse._MOVED`` and no ``group`` in leagues.yaml (the ESPN
-# registry). SIHF sits beside the HockeyTech families under ``hockey/`` without being one.
-_NESTED_HOMES = {"sihf": "hockey.sihf"}
+# registry). SIHF and the European leagues sit beside the HockeyTech families under ``hockey/``
+# without being among them. Key = docs/registry prefix, value = package path under
+# ``sportsdataverse``. They differ only for DEL: ``del`` is a Python keyword
+# (``import sportsdataverse.hockey.del`` is a SyntaxError), so its package is ``hockey.del_``.
+_NESTED_HOMES = {
+    "sihf": "hockey.sihf",
+    **{h: f"hockey.{h}" for h in _EURO_HOCKEY_HOMES},
+    "del": "hockey.del_",
+}
 
 
 def _home_module(prefix: str) -> str:
@@ -480,7 +503,29 @@ def _home_module(prefix: str) -> str:
 # A blank cell is honest. A wrong one is worse than blank AND invisible to the description
 # ratchet, which counts it as covered.
 _NO_R_DICT_FAMILIES = frozenset(
-    {"espn_content", "thesportsdb", "football_data", "openligadb", "polymarket", "kalshi", "sihf_api_web"},
+    {
+        "espn_content",
+        "thesportsdb",
+        "football_data",
+        "openligadb",
+        "polymarket",
+        "kalshi",
+        "sihf_api_web",
+        # European hockey: fastRhockey has no mirror yet (Phase C will add one).
+        "del_esports",
+        "icehl_esports",
+        "eihl_esports",
+        "metal_esports",
+        "elh",
+        "liiga",
+        "shl",
+        "ha",
+        "nationalleague",
+        "magnus",
+        "khl_rest",
+        "khl_webcaster",
+        "vhl",
+    },
 )
 
 
@@ -2230,6 +2275,21 @@ FLAT_APIS = [
     ("kalshi", "odds"),
     # Swiss Ice Hockey Federation statistics API (data.sihf.ch), every SIHF league
     ("sihf_api_web", "sihf"),
+    # European hockey leagues (sdv-internal-refs: esports-hokejovyzapis/, hokejcz/, liiga/, shl/,
+    # hockeyallsvenskan/, nationalleague/, ligue-magnus/, khl/, vhl/), homed under hockey/<lg>/
+    ("del_esports", "del"),
+    ("icehl_esports", "icehl"),
+    ("eihl_esports", "eihl"),
+    ("metal_esports", "metal"),
+    ("elh", "elh"),
+    ("liiga", "liiga"),
+    ("shl", "shl"),
+    ("ha", "ha"),
+    ("nationalleague", "nl"),
+    ("magnus", "magnus"),
+    ("khl_rest", "khl"),
+    ("khl_webcaster", "khl"),
+    ("vhl", "vhl"),
 ]
 
 
@@ -2483,11 +2543,14 @@ def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
         result.setdefault("hockey", [])
         if ht not in result["hockey"]:
             result["hockey"].append(ht)
-    # And the homes nested from their first release (sihf), under their container.
-    for home, mod in _NESTED_HOMES.items():
-        members = result.setdefault(mod.split(".")[0], [])
-        if home not in members:
-            members.append(home)
+    # And the homes nested from their first release (sihf, the European leagues), under their
+    # container. The member is the PACKAGE leaf, not the prefix: DEL's prefix ``del`` is a keyword
+    # and ``from sportsdataverse.hockey import del`` would not even parse.
+    for mod in _NESTED_HOMES.values():
+        container, leaf = mod.split(".")[0], mod.split(".")[-1]
+        members = result.setdefault(container, [])
+        if leaf not in members:
+            members.append(leaf)
     return {g: sorted(members) for g, members in result.items()}
 
 
@@ -2616,6 +2679,7 @@ _COVERAGE_LEAGUES = [
     "espn_content",
     "thesportsdb",
     "sihf",
+    *_EURO_HOCKEY_HOMES,
     # Joined in 0.1.5: each has hand-written modules, so until now the gates never
     # saw their functions and they had no Additional page.
     "soccer",
@@ -3005,6 +3069,19 @@ _FLAT_API_DOC = {
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
+    "del_esports": "DEL data feed (eSports hokejovyzapis S3 bucket, Germany)",
+    "icehl_esports": "ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria)",
+    "eihl_esports": "EIHL data feed (eSports hokejovyzapis S3 bucket, UK)",
+    "metal_esports": "Metal Ligaen data feed (eSports hokejovyzapis S3 bucket, Denmark)",
+    "elh": "Czech Extraliga (hokej.cz S3 bucket + eSports Media scoreboard)",
+    "liiga": "Liiga API v2 (liiga.fi/api/v2, Finland)",
+    "shl": "SHL site API (www.shl.se/api, Sweden)",
+    "ha": "HockeyAllsvenskan site API (hockeyallsvenskan.se, Sweden)",
+    "nationalleague": "National League app API (www.nationalleague.ch/api, Switzerland)",
+    "magnus": "Ligue Magnus (liguemagnus.com admin-ajax JSON + game sheets, France)",
+    "khl_rest": "KHL site REST (www.khl.ru/rest)",
+    "khl_webcaster": "KHL webcaster mobile API (khl.api.webcaster.pro)",
+    "vhl": "VHL (vhlru.ru server-rendered pages, parsed)",
     "football_data": "Football-Data.co.uk CSV archive (football-data.co.uk)",
     "openligadb": "OpenLigaDB (api.openligadb.de, community German football)",
     "polymarket": "Polymarket read APIs (gamma-api + clob.polymarket.com)",
@@ -4221,7 +4298,7 @@ def render_autodoc_page(prefix: str | None, corpus: str) -> str | None:
         module = "sportsdataverse"
     else:
         title = f"{_doc_display_name(prefix)} — additional Python functions"
-        module = f"sportsdataverse.{prefix}"
+        module = _home_module(prefix)
     template = render.ENV.get_template("autodoc_page.md.jinja")
     return template.render(title=title, module=module, sidebar_position=50, groups=groups)
 
@@ -4933,7 +5010,12 @@ _SPORTS = (
     ("other", "Other"),
 )
 # Sport of a documented league that leagues.yaml does not list (releases-only or hand-written modules).
-_EXTRA_LEAGUE_SPORT = {"pwhl": "hockey", "sihf": "hockey", **{lg: "hockey" for lg in _HOCKEYTECH_MODULE_LEAGUES}}
+_EXTRA_LEAGUE_SPORT = {
+    "pwhl": "hockey",
+    **{lg: "hockey" for lg in _HOCKEYTECH_MODULE_LEAGUES},
+    # A nested home's sport is its container (``hockey.liiga`` -> hockey).
+    **{home: mod.split(".")[0] for home, mod in _NESTED_HOMES.items()},
+}
 # Labels for prefixes that are not initials; every other prefix is upper-cased (nfl -> NFL).
 _LEAGUE_LABELS = {
     "bundesliga": "Bundesliga",
@@ -4952,6 +5034,13 @@ _LEAGUE_LABELS = {
     "espn_content": "ESPN content (news)",
     "thesportsdb": "TheSportsDB",
     "sihf": "SIHF (Swiss hockey)",
+    "icehl": "ICE Hockey League",
+    "metal": "Metal Ligaen",
+    "elh": "Czech Extraliga",
+    "liiga": "Liiga",
+    "ha": "HockeyAllsvenskan",
+    "nl": "National League",
+    "magnus": "Ligue Magnus",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",
