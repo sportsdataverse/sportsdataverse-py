@@ -228,6 +228,16 @@
   expected: kill
   note: the gate's MUTATION line; a shape-(1,) gameSpread cannot persist as JSON odds_override
 
+- id: cfb-pickcenter-over-under-ndarray
+  group: cfb-pickcenter
+  finding: C-M19
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'overUnder = float(np.asarray(overUnder).item())'
+  mutant: 'overUnder = np.asarray(overUnder)'
+  test: tests/cfb/test_cfb_pbp.py -k "pickcenter_round_trip"
+  expected: kill
+  note: the third unwrap (review R828-8); a shape-(1,) overUnder cannot persist as JSON odds_override
+
 # --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13
