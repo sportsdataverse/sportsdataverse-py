@@ -222,12 +222,30 @@ def test_game_lineups_units_and_absentees():
 # --- contract -----------------------------------------------------------------
 
 
-@pytest.mark.parametrize("payload", [None, {}, {"gameId": None}, [], "x"])
+# Badly typed nested blocks: each must read as absent, never raise (the parser contract).
+_MALFORMED_GAMES = [
+    {"gameId": 1, "details": ["x"]},
+    {"gameId": 1, "details": {"homeTeam": "x", "awayTeam": 5, "venue": [], "referees": "x"}},
+    {"gameId": 1, "summary": "x", "result": 5, "status": [], "stats": "x", "lineUps": [1], "players": 7},
+    {"gameId": 1, "summary": {"periods": [{"goals": "x", "fouls": [5]}, "x"], "shootout": "x"}},
+    {"gameId": 1, "result": {"scores": "x", "sogs": 3}, "broadcasts": "x", "league": "x"},
+    {"gameId": 1, "stats": [{"alias": "gameTeamStats", "data": 5}], "lineUps": {"homeTeam": {"taggedPlayers": 1}}},
+]
+
+
+def test_pbp_event_with_a_non_string_text_is_kept():
+    df = parse_sihf_pbp({"gameId": 1, "summary": {"periods": [{"name": "1", "goals": [{"text": 5, "time": "01:00"}]}]}})
+    assert df.height == 1
+    assert df.row(0, named=True)["goal_tags"] is None
+
+
+@pytest.mark.parametrize("payload", [None, {}, {"gameId": None}, [], "x", *_MALFORMED_GAMES])
 @pytest.mark.parametrize("short", sorted(GAME_PARSERS))
 def test_game_parsers_empty_keep_their_columns(short, payload):
     schema = yaml.safe_load((SCHEMA_DIR / f"{short}.yaml").read_text(encoding="utf-8"))
     df = GAME_PARSERS[short](payload)
-    assert df.height == 0
+    # game_info keeps its one row (the game id is there); everything else has nothing to show
+    assert df.height == (1 if short == "game_info" and isinstance(payload, dict) and payload.get("gameId") else 0)
     assert df.columns == [c["name"] for c in schema["columns"]]
 
 

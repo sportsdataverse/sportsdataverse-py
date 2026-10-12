@@ -148,6 +148,16 @@ def _clock_seconds(value: Any) -> Optional[int]:
     return int(m.group(1)) * 60 + int(m.group(2)) if m else None
 
 
+def _obj(value: Any) -> Mapping[str, Any]:
+    """``value`` when it is an object, else ``{}``: a nested block of the wrong type reads as absent."""
+    return value if isinstance(value, dict) else {}
+
+
+def _list(value: Any) -> List[Any]:
+    """``value`` when it is a list, else ``[]`` (``x or []`` lets a string or a number through)."""
+    return value if isinstance(value, list) else []
+
+
 def _blank(value: Any) -> Any:
     return None if isinstance(value, str) and not value.strip() else value
 
@@ -172,8 +182,8 @@ def _expand_cell(col: str, value: Any) -> Dict[str, Any]:
         return {f"{col}_home": _int(value.get("homeTeam")), f"{col}_away": _int(value.get("awayTeam"))}
     if kind == "periods":
         return {
-            f"{col}_home": [_int(v) for v in value.get("homeTeam") or []],
-            f"{col}_away": [_int(v) for v in value.get("awayTeam") or []],
+            f"{col}_home": [_int(v) for v in _list(value.get("homeTeam"))],
+            f"{col}_away": [_int(v) for v in _list(value.get("awayTeam"))],
         }
     if kind == "gameStatus":
         return {
@@ -188,7 +198,7 @@ def _expand_cell(col: str, value: Any) -> Dict[str, Any]:
     if kind == "linkToGameDetail":
         return {"game_id": _int(value.get("gameId"))}
     if kind == "broadcasts":
-        return {col: ",".join(str(e) for e in value.get("entries") or [])}
+        return {col: ",".join(str(e) for e in _list(value.get("entries")))}
     # An object type not seen when the parser was written: keep its name / id when it has them.
     return {f"{col}_id": _licence(value.get("id")), f"{col}_name": value.get("name")}
 
@@ -214,7 +224,7 @@ def _echoed(raw: Any) -> Dict[str, Optional[int]]:
     The league is not among them: it travels in ``searchQuery``, which the body does not echo."""
     names = {"Season": "season", "Phase": "phase_id"}
     out: Dict[str, Optional[int]] = dict.fromkeys(names.values())
-    for f in (raw.get("filters") if isinstance(raw, dict) else None) or []:
+    for f in _list(raw.get("filters") if isinstance(raw, dict) else None):
         if isinstance(f, dict) and f.get("alias") in names:
             out[names[f["alias"]]] = _int(f.get("selected"))
     return out
@@ -224,15 +234,15 @@ def _table_frame(raw: Any, extra: Optional[Mapping[str, Any]] = None) -> pl.Data
     """A SIHF table object -> polars frame (zero rows, no columns, when unusable)."""
     if not isinstance(raw, dict):
         return pl.DataFrame()
-    header = [h for h in raw.get("header") or [] if isinstance(h, dict)]
+    header = [h for h in _list(raw.get("header")) if isinstance(h, dict)]
     data = raw.get("data") or []
     if not header or not isinstance(data, list):
         return pl.DataFrame()
     aliases = {str(h.get("alias")): _col(str(h.get("alias"))) for h in header}
     summary: Dict[int, str] = {}
-    for hp in raw.get("highlightedPositions") or []:
+    for hp in _list(raw.get("highlightedPositions")):
         if isinstance(hp, dict) and hp.get("style") in _SUMMARY_STYLES:
-            for r in hp.get("rows") or []:
+            for r in _list(hp.get("rows")):
                 if isinstance(r, int):
                     summary[r - 1] = str(hp["style"])  # rows are 1-based
     prefix = dict(extra or {})
@@ -331,10 +341,10 @@ def _game(raw: Any) -> Dict[str, Any]:
 
 def _sides(game: Mapping[str, Any]) -> Dict[int, str]:
     """``{team_id: "home" | "away"}`` from ``details.homeTeam`` / ``awayTeam``."""
-    details = game.get("details") or {}
+    details = _obj(game.get("details"))
     out: Dict[int, str] = {}
     for side in ("home", "away"):
-        tid = _licence((details.get(f"{side}Team") or {}).get("id"))
+        tid = _licence(_obj(details.get(f"{side}Team")).get("id"))
         if tid is not None:
             out[tid] = side
     return out
@@ -343,7 +353,7 @@ def _sides(game: Mapping[str, Any]) -> Dict[int, str]:
 def _roster(game: Mapping[str, Any]) -> Dict[int, Mapping[str, Any]]:
     """``{licence: player}`` from the ``players`` list."""
     return {
-        pid: p for p in game.get("players") or [] if isinstance(p, dict) and (pid := _licence(p.get("id"))) is not None
+        pid: p for p in _list(game.get("players")) if isinstance(p, dict) and (pid := _licence(p.get("id"))) is not None
     }
 
 
@@ -359,7 +369,7 @@ def _person(roster: Mapping[int, Mapping[str, Any]], licence: Any, prefix: str =
 
 def _stats_table(game: Mapping[str, Any], alias: str) -> Optional[Mapping[str, Any]]:
     """The embedded ``stats`` table with ``alias`` (``gameTeamStats``, ``gamePlayerStatsHome``, ...)."""
-    return next((t for t in game.get("stats") or [] if isinstance(t, dict) and t.get("alias") == alias), None)
+    return next((t for t in _list(game.get("stats")) if isinstance(t, dict) and t.get("alias") == alias), None)
 
 
 def _frame(rows: Iterable[Mapping[str, Any]], schema: Mapping[str, Any]) -> pl.DataFrame:
@@ -476,7 +486,7 @@ def parse_sihf_pbp(
         return _person(roster, licence, prefix)
 
     events: List[Dict[str, Any]] = []
-    periods = [p for p in (game.get("summary") or {}).get("periods") or [] if isinstance(p, dict)]
+    periods = [p for p in _list(_obj(game.get("summary")).get("periods")) if isinstance(p, dict)]
     for number, period in enumerate(periods):
         for kind, key in (
             ("penalty", "fouls"),
@@ -484,11 +494,12 @@ def parse_sihf_pbp(
             ("revoked_goal", "revokedGoals"),
             ("goalie", "goalkeepers"),
         ):
-            for e in period.get(key) or []:
+            for e in _list(period.get(key)):
                 if not isinstance(e, dict):
                     continue
                 tid = _licence(e.get("teamId"))
-                text = e.get("text") or ""
+                raw_text = e.get("text")
+                text = raw_text if isinstance(raw_text, str) else ""
                 row: Dict[str, Any] = {
                     "period_number": number + 1,
                     "period": period.get("name"),
@@ -533,8 +544,8 @@ def parse_sihf_pbp(
                     row["goalie_change"] = m.group(1).lower() if m else None
                 events.append(row)
     events.sort(key=lambda r: (_clock_seconds(r["time"]) is None, _clock_seconds(r["time"]) or 0, r["_order"]))
-    shootout = (game.get("summary") or {}).get("shootout") or {}
-    for s in shootout.get("shoots") or []:
+    shootout = _obj(_obj(game.get("summary")).get("shootout"))
+    for s in _list(shootout.get("shoots")):
         if not isinstance(s, dict):
             continue
         shooter = who("player", s.get("scorerLicenceNr"))
@@ -563,7 +574,7 @@ def parse_sihf_pbp(
 
 def _side_tables(game: Mapping[str, Any], alias: str) -> pl.DataFrame:
     """The per-side ``stats`` tables ``{alias}Home`` + ``{alias}Away``, stacked with side / team / player ids."""
-    details = game.get("details") or {}
+    details = _obj(game.get("details"))
     by_jersey: Dict[tuple, int] = {}
     for pid, p in _roster(game).items():
         tid, jersey = _licence(p.get("teamId")), _int(p.get("jerseyNumber"))
@@ -572,7 +583,7 @@ def _side_tables(game: Mapping[str, Any], alias: str) -> pl.DataFrame:
     frames = []
     for side in ("home", "away"):
         table = _stats_table(game, f"{alias}{side.title()}")
-        team = details.get(f"{side}Team") or {}
+        team = _obj(details.get(f"{side}Team"))
         tid = _licence(team.get("id"))
         df = _table_frame(
             table,
@@ -797,7 +808,7 @@ def parse_sihf_game_team_stats(
     game = _game(raw)
     table = _stats_table(game, "gameTeamStats")
     rows = []
-    for cells in (table or {}).get("data") or []:
+    for cells in _list(_obj(table).get("data")):
         if isinstance(cells, list) and len(cells) >= 3:
             rows.append(
                 {
@@ -903,17 +914,17 @@ def parse_sihf_game_info(
     game = _game(raw)
     if not game:
         return _out(_frame([], _INFO_SCHEMA), return_as_pandas)
-    details = game.get("details") or {}
-    result = game.get("result") or {}
-    status = game.get("status") or {}
-    venue = details.get("venue") or {}
+    details = _obj(game.get("details"))
+    result = _obj(game.get("result"))
+    status = _obj(game.get("status"))
+    venue = _obj(details.get("venue"))
     row: Dict[str, Any] = {
         "game_id": _int(game.get("gameId")),
         "season": _int(game.get("season")),
         "round": _int(game.get("round")),
     }
     for key in ("league", "region", "group", "tournament", "qualification", "phase"):
-        block = game.get(key) or {}
+        block = _obj(game.get(key))
         row[f"{key}_id"] = _int(block.get("id"))
         row[f"{key}_name"] = block.get("name")
     row |= {
@@ -926,29 +937,29 @@ def parse_sihf_game_info(
         "status_canceled": status.get("canceled") if isinstance(status.get("canceled"), bool) else None,
     }
     for side in ("home", "away"):
-        team = details.get(f"{side}Team") or {}
+        team = _obj(details.get(f"{side}Team"))
         row |= {
             f"{side}_team_id": _licence(team.get("id")),
             f"{side}_team_name": team.get("name"),
             f"{side}_team_acronym": team.get("acronym"),
             f"{side}_score": _int(result.get(f"{side}Team")),
             f"{side}_score_by_period": [
-                _int(s.get(f"{side}Team")) for s in result.get("scores") or [] if isinstance(s, dict)
+                _int(s.get(f"{side}Team")) for s in _list(result.get("scores")) if isinstance(s, dict)
             ],
             f"{side}_shots_by_period": [
-                _int(s.get(f"{side}Team")) for s in result.get("sogs") or [] if isinstance(s, dict)
+                _int(s.get(f"{side}Team")) for s in _list(result.get("sogs")) if isinstance(s, dict)
             ],
         }
-    row["period_indicators"] = [str(s.get("indicator")) for s in result.get("scores") or [] if isinstance(s, dict)]
+    row["period_indicators"] = [str(s.get("indicator")) for s in _list(result.get("scores")) if isinstance(s, dict)]
     row |= {
         "venue_name": venue.get("name"),
         "venue_city": venue.get("city"),
         "spectators": _int(venue.get("spectators")),
-        "referees": ", ".join(str(o.get("fullName")) for o in details.get("referees") or [] if isinstance(o, dict))
+        "referees": ", ".join(str(o.get("fullName")) for o in _list(details.get("referees")) if isinstance(o, dict))
         or None,
-        "linesmen": ", ".join(str(o.get("fullName")) for o in details.get("linesmen") or [] if isinstance(o, dict))
+        "linesmen": ", ".join(str(o.get("fullName")) for o in _list(details.get("linesmen")) if isinstance(o, dict))
         or None,
-        "broadcasts": ",".join(str(e) for e in (game.get("broadcasts") or {}).get("entries") or []) or None,
+        "broadcasts": ",".join(str(e) for e in _list(_obj(game.get("broadcasts")).get("entries"))) or None,
     }
     return _out(_frame([row], _INFO_SCHEMA), return_as_pandas)
 
@@ -1030,15 +1041,15 @@ def parse_sihf_game_lineups(
     """
     game = _game(raw)
     gid, roster = _int(game.get("gameId")), _roster(game)
-    details = game.get("details") or {}
-    lineups = game.get("lineUps") or {}
+    details = _obj(game.get("details"))
+    lineups = _obj(game.get("lineUps"))
     rows: List[Dict[str, Any]] = []
 
     for side in ("home", "away"):
-        tid = _licence((details.get(f"{side}Team") or {}).get("id"))
+        tid = _licence(_obj(details.get(f"{side}Team")).get("id"))
         team = lineups.get(f"{side}Team") if isinstance(lineups, dict) else None
         if isinstance(team, dict):
-            tags = [t for t in team.get("taggedPlayers") or [] if isinstance(t, dict)]
+            tags = [t for t in _list(team.get("taggedPlayers")) if isinstance(t, dict)]
             captains = {_licence(t.get("id")) for t in tags if t.get("type") == "captain"}
             first_goalies = {_licence(t.get("id")) for t in tags if t.get("type") == "goalkeeper"}
             for path, unit in _UNITS:
@@ -1061,10 +1072,10 @@ def parse_sihf_game_lineups(
                             "is_first_goalkeeper": who["player_id"] in first_goalies,
                         }
                     )
-        for group in details.get(f"{side}Absentees") or []:
+        for group in _list(details.get(f"{side}Absentees")):
             if not isinstance(group, dict):
                 continue
-            for licence in group.get("absentees") or []:
+            for licence in _list(group.get("absentees")):
                 who = _person(roster, licence)
                 if who["player_id"] is None:
                     continue
