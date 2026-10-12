@@ -1,0 +1,253 @@
+{
+  "title": "Player Stats",
+  "description": "Player Stats - Faceoffs Summary",
+  "pages": 427,
+  "selectedPage": 1,
+  "orderBy": "faceoffs",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:36:50.3445513+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Summary",
+      "rowIdentifierKey": "points",
+      "isOrderDescending": true,
+      "alias": "player"
+    },
+    {
+      "name": "Goals/Assists",
+      "rowIdentifierKey": "goals",
+      "isOrderDescending": true,
+      "alias": "playerGoalAssist"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogSog",
+      "isOrderDescending": true,
+      "alias": "playerShotDetail"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": null,
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": false,
+      "alias": "rank"
+    },
+    {
+      "name": "Spieler",
+      "description": "Spielername",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "player"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "Pos",
+      "description": "Spielerposition",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "position"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "FO Total",
+      "description": "Bullys Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffs"
+    },
+    {
+      "name": "FO/GP",
+      "description": "Gespielte Bullys pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsPerGame"
+    },
+    {
+      "name": "FO%",
+      "description": "Gewonnene Faceoff in %",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsPercent"
+    },
+    {
+      "name": "FOW Total",
+      "description": "Gewonnene Bullys Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsWon"
+    },
+    {
+      "name": "FOL Total",
+      "description": "Verlorene Bullys Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsLost"
+    },
+    {
+      "name": "FOW/GP",
+      "description": "Gewonnene Bullys pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsWonPerGame"
+    },
+    {
+      "name": "FOL/GP",
+      "description": "Verlorene Bullys pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsLostPerGame"
+    },
+    {
+      "name": "FO% oz Total",
+      "description": "Gewonnene Faceoffs in % offensive Zone",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsOffensivePercent"
+    },
+    {
+      "name": "FO% nz Total",
+      "description": "Gewonnene Faceoffs in % Neutrale Zone",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsNeutralPercent"
+    },
+    {
+      "name": "FO% dz Total",
+      "description": "Gewonnene Faceoffs in % defensive Zone",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsDefensivePercent"
+    }
+  ],
+  "data": [
+    [
+      "427",
+      "Zadina Filip",
+      {
+        "id": 101151,
+        "name": "HC Davos",
+        "acronym": "HCD",
+        "signed": false,
+        "type": "team"
+      },
+      "Stürmer",
+      "72",
+      "0",
+      "0.00",
+      "-",
+      "0",
+      "0",
+      "0.00",
+      "0.00",
+      "-",
+      "-",
+      "-"
+    ],
+    [
+      "426",
+      "Rathgeb Yannick",
+      {
+        "id": 103138,
+        "name": "Fribourg-Gottéron",
+        "acronym": "FRI",
+        "signed": false,
+        "type": "team"
+      },
+      "Verteidiger",
+      "89",
+      "0",
+      "0.00",
+      "-",
+      "0",
+      "0",
+      "0.00",
+      "0.00",
+      "-",
+      "-",
+      "-"
+    ],
+    [
+      "425",
+      "Puljujärvi Jesse",
+      {
+        "id": 103140,
+        "name": "Genève-Servette HC",
+        "acronym": "GSHC",
+        "signed": false,
+        "type": "team"
+      },
+      "Stürmer",
+      "76",
+      "0",
+      "0.00",
+      "-",
+      "0",
+      "0",
+      "0.00",
+      "0.00",
+      "-",
+      "-",
+      "-"
+    ]
+  ],
+  "alias": "playerFaceoff"
+}

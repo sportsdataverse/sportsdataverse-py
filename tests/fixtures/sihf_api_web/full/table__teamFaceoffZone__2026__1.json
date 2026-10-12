@@ -1,0 +1,653 @@
+{
+ "title": "Team Stats",
+ "description": "Team Stats - Faceoffs/Zone",
+ "pages": 0,
+ "selectedPage": 0,
+ "orderBy": "faceoffsOffensive",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2026-05-01T13:39:32.7957055+02:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    },
+    {
+     "name": "2018/19",
+     "alias": "2019"
+    },
+    {
+     "name": "2017/18",
+     "alias": "2018"
+    },
+    {
+     "name": "2016/17",
+     "alias": "2017"
+    },
+    {
+     "name": "2015/16",
+     "alias": "2016"
+    },
+    {
+     "name": "2014/15",
+     "alias": "2015"
+    },
+    {
+     "name": "2013/14",
+     "alias": "2014"
+    },
+    {
+     "name": "2012/13",
+     "alias": "2013"
+    },
+    {
+     "name": "2011/12",
+     "alias": "2012"
+    },
+    {
+     "name": "2010/11",
+     "alias": "2011"
+    },
+    {
+     "name": "2009/10",
+     "alias": "2010"
+    },
+    {
+     "name": "2008/09",
+     "alias": "2009"
+    },
+    {
+     "name": "1046/47",
+     "alias": "1047"
+    }
+   ],
+   "selected": "2026",
+   "type": "Dropdown",
+   "alias": "Season"
+  }
+ ],
+ "secondaryMenu": [
+  {
+   "name": "Goals",
+   "rowIdentifierKey": "goalsFor",
+   "isOrderDescending": true,
+   "alias": "teamGoal"
+  },
+  {
+   "name": "Goals Pos/Nation",
+   "rowIdentifierKey": "goalsForFw",
+   "isOrderDescending": true,
+   "alias": "teamGoalPosNation"
+  },
+  {
+   "name": "Shots",
+   "rowIdentifierKey": "sogSog",
+   "isOrderDescending": true,
+   "alias": "teamShotDetail"
+  },
+  {
+   "name": "PP",
+   "rowIdentifierKey": "ppPercent",
+   "isOrderDescending": true,
+   "alias": "teamPp"
+  },
+  {
+   "name": "PK",
+   "rowIdentifierKey": "pkPercent",
+   "isOrderDescending": true,
+   "alias": "teamPk"
+  },
+  {
+   "name": "Penalties",
+   "rowIdentifierKey": "pimTotal",
+   "isOrderDescending": true,
+   "alias": "teamFoul"
+  },
+  {
+   "name": "Shootouts",
+   "rowIdentifierKey": "penShotsPercent",
+   "isOrderDescending": true,
+   "alias": "teamShootout"
+  },
+  {
+   "name": "Faceoffs Summary",
+   "rowIdentifierKey": "faceoffsPercent",
+   "isOrderDescending": true,
+   "alias": "teamFaceoff"
+  },
+  {
+   "name": "Faceoffs/Zone",
+   "rowIdentifierKey": "faceoffsOffensive",
+   "isOrderDescending": true,
+   "alias": "teamFaceoffZone"
+  },
+  {
+   "name": "Faceoffs/Spiel",
+   "rowIdentifierKey": "faceoffsOffensivePerGame",
+   "isOrderDescending": true,
+   "alias": "teamFaceoffZoneGame"
+  },
+  {
+   "name": "Attendance",
+   "rowIdentifierKey": "spectatorsQuotient",
+   "isOrderDescending": true,
+   "alias": "teamSpectator"
+  }
+ ],
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [
+  {
+   "name": null,
+   "style": "average",
+   "rows": [
+    8
+   ]
+  }
+ ],
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "rank"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "GP",
+   "description": "Gespielte Spiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesPlayed"
+  },
+  {
+   "name": "FO oz",
+   "description": "Gespielte Bullys offensive Zone total",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsOffensive"
+  },
+  {
+   "name": "FO% oz Total",
+   "description": "Gewonnene Faceoffs in % offensive Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsOffensivePercent"
+  },
+  {
+   "name": "FOW oz",
+   "description": "Gewonnene Bullys offensive Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsWonOffensive"
+  },
+  {
+   "name": "FOL oz",
+   "description": "Verlorene Bullys offensive Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsLostOffensive"
+  },
+  {
+   "name": "FO nz",
+   "description": "Gespielte Bullys neutrale Zone total",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsNeutral"
+  },
+  {
+   "name": "FO% nz Total",
+   "description": "Gewonnene Faceoffs in % Neutrale Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsNeutralPercent"
+  },
+  {
+   "name": "FOW nz",
+   "description": "Gewonnene Bullys neutrale Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsWonNeutral"
+  },
+  {
+   "name": "FOL nz",
+   "description": "Verlorene Bullys neutrale Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsLostNeutral"
+  },
+  {
+   "name": "FO dz",
+   "description": "Gespielte Bullys defensive Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsDefensive"
+  },
+  {
+   "name": "FO% dz Total",
+   "description": "Gewonnene Faceoffs in % defensive Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsDefensivePercent"
+  },
+  {
+   "name": "FOW dz",
+   "description": "Gewonnene Bullys defensive Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsWonDefensive"
+  },
+  {
+   "name": "FOL dz",
+   "description": "Verlorene Bullys defensive Zone",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "faceoffsLostDefensive"
+  }
+ ],
+ "data": [
+  [
+   "14",
+   {
+    "id": 101149,
+    "name": "EHC Kloten",
+    "acronym": "EHCK",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "913",
+   "50.16",
+   "458",
+   "455",
+   "780",
+   "51.67",
+   "403",
+   "377",
+   "981",
+   "60.14",
+   "590",
+   "391"
+  ],
+  [
+   "13",
+   {
+    "id": 101150,
+    "name": "HC Lugano",
+    "acronym": "HCL",
+    "signed": false,
+    "type": "team"
+   },
+   "60",
+   "1010",
+   "46.14",
+   "466",
+   "544",
+   "926",
+   "49.03",
+   "454",
+   "472",
+   "1213",
+   "50.45",
+   "612",
+   "601"
+  ],
+  [
+   "12",
+   {
+    "id": 102126,
+    "name": "SC Bern",
+    "acronym": "SCB",
+    "signed": false,
+    "type": "team"
+   },
+   "60",
+   "1044",
+   "41.48",
+   "433",
+   "611",
+   "861",
+   "46.57",
+   "401",
+   "460",
+   "1221",
+   "52.50",
+   "641",
+   "580"
+  ],
+  [
+   "11",
+   {
+    "id": 102128,
+    "name": "EHC Biel-Bienne",
+    "acronym": "EHCB",
+    "signed": false,
+    "type": "team"
+   },
+   "56",
+   "1061",
+   "43.17",
+   "458",
+   "603",
+   "877",
+   "49.83",
+   "437",
+   "440",
+   "1090",
+   "52.39",
+   "571",
+   "519"
+  ],
+  [
+   "10",
+   {
+    "id": 102127,
+    "name": "SCL Tigers",
+    "acronym": "SCL",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "1138",
+   "45.69",
+   "520",
+   "618",
+   "798",
+   "53.38",
+   "426",
+   "372",
+   "968",
+   "58.68",
+   "568",
+   "400"
+  ],
+  [
+   "9",
+   {
+    "id": 101152,
+    "name": "HC Ambri-Piotta",
+    "acronym": "HCAP",
+    "signed": false,
+    "type": "team"
+   },
+   "56",
+   "1163",
+   "43.08",
+   "501",
+   "662",
+   "905",
+   "48.95",
+   "443",
+   "462",
+   "1076",
+   "53.07",
+   "571",
+   "505"
+  ],
+  [
+   "8",
+   {
+    "id": 103144,
+    "name": "HC Ajoie",
+    "acronym": "HCA",
+    "signed": false,
+    "type": "team"
+   },
+   "56",
+   "1176",
+   "46.77",
+   "550",
+   "626",
+   "866",
+   "49.19",
+   "426",
+   "440",
+   "977",
+   "55.27",
+   "540",
+   "437"
+  ],
+  [
+   "",
+   {
+    "id": 100000,
+    "name": "Durchschnitt",
+    "acronym": "Durchschnitt",
+    "signed": false,
+    "type": "team"
+   },
+   "65",
+   "1276",
+   "45.06",
+   "575",
+   "701",
+   "1036",
+   "50.00",
+   "518",
+   "518",
+   "1276",
+   "54.94",
+   "701",
+   "575"
+  ],
+  [
+   "7",
+   {
+    "id": 103141,
+    "name": "Lausanne HC",
+    "acronym": "LHC",
+    "signed": false,
+    "type": "team"
+   },
+   "66",
+   "1284",
+   "44.16",
+   "567",
+   "717",
+   "1037",
+   "46.29",
+   "480",
+   "557",
+   "1330",
+   "52.48",
+   "698",
+   "632"
+  ],
+  [
+   "6",
+   {
+    "id": 101144,
+    "name": "EV Zug",
+    "acronym": "EVZ",
+    "signed": false,
+    "type": "team"
+   },
+   "66",
+   "1287",
+   "44.60",
+   "574",
+   "713",
+   "1060",
+   "51.60",
+   "547",
+   "513",
+   "1136",
+   "55.11",
+   "626",
+   "510"
+  ],
+  [
+   "5",
+   {
+    "id": 101139,
+    "name": "ZSC Lions",
+    "acronym": "ZSC",
+    "signed": false,
+    "type": "team"
+   },
+   "70",
+   "1385",
+   "47.58",
+   "659",
+   "726",
+   "1095",
+   "50.41",
+   "552",
+   "543",
+   "1371",
+   "54.19",
+   "743",
+   "628"
+  ],
+  [
+   "4",
+   {
+    "id": 103140,
+    "name": "Genève-Servette HC",
+    "acronym": "GSHC",
+    "signed": false,
+    "type": "team"
+   },
+   "76",
+   "1485",
+   "47.47",
+   "705",
+   "780",
+   "1263",
+   "54.32",
+   "686",
+   "577",
+   "1533",
+   "58.58",
+   "898",
+   "635"
+  ],
+  [
+   "3",
+   {
+    "id": 101060,
+    "name": "SC Rapperswil-Jona Lakers",
+    "acronym": "SCRJ",
+    "signed": false,
+    "type": "team"
+   },
+   "74",
+   "1588",
+   "44.46",
+   "706",
+   "882",
+   "1193",
+   "46.44",
+   "554",
+   "639",
+   "1511",
+   "55.06",
+   "832",
+   "679"
+  ],
+  [
+   "2",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": false,
+    "type": "team"
+   },
+   "86",
+   "1655",
+   "43.93",
+   "727",
+   "928",
+   "1389",
+   "50.47",
+   "701",
+   "688",
+   "1628",
+   "53.75",
+   "875",
+   "753"
+  ],
+  [
+   "1",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "90",
+   "1693",
+   "43.30",
+   "733",
+   "960",
+   "1462",
+   "51.03",
+   "746",
+   "716",
+   "1847",
+   "57.39",
+   "1060",
+   "787"
+  ]
+ ],
+ "alias": "teamFaceoffZone"
+}

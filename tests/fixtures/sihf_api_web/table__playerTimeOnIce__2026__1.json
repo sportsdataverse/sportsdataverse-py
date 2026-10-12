@@ -1,0 +1,264 @@
+{
+  "title": "Player Stats",
+  "description": "Player Stats - Time on ice",
+  "pages": 427,
+  "selectedPage": 1,
+  "orderBy": "timeOnIcePerGame",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:36:50.3445513+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Summary",
+      "rowIdentifierKey": "points",
+      "isOrderDescending": true,
+      "alias": "player"
+    },
+    {
+      "name": "Goals/Assists",
+      "rowIdentifierKey": "goals",
+      "isOrderDescending": true,
+      "alias": "playerGoalAssist"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogSog",
+      "isOrderDescending": true,
+      "alias": "playerShotDetail"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": null,
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": false,
+      "alias": "rank"
+    },
+    {
+      "name": "Spieler",
+      "description": "Spielername",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "player"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "Pos",
+      "description": "Spielerposition",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "position"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "EQ TOI",
+      "description": "Eiszeit bei Gleichstand",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "timeOnIceEq"
+    },
+    {
+      "name": "EQ TOI/GP",
+      "description": "Eiszeit bei Gleichstand pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "timeOnIceEqPerGame"
+    },
+    {
+      "name": "TOI PP",
+      "description": "Eiszeit in Überzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "timeOnIcePp"
+    },
+    {
+      "name": "PP TOI/GP",
+      "description": "Eiszeit bei Überzahl pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "timeOnIcePpPerGame"
+    },
+    {
+      "name": "TOI PK",
+      "description": "Eiszeit in Unterzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "timeOnIcePk"
+    },
+    {
+      "name": "PK TOI/GP",
+      "description": "Eiszeit bei Unterzahl pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "timeOnIcePkPerGame"
+    },
+    {
+      "name": "TOI Total",
+      "description": "Eiszeit total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "timeOnIce"
+    },
+    {
+      "name": "TOI/GP",
+      "description": "Eiszeit pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "timeOnIcePerGame"
+    },
+    {
+      "name": "Shifts",
+      "description": "Anzahl Einsätze",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "shifts"
+    },
+    {
+      "name": "TOI/Shift",
+      "description": "durchschnittliche Eiszeit pro Einsatz",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "timeOnIcePerShift"
+    },
+    {
+      "name": "Shift/GP",
+      "description": "Anzahl Einsätze pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "shiftsPerGame"
+    }
+  ],
+  "data": [
+    [
+      "427",
+      "Nater Jens",
+      {
+        "id": 101144,
+        "name": "EV Zug",
+        "acronym": "EVZ",
+        "signed": false,
+        "type": "team"
+      },
+      "Verteidiger",
+      "2",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "0",
+      "-",
+      "0.00"
+    ],
+    [
+      "426",
+      "Hedlund William",
+      {
+        "id": 101152,
+        "name": "HC Ambri-Piotta",
+        "acronym": "HCAP",
+        "signed": false,
+        "type": "team"
+      },
+      "Stürmer",
+      "1",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "0",
+      "-",
+      "0.00"
+    ],
+    [
+      "425",
+      "Andri Flavio",
+      {
+        "id": 101144,
+        "name": "EV Zug",
+        "acronym": "EVZ",
+        "signed": false,
+        "type": "team"
+      },
+      "Verteidiger",
+      "1",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "00:00",
+      "0",
+      "-",
+      "0.00"
+    ]
+  ],
+  "alias": "playerTimeOnIce"
+}

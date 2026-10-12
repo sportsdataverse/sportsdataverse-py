@@ -1,0 +1,239 @@
+{
+  "title": "Team Stats",
+  "description": "Team Stats - Faceoffs Summary",
+  "pages": 0,
+  "selectedPage": 0,
+  "orderBy": "faceoffsPercent",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:39:32.7957055+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Goals",
+      "rowIdentifierKey": "goalsFor",
+      "isOrderDescending": true,
+      "alias": "teamGoal"
+    },
+    {
+      "name": "Goals Pos/Nation",
+      "rowIdentifierKey": "goalsForFw",
+      "isOrderDescending": true,
+      "alias": "teamGoalPosNation"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogSog",
+      "isOrderDescending": true,
+      "alias": "teamShotDetail"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": [
+    {
+      "name": null,
+      "style": "average",
+      "rows": [
+        8
+      ]
+    }
+  ],
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "rank"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "FO Total",
+      "description": "Bullys Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffs"
+    },
+    {
+      "name": "FO/GP",
+      "description": "Gespielte Bullys pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsPerGame"
+    },
+    {
+      "name": "FO%",
+      "description": "Gewonnene Faceoff in %",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsPercent"
+    },
+    {
+      "name": "FOW Total",
+      "description": "Gewonnene Bullys Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsWon"
+    },
+    {
+      "name": "FOL Total",
+      "description": "Verlorene Bullys Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsLost"
+    },
+    {
+      "name": "FOW/GP",
+      "description": "Gewonnene Bullys pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsWonPerGame"
+    },
+    {
+      "name": "FOL/GP",
+      "description": "Verlorene Bullys pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsLostPerGame"
+    },
+    {
+      "name": "FO% oz Total",
+      "description": "Gewonnene Faceoffs in % offensive Zone",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsOffensivePercent"
+    },
+    {
+      "name": "FO% nz Total",
+      "description": "Gewonnene Faceoffs in % Neutrale Zone",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsNeutralPercent"
+    },
+    {
+      "name": "FO% dz Total",
+      "description": "Gewonnene Faceoffs in % defensive Zone",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "faceoffsDefensivePercent"
+    }
+  ],
+  "data": [
+    [
+      "14",
+      {
+        "id": 102126,
+        "name": "SC Bern",
+        "acronym": "SCB",
+        "signed": false,
+        "type": "team"
+      },
+      "60",
+      "3126",
+      "52.10",
+      "47.18",
+      "1475",
+      "1651",
+      "24.58",
+      "27.52",
+      "41.48",
+      "46.57",
+      "52.50"
+    ],
+    [
+      "13",
+      {
+        "id": 103141,
+        "name": "Lausanne HC",
+        "acronym": "LHC",
+        "signed": false,
+        "type": "team"
+      },
+      "66",
+      "3651",
+      "55.32",
+      "47.80",
+      "1745",
+      "1906",
+      "26.44",
+      "28.88",
+      "44.16",
+      "46.29",
+      "52.48"
+    ],
+    [
+      "12",
+      {
+        "id": 101152,
+        "name": "HC Ambri-Piotta",
+        "acronym": "HCAP",
+        "signed": false,
+        "type": "team"
+      },
+      "56",
+      "3144",
+      "56.14",
+      "48.19",
+      "1515",
+      "1629",
+      "27.05",
+      "29.09",
+      "43.08",
+      "48.95",
+      "53.07"
+    ]
+  ],
+  "alias": "teamFaceoff"
+}
