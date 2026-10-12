@@ -293,8 +293,15 @@ def _pair_teams(espn_games: pl.DataFrame, stats_games: pl.DataFrame, p: str) -> 
     used_e: set = set()
     used_s: set = set()
     rows = []
-    for espn_id, stats_id, share in counts.select("espn_team_id", f"{p}_team_id", "share").iter_rows():
+    cands = counts.select("espn_team_id", f"{p}_team_id", "n", "share").rows()
+    for espn_id, stats_id, n, share in cands:
         if espn_id in used_e or stats_id in used_s:
+            continue
+        # A tie with another open candidate of either team (a few shared dates only) stays unpaired.
+        if any(
+            c[2] == n and (c[0] == espn_id) != (c[1] == stats_id) and c[0] not in used_e and c[1] not in used_s
+            for c in cands
+        ):
             continue
         used_e.add(espn_id)
         used_s.add(stats_id)
@@ -396,60 +403,8 @@ def _player_crosswalk(
         pl.col(pjersey).alias("jersey"),
     )
 
-    by_block = right.partition_by("block", as_dict=True)
-    empty_right = right.clear()
-    pair_frames = [
-        fuzzy_match(lf, by_block.get(key, empty_right), min_confidence, exact_tiebreak=True)
-        for key, lf in left.partition_by("block", as_dict=True).items()
-    ]
-    game_pairs = (
-        pl.concat(pair_frames)
-        if pair_frames
-        else pl.DataFrame(
-            schema={
-                "block": pl.Utf8,
-                "left_id": pl.Utf8,
-                "right_id": pl.Utf8,
-                "match_method": pl.Utf8,
-                "match_confidence": pl.Float64,
-            }
-        )
-    ).join(left.select("block", pl.col("id").alias("left_id"), "espn_team_id"), on=["block", "left_id"])
-
     keys = ["espn_team_id", "espn_athlete_id"]
-    # Denominator = games where the athlete matched anyone, so the score is agreement, not presence.
-    games_seen = (
-        game_pairs.filter(pl.col("right_id").is_not_null())
-        .group_by(["espn_team_id", "left_id"])
-        .agg(pl.len().alias("n_games"))
-    )
-    best = (
-        game_pairs.filter(pl.col("right_id").is_not_null())
-        .group_by(["espn_team_id", "left_id", "right_id"])
-        .agg(pl.len().alias("n"), (pl.col("match_method") == "exact_name").sum().alias("n_exact"))
-        .sort(["n", "n_exact", "right_id"], descending=[True, True, False])
-        # A tie between the top two candidates is left unmatched rather than guessed.
-        .with_columns(
-            ((pl.col("n").shift(-1) == pl.col("n")) & (pl.col("n_exact").shift(-1) == pl.col("n_exact")))
-            .over(["espn_team_id", "left_id"])
-            .fill_null(False)
-            .alias("_tied")
-        )
-        .group_by(["espn_team_id", "left_id"], maintain_order=True)
-        .first()
-        .filter(pl.col("_tied") == False)
-        .join(games_seen, on=["espn_team_id", "left_id"])
-        .select(
-            pl.col("espn_team_id"),
-            pl.col("left_id").alias("espn_athlete_id"),
-            pl.col("right_id").alias(pid),
-            pl.when(pl.col("n_exact") * 2 >= pl.col("n"))
-            .then(pl.lit("exact_name"))
-            .otherwise(pl.lit("fuzzy_jw"))
-            .alias("match_method"),
-            (pl.col("n") / pl.col("n_games")).alias("match_confidence"),
-        )
-    )
+    best = vote_block_matches(left, right, min_confidence).rename({"right_id": pid})
 
     latest_espn = espn.sort("game_date", nulls_last=False).unique(keys, keep="last", maintain_order=False)
     stats_latest = (
@@ -496,6 +451,83 @@ def _player_crosswalk(
         "match_method",
         "match_confidence",
         "match_keys",
+    )
+
+
+def vote_block_matches(left: pl.DataFrame, right: pl.DataFrame, min_confidence: float = 0.92) -> pl.DataFrame:
+    """Match players inside each (game, team) block, then vote the season into one id per ESPN athlete.
+
+    Each block (one ESPN game x one ESPN team, about 15 names a side) is matched with
+    :func:`~sportsdataverse._common_crosswalk_basketball.fuzzy_match` (exact name first,
+    jersey tie-break, then Jaro-Winkler at ``min_confidence``). Across the season, the
+    candidate an athlete matched most often wins; a tie between the top two is left
+    unmatched rather than guessed.
+
+    Args:
+        left: ESPN rows: ``block``, ``espn_team_id``, ``id`` (ESPN athlete id),
+            ``name_key`` (:func:`normalize_name`) and ``jersey``.
+        right: The other source's rows, blocked the same way: ``block``, ``id``,
+            ``name_key`` and ``jersey`` (null when the source has none).
+        min_confidence: Jaro-Winkler floor for a fuzzy match.
+
+    Returns:
+        One row per voted (``espn_team_id``, ``espn_athlete_id``) with ``right_id``,
+        ``match_method`` (``exact_name`` when at least half the agreeing games
+        matched exactly, else ``fuzzy_jw``) and ``match_confidence`` (the share of
+        the athlete's matched games that agree on ``right_id``).
+    """
+    by_block = right.partition_by("block", as_dict=True)
+    empty_right = right.clear()
+    pair_frames = [
+        fuzzy_match(lf, by_block.get(key, empty_right), min_confidence, exact_tiebreak=True)
+        for key, lf in left.partition_by("block", as_dict=True).items()
+    ]
+    game_pairs = (
+        pl.concat(pair_frames)
+        if pair_frames
+        else pl.DataFrame(
+            schema={
+                "block": pl.Utf8,
+                "left_id": pl.Utf8,
+                "right_id": pl.Utf8,
+                "match_method": pl.Utf8,
+                "match_confidence": pl.Float64,
+            }
+        )
+    ).join(left.select("block", pl.col("id").alias("left_id"), "espn_team_id"), on=["block", "left_id"])
+
+    # Denominator = games where the athlete matched anyone, so the score is agreement, not presence.
+    games_seen = (
+        game_pairs.filter(pl.col("right_id").is_not_null())
+        .group_by(["espn_team_id", "left_id"])
+        .agg(pl.len().alias("n_games"))
+    )
+    return (
+        game_pairs.filter(pl.col("right_id").is_not_null())
+        .group_by(["espn_team_id", "left_id", "right_id"])
+        .agg(pl.len().alias("n"), (pl.col("match_method") == "exact_name").sum().alias("n_exact"))
+        .sort(["n", "n_exact", "right_id"], descending=[True, True, False])
+        # A tie between the top two candidates is left unmatched rather than guessed.
+        .with_columns(
+            ((pl.col("n").shift(-1) == pl.col("n")) & (pl.col("n_exact").shift(-1) == pl.col("n_exact")))
+            .over(["espn_team_id", "left_id"])
+            .fill_null(False)
+            .alias("_tied")
+        )
+        .group_by(["espn_team_id", "left_id"], maintain_order=True)
+        .first()
+        .filter(pl.col("_tied") == False)
+        .join(games_seen, on=["espn_team_id", "left_id"])
+        .select(
+            pl.col("espn_team_id"),
+            pl.col("left_id").alias("espn_athlete_id"),
+            pl.col("right_id"),
+            pl.when(pl.col("n_exact") * 2 >= pl.col("n"))
+            .then(pl.lit("exact_name"))
+            .otherwise(pl.lit("fuzzy_jw"))
+            .alias("match_method"),
+            (pl.col("n") / pl.col("n_games")).alias("match_confidence"),
+        )
     )
 
 
@@ -618,6 +650,7 @@ def build_archive_crosswalks(
     fox: bool = False,
     fox_games: bool = False,
     yahoo: bool = False,
+    alt_root: Optional[Union[str, Path]] = None,
 ) -> Dict[str, pl.DataFrame]:
     """Build the team, schedule and player crosswalks for one past season (no I/O unless a Fox or Yahoo leg is on).
 
@@ -649,6 +682,10 @@ def build_archive_crosswalks(
             kept only where Yahoo lists it. A failed fetch logs a warning and
             leaves the columns null (unverified home-side ids when only the id
             list fails). Ignored for the NBA, whose Yahoo ids always fill.
+        alt_root: ``*-alt-data`` checkout; fills the Fox / Yahoo player columns
+            from its parsed ``season`` (see
+            :func:`sportsdataverse._crosswalk_alt.with_alt_player_legs`), only
+            where they are null.
 
     Returns:
         ``{"team", "schedule", "player"}`` frames with the league module's
@@ -677,4 +714,10 @@ def build_archive_crosswalks(
     if yahoo and league == "wnba":
         team = with_yahoo_teams(league, team)
         schedule = with_yahoo_games(league, season, schedule, team)
+    if alt_root is not None:
+        from sportsdataverse._crosswalk_alt import with_alt_player_legs
+
+        player = with_alt_player_legs(
+            league, season, player, espn_schedule, espn_game_rosters, alt_root, min_confidence
+        )
     return {"team": team, "schedule": schedule, "player": player}
