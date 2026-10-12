@@ -10,9 +10,14 @@ Reads the frozen spec and the committed captures from the ``sdv-internal-refs`` 
 * ``tools/codegen/endpoints/shl.yaml`` -- one endpoint per GET route (27).
 * ``tools/codegen/schemas/native/shl/<short>.yaml`` -- returns-schema per endpoint: the
   columns of the endpoint's parser run over its capture, typed from the FULL bodies in
-  ``tests/fixtures/shl/full/`` where there is one (the 3-row captures mistype rates), and
-  described from the refs ``shl-returns.md`` route tables. ``stats_info`` documents the union
-  of the 34 modules' columns.
+  ``tests/fixtures/shl/full/`` where there is one (the 3-row captures mistype rates).
+  ``stats_info`` documents the union of the 34 modules' columns. Descriptions are written
+  empty here (a re-capture would clobber them).
+* ``tools/codegen/shl_column_descriptions.snippet.yaml`` -- the column descriptions, keyed by
+  schema key (``shl_<short>``) then column, from the refs ``shl-returns.md`` route tables and
+  the curated text below; merged into ``manual_column_descriptions.yaml``.
+* ``sportsdataverse/hockey/shl/shl_schemas.py`` -- every endpoint's column -> polars dtype,
+  which the parsers use to type a zero-row frame and to backfill missing columns.
 
 Season-keyed routes take ``season`` (END year) + ``game_type`` instead of the provider's
 ssgt / season uuids: ``shl_runtime._get`` maps them through layout-info.
@@ -91,6 +96,11 @@ _FULL: Dict[str, List[str]] = {
     "layout_info": ["statistics-v2__layout-info__directory.json"],
 }
 
+# Columns null in every capture of a route (so typed Utf8) that hold numbers on the sibling
+# routes of the same shape: an unplayed game has no score yet.
+_SCORES = {"home_team_score": pl.Int64, "away_team_score": pl.Int64}
+_NULL_IN_CAPTURE: Dict[str, Dict[str, Any]] = {"next_game_day": _SCORES, "team_upcoming_games": _SCORES}
+
 # Wire query key -> wrapper argument name (an ssgt / athlete uuid is never called a season or player id).
 _ARG_NAMES = {
     "playerUuid": "athlete_uuid",
@@ -155,7 +165,82 @@ _EXTRA = {
 }
 
 _GAME_PERIOD = {"period": "Period: 0 = the whole game, 1-3 the periods, 4 and up overtime."}
-_EXTRA_BY_SHORT = {"boxscore": _GAME_PERIOD, "player_box": _GAME_PERIOD, "team_stats": _GAME_PERIOD}
+# W / T / L mean different things per route (refs shl-returns.md, "Same names, different
+# meanings"; the career log's W + L + no-decisions = GPI in the capture).
+_GOALIE_CAREER_WTL = {
+    "w": "Goalie wins: games the goalie was credited with the win, overtime and shootout wins included.",
+    "l": "Goalie losses: games the goalie was charged with the loss, overtime and shootout losses included.",
+    "t": "Goalie ties: games that ended level with the goalie credited a tie; 0 in every sampled row, as "
+    "overtime and shootouts now decide every game.",
+}
+_GOALIE_GAME_WTL = {
+    "w": "1 when the goalie was credited with the win in this game (overtime and shootout included), else 0.",
+    "l": "1 when the goalie was charged with the loss in this game (overtime and shootout included), else 0.",
+    "t": "1 when the goalie was credited a tie in this game, else 0; 0 in every sampled row, as overtime "
+    "and shootouts now decide every game.",
+}
+_STATS_INFO_WTL = {
+    "w": "Wins. Team modules (teams_result): total wins, regulation + overtime + shootout; goalkeeper "
+    "modules: wins credited to the goalie; standings_standings: regulation wins only.",
+    "l": "Losses. Team modules (teams_result): total losses, regulation + overtime + shootout; goalkeeper "
+    "modules: losses charged to the goalie; standings_standings: regulation losses only.",
+    "t": "Goalie ties (goalkeeper modules only); 0 in every sampled row, as overtime and shootouts now "
+    "decide every game.",
+}
+_EXTRA_BY_SHORT = {
+    "boxscore": _GAME_PERIOD,
+    "player_box": _GAME_PERIOD,
+    "team_stats": _GAME_PERIOD,
+    "athlete_career": _GOALIE_CAREER_WTL,
+    "athlete_game_log": _GOALIE_GAME_WTL,
+    "stats_info": _STATS_INFO_WTL,
+}
+# Refs prose too terse for the manual-descriptions rules (>= 15 characters, no restated name):
+# the same fact, spelled out. Keyed by the resolved text, since many columns share one.
+_EXPAND = {
+    "Assists.": "Number of assists credited.",
+    "Age in years.": "Age of the player in whole years.",
+    "Given name.": "Given (first) name of the player.",
+    "Surname.": "Surname (family name) of the player.",
+    "Height in cm.": "Height of the player in centimetres.",
+    "Weight in kg.": "Weight of the player in kilograms.",
+    "Club email.": "Contact email address of the club.",
+    "Logo URL.": "URL of the team logo image.",
+    "home or away.": "Side of the game: home or away.",
+    "Blocked shots.": "Number of blocked shots.",
+    "Game date.": "Date of the game (YYYY-MM-DD).",
+    "Face-offs won.": "Number of face-offs won.",
+    "Goals.": "Number of goals scored.",
+    "Goals against.": "Number of goals conceded (goals against).",
+    "Away goals.": "Goals scored by the away team.",
+    "Home goals.": "Goals scored by the home team.",
+    "Goals for.": "Number of goals scored (goals for).",
+    "Games played.": "Number of games played.",
+    "Club chairman.": "Name of the club chairman.",
+    "Club fax.": "Fax number of the club.",
+    "Shirt number.": "Jersey (shirt) number of the player.",
+    "Jersey number.": "Jersey (shirt) number of the player.",
+    "Club phone.": "Telephone number of the club.",
+    "Times leading.": "Times leading: how often the team was ahead (exact definition unverified).",
+    "Line number.": "Line (unit) number the player was listed on.",
+    "Club name.": "Full name of the club.",
+    "Penalty shots.": "Number of penalty shots.",
+    "Rank change.": "Change in standings rank, in places (the reference point is unverified).",
+    "Shutouts.": "Number of shutouts (games without a goal against).",
+    "Shots on goal.": "Number of shots on goal.",
+    "Shootout wins.": "Number of shootout wins.",
+    "Saves.": "Number of saves made by the goalie.",
+    "Shots wide.": "Number of shots that missed the net.",
+    "Team name.": "Name of the team.",
+    "Image caption.": "Caption text of the image.",
+    "Team short name.": "Short display name of the team.",
+    "Arena.": "Name of the arena the game is played in.",
+    "Arena name.": "Name of the arena (venue).",
+}
+SNIPPET = ROOT / "tools" / "codegen" / "shl_column_descriptions.snippet.yaml"
+SCHEMA_MODULE = ROOT / "sportsdataverse" / "hockey" / "shl" / "shl_schemas.py"
+# polars dtype -> the code shl_schemas.py stores (shl_parsers._SCHEMA_DTYPES reads it back).
+_DTYPE_CODES = {"String": "str", "Int64": "int", "Float64": "float", "Boolean": "bool", "List(Int64)": "list[int]"}
 
 # Wire-name parts the shapers rename, applied when matching refs-table names to columns.
 _PART_RENAMES = {
@@ -165,7 +250,8 @@ _PART_RENAMES = {
     "seriesInfo": "series",
 }
 _PBP_RENAMES = {"homeTeam": "home", "awayTeam": "away", "eventTeam": "event"}
-_ROW = re.compile(r"^\|\s*`([^`]+)`\s*\|.*\|\s*(.+?)\s*\|\s*$")
+# | `name` | type | description | -- the description may itself hold pipes (type|source|id).
+_ROW = re.compile(r"^\|\s*`([^`]+)`\s*\|\s*[^|]*?\s*\|\s*(.+?)\s*\|\s*$")
 
 
 def _capture(refs: Path, path: str, variant: Optional[str] = None) -> Path:
@@ -204,6 +290,35 @@ def _md_tables(md: Path) -> Dict[str, Dict[str, str]]:
     return out
 
 
+_FILLER = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.I)
+
+
+def _bad(name: str, desc: str) -> bool:
+    """Whether ``desc`` would fail the manual-descriptions filler rules (missing, short, restated)."""
+    d = (desc or "").strip()
+    return len(d) < 15 or d.lower() == name.lower() or bool(_FILLER.match(d))
+
+
+def _write_schema_module(dtypes: Dict[str, Dict[str, str]]) -> None:
+    lines = [
+        '"""Per-endpoint column -> dtype code for the ``shl`` parsers.',
+        "",
+        "Generated by tools/codegen/gen_shl.py from the same frames as the returns-schemas: do not edit.",
+        "Codes: str, int, float, bool, list[int] (see ``shl_parsers._SCHEMA_DTYPES``).",
+        '"""',
+        "",
+        "from typing import Dict",
+        "",
+        "SCHEMAS: Dict[str, Dict[str, str]] = {",
+    ]
+    for short in sorted(dtypes):
+        lines.append(f"    {json.dumps(short)}: {{")  # double quotes: ruff format leaves the file alone
+        lines += [f"        {json.dumps(name)}: {json.dumps(code)}," for name, code in dtypes[short].items()]
+        lines.append("    },")
+    lines += ["}", ""]
+    SCHEMA_MODULE.write_text("\n".join(lines), encoding="utf-8", newline="\n")
+
+
 def _parse(parser: Callable[..., pl.DataFrame], path: Path) -> pl.DataFrame:
     return parser(json.loads(path.read_text(encoding="utf-8")))
 
@@ -218,6 +333,7 @@ def _frame_for(
     for f in paths:
         for name, dtype in _parse(parser, f).schema.items():
             schema.setdefault(name, dtype)
+    schema.update({k: v for k, v in _NULL_IN_CAPTURE.get(short, {}).items() if k in schema})
     return pl.DataFrame(schema=schema)
 
 
@@ -350,19 +466,34 @@ def main() -> None:
     spec_desc = spec_descriptions(spec)
     schema_dir = ROOT / f"tools/codegen/schemas/native/{STEM}"
     rewrite_schema_dir(schema_dir)
+    snippet: Dict[str, Dict[str, str]] = {}
+    dtypes: Dict[str, Dict[str, str]] = {}
     for path, _op in ops:
         short, parser_name = _ROUTES[path]
         frame = _frame_for(refs, path, short, getattr(shl_parsers, parser_name), modules)
         sources = [_EXTRA_BY_SHORT.get(short, {}), _EXTRA, md.get(path, {}), flat_md, spec_desc]
-        write_yaml(
-            schema_dir / f"{short}.yaml",
-            {
-                "schema": f"{STEM}_{short}",
-                "kind": "dataframe",
-                "columns": columns_from_frame(frame, sources, leaf_fallback=False),
-            },
-        )
-    print(f"{STEM}: {len(ops)} endpoints, stats_info over {len(modules)} modules")
+        cols = columns_from_frame(frame, sources, leaf_fallback=False)
+        texts = snippet.setdefault(f"{STEM}_{short}", {})
+        for col in cols:
+            desc = col["description"].strip()
+            texts[col["name"]] = _EXPAND.get(desc, desc)
+            col["description"] = ""
+        dtypes[short] = {
+            name: _DTYPE_CODES[str(dtype).replace("Utf8", "String")] for name, dtype in frame.schema.items()
+        }
+        write_yaml(schema_dir / f"{short}.yaml", {"schema": f"{STEM}_{short}", "kind": "dataframe", "columns": cols})
+    bad = sorted(f"{k}.{c}: {d!r}" for k, cs in snippet.items() for c, d in cs.items() if _bad(c, d))
+    if bad:
+        raise SystemExit("shl: missing or filler descriptions (add them to _EXTRA):\n" + "\n".join(bad))
+    write_yaml(SNIPPET, snippet)
+    by_columns: Dict[Tuple[str, ...], Tuple[str, Dict[str, str]]] = {}
+    for short, types in dtypes.items():  # the parsers find an endpoint's dtypes by its column list
+        other, other_types = by_columns.setdefault(tuple(types), (short, types))
+        if other_types != types:
+            raise SystemExit(f"shl: {other} and {short} share a column list but not its dtypes")
+    _write_schema_module(dtypes)
+    n = sum(map(len, snippet.values()))
+    print(f"{STEM}: {len(ops)} endpoints, stats_info over {len(modules)} modules, {n} descriptions")
 
 
 if __name__ == "__main__":

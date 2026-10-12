@@ -1,0 +1,1190 @@
+shl_athlete_career:
+  ga: Number of goals conceded (goals against).
+  gaa: Goals against average (per 60 minutes). Numeric, but sent as a string in some
+    rows and as a number in others.
+  gp: Number of games played.
+  gpi: Games played with ice time.
+  info_age_format: 'Unit of value: years.'
+  info_age_value: Age of the player in whole years.
+  info_birth_date: Date of birth (YYYY-MM-DD).
+  info_career_stats: Career stat rows of the player (empty in the sample).
+  info_first_name: Given (first) name of the player.
+  info_full_name: Given name and surname.
+  info_gender: Sex of the athlete or team (male / female).
+  info_height_format: 'Unit of value: cm.'
+  info_height_value: Height of the player in centimetres.
+  info_is_in_squad: Whether the player is in the current squad.
+  info_jersey_number: Jersey (shirt) number of the player.
+  info_last_name: Surname (family name) of the player.
+  info_nationality: Nationality (ISO country code).
+  info_player_id: 'isa (StatNet) player id as an INTEGER. Join trap: play-by-play
+    sends the same id as a STRING (player.playerId, pop/nep, assists) and map keys
+    are strings; cast before joining.'
+  info_position: Position code (CE = centre, LW, RW, D, GK, F); N/A in the athlete
+    game logs.
+  info_position_code: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when
+    unknown.
+  info_season_stats: Current-season stat rows of the player (empty in the sample).
+  info_shoots: Shooting side (L / R; Left / Right).
+  info_ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type);
+    label via layout-info seasonSeriesGameTypeTeams[].'
+  info_statistics_provider: Stats provider of the data (statnet seen).
+  info_team_code: Team code of the player's team (e.g. FHC).
+  info_team_id: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  info_team_instance_id: Club site instance id (e.g. fhc1_fhc).
+  info_team_name: Team name (e.g. Frölunda HC); empty in some rows.
+  info_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  info_uuid: Athlete uuid (platform key space) in player and goalie modules, team
+    uuid in team modules; joins to the athlete routes or /sports-v2/teams/{team_uuid}.
+  info_weight_format: 'Unit of value: kg.'
+  info_weight_value: Weight of the player in kilograms.
+  l: 'Goalie losses: games the goalie was charged with the loss, overtime and shootout
+    losses included.'
+  so: Number of shutouts (games without a goal against).
+  svs: Number of saves made by the goalie.
+  svs_perc: Save %. Numeric, but sent as a string in some rows and as a number in
+    others.
+  t: 'Goalie ties: games that ended level with the goalie credited a tie; 0 in every
+    sampled row, as overtime and shootouts now decide every game.'
+  w: 'Goalie wins: games the goalie was credited with the win, overtime and shootout
+    wins included.'
+shl_athlete_details:
+  athlete_data_contact_info: Contact info (null in captures).
+  athlete_data_created_at: Record creation time (ISO 8601; often null).
+  athlete_data_created_by: Record creator (site instance id; often null).
+  athlete_data_creator_site: Site that created the record (null in captures).
+  athlete_data_date_of_birth: Date of birth (YYYY-MM-DD).
+  athlete_data_deleted: Soft-delete flag of the record (false in every sample).
+  athlete_data_first_name: Given (first) name of the player.
+  athlete_data_gender: Sex of the athlete or team (male / female).
+  athlete_data_height: Height of the player in centimetres.
+  athlete_data_last_modified: Record last-modified time (ISO 8601).
+  athlete_data_last_name: Surname (family name) of the player.
+  athlete_data_metadata: Free-form metadata.
+  athlete_data_nationality: Nationality (ISO country code).
+  athlete_data_player_ext_ids: External ids of the athlete (isa, ramses_legacy, ramses_generic_legacy,
+    ramses_merged).
+  athlete_data_shoots: Shooting side (L / R; Left / Right).
+  athlete_data_uuid: Athlete uuid (platform key space; qQ9-... or 10-char form); joins
+    to the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy
+    id.
+  athlete_data_weight: Weight of the player in kilograms.
+shl_athlete_game_log:
+  date: Date of the game (YYYY-MM-DD).
+  ga: Number of goals conceded (goals against).
+  gaa: Goals against average (per 60 minutes). Numeric, but sent as a string in some
+    rows and as a number in others.
+  gp: Number of games played.
+  gpi: Games played with ice time.
+  gs: Games started (goalie log).
+  guest_team: Away team SHORT NAME (e.g. Luleå), not a code.
+  guest_team_icon: Away team logo URL.
+  home_team: Home team SHORT NAME (e.g. Frölunda; may carry a trailing space), not
+    a code.
+  home_team_icon: Home team logo URL.
+  info_birth_date: Date of birth (YYYY-MM-DD).
+  info_career_stats: Career stat rows of the player (empty in the sample).
+  info_first_name: Given (first) name of the player.
+  info_full_name: Given name and surname.
+  info_gender: Sex of the athlete or team (male / female).
+  info_is_in_squad: Whether the player is in the current squad.
+  info_jersey_number: Jersey (shirt) number of the player.
+  info_last_name: Surname (family name) of the player.
+  info_nationality: Nationality (ISO country code).
+  info_player_id: 'isa (StatNet) player id as an INTEGER. Join trap: play-by-play
+    sends the same id as a STRING (player.playerId, pop/nep, assists) and map keys
+    are strings; cast before joining.'
+  info_position: Position code (CE = centre, LW, RW, D, GK, F); N/A in the athlete
+    game logs.
+  info_position_code: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when
+    unknown.
+  info_season_stats: Current-season stat rows of the player (empty in the sample).
+  info_shoots: Shooting side (L / R; Left / Right). '-' placeholder in every sample.
+  info_ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type);
+    label via layout-info seasonSeriesGameTypeTeams[].'
+  info_statistics_provider: Stats provider of the data (statnet seen).
+  info_team_name: Team name (e.g. Frölunda HC); empty in some rows. Empty string in
+    every sample (placeholder).
+  l: 1 when the goalie was charged with the loss in this game (overtime and shootout
+    included), else 0.
+  series: Series id in the career log.
+  so: Number of shutouts (games without a goal against).
+  soga: Shots on goal against.
+  svs: Number of saves made by the goalie.
+  svs_perc: Save %. Numeric, but sent as a string in some rows and as a number in
+    others.
+  t: 1 when the goalie was credited a tie in this game, else 0; 0 in every sampled
+    row, as overtime and shootouts now decide every game.
+  w: 1 when the goalie was credited with the win in this game (overtime and shootout
+    included), else 0.
+shl_athlete_profile:
+  age_format: 'Unit of value: years.'
+  age_value: Age of the player in whole years.
+  birth_date: Date of birth (YYYY-MM-DD).
+  career_stats: Career stat rows of the player (empty in the sample).
+  first_name: Given (first) name of the player.
+  full_name: Given name and surname.
+  gender: Sex of the athlete or team (male / female).
+  height_format: 'Unit of value: cm.'
+  height_value: Height of the player in centimetres.
+  is_in_squad: Whether the player is in the current squad.
+  jersey_number: Jersey (shirt) number of the player.
+  last_name: Surname (family name) of the player.
+  media_alt: Image alt text. Empty string in every sample (placeholder).
+  media_focal_point: Image crop focal point.
+  media_photographer: Image credit. Empty string in every sample (placeholder).
+  media_srcset: Responsive image srcset.
+  media_url: Portrait URL on the imgix CDN.
+  media_url_img_original_proportion: Image URL, original proportion.
+  media_url_placeholder_image: Placeholder image URL. Empty string in every sample
+    (placeholder).
+  media_videourl: Link to a club video. Empty string in every sample (placeholder).
+  nationality: Nationality (ISO country code).
+  position: Position label in Swedish (Målvakt = goalkeeper).
+  position_code: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
+  season_stats: Current-season stat rows of the player (empty in the sample).
+  shoots: Shooting side (L / R; Left / Right).
+  team_code: StatNet team code (SAIK, FHC).
+  team_instance_id: Club site instance id (e.g. fhc1_fhc).
+  team_media: Media URL or string.
+  team_name: Name of the team.
+  team_uuid: Platform team uuid.
+  uuid: Athlete uuid (platform key space, qQ9-... or 10-char form); joins to the athlete
+    routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id.
+  weight_format: 'Unit of value: kg.'
+  weight_value: Weight of the player in kilograms.
+shl_athlete_seasons:
+  label: 'Display label (season list: 2025/2026).'
+  name: Season label (e.g. 2025/2026).
+  value: Season START year (2025 = 2025/2026); the season= param of playerProfile_seasonGameLog.
+    Numeric value sent as a string.
+shl_boxscore:
+  a: Number of assists credited.
+  first_name: Given (first) name of the player.
+  fo_perc: Face-off win %.
+  fol: Face-offs lost.
+  fow: Number of face-offs won.
+  full_name: Given name and surname.
+  g: Number of goals scored.
+  ga: Number of goals conceded (goals against).
+  hits: Body checks delivered.
+  last_name: Surname (family name) of the player.
+  line: Line (unit) number the player was listed on.
+  nr: Jersey (shirt) number of the player.
+  period: 'Period: 0 = the whole game, 1-3 the periods, 4 and up overtime.'
+  pim: Penalty minutes.
+  player_id: isa (StatNet) player id, Int64. Play-by-play sends it as a string, every
+    other route as an integer; it is cast here so the frames join.
+  plus_minus: Plus/minus in the game.
+  pos: Position code in this game (e.g. CE, LW, RW, D, GK).
+  position_group: skater or goalie (goalies come from the body's gkStats rows).
+  ppg: Power-play goals.
+  ppsog: Power-play shots on goal.
+  sog: Number of shots on goal.
+  soga: Shots on goal against.
+  spga: Unverified goalie column (box score).
+  svs: Number of saves made by the goalie.
+  svs_perc: Save percentage of the game as a FRACTION 0-1 (e.g. '0.9655...'); integer
+    0 for a goalie without shots. Numeric, but sent as a string in some rows and as
+    a number in others.
+  sw: Number of shots that missed the net.
+  team_id: Team code (e.g. FHC) in gameday and standings payloads; not the team uuid.
+  team_side: 'Side of the game: home or away.'
+  toi: Time on ice (mm:ss). Clock/duration as an mm:ss string.
+shl_game_header:
+  away_team_address: Club postal address.
+  away_team_email: Contact email address of the club.
+  away_team_founded_on: Club founding date. Numeric value sent as a string.
+  away_team_icon: URL of the team logo image.
+  away_team_instance_id: Club site instance id (e.g. fhc1_fhc).
+  away_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  away_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  away_team_names_full: Full club name ('Herr' = men's team).
+  away_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  away_team_names_long: Long club name ('Herr' = men's team).
+  away_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  away_team_names_short: Short club name ('Herr' = men's team).
+  away_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  away_team_score: Goals scored by the team in the game.
+  away_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  game_info_arena_name: Name of the arena hosting the game.
+  game_info_ext_id: StatNet game number as a string (StatNet key space); equals gameday
+    gameId. Numeric value sent as a string.
+  game_info_game_uuid: Game uuid (platform key space, e.g. bdhvuc5tex); joins to schedule
+    gameInfo[].uuid and every gameday/{game_uuid} route. The StatNet number of the
+    same game is gameId.
+  game_info_overtime: Whether the game went to overtime.
+  game_info_round_label: Round label (often empty). Empty string in every sample (placeholder).
+  game_info_round_number: Schedule round (1 = first game day of the season).
+  game_info_series_code: Series code of the game (SHL).
+  game_info_series_display_name: Series label shown on the site (SHL).
+  game_info_series_name: Series label of the game (SHL).
+  game_info_shootout: Whether the game went to a shootout.
+  game_info_start_date_time: Scheduled start, local time (Europe/Stockholm).
+  game_info_state: Game state with an underscore (post_game seen); the schedule spells
+    it post-game.
+  home_team_address: Club postal address.
+  home_team_email: Contact email address of the club.
+  home_team_founded_on: Club founding date. Numeric value sent as a string.
+  home_team_icon: URL of the team logo image.
+  home_team_instance_id: Club site instance id (e.g. fhc1_fhc).
+  home_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  home_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  home_team_names_full: Full club name ('Herr' = men's team).
+  home_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  home_team_names_long: Long club name ('Herr' = men's team).
+  home_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  home_team_names_short: Short club name ('Herr' = men's team).
+  home_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  home_team_score: Goals scored by the team in the game.
+  home_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  instance_context_site_team_is_away_team: Whether the site's team is the away team.
+  instance_context_site_team_is_home_team: Whether the site's team is the home team.
+  instance_context_site_team_is_in_game: Whether the site's team plays in the game.
+  series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk); the seriesUuid
+    param of game-schedule.
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+shl_game_overview:
+  away_goals: Away goals after this event (running score).
+  away_team_game_id: StatNet game number (StatNet key space, e.g. 22003); keys stats-info
+    games{} and equals sports-v2 game-info extId. Not the game uuid.
+  away_team_game_source_id: StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC);
+    the same game as gameId.
+  away_team_game_uuid: Game uuid (platform key space, e.g. bdhvuc5tex); joins to schedule
+    gameInfo[].uuid and every gameday/{game_uuid} route. The StatNet number of the
+    same game is gameId.
+  away_team_place: 'Side of the game: home or away.'
+  away_team_score: Goals scored by the team in the game.
+  away_team_team_code: Team code (FHC, LHC, ...).
+  away_team_team_id: Team code (e.g. FHC) in gameday and standings payloads; not the
+    team uuid.
+  away_team_team_name: Team display name (e.g. Frölunda HC).
+  game_uuid: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  home_goals: Home goals after this event (running score).
+  home_team_game_id: StatNet game number (StatNet key space, e.g. 22003); keys stats-info
+    games{} and equals sports-v2 game-info extId. Not the game uuid.
+  home_team_game_source_id: StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC);
+    the same game as gameId.
+  home_team_game_uuid: Game uuid (platform key space, e.g. bdhvuc5tex); joins to schedule
+    gameInfo[].uuid and every gameday/{game_uuid} route. The StatNet number of the
+    same game is gameId.
+  home_team_place: 'Side of the game: home or away.'
+  home_team_score: Goals scored by the team in the game.
+  home_team_team_code: Team code (FHC, LHC, ...).
+  home_team_team_id: Team code (e.g. FHC) in gameday and standings payloads; not the
+    team uuid.
+  home_team_team_name: Team display name (e.g. Frölunda HC).
+  state: StatNet game state (GameEnded seen).
+  time_period: Period (1-3, 4 = overtime, 5 = shootout).
+  time_period_time: Time in period (MM:SS). Clock/duration as an mm:ss string.
+shl_game_summary:
+  best_scorers: Top scorers of the game.
+  statistics_provider: Stats provider of the data (statnet seen).
+  team_head2_head: Previous meetings of the two teams.
+  team_period_caption: Caption text of the image.
+  team_period_overtime: Whether the game went to overtime.
+  team_period_shootout: Whether the game went to a shootout.
+  team_period_stats: 'Team stats per period: rows with home and away values.'
+shl_last_game_day:
+  away_team_code: Away team code (e.g. LHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  away_team_icon: URL of the team logo image.
+  away_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  away_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  away_team_names_full: Full club name ('Herr' = men's team).
+  away_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  away_team_names_long: Long club name ('Herr' = men's team).
+  away_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  away_team_names_short: Short club name ('Herr' = men's team).
+  away_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  away_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  away_team_score: Goals scored by the team in the game.
+  away_team_status: Result for the team (WIN, LOSE) or record status.
+  away_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  game_uuid: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  home_team_code: Home team code (e.g. FHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  home_team_icon: URL of the team logo image.
+  home_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  home_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  home_team_names_full: Full club name ('Herr' = men's team).
+  home_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  home_team_names_long: Long club name ('Herr' = men's team).
+  home_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  home_team_names_short: Short club name ('Herr' = men's team).
+  home_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  home_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  home_team_score: Goals scored by the team in the game.
+  home_team_status: Result for the team (WIN, LOSE) or record status.
+  home_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  overtime: Whether the game went to overtime.
+  series_code: Series code (SHL, CHL).
+  series_display_name: Series label shown on the site (SHL, CHL).
+  series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
+  shootout: Whether the game went to a shootout.
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  start_date_time: Scheduled start, local time (Europe/Stockholm).
+  state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
+  venue_name: Name of the arena (venue).
+  venue_uuid: Arena uuid (platform key space).
+shl_layout_info:
+  game_type: Game type record (uuid, code regular / playoff / qualdown, Swedish name).
+  game_type_name: 'Game type label in Swedish: Grundserie = regular season, Slutspel
+    = playoffs, Kvalspel nedflyttning = relegation qualification, Kvalserien = the
+    old promotion/relegation series.'
+  game_type_uuid: Game type uuid (platform key space; regular qQ9-af37Ti40B); the
+    gameTypeUuid param of game-schedule.
+  season: Season END year (2026 = 2025/26).
+  season_code: 'Provider season code: the START year as a string (2025 = 2025/26).'
+  season_name: Season label (e.g. 2025/2026).
+  season_uuid: Season uuid (platform key space; code 2025 = 2025/2026); the seasonUuid
+    param of game-schedule.
+  series_code: Series code (SHL, CHL; HA and Kvalserien in old career logs).
+  series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  state: 'ssgt state: active (the current season) or closed.'
+shl_next_game_day:
+  away_team_code: Away team code (e.g. LHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  away_team_icon: URL of the team logo image.
+  away_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  away_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  away_team_names_full: Full club name ('Herr' = men's team).
+  away_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  away_team_names_long: Long club name ('Herr' = men's team).
+  away_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  away_team_names_short: Short club name ('Herr' = men's team).
+  away_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  away_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  away_team_score: Goals scored by the team in the game.
+  away_team_status: Result for the team (WIN, LOSE) or record status.
+  away_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  game_uuid: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  home_team_code: Home team code (e.g. FHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  home_team_icon: URL of the team logo image.
+  home_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  home_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  home_team_names_full: Full club name ('Herr' = men's team).
+  home_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  home_team_names_long: Long club name ('Herr' = men's team).
+  home_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  home_team_names_short: Short club name ('Herr' = men's team).
+  home_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  home_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  home_team_score: Goals scored by the team in the game.
+  home_team_status: Result for the team (WIN, LOSE) or record status.
+  home_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  overtime: Whether the game went to overtime.
+  series_code: Series code (SHL, CHL).
+  series_display_name: Series label shown on the site (SHL, CHL).
+  series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
+  shootout: Whether the game went to a shootout.
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  start_date_time: Scheduled start, local time (Europe/Stockholm).
+  state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
+  venue_name: Name of the arena (venue).
+  venue_uuid: Arena uuid (platform key space).
+shl_pbp:
+  arena: Name of the arena hosting the game.
+  assist1_family_name: 'First assist: surname.'
+  assist1_first_name: 'First assist: given name.'
+  assist1_jersey_today: 'First assist: jersey number in this game (string).'
+  assist1_player_id: isa id of the first assist.
+  assist2_family_name: 'Second assist: surname.'
+  assist2_first_name: 'Second assist: given name.'
+  assist2_jersey_today: 'Second assist: jersey number in this game (string).'
+  assist2_player_id: isa id of the second assist.
+  attendance: Spectators at the game.
+  away_goals: Away goals after this event (running score).
+  away_score: Goals scored by the team in the game.
+  away_team_code: Team code (FHC, LHC, ...).
+  away_team_id: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  away_team_name: Team display name (e.g. Frölunda HC).
+  did_render_in_penalty_shot: Whether the penalty led to a penalty shot.
+  event_id: StatNet event sequence number; unique within one game only (pair it with
+    gameId or gameUuid).
+  event_place: 'Side of the game: home or away.'
+  event_team_code: Team code (FHC, LHC, ...).
+  event_team_id: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  event_team_name: Team display name (e.g. Frölunda HC).
+  event_uuid: Event uuid (platform key space), unique across games. eventId is the
+    StatNet per-game sequence number.
+  finished: Whether the period is finished.
+  finished_at: Period end time (ISO 8601 UTC).
+  game_id: StatNet game number (StatNet key space, e.g. 22003); keys stats-info games{}
+    and equals sports-v2 game-info extId. Not the game uuid.
+  game_source_id: StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same
+    game as gameId.
+  game_state: Game state (e.g. GameEnded).
+  game_type: 'StatNet league label: Elitserien (SHL''s name until 2013).'
+  game_uuid: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  goal_section: Goal-mouth section of the shot/goal (-3 lines up with blocked shots;
+    unverified).
+  goal_status: Goal strength (e.g. EQ, PP1, SH1).
+  home_goals: Home goals after this event (running score).
+  home_score: Goals scored by the team in the game.
+  home_team_code: Team code (FHC, LHC, ...).
+  home_team_id: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  home_team_name: Team display name (e.g. Frölunda HC).
+  is_empty_net_goal: Whether the goal went into an empty net.
+  is_entering: Goalie event, true when the goalie enters the ice and false when leaving.
+  is_penalty_shot: Whether the shot/goal was a penalty shot.
+  location_x: Shot x coordinate. Units, origin and orientation unverified; range -29..481
+    over the 118 located events of game bdhvuc5tex (discovery download, 2026-10-12).
+  location_y: Shot y coordinate. Units, origin and orientation unverified; range -140..129
+    over the 118 located events of game bdhvuc5tex (discovery download, 2026-10-12).
+  nep_player_ids: isa ids of the conceding side's players on the ice for the goal
+    (List[Int64]).
+  offence: Penalty offence code (e.g. CROSS, HOOK, TRIP).
+  period: Period (1-3, 4 = overtime, 5 = shootout).
+  player_family_name: Surname (family name) of the player.
+  player_first_name: Given (first) name of the player.
+  player_id: isa (StatNet) player id, Int64. Play-by-play sends it as a string, every
+    other route as an integer; it is cast here so the frames join.
+  player_jersey_today: Jersey number in this game. Numeric value sent as a string.
+  pop_player_ids: isa ids of the scoring side's players on the ice for the goal (List[Int64]).
+  real_world_time: Wall-clock time of the event (local).
+  revision: Event revision counter.
+  round: Schedule round of the game (1 = first game day).
+  start_date_and_time: Scheduled start (local).
+  started: Whether the period has started.
+  started_at: Period start time (ISO 8601 UTC).
+  time: Game clock in the period (MM:SS, counting up from 00:00). Clock/duration as
+    an mm:ss string.
+  type: 'Event type: goal, shot, penalty, goalkeeper (goalie in / out), period (start
+    / end), timeout.'
+  updated_time: Last update time of the event.
+  variant_bench_time: Bench minor minutes in the penalty. Numeric value sent as a
+    string.
+  variant_description: Text description (penalty, media).
+  variant_double_minor_time: Double-minor minutes in the penalty. Numeric value sent
+    as a string.
+  variant_g_m_time: Game-misconduct minutes in the penalty. Numeric value sent as
+    a string.
+  variant_m_p_time: Match-penalty minutes. Numeric value sent as a string.
+  variant_major_time: Major-penalty minutes. Numeric value sent as a string.
+  variant_minor_time: Minor-penalty minutes. Numeric value sent as a string.
+  variant_misconduct_time: Misconduct minutes. Numeric value sent as a string.
+  variant_short_name: Penalty type (Minor, Major, ...).
+shl_player_box:
+  a: Number of assists credited.
+  bk_s: Number of blocked shots.
+  first_name: Given (first) name of the player.
+  fo_perc: Face-off win %.
+  fo_tot: Face-offs taken.
+  fol: Face-offs lost.
+  fow: Number of face-offs won.
+  full_name: Given name and surname.
+  g: Number of goals scored.
+  ga: Number of goals conceded (goals against).
+  hits: Body checks delivered.
+  last_name: Surname (family name) of the player.
+  line: Line (unit) number the player was listed on.
+  ms: Missed shots (wide + blocked).
+  nep: On ice for goals against (count).
+  nr: Jersey (shirt) number of the player.
+  num_pen: Number of penalties.
+  period: 'Period: 0 = the whole game, 1-3 the periods, 4 and up overtime.'
+  pim: Penalty minutes.
+  player_id: isa (StatNet) player id, Int64. Play-by-play sends it as a string, every
+    other route as an integer; it is cast here so the frames join.
+  plus_minus: Plus/minus in the game.
+  pop: On ice for goals for (count).
+  pos: Position code in this game (e.g. CE, LW, RW, D, GK).
+  position_group: skater or goalie (goalies come from the body's gkStats rows).
+  ppg: Power-play goals.
+  ppsog: Power-play shots on goal.
+  shg: Shorthanded goals.
+  sog: Number of shots on goal.
+  soga: Shots on goal against.
+  spga: Unverified goalie column (box score).
+  svs: Number of saves made by the goalie.
+  svs_perc: Save percentage of the game as a FRACTION 0-1 (e.g. '0.9655...'); integer
+    0 for a goalie without shots. Numeric, but sent as a string in some rows and as
+    a number in others.
+  sw: Number of shots that missed the net.
+  team_id: Team code (e.g. FHC) in gameday and standings payloads; not the team uuid.
+  team_side: 'Side of the game: home or away.'
+  toi: Time on ice (mm:ss). Clock/duration as an mm:ss string.
+  tp: Points (goals + assists).
+shl_player_h2h:
+  age_format: 'Unit of value: years.'
+  age_value: Age of the player in whole years.
+  birth_date: Date of birth (YYYY-MM-DD).
+  career_stats: Career stat rows of the player (empty in the sample).
+  effective_ssgt_uuid: 'The ssgt the head-to-head was computed for: the CURRENT season,
+    whatever the path asked.'
+  first_name: Given (first) name of the player.
+  full_name: Given name and surname.
+  gender: Sex of the athlete or team (male / female).
+  height_format: 'Unit of value: cm.'
+  height_value: Height of the player in centimetres.
+  is_in_squad: Whether the player is in the current squad.
+  jersey_number: Jersey (shirt) number of the player.
+  last_name: Surname (family name) of the player.
+  match_stats_a: Number of assists credited.
+  match_stats_bk_s: Number of blocked shots.
+  match_stats_fo_perc: Face-off win %.
+  match_stats_fo_tot: Face-offs taken.
+  match_stats_fol: Face-offs lost.
+  match_stats_fow: Number of face-offs won.
+  match_stats_g: Number of goals scored.
+  match_stats_hits: Body checks delivered.
+  match_stats_line: Line (unit) number the player was listed on.
+  match_stats_ms: Missed shots (wide + blocked).
+  match_stats_nep: On ice for goals against (count).
+  match_stats_nr: Jersey (shirt) number of the player.
+  match_stats_num_pen: Number of penalties.
+  match_stats_pim: Penalty minutes.
+  match_stats_plus_minus: Goals for minus goals against while on ice (+/-).
+  match_stats_pop: On ice for goals for (count).
+  match_stats_pos: Position code in this game (e.g. CE, LW, RW, D, GK).
+  match_stats_ppg: Power-play goals.
+  match_stats_ppsog: Power-play shots on goal.
+  match_stats_shg: Shorthanded goals.
+  match_stats_sog: Number of shots on goal.
+  match_stats_sw: Number of shots that missed the net.
+  match_stats_toi: Time on ice (mm:ss). Clock/duration as an mm:ss string.
+  match_stats_tp: Points (goals + assists).
+  media_alt: Image alt text. Empty string in every sample (placeholder).
+  media_srcset: Responsive image srcset.
+  media_url: Portrait URL on the imgix CDN.
+  nationality: Nationality (ISO country code).
+  position: Position label in English (e.g. Forward); N/A when unknown.
+  position_code: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
+  season_avg_stats: Head-to-head season averages.
+  season_stats: Current-season stat rows of the player (empty in the sample).
+  statistics_provider: Stats provider of the data (statnet seen).
+  team_code: StatNet team code (SAIK, FHC).
+  team_instance_id: Club site instance id (e.g. fhc1_fhc).
+  team_media: Media URL or string.
+  team_name: Name of the team.
+  team_uuid: Platform team uuid.
+  uuid: Athlete uuid (platform key space; qQ9-... or 10-char form); joins to the athlete
+    routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id.
+  weight_format: 'Unit of value: kg.'
+  weight_value: Weight of the player in kilograms.
+shl_post_game_team_stats:
+  away_team_center_type: Stat code compared in the middle (e.g. SEff, PPPerc).
+  away_team_center_value: Value (string-encoded). Numeric, but sent as a string in
+    some rows and as a number in others.
+  away_team_left_type: Stat code compared on the left (e.g. G, PPG).
+  away_team_left_value: Value (string-encoded).
+  away_team_right_type: Stat code compared on the right (e.g. SOG, PPOpp).
+  away_team_right_value: Value (string-encoded).
+  away_team_side_translate_key: Translation key of the side.
+  home_team_center_type: Stat code compared in the middle (e.g. SEff, PPPerc).
+  home_team_center_value: Value (string-encoded). Numeric, but sent as a string in
+    some rows and as a number in others.
+  home_team_left_type: Stat code compared on the left (e.g. G, PPG).
+  home_team_left_value: Value (string-encoded).
+  home_team_right_type: Stat code compared on the right (e.g. SOG, PPOpp).
+  home_team_right_value: Value (string-encoded).
+  home_team_side_translate_key: Translation key of the side.
+shl_roster:
+  first_name: Given (first) name of the player.
+  full_name: Given name and surname.
+  gender: Sex of the athlete or team (male / female).
+  jersey_number: Jersey (shirt) number of the player.
+  last_name: Surname (family name) of the player.
+  nationality: Nationality (ISO country code).
+  player_type: Roster role of the player (unverified).
+  portrait_url: URL of the player's latest rendered portrait.
+  position: 'Position group label: Målvakter = goalkeepers, Backar = defencemen, Forwards.'
+  position_code: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
+  uuid: Athlete uuid (platform key space; qQ9-... or 10-char form); joins to the athlete
+    routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id.
+shl_schedule:
+  away_team_code: Away team code (e.g. LHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  away_team_icon: URL of the team logo image.
+  away_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  away_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  away_team_names_full: Full club name ('Herr' = men's team).
+  away_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  away_team_names_long: Long club name ('Herr' = men's team).
+  away_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  away_team_names_short: Short club name ('Herr' = men's team).
+  away_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  away_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  away_team_score: Goals scored by the team in the game.
+  away_team_status: Result for the team (WIN, LOSE) or record status.
+  away_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  game_uuid: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  home_team_code: Home team code (e.g. FHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  home_team_icon: URL of the team logo image.
+  home_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  home_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  home_team_names_full: Full club name ('Herr' = men's team).
+  home_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  home_team_names_long: Long club name ('Herr' = men's team).
+  home_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  home_team_names_short: Short club name ('Herr' = men's team).
+  home_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  home_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  home_team_score: Goals scored by the team in the game.
+  home_team_status: Result for the team (WIN, LOSE) or record status.
+  home_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  overtime: Whether the game went to overtime.
+  raw_start_date_time: Start time, UTC ISO 8601.
+  round_label: Round label (often empty). Empty string in every sample (placeholder).
+  round_number: Schedule round (1 = first game day of the season).
+  series_code: Series code (SHL, CHL).
+  series_display_name: Series label shown on the site (SHL, CHL).
+  series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
+  shootout: Whether the game went to a shootout.
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  start_date_time: Scheduled start, local time (Europe/Stockholm).
+  state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
+  venue_name: Name of the arena (venue).
+  venue_uuid: Arena uuid (platform key space).
+shl_season_filter:
+  code: 'Game type code: regular, playoff, qualdown (legacy career logs: qualification).'
+  deleted: Soft-delete flag of the record (false in every sample).
+  kind: 'Directory entry kind: series, season or game_type.'
+  name: 'Game type label in Swedish: Grundserie = regular season, Slutspel = playoffs,
+    Kvalspel nedflyttning = relegation qualification, Kvalserien = the old promotion/relegation
+    series.'
+  uuid: Game type uuid (platform key space; regular qQ9-af37Ti40B); the gameTypeUuid
+    param of game-schedule.
+shl_sites:
+  icon: URL of the team logo image.
+  id: Club site instance id (e.g. bif1_bif); equals instanceId. Not a team uuid or
+    code.
+  instance_id: Club site instance id (e.g. fhc1_fhc).
+  name: Full name of the club.
+  public_url: Public image URL.
+shl_ssgt_provider:
+  provider: Stats provider of the ssgt (statnet, impleo).
+shl_standings:
+  diff: Goal difference.
+  ga: Number of goals conceded (goals against).
+  gf: Number of goals scored (goals for).
+  gp: Number of games played.
+  l: Regulation losses.
+  otl: Overtime and shootout losses.
+  otw: Overtime and shootout wins.
+  p: Standings points (3 per regulation win, 2 per OT/SO win, 1 per OT/SO loss).
+  rank: Position in the table (1 = top).
+  rank_diff: Change in standings rank, in places (the reference point is unverified).
+  season: Season END year (2026 = 2025/26).
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  t: Games tied after regulation, decided in overtime or a shootout (= OTW + OTL).
+  team_code: StatNet team code (SAIK, FHC).
+  team_name: Name of the team.
+  team_short_name: Short display name of the team.
+  team_uuid: Platform team uuid.
+  w: Regulation wins.
+shl_stats_info:
+  a: Number of assists credited.
+  a_firsts: Primary assists.
+  a_seconds: Secondary assists.
+  att_avg_home: Average home attendance per game.
+  att_avg_overall: Average attendance per game.
+  att_avg_road: Average away attendance per game.
+  att_total_home: Total home attendance.
+  att_total_overall: Total attendance.
+  att_total_road: Total away attendance.
+  attendance: Spectators at the game.
+  bk_s: Number of blocked shots.
+  ca: Corsi against (shot attempts against).
+  cf: Corsi for (shot attempts for).
+  cf_perc: Corsi for percentage. Numeric value sent as a string.
+  close_cf_perc: Corsi for percentage in close-score situations. Numeric, but sent
+    as a string in some rows and as a number in others.
+  close_ff_perc: Fenwick for percentage in close-score situations. Numeric, but sent
+    as a string in some rows and as a number in others.
+  date_time: Game date and time.
+  dfo: Defensive-zone face-offs.
+  dfo_perc: Defensive-zone face-offs won %. Numeric value sent as a string.
+  dfol: Defensive-zone face-offs lost.
+  dfow: Defensive-zone face-offs won.
+  diff: Goal difference.
+  eff_pim: Effective penalty minutes (served).
+  eng: Empty-net goals.
+  enga: Empty-net goals against.
+  eqa: Even-strength assists.
+  eqg: Even-strength goals.
+  eqtp: Even-strength points.
+  es_minus: Even-strength goals against while on ice.
+  es_plus: Even-strength goals for while on ice.
+  es_plus_minus: Even-strength plus/minus.
+  esa: Even-strength assists.
+  esg: Even-strength goals.
+  esga: Even-strength goals against.
+  essog: Even-strength shots on goal.
+  essoga: Even-strength shots on goal against.
+  essvs_perc: Even-strength save %. Numeric value sent as a string.
+  essw: Even-strength shots wide.
+  estoi_gp: Even-strength time on ice per game (mm:ss). Clock/duration as an mm:ss
+    string.
+  estp: Even-strength points.
+  fa: Fenwick against (unblocked shot attempts against).
+  ff: Fenwick for (unblocked shot attempts for).
+  ff_perc: Fenwick for percentage. Numeric, but sent as a string in some rows and
+    as a number in others.
+  fo: Face-offs taken.
+  fo_perc: Face-off win %. Numeric value sent as a string.
+  fo_violation_perc: Face-off violation %. Numeric value sent as a string.
+  fo_violations: Face-off violations.
+  fo_violations_perc: Face-off violation %.
+  fol: Face-offs lost.
+  fow: Number of face-offs won.
+  freezes: Puck freezes (stoppages caused).
+  freezes_against: Puck freezes by the opponent.
+  g: Number of goals scored.
+  ga: Number of goals conceded (goals against).
+  gaa: Goals against average (per 60 minutes). Numeric value sent as a string.
+  game_score_away_score: Goals scored by the away team.
+  game_score_decided_in: Filter values for how a game was decided.
+  game_score_home_score: Goals scored by the home team.
+  gapg: Goals against per game. Numeric value sent as a string.
+  gfg: First goal of the game.
+  gm: Game misconducts.
+  gp: Number of games played.
+  gp_home: Home games played.
+  gp_road: Away games played.
+  gpg: Goals per game. Numeric value sent as a string.
+  gpi: Games played with ice time.
+  guest_team: Away team code (e.g. HV71).
+  gwg: Game-winning goals.
+  hits: Body checks delivered.
+  home_team: Home team code (e.g. BIF).
+  icing_against: Icings by the opponent.
+  icings: Icing calls against the team.
+  info_away_team_id: Away team code (e.g. LHC); not a uuid.
+  info_birth_date: Date of birth (YYYY-MM-DD).
+  info_club_name: Club names by length.
+  info_club_name_code: Display abbreviation; differs from the team code for some clubs
+    (SKE vs SAIK, ÖRE vs OHK).
+  info_club_name_full: Full club name ('Herr' = men's team).
+  info_club_name_long: Long club name ('Herr' = men's team).
+  info_club_name_short: Short club name ('Herr' = men's team).
+  info_code: Team code (e.g. SAIK) in team and standings modules; absent for players.
+  info_created_at: Record creation time (ISO 8601; often null).
+  info_created_by: Record creator (site instance id; often null).
+  info_deleted: Soft-delete flag of the record (false in every sample).
+  info_display_name: Team display-name override; unused. Empty string in every sample
+    (placeholder).
+  info_ext_ids: External ids of the record.
+  info_first_name: Given (first) name of the player.
+  info_full_name: Given name and surname.
+  info_game_id: StatNet game number (StatNet key space, e.g. 22003); keys stats-info
+    games{} and equals sports-v2 game-info extId. Not the game uuid.
+  info_gender: Sex of the athlete or team (male / female).
+  info_graphics_library: Graphics asset key.
+  info_height_format: 'Unit of value: cm.'
+  info_height_value: Height of the player in centimetres.
+  info_home_team_id: Home team code (e.g. FHC); not a uuid.
+  info_id: Team code (e.g. SAIK) in team and standings modules; null in player, goalie
+    and games modules (use info.uuid).
+  info_last_modified: Record last-modified time (ISO 8601).
+  info_last_name: Surname (family name) of the player.
+  info_logo: URL of the team logo image.
+  info_nationality: Nationality (ISO country code).
+  info_number: Jersey (shirt) number of the player.
+  info_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the logo
+    at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  info_ownersite: Owning site code.
+  info_player_media: Portrait image reference (mediaString, type).
+  info_player_media_id: Media-library id of the portrait (joins to /api/media; not
+    a player id).
+  info_player_media_media_string: Media reference (type|source|id).
+  info_player_media_sort_order: Ordering index for display.
+  info_player_media_type: Image kind (portrait).
+  info_position: Position code (CE = centre, LW, RW, D, GK, F); N/A in the athlete
+    game logs.
+  info_series: Series with their uuids (SHL, CHL).
+  info_shoots: Shooting side (L / R; Left / Right).
+  info_site_display_name: Club name as shown on its own site (e.g. Frölunda HC).
+  info_social_media: Club social links.
+  info_sport: Sport records the club belongs to (ice hockey).
+  info_team_code: Team code of the player's team (e.g. FHC).
+  info_team_ext_ids: External ids of the team.
+  info_team_id: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  info_team_info_accreditation: Press-accreditation contact, free Swedish text (e.g.
+    'Senast dagen före match till …' = 'no later than the day before the game, to
+    …').
+  info_team_info_address: Club postal address.
+  info_team_info_chairman: Name of the club chairman.
+  info_team_info_contact: Club contact text.
+  info_team_info_email: Contact email address of the club.
+  info_team_info_facebook: Club Facebook URL.
+  info_team_info_fax: Fax number of the club.
+  info_team_info_finals: Club's final appearances (text).
+  info_team_info_founded: Club founding year (text). Numeric value sent as a string.
+  info_team_info_golds: Club's championships (text).
+  info_team_info_instagram: Club Instagram URL.
+  info_team_info_manager: Club general manager.
+  info_team_info_phone: Telephone number of the club.
+  info_team_info_retired_numbers: Retired jersey numbers (text).
+  info_team_info_twitter: Club X/Twitter URL.
+  info_team_media: Media URL or string.
+  info_team_name: Team name (e.g. Frölunda HC); empty in some rows.
+  info_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  info_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  info_team_names_full: Full club name ('Herr' = men's team).
+  info_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  info_team_names_long: Long club name ('Herr' = men's team).
+  info_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  info_team_names_short: Short club name ('Herr' = men's team).
+  info_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  info_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  info_team_site_display_name: Club name as shown on its own site (e.g. Frölunda HC).
+  info_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  info_type: 'Record type of the row''s subject: team in team modules, athlete in
+    player and goalie modules.'
+  info_uuid: Athlete uuid (platform key space) in player and goalie modules, team
+    uuid in team modules; joins to the athlete routes or /sports-v2/teams/{team_uuid}.
+  info_weight_format: 'Unit of value: kg.'
+  info_weight_value: Weight of the player in kilograms.
+  l: 'Losses. Team modules (teams_result): total losses, regulation + overtime + shootout;
+    goalkeeper modules: losses charged to the goalie; standings_standings: regulation
+    losses only.'
+  leading: 'Times leading: how often the team was ahead (exact definition unverified).'
+  leading1: Games leading after period 1 (unverified).
+  leading2: Games leading after period 2 (unverified).
+  major: Major penalties.
+  minor: Minor penalties.
+  minus: Goals against while on ice.
+  mip: Minutes played (mm:ss). Clock/duration as an mm:ss string.
+  misc: Misconduct penalties.
+  mp: Match penalties.
+  ms: Missed shots (wide + blocked).
+  msa: Missed shots against (wide + blocked).
+  off_pim: Offensive penalty minutes.
+  offsides: Offside calls against the team.
+  offsides_against: Offsides by the opponent.
+  ofo: Offensive-zone face-offs.
+  ofo_perc: Offensive-zone face-offs won %. Numeric value sent as a string.
+  ofol: Offensive-zone face-offs lost.
+  ofow: Offensive-zone face-offs won.
+  on_ice_goal_perc: On-ice shooting % (unverified).
+  on_ice_svs_perc: On-ice save % (unverified). Numeric, but sent as a string in some
+    rows and as a number in others.
+  otl: Overtime losses, shootouts excluded (see SOL).
+  otw: Overtime wins, shootouts excluded (see SOW).
+  p_gp_format: Points per game (formatted). Numeric value sent as a string.
+  pdo: PDO (on-ice shooting % + on-ice save %). Numeric, but sent as a string in some
+    rows and as a number in others.
+  pers_pim: Personal penalty minutes.
+  pim: Penalty minutes.
+  pk_opp: Times shorthanded.
+  pk_perc: Penalty-kill %. Numeric value sent as a string.
+  pk_time: Time shorthanded (hh:mm:ss). Duration as an hh:mm:ss string.
+  player_id: isa (StatNet) player id, Int64. Play-by-play sends it as a string, every
+    other route as an integer; it is cast here so the frames join.
+  plus: Goals for while on ice.
+  plus_minus: Goals for minus goals against while on ice (+/-).
+  points: Standings points (3 per regulation win, 2 per OT/SO win, 1 per OT/SO loss).
+  pp_minus: Goals against while on ice on the power play.
+  pp_opp: Power-play opportunities.
+  pp_perc: Power-play %. Numeric value sent as a string.
+  pp_plus: Goals for while on ice on the power play.
+  pp_plus_minus: Power-play plus/minus.
+  pp_time: Time on the power play (hh:mm:ss). Duration as an hh:mm:ss string.
+  ppa: Power-play assists.
+  ppg: Power-play goals.
+  ppga: Power-play goals against (conceded while shorthanded).
+  pps_eff: Power-play shooting %. Numeric value sent as a string.
+  ppsg_perc: Power-play shooting % (unverified). Numeric value sent as a string.
+  ppsog: Power-play shots on goal.
+  ppsoga: Power-play shots on goal against.
+  ppsvs_perc: Save % against the power play (unverified). Numeric value sent as a
+    string.
+  ppsw: Power-play shots wide.
+  pptoi_gp: Power-play time on ice per game (mm:ss). Clock/duration as an mm:ss string.
+  pptoi_perc: Share of time on ice on the power play (unverified). Numeric value sent
+    as a string.
+  pptoi_pp_plus: Power-play time on ice per power-play goal for (unverified). Clock/duration
+    as an mm:ss string.
+  pptp: Power-play points.
+  ps: Number of penalty shots.
+  ps_perc: Penalty-shot conversion %. Numeric value sent as a string.
+  psa: Penalty-shot attempts.
+  psg: Penalty-shot goals.
+  psga: Penalty-shot goals against.
+  pssvs: Penalty shots saved.
+  pssvs_perc: Penalty-shot save %.
+  rank: Rank in the table.
+  s_eff: Shooting %. Numeric value sent as a string.
+  sfa: Shots on goal against (unverified).
+  sg_perc: Shooting %. Numeric value sent as a string.
+  sh_minus: Goals against while on ice shorthanded.
+  sh_plus: Goals for while on ice shorthanded.
+  sh_plus_minus: Shorthanded plus/minus.
+  sha: Shorthanded assists.
+  shg: Shorthanded goals.
+  shga: Shorthanded goals against (conceded while on the power play).
+  shsog: Shorthanded shots on goal.
+  shsoga: Shorthanded shots on goal against.
+  shsvs_perc: Shorthanded save % (unverified). Numeric value sent as a string.
+  shsw: Shorthanded shots wide.
+  shtoi_gp: Shorthanded time on ice per game (mm:ss). Clock/duration as an mm:ss string.
+  shtoi_perc: Share of time on ice shorthanded (unverified). Numeric value sent as
+    a string.
+  shtoi_sh_minus: Shorthanded time on ice per shorthanded goal against (unverified).
+    Clock/duration as an mm:ss string.
+  shtp: Shorthanded points.
+  sib: Shots blocked (blocked attempts).
+  so: Number of shutouts (games without a goal against).
+  so_ps: Shootout shots.
+  so_ps_perc: Shootout shooting %. Numeric value sent as a string.
+  so_psa: Shootout attempts against.
+  so_psg: Shootout goals.
+  so_psga: Shootout goals against.
+  so_pssvs: Shootout saves.
+  so_pssvs_perc: Shootout save %. Numeric value sent as a string.
+  sog: Number of shots on goal.
+  sog_perc: Shots on goal % of attempts. Numeric value sent as a string.
+  soga: Shots on goal against.
+  sol: Shootout losses.
+  sow: Number of shootout wins.
+  ss: Scoring-chance shots (site label; unverified).
+  ssa: Scoring-chance shots against (site label; unverified).
+  ssga: Scoring-chance goals against (unverified).
+  ssoga: Scoring-chance shots on goal against (unverified).
+  sssvs_perc: Save % on scoring-chance shots. Numeric value sent as a string.
+  st_perc: Special-teams % (power-play % + penalty-kill %). Numeric value sent as
+    a string.
+  svs: Number of saves made by the goalie.
+  svs_perc: Save %. Numeric value sent as a string.
+  sw: Number of shots that missed the net.
+  swa: Shots wide against.
+  t: Goalie ties (goalkeeper modules only); 0 in every sampled row, as overtime and
+    shootouts now decide every game.
+  team_pen: Team (bench) penalties.
+  tiedg: Times tied (unverified).
+  toi: Time on ice (mm:ss). Duration as an hh:mm:ss string.
+  toi_gp: Time on ice per game (mm:ss). Clock/duration as an mm:ss string.
+  tp: Points (goals + assists).
+  tppg: Points per game. Numeric value sent as a string.
+  trailing: Times trailing.
+  trailing1: Games trailing after period 1 (unverified).
+  trailing2: Games trailing after period 2 (unverified).
+  valid_ranking: Whether the row qualifies for the ranking (minimum games / minutes).
+  venue: Name of the arena the game is played in.
+  w: 'Wins. Team modules (teams_result): total wins, regulation + overtime + shootout;
+    goalkeeper modules: wins credited to the goalie; standings_standings: regulation
+    wins only.'
+shl_team:
+  arena_name: Name of the arena hosting the game. Empty string in every sample (placeholder).
+  contact: Club contact text.
+  icon: URL of the team logo image.
+  info_accreditation: Press-accreditation contact, free Swedish text (e.g. 'Senast
+    dagen före match till …' = 'no later than the day before the game, to …').
+  info_address: Club postal address.
+  info_chairman: Name of the club chairman.
+  info_email: Contact email address of the club.
+  info_facebook: Club Facebook URL.
+  info_fax: Fax number of the club.
+  info_finals: Club's final appearances (text).
+  info_founded: Club founding year (text). Numeric value sent as a string.
+  info_golds: Club's championships (text).
+  info_instagram: Club Instagram URL.
+  info_manager: Club general manager.
+  info_phone: Telephone number of the club.
+  info_retired_numbers: Retired jersey numbers (text).
+  info_twitter: Club X/Twitter URL.
+  names_code: Display abbreviation; differs from the team code for some clubs (SKE
+    vs SAIK, ÖRE vs OHK).
+  names_code_site: Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF
+    Herr').
+  names_full: Full club name ('Herr' = men's team).
+  names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  names_long: Long club name ('Herr' = men's team).
+  names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  names_short: Short club name ('Herr' = men's team).
+  names_short_site: Short club name as shown on the site ('Herr' = men's team).
+  nationality: Nationality (ISO country code).
+  owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the logo at
+    sportality.cdn.s8y.se/team-logos/{id}.svg.
+  public_url: Public image URL.
+  site_display_name: Club name as shown on its own site (e.g. Frölunda HC).
+  uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+shl_team_played_games:
+  away_team_code: Away team code (e.g. LHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  away_team_icon: URL of the team logo image.
+  away_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  away_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  away_team_names_full: Full club name ('Herr' = men's team).
+  away_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  away_team_names_long: Long club name ('Herr' = men's team).
+  away_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  away_team_names_short: Short club name ('Herr' = men's team).
+  away_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  away_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  away_team_score: Goals scored by the team in the game.
+  away_team_status: Result for the team (WIN, LOSE) or record status.
+  away_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  date: Date (YYYY-MM-DD).
+  game_uuid: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  home_team_code: Home team code (e.g. FHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  home_team_icon: URL of the team logo image.
+  home_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  home_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  home_team_names_full: Full club name ('Herr' = men's team).
+  home_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  home_team_names_long: Long club name ('Herr' = men's team).
+  home_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  home_team_names_short: Short club name ('Herr' = men's team).
+  home_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  home_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  home_team_score: Goals scored by the team in the game.
+  home_team_status: Result for the team (WIN, LOSE) or record status.
+  home_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  overtime: Whether the game went to overtime.
+  series_code: Series code (SHL, CHL).
+  series_display_name: Series label shown on the site (SHL, CHL).
+  series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
+  shootout: Whether the game went to a shootout.
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  start_date_time: Scheduled start, local time (Europe/Stockholm).
+  state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
+  time: Game clock in the period (MM:SS, counting up from 00:00). Clock/duration as
+    an mm:ss string.
+  venue_name: Name of the arena (venue).
+  venue_uuid: Arena uuid (platform key space).
+shl_team_stats:
+  fow: Number of face-offs won.
+  g: Number of goals scored.
+  game_id: StatNet game number (StatNet key space, e.g. 22003); keys stats-info games{}
+    and equals sports-v2 game-info extId. Not the game uuid.
+  game_source_id: StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same
+    game as gameId.
+  game_uuid: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  period: 'Period: 0 = the whole game, 1-3 the periods, 4 and up overtime.'
+  pim: Penalty minutes.
+  place: 'Side of the game: home or away.'
+  score: Goals scored by the team in the game.
+  team_code: StatNet team code (SAIK, FHC).
+  team_id: Team code (e.g. FHC) in gameday and standings payloads; not the team uuid.
+  team_name: Name of the team.
+  team_side: 'Side of the game: home or away.'
+shl_team_upcoming_games:
+  away_team_code: Away team code (e.g. LHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  away_team_icon: URL of the team logo image.
+  away_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  away_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  away_team_names_full: Full club name ('Herr' = men's team).
+  away_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  away_team_names_long: Long club name ('Herr' = men's team).
+  away_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  away_team_names_short: Short club name ('Herr' = men's team).
+  away_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  away_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  away_team_score: Goals scored by the team in the game.
+  away_team_status: Result for the team (WIN, LOSE) or record status.
+  away_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  date: Date (YYYY-MM-DD).
+  game_uuid: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  home_team_code: Home team code (e.g. FHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  home_team_icon: URL of the team logo image.
+  home_team_names_code: Display abbreviation; differs from the team code for some
+    clubs (SKE vs SAIK, ÖRE vs OHK).
+  home_team_names_code_site: Display abbreviation on the site; 'Herr' = men's team
+    (e.g. 'DIF Herr').
+  home_team_names_full: Full club name ('Herr' = men's team).
+  home_team_names_full_site: Full club name as shown on the site ('Herr' = men's team).
+  home_team_names_long: Long club name ('Herr' = men's team).
+  home_team_names_long_site: Long club name as shown on the site ('Herr' = men's team).
+  home_team_names_short: Short club name ('Herr' = men's team).
+  home_team_names_short_site: Short club name as shown on the site ('Herr' = men's
+    team).
+  home_team_owner_instance_id: Club site instance id (e.g. fhc1_fhc); also names the
+    logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  home_team_score: Goals scored by the team in the game.
+  home_team_status: Result for the team (WIN, LOSE) or record status.
+  home_team_uuid: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  overtime: Whether the game went to overtime.
+  series_code: Series code (SHL, CHL).
+  series_display_name: Series label shown on the site (SHL, CHL).
+  series_uuid: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
+  shootout: Whether the game went to a shootout.
+  ssgt_uuid: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  start_date_time: Scheduled start, local time (Europe/Stockholm).
+  state: 'Game state: pre-game or post-game (hyphenated; a live value was not observed).'
+  time: Game clock in the period (MM:SS, counting up from 00:00). Clock/duration as
+    an mm:ss string.
+  venue_name: Name of the arena (venue).
+  venue_uuid: Arena uuid (platform key space).

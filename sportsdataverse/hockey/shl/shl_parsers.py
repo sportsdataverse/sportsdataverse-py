@@ -45,10 +45,16 @@ Id key spaces (one dtype each, cast here at the boundary):
   system next to isa and ``ramses_legacy`` (athlete-details ``playerExtIds`` only).
 * ``team_id`` / ``*_team_id`` / ``team_code`` -- the StatNet team code (``FHC``): ``Utf8``.
 
-Stat cells of the stats tables, box scores and team stats are ``Float64`` whenever every value
-is a number or a numeric string: the API mixes ``"1.29"`` and ``0`` in one column, so a
-count-looking sample would otherwise type a rate as an integer. A column holding any other
-string (``"19:02"`` time on ice) stays ``Utf8``.
+Stat cells of the stats tables, box scores and team stats, and every ``*_perc`` rate, are
+``Float64`` whenever every value is a number or a numeric string: the API mixes ``"1.29"`` and
+``0`` in one column, so a count-looking sample would otherwise type a rate as an integer. A
+column holding any other string (``"19:02"`` time on ice) stays ``Utf8``.
+
+When the generated wrapper passes ``columns=``, the frame is conformed to that endpoint's
+returns schema (:data:`~sportsdataverse.hockey.shl.shl_schemas.SCHEMAS`): documented columns
+first, in order and with the documented dtypes (a missing one is a null column), anything the
+API added later after them. An empty or malformed body gives the same columns and dtypes with
+zero rows, so a frame from an empty body concatenates with a populated one.
 """
 
 from __future__ import annotations
@@ -61,6 +67,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.hockey.shl.shl_schemas import SCHEMAS
 
 __all__ = [
     "parse_shl",
@@ -89,6 +96,18 @@ _PLACEHOLDERS = frozenset({"Player", "Team", "Season", "Series", "GameType"})
 _BOX_SIDES = (("homeTeamValue", "home"), ("awayTeamValue", "away"))
 _SCHEDULE_KEYS = ("gameInfo", "games", "playedGames", "upcomingGames")
 _TEAM_PREFIX = {"homeTeamInfo": "homeTeam", "awayTeamInfo": "awayTeam", "venueInfo": "venue", "seriesInfo": "series"}
+# shl_schemas dtype codes -> polars dtypes.
+_SCHEMA_DTYPES: Dict[str, pl.DataType] = {
+    "str": pl.Utf8(),
+    "int": pl.Int64(),
+    "float": pl.Float64(),
+    "bool": pl.Boolean(),
+    "list[int]": pl.List(pl.Int64),
+}
+# A wrapper's documented column list -> that endpoint's {column: dtype} (lists are unique per endpoint).
+_BY_COLUMNS: Dict[tuple, Dict[str, pl.DataType]] = {
+    tuple(cols): {c: _SCHEMA_DTYPES[code] for c, code in cols.items()} for cols in SCHEMAS.values()
+}
 
 
 def _column(key: str) -> str:
@@ -112,6 +131,11 @@ def _flatten(obj: Mapping[str, Any], prefix: str = "") -> Dict[str, Any]:
 def _dict(v: Any) -> Dict[str, Any]:
     """``v`` when it is a dict, else ``{}`` (keeps a malformed body from raising)."""
     return v if isinstance(v, dict) else {}
+
+
+def _list(v: Any) -> List[Any]:
+    """``v`` when it is a list, else ``[]`` (a wrong-typed value reads as absent)."""
+    return v if isinstance(v, list) else []
 
 
 def _is_number(v: Any) -> bool:
@@ -171,7 +195,7 @@ def _frame(rows: Iterable[Mapping[str, Any]], stat_keys: Iterable[str] = ()) -> 
         if any(isinstance(v, list) and v and all(_is_number(x) for x in v) for v in values) and name.endswith("_ids"):
             cols[name] = pl.Series(name, values, dtype=pl.List(pl.Int64))
             continue
-        cols[name] = _series(name, values, k in stats)
+        cols[name] = _series(name, values, k in stats or name.endswith("_perc"))
     return _cast_ids(pl.DataFrame(list(cols.values())))
 
 
@@ -190,8 +214,20 @@ def _dtype(column: str) -> pl.DataType:
 
 
 def _finish(df: pl.DataFrame, columns: Optional[Sequence[str]], return_as_pandas: bool) -> Frame:
-    if df.height == 0:
-        df = pl.DataFrame(schema={c: _dtype(c) for c in columns}) if columns else pl.DataFrame()
+    """Conform ``df`` to the documented ``columns`` (dtypes from the endpoint's returns schema)."""
+    if columns:
+        schema = _BY_COLUMNS.get(tuple(columns)) or {c: _dtype(c) for c in columns}
+        if df.height == 0:
+            df = pl.DataFrame(schema=schema)
+        else:
+            extra = [c for c in df.columns if c not in schema]
+            missing = [pl.lit(None, dtype=dtype).alias(c) for c, dtype in schema.items() if c not in df.columns]
+            # ponytail: a value the documented dtype cannot hold becomes null (strict=False).
+            df = df.with_columns(missing).select(
+                *(pl.col(c).cast(dtype, strict=False) for c, dtype in schema.items()), *extra
+            )
+    elif df.height == 0:
+        df = pl.DataFrame()
     return df.to_pandas() if return_as_pandas else df
 
 
@@ -453,11 +489,11 @@ def parse_shl_team_stats(raw: Any, *, return_as_pandas: bool = False, columns: O
         if not isinstance(team, dict):
             continue
         head = {"teamSide": side, **{k: v for k, v in team.items() if k != "statistics"}}
-        for per in team.get("statistics") or []:
+        for per in _list(team.get("statistics")):
             if not isinstance(per, dict):
                 continue
             row = {**head, "period": per.get("period")}
-            for kv in per.get("parsedTotalStatistics") or []:
+            for kv in _list(per.get("parsedTotalStatistics")):
                 if isinstance(kv, dict) and kv.get("key"):
                     row[str(kv["key"])] = kv.get("value")
                     stat_keys.append(str(kv["key"]))
@@ -491,7 +527,7 @@ def parse_shl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
     body = _dict(raw)
     start = body.get("season")
     rows = []
-    for rec in body.get("leagueStandings") or []:
+    for rec in _list(body.get("leagueStandings")):
         if not isinstance(rec, dict):
             continue
         info = _dict(rec.get("info"))
@@ -553,7 +589,7 @@ def parse_shl_stats_info(raw: Any, *, return_as_pandas: bool = False, columns: O
     isa = _isa_by_uuid(body.get("players")) if body.get("type") != "athlete_single" else {}
     rows = []
     stats: set = set()
-    for rec in body.get("stats") or []:
+    for rec in _list(body.get("stats")):
         if not isinstance(rec, dict):
             continue
         info = _dict(rec.get("info"))
@@ -678,10 +714,10 @@ def parse_shl_filter(raw: Any, *, return_as_pandas: bool = False, columns: Optio
     body = _dict(raw)
     rows = []
     for key, kind in (("series", "series"), ("season", "season"), ("gameType", "game_type")):
-        for rec in body.get(key) or []:
+        for rec in _list(body.get(key)):
             if not isinstance(rec, dict):
                 continue
-            names = {n.get("language"): n.get("translation") for n in rec.get("names") or [] if isinstance(n, dict)}
+            names = {n.get("language"): n.get("translation") for n in _list(rec.get("names")) if isinstance(n, dict)}
             name = names.get("en") or next(iter(names.values()), None)
             rows.append(
                 {
@@ -719,7 +755,7 @@ def parse_shl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Optio
     for group in raw if isinstance(raw, list) else []:
         if not isinstance(group, dict):
             continue
-        for p in group.get("players") or []:
+        for p in _list(group.get("players")):
             if not isinstance(p, dict):
                 continue
             portrait = _dict(p.get("renderedLatestPortrait"))
@@ -763,7 +799,7 @@ def parse_shl_h2h(raw: Any, *, return_as_pandas: bool = False, columns: Optional
     body = _dict(raw)
     rows = [
         {**_flatten(p), "effectiveSsgtUuid": body.get("effectiveSsgtUuid")}
-        for p in body.get("players") or []
+        for p in _list(body.get("players"))
         if isinstance(p, dict)
     ]
     return _finish(_frame(rows), columns, return_as_pandas)

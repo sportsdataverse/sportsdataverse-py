@@ -227,3 +227,86 @@ def test_schemas_match_the_parsers_on_the_captures():
         for f in _capture_for(ep):
             parsed = getattr(P, ep["parser"])(_load(f)).columns
             assert set(parsed) <= set(cols), (ep["short"], f.name, sorted(set(parsed) - set(cols)))
+
+
+# --------------------------------------------------------------------------- empty frames = populated dtypes
+
+
+def _documented(short: str) -> list:
+    return [c["name"] for c in yaml.safe_load((SCHEMAS / f"{short}.yaml").read_text())["columns"]]
+
+
+@pytest.mark.parametrize(("short", "parser", "fixture"), _CASES, ids=[f"{s}:{f.stem[-30:]}" for s, _, f in _CASES])
+def test_empty_frame_concatenates_with_a_populated_one(short, parser, fixture):
+    """What the generated wrapper does: ``columns=`` -> documented columns and dtypes, empty or not."""
+    cols = _documented(short)
+    empty = getattr(P, parser)({}, columns=cols)
+    full = getattr(P, parser)(_load(fixture), columns=cols)
+    both = pl.concat([empty, full], how="vertical")
+    assert both.columns == cols and both.height == full.height > 0
+    assert empty.schema == full.schema
+
+
+@pytest.mark.parametrize(
+    ("short", "parser", "body"),
+    [
+        ("pbp", "parse_shl_pbp", "gameday__play-by-play__bdhvuc5tex.json"),
+        ("boxscore", "parse_shl_player_box", "gameday__boxscore__bdhvuc5tex.json"),
+        ("stats_info", "parse_shl_stats_info", "statistics-v2__stats-info__teams_result__iuzqg7dqk9.json"),
+        ("stats_info", "parse_shl_stats_info", "statistics-v2__stats-info__goalkeepers_summary__iuzqg7dqk9.json"),
+        ("layout_info", "parse_shl_layout", "statistics-v2__layout-info__directory.json"),
+    ],
+)
+def test_empty_frame_matches_the_full_bodies(short, parser, body):
+    cols = _documented(short)
+    empty = getattr(P, parser)([], columns=cols)
+    pl.concat([empty, getattr(P, parser)(_load(FULL / body), columns=cols)], how="vertical")
+
+
+def test_schema_module_lists_the_returns_schema_columns():
+    """``shl_schemas.SCHEMAS`` is written by gen_shl.py with the schemas; they must not drift apart."""
+    from sportsdataverse.hockey.shl.shl_schemas import SCHEMAS as DTYPES
+
+    assert set(DTYPES) == {e["short"] for e in _endpoints()}
+    r_type = {"str": "character", "int": "integer", "float": "numeric", "bool": "logical", "list[int]": "character"}
+    for short, types in DTYPES.items():
+        doc = yaml.safe_load((SCHEMAS / f"{short}.yaml").read_text())["columns"]
+        assert [c["name"] for c in doc] == list(types), short
+        assert [c["type"] for c in doc] == [r_type[t] for t in types.values()], short
+        assert all(c["description"] == "" for c in doc), short  # text lives in the descriptions snippet
+
+
+def test_unplayed_games_type_the_score_like_played_ones():
+    cols = _documented("team_upcoming_games")
+    df = P.parse_shl_schedule(_load(FIXTURES / "sports-v2__upcoming-games__team_uuid.json"), columns=cols)
+    assert df.schema["home_team_score"] == pl.Int64 == df.schema["away_team_score"]
+
+
+def test_missing_documented_columns_are_backfilled_with_their_dtype():
+    cols = _documented("standings")
+    df = P.parse_shl_standings({"season": 2025, "leagueStandings": [{"id": "SAIK"}]}, columns=cols)
+    assert df.columns == cols and df.height == 1
+    assert df.schema["gp"] == pl.Int64 and df["gp"].null_count() == 1
+
+
+@pytest.mark.parametrize(
+    ("parser", "payload"),
+    [
+        ("parse_shl_team_stats", {"home": {"teamId": "FHC", "statistics": 5}}),
+        ("parse_shl_team_stats", {"home": {"statistics": [{"period": 0, "parsedTotalStatistics": "x"}]}}),
+        ("parse_shl_standings", {"leagueStandings": "x"}),
+        ("parse_shl_stats_info", [{"stats": 7}]),
+        ("parse_shl_filter", {"season": [{"code": "2025", "names": 3}], "series": True}),
+        ("parse_shl_roster", [{"positionCode": "GK", "players": {"a": 1}}]),
+        ("parse_shl_h2h", {"players": "x"}),
+    ],
+)
+def test_wrong_typed_containers_read_as_absent(parser, payload):
+    assert isinstance(getattr(P, parser)(payload), pl.DataFrame)
+
+
+def test_h2h_face_off_percentage_is_float():
+    cols = _documented("player_h2h")
+    body = _load(FIXTURES / "statistics-v2__player-h2h-v2__ssgt_uuid__home_team_uuid__away_team_uuid.json")
+    assert P.parse_shl_h2h(body).schema["match_stats_fo_perc"] == pl.Float64
+    assert P.parse_shl_h2h(body, columns=cols).schema["match_stats_fo_perc"] == pl.Float64

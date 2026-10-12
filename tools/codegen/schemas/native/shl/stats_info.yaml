@@ -1,815 +1,788 @@
 columns:
-- description: Rank in the table.
+- description: ''
   name: rank
   type: integer
-- description: Games played.
+- description: ''
   name: gp
   type: numeric
-- description: 'Total wins: regulation + overtime + shootout.'
+- description: ''
   name: w
   type: numeric
-- description: 'Total losses: regulation + overtime + shootout.'
+- description: ''
   name: l
   type: numeric
-- description: Times leading.
+- description: ''
   name: leading
   type: numeric
-- description: Times trailing.
+- description: ''
   name: trailing
   type: numeric
-- description: Goals.
+- description: ''
   name: g
   type: numeric
-- description: Goals against.
+- description: ''
   name: ga
   type: numeric
-- description: First goal of the game.
+- description: ''
   name: gfg
   type: numeric
-- description: Overtime wins, shootouts excluded (see SOW).
+- description: ''
   name: otw
   type: numeric
-- description: Overtime losses, shootouts excluded (see SOL).
+- description: ''
   name: otl
   type: numeric
-- description: Shootout wins.
+- description: ''
   name: sow
   type: numeric
-- description: Shootout losses.
+- description: ''
   name: sol
   type: numeric
-- description: Points per game (formatted). Numeric value sent as a string.
+- description: ''
   name: p_gp_format
   type: numeric
-- description: Goals per game. Numeric value sent as a string.
+- description: ''
   name: gpg
   type: numeric
-- description: Goals against per game. Numeric value sent as a string.
+- description: ''
   name: gapg
   type: numeric
-- description: Standings points (3 per regulation win, 2 per OT/SO win, 1 per OT/SO
-    loss).
+- description: ''
   name: points
   type: numeric
-- description: 'Record type of the row''s subject: team in team modules, athlete in
-    player and goalie modules.'
+- description: ''
   name: info_type
   type: character
-- description: Team code (e.g. SAIK) in team and standings modules; null in player,
-    goalie and games modules (use info.uuid).
+- description: ''
   name: info_id
   type: character
-- description: Athlete uuid (platform key space) in player and goalie modules, team
-    uuid in team modules; joins to the athlete routes or /sports-v2/teams/{team_uuid}.
+- description: ''
   name: info_uuid
   type: character
-- description: Record creation time (ISO 8601; often null).
+- description: ''
   name: info_created_at
   type: character
-- description: Record creator (site instance id; often null).
+- description: ''
   name: info_created_by
   type: character
-- description: Soft-delete flag of the record (false in every sample).
+- description: ''
   name: info_deleted
   type: logical
-- description: Sex of the athlete or team (male / female).
+- description: ''
   name: info_gender
   type: character
-- description: Graphics asset key.
+- description: ''
   name: info_graphics_library
   type: character
-- description: Record last-modified time (ISO 8601).
+- description: ''
   name: info_last_modified
   type: character
-- description: Nationality (ISO country code).
+- description: ''
   name: info_nationality
   type: character
-- description: Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+- description: ''
   name: info_owner_instance_id
   type: character
-- description: Owning site code.
+- description: ''
   name: info_ownersite
   type: character
-- description: Team code of the player's team (e.g. FHC).
+- description: ''
   name: info_team_code
   type: character
-- description: Series with their uuids (SHL, CHL).
+- description: ''
   name: info_series
   type: character
-- description: Sport records the club belongs to (ice hockey).
+- description: ''
   name: info_sport
   type: character
-- description: Media URL or string.
+- description: ''
   name: info_team_media
   type: character
-- description: Display abbreviation; differs from the team code for some clubs (SKE
-    vs SAIK, ÖRE vs OHK).
+- description: ''
   name: info_team_names_code
   type: character
-- description: Short club name ('Herr' = men's team).
+- description: ''
   name: info_team_names_short
   type: character
-- description: Long club name ('Herr' = men's team).
+- description: ''
   name: info_team_names_long
   type: character
-- description: Full club name ('Herr' = men's team).
+- description: ''
   name: info_team_names_full
   type: character
-- description: Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr').
+- description: ''
   name: info_team_names_code_site
   type: character
-- description: Short club name as shown on the site ('Herr' = men's team).
+- description: ''
   name: info_team_names_short_site
   type: character
-- description: Full club name as shown on the site ('Herr' = men's team).
+- description: ''
   name: info_team_names_full_site
   type: character
-- description: Long club name as shown on the site ('Herr' = men's team).
+- description: ''
   name: info_team_names_long_site
   type: character
-- description: Display abbreviation; differs from the team code for some clubs (SKE
-    vs SAIK, ÖRE vs OHK).
+- description: ''
   name: info_club_name_code
   type: character
-- description: Short club name ('Herr' = men's team).
+- description: ''
   name: info_club_name_short
   type: character
-- description: Long club name ('Herr' = men's team).
+- description: ''
   name: info_club_name_long
   type: character
-- description: Full club name ('Herr' = men's team).
+- description: ''
   name: info_club_name_full
   type: character
-- description: Club founding year (text). Numeric value sent as a string.
+- description: ''
   name: info_team_info_founded
   type: character
-- description: Club's championships (text).
+- description: ''
   name: info_team_info_golds
   type: character
-- description: Club's final appearances (text).
+- description: ''
   name: info_team_info_finals
   type: character
-- description: Club postal address.
+- description: ''
   name: info_team_info_address
   type: character
-- description: Club phone.
+- description: ''
   name: info_team_info_phone
   type: character
-- description: Club fax.
+- description: ''
   name: info_team_info_fax
   type: character
-- description: Club email.
+- description: ''
   name: info_team_info_email
   type: character
-- description: Club chairman.
+- description: ''
   name: info_team_info_chairman
   type: character
-- description: Club general manager.
+- description: ''
   name: info_team_info_manager
   type: character
-- description: Press-accreditation contact, free Swedish text (e.g. 'Senast dagen
-    före match till …' = 'no later than the day before the game, to …').
+- description: ''
   name: info_team_info_accreditation
   type: character
-- description: Club Facebook URL.
+- description: ''
   name: info_team_info_facebook
   type: character
-- description: Club Instagram URL.
+- description: ''
   name: info_team_info_instagram
   type: character
-- description: Club X/Twitter URL.
+- description: ''
   name: info_team_info_twitter
   type: character
-- description: External ids of the team.
+- description: ''
   name: info_team_ext_ids
   type: character
-- description: External ids of the record.
+- description: ''
   name: info_ext_ids
   type: character
-- description: Logo URL.
+- description: ''
   name: info_logo
   type: character
-- description: Club social links.
+- description: ''
   name: info_social_media
   type: character
-- description: Team display-name override; unused. Empty string in every sample (placeholder).
+- description: ''
   name: info_display_name
   type: character
-- description: Team code (e.g. SAIK) in team and standings modules; absent for players.
+- description: ''
   name: info_code
   type: character
-- description: Club name as shown on its own site (e.g. Frölunda HC).
+- description: ''
   name: info_site_display_name
   type: character
-- description: Retired jersey numbers (text).
+- description: ''
   name: info_team_info_retired_numbers
   type: character
-- description: Club contact text.
+- description: ''
   name: info_team_info_contact
   type: character
-- description: Club names by length.
+- description: ''
   name: info_club_name
   type: character
-- description: isa (StatNet) player id, Int64. Play-by-play sends it as a string,
-    every other route as an integer; it is cast here so the frames join.
+- description: ''
   name: player_id
   type: integer
-- description: Saves.
+- description: ''
   name: svs
   type: numeric
-- description: Save %. Numeric value sent as a string.
+- description: ''
   name: svs_perc
   type: numeric
-- description: Games played with ice time.
+- description: ''
   name: gpi
   type: numeric
-- description: Goals against average (per 60 minutes). Numeric value sent as a string.
+- description: ''
   name: gaa
   type: numeric
-- description: Goalie ties; 0 in every sampled row (no ties since overtime/shootouts).
+- description: ''
   name: t
   type: numeric
-- description: Shutouts.
+- description: ''
   name: so
   type: numeric
-- description: Minutes played (mm:ss). Clock/duration as an mm:ss string.
+- description: ''
   name: mip
   type: character
-- description: Whether the row qualifies for the ranking (minimum games / minutes).
+- description: ''
   name: valid_ranking
   type: logical
-- description: Given name and surname.
+- description: ''
   name: info_full_name
   type: character
-- description: Given name.
+- description: ''
   name: info_first_name
   type: character
-- description: Surname.
+- description: ''
   name: info_last_name
   type: character
-- description: Date of birth (YYYY-MM-DD).
+- description: ''
   name: info_birth_date
   type: character
-- description: Jersey number.
+- description: ''
   name: info_number
   type: integer
-- description: Position code (CE = centre, LW, RW, D, GK, F); N/A in the athlete game
-    logs.
+- description: ''
   name: info_position
   type: character
-- description: Shooting side (L / R; Left / Right).
+- description: ''
   name: info_shoots
   type: character
-- description: Weight in kg.
+- description: ''
   name: info_weight_value
   type: integer
-- description: 'Unit of value: kg.'
+- description: ''
   name: info_weight_format
   type: character
-- description: Height in cm.
+- description: ''
   name: info_height_value
   type: integer
-- description: 'Unit of value: cm.'
+- description: ''
   name: info_height_format
   type: character
-- description: Media-library id of the portrait (joins to /api/media; not a player
-    id).
+- description: ''
   name: info_player_media_id
   type: integer
-- description: id).
+- description: ''
   name: info_player_media_media_string
   type: character
-- description: Image kind (portrait).
+- description: ''
   name: info_player_media_type
   type: character
-- description: Ordering index for display.
+- description: ''
   name: info_player_media_sort_order
   type: integer
-- description: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
-    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+- description: ''
   name: info_team_uuid
   type: character
-- description: Team name (e.g. Frölunda HC); empty in some rows.
+- description: ''
   name: info_team_name
   type: character
-- description: Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+- description: ''
   name: info_team_owner_instance_id
   type: character
-- description: Club name as shown on its own site (e.g. Frölunda HC).
+- description: ''
   name: info_team_site_display_name
   type: character
-- description: Team code (e.g. FHC) in gameday and standings payloads; not the team
-    uuid.
+- description: ''
   name: info_team_id
   type: character
-- description: Points (goals + assists).
+- description: ''
   name: tp
   type: numeric
-- description: Assists.
+- description: ''
   name: a
   type: numeric
-- description: Penalty minutes.
+- description: ''
   name: pim
   type: numeric
-- description: Game-winning goals.
+- description: ''
   name: gwg
   type: numeric
-- description: Power-play goals.
+- description: ''
   name: ppg
   type: numeric
-- description: Shots on goal.
+- description: ''
   name: sog
   type: numeric
-- description: Body checks delivered.
+- description: ''
   name: hits
   type: numeric
-- description: Blocked shots.
+- description: ''
   name: bk_s
   type: numeric
-- description: Goals for while on ice.
+- description: ''
   name: plus
   type: numeric
-- description: Goals against while on ice.
+- description: ''
   name: minus
   type: numeric
-- description: Goals for minus goals against while on ice (+/-).
+- description: ''
   name: plus_minus
   type: numeric
-- description: Time on ice per game (mm:ss). Clock/duration as an mm:ss string.
+- description: ''
   name: toi_gp
   type: character
-- description: Points per game. Numeric value sent as a string.
+- description: ''
   name: tppg
   type: numeric
-- description: Primary assists.
+- description: ''
   name: a_firsts
   type: numeric
-- description: Secondary assists.
+- description: ''
   name: a_seconds
   type: numeric
-- description: Power-play assists.
+- description: ''
   name: ppa
   type: numeric
-- description: Power-play points.
+- description: ''
   name: pptp
   type: numeric
-- description: Even-strength goals.
+- description: ''
   name: eqg
   type: numeric
-- description: Even-strength assists.
+- description: ''
   name: eqa
   type: numeric
-- description: Even-strength points.
+- description: ''
   name: eqtp
   type: numeric
-- description: Shorthanded goals.
+- description: ''
   name: shg
   type: numeric
-- description: Shorthanded assists.
+- description: ''
   name: sha
   type: numeric
-- description: Shorthanded points.
+- description: ''
   name: shtp
   type: numeric
-- description: Games trailing after period 2 (unverified).
+- description: ''
   name: trailing2
   type: numeric
-- description: Games trailing after period 1 (unverified).
+- description: ''
   name: trailing1
   type: numeric
-- description: Times tied (unverified).
+- description: ''
   name: tiedg
   type: numeric
-- description: Games leading after period 1 (unverified).
+- description: ''
   name: leading1
   type: numeric
-- description: Games leading after period 2 (unverified).
+- description: ''
   name: leading2
   type: numeric
-- description: Empty-net goals.
+- description: ''
   name: eng
   type: numeric
-- description: Time on ice (mm:ss). Duration as an hh:mm:ss string.
+- description: ''
   name: toi
   type: character
-- description: Power-play time on ice per game (mm:ss). Clock/duration as an mm:ss
-    string.
+- description: ''
   name: pptoi_gp
   type: character
-- description: Shorthanded time on ice per game (mm:ss). Clock/duration as an mm:ss
-    string.
+- description: ''
   name: shtoi_gp
   type: character
-- description: Share of time on ice on the power play (unverified). Numeric value
-    sent as a string.
+- description: ''
   name: pptoi_perc
   type: numeric
-- description: Share of time on ice shorthanded (unverified). Numeric value sent as
-    a string.
+- description: ''
   name: shtoi_perc
   type: numeric
-- description: Power-play time on ice per power-play goal for (unverified). Clock/duration
-    as an mm:ss string.
+- description: ''
   name: pptoi_pp_plus
   type: character
-- description: Power-play shots on goal.
+- description: ''
   name: ppsog
   type: numeric
-- description: Power-play shots wide.
+- description: ''
   name: ppsw
   type: numeric
-- description: Power-play shooting % (unverified). Numeric value sent as a string.
+- description: ''
   name: ppsg_perc
   type: numeric
-- description: Goals for while on ice on the power play.
+- description: ''
   name: pp_plus
   type: numeric
-- description: Goals against while on ice on the power play.
+- description: ''
   name: pp_minus
   type: numeric
-- description: Power-play plus/minus.
+- description: ''
   name: pp_plus_minus
   type: numeric
-- description: Shorthanded shots on goal.
+- description: ''
   name: shsog
   type: numeric
-- description: Shorthanded shots wide.
+- description: ''
   name: shsw
   type: numeric
-- description: Goals for while on ice shorthanded.
+- description: ''
   name: sh_plus
   type: numeric
-- description: Goals against while on ice shorthanded.
+- description: ''
   name: sh_minus
   type: numeric
-- description: Shorthanded plus/minus.
+- description: ''
   name: sh_plus_minus
   type: numeric
-- description: Shorthanded time on ice per shorthanded goal against (unverified).
-    Clock/duration as an mm:ss string.
+- description: ''
   name: shtoi_sh_minus
   type: character
-- description: Even-strength goals.
+- description: ''
   name: esg
   type: numeric
-- description: Even-strength assists.
+- description: ''
   name: esa
   type: numeric
-- description: Even-strength points.
+- description: ''
   name: estp
   type: numeric
-- description: Even-strength shots on goal.
+- description: ''
   name: essog
   type: numeric
-- description: Even-strength shots wide.
+- description: ''
   name: essw
   type: numeric
-- description: Even-strength goals for while on ice.
+- description: ''
   name: es_plus
   type: numeric
-- description: Even-strength goals against while on ice.
+- description: ''
   name: es_minus
   type: numeric
-- description: Even-strength plus/minus.
+- description: ''
   name: es_plus_minus
   type: numeric
-- description: Even-strength time on ice per game (mm:ss). Clock/duration as an mm:ss
-    string.
+- description: ''
   name: estoi_gp
   type: character
-- description: Effective penalty minutes (served).
+- description: ''
   name: eff_pim
   type: numeric
-- description: Personal penalty minutes.
+- description: ''
   name: pers_pim
   type: numeric
-- description: Offensive penalty minutes.
+- description: ''
   name: off_pim
   type: numeric
-- description: Minor penalties.
+- description: ''
   name: minor
   type: numeric
-- description: Major penalties.
+- description: ''
   name: major
   type: numeric
-- description: Misconduct penalties.
+- description: ''
   name: misc
   type: numeric
-- description: Game misconducts.
+- description: ''
   name: gm
   type: numeric
-- description: Match penalties.
+- description: ''
   name: mp
   type: numeric
-- description: Face-off win %. Numeric value sent as a string.
+- description: ''
   name: fo_perc
   type: numeric
-- description: Face-offs taken.
+- description: ''
   name: fo
   type: numeric
-- description: Face-offs won.
+- description: ''
   name: fow
   type: numeric
-- description: Face-offs lost.
+- description: ''
   name: fol
   type: numeric
-- description: Offensive-zone face-offs won %. Numeric value sent as a string.
+- description: ''
   name: ofo_perc
   type: numeric
-- description: Offensive-zone face-offs.
+- description: ''
   name: ofo
   type: numeric
-- description: Offensive-zone face-offs won.
+- description: ''
   name: ofow
   type: numeric
-- description: Offensive-zone face-offs lost.
+- description: ''
   name: ofol
   type: numeric
-- description: Defensive-zone face-offs won %. Numeric value sent as a string.
+- description: ''
   name: dfo_perc
   type: numeric
-- description: Defensive-zone face-offs.
+- description: ''
   name: dfo
   type: numeric
-- description: Defensive-zone face-offs won.
+- description: ''
   name: dfow
   type: numeric
-- description: Defensive-zone face-offs lost.
+- description: ''
   name: dfol
   type: numeric
-- description: Face-off violation %. Numeric value sent as a string.
+- description: ''
   name: fo_violation_perc
   type: numeric
-- description: Face-off violations.
+- description: ''
   name: fo_violations
   type: numeric
-- description: Shooting %. Numeric value sent as a string.
+- description: ''
   name: sg_perc
   type: numeric
-- description: Missed shots (wide + blocked).
+- description: ''
   name: ms
   type: numeric
-- description: Shots on goal % of attempts. Numeric value sent as a string.
+- description: ''
   name: sog_perc
   type: numeric
-- description: Penalty shots.
+- description: ''
   name: ps
   type: numeric
-- description: Penalty-shot goals.
+- description: ''
   name: psg
   type: numeric
-- description: Penalty-shot conversion %. Numeric value sent as a string.
+- description: ''
   name: ps_perc
   type: numeric
-- description: Shootout shots.
+- description: ''
   name: so_ps
   type: numeric
-- description: Shootout goals.
+- description: ''
   name: so_psg
   type: numeric
-- description: Shootout shooting %. Numeric value sent as a string.
+- description: ''
   name: so_ps_perc
   type: numeric
-- description: Corsi for (shot attempts for).
+- description: ''
   name: cf
   type: numeric
-- description: Corsi against (shot attempts against).
+- description: ''
   name: ca
   type: numeric
-- description: Corsi for percentage. Numeric value sent as a string.
+- description: ''
   name: cf_perc
   type: numeric
-- description: Corsi for percentage in close-score situations. Numeric, but sent as
-    a string in some rows and as a number in others.
+- description: ''
   name: close_cf_perc
   type: numeric
-- description: Fenwick for (unblocked shot attempts for).
+- description: ''
   name: ff
   type: numeric
-- description: Fenwick against (unblocked shot attempts against).
+- description: ''
   name: fa
   type: numeric
-- description: Fenwick for percentage. Numeric, but sent as a string in some rows
-    and as a number in others.
+- description: ''
   name: ff_perc
   type: numeric
-- description: Fenwick for percentage in close-score situations. Numeric, but sent
-    as a string in some rows and as a number in others.
+- description: ''
   name: close_ff_perc
   type: numeric
-- description: On-ice shooting % (unverified).
+- description: ''
   name: on_ice_goal_perc
   type: numeric
-- description: On-ice save % (unverified). Numeric, but sent as a string in some rows
-    and as a number in others.
+- description: ''
   name: on_ice_svs_perc
   type: numeric
-- description: PDO (on-ice shooting % + on-ice save %). Numeric, but sent as a string
-    in some rows and as a number in others.
+- description: ''
   name: pdo
   type: numeric
-- description: Portrait image reference (mediaString, type).
+- description: ''
   name: info_player_media
   type: character
-- description: Shorthanded goals against (conceded while on the power play).
+- description: ''
   name: shga
   type: numeric
-- description: Power-play goals against (conceded while shorthanded).
+- description: ''
   name: ppga
   type: numeric
-- description: Empty-net goals against.
+- description: ''
   name: enga
   type: numeric
-- description: Power-play opportunities.
+- description: ''
   name: pp_opp
   type: numeric
-- description: Power-play %. Numeric value sent as a string.
+- description: ''
   name: pp_perc
   type: numeric
-- description: Time on the power play (hh:mm:ss). Duration as an hh:mm:ss string.
+- description: ''
   name: pp_time
   type: character
-- description: Special-teams % (power-play % + penalty-kill %). Numeric value sent
-    as a string.
+- description: ''
   name: st_perc
   type: numeric
-- description: Times shorthanded.
+- description: ''
   name: pk_opp
   type: numeric
-- description: Penalty-kill %. Numeric value sent as a string.
+- description: ''
   name: pk_perc
   type: numeric
-- description: Power-play shots on goal against.
+- description: ''
   name: ppsoga
   type: numeric
-- description: Time shorthanded (hh:mm:ss). Duration as an hh:mm:ss string.
+- description: ''
   name: pk_time
   type: character
-- description: Home games played.
+- description: ''
   name: gp_home
   type: numeric
-- description: Average home attendance per game.
+- description: ''
   name: att_avg_home
   type: numeric
-- description: Total home attendance.
+- description: ''
   name: att_total_home
   type: numeric
-- description: Average attendance per game.
+- description: ''
   name: att_avg_overall
   type: numeric
-- description: Total attendance.
+- description: ''
   name: att_total_overall
   type: numeric
-- description: Away games played.
+- description: ''
   name: gp_road
   type: numeric
-- description: Average away attendance per game.
+- description: ''
   name: att_avg_road
   type: numeric
-- description: Total away attendance.
+- description: ''
   name: att_total_road
   type: numeric
-- description: Team (bench) penalties.
+- description: ''
   name: team_pen
   type: numeric
-- description: Shooting %. Numeric value sent as a string.
+- description: ''
   name: s_eff
   type: numeric
-- description: Power-play shooting %. Numeric value sent as a string.
+- description: ''
   name: pps_eff
   type: numeric
-- description: Shots wide.
+- description: ''
   name: sw
   type: numeric
-- description: Shots blocked (blocked attempts).
+- description: ''
   name: sib
   type: numeric
-- description: Scoring-chance shots (site label; unverified).
+- description: ''
   name: ss
   type: numeric
-- description: Shots on goal against.
+- description: ''
   name: soga
   type: numeric
-- description: Missed shots against (wide + blocked).
+- description: ''
   name: msa
   type: numeric
-- description: Shots wide against.
+- description: ''
   name: swa
   type: numeric
-- description: Shots on goal against (unverified).
+- description: ''
   name: sfa
   type: numeric
-- description: Scoring-chance shots against (site label; unverified).
+- description: ''
   name: ssa
   type: numeric
-- description: Face-off violation %.
+- description: ''
   name: fo_violations_perc
   type: numeric
-- description: Penalty-shot attempts.
+- description: ''
   name: psa
   type: numeric
-- description: Penalty shots saved.
+- description: ''
   name: pssvs
   type: numeric
-- description: Shootout attempts against.
+- description: ''
   name: so_psa
   type: numeric
-- description: Shootout saves.
+- description: ''
   name: so_pssvs
   type: numeric
-- description: Shootout save %. Numeric value sent as a string.
+- description: ''
   name: so_pssvs_perc
   type: numeric
-- description: Puck freezes (stoppages caused).
+- description: ''
   name: freezes
   type: numeric
-- description: Puck freezes by the opponent.
+- description: ''
   name: freezes_against
   type: numeric
-- description: Icing calls against the team.
+- description: ''
   name: icings
   type: numeric
-- description: Icings by the opponent.
+- description: ''
   name: icing_against
   type: numeric
-- description: Offside calls against the team.
+- description: ''
   name: offsides
   type: numeric
-- description: Offsides by the opponent.
+- description: ''
   name: offsides_against
   type: numeric
-- description: Scoring-chance goals against (unverified).
+- description: ''
   name: ssga
   type: numeric
-- description: Scoring-chance shots on goal against (unverified).
+- description: ''
   name: ssoga
   type: numeric
-- description: Save % on scoring-chance shots. Numeric value sent as a string.
+- description: ''
   name: sssvs_perc
   type: numeric
-- description: Save % against the power play (unverified). Numeric value sent as a
-    string.
+- description: ''
   name: ppsvs_perc
   type: numeric
-- description: Shorthanded shots on goal against.
+- description: ''
   name: shsoga
   type: numeric
-- description: Shorthanded save % (unverified). Numeric value sent as a string.
+- description: ''
   name: shsvs_perc
   type: numeric
-- description: Even-strength goals against.
+- description: ''
   name: esga
   type: numeric
-- description: Even-strength shots on goal against.
+- description: ''
   name: essoga
   type: numeric
-- description: Even-strength save %. Numeric value sent as a string.
+- description: ''
   name: essvs_perc
   type: numeric
-- description: Penalty-shot goals against.
+- description: ''
   name: psga
   type: numeric
-- description: Penalty-shot save %.
+- description: ''
   name: pssvs_perc
   type: numeric
-- description: Shootout goals against.
+- description: ''
   name: so_psga
   type: numeric
-- description: Game date and time.
+- description: ''
   name: date_time
   type: character
-- description: Home team code (e.g. BIF).
+- description: ''
   name: home_team
   type: character
-- description: Away team code (e.g. HV71).
+- description: ''
   name: guest_team
   type: character
-- description: Home goals.
+- description: ''
   name: game_score_home_score
   type: integer
-- description: Away goals.
+- description: ''
   name: game_score_away_score
   type: integer
-- description: Filter values for how a game was decided.
+- description: ''
   name: game_score_decided_in
   type: character
-- description: Arena.
+- description: ''
   name: venue
   type: character
-- description: Spectators at the game.
+- description: ''
   name: attendance
   type: numeric
-- description: StatNet game number (StatNet key space, e.g. 22003); keys stats-info
-    games{} and equals sports-v2 game-info extId. Not the game uuid.
+- description: ''
   name: info_game_id
   type: integer
-- description: Home team code (e.g. FHC); not a uuid.
+- description: ''
   name: info_home_team_id
   type: character
-- description: Away team code (e.g. LHC); not a uuid.
+- description: ''
   name: info_away_team_id
   type: character
-- description: Goal difference.
+- description: ''
   name: diff
   type: numeric
 kind: dataframe

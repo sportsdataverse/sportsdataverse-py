@@ -1,5 +1,5 @@
 columns:
-- description: Stats provider of the ssgt (statnet, impleo).
+- description: ''
   name: provider
   type: character
 kind: dataframe

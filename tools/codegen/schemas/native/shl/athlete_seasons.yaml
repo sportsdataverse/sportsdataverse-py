@@ -1,12 +1,11 @@
 columns:
-- description: Season START year (2025 = 2025/2026); the season= param of playerProfile_seasonGameLog.
-    Numeric value sent as a string.
+- description: ''
   name: value
   type: character
-- description: Season label (e.g. 2025/2026).
+- description: ''
   name: name
   type: character
-- description: 'Display label (season list: 2025/2026).'
+- description: ''
   name: label
   type: character
 kind: dataframe

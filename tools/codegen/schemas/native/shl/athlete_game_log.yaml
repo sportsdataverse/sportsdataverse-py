@@ -1,115 +1,107 @@
 columns:
-- description: Game date.
+- description: ''
   name: date
   type: character
-- description: Series id in the career log.
+- description: ''
   name: series
   type: character
-- description: Home team SHORT NAME (e.g. Frölunda; may carry a trailing space), not
-    a code.
+- description: ''
   name: home_team
   type: character
-- description: Home team logo URL.
+- description: ''
   name: home_team_icon
   type: character
-- description: Away team SHORT NAME (e.g. Luleå), not a code.
+- description: ''
   name: guest_team
   type: character
-- description: Away team logo URL.
+- description: ''
   name: guest_team_icon
   type: character
-- description: Games played.
+- description: ''
   name: gp
   type: numeric
-- description: Games played with ice time.
+- description: ''
   name: gpi
   type: numeric
-- description: Games started (goalie log).
+- description: ''
   name: gs
   type: numeric
-- description: Wins (meaning differs by table; see the module or route).
+- description: ''
   name: w
   type: numeric
-- description: Ties (meaning differs by table; see the module or route).
+- description: ''
   name: t
   type: numeric
-- description: Losses (meaning differs by table; see the module or route).
+- description: ''
   name: l
   type: numeric
-- description: Shutouts.
+- description: ''
   name: so
   type: numeric
-- description: Goals against.
+- description: ''
   name: ga
   type: numeric
-- description: Goals against average (per 60 minutes). Numeric, but sent as a string
-    in some rows and as a number in others.
+- description: ''
   name: gaa
   type: numeric
-- description: Shots on goal against.
+- description: ''
   name: soga
   type: numeric
-- description: Saves.
+- description: ''
   name: svs
   type: numeric
-- description: Save %. Numeric, but sent as a string in some rows and as a number
-    in others.
+- description: ''
   name: svs_perc
   type: numeric
-- description: Given name and surname.
+- description: ''
   name: info_full_name
   type: character
-- description: Given name.
+- description: ''
   name: info_first_name
   type: character
-- description: Surname.
+- description: ''
   name: info_last_name
   type: character
-- description: Date of birth (YYYY-MM-DD).
+- description: ''
   name: info_birth_date
   type: character
-- description: Nationality (ISO country code).
+- description: ''
   name: info_nationality
   type: character
-- description: Sex of the athlete or team (male / female).
+- description: ''
   name: info_gender
   type: character
-- description: Shirt number.
+- description: ''
   name: info_jersey_number
   type: character
-- description: Position code (CE = centre, LW, RW, D, GK, F); N/A in the athlete game
-    logs.
+- description: ''
   name: info_position
   type: character
-- description: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
+- description: ''
   name: info_position_code
   type: character
-- description: Shooting side (L / R; Left / Right). '-' placeholder in every sample.
+- description: ''
   name: info_shoots
   type: character
-- description: Team name (e.g. Frölunda HC); empty in some rows. Empty string in every
-    sample (placeholder).
+- description: ''
   name: info_team_name
   type: character
-- description: Current-season stat rows of the player (empty in the sample).
+- description: ''
   name: info_season_stats
   type: character
-- description: Career stat rows of the player (empty in the sample).
+- description: ''
   name: info_career_stats
   type: character
-- description: Stats provider of the data (statnet seen).
+- description: ''
   name: info_statistics_provider
   type: character
-- description: Whether the player is in the current squad.
+- description: ''
   name: info_is_in_squad
   type: logical
-- description: 'isa (StatNet) player id as an INTEGER. Join trap: play-by-play sends
-    the same id as a STRING (player.playerId, pop/nep, assists) and map keys are strings;
-    cast before joining.'
+- description: ''
   name: info_player_id
   type: integer
-- description: 'ssgt uuid (platform key space: one season + series + game type); label
-    via layout-info seasonSeriesGameTypeTeams[].'
+- description: ''
   name: info_ssgt_uuid
   type: character
 kind: dataframe
