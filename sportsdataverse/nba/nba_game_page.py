@@ -165,30 +165,55 @@ def _check_league(league_id: str) -> None:
         raise ValueError(f"league_id {league_id!r} is not supported by the game page; use one of {_SUPPORTED_LEAGUES}")
 
 
+def _margin_to_prob(lg: str, margin: float) -> float:
+    """The league's pregame model: home win probability from an expected home margin."""
+    if lg in _NCAA:
+        from sportsdataverse.mbb.mbb_game_predict import win_prob_from_margin as ncaa_win_prob_from_margin
+
+        return ncaa_win_prob_from_margin(margin, league=_NCAA[lg])
+    return win_prob_from_margin(margin, league_id=_NBA_FAMILY_IDS[lg])
+
+
+def _hfa(lg: str) -> float:
+    """The league's fitted home-court advantage in points."""
+    if lg in _NCAA:
+        from sportsdataverse.mbb.mbb_prediction_constants import get_constants as ncaa_constants
+
+        return ncaa_constants(_NCAA[lg]).hfa
+    return get_constants(_NBA_FAMILY_IDS[lg]).hfa
+
+
 def home_prior(
     home_team_spread: Optional[float],
     game_spread_available: Optional[bool],
     *,
-    league_id: str = "00",
+    league_id: Optional[str] = None,
+    league: Optional[str] = None,
+    neutral_site: Optional[bool] = False,
 ) -> tuple[float, str]:
     """Pregame home win probability for the in-game model, and where it came from.
 
-    ``home_team_spread`` is the signed expected home margin that ``load_nba_pbp`` /
-    ``helper_nba_pbp_features`` carry (positive when the home side is favoured). Both hoopR and
-    :func:`~sportsdataverse.nba.nba_pbp.helper_nba_pickcenter` substitute ``+2.5`` when no line
-    exists, so the value is only trusted when ``game_spread_available`` is true; otherwise the
-    prior is home-court advantage alone.
+    ``home_team_spread`` is the signed expected home margin the basketball pbp frames carry
+    (positive when the home side is favoured). Every league's pickcenter helper substitutes ``+2.5``
+    when no line exists, so the value is only trusted when ``game_spread_available`` is true. A line
+    already prices the venue. Without one the prior is home-court advantage alone, and at a neutral
+    site (common in college tournaments) there is none: the prior is 0.5. NBA and WNBA use
+    :func:`~sportsdataverse.nba.nba_game_predict.win_prob_from_margin` and their fitted ``hfa``;
+    MBB and WBB use :func:`~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with
+    ``league="mens"`` / ``"womens"``.
 
     Args:
         home_team_spread: Signed expected home margin, or ``None``.
         game_spread_available: Whether a real line backed that spread.
-        league_id: ``"00"`` NBA / ``"10"`` WNBA (selects the constants).
+        league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
+        neutral_site: ESPN ``neutralSite`` / the schedule's ``neutral_site``; ``None`` or NaN counts as false.
 
     Returns:
-        ``(probability, source)`` with ``source`` ``"spread"`` or ``"hfa"``.
+        ``(probability, source)`` with ``source`` ``"spread"``, ``"neutral"`` or ``"hfa"``.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
+        ValueError: If the league is unknown or ``league`` contradicts ``league_id``.
 
     Example:
         Quick start::
@@ -197,17 +222,23 @@ def home_prior(
             home_prior(3.0, True)      # (0.58, 'spread')
             home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
 
+        A lineless college tournament game::
+
+            home_prior(None, None, league="mbb", neutral_site=True)  # (0.5, 'neutral')
+
         See Also:
-            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
-            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
 
         .. _hoopR: https://hoopR.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    _check_league(league_id)
+    lg = _resolve_league(league, league_id)
     if game_spread_available and home_team_spread is not None and not math.isnan(float(home_team_spread)):
-        return win_prob_from_margin(float(home_team_spread), league_id=league_id), "spread"
-    return win_prob_from_margin(get_constants(league_id).hfa, league_id=league_id), "hfa"
+        return _margin_to_prob(lg, float(home_team_spread)), "spread"
+    if neutral_site and neutral_site == neutral_site:  # NaN (a null pandas cell) is not a neutral site
+        return _margin_to_prob(lg, 0.0), "neutral"
+    return _margin_to_prob(lg, _hfa(lg)), "hfa"
 
 
 def ot_adjusted_seconds(pbp: pl.DataFrame) -> pl.DataFrame:

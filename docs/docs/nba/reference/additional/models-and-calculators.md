@@ -926,15 +926,18 @@ get_shrinkage_k("00")
 
 ### home_prior {#home_prior}
 
-`home_prior(home_team_spread: 'Optional[float]', game_spread_available: 'Optional[bool]', *, league_id: 'str' = '00') -> 'tuple[float, str]'`
+`home_prior(home_team_spread: 'Optional[float]', game_spread_available: 'Optional[bool]', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, neutral_site: 'Optional[bool]' = False) -> 'tuple[float, str]'`
 
 Pregame home win probability for the in-game model, and where it came from.
 
-`home_team_spread` is the signed expected home margin that `load_nba_pbp` /
-`helper_nba_pbp_features` carry (positive when the home side is favoured). Both hoopR and
-`~sportsdataverse.nba.nba_pbp.helper_nba_pickcenter` substitute `+2.5` when no line
-exists, so the value is only trusted when `game_spread_available` is true; otherwise the
-prior is home-court advantage alone.
+`home_team_spread` is the signed expected home margin the basketball pbp frames carry
+(positive when the home side is favoured). Every league's pickcenter helper substitutes `+2.5`
+when no line exists, so the value is only trusted when `game_spread_available` is true. A line
+already prices the venue. Without one the prior is home-court advantage alone, and at a neutral
+site (common in college tournaments) there is none: the prior is 0.5. NBA and WNBA use
+`~sportsdataverse.nba.nba_game_predict.win_prob_from_margin` and their fitted `hfa`;
+MBB and WBB use `~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with
+`league="mens"` / `"womens"`.
 
 **Parameters**
 
@@ -942,11 +945,13 @@ prior is home-court advantage alone.
 |---|---|---|---|
 | `home_team_spread` | `Optional[float]` |  | Signed expected home margin, or `None`. |
 | `game_spread_available` | `Optional[bool]` |  | Whether a real line backed that spread. |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA (selects the constants). |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `neutral_site` | `Optional[bool]` | `False` | ESPN `neutralSite` / the schedule's `neutral_site`; `None` or NaN counts as false. |
 
 **Returns**
 
-`(probability, source)` with `source` `"spread"` or `"hfa"`.
+`(probability, source)` with `source` `"spread"`, `"neutral"` or `"hfa"`.
 
 **Example**
 
@@ -954,6 +959,10 @@ prior is home-court advantage alone.
 from sportsdataverse.nba.nba_game_page import home_prior
 home_prior(3.0, True)      # (0.58, 'spread')
 home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
+
+# A lineless college tournament game
+
+home_prior(None, None, league="mbb", neutral_site=True)  # (0.5, 'neutral')
 ```
 
 ### in_game_features {#in_game_features}

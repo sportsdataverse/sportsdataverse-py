@@ -15,6 +15,8 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse.mbb import mbb_game_predict as ncaa_predict
+from sportsdataverse.mbb import mbb_prediction_constants as ncaa_constants
 from sportsdataverse.nba import nba_game_page as gp
 
 ESPN = Path(__file__).resolve().parents[1] / "fixtures" / "espn"
@@ -119,3 +121,40 @@ def test_game_minutes_count_overtime_past_the_games_own_regulation() -> None:
     assert gp.game_minutes(4, league="wbb") == 40 and gp.game_minutes(5, league="wbb") == 45
     assert gp.game_minutes(3, league="wnba", regulation_periods=2) == 45  # 2005 halves, one OT
     assert gp.game_minutes(2, league="wbb", regulation_periods=2) == 40
+
+
+def test_college_constants_are_the_ones_the_spec_names() -> None:
+    mens, womens = ncaa_constants.get_constants("mens"), ncaa_constants.get_constants("womens")
+    assert (mens.hfa, mens.margin_sd, womens.hfa, womens.margin_sd) == (2.9281, 11.2196, 2.6432, 12.1716)
+
+
+def test_college_prior_uses_the_college_model_constants() -> None:
+    p, src = gp.home_prior(None, None, league="mbb")
+    assert src == "hfa" and p == pytest.approx(ncaa_predict.win_prob_from_margin(2.9281, league="mens"))
+    p_w, _ = gp.home_prior(None, None, league="wbb")
+    assert p_w == pytest.approx(ncaa_predict.win_prob_from_margin(2.6432, league="womens"))
+    # league_id="10" used to be the only way to score WBB: it gave the WNBA prior, which is wrong
+    assert p_w != pytest.approx(gp.home_prior(None, None, league_id="10")[0])
+    p_s, src_s = gp.home_prior(-1.5, True, league="mbb")  # mbb_401812161: home +1.5 underdog
+    assert src_s == "spread" and p_s == pytest.approx(ncaa_predict.win_prob_from_margin(-1.5, league="mens"))
+
+
+@pytest.mark.parametrize("league", ["nba", "wnba", "mbb", "wbb"])
+def test_neutral_site_without_a_line_has_no_home_court(league: str) -> None:
+    p, src = gp.home_prior(None, None, league=league, neutral_site=True)
+    assert src == "neutral" and p == pytest.approx(0.5)
+    # the +2.5 the pickcenter helpers default to with no line never reaches the model
+    assert gp.home_prior(2.5, False, league=league, neutral_site=True)[1] == "neutral"
+    # a real line already prices the venue
+    assert gp.home_prior(-3.0, True, league=league, neutral_site=True)[1] == "spread"
+    # a null warehouse cell is not a neutral site
+    assert gp.home_prior(None, None, league=league, neutral_site=None)[1] == "hfa"
+    assert gp.home_prior(None, None, league=league, neutral_site=float("nan"))[1] == "hfa"  # type: ignore[arg-type]
+
+
+def test_nba_prior_is_unchanged() -> None:
+    from sportsdataverse.nba.nba_game_predict import win_prob_from_margin
+
+    assert gp.home_prior(None, None) == (win_prob_from_margin(2.184, league_id="00"), "hfa")
+    assert gp.home_prior(None, None, league_id="10") == (win_prob_from_margin(1.184, league_id="10"), "hfa")
+    assert gp.home_prior(3.0, True) == (win_prob_from_margin(3.0, league_id="00"), "spread")
