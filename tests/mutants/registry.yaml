@@ -954,7 +954,7 @@
   group: nfl-end-state
   finding: C-H5
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'pl.when(no_down).then(1).otherwise(pl.col("end.down")).alias("end.down"),'
+  snippet: 'pl.when(pl.col("_no_down")).then(1).otherwise(pl.col("end.down")).alias("end.down"),'
   mutant: 'pl.col("end.down").alias("end.down"),'
   test: tests/nfl/test_nfl_whole_game_oracle.py -k "end_down_minus_one_only_on_a_score and 401326467"
   expected: kill
@@ -975,6 +975,31 @@
     ESPN copies a pre-2014 missed field goal's start into its end; with only the down rewritten
     the receiver is scored at the kicker's spot and EPA MAE vs nflverse goes 1.72 -> 2.78 (8 rows)
     instead of 1.72 -> 0.162.
+
+- id: nfl-missed-fg-next-snap-adjacency-guard
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& (pl.col("_nxt").struct.field("r") == seq_rank + 1)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_end_down_minus_one_missed_field_goal_falls_back_when_the_next_snap_is_out_of_order
+  expected: kill
+  note: >-
+    R810-2: without the sequenceNumber adjacency check an out-of-order next snap (R785-4) lends
+    the missed field goal its yard line; on 164 of 1,451 pre-2014 nfl-raw misses the guard falls
+    back and ESPN's whole end (down -1) is closer to nflverse than 1st & 10 at the kicker's spot.
+
+- id: nfl-rewritten-row-distance-ten
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.when(goal_to_go).then(pl.col("end.yardsToEndzone")).otherwise(10))'
+  mutant: '.then(pl.col("end.distance"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "next_snap_distance"
+  expected: kill
+  note: >-
+    R810-1: keeping ESPN's stale end distance on a rewritten return ends it at 1st & 4-20 where the
+    receiver's next snap (nflverse ydstogo) is 1st & 10; kickoff EPA MAE vs nflverse 0.270 -> 0.347.
 
 - id: nfl-end-state-half-end-held
   group: nfl-end-state

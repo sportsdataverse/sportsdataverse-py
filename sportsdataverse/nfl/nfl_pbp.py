@@ -1677,37 +1677,47 @@ class NFLPlayProcess(object):
         # its -1 (a try or a kickoff follows, and the series and touchdown logic read it), and so
         # does a timeout: nflverse carries no media timeout and gives a team timeout no down.
         stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
-        no_down = (pl.col("end.down") == -1) & ~stop & ~(pl.col("scoringPlay") == True).fill_null(False)
         # The pre-2014 missed field goal's end is its start copied (the kicker's own spot, distance
         # -1), so it ends where the receiver's next snap starts, the state nflfastR reads. Pre-2014
         # play ids are not always in game order (R785-4), so the next snap by id must also be the
-        # next snap by sequenceNumber in the same half; otherwise ESPN's end stands.
+        # next snap by sequenceNumber in the same half and not a kickoff; otherwise ESPN's end
+        # stands whole, down -1 included (closer to nflverse than 1st & 10 at the kicker's spot).
         seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")
         nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=pl.col("type.text").is_in(kickoff_vec), r=seq_rank)
-        missed_fg = (
-            no_down
-            & (pl.col("type.text") == "Field Goal Missed")
-            & (pl.col("_nxt").struct.field("kick") == False)
-            & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
+        missed_fg = pl.col("type.text") == "Field Goal Missed"
+        next_snap = (
+            (pl.col("_nxt").struct.field("kick") == False) & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
         ).fill_null(False)
+        no_down = (
+            (pl.col("end.down") == -1)
+            & ~stop
+            & ~(pl.col("scoringPlay") == True).fill_null(False)
+            & ~(missed_fg & ~next_snap).fill_null(False)
+        )
+        # The receiver's first snap is 1st & 10, or 1st & goal inside the 10 (all 21 rewritten
+        # returns in the captures); ESPN's own end distance on a return is often stale (R810-1).
+        goal_to_go = pl.col("end.yardsToEndzone").is_between(1, 9)
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
                 half=pl.when(pl.col("period.number") <= 2).then(1).otherwise(2),
             )
             .with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("half"))
+            .with_columns(_no_down=no_down.fill_null(False))
             .with_columns(
-                pl.when(missed_fg)
+                pl.when(pl.col("_no_down") & missed_fg)
                 .then(pl.col("_nxt").struct.field("y2e"))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
-                pl.when(no_down & (pl.col("end.distance") <= 0))
-                .then(10)
+                pl.when(pl.col("_no_down")).then(1).otherwise(pl.col("end.down")).alias("end.down"),
+            )
+            .with_columns(
+                pl.when(pl.col("_no_down"))
+                .then(pl.when(goal_to_go).then(pl.col("end.yardsToEndzone")).otherwise(10))
                 .otherwise(pl.col("end.distance"))
                 .alias("end.distance"),
-                pl.when(no_down).then(1).otherwise(pl.col("end.down")).alias("end.down"),
             )
-            .drop("_nxt")
+            .drop("_nxt", "_no_down")
             .with_columns(
                 lead_half=pl.col("half").shift(-1),
                 lag_scoringPlay=pl.col("scoringPlay").shift(1),

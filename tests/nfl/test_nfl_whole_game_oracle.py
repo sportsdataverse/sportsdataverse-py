@@ -26,6 +26,7 @@ game asserts the oracle plainly. Tolerances on model columns are the agreement m
 
 from __future__ import annotations
 
+import copy
 import math
 
 import polars as pl
@@ -33,6 +34,7 @@ import pytest
 
 from sportsdataverse.nfl.ep_wp import _derive_wpa, calculate_completion_probability, calculate_epa, calculate_wpa
 from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec, normalplay, offense_score_vec
+import sportsdataverse.nfl.nfl_fourth_down as nfl_fourth_down
 from sportsdataverse.nfl import NFLPlayProcess
 from sportsdataverse.nfl.nfl_pbp import _touchdown_did_not_stand
 from tests.nfl._whole_game import CAPTURES, FIX, load_summary, run
@@ -202,8 +204,9 @@ def test_end_down_minus_one_only_on_a_score(game_id):
 
 # nflverse's epa on the 29 plays task 2.3 moves (fixtures/nflverse/end_down_minus_one_epa.csv; the
 # README has the provenance). Measured MAE on HEAD before -> after the fix: missed field goals
-# 1.720 -> 0.162 (8 rows), kickoff returns 0.952 -> 0.347 (21 rows); ceilings one step toward failing.
-_END_DOWN_EPA_MAE = {"field_goal": 0.17, "kickoff": 0.35}
+# 1.720 -> 0.162 (8 rows), kickoff returns 0.952 -> 0.270 (21 rows; 0.347 before R810-1 set the
+# returns' distance to 10); ceilings one step toward failing.
+_END_DOWN_EPA_MAE = {"field_goal": 0.17, "kickoff": 0.28}
 
 
 @pytest.mark.parametrize("play_type", list(_END_DOWN_EPA_MAE))
@@ -218,6 +221,55 @@ def test_end_down_minus_one_epa_agrees_with_nflverse(play_type):
     j = nv.join(ours, on=["espn_game_id", "play_id"], how="inner")
     _require(j.height == nv.height, f"{j.height} of {nv.height} nflverse plays matched")
     assert (j["EPA"] - j["epa"]).abs().mean() <= _END_DOWN_EPA_MAE[play_type]
+
+
+def _nflverse_next_snap(game_id: int) -> pl.DataFrame:
+    """Each nflverse play with the down / ydstogo / yardline of the next row that has a down."""
+    nv = _nflverse(game_id).with_columns(pl.col("play_id").cast(pl.Int64)).sort("play_id")
+    nxt = pl.when(pl.col("down").is_not_null())
+    return nv.with_columns(
+        next_down=nxt.then(pl.col("down")).shift(-1).backward_fill(),
+        next_ydstogo=nxt.then(pl.col("ydstogo")).shift(-1).backward_fill(),
+    )
+
+
+@pytest.mark.parametrize("game_id", [401326467, 401671740])
+def test_end_down_minus_one_kickoff_return_ends_at_the_next_snap_distance(game_id):
+    # R810-1: a rewritten return ends at the receiver's first snap, 1st & 10 (or goal); ESPN's own
+    # end distance on a return is stale (4/6/8/9/11/15/20 on 8 of the 21 capture rows). Oracle:
+    # nflverse's ydstogo on the next snap. Covers 401326467 (8 returns) and 401671740 (2).
+    csv = pl.read_csv(FIX / "nflverse" / "end_down_minus_one_epa.csv").filter(
+        (pl.col("espn_game_id") == game_id) & (pl.col("play_type") == "kickoff")
+    )
+    _require(csv.height > 0, "no rewritten return in this slice")
+    ours = run(game_id).plays.with_columns(
+        play_id=pl.col("id").cast(pl.Utf8).str.slice(len(str(game_id))).cast(pl.Int64)
+    )
+    j = csv.join(ours, on="play_id").join(_nflverse_next_snap(game_id), on="play_id")
+    _require(j.height == csv.height, f"{j.height} of {csv.height} returns joined")
+    assert _bad(j, (pl.col("end.down") == pl.col("next_down")) & (pl.col("end.distance") == pl.col("next_ydstogo")),
+                ["end.down", "end.distance", "next_down", "next_ydstogo"]) == []  # fmt: skip
+
+
+def test_end_down_minus_one_missed_field_goal_falls_back_when_the_next_snap_is_out_of_order():
+    # R810-2: pre-2014 play ids are not always in game order (R785-4; 3 of 1,451 pre-2014 missed
+    # field goals in nfl-raw, e.g. 320107034). On a real capture whose next snap is made to precede
+    # the miss in sequenceNumber, the guard refuses it and ESPN's whole end stands: down -1, the
+    # kicker's copied spot. Uncorrupted, the same row takes the next snap (1st & 10 at its spot).
+    game_id, fg = 251113015, "2511130151134"
+    summary = copy.deepcopy(load_summary(game_id))
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    i = next(k for k, p in enumerate(plays) if p["id"] == fg)
+    plays[i + 1]["sequenceNumber"] = str(int(plays[i]["sequenceNumber"]) - 1)
+    proc = NFLPlayProcess(gameId=game_id)
+    proc.espn_nfl_pbp(summary=summary)
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(nfl_fourth_down, "_try_load", lambda name: None)
+        proc.run_processing_pipeline()
+    row = proc.plays_frame.filter(pl.col("id").cast(pl.Utf8) == fg).row(0, named=True)
+    clean = run(game_id).plays.filter(pl.col("id").cast(pl.Utf8) == fg).row(0, named=True)
+    assert (clean["end.down"], clean["end.yardsToEndzone"]) == (1, 79)
+    assert (row["end.down"], row["end.yardsToEndzone"]) == (-1, row["start.yardsToEndzone"])
 
 
 @pytest.mark.parametrize("game_id", _cases())
@@ -474,13 +526,13 @@ def test_model_column_agrees_with_nflverse(game_id, ours, theirs):
     assert mae <= mae_ceiling, mae
 
 
-@pytest.mark.parametrize(("ours", "theirs"), [("EP_start", "ep"), ("EPA", "epa")])
 @pytest.mark.parametrize("game_id", list(_H5_RETURNS))
-def test_end_down_minus_one_returns_sit_in_the_kickoff_band(game_id, ours, theirs):
-    # 2.3 (C-H5): a fixed return agrees with nflverse no worse than the game's other kickoffs do.
-    # Measured on 401671740: returns ep 0.313/0.351, epa 0.224/0.605; other kickoffs max 0.466 / 0.630
-    # (before 2.3 the returns' epa was off 1.182/1.499).
-    err = (pl.col(ours).cast(pl.Float64) - pl.col(f"{theirs}_nv").cast(pl.Float64)).abs()
+def test_end_down_minus_one_returns_sit_in_the_kickoff_band(game_id):
+    # 2.3 (C-H5): a fixed return's EPA agrees with nflverse no worse than the game's other kickoffs.
+    # Measured on 401671740: returns 0.224/0.326 (0.605 before R810-1); other kickoffs max 0.630
+    # (before 2.3 the returns were off 1.182/1.499). No EP_start case: start-of-play EP does not
+    # read the end state, so it could not fail on a 2.3 regression (R810-4).
+    err = (pl.col("EPA").cast(pl.Float64) - pl.col("epa_nv").cast(pl.Float64)).abs()
     j = _joined(game_id).filter(
         pl.col("type.text").is_in(kickoff_vec) & ~pl.col("id").is_in(_open_finding_rows(game_id))
     )
