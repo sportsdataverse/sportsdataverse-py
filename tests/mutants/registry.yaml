@@ -298,6 +298,70 @@
   expected: kill
   note: the overtime touchdown ESPN labels period 2 would go unreported
 
+# --- C-NF-10(a): a play field absent from every play (no column at all) ---------------------------
+# Killers (3.4(b2)): real captures with the block stripped from every play (CFB 401628455, NFL 401872922).
+- id: cfb-missing-play-fields-materialized
+  group: cfb-crash-guards
+  finding: C-NF-10
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        if _missing:'
+  mutant: '        if False:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "absent_from_every_play"
+  expected: kill
+  note: an absent `end` block or score raises ColumnNotFoundError on end.down / homeScore
+
+- id: nfl-missing-play-fields-materialized
+  group: cfb-crash-guards
+  finding: C-NF-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        if _missing:'
+  mutant: '        if False:'
+  test: tests/nfl/test_nfl_offline_inputs.py -k "absent_from_every_play"
+  expected: kill
+  note: an absent start / end block, clock or score raises ColumnNotFoundError
+
+# --- C-NF-10(b) / R828-3: pickcenter fields that every provider leaves null -------------------------
+# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py on the 401301042 / 400869817 pickcenters.
+- id: cfb-pickcenter-null-spread-falls-through
+  group: cfb-crash-guards
+  finding: C-NF-10
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'if pickcenter is not None and _first("spread", None) is not None:'
+  mutant: 'if pickcenter is not None:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "all_null_spread"
+  expected: kill
+  note: a spread-less pickcenter would publish the 2.5 default as an available market spread
+
+- id: cfb-default-total-one-constant
+  group: cfb-default-odds
+  finding: R828-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_DEFAULT_TOTAL = 55.5'
+  mutant: '_DEFAULT_TOTAL = 55.0'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pickcenter_without_a_total"
+  expected: kill
+  note: the pickcenter path's old 55.0 against 55.5 on every other path
+
+- id: cfb-default-total-warns-pickcenter
+  group: cfb-default-odds
+  finding: R828-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_warn_default_total(self.gameId, "summary_pickcenter", overUnder)'
+  mutant: 'pass'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pickcenter_without_a_total"
+  expected: kill
+  note: 400869817 (and 322590228, 401761665) would record the default total as summary_pickcenter, unwarned
+
+- id: cfb-default-total-warns-core-api
+  group: cfb-default-odds
+  finding: R828-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'if gameSpreadAvailable and ou_raw is None:'
+  mutant: 'if False:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "core_odds_api_spread_without_a_total"
+  expected: kill
+  note: an ESPN BET item with a spread and no total would default the total silently
+
 # --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13

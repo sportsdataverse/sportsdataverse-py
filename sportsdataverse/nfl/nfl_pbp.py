@@ -798,6 +798,31 @@ class NFLPlayProcess(object):
         ):
             logging.debug(f"{self.gameId}: appear to be too many plays ({len(pbp_txt['plays'])}) for a completed game")
             return pbp_txt
+        # A play's whole ``start`` / ``end`` block, its clock or its scores can be absent from every
+        # play: json_normalize then emits no such column and the chain below raised ColumnNotFoundError
+        # (C-NF-10(a)). Materialize them null, as the CFB processor does; strings as String-null for
+        # the ``.str`` ops, the scores Int64-null (their published dtype), the rest untyped for the casts.
+        _required_play_cols = {
+            "clock.displayValue": pl.String,
+            "type.text": pl.String,
+            "text": pl.String,
+            "homeScore": pl.Int64,
+            "awayScore": pl.Int64,
+            "start.downDistanceText": pl.String,
+            **dict.fromkeys(
+                [
+                    f"{side}.{f}"
+                    for side in ("start", "end")
+                    for f in ("team.id", "down", "distance", "yardsToEndzone", "yardLine")
+                ],
+                pl.Null,
+            ),
+        }
+        _missing = [c for c in _required_play_cols if c not in pbp_txt["plays"].columns]
+        if _missing:
+            pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+                pl.lit(None, dtype=_required_play_cols[c]).alias(c) for c in _missing
+            )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(

@@ -142,3 +142,18 @@ def test_odds_override_replaces_the_pickcenter_cascade(summary, monkeypatch):
     assert proc.odds_source == "injected"
     with pytest.raises(ValueError, match="missing required keys"):
         NFLPlayProcess(gameId=GAME_ID, odds_override={"gameSpread": 1})
+
+
+@pytest.mark.parametrize("keys", [("start",), ("end",), ("clock",), ("homeScore", "awayScore")], ids=lambda k: k[0])
+def test_a_play_field_absent_from_every_play_does_not_crash(summary, keys):
+    """C-NF-10(a): with a block absent from EVERY play json_normalize emits no column for it, and the
+    plays build raised ColumnNotFoundError; the processor now runs with those columns null."""
+    stripped = json.loads(json.dumps(summary))
+    for drive in stripped["drives"]["previous"]:
+        for play in drive["plays"]:
+            for key in keys:
+                play.pop(key, None)
+    proc = NFLPlayProcess(gameId=GAME_ID)
+    proc.espn_nfl_pbp(summary=stripped)
+    plays = proc.run_processing_pipeline()["plays"]
+    assert len(plays) > 100

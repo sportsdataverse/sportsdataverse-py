@@ -456,6 +456,21 @@ def _warn_default_odds(game_id, odds_source, spread, total) -> None:
     )
 
 
+#: The total every odds path falls back to when no provider has one (the pickcenter path used 55.0, R828-3).
+_DEFAULT_TOTAL = 55.5
+
+
+def _warn_default_total(game_id, odds_source, total) -> None:
+    """Warn that a game with a market spread has no market total (R828-3): the total is a default."""
+    warnings.warn(
+        f"CFB game {game_id}: no pregame total is available (odds_source={odds_source!r}); the overUnder "
+        f"column and the fourth-down decision surface (team implied totals) use {total}, which no market set. "
+        "Make it an error with warnings.simplefilter('error', DefaultOddsWarning).",
+        _DefaultOddsWarning,
+        stacklevel=3,
+    )
+
+
 def _warn_period_steps_back(play_df: pl.DataFrame, game_id) -> None:
     """Warn when ``period.number`` decreases along the final row order (C-M18): a wrong id or label."""
     if "period.number" not in play_df.columns:
@@ -2730,6 +2745,8 @@ class CFBPlayProcess(object):
         # String-null because the chain runs `.str.*` ops on them (split/contains/to_lowercase),
         # which raise on an untyped Null column; the numeric/bool columns stay untyped Null so
         # their explicit downstream `.cast(...)` owns the final dtype.
+        # A play's whole ``end`` block or its scores can be absent from every play too (C-NF-10(a));
+        # the scores are created Int64-null, their published dtype.
         _required_play_cols = [
             "period.number",
             "clock.displayValue",
@@ -2738,6 +2755,8 @@ class CFBPlayProcess(object):
             "sequenceNumber",
             "text",
             "scoringPlay",
+            "homeScore",
+            "awayScore",
             "start.team.id",
             "start.down",
             "start.distance",
@@ -2745,13 +2764,25 @@ class CFBPlayProcess(object):
             "start.yardLine",
             "start.downDistanceText",
             "end.team.id",
+            "end.down",
+            "end.distance",
+            "end.yardsToEndzone",
             "end.yardLine",
         ]
         _string_play_cols = {"clock.displayValue", "type.text", "text", "start.downDistanceText"}
         _missing = [c for c in _required_play_cols if c not in pbp_txt["plays"].columns]
         if _missing:
             pbp_txt["plays"] = pbp_txt["plays"].with_columns(
-                [(pl.lit(None, dtype=pl.String) if c in _string_play_cols else pl.lit(None)).alias(c) for c in _missing]
+                [
+                    (
+                        pl.lit(None, dtype=pl.String)
+                        if c in _string_play_cols
+                        else pl.lit(None, dtype=pl.Int64)
+                        if c in ("homeScore", "awayScore")
+                        else pl.lit(None)
+                    ).alias(c)
+                    for c in _missing
+                ]
             )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
@@ -3895,7 +3926,9 @@ class CFBPlayProcess(object):
 
         gameSpreadAvailable = spread_raw is not None
         gameSpread = float(spread_raw) if spread_raw is not None else 2.5
-        overUnder = float(ou_raw) if ou_raw is not None else 55.5
+        overUnder = float(ou_raw) if ou_raw is not None else _DEFAULT_TOTAL
+        if gameSpreadAvailable and ou_raw is None:
+            _warn_default_total(self.gameId, "core_odds_api", overUnder)
         homeFavorite = bool(home_fav_raw) if home_fav_raw is not None else True
         return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable)
 
@@ -3922,25 +3955,29 @@ class CFBPlayProcess(object):
         # offline (a supplied summary): the summary's own pickcenter is the only
         # odds source, so one provider is enough and an empty array means the
         # documented defaults, never a request
+        pickcenter = None
         if n_pick > 1 or (offline and n_pick >= 1):
             pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
             pickcenter = pickcenter.sort_values(by=["provider.id"])
-            homeFavorite = (
-                pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
-                if "homeTeamOdds.favorite" in pickcenter.columns
-                else True
-            )
-            gameSpread = (
-                pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0]
-                if "spread" in pickcenter.columns
-                else 2.5
-            )
-            overUnder = (
-                pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
-                if "overUnder" in pickcenter.columns
-                else 55.0
-            )
-            # .values[0] is a shape-(1,) row: unwrap to Python scalars so the payload's odds are a
+
+        def _first(column, default):
+            """The first provider's non-null ``column`` (``provider.id`` order), else ``default``.
+
+            An all-null column used to raise IndexError on the empty filter (C-NF-10(b), R828-3).
+            """
+            values = pickcenter[column].dropna() if column in pickcenter.columns else ()
+            return values.iloc[0] if len(values) else default
+
+        # a pickcenter whose providers carry no spread is no spread: it takes the path below, as an
+        # empty pickcenter does (C-NF-10(b))
+        if pickcenter is not None and _first("spread", None) is not None:
+            homeFavorite = _first("homeTeamOdds.favorite", True)
+            gameSpread = _first("spread", 2.5)
+            overUnder = _first("overUnder", None)
+            if overUnder is None:
+                overUnder = _DEFAULT_TOTAL
+                _warn_default_total(self.gameId, "summary_pickcenter", overUnder)
+            # pandas hands back numpy values: unwrap to Python scalars so the payload's odds are a
             # valid (JSON-safe) odds_override (C-M19); the values chosen are unchanged
             homeFavorite = bool(np.asarray(homeFavorite).item())
             gameSpread = float(np.asarray(gameSpread).item())
