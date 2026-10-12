@@ -1,0 +1,179 @@
+api: eihl_esports
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the bucket has no such key (S3 404 NoSuchKey:
+    unknown season, competition, match or team), or the file holds no rows (an unplayed
+    game, an empty shot shell).'
+  see_also:
+  - name: EIHL
+    note: the league site whose widgets read this public eSports bucket
+    url: https://www.eliteleague.co.uk/
+endpoints:
+- example_args:
+    league_id: 3
+    season: 2027
+  parser: parse_esports_schedule
+  path: /league-matches/{season}/{league_id}.json
+  path_params:
+  - description: Season by its END year (2027 = 2026/27). The bucket keys seasons
+      by their START year; the wrapper requests season - 1.
+    name: season
+    required: true
+    transform: season_start_year
+    type: int
+  - default: 3
+    description: Competition id. 3 = Elite League, 4 = Challenge Cup, 5 = playoffs.
+    name: league_id
+    required: false
+    type: int
+  returns_schema: native/eihl_esports/schedule
+  short: schedule
+  summary: Schedule and results of one competition season, one row per match, played
+    or not.
+- example_args:
+    league_id: 3
+    season: 2027
+    team_id: 96
+  parser: parse_esports_player_stats
+  path: /league-team-stats/{season}/{league_id}/{team_id}.json
+  path_params:
+  - description: Season by its END year (2027 = 2026/27). The bucket keys seasons
+      by their START year; the wrapper requests season - 1.
+    name: season
+    required: true
+    transform: season_start_year
+    type: int
+  - default: 3
+    description: Competition id. 3 = Elite League, 4 = Challenge Cup, 5 = playoffs.
+    name: league_id
+    required: false
+    type: int
+  - description: 'Team id (per-bucket team key space: home_id / guest_id in eihl_schedule).'
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/eihl_esports/team_player_stats
+  short: team_player_stats
+  summary: Season player stats of one team in one competition, one row per player.
+- example_args:
+    league_id: 3
+    season: 2027
+  parser: parse_esports
+  path: /league-top-scorers/{season}/{league_id}.json
+  path_params:
+  - description: Season by its END year (2027 = 2026/27). The bucket keys seasons
+      by their START year; the wrapper requests season - 1.
+    name: season
+    required: true
+    transform: season_start_year
+    type: int
+  - default: 3
+    description: Competition id. 3 = Elite League, 4 = Challenge Cup, 5 = playoffs.
+    name: league_id
+    required: false
+    type: int
+  returns_schema: native/eihl_esports/top_scorers
+  short: top_scorers
+  summary: Skater scoring leaderboard of one competition season.
+- example_args:
+    match_id: 4440
+  parser: parse_esports_game_info
+  path: /matches/{match_id}/game-info.json
+  path_params:
+  - description: 'Match id (per-bucket match key space: match_id in eihl_schedule).
+      Not the league website''s game id.'
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/eihl_esports/game_info
+  short: game_info
+  summary: 'Game info of one match: state, arena, attendance, officials, coaches,
+    period scores.'
+- example_args:
+    match_id: 4440
+  parser: parse_esports_pbp
+  path: /matches/{match_id}/period-events.json
+  path_params:
+  - description: 'Match id (per-bucket match key space: match_id in eihl_schedule).
+      Not the league website''s game id.'
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/eihl_esports/pbp
+  short: pbp
+  summary: 'Play-by-play of one match: goals, penalties, goalie changes and timeouts,
+    one row per event.'
+- example_args:
+    match_id: 4440
+    team_id: 96
+  parser: parse_esports_player_stats
+  path: /matches/{match_id}/team-stats/{team_id}.json
+  path_params:
+  - description: 'Match id (per-bucket match key space: match_id in eihl_schedule).
+      Not the league website''s game id.'
+    name: match_id
+    required: true
+    type: int
+  - description: 'Team id (per-bucket team key space: home_id / guest_id in eihl_schedule).'
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/eihl_esports/player_box
+  short: player_box
+  summary: Player boxscore of one team in one match, one row per player.
+- example_args:
+    match_id: 4440
+  parser: parse_esports
+  path: /matches/{match_id}/top-goalies.json
+  path_params:
+  - description: 'Match id (per-bucket match key space: match_id in eihl_schedule).
+      Not the league website''s game id.'
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/eihl_esports/goalie_box
+  short: goalie_box
+  summary: Goalie lines of one match, one row per goalie who played.
+- example_args:
+    league_id: 3
+    season: 2027
+  parser: parse_esports_standings
+  path: /table/{season}/{league_id}.json
+  path_params:
+  - description: Season by its END year (2027 = 2026/27). The bucket keys seasons
+      by their START year; the wrapper requests season - 1.
+    name: season
+    required: true
+    transform: season_start_year
+    type: int
+  - default: 3
+    description: Competition id. 3 = Elite League, 4 = Challenge Cup, 5 = playoffs.
+    name: league_id
+    required: false
+    type: int
+  returns_schema: native/eihl_esports/standings
+  short: standings
+  summary: Standings of one competition season, one row per team.
+- example_args:
+    match_id: 4440
+  parser: parse_esports_shots
+  path: /visualization/shots/{match_id}.json
+  path_params:
+  - description: 'Match id (per-bucket match key space: match_id in eihl_schedule).
+      Not the league website''s game id.'
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/eihl_esports/shots
+  short: shots
+  summary: Shots of one match with rink coordinates and result, one row per shot.
+getter_module: sportsdataverse.hockey.esports_runtime
+host: https://s3.eu-west-1.amazonaws.com/eihl.hokejovyzapis.cz
+module: eihl_esports
+name_pattern: eihl_{short}
+parser_columns: true
+parser_module: hockey.esports_parsers
+passthrough_query: false
+qualifier: ''
+schema_prefix: eihl_

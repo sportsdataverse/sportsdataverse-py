@@ -1,0 +1,441 @@
+{
+  "gameInfo": {
+    "actualTimeName": "end",
+    "actualTimeAlias": "K",
+    "status": "AFTER_MATCH",
+    "stadium": "",
+    "numberOfViewers": 916,
+    "referees": {
+      "headReferee1": "Rasmus Toppel",
+      "headReferee2": "Daniel Bøjle",
+      "lineReferee1": "Magnus L. Christiansen",
+      "lineReferee2": "Frederik Nielsen",
+      "headReferee1number": 12,
+      "headReferee2number": 21,
+      "lineReferee1number": 68,
+      "lineReferee2number": 92,
+      "headReferee1id": 29,
+      "headReferee2id": 8,
+      "lineReferee1id": 21,
+      "lineReferee2id": 12
+    },
+    "teamInfo": {
+      "home": {
+        "id": 8,
+        "name": "Rødovre Mighty Bulls",
+        "shortcut": "ROD"
+      },
+      "visitor": {
+        "id": 4,
+        "name": "Aalborg Pirates",
+        "shortcut": "AAL"
+      }
+    },
+    "trainers": {
+      "homeHeadCoach": "Ville Hämäläinen",
+      "visitorHeadCoach": "Daniel Johansson"
+    },
+    "teamBilance": {
+      "homeWin": 6,
+      "visitorWin": 6
+    },
+    "results": {
+      "extra_time": false,
+      "shooting": false,
+      "contumacy": false,
+      "score": {
+        "final": {
+          "score_home": 1,
+          "score_guest": 3
+        },
+        "first_period": {
+          "score_home": 0,
+          "score_guest": 2
+        },
+        "second_period": {
+          "score_home": 0,
+          "score_guest": 1
+        },
+        "third_period": {
+          "score_home": 1,
+          "score_guest": 0
+        }
+      }
+    }
+  },
+  "roster": {
+    "home": {
+      "101": {
+        "playerId": 400,
+        "matchPlayerId": 19971,
+        "name": "Mathieu",
+        "surname": "Caron",
+        "jersey": 62,
+        "position": "GK",
+        "roster": "101"
+      },
+      "102": {
+        "playerId": 322,
+        "matchPlayerId": 19989,
+        "name": "Bertram",
+        "surname": "Witomski",
+        "jersey": 72,
+        "position": "GK",
+        "roster": "102"
+      },
+      "211": {
+        "playerId": 402,
+        "matchPlayerId": 19967,
+        "name": "Sebastian ",
+        "surname": "Bergholt",
+        "jersey": 41,
+        "position": "DE",
+        "roster": "211"
+      },
+      "212": {
+        "playerId": 405,
+        "matchPlayerId": 19983,
+        "name": "Jerkko",
+        "surname": "Rämö",
+        "jersey": 44,
+        "position": "DE",
+        "roster": "212"
+      },
+      "221": {
+        "playerId": 104,
+        "matchPlayerId": 19966,
+        "name": "Frederick",
+        "surname": "Amondsen",
+        "jersey": 39,
+        "position": "DE",
+        "roster": "221"
+      },
+      "222": {
+        "playerId": 403,
+        "matchPlayerId": 19972,
+        "name": "Nicolai",
+        "surname": "Ebdrup",
+        "jersey": 73,
+        "position": "DE",
+        "roster": "222"
+      },
+      "231": {
+        "playerId": 107,
+        "matchPlayerId": 19970,
+        "name": "Lasse",
+        "surname": "Carlsen",
+        "jersey": 55,
+        "position": "DE",
+        "roster": "231"
+      },
+      "232": {
+        "playerId": 101,
+        "matchPlayerId": 19981,
+        "name": "Lukas",
+        "surname": "Nielsen",
+        "jersey": 4,
+        "position": "DE",
+        "roster": "232"
+      },
+      "241": {
+        "playerId": 420,
+        "matchPlayerId": 19975,
+        "name": "Casey",
+        "surname": "Joshua Silverman",
+        "jersey": 2,
+        "position": "FW",
+        "roster": "241"
+      },
+      "242": {
+        "playerId": 111,
+        "matchPlayerId": 19979,
+        "name": "Mikkel",
+        "surname": "Molge",
+        "jersey": 16,
+        "position": "FW",
+        "roster": "242"
+      },
+      "311": {
+        "playerId": 370,
+        "matchPlayerId": 19982,
+        "name": "Philip",
+        "surname": "Rafnsson",
+        "jersey": 17,
+        "position": "FW",
+        "roster": "311"
+      },
+      "312": {
+        "playerId": 124,
+        "matchPlayerId": 19977,
+        "name": "Nikolaj",
+        "surname": "Krag Christensen",
+        "jersey": 11,
+        "position": "FW",
+        "roster": "312"
+      },
+      "313": {
+        "playerId": 152,
+        "matchPlayerId": 19976,
+        "name": "Matthew",
+        "surname": "Kopperud",
+        "jersey": 28,
+        "position": "FW",
+        "roster": "313"
+      },
+      "321": {
+        "playerId": 114,
+        "matchPlayerId": 19969,
+        "name": "Anders ",
+        "surname": "Biel",
+        "jersey": 61,
+        "position": "FW",
+        "roster": "321"
+      },
+      "322": {
+        "playerId": 320,
+        "matchPlayerId": 19980,
+        "name": "Joonas",
+        "surname": "Niemelä",
+        "jersey": 14,
+        "position": "FW",
+        "roster": "322"
+      },
+      "323": {
+        "playerId": 220,
+        "matchPlayerId": 19984,
+        "name": "Miku",
+        "surname": "Ronkainen",
+        "jersey": 94,
+        "position": "FW",
+        "roster": "323"
+      },
+      "331": {
+        "playerId": 110,
+        "matchPlayerId": 19968,
+        "name": "Mikey",
+        "surname": "Bergmann",
+        "jersey": 15,
+        "position": "FW",
+        "roster": "331"
+      },
+      "332": {
+        "playerId": 109,
+        "matchPlayerId": 19974,
+        "name": "Mathias",
+        "surname": "Hansen",
+        "jersey": 12,
+        "position": "FW",
+        "roster": "332"
+      },
+      "333": {
+        "playerId": 149,
+        "matchPlayerId": 19987,
+        "name": "Christian",
+        "surname": "Thunbo",
+        "jersey": 59,
+        "position": "FW",
+        "roster": "333"
+      },
+      "341": {
+        "playerId": 108,
+        "matchPlayerId": 19986,
+        "name": "Sebastian",
+        "surname": "Strømstad",
+        "jersey": 10,
+        "position": "FW",
+        "roster": "341"
+      },
+      "342": {
+        "playerId": 401,
+        "matchPlayerId": 19985,
+        "name": "Lukas",
+        "surname": "Scheffmann",
+        "jersey": 6,
+        "position": "FW",
+        "roster": "342"
+      },
+      "343": {
+        "playerId": 73,
+        "matchPlayerId": 19973,
+        "name": "Victor",
+        "surname": "Gade",
+        "jersey": 20,
+        "position": "FW",
+        "roster": "343"
+      }
+    },
+    "visitor": {
+      "101": {
+        "playerId": 412,
+        "matchPlayerId": 20005,
+        "name": "Kristers",
+        "surname": "Steinbergs",
+        "jersey": 1,
+        "position": "GK",
+        "roster": "101"
+      },
+      "102": {
+        "playerId": 413,
+        "matchPlayerId": 20006,
+        "name": "Edvin",
+        "surname": "Olofsson",
+        "jersey": 92,
+        "position": "GK",
+        "roster": "102"
+      },
+      "211": {
+        "playerId": 409,
+        "matchPlayerId": 20004,
+        "name": "Eric",
+        "surname": "Hjort",
+        "jersey": 55,
+        "position": "DE",
+        "roster": "211"
+      },
+      "212": {
+        "playerId": 22,
+        "matchPlayerId": 19991,
+        "name": "Jonas",
+        "surname": "Brøndberg",
+        "jersey": 29,
+        "position": "DE",
+        "roster": "212"
+      },
+      "221": {
+        "playerId": 415,
+        "matchPlayerId": 20008,
+        "name": "Alexander",
+        "surname": "Lindelöf",
+        "jersey": 66,
+        "position": "DE",
+        "roster": "221"
+      },
+      "222": {
+        "playerId": 410,
+        "matchPlayerId": 20003,
+        "name": "Frederik",
+        "surname": "Rundh",
+        "jersey": 77,
+        "position": "DE",
+        "roster": "222"
+      },
+      "231": {
+        "playerId": 432,
+        "matchPlayerId": 20012,
+        "name": "Niklas",
+        "surname": "Folin",
+        "jersey": 4,
+        "position": "DE",
+        "roster": "231"
+      },
+      "232": {
+        "playerId": 20,
+        "matchPlayerId": 19994,
+        "name": "Lucas",
+        "surname": "Kjelgaard Larsen",
+        "jersey": 16,
+        "position": "DE",
+        "roster": "232"
+      },
+      "311": {
+        "playerId": 36,
+        "matchPlayerId": 20002,
+        "name": "Eric",
+        "surname": "Engstrand",
+        "jersey": 91,
+        "position": "FW",
+        "roster": "311"
+      },
+      "312": {
+        "playerId": 33,
+        "matchPlayerId": 19998,
+        "name": "Julian",
+        "surname": "Jakobsen",
+        "jersey": 61,
+        "position": "FW",
+        "roster": "312"
+      },
+      "313": {
+        "playerId": 90,
+        "matchPlayerId": 19995,
+        "name": "Jeppe Jul",
+        "surname": "Korsgaard",
+        "jersey": 21,
+        "position": "FW",
+        "roster": "313"
+      },
+      "321": {
+        "playerId": 35,
+        "matchPlayerId": 20001,
+        "name": "Tor Ulrik",
+        "surname": "Rasmussen",
+        "jersey": 88,
+        "position": "FW",
+        "roster": "321"
+      },
+      "322": {
+        "playerId": 470,
+        "matchPlayerId": 20013,
+        "name": "Oskar",
+        "surname": "Kvist",
+        "jersey": 76,
+        "position": "FW",
+        "roster": "322"
+      },
+      "323": {
+        "playerId": 216,
+        "matchPlayerId": 19999,
+        "name": "Lucas",
+        "surname": "Andersen",
+        "jersey": 71,
+        "position": "FW",
+        "roster": "323"
+      },
+      "331": {
+        "playerId": 419,
+        "matchPlayerId": 20011,
+        "name": "Tyler",
+        "surname": "Welsh",
+        "jersey": 20,
+        "position": "FW",
+        "roster": "331"
+      },
+      "332": {
+        "playerId": 417,
+        "matchPlayerId": 20009,
+        "name": "Casey",
+        "surname": "Dornbach",
+        "jersey": 9,
+        "position": "FW",
+        "roster": "332"
+      },
+      "333": {
+        "playerId": 30,
+        "matchPlayerId": 19996,
+        "name": "Andreas",
+        "surname": "Grundtvig",
+        "jersey": 22,
+        "position": "FW",
+        "roster": "333"
+      },
+      "341": {
+        "playerId": 26,
+        "matchPlayerId": 19993,
+        "name": "Sebastian",
+        "surname": "Brinkman",
+        "jersey": 2,
+        "position": "FW",
+        "roster": "341"
+      },
+      "343": {
+        "playerId": 257,
+        "matchPlayerId": 19997,
+        "name": "Gustav",
+        "surname": "Nørgaard",
+        "jersey": 25,
+        "position": "FW",
+        "roster": "343"
+      }
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "matches": [
+    {
+      "id": 528,
+      "start_date": "2026-08-28 19:00:00",
+      "real_start_date": "0000-00-00 00:00:00",
+      "real_end_date": "2026-08-28 23:59:00",
+      "league_id": 1,
+      "league": "Metal Ligaen",
+      "league_part_id": 7,
+      "league_part_name": "Metal Ligaen 2026/27",
+      "season": "2026",
+      "round": "",
+      "group": "",
+      "tickets_url": "https://shop.soenderjyske.dk/",
+      "home": {
+        "id": 2,
+        "name": "Sønderjyske Ishockey",
+        "shortcut": "SON"
+      },
+      "guest": {
+        "id": 9,
+        "name": "Odense Bulldogs",
+        "shortcut": "ODE"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 1,
+            "score_guest": 2
+          },
+          "first_period": {
+            "score_home": 0,
+            "score_guest": 1
+          },
+          "second_period": {
+            "score_home": 1,
+            "score_guest": 1
+          },
+          "third_period": {
+            "score_home": 0,
+            "score_guest": 0
+          }
+        }
+      },
+      "actual_time_name": "end",
+      "actual_time_alias": "K",
+      "last_event_time": 3600,
+      "arena": "",
+      "advanced_statistics": true
+    },
+    {
+      "id": 529,
+      "start_date": "2026-08-28 19:30:00",
+      "real_start_date": "0000-00-00 00:00:00",
+      "real_end_date": "2026-08-28 22:03:00",
+      "league_id": 1,
+      "league": "Metal Ligaen",
+      "league_part_id": 7,
+      "league_part_name": "Metal Ligaen 2026/27",
+      "season": "2026",
+      "round": null,
+      "group": null,
+      "tickets_url": "https://shop.whitehawks.dk/",
+      "home": {
+        "id": 3,
+        "name": "Frederikshavn White Hawks",
+        "shortcut": "FRE"
+      },
+      "guest": {
+        "id": 4,
+        "name": "Aalborg Pirates",
+        "shortcut": "AAL"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 3,
+            "score_guest": 4
+          },
+          "first_period": {
+            "score_home": 0,
+            "score_guest": 2
+          },
+          "second_period": {
+            "score_home": 2,
+            "score_guest": 1
+          },
+          "third_period": {
+            "score_home": 1,
+            "score_guest": 1
+          }
+        }
+      },
+      "actual_time_name": "end",
+      "actual_time_alias": "K",
+      "last_event_time": 3600,
+      "arena": "",
+      "advanced_statistics": true
+    },
+    {
+      "id": 530,
+      "start_date": "2026-08-28 19:30:00",
+      "real_start_date": "0000-00-00 00:00:00",
+      "real_end_date": "2026-08-28 23:59:00",
+      "league_id": 1,
+      "league": "Metal Ligaen",
+      "league_part_id": 7,
+      "league_part_name": "Metal Ligaen 2026/27",
+      "season": "2026",
+      "round": "",
+      "group": "",
+      "tickets_url": "https://shop.bluefox.dk/",
+      "home": {
+        "id": 6,
+        "name": "Herning Blue Fox",
+        "shortcut": "HER"
+      },
+      "guest": {
+        "id": 5,
+        "name": "Esbjerg Energy",
+        "shortcut": "ESB"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 7,
+            "score_guest": 1
+          },
+          "first_period": {
+            "score_home": 2,
+            "score_guest": 0
+          },
+          "second_period": {
+            "score_home": 4,
+            "score_guest": 0
+          },
+          "third_period": {
+            "score_home": 1,
+            "score_guest": 1
+          }
+        }
+      },
+      "actual_time_name": "end",
+      "actual_time_alias": "K",
+      "last_event_time": 3600,
+      "arena": "",
+      "advanced_statistics": true
+    }
+  ]
+}

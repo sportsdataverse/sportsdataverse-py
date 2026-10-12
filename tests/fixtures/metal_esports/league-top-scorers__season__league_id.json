@@ -1,0 +1,41 @@
+[
+  {
+    "playerId": 428,
+    "name": "Troy",
+    "surname": "Lajeunesse",
+    "birthdate": "1997-05-20",
+    "teamId": 5,
+    "teamName": "Esbjerg Energy",
+    "teamShortcut": "ESB",
+    "goals": 7,
+    "assists": 9,
+    "points": 16,
+    "shots": 0
+  },
+  {
+    "playerId": 429,
+    "name": "Zane ",
+    "surname": "Franklin",
+    "birthdate": "1999-05-01",
+    "teamId": 5,
+    "teamName": "Esbjerg Energy",
+    "teamShortcut": "ESB",
+    "goals": 4,
+    "assists": 11,
+    "points": 15,
+    "shots": 0
+  },
+  {
+    "playerId": 398,
+    "name": "Kevin",
+    "surname": "O'Neil",
+    "birthdate": "1998-02-23",
+    "teamId": 6,
+    "teamName": "Herning Blue Fox",
+    "teamShortcut": "HER",
+    "goals": 4,
+    "assists": 11,
+    "points": 15,
+    "shots": 0
+  }
+]
