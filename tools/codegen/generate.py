@@ -92,9 +92,13 @@ def _example_url(
     Replays the wrapper body (see ``espn_league_module.py.jinja`` / ``api_module.py.jinja``
     and :meth:`_EndpointView._build_path_expr`): argument defaults, ``default_from``,
     ``transform``, ``[optional segments]`` and ``now_variant``, then every non-None
-    query param in ``_params`` order. Empty when the example omits a required argument,
-    since that call raises before it requests anything.
+    query param in ``_params`` order -- passed through the getter module's own
+    ``_build_query`` when it has one (SIHF folds its filters into ``searchQuery`` /
+    ``filterBy`` / ``filterQuery`` before requesting). Empty when the example omits a
+    required argument, since that call raises before it requests anything.
     """
+    import importlib
+
     params = [*ep.path_params, *ep.query_params]
     if any(p.required and p.default_from is None and p.python_name not in ep.example_args for p in params):
         return ""
@@ -117,6 +121,10 @@ def _example_url(
         path = ep.now_variant
     path = _PATH_TOKEN.sub(lambda m: str(vals.get(m.group(1), m.group(0))), _sub_slugs(path, sport, league))
     qs = {k: v for k, v in qs.items() if v is not None}  # _get strips None params
+    build = getattr(importlib.import_module(getter_module), "_build_query", None)
+    if build is not None:  # the runtime rewrites the query before it requests (sihf_runtime)
+        built = build(qs)
+        qs = built[0] if isinstance(built, tuple) else built
     return f"{host_url}{path}" + (f"?{urlencode(qs, doseq=True)}" if qs else "")
 
 

@@ -372,6 +372,38 @@ def test_game_wrapper_sends_game_id(monkeypatch):
     assert raw["gameId"] == "20261105000325"
 
 
+_ENDPOINTS = yaml.safe_load(
+    (Path(__file__).parents[3] / "tools" / "codegen" / "endpoints" / "sihf_api_web.yaml").read_text(encoding="utf-8")
+)["endpoints"]
+
+
+@pytest.mark.parametrize("ep", _ENDPOINTS, ids=lambda ep: ep["short"])
+def test_the_documented_example_url_is_the_request_the_wrapper_sends(monkeypatch, ep):
+    # The docstring's Example URL (and the docs page's Valid URL) must be what goes on the wire,
+    # i.e. AFTER sihf_runtime._build_query folds League / Season / Phase / Date / ContentType.
+    from urllib.parse import urlencode
+
+    from sportsdataverse.hockey.sihf import sihf_runtime
+
+    sent: List[str] = []
+
+    class _Stop(Exception):
+        pass
+
+    def fake(url: str, params: Any = None, **kw: Any) -> Any:
+        sent.append(f"{url}?{urlencode(params or {}, doseq=True)}")
+        raise _Stop
+
+    monkeypatch.setattr(sihf_runtime._rt, "_get", fake)
+    fn = getattr(sihf_api_web, f"sihf_{ep['short']}")
+    with pytest.raises(_Stop):
+        fn(**ep["example_args"])
+    documented = next(
+        line.split("Example URL:", 1)[1].strip() for line in (fn.__doc__ or "").splitlines() if "Example URL:" in line
+    )
+    assert sent == [documented]
+
+
 def test_language_is_a_closed_set():
     with pytest.raises(ValueError, match="language"):
         sihf_api_web.sihf_results(season=2026, language="xx")

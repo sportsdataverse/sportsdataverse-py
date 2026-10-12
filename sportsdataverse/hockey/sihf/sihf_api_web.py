@@ -286,7 +286,7 @@ def sihf_results(
     """Games of a league season: date, teams, score, per-period score, decision, status and game_id.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
-    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=results&searchQuery=1%2F%2F&Season=2026&League=1&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=results&searchQuery=1%2F%2F1&language=en&filterBy=Season%2CDate&filterQuery=2026%2F01.07.2025-30.06.2026
 
     Args:
         season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
@@ -352,7 +352,7 @@ def sihf_standings(
     """League table of a season (every game, or home / away games only): rank, games, points, regulation / overtime / shootout wins and losses, goals, streak.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
-    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&ContentType=All&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F1&language=en&filterBy=Season%2CContentType&filterQuery=2026%2FAll
 
     Args:
         season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
@@ -421,7 +421,7 @@ def sihf_player_stats(
     """Skater season totals: games, goals, assists, points, penalty minutes, plus-minus.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
-    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=player&searchQuery=1%2F%2F&Season=2026&League=1&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=player&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
 
     Args:
         season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
@@ -486,7 +486,7 @@ def sihf_goalie_stats(
     """Goaltender season totals: games, starts, goals against, GAA, shots, saves, save percentage, ice time.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
-    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=goalkeeper&searchQuery=1%2F%2F&Season=2026&League=1&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=goalkeeper&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
 
     Args:
         season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
