@@ -142,6 +142,23 @@ def test_a_body_without_its_echo_cannot_be_verified(monkeypatch):
         rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026})
 
 
+def test_a_truncated_table_raises_asset_fetch_error(monkeypatch):
+    # ``pages`` is the total row count (results 414 / 414, goalkeeper 35 / 35, measured 2026-10-12).
+    body = _body(Season="2026", Date="01.07.2025-30.06.2026")
+    body["pages"] = 414
+    _patch(monkeypatch, body)
+    with pytest.raises(AssetFetchError, match="announces 414 rows but serves 1"):
+        rt._get(URL, {"alias": "results", "searchQuery": "1//", "League": 1, "Season": 2026})
+
+
+@pytest.mark.parametrize("pages", [1, 0, None])
+def test_a_whole_or_unpaged_table_passes(monkeypatch, pages):
+    body = _body(Season="2026")  # one row
+    body["pages"] = pages  # standing answers 0
+    _patch(monkeypatch, body)
+    assert rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026}) is body
+
+
 def test_a_matching_echo_returns_the_body(monkeypatch):
     body = _body(Season="2026")
     _patch(monkeypatch, body)

@@ -34,6 +34,10 @@ top of the shared getter, all measured live (2026-10-08):
   table body with no filter echo at all, or a phase echo without its ``entries`` list,
   cannot be verified and raises :class:`~sportsdataverse.errors.AssetFetchError`.
 
+A table body also announces its row count in ``pages`` (``0`` on ``standing``); a body whose
+rows disagree with it raises :class:`~sportsdataverse.errors.AssetFetchError` rather than
+passing a truncated table off as the whole one.
+
 Everything else is the package error vocabulary from the shared getter: 404 (the
 ``gameoverview`` ``{"error": "GameNotFound"}``) -> ``NoDataError``, 400
 (``MissingSearchQuery``) -> ``ValueError``, any other non-2xx (an unknown table ``alias``
@@ -106,6 +110,25 @@ def _check_table(url: str, raw: Any, filters: List[Tuple[str, str]]) -> None:
         raise NoDataError(f"{_rt._where(url)}: SIHF answered {rows[0][0]!r} (no table for that league and season)")
 
 
+def _check_complete(url: str, raw: Any) -> None:
+    """Raise unless a table body holds every row it announces.
+
+    ``pages`` is the table's total ROW count, not a page count: measured 2026-10-12 it equals
+    ``len(data)`` on full bodies (``results`` 414 / 414, ``goalkeeper`` 35 / 35 with its
+    league-average row), and is ``0`` on ``standing``, which has no paging. So a positive
+    ``pages`` that disagrees with the rows served means a truncated answer.
+    """
+    if not isinstance(raw, dict):
+        return
+    pages, rows = raw.get("pages"), raw.get("data")
+    if isinstance(pages, int) and not isinstance(pages, bool) and pages > 0 and isinstance(rows, list):
+        if len(rows) != pages:
+            raise AssetFetchError(
+                f"{_rt._where(url)}: the table announces {pages} rows but serves {len(rows)}; "
+                "a partial table is not returned as a complete one"
+            )
+
+
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a SIHF route as JSON: build the scoped query, fetch, then verify a table answer.
 
@@ -114,10 +137,12 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
             list the requested phase, or has no table for the league.
         ValueError: the host answered 400 / 422 -- the request is wrong.
         AssetFetchError: any other non-2xx after retries, a connection failure after
-            retries, a 2xx whose body is empty or not JSON, or a table body without its
-            filter echo (or a phase echo without its ``entries``).
+            retries, a 2xx whose body is empty or not JSON, a table body without its
+            filter echo (or a phase echo without its ``entries``), or a table body with
+            fewer or more rows than its ``pages`` row count announces.
     """
     query, filters = _build_query(params)
     raw = _rt._get(url, query, **kwargs)
     _check_table(url, raw, filters)
+    _check_complete(url, raw)
     return raw
