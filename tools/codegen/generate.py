@@ -2561,13 +2561,14 @@ def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
         if ht not in result["hockey"]:
             result["hockey"].append(ht)
     # And the homes nested from their first release (sihf, the European leagues), under their
-    # container. The member is the PACKAGE leaf, not the prefix: DEL's prefix ``del`` is a keyword
-    # and ``from sportsdataverse.hockey import del`` would not even parse.
+    # container. The member is the PACKAGE name, not the prefix (DEL's prefix ``del`` is a keyword,
+    # its package ``del_``). The container imports its direct child, which is the home itself only
+    # one level down: ``a.b.home`` puts ``b`` under ``a`` (``b``'s own ``__init__`` reaches ``home``).
     for mod in _NESTED_HOMES.values():
-        container, leaf = mod.split(".")[0], mod.split(".")[-1]
+        container, child = mod.split(".")[:2]
         members = result.setdefault(container, [])
-        if leaf not in members:
-            members.append(leaf)
+        if child not in members:
+            members.append(child)
     return {g: sorted(members) for g, members in result.items()}
 
 

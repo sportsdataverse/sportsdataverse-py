@@ -591,8 +591,10 @@ def parse_sihf_phases(
             phase_id = _int(e.get("alias")) if isinstance(e, dict) else None
             if phase_id is None:  # the "all" pseudo-entry
                 continue
-            name = str(e.get("name") or "").strip()
-            m = _PHASE_COUNT.match(name)
+            # A name that is not a string (missing, a list, an object) is null, never "" or "['x']".
+            raw_name = e.get("name")
+            name = (raw_name.strip() or None) if isinstance(raw_name, str) else None
+            m = _PHASE_COUNT.match(name) if name else None
             rows.append(
                 {
                     "season": season,
@@ -601,7 +603,7 @@ def parse_sihf_phases(
                     "n_games": int(m.group(2)) if m and counts_games else None,
                 }
             )
-    return _out(pl.DataFrame(rows, schema=_PHASES_SCHEMA), return_as_pandas)
+    return _out(_frame(rows, _PHASES_SCHEMA), return_as_pandas)
 
 
 # ---------------------------------------------------------------------------
