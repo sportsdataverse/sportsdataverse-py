@@ -312,6 +312,11 @@ const config: Config = {
               target: '_self',
               className: 'sdv-section-header',
             },
+            {
+              href: 'https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf',
+              label: 'Cheat Sheet (PDF)',
+              target: '_self',
+            },
             // -- Python --
             {
               label: 'Python Packages',

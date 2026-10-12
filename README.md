@@ -302,7 +302,7 @@ upstream data source for many of those loaders.
 <!-- cheatsheet-section -->
 ## **Cheat sheet**
 
-A printable one-page reference for **sportsdataverse (Python)** — the loaders, the wrapper
+A printable six-page reference for **sportsdataverse (Python)** — the loaders, the wrapper
 families, and what each one returns.
 
 📄 **[Download the sportsdataverse (Python) cheat sheet (PDF)](https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf)**
