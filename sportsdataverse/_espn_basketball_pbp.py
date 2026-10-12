@@ -100,3 +100,62 @@ def period_end_seconds(period_scope: str, scopes: tuple[str, ...]) -> list[pl.Ex
         .alias(f"end.{s}_seconds_remaining")
         for s in (period_scope, *scopes)
     ]
+
+
+def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFrame:
+    """ESPN shot coordinates in the hoopR / wehoop convention, the raw pair kept as ``coordinate.{x,y}.raw``.
+
+    Port of the ``helper_espn_<lg>_pbp`` block in hoopR (``espn_nba_data.R``, ``espn_mbb_data.R``)
+    and wehoop (``espn_wnba_data.R``, ``espn_wbb_data.R``), the convention every published
+    basketball pbp file carries. ESPN reports feet with the hoop at ``(25, 0)``. A play whose
+    ``type.text`` contains "Free Throw" (case-sensitive, as R's ``str_detect``; MBB's
+    "MadeFreeThrow" never matches) is pinned to ``(25, 13.75)``, the line 13.75 feet from the
+    hoop, in the raw pair as well. Then ``coordinate.x = y - 41.75`` and
+    ``coordinate.y = x - 25``, both negated on the home team's plays, so the two teams shoot at
+    opposite ends of one full court. A play with no ``team.id`` is not flipped (R's
+    ``case_when`` reads ``NA == id`` as false).
+
+    The raw pair takes the original columns' places and the transformed pair is appended,
+    R's column order. A frame that already carries ``coordinate.x.raw`` (a processed payload
+    read back by the release converters) is transformed again from its raw pair, so the
+    function is idempotent. Frames without both coordinate columns pass through unchanged.
+
+    Args:
+        df: Plays with ESPN's dotted keys (``coordinate.x``, ``coordinate.y``, ``type.text``,
+            ``team.id``).
+        home_team_id: The home team's ESPN id.
+
+    Returns:
+        ``df`` with ``coordinate.x`` / ``coordinate.y`` transformed (Float64) and
+        ``coordinate.x.raw`` / ``coordinate.y.raw`` holding ESPN's values (Float64).
+    """
+    if "coordinate.x" not in df.columns or "coordinate.y" not in df.columns:
+        return df
+    if "coordinate.x.raw" in df.columns and "coordinate.y.raw" in df.columns:
+        df = df.drop("coordinate.x", "coordinate.y").rename(
+            {"coordinate.x.raw": "coordinate.x", "coordinate.y.raw": "coordinate.y"}
+        )
+    ft = pl.col("type.text").str.contains("Free Throw") if "type.text" in df.columns else pl.lit(False)
+    df = df.with_columns(
+        pl.when(ft).then(pl.lit(25.0)).otherwise(pl.col("coordinate.x").cast(pl.Float64)).alias("coordinate.x"),
+        pl.when(ft).then(pl.lit(13.75)).otherwise(pl.col("coordinate.y").cast(pl.Float64)).alias("coordinate.y"),
+    )
+    team = pl.col("team.id").cast(pl.Int64, strict=False) if "team.id" in df.columns else pl.lit(None, dtype=pl.Int64)
+    is_home = pl.lit(False) if home_team_id is None else (team == home_team_id).fill_null(False)
+    return df.with_columns(
+        pl.when(is_home)
+        .then(-1 * (pl.col("coordinate.y") - 41.75))
+        .otherwise(pl.col("coordinate.y") - 41.75)
+        .alias("coordinate_x_transformed"),
+        pl.when(is_home)
+        .then(-1 * (pl.col("coordinate.x") - 25))
+        .otherwise(pl.col("coordinate.x") - 25)
+        .alias("coordinate_y_transformed"),
+    ).rename(
+        {
+            "coordinate.x": "coordinate.x.raw",
+            "coordinate.y": "coordinate.y.raw",
+            "coordinate_x_transformed": "coordinate.x",
+            "coordinate_y_transformed": "coordinate.y",
+        }
+    )
