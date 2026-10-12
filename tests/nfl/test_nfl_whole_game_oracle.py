@@ -33,7 +33,13 @@ import polars as pl
 import pytest
 
 from sportsdataverse.nfl.ep_wp import _derive_wpa, calculate_completion_probability, calculate_epa, calculate_wpa
-from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec, normalplay, offense_score_vec
+from sportsdataverse.nfl.model_vars import (
+    clock_stoppage_vec,
+    kickoff_vec,
+    normalplay,
+    offense_score_vec,
+    touchback_yardline_expr,
+)
 import sportsdataverse.nfl.nfl_fourth_down as nfl_fourth_down
 from sportsdataverse.nfl import NFLPlayProcess
 from sportsdataverse.nfl.nfl_pbp import _touchdown_did_not_stand
@@ -879,3 +885,64 @@ def test_real_concat_equals_per_game_runs_nflverse_wpa():
         for g in SLICES
     ]
     assert _same_per_game(_derive_wpa, frames, "game_id") == []
+
+
+# ---------------------------------------------------------------------------------------------
+# EX-2.3-a (task 2.21): a touchback kickoff ends at the season's touchback spot
+# ---------------------------------------------------------------------------------------------
+
+# The owner's kickoff model: EPA = EP(1st & 10 at the net spot) - EP(1st & 10 at the touchback spot),
+# so a touchback kickoff is worth 0. EP_start_touchback starts it at the season's rule spot
+# (model_vars.touchback_yardline: 80 before 2016, 75 for 2016-23, 70 in 2024, 65 from 2025); the end
+# state was a literal 75, right only in 2016-23. One or more captures per era; every touchback kickoff in
+# them ends at that spot with |EPA| < 1e-3 (3 older rows elsewhere do not: ESPN's end clock moves on them).
+_TB_ERAS = {
+    "pre-2016": (331103020, 400791508),
+    "2016-23": (401547449,),
+    "2024": (401671740, 401671835),
+    "2025": (401772636, 401772726, 401872922),
+}
+
+
+@pytest.mark.parametrize("game_id", [g for gs in _TB_ERAS.values() for g in gs])
+def test_kickoff_touchback_epa_is_zero(game_id):
+    f = run(game_id).plays.filter(_t("kickoff_tb") & ~_t("scoringPlay"))
+    _require(f.height > 0, "no touchback kickoff in the capture")
+    ok = (pl.col("end.yardsToEndzone") == touchback_yardline_expr(pl.col("season"))) & (pl.col("EPA").abs() < 1e-3)
+    assert _bad(f, ok, ["season", "end.yardsToEndzone", "EP_start", "EP_end", "EPA"]) == []
+
+
+# nflverse's epa on every touchback kickoff of the captures that nflverse also flags as one
+# (fixtures/nflverse/kickoff_touchback_epa.csv, 124 rows, 2006-2025; the README has the provenance).
+# MAE before -> after the fix: pre-2016 0.328 -> 0.017, 2016-23 0.001 -> 0.001, 2024 0.469 -> 0.267,
+# 2025 1.096 -> 0.536. Ceilings are the measured MAE rounded up. From 2024 nflfastR still scores a
+# kickoff at its stale touchback 75 (helper_add_ep_wp.R: `ifelse(season < 2016, 80, 75)`) while the
+# next snap is at the 30 / 35, so nflverse's own touchback epa is +0.21 / +0.54 there, not 0; ours is
+# 0 (test above), and each row may sit no further from nflverse than 0 does.
+_TB_NFLVERSE_MAE = {"pre-2016": 0.02, "2016-23": 0.002}
+
+
+@pytest.mark.parametrize("era", list(_TB_ERAS))
+def test_kickoff_touchback_epa_agrees_with_nflverse(era):
+    nv = pl.read_csv(FIX / "nflverse" / "kickoff_touchback_epa.csv")
+    nv = nv.filter(
+        {
+            "pre-2016": pl.col("season") < 2016,
+            "2016-23": pl.col("season").is_between(2016, 2023),
+            "2024": pl.col("season") == 2024,
+            "2025": pl.col("season") >= 2025,
+        }[era]
+    )
+    ours = pl.concat(
+        run(g)
+        .plays.select(pl.col("id").cast(pl.Utf8), pl.col("EPA").cast(pl.Float64))
+        .with_columns(espn_game_id=pl.lit(g, dtype=pl.Int64))
+        for g in nv["espn_game_id"].unique().sort()
+    ).with_columns(play_id=pl.col("id").str.slice(9).cast(pl.Int64))
+    j = nv.join(ours, on=["espn_game_id", "play_id"], how="inner")
+    _require(j.height == nv.height > 0, f"{j.height} of {nv.height} nflverse plays matched")
+    err = (pl.col("EPA") - pl.col("epa")).abs()
+    if era in _TB_NFLVERSE_MAE:
+        assert j.select(err.mean()).item() <= _TB_NFLVERSE_MAE[era]
+    else:
+        assert _bad(j, err <= pl.col("epa").abs() + 0.01, ["play_id", "EPA", "epa"]) == []

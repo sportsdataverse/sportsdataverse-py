@@ -1318,3 +1318,17 @@
   note: >-
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
+
+# --- EX-2.3-a (task 2.21): a touchback kickoff ends at the season's touchback spot ----------------
+- id: nfl-kickoff-touchback-end-at-season-spot
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(touchback_yardline_expr(pl.col("season")))  # EX-2.3-a: the EP_start_touchback spot'
+  mutant: '.then(75)  # EX-2.3-a: the EP_start_touchback spot'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_epa_is_zero[401671740]
+  expected: kill
+  note: >-
+    The literal 75 back: a 2024 touchback kickoff starts at the 70 (EP_start_touchback) and ends at
+    the 75, EPA about -0.25 on each of 401671740's 8 touchbacks (and +0.38 before 2016, -0.46 from
+    2025) instead of the owner's model's 0.

@@ -116,6 +116,14 @@ uv run python -c "import sys, polars as pl; src, gid, out = sys.argv[1:]; pl.rea
   `nflverse-dev/nfl-data/python/.cache/nflverse_pbp/pbp_<season>.parquet`); the ESPN game id is mapped to nflverse's
   `game_id` by the `espn` column of `https://github.com/nflverse/nfldata/raw/master/data/games.csv`, and
   the play by ESPN's play id (the game id followed by the GSIS `play_id`).
+- **`nflverse/kickoff_touchback_epa.csv`** (task 2.21, EX-2.3-a, read by
+  `test_kickoff_touchback_epa_agrees_with_nflverse`): nflverse's `epa` on 124 plays of the committed
+  captures, columns `espn_game_id, play_id, nflverse_game_id, season, epa`: every play the processor
+  flags `kickoff_tb` (unscored) that nflverse also has as `play_type == "kickoff"` with `touchback == 1`
+  (2006-2025; the 32 2006-2007 rows whose ESPN id does not land on a nflverse touchback kickoff are left
+  out). Read 2026-10-12 from the nfl-data cache of the same release's `play_by_play_<season>.parquet`
+  assets (`nflverse-dev/nfl-data/python/.cache/nflverse_pbp/pbp_<season>.parquet`), mapped and joined as
+  the file above.
 
 ## Fourth-down and offline-model fixtures (task 1.5)
 

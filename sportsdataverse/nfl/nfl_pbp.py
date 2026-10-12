@@ -5137,8 +5137,11 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .with_columns(
+                # A touchback kickoff ends where EP_start_touchback starts it: the season's rule
+                # spot, so its EPA is 0 (the owner's kickoff model; EX-2.3-a). The punt touchback
+                # below is the 20 in every season.
                 pl.when(pl.col("kickoff_tb") == True)
-                .then(75)
+                .then(touchback_yardline_expr(pl.col("season")))  # EX-2.3-a: the EP_start_touchback spot
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
                 pl.when(pl.col("kickoff_tb") == True).then(1).otherwise(pl.col("end.down")).alias("end.down"),
