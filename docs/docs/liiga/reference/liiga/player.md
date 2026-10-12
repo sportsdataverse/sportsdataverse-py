@@ -30,26 +30,26 @@ Roster and bio of every player in a season range.
 | `player_id` | integer | Player id; the same number in lineups, rosters, stat tables and the profile (fihaId). |
 | `team_id` | integer | Team id, the number of Liiga's `<num>:<slug>` team key (sent as that string, a bare integer or a digit string depending on the route). |
 | `team_slug` | character | Team slug, the part of Liiga's `<num>:<slug>` team key after the colon (e.g. hpk). |
-| `team_name` | character | Team display name. |
+| `team_name` | character | Team's display name, e.g. HPK or Tappara. |
 | `country_of_birth` | character | Country of birth, 3-letter code. |
-| `place_of_birth` | character | Place of birth. |
+| `place_of_birth` | character | Player's place of birth (town or city). |
 | `date_of_birth` | character | Date of birth, YYYY-MM-DD. |
 | `nationality` | character | Nationality, 3-letter code. |
-| `first_name` | character | First name. |
-| `last_name` | character | Last name. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
 | `role` | character | Position: CENTER, LEFT_WING, RIGHT_WING, LEFT_DEFENSEMAN, RIGHT_DEFENSEMAN, SEVENTH_DEFENSEMAN, GOALIE. |
 | `role_code` | character | Position code, Finnish: KH = centre, VL/OL = left/right wing, VP/OP = left/right defence, 7. P = seventh defenceman, MV = goalkeeper. |
 | `handedness` | character | Shoots LEFT or RIGHT. |
-| `height` | integer | Height, cm. |
-| `weight` | integer | Weight, kg. |
-| `rookie` | logical | Rookie. |
-| `jersey` | integer | Jersey number. |
-| `injured` | logical | Injured. |
-| `suspended` | logical | Suspended. |
+| `height` | integer | Player's height in centimetres. |
+| `weight` | integer | Player's weight in kilograms. |
+| `rookie` | logical | True when Liiga flags the player as a rookie. |
+| `jersey` | integer | Jersey (sweater) number the player wore. |
+| `injured` | logical | True when the player is listed as injured. |
+| `suspended` | logical | True when the player is listed as suspended. |
 | `removed` | logical | Removed from the roster. |
-| `captain` | logical | Captain. |
-| `alternate_captain` | logical | Alternate captain. |
-| `picture_url` | character | Photo URL. |
+| `captain` | logical | True when the player is the team captain (C). |
+| `alternate_captain` | logical | True when the player is an alternate captain (A). |
+| `picture_url` | character | URL of the player's photo. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -82,21 +82,21 @@ One player's bio, teams by season and active seasons.
 | `active_seasons` | character | Seasons (END year) the player appears in. |
 | `team_seasons` | character | Map team id -> seasons (END year) with that team. |
 | `team_list` | character | Map team name -> team as `<num>:<slug>`. |
-| `birth_locality_country_code` | character | Birth place: country: code. |
-| `birth_locality_country_name` | character | Birth place: country: rink name. |
-| `birth_locality_name` | character | Birth place: rink name. |
+| `birth_locality_country_code` | character | Player's birth country, 3-letter code (e.g. FIN). |
+| `birth_locality_country_name` | character | Player's birth country name, in Finnish (e.g. Suomi). |
+| `birth_locality_name` | character | Player's birth place (town or city). |
 | `date_of_birth` | character | Date of birth, YYYY-MM-DD. |
 | `player_id` | integer | Player id; the same number in lineups, rosters, stat tables and the profile (fihaId). |
-| `first_name` | character | First name. |
-| `last_name` | character | Last name. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
 | `handedness` | character | Shoots LEFT or RIGHT. |
-| `height` | integer | Height, cm. |
-| `is_suspended` | logical | Suspended. |
+| `height` | integer | Player's height in centimetres. |
+| `is_suspended` | logical | True when the player is listed as suspended. |
 | `is_removed` | logical | Removed from the roster. |
-| `nationality_code` | character | Nationality: code. |
-| `nationality_name` | character | Nationality: rink name. |
-| `weight` | integer | Weight, kg. |
-| `teams` | character | Team directory: a map keyed by team as `<num>:<slug>` (e.g. `1368624751:k-espoo`), one row per current or past team. |
+| `nationality_code` | character | Player's nationality, 3-letter country code (e.g. FIN). |
+| `nationality_name` | character | Player's nationality as a country name, in Finnish (e.g. Suomi). |
+| `weight` | integer | Player's weight in kilograms. |
+| `teams` | character | Map keyed by an id -> one of the player's team seasons (season, jersey, teamId, slug). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -128,43 +128,43 @@ One player's career: season totals by tournament.
 |---|---|---|
 | `player_id` | integer | Player id; the same number in lineups, rosters, stat tables and the profile (fihaId). |
 | `season` | integer | Season END year (2026 = 2025-26). |
-| `games` | integer | Games (player, all-time). |
+| `games` | integer | Games (player, that season and tournament). |
 | `played_games` | integer | Played games (player, that season and tournament). |
-| `goals` | integer | Goals. |
-| `assists` | integer | Assists (player, all-time). |
-| `points` | integer | Points (player, all-time). |
-| `penalty_minutes` | integer | Penalty minutes. |
+| `goals` | integer | Goals (player, that season and tournament). |
+| `assists` | integer | Assists (player, that season and tournament). |
+| `points` | integer | Points (player, that season and tournament). |
+| `penalty_minutes` | integer | Penalty minutes (player, that season and tournament). |
 | `plus` | integer | On ice for goals for (the + of plus/minus). |
 | `minus` | integer | On ice for goals against (the - of plus/minus). |
-| `plus_minus` | integer | plus minus minus. |
-| `power_play_goals` | integer | Power play goals (team, this period). |
-| `short_handed_goals` | integer | Short handed goals. |
+| `plus_minus` | integer | Plus/minus: on-ice goals for minus on-ice goals against. |
+| `power_play_goals` | integer | Power play goals (player, that season and tournament). |
+| `short_handed_goals` | integer | Short handed goals (player, that season and tournament). |
 | `winning_goals` | integer | Winning goals (player, that season and tournament). |
-| `shots` | integer | Shots (player, all-time). |
+| `shots` | integer | Shots (player, that season and tournament). |
 | `shots_into_goal` | integer | Shots into goal (player, that season and tournament). |
-| `shot_percentage` | numeric | Shot percentage (player, all-time). Percent, 0-100. |
+| `shot_percentage` | numeric | Shot percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
 | `shot_into_goal_percentage` | numeric | Shot into goal percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
-| `tournament` | character | Tournament. |
-| `league_name` | character | League name. |
-| `team_name` | character | Team display name. |
-| `end_time` | character | Period end, seconds from game start. |
+| `tournament` | character | Tournament of the career row, uppercase: RUNKOSARJA (regular season), PLAYOFFS, PRACTICE (preseason), ... |
+| `league_name` | character | Name of the league of that career row, e.g. Liiga. |
+| `team_name` | character | Team's display name, e.g. HPK or Tappara. |
+| `end_time` | character | ISO 8601 UTC timestamp, not game seconds: the end of that season-tournament for finished seasons (2026-03-17T23:59:59Z for the 2025-26 regular season) and the request time for the season in progress. Looks like the end of the stats window; meaning unverified. |
 | `team_short_name` | character | Team abbreviation. |
 | `time_on_ice` | integer | Time on ice (player, that season and tournament). Seconds. |
-| `save_percentage` | numeric | Save percentage (team, over the season range). Percent, 0-100. |
-| `goals_against_average` | numeric | Goals against average. |
-| `win_percentage` | numeric | Share of games won, a 0-1 FRACTION sent as a STRING (e.g. "0.583"), season to date. |
-| `shut_out` | character | Shut out. |
-| `faceoffs_won` | integer | Faceoffs won. |
+| `save_percentage` | numeric | Save percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
+| `goals_against_average` | numeric | Goals against per game (goalkeeper), that season and tournament; sent as a string. |
+| `win_percentage` | numeric | Win percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
+| `shut_out` | character | Shutouts (goalkeeper), that season and tournament; sent as a string (e.g. "0"). |
+| `faceoffs_won` | integer | Faceoffs won (player, that season and tournament). |
 | `faceoffs_percentage` | numeric | Faceoffs percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
-| `wins` | integer | Wins (team, season to date in that table's tournament). |
-| `losses` | integer | Losses (team, season to date in that table's tournament). |
-| `ties` | integer | Ties (team, season to date in that table's tournament). |
+| `wins` | integer | Wins (player, that season and tournament). |
+| `losses` | integer | Losses (player, that season and tournament). |
+| `ties` | integer | Ties (player, that season and tournament). |
 | `gk_wins` | integer | Goalkeeper wins (player, that season and tournament). |
 | `gk_losses` | integer | Goalkeeper losses (player, that season and tournament). |
 | `gk_ties` | integer | Goalkeeper ties (player, that season and tournament). |
-| `saves` | integer | Saves (goalkeeper, this period). |
-| `goals_against` | integer | Goals against (team, season to date in that table's tournament). |
-| `faceoff_total` | integer | Faceoff total (team, over the season range). |
+| `saves` | integer | Saves (player, that season and tournament). |
+| `goals_against` | integer | Goals against (player, that season and tournament). |
+| `faceoff_total` | integer | Faceoff total (player, that season and tournament). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -197,46 +197,46 @@ One player's game log for a season, every tournament.
 |---|---|---|
 | `player_id` | integer | Player id; the same number in lineups, rosters, stat tables and the profile (fihaId). |
 | `season` | integer | Season END year (2026 = 2025-26). |
-| `tournament` | character | Tournament. |
+| `tournament` | character | Tournament of the game (the body's list key): regular, playoffs, practice, qualifications, playout, chl or pitsiturnaus. |
 | `game_str` | character | Matchup label, e.g. `HPK - LUK`. |
 | `game_id` | integer | Game id, unique only within a season: key a game as (season, game_id). |
 | `date` | character | Game start, ISO 8601 UTC. |
-| `assists` | integer | Assists (player, all-time). |
+| `assists` | integer | Assists (player, this game). |
 | `blocked_or_saved_shots` | integer | Blocked or saved shots (player, this game). |
-| `faceoffs_total` | integer | Faceoffs total. |
-| `faceoffs_won` | integer | Faceoffs won. |
-| `faceoffs_percentage` | numeric | Faceoffs percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
-| `goals` | integer | Goals. |
+| `faceoffs_total` | integer | Faceoffs total (player, this game). |
+| `faceoffs_won` | integer | Faceoffs won (player, this game). |
+| `faceoffs_percentage` | numeric | Faceoffs percentage (player, this game). Percent, 0-100, sent as a STRING. |
+| `goals` | integer | Goals (player, this game). |
 | `minus` | integer | On ice for goals against (the - of plus/minus). |
 | `total_points` | integer | Total points (player, this game). |
-| `home_team_name` | character | Home team name. |
-| `away_team_name` | character | Away team name. |
-| `penalty_minutes` | integer | Penalty minutes. |
-| `penaltykill_assists` | integer | Penaltykill assists (goalkeeper, this period). |
+| `home_team_name` | character | Display name of the home team of the game, e.g. HPK. |
+| `away_team_name` | character | Display name of the away team of the game, e.g. Lukko. |
+| `penalty_minutes` | integer | Penalty minutes (player, this game). |
+| `penaltykill_assists` | integer | Penaltykill assists (player, this game). |
 | `penaltykill_goals` | integer | Penaltykill goals (player, this game). |
 | `penaltykill_points` | integer | Penaltykill points (player, this game). |
 | `plus` | integer | On ice for goals for (the + of plus/minus). |
-| `plus_minus` | integer | plus minus minus. |
-| `powerplay_assists` | integer | Powerplay assists (goalkeeper, this period). |
-| `powerplay_goals` | integer | Powerplay goals. |
+| `plus_minus` | integer | Plus/minus: on-ice goals for minus on-ice goals against. |
+| `powerplay_assists` | integer | Powerplay assists (player, this game). |
+| `powerplay_goals` | integer | Powerplay goals (player, this game). |
 | `powerplay_seconds` | integer | Powerplay seconds (player, this game). Seconds. |
-| `time_on_ice` | integer | Time on ice (player, that season and tournament). Seconds. |
-| `saves` | integer | Saves (goalkeeper, this period). |
-| `save_percentage` | numeric | Save percentage (team, over the season range). Percent, 0-100. |
+| `time_on_ice` | integer | Time on ice (player, this game). Seconds. |
+| `saves` | integer | Saves (player, this game). |
+| `save_percentage` | numeric | Save percentage (player, this game). Percent, 0-100, sent as a STRING. |
 | `block_or_saved_shots_percentage` | numeric | Block or saved shots percentage (player, this game). Percent, 0-100, sent as a STRING. |
-| `shots` | integer | Shots (player, all-time). |
-| `shots_into_goal` | integer | Shots into goal (player, that season and tournament). |
-| `shut_out` | integer | Shut out. |
-| `shots_saved` | integer | Shots saved (team, over the season range). |
+| `shots` | integer | Shots (player, this game). |
+| `shots_into_goal` | integer | Shots into goal (player, this game). |
+| `shut_out` | integer | 1 for a goalkeeper's shutout in this game, else 0. |
+| `shots_saved` | integer | Shots saved (player, this game). |
 | `shots_saved_by_skater` | integer | Shots saved by skater (player, this game). |
-| `shot_percentage` | numeric | Shot percentage (player, all-time). Percent, 0-100. |
-| `shot_into_goal_percentage` | numeric | Shot into goal percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
-| `goals_against` | integer | Goals against (team, season to date in that table's tournament). |
-| `goalkeeper` | logical | Goalkeeper. |
-| `winning_goals` | integer | Winning goals (player, that season and tournament). |
-| `won` | integer | Won (player, this game). |
-| `tied` | integer | Tied (player, this game). |
-| `lost` | integer | Lost (player, this game). |
+| `shot_percentage` | numeric | Shot percentage (player, this game). Percent, 0-100, sent as a STRING. |
+| `shot_into_goal_percentage` | numeric | Shot into goal percentage (player, this game). Percent, 0-100, sent as a STRING. |
+| `goals_against` | integer | Goals against (player, this game). |
+| `goalkeeper` | logical | True when the player is a goalkeeper. |
+| `winning_goals` | integer | Winning goals (player, this game). |
+| `won` | integer | 1 when the player's team won the game, else 0. |
+| `tied` | integer | 1 when Liiga counts the game as a tie for the player's team, else 0 (overtime handling unverified). |
+| `lost` | integer | 1 when the player's team lost the game, else 0. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -271,49 +271,49 @@ Player stat table summed over a season range, by data_type (the whole league, un
 |---|---|---|
 | `player_id` | integer | Player id; the same number in lineups, rosters, stat tables and the profile (fihaId). |
 | `team_id` | integer | Team id, the number of Liiga's `<num>:<slug>` team key (sent as that string, a bare integer or a digit string depending on the route). |
-| `team_name` | character | Team display name. |
+| `team_name` | character | Team's display name, e.g. HPK or Tappara. |
 | `team_short_name` | character | Team abbreviation. |
 | `role` | character | Position: CENTER, LEFT_WING, RIGHT_WING, LEFT_DEFENSEMAN, RIGHT_DEFENSEMAN, SEVENTH_DEFENSEMAN, GOALIE. |
-| `first_name` | character | First name. |
-| `last_name` | character | Last name. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
 | `nationality` | character | Nationality, 3-letter code. |
-| `tournament` | character | Tournament. |
-| `picture_url` | character | Photo URL. |
+| `tournament` | character | Tournament of the summed row as Liiga labels it, e.g. regular. |
+| `picture_url` | character | URL of the player's photo. |
 | `previous_teams_for_tournament` | character | Earlier teams of a player traded during the tournament. |
-| `injured` | logical | Injured. |
-| `jersey` | integer | Jersey number. |
-| `last_season` | integer | Last season (player, summed over the season range). |
-| `goalkeeper` | logical | Goalkeeper. |
-| `games` | integer | Games (player, all-time). |
-| `played_games` | integer | Played games (player, that season and tournament). |
-| `rookie` | logical | Rookie. |
-| `suspended` | logical | Suspended. |
+| `injured` | logical | True when the player is listed as injured. |
+| `jersey` | integer | Jersey (sweater) number the player wore. |
+| `last_season` | integer | Last season (END year) of the range in which the player appears. |
+| `goalkeeper` | logical | True when the player is a goalkeeper. |
+| `games` | integer | Games (player, summed over the season range). |
+| `played_games` | integer | Played games (player, summed over the season range). |
+| `rookie` | logical | True when Liiga flags the player as a rookie. |
+| `suspended` | logical | True when the player is listed as suspended. |
 | `removed` | logical | Removed from the roster. |
-| `time_on_ice` | integer | Time on ice (player, that season and tournament). Seconds. |
+| `time_on_ice` | integer | Time on ice (player, summed over the season range). Seconds. |
 | `current` | logical | Player is on the team now. |
-| `is_u20` | logical | Is u 2 #0. |
-| `golden_helmets` | integer | Golden helmets (player, summed over the season range). |
-| `alumni_points` | integer | Alumni points (player, summed over the season range). |
-| `goals` | integer | Goals. |
-| `assists` | integer | Assists (player, all-time). |
-| `points` | integer | Points (player, all-time). |
+| `is_u20` | logical | True when Liiga flags the player as under 20 (U20). |
+| `golden_helmets` | integer | Golden helmets (Liiga's team points-leader helmet; reading unverified), summed over the season range. |
+| `alumni_points` | integer | Alumni points (meaning undocumented by Liiga), summed over the season range. |
+| `goals` | integer | Goals (player, summed over the season range). |
+| `assists` | integer | Assists (player, summed over the season range). |
+| `points` | integer | Points (player, summed over the season range). |
 | `plus` | integer | On ice for goals for (the + of plus/minus). |
 | `minus` | integer | On ice for goals against (the - of plus/minus). |
-| `plus_minus` | integer | plus minus minus. |
-| `penalty_minutes` | integer | Penalty minutes. |
-| `powerplay_goals` | integer | Powerplay goals. |
-| `penaltykill_goals` | integer | Penaltykill goals (player, this game). |
-| `winning_goals` | integer | Winning goals (player, that season and tournament). |
-| `shots` | integer | Shots (player, all-time). |
-| `shots_into_goal` | integer | Shots into goal (player, that season and tournament). |
-| `expected_goals` | numeric | Expected goals (xG), computed by the provider with an undocumented model: the team's total for the game in /games and /games/{season}/{id}; the player's sum over the season range in /players/stats/summed. /shotmap has no per-shot xG. |
-| `contest_won` | integer | Contest won (player, summed over the season range). |
-| `contest_lost` | integer | Contest lost (player, summed over the season range). |
-| `goals_to_empty_goal` | integer | Goals to empty goal (goalkeeper, this period). |
+| `plus_minus` | integer | Plus/minus: on-ice goals for minus on-ice goals against. |
+| `penalty_minutes` | integer | Penalty minutes (player, summed over the season range). |
+| `powerplay_goals` | integer | Powerplay goals (player, summed over the season range). |
+| `penaltykill_goals` | integer | Penaltykill goals (player, summed over the season range). |
+| `winning_goals` | integer | Winning goals (player, summed over the season range). |
+| `shots` | integer | Shots (player, summed over the season range). |
+| `shots_into_goal` | integer | Shots into goal (player, summed over the season range). |
+| `expected_goals` | numeric | Expected goals (xG) of the player's shots summed over the season range, from Liiga's undocumented model. |
+| `contest_won` | integer | Contests (puck battles; definition unverified) the player won, summed over the season range. |
+| `contest_lost` | integer | Contests (puck battles; definition unverified) the player lost, summed over the season range. |
+| `goals_to_empty_goal` | integer | Goals to empty goal (player, summed over the season range). |
 | `time_on_ice_avg` | numeric | Time on ice (player, summed over the season range). Seconds per game. |
-| `contest_won_percentage` | numeric | Contest won percentage (player, summed over the season range). Percent, 0-100. |
+| `contest_won_percentage` | numeric | Share of contests won, 0-100, over the season range (definition unverified). |
 | `xge` | numeric | Goals minus expectedGoals over the season range (4 goals on 5.0956 xG = -1.0956). |
-| `shot_percentage` | numeric | Shot percentage (player, all-time). Percent, 0-100. |
+| `shot_percentage` | numeric | Shot percentage (player, summed over the season range). Percent, 0-100. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

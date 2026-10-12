@@ -52,8 +52,8 @@ Game header: StatNet extId, arena, state, teams, scores.
 | `home_team_instance_id` | character | Club site instance id (e.g. fhc1_fhc). |
 | `home_team_founded_on` | character | Club founding date. Numeric value sent as a string. |
 | `home_team_address` | character | Club postal address. |
-| `home_team_email` | character | Club email. |
-| `home_team_icon` | character | Logo URL. |
+| `home_team_email` | character | Contact email address of the club. |
+| `home_team_icon` | character | URL of the team logo image. |
 | `home_team_score` | integer | Goals scored by the team in the game. |
 | `away_team_names_code` | character | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
 | `away_team_names_short` | character | Short club name ('Herr' = men's team). |
@@ -67,8 +67,8 @@ Game header: StatNet extId, arena, state, teams, scores.
 | `away_team_instance_id` | character | Club site instance id (e.g. fhc1_fhc). |
 | `away_team_founded_on` | character | Club founding date. Numeric value sent as a string. |
 | `away_team_address` | character | Club postal address. |
-| `away_team_email` | character | Club email. |
-| `away_team_icon` | character | Logo URL. |
+| `away_team_email` | character | Contact email address of the club. |
+| `away_team_icon` | character | URL of the team logo image. |
 | `away_team_score` | integer | Goals scored by the team in the game. |
 | `ssgt_uuid` | character | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
 | `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk); the seriesUuid param of game-schedule. |
@@ -104,7 +104,7 @@ Score, state, clock, StatNet gameId and gameSourceId.
 | `game_uuid` | character | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
 | `home_team_game_source_id` | character | StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same game as gameId. |
 | `home_team_game_id` | integer | StatNet game number (StatNet key space, e.g. 22003); keys stats-info games{} and equals sports-v2 game-info extId. Not the game uuid. |
-| `home_team_place` | character | home or away. |
+| `home_team_place` | character | Side of the game: home or away. |
 | `home_team_score` | integer | Goals scored by the team in the game. |
 | `home_team_team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
 | `home_team_team_name` | character | Team display name (e.g. Frölunda HC). |
@@ -112,7 +112,7 @@ Score, state, clock, StatNet gameId and gameSourceId.
 | `home_team_game_uuid` | character | Game uuid (platform key space, e.g. bdhvuc5tex); joins to schedule gameInfo[].uuid and every gameday/{game_uuid} route. The StatNet number of the same game is gameId. |
 | `away_team_game_source_id` | character | StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same game as gameId. |
 | `away_team_game_id` | integer | StatNet game number (StatNet key space, e.g. 22003); keys stats-info games{} and equals sports-v2 game-info extId. Not the game uuid. |
-| `away_team_place` | character | home or away. |
+| `away_team_place` | character | Side of the game: home or away. |
 | `away_team_score` | integer | Goals scored by the team in the game. |
 | `away_team_team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
 | `away_team_team_name` | character | Team display name (e.g. Frölunda HC). |
@@ -153,7 +153,7 @@ Goals by period, head-to-head summary, best scorers.
 | col_name | type | description |
 |---|---|---|
 | `team_head2_head` | character | Previous meetings of the two teams. |
-| `team_period_caption` | character | Image caption. |
+| `team_period_caption` | character | Caption text of the image. |
 | `team_period_overtime` | logical | Whether the game went to overtime. |
 | `team_period_shootout` | logical | Whether the game went to a shootout. |
 | `team_period_stats` | character | Team stats per period: rows with home and away values. |

@@ -25,34 +25,34 @@ Skater and goalie box score per team (2023/24 on).
 
 | col_name | type | description |
 |---|---|---|
-| `team_side` | character | home or away. |
+| `team_side` | character | Side of the game: home or away. |
 | `position_group` | character | skater or goalie (goalies come from the body's gkStats rows). |
 | `player_id` | integer | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
 | `team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
 | `period` | integer | Period: 0 = the whole game, 1-3 the periods, 4 and up overtime. |
 | `full_name` | character | Given name and surname. |
-| `first_name` | character | Given name. |
-| `last_name` | character | Surname. |
-| `nr` | integer | Jersey number. |
+| `first_name` | character | Given (first) name of the player. |
+| `last_name` | character | Surname (family name) of the player. |
+| `nr` | integer | Jersey (shirt) number of the player. |
 | `pos` | character | Position code in this game (e.g. CE, LW, RW, D, GK). |
-| `line` | integer | Line number. |
-| `g` | numeric | Goals. |
-| `a` | numeric | Assists. |
+| `line` | integer | Line (unit) number the player was listed on. |
+| `g` | numeric | Number of goals scored. |
+| `a` | numeric | Number of assists credited. |
 | `ppg` | numeric | Power-play goals. |
-| `sw` | numeric | Shots wide. |
+| `sw` | numeric | Number of shots that missed the net. |
 | `pim` | numeric | Penalty minutes. |
-| `sog` | numeric | Shots on goal. |
+| `sog` | numeric | Number of shots on goal. |
 | `ppsog` | numeric | Power-play shots on goal. |
 | `plus_minus` | numeric | Plus/minus in the game. |
 | `toi` | character | Time on ice (mm:ss). Clock/duration as an mm:ss string. |
 | `hits` | numeric | Body checks delivered. |
-| `fow` | numeric | Face-offs won. |
+| `fow` | numeric | Number of face-offs won. |
 | `fol` | numeric | Face-offs lost. |
 | `fo_perc` | numeric | Face-off win %. |
-| `ga` | numeric | Goals against. |
+| `ga` | numeric | Number of goals conceded (goals against). |
 | `soga` | numeric | Shots on goal against. |
 | `spga` | numeric | Unverified goalie column (box score). |
-| `svs` | numeric | Saves. |
+| `svs` | numeric | Number of saves made by the goalie. |
 | `svs_perc` | numeric | Save percentage of the game as a FRACTION 0-1 (e.g. '0.9655...'); integer 0 for a goalie without shots. Numeric, but sent as a string in some rows and as a number in others. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -103,7 +103,7 @@ Games of the last played match day of an ssgt.
 | `home_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
 | `home_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
 | `home_team_score` | integer | Goals scored by the team in the game. |
-| `home_team_icon` | character | Logo URL. |
+| `home_team_icon` | character | URL of the team logo image. |
 | `away_team_status` | character | Result for the team (WIN, LOSE) or record status. |
 | `away_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `away_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
@@ -117,9 +117,9 @@ Games of the last played match day of an ssgt.
 | `away_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
 | `away_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
 | `away_team_score` | integer | Goals scored by the team in the game. |
-| `away_team_icon` | character | Logo URL. |
+| `away_team_icon` | character | URL of the team logo image. |
 | `venue_uuid` | character | Arena uuid (platform key space). |
-| `venue_name` | character | Arena name. |
+| `venue_name` | character | Name of the arena (venue). |
 | `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
 | `series_code` | character | Series code (SHL, CHL). |
 | `series_display_name` | character | Series label shown on the site (SHL, CHL). |
@@ -210,8 +210,8 @@ Games of the next match day of an ssgt.
 | `home_team_names_short_site` | character | Short club name as shown on the site ('Herr' = men's team). |
 | `home_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
 | `home_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
-| `home_team_score` | character | Goals scored by the team in the game. |
-| `home_team_icon` | character | Logo URL. |
+| `home_team_score` | integer | Goals scored by the team in the game. |
+| `home_team_icon` | character | URL of the team logo image. |
 | `away_team_status` | character | Result for the team (WIN, LOSE) or record status. |
 | `away_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `away_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
@@ -220,10 +220,10 @@ Games of the next match day of an ssgt.
 | `away_team_names_short` | character | Short club name ('Herr' = men's team). |
 | `away_team_names_long` | character | Long club name ('Herr' = men's team). |
 | `away_team_names_full` | character | Full club name ('Herr' = men's team). |
-| `away_team_score` | character | Goals scored by the team in the game. |
-| `away_team_icon` | character | Logo URL. |
+| `away_team_score` | integer | Goals scored by the team in the game. |
+| `away_team_icon` | character | URL of the team logo image. |
 | `venue_uuid` | character | Arena uuid (platform key space). |
-| `venue_name` | character | Arena name. |
+| `venue_name` | character | Name of the arena (venue). |
 | `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
 | `series_code` | character | Series code (SHL, CHL). |
 | `series_display_name` | character | Series label shown on the site (SHL, CHL). |
@@ -285,12 +285,12 @@ Play-by-play events with shot coordinates (2023/24 on).
 | `away_team_code` | character | Team code (FHC, LHC, ...). |
 | `away_score` | integer | Goals scored by the team in the game. |
 | `event_team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
-| `event_place` | character | home or away. |
+| `event_place` | character | Side of the game: home or away. |
 | `event_team_code` | character | Team code (FHC, LHC, ...). |
 | `event_team_name` | character | Team display name (e.g. Frölunda HC). |
 | `player_id` | integer | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
-| `player_first_name` | character | Given name. |
-| `player_family_name` | character | Surname. |
+| `player_first_name` | character | Given (first) name of the player. |
+| `player_family_name` | character | Surname (family name) of the player. |
 | `player_jersey_today` | character | Jersey number in this game. Numeric value sent as a string. |
 | `is_entering` | logical | Goalie event, true when the goalie enters the ice and false when leaving. |
 | `game_uuid` | character | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
@@ -356,34 +356,34 @@ Extended skater and goalie game stats per team (2023/24 on).
 
 | col_name | type | description |
 |---|---|---|
-| `team_side` | character | home or away. |
+| `team_side` | character | Side of the game: home or away. |
 | `position_group` | character | skater or goalie (goalies come from the body's gkStats rows). |
 | `player_id` | integer | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
 | `team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
 | `period` | integer | Period: 0 = the whole game, 1-3 the periods, 4 and up overtime. |
 | `full_name` | character | Given name and surname. |
-| `first_name` | character | Given name. |
-| `last_name` | character | Surname. |
-| `nr` | integer | Jersey number. |
+| `first_name` | character | Given (first) name of the player. |
+| `last_name` | character | Surname (family name) of the player. |
+| `nr` | integer | Jersey (shirt) number of the player. |
 | `pos` | character | Position code in this game (e.g. CE, LW, RW, D, GK). |
-| `line` | integer | Line number. |
-| `g` | numeric | Goals. |
-| `a` | numeric | Assists. |
+| `line` | integer | Line (unit) number the player was listed on. |
+| `g` | numeric | Number of goals scored. |
+| `a` | numeric | Number of assists credited. |
 | `ppg` | numeric | Power-play goals. |
-| `sw` | numeric | Shots wide. |
+| `sw` | numeric | Number of shots that missed the net. |
 | `pim` | numeric | Penalty minutes. |
-| `sog` | numeric | Shots on goal. |
+| `sog` | numeric | Number of shots on goal. |
 | `ppsog` | numeric | Power-play shots on goal. |
 | `plus_minus` | numeric | Plus/minus in the game. |
 | `toi` | character | Time on ice (mm:ss). Clock/duration as an mm:ss string. |
 | `hits` | numeric | Body checks delivered. |
-| `fow` | numeric | Face-offs won. |
+| `fow` | numeric | Number of face-offs won. |
 | `fol` | numeric | Face-offs lost. |
 | `fo_perc` | numeric | Face-off win %. |
-| `ga` | numeric | Goals against. |
+| `ga` | numeric | Number of goals conceded (goals against). |
 | `soga` | numeric | Shots on goal against. |
 | `spga` | numeric | Unverified goalie column (box score). |
-| `svs` | numeric | Saves. |
+| `svs` | numeric | Number of saves made by the goalie. |
 | `svs_perc` | numeric | Save percentage of the game as a FRACTION 0-1 (e.g. '0.9655...'); integer 0 for a goalie without shots. Numeric, but sent as a string in some rows and as a number in others. |
 | `tp` | numeric | Points (goals + assists). |
 | `shg` | numeric | Shorthanded goals. |
@@ -392,7 +392,7 @@ Extended skater and goalie game stats per team (2023/24 on).
 | `fo_tot` | numeric | Face-offs taken. |
 | `num_pen` | numeric | Number of penalties. |
 | `ms` | numeric | Missed shots (wide + blocked). |
-| `bk_s` | numeric | Blocked shots. |
+| `bk_s` | numeric | Number of blocked shots. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -426,24 +426,24 @@ Player head-to-head for a matchup.
 | col_name | type | description |
 |---|---|---|
 | `uuid` | character | Athlete uuid (platform key space; qQ9-... or 10-char form); joins to the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id. |
-| `first_name` | character | Given name. |
-| `last_name` | character | Surname. |
+| `first_name` | character | Given (first) name of the player. |
+| `last_name` | character | Surname (family name) of the player. |
 | `full_name` | character | Given name and surname. |
 | `birth_date` | character | Date of birth (YYYY-MM-DD). |
 | `nationality` | character | Nationality (ISO country code). |
 | `gender` | character | Sex of the athlete or team (male / female). |
-| `jersey_number` | character | Shirt number. |
+| `jersey_number` | character | Jersey (shirt) number of the player. |
 | `position` | character | Position label in English (e.g. Forward); N/A when unknown. |
 | `position_code` | character | Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown. |
-| `age_value` | integer | Age in years. |
+| `age_value` | integer | Age of the player in whole years. |
 | `age_format` | character | Unit of value: years. |
-| `height_value` | integer | Height in cm. |
+| `height_value` | integer | Height of the player in centimetres. |
 | `height_format` | character | Unit of value: cm. |
-| `weight_value` | integer | Weight in kg. |
+| `weight_value` | integer | Weight of the player in kilograms. |
 | `weight_format` | character | Unit of value: kg. |
 | `team_uuid` | character | Platform team uuid. |
 | `team_instance_id` | character | Club site instance id (e.g. fhc1_fhc). |
-| `team_name` | character | Team name. |
+| `team_name` | character | Name of the team. |
 | `team_code` | character | StatNet team code (SAIK, FHC). |
 | `team_media` | character | Media URL or string. |
 | `media_url` | character | Portrait URL on the imgix CDN. |
@@ -451,29 +451,29 @@ Player head-to-head for a matchup.
 | `media_srcset` | character | Responsive image srcset. |
 | `season_stats` | character | Current-season stat rows of the player (empty in the sample). |
 | `career_stats` | character | Career stat rows of the player (empty in the sample). |
-| `match_stats_nr` | integer | Jersey number. |
+| `match_stats_nr` | integer | Jersey (shirt) number of the player. |
 | `match_stats_pos` | character | Position code in this game (e.g. CE, LW, RW, D, GK). |
-| `match_stats_line` | integer | Line number. |
-| `match_stats_g` | integer | Goals. |
-| `match_stats_a` | integer | Assists. |
+| `match_stats_line` | integer | Line (unit) number the player was listed on. |
+| `match_stats_g` | integer | Number of goals scored. |
+| `match_stats_a` | integer | Number of assists credited. |
 | `match_stats_tp` | integer | Points (goals + assists). |
 | `match_stats_shg` | integer | Shorthanded goals. |
 | `match_stats_ppg` | integer | Power-play goals. |
-| `match_stats_sw` | integer | Shots wide. |
+| `match_stats_sw` | integer | Number of shots that missed the net. |
 | `match_stats_pim` | integer | Penalty minutes. |
-| `match_stats_sog` | integer | Shots on goal. |
+| `match_stats_sog` | integer | Number of shots on goal. |
 | `match_stats_ppsog` | integer | Power-play shots on goal. |
 | `match_stats_nep` | integer | On ice for goals against (count). |
 | `match_stats_pop` | integer | On ice for goals for (count). |
 | `match_stats_toi` | character | Time on ice (mm:ss). Clock/duration as an mm:ss string. |
 | `match_stats_hits` | integer | Body checks delivered. |
 | `match_stats_fo_tot` | integer | Face-offs taken. |
-| `match_stats_fow` | integer | Face-offs won. |
+| `match_stats_fow` | integer | Number of face-offs won. |
 | `match_stats_fol` | integer | Face-offs lost. |
 | `match_stats_num_pen` | integer | Number of penalties. |
-| `match_stats_fo_perc` | integer | Face-off win %. |
+| `match_stats_fo_perc` | numeric | Face-off win %. |
 | `match_stats_ms` | integer | Missed shots (wide + blocked). |
-| `match_stats_bk_s` | integer | Blocked shots. |
+| `match_stats_bk_s` | integer | Number of blocked shots. |
 | `match_stats_plus_minus` | integer | Goals for minus goals against while on ice (+/-). |
 | `season_avg_stats` | character | Head-to-head season averages. |
 | `statistics_provider` | character | Stats provider of the data (statnet seen). |
@@ -559,11 +559,11 @@ Current roster of a team, grouped by position.
 | `player_type` | character | Roster role of the player (unverified). |
 | `gender` | character | Sex of the athlete or team (male / female). |
 | `uuid` | character | Athlete uuid (platform key space; qQ9-... or 10-char form); joins to the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id. |
-| `first_name` | character | Given name. |
-| `last_name` | character | Surname. |
+| `first_name` | character | Given (first) name of the player. |
+| `last_name` | character | Surname (family name) of the player. |
 | `full_name` | character | Given name and surname. |
 | `nationality` | character | Nationality (ISO country code). |
-| `jersey_number` | integer | Shirt number. |
+| `jersey_number` | integer | Jersey (shirt) number of the player. |
 | `portrait_url` | character | URL of the player's latest rendered portrait. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -615,7 +615,7 @@ Schedule and results of one season + series + game type.
 | `home_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
 | `home_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
 | `home_team_score` | integer | Goals scored by the team in the game. |
-| `home_team_icon` | character | Logo URL. |
+| `home_team_icon` | character | URL of the team logo image. |
 | `away_team_status` | character | Result for the team (WIN, LOSE) or record status. |
 | `away_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `away_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
@@ -629,9 +629,9 @@ Schedule and results of one season + series + game type.
 | `away_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
 | `away_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
 | `away_team_score` | integer | Goals scored by the team in the game. |
-| `away_team_icon` | character | Logo URL. |
+| `away_team_icon` | character | URL of the team logo image. |
 | `venue_uuid` | character | Arena uuid (platform key space). |
-| `venue_name` | character | Arena name. |
+| `venue_name` | character | Name of the arena (venue). |
 | `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
 | `series_code` | character | Series code (SHL, CHL). |
 | `series_display_name` | character | Series label shown on the site (SHL, CHL). |
@@ -704,8 +704,8 @@ Teams (sites) taking part in an ssgt.
 | `id` | character | Club site instance id (e.g. bif1_bif); equals instanceId. Not a team uuid or code. |
 | `instance_id` | character | Club site instance id (e.g. fhc1_fhc). |
 | `public_url` | character | Public image URL. |
-| `name` | character | Club name. |
-| `icon` | character | Logo URL. |
+| `name` | character | Full name of the club. |
+| `icon` | character | URL of the team logo image. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -769,19 +769,19 @@ Standings of an ssgt (gameday widget).
 | `ssgt_uuid` | character | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
 | `team_code` | character | StatNet team code (SAIK, FHC). |
 | `team_uuid` | character | Platform team uuid. |
-| `team_name` | character | Team name. |
-| `team_short_name` | character | Team short name. |
+| `team_name` | character | Name of the team. |
+| `team_short_name` | character | Short display name of the team. |
 | `rank` | integer | Position in the table (1 = top). |
-| `rank_diff` | integer | Rank change. |
-| `gp` | integer | Games played. |
+| `rank_diff` | integer | Change in standings rank, in places (the reference point is unverified). |
+| `gp` | integer | Number of games played. |
 | `w` | integer | Regulation wins. |
 | `t` | integer | Games tied after regulation, decided in overtime or a shootout (= OTW + OTL). |
 | `l` | integer | Regulation losses. |
 | `otw` | integer | Overtime and shootout wins. |
 | `otl` | integer | Overtime and shootout losses. |
 | `p` | integer | Standings points (3 per regulation win, 2 per OT/SO win, 1 per OT/SO loss). |
-| `gf` | integer | Goals for. |
-| `ga` | integer | Goals against. |
+| `gf` | integer | Number of goals scored (goals for). |
+| `ga` | integer | Number of goals conceded (goals against). |
 | `diff` | integer | Goal difference. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -815,17 +815,17 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank in the table. |
-| `gp` | numeric | Games played. |
-| `w` | numeric | Total wins: regulation + overtime + shootout. |
-| `l` | numeric | Total losses: regulation + overtime + shootout. |
-| `leading` | numeric | Times leading. |
+| `gp` | numeric | Number of games played. |
+| `w` | numeric | Wins. Team modules (teams_result): total wins, regulation + overtime + shootout; goalkeeper modules: wins credited to the goalie; standings_standings: regulation wins only. |
+| `l` | numeric | Losses. Team modules (teams_result): total losses, regulation + overtime + shootout; goalkeeper modules: losses charged to the goalie; standings_standings: regulation losses only. |
+| `leading` | numeric | Times leading: how often the team was ahead (exact definition unverified). |
 | `trailing` | numeric | Times trailing. |
-| `g` | numeric | Goals. |
-| `ga` | numeric | Goals against. |
+| `g` | numeric | Number of goals scored. |
+| `ga` | numeric | Number of goals conceded (goals against). |
 | `gfg` | numeric | First goal of the game. |
 | `otw` | numeric | Overtime wins, shootouts excluded (see SOW). |
 | `otl` | numeric | Overtime losses, shootouts excluded (see SOL). |
-| `sow` | numeric | Shootout wins. |
+| `sow` | numeric | Number of shootout wins. |
 | `sol` | numeric | Shootout losses. |
 | `p_gp_format` | numeric | Points per game (formatted). Numeric value sent as a string. |
 | `gpg` | numeric | Goals per game. Numeric value sent as a string. |
@@ -863,10 +863,10 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 | `info_team_info_golds` | character | Club's championships (text). |
 | `info_team_info_finals` | character | Club's final appearances (text). |
 | `info_team_info_address` | character | Club postal address. |
-| `info_team_info_phone` | character | Club phone. |
-| `info_team_info_fax` | character | Club fax. |
-| `info_team_info_email` | character | Club email. |
-| `info_team_info_chairman` | character | Club chairman. |
+| `info_team_info_phone` | character | Telephone number of the club. |
+| `info_team_info_fax` | character | Fax number of the club. |
+| `info_team_info_email` | character | Contact email address of the club. |
+| `info_team_info_chairman` | character | Name of the club chairman. |
 | `info_team_info_manager` | character | Club general manager. |
 | `info_team_info_accreditation` | character | Press-accreditation contact, free Swedish text (e.g. 'Senast dagen före match till …' = 'no later than the day before the game, to …'). |
 | `info_team_info_facebook` | character | Club Facebook URL. |
@@ -874,7 +874,7 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 | `info_team_info_twitter` | character | Club X/Twitter URL. |
 | `info_team_ext_ids` | character | External ids of the team. |
 | `info_ext_ids` | character | External ids of the record. |
-| `info_logo` | character | Logo URL. |
+| `info_logo` | character | URL of the team logo image. |
 | `info_social_media` | character | Club social links. |
 | `info_display_name` | character | Team display-name override; unused. Empty string in every sample (placeholder). |
 | `info_code` | character | Team code (e.g. SAIK) in team and standings modules; absent for players. |
@@ -883,27 +883,27 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 | `info_team_info_contact` | character | Club contact text. |
 | `info_club_name` | character | Club names by length. |
 | `player_id` | integer | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
-| `svs` | numeric | Saves. |
+| `svs` | numeric | Number of saves made by the goalie. |
 | `svs_perc` | numeric | Save %. Numeric value sent as a string. |
 | `gpi` | numeric | Games played with ice time. |
 | `gaa` | numeric | Goals against average (per 60 minutes). Numeric value sent as a string. |
-| `t` | numeric | Goalie ties; 0 in every sampled row (no ties since overtime/shootouts). |
-| `so` | numeric | Shutouts. |
+| `t` | numeric | Goalie ties (goalkeeper modules only); 0 in every sampled row, as overtime and shootouts now decide every game. |
+| `so` | numeric | Number of shutouts (games without a goal against). |
 | `mip` | character | Minutes played (mm:ss). Clock/duration as an mm:ss string. |
 | `valid_ranking` | logical | Whether the row qualifies for the ranking (minimum games / minutes). |
 | `info_full_name` | character | Given name and surname. |
-| `info_first_name` | character | Given name. |
-| `info_last_name` | character | Surname. |
+| `info_first_name` | character | Given (first) name of the player. |
+| `info_last_name` | character | Surname (family name) of the player. |
 | `info_birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `info_number` | integer | Jersey number. |
+| `info_number` | integer | Jersey (shirt) number of the player. |
 | `info_position` | character | Position code (CE = centre, LW, RW, D, GK, F); N/A in the athlete game logs. |
 | `info_shoots` | character | Shooting side (L / R; Left / Right). |
-| `info_weight_value` | integer | Weight in kg. |
+| `info_weight_value` | integer | Weight of the player in kilograms. |
 | `info_weight_format` | character | Unit of value: kg. |
-| `info_height_value` | integer | Height in cm. |
+| `info_height_value` | integer | Height of the player in centimetres. |
 | `info_height_format` | character | Unit of value: cm. |
 | `info_player_media_id` | integer | Media-library id of the portrait (joins to /api/media; not a player id). |
-| `info_player_media_media_string` | character | id). |
+| `info_player_media_media_string` | character | Media reference (type\|source\|id). |
 | `info_player_media_type` | character | Image kind (portrait). |
 | `info_player_media_sort_order` | integer | Ordering index for display. |
 | `info_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
@@ -912,13 +912,13 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 | `info_team_site_display_name` | character | Club name as shown on its own site (e.g. Frölunda HC). |
 | `info_team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
 | `tp` | numeric | Points (goals + assists). |
-| `a` | numeric | Assists. |
+| `a` | numeric | Number of assists credited. |
 | `pim` | numeric | Penalty minutes. |
 | `gwg` | numeric | Game-winning goals. |
 | `ppg` | numeric | Power-play goals. |
-| `sog` | numeric | Shots on goal. |
+| `sog` | numeric | Number of shots on goal. |
 | `hits` | numeric | Body checks delivered. |
-| `bk_s` | numeric | Blocked shots. |
+| `bk_s` | numeric | Number of blocked shots. |
 | `plus` | numeric | Goals for while on ice. |
 | `minus` | numeric | Goals against while on ice. |
 | `plus_minus` | numeric | Goals for minus goals against while on ice (+/-). |
@@ -977,7 +977,7 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 | `mp` | numeric | Match penalties. |
 | `fo_perc` | numeric | Face-off win %. Numeric value sent as a string. |
 | `fo` | numeric | Face-offs taken. |
-| `fow` | numeric | Face-offs won. |
+| `fow` | numeric | Number of face-offs won. |
 | `fol` | numeric | Face-offs lost. |
 | `ofo_perc` | numeric | Offensive-zone face-offs won %. Numeric value sent as a string. |
 | `ofo` | numeric | Offensive-zone face-offs. |
@@ -992,7 +992,7 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 | `sg_perc` | numeric | Shooting %. Numeric value sent as a string. |
 | `ms` | numeric | Missed shots (wide + blocked). |
 | `sog_perc` | numeric | Shots on goal % of attempts. Numeric value sent as a string. |
-| `ps` | numeric | Penalty shots. |
+| `ps` | numeric | Number of penalty shots. |
 | `psg` | numeric | Penalty-shot goals. |
 | `ps_perc` | numeric | Penalty-shot conversion %. Numeric value sent as a string. |
 | `so_ps` | numeric | Shootout shots. |
@@ -1032,7 +1032,7 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 | `team_pen` | numeric | Team (bench) penalties. |
 | `s_eff` | numeric | Shooting %. Numeric value sent as a string. |
 | `pps_eff` | numeric | Power-play shooting %. Numeric value sent as a string. |
-| `sw` | numeric | Shots wide. |
+| `sw` | numeric | Number of shots that missed the net. |
 | `sib` | numeric | Shots blocked (blocked attempts). |
 | `ss` | numeric | Scoring-chance shots (site label; unverified). |
 | `soga` | numeric | Shots on goal against. |
@@ -1067,10 +1067,10 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 | `date_time` | character | Game date and time. |
 | `home_team` | character | Home team code (e.g. BIF). |
 | `guest_team` | character | Away team code (e.g. HV71). |
-| `game_score_home_score` | integer | Home goals. |
-| `game_score_away_score` | integer | Away goals. |
+| `game_score_home_score` | integer | Goals scored by the home team. |
+| `game_score_away_score` | integer | Goals scored by the away team. |
 | `game_score_decided_in` | character | Filter values for how a game was decided. |
-| `venue` | character | Arena. |
+| `venue` | character | Name of the arena the game is played in. |
 | `attendance` | numeric | Spectators at the game. |
 | `info_game_id` | integer | StatNet game number (StatNet key space, e.g. 22003); keys stats-info games{} and equals sports-v2 game-info extId. Not the game uuid. |
 | `info_home_team_id` | character | Home team code (e.g. FHC); not a uuid. |

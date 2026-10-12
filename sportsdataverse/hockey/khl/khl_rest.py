@@ -482,8 +482,8 @@ def khl_schedule(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -546,8 +546,8 @@ def khl_roster(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -611,8 +611,8 @@ def khl_stat_filters(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -681,8 +681,8 @@ def khl_game_header(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -753,8 +753,8 @@ def khl_game_protocol(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -824,8 +824,8 @@ def khl_game_info(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -895,8 +895,8 @@ def khl_player_box(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -966,8 +966,8 @@ def khl_pbp(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1037,8 +1037,8 @@ def khl_shots(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1102,8 +1102,8 @@ def khl_player_profile(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1164,8 +1164,8 @@ def khl_player_career(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1226,8 +1226,8 @@ def khl_playoff_bracket(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1293,8 +1293,8 @@ def khl_standings(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1367,8 +1367,8 @@ def khl_player_stats(
         A polars/pandas DataFrame by default; the raw khl.ru envelope ``Dict`` (``{status, data, errors}``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), or a 307 again after re-priming the session.
-        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another game / player / tournament.
+        sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested.
+        sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has no such stage.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

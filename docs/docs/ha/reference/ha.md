@@ -32,9 +32,9 @@ The current season's games (CMS records, decoded from the schedule page): slug, 
 | `cms_season` | character | CMS season key as sent (season_2026 = 2026/27: a START year). |
 | `statnet_game_number` | integer | StatNet game number (23401 = 2026/27 game 1); the play-by-play request key. |
 | `slug` | character | Game slug yyyymmdd-home-away (lower-case CMS short names); the /api/game?slug= key. |
-| `round` | integer | Round number. |
+| `round` | integer | Round number of the game in the season schedule. |
 | `scheduled_date_time` | character | Scheduled face-off time (ISO 8601 UTC). |
-| `venue` | character | Arena name. |
+| `venue` | character | Arena name on the CMS game record. |
 | `attendance` | integer | Attendance; null for an unplayed game (0 for a played one means unknown). |
 | `current_period` | character | Live period while the game runs; empty string '' before and after. |
 | `current_period_start` | character | Start time of the live period; null outside a live game. |
@@ -64,7 +64,7 @@ The current season's games (CMS records, decoded from the schedule page): slug, 
 | `published_at` | character | CMS publish time of the record (ISO 8601 UTC). |
 | `home_team_cms_id` | integer | CMS (Strapi) record id of the home team (81 = AIK). |
 | `home_team_document_id` | character | Home team: CMS (Strapi) document id (string; stable across drafts and locales). |
-| `home_team_name` | character | Home team: club name. |
+| `home_team_name` | character | Home team: short club name (the teams list's name). |
 | `home_team_code` | character | Display code of the home team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet id. |
 | `home_team_main_color_hex` | character | Home team: primary colour (hex). |
 | `home_team_alternate_color_hex` | character | Home team: secondary colour (hex). |
@@ -81,7 +81,7 @@ The current season's games (CMS records, decoded from the schedule page): slug, 
 | `home_team_logo_url` | character | Logo URL of the home team. |
 | `away_team_cms_id` | integer | CMS (Strapi) record id of the away team. |
 | `away_team_document_id` | character | Away team: CMS (Strapi) document id (string; stable across drafts and locales). |
-| `away_team_name` | character | Away team: club name. |
+| `away_team_name` | character | Away team: short club name (the teams list's name). |
 | `away_team_code` | character | Display code of the away team, not the StatNet id. |
 | `away_team_main_color_hex` | character | Away team: primary colour (hex). |
 | `away_team_alternate_color_hex` | character | Away team: secondary colour (hex). |
@@ -131,9 +131,9 @@ One game's CMS record by slug (2025/26 onward): StatNet game number and team ids
 | `cms_season` | character | CMS season key as sent (season_2026 = 2026/27: a START year). |
 | `statnet_game_number` | integer | StatNet game number (23401 = 2026/27 game 1); the play-by-play request key. |
 | `slug` | character | Game slug yyyymmdd-home-away (lower-case CMS short names); the /api/game?slug= key. |
-| `round` | integer | Round number. |
+| `round` | integer | Round number of the game in the season schedule. |
 | `scheduled_date_time` | character | Scheduled face-off time (ISO 8601 UTC). |
-| `venue` | character | Arena name. |
+| `venue` | character | Arena name on the CMS game record. |
 | `attendance` | integer | Attendance; null for an unplayed game (0 for a played one means unknown). |
 | `current_period` | character | Live period while the game runs; empty string '' before and after. |
 | `current_period_start` | character | Start time of the live period; null outside a live game. |
@@ -163,7 +163,7 @@ One game's CMS record by slug (2025/26 onward): StatNet game number and team ids
 | `published_at` | character | CMS publish time of the record (ISO 8601 UTC). |
 | `home_team_cms_id` | integer | CMS (Strapi) record id of the home team (81 = AIK). |
 | `home_team_document_id` | character | Home team: CMS (Strapi) document id (string; stable across drafts and locales). |
-| `home_team_name` | character | Home team: club name. |
+| `home_team_name` | character | Home team: short club name (the teams list's name). |
 | `home_team_code` | character | Display code of the home team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet id. |
 | `home_team_main_color_hex` | character | Home team: primary colour (hex). |
 | `home_team_alternate_color_hex` | character | Home team: secondary colour (hex). |
@@ -180,7 +180,7 @@ One game's CMS record by slug (2025/26 onward): StatNet game number and team ids
 | `home_team_logo_url` | character | Logo URL of the home team. |
 | `away_team_cms_id` | integer | CMS (Strapi) record id of the away team. |
 | `away_team_document_id` | character | Away team: CMS (Strapi) document id (string; stable across drafts and locales). |
-| `away_team_name` | character | Away team: club name. |
+| `away_team_name` | character | Away team: short club name (the teams list's name). |
 | `away_team_code` | character | Display code of the away team, not the StatNet id. |
 | `away_team_main_color_hex` | character | Away team: primary colour (hex). |
 | `away_team_alternate_color_hex` | character | Away team: secondary colour (hex). |
@@ -231,7 +231,7 @@ One game's events (2025/26 onward): shots with outcome, goals with assists and s
 | `statnet_game_number` | integer | StatNet game number (23401 = 2026/27 game 1); the play-by-play request key. |
 | `home_statnet_id` | character | StatNet team id of the home team (AIK, MODO, MIK). |
 | `away_statnet_id` | character | StatNet team id of the away team. |
-| `period` | integer | Period number. |
+| `period` | integer | Period number the event belongs to. |
 | `period_label` | character | Period label ('Period 1'). |
 | `event_type` | character | Event type: Shot, Goal, Penalty, GoalkeeperEvent or Timeout. |
 | `time` | integer | Seconds into the period. |
@@ -297,7 +297,7 @@ Every game of a season, played or scheduled (is_played): date, display team code
 | `away_score` | integer | Away goals, final. |
 | `decided_in` | character | How the game was decided (FT, OT, SO); empty for a game not yet played. |
 | `is_played` | logical | True when the game has been played (decided_in is not empty). |
-| `arena` | character | Arena. |
+| `arena` | character | Arena the game is played in, as the games table names it. |
 | `attendance` | integer | Attendance; null for an unplayed game (0 for a played one means unknown). |
 | `home_shots_total` | integer | Home team: shots on goal. |
 | `home_shots_goal` | integer | Home team: goals. |
@@ -350,7 +350,7 @@ Standings of a season. Wins and losses are REGULATION only; overtime counts incl
 | `rank` | integer | Rank in the table. |
 | `team_code_mixed` | character | Upstream standings teamCode: the StatNet id for some clubs (MODO), the display code for others (MORA, NVIF, ÖIK). Join on team_code instead. |
 | `team_code` | character | Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet id. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the season and phase. |
 | `regulation_wins` | integer | Regulation wins only (the team table's wins_total also counts OT and shootout wins). |
 | `regulation_losses` | integer | Regulation losses only. |
 | `ties` | integer | Ties (0 in the overtime era). |
@@ -358,10 +358,10 @@ Standings of a season. Wins and losses are REGULATION only; overtime counts incl
 | `overtime_and_shootout_losses` | integer | Overtime losses, shootout losses included. |
 | `shootouts_wins` | integer | Shootout wins as sent (0 in every sampled row: they are counted in overtime_and_shootout_wins). |
 | `shootouts_losses` | integer | Shootout losses as sent (0 in every sampled row). |
-| `goals` | integer | Goals for. |
-| `goals_against` | integer | Goals against. |
+| `goals` | integer | Goals scored by the team (goals for). |
+| `goals_against` | integer | Goals conceded by the team. |
 | `goal_difference` | integer | Goal difference. |
-| `total_points` | integer | Points. |
+| `total_points` | integer | Standings points of the team. |
 | `power_play_perc` | numeric | Power-play percentage; empty-string placeholder '' in every sample. |
 | `penalty_kill_perc` | numeric | Penalty-kill percentage; empty-string placeholder '' in every sample. |
 
@@ -407,14 +407,14 @@ Skater stats of a season, one category (column set) per call. Names and StatNet 
 | `rank` | integer | Rank in the table. |
 | `player_name` | character | Player name (the table carries no player id). |
 | `team_statnet_id` | character | StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code. |
-| `gp` | integer | Games played. |
+| `gp` | integer | Games played in the season and phase. |
 | `tp` | integer | Points (goals + assists). |
-| `g` | integer | Goals. |
-| `a` | integer | Assists. |
+| `g` | integer | Goals scored by the skater. |
+| `a` | integer | Assists credited to the skater. |
 | `pim` | integer | Penalty minutes. |
 | `gwg` | integer | Game-winning goals. |
 | `ppg` | integer | Power-play goals. |
-| `sog` | integer | Shots on goal. |
+| `sog` | integer | Shots on goal by the skater. |
 | `hits` | integer | Hits (0 in seasons before tracking). |
 | `bks` | integer | Blocked shots (0 in seasons before tracking). |
 | `plus` | integer | Even-strength / short-handed goals for while on ice (plus count). |
@@ -463,16 +463,16 @@ Goalkeeper stats of a season, one category per call. Names and StatNet team ids,
 | `rank` | integer | Rank in the table. |
 | `player_name` | character | Player name (the table carries no player id). |
 | `team_statnet_id` | character | StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code. |
-| `svs` | integer | Saves. |
+| `svs` | integer | Saves made by the goalkeeper. |
 | `svs_perc` | numeric | Save percentage ('92.61'). |
-| `gp` | integer | Games played. |
+| `gp` | integer | Games played in the season and phase. |
 | `gpi` | integer | Games played in (appeared). |
-| `ga` | integer | Goals against. |
+| `ga` | integer | Goals against: goals allowed in the season and phase. |
 | `gaa` | numeric | Goals-against average. |
-| `w` | integer | Wins. |
-| `t` | integer | Ties. |
-| `l` | integer | Losses. |
-| `so` | integer | Shutouts. |
+| `w` | integer | Wins credited to the goalkeeper. |
+| `t` | integer | Ties credited to the goalkeeper (0 in the overtime era). |
+| `l` | integer | Losses credited to the goalkeeper. |
+| `so` | integer | Shutouts recorded by the goalkeeper. |
 | `mip` | character | Minutes played, total mm:ss string ('1726:51'). |
 | `valid_ranking` | integer | 1 when the goalkeeper qualifies for the ranked list (minimum games), else 0. |
 
@@ -515,17 +515,17 @@ Team stats of a season, one category per call. W / L are totals including overti
 | `season` | integer | Season END year (2026 = 2025/26). |
 | `rank` | integer | Rank in the table. |
 | `team_code` | character | Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet id. |
-| `gp` | integer | Games played. |
+| `gp` | integer | Games played in the season and phase. |
 | `wins_total` | integer | Wins in total, overtime and shootout wins included (otw and sow are subsets). |
 | `losses_total` | integer | Losses in total, overtime and shootout losses included (otl and sol are subsets). |
 | `leading` | integer | Games or situations leading (StatNet 'Leading'; meaning unverified). |
 | `trailing` | integer | Games or situations trailing (StatNet 'Trailing'; meaning unverified). |
-| `g` | integer | Goals. |
-| `ga` | integer | Goals against. |
+| `g` | integer | Goals scored by the team. |
+| `ga` | integer | Goals against: goals allowed in the season and phase. |
 | `gfg` | integer | Games in which the team scored the first goal (inferred from the label; unverified). |
-| `otw` | integer | Overtime wins. |
+| `otw` | integer | Overtime wins (a subset of wins_total). |
 | `otl` | integer | Overtime losses. |
-| `sow` | integer | Shootout wins. |
+| `sow` | integer | Shootout wins (a subset of wins_total). |
 | `sol` | integer | Shootout losses. |
 | `p_gp` | numeric | Points per game. |
 | `gpg` | numeric | Goals for per game (number). |
@@ -564,8 +564,8 @@ Teams of a season with both team keys: StatNet team id <-> display code (from th
 | `season` | integer | Season END year (2026 = 2025/26). |
 | `team_statnet_id` | character | StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code. |
 | `team_code` | character | Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet id. |
-| `name` | character | Short club name. |
-| `full_name` | character | Full club name. |
+| `name` | character | Short club name (the teams list's name). |
+| `full_name` | character | Full club name (the teams list's fullName). |
 | `logos_icon` | character | Logo: icon-size logo URL. |
 | `logos_large` | character | Logo: large logo URL. |
 | `logos_small` | character | Logo: small logo rendition (500 px). |
@@ -618,7 +618,7 @@ Current-season top 25 of one metric, with the StatNet player id (the only stats 
 | `headshot` | character | Headshot URL (medium rendition). |
 | `headshot_small` | character | Small headshot URL. |
 | `headshot_medium` | character | Medium headshot URL. |
-| `team_logo` | character | Team logo URL. |
+| `team_logo` | character | Logo URL of the player's team. |
 | `team_name` | character | Team label as shown on the card (the display team code). |
 | `team_main_color` | character | Team primary colour (hex). |
 
@@ -664,11 +664,11 @@ One team's players from the CMS directory: CMS ids, position, jersey, birth date
 | `jersey_number` | integer | Jersey number of the player. |
 | `birth_date` | character | Birth date, YYYY-MM-DD. |
 | `country` | character | Nationality, IOC/ISO alpha-3 code (SWE, NOR). |
-| `height` | integer | Height in cm. |
-| `weight` | integer | Weight in kg. |
+| `height` | integer | Player height in centimetres. |
+| `weight` | integer | Player weight in kilograms. |
 | `shoots` | character | Shoots / catches: L or R. |
 | `youth_team` | character | Youth (development) club. |
-| `is_rookie` | logical | Rookie flag. |
+| `is_rookie` | logical | True when the CMS directory flags the player as a rookie. |
 | `team_player` | character | Card label 'TEAM \\| POS JERSEY \\| Family name'. |
 | `slug` | character | Player slug; joins ha_leaders. |
 | `position_name` | character | Playing position, English label (Center, Left Wing, ...). |

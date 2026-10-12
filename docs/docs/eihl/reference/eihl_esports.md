@@ -309,6 +309,21 @@ Play-by-play of one match: goals, penalties, goalie changes and timeouts, one ro
 | `outgoing_goalie_player_id` | integer | Player id (playerId key space) of the goalie leaving the game (goalkeeperChange). |
 | `outgoing_goalie_jersey` | integer | Jersey number of the goalie leaving the game (goalkeeperChange). |
 | `outgoing_goalie_name` | character | Full name of the goalie leaving the game (goalkeeperChange). |
+| `create_time` | integer | Game second at which the event was entered (unverified). |
+| `penalized_player_id` | integer | Player id (playerId key space) of the penalized player. |
+| `penalized_jersey` | integer | Jersey number of the penalized player. |
+| `penalized_name` | character | Full name of the penalized player. |
+| `penalty_from_real_time` | character | Penalty start, local wall clock YYYY-MM-DD HH:MM:SS. |
+| `penalty_from_scoreboard_time` | integer | Penalty start, game second. |
+| `penalty_to_real_time` | character | Penalty end, local wall clock YYYY-MM-DD HH:MM:SS. |
+| `penalty_to_scoreboard_time` | integer | Penalty end, game second. |
+| `duration` | integer | Penalty length in seconds (120 = minor). |
+| `disciplined_functionary` | logical | True when the penalty was assessed to a team official. |
+| `disciplined_bm` | logical | True when the penalty was a bench minor. |
+| `codename` | character | Penalty code, e.g. `HOOK`, `TRIP`, `ROUGH`, `BOARD`, `DELAY`. |
+| `replaced_player_id` | integer | Player id (playerId key space) of the player serving the penalty in the penalized player's place. |
+| `replaced_jersey` | integer | Jersey number of the player serving the penalty in the penalized player's place. |
+| `replaced_name` | character | Full name of the player serving the penalty in the penalized player's place. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

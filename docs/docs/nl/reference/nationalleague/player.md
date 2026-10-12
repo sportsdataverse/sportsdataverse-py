@@ -30,14 +30,14 @@ One game's player box score: goals, assists, shots, faceoffs, ice time, goaltend
 | `team_id` | integer | SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as the sihf family's team_id. |
 | `player_id` | integer | SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the sihf family's player_id and every SIHF *LicenceNr. |
 | `number` | character | Sweater number, a string |
-| `first_name` | character | First name |
-| `last_name` | character | Last name |
+| `first_name` | character | First (given) name of the player |
+| `last_name` | character | Last (family) name of the player |
 | `short_name` | character | Initial and last name, e.g. 'S. Aeschlimann' |
 | `name` | character | First and last name |
 | `position` | character | goalkeeper, defender or forwarder (sic) |
-| `fow` | integer | Faceoffs won |
-| `fol` | integer | Faceoffs lost |
-| `sog` | integer | Shots on goal |
+| `fow` | integer | Number of faceoffs won |
+| `fol` | integer | Number of faceoffs lost |
+| `sog` | integer | Number of shots on goal |
 | `shm` | integer | Shots that missed the net |
 | `shp` | integer | Shots that hit the post |
 | `shb` | integer | Own shots blocked by an opponent |
@@ -47,14 +47,14 @@ One game's player box score: goals, assists, shots, faceoffs, ice time, goaltend
 | `toi_pp` | integer | Power-play time on ice, seconds |
 | `toi_pk` | integer | Shorthanded time on ice, seconds |
 | `pim` | integer | Penalty minutes |
-| `g` | integer | Goals |
-| `a1` | integer | First assists |
-| `a2` | integer | Second assists |
+| `g` | integer | Number of goals scored |
+| `a1` | integer | First (primary) assists credited |
+| `a2` | integer | Second (secondary) assists credited |
 | `pl` | integer | Plus count: on ice for an even-strength or shorthanded goal for |
 | `mi` | integer | Minus count: on ice for a goal against |
 | `mip` | integer | Goaltender time played, hundredths of a minute (6000 = 60:00; = seconds / 0.6) |
-| `ga` | integer | Goals against |
-| `svs` | integer | Saves |
+| `ga` | integer | Goals against: number of goals conceded |
+| `svs` | integer | Number of saves made by the goaltender |
 | `sa` | integer | Shots on goal against |
 | `gaa` | numeric | Goals-against average; 0 in every sampled row, even for goaltenders who conceded |
 | `save_percentage` | numeric | Save percentage, 0-100 |
@@ -94,11 +94,11 @@ Season stats for every player, with playerId.
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the sihf family's player_id and every SIHF *LicenceNr. |
-| `first_name` | character | First name |
-| `last_name` | character | Last name |
+| `first_name` | character | First (given) name of the player |
+| `last_name` | character | Last (family) name of the player |
 | `team_id` | integer | SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as the sihf family's team_id. |
 | `team_short_name` | character | Team abbreviation |
-| `team_name` | character | Team display name |
+| `team_name` | character | Team name as the league app displays it |
 | `number` | character | Sweater number, a string |
 | `position` | character | goalkeeper, defender or forwarder (sic); one of 502 rows in the full 2026 body has the integer 0 |
 | `topscorer_points` | integer | PostFinance Top Scorer game score (an app fantasy rating, not on-ice points) |
@@ -114,10 +114,10 @@ Season stats for every player, with playerId.
 | `hand` | character | Shooting or catching hand; unobserved: null or empty in every sampled row |
 | `lcrid` | integer | Not determined (small integer, 0-4 in 2026) |
 | `noc` | integer | Not determined (small integer, 0-2 in 2026) |
-| `gp` | integer | Games played |
-| `g` | integer | Goals |
-| `a1` | integer | First assists |
-| `a2` | integer | Second assists |
+| `gp` | integer | Number of games played |
+| `g` | integer | Number of goals scored |
+| `a1` | integer | First (primary) assists credited |
+| `a2` | integer | Second (secondary) assists credited |
 | `penalties` | integer | Penalties taken (upstream `fo`: fo2 + fo5 + fo10 + gm + mp). Not faceoffs: see face_offs / fot. |
 | `pim` | integer | Penalty minutes |
 | `geq` | integer | Even-strength goals |
@@ -132,22 +132,22 @@ Season stats for every player, with playerId.
 | `toi_eq` | integer | Even-strength time on ice, seconds |
 | `toipp` | integer | Power-play time on ice, seconds (lower-case pp, unlike the box score's toiPp) |
 | `toi_pk` | integer | Shorthanded time on ice, seconds |
-| `sog` | integer | Shots on goal |
+| `sog` | integer | Number of shots on goal |
 | `shm` | integer | Shots that missed the net |
 | `shp` | integer | Shots that hit the post |
 | `shb` | integer | Own shots blocked by an opponent |
 | `bks` | integer | Opponent shots blocked |
-| `fow` | integer | Faceoffs won |
-| `fol` | integer | Faceoffs lost |
-| `shi` | integer | Shifts |
+| `fow` | integer | Number of faceoffs won |
+| `fol` | integer | Number of faceoffs lost |
+| `shi` | integer | Number of shifts played |
 | `gwgk` | integer | Not determined; 0 on every 2026 row |
 | `gw` | integer | Goaltender wins (incl. overtime and shootout) |
 | `gl` | integer | Goaltender losses (incl. overtime and shootout) |
 | `fk` | integer | Games started in goal (inferred: fk <= gp; 42 of 44 for the 2026 games-played leader) |
-| `ga` | integer | Goals against |
+| `ga` | integer | Goals against: number of goals conceded |
 | `sa` | integer | Shots on goal against |
-| `svs` | integer | Saves |
-| `so` | integer | Shutouts |
+| `svs` | integer | Number of saves made by the goaltender |
+| `so` | integer | Number of shutouts (games without a goal conceded) |
 | `mip` | integer | Goaltender time played, hundredths of a minute (6000 = 60:00; = seconds / 0.6) |
 | `assists` | integer | Assists (a1 + a2; verified on every 2026 row) |
 | `points` | integer | Points (g + assists; verified) |
@@ -155,11 +155,11 @@ Season stats for every player, with playerId.
 | `save_percentage` | numeric | Save percentage, 0-100 |
 | `face_offs_percentage` | numeric | Faceoff win percentage, 0-100; -1 with no faceoffs |
 | `face_offs` | integer | Faceoffs taken (fow + fol; verified) |
-| `is_captain` | logical | Team captain |
+| `is_captain` | logical | Whether the player is the team captain |
 | `first_goalkeeper` | logical | Team's first-choice goaltender |
 | `ga_per_game` | numeric | Goals against per game (ga / gp; verified) |
 | `points_per_game` | numeric | Points per game |
-| `svs_per_game` | numeric | Saves per game |
+| `svs_per_game` | numeric | Goaltender saves per game played |
 | `bks_per_game` | numeric | Blocked shots per game |
 | `sog_per_game` | numeric | Shots on goal per game |
 | `shm_per_game` | numeric | Missed shots per game |
@@ -202,8 +202,8 @@ Season stats for every player, with playerId.
 | `foloz` | integer | Offensive-zone faceoffs lost |
 | `folnz` | integer | Neutral-zone faceoffs lost |
 | `foldz` | integer | Defensive-zone faceoffs lost |
-| `psg` | integer | Shootout goals |
-| `pssvs` | integer | Shootout saves |
+| `psg` | integer | Goals scored in shootouts |
+| `pssvs` | integer | Saves made in shootouts |
 | `got` | integer | Overtime goals (a subset of g) |
 | `ot_rank` | integer | Overtime-scoring rank; 0 on the 2026 rows (filled in 2027) |
 | `ot_g` | integer | Overtime goals in the overtime table; 0 on every 2026 row |
@@ -270,11 +270,11 @@ One player's season stats.
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the sihf family's player_id and every SIHF *LicenceNr. |
-| `first_name` | character | First name |
-| `last_name` | character | Last name |
+| `first_name` | character | First (given) name of the player |
+| `last_name` | character | Last (family) name of the player |
 | `team_id` | integer | SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as the sihf family's team_id. |
 | `team_short_name` | character | Team abbreviation |
-| `team_name` | character | Team display name |
+| `team_name` | character | Team name as the league app displays it |
 | `number` | character | Sweater number, a string |
 | `position` | character | goalkeeper, defender or forwarder (sic); one of 502 rows in the full 2026 body has the integer 0 |
 | `topscorer_points` | integer | PostFinance Top Scorer game score (an app fantasy rating, not on-ice points) |
@@ -290,10 +290,10 @@ One player's season stats.
 | `hand` | character | Shooting or catching hand; unobserved: null or empty in every sampled row |
 | `lcrid` | integer | Not determined (small integer, 0-4 in 2026) |
 | `noc` | integer | Not determined (small integer, 0-2 in 2026) |
-| `gp` | integer | Games played |
-| `g` | integer | Goals |
-| `a1` | integer | First assists |
-| `a2` | integer | Second assists |
+| `gp` | integer | Number of games played |
+| `g` | integer | Number of goals scored |
+| `a1` | integer | First (primary) assists credited |
+| `a2` | integer | Second (secondary) assists credited |
 | `penalties` | integer | Penalties taken (upstream `fo`: fo2 + fo5 + fo10 + gm + mp). Not faceoffs: see face_offs / fot. |
 | `pim` | integer | Penalty minutes |
 | `geq` | integer | Even-strength goals |
@@ -308,22 +308,22 @@ One player's season stats.
 | `toi_eq` | integer | Even-strength time on ice, seconds |
 | `toipp` | integer | Power-play time on ice, seconds (lower-case pp, unlike the box score's toiPp) |
 | `toi_pk` | integer | Shorthanded time on ice, seconds |
-| `sog` | integer | Shots on goal |
+| `sog` | integer | Number of shots on goal |
 | `shm` | integer | Shots that missed the net |
 | `shp` | integer | Shots that hit the post |
 | `shb` | integer | Own shots blocked by an opponent |
 | `bks` | integer | Opponent shots blocked |
-| `fow` | integer | Faceoffs won |
-| `fol` | integer | Faceoffs lost |
-| `shi` | integer | Shifts |
+| `fow` | integer | Number of faceoffs won |
+| `fol` | integer | Number of faceoffs lost |
+| `shi` | integer | Number of shifts played |
 | `gwgk` | integer | Not determined; 0 on every 2026 row |
 | `gw` | integer | Goaltender wins (incl. overtime and shootout) |
 | `gl` | integer | Goaltender losses (incl. overtime and shootout) |
 | `fk` | integer | Games started in goal (inferred: fk <= gp; 42 of 44 for the 2026 games-played leader) |
-| `ga` | integer | Goals against |
+| `ga` | integer | Goals against: number of goals conceded |
 | `sa` | integer | Shots on goal against |
-| `svs` | integer | Saves |
-| `so` | integer | Shutouts |
+| `svs` | integer | Number of saves made by the goaltender |
+| `so` | integer | Number of shutouts (games without a goal conceded) |
 | `mip` | integer | Goaltender time played, hundredths of a minute (6000 = 60:00; = seconds / 0.6) |
 | `assists` | integer | Assists (a1 + a2; verified on every 2026 row) |
 | `points` | integer | Points (g + assists; verified) |
@@ -331,11 +331,11 @@ One player's season stats.
 | `save_percentage` | numeric | Save percentage, 0-100 |
 | `face_offs_percentage` | numeric | Faceoff win percentage, 0-100; -1 with no faceoffs |
 | `face_offs` | integer | Faceoffs taken (fow + fol; verified) |
-| `is_captain` | logical | Team captain |
+| `is_captain` | logical | Whether the player is the team captain |
 | `first_goalkeeper` | logical | Team's first-choice goaltender |
 | `ga_per_game` | numeric | Goals against per game (ga / gp; verified) |
 | `points_per_game` | numeric | Points per game |
-| `svs_per_game` | numeric | Saves per game |
+| `svs_per_game` | numeric | Goaltender saves per game played |
 | `bks_per_game` | numeric | Blocked shots per game |
 | `sog_per_game` | numeric | Shots on goal per game |
 | `shm_per_game` | numeric | Missed shots per game |
@@ -378,8 +378,8 @@ One player's season stats.
 | `foloz` | integer | Offensive-zone faceoffs lost |
 | `folnz` | integer | Neutral-zone faceoffs lost |
 | `foldz` | integer | Defensive-zone faceoffs lost |
-| `psg` | integer | Shootout goals |
-| `pssvs` | integer | Shootout saves |
+| `psg` | integer | Goals scored in shootouts |
+| `pssvs` | integer | Saves made in shootouts |
 | `got` | integer | Overtime goals (a subset of g) |
 | `ot_rank` | integer | Overtime-scoring rank; 0 on the 2026 rows (filled in 2027) |
 | `ot_g` | integer | Overtime goals in the overtime table; 0 on every 2026 row |

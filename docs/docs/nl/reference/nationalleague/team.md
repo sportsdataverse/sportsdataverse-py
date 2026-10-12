@@ -54,7 +54,7 @@ One team's games for one season.
 | `away_team_coach` | character | Away head coach name; filled in a game's `overview`, null in the season lists; unobserved: null, absent or empty in every sampled row |
 | `game_time` | integer | Elapsed game minutes; 0 on every game in the season lists, 60 in a finished game's overview |
 | `show_game_time` | logical | App flag: show gameTime |
-| `arena` | character | Arena name |
+| `arena` | character | Name of the arena the game is played in |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -87,8 +87,8 @@ One game's team totals: shots by period, faceoffs by zone, power play and penalt
 | `game_id` | integer | SIHF game id `<season(4)><competition(4)><sequence(6)>` (Int64; e.g. 20261105000325, 1105 = National League). The same id as the sihf family's game_id; its first four digits are the season END year. |
 | `team_side` | character | home or away: the side of the team this row belongs to. |
 | `team_id` | integer | SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as the sihf family's team_id. |
-| `g` | integer | Goals |
-| `ga` | integer | Goals against |
+| `g` | integer | Number of goals scored |
+| `ga` | integer | Goals against: number of goals conceded |
 | `sa` | integer | Shots on goal against |
 | `sog1` | integer | Shots on goal in the 1st period |
 | `sog2` | integer | Shots on goal in the 2nd period |
@@ -117,12 +117,12 @@ One game's team totals: shots by period, faceoffs by zone, power play and penalt
 | `pkga` | integer | Power-play goals allowed while shorthanded |
 | `faceoffs` | integer | Faceoffs taken (upstream `fo`: fow + fol). Not penalties. |
 | `pim` | integer | Penalty minutes |
-| `sog` | integer | Shots on goal |
+| `sog` | integer | Number of shots on goal |
 | `sog_percentage` | numeric | Shooting percentage, 100 * g / sog |
 | `pp_percentage` | numeric | Power-play percentage, 100 * ppg / ppo |
 | `pk_percentage` | numeric | Penalty-kill percentage, 0-100 |
-| `fow` | integer | Faceoffs won |
-| `fol` | integer | Faceoffs lost |
+| `fow` | integer | Number of faceoffs won |
+| `fol` | integer | Number of faceoffs lost |
 | `faceoffs_percentage` | numeric | Faceoff win percentage (upstream `foPercentage`); -1 without faceoffs. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -156,11 +156,11 @@ Season stats for one team's players.
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the sihf family's player_id and every SIHF *LicenceNr. |
-| `first_name` | character | First name |
-| `last_name` | character | Last name |
+| `first_name` | character | First (given) name of the player |
+| `last_name` | character | Last (family) name of the player |
 | `team_id` | integer | SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as the sihf family's team_id. |
 | `team_short_name` | character | Team abbreviation |
-| `team_name` | character | Team display name |
+| `team_name` | character | Team name as the league app displays it |
 | `number` | character | Sweater number, a string |
 | `position` | character | goalkeeper, defender or forwarder (sic); one of 502 rows in the full 2026 body has the integer 0 |
 | `topscorer_points` | integer | PostFinance Top Scorer game score (an app fantasy rating, not on-ice points) |
@@ -176,10 +176,10 @@ Season stats for one team's players.
 | `hand` | character | Shooting or catching hand; unobserved: null or empty in every sampled row |
 | `lcrid` | integer | Not determined (small integer, 0-4 in 2026) |
 | `noc` | integer | Not determined (small integer, 0-2 in 2026) |
-| `gp` | integer | Games played |
-| `g` | integer | Goals |
-| `a1` | integer | First assists |
-| `a2` | integer | Second assists |
+| `gp` | integer | Number of games played |
+| `g` | integer | Number of goals scored |
+| `a1` | integer | First (primary) assists credited |
+| `a2` | integer | Second (secondary) assists credited |
 | `penalties` | integer | Penalties taken (upstream `fo`: fo2 + fo5 + fo10 + gm + mp). Not faceoffs: see face_offs / fot. |
 | `pim` | integer | Penalty minutes |
 | `geq` | integer | Even-strength goals |
@@ -194,22 +194,22 @@ Season stats for one team's players.
 | `toi_eq` | integer | Even-strength time on ice, seconds |
 | `toipp` | integer | Power-play time on ice, seconds (lower-case pp, unlike the box score's toiPp) |
 | `toi_pk` | integer | Shorthanded time on ice, seconds |
-| `sog` | integer | Shots on goal |
+| `sog` | integer | Number of shots on goal |
 | `shm` | integer | Shots that missed the net |
 | `shp` | integer | Shots that hit the post |
 | `shb` | integer | Own shots blocked by an opponent |
 | `bks` | integer | Opponent shots blocked |
-| `fow` | integer | Faceoffs won |
-| `fol` | integer | Faceoffs lost |
-| `shi` | integer | Shifts |
+| `fow` | integer | Number of faceoffs won |
+| `fol` | integer | Number of faceoffs lost |
+| `shi` | integer | Number of shifts played |
 | `gwgk` | integer | Not determined; 0 on every 2026 row |
 | `gw` | integer | Goaltender wins (incl. overtime and shootout) |
 | `gl` | integer | Goaltender losses (incl. overtime and shootout) |
 | `fk` | integer | Games started in goal (inferred: fk <= gp; 42 of 44 for the 2026 games-played leader) |
-| `ga` | integer | Goals against |
+| `ga` | integer | Goals against: number of goals conceded |
 | `sa` | integer | Shots on goal against |
-| `svs` | integer | Saves |
-| `so` | integer | Shutouts |
+| `svs` | integer | Number of saves made by the goaltender |
+| `so` | integer | Number of shutouts (games without a goal conceded) |
 | `mip` | integer | Goaltender time played, hundredths of a minute (6000 = 60:00; = seconds / 0.6) |
 | `assists` | integer | Assists (a1 + a2; verified on every 2026 row) |
 | `points` | integer | Points (g + assists; verified) |
@@ -217,11 +217,11 @@ Season stats for one team's players.
 | `save_percentage` | numeric | Save percentage, 0-100 |
 | `face_offs_percentage` | numeric | Faceoff win percentage, 0-100; -1 with no faceoffs |
 | `face_offs` | integer | Faceoffs taken (fow + fol; verified) |
-| `is_captain` | logical | Team captain |
+| `is_captain` | logical | Whether the player is the team captain |
 | `first_goalkeeper` | logical | Team's first-choice goaltender |
 | `ga_per_game` | numeric | Goals against per game (ga / gp; verified) |
 | `points_per_game` | numeric | Points per game |
-| `svs_per_game` | numeric | Saves per game |
+| `svs_per_game` | numeric | Goaltender saves per game played |
 | `bks_per_game` | numeric | Blocked shots per game |
 | `sog_per_game` | numeric | Shots on goal per game |
 | `shm_per_game` | numeric | Missed shots per game |
@@ -264,8 +264,8 @@ Season stats for one team's players.
 | `foloz` | integer | Offensive-zone faceoffs lost |
 | `folnz` | integer | Neutral-zone faceoffs lost |
 | `foldz` | integer | Defensive-zone faceoffs lost |
-| `psg` | integer | Shootout goals |
-| `pssvs` | integer | Shootout saves |
+| `psg` | integer | Goals scored in shootouts |
+| `pssvs` | integer | Saves made in shootouts |
 | `got` | integer | Overtime goals (a subset of g) |
 | `ot_rank` | integer | Overtime-scoring rank; 0 on the 2026 rows (filled in 2027) |
 | `ot_g` | integer | Overtime goals in the overtime table; 0 on every 2026 row |
@@ -329,14 +329,14 @@ Club CMS record: names, logo, website, ticket links.
 
 | col_name | type | description |
 |---|---|---|
-| `name` | character | Club name |
+| `name` | character | Club name from the club's CMS record |
 | `cms_node_id` | integer | Umbraco CMS node id of the club page (Int64; not a team id). |
 | `url_segment` | character | URL slug of the club page |
 | `type` | character | CMS node kind ('Content') |
 | `content_type` | character | CMS document type ('club') |
 | `url` | character | Site path of the club page |
 | `fields_grid` | character | Page layout blocks; unobserved: null or empty in every sampled row |
-| `fields_logo_name` | character | Media title |
+| `fields_logo_name` | character | Title of the club logo media item in the club CMS |
 | `fields_logo_id` | integer | Umbraco CMS media id; not a team id |
 | `fields_logo_url_segment` | character | URL slug; unobserved: null or empty in every sampled row |
 | `fields_logo_type` | character | CMS node kind ('Media') |
@@ -348,7 +348,7 @@ Club CMS record: names, logo, website, ticket links.
 | `fields_logo_fields_umbraco_width` | integer | Image width, pixels |
 | `fields_logo_fields_umbraco_height` | integer | Image height, pixels |
 | `fields_logo_fields_umbraco_bytes` | integer | File size, bytes |
-| `fields_logo_fields_umbraco_extension` | character | File extension |
+| `fields_logo_fields_umbraco_extension` | character | File extension of the club logo media file |
 | `team_id` | integer | SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as the sihf family's team_id. |
 | `fields_website` | character | Club website URL |
 | `fields_ticket_url` | character | Club ticket-shop URL |

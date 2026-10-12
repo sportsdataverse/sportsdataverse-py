@@ -53,7 +53,7 @@ Schedule and results for one season: NL plus exhibitions.
 | `away_team_coach` | character | Away head coach name; filled in a game's `overview`, null in the season lists; unobserved: null, absent or empty in every sampled row |
 | `game_time` | integer | Elapsed game minutes; 0 on every game in the season lists, 60 in a finished game's overview |
 | `show_game_time` | logical | App flag: show gameTime |
-| `arena` | character | Arena name |
+| `arena` | character | Name of the arena the game is played in |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -111,7 +111,7 @@ The current or next game day.
 | `away_team_coach` | character | Away head coach name; filled in a game's `overview`, null in the season lists; unobserved: null, absent or empty in every sampled row |
 | `game_time` | integer | Elapsed game minutes; 0 on every game in the season lists, 60 in a finished game's overview |
 | `show_game_time` | logical | App flag: show gameTime |
-| `arena` | character | Arena name |
+| `arena` | character | Name of the arena the game is played in |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -179,7 +179,7 @@ Playoff and play-in series by round: one row per game, with its series score.
 | `away_team_coach` | character | Away head coach name; filled in a game's `overview`, null in the season lists; unobserved: null, absent or empty in every sampled row |
 | `game_time` | integer | Elapsed game minutes; 0 on every game in the season lists, 60 in a finished game's overview |
 | `show_game_time` | logical | App flag: show gameTime |
-| `arena` | character | Arena name |
+| `arena` | character | Name of the arena the game is played in |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -247,7 +247,7 @@ Playout and league-qualification series by round: one row per game, with its ser
 | `away_team_coach` | character | Away head coach name; filled in a game's `overview`, null in the season lists; unobserved: null, absent or empty in every sampled row |
 | `game_time` | integer | Elapsed game minutes; 0 on every game in the season lists, 60 in a finished game's overview |
 | `show_game_time` | logical | App flag: show gameTime |
-| `arena` | character | Arena name |
+| `arena` | character | Name of the arena the game is played in |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -305,7 +305,7 @@ One game's header: teams, date, status, final and per-period score, coaches, ref
 | `away_team_coach` | character | Away head coach name; filled in a game's `overview`, null in the season lists |
 | `game_time` | integer | Elapsed game minutes; 0 on every game in the season lists, 60 in a finished game's overview |
 | `show_game_time` | logical | App flag: show gameTime |
-| `arena` | character | Arena name |
+| `arena` | character | Name of the arena the game is played in |
 | `home_team_first_result` | integer | Home goals in the 1st period |
 | `away_team_first_result` | integer | Away goals in the 1st period |
 | `home_team_second_result` | integer | Home goals in the 2nd period |
@@ -423,11 +423,11 @@ One game's lineups: every dressed player by unit, with licence number, position 
 | `player_id` | integer | SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the sihf family's player_id and every SIHF *LicenceNr. |
 | `position` | character | goalkeeper, defender or forwarder (sic) |
 | `line` | integer | Line number, an integer (goalkeepers 1-2 = first / backup) |
-| `first_name` | character | First name |
-| `last_name` | character | Last name |
+| `first_name` | character | First (given) name of the player |
+| `last_name` | character | Last (family) name of the player |
 | `number` | character | Sweater number, a string |
 | `is_topscorer` | logical | Wears the team's PostFinance Top Scorer jersey |
-| `is_captain` | logical | Team captain |
+| `is_captain` | logical | Whether the player is the team captain |
 | `first_goalkeeper` | logical | Starting goaltender |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -510,11 +510,11 @@ Top scorers (same row shape as /player).
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the sihf family's player_id and every SIHF *LicenceNr. |
-| `first_name` | character | First name |
-| `last_name` | character | Last name |
+| `first_name` | character | First (given) name of the player |
+| `last_name` | character | Last (family) name of the player |
 | `team_id` | integer | SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as the sihf family's team_id. |
 | `team_short_name` | character | Team abbreviation |
-| `team_name` | character | Team display name |
+| `team_name` | character | Team name as the league app displays it |
 | `number` | character | Sweater number, a string |
 | `position` | character | goalkeeper, defender or forwarder (sic); one of 502 rows in the full 2026 body has the integer 0 |
 | `topscorer_points` | integer | PostFinance Top Scorer game score (an app fantasy rating, not on-ice points) |
@@ -530,10 +530,10 @@ Top scorers (same row shape as /player).
 | `hand` | character | Shooting or catching hand; unobserved: null or empty in every sampled row |
 | `lcrid` | integer | Not determined (small integer, 0-4 in 2026) |
 | `noc` | integer | Not determined (small integer, 0-2 in 2026) |
-| `gp` | integer | Games played |
-| `g` | integer | Goals |
-| `a1` | integer | First assists |
-| `a2` | integer | Second assists |
+| `gp` | integer | Number of games played |
+| `g` | integer | Number of goals scored |
+| `a1` | integer | First (primary) assists credited |
+| `a2` | integer | Second (secondary) assists credited |
 | `penalties` | integer | Penalties taken (upstream `fo`: fo2 + fo5 + fo10 + gm + mp). Not faceoffs: see face_offs / fot. |
 | `pim` | integer | Penalty minutes |
 | `geq` | integer | Even-strength goals |
@@ -548,22 +548,22 @@ Top scorers (same row shape as /player).
 | `toi_eq` | integer | Even-strength time on ice, seconds |
 | `toipp` | integer | Power-play time on ice, seconds (lower-case pp, unlike the box score's toiPp) |
 | `toi_pk` | integer | Shorthanded time on ice, seconds |
-| `sog` | integer | Shots on goal |
+| `sog` | integer | Number of shots on goal |
 | `shm` | integer | Shots that missed the net |
 | `shp` | integer | Shots that hit the post |
 | `shb` | integer | Own shots blocked by an opponent |
 | `bks` | integer | Opponent shots blocked |
-| `fow` | integer | Faceoffs won |
-| `fol` | integer | Faceoffs lost |
-| `shi` | integer | Shifts |
+| `fow` | integer | Number of faceoffs won |
+| `fol` | integer | Number of faceoffs lost |
+| `shi` | integer | Number of shifts played |
 | `gwgk` | integer | Not determined; 0 on every 2026 row |
 | `gw` | integer | Goaltender wins (incl. overtime and shootout) |
 | `gl` | integer | Goaltender losses (incl. overtime and shootout) |
 | `fk` | integer | Games started in goal (inferred: fk <= gp; 42 of 44 for the 2026 games-played leader) |
-| `ga` | integer | Goals against |
+| `ga` | integer | Goals against: number of goals conceded |
 | `sa` | integer | Shots on goal against |
-| `svs` | integer | Saves |
-| `so` | integer | Shutouts |
+| `svs` | integer | Number of saves made by the goaltender |
+| `so` | integer | Number of shutouts (games without a goal conceded) |
 | `mip` | integer | Goaltender time played, hundredths of a minute (6000 = 60:00; = seconds / 0.6) |
 | `assists` | integer | Assists (a1 + a2; verified on every 2026 row) |
 | `points` | integer | Points (g + assists; verified) |
@@ -571,11 +571,11 @@ Top scorers (same row shape as /player).
 | `save_percentage` | numeric | Save percentage, 0-100 |
 | `face_offs_percentage` | numeric | Faceoff win percentage, 0-100; -1 with no faceoffs |
 | `face_offs` | integer | Faceoffs taken (fow + fol; verified) |
-| `is_captain` | logical | Team captain |
+| `is_captain` | logical | Whether the player is the team captain |
 | `first_goalkeeper` | logical | Team's first-choice goaltender |
 | `ga_per_game` | numeric | Goals against per game (ga / gp; verified) |
 | `points_per_game` | numeric | Points per game |
-| `svs_per_game` | numeric | Saves per game |
+| `svs_per_game` | numeric | Goaltender saves per game played |
 | `bks_per_game` | numeric | Blocked shots per game |
 | `sog_per_game` | numeric | Shots on goal per game |
 | `shm_per_game` | numeric | Missed shots per game |
@@ -618,8 +618,8 @@ Top scorers (same row shape as /player).
 | `foloz` | integer | Offensive-zone faceoffs lost |
 | `folnz` | integer | Neutral-zone faceoffs lost |
 | `foldz` | integer | Defensive-zone faceoffs lost |
-| `psg` | integer | Shootout goals |
-| `pssvs` | integer | Shootout saves |
+| `psg` | integer | Goals scored in shootouts |
+| `pssvs` | integer | Saves made in shootouts |
 | `got` | integer | Overtime goals (a subset of g) |
 | `ot_rank` | integer | Overtime-scoring rank; 0 on the 2026 rows (filled in 2027) |
 | `ot_g` | integer | Overtime goals in the overtime table; 0 on every 2026 row |
@@ -684,35 +684,35 @@ Standings with team season stats.
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Standings rank |
+| `rank` | integer | Position of the team in the standings table |
 | `team_id` | integer | SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as the sihf family's team_id. |
-| `name` | character | Team display name |
+| `name` | character | Team name as the league app displays it |
 | `short_name` | character | Team abbreviation |
 | `streak` | character | Last results, most recent first: W or L |
-| `gp` | integer | Games played |
+| `gp` | integer | Number of games played |
 | `gw` | integer | Wins, all kinds |
 | `gwot` | integer | Overtime + shootout wins (gwo + gwpe) |
-| `gwpe` | integer | Shootout wins |
+| `gwpe` | integer | Number of wins decided in a shootout |
 | `gl` | integer | Losses, all kinds |
 | `glot` | integer | Overtime + shootout losses (glo + glpe) |
 | `glpe` | integer | Shootout losses |
 | `po` | integer | Standings points: 3 per regulation win, 2 per overtime/shootout win, 1 per overtime/shootout loss (verified) |
-| `g` | integer | Goals |
+| `g` | integer | Number of goals scored |
 | `geq` | integer | Even-strength goals (geq + gpp + gpk can fall short of g) |
 | `gpp` | integer | Power-play goals |
 | `gpk` | integer | Shorthanded goals |
-| `ga` | integer | Goals against |
+| `ga` | integer | Goals against: number of goals conceded |
 | `gaeq` | integer | Even-strength goals against |
 | `gapp` | integer | Shorthanded goals allowed on the power play |
 | `gapk` | integer | Power-play goals allowed while shorthanded |
 | `go` | integer | Goal difference, g - ga (verified) |
 | `ppo` | integer | Power-play opportunities |
 | `pks` | integer | Times shorthanded |
-| `sog` | integer | Shots on goal |
+| `sog` | integer | Number of shots on goal |
 | `penalties` | integer | Penalties taken (upstream `fo`: fo2 + fo5 + fo10 + gm + mp). Not faceoffs: see face_offs / fot. |
 | `pim` | integer | Penalty minutes |
-| `fow` | integer | Faceoffs won |
-| `fol` | integer | Faceoffs lost |
+| `fow` | integer | Number of faceoffs won |
+| `fol` | integer | Number of faceoffs lost |
 | `shm` | integer | Shots that missed the net |
 | `shp` | integer | Shots that hit the post |
 | `shb` | integer | Own shots blocked by an opponent |
@@ -742,11 +742,11 @@ Standings with team season stats.
 | `gm` | integer | Game misconducts |
 | `mp` | integer | Match penalties |
 | `ps` | integer | Shootout attempts taken |
-| `psg` | integer | Shootout goals |
+| `psg` | integer | Goals scored in shootouts |
 | `psm` | integer | Shootout misses (ps = psg + psm on every 2026 team row) |
 | `psa` | integer | Shootout shots faced (psga + pssvs) |
 | `psga` | integer | Shootout goals against |
-| `pssvs` | integer | Shootout saves |
+| `pssvs` | integer | Saves made in shootouts |
 | `spec` | integer | Total home attendance |
 | `cap` | integer | Total home arena capacity over the home games |
 | `fowoz` | integer | Offensive-zone faceoffs won |
@@ -767,7 +767,7 @@ Standings with team season stats.
 | `ppggp` | numeric | Power-play goals per game |
 | `ppopgp` | numeric | Power-play opportunities per game |
 | `ppgp` | numeric | Power-play time per game, seconds |
-| `gpg` | numeric | Goals per game |
+| `gpg` | numeric | Goals scored per game played |
 | `gagp` | numeric | Goals against per game |
 | `gappgp` | numeric | Shorthanded goals against per game |
 | `geqgp` | numeric | Even-strength goals per game |
@@ -804,7 +804,7 @@ Standings with team season stats.
 | `pssvs_percentage` | numeric | Shootout save percentage, 0-100; -1 with no shootout shots faced |
 | `pgp` | numeric | Standings points per game |
 | `gwit` | integer | Wins in regulation time (gw = gwit + overtime/shootout wins; verified) |
-| `gwo` | integer | Overtime wins |
+| `gwo` | integer | Number of wins in overtime |
 | `glit` | integer | Losses in regulation time (gl = glit + overtime/shootout losses; verified) |
 | `glo` | integer | Overtime losses |
 

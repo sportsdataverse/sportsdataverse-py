@@ -248,6 +248,12 @@ Play-by-play of one match: goals, penalties, goalie changes and timeouts, one ro
 | `outgoing_goalie_player_id` | integer | Player id (playerId key space) of the goalie leaving the game (goalkeeperChange). |
 | `outgoing_goalie_jersey` | integer | Jersey number of the goalie leaving the game (goalkeeperChange). |
 | `outgoing_goalie_name` | character | Full name of the goalie leaving the game (goalkeeperChange). |
+| `team_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
+| `team_shortcut` | character | Three-letter team code. |
+| `goal_review` | character | Video review subject, e.g. a goal (EIHL `videoReview` events). |
+| `on_ice_decision` | character | Call on the ice before the review. |
+| `reason_for_review` | character | Why the play was reviewed (free text). |
+| `decision_after_review` | character | Final call after the review. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

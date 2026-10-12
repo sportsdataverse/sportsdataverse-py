@@ -407,6 +407,9 @@ def vhl_schedule(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -467,6 +470,9 @@ def vhl_game_info(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -528,6 +534,9 @@ def vhl_goals(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -589,6 +598,9 @@ def vhl_penalties(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -650,6 +662,9 @@ def vhl_player_box(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -711,6 +726,9 @@ def vhl_goalie_box(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -772,6 +790,9 @@ def vhl_pbp(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -829,6 +850,9 @@ def vhl_standings(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -883,6 +907,9 @@ def vhl_skater_stats(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -941,6 +968,9 @@ def vhl_goalie_stats(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -997,6 +1027,9 @@ def vhl_player(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1049,6 +1082,9 @@ def vhl_player_career(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1101,6 +1137,9 @@ def vhl_roster(
 
         .. _VHL: https://www.vhlru.ru/en/
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+
+    Notes:
+        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}

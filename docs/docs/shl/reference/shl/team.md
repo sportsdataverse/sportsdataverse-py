@@ -38,10 +38,10 @@ One team.
 | `info_finals` | character | Club's final appearances (text). |
 | `info_retired_numbers` | character | Retired jersey numbers (text). |
 | `info_address` | character | Club postal address. |
-| `info_phone` | character | Club phone. |
-| `info_fax` | character | Club fax. |
-| `info_email` | character | Club email. |
-| `info_chairman` | character | Club chairman. |
+| `info_phone` | character | Telephone number of the club. |
+| `info_fax` | character | Fax number of the club. |
+| `info_email` | character | Contact email address of the club. |
+| `info_chairman` | character | Name of the club chairman. |
 | `info_manager` | character | Club general manager. |
 | `info_accreditation` | character | Press-accreditation contact, free Swedish text (e.g. 'Senast dagen före match till …' = 'no later than the day before the game, to …'). |
 | `info_facebook` | character | Club Facebook URL. |
@@ -52,7 +52,7 @@ One team.
 | `nationality` | character | Nationality (ISO country code). |
 | `arena_name` | character | Name of the arena hosting the game. Empty string in every sample (placeholder). |
 | `public_url` | character | Public image URL. |
-| `icon` | character | Logo URL. |
+| `icon` | character | URL of the team logo image. |
 | `owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
 | `site_display_name` | character | Club name as shown on its own site (e.g. Frölunda HC). |
 
@@ -105,7 +105,7 @@ A team's recent games.
 | `home_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
 | `home_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
 | `home_team_score` | integer | Goals scored by the team in the game. |
-| `home_team_icon` | character | Logo URL. |
+| `home_team_icon` | character | URL of the team logo image. |
 | `away_team_status` | character | Result for the team (WIN, LOSE) or record status. |
 | `away_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `away_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
@@ -119,9 +119,9 @@ A team's recent games.
 | `away_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
 | `away_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
 | `away_team_score` | integer | Goals scored by the team in the game. |
-| `away_team_icon` | character | Logo URL. |
+| `away_team_icon` | character | URL of the team logo image. |
 | `venue_uuid` | character | Arena uuid (platform key space). |
-| `venue_name` | character | Arena name. |
+| `venue_name` | character | Name of the arena (venue). |
 | `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
 | `series_code` | character | Series code (SHL, CHL). |
 | `series_display_name` | character | Series label shown on the site (SHL, CHL). |
@@ -154,19 +154,19 @@ Team stats per period and total (2023/24 on).
 
 | col_name | type | description |
 |---|---|---|
-| `team_side` | character | home or away. |
+| `team_side` | character | Side of the game: home or away. |
 | `game_source_id` | character | StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same game as gameId. |
 | `game_id` | integer | StatNet game number (StatNet key space, e.g. 22003); keys stats-info games{} and equals sports-v2 game-info extId. Not the game uuid. |
-| `place` | character | home or away. |
+| `place` | character | Side of the game: home or away. |
 | `score` | integer | Goals scored by the team in the game. |
 | `team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
-| `team_name` | character | Team name. |
+| `team_name` | character | Name of the team. |
 | `team_code` | character | StatNet team code (SAIK, FHC). |
 | `game_uuid` | character | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
 | `period` | integer | Period: 0 = the whole game, 1-3 the periods, 4 and up overtime. |
-| `g` | numeric | Goals. |
+| `g` | numeric | Number of goals scored. |
 | `pim` | numeric | Penalty minutes. |
-| `fow` | numeric | Face-offs won. |
+| `fow` | numeric | Number of face-offs won. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -217,8 +217,8 @@ A team's next games.
 | `home_team_names_short_site` | character | Short club name as shown on the site ('Herr' = men's team). |
 | `home_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
 | `home_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
-| `home_team_score` | character | Goals scored by the team in the game. |
-| `home_team_icon` | character | Logo URL. |
+| `home_team_score` | integer | Goals scored by the team in the game. |
+| `home_team_icon` | character | URL of the team logo image. |
 | `away_team_status` | character | Result for the team (WIN, LOSE) or record status. |
 | `away_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
 | `away_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
@@ -231,10 +231,10 @@ A team's next games.
 | `away_team_names_short_site` | character | Short club name as shown on the site ('Herr' = men's team). |
 | `away_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
 | `away_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
-| `away_team_score` | character | Goals scored by the team in the game. |
-| `away_team_icon` | character | Logo URL. |
+| `away_team_score` | integer | Goals scored by the team in the game. |
+| `away_team_icon` | character | URL of the team logo image. |
 | `venue_uuid` | character | Arena uuid (platform key space). |
-| `venue_name` | character | Arena name. |
+| `venue_name` | character | Name of the arena (venue). |
 | `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
 | `series_code` | character | Series code (SHL, CHL). |
 | `series_display_name` | character | Series label shown on the site (SHL, CHL). |

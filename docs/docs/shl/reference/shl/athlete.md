@@ -26,30 +26,30 @@ Player career totals by season.
 
 | col_name | type | description |
 |---|---|---|
-| `gp` | numeric | Games played. |
+| `gp` | numeric | Number of games played. |
 | `gpi` | numeric | Games played with ice time. |
-| `ga` | numeric | Goals against. |
+| `ga` | numeric | Number of goals conceded (goals against). |
 | `gaa` | numeric | Goals against average (per 60 minutes). Numeric, but sent as a string in some rows and as a number in others. |
-| `svs` | numeric | Saves. |
+| `svs` | numeric | Number of saves made by the goalie. |
 | `svs_perc` | numeric | Save %. Numeric, but sent as a string in some rows and as a number in others. |
-| `w` | numeric | Wins (meaning differs by table; see the module or route). |
-| `t` | numeric | Ties (meaning differs by table; see the module or route). |
-| `l` | numeric | Losses (meaning differs by table; see the module or route). |
-| `so` | numeric | Shutouts. |
+| `w` | numeric | Goalie wins: games the goalie was credited with the win, overtime and shootout wins included. |
+| `t` | numeric | Goalie ties: games that ended level with the goalie credited a tie; 0 in every sampled row, as overtime and shootouts now decide every game. |
+| `l` | numeric | Goalie losses: games the goalie was charged with the loss, overtime and shootout losses included. |
+| `so` | numeric | Number of shutouts (games without a goal against). |
 | `info_uuid` | character | Athlete uuid (platform key space) in player and goalie modules, team uuid in team modules; joins to the athlete routes or /sports-v2/teams/{team_uuid}. |
 | `info_full_name` | character | Given name and surname. |
-| `info_first_name` | character | Given name. |
-| `info_last_name` | character | Surname. |
+| `info_first_name` | character | Given (first) name of the player. |
+| `info_last_name` | character | Surname (family name) of the player. |
 | `info_birth_date` | character | Date of birth (YYYY-MM-DD). |
 | `info_nationality` | character | Nationality (ISO country code). |
 | `info_gender` | character | Sex of the athlete or team (male / female). |
-| `info_age_value` | integer | Age in years. |
+| `info_age_value` | integer | Age of the player in whole years. |
 | `info_age_format` | character | Unit of value: years. |
-| `info_weight_value` | integer | Weight in kg. |
+| `info_weight_value` | integer | Weight of the player in kilograms. |
 | `info_weight_format` | character | Unit of value: kg. |
-| `info_height_value` | integer | Height in cm. |
+| `info_height_value` | integer | Height of the player in centimetres. |
 | `info_height_format` | character | Unit of value: cm. |
-| `info_jersey_number` | character | Shirt number. |
+| `info_jersey_number` | character | Jersey (shirt) number of the player. |
 | `info_position` | character | Position code (CE = centre, LW, RW, D, GK, F); N/A in the athlete game logs. |
 | `info_position_code` | character | Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown. |
 | `info_shoots` | character | Shooting side (L / R; Left / Right). |
@@ -98,17 +98,17 @@ Player bio plus playerExtIds (isa, ramses_legacy, ...).
 | `athlete_data_created_at` | character | Record creation time (ISO 8601; often null). |
 | `athlete_data_created_by` | character | Record creator (site instance id; often null). |
 | `athlete_data_creator_site` | character | Site that created the record (null in captures). |
-| `athlete_data_height` | integer | Height in cm. |
+| `athlete_data_height` | integer | Height of the player in centimetres. |
 | `athlete_data_date_of_birth` | character | Date of birth (YYYY-MM-DD). |
 | `athlete_data_deleted` | logical | Soft-delete flag of the record (false in every sample). |
-| `athlete_data_first_name` | character | Given name. |
+| `athlete_data_first_name` | character | Given (first) name of the player. |
 | `athlete_data_gender` | character | Sex of the athlete or team (male / female). |
 | `athlete_data_last_modified` | character | Record last-modified time (ISO 8601). |
-| `athlete_data_last_name` | character | Surname. |
+| `athlete_data_last_name` | character | Surname (family name) of the player. |
 | `athlete_data_metadata` | character | Free-form metadata. |
 | `athlete_data_nationality` | character | Nationality (ISO country code). |
 | `athlete_data_shoots` | character | Shooting side (L / R; Left / Right). |
-| `athlete_data_weight` | integer | Weight in kg. |
+| `athlete_data_weight` | integer | Weight of the player in kilograms. |
 | `athlete_data_player_ext_ids` | character | External ids of the athlete (isa, ramses_legacy, ramses_generic_legacy, ramses_merged). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -141,31 +141,31 @@ Player game log of one season.
 
 | col_name | type | description |
 |---|---|---|
-| `date` | character | Game date. |
+| `date` | character | Date of the game (YYYY-MM-DD). |
 | `series` | character | Series id in the career log. |
 | `home_team` | character | Home team SHORT NAME (e.g. Frölunda; may carry a trailing space), not a code. |
 | `home_team_icon` | character | Home team logo URL. |
 | `guest_team` | character | Away team SHORT NAME (e.g. Luleå), not a code. |
 | `guest_team_icon` | character | Away team logo URL. |
-| `gp` | numeric | Games played. |
+| `gp` | numeric | Number of games played. |
 | `gpi` | numeric | Games played with ice time. |
 | `gs` | numeric | Games started (goalie log). |
-| `w` | numeric | Wins (meaning differs by table; see the module or route). |
-| `t` | numeric | Ties (meaning differs by table; see the module or route). |
-| `l` | numeric | Losses (meaning differs by table; see the module or route). |
-| `so` | numeric | Shutouts. |
-| `ga` | numeric | Goals against. |
+| `w` | numeric | 1 when the goalie was credited with the win in this game (overtime and shootout included), else 0. |
+| `t` | numeric | 1 when the goalie was credited a tie in this game, else 0; 0 in every sampled row, as overtime and shootouts now decide every game. |
+| `l` | numeric | 1 when the goalie was charged with the loss in this game (overtime and shootout included), else 0. |
+| `so` | numeric | Number of shutouts (games without a goal against). |
+| `ga` | numeric | Number of goals conceded (goals against). |
 | `gaa` | numeric | Goals against average (per 60 minutes). Numeric, but sent as a string in some rows and as a number in others. |
 | `soga` | numeric | Shots on goal against. |
-| `svs` | numeric | Saves. |
+| `svs` | numeric | Number of saves made by the goalie. |
 | `svs_perc` | numeric | Save %. Numeric, but sent as a string in some rows and as a number in others. |
 | `info_full_name` | character | Given name and surname. |
-| `info_first_name` | character | Given name. |
-| `info_last_name` | character | Surname. |
+| `info_first_name` | character | Given (first) name of the player. |
+| `info_last_name` | character | Surname (family name) of the player. |
 | `info_birth_date` | character | Date of birth (YYYY-MM-DD). |
 | `info_nationality` | character | Nationality (ISO country code). |
 | `info_gender` | character | Sex of the athlete or team (male / female). |
-| `info_jersey_number` | character | Shirt number. |
+| `info_jersey_number` | character | Jersey (shirt) number of the player. |
 | `info_position` | character | Position code (CE = centre, LW, RW, D, GK, F); N/A in the athlete game logs. |
 | `info_position_code` | character | Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown. |
 | `info_shoots` | character | Shooting side (L / R; Left / Right). '-' placeholder in every sample. |
@@ -208,24 +208,24 @@ Player profile: age, height, weight, position.
 |---|---|---|
 | `uuid` | character | Athlete uuid (platform key space, qQ9-... or 10-char form); joins to the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id. |
 | `full_name` | character | Given name and surname. |
-| `first_name` | character | Given name. |
-| `last_name` | character | Surname. |
+| `first_name` | character | Given (first) name of the player. |
+| `last_name` | character | Surname (family name) of the player. |
 | `birth_date` | character | Date of birth (YYYY-MM-DD). |
 | `nationality` | character | Nationality (ISO country code). |
 | `gender` | character | Sex of the athlete or team (male / female). |
-| `age_value` | integer | Age in years. |
+| `age_value` | integer | Age of the player in whole years. |
 | `age_format` | character | Unit of value: years. |
-| `weight_value` | integer | Weight in kg. |
+| `weight_value` | integer | Weight of the player in kilograms. |
 | `weight_format` | character | Unit of value: kg. |
-| `height_value` | integer | Height in cm. |
+| `height_value` | integer | Height of the player in centimetres. |
 | `height_format` | character | Unit of value: cm. |
-| `jersey_number` | integer | Shirt number. |
+| `jersey_number` | integer | Jersey (shirt) number of the player. |
 | `position` | character | Position label in Swedish (Målvakt = goalkeeper). |
 | `position_code` | character | Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown. |
 | `shoots` | character | Shooting side (L / R; Left / Right). |
 | `team_uuid` | character | Platform team uuid. |
 | `team_instance_id` | character | Club site instance id (e.g. fhc1_fhc). |
-| `team_name` | character | Team name. |
+| `team_name` | character | Name of the team. |
 | `team_code` | character | StatNet team code (SAIK, FHC). |
 | `team_media` | character | Media URL or string. |
 | `season_stats` | character | Current-season stat rows of the player (empty in the sample). |

@@ -9,6 +9,8 @@ toc_max_heading_level: 2
 
 `sportsdataverse.hockey.khl` — 14 endpoints.
 
+> **Note:** Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+
 ## khl_schedule
 
 Season schedule and results of a tournament, one row per game (All-Star games dropped).
@@ -32,7 +34,7 @@ Season schedule and results of a tournament, one row per game (All-Star games dr
 | `game_id` | integer | khl.ru game id; equals webcaster event khl_id / match_id |
 | `tournament_id` | integer | khl.ru tournament (stage) id, tnId: 1369 = 2025-26 regular season, 1370 its playoff; equals webcaster stage khl_id |
 | `date` | character | Game date YYYY-MM-DD (Moscow time) |
-| `time` | character | Game clock mm:ss (game-elapsed); period marker rows keep their wall-clock HH:MM |
+| `time` | character | Start time hh:mm (Moscow time); not a game clock |
 | `home_club_id` | integer | Home CLUB id (stable across seasons; joins webcaster team khl_id) |
 | `home_name` | character | Home team name (Russian on www.khl.ru) |
 | `away_club_id` | integer | Visitor CLUB id (stable across seasons; joins webcaster team khl_id) |
@@ -76,13 +78,13 @@ Club roster (current season only): one row per player.
 |---|---|---|
 | `group` | character | List the row comes from (position group / roster section) |
 | `player_id` | integer | khl.ru player id; equals webcaster player khl_id |
-| `photo` | character |  |
+| `photo` | character | Player photo URL on khl.ru (protocol-relative) |
 | `country` | character | Citizenship (Russian) |
 | `lastname` | character | Last name in Russian |
 | `firstname` | character | First name in Russian |
 | `jn` | integer | Jersey number (not an id; 0 on a team event) |
-| `age` | integer |  |
-| `favorite` | logical |  |
+| `age` | integer | Player age in years |
+| `favorite` | logical | Front-end favourite flag of the signed-in user (always False here) |
 | `link` | character | Relative khl.ru page path |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
@@ -119,8 +121,8 @@ Stats filter options: seasons, tournaments, position groups and clubs (one row p
 | `filter_name` | character | Filter label as the site prints it |
 | `value` | character | Option code to send for the filter (a tournament id, a season code such as s19, a club slug) |
 | `name` | character | Option label (Russian) |
-| `def` | integer |  |
-| `active` | integer |  |
+| `def` | integer | Default tournament id (tnId) of a season option |
+| `active` | integer | 1 when the option is selectable |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
@@ -167,8 +169,8 @@ Game header: status, teams, score, arena (one row).
 | `roundname_en` | character | Round label in English |
 | `date` | character | Game date YYYY-MM-DD (Moscow time) |
 | `dayofweek` | integer | Day of week, 1 = Sunday (6 = Friday 2026-03-20) |
-| `time` | character | Game clock mm:ss (game-elapsed); period marker rows keep their wall-clock HH:MM |
-| `changes` | integer |  |
+| `time` | character | Start time hh:mm:ss (Moscow time); not a game clock |
+| `changes` | integer | Count of changes to the game record (0 in the captured bodies; unverified) |
 | `number` | integer | Game number within the tournament |
 | `home_name_l3` | character | Home club 3-letter code in Russian |
 | `home_name_en` | character | Home club name in English |
@@ -189,16 +191,16 @@ Game header: status, teams, score, arena (one row).
 | `ots` | character | How the game ended: empty = regulation, OT = overtime, SO = shootout |
 | `attendance` | integer | Attendance (numeric string) |
 | `approved` | integer | 1 = result confirmed by the league |
-| `format_date_day` | character |  |
-| `time_format` | character |  |
+| `format_date_day` | character | Game date YYYY-MM-DD (Moscow time), as the site formats it |
+| `time_format` | character | Start time hh:mm (Moscow time) |
 | `full_date` | integer | Start time, unix seconds (UTC) |
-| `date_type` | character |  |
+| `date_type` | character | Front-end date bucket of the game relative to today ('last' = already played; other values unverified) |
 | `type` | character | Game state/type code (sogame = finished in a shootout) |
-| `winner` | character |  |
-| `visible_date` | character |  |
-| `visible_date_full` | character |  |
-| `visible_date_full2` | character |  |
-| `visible_date_day` | character |  |
+| `winner` | character | Winning side: A = home, B = visitor |
+| `visible_date` | character | Short display date in Russian ('20 мар' = 20 March) |
+| `visible_date_full` | character | Display date in Russian without the year ('20 марта') |
+| `visible_date_full2` | character | Display date in Russian with the year ('20 марта 2026') |
+| `visible_date_day` | character | Abbreviated weekday in Russian ('пт' = Friday) |
 | `win` | integer | True when this club won |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
@@ -299,8 +301,8 @@ Game info: teams, score, arena, officials, starting goalies (one row).
 | `roundname_en` | character | Round label in English |
 | `date` | character | Game date YYYY-MM-DD (Moscow time) |
 | `dayofweek` | integer | Day of week, 1 = Sunday (6 = Friday 2026-03-20) |
-| `time` | character | Game clock mm:ss (game-elapsed); period marker rows keep their wall-clock HH:MM |
-| `changes` | integer |  |
+| `time` | character | Start time hh:mm:ss (Moscow time); not a game clock |
+| `changes` | integer | Count of changes to the game record (0 in the captured bodies; unverified) |
 | `number` | integer | Game number within the tournament |
 | `home_name_l3` | character | Home club 3-letter code in Russian |
 | `home_name_en` | character | Home club name in English |
@@ -325,22 +327,22 @@ Game info: teams, score, arena, officials, starting goalies (one row).
 | `sc_p4` | character | Overtime or shootout score 'home:visitor' |
 | `attendance` | integer | Attendance (numeric string) |
 | `approved` | integer | 1 = result confirmed by the league |
-| `format_date_day` | character |  |
-| `time_format` | character |  |
+| `format_date_day` | character | Game date YYYY-MM-DD (Moscow time), as the site formats it |
+| `time_format` | character | Start time hh:mm (Moscow time) |
 | `full_date` | integer | Start time, unix seconds (UTC) |
-| `date_type` | character |  |
+| `date_type` | character | Front-end date bucket of the game relative to today ('last' = already played; other values unverified) |
 | `type` | character | Game state/type code (sogame = finished in a shootout) |
-| `winner` | character |  |
-| `visible_date` | character |  |
-| `visible_date_full` | character |  |
-| `visible_date_full2` | character |  |
-| `visible_date_day` | character |  |
+| `winner` | character | Winning side: A = home, B = visitor |
+| `visible_date` | character | Short display date in Russian ('20 мар' = 20 March) |
+| `visible_date_full` | character | Display date in Russian without the year ('20 марта') |
+| `visible_date_full2` | character | Display date in Russian with the year ('20 марта 2026') |
+| `visible_date_day` | character | Abbreviated weekday in Russian ('пт' = Friday) |
 | `statusvalue` | character | Game status in Russian (матч завершен = match finished) |
 | `pernum` | integer | Number of regulation periods played |
 | `numlines` | integer | Number of lines on the line-up card |
 | `gk_a_jn` | integer | Home starting goalie's JERSEY number (gameItem.gkA), not an id |
 | `gk_b_jn` | integer | Visitor starting goalie's JERSEY number (gameItem.gkB), not an id |
-| `is_events_have_multi_ovt` | logical |  |
+| `is_events_have_multi_ovt` | logical | True when the game has more than one overtime period (playoff) |
 | `idmainref1` | integer | Referee 1: khl.ru referee id |
 | `idmainref2` | integer | Referee 2: khl.ru referee id |
 | `idlineref1` | integer | Linesman 1: khl.ru referee id |
@@ -396,15 +398,15 @@ Skater box score by period: one row per period, side and jersey, with the player
 | `player_id` | integer | khl.ru player id; equals webcaster player khl_id |
 | `player_name` | character | Player name as the site prints it (Russian on www.khl.ru) |
 | `position` | character | Position code (Russian letter on www.khl.ru) |
-| `g` | integer |  |
+| `g` | integer | Goals scored in the period block |
 | `a` | integer | Home roster keyed by jersey number |
 | `p` | character | Points (empty string when none) |
-| `shots` | integer |  |
+| `shots` | integer | Shots on goal in the period block |
 | `pim` | integer | Penalty minutes |
-| `fo` | integer |  |
-| `fow` | integer |  |
+| `fo` | integer | Faceoffs taken in the period block |
+| `fow` | integer | Faceoffs won in the period block |
 | `fow_pct` | numeric | Stat code the bar is computed from |
-| `bls` | integer |  |
+| `bls` | integer | Shots blocked in the period block |
 | `hits` | integer | Hits (body checks) |
 | `fa` | integer | Takeaways (the site labels this column 'Отборы', takeaways) |
 | `p_intc` | integer | Pass interceptions |
@@ -517,8 +519,8 @@ Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 o
 | `jn` | integer | Jersey number (not an id; 0 on a team event) |
 | `player_id` | integer | khl.ru player id; equals webcaster player khl_id |
 | `shot_type` | integer | 1 = goal, 2 = saved (inferred upstream; unverified) |
-| `x` | integer | Shot x on the site's 1000 x 500 rink grid |
-| `y` | integer | Shot y on the site's 1000 x 500 rink grid |
+| `x` | integer | Shot x on the site's 1000-wide rink grid (indent_left = x/10 %); whether shots are normalised to one attacking direction is UNVERIFIED |
+| `y` | integer | Shot y on the site's 500-high rink grid (indent_top = y/5 %); orientation UNVERIFIED |
 | `indent_left` | numeric | Shot position as percent from the left edge |
 | `indent_top` | numeric | Shot position as percent from the top edge |
 | `indent_right` | numeric | Shot position as percent from the right edge |
@@ -555,33 +557,33 @@ Player profile: bio, contract, club (one row).
 | `player_id` | integer | khl.ru player id; equals webcaster player khl_id |
 | `firstname` | character | First name in Russian |
 | `lastname` | character | Last name in Russian |
-| `photo` | character |  |
+| `photo` | character | Player photo URL on khl.ru (protocol-relative) |
 | `position` | character | Position code (Russian letter on www.khl.ru) |
-| `position_code` | character |  |
+| `position_code` | character | Position key in English (goaltender, defender, forward) |
 | `biography` | character | Biography text in Russian (HTML) |
 | `is_hero` | logical | Site 'hero' flag (unverified meaning) |
 | `is_rip` | logical | True for a deceased player |
 | `links_stats` | character | Relative khl.ru page path |
 | `pagelink` | character | Relative khl.ru page path |
-| `summary_stats_gp` | integer |  |
-| `summary_stats_a` | integer |  |
-| `summary_stats_pm` | integer |  |
-| `summary_stats_g` | integer |  |
-| `summary_stats_pts` | integer |  |
+| `summary_stats_gp` | integer | Career KHL games played (profile summary) |
+| `summary_stats_a` | integer | Career KHL assists (profile summary) |
+| `summary_stats_pm` | integer | Career KHL plus-minus (profile summary) |
+| `summary_stats_g` | integer | Career KHL goals (profile summary) |
+| `summary_stats_pts` | integer | Career KHL points (profile summary) |
 | `jn` | integer | Jersey number (not an id; 0 on a team event) |
 | `club_name` | character | Name in Russian (Cyrillic); the *_en / *en sibling holds the English transliteration |
-| `club_logo` | character |  |
+| `club_logo` | character | Current club logo URL on khl.ru (protocol-relative) |
 | `club_code` | character | Club slug (/clubs/<slug>/) |
-| `height` | character |  |
-| `weight` | character |  |
+| `height` | character | Height with its Russian unit ('183 см' = 183 cm) |
+| `weight` | character | Weight with its Russian unit ('85 кг' = 85 kg) |
 | `birthdate` | character | Birth date (Russian display format) |
-| `age` | character |  |
+| `age` | character | Age with its Russian unit ('27 лет' = 27 years) |
 | `contract_name` | character | Contract label in Russian |
 | `contract_date` | character | Contract end date |
 | `country_name` | character | Name in Russian (Cyrillic); the *_en / *en sibling holds the English transliteration |
-| `country_flag` | character |  |
+| `country_flag` | character | Flag image path of the player's country (citizenship) |
 | `sport_country_name` | character | Name in Russian (Cyrillic); the *_en / *en sibling holds the English transliteration |
-| `sport_country_flag` | character |  |
+| `sport_country_flag` | character | Flag image path of the country the player represents in sport |
 | `stick` | character | Shooting hand: l = left, r = right |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
@@ -619,25 +621,25 @@ Player career: one row per season tournament.
 | `club_id` | integer | khl.ru CLUB id (stable across seasons; joins webcaster team khl_id) |
 | `team_name` | character | Team name as the site prints it |
 | `jn` | integer | Jersey number (not an id; 0 on a team event) |
-| `gp` | integer |  |
-| `g` | integer |  |
-| `a` | integer |  |
-| `pts` | integer |  |
-| `pm` | integer |  |
+| `gp` | integer | Games played by the player |
+| `g` | integer | Goals scored by the player |
+| `a` | integer | Assists credited to the player |
+| `pts` | integer | Points (goals plus assists) |
+| `pm` | integer | Plus-minus rating of the player |
 | `plus` | integer | Plus (on ice for a goal for) |
 | `minus` | integer | Minus (on ice for a goal against) |
 | `pim` | integer | Penalty minutes |
 | `eqg` | integer | Even-strength goals |
 | `ppg` | integer | Power-play goals |
 | `shg` | integer | Short-handed goals |
-| `otg` | integer |  |
+| `otg` | integer | Overtime goals scored by the player |
 | `gwg` | integer | Game-winning goals |
 | `sds` | integer | Shootout-deciding goals |
-| `sog` | integer |  |
+| `sog` | integer | Shots on goal by the player |
 | `sog_pct` | numeric | Shooting percentage |
 | `sog_avg` | numeric | Shots on goal per game |
-| `fo` | integer |  |
-| `fow` | integer |  |
+| `fo` | integer | Faceoffs taken by the player |
+| `fow` | integer | Faceoffs won by the player |
 | `fo_pct` | numeric | Faceoff win percentage |
 | `toi_avg` | character | Average time on ice per game (mm:ss) |
 | `sft_avg` | numeric | Average shifts per game |
@@ -648,9 +650,9 @@ Player career: one row per season tournament.
 | `tish_avg` | character | Average short-handed time on ice per game |
 | `sftsh_avg` | numeric | Average short-handed shifts per game |
 | `hits` | integer | Hits (body checks) |
-| `bls` | integer |  |
-| `foa` | integer |  |
-| `tka` | integer |  |
+| `bls` | integer | Shots blocked by the player |
+| `foa` | integer | Faceoffs lost by the player |
+| `tka` | integer | Takeaways by the player |
 | `p_intc` | integer | Pass interceptions |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
@@ -725,15 +727,15 @@ Regular-season standings: one row per team per table (league, conferences, divis
 | `rank` | integer | 1-based position in its table / list |
 | `club_id` | integer | khl.ru CLUB id (stable across seasons; joins webcaster team khl_id) |
 | `name` | character | Name in Russian (Cyrillic); the *_en / *en sibling holds the English transliteration |
-| `gp` | integer |  |
-| `w` | integer |  |
-| `otw` | integer |  |
-| `sow` | integer |  |
+| `gp` | integer | Games played (gp = w + otw + sow + sol + otl + l) |
+| `w` | integer | Regulation wins only: overtime (otw) and shootout (sow) wins are separate columns |
+| `otw` | integer | Overtime wins (not counted in w) |
+| `sow` | integer | Shootout wins (not counted in w) |
 | `sol` | integer | Shootout losses |
 | `otl` | integer | Overtime losses |
 | `otl_en` | integer | Overtime losses with the net empty |
-| `l` | integer |  |
-| `pts` | integer |  |
+| `l` | integer | Regulation losses only: overtime (otl) and shootout (sol) losses are separate columns |
+| `pts` | integer | Points: 2 per win of any kind, 1 per overtime or shootout loss (3-2-1 in early seasons such as 2013-14) |
 | `goals_for` | integer | Goals scored by the team |
 | `goals_against` | integer | Goals allowed by the team |
 | `is_out_playoff` | logical | Eliminated from playoff contention |
@@ -777,27 +779,27 @@ League player stats of a tournament, one page (one row per player).
 | `rank` | integer | 1-based position in its table / list |
 | `player_id` | integer | khl.ru player id; equals webcaster player khl_id |
 | `player_name` | character | Player name as the site prints it (Russian on www.khl.ru) |
-| `image` | character |  |
+| `image` | character | Player photo URL on khl.ru (team-season specific) |
 | `jn` | integer | Jersey number (not an id; 0 on a team event) |
-| `gp` | integer |  |
-| `g` | integer |  |
-| `a` | integer |  |
-| `pts` | integer |  |
-| `pm` | integer |  |
+| `gp` | integer | Games played by the player |
+| `g` | integer | Goals scored by the player |
+| `a` | integer | Assists credited to the player |
+| `pts` | integer | Points (goals plus assists) |
+| `pm` | integer | Plus-minus rating of the player |
 | `plus` | integer | Plus (on ice for a goal for) |
 | `minus` | integer | Minus (on ice for a goal against) |
 | `pim` | integer | Penalty minutes |
 | `eqg` | integer | Even-strength goals |
 | `ppg` | integer | Power-play goals |
 | `shg` | integer | Short-handed goals |
-| `otg` | integer |  |
+| `otg` | integer | Overtime goals scored by the player |
 | `gwg` | integer | Game-winning goals |
 | `sds` | integer | Shootout-deciding goals |
-| `sog` | integer |  |
+| `sog` | integer | Shots on goal by the player |
 | `sog_pct` | numeric | Shooting percentage |
 | `sog_avg` | numeric | Shots on goal per game |
-| `fo` | integer |  |
-| `fow` | integer |  |
+| `fo` | integer | Faceoffs taken by the player |
+| `fow` | integer | Faceoffs won by the player |
 | `fo_pct` | numeric | Faceoff win percentage |
 | `toi_avg` | character | Average time on ice per game (mm:ss) |
 | `sft_avg` | numeric | Average shifts per game |
@@ -808,7 +810,7 @@ League player stats of a tournament, one page (one row per player).
 | `tish_avg` | character | Average short-handed time on ice per game |
 | `sftsh_avg` | numeric | Average short-handed shifts per game |
 | `hits` | integer | Hits (body checks) |
-| `bls` | integer |  |
+| `bls` | integer | Shots blocked by the player |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 

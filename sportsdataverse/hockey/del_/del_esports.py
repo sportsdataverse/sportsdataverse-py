@@ -246,6 +246,12 @@ _PARSER_COLUMNS = {
         "outgoing_goalie_player_id",
         "outgoing_goalie_jersey",
         "outgoing_goalie_name",
+        "team_id",
+        "team_shortcut",
+        "goal_review",
+        "on_ice_decision",
+        "reason_for_review",
+        "decision_after_review",
     ],
     "roster": [
         "team_side",

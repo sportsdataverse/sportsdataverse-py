@@ -9,6 +9,8 @@ toc_max_heading_level: 2
 
 `sportsdataverse.hockey.vhl` — 13 endpoints.
 
+> **Note:** Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+
 ## vhl_schedule
 
 Schedule and results of one season stage: every game with its club ids, score and decision.
@@ -154,7 +156,7 @@ Goals of a game with scorer, assists, strength and the jerseys on ice for both t
 | `score` | character | Score after the goal 'home:away' (Score). |
 | `strength` | character | Goal strength code (PMG): eq (even), ppg (power play), shg (shorthanded); null on the shootout row. |
 | `scorer_id` | integer | Player id of the scorer: the {player_id} of /en/players/{player_id}/, stable across seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru player ids; whether it equals the same person's khl.ru id is unverified. |
-| `scorer` | character | Scorer name. |
+| `scorer` | character | Goal scorer's name, 'Surname Given' as the report prints it. |
 | `scorer_jersey` | integer | Scorer jersey number. |
 | `scorer_season_total` | integer | The scorer's season goal count after this goal (the '(13)' suffix); null on the shootout row. |
 | `assist1_id` | integer | Player id of the first assist; null when unassisted. |
@@ -255,8 +257,8 @@ Skater box score of a game: scoring, shots, faceoffs, time on ice, hits and bloc
 | `player` | character | Player name, 'Surname Given' (Latin on /en/ pages). |
 | `captaincy` | character | Captaincy marker from the name suffix: C (captain), A (alternate); null otherwise. |
 | `games_played` | integer | Games played (GP). |
-| `goals` | integer | Goals (G). |
-| `assists` | integer | Assists (A). |
+| `goals` | integer | Goals (G) the player scored in the row's scope: the game in a box score, the season stage in stats and career rows. |
+| `assists` | integer | Assists (A) credited to the player in the row's scope: the game in a box score, the season stage in stats and career rows. |
 | `points` | integer | Points, goals + assists (PTS). |
 | `plus_minus` | integer | Plus/minus (+/-). |
 | `penalty_minutes` | integer | Penalty minutes (PIM). |
@@ -323,11 +325,11 @@ Goalie box score of a game: shots against, saves, save percentage and time on ic
 | `shootouts_played` | integer | Shootouts played (SOP). |
 | `shots_against` | integer | Shots on goal faced (the SOG column of goalie tables). |
 | `goals_against` | integer | Goals allowed (GA). |
-| `saves` | integer | Saves (Sv). |
+| `saves` | integer | Saves (Sv): shots on goal the goalie stopped in the row's scope (the game, or the season stage in stats and career rows). |
 | `save_pct` | numeric | Save percentage (%Sv); 0-100 scale (93.8 = 93.8 %); null when the page shows '-'. |
 | `gaa` | numeric | Goals-against average (GAA) = 60 x GA / TOI minutes; null when the page shows '-'. |
-| `assists` | integer | Assists (A). |
-| `shutouts` | integer | Shutouts (SO). |
+| `assists` | integer | Assists (A) credited to the player in the row's scope: the game in a box score, the season stage in stats and career rows. |
+| `shutouts` | integer | Shutouts (SO): games in the row's scope in which the goalie allowed no goal. |
 | `penalty_minutes` | integer | Penalty minutes (PIM). |
 | `toi` | character | Time on ice in this game, 'mm:ss'; null for a dressed goalie who did not play ('-'). |
 
@@ -461,8 +463,8 @@ Season stats of every defenseman and forward of one season stage.
 | `jersey` | integer | Jersey number (#; the page legend mislabels this column 'Position'). |
 | `team` | character | Team short name (Latin; the report tables' form). |
 | `games_played` | integer | Games played (GP). |
-| `goals` | integer | Goals (G). |
-| `assists` | integer | Assists (A). |
+| `goals` | integer | Goals (G) the player scored in the row's scope: the game in a box score, the season stage in stats and career rows. |
+| `assists` | integer | Assists (A) credited to the player in the row's scope: the game in a box score, the season stage in stats and career rows. |
 | `points` | integer | Points, goals + assists (PTS). |
 | `plus_minus` | integer | Plus/minus (+/-). |
 | `plus` | integer | Plus: on-ice goals for that count toward plus/minus (+). |
@@ -527,12 +529,12 @@ Season stats of every goalie of one season stage.
 | `shootouts_played` | integer | Shootouts played (SOP). |
 | `shots_against` | integer | Shots on goal faced (the SOG column of goalie tables). |
 | `goals_against` | integer | Goals allowed (GA). |
-| `saves` | integer | Saves (Sv). |
+| `saves` | integer | Saves (Sv): shots on goal the goalie stopped in the row's scope (the game, or the season stage in stats and career rows). |
 | `save_pct` | numeric | Save percentage (%Sv); 0-100 scale (93.8 = 93.8 %); null when the page shows '-'. |
 | `gaa` | numeric | Goals-against average (GAA) = 60 x GA / TOI minutes; null when the page shows '-'. |
-| `goals` | integer | Goals (G). |
-| `assists` | integer | Assists (A). |
-| `shutouts` | integer | Shutouts (SO). |
+| `goals` | integer | Goals (G) the player scored in the row's scope: the game in a box score, the season stage in stats and career rows. |
+| `assists` | integer | Assists (A) credited to the player in the row's scope: the game in a box score, the season stage in stats and career rows. |
+| `shutouts` | integer | Shutouts (SO): games in the row's scope in which the goalie allowed no goal. |
 | `penalty_minutes` | integer | Penalty minutes (PIM). |
 | `toi` | character | Time on ice (TOI), 'mm:ss' string; minutes run past 59 over a season ('2314:48'); null when the page shows '-'. |
 
@@ -611,8 +613,8 @@ Player career by season stage and team (skater and goalie columns in one frame).
 | `team` | character | Team short name (Latin; the report tables' form). |
 | `jersey` | integer | Jersey number worn for that team that season (#). |
 | `games_played` | integer | Games played (GP). |
-| `goals` | integer | Goals (G). |
-| `assists` | integer | Assists (A). |
+| `goals` | integer | Goals (G) the player scored in the row's scope: the game in a box score, the season stage in stats and career rows. |
+| `assists` | integer | Assists (A) credited to the player in the row's scope: the game in a box score, the season stage in stats and career rows. |
 | `points` | integer | Points, goals + assists (PTS). |
 | `plus_minus` | integer | Plus/minus (+/-). |
 | `penalty_minutes` | integer | Penalty minutes (PIM). |
@@ -637,10 +639,10 @@ Player career by season stage and team (skater and goalie columns in one frame).
 | `shootouts_played` | integer | Shootouts played (SOP). |
 | `shots_against` | integer | Shots on goal faced (the SOG column of goalie tables). |
 | `goals_against` | integer | Goals allowed (GA). |
-| `saves` | integer | Saves (Sv). |
+| `saves` | integer | Saves (Sv): shots on goal the goalie stopped in the row's scope (the game, or the season stage in stats and career rows). |
 | `save_pct` | numeric | Save percentage (%Sv); 0-100 scale (93.8 = 93.8 %); null when the page shows '-'. |
 | `gaa` | numeric | Goals-against average (GAA) = 60 x GA / TOI minutes; null when the page shows '-'. |
-| `shutouts` | integer | Shutouts (SO). |
+| `shutouts` | integer | Shutouts (SO): games in the row's scope in which the goalie allowed no goal. |
 | `toi` | character | Time on ice (TOI), 'mm:ss' string; minutes run past 59 over a season ('2314:48'); null when the page shows '-'. |
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).

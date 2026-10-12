@@ -9,6 +9,10 @@ toc_max_heading_level: 2
 
 `sportsdataverse.hockey.nl` — 17 endpoints.
 
+> **Note:** robots.txt on www.nationalleague.ch disallows /api. The owner approved building on it on 2026-10-12 for polite, incremental use: requests are spaced at least 1 s apart, and a bulk backfill or a published mirror needs the owner's sign-off first.
+
+> **Note:** Crawl incrementally: fetch a finished game once (keyed by game_id), find new games with one nl_schedule call per run, and fetch season tables at most once per game day.
+
 ## Player
 
 | Function | Summary |

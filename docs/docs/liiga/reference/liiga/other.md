@@ -61,23 +61,23 @@ Every game of a season and tournament: teams, score, xG, power plays, periods an
 | `season` | integer | Season END year (2026 = 2025-26). |
 | `start` | character | Scheduled start, ISO 8601 UTC. |
 | `end` | character | Time the game ended, ISO 8601 UTC (absent from the refs captures; seen in the full 2026 playoff body). |
-| `periods` | character | Periods. |
+| `periods` | character | JSON list of the game's periods: index, home and away goals, category, start and end second. |
 | `finished_type` | character | How the game ended: ENDED_DURING_REGULAR_GAME_TIME, ENDED_DURING_EXTENDED_GAME_TIME (overtime), ENDED_DURING_WINNING_SHOT_COMPETITION (shootout). |
 | `started` | logical | Game has started. |
 | `ended` | logical | Game has ended. |
 | `game_time` | integer | Seconds from the start of the game. Regular season: 3900 (65:00) = the end of the 5-minute overtime; playoff overtime runs past it. |
-| `spectators` | integer | Attendance. |
+| `spectators` | integer | Attendance (spectators) reported for the game. |
 | `play_off_pair` | integer | Playoff pairing number, else null. |
 | `play_off_phase` | integer | Playoff round, else null. |
-| `play_off_req_wins` | integer | Wins needed to take the series, else null. |
-| `buy_tickets_url` | character | Ticket link, else null. |
-| `ice_rink_id` | integer | Rink: rink id. |
-| `ice_rink_name` | character | Rink: rink name. |
-| `ice_rink_latitude` | numeric | Rink: latitude. |
-| `ice_rink_longitude` | numeric | Rink: longitude. |
-| `ice_rink_street_address` | character | Rink: street address. |
-| `ice_rink_zip` | character | Rink: zip. |
-| `ice_rink_city` | character | Rink: city. |
+| `play_off_req_wins` | integer | Wins needed to take the playoff series, else null. |
+| `buy_tickets_url` | character | Ticket link for the game, else null. |
+| `ice_rink_id` | integer | Liiga's id of the rink (ice arena). |
+| `ice_rink_name` | character | Name of the rink (ice arena). |
+| `ice_rink_latitude` | numeric | Rink latitude, decimal degrees. |
+| `ice_rink_longitude` | numeric | Rink longitude, decimal degrees. |
+| `ice_rink_street_address` | character | Street address of the rink. |
+| `ice_rink_zip` | character | Postal code of the rink. |
+| `ice_rink_city` | character | City where the rink is located. |
 | `current_period` | integer | Last period played (3 = regulation; 4 and up = overtime periods or the shootout; 2026 values 3, 4, 5, 7). |
 | `stale` | logical | Live data is stale. |
 | `serie` | character | Tournament code, uppercase (RUNKOSARJA, PLAYOFFS, PRACTICE, ...); in /schedule the integer tournament id instead (see serieId and Divergence notes). |
@@ -85,37 +85,37 @@ Every game of a season and tournament: teams, score, xG, power plays, periods an
 | `home_team_id` | integer | Home team id (the number of the `<num>:<slug>` key). |
 | `home_team_slug` | character | Home team slug (e.g. hpk). |
 | `home_placeholder` | character | Home team: placeholder label for an undecided playoff team, else null. |
-| `home_name` | character | Home team: rink name. |
-| `home_goals` | integer | Home team: goals. |
-| `home_time_out` | character | Home team: second of the game (from game start) at which the team called its timeout. |
-| `home_powerplay_instances` | integer | Home team: powerplay instances. |
-| `home_powerplay_goals` | integer | Home team: powerplay goals. |
-| `home_short_handed_instances` | integer | Home team: short handed instances. |
-| `home_short_handed_goals` | integer | Home team: short handed goals. |
-| `home_expected_goals` | numeric | Home team: expected goals (xG), computed by the provider with an undocumented model: the team's total for the game in /games and /games/{season}/{id}; the player's sum over the season range in /players/stats/summed. /shotmap has no per-shot xG. |
+| `home_name` | character | Home team: display name of the team, e.g. HPK. |
+| `home_goals` | integer | Home team: goals scored by the team in the game. |
+| `home_time_out` | integer | Home team: second of the game (from game start) at which the team called its timeout. |
+| `home_powerplay_instances` | integer | Home team: power plays the team had in the game. |
+| `home_powerplay_goals` | integer | Home team: power-play goals the team scored in the game. |
+| `home_short_handed_instances` | integer | Home team: times the team played short-handed in the game. |
+| `home_short_handed_goals` | integer | Home team: short-handed goals the team scored in the game. |
+| `home_expected_goals` | numeric | Home team: expected goals (xG) for the team in the game, from Liiga's undocumented model. |
 | `home_ranking` | integer | Home team: table position. |
 | `home_game_start_date_time` | character | Home team: scheduled start, ISO 8601 UTC. |
-| `home_logos_dark_bg` | character | Home team: logo: dark bg. |
-| `home_logos_light_bg` | character | Home team: logo: light bg. |
-| `home_logos_dark_bg_original` | character | Home team: logo: dark bg original. |
-| `home_logos_light_bg_original` | character | Home team: logo: light bg original. |
+| `home_logos_dark_bg` | character | Home team: logo image URL for dark backgrounds. |
+| `home_logos_light_bg` | character | Home team: logo image URL for light backgrounds. |
+| `home_logos_dark_bg_original` | character | Home team: original-file logo URL for dark backgrounds; null in every capture. |
+| `home_logos_light_bg_original` | character | Home team: original-file logo URL for light backgrounds; null in every capture. |
 | `away_team_id` | integer | Away team id (the number of the `<num>:<slug>` key). |
 | `away_team_slug` | character | Away team slug (e.g. tps). |
 | `away_placeholder` | character | Away team: placeholder label for an undecided playoff team, else null. |
-| `away_name` | character | Away team: rink name. |
-| `away_goals` | integer | Away team: goals. |
-| `away_time_out` | character | Away team: second of the game (from game start) at which the team called its timeout. |
-| `away_powerplay_instances` | integer | Away team: powerplay instances. |
-| `away_powerplay_goals` | integer | Away team: powerplay goals. |
-| `away_short_handed_instances` | integer | Away team: short handed instances. |
-| `away_short_handed_goals` | integer | Away team: short handed goals. |
-| `away_expected_goals` | numeric | Away team: expected goals (xG), computed by the provider with an undocumented model: the team's total for the game in /games and /games/{season}/{id}; the player's sum over the season range in /players/stats/summed. /shotmap has no per-shot xG. |
+| `away_name` | character | Away team: display name of the team, e.g. HPK. |
+| `away_goals` | integer | Away team: goals scored by the team in the game. |
+| `away_time_out` | integer | Away team: second of the game (from game start) at which the team called its timeout. |
+| `away_powerplay_instances` | integer | Away team: power plays the team had in the game. |
+| `away_powerplay_goals` | integer | Away team: power-play goals the team scored in the game. |
+| `away_short_handed_instances` | integer | Away team: times the team played short-handed in the game. |
+| `away_short_handed_goals` | integer | Away team: short-handed goals the team scored in the game. |
+| `away_expected_goals` | numeric | Away team: expected goals (xG) for the team in the game, from Liiga's undocumented model. |
 | `away_ranking` | integer | Away team: table position. |
 | `away_game_start_date_time` | character | Away team: scheduled start, ISO 8601 UTC. |
-| `away_logos_dark_bg` | character | Away team: logo: dark bg. |
-| `away_logos_light_bg` | character | Away team: logo: light bg. |
-| `away_logos_dark_bg_original` | character | Away team: logo: dark bg original. |
-| `away_logos_light_bg_original` | character | Away team: logo: light bg original. |
+| `away_logos_dark_bg` | character | Away team: logo image URL for dark backgrounds. |
+| `away_logos_light_bg` | character | Away team: logo image URL for light backgrounds. |
+| `away_logos_dark_bg_original` | character | Away team: original-file logo URL for dark backgrounds; null in every capture. |
+| `away_logos_light_bg_original` | character | Away team: original-file logo URL for light backgrounds; null in every capture. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -148,20 +148,20 @@ Every goal of a season and tournament: scorer, assists, strength codes and skate
 |---|---|---|
 | `season` | integer | Season END year (2026 = 2025-26). |
 | `game_id` | integer | Game id, unique only within a season: key a game as (season, game_id). |
-| `side` | character | home or away. |
+| `side` | character | Which team of the game the row belongs to: home or away. |
 | `team_id` | integer | Team id, the number of Liiga's `<num>:<slug>` team key (sent as that string, a bare integer or a digit string depending on the route). |
 | `team_slug` | character | Team slug, the part of Liiga's `<num>:<slug>` team key after the colon (e.g. hpk). |
 | `log_time` | character | Wall-clock time the event was logged, ISO 8601 UTC. |
 | `winning_goal` | logical | Game-winning goal. |
 | `game_time` | integer | Seconds from the start of the game. Regular season: 3900 (65:00) = the end of the 5-minute overtime; playoff overtime runs past it. |
-| `period` | integer | Period number. |
+| `period` | integer | Period number: 1-3 are regulation, 4 and up overtime (or the shootout). |
 | `event_id` | integer | Event id within the game. |
 | `home_team_score` | integer | Home score after the event. |
 | `away_team_score` | integer | Away score after the event. |
 | `goals_so_far_in_season` | integer | Scorer's season goal count after this goal. |
-| `video_clip_url` | character | Video clip url. |
-| `video_clip_playlist_url` | character | Video clip playlist url. |
-| `video_thumbnail_url` | character | Video thumbnail url. |
+| `video_clip_url` | character | URL of the goal's video clip; null in every capture. |
+| `video_clip_playlist_url` | character | URL of the goal's video clip playlist; null in every capture. |
+| `video_thumbnail_url` | character | URL of the goal video's thumbnail image; null in every capture. |
 | `scorer_player_id` | integer | Scorer's player id. |
 | `scorer_first_name` | character | Scorer's first name. |
 | `scorer_last_name` | character | Scorer's last name. |
@@ -209,38 +209,38 @@ Schedule of a season and tournament: game ids, teams, goals, xG, start and rink.
 | `game_id` | integer | Game id, unique only within a season: key a game as (season, game_id). |
 | `serie_id` | integer | Tournament id, the same every season: 1188 regular season, 1189 playoffs, 1194 preseason, 1890 CHL. |
 | `season` | integer | Season END year (2026 = 2025-26). |
-| `home_team_name` | character | Home team name. |
-| `away_team_name` | character | Away team name. |
+| `home_team_name` | character | Display name of the home team, e.g. HPK. |
+| `away_team_name` | character | Display name of the away team, e.g. TPS. |
 | `home_team_id` | integer | Home team id (the number of the `<num>:<slug>` key). |
 | `home_team_slug` | character | Home team slug (e.g. hpk). |
 | `away_team_id` | integer | Away team id (the number of the `<num>:<slug>` key). |
 | `away_team_slug` | character | Away team slug (e.g. tps). |
-| `home_team_placeholder` | character | Home team placeholder. |
-| `away_team_placeholder` | character | Away team placeholder. |
-| `home_team_goals` | integer | Home team goals. |
-| `away_team_goals` | integer | Away team goals. |
+| `home_team_placeholder` | character | Placeholder label for an undecided playoff home team, else null. |
+| `away_team_placeholder` | character | Placeholder label for an undecided playoff away team, else null. |
+| `home_team_goals` | integer | Goals scored by the home team in the game. |
+| `away_team_goals` | integer | Goals scored by the away team in the game. |
 | `expected_home_team_goals` | numeric | Home team's expected goals (xG) for the game, provider-computed (same value as /games `homeTeam.expectedGoals`). |
 | `expected_away_team_goals` | numeric | Away team's expected goals (xG) for the game, provider-computed. |
 | `game_time` | integer | Seconds from the start of the game. Regular season: 3900 (65:00) = the end of the 5-minute overtime; playoff overtime runs past it. |
 | `started` | logical | Game has started. |
 | `ended` | logical | Game has ended. |
-| `home_team_winner` | logical | Home team won. |
-| `spectators` | integer | Attendance. |
-| `home_team_ranking` | character | Home team ranking. |
-| `away_team_ranking` | character | Away team ranking. |
-| `play_off_pair` | character | Playoff pairing number, else null. |
-| `play_off_phase` | character | Playoff round, else null. |
+| `home_team_winner` | logical | True when the home team won the game. |
+| `spectators` | integer | Attendance (spectators) reported for the game. |
+| `home_team_ranking` | integer | Home team's table position; null in every capture. |
+| `away_team_ranking` | integer | Away team's table position; null in every capture. |
+| `play_off_pair` | integer | Playoff pairing number, else null. |
+| `play_off_phase` | integer | Playoff round, else null. |
 | `play_off_req_wins` | integer | Wins needed to take the series, else null. |
 | `start` | character | Scheduled start, ISO 8601 UTC. |
 | `buy_tickets_url` | character | Ticket link, else null. |
 | `finished_type` | character | How the game ended: ENDED_DURING_REGULAR_GAME_TIME, ENDED_DURING_EXTENDED_GAME_TIME (overtime), ENDED_DURING_WINNING_SHOT_COMPETITION (shootout). |
-| `ice_rink_id` | integer | Rink: rink id. |
-| `ice_rink_name` | character | Rink: rink name. |
-| `ice_rink_latitude` | numeric | Rink: latitude. |
-| `ice_rink_longitude` | numeric | Rink: longitude. |
-| `ice_rink_street_address` | character | Rink: street address. |
-| `ice_rink_zip` | character | Rink: zip. |
-| `ice_rink_city` | character | Rink: city. |
+| `ice_rink_id` | integer | Liiga's id of the rink (ice arena). |
+| `ice_rink_name` | character | Name of the rink (ice arena). |
+| `ice_rink_latitude` | numeric | Rink latitude, decimal degrees. |
+| `ice_rink_longitude` | numeric | Rink longitude, decimal degrees. |
+| `ice_rink_street_address` | character | Street address of the rink. |
+| `ice_rink_zip` | character | Postal code of the rink. |
+| `ice_rink_city` | character | City where the rink is located. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -307,19 +307,19 @@ One game's header: teams, score, xG, power plays, periods, rink, referees and at
 | `game_id` | integer | Game id, unique only within a season: key a game as (season, game_id). |
 | `season` | integer | Season END year (2026 = 2025-26). |
 | `start` | character | Scheduled start, ISO 8601 UTC. |
-| `periods` | character | Periods. |
+| `periods` | character | JSON list of the game's periods: index, home and away goals, category, start and end second. |
 | `finished_type` | character | How the game ended: ENDED_DURING_REGULAR_GAME_TIME, ENDED_DURING_EXTENDED_GAME_TIME (overtime), ENDED_DURING_WINNING_SHOT_COMPETITION (shootout). |
 | `started` | logical | Game has started. |
 | `ended` | logical | Game has ended. |
 | `game_time` | integer | Seconds from the start of the game. Regular season: 3900 (65:00) = the end of the 5-minute overtime; playoff overtime runs past it. |
-| `spectators` | integer | Attendance. |
-| `ice_rink_id` | integer | Rink: rink id. |
-| `ice_rink_name` | character | Rink: rink name. |
-| `ice_rink_latitude` | numeric | Rink: latitude. |
-| `ice_rink_longitude` | numeric | Rink: longitude. |
-| `ice_rink_street_address` | character | Rink: street address. |
-| `ice_rink_zip` | character | Rink: zip. |
-| `ice_rink_city` | character | Rink: city. |
+| `spectators` | integer | Attendance (spectators) reported for the game. |
+| `ice_rink_id` | integer | Liiga's id of the rink (ice arena). |
+| `ice_rink_name` | character | Name of the rink (ice arena). |
+| `ice_rink_latitude` | numeric | Rink latitude, decimal degrees. |
+| `ice_rink_longitude` | numeric | Rink longitude, decimal degrees. |
+| `ice_rink_street_address` | character | Street address of the rink. |
+| `ice_rink_zip` | character | Postal code of the rink. |
+| `ice_rink_city` | character | City where the rink is located. |
 | `current_period` | integer | Last period played (3 = regulation; 4 and up = overtime periods or the shootout; 2026 values 3, 4, 5, 7). |
 | `referees` | character | Game officials. |
 | `stale` | logical | Live data is stale. |
@@ -328,37 +328,37 @@ One game's header: teams, score, xG, power plays, periods, rink, referees and at
 | `home_team_id` | integer | Home team id (the number of the `<num>:<slug>` key). |
 | `home_team_slug` | character | Home team slug (e.g. hpk). |
 | `home_placeholder` | character | Home team: placeholder label for an undecided playoff team, else null. |
-| `home_name` | character | Home team: rink name. |
-| `home_goals` | integer | Home team: goals. |
+| `home_name` | character | Home team: display name of the team, e.g. HPK. |
+| `home_goals` | integer | Home team: goals scored by the team in the game. |
 | `home_time_out` | integer | Home team: second of the game (from game start) at which the team called its timeout. |
-| `home_powerplay_instances` | integer | Home team: powerplay instances. |
-| `home_powerplay_goals` | integer | Home team: powerplay goals. |
-| `home_short_handed_instances` | integer | Home team: short handed instances. |
-| `home_short_handed_goals` | integer | Home team: short handed goals. |
-| `home_expected_goals` | numeric | Home team: expected goals (xG), computed by the provider with an undocumented model: the team's total for the game in /games and /games/{season}/{id}; the player's sum over the season range in /players/stats/summed. /shotmap has no per-shot xG. |
-| `home_ranking` | character | Home team: table position. |
+| `home_powerplay_instances` | integer | Home team: power plays the team had in the game. |
+| `home_powerplay_goals` | integer | Home team: power-play goals the team scored in the game. |
+| `home_short_handed_instances` | integer | Home team: times the team played short-handed in the game. |
+| `home_short_handed_goals` | integer | Home team: short-handed goals the team scored in the game. |
+| `home_expected_goals` | numeric | Home team: expected goals (xG) for the team in the game, from Liiga's undocumented model. |
+| `home_ranking` | integer | Home team: table position. |
 | `home_game_start_date_time` | character | Home team: scheduled start, ISO 8601 UTC. |
-| `home_logos_dark_bg` | character | Home team: logo: dark bg. |
-| `home_logos_light_bg` | character | Home team: logo: light bg. |
-| `home_logos_dark_bg_original` | character | Home team: logo: dark bg original. |
-| `home_logos_light_bg_original` | character | Home team: logo: light bg original. |
+| `home_logos_dark_bg` | character | Home team: logo image URL for dark backgrounds. |
+| `home_logos_light_bg` | character | Home team: logo image URL for light backgrounds. |
+| `home_logos_dark_bg_original` | character | Home team: original-file logo URL for dark backgrounds; null in every capture. |
+| `home_logos_light_bg_original` | character | Home team: original-file logo URL for light backgrounds; null in every capture. |
 | `away_team_id` | integer | Away team id (the number of the `<num>:<slug>` key). |
 | `away_team_slug` | character | Away team slug (e.g. tps). |
 | `away_placeholder` | character | Away team: placeholder label for an undecided playoff team, else null. |
-| `away_name` | character | Away team: rink name. |
-| `away_goals` | integer | Away team: goals. |
-| `away_time_out` | character | Away team: second of the game (from game start) at which the team called its timeout. |
-| `away_powerplay_instances` | integer | Away team: powerplay instances. |
-| `away_powerplay_goals` | integer | Away team: powerplay goals. |
-| `away_short_handed_instances` | integer | Away team: short handed instances. |
-| `away_short_handed_goals` | integer | Away team: short handed goals. |
-| `away_expected_goals` | numeric | Away team: expected goals (xG), computed by the provider with an undocumented model: the team's total for the game in /games and /games/{season}/{id}; the player's sum over the season range in /players/stats/summed. /shotmap has no per-shot xG. |
-| `away_ranking` | character | Away team: table position. |
+| `away_name` | character | Away team: display name of the team, e.g. HPK. |
+| `away_goals` | integer | Away team: goals scored by the team in the game. |
+| `away_time_out` | integer | Away team: second of the game (from game start) at which the team called its timeout. |
+| `away_powerplay_instances` | integer | Away team: power plays the team had in the game. |
+| `away_powerplay_goals` | integer | Away team: power-play goals the team scored in the game. |
+| `away_short_handed_instances` | integer | Away team: times the team played short-handed in the game. |
+| `away_short_handed_goals` | integer | Away team: short-handed goals the team scored in the game. |
+| `away_expected_goals` | numeric | Away team: expected goals (xG) for the team in the game, from Liiga's undocumented model. |
+| `away_ranking` | integer | Away team: table position. |
 | `away_game_start_date_time` | character | Away team: scheduled start, ISO 8601 UTC. |
-| `away_logos_dark_bg` | character | Away team: logo: dark bg. |
-| `away_logos_light_bg` | character | Away team: logo: light bg. |
-| `away_logos_dark_bg_original` | character | Away team: logo: dark bg original. |
-| `away_logos_light_bg_original` | character | Away team: logo: light bg original. |
+| `away_logos_dark_bg` | character | Away team: logo image URL for dark backgrounds. |
+| `away_logos_light_bg` | character | Away team: logo image URL for light backgrounds. |
+| `away_logos_dark_bg_original` | character | Away team: original-file logo URL for dark backgrounds; null in every capture. |
+| `away_logos_light_bg_original` | character | Away team: original-file logo URL for light backgrounds; null in every capture. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -392,11 +392,11 @@ One game's shots with rink-image coordinates (pixels), shooter, blocker and skat
 | `season` | integer | Season END year (2026 = 2025-26). |
 | `game_id` | integer | Game id, unique only within a season: key a game as (season, game_id). |
 | `type` | character | Strength of the shot, e.g. EvenStrengthShot, PowerplayShot. |
-| `shooting_team_id` | integer | Shooting team id. |
+| `shooting_team_id` | integer | Team id of the shooter's team (the number of the `<num>:<slug>` key). |
 | `left_team_id` | integer | Team whose shots are drawn at the right end of the rink image (x grows toward it). |
 | `right_team_id` | integer | Team whose shots are drawn at the left end of the rink image. |
 | `game_time` | integer | Seconds from the start of the game. Regular season: 3900 (65:00) = the end of the 5-minute overtime; playoff overtime runs past it. |
-| `period` | integer | Period number. |
+| `period` | integer | Period number: 1-3 are regulation, 4 and up overtime (or the shootout). |
 | `shot_x` | integer | Shot x on the site's rink drawing. Game 1 of 2026: x 90-932; the leftTeam's shots lie at x 188-932 and the rightTeam's at 90-379, so x grows toward the right end. Origin, unit and image width are not stated (unverified). |
 | `shot_y` | integer | Shot y on the site's rink drawing. Game 1 of 2026: y 9-514. Origin, direction and image height are not stated (unverified). |
 | `blocker_id` | integer | Player id of the goalkeeper or skater who stopped the shot, else null. |
@@ -434,18 +434,18 @@ Standings of a season: regular season, playoffs, preseason, playout and qualific
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season END year (2026 = 2025-26). |
-| `tournament` | character | Tournament. |
+| `tournament` | character | Table the row belongs to, in the request vocabulary: runkosarja, playoffs, valmistavat_ottelut, playout or qualifications. |
 | `internal_id` | integer | Team id (same number as team_id). |
 | `team_id` | integer | Team id, the number of Liiga's `<num>:<slug>` team key (sent as that string, a bare integer or a digit string depending on the route). |
 | `team_slug` | character | Team slug, the part of Liiga's `<num>:<slug>` team key after the colon (e.g. hpk). |
-| `team_name` | character | Team display name. |
-| `team_logos_dark_bg` | character | Team logo: dark bg. |
-| `team_logos_light_bg` | character | Team logo: light bg. |
-| `team_logos_dark_bg_original` | character | Team logo: dark bg original. |
-| `team_logos_light_bg_original` | character | Team logo: light bg original. |
+| `team_name` | character | Team's display name, e.g. HPK or Tappara. |
+| `team_logos_dark_bg` | character | Logo image URL for dark backgrounds. |
+| `team_logos_light_bg` | character | Logo image URL for light backgrounds. |
+| `team_logos_dark_bg_original` | character | Original-file logo URL for dark backgrounds; null in every capture. |
+| `team_logos_light_bg_original` | character | Original-file logo URL for light backgrounds; null in every capture. |
 | `ranking` | integer | Table position. |
 | `live_ranking` | integer | Table position counting games in progress. |
-| `games` | integer | Games (player, all-time). |
+| `games` | integer | Games (team, season to date in that table's tournament). |
 | `live_games` | integer | Games counting games in progress (team, season to date in that table's tournament). |
 | `wins` | integer | Wins (team, season to date in that table's tournament). |
 | `live_wins` | integer | Wins counting games in progress (team, season to date in that table's tournament). |
@@ -455,26 +455,26 @@ Standings of a season: regular season, playoffs, preseason, playout and qualific
 | `ties` | integer | Ties (team, season to date in that table's tournament). |
 | `live_ties` | integer | Ties counting games in progress (team, season to date in that table's tournament). |
 | `overtime_losses` | integer | Overtime losses (team, season to date in that table's tournament). |
-| `points` | integer | Points (player, all-time). |
+| `points` | integer | Points (team, season to date in that table's tournament). |
 | `live_points` | integer | Points counting games in progress (team, season to date in that table's tournament). |
-| `goals` | integer | Goals. |
+| `goals` | integer | Goals (team, season to date in that table's tournament). |
 | `goals_against` | integer | Goals against (team, season to date in that table's tournament). |
 | `live_goals` | integer | Goals counting games in progress (team, season to date in that table's tournament). |
 | `live_goals_against` | integer | Goals against counting games in progress (team, season to date in that table's tournament). |
-| `power_play_instances` | integer | Power play instances. |
+| `power_play_instances` | integer | Power play instances (team, season to date in that table's tournament). |
 | `power_play_time` | integer | Seconds on the power play, season to date. |
-| `power_play_goals` | integer | Power play goals (team, this period). |
-| `short_handed_instances` | integer | Short handed instances. |
+| `power_play_goals` | integer | Power play goals (team, season to date in that table's tournament). |
+| `short_handed_instances` | integer | Short handed instances (team, season to date in that table's tournament). |
 | `short_handed_time` | integer | Seconds short-handed, season to date. |
-| `short_handed_goals_against` | integer | Short handed goals against (team, this period). |
-| `penalty_minutes` | integer | Penalty minutes. |
-| `two_minute_penalties` | integer | Two minute penalties (team, this period). |
-| `five_minute_penalties` | integer | Five minute penalties (team, this period). |
-| `ten_minute_penalties` | integer | Ten minute penalties (team, this period). |
-| `twenty_minute_penalties` | integer | Twenty minute penalties (team, this period). |
+| `short_handed_goals_against` | integer | Short handed goals against (team, season to date in that table's tournament). |
+| `penalty_minutes` | integer | Penalty minutes (team, season to date in that table's tournament). |
+| `two_minute_penalties` | integer | Two minute penalties (team, season to date in that table's tournament). |
+| `five_minute_penalties` | integer | Five minute penalties (team, season to date in that table's tournament). |
+| `ten_minute_penalties` | integer | Ten minute penalties (team, season to date in that table's tournament). |
+| `twenty_minute_penalties` | integer | Twenty minute penalties (team, season to date in that table's tournament). |
 | `twenty_five_minute_penalties` | integer | Twenty five minute penalties (team, season to date in that table's tournament). |
 | `total_penalties` | integer | Total penalties (team, season to date in that table's tournament). |
-| `distance` | numeric | Distance (goalkeeper, this period). Distance; unit not stated (unverified). |
+| `distance` | numeric | Distance (team, season to date in that table's tournament). Distance; unit not stated (unverified). |
 | `serie` | character | Tournament code, uppercase (RUNKOSARJA, PLAYOFFS, PRACTICE, ...); in /schedule the integer tournament id instead (see serieId and Divergence notes). |
 | `live_points_per_game` | numeric | Points per game counting games in progress (team, season to date in that table's tournament). |
 | `power_play_percentage` | numeric | Power-play conversion, a 0-1 FRACTION sent as a STRING (e.g. "0.277"), season to date. |

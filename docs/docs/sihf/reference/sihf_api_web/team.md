@@ -541,8 +541,8 @@ Team home attendance per season: home games, total and average spectators, avera
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
 | `home_games` | integer | Number of home games. |
 | `spectators` | integer | Total home attendance (SIHF prints a ’ thousands separator; dropped here). |
-| `stadium_capacity_quotient` | integer | Average arena capacity. |
-| `spectators_quotient` | integer | Average home attendance per game. |
+| `stadium_capacity_quotient` | double | Average arena capacity. |
+| `spectators_quotient` | double | Average home attendance per game. |
 | `stadium_capacity_percent` | double | Average arena utilisation, percent. |
 | `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 

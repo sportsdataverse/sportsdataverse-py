@@ -24,7 +24,7 @@ Every team's regular-season record, one row per team and season since 1976.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Rink id. |
+| `id` | integer | Row id of this team-season row (NOT a team id; `teamId` is the team). |
 | `season` | integer | Season END year (2026 = 2025-26). |
 | `league_id` | integer | League id: 1 = Liiga (SM-liiga) on every /teams/info row 1976-2027. |
 | `serie_id` | integer | Tournament id, the same every season: 1188 regular season, 1189 playoffs, 1194 preseason, 1890 CHL. |
@@ -34,20 +34,20 @@ Every team's regular-season record, one row per team and season since 1976.
 | `away_ties` | integer | Away ties (team, that regular season). |
 | `away_wins` | integer | Away wins (team, that regular season). |
 | `away_wins_in_extra_time` | integer | Away wins in extra time (team, that regular season). |
-| `games` | integer | Games (player, all-time). |
-| `goals_against` | integer | Goals against (team, season to date in that table's tournament). |
+| `games` | integer | Games (team, that regular season). |
+| `goals_against` | integer | Goals against (team, that regular season). |
 | `goals_scored` | integer | Goals scored (team, that regular season). |
 | `home_games` | integer | Home games (team, that regular season). |
 | `home_losses` | integer | Home losses (team, that regular season). |
 | `home_ties` | integer | Home ties (team, that regular season). |
 | `home_wins` | integer | Home wins (team, that regular season). |
 | `home_wins_in_extra_time` | integer | Home wins in extra time (team, that regular season). |
-| `losses` | integer | Losses (team, season to date in that table's tournament). |
+| `losses` | integer | Losses (team, that regular season). |
 | `playoff_rank` | integer | Playoff rank (team, that regular season). |
-| `points` | integer | Points (player, all-time). |
+| `points` | integer | Points (team, that regular season). |
 | `regular_season_rank` | integer | Regular season rank (team, that regular season). |
-| `ties` | integer | Ties (team, season to date in that table's tournament). |
-| `wins` | integer | Wins (team, season to date in that table's tournament). |
+| `ties` | integer | Ties (team, that regular season). |
+| `wins` | integer | Wins (team, that regular season). |
 | `wins_in_extra_time` | integer | Wins in extra time (team, that regular season). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -79,16 +79,16 @@ Team directory: every current and past team with logos, venue capacity and club 
 |---|---|---|
 | `team_id` | integer | Team id, the number of Liiga's `<num>:<slug>` team key (sent as that string, a bare integer or a digit string depending on the route). |
 | `team_slug` | character | Team slug, the part of Liiga's `<num>:<slug>` team key after the colon (e.g. hpk). |
-| `name` | character | Rink name. |
-| `contact_info` | character | Contact info. |
-| `externals` | character | Externals. |
-| `country_code` | character | Country: code. |
-| `country_name` | character | Country: rink name. |
-| `current_venue_capacity` | integer | Current venue capacity. |
-| `general_info` | character | General info. |
-| `url` | character | Url. |
-| `locality` | character | Locality. |
-| `logo` | character | Logo. |
+| `name` | character | Club name as Liiga lists it, e.g. HIFK or K-Espoo. |
+| `contact_info` | character | Club contact details as HTML, in Finnish (company, address, phone). |
+| `externals` | character | JSON list of the club's external links (url, label), e.g. its ticket shops. |
+| `country_code` | character | Club's country, 3-letter code (e.g. FIN). |
+| `country_name` | character | Club's country name, e.g. Finland. |
+| `current_venue_capacity` | integer | Capacity of the team's current home arena (spectators). |
+| `general_info` | character | Club history and facts as an HTML table, in Finnish (founding year, titles, ...). |
+| `url` | character | Club website URL. |
+| `locality` | character | Club's home locality; null in every capture (unverified). |
+| `logo` | character | Team logo image URL (old.liiga.fi media). |
 | `short_name` | character | Team abbreviation. |
 | `teamtournamentstats` | character | Team totals per season and tournament, snake_case, percentages and averages sent as STRINGS. |
 
@@ -125,23 +125,23 @@ Team stat table of a season range, by data_type.
 |---|---|---|
 | `sort_desc` | logical | Default sort is descending. |
 | `team_id` | integer | Team id, the number of Liiga's `<num>:<slug>` team key (sent as that string, a bare integer or a digit string depending on the route). |
-| `team_name` | character | Team display name. |
+| `team_name` | character | Team's display name, e.g. HPK or Tappara. |
 | `team_short_name` | character | Team abbreviation. |
-| `team_logos_dark_bg` | character | Team logo: dark bg. |
-| `team_logos_light_bg` | character | Team logo: light bg. |
-| `team_logos_dark_bg_original` | character | Team logo: dark bg original. |
-| `team_logos_light_bg_original` | character | Team logo: light bg original. |
-| `games` | integer | Games (player, all-time). |
+| `team_logos_dark_bg` | character | Logo image URL for dark backgrounds. |
+| `team_logos_light_bg` | character | Logo image URL for light backgrounds. |
+| `team_logos_dark_bg_original` | character | Original-file logo URL for dark backgrounds; null in every capture. |
+| `team_logos_light_bg_original` | character | Original-file logo URL for light backgrounds; null in every capture. |
+| `games` | integer | Games (team, over the season range). |
 | `ranking` | integer | Table position. |
 | `previous_game_day_ranking` | integer | Table position after the previous game day. |
-| `shots` | integer | Shots (player, all-time). |
+| `shots` | integer | Shots (team, over the season range). |
 | `shots_saved` | integer | Shots saved (team, over the season range). |
 | `shots_even_strength` | integer | Shots at even strength (team, over the season range). |
 | `shots_powerplay` | integer | Shots on the power play (team, over the season range). |
 | `shots_penalty_kill` | integer | Shots on the penalty kill (team, over the season range). |
 | `shots_against` | integer | Shots against (team, over the season range). |
-| `goals` | integer | Goals. |
-| `goals_against` | integer | Goals against (team, season to date in that table's tournament). |
+| `goals` | integer | Goals (team, over the season range). |
+| `goals_against` | integer | Goals against (team, over the season range). |
 | `shots_against_even_strength` | integer | Shots against at even strength (team, over the season range). |
 | `shots_against_powerplay` | integer | Shots against on the power play (team, over the season range). |
 | `shots_against_penalty_kill` | integer | Shots against on the penalty kill (team, over the season range). |
@@ -153,8 +153,8 @@ Team stat table of a season range, by data_type.
 | `non_blocked_shots_against_even_strength` | integer | Non blocked shots against at even strength (team, over the season range). |
 | `non_blocked_shots_against_powerplay` | integer | Non blocked shots against on the power play (team, over the season range). |
 | `non_blocked_shots_against_penalty_kill` | integer | Non blocked shots against on the penalty kill (team, over the season range). |
-| `powerplay_goals` | integer | Powerplay goals. |
-| `powerplay_goals_against` | integer | Powerplay goals against (team, that season and tournament). |
+| `powerplay_goals` | integer | Powerplay goals (team, over the season range). |
+| `powerplay_goals_against` | integer | Powerplay goals against (team, over the season range). |
 | `penalty_kill_goals` | integer | Penalty kill goals (team, over the season range). |
 | `penalty_kill_goals_against` | integer | Penalty kill goals against (team, over the season range). |
 | `even_strength_goals` | integer | Even strength goals (team, over the season range). |
@@ -187,7 +187,7 @@ Team stat table of a season range, by data_type.
 | `non_blocked_shots_difference_powerplay` | integer | Non blocked shots difference on the power play (team, over the season range). |
 | `non_blocked_shots_difference_penalty_kill` | integer | Non blocked shots difference on the penalty kill (team, over the season range). |
 | `non_blocked_shots_for_shots_against_percentage` | numeric | Non blocked shots for shots against percentage (team, over the season range). Percent, 0-100. |
-| `pdo` | numeric | PDO (on-ice shooting % + save %) (team, that season and tournament). Percent, 0-100, sent as a STRING. |
+| `pdo` | numeric | PDO (on-ice shooting % + save %) (team, over the season range). Percent, 0-100. |
 | `non_blocked_shots_difference_even_strength` | integer | Non blocked shots difference at even strength (team, over the season range). |
 | `save_percentage` | numeric | Save percentage (team, over the season range). Percent, 0-100. |
 
