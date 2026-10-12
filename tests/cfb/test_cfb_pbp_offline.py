@@ -162,15 +162,42 @@ def test_core_odds_api_spread_without_a_total_warns(monkeypatch):
     assert init == {"gameSpread": -6.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": True}
 
 
-def _process_capture(game_id: int) -> CFBPlayProcess:
+def _process_capture(game_id: int, edit=None) -> CFBPlayProcess:
+    """Process a committed capture offline, after ``edit`` mutates each of its drive plays."""
     path = next(FIX.glob(f"summary_{game_id}*.json*"))
     opener = gzip.open if path.suffix == ".gz" else open
     with opener(path, "rt", encoding="utf-8") as fh:
         summary = json.load(fh)
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            (edit or (lambda _: None))(play)
     proc = CFBPlayProcess(gameId=game_id, join_participants=False)
     proc.espn_cfb_pbp(summary=summary)
     proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
     return proc
+
+
+def test_the_literal_null_play_text_is_not_a_player_name():
+    """C-L6: ESPN's play text "null punt blocked by blocked by" (401628559) named a punter "null"."""
+    plays = _process_capture(401628559).plays_frame
+    row = plays.filter(pl.col("id") == 401628559102988701)
+    assert row["text"].to_list() == ["null punt blocked by blocked by"]
+    assert row["punter_player_name"].to_list() == [None]
+
+
+def test_the_pass_flag_literals_fold_case():
+    """C-L16: cfbfastR matches "sacked" with ignore_case. 401628334's sacked-and-recovered fumble is a
+    pass play whatever the case of its text (the captures carry no other casing, so this edits one)."""
+    sack_id = 401628334102944601
+
+    def shout(play):
+        if int(play["id"]) == sack_id:
+            play["text"] = play["text"].replace("sacked", "SACKED")
+
+    row = _process_capture(401628334, shout).plays_frame.filter(pl.col("id") == sack_id)
+    assert row["type.text"].to_list() == ["Fumble Recovery (Own)"]
+    assert "SACKED" in row["text"].item()
+    assert row.select("pass", "sack").rows() == [(True, True)]
 
 
 def test_period_order_warning_on_a_mislabelled_period():

@@ -314,9 +314,9 @@ _PLAYER_NAME_CLAUSE_LEAD = (
     r"|(?:to|by|at|for|in|the|up|lateral|complete|incomplete|direct|from|returned|recovered|fumbled|muffed)"
     r"(?:\s|$).*$)"
 )
-#: After the cut, a name holding a digit (a spot such as "WAS30"), ESPN's "N/A" placeholder, or a
-#: single character is not a name.
-_PLAYER_NAME_NOT_A_NAME = r"\d|^N/A(?:[\s,.]|$)|^.$"
+#: After the cut, a name holding a digit (a spot such as "WAS30"), ESPN's "N/A" placeholder, a
+#: single character, or ESPN's literal play text "null" (401628559's blocked punt, C-L6) is not a name.
+_PLAYER_NAME_NOT_A_NAME = r"\d|^N/A(?:[\s,.]|$)|^.$|^null$"
 
 #: Narrative tails that bleed into a captured name where the extraction regex
 #: has no stopword boundary: pass-direction phrases (``"Russell Wilson deep
@@ -523,7 +523,7 @@ def _as_trained_2h_flag(features: pl.DataFrame) -> pl.DataFrame:
     only on the opening kicker's first-half possessions) degrades ``wp_before_naive``; feeding
     the trained semantics keeps WP as it was while the published column stays correct.
     """
-    return features.with_columns((~pl.col("is_home")).alias("pos_team_receives_2H_kickoff"))
+    return features.with_columns((pl.col("is_home") == False).alias("pos_team_receives_2H_kickoff"))
 
 
 def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
@@ -1816,7 +1816,7 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
     )
     if not df["_late"].any():
         return plays_df
-    fixed = df.filter(~pl.col("_late")).select("_pos", "_seq", "_drv")
+    fixed = df.filter(pl.col("_late") == False).select("_pos", "_seq", "_drv")
     late = df.filter(pl.col("_late")).select("_pos", "_seq", "_drv")
     target = (
         late.join(fixed.rename({"_pos": "_tpos", "_seq": "_tseq", "_drv": "_tdrv"}), how="cross")
@@ -1843,7 +1843,7 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
     # defensive twos meet this in 2014-2026 (7 rows, 2020-24).
     tries = df.filter(pl.col("_late") & pl.col("type.text").is_in(_TRY_TYPES)).join(target, on="_pos", how="anti")
     if tries.height:
-        tds = df.filter(~pl.col("_late") & pl.col("type.text").str.contains("(?i)touchdown")).select(
+        tds = df.filter((pl.col("_late") == False) & pl.col("type.text").str.contains("(?i)touchdown")).select(
             _tpos="_pos", _tseq="_seq", _tper="_per"
         )
         target = pl.concat(
@@ -4387,51 +4387,56 @@ class CFBPlayProcess(object):
                             ],
                         )
                     )
-                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("sacked")))
-                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("pass complete")))
+                    # the text literals fold case, as cfbfastR's ignore_case does (C-L16)
+                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("(?i)sacked")))
+                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("(?i)pass complete")))
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Own)").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
-                        ),
-                    )
-                    .or_((pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("sacked")))
-                    .or_(
-                        (pl.col("type.text") == "Fumble Recovery (Own) Touchdown").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
                         ),
                     )
                     .or_(
+                        (pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("(?i)sacked"))
+                    )
+                    .or_(
                         (pl.col("type.text") == "Fumble Recovery (Own) Touchdown").and_(
-                            pl.col("text").str.contains("sacked"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
+                        ),
+                    )
+                    .or_(
+                        (pl.col("type.text") == "Fumble Recovery (Own) Touchdown").and_(
+                            pl.col("text").str.contains("(?i)sacked"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent)").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent)").and_(
-                            pl.col("text").str.contains("sacked"),
+                            pl.col("text").str.contains("(?i)sacked"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent) Touchdown").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Return Touchdown").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete"),
                         ),
                     )
                     .or_(
-                        (pl.col("type.text") == "Fumble Return Touchdown").and_(pl.col("text").str.contains("sacked")),
+                        (pl.col("type.text") == "Fumble Return Touchdown").and_(
+                            pl.col("text").str.contains("(?i)sacked")
+                        ),
                     )
                     # 2025+ ESPN type for a fumble with no recovery (out of bounds)
                     .or_(
                         (pl.col("type.text") == "Fumble").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
                         ),
                     )
                     # Interception plays are pass attempts. The branches above
@@ -4732,7 +4737,7 @@ class CFBPlayProcess(object):
             play_df.with_columns(
                 # 2025+ ESPN files a pick whose returner fumbles out of bounds as "Fumble";
                 # it is an interception, not a strip sack for the rule below to retype.
-                pl.when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass intercepted")))
+                pl.when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("(?i)pass intercepted")))
                 .then(pl.lit("Interception Return"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
@@ -5523,7 +5528,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
                 .then(True)
-                .when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass complete")))
+                .when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("(?i)pass complete")))
                 .then(True)
                 .otherwise(False),
                 pass_attempt=pl.when(
@@ -10479,7 +10484,11 @@ class CFBPlayProcess(object):
 
         Returns:
             dict: The fully-processed game payload. If the constructor was
-            given ``return_keys``, only those keys are returned.
+            given ``return_keys``, only those keys are returned. Its ``plays`` are
+            the feed's plays without the administrative rows (coin toss, period and
+            game markers, drive banners) and ESPN's duplicate copies, so there are
+            fewer of them than the summary's drive plays. Key a play on ``id``:
+            before 2005 ``sequenceNumber`` restarts with every drive.
 
         Example:
             Quick start::

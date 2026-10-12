@@ -735,6 +735,24 @@ def test_every_row_is_a_feed_play_once(game_id):
     assert invented == set(), f"rows that are not feed plays: {sorted(invented)}"
 
 
+_PRE_2005 = tuple(gid for gid in CAPTURES if FEEDS[gid].season < 2005)
+#: the feed rows that are not plays: period/game markers and the 2004 feed's drive banners
+_ADMIN_TEXT = re.compile(r"(?i)^(?:end of|start of|begin drive)")
+
+
+@pytest.mark.parametrize("game_id", _params(_PRE_2005))
+def test_pre_2005_rows_dropped_from_the_feed_are_admin_rows(game_id):
+    """C-L11: before 2005 ``sequenceNumber`` restarts per drive (nearly every value repeats), so it is
+    no key; the copy drops key on ``id``. Every feed row the output lacks is a marker, never a play."""
+    summary = _load(PATHS[game_id])
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    sequences = [p.get("sequenceNumber") for p in plays]
+    assert len(set(sequences)) < len(sequences) / 2, "the capture no longer repeats sequenceNumber"
+    kept = set(_frame(game_id)["id"].cast(pl.Int64).to_list())
+    dropped = [p.get("text") or "" for p in plays if int(p["id"]) not in kept]
+    assert dropped and all(_ADMIN_TEXT.search(text) for text in dropped), dropped
+
+
 def test_flag_literals_meet_no_other_casing():
     """C-L16 (latent): R matches these with ignore_case; the captures never make the two disagree."""
     differ = [

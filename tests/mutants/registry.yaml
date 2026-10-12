@@ -362,6 +362,29 @@
   expected: kill
   note: an ESPN BET item with a spread and no total would default the total silently
 
+# --- C-L6 / C-L16: the lows ------------------------------------------------------------------------
+# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py on 401628559 (literal "null" text) and
+# 401628334 (its sacked-and-recovered fumble with the text upper-cased).
+- id: cfb-player-name-literal-null
+  group: cfb-lows
+  finding: C-L6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '^.$|^null$"'
+  mutant: '^.$"'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "literal_null_play_text"
+  expected: kill
+  note: 401628559's blocked punt names a punter "null"
+
+- id: cfb-pass-flag-literals-fold-case
+  group: cfb-lows
+  finding: C-L16
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.or_((pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("(?i)sacked")))'
+  mutant: '.or_((pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("sacked")))'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pass_flag_literals_fold_case"
+  expected: kill
+  note: a "SACKED" text on a recovered fumble would not be a pass play (R matches with ignore_case)
+
 # --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13
