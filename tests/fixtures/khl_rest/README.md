@@ -1,0 +1,18 @@
+# KHL site REST fixtures (`khl_rest`)
+
+Real responses from the khl.ru site REST, `POST https://www.khl.ru/rest/<route>/` with a primed
+cookie jar and the Bitrix `sessid` (form-encoded; see `sportsdataverse/hockey/khl/khl_runtime.py`).
+
+- `*.json` (top level): copies of `sdv-internal-refs/khl/captures/rest/` at refs commit `1104660`,
+  captured 2026-10-12 by `khl/tools/capture.py`. Tournament `1369` (2025-26 regular season; the
+  playoff sample uses `1370`), game `898236`, club `7`, player `41928`, `stat/players` page 1 at
+  `nav[count]=20`. TRUNCATED: every array and every id/date-keyed map keeps its first 3 entries,
+  and strings over 1,000 characters keep 200 (see the refs `captures/README.md`).
+- `full/game__text.json`: ONE complete `/game/text/` body (game `898236`, tournament `1369`),
+  fetched 2026-10-12 with `values[tournament]=1369&values[gameid]=898236`, untruncated, written
+  compact. The game-page returns schemas (`game_info`, `player_box`, `pbp`, `shots`) and their dtype
+  tests come from it, never from the truncated sample.
+
+Redactions: `fonbet` (the betting-widget flag) and `bets` are removed at any depth, as the runtime
+does. Nothing else is edited. Owner flag (refs `khl/README.md`): fine as test fixtures; no published
+data release without sanctions sign-off.
