@@ -10,7 +10,7 @@
   "Csv",
   "Pdf"
  ],
- "updateDateTime": "2025-03-02T13:01:58.3053767+01:00",
+ "updateDateTime": "2025-03-02T13:00:00.2893616+01:00",
  "filters": [
   {
    "title": "Saison",
@@ -51,6 +51,26 @@
    "selected": "2025",
    "type": "Dropdown",
    "alias": "Season"
+  },
+  {
+   "title": "Heim/Auswärts",
+   "entries": [
+    {
+     "name": "Heim/Auswärts",
+     "alias": "All"
+    },
+    {
+     "name": "Heim",
+     "alias": "Home"
+    },
+    {
+     "name": "Auswärts",
+     "alias": "Away"
+    }
+   ],
+   "selected": "All",
+   "type": "Dropdown",
+   "alias": "ContentType"
   }
  ],
  "secondaryMenu": null,
@@ -193,28 +213,51 @@
   [
    "1",
    {
+    "id": 103141,
+    "name": "Lausanne HC",
+    "acronym": "LHC",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "97",
+   "1.865",
+   "25",
+   "6",
+   "3",
+   "3",
+   "1",
+   "14",
+   "153",
+   "128",
+   "25",
+   "W-W+L+W+W+L-W+L+L+L+"
+  ],
+  [
+   "2",
+   {
     "id": 101139,
     "name": "ZSC Lions",
     "acronym": "ZSC",
     "signed": false,
     "type": "team"
    },
-   "26",
-   "41",
-   "1.577",
-   "10",
+   "52",
+   "93",
+   "1.788",
+   "22",
+   "7",
+   "4",
    "2",
-   "2",
-   "2",
-   "1",
-   "9",
-   "71",
-   "62",
-   "9",
-   "W-W-L+W+L+L-L+W-L+L+"
+   "3",
+   "14",
+   "156",
+   "121",
+   "35",
+   "L-L+W+L-W-L+W-L+L+W+"
   ],
   [
-   "2",
+   "3",
    {
     "id": 102126,
     "name": "SC Bern",
@@ -222,65 +265,42 @@
     "signed": false,
     "type": "team"
    },
-   "26",
-   "40",
-   "1.538",
-   "10",
-   "1",
+   "52",
+   "91",
+   "1.750",
+   "24",
+   "3",
    "0",
-   "3",
-   "5",
-   "7",
-   "72",
-   "71",
-   "1",
-   "W+W+W+L+L-L-L+W+W+L+"
-  ],
-  [
-   "3",
-   {
-    "id": 103138,
-    "name": "Fribourg-Gottéron",
-    "acronym": "FRI",
-    "signed": false,
-    "type": "team"
-   },
+   "4",
+   "9",
+   "12",
+   "165",
+   "139",
    "26",
-   "39",
-   "1.500",
-   "10",
-   "2",
-   "1",
-   "2",
-   "1",
-   "10",
-   "59",
-   "67",
-   "-8",
-   "W+W+L-W+W+L-W+W-W-W+"
+   "W-W+L+W+W+L-W+W+L+W+"
   ],
   [
    "4",
    {
-    "id": 101151,
-    "name": "HC Davos",
-    "acronym": "HCD",
+    "id": 101144,
+    "name": "EV Zug",
+    "acronym": "EVZ",
     "signed": false,
     "type": "team"
    },
-   "26",
-   "38",
-   "1.462",
-   "10",
-   "3",
+   "52",
+   "88",
+   "1.692",
+   "25",
+   "4",
+   "1",
    "0",
-   "1",
-   "1",
-   "11",
-   "70",
-   "67",
    "3",
-   "L+L+W-L+L+L+W+L+W+L+"
+   "19",
+   "173",
+   "136",
+   "37",
+   "L+W+L+W-W+L+W+L+L+W+"
   ]
  ],
  "alias": "standing"

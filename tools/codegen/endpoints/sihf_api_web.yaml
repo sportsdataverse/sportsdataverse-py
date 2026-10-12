@@ -2,10 +2,13 @@ api: sihf_api_web
 host: https://data.sihf.ch/statistic/api/cms
 name_pattern: sihf_{short}
 module: sihf_api_web
-parser_module: sihf.sihf_api_web_parsers
-getter_module: sportsdataverse.sihf.sihf_runtime
+parser_module: hockey.sihf.sihf_api_web_parsers
+getter_module: sportsdataverse.hockey.sihf.sihf_runtime
 qualifier: web
 schema_prefix: sihf_
+# The generated wrappers pass each endpoint's documented column names (columns=), so an empty
+# season table parses to a zero-row frame with its documented schema.
+parser_columns: true
 docstring:
   example_import: true
   raises:
@@ -60,8 +63,8 @@ endpoints:
   parser: parse_sihf_table
   returns_schema: native/sihf_api_web/results
 - short: standings
-  summary: 'League table of a season: rank, games, points, regulation / overtime / shootout wins and losses,
-    goals, streak.'
+  summary: 'League table of a season (every game, or home / away games only): rank, games, points, regulation
+    / overtime / shootout wins and losses, goals, streak.'
   path: /table
   fixed_params:
     alias: standing
@@ -84,8 +87,18 @@ endpoints:
     query_key: Phase
     type: int
     description: 'SIHF phase id (regular season, a playoff round, ...; the body''s Phase filter lists
-      them). None = no phase filter: the season summary over every phase (player / goalie tables), every
-      game (results), the regular-season table (standings).'
+      them). None = no phase filter: the regular-season table.'
+  - name: venue
+    query_key: ContentType
+    type: str
+    default: All
+    choices:
+    - All
+    - Home
+    - Away
+    kw_only: true
+    description: 'Which games the table counts: All (the full table), Home or Away. Always sent: without
+      it SIHF answers the away-games table (26 of the 52 National League games).'
   - name: language
     query_key: language
     type: str
@@ -201,7 +214,7 @@ endpoints:
     query_key: searchQuery
     type: int
     required: true
-    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
   - name: language
     query_key: language
     type: str
@@ -215,7 +228,7 @@ endpoints:
     description: 'Response language. Only part of the body is translated: status, position and penalty
       names stay German.'
   example_args:
-    game_id: 20261105000421
+    game_id: 20261105000325
   parser: parse_sihf_pbp
   returns_schema: native/sihf_api_web/pbp
 - short: game_info
@@ -229,7 +242,7 @@ endpoints:
     query_key: searchQuery
     type: int
     required: true
-    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
   - name: language
     query_key: language
     type: str
@@ -243,7 +256,7 @@ endpoints:
     description: 'Response language. Only part of the body is translated: status, position and penalty
       names stay German.'
   example_args:
-    game_id: 20261105000421
+    game_id: 20261105000325
   parser: parse_sihf_game_info
   returns_schema: native/sihf_api_web/game_info
 - short: game_player_stats
@@ -256,7 +269,7 @@ endpoints:
     query_key: searchQuery
     type: int
     required: true
-    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
   - name: language
     query_key: language
     type: str
@@ -270,7 +283,7 @@ endpoints:
     description: 'Response language. Only part of the body is translated: status, position and penalty
       names stay German.'
   example_args:
-    game_id: 20261105000421
+    game_id: 20261105000325
   parser: parse_sihf_game_player_stats
   returns_schema: native/sihf_api_web/game_player_stats
 - short: game_goalie_stats
@@ -283,7 +296,7 @@ endpoints:
     query_key: searchQuery
     type: int
     required: true
-    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
   - name: language
     query_key: language
     type: str
@@ -297,7 +310,7 @@ endpoints:
     description: 'Response language. Only part of the body is translated: status, position and penalty
       names stay German.'
   example_args:
-    game_id: 20261105000421
+    game_id: 20261105000325
   parser: parse_sihf_game_goalie_stats
   returns_schema: native/sihf_api_web/game_goalie_stats
 - short: game_team_stats
@@ -311,7 +324,7 @@ endpoints:
     query_key: searchQuery
     type: int
     required: true
-    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
   - name: language
     query_key: language
     type: str
@@ -325,7 +338,7 @@ endpoints:
     description: 'Response language. Only part of the body is translated: status, position and penalty
       names stay German.'
   example_args:
-    game_id: 20261105000421
+    game_id: 20261105000325
   parser: parse_sihf_game_team_stats
   returns_schema: native/sihf_api_web/game_team_stats
 - short: game_lineups
@@ -338,7 +351,7 @@ endpoints:
     query_key: searchQuery
     type: int
     required: true
-    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+    description: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
   - name: language
     query_key: language
     type: str
@@ -352,6 +365,6 @@ endpoints:
     description: 'Response language. Only part of the body is translated: status, position and penalty
       names stay German.'
   example_args:
-    game_id: 20261105000421
+    game_id: 20261105000325
   parser: parse_sihf_game_lineups
   returns_schema: native/sihf_api_web/game_lineups

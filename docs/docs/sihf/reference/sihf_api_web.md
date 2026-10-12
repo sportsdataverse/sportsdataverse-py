@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # SIHF — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)
 
-`sportsdataverse.sihf` — 10 endpoints.
+`sportsdataverse.hockey.sihf` — 10 endpoints.
 
 ## sihf_results
 
@@ -31,7 +31,7 @@ Games of a league season: date, teams, score, per-period score, decision, status
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
-| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...). |
+| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
 | `day` | character | Weekday abbreviation, German (e.g., "Di"). |
 | `date` | character | Game date (local). |
 | `time` | character | Scheduled local start time, "hh:mm". |
@@ -69,17 +69,18 @@ _Last validated n/a._
 
 ## sihf_standings
 
-League table of a season: rank, games, points, regulation / overtime / shootout wins and losses, goals, streak.
+League table of a season (every game, or home / away games only): rank, games, points, regulation / overtime / shootout wins and losses, goals, streak.
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/table`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&language=en](https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&ContentType=All&language=en](https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&ContentType=All&language=en)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `Season` | `season` |  | `Y` |  | Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one). |
 | `League` | `league_id` |  |  | `Y` | SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError. |
-| `Phase` | `phase_id` |  |  | `Y` | SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase (player / goalie tables), every game (results), the regular-season table (standings). |
+| `Phase` | `phase_id` |  |  | `Y` | SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the regular-season table. |
+| `ContentType` | `venue` |  |  | `Y` | Which games the table counts: All (the full table), Home or Away. Always sent: without it SIHF answers the away-games table (26 of the 52 National League games). |
 | `language` | `language` |  |  | `Y` | Response language. Only part of the body is translated: status, position and penalty names stay German. |
 
 ### Returns {#sihf_standings-returns}
@@ -89,12 +90,12 @@ League table of a season: rank, games, points, regulation / overtime / shootout 
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
-| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...). |
+| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
 | `rank` | integer | Rank in the table; null on a summary row. |
 | `team_id` | integer | SIHF team id (Int64 join key). |
 | `team_name` | character | Team display name as SIHF publishes it. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"). |
-| `games_played` | integer | Games the player or team played in the selection. |
+| `games_played` | integer | Games the team played in the selection (every game, or home / away games only, per venue). |
 | `points` | integer | Table points earned in the standings. |
 | `points_quotient` | double | Points per game. |
 | `games_won_in_time` | integer | Wins in regulation. |
@@ -141,14 +142,14 @@ Skater season totals: games, goals, assists, points, penalty minutes, plus-minus
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
-| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...). |
+| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
 | `rank` | integer | Rank in the table; null on a summary row. |
 | `player` | character | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"). |
 | `team_id` | integer | SIHF team id (Int64 join key). |
 | `team_name` | character | Team display name as SIHF publishes it. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"). |
 | `position` | character | Position, German whatever the language (e.g., "Stürmer"). |
-| `games_played` | integer | Games the player or team played in the selection. |
+| `games_played` | integer | Games the player played in the selection. |
 | `goals` | integer | Goals scored by the player. |
 | `assists` | integer | Assists (primary + secondary). |
 | `points` | integer | Points (goals + assists). |
@@ -189,7 +190,7 @@ Goaltender season totals: games, starts, goals against, GAA, shots, saves, save 
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
-| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...). |
+| `phase_id` | integer | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
 | `rank` | integer | Rank in the table; null on a summary row. |
 | `player` | character | Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"). |
 | `team_id` | integer | SIHF team id (Int64 join key). |
@@ -202,7 +203,7 @@ Goaltender season totals: games, starts, goals against, GAA, shots, saves, save 
 | `shots_against` | integer | Shots on goal faced. |
 | `saves` | integer | Shots on goal saved by the goaltender. |
 | `saves_percentage` | double | Save percentage on a 0-100 scale (91.25 = .9125). |
-| `seconds_played` | character | Ice time as "mm:ss" (a string, despite the upstream name). |
+| `seconds_played` | character | Ice time as "mm:ss" (a string, despite the upstream name). Minutes are not capped at 59: an overtime game reads "65:00", a season total "3615:02". |
 | `penalty_in_minutes` | integer | Penalty minutes. |
 | `goals` | integer | Goals scored by the goaltender (almost always 0). |
 | `assists` | integer | Assists by the goaltender. |
@@ -224,11 +225,11 @@ Event timeline of one game: goals, penalties, goaltender changes, revoked goals 
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/gameoverview`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421. |
+| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325. |
 | `language` | `language` |  |  | `Y` | Response language. Only part of the body is translated: status, position and penalty names stay German. |
 
 ### Returns {#sihf_pbp-returns}
@@ -277,7 +278,7 @@ Event timeline of one game: goals, penalties, goaltender changes, revoked goals 
 ### Example {#sihf_pbp-example}
 
 ```python
-sihf_pbp(game_id=20261105000421)
+sihf_pbp(game_id=20261105000325)
 ```
 
 _Last validated n/a._
@@ -288,11 +289,11 @@ Header of one game: league, phase, teams, final and per-period score and shots, 
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/gameoverview`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421. |
+| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325. |
 | `language` | `language` |  |  | `Y` | Response language. Only part of the body is translated: status, position and penalty names stay German. |
 
 ### Returns {#sihf_game_info-returns}
@@ -348,7 +349,7 @@ Header of one game: league, phase, teams, final and per-period score and shots, 
 ### Example {#sihf_game_info-example}
 
 ```python
-sihf_game_info(game_id=20261105000421)
+sihf_game_info(game_id=20261105000325)
 ```
 
 _Last validated n/a._
@@ -359,11 +360,11 @@ Skater box score of one game, both sides, with ice time and faceoffs.
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/gameoverview`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421. |
+| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325. |
 | `language` | `language` |  |  | `Y` | Response language. Only part of the body is translated: status, position and penalty names stay German. |
 
 ### Returns {#sihf_game_player_stats-returns}
@@ -404,7 +405,7 @@ Skater box score of one game, both sides, with ice time and faceoffs.
 ### Example {#sihf_game_player_stats-example}
 
 ```python
-sihf_game_player_stats(game_id=20261105000421)
+sihf_game_player_stats(game_id=20261105000325)
 ```
 
 _Last validated n/a._
@@ -415,11 +416,11 @@ Goaltender box score of one game, both sides.
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/gameoverview`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421. |
+| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325. |
 | `language` | `language` |  |  | `Y` | Response language. Only part of the body is translated: status, position and penalty names stay German. |
 
 ### Returns {#sihf_game_goalie_stats-returns}
@@ -438,10 +439,10 @@ Goaltender box score of one game, both sides.
 | `saves` | integer | Shots on goal saved by the goaltender. |
 | `shots_against` | integer | Shots on goal faced. |
 | `saves_percentage` | double | Save percentage on a 0-100 scale (91.25 = .9125). |
-| `seconds_played` | character | Ice time as "mm:ss" (a string, despite the upstream name). |
+| `seconds_played` | character | Ice time as "mm:ss" (a string, despite the upstream name). Minutes are not capped at 59: an overtime game reads "65:00", a season total "3615:02". |
 | `goals_against_average` | double | Goals against per 60 minutes in this game. |
 | `penalty_in_minutes` | integer | Penalty minutes. |
-| `row_type` | character | "data" for a regular row; "average" or "total" for a summary row SIHF mixes into the table. |
+| `row_type` | character | "data" for every row: a game goalie box has no summary rows. |
 | `player_id` | integer | SIHF licence number of the player (Int64 join key), resolved from the game's roster. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -449,7 +450,7 @@ Goaltender box score of one game, both sides.
 ### Example {#sihf_game_goalie_stats-example}
 
 ```python
-sihf_game_goalie_stats(game_id=20261105000421)
+sihf_game_goalie_stats(game_id=20261105000325)
 ```
 
 _Last validated n/a._
@@ -460,11 +461,11 @@ Team stats of one game: shots by period, faceoffs by zone, penalty minutes, powe
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/gameoverview`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421. |
+| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325. |
 | `language` | `language` |  |  | `Y` | Response language. Only part of the body is translated: status, position and penalty names stay German. |
 
 ### Returns {#sihf_game_team_stats-returns}
@@ -483,7 +484,7 @@ Team stats of one game: shots by period, faceoffs by zone, penalty minutes, powe
 ### Example {#sihf_game_team_stats-example}
 
 ```python
-sihf_game_team_stats(game_id=20261105000421)
+sihf_game_team_stats(game_id=20261105000325)
 ```
 
 _Last validated n/a._
@@ -494,11 +495,11 @@ Lineups of one game by unit and slot, plus the absentees.
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/gameoverview`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en](https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421. |
+| `searchQuery` | `game_id` |  | `Y` |  | Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325. |
 | `language` | `language` |  |  | `Y` | Response language. Only part of the body is translated: status, position and penalty names stay German. |
 
 ### Returns {#sihf_game_lineups-returns}
@@ -525,7 +526,7 @@ Lineups of one game by unit and slot, plus the absentees.
 ### Example {#sihf_game_lineups-example}
 
 ```python
-sihf_game_lineups(game_id=20261105000421)
+sihf_game_lineups(game_id=20261105000325)
 ```
 
 _Last validated n/a._

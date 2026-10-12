@@ -142,7 +142,7 @@ _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
         "sportsdataverse.euroleague.euroleague_runtime",
-        "sportsdataverse.sihf.sihf_runtime",
+        "sportsdataverse.hockey.sihf.sihf_runtime",
         "sportsdataverse.thesportsdb.thesportsdb_runtime",
         "sportsdataverse.soccer.football_data_runtime",
         "sportsdataverse.soccer.uefa_runtime",
@@ -449,6 +449,16 @@ _LEAGUE_R_PACKAGE = {
 # Package homes that are not leagues: they carry flat-API families but no ESPN league, no
 # loaders and no R counterpart. Ordered, because _doc_leagues() appends them in this order.
 _NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_content", "thesportsdb", "sihf")
+
+# Homes that live inside a sport-group container from their first release, so they have no
+# top-level alias in ``sportsdataverse._MOVED`` and no ``group`` in leagues.yaml (the ESPN
+# registry). SIHF sits beside the HockeyTech families under ``hockey/`` without being one.
+_NESTED_HOMES = {"sihf": "hockey.sihf"}
+
+
+def _home_module(prefix: str) -> str:
+    """The import path the docs and Examples name for ``prefix`` (``sportsdataverse.<prefix>`` unless nested)."""
+    return f"sportsdataverse.{_NESTED_HOMES.get(prefix, prefix)}"
 
 
 # Flat-API families with NO R counterpart. Their columns never passed through an R package,
@@ -980,7 +990,7 @@ class _EndpointView:
             auth=auth,
             league_param=league.league_param,
             doc_extras=doc_extras,
-            import_from=f"sportsdataverse.{league.prefix}" if league.prefix else "",
+            import_from=_home_module(league.prefix) if league.prefix else "",
             returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
             vocab_raises=getter_module in _VOCAB_GETTERS,
         )
@@ -2243,6 +2253,8 @@ def _flat_dest(prefix: str, module: str) -> Path:
     Returns:
         Absolute path the module should be written to.
     """
+    if prefix in _NESTED_HOMES:
+        return LIVE.joinpath(*_NESTED_HOMES[prefix].split("."), f"{module}.py")
     group = _LEAGUE_GROUP.get(prefix, "")
     base = LIVE / group / prefix if group else LIVE / prefix
     return base / f"{module}.py"
@@ -2448,7 +2460,7 @@ def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
     """Build group → sorted-members mapping from the prefix→group dict.
 
     Includes the hand-written HockeyTech modules (``_HOCKEYTECH_MODULE_LEAGUES``)
-    under hockey.
+    and the ``_NESTED_HOMES`` (sihf) under hockey.
     """
     _HOCKEYTECH = _HOCKEYTECH_MODULE_LEAGUES
     result: dict[str, list[str]] = {}
@@ -2463,6 +2475,11 @@ def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
         result.setdefault("hockey", [])
         if ht not in result["hockey"]:
             result["hockey"].append(ht)
+    # And the homes nested from their first release (sihf), under their container.
+    for home, mod in _NESTED_HOMES.items():
+        members = result.setdefault(mod.split(".")[0], [])
+        if home not in members:
+            members.append(home)
     return {g: sorted(members) for g, members in result.items()}
 
 
@@ -2610,10 +2627,11 @@ _COVERAGE_LEAGUES = [
 def _league_module(prefix: str) -> str:
     """A league's module path under ``sportsdataverse``: the nested home for a name that moved
     (``epl`` -> ``soccer.epl``, ``ahl`` -> ``hockey.ahl``), so codegen never imports the old
-    top-level alias and trips its DeprecationWarning. ``sportsdataverse._MOVED`` is the one list."""
+    top-level alias and trips its DeprecationWarning. ``sportsdataverse._MOVED`` is the one list
+    of moved names; ``_NESTED_HOMES`` holds the homes that were nested from the start (``sihf``)."""
     from sportsdataverse import _MOVED
 
-    return _MOVED.get(prefix, prefix)
+    return _MOVED.get(prefix) or _NESTED_HOMES.get(prefix, prefix)
 
 
 _COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
@@ -3156,6 +3174,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     template = render.ENV.get_template("reference_page.md.jinja")
     return template.render(
         prefix=prefix,
+        module=_home_module(prefix),
         title=f"{_doc_display_name(prefix)} — {label}",
         label=label,
         sidebar_position=position,
@@ -3351,6 +3370,7 @@ def render_league_index(
     template = render.ENV.get_template("league_index.md.jinja")
     return template.render(
         prefix=prefix,
+        module=_home_module(prefix),
         display_name=_doc_display_name(prefix),
         api_rows=_apis_for(prefix),
         has_loaders=bool(loaders),
@@ -4396,7 +4416,9 @@ def refresh_autodoc_schemas() -> int:
     timeout = float(os.environ.get("SDV_AUTODOC_CALL_TIMEOUT", "120"))
     for scope, names in _autodoc_names_by_scope().items():
         scope_key = "global" if scope is None else scope
-        mod = importlib.import_module("sportsdataverse" if scope is None else f"sportsdataverse.{scope}")
+        mod = importlib.import_module(
+            "sportsdataverse" if scope is None else f"sportsdataverse.{_league_module(scope)}"
+        )
         scope_args = args_by_scope.get(scope_key, {})
         memo.clear()  # inputs are scope-local; don't hold every league's season loads at once
         for fn in names:
@@ -4954,7 +4976,10 @@ _INTRO_MARKERS = (
     "<!-- END generated: leagues-and-sources -->",
 )
 # League prefix -> the import path shown in intro.md, where it is not sportsdataverse.<prefix>.
-_INTRO_MODULE = {lg: f"sportsdataverse.hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES}
+_INTRO_MODULE = {
+    **{lg: f"sportsdataverse.hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES},
+    **{lg: _home_module(lg) for lg in _NESTED_HOMES},
+}
 
 
 def _patch_between_markers(text: str, begin: str, end: str, body: str) -> str:

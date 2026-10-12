@@ -31,7 +31,7 @@ is asked.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Union
 
 import pandas as pd
 import polars as pl
@@ -90,6 +90,18 @@ _FLOAT_ALIASES = frozenset(
 )
 # highlightedPositions styles that mark a summary row (the rest -- ``line`` -- are visual separators).
 _SUMMARY_STYLES = frozenset({"average", "total"})
+# Season-table columns whose dtype neither their header alias nor the ``*_id`` rule gives: the
+# expanded ``result`` / ``periods`` / ``gameStatus`` cells, ``date`` and the echoed ``season``.
+_TABLE_DTYPES: Dict[str, Any] = {
+    "season": pl.Int64,
+    "date": pl.Date,
+    "score_home": pl.Int64,
+    "score_away": pl.Int64,
+    "score_per_period_home": pl.List(pl.Int64),
+    "score_per_period_away": pl.List(pl.Int64),
+    "status_percent": pl.Int64,
+    "status_canceled": pl.Boolean,
+}
 
 
 def _out(df: pl.DataFrame, return_as_pandas: bool) -> Frame:
@@ -98,6 +110,19 @@ def _out(df: pl.DataFrame, return_as_pandas: bool) -> Frame:
 
 def _col(alias: str) -> str:
     return underscore(str(alias)).replace(" ", "_").replace(".", "_")
+
+
+_INT_COLS = frozenset(_col(a) for a in _INT_ALIASES)
+_FLOAT_COLS = frozenset(_col(a) for a in _FLOAT_ALIASES)
+
+
+def _table_dtype(col: str) -> Any:
+    """The documented dtype of a season-table column (String for one the parser does not type)."""
+    if col in _TABLE_DTYPES:
+        return _TABLE_DTYPES[col]
+    if col == "id" or col.endswith("_id") or col in _INT_COLS:
+        return pl.Int64
+    return pl.Float64 if col in _FLOAT_COLS else pl.String
 
 
 def _int(value: Any) -> Optional[int]:
@@ -121,6 +146,22 @@ def _clock_seconds(value: Any) -> Optional[int]:
     """``"65:56"`` -> ``3956`` (elapsed game seconds); ``None`` when malformed."""
     m = re.fullmatch(r"(\d+):(\d{2})", str(value or "").strip())
     return int(m.group(1)) * 60 + int(m.group(2)) if m else None
+
+
+def _obj(value: Any) -> Mapping[str, Any]:
+    """``value`` when it is an object, else ``{}``: a nested block of the wrong type reads as absent."""
+    return value if isinstance(value, dict) else {}
+
+
+def _list(value: Any) -> List[Any]:
+    """``value`` when it is a list, else ``[]`` (``x or []`` lets a string or a number through)."""
+    return value if isinstance(value, list) else []
+
+
+def _joined(values: Iterable[Any], sep: str) -> Optional[str]:
+    """The present values joined by ``sep``; ``None`` when there are none (a missing name never becomes ``"None"``)."""
+    text = [str(v) for v in values if v is not None and str(v).strip()]
+    return sep.join(text) if text else None
 
 
 def _blank(value: Any) -> Any:
@@ -147,8 +188,8 @@ def _expand_cell(col: str, value: Any) -> Dict[str, Any]:
         return {f"{col}_home": _int(value.get("homeTeam")), f"{col}_away": _int(value.get("awayTeam"))}
     if kind == "periods":
         return {
-            f"{col}_home": [_int(v) for v in value.get("homeTeam") or []],
-            f"{col}_away": [_int(v) for v in value.get("awayTeam") or []],
+            f"{col}_home": [_int(v) for v in _list(value.get("homeTeam"))],
+            f"{col}_away": [_int(v) for v in _list(value.get("awayTeam"))],
         }
     if kind == "gameStatus":
         return {
@@ -163,7 +204,7 @@ def _expand_cell(col: str, value: Any) -> Dict[str, Any]:
     if kind == "linkToGameDetail":
         return {"game_id": _int(value.get("gameId"))}
     if kind == "broadcasts":
-        return {col: ",".join(str(e) for e in value.get("entries") or [])}
+        return {col: _joined(_list(value.get("entries")), ",")}
     # An object type not seen when the parser was written: keep its name / id when it has them.
     return {f"{col}_id": _licence(value.get("id")), f"{col}_name": value.get("name")}
 
@@ -189,7 +230,7 @@ def _echoed(raw: Any) -> Dict[str, Optional[int]]:
     The league is not among them: it travels in ``searchQuery``, which the body does not echo."""
     names = {"Season": "season", "Phase": "phase_id"}
     out: Dict[str, Optional[int]] = dict.fromkeys(names.values())
-    for f in (raw.get("filters") if isinstance(raw, dict) else None) or []:
+    for f in _list(raw.get("filters") if isinstance(raw, dict) else None):
         if isinstance(f, dict) and f.get("alias") in names:
             out[names[f["alias"]]] = _int(f.get("selected"))
     return out
@@ -199,15 +240,15 @@ def _table_frame(raw: Any, extra: Optional[Mapping[str, Any]] = None) -> pl.Data
     """A SIHF table object -> polars frame (zero rows, no columns, when unusable)."""
     if not isinstance(raw, dict):
         return pl.DataFrame()
-    header = [h for h in raw.get("header") or [] if isinstance(h, dict)]
+    header = [h for h in _list(raw.get("header")) if isinstance(h, dict)]
     data = raw.get("data") or []
     if not header or not isinstance(data, list):
         return pl.DataFrame()
     aliases = {str(h.get("alias")): _col(str(h.get("alias"))) for h in header}
     summary: Dict[int, str] = {}
-    for hp in raw.get("highlightedPositions") or []:
+    for hp in _list(raw.get("highlightedPositions")):
         if isinstance(hp, dict) and hp.get("style") in _SUMMARY_STYLES:
-            for r in hp.get("rows") or []:
+            for r in _list(hp.get("rows")):
                 if isinstance(r, int):
                     summary[r - 1] = str(hp["style"])  # rows are 1-based
     prefix = dict(extra or {})
@@ -225,15 +266,30 @@ def _table_frame(raw: Any, extra: Optional[Mapping[str, Any]] = None) -> pl.Data
     df = _typed(pl.from_dicts(rows, infer_schema_length=None), aliases)
     # Ids are Int64 join keys even when every row is null (inference would make them Null).
     ids = [c for c in df.columns if c == "id" or c.endswith("_id")]
-    return df.with_columns(pl.col(c).cast(pl.Int64, strict=False) for c in ids) if ids else df
+    df = df.with_columns(pl.col(c).cast(pl.Int64, strict=False) for c in ids) if ids else df
+    # A column that is blank in every row (or ``season`` when the body does not echo it) infers as
+    # Null, and a periods column of empty lists as List(Null): give each its documented dtype.
+    blank: Dict[str, Any] = {}
+    for c, dtype in df.schema.items():
+        doc = _table_dtype(c)
+        if dtype == pl.Null or (dtype == pl.List(pl.Null) and isinstance(doc, pl.List)):
+            blank[c] = doc
+    return df.with_columns(pl.col(c).cast(t) for c, t in blank.items()) if blank else df
 
 
-def parse_sihf_table(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_table(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``/table`` body (results, standings, player or goalie stats) into a tidy frame.
 
     Each positional row is keyed by its ``header`` alias, snake_cased (``gamesPlayed`` ->
-    ``games_played``). Typed cells expand: a ``team`` cell to ``{col}_id`` / ``{col}_name``
-    / ``{col}_acronym``, a ``result`` to ``{col}_home`` / ``{col}_away``, ``periods`` to
+    ``games_played``). The columns therefore follow the header the league publishes: the
+    documented ones are the National League's (the MyHockey League's standings header is the
+    same), and a league that publishes an extra alias gets an extra column. Typed cells
+    expand: a ``team`` cell to ``{col}_id`` / ``{col}_name`` / ``{col}_acronym``, a ``result`` to ``{col}_home`` / ``{col}_away``, ``periods`` to
     per-side ``List[Int64]`` columns, ``gameStatus`` to ``status_*`` plus the start / end /
     update timestamps, and ``linkToGameDetail`` to ``game_id``. Known count and rate columns
     are cast to ``Int64`` / ``Float64`` (``""`` and ``"-"`` become null) and ``date`` to a
@@ -245,12 +301,16 @@ def parse_sihf_table(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = 
     pseudo-team ``100000`` / ``Durchschnitt``).
 
     Args:
-        raw: a SIHF table JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
+        raw (dict | None): a SIHF table JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): the table's documented column names (the generated wrappers pass their
+            returns-schema). A table with no rows then parses to a zero-row frame with exactly
+            these columns, in their documented dtypes.
 
     Returns:
         One row per table row. A zero-row frame when the payload is ``None``, empty or
-        malformed -- callers can chain without a null-check.
+        malformed -- with the ``columns`` schema when given -- so callers can chain without a
+        null-check.
 
     Raises:
         None: malformed payloads yield a zero-row frame rather than an exception.
@@ -258,7 +318,7 @@ def parse_sihf_table(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = 
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_standings
+            from sportsdataverse.hockey.sihf import sihf_standings
 
             df = sihf_standings(season=2026, league_id=1)
             print(df.shape)
@@ -273,6 +333,8 @@ def parse_sihf_table(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = 
     .. _SIHF: https://www.sihf.ch/
     """
     df = _table_frame(raw, _echoed(raw))
+    if df.height == 0 and columns is not None:
+        df = pl.DataFrame(schema={c: _table_dtype(c) for c in columns})
     return _out(df, return_as_pandas)
 
 
@@ -287,10 +349,10 @@ def _game(raw: Any) -> Dict[str, Any]:
 
 def _sides(game: Mapping[str, Any]) -> Dict[int, str]:
     """``{team_id: "home" | "away"}`` from ``details.homeTeam`` / ``awayTeam``."""
-    details = game.get("details") or {}
+    details = _obj(game.get("details"))
     out: Dict[int, str] = {}
     for side in ("home", "away"):
-        tid = _licence((details.get(f"{side}Team") or {}).get("id"))
+        tid = _licence(_obj(details.get(f"{side}Team")).get("id"))
         if tid is not None:
             out[tid] = side
     return out
@@ -299,7 +361,7 @@ def _sides(game: Mapping[str, Any]) -> Dict[int, str]:
 def _roster(game: Mapping[str, Any]) -> Dict[int, Mapping[str, Any]]:
     """``{licence: player}`` from the ``players`` list."""
     return {
-        pid: p for p in game.get("players") or [] if isinstance(p, dict) and (pid := _licence(p.get("id"))) is not None
+        pid: p for p in _list(game.get("players")) if isinstance(p, dict) and (pid := _licence(p.get("id"))) is not None
     }
 
 
@@ -315,7 +377,7 @@ def _person(roster: Mapping[int, Mapping[str, Any]], licence: Any, prefix: str =
 
 def _stats_table(game: Mapping[str, Any], alias: str) -> Optional[Mapping[str, Any]]:
     """The embedded ``stats`` table with ``alias`` (``gameTeamStats``, ``gamePlayerStatsHome``, ...)."""
-    return next((t for t in game.get("stats") or [] if isinstance(t, dict) and t.get("alias") == alias), None)
+    return next((t for t in _list(game.get("stats")) if isinstance(t, dict) and t.get("alias") == alias), None)
 
 
 def _frame(rows: Iterable[Mapping[str, Any]], schema: Mapping[str, Any]) -> pl.DataFrame:
@@ -369,7 +431,12 @@ _GOALIE_CHANGE = re.compile(r"\((IN|OUT)\)\s*$")
 _TYPE_ORDER = {"penalty": 0, "goal": 1, "revoked_goal": 2, "goalie": 3}
 
 
-def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_pbp(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the game's event timeline, one row per event.
 
     ``event_type`` is ``goal``, ``penalty``, ``goalie`` (a goaltender in / out, see
@@ -387,8 +454,10 @@ def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = Fa
     ``goalie_*``.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per event with the documented columns; a zero-row frame with the same
@@ -400,9 +469,9 @@ def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = Fa
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_pbp
+            from sportsdataverse.hockey.sihf import sihf_pbp
 
-            pbp = sihf_pbp(game_id=20261105000421)
+            pbp = sihf_pbp(game_id=20261105000325)
             print(pbp.shape)
 
         Pipeline next step (one line)::
@@ -425,7 +494,7 @@ def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = Fa
         return _person(roster, licence, prefix)
 
     events: List[Dict[str, Any]] = []
-    periods = [p for p in (game.get("summary") or {}).get("periods") or [] if isinstance(p, dict)]
+    periods = [p for p in _list(_obj(game.get("summary")).get("periods")) if isinstance(p, dict)]
     for number, period in enumerate(periods):
         for kind, key in (
             ("penalty", "fouls"),
@@ -433,11 +502,12 @@ def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = Fa
             ("revoked_goal", "revokedGoals"),
             ("goalie", "goalkeepers"),
         ):
-            for e in period.get(key) or []:
+            for e in _list(period.get(key)):
                 if not isinstance(e, dict):
                     continue
                 tid = _licence(e.get("teamId"))
-                text = e.get("text") or ""
+                raw_text = e.get("text")
+                text = raw_text if isinstance(raw_text, str) else ""
                 row: Dict[str, Any] = {
                     "period_number": number + 1,
                     "period": period.get("name"),
@@ -482,8 +552,8 @@ def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = Fa
                     row["goalie_change"] = m.group(1).lower() if m else None
                 events.append(row)
     events.sort(key=lambda r: (_clock_seconds(r["time"]) is None, _clock_seconds(r["time"]) or 0, r["_order"]))
-    shootout = (game.get("summary") or {}).get("shootout") or {}
-    for s in shootout.get("shoots") or []:
+    shootout = _obj(_obj(game.get("summary")).get("shootout"))
+    for s in _list(shootout.get("shoots")):
         if not isinstance(s, dict):
             continue
         shooter = who("player", s.get("scorerLicenceNr"))
@@ -512,16 +582,17 @@ def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = Fa
 
 def _side_tables(game: Mapping[str, Any], alias: str) -> pl.DataFrame:
     """The per-side ``stats`` tables ``{alias}Home`` + ``{alias}Away``, stacked with side / team / player ids."""
-    details = game.get("details") or {}
-    by_jersey: Dict[tuple, int] = {}
+    details = _obj(game.get("details"))
+    # (team, jersey) -> licence; a jersey two roster players share maps to None rather than a guess.
+    by_jersey: Dict[tuple, Optional[int]] = {}
     for pid, p in _roster(game).items():
         tid, jersey = _licence(p.get("teamId")), _int(p.get("jerseyNumber"))
         if tid is not None and jersey is not None:
-            by_jersey[(tid, jersey)] = pid
+            by_jersey[(tid, jersey)] = None if (tid, jersey) in by_jersey else pid
     frames = []
     for side in ("home", "away"):
         table = _stats_table(game, f"{alias}{side.title()}")
-        team = details.get(f"{side}Team") or {}
+        team = _obj(details.get(f"{side}Team"))
         tid = _licence(team.get("id"))
         df = _table_frame(
             table,
@@ -594,7 +665,12 @@ def _conform(df: pl.DataFrame, schema: Mapping[str, Any]) -> pl.DataFrame:
     return df.select(exprs + [pl.col(c) for c in df.columns if c not in schema])
 
 
-def parse_sihf_game_player_stats(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_player_stats(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the skater box score, one row per player per side.
 
     Stacks the page's ``gamePlayerStatsHome`` and ``gamePlayerStatsAway`` tables, tagged with
@@ -604,8 +680,10 @@ def parse_sihf_game_player_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     ``faceoffs_percent`` is null (``"-"`` upstream) for a player with no faceoffs.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per skater plus one total row per side; a zero-row frame with the documented
@@ -617,9 +695,9 @@ def parse_sihf_game_player_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_player_stats
+            from sportsdataverse.hockey.sihf import sihf_game_player_stats
 
-            box = sihf_game_player_stats(game_id=20261105000421)
+            box = sihf_game_player_stats(game_id=20261105000325)
             print(box.shape)
 
         Pipeline next step (one line)::
@@ -636,7 +714,12 @@ def parse_sihf_game_player_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     return _out(_conform(_side_tables(_game(raw), "gamePlayerStats"), _GAME_PLAYER_SCHEMA), return_as_pandas)
 
 
-def parse_sihf_game_goalie_stats(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_goalie_stats(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the goaltender box score, one row per goalie per side.
 
     Stacks ``gameGoalieStatsHome`` and ``gameGoalieStatsAway`` with ``team_side`` /
@@ -645,8 +728,10 @@ def parse_sihf_game_goalie_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     rates.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per dressed goaltender; a zero-row frame with the documented columns for a
@@ -658,9 +743,9 @@ def parse_sihf_game_goalie_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_goalie_stats
+            from sportsdataverse.hockey.sihf import sihf_game_goalie_stats
 
-            goalies = sihf_game_goalie_stats(game_id=20261105000421)
+            goalies = sihf_game_goalie_stats(game_id=20261105000325)
             print(goalies.shape)
 
         Pipeline next step (one line)::
@@ -683,7 +768,12 @@ _TEAM_STATS_SCHEMA: Dict[str, Any] = {
 }
 
 
-def parse_sihf_game_team_stats(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_team_stats(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the team stats, one row per statistic.
 
     The page's ``gameTeamStats`` table is one row per statistic with one column per team
@@ -693,8 +783,10 @@ def parse_sihf_game_team_stats(raw: Optional[Dict[str, Any]], *, return_as_panda
     times (``PPT`` / ``PKT``).
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per statistic; a zero-row frame with the documented columns for a game not
@@ -706,9 +798,9 @@ def parse_sihf_game_team_stats(raw: Optional[Dict[str, Any]], *, return_as_panda
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_team_stats
+            from sportsdataverse.hockey.sihf import sihf_game_team_stats
 
-            stats = sihf_game_team_stats(game_id=20261105000421)
+            stats = sihf_game_team_stats(game_id=20261105000325)
             print(stats.shape)
 
         Pipeline next step (one line)::
@@ -725,7 +817,7 @@ def parse_sihf_game_team_stats(raw: Optional[Dict[str, Any]], *, return_as_panda
     game = _game(raw)
     table = _stats_table(game, "gameTeamStats")
     rows = []
-    for cells in (table or {}).get("data") or []:
+    for cells in _list(_obj(table).get("data")):
         if isinstance(cells, list) and len(cells) >= 3:
             rows.append(
                 {
@@ -783,7 +875,12 @@ _INFO_SCHEMA: Dict[str, Any] = {
 }
 
 
-def parse_sihf_game_info(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_info(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the game header, one row.
 
     League, region, group, tournament, qualification (``Regular Season``, ``Playoff
@@ -794,8 +891,10 @@ def parse_sihf_game_info(raw: Optional[Dict[str, Any]], *, return_as_pandas: boo
     venue and ``spectators``; and the officials and broadcasters as comma-joined names.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row; a zero-row frame with the documented columns for an empty or a malformed
@@ -807,9 +906,9 @@ def parse_sihf_game_info(raw: Optional[Dict[str, Any]], *, return_as_pandas: boo
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_info
+            from sportsdataverse.hockey.sihf import sihf_game_info
 
-            info = sihf_game_info(game_id=20261105000421)
+            info = sihf_game_info(game_id=20261105000325)
             print(info.shape)
 
         Pipeline next step (one line)::
@@ -824,17 +923,17 @@ def parse_sihf_game_info(raw: Optional[Dict[str, Any]], *, return_as_pandas: boo
     game = _game(raw)
     if not game:
         return _out(_frame([], _INFO_SCHEMA), return_as_pandas)
-    details = game.get("details") or {}
-    result = game.get("result") or {}
-    status = game.get("status") or {}
-    venue = details.get("venue") or {}
+    details = _obj(game.get("details"))
+    result = _obj(game.get("result"))
+    status = _obj(game.get("status"))
+    venue = _obj(details.get("venue"))
     row: Dict[str, Any] = {
         "game_id": _int(game.get("gameId")),
         "season": _int(game.get("season")),
         "round": _int(game.get("round")),
     }
     for key in ("league", "region", "group", "tournament", "qualification", "phase"):
-        block = game.get(key) or {}
+        block = _obj(game.get(key))
         row[f"{key}_id"] = _int(block.get("id"))
         row[f"{key}_name"] = block.get("name")
     row |= {
@@ -847,29 +946,32 @@ def parse_sihf_game_info(raw: Optional[Dict[str, Any]], *, return_as_pandas: boo
         "status_canceled": status.get("canceled") if isinstance(status.get("canceled"), bool) else None,
     }
     for side in ("home", "away"):
-        team = details.get(f"{side}Team") or {}
+        team = _obj(details.get(f"{side}Team"))
         row |= {
             f"{side}_team_id": _licence(team.get("id")),
             f"{side}_team_name": team.get("name"),
             f"{side}_team_acronym": team.get("acronym"),
             f"{side}_score": _int(result.get(f"{side}Team")),
             f"{side}_score_by_period": [
-                _int(s.get(f"{side}Team")) for s in result.get("scores") or [] if isinstance(s, dict)
+                _int(s.get(f"{side}Team")) for s in _list(result.get("scores")) if isinstance(s, dict)
             ],
             f"{side}_shots_by_period": [
-                _int(s.get(f"{side}Team")) for s in result.get("sogs") or [] if isinstance(s, dict)
+                _int(s.get(f"{side}Team")) for s in _list(result.get("sogs")) if isinstance(s, dict)
             ],
         }
-    row["period_indicators"] = [str(s.get("indicator")) for s in result.get("scores") or [] if isinstance(s, dict)]
+    # aligned with the per-period lists, so a missing indicator stays a null element (never "None")
+    row["period_indicators"] = [
+        None if s.get("indicator") is None else str(s.get("indicator"))
+        for s in _list(result.get("scores"))
+        if isinstance(s, dict)
+    ]
     row |= {
         "venue_name": venue.get("name"),
         "venue_city": venue.get("city"),
         "spectators": _int(venue.get("spectators")),
-        "referees": ", ".join(str(o.get("fullName")) for o in details.get("referees") or [] if isinstance(o, dict))
-        or None,
-        "linesmen": ", ".join(str(o.get("fullName")) for o in details.get("linesmen") or [] if isinstance(o, dict))
-        or None,
-        "broadcasts": ",".join(str(e) for e in (game.get("broadcasts") or {}).get("entries") or []) or None,
+        "referees": _joined([_obj(o).get("fullName") for o in _list(details.get("referees"))], ", "),
+        "linesmen": _joined([_obj(o).get("fullName") for o in _list(details.get("linesmen"))], ", "),
+        "broadcasts": _joined(_list(_obj(game.get("broadcasts")).get("entries")), ","),
     }
     return _out(_frame([row], _INFO_SCHEMA), return_as_pandas)
 
@@ -900,7 +1002,12 @@ _UNITS = (
 )
 
 
-def parse_sihf_game_lineups(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_lineups(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into both lineups and absentees, one row per player.
 
     Dressed players come from ``lineUps``, one row per player per ``unit``
@@ -913,8 +1020,10 @@ def parse_sihf_game_lineups(raw: Optional[Dict[str, Any]], *, return_as_pandas: 
     roster.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per listed player; a zero-row frame with the documented columns for a game
@@ -926,9 +1035,9 @@ def parse_sihf_game_lineups(raw: Optional[Dict[str, Any]], *, return_as_pandas: 
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_lineups
+            from sportsdataverse.hockey.sihf import sihf_game_lineups
 
-            lineups = sihf_game_lineups(game_id=20261105000421)
+            lineups = sihf_game_lineups(game_id=20261105000325)
             print(lineups.shape)
 
         Pipeline next step (one line)::
@@ -944,15 +1053,15 @@ def parse_sihf_game_lineups(raw: Optional[Dict[str, Any]], *, return_as_pandas: 
     """
     game = _game(raw)
     gid, roster = _int(game.get("gameId")), _roster(game)
-    details = game.get("details") or {}
-    lineups = game.get("lineUps") or {}
+    details = _obj(game.get("details"))
+    lineups = _obj(game.get("lineUps"))
     rows: List[Dict[str, Any]] = []
 
     for side in ("home", "away"):
-        tid = _licence((details.get(f"{side}Team") or {}).get("id"))
+        tid = _licence(_obj(details.get(f"{side}Team")).get("id"))
         team = lineups.get(f"{side}Team") if isinstance(lineups, dict) else None
         if isinstance(team, dict):
-            tags = [t for t in team.get("taggedPlayers") or [] if isinstance(t, dict)]
+            tags = [t for t in _list(team.get("taggedPlayers")) if isinstance(t, dict)]
             captains = {_licence(t.get("id")) for t in tags if t.get("type") == "captain"}
             first_goalies = {_licence(t.get("id")) for t in tags if t.get("type") == "goalkeeper"}
             for path, unit in _UNITS:
@@ -975,10 +1084,10 @@ def parse_sihf_game_lineups(raw: Optional[Dict[str, Any]], *, return_as_pandas: 
                             "is_first_goalkeeper": who["player_id"] in first_goalies,
                         }
                     )
-        for group in details.get(f"{side}Absentees") or []:
+        for group in _list(details.get(f"{side}Absentees")):
             if not isinstance(group, dict):
                 continue
-            for licence in group.get("absentees") or []:
+            for licence in _list(group.get("absentees")):
                 who = _person(roster, licence)
                 if who["player_id"] is None:
                     continue

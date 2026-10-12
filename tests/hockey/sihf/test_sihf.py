@@ -17,8 +17,8 @@ import polars as pl
 import pytest
 import yaml
 
-from sportsdataverse.sihf import sihf_api_web
-from sportsdataverse.sihf.sihf_api_web_parsers import (
+from sportsdataverse.hockey.sihf import sihf_api_web
+from sportsdataverse.hockey.sihf.sihf_api_web_parsers import (
     parse_sihf_game_goalie_stats,
     parse_sihf_game_info,
     parse_sihf_game_lineups,
@@ -29,8 +29,8 @@ from sportsdataverse.sihf.sihf_api_web_parsers import (
 )
 from tests.conftest import skip_if_no_live
 
-FIXTURES = Path(__file__).parents[1] / "fixtures" / "sihf_api_web"
-SCHEMA_DIR = Path(__file__).parents[2] / "tools" / "codegen" / "schemas" / "native" / "sihf_api_web"
+FIXTURES = Path(__file__).parents[2] / "fixtures" / "sihf_api_web"
+SCHEMA_DIR = Path(__file__).parents[3] / "tools" / "codegen" / "schemas" / "native" / "sihf_api_web"
 GAME = "gameoverview__20261105000325.json"  # goaltender change + revoked goal
 SHOOTOUT = "gameoverview__20261105000009.json"
 
@@ -90,6 +90,27 @@ def test_standings_types_and_order():
     assert set(df["row_type"]) == {"data"}  # the "line" highlights are separators, not summary rows
 
 
+def test_standings_are_the_full_regular_season_table():
+    # Captured with ContentType=All. Without it SIHF serves the away-games table: 26 GP each, and
+    # HC Davos on 50 points instead of 117 (measured 2026-10-12 against the season's results).
+    df = parse_sihf_table(_load(TABLES["standings"]))
+    assert set(df["games_played"]) == {52}  # 14 teams x 4 meetings
+    assert df["games_played"].sum() == 2 * 364  # every one of the 364 regular-season games, twice
+    top = df.row(0, named=True)
+    assert (top["team_acronym"], top["points"]) == ("HCD", 117)
+    wins = ["games_won_in_time", "games_won_extra_time", "games_won_penalty"]
+    losses = ["games_lost_in_time", "games_lost_extra_time", "games_lost_penalty"]
+    assert (df.select(pl.sum_horizontal(wins + losses)).to_series() == df["games_played"]).all()
+    assert set(parse_sihf_table(_load("table__standing__2025__1.json"))["games_played"]) == {52}
+
+
+def test_a_second_league_publishes_the_documented_standings_columns():
+    # The columns come from each league's own header; the MyHockey League's matches the National League's.
+    df = parse_sihf_table(_load("table__standing__2026__100.json"))
+    assert df.height == 11 and set(df["season"]) == {2026}
+    assert df.schema == parse_sihf_table(_load(TABLES["standings"])).schema
+
+
 def test_goalie_table_tags_the_league_average_row():
     df = parse_sihf_table(_load(TABLES["goalie_stats"]))
     avg = df.filter(pl.col("row_type") == "average")
@@ -102,7 +123,22 @@ def test_goalie_table_tags_the_league_average_row():
 def test_second_season_fixture_echoes_its_season():
     df = parse_sihf_table(_load("table__standing__2025__1.json"))
     assert set(df["season"]) == {2025}
-    assert "Fribourg-Gottéron" in df["team_name"].to_list()  # UTF-8 intact
+    assert "Fribourg-Gottéron" in parse_sihf_table(_load(TABLES["standings"]))["team_name"].to_list()  # UTF-8 intact
+
+
+def test_all_blank_table_columns_keep_their_documented_dtypes():
+    # A column blank in every row infers as Null, a periods column of empty lists as List(Null),
+    # and season is null when the body does not echo it: each still gets its documented dtype.
+    body = _load(TABLES["results"])
+    header = [h["alias"] for h in body["header"]]
+    for row in body["data"]:
+        row[header.index("date")] = ""
+        row[header.index("decision")] = ""
+        row[header.index("scorePerPeriod")] = {"type": "periods", "homeTeam": [], "awayTeam": []}
+    body["filters"] = [f for f in body["filters"] if f.get("alias") != "Season"]
+    df = parse_sihf_table(body)
+    assert df.schema == parse_sihf_table(_load(TABLES["results"])).schema
+    assert df["date"].null_count() == df["season"].null_count() == df.height
 
 
 def test_table_pandas():
@@ -158,6 +194,19 @@ def test_game_info_one_row():
     assert row["spectators"] and row["referees"]
 
 
+def test_game_info_missing_names_stay_null():
+    # A missing indicator / official name / broadcaster must be a null, never the string "None".
+    body = _load(GAME)
+    for s in body["result"]["scores"]:
+        del s["indicator"]
+    body["details"]["referees"] = [{"fullName": None}, {}]
+    body["details"]["linesmen"] = [{"fullName": "A B"}, {"fullName": None}]
+    body["broadcasts"] = {"entries": [None]}
+    row = parse_sihf_game_info(body).row(0, named=True)
+    assert row["period_indicators"] == [None] * len(row["home_score_by_period"])
+    assert (row["referees"], row["linesmen"], row["broadcasts"]) == (None, "A B", None)
+
+
 def test_game_player_stats_resolve_player_ids():
     df = parse_sihf_game_player_stats(_load(GAME))
     players = df.filter(pl.col("row_type") == "data")
@@ -169,6 +218,18 @@ def test_game_player_stats_resolve_player_ids():
         side_players = players.filter(pl.col("team_side") == side)
         side_total = totals.filter(pl.col("team_side") == side)
         assert side_players["goals"].sum() == side_total["goals"].item()
+
+
+def test_a_shared_jersey_leaves_the_player_id_null():
+    # Two roster players on one team with one jersey: the box-score row cannot be resolved, so no guess.
+    body = _load(GAME)
+    box = parse_sihf_game_player_stats(body).filter(pl.col("row_type") == "data").row(0, named=True)
+    twin = next(p for p in body["players"] if str(p["id"]) == str(box["player_id"]))
+    body["players"].append({**twin, "id": 99999999, "fullName": "Twin Player"})
+    again = parse_sihf_game_player_stats(body).filter(
+        (pl.col("team_side") == box["team_side"]) & (pl.col("player_number") == box["player_number"])
+    )
+    assert again["player_id"].to_list() == [None]
 
 
 def test_game_goalie_and_team_stats():
@@ -193,18 +254,68 @@ def test_game_lineups_units_and_absentees():
 # --- contract -----------------------------------------------------------------
 
 
-@pytest.mark.parametrize("payload", [None, {}, {"gameId": None}, [], "x"])
+# Badly typed nested blocks: each must read as absent, never raise (the parser contract).
+_MALFORMED_GAMES = [
+    {"gameId": 1, "details": ["x"]},
+    {"gameId": 1, "details": {"homeTeam": "x", "awayTeam": 5, "venue": [], "referees": "x"}},
+    {"gameId": 1, "summary": "x", "result": 5, "status": [], "stats": "x", "lineUps": [1], "players": 7},
+    {"gameId": 1, "summary": {"periods": [{"goals": "x", "fouls": [5]}, "x"], "shootout": "x"}},
+    {"gameId": 1, "result": {"scores": "x", "sogs": 3}, "broadcasts": "x", "league": "x"},
+    {"gameId": 1, "stats": [{"alias": "gameTeamStats", "data": 5}], "lineUps": {"homeTeam": {"taggedPlayers": 1}}},
+]
+
+
+def test_pbp_event_with_a_non_string_text_is_kept():
+    df = parse_sihf_pbp({"gameId": 1, "summary": {"periods": [{"name": "1", "goals": [{"text": 5, "time": "01:00"}]}]}})
+    assert df.height == 1
+    assert df.row(0, named=True)["goal_tags"] is None
+
+
+@pytest.mark.parametrize("payload", [None, {}, {"gameId": None}, [], "x", *_MALFORMED_GAMES])
 @pytest.mark.parametrize("short", sorted(GAME_PARSERS))
 def test_game_parsers_empty_keep_their_columns(short, payload):
     schema = yaml.safe_load((SCHEMA_DIR / f"{short}.yaml").read_text(encoding="utf-8"))
     df = GAME_PARSERS[short](payload)
-    assert df.height == 0
+    # game_info keeps its one row (the game id is there); everything else has nothing to show
+    assert df.height == (1 if short == "game_info" and isinstance(payload, dict) and payload.get("gameId") else 0)
     assert df.columns == [c["name"] for c in schema["columns"]]
 
 
-@pytest.mark.parametrize("payload", [None, {}, {"header": [], "data": []}, {"header": [{"alias": "a"}], "data": "x"}])
-def test_table_parser_empty(payload):
+_EMPTY_TABLES = [None, {}, [], "x", {"header": [], "data": []}, {"header": [{"alias": "a"}], "data": "x"}]
+
+
+@pytest.mark.parametrize("payload", _EMPTY_TABLES)
+@pytest.mark.parametrize("short", sorted(TABLES))
+def test_table_parser_empty_keeps_the_documented_schema(short, payload):
+    # The columns AND dtypes of an empty table are the ones the real capture parses to.
+    names = [c["name"] for c in yaml.safe_load((SCHEMA_DIR / f"{short}.yaml").read_text(encoding="utf-8"))["columns"]]
+    df = parse_sihf_table(payload, columns=names)
+    assert df.height == 0
+    assert df.columns == names
+    assert df.schema == parse_sihf_table(_load(TABLES[short])).schema
+
+
+@pytest.mark.parametrize("payload", _EMPTY_TABLES)
+def test_table_parser_empty_without_columns(payload):
     assert parse_sihf_table(payload).height == 0
+
+
+@pytest.mark.parametrize(
+    ("fn", "short"),
+    [
+        (sihf_api_web.sihf_results, "results"),
+        (sihf_api_web.sihf_standings, "standings"),
+        (sihf_api_web.sihf_player_stats, "player_stats"),
+        (sihf_api_web.sihf_goalie_stats, "goalie_stats"),
+    ],
+)
+def test_table_wrappers_return_the_documented_schema_when_empty(monkeypatch, fn, short):
+    body = _load(TABLES[short])
+    body["data"] = []  # a season / phase with no rows yet
+    _capture(monkeypatch, body)
+    df = fn(season=2026)
+    assert df.height == 0
+    assert df.schema == parse_sihf_table(_load(TABLES[short])).schema
 
 
 @pytest.mark.parametrize(
@@ -247,6 +358,8 @@ def test_table_wrappers_send_alias_and_filters(monkeypatch, fn, alias):
     p = calls[0]["params"]
     # the runtime moves League into searchQuery; the wrapper hands it over as a parameter
     assert (p["alias"], p["searchQuery"], p["Season"], p["League"], p["language"]) == (alias, "1//", 2026, 2, "en")
+    # only standings take ContentType, and always send it (without it SIHF answers the away table)
+    assert p.get("ContentType") == ("All" if alias == "standing" else None)
 
 
 def test_game_wrapper_sends_game_id(monkeypatch):
@@ -273,6 +386,7 @@ def test_live_standings_and_game():
 
     df = sihf_api_web.sihf_standings(season=2026, league_id=1)
     assert df.height == 14 and set(df["season"]) == {2026}
+    assert set(df["games_played"]) == {52}  # the full table, not the away table SIHF serves by default
     pbp = sihf_api_web.sihf_pbp(game_id=20261105000421)
     assert pbp.filter(pl.col("event_type") == "goal").height == 5
     with pytest.raises(NoDataError):

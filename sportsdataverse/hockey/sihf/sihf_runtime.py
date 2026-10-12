@@ -10,13 +10,19 @@ top of the shared getter, all measured live (2026-10-08):
   other parameter; :func:`_get` moves it into ``searchQuery``.
 * **The other filters are one composite pair.** ``filterBy=Season,Phase,Date`` +
   ``filterQuery=2026/4940/<range>`` (names and values in the same order). :func:`_get`
-  folds the ``Season`` / ``Phase`` parameters that are set into the pair. Never send
+  folds the ``Season`` / ``Phase`` / ``Date`` / ``ContentType`` parameters that are set
+  into the pair. Never send
   ``Phase=all``: ``standing`` answers it with the regular season and ``player`` /
   ``goalkeeper`` with Playoff Overall (one phase each), while ``results`` answers every
   game. No Phase filter is the documented way to get the whole season.
 * **Results need a season-wide date range.** Without a ``Date`` filter the current
   season's ``results`` table answers only today's game day (one row). ``results``
   therefore always sends ``Date=01.07.<season-1>-30.06.<season>``.
+* **The standings need ``ContentType``.** ``standing`` without a ``ContentType`` filter
+  answers the AWAY-games table (26 of the 52 National League games in 2025-26, measured
+  2026-10-12 against the season's ``results``) and does not echo the filter. ``ContentType=All``
+  answers the full table and echoes ``All``; ``Home`` / ``Away`` give the split tables. The
+  ``sihf_standings`` wrapper always sends it.
 * **An unknown value is never an error upstream.** An unknown ``Season`` / ``Phase`` is
   answered with another one (``Season=1890`` serves the current season) and only the
   body's ``filters[].selected`` echo shows it; an unknown league answers a single
@@ -27,6 +33,10 @@ top of the shared getter, all measured live (2026-10-08):
   typo can never return another season's or phase's rows labelled as the requested one. A
   table body with no filter echo at all, or a phase echo without its ``entries`` list,
   cannot be verified and raises :class:`~sportsdataverse.errors.AssetFetchError`.
+
+A table body also announces its row count in ``pages`` (``0`` on ``standing``); a body whose
+rows disagree with it raises :class:`~sportsdataverse.errors.AssetFetchError` rather than
+passing a truncated table off as the whole one.
 
 Everything else is the package error vocabulary from the shared getter: 404 (the
 ``gameoverview`` ``{"error": "GameNotFound"}``) -> ``NoDataError``, 400
@@ -44,10 +54,10 @@ from sportsdataverse.errors import AssetFetchError, NoDataError
 __all__: List[str] = []
 
 #: The filters folded into ``filterBy`` / ``filterQuery``, in this order.
-FILTER_KEYS: Tuple[str, ...] = ("Season", "Phase", "Date")
+FILTER_KEYS: Tuple[str, ...] = ("Season", "Phase", "Date", "ContentType")
 
 
-def season_date_range(season: Any) -> str:
+def _season_date_range(season: Any) -> str:
     """``01.07.<season-1>-30.06.<season>``: every date of a season keyed by its END year."""
     end = int(season)
     return f"01.07.{end - 1}-30.06.{end}"
@@ -60,7 +70,7 @@ def _build_query(params: Optional[Dict[str, Any]]) -> Tuple[Dict[str, Any], List
     if league is not None:
         clean["searchQuery"] = f"{clean.get('searchQuery', '1//')}{league}"
     if clean.get("alias") == "results" and "Season" in clean and "Date" not in clean:
-        clean["Date"] = season_date_range(clean["Season"])
+        clean["Date"] = _season_date_range(clean["Season"])
     filters = [(k, str(clean.pop(k))) for k in FILTER_KEYS if k in clean]
     if filters:
         clean["filterBy"] = ",".join(k for k, _ in filters)
@@ -100,6 +110,25 @@ def _check_table(url: str, raw: Any, filters: List[Tuple[str, str]]) -> None:
         raise NoDataError(f"{_rt._where(url)}: SIHF answered {rows[0][0]!r} (no table for that league and season)")
 
 
+def _check_complete(url: str, raw: Any) -> None:
+    """Raise unless a table body holds every row it announces.
+
+    ``pages`` is the table's total ROW count, not a page count: measured 2026-10-12 it equals
+    ``len(data)`` on full bodies (``results`` 414 / 414, ``goalkeeper`` 35 / 35 with its
+    league-average row), and is ``0`` on ``standing``, which has no paging. So a positive
+    ``pages`` that disagrees with the rows served means a truncated answer.
+    """
+    if not isinstance(raw, dict):
+        return
+    pages, rows = raw.get("pages"), raw.get("data")
+    if isinstance(pages, int) and not isinstance(pages, bool) and pages > 0 and isinstance(rows, list):
+        if len(rows) != pages:
+            raise AssetFetchError(
+                f"{_rt._where(url)}: the table announces {pages} rows but serves {len(rows)}; "
+                "a partial table is not returned as a complete one"
+            )
+
+
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a SIHF route as JSON: build the scoped query, fetch, then verify a table answer.
 
@@ -108,10 +137,12 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
             list the requested phase, or has no table for the league.
         ValueError: the host answered 400 / 422 -- the request is wrong.
         AssetFetchError: any other non-2xx after retries, a connection failure after
-            retries, a 2xx whose body is empty or not JSON, or a table body without its
-            filter echo (or a phase echo without its ``entries``).
+            retries, a 2xx whose body is empty or not JSON, a table body without its
+            filter echo (or a phase echo without its ``entries``), or a table body with
+            fewer or more rows than its ``pages`` row count announces.
     """
     query, filters = _build_query(params)
     raw = _rt._get(url, query, **kwargs)
     _check_table(url, raw, filters)
+    _check_complete(url, raw)
     return raw
