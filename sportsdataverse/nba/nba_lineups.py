@@ -468,7 +468,9 @@ def _regulation_clock(game_id: object, league_id: Optional[str] = None) -> Tuple
     from sportsdataverse.scrape.stats.periods import regulation_shape, season_of
 
     gid = str(game_id or "").zfill(10)
-    league = league_id or (gid[:2] if gid[:2] in ("00", "10", "15", "20") else "00")
+    league = (
+        str(league_id).zfill(2) if league_id is not None else (gid[:2] if gid[:2] in ("00", "10", "15", "20") else "00")
+    )
     if league == "15":
         return _SUMMER_LEAGUE_CLOCK
     if league != "10":
@@ -516,29 +518,31 @@ _ROTATION_COVERAGE_TOLERANCE = 0.02
 def _rotation_coverage_error(rotation: dict[str, list[dict]]) -> float:
     """Worst per-team relative gap between rotation stint time and five players' worth of game.
 
-    Each team has exactly five players on court for the whole game, so a team's
-    stints (``OUT_TIME_REAL - IN_TIME_REAL``) must sum to ``5 x`` the game's
-    final ``OUT_TIME_REAL``. A payload that overlaps stints (7-10 "on court" at
-    once) or drops some is malformed; mapped faithfully it credits players
-    with minutes they never played. Returns ``max |sum / (5 x end) - 1|`` over
-    the teams with stints, ``0.0`` when there are none, and ``inf`` when any
-    stint has a negative or inverted clock (WNBA 2004-05 payloads carry
+    Each team has exactly five players on court for the whole game, so each
+    team's stints (``OUT_TIME_REAL - IN_TIME_REAL``) must sum to ``5 x`` the
+    game's final ``OUT_TIME_REAL`` -- one end for both teams, so a team whose
+    stints stop early (no overtime rows) or are missing entirely does not pass.
+    A payload that overlaps stints (7-10 "on court" at once) or drops some is
+    malformed; mapped faithfully it credits players with minutes they never
+    played. Returns ``max |sum / (5 x end) - 1|`` over both teams (``1.0`` for
+    a team with no stints), ``0.0`` when neither team has any, and ``inf`` when
+    any stint has a negative or inverted clock (WNBA 2004-05 payloads carry
     ``IN_TIME_REAL = -2320`` and stop at 600 s).
     """
-    worst = 0.0
-    for key in ("HomeTeam", "AwayTeam", "homeTeam", "awayTeam"):
-        stints = rotation.get(key) or []
-        for s in stints:
-            t_in, t_out = float(s.get("IN_TIME_REAL") or 0.0), float(s.get("OUT_TIME_REAL") or 0.0)
-            if t_in < 0 or t_out < t_in:
-                return float("inf")
-        ends = [float(s.get("OUT_TIME_REAL") or 0.0) for s in stints]
-        end = max(ends, default=0.0)
-        if end <= 0:
-            continue
-        total = sum(float(s.get("OUT_TIME_REAL") or 0.0) - float(s.get("IN_TIME_REAL") or 0.0) for s in stints)
-        worst = max(worst, abs(total / (5.0 * end) - 1.0))
-    return worst
+    teams = [
+        rotation.get("HomeTeam") or rotation.get("homeTeam") or [],
+        rotation.get("AwayTeam") or rotation.get("awayTeam") or [],
+    ]
+    spans = [
+        [(float(s.get("IN_TIME_REAL") or 0.0), float(s.get("OUT_TIME_REAL") or 0.0)) for s in stints]
+        for stints in teams
+    ]
+    if any(t_in < 0 or t_out < t_in for team in spans for t_in, t_out in team):
+        return float("inf")
+    end = max((t_out for team in spans for _, t_out in team), default=0.0)
+    if end <= 0:
+        return 0.0
+    return max(abs(sum(t_out - t_in for t_in, t_out in team) / (5.0 * end) - 1.0) for team in spans)
 
 
 def _build_sub_map(

@@ -449,6 +449,7 @@ def test_regulation_clock_by_league_and_era() -> None:
     assert _regulation_clock("None", "10") == (4, 600.0)
     assert _regulation_clock("None") == (4, 720.0)
     assert _regulation_clock("1022400001", "00") == (4, 720.0)  # explicit league wins
+    assert _regulation_clock("None", 10) == (4, 600.0)  # an int league id is normalised, not misread as NBA
     wnba = _regulation_clock("1022400001")
     # The real 2021 case: checked in at IN_TIME_REAL 23921 = 7.9 s left in Q4.
     assert _elapsed_time(4, 7.9, wnba) == pytest.approx(23921.0)
@@ -468,6 +469,12 @@ def test_rotation_coverage_error_flags_overlapping_stints(game_id: str) -> None:
     key = "HomeTeam" if rot.get("HomeTeam") else "homeTeam"
     longest = max(rot[key], key=lambda s: float(s["OUT_TIME_REAL"]) - float(s["IN_TIME_REAL"]))
     assert _rotation_coverage_error({**rot, key: [*rot[key], longest]}) > 0.02
+    # One team missing entirely, or stopping before the other (no overtime rows), is malformed too.
+    assert _rotation_coverage_error({**rot, key: []}) == pytest.approx(1.0)
+    other = "AwayTeam" if key == "HomeTeam" else "awayTeam"
+    last = max(float(s["OUT_TIME_REAL"]) for s in rot[other])
+    extended = [{**s, "OUT_TIME_REAL": last + 3000.0} if float(s["OUT_TIME_REAL"]) == last else s for s in rot[other]]
+    assert _rotation_coverage_error({**rot, other: extended}) > 0.02
     # Negative clocks (as in the WNBA 2004-05 payloads) are malformed whatever they sum to.
     shifted = [{**s, "IN_TIME_REAL": -2320.0} if s is longest else s for s in rot[key]]
     assert _rotation_coverage_error({**rot, key: shifted}) == float("inf")
