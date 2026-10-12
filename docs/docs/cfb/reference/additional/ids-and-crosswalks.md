@@ -137,9 +137,9 @@ Two modes:
   conference-championship or CFP rematch of the same teams).
 * **Single week** (`week` given): just that week's slate, matched on team.
 
-Each provider leg is best-effort: a Fox outage, a Yahoo per-week parser
-hiccup, or Fox's offseason-projected CFP matchups simply leave that
-provider's columns null rather than failing the call.
+A provider with no game for a matchup (Fox's offseason-projected CFP games, a
+404 week) leaves that provider's columns null. A fetch that FAILED raises, so
+the same upstream data always builds the same rows.
 
 **Parameters**
 

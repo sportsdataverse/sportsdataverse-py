@@ -360,24 +360,20 @@ def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
 
     Driven by the ESPN calendar so the exact (week, season_type) slots are used:
     regular weeks (season_type 2), bowls (season_type 3, week 1), and the CFP
-    (season_type 3, week 999). season_type 4 (all-star) is skipped. The weeks
-    share one :class:`FetchTally`: a 404 week contributes nothing, an isolated
-    failed week is skipped and logged, and a season where no WEEK answered raises
-    :class:`CrosswalkSourceError` -- a failed fetch is never an empty week. The
-    calendar is tallied apart (an answered calendar must not mask failed weeks); a
-    failed calendar is logged and falls back to the default week slots.
+    (season_type 3, week 999). season_type 4 (all-star) is skipped. A 404 week
+    contributes nothing; any failed fetch -- the calendar or one week -- raises
+    :class:`CrosswalkSourceError`. The season is a join spine published nightly,
+    so a skipped week (or default slots standing in for a failed calendar) would
+    add and drop rows from one build to the next.
     """
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
-    cal_tally = FetchTally("espn_cfb_calendar")
-    cal = cal_tally.fetch(f"season={season}", lambda: espn_cfb_calendar(season=season, **kwargs))
-    if cal_tally.failed:
-        logger.warning(
-            "espn_cfb_calendar failed for %s; using the default week slots: %s", season, cal_tally.failed[0][1]
-        )
-    tally = FetchTally("espn_cfb_schedule")
+    cal = FetchTally("espn_cfb_calendar", strict=True).fetch(
+        f"season={season}", lambda: espn_cfb_calendar(season=season, **kwargs)
+    )
+    tally = FetchTally("espn_cfb_schedule", strict=True)
     slots: List[tuple[Any, Any]] = [] if cal is None else [(r.get("week"), r.get("season_type")) for r in _rows(cal)]
-    if not slots:  # calendar unavailable -> sensible default coverage
+    if not slots:  # no calendar (404 / empty) -> sensible default coverage
         slots = [(str(w), "2") for w in range(1, 17)] + [("1", "3"), ("999", "3")]
     valid = [(w, st) for (w, st) in slots if w is not None and str(st) in ("2", "3")]
 
@@ -472,12 +468,12 @@ def _fox_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
 def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # Yahoo scoreboard is per-week; loop the regular season + postseason weeks
     # (bowls/CFP run into the low 20s -- the national championship is ~week 21).
-    # One FetchTally: a 404 week is empty, an isolated failed week is skipped and
-    # logged, and a season where no week answered raises CrosswalkSourceError.
-    # Dedup by game id across weeks.
+    # A 404 week is empty; any failed week raises CrosswalkSourceError. Skipping it
+    # dropped that week's Yahoo ids and Yahoo-only rows, so two builds of the same
+    # season differed (1,565 vs 1,608 rows on 2026-10-12). Dedup by game id.
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
-    tally = FetchTally("yahoo_cfb_scoreboard")
+    tally = FetchTally("yahoo_cfb_scoreboard", strict=True)
 
     def _fetch(week: int) -> List[Dict[str, Any]]:
         return tally.fetch(f"season={season} week={week}", lambda: _yahoo_games(season, week, **kwargs)) or []
@@ -1131,9 +1127,9 @@ def cfb_schedule_crosswalk(
       conference-championship or CFP rematch of the same teams).
     * **Single week** (``week`` given): just that week's slate, matched on team.
 
-    Each provider leg is best-effort: a Fox outage, a Yahoo per-week parser
-    hiccup, or Fox's offseason-projected CFP matchups simply leave that
-    provider's columns null rather than failing the call.
+    A provider with no game for a matchup (Fox's offseason-projected CFP games, a
+    404 week) leaves that provider's columns null. A fetch that FAILED raises, so
+    the same upstream data always builds the same rows.
 
     Args:
         season: Season year (e.g. ``2024``).
@@ -1155,6 +1151,10 @@ def cfb_schedule_crosswalk(
         ``matchup_key``, ``espn_game_id``, ``fox_game_id``, ``yahoo_game_id``,
         ``yahoo_global_game_id``, ``home_team``, ``away_team``, ``espn_date``,
         ``fox_date``, ``yahoo_date``, ``matched_sources``.
+
+    Raises:
+        CrosswalkSourceError: Full-season mode, a provider fetch failed after its
+            retries (a 404 is "no games", never a failure).
 
     Example:
         Crosswalk the whole season (regular + bowls + CFP)::
