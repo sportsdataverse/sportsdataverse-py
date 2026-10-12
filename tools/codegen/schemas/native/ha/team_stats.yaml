@@ -1,64 +1,59 @@
 columns:
-- description: Season END year (2026 = 2025/26).
+- description: ''
   name: season
   type: integer
-- description: Rank in the table.
+- description: ''
   name: rank
   type: integer
-- description: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
-    id.
+- description: ''
   name: team_code
   type: character
-- description: Games played.
+- description: ''
   name: gp
   type: integer
-- description: Wins in total, overtime and shootout wins included (otw and sow are
-    subsets).
+- description: ''
   name: wins_total
   type: integer
-- description: Losses in total, overtime and shootout losses included (otl and sol
-    are subsets).
+- description: ''
   name: losses_total
   type: integer
-- description: Games or situations leading (StatNet 'Leading'; meaning unverified).
+- description: ''
   name: leading
   type: integer
-- description: Games or situations trailing (StatNet 'Trailing'; meaning unverified).
+- description: ''
   name: trailing
   type: integer
-- description: Goals.
+- description: ''
   name: g
   type: integer
-- description: Goals against.
+- description: ''
   name: ga
   type: integer
-- description: Games in which the team scored the first goal (inferred from the label;
-    unverified).
+- description: ''
   name: gfg
   type: integer
-- description: Overtime wins.
+- description: ''
   name: otw
   type: integer
-- description: Overtime losses.
+- description: ''
   name: otl
   type: integer
-- description: Shootout wins.
+- description: ''
   name: sow
   type: integer
-- description: Shootout losses.
+- description: ''
   name: sol
   type: integer
-- description: Points per game.
+- description: ''
   name: p_gp
   type: numeric
-- description: Goals for per game (number).
+- description: ''
   name: gpg
   type: numeric
-- description: Goals against per game (number).
+- description: ''
   name: gapg
   type: numeric
-- description: 'Standings points: 3 per regulation win, 2 per overtime/shootout win,
-    1 per overtime/shootout loss (2025 IFB: 102 + 14 + 3 = 119).'
+- description: ''
   name: points
   type: integer
 kind: dataframe

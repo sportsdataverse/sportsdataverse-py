@@ -30,6 +30,9 @@ ROOT = Path(__file__).parents[3]
 FIXTURES = ROOT / "tests" / "fixtures" / "ha"
 YAML_PATH = ROOT / "tools" / "codegen" / "endpoints" / "ha.yaml"
 SCHEMA_DIR = ROOT / "tools" / "codegen" / "schemas" / "native" / "ha"
+SNIPPET = ROOT / "tools" / "codegen" / "ha_column_descriptions.snippet.yaml"
+#: The spec's routes, request examples and category enums, written by gen_ha.py (CI has no refs checkout).
+SNAPSHOT = json.loads((FIXTURES / "spec_snapshot.json").read_text(encoding="utf-8"))
 HOST = R.HOST
 
 sys.path.insert(0, str(ROOT / "tools" / "codegen"))
@@ -83,7 +86,7 @@ def test_every_wrapper_parses_its_fixture(short):
         assert df.schema["season"] == pl.Int64 and df["season"].null_count() == 0
 
 
-@pytest.mark.parametrize("fixture", sorted(p.name for p in FIXTURES.glob("*.json")))
+@pytest.mark.parametrize("fixture", sorted(p.name for p in FIXTURES.glob("*.json") if p.name != "spec_snapshot.json"))
 def test_every_refs_capture_parses(fixture):
     df = CAPTURE_PARSERS[fixture.split("@")[0].removesuffix(".json")](_load(fixture))
     assert df.height > 0 and all(SNAKE.match(c) for c in df.columns)
@@ -97,9 +100,38 @@ def test_committed_schema_matches_the_parser(short):
     df = _parsed(short)
     assert [c["name"] for c in committed["columns"]] == df.columns
     typed = {"integer": pl.Int64, "numeric": pl.Float64, "logical": pl.Boolean, "character": pl.String}
+    texts = yaml.safe_load(SNIPPET.read_text(encoding="utf-8"))[f"ha_{short}"]
     for col in committed["columns"]:
         assert df.schema[col["name"]] == typed[col["type"]], col
-        assert col["description"], col["name"]
+        assert col["description"] == "", col["name"]  # descriptions never live in schemas/**
+        assert len(texts[col["name"]]) >= 15, col["name"]
+    assert set(texts) == {c["name"] for c in committed["columns"]}  # no orphan, no gap
+
+
+@pytest.mark.parametrize("short", sorted(gen_ha.ENDPOINTS))
+def test_empty_frame_concats_with_a_populated_one(short):
+    """An empty body parses to the populated frame's columns AND dtypes (the wrapper passes ``columns``)."""
+    parser = gen_ha.ENDPOINTS[short][1]
+    cols = [c["name"] for c in yaml.safe_load((SCHEMA_DIR / f"{short}.yaml").read_text(encoding="utf-8"))["columns"]]
+    full = gen_ha._frame(gen_ha.ENDPOINTS[short])
+    populated = parser(_load(gen_ha.ENDPOINTS[short][2]), columns=cols)
+    for empty in (parser({}, columns=cols), parser({"results": "x"}, columns=cols)):
+        assert empty.schema == populated.select(cols).schema
+        assert pl.concat([empty, populated], how="vertical").height == populated.height
+    assert pl.concat([parser({}), full], how="vertical").height == full.height
+
+
+def test_documented_columns_lead_in_schema_order():
+    df = P.parse_ha_leaders(_load("api__player-leaderboard.json"), columns=["team_code", "rank", "never_sent"])
+    assert df.columns[:3] == ["team_code", "rank", "never_sent"] and df.width > 3
+
+
+@pytest.mark.parametrize(
+    ("sent", "want"), [("13950", 13950), ("13 950", 13950), ("1,386", 1386), ("", None), (987, 987)]
+)
+def test_attendance_is_an_integer_count(sent, want):
+    df = P.parse_ha_schedule({"data": [{"id": 1, "attendance": sent}]})
+    assert df.schema["attendance"] == pl.Int64 and df["attendance"].to_list() == [want]
 
 
 @pytest.mark.parametrize("parser", ALL_PARSERS, ids=lambda f: f.__name__)
@@ -271,14 +303,9 @@ def _yaml() -> Dict[str, Any]:
     return yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))
 
 
-def _spec() -> Dict[str, Any]:
-    refs = gen_ha.refs_dir("hockeyallsvenskan", gen_ha.SPEC)
-    return yaml.safe_load((refs / gen_ha.SPEC).read_text(encoding="utf-8"))
-
-
 def test_yaml_lists_every_route():
     doc = _yaml()
-    assert {e[0] for e in gen_ha.ENDPOINTS.values()} == set(_spec()["paths"])
+    assert {e[0] for e in gen_ha.ENDPOINTS.values()} == set(SNAPSHOT["routes"])
     assert [e["short"] for e in doc["endpoints"]] == list(gen_ha.ENDPOINTS)
     assert len(doc["endpoints"]) == 11
     assert doc["getter_module"] == "sportsdataverse.hockey.ha.ha_runtime"
@@ -295,14 +322,12 @@ def test_yaml_categories_are_the_probed_sets():
         cat = {p["name"]: p for p in by[short]["extra_params"]}["category"]
         assert cat["query_key"] == "categories" and tuple(cat["choices"]) == R.CATEGORIES[route]
         assert len(cat["choices"]) == n and cat["default"] == R.BODIES[route]["categories"]
-    spec = _spec()
-    for route, allowed in R.CATEGORIES.items():
-        enum = spec["paths"][route]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]
-        assert tuple(enum["categories"]["enum"]) == allowed
+    assert {route: tuple(enum) for route, enum in SNAPSHOT["categories"].items()} == R.CATEGORIES
 
 
 def test_runtime_default_bodies_are_the_spec_examples():
-    gen_ha._check_bodies(_spec())  # raises on any drift
+    assert SNAPSHOT["request_examples"]
+    gen_ha._check_bodies(SNAPSHOT["request_examples"])  # raises on any drift
 
 
 def test_players_wrapper_requires_a_team():
@@ -347,7 +372,7 @@ def transport(monkeypatch):
             return answer()
 
     def download(url: str, params: Any = None, **kw: Any) -> Any:
-        state["gets"].append({"url": url, "params": dict(params or {})})
+        state["gets"].append({"url": url, "params": dict(params or {}), "session": kw.get("session")})
         return answer()
 
     monkeypatch.setattr(R, "_SESSION", _Session())
@@ -405,6 +430,18 @@ def test_runtime_non_200_follows_the_vocabulary(transport, status, error):
     transport["queue"] = [_Resp(status, {"error": "Missing league or season"})]
     with pytest.raises(error):
         R._get(f"{HOST}/api/league-standings-all-time", {"season": 2026})
+
+
+@pytest.mark.parametrize("status", [429, 503])
+def test_runtime_honours_retry_after(transport, monkeypatch, status):
+    slept: List[float] = []
+    monkeypatch.setattr(R.time, "sleep", slept.append)
+    busy = _Resp(status, {"x": 1})
+    busy.headers["Retry-After"] = "7"
+    transport["queue"] = [busy, _Resp(status, {"x": 1}), _ok("api__league-standings-all-time.json")]
+    R._get(f"{HOST}/api/league-standings-all-time", {"season": 2026})
+    assert slept == [7.0, 4.0]  # the server's wait, then the plain backoff
+    assert len(transport["waited"]) == 3
 
 
 def test_runtime_transport_failure_is_asset_fetch_error(transport):
@@ -581,7 +618,7 @@ def test_schedule_page_decodes_the_split_flight_element(transport):
     props = _load("pages__matcher.json")
     transport["queue"] = [_Resp(200, text=_page(props), ctype="text/html; charset=utf-8")]
     body = R._get(f"{HOST}/pages/matcher")
-    assert body == props and transport["waited"] == [f"{HOST}/pages/matcher"]
+    assert body == props and transport["gets"][0]["session"] is euro_hockey_runtime.SESSION  # waits per attempt
     assert P.parse_ha_schedule(body).height == 3
 
 

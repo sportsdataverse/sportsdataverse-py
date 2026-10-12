@@ -52,7 +52,9 @@ answer, so it comes from the request the runtime stamps under ``_request``; CMS 
 carry ``season_2026`` (a START year), which becomes ``season`` 2027 (``cms_season`` keeps the
 raw value).
 
-**Dtypes are pinned by name**, not taken from a sample: the site sends ``efficiency`` as
+**Dtypes come from the returns-schemas** (:data:`._ha_schema.DTYPES`, written by
+``tools/codegen/gen_ha.py``), then from name rules for a column no schema lists, never from a
+sample, so an empty frame has the dtypes of a populated one: the site sends ``efficiency`` as
 ``"8.82"``, ``0`` or null in one column, and every standings value as a string. Rates
 (``*perc``, ``efficiency``, ``gaa``, ``gpg``, ``gapg``, ``p_gp``, ``tppg``, arena
 coordinates) are Float64 (``""`` -> null); counts sent as strings are Int64. Clock strings
@@ -74,6 +76,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.hockey.ha._ha_schema import DTYPES
 
 __all__ = [
     "parse_ha",
@@ -181,6 +184,9 @@ _INT_COLS = frozenset(
 _OBJECT_KEYS = frozenset({"headshots", "logo", "logos", "team", "player", "Assist1", "Assist2"})
 _BOOL_COLS = frozenset({"is_penalty_shot", "is_played", "is_entering", "is_completed", "is_rookie"})
 _SIDES = (("home", "home_team"), ("away", "away_team"))
+_SCHEMA_TYPES = {"integer": pl.Int64, "numeric": pl.Float64, "logical": pl.Boolean, "character": pl.String}
+#: Separators a head count may carry (``1 386``, ``1,386``, ``1.386``); blanks become null.
+_COUNT_NOISE = r"[\s,.'\u00a0\u202f]"
 
 
 # --- helpers ------------------------------------------------------------------------------------
@@ -245,7 +251,9 @@ def _stamp(row: Dict[str, Any], req: Mapping[str, Any]) -> Dict[str, Any]:
 
 
 def _dtype_for(col: str) -> Any:
-    """The dtype a column has by name alone (empty frames and gap-filled columns)."""
+    """The dtype of a column: its returns-schema type, else by name alone."""
+    if col in DTYPES:
+        return _SCHEMA_TYPES[DTYPES[col]]
     if _STR_ID.search(col) and not col.endswith("player_statnet_id"):
         return pl.String
     if _INT_ID.search(col) or col in _INT_COLS:
@@ -261,6 +269,11 @@ def _number(expr: pl.Expr, dtype: Any) -> pl.Expr:
     return expr.cast(pl.String).str.strip_chars().cast(dtype, strict=False)
 
 
+def _count(expr: pl.Expr) -> pl.Expr:
+    """A head count to Int64: separators dropped, a blank or non-number to null."""
+    return expr.cast(pl.String).str.replace_all(_COUNT_NOISE, "").cast(pl.Int64, strict=False)
+
+
 def _typed(df: pl.DataFrame) -> pl.DataFrame:
     """Ids, counts and rates to their pinned dtypes; ``"true"`` / ``"false"`` to Boolean."""
     df = _cast_ids_int64(df, [c for c in df.columns if _dtype_for(c) == pl.Int64 and _INT_ID.search(c)])
@@ -271,11 +284,13 @@ def _typed(df: pl.DataFrame) -> pl.DataFrame:
             continue
         if dtype == pl.Null:
             casts.append(pl.col(col).cast(want))
+        elif col == "attendance":
+            casts.append(_count(pl.col(col)).alias(col))
         elif want == pl.Boolean and dtype == pl.String:
             casts.append(pl.col(col).str.to_lowercase().replace_strict({"true": True, "false": False}, default=None))
         elif want in (pl.Int64, pl.Float64) and not _INT_ID.search(col):
             casts.append(_number(pl.col(col), want).alias(col))
-        elif want == pl.String and _STR_ID.search(col):
+        elif want == pl.String:
             casts.append(pl.col(col).cast(pl.String))
     return df.with_columns(casts) if casts else df
 
@@ -292,7 +307,8 @@ def _frame(rows: Iterable[Mapping[str, Any]]) -> pl.DataFrame:
 
 
 def _finish(df: pl.DataFrame, columns: Optional[Sequence[str]], return_as_pandas: bool) -> Frame:
-    """Apply the documented columns (an empty frame keeps them; a missing one is added as nulls)."""
+    """Apply the documented columns: an empty frame keeps them, a missing one is added as nulls,
+    and they lead in documented order (undocumented extras after), so frames concat."""
     if columns:
         if df.width == 0:
             df = pl.DataFrame(schema={c: _dtype_for(c) for c in columns})
@@ -300,6 +316,7 @@ def _finish(df: pl.DataFrame, columns: Optional[Sequence[str]], return_as_pandas
             missing = [pl.lit(None, dtype=_dtype_for(c)).alias(c) for c in columns if c not in df.columns]
             if missing:
                 df = df.with_columns(missing)
+            df = df.select([*columns, *(c for c in df.columns if c not in columns)])
     return df.to_pandas() if return_as_pandas else df
 
 

@@ -1,80 +1,77 @@
 columns:
-- description: StatNet game number (23401 = 2026/27 game 1); the play-by-play request
-    key.
+- description: ''
   name: statnet_game_number
   type: integer
-- description: StatNet team id of the home team (AIK, MODO, MIK).
+- description: ''
   name: home_statnet_id
   type: character
-- description: StatNet team id of the away team.
+- description: ''
   name: away_statnet_id
   type: character
-- description: Period number.
+- description: ''
   name: period
   type: integer
-- description: Period label ('Period 1').
+- description: ''
   name: period_label
   type: character
-- description: 'Event type: Shot, Goal, Penalty, GoalkeeperEvent or Timeout.'
+- description: ''
   name: event_type
   type: character
-- description: Seconds into the period.
+- description: ''
   name: time
   type: integer
-- description: 'Goalkeeper event: true when the goalkeeper enters, false when he leaves.'
+- description: ''
   name: is_entering
   type: logical
-- description: Team label as shown on the card (the display team code).
+- description: ''
   name: team_name
   type: character
-- description: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
-    id.
+- description: ''
   name: team_code
   type: character
-- description: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.
+- description: ''
   name: team_statnet_id
   type: character
-- description: StatNet player id (the same id space as SHL's isa id, verified on one
-    player).
+- description: ''
   name: player_statnet_id
   type: integer
-- description: 'Player: first name of the player.'
+- description: ''
   name: player_first_name
   type: character
-- description: 'Player: family name of the player.'
+- description: ''
   name: player_family_name
   type: character
-- description: 'Player: jersey number of the player.'
+- description: ''
   name: player_jersey_number
   type: integer
-- description: Shot outcome, goal strength (EQ), penalty text or timeout note.
+- description: ''
   name: event_description
   type: character
-- description: Score after the goal, home-away.
+- description: ''
   name: running_score
   type: character
-- description: Scorer's season goals after this goal.
+- description: ''
   name: scorer_season_goals
   type: integer
-- description: Goal scored on a penalty shot.
+- description: ''
   name: is_penalty_shot
   type: logical
-- description: First assist, by name (no id).
+- description: ''
   name: assist1_name
   type: character
-- description: First assist's jersey number in this game.
+- description: ''
   name: assist1_jersey_today
   type: integer
-- description: First assist's season assists after this goal.
+- description: ''
   name: assist1_season_assists
   type: integer
-- description: Second assist, by name (no id).
+- description: ''
   name: assist2_name
   type: character
-- description: Second assist's jersey number in this game.
+- description: ''
   name: assist2_jersey_today
   type: integer
-- description: Second assist's season assists after this goal.
+- description: ''
   name: assist2_season_assists
   type: integer
 kind: dataframe

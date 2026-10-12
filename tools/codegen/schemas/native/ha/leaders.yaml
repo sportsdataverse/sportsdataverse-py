@@ -1,58 +1,56 @@
 columns:
-- description: Rank in the table.
+- description: ''
   name: rank
   type: integer
-- description: Player name (the table carries no player id).
+- description: ''
   name: player_name
   type: character
-- description: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
-    id.
+- description: ''
   name: team_code
   type: character
-- description: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.
+- description: ''
   name: team_statnet_id
   type: character
-- description: Jersey number of the player.
+- description: ''
   name: jersey_number
   type: integer
-- description: 'Playing position: F forward, D defence (G goalkeeper on goalie metrics).'
+- description: ''
   name: position
   type: character
-- description: Metric code (echo of the request metric).
+- description: ''
   name: metric
   type: character
-- description: Value of the metric (a count, a percentage or a clock, as text).
+- description: ''
   name: metric_value
   type: character
-- description: StatNet player id (the same id space as SHL's isa id, verified on one
-    player).
+- description: ''
   name: player_statnet_id
   type: integer
-- description: First name of the player.
+- description: ''
   name: first_name
   type: character
-- description: Family name of the player.
+- description: ''
   name: family_name
   type: character
-- description: Player slug; joins ha_players.
+- description: ''
   name: slug
   type: character
-- description: Headshot URL (medium rendition).
+- description: ''
   name: headshot
   type: character
-- description: Small headshot URL.
+- description: ''
   name: headshot_small
   type: character
-- description: Medium headshot URL.
+- description: ''
   name: headshot_medium
   type: character
-- description: Team logo URL.
+- description: ''
   name: team_logo
   type: character
-- description: Team label as shown on the card (the display team code).
+- description: ''
   name: team_name
   type: character
-- description: Team primary colour (hex).
+- description: ''
   name: team_main_color
   type: character
 kind: dataframe

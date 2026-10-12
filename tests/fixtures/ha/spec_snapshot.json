@@ -1,0 +1,142 @@
+{
+  "routes": [
+    "/api/all-players",
+    "/api/all-time-games-stats",
+    "/api/all-time-goalkeepers-stats",
+    "/api/all-time-skaters-stats",
+    "/api/all-time-teams-stats",
+    "/api/game",
+    "/api/league-standings-all-time",
+    "/api/play-by-play",
+    "/api/player-leaderboard",
+    "/pages/matcher"
+  ],
+  "request_examples": {
+    "/api/all-players": {
+      "leagueShortName": "HA",
+      "orderBy": "familyName",
+      "page": 1,
+      "pageSize": 100,
+      "scope": "league",
+      "searchQuery": "",
+      "teamShortName": "AIK"
+    },
+    "/api/all-time-games-stats": {
+      "against_team": "all",
+      "all_results": "all",
+      "categories": "all",
+      "decided_in": "all",
+      "game_status": "all",
+      "league": "HA",
+      "page": 1,
+      "page_size": 1000,
+      "phase": "HA",
+      "season": "2025",
+      "team": "all",
+      "team_side": "all"
+    },
+    "/api/all-time-goalkeepers-stats": {
+      "against_team": "all",
+      "all_results": "all",
+      "categories": "summary",
+      "decided_in": "all",
+      "game_status": "all",
+      "league": "HA",
+      "page": 1,
+      "page_size": 1000,
+      "phase": "HA",
+      "season": "2025",
+      "team": "all",
+      "team_side": "all"
+    },
+    "/api/all-time-skaters-stats": {
+      "against_team": "all",
+      "ages": "all",
+      "all_results": "all",
+      "categories": "summary",
+      "decided_in": "all",
+      "game_status": "all",
+      "league": "HA",
+      "page": 1,
+      "page_size": 1000,
+      "phase": "HA",
+      "position": "all",
+      "season": "2025",
+      "team": "all",
+      "team_side": "all"
+    },
+    "/api/all-time-teams-stats": {
+      "against_team": "all",
+      "all_results": "all",
+      "categories": "results",
+      "decided_in": "all",
+      "game_status": "all",
+      "league": "HA",
+      "phase": "HA",
+      "season": "2025",
+      "team": "all",
+      "team_side": "all"
+    },
+    "/api/league-standings-all-time": {
+      "league": "HA",
+      "location": "all",
+      "phase": "HA",
+      "season": "2025"
+    },
+    "/api/play-by-play": {
+      "awayStatNetId": "MODO",
+      "homeStatNetId": "AIK",
+      "playedDateTime": "2026-09-18T17:00:00.000Z",
+      "scheduledDateTime": "2026-09-18T17:00:00.000Z",
+      "statNetGameNumber": "23401"
+    },
+    "/api/player-leaderboard": {
+      "isGoalkeeper": false,
+      "league": "HA",
+      "metric": "TP",
+      "page": 1,
+      "pageSize": 100,
+      "phase": "HA",
+      "team": null
+    }
+  },
+  "categories": {
+    "/api/all-time-goalkeepers-stats": [
+      "summary",
+      "results",
+      "game_strength",
+      "defensive",
+      "shootouts"
+    ],
+    "/api/all-time-skaters-stats": [
+      "summary",
+      "points",
+      "goals",
+      "time_on_ice",
+      "power_play",
+      "penalty_kill",
+      "equal_strength",
+      "penalties",
+      "plus_minus",
+      "faceoffs",
+      "offensive",
+      "defensive",
+      "shootouts",
+      "corsi_fenwick_pdo"
+    ],
+    "/api/all-time-teams-stats": [
+      "results",
+      "goals",
+      "power_play",
+      "penalty_kill",
+      "penalties",
+      "offensive",
+      "defensive",
+      "faceoffs",
+      "shootouts",
+      "corsi_fenwick_pdo",
+      "stoppage_reasons",
+      "attendance"
+    ]
+  }
+}

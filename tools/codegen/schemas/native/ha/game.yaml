@@ -1,217 +1,212 @@
 columns:
-- description: Season END year (2026 = 2025/26).
+- description: ''
   name: season
   type: integer
-- description: CMS (Strapi) record id of the game.
+- description: ''
   name: game_cms_id
   type: integer
-- description: CMS (Strapi) document id of the game.
+- description: ''
   name: game_document_id
   type: character
-- description: 'CMS season key as sent (season_2026 = 2026/27: a START year).'
+- description: ''
   name: cms_season
   type: character
-- description: StatNet game number (23401 = 2026/27 game 1); the play-by-play request
-    key.
+- description: ''
   name: statnet_game_number
   type: integer
-- description: Game slug yyyymmdd-home-away (lower-case CMS short names); the /api/game?slug=
-    key.
+- description: ''
   name: slug
   type: character
-- description: Round number.
+- description: ''
   name: round
   type: integer
-- description: Scheduled face-off time (ISO 8601 UTC).
+- description: ''
   name: scheduled_date_time
   type: character
-- description: Arena name.
+- description: ''
   name: venue
   type: character
-- description: Attendance; null for an unplayed game (0 for a played one means unknown).
+- description: ''
   name: attendance
   type: integer
-- description: Live period while the game runs; empty string '' before and after.
+- description: ''
   name: current_period
   type: character
-- description: Start time of the live period; null outside a live game.
+- description: ''
   name: current_period_start
   type: character
-- description: Home goals, final.
+- description: ''
   name: home_score
   type: integer
-- description: Away goals, final.
+- description: ''
   name: away_score
   type: integer
-- description: End time (ISO 8601 UTC).
+- description: ''
   name: ended_date_time
   type: character
-- description: How the game was decided (FT, OT, SO); empty for a game not yet played.
+- description: ''
   name: decided_in
   type: character
-- description: Home goals in period 1.
+- description: ''
   name: home_score_p1
   type: integer
-- description: Away goals in period 1.
+- description: ''
   name: away_score_p1
   type: integer
-- description: Home goals in period 2.
+- description: ''
   name: home_score_p2
   type: integer
-- description: Away goals in period 2.
+- description: ''
   name: away_score_p2
   type: integer
-- description: Home goals in period 3.
+- description: ''
   name: home_score_p3
   type: integer
-- description: Away goals in period 3.
+- description: ''
   name: away_score_p3
   type: integer
-- description: Home overtime goals; null when the game had no overtime.
+- description: ''
   name: home_ot_score
   type: integer
-- description: Away overtime goals; null when the game had no overtime.
+- description: ''
   name: away_ot_score
   type: integer
-- description: Home shootout goals; null when the game had no shootout.
+- description: ''
   name: home_so_score
   type: integer
-- description: Away shootout goals; null when the game had no shootout.
+- description: ''
   name: away_so_score
   type: integer
-- description: 'Game type (phase): HA regular season, HAPlayoff playoffs, HAkval playout.'
+- description: ''
   name: game_type
   type: character
-- description: Game of the playoff series (1, 2, ...); null outside the playoffs.
+- description: ''
   name: play_off_game
   type: character
-- description: Playoff round label.
+- description: ''
   name: play_off_game_level
   type: character
-- description: Actual start time (ISO 8601 UTC).
+- description: ''
   name: played_date_time
   type: character
-- description: true once the game is final.
+- description: ''
   name: is_completed
   type: logical
-- description: StatNet team id of the home team (AIK, MODO, MIK).
+- description: ''
   name: home_statnet_id
   type: character
-- description: StatNet team id of the away team.
+- description: ''
   name: away_statnet_id
   type: character
-- description: CMS creation time of the record (ISO 8601 UTC).
+- description: ''
   name: created_at
   type: character
-- description: CMS update time of the record (ISO 8601 UTC).
+- description: ''
   name: updated_at
   type: character
-- description: CMS publish time of the record (ISO 8601 UTC).
+- description: ''
   name: published_at
   type: character
-- description: CMS (Strapi) record id of the home team (81 = AIK).
+- description: ''
   name: home_team_cms_id
   type: integer
-- description: 'Home team: CMS (Strapi) document id (string; stable across drafts
-    and locales).'
+- description: ''
   name: home_team_document_id
   type: character
-- description: 'Home team: club name.'
+- description: ''
   name: home_team_name
   type: character
-- description: Display code of the home team (AIK, MoDo, MORA, NVIF, ÖIK), not the
-    StatNet id.
+- description: ''
   name: home_team_code
   type: character
-- description: 'Home team: primary colour (hex).'
+- description: ''
   name: home_team_main_color_hex
   type: character
-- description: 'Home team: secondary colour (hex).'
+- description: ''
   name: home_team_alternate_color_hex
   type: character
-- description: 'Home team: home arena.'
+- description: ''
   name: home_team_team_arena
   type: character
-- description: 'Home team: postal address of the arena (multi-line, newline-separated).'
+- description: ''
   name: home_team_arena_address
   type: character
-- description: 'Home team: arena latitude, decimal degrees.'
+- description: ''
   name: home_team_arena_latitude
   type: numeric
-- description: 'Home team: arena longitude, decimal degrees.'
+- description: ''
   name: home_team_arena_longitude
   type: numeric
-- description: 'Home team: arena telephone contact.'
+- description: ''
   name: home_team_arena_telephone
   type: character
-- description: 'Home team: ticket shop URL.'
+- description: ''
   name: home_team_tickets_provider_url
   type: character
-- description: 'Home team: club lottery URL.'
+- description: ''
   name: home_team_club_mate_lottery_url
   type: character
-- description: 'Home team: CMS creation time of the record (ISO 8601 UTC).'
+- description: ''
   name: home_team_created_at
   type: character
-- description: 'Home team: CMS update time of the record (ISO 8601 UTC).'
+- description: ''
   name: home_team_updated_at
   type: character
-- description: 'Home team: CMS publish time of the record (ISO 8601 UTC).'
+- description: ''
   name: home_team_published_at
   type: character
-- description: Logo URL of the home team.
+- description: ''
   name: home_team_logo_url
   type: character
-- description: CMS (Strapi) record id of the away team.
+- description: ''
   name: away_team_cms_id
   type: integer
-- description: 'Away team: CMS (Strapi) document id (string; stable across drafts
-    and locales).'
+- description: ''
   name: away_team_document_id
   type: character
-- description: 'Away team: club name.'
+- description: ''
   name: away_team_name
   type: character
-- description: Display code of the away team, not the StatNet id.
+- description: ''
   name: away_team_code
   type: character
-- description: 'Away team: primary colour (hex).'
+- description: ''
   name: away_team_main_color_hex
   type: character
-- description: 'Away team: secondary colour (hex).'
+- description: ''
   name: away_team_alternate_color_hex
   type: character
-- description: 'Away team: home arena.'
+- description: ''
   name: away_team_team_arena
   type: character
-- description: 'Away team: postal address of the arena (multi-line, newline-separated).'
+- description: ''
   name: away_team_arena_address
   type: character
-- description: 'Away team: arena latitude, decimal degrees.'
+- description: ''
   name: away_team_arena_latitude
   type: numeric
-- description: 'Away team: arena longitude, decimal degrees.'
+- description: ''
   name: away_team_arena_longitude
   type: numeric
-- description: 'Away team: arena telephone contact.'
+- description: ''
   name: away_team_arena_telephone
   type: character
-- description: 'Away team: ticket shop URL.'
+- description: ''
   name: away_team_tickets_provider_url
   type: character
-- description: 'Away team: club lottery URL.'
+- description: ''
   name: away_team_club_mate_lottery_url
   type: character
-- description: 'Away team: CMS creation time of the record (ISO 8601 UTC).'
+- description: ''
   name: away_team_created_at
   type: character
-- description: 'Away team: CMS update time of the record (ISO 8601 UTC).'
+- description: ''
   name: away_team_updated_at
   type: character
-- description: 'Away team: CMS publish time of the record (ISO 8601 UTC).'
+- description: ''
   name: away_team_published_at
   type: character
-- description: Logo URL of the away team.
+- description: ''
   name: away_team_logo_url
   type: character
 kind: dataframe
