@@ -103,6 +103,29 @@ from sportsdataverse.nfl.model_vars import (
     scores_vec,
     turnover_vec,
 )
+from sportsdataverse.cfb.cfb_pbp import _PENALTY_NEGATED_TEXT
+
+
+def _touchdown_did_not_stand() -> pl.Expr:
+    """Whether a touchdown the row's text names did not stand.
+
+    The CFB rule (``cfb_pbp._touchdown_negated``, C-M1) with ESPN's ``scoringPlay`` as the gate. On
+    a row ESPN did not score, the no-play marker ("TOUCHDOWN NULLIFIED by Penalty") or a replay
+    reversal negates it: ESPN still types "... for 29 yards, TOUCHDOWN ... and the play was REVERSED"
+    as a "Passing Touchdown" (291018018, 401671740; C-NF-6). On a row ESPN scored only the nullified
+    marker does (6 published 2009-12 rows score one): its "No Play" belongs to the try or to the
+    ruling a reversal INTO the touchdown overturned (2812140120518, 4005542932688), and the NFL
+    text has no CFB "clock" tail to cut those off at.
+    """
+    text = pl.col("text")
+    unscored = _PENALTY_NEGATED_TEXT + "|reversed"
+    return (
+        pl.when(pl.col("scoringPlay") == True)  # noqa: E712
+        .then(text.str.contains("(?i)nullified by penalty"))
+        .otherwise(text.str.contains(unscored))
+        .fill_null(False)
+    )
+
 
 # ESPN NFL play-text grammar. A ball-carrier is "X.Surname" (optionally
 # "Ja.Surname", "A.St. Brown", "A.Van Ginkel", "D.Jones Jr."); the CFB text the
@@ -1681,8 +1704,11 @@ class NFLPlayProcess(object):
         play_df = (
             play_df.with_columns(
                 scoring_play=pl.when(pl.col("type.text").is_in(scores_vec)).then(True).otherwise(False),
-                td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
-                | pl.col("type.text").str.contains("Touchdown"),
+                td_play=(
+                    pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
+                    | pl.col("type.text").str.contains("Touchdown")
+                )
+                & ~_touchdown_did_not_stand(),
                 touchdown=pl.col("type.text").str.contains("(?i)touchdown"),
                 ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
                 td_check=pl.col("text").str.contains("(?i)touchdown"),
@@ -2827,7 +2853,9 @@ class NFLPlayProcess(object):
                 # ``type.text`` alone does not catch every one: ESPN labels some pick-sixes
                 # "Passing Touchdown" and some "Interception Return", so the text -- which
                 # says the ball was intercepted or lost and THEN scored -- gates first (O3).
-                pass_td=pl.when(_returned_for_touchdown("text"))
+                pass_td=pl.when(_touchdown_did_not_stand())
+                .then(False)
+                .when(_returned_for_touchdown("text"))
                 .then(False)
                 .when(pl.col("type.text").is_in(["Passing Touchdown"]))
                 .then(True)
@@ -2838,7 +2866,9 @@ class NFLPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                rush_td=pl.when(_returned_for_touchdown("text"))
+                rush_td=pl.when(_touchdown_did_not_stand())
+                .then(False)
+                .when(_returned_for_touchdown("text"))
                 .then(False)
                 .when(pl.col("type.text").is_in(["Rushing Touchdown"]))
                 .then(True)

@@ -610,10 +610,11 @@ def test_a_rise_to_the_header_final_that_the_game_keeps_is_kept(sf_sea_2017):
 def test_pick_six_typed_interception_return_is_not_a_passing_touchdown():
     # "T.Romo pass short left intended for D.Street INTERCEPTED by T.McBride ... T.McBride for 20
     # yards, TOUCHDOWN." ESPN types the row "Interception Return", which is not in
-    # ``defense_score_vec``, so ``pass & td_play`` booked it as Romo's passing touchdown.
+    # ``defense_score_vec``, so ``pass & td_play`` booked it as Romo's passing touchdown. The replay
+    # REVERSED the score ("T.McBride ran ob at DAL 1", ESPN scoringPlay False): no td_play either (C-NF-6).
     row = _row(_process(400791590), 4007915903306)
     assert row["type.text"] == "Interception Return"
-    assert row["td_play"] and row["int"]
+    assert not row["td_play"] and row["int"]
     assert not row["pass_td"] and not row["rush_td"]
     assert row["yds_receiving"] == 0
     assert row["yds_int_return"] == 20

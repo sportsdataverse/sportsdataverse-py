@@ -1109,3 +1109,26 @@
   note: >-
     Review R806-1: without the step run_cleaning_pipeline() copies the setup-stage CFB-phrase
     penalty_1st_conv into first_down_penalty, 0 on every slice (nflverse 6 on 401547449).
+
+# --- C-M1 / C-NF-6 (task 2.5): touchdowns that did not stand ------------------------------------------
+- id: nfl-td-reversed-unscored-gate
+  group: nfl-td-flags
+  finding: C-NF-6
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'unscored = _PENALTY_NEGATED_TEXT + "|reversed"'
+  mutant: 'unscored = _PENALTY_NEGATED_TEXT'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_box_td_parity_team_box_touchdowns_match_espn_box[291018018]
+  expected: kill
+  note: >-
+    Without the REVERSED gate the replay-reversed Colston touchdown (scoringPlay False) is counted:
+    NO 5 passing TDs on 291018018 vs ESPN's box 4.
+
+- id: nfl-td-nullified-unscored-gate
+  group: nfl-td-flags
+  finding: C-M1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                & ~_touchdown_did_not_stand(),'
+  mutant: '                & pl.lit(True),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_nullified_touchdown_is_not_a_touchdown[291018018]
+  expected: kill
+  note: td_play True again on the three "TOUCHDOWN NULLIFIED by Penalty" rows of 291018018
