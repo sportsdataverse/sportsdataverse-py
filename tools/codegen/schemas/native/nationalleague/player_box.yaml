@@ -1,0 +1,123 @@
+columns:
+- description: SIHF game id `<season(4)><competition(4)><sequence(6)>` (Int64; e.g.
+    20261105000325, 1105 = National League). The same id as the sihf family's game_id;
+    its first four digits are the season END year.
+  name: game_id
+  type: integer
+- description: 'home or away: the side of the team this row belongs to.'
+  name: team_side
+  type: character
+- description: SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as
+    the sihf family's team_id.
+  name: team_id
+  type: integer
+- description: SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the
+    sihf family's player_id and every SIHF *LicenceNr.
+  name: player_id
+  type: integer
+- description: Sweater number, a string
+  name: number
+  type: character
+- description: First name
+  name: first_name
+  type: character
+- description: Last name
+  name: last_name
+  type: character
+- description: Initial and last name, e.g. 'S. Aeschlimann'
+  name: short_name
+  type: character
+- description: First and last name
+  name: name
+  type: character
+- description: goalkeeper, defender or forwarder (sic)
+  name: position
+  type: character
+- description: Faceoffs won
+  name: fow
+  type: integer
+- description: Faceoffs lost
+  name: fol
+  type: integer
+- description: Shots on goal
+  name: sog
+  type: integer
+- description: Shots that missed the net
+  name: shm
+  type: integer
+- description: Shots that hit the post
+  name: shp
+  type: integer
+- description: Own shots blocked by an opponent
+  name: shb
+  type: integer
+- description: Opponent shots blocked
+  name: bks
+  type: integer
+- description: Time on ice, seconds
+  name: toi
+  type: integer
+- description: Even-strength time on ice, seconds
+  name: toi_eq
+  type: integer
+- description: Power-play time on ice, seconds
+  name: toi_pp
+  type: integer
+- description: Shorthanded time on ice, seconds
+  name: toi_pk
+  type: integer
+- description: Penalty minutes
+  name: pim
+  type: integer
+- description: Goals
+  name: g
+  type: integer
+- description: First assists
+  name: a1
+  type: integer
+- description: Second assists
+  name: a2
+  type: integer
+- description: 'Plus count: on ice for an even-strength or shorthanded goal for'
+  name: pl
+  type: integer
+- description: 'Minus count: on ice for a goal against'
+  name: mi
+  type: integer
+- description: Goaltender time played, hundredths of a minute (6000 = 60:00; = seconds
+    / 0.6)
+  name: mip
+  type: integer
+- description: Goals against
+  name: ga
+  type: integer
+- description: Saves
+  name: svs
+  type: integer
+- description: Shots on goal against
+  name: sa
+  type: integer
+- description: Goals-against average; 0 in every sampled row, even for goaltenders
+    who conceded
+  name: gaa
+  type: numeric
+- description: Save percentage, 0-100
+  name: save_percentage
+  type: numeric
+- description: 'Faceoffs taken (upstream `fo`: fow + fol). Not penalties.'
+  name: faceoffs
+  type: integer
+- description: Faceoff win percentage (upstream `foPercentage`); -1 without faceoffs.
+  name: faceoffs_percentage
+  type: numeric
+- description: Assists (a1 + a2)
+  name: a
+  type: integer
+- description: Points (goals + assists)
+  name: pts
+  type: integer
+- description: Plus/minus (pl - mi)
+  name: pl_mi
+  type: integer
+kind: dataframe
+schema: nl_player_box

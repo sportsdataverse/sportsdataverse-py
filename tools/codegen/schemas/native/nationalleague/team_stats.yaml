@@ -1,0 +1,126 @@
+columns:
+- description: SIHF game id `<season(4)><competition(4)><sequence(6)>` (Int64; e.g.
+    20261105000325, 1105 = National League). The same id as the sihf family's game_id;
+    its first four digits are the season END year.
+  name: game_id
+  type: integer
+- description: 'home or away: the side of the team this row belongs to.'
+  name: team_side
+  type: character
+- description: SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as
+    the sihf family's team_id.
+  name: team_id
+  type: integer
+- description: Goals
+  name: g
+  type: integer
+- description: Goals against
+  name: ga
+  type: integer
+- description: Shots on goal against
+  name: sa
+  type: integer
+- description: Shots on goal in the 1st period
+  name: sog1
+  type: integer
+- description: Shots on goal in the 2nd period
+  name: sog2
+  type: integer
+- description: Shots on goal in the 3rd period
+  name: sog3
+  type: integer
+- description: Shots on goal in overtime, all periods
+  name: sog_ot
+  type: integer
+- description: Shots on goal in overtime period 1
+  name: sog_ot1
+  type: integer
+- description: Shots on goal in overtime period 2
+  name: sog_ot2
+  type: integer
+- description: Shots on goal in overtime period 3
+  name: sog_ot3
+  type: integer
+- description: Shots that missed the net
+  name: shm
+  type: integer
+- description: Shots that hit the post
+  name: shp
+  type: integer
+- description: Own shots blocked by an opponent
+  name: shb
+  type: integer
+- description: Opponent shots blocked
+  name: bks
+  type: integer
+- description: Defensive-zone faceoffs won (0 in every sampled game)
+  name: fow_d
+  type: integer
+- description: Neutral-zone faceoffs won (0 in every sampled game)
+  name: fow_n
+  type: integer
+- description: Offensive-zone faceoffs won (0 in every sampled game)
+  name: fow_o
+  type: integer
+- description: Neutral-zone faceoffs lost (0 in every sampled game)
+  name: fol_n
+  type: integer
+- description: Offensive-zone faceoffs lost (0 in every sampled game)
+  name: fol_o
+  type: integer
+- description: Defensive-zone faceoffs lost (0 in every sampled game)
+  name: fol_d
+  type: integer
+- description: Power-play time, seconds
+  name: ppt
+  type: integer
+- description: Power-play opportunities
+  name: ppo
+  type: integer
+- description: Power-play goals
+  name: ppg
+  type: integer
+- description: Shorthanded goals allowed while on the power play
+  name: ppga
+  type: integer
+- description: Shorthanded time, seconds
+  name: pkt
+  type: integer
+- description: Times shorthanded
+  name: pks
+  type: integer
+- description: Shorthanded goals scored
+  name: pkg
+  type: integer
+- description: Power-play goals allowed while shorthanded
+  name: pkga
+  type: integer
+- description: 'Faceoffs taken (upstream `fo`: fow + fol). Not penalties.'
+  name: faceoffs
+  type: integer
+- description: Penalty minutes
+  name: pim
+  type: integer
+- description: Shots on goal
+  name: sog
+  type: integer
+- description: Shooting percentage, 100 * g / sog
+  name: sog_percentage
+  type: numeric
+- description: Power-play percentage, 100 * ppg / ppo
+  name: pp_percentage
+  type: numeric
+- description: Penalty-kill percentage, 0-100
+  name: pk_percentage
+  type: numeric
+- description: Faceoffs won
+  name: fow
+  type: integer
+- description: Faceoffs lost
+  name: fol
+  type: integer
+- description: Faceoff win percentage (upstream `foPercentage`); -1 without faceoffs.
+  name: faceoffs_percentage
+  type: numeric
+kind: dataframe
+schema: nl_team_stats
