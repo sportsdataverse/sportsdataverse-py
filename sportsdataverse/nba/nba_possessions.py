@@ -40,7 +40,6 @@ LINEUP_COLUMNS: list[str] = [f"off_player_{i}" for i in range(1, 6)] + [f"def_pl
 # ~0% null rows; a one-sided-missing payload produces ~100%. Threshold of 2%
 # gives generous headroom while still catching the one-sided failure mode.
 _ROTATION_NULL_TOLERANCE = 0.02  # >2% of actions missing a player slot => degraded rotation, fall back to pbp
-_ROTATION_COVERAGE_TOLERANCE = 0.02  # team stints off 5 x game length by >2% => malformed rotation, fall back
 
 # ---------------------------------------------------------------------------
 # Schema
@@ -1782,7 +1781,6 @@ def nba_possessions(
     """
     from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
     from sportsdataverse.nba.nba_lineups import (
-        _rotation_coverage_error,
         boxscore_home_away,
         parse_rotation_resultsets,
         players_on_court_from_pbp,
@@ -1810,14 +1808,10 @@ def nba_possessions(
             game_id, league_id, proxy_url=proxy_url, raw_store_dir=raw_store_dir, raw_store_readonly=raw_store_readonly
         )
         rot = parse_rotation_resultsets(raw_rot)
-        # Stint-sum guard: overlapping or dropped stints map to plausible-looking
-        # but wrong lineups (no null slots), so the null-slot guard below misses them.
-        coverage_err = _rotation_coverage_error(rot)
-        if coverage_err > _ROTATION_COVERAGE_TOLERANCE:
-            raise ValueError(f"rotation stints are off five players' game time by {coverage_err:.1%}")
-        oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
+        # A malformed rotation (stints off five players' game time) comes back empty too.
+        oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away, league_id=league_id)
         if oc.is_empty():
-            raise ValueError("rotation produced empty on-court frame")
+            raise ValueError("rotation produced empty (or rejected malformed) on-court frame")
         # Coverage guard: a partially-degraded rotation payload (e.g. one side missing
         # stints) yields a non-empty frame with null player slots. Treat that as a
         # failure so "auto" falls back to the complete pbp reconstruction.

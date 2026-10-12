@@ -677,7 +677,7 @@ print(oc.shape)
 
 ### players_on_court_from_rotation {#players_on_court_from_rotation}
 
-`players_on_court_from_rotation(enhanced_pbp: 'pl.DataFrame', rotation: 'dict[str, list[dict]]', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'`
+`players_on_court_from_rotation(enhanced_pbp: 'pl.DataFrame', rotation: 'dict[str, list[dict]]', *, home_team_id: 'int', away_team_id: 'int', league_id: 'Optional[str]' = None) -> 'pl.DataFrame'`
 
 Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm.
 
@@ -695,10 +695,11 @@ The rotation dict may use either `"HomeTeam"`/`"AwayTeam"` or
 | `rotation` | `dict[str, list[dict]]` |  | Parsed rotation dict, typically from `parse_rotation_resultsets`. Each team's list contains stint dicts with numeric `PERSON_ID`, `IN_TIME_REAL`, `OUT_TIME_REAL`. |
 | `home_team_id` | `int` |  | Integer team ID of the home team. |
 | `away_team_id` | `int` |  | Integer team ID of the away team. |
+| `league_id` | `Optional[str]` | `None` | `"00"` NBA, `"10"` WNBA, `"15"` Summer League, `"20"` G League. Sets the period lengths the rotation clock runs on; when `None` the league is read off the game id. |
 
 **Returns**
 
-`polars.DataFrame` conforming to `LINEUPS_SCHEMA` with one row per action in *enhanced_pbp* (same row count, same ordering). Never raises — empty/malformed rotation returns a zero-row frame.
+`polars.DataFrame` conforming to `LINEUPS_SCHEMA` with one row per action in *enhanced_pbp* (same row count, same ordering). Never raises — an empty or malformed rotation (stints that do not sum to five players' game time, or carry negative / inverted clocks) logs a warning and returns a zero-row frame, so callers fall back to another lineup source.
 
 | col_name | type | description |
 |---|---|---|

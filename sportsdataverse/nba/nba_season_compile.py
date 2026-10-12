@@ -26,10 +26,13 @@ _LOG = logging.getLogger(__name__)
 #: the forward-fill accepted and so reset the running score. Possession points
 #: are a score difference, so every cached pre-2018 game holds corrupted points
 #: (up to +/-140 per possession) and must be recompiled rather than reused.
-#: v5: the rotation lineup mapper timed every event on the NBA's 720 s quarters,
-#: so WNBA rotation-derived lineups ran 120 s per period behind the rotation clock
-#: (player minutes off by ~3.3 min per game vs the box); malformed rotation
-#: payloads (stints not summing to five players' game time) now fall back.
+#: v5: rotation payloads whose stints do not sum to five players' game time (or
+#: carry negative / inverted clocks) are now rejected and fall back to quarter_box
+#: / pbp lineups, so cached NBA games compiled from such a payload are stale. The
+#: same key also names the WNBA per-game caches that import ``_game_cache_key``
+#: (wehoop-wnba-stats-data's impact builder), whose rotation lineups were also
+#: timed on 720 s quarters instead of the WNBA's 600 s. Other WNBA producers keep
+#: their own caches and must rebuild those themselves.
 PIPELINE_VERSION: int = 5
 
 _LEAGUE_ID = "00"

@@ -444,6 +444,11 @@ def test_regulation_clock_by_league_and_era() -> None:
     assert _regulation_clock("1020600001") == (4, 600.0)
     assert _regulation_clock("0022200001") == (4, 720.0)
     assert _regulation_clock("2022300001") == (4, 720.0)
+    assert _regulation_clock("1522400001") == (4, 600.0)  # Summer League: 10-minute quarters
+    # An undecodable id (enhanced pbp can carry game_id "None") must not hand a WNBA game the NBA clock.
+    assert _regulation_clock("None", "10") == (4, 600.0)
+    assert _regulation_clock("None") == (4, 720.0)
+    assert _regulation_clock("1022400001", "00") == (4, 720.0)  # explicit league wins
     wnba = _regulation_clock("1022400001")
     # The real 2021 case: checked in at IN_TIME_REAL 23921 = 7.9 s left in Q4.
     assert _elapsed_time(4, 7.9, wnba) == pytest.approx(23921.0)
@@ -466,3 +471,39 @@ def test_rotation_coverage_error_flags_overlapping_stints(game_id: str) -> None:
     # Negative clocks (as in the WNBA 2004-05 payloads) are malformed whatever they sum to.
     shifted = [{**s, "IN_TIME_REAL": -2320.0} if s is longest else s for s in rot[key]]
     assert _rotation_coverage_error({**rot, key: shifted}) == float("inf")
+
+
+def _overlapping(raw: dict) -> dict:
+    """The fixture's rotation with every home stint duplicated (ten 'on court')."""
+    out = json.loads(json.dumps(raw))
+    for rs in out["resultSets"]:
+        if rs["name"] == "HomeTeam":
+            rs["rowSet"] = rs["rowSet"] + rs["rowSet"]
+    return out
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_malformed_rotation_maps_to_an_empty_frame(game_id: str) -> None:
+    """The guard lives in the mapper itself, so every caller sees the rejection."""
+    enh = enhanced_pbp_from_payload(json.loads((FXR / game_id / "playbyplayv3.json").read_text()))
+    home, away = boxscore_home_away(_raw_box(game_id))
+    rot = parse_rotation_resultsets(_overlapping(_raw_rotation(game_id)))
+    oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away, league_id="10")
+    assert oc.is_empty()
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_wnba_engine_falls_back_to_pbp_lineups_on_malformed_rotation(
+    monkeypatch: pytest.MonkeyPatch, game_id: str
+) -> None:
+    """wnba_on_court / wnba_possessions have no quarter_box step: a rejected rotation must not
+    leave null lineups on every possession; the pbp substitution chain stands in."""
+    _patch(monkeypatch, game_id)
+    raw = _raw_rotation(game_id)
+    monkeypatch.setattr(W, "_fetch_rotation", lambda g: _overlapping(raw))
+    oc = W.wnba_on_court(game_id)
+    assert oc.height > 0
+    poss = W.wnba_possessions(game_id)
+    slots = [f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)]
+    assert poss.height > 0
+    assert poss.select(pl.sum_horizontal([pl.col(c).is_null() for c in slots]).sum()).item() == 0
