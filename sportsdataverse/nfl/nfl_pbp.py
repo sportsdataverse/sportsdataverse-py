@@ -1697,12 +1697,17 @@ class NFLPlayProcess(object):
         # where that team's next snap starts (ESPN's end yard line is flipped on some returns, R810-5).
         # Pre-2014 play ids are not always in game order (R785-4), so the next snap by id must also be
         # the next snap by sequenceNumber in the same half, and not another kickoff; otherwise ESPN's
-        # end yard line stands.
+        # end yard line stands. It must also be the RECEIVER's snap: a kickoff row's start.pos_team.id
+        # is the receiving team in every era (ESPN's start.team is the kicker), so the next snap's
+        # possession must equal it. ESPN files some kickoffs inside the kicking team's drive
+        # (401326517/1442); a muff the kicking team recovers fails it too (R810-3).
         kickoff = pl.col("type.text").is_in(kickoff_vec).fill_null(False)
         seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")
-        nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=kickoff, r=seq_rank)
+        nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=kickoff, r=seq_rank, team=pl.col("start.pos_team.id"))
         next_snap = (
-            (pl.col("_nxt").struct.field("kick") == False) & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
+            (pl.col("_nxt").struct.field("kick") == False)
+            & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
+            & (pl.col("_nxt").struct.field("team") == pl.col("start.pos_team.id"))  # the receiver's snap
         ).fill_null(False)
         # A missed field goal starts the other team's possession at a first down (the owner's
         # missed-field-goal model); its spot is set in __add_play_category_flags, once the kick's
@@ -5097,6 +5102,7 @@ class NFLPlayProcess(object):
         _probs_start = _ep_model.predict(DMatrix(X_ep_start, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_start = np.clip(_probs_start @ _EP_POINT_VALUES, -10.0, 10.0)
 
+        tb_fallback = (pl.col("kickoff_tb") == True) & ~pl.col("_kick_spot")  # R831-1: next snap wins
         play_df = (
             play_df.with_columns(
                 pl.when(pl.col("end.TimeSecsRem") <= 0)
@@ -5139,16 +5145,22 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .with_columns(
-                # A touchback kickoff with no next snap to read ends where EP_start_touchback starts
-                # it: the season's rule spot, so its EPA is 0 (the owner's kickoff model; EX-2.3-a).
-                # One the next snap places keeps that spot (_kick_spot, set with the C-H5 rewrite):
-                # from 2024 a kick that lands in the landing zone and rolls into the end zone is a
-                # touchback at the 20, not the 30 / 35 (R831-1). The punt touchback below is the 20
-                # in every season.
-                pl.when((pl.col("kickoff_tb") == True) & ~pl.col("_kick_spot"))  # R831-1: next snap wins
+                # A touchback kickoff with no receiver's next snap to read ends where EP_start_touchback
+                # starts it: the season's rule spot, with the receiver's ball, timeouts and clock (a
+                # touchback runs none), so its EPA is 0 (the owner's kickoff model; EX-2.3-a). ESPN's end
+                # team / clock on such a row come from whatever row follows it (401326517/1442 is filed
+                # inside the kicking team's drive). One the next snap places keeps that spot (_kick_spot,
+                # set with the C-H5 rewrite): from 2024 a kick that lands in the landing zone and rolls
+                # into the end zone is a touchback at the 20, not the 30 / 35 (R831-1). The punt
+                # touchback below is the 20 in every season.
+                pl.when(tb_fallback)
                 .then(touchback_yardline_expr(pl.col("season")))  # EX-2.3-a: the EP_start_touchback spot
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
+                *(
+                    pl.when(tb_fallback).then(pl.col(f"start.{c}")).otherwise(pl.col(f"end.{c}")).alias(f"end.{c}")
+                    for c in ("is_home", "posTeamTimeouts", "defPosTeamTimeouts", "TimeSecsRem")
+                ),
                 pl.when(pl.col("kickoff_tb") == True).then(1).otherwise(pl.col("end.down")).alias("end.down"),
                 pl.when(pl.col("kickoff_tb") == True).then(10).otherwise(pl.col("end.distance")).alias("end.distance"),
             )

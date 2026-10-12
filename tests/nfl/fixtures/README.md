@@ -215,6 +215,11 @@ columns, one per quarterback-game ESPN rated in 2023 (regular season and playoff
 - `plays_401872922.json.gz`, `box_401872925_espn_trimmed.json.gz`: see the tests that read them.
 - `athlete_refs_401872922.json.gz`: the Core v2 `$ref` payloads (`sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/<id>`) of the 7 athletes in `plays_401872922.json.gz` that the summary's athlete lookup misses, keyed by `$ref` URL; one request each, 2026-10-11, whole payloads. Read by `tests/football/test_play_participants_resolve.py` (supp-007).
 - `fox/`, `nfl_cbs/`, `yahoo_nfl/`: provider captures with their own READMEs where present.
+- `kickoff_misfiled_401326517_trimmed.json.gz` (task 2.21, read by `test_kickoff_net_spot_is_the_receivers_next_snap`):
+  the ESPN summary of 401326517 (2021 week 13, PHI @ NYJ) from the nfl-raw library
+  (`nfl/espn/raw/2021/401326517.json.gz`, nfl-raw commit 5ca32021, 2026-09-14), trimmed to the same keys as the
+  whole-game captures. It is NOT one of them (the name keeps it out of the `summary_*` glob): ESPN files the
+  touchback kickoff 1442 between two PHI snaps of one drive, the case the kickoff net-spot possession check covers.
 
 ## Overtime rule sets (C-M6)
 

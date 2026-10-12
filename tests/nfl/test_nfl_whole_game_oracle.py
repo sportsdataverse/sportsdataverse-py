@@ -27,6 +27,8 @@ game asserts the oracle plainly. Tolerances on model columns are the agreement m
 from __future__ import annotations
 
 import copy
+import gzip
+import json
 import math
 
 import polars as pl
@@ -263,7 +265,10 @@ def _next_out_of_order(plays: list, i: int) -> None:
 
 
 def _next_is_a_kickoff(plays: list, i: int) -> None:
+    # A re-kick by the same kicker, so the next row's possession is still the receiver's and only the
+    # not-a-kickoff guard can reject it (the possession check, #831, would catch any other kickoff).
     plays[i + 1]["type"]["text"] = "Kickoff"
+    plays[i + 1]["start"]["team"] = copy.deepcopy(plays[i]["start"]["team"])
 
 
 @pytest.mark.parametrize("edit", [_next_out_of_order, _next_is_a_kickoff], ids=["out_of_order", "next_is_kickoff"])
@@ -898,7 +903,8 @@ def test_real_concat_equals_per_game_runs_nflverse_wpa():
 # them ends at that spot with |EPA| < 1e-3, except the 2024+ landing-zone touchback below. Elsewhere in
 # the captures 25 kickoff_tb rows were not 0 at the season spot, every one with ESPN's end clock moving
 # (R831-3, routed to task 2.19): 22 are 2006-07 bare "KickOff" rows nflverse has as returns (R831-2,
-# task 2.19), which now keep their next snap's spot; 3 are real touchbacks (in the CSV below).
+# task 2.19), which now keep their next snap's spot; 3 are real touchbacks in the CSV below, of which
+# 400791590/1855 (no next snap to read) now takes its start's clock and is 0.
 _TB_ERAS = {
     "pre-2016": (331103020, 400791508),
     "2016-23": (401547449,),
@@ -946,6 +952,27 @@ def test_kickoff_touchback_without_a_next_snap_ends_at_the_season_spot(game_id, 
     assert abs(row["EPA"]) < 1e-3, row["EPA"]
 
 
+def test_kickoff_net_spot_is_the_receivers_next_snap():
+    # The owner's model reads the net spot at the RECEIVER's next snap. ESPN files 401326517's touchback
+    # 1442 (J.Elliott, PHI, 2021) between two PHI snaps of one drive, so the next row is PHI's 1st & 10
+    # at the NYJ 30; without the possession check that was read as NYJ's net spot (EPA +2.508). The
+    # check fails, so the touchback falls back to the season spot: EPA 0 (nflverse 0.000).
+    # fixtures/kickoff_misfiled_401326517_trimmed.json.gz (README "Other files").
+    with gzip.open(FIX / "kickoff_misfiled_401326517_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    proc = NFLPlayProcess(gameId=401326517)
+    proc.espn_nfl_pbp(summary=summary)
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(nfl_fourth_down, "_try_load", lambda name: None)
+        proc.run_processing_pipeline()
+    f = proc.plays_frame.sort("game_play_number")
+    i = f["id"].cast(pl.Utf8).to_list().index("4013265171442")
+    row, nxt = f.row(i, named=True), f.row(i + 1, named=True)
+    assert row["kickoff_tb"] is True and nxt["start.pos_team.id"] != row["start.pos_team.id"]
+    assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (1, 10, 75)
+    assert abs(row["EPA"]) < 1e-3, row["EPA"]
+
+
 def test_kickoff_touchback_cleaning_pipeline_has_no_kick_spot_column():
     # _kick_spot is carried from the C-H5 block to the EP block, which drops it; the cleaning pipeline
     # stops before the EP block and must drop it itself (review thread on #831).
@@ -959,13 +986,13 @@ def test_kickoff_touchback_cleaning_pipeline_has_no_kick_spot_column():
 
 # nflverse's epa on every touchback kickoff of the captures that nflverse also flags as one
 # (fixtures/nflverse/kickoff_touchback_epa.csv, 124 rows, 2006-2025; the README has the provenance).
-# MAE before -> after the fix: pre-2016 0.328 -> 0.017, 2016-23 0.0005 -> 0.0005, 2024 0.469 -> 0.255,
+# MAE before -> after the fix: pre-2016 0.328 -> 0.006, 2016-23 0.0005 -> 0.0005, 2024 0.469 -> 0.255,
 # 2025 1.096 -> 0.536. Ceilings are the measured MAE rounded up. From 2024 nflfastR still scores a
 # kickoff at its stale touchback 75 (helper_add_ep_wp.R: `ifelse(season < 2016, 80, 75)`) while the
 # next snap is at the 30 / 35, so nflverse's own touchback epa is not 0 there: +0.258 (2024, 1,880
 # plays) and +0.347 (2025, 610) over each full season, +0.211 / +0.536 on these capture rows. Ours is
 # the owner's model (tests above), and each row may sit no further from nflverse than 0 does.
-_TB_NFLVERSE_MAE = {"pre-2016": 0.02, "2016-23": 0.002}
+_TB_NFLVERSE_MAE = {"pre-2016": 0.01, "2016-23": 0.002}
 
 
 @pytest.mark.parametrize("era", list(_TB_ERAS))

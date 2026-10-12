@@ -994,8 +994,8 @@
   group: nfl-end-state
   finding: C-H5
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '(pl.col("_nxt").struct.field("kick") == False) & (pl.col("_nxt").struct.field("r")'
-  mutant: 'pl.lit(True) & (pl.col("_nxt").struct.field("r")'
+  snippet: '(pl.col("_nxt").struct.field("kick") == False)'
+  mutant: 'pl.lit(True)'
   test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_net_spot_falls_back_to_espn and next_is_kickoff"
   expected: kill
   note: >-
@@ -1343,8 +1343,8 @@
   group: nfl-end-state
   finding: EX-2.3-a
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'pl.when((pl.col("kickoff_tb") == True) & ~pl.col("_kick_spot"))  # R831-1: next snap wins'
-  mutant: 'pl.when(pl.col("kickoff_tb") == True)  # R831-1: next snap wins'
+  snippet: 'tb_fallback = (pl.col("kickoff_tb") == True) & ~pl.col("_kick_spot")  # R831-1: next snap wins'
+  mutant: 'tb_fallback = pl.col("kickoff_tb") == True  # R831-1: next snap wins'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_landing_zone_ends_at_the_next_snap
   expected: kill
   note: >-
@@ -1365,3 +1365,16 @@
     The C-H5 block's _kick_spot flag rides to the EP block, which drops it; run_cleaning_pipeline
     stops before the EP block, so without its own drop every cleaned play carries the temporary
     column (CodeRabbit thread on #831).
+
+- id: nfl-kickoff-next-snap-is-the-receivers
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& (pl.col("_nxt").struct.field("team") == pl.col("start.pos_team.id"))  # the receiver'
+  mutant: '& pl.lit(True)  # the receiver'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_net_spot_is_the_receivers_next_snap
+  expected: kill
+  note: >-
+    The owner's net spot is the RECEIVER's next snap. ESPN files 401326517's touchback 1442 between two
+    PHI snaps; without the possession check the PHI snap at the NYJ 30 is read as NYJ's net spot and
+    the touchback scores EPA +2.508 instead of 0 (nflverse 0.000).
