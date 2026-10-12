@@ -37,20 +37,21 @@ class _Resp:
 
 @pytest.fixture
 def served(monkeypatch: pytest.MonkeyPatch):
-    """Route URLs to canned responses; record every request and every polite wait."""
+    """Route URLs to canned responses; record every request and each one sent over the polite session."""
     routes: Dict[str, _Resp] = {"/statistics-v2/layout-info": _Resp(LAYOUT)}
     calls: List[Tuple[str, Dict[str, Any]]] = []
     waits: List[str] = []
 
     def fake_download(url: str, params: Any = None, **kw: Any) -> _Resp:
         calls.append((url, dict(params or {})))
+        if kw.get("session") is rt.SESSION:  # the session waits for _polite_wait on every attempt
+            waits.append(url)
         path = urlsplit(url).path.split("/api", 1)[1]
         if path not in routes:
             raise AssertionError(f"unexpected request {path}")
         return routes[path]
 
     monkeypatch.setattr(rt, "download", fake_download)
-    monkeypatch.setattr(rt, "_polite_wait", waits.append)
     rt._directory.cache_clear()
     yield routes, calls, waits
     rt._directory.cache_clear()
@@ -66,13 +67,13 @@ def test_stats_info_maps_the_end_year_and_always_sends_count_1000(served):
     )
     rt._get(f"{B}/statistics-v2/stats-info/standings_standings", {"season": 2026, "gameType": "regular", "count": 50})
     assert calls[-1][1] == {"ssgtUuid": "iuzqg7dqk9", "count": 1000}
-    assert len(waits) == len(calls) == 2  # layout-info + the table, each after a polite wait
+    assert len(waits) == len(calls) == 2  # layout-info + the table, each over the polite session
 
 
 def test_layout_info_is_fetched_once_per_process(served):
     routes, calls, _ = served
     routes["/statistics-v2/stats-info/teams_result"] = _Resp(
-        _load("statistics-v2__stats-info__module__teams_result.json")
+        _load("full/statistics-v2__stats-info__teams_result__iuzqg7dqk9.json")
     )
     for _ in range(3):
         rt._get(f"{B}/statistics-v2/stats-info/teams_result", {"season": 2026})
@@ -87,13 +88,13 @@ def test_schedule_gets_all_three_uuids_and_checks_the_ssgt(served):
 
 
 def test_schedule_of_another_season_is_refused(served):
-    """The 2024/25 schedule served for a 2025/26 request: wrong scope -> NoDataError."""
+    """The 2024/25 schedule served for a 2025/26 request: a wrong answer -> AssetFetchError."""
     routes, _, _ = served
     other = _load("sports-v2__game-schedule.json")
     for g in other["gameInfo"]:
         g["ssgtUuid"] = "qeb-73qtP8d19"
     routes["/sports-v2/game-schedule"] = _Resp(other)
-    with pytest.raises(NoDataError, match="not the data asked for"):
+    with pytest.raises(AssetFetchError, match="not the data asked for"):
         rt._get(f"{B}/sports-v2/game-schedule", {"season": 2026})
 
 
@@ -147,6 +148,32 @@ def test_truncated_stats_page_is_refused(served):
         rt._get(f"{B}/statistics-v2/stats-info/players_summary", {"season": 2026})
 
 
+def test_stats_page_short_of_its_total_count_is_refused(served):
+    """count=1000 sent, 3 rows back while totalCount says 473: a cut answer, not a short table."""
+    routes, _, _ = served
+    routes["/statistics-v2/stats-info/players_summary"] = _Resp(
+        _load("statistics-v2__stats-info__module__players_summary.json")
+    )
+    with pytest.raises(AssetFetchError, match="3 of totalCount=473"):
+        rt._get(f"{B}/statistics-v2/stats-info/players_summary", {"season": 2026})
+
+
+def test_stats_page_matching_its_total_count_passes(served):
+    routes, _, _ = served
+    routes["/statistics-v2/stats-info/goalkeepers_summary"] = _Resp(
+        _load("full/statistics-v2__stats-info__goalkeepers_summary__iuzqg7dqk9.json")
+    )
+    assert len(rt._get(f"{B}/statistics-v2/stats-info/goalkeepers_summary", {"season": 2026})[0]["stats"]) == 36
+
+
+def test_another_team_page_is_a_failed_fetch(served):
+    """A team page for another uuid is a wrong answer (AssetFetchError), not "nothing here"."""
+    routes, _, _ = served
+    routes["/sports-v2/teams/zzzz-zzzzzzzzz"] = _Resp(_load("sports-v2__teams__team_uuid.json"))
+    with pytest.raises(AssetFetchError, match="not the data asked for"):
+        rt._get(f"{B}/sports-v2/teams/zzzz-zzzzzzzzz")
+
+
 def test_empty_gameday_body_is_no_data(served):
     """Games before 2023/24 answer 200 with an empty body."""
     routes, _, _ = served
@@ -187,7 +214,7 @@ def test_non_json_body_is_a_failed_fetch(served):
 def test_another_game_is_refused(served):
     routes, _, _ = served
     routes["/gameday/play-by-play/zzzzzzzzzz"] = _Resp(_load("gameday__play-by-play__game_uuid.json"))
-    with pytest.raises(NoDataError, match="gameUuid='bdhvuc5tex'"):
+    with pytest.raises(AssetFetchError, match="gameUuid='bdhvuc5tex'"):
         rt._get(f"{B}/gameday/play-by-play/zzzzzzzzzz")
 
 
@@ -226,9 +253,33 @@ def test_provider_text_route(served):
 
 def test_player_crosswalk_is_one_stats_info_call(served):
     routes, calls, _ = served
-    routes["/statistics-v2/stats-info/players_summary"] = _Resp(
-        _load("statistics-v2__stats-info__module__players_summary.json")
-    )
+    body = _load("statistics-v2__stats-info__module__players_summary.json")
+    body[0]["totalCount"] = len(body[0]["stats"])  # the committed capture is cut to 3 rows
+    routes["/statistics-v2/stats-info/players_summary"] = _Resp(body)
     xw = rt.shl_player_crosswalk(2026)
     assert [u.rsplit("/", 1)[-1] for u, _ in calls] == ["layout-info", "players_summary"]
     assert xw.schema["player_id"] == pl.Int64 and xw.height == 3
+
+
+def test_every_attempt_retries_included_waits_its_turn(monkeypatch: pytest.MonkeyPatch):
+    """Real ``download()`` over ``SESSION``: a 503 then a 200 is two polite waits, one per attempt."""
+    from sportsdataverse import dl_utils
+    from sportsdataverse.hockey import euro_hockey_runtime as ehr
+
+    class _Wire:
+        def __init__(self, status: int, body: bytes) -> None:
+            self.status_code, self.content, self.text = status, body, body.decode()
+            self.headers = {"Content-Type": "application/json"}
+            self.url = f"{B}/sports-v2/teams/087a-087aTQv9u"
+
+        def json(self) -> Any:
+            return json.loads(self.content)
+
+    team = json.dumps(_load("sports-v2__teams__team_uuid.json")).encode()
+    answers = iter([_Wire(503, b"{}"), _Wire(200, team)])
+    waits: List[str] = []
+    monkeypatch.setattr(ehr, "_polite_wait", waits.append)
+    monkeypatch.setattr(dl_utils.time, "sleep", lambda s: None)
+    monkeypatch.setattr(ehr.requests.Session, "request", lambda self, method, url, *a, **k: next(answers))
+    assert rt._get(f"{B}/sports-v2/teams/087a-087aTQv9u")["uuid"] == "087a-087aTQv9u"
+    assert len(waits) == 2

@@ -1,18 +1,17 @@
 columns:
-- description: Club site instance id (e.g. bif1_bif); equals instanceId. Not a team
-    uuid or code.
+- description: ''
   name: id
   type: character
-- description: Club site instance id (e.g. fhc1_fhc).
+- description: ''
   name: instance_id
   type: character
-- description: Public image URL.
+- description: ''
   name: public_url
   type: character
-- description: Club name.
+- description: ''
   name: name
   type: character
-- description: Logo URL.
+- description: ''
   name: icon
   type: character
 kind: dataframe

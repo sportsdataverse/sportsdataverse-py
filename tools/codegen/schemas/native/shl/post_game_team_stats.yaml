@@ -1,46 +1,44 @@
 columns:
-- description: Translation key of the side.
+- description: ''
   name: home_team_side_translate_key
   type: character
-- description: Stat code compared on the left (e.g. G, PPG).
+- description: ''
   name: home_team_left_type
   type: character
-- description: Value (string-encoded).
+- description: ''
   name: home_team_left_value
   type: integer
-- description: Stat code compared on the right (e.g. SOG, PPOpp).
+- description: ''
   name: home_team_right_type
   type: character
-- description: Value (string-encoded).
+- description: ''
   name: home_team_right_value
   type: integer
-- description: Stat code compared in the middle (e.g. SEff, PPPerc).
+- description: ''
   name: home_team_center_type
   type: character
-- description: Value (string-encoded). Numeric, but sent as a string in some rows
-    and as a number in others.
+- description: ''
   name: home_team_center_value
   type: character
-- description: Translation key of the side.
+- description: ''
   name: away_team_side_translate_key
   type: character
-- description: Stat code compared on the left (e.g. G, PPG).
+- description: ''
   name: away_team_left_type
   type: character
-- description: Value (string-encoded).
+- description: ''
   name: away_team_left_value
   type: integer
-- description: Stat code compared on the right (e.g. SOG, PPOpp).
+- description: ''
   name: away_team_right_type
   type: character
-- description: Value (string-encoded).
+- description: ''
   name: away_team_right_value
   type: integer
-- description: Stat code compared in the middle (e.g. SEff, PPPerc).
+- description: ''
   name: away_team_center_type
   type: character
-- description: Value (string-encoded). Numeric, but sent as a string in some rows
-    and as a number in others.
+- description: ''
   name: away_team_center_value
   type: character
 kind: dataframe

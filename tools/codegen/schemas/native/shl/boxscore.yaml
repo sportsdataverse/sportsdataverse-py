@@ -1,93 +1,89 @@
 columns:
-- description: home or away.
+- description: ''
   name: team_side
   type: character
-- description: skater or goalie (goalies come from the body's gkStats rows).
+- description: ''
   name: position_group
   type: character
-- description: isa (StatNet) player id, Int64. Play-by-play sends it as a string,
-    every other route as an integer; it is cast here so the frames join.
+- description: ''
   name: player_id
   type: integer
-- description: Team code (e.g. FHC) in gameday and standings payloads; not the team
-    uuid.
+- description: ''
   name: team_id
   type: character
-- description: 'Period: 0 = the whole game, 1-3 the periods, 4 and up overtime.'
+- description: ''
   name: period
   type: integer
-- description: Given name and surname.
+- description: ''
   name: full_name
   type: character
-- description: Given name.
+- description: ''
   name: first_name
   type: character
-- description: Surname.
+- description: ''
   name: last_name
   type: character
-- description: Jersey number.
+- description: ''
   name: nr
   type: integer
-- description: Position code in this game (e.g. CE, LW, RW, D, GK).
+- description: ''
   name: pos
   type: character
-- description: Line number.
+- description: ''
   name: line
   type: integer
-- description: Goals.
+- description: ''
   name: g
   type: numeric
-- description: Assists.
+- description: ''
   name: a
   type: numeric
-- description: Power-play goals.
+- description: ''
   name: ppg
   type: numeric
-- description: Shots wide.
+- description: ''
   name: sw
   type: numeric
-- description: Penalty minutes.
+- description: ''
   name: pim
   type: numeric
-- description: Shots on goal.
+- description: ''
   name: sog
   type: numeric
-- description: Power-play shots on goal.
+- description: ''
   name: ppsog
   type: numeric
-- description: Plus/minus in the game.
+- description: ''
   name: plus_minus
   type: numeric
-- description: Time on ice (mm:ss). Clock/duration as an mm:ss string.
+- description: ''
   name: toi
   type: character
-- description: Body checks delivered.
+- description: ''
   name: hits
   type: numeric
-- description: Face-offs won.
+- description: ''
   name: fow
   type: numeric
-- description: Face-offs lost.
+- description: ''
   name: fol
   type: numeric
-- description: Face-off win %.
+- description: ''
   name: fo_perc
   type: numeric
-- description: Goals against.
+- description: ''
   name: ga
   type: numeric
-- description: Shots on goal against.
+- description: ''
   name: soga
   type: numeric
-- description: Unverified goalie column (box score).
+- description: ''
   name: spga
   type: numeric
-- description: Saves.
+- description: ''
   name: svs
   type: numeric
-- description: Save percentage of the game as a FRACTION 0-1 (e.g. '0.9655...'); integer
-    0 for a goalie without shots. Numeric, but sent as a string in some rows and as
-    a number in others.
+- description: ''
   name: svs_perc
   type: numeric
 kind: dataframe

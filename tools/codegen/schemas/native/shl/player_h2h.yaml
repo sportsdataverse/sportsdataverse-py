@@ -1,167 +1,164 @@
 columns:
-- description: Athlete uuid (platform key space; qQ9-... or 10-char form); joins to
-    the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy
-    id.
+- description: ''
   name: uuid
   type: character
-- description: Given name.
+- description: ''
   name: first_name
   type: character
-- description: Surname.
+- description: ''
   name: last_name
   type: character
-- description: Given name and surname.
+- description: ''
   name: full_name
   type: character
-- description: Date of birth (YYYY-MM-DD).
+- description: ''
   name: birth_date
   type: character
-- description: Nationality (ISO country code).
+- description: ''
   name: nationality
   type: character
-- description: Sex of the athlete or team (male / female).
+- description: ''
   name: gender
   type: character
-- description: Shirt number.
+- description: ''
   name: jersey_number
   type: character
-- description: Position label in English (e.g. Forward); N/A when unknown.
+- description: ''
   name: position
   type: character
-- description: Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown.
+- description: ''
   name: position_code
   type: character
-- description: Age in years.
+- description: ''
   name: age_value
   type: integer
-- description: 'Unit of value: years.'
+- description: ''
   name: age_format
   type: character
-- description: Height in cm.
+- description: ''
   name: height_value
   type: integer
-- description: 'Unit of value: cm.'
+- description: ''
   name: height_format
   type: character
-- description: Weight in kg.
+- description: ''
   name: weight_value
   type: integer
-- description: 'Unit of value: kg.'
+- description: ''
   name: weight_format
   type: character
-- description: Platform team uuid.
+- description: ''
   name: team_uuid
   type: character
-- description: Club site instance id (e.g. fhc1_fhc).
+- description: ''
   name: team_instance_id
   type: character
-- description: Team name.
+- description: ''
   name: team_name
   type: character
-- description: StatNet team code (SAIK, FHC).
+- description: ''
   name: team_code
   type: character
-- description: Media URL or string.
+- description: ''
   name: team_media
   type: character
-- description: Portrait URL on the imgix CDN.
+- description: ''
   name: media_url
   type: character
-- description: Image alt text. Empty string in every sample (placeholder).
+- description: ''
   name: media_alt
   type: character
-- description: Responsive image srcset.
+- description: ''
   name: media_srcset
   type: character
-- description: Current-season stat rows of the player (empty in the sample).
+- description: ''
   name: season_stats
   type: character
-- description: Career stat rows of the player (empty in the sample).
+- description: ''
   name: career_stats
   type: character
-- description: Jersey number.
+- description: ''
   name: match_stats_nr
   type: integer
-- description: Position code in this game (e.g. CE, LW, RW, D, GK).
+- description: ''
   name: match_stats_pos
   type: character
-- description: Line number.
+- description: ''
   name: match_stats_line
   type: integer
-- description: Goals.
+- description: ''
   name: match_stats_g
   type: integer
-- description: Assists.
+- description: ''
   name: match_stats_a
   type: integer
-- description: Points (goals + assists).
+- description: ''
   name: match_stats_tp
   type: integer
-- description: Shorthanded goals.
+- description: ''
   name: match_stats_shg
   type: integer
-- description: Power-play goals.
+- description: ''
   name: match_stats_ppg
   type: integer
-- description: Shots wide.
+- description: ''
   name: match_stats_sw
   type: integer
-- description: Penalty minutes.
+- description: ''
   name: match_stats_pim
   type: integer
-- description: Shots on goal.
+- description: ''
   name: match_stats_sog
   type: integer
-- description: Power-play shots on goal.
+- description: ''
   name: match_stats_ppsog
   type: integer
-- description: On ice for goals against (count).
+- description: ''
   name: match_stats_nep
   type: integer
-- description: On ice for goals for (count).
+- description: ''
   name: match_stats_pop
   type: integer
-- description: Time on ice (mm:ss). Clock/duration as an mm:ss string.
+- description: ''
   name: match_stats_toi
   type: character
-- description: Body checks delivered.
+- description: ''
   name: match_stats_hits
   type: integer
-- description: Face-offs taken.
+- description: ''
   name: match_stats_fo_tot
   type: integer
-- description: Face-offs won.
+- description: ''
   name: match_stats_fow
   type: integer
-- description: Face-offs lost.
+- description: ''
   name: match_stats_fol
   type: integer
-- description: Number of penalties.
+- description: ''
   name: match_stats_num_pen
   type: integer
-- description: Face-off win %.
+- description: ''
   name: match_stats_fo_perc
-  type: integer
-- description: Missed shots (wide + blocked).
+  type: numeric
+- description: ''
   name: match_stats_ms
   type: integer
-- description: Blocked shots.
+- description: ''
   name: match_stats_bk_s
   type: integer
-- description: Goals for minus goals against while on ice (+/-).
+- description: ''
   name: match_stats_plus_minus
   type: integer
-- description: Head-to-head season averages.
+- description: ''
   name: season_avg_stats
   type: character
-- description: Stats provider of the data (statnet seen).
+- description: ''
   name: statistics_provider
   type: character
-- description: Whether the player is in the current squad.
+- description: ''
   name: is_in_squad
   type: logical
-- description: 'The ssgt the head-to-head was computed for: the CURRENT season, whatever
-    the path asked.'
+- description: ''
   name: effective_ssgt_uuid
   type: character
 kind: dataframe

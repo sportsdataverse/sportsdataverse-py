@@ -14,19 +14,21 @@ The SHL site API is keyless JSON. Its contracts, all from the refs capture
   :class:`~sportsdataverse.errors.NoDataError`. :func:`shl_ssgt_uuid` exposes the mapping.
 * **stats-info truncates silently.** Without ``count=1000`` it serves 50 rows and its
   ``totalCount`` echoes 50. :func:`_get` always sends ``count=1000`` and raises
-  :class:`~sportsdataverse.errors.AssetFetchError` when the rows reach the count (a cut page).
+  :class:`~sportsdataverse.errors.AssetFetchError` when the rows reach the count or fall
+  short of the body's ``totalCount`` (a cut page).
 * **gameday/* starts in 2023/24.** Older games answer 200 with an EMPTY body, which raises
   ``NoDataError`` (the shared getter would call an empty body a failed fetch).
 * **Refusals.** A 200 body that is only an error envelope, or a body that is not JSON, raises
   ``AssetFetchError``; an empty stub (``{}`` / ``[]``) or a table with zero rows raises
   ``NoDataError``. A body that names another game, team, athlete or ssgt than the one asked
-  for raises ``NoDataError``; one without the field that would show it raises
-  ``AssetFetchError`` (it cannot be verified). ``player-h2h-v2`` is not checked: it answers
+  for (a wrong answer) raises ``AssetFetchError``, as does one without the field that would
+  show it (it cannot be verified). ``player-h2h-v2`` is not checked: it answers
   the current season whatever ssgt the path names.
 * **One text route.** ``/sports-v2/ssgt/{ssgt}/provider`` answers a bare word (``statnet``)
   as text/html; anything else there (the SPA shell) raises ``AssetFetchError``.
 
-Every request waits for :func:`~sportsdataverse.hockey.euro_hockey_runtime._polite_wait`
+Every attempt, retries included, goes through
+:data:`~sportsdataverse.hockey.euro_hockey_runtime.SESSION`, which waits for ``_polite_wait``
 (at least 1 s between two requests to the host). Status codes follow the package vocabulary
 through :mod:`sportsdataverse._codegen_runtime`: 404 -> ``NoDataError``, 400 / 422 ->
 ``ValueError``, any other non-2xx or a dead connection -> ``AssetFetchError``.
@@ -45,7 +47,7 @@ import polars as pl
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
-from sportsdataverse.hockey.euro_hockey_runtime import _polite_wait
+from sportsdataverse.hockey.euro_hockey_runtime import SESSION
 from sportsdataverse.hockey.shl.shl_parsers import parse_shl_player_crosswalk
 
 __all__ = ["GAME_TYPES", "shl_player_crosswalk", "shl_ssgt_uuid"]
@@ -139,8 +141,8 @@ def _pluck(body: Any, path: str) -> List[Any]:
 
 
 def _transport(url: str, **kwargs: Any) -> Any:
-    """``download`` after the polite wait; an empty 200 from a gameday route is "no data"."""
-    _polite_wait(url)
+    """``download`` over the polite session; an empty 200 from a gameday route is "no data"."""
+    kwargs.setdefault("session", SESSION)
     resp = download(url=url, **kwargs)
     status = getattr(resp, "status_code", 200)
     if "/gameday/" in url and status == 200 and not (getattr(resp, "text", "") or "").strip():
@@ -270,8 +272,12 @@ def _check(url: str, route: Optional[str], raw: Any, query: Dict[str, Any], ssgt
     rows = _pluck(raw, _ROWS[route])
     if not any(isinstance(r, dict) and r for r in rows):
         raise NoDataError(f"{where} answered no rows at {_ROWS[route]!r}")
-    if route == r"/statistics-v2/stats-info/[^/]+" and len(rows) >= STATS_COUNT:
-        raise AssetFetchError(f"{where} answered {len(rows)} rows = count={STATS_COUNT}: the table may be cut")
+    if route == r"/statistics-v2/stats-info/[^/]+":
+        if len(rows) >= STATS_COUNT:
+            raise AssetFetchError(f"{where} answered {len(rows)} rows = count={STATS_COUNT}: the table may be cut")
+        total = next(iter(_pluck(raw, "[].totalCount")), None)
+        if isinstance(total, int) and not isinstance(total, bool) and len(rows) < total:
+            raise AssetFetchError(f"{where} answered {len(rows)} of totalCount={total} rows: the table was cut")
     scope = _SCOPE.get(route)
     if scope is None:
         return
@@ -288,7 +294,7 @@ def _check(url: str, route: Optional[str], raw: Any, query: Dict[str, Any], ssgt
         raise AssetFetchError(f"{where}: the body lacks {field!r}, so {expected!r} cannot be verified")
     wrong = [v for v in values if v != expected]
     if wrong:
-        raise NoDataError(f"{where} answered {field}={wrong[0]!r} for {expected!r}: not the data asked for")
+        raise AssetFetchError(f"{where} answered {field}={wrong[0]!r} for {expected!r}: not the data asked for")
 
 
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
@@ -305,15 +311,15 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
 
     Raises:
         NoDataError: a 404; an empty gameday body (games before 2023/24); an empty stub or a
-            table with no rows; an answer for another game / team / athlete / ssgt; a season
-            or game type layout-info does not list.
+            table with no rows; a season or game type layout-info does not list.
         ValueError: a 400 / 422, or a season that is not a year.
         AssetFetchError: any other non-2xx or a dead connection after retries; a non-JSON or
-            error-envelope 200; a stats-info page whose rows reach ``count``; a body without
-            the field that would show its scope.
+            error-envelope 200; a stats-info page whose rows reach ``count`` or fall short of
+            its ``totalCount``; an answer for another game / team / athlete / ssgt, or a body
+            without the field that would show its scope.
     """
     if _TEXT_ROUTE.search(urlsplit(url).path):
-        _polite_wait(url)
+        kwargs.setdefault("session", SESSION)
         with _rt._transport_errors(url):
             resp = download(url=url, **kwargs)
         text = _rt._text_body(resp, url).strip()

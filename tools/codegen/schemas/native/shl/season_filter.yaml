@@ -1,20 +1,17 @@
 columns:
-- description: 'Directory entry kind: series, season or game_type.'
+- description: ''
   name: kind
   type: character
-- description: 'Game type code: regular, playoff, qualdown (legacy career logs: qualification).'
+- description: ''
   name: code
   type: character
-- description: 'Game type label in Swedish: Grundserie = regular season, Slutspel
-    = playoffs, Kvalspel nedflyttning = relegation qualification, Kvalserien = the
-    old promotion/relegation series.'
+- description: ''
   name: name
   type: character
-- description: Game type uuid (platform key space; regular qQ9-af37Ti40B); the gameTypeUuid
-    param of game-schedule.
+- description: ''
   name: uuid
   type: character
-- description: Soft-delete flag of the record (false in every sample).
+- description: ''
   name: deleted
   type: logical
 kind: dataframe
