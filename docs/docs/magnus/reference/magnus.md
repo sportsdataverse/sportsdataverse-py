@@ -11,7 +11,7 @@ toc_max_heading_level: 2
 
 ## magnus_competitions
 
-Competitions (one per season) of a competition type
+Competitions (one per season) of a competition type.
 
 **Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
 
@@ -83,8 +83,8 @@ Game header from the game sheet: teams, score, start time, status, attendance an
 | `has_shootout` | logical | Whether the game went to a shootout. |
 | `n_periods` | integer | Number of regulation periods. |
 | `period_minutes` | integer | Length of a regulation period in minutes. |
-| `attendance` | integer | Spectators. |
-| `venue` | character | Rink name. |
+| `attendance` | integer | Number of spectators (attendance). |
+| `venue` | character | Name of the rink (arena). |
 
 **`return_parsed=False`** — the game sheet `Dict` extracted from the page's embedded JSON (staff birth dates removed).
 
@@ -116,7 +116,7 @@ Game roster from the game sheet: one row per dressed player, with the person id,
 |---|---|---|
 | `game_id` | integer | Game id (Int64 join key). |
 | `team_id` | integer | Team id (Int64). |
-| `home_away` | character | home or away. |
+| `home_away` | character | The team's side: home or away. |
 | `player_id` | integer | Person id (Int64; joueurs[].id = personne.id), stable across games; the player key of every Magnus frame. |
 | `player_participant_id` | integer | The player's roster entry in THIS game (Int64; changes every game), the key the sheet's on-ice lists and MVPs use; never join across games on it. |
 | `player_name` | character | Player name (SURNAME First). |
@@ -199,7 +199,7 @@ _Last validated n/a._
 
 ## magnus_phases
 
-Phases of a competition (regular season, playoffs, relegation)
+Phases of a competition (regular season, playoffs, relegation).
 
 **Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
 
@@ -236,7 +236,7 @@ _Last validated n/a._
 
 ## magnus_round_games
 
-One round of a phase with its games
+One round of a phase with its games.
 
 **Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
 
@@ -273,7 +273,7 @@ One round of a phase with its games
 | `home_team_participant_id` | integer | Team participant id of the home team in this phase (Int64; its own key space, joins team_participant_id of the standings; not a team id). |
 | `away_team_participant_id` | integer | Team participant id of the away team in this phase (Int64; joins team_participant_id of the standings). |
 | `venue_id` | integer | Rink id (Int64). |
-| `venue` | character | Rink name. |
+| `venue` | character | Name of the rink (arena). |
 | `game_label` | character | Game label as published ("HOME / AWAY"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -288,7 +288,7 @@ _Last validated n/a._
 
 ## magnus_rounds
 
-Rounds (journees) of a phase with their dates (games via get_rencontrestours)
+Rounds (journees) of a phase with their dates (games via get_rencontrestours).
 
 **Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
 
@@ -326,7 +326,7 @@ _Last validated n/a._
 
 ## magnus_schedule
 
-Games (schedule and results); Laravel-paginated, par_page=700 returns a full season
+Games (schedule and results); Laravel-paginated, par_page=700 returns a full season.
 
 **Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
 
@@ -367,7 +367,7 @@ Games (schedule and results); Laravel-paginated, par_page=700 returns a full sea
 | `home_team_participant_id` | integer | Team participant id of the home team in this phase (Int64; its own key space, joins team_participant_id of the standings; not a team id). |
 | `away_team_participant_id` | integer | Team participant id of the away team in this phase (Int64; joins team_participant_id of the standings). |
 | `venue_id` | integer | Rink id (Int64). |
-| `venue` | character | Rink name. |
+| `venue` | character | Name of the rink (arena). |
 | `game_label` | character | Game label as published ("HOME / AWAY"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -421,7 +421,7 @@ _Last validated n/a._
 
 ## magnus_standings
 
-Standings of a phase
+Standings of a phase.
 
 **Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
 
@@ -442,15 +442,15 @@ Standings of a phase
 | `team` | character | Short team name as the table publishes it (e.g., "MARSEILLE"). |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_participant_id` | integer | Team participant id in this phase (Int64; joins home_team_participant_id / away_team_participant_id of the schedule). |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `wins` | integer | Wins in regulation. |
 | `ot_wins` | integer | Wins in overtime or a shootout. |
 | `ot_losses` | integer | Losses in overtime or a shootout. |
 | `losses` | integer | Losses in regulation. |
-| `ties` | integer | Tied games. |
-| `points` | integer | Table points. |
-| `goals_for` | integer | Goals scored. |
-| `goals_against` | integer | Goals allowed. |
+| `ties` | integer | Number of tied games. |
+| `points` | integer | Points in the standings table. |
+| `goals_for` | integer | Goals scored (total). |
+| `goals_against` | integer | Goals allowed (goals against). |
 | `penalty_minutes` | integer | Penalty minutes. |
 | `last_results` | character | Form guide: the last results as W (win), L (loss) or T (tie) letters, in the order the table lists them. |
 | `standings_id` | integer | Standings table id (Int64). |
@@ -467,7 +467,7 @@ _Last validated n/a._
 
 ## magnus_teams
 
-Teams of a phase
+Teams of a phase.
 
 **Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
 
@@ -489,7 +489,7 @@ Teams of a phase
 | `team_short_name` | character | Short team label (e.g., "GAP", "ANGLET"). |
 | `team_label` | character | Back-office label, "<club code> - <NAME> <level>"; use team for display. |
 | `gender` | character | Gender of the team: M (men; the only value observed). |
-| `logo_url` | character | Team logo URL. |
+| `logo_url` | character | URL of the team logo image. |
 | `club_id` | integer | Id of the club (legal entity) behind the team (Int64). |
 | `club` | character | Name of the club (legal entity). |
 | `club_code` | character | Federation club code (e.g., "93006S"). |

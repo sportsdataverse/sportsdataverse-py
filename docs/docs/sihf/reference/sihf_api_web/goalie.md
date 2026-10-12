@@ -86,7 +86,7 @@ Goaltender shots against: on goal (total, slot), missed, post, with per-game rat
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `soga_sog` | integer | Shots on goal against, total. |
 | `soga_sog_per_game` | double | Shots on goal against per game. |
 | `soga_sog_slot` | integer | Slot shots on goal against. |
@@ -136,17 +136,17 @@ Goaltender decisions: starts, wins and losses in regulation, overtime and shooto
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `first_keeper` | integer | Games started as goalkeeper (GPI). |
-| `wins` | integer | Wins, total. |
+| `wins` | integer | Wins, all decision types. |
 | `wins_intime` | integer | Wins in regulation. |
-| `wins_overtime` | integer | Overtime wins. |
-| `wins_penalty` | integer | Shootout wins. |
-| `losses` | integer | Losses, total. |
+| `wins_overtime` | integer | Games won in overtime. |
+| `wins_penalty` | integer | Games won in a shootout. |
+| `losses` | integer | Losses, all decision types. |
 | `losses_intime` | integer | Losses in regulation. |
 | `losses_overtime` | integer | Overtime losses. |
 | `losses_penalty` | integer | Shootout losses. |
-| `shutout` | integer | Shutouts. |
+| `shutout` | integer | Shutouts (games with no goal against). |
 | `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -187,7 +187,7 @@ Goaltender shootouts: attempts faced, goals against, saves and save percentage.
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `pen_shots_against` | integer | Shootout/penalty shots faced. |
 | `pen_shot_goals_against` | integer | Shootout/penalty goals allowed. |
 | `pen_shot_saves` | integer | Shootout/penalty shots saved. |

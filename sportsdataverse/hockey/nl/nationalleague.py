@@ -53,7 +53,7 @@ def nl_schedule(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Schedule and results for one season: NL plus exhibitions
+    """Schedule and results for one season: NL plus exhibitions.
 
     Endpoint: ``GET https://www.nationalleague.ch/api/games``
     Example URL: https://www.nationalleague.ch/api/games?season=2026
@@ -111,7 +111,7 @@ def nl_current_games(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """The current or next game day
+    """The current or next game day.
 
     Endpoint: ``GET https://www.nationalleague.ch/api/games/current``
     Example URL: https://www.nationalleague.ch/api/games/current?season=2027
@@ -170,7 +170,7 @@ def nl_team_schedule(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """One team's games for one season
+    """One team's games for one season.
 
     Endpoint: ``GET https://www.nationalleague.ch/api/games/team/{team_id}``
     Example URL: https://www.nationalleague.ch/api/games/team/101144?season=2026
@@ -682,7 +682,7 @@ def nl_player_stats(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Season stats for every player, with playerId
+    """Season stats for every player, with playerId.
 
     Endpoint: ``GET https://www.nationalleague.ch/api/player``
     Example URL: https://www.nationalleague.ch/api/player?season=2026&phase=4940
@@ -744,7 +744,7 @@ def nl_top_scorers(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Top scorers (same row shape as /player)
+    """Top scorers (same row shape as /player).
 
     Endpoint: ``GET https://www.nationalleague.ch/api/player/topscorer``
     Example URL: https://www.nationalleague.ch/api/player/topscorer?take=3&season=2026&phase=4940
@@ -808,7 +808,7 @@ def nl_team_player_stats(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Season stats for one team's players
+    """Season stats for one team's players.
 
     Endpoint: ``GET https://www.nationalleague.ch/api/player/team/{team_id}``
     Example URL: https://www.nationalleague.ch/api/player/team/101144?season=2026&phase=4940
@@ -871,7 +871,7 @@ def nl_player_season(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """One player's season stats
+    """One player's season stats.
 
     Endpoint: ``GET https://www.nationalleague.ch/api/player/{player_id}``
     Example URL: https://www.nationalleague.ch/api/player/305519?season=2026&phase=4940
@@ -933,7 +933,7 @@ def nl_standings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Standings with team season stats
+    """Standings with team season stats.
 
     Endpoint: ``GET https://www.nationalleague.ch/api/teams``
     Example URL: https://www.nationalleague.ch/api/teams?season=2026&phase=4940
@@ -993,7 +993,7 @@ def nl_team_info(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Club CMS record: names, logo, website, ticket links
+    """Club CMS record: names, logo, website, ticket links.
 
     Endpoint: ``GET https://www.nationalleague.ch/api/teams/{team_id}/info``
     Example URL: https://www.nationalleague.ch/api/teams/101144/info

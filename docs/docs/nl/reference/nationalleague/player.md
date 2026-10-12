@@ -76,7 +76,7 @@ _Last validated n/a._
 
 ## nl_player_stats
 
-Season stats for every player, with playerId
+Season stats for every player, with playerId.
 
 **Endpoint URL:** `GET https://www.nationalleague.ch/api/player`
 
@@ -251,7 +251,7 @@ _Last validated n/a._
 
 ## nl_player_season
 
-One player's season stats
+One player's season stats.
 
 **Endpoint URL:** `GET https://www.nationalleague.ch/api/player/{player_id}`
 

@@ -46,7 +46,7 @@ def magnus_competitions(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Competitions (one per season) of a competition type
+    """Competitions (one per season) of a competition type.
 
     Endpoint: ``GET https://liguemagnus.com/wp-admin/admin-ajax.php``
     Example URL: https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_competition_by_type&id_type=1
@@ -249,7 +249,7 @@ def magnus_phases(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Phases of a competition (regular season, playoffs, relegation)
+    """Phases of a competition (regular season, playoffs, relegation).
 
     Endpoint: ``GET https://liguemagnus.com/wp-admin/admin-ajax.php``
     Example URL: https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_phases&competition_id=240
@@ -303,7 +303,7 @@ def magnus_round_games(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """One round of a phase with its games
+    """One round of a phase with its games.
 
     Endpoint: ``GET https://liguemagnus.com/wp-admin/admin-ajax.php``
     Example URL: https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_rencontrestours&phase_id=714&journee=1
@@ -358,7 +358,7 @@ def magnus_rounds(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Rounds (journees) of a phase with their dates (games via get_rencontrestours)
+    """Rounds (journees) of a phase with their dates (games via get_rencontrestours).
 
     Endpoint: ``GET https://liguemagnus.com/wp-admin/admin-ajax.php``
     Example URL: https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_liste_tours&phase_id=714
@@ -416,7 +416,7 @@ def magnus_schedule(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Games (schedule and results); Laravel-paginated, par_page=700 returns a full season
+    """Games (schedule and results); Laravel-paginated, par_page=700 returns a full season.
 
     Endpoint: ``GET https://liguemagnus.com/wp-admin/admin-ajax.php``
     Example URL: https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_rencontres&par_page=700&competition_id=240
@@ -530,7 +530,7 @@ def magnus_standings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Standings of a phase
+    """Standings of a phase.
 
     Endpoint: ``GET https://liguemagnus.com/wp-admin/admin-ajax.php``
     Example URL: https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_classementsphase&phase_id=714
@@ -583,7 +583,7 @@ def magnus_teams(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Teams of a phase
+    """Teams of a phase.
 
     Endpoint: ``GET https://liguemagnus.com/wp-admin/admin-ajax.php``
     Example URL: https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_equipes&phase_id=714

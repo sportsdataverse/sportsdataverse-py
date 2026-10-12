@@ -193,7 +193,7 @@ def _ajax_entry(short: str, cfg: Dict[str, Any], op: dict) -> Dict[str, Any]:
         raise SystemExit(f"magnus {short}: spec params {sorted(spec_wire)} != covered {sorted(covered)}")
     return {
         "short": short,
-        "summary": " ".join(str(op.get("summary") or "").split()),
+        "summary": " ".join(str(op.get("summary") or "").split()).rstrip(".") + ".",  # prose, period-terminated
         "path": AJAX,
         "fixed_params": fixed,
         "extra_params": params,

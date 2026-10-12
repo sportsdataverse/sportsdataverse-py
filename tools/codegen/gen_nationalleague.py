@@ -293,7 +293,7 @@ def _entry(short: str, path: str, op: dict, parser: str, summary: Any) -> Dict[s
     assert not {"league", "sport"} & {p["name"] for p in pps}, path  # Review Focus 4: the renderer eats these
     entry: Dict[str, Any] = {
         "short": short,
-        "summary": summary or op.get("summary") or f"GET {path}",
+        "summary": (summary or op.get("summary") or f"GET {path}").rstrip(".") + ".",  # prose, period-terminated
         "path": wire_path,
         "parser": parser,
         "returns_schema": f"native/{STEM}/{short}",

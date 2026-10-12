@@ -28,8 +28,8 @@ Cumulative shot attempts and shots on goal of one game, per team and game minute
 | col_name | type | description |
 |---|---|---|
 | `start_date` | character | Scheduled start, local YYYY-MM-DD HH:MM. |
-| `team_side` | character | home or away. |
-| `team_name` | character | Team full name. |
+| `team_side` | character | The team's side: home or away. |
+| `team_name` | character | Team full (official) name. |
 | `team_score` | integer | The team's final goals. |
 | `minute` | integer | Game minute (1-60), the end of which the totals run to. |
 | `shots` | integer | Cumulative shot attempts up to the end of the minute. |
@@ -381,13 +381,13 @@ Shot attempts of one game with rink coordinates and result code (hokej.cz ids).
 | `hokejcz_away_team_id` | integer | hokej.cz team id of the away team (Vitkovice = 7); NOT the onlajny id of the play-by-play. |
 | `away_team_name` | character | Away team full name. |
 | `away_team_code` | character | Away team code, e.g. VIT. |
-| `shot_id` | integer | Shot id. |
+| `shot_id` | integer | Feed id of the shot event. |
 | `hokejcz_player_id` | integer | hokej.cz player id of the shooter (Hradec = 10093378); NOT an onlajny id. No player crosswalk is published. |
 | `jersey` | integer | Shooter's jersey number (the join key for a per-game crosswalk with the play-by-play names). |
 | `first_name` | character | Shooter's given name. |
 | `last_name` | character | Shooter's family name. |
 | `hokejcz_team_id` | integer | hokej.cz team id of the shooting team (equals the home or away team id). |
-| `team_side` | character | home or away. |
+| `team_side` | character | The team's side: home or away. |
 | `match_shot_resutl_id` | integer | Shot result code, provider's typo kept: 4 = goal (verified against the play-by-play); 1/2/3/5 unknown. |
 | `shot_result_id` | integer | Alias of match_shot_resutl_id: 4 = goal; 1/2/3/5 unknown. |
 | `is_goal` | logical | True when the result code is 4 (goal). |

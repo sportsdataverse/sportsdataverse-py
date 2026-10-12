@@ -36,10 +36,10 @@ Schedule and results of one competition season, one row per match, played or not
 | `season` | integer | Season by its END year (2027 = 2026/27); the body's START-year key plus one. |
 | `round` | character | Round number as a string (`"1"`, `"249"`); DEL values carry a leading U+FEFF byte-order mark, empty string in Denmark. |
 | `home_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
-| `home_name` | character | Team display name. |
+| `home_name` | character | Team display name as the feed prints it. |
 | `home_shortcut` | character | Three-letter team code. |
 | `guest_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
-| `guest_name` | character | Team display name. |
+| `guest_name` | character | Team display name as the feed prints it. |
 | `guest_shortcut` | character | Three-letter team code. |
 | `status` | character | Match status: `BEFORE_MATCH`, `LIVE`, `AFTER_MATCH`. |
 | `overtime_count` | integer | Number of overtime periods played; null in the samples. |
@@ -94,21 +94,21 @@ Season player stats of one team in one competition, one row per player.
 |---|---|---|
 | `player_id` | integer | Player id (playerId key space, per bucket, stable across games and seasons). |
 | `holema_id` | integer | Unobserved (null in every sample); an external registry id by its name, key space unknown, joins to nothing captured. |
-| `name` | character | Player full name. |
+| `name` | character | Player full name (first and last). |
 | `firstname` | character | First name of the player in this row. |
-| `surname` | character | Player last name. |
+| `surname` | character | Player's last (family) name. |
 | `date_of_birth` | character | Birth date `YYYY-MM-DD`. |
 | `active` | logical | True when the player is active on the team. |
 | `position` | character | Position code: `GK` goalie, `DE` defence, `FW` / `FO` forward (FO meaning unverified). |
 | `stick` | character | Handedness: `left` or `right`; null when unknown. |
 | `weight` | integer | Weight in kg; `0` placeholder when unknown. |
 | `height` | integer | Height in cm; `0` placeholder when unknown. |
-| `jersey` | integer | Jersey number. |
+| `jersey` | integer | Player jersey (sweater) number. |
 | `birth_country` | character | Player's country of birth (name). |
 | `nationality` | character | Nationality, country name. |
 | `nationality_short` | character | Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain). |
 | `team_shortcut` | character | Three-letter team code. |
-| `games` | integer | Games played. |
+| `games` | integer | Games played in the table's scope. |
 | `goals` | integer | goals in total (goals_home + goals_away: the body splits it by home and away games). |
 | `goals_home` | integer | Split by venue: `home` = in the player's home games, `away` = in away games. |
 | `goals_away` | integer | Split by venue: `home` = in the player's home games, `away` = in away games. |
@@ -174,15 +174,15 @@ Skater scoring leaderboard of one competition season.
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events, boxscores and leaderboards. |
-| `name` | character | Player first name. |
-| `surname` | character | Player last name. |
+| `name` | character | Player's first (given) name. |
+| `surname` | character | Player's last (family) name. |
 | `team_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
-| `team_name` | character | Team display name. |
+| `team_name` | character | Team display name as the feed prints it. |
 | `team_shortcut` | character | Three-letter team code. |
 | `goals` | integer | Goals the player scored in the league-season. |
 | `assists` | integer | Assists credited to the player in the league-season. |
 | `points` | integer | Points, goals + assists. |
-| `shots` | integer | Shots on goal. |
+| `shots` | integer | Shots on goal (saved or scored). |
 | `games` | integer | Games played (two names for the same count). |
 | `penalty_minutes` | integer | Penalty minutes assessed to the player in the league-season. |
 | `time_on_ice` | integer | Time on ice, seconds; `0` placeholder in the samples. |
@@ -221,7 +221,7 @@ Every faceoff of one match: time, dot, winner and loser.
 | `position` | character | Face-off dot: `BULY_CENTRAL` or `BULY_{HOME\|AWAY}_{DEFENSE\|BLUE}_{LEFT\|RIGHT}`. |
 | `position_shortcut` | character | Short dot code, e.g. `C`, `HDL` (home defence left), `HDR`. |
 | `winner_id` | integer | Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events, boxscores and leaderboards. |
-| `winner_name` | character | Player full name. |
+| `winner_name` | character | Player full name (first and last). |
 | `loser_id` | integer | Player id (playerId key space) of the faceoff loser (DEL spells the key losser, ICEHL looser). |
 | `loser_name` | character | Full name of the faceoff loser. |
 
@@ -266,10 +266,10 @@ Game info of one match: state, arena, attendance, officials, coaches, period sco
 | `referees_line_referee2_id` | integer | Official (referee/linesman) person id, its own key space; not a player id; no other captured file joins to it. |
 | `referees_line_referee2_name` | character | Official's full name. |
 | `team_info_home_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
-| `team_info_home_name` | character | Team display name. |
+| `team_info_home_name` | character | Team display name as the feed prints it. |
 | `team_info_home_shortcut` | character | Three-letter team code. |
 | `team_info_visitor_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
-| `team_info_visitor_name` | character | Team display name. |
+| `team_info_visitor_name` | character | Team display name as the feed prints it. |
 | `team_info_visitor_shortcut` | character | Three-letter team code. |
 | `trainers_visitor_head_coach_id` | integer | Coach person id, its own key space; not a player id; no other captured file joins to it. |
 | `trainers_visitor_head_coach_name` | character | Head coach full name. |
@@ -289,9 +289,9 @@ Game info of one match: state, arena, attendance, officials, coaches, period sco
 | `results_score_third_period_score_home` | integer | Home team goals in that span. |
 | `results_score_third_period_score_guest` | integer | Visiting team goals in that span. |
 | `best_players_home_id` | integer | Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events, boxscores and leaderboards. |
-| `best_players_home_name` | character | Player full name. |
+| `best_players_home_name` | character | Player full name (first and last). |
 | `best_players_visitor_id` | integer | Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events, boxscores and leaderboards. |
-| `best_players_visitor_name` | character | Player full name. |
+| `best_players_visitor_name` | character | Player full name (first and last). |
 | `overtime_count` | integer | Number of overtime periods; null in the samples. |
 | `last_event_time` | integer | Game second of the latest event (3600 = end of regulation). |
 
@@ -403,9 +403,9 @@ Game roster of one match by line slot, one row per dressed player.
 | `slot` | character | Line slot, three digits <group><line><position>: group 1 = goalies (101, 102), 2 = defence pairs, 3 = forward lines. |
 | `player_id` | integer | Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events, boxscores and leaderboards. |
 | `match_player_id` | integer | Match-player id (one row per player per game; a different key space from the player id); joins to `matchPlayerId` in the same game's roster and events only. |
-| `name` | character | Player first name. |
-| `surname` | character | Player last name. |
-| `jersey` | integer | Jersey number. |
+| `name` | character | Player's first (given) name. |
+| `surname` | character | Player's last (family) name. |
+| `jersey` | integer | Player jersey (sweater) number. |
 | `position` | character | Position code: `GK` goalie, `DE` defence, `FW` / `FO` forward (FO meaning unverified). |
 | `captain` | logical | True for the team captain. |
 | `starting_six` | logical | True for the six players who started the game. |
@@ -444,9 +444,9 @@ Every shift of one match, one row per player shift.
 | `end_time` | integer | Shift end, game second. |
 | `end_real_time` | character | Shift end, local wall clock. |
 | `player_id` | integer | Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events, boxscores and leaderboards. |
-| `player_name` | character | Player full name. |
+| `player_name` | character | Player full name (first and last). |
 | `team_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
-| `team_name` | character | Team display name. |
+| `team_name` | character | Team display name as the feed prints it. |
 | `duration` | integer | Shift length in seconds (end_time - start_time). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -480,21 +480,21 @@ Player boxscore of one team in one match, one row per player.
 |---|---|---|
 | `player_id` | integer | Player id (playerId key space, per bucket, stable across games and seasons). |
 | `holema_id` | integer | Unobserved (null in every sample); an external registry id by its name, key space unknown, joins to nothing captured. |
-| `name` | character | Player full name. |
+| `name` | character | Player full name (first and last). |
 | `firstname` | character | First name of the player in this row. |
-| `surname` | character | Player last name. |
+| `surname` | character | Player's last (family) name. |
 | `date_of_birth` | character | Birth date `YYYY-MM-DD`. |
 | `active` | logical | True when the player is active on the team. |
 | `position` | character | Position code: `GK` goalie, `DE` defence, `FW` / `FO` forward (FO meaning unverified). |
 | `stick` | character | Handedness: `left` or `right`; null when unknown. |
 | `weight` | integer | Weight in kg; `0` placeholder when unknown. |
 | `height` | integer | Height in cm; `0` placeholder when unknown. |
-| `jersey` | integer | Jersey number. |
+| `jersey` | integer | Player jersey (sweater) number. |
 | `birth_country` | character | Player's country of birth (name). |
 | `nationality` | character | Nationality, country name. |
 | `nationality_short` | character | Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain). |
 | `team_shortcut` | character | Three-letter team code. |
-| `games` | integer | Games played. |
+| `games` | integer | Games played in the table's scope. |
 | `goals` | integer | goals in total (goals_home + goals_away: the body splits it by home and away games). |
 | `goals_home` | integer | Split by venue: `home` = in the player's home games, `away` = in away games. |
 | `goals_away` | integer | Split by venue: `home` = in the player's home games, `away` = in away games. |
@@ -559,12 +559,12 @@ Goalie lines of one match, one row per goalie who played.
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events, boxscores and leaderboards. |
-| `name` | character | Goalie first name. |
-| `surname` | character | Goalie last name. |
+| `name` | character | Goaltender's first (given) name. |
+| `surname` | character | Goaltender's last (family) name. |
 | `team_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
-| `team_name` | character | Team display name. |
+| `team_name` | character | Team display name as the feed prints it. |
 | `team_shortcut` | character | Three-letter team code. |
-| `jersey` | integer | Jersey number. |
+| `jersey` | integer | Player jersey (sweater) number. |
 | `matches` | integer | Games played (1 in a per-game file). |
 | `won_matches` | integer | Games the goalie won. |
 | `lost_matches` | integer | Games the goalie lost. |
@@ -612,18 +612,18 @@ Standings of one competition season, one row per team.
 | `datetime` | character | Standings computed at, local time, `YYYY-MM-DD HH:MM:SS`. |
 | `team_id` | integer | Team id (per-bucket team key space); joins to home_id / guest_id in the schedule. |
 | `part_team_id` | integer | Team-in-league-part id (its own key space: one team in one league part); no other captured file carries it. |
-| `name` | character | Team display name. |
+| `name` | character | Team display name as the feed prints it. |
 | `shortcut` | character | Three-letter team code. |
 | `position` | integer | Table position, 1 = first. |
-| `points` | integer | Table points. |
-| `games` | integer | Games played. |
+| `points` | integer | Points in the standings table. |
+| `games` | integer | Games played in the table's scope. |
 | `wins` | integer | Wins in regulation (DEL, EIHL, Denmark) or all wins (ICEHL, see `winsReg`); definition per bucket unverified. |
 | `wins_ot` | integer | Wins after overtime or shootout. |
 | `ties` | integer | Ties (0 under current rules). |
 | `losses_ot` | integer | Losses after overtime or shootout. |
 | `losses` | integer | Losses in regulation time. |
 | `score1` | integer | Goals the team scored (goals for). |
-| `score2` | integer | Goals against. |
+| `score2` | integer | Goals conceded (goals against). |
 | `only_so_wins` | integer | Wins in a shootout. |
 | `only_so_losts` | integer | Losses in a shootout. |
 | `only_ot_wins` | integer | Wins in overtime. |
@@ -662,14 +662,14 @@ Shots of one match with rink coordinates and result, one row per shot.
 | `match_id` | integer | Match id (per-bucket match key space); joins to the {match_id} path param of the game wrappers. |
 | `date` | character | Game date `YYYY-MM-DD`. |
 | `home_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
-| `home_name` | character | Team display name. |
+| `home_name` | character | Team display name as the feed prints it. |
 | `home_shortcut` | character | Three-letter team code. |
 | `visitor_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |
-| `visitor_name` | character | Team display name. |
+| `visitor_name` | character | Team display name as the feed prints it. |
 | `visitor_shortcut` | character | Three-letter team code. |
 | `shot_id` | integer | Shot id within the shot files. |
 | `player_id` | integer | Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events, boxscores and leaderboards. |
-| `jersey` | integer | Jersey number. |
+| `jersey` | integer | Player jersey (sweater) number. |
 | `first_name` | character | First name of the shooter. |
 | `last_name` | character | Last name of the shooter. |
 | `team_id` | integer | Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and the `{team_id}` path param. |

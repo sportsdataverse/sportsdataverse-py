@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## nl_schedule
 
-Schedule and results for one season: NL plus exhibitions
+Schedule and results for one season: NL plus exhibitions.
 
 **Endpoint URL:** `GET https://www.nationalleague.ch/api/games`
 
@@ -67,7 +67,7 @@ _Last validated n/a._
 
 ## nl_current_games
 
-The current or next game day
+The current or next game day.
 
 **Endpoint URL:** `GET https://www.nationalleague.ch/api/games/current`
 
@@ -491,7 +491,7 @@ _Last validated n/a._
 
 ## nl_top_scorers
 
-Top scorers (same row shape as /player)
+Top scorers (same row shape as /player).
 
 **Endpoint URL:** `GET https://www.nationalleague.ch/api/player/topscorer`
 
@@ -667,7 +667,7 @@ _Last validated n/a._
 
 ## nl_standings
 
-Standings with team season stats
+Standings with team season stats.
 
 **Endpoint URL:** `GET https://www.nationalleague.ch/api/teams`
 

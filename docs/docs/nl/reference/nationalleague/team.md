@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## nl_team_schedule
 
-One team's games for one season
+One team's games for one season.
 
 **Endpoint URL:** `GET https://www.nationalleague.ch/api/games/team/{team_id}`
 
@@ -137,7 +137,7 @@ _Last validated n/a._
 
 ## nl_team_player_stats
 
-Season stats for one team's players
+Season stats for one team's players.
 
 **Endpoint URL:** `GET https://www.nationalleague.ch/api/player/team/{team_id}`
 
@@ -313,7 +313,7 @@ _Last validated n/a._
 
 ## nl_team_info
 
-Club CMS record: names, logo, website, ticket links
+Club CMS record: names, logo, website, ticket links.
 
 **Endpoint URL:** `GET https://www.nationalleague.ch/api/teams/{team_id}/info`
 

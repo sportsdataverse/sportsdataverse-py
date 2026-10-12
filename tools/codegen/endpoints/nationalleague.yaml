@@ -38,7 +38,7 @@ endpoints:
   path: /games
   returns_schema: native/nationalleague/schedule
   short: schedule
-  summary: 'Schedule and results for one season: NL plus exhibitions'
+  summary: 'Schedule and results for one season: NL plus exhibitions.'
 - example_args:
     season: 2027
   extra_params:
@@ -54,7 +54,7 @@ endpoints:
   path: /games/current
   returns_schema: native/nationalleague/current_games
   short: current_games
-  summary: The current or next game day
+  summary: The current or next game day.
 - example_args:
     season: 2026
     team_id: 101144
@@ -77,7 +77,7 @@ endpoints:
     type: int
   returns_schema: native/nationalleague/team_schedule
   short: team_schedule
-  summary: One team's games for one season
+  summary: One team's games for one season.
 - example_args:
     season: 2026
   extra_params:
@@ -219,7 +219,7 @@ endpoints:
   path: /player
   returns_schema: native/nationalleague/player_stats
   short: player_stats
-  summary: Season stats for every player, with playerId
+  summary: Season stats for every player, with playerId.
 - example_args:
     phase: 4940
     season: 2026
@@ -248,7 +248,7 @@ endpoints:
   path: /player/topscorer
   returns_schema: native/nationalleague/top_scorers
   short: top_scorers
-  summary: Top scorers (same row shape as /player)
+  summary: Top scorers (same row shape as /player).
 - example_args:
     phase: 4940
     season: 2026
@@ -279,7 +279,7 @@ endpoints:
     type: int
   returns_schema: native/nationalleague/team_player_stats
   short: team_player_stats
-  summary: Season stats for one team's players
+  summary: Season stats for one team's players.
 - example_args:
     phase: 4940
     player_id: 305519
@@ -311,7 +311,7 @@ endpoints:
     type: int
   returns_schema: native/nationalleague/player_season
   short: player_season
-  summary: One player's season stats
+  summary: One player's season stats.
 - example_args:
     phase: 4940
     season: 2026
@@ -335,7 +335,7 @@ endpoints:
   path: /teams
   returns_schema: native/nationalleague/standings
   short: standings
-  summary: Standings with team season stats
+  summary: Standings with team season stats.
 - example_args:
     team_id: 101144
   parser: parse_nationalleague_team_info
@@ -348,7 +348,7 @@ endpoints:
     type: int
   returns_schema: native/nationalleague/team_info
   short: team_info
-  summary: 'Club CMS record: names, logo, website, ticket links'
+  summary: 'Club CMS record: names, logo, website, ticket links.'
 getter_module: sportsdataverse.hockey.nl.nationalleague_runtime
 host: https://www.nationalleague.ch/api
 module: nationalleague

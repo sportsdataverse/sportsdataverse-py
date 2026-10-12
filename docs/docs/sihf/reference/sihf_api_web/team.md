@@ -34,10 +34,10 @@ Team goals for and against per season: totals and per game, even strength, power
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
-| `goals_for` | integer | Goals for. |
+| `games_played` | integer | Games played in the table's scope. |
+| `goals_for` | integer | Goals scored (goals for). |
 | `goals_for_quotient` | double | Goals for per game. |
-| `goals_against` | integer | Goals against. |
+| `goals_against` | integer | Goals conceded (goals against). |
 | `goals_against_quotient` | double | Goals against per game. |
 | `even_goals_for` | integer | Even-strength goals for. |
 | `even_goals_for_quotient` | double | Even-strength goals for per game. |
@@ -90,7 +90,7 @@ Team goals by scorer: forwards, defensemen and import players (totals and shares
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `goals_for_fw_df` | integer | Goals by forwards and defencemen. |
 | `goals_for_fw` | integer | Goals by forwards. |
 | `goals_for_fw_percent` | double | Share of goals by forwards, percent. |
@@ -139,8 +139,8 @@ Team shots per season: on goal (total, slot, shooting percentage), missed, post,
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
-| `sog_sog` | integer | Shots on goal. |
+| `games_played` | integer | Games played in the table's scope. |
+| `sog_sog` | integer | Shots on goal (saved or scored). |
 | `sog_sog_percent` | double | Shooting percentage (goals / shots on goal). |
 | `sog_sog_quotient` | double | Shots on goal per game. |
 | `sog_sog_slot` | integer | Slot shots on goal. |
@@ -149,7 +149,7 @@ Team shots per season: on goal (total, slot, shooting percentage), missed, post,
 | `sog_missed_per_game` | double | Missed shots per game. |
 | `sog_post` | integer | Post/crossbar shots, total. |
 | `sog_post_per_game` | double | Post/crossbar shots per game. |
-| `blockings` | integer | Blocked shots. |
+| `blockings` | integer | Number of shots blocked. |
 | `blockings_per_game` | double | Blocked shots per game. |
 | `soga_sog` | integer | Shots on goal against, total. |
 | `soga_sog_per_game` | double | Shots on goal against per game. |
@@ -194,7 +194,7 @@ Team power play per season: opportunities, goals, conversion percentage, power-p
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `pp_opportunities` | integer | Power-play opportunities. |
 | `pp_opportunities_quotient` | double | Power-play opportunities per game. |
 | `pp_goals_for` | integer | Power-play goals for. |
@@ -243,7 +243,7 @@ Team penalty kill per season: times short-handed, goals against, kill percentage
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `pk_situations` | integer | Short-handed situations. |
 | `pk_situations_quotient` | double | Short-handed situations per game. |
 | `pk_goals_against` | integer | Goals against while short-handed. |
@@ -292,7 +292,7 @@ Team penalties per season: 2-, 5- and 10-minute penalties, game misconducts, mat
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `pim2` | integer | Number of 2-minute minor penalties. |
 | `pim5` | integer | Number of 5-minute major penalties. |
 | `pim10` | integer | Number of 10-minute misconducts. |
@@ -338,8 +338,8 @@ Team shootouts per season: shootout wins and losses, attempts, goals and percent
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
-| `games_won_penalty` | integer | Shootout wins. |
+| `games_played` | integer | Games played in the table's scope. |
+| `games_won_penalty` | integer | Games won in a shootout. |
 | `games_lost_penalty` | integer | Shootout losses. |
 | `pen_shots` | integer | Shootout/penalty shots taken. |
 | `pen_shot_goals` | integer | Shootout/penalty goals. |
@@ -388,12 +388,12 @@ Team faceoffs per season: taken, won, lost, per game, and win percentage overall
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `faceoffs` | integer | Faceoffs taken, total. |
 | `faceoffs_per_game` | double | Faceoffs taken per game. |
 | `faceoffs_percent` | double | Faceoff win percentage; '-' with no faceoffs. |
-| `faceoffs_won` | integer | Faceoffs won. |
-| `faceoffs_lost` | integer | Faceoffs lost. |
+| `faceoffs_won` | integer | Number of faceoffs won. |
+| `faceoffs_lost` | integer | Number of faceoffs lost. |
 | `faceoffs_won_per_game` | double | Faceoffs won per game. |
 | `faceoffs_lost_per_game` | double | Faceoffs lost per game. |
 | `faceoffs_offensive_percent` | double | Faceoff win percentage, offensive zone. |
@@ -438,7 +438,7 @@ Team faceoffs by zone (offensive, neutral, defensive) per season: taken, won, lo
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `faceoffs_offensive` | integer | Faceoffs taken, offensive zone. |
 | `faceoffs_offensive_percent` | double | Faceoff win percentage, offensive zone. |
 | `faceoffs_won_offensive` | integer | Faceoffs won, offensive zone. |
@@ -490,7 +490,7 @@ Team faceoffs by zone (offensive, neutral, defensive) per game: taken, won and l
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `faceoffs_offensive_per_game` | double | Faceoffs taken per game, offensive zone. |
 | `faceoffs_won_offensive_per_game` | double | Faceoffs won per game, offensive zone. |
 | `faceoffs_lost_offensive_per_game` | double | Faceoffs lost per game, offensive zone. |
@@ -539,7 +539,7 @@ Team home attendance per season: home games, total and average spectators, avera
 | `team_id` | integer | SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000). |
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
-| `home_games` | integer | Home games. |
+| `home_games` | integer | Number of home games. |
 | `spectators` | integer | Total home attendance (SIHF prints a ’ thousands separator; dropped here). |
 | `stadium_capacity_quotient` | integer | Average arena capacity. |
 | `spectators_quotient` | integer | Average home attendance per game. |

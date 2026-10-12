@@ -44528,7 +44528,7 @@ wnba_referee_assignments:
   replay_center.official_name: Replay-center official's display name for that date.
 # European hockey: SIHF extension (feat/sihf-extension).
 sihf_goalie_shootouts:
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   pen_shot_goals_against: Shootout/penalty goals allowed.
   pen_shot_saves: Shootout/penalty shots saved.
   pen_shot_saves_percent: Shootout/penalty save percentage.
@@ -44544,7 +44544,7 @@ sihf_goalie_shootouts:
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
 sihf_goalie_shots:
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   player: Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id.
   rank: Rank in the table; null on a summary row, and on a goaltender below the qualification line.
@@ -44566,8 +44566,8 @@ sihf_goalie_shots:
     row.
 sihf_goalie_wins:
   first_keeper: Games started as goalkeeper (GPI).
-  games_played: Games played.
-  losses: Losses, total.
+  games_played: Games played in the table's scope.
+  losses: Losses, all decision types.
   losses_intime: Losses in regulation.
   losses_overtime: Overtime losses.
   losses_penalty: Shootout losses.
@@ -44577,27 +44577,27 @@ sihf_goalie_wins:
   row_type: '"data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes
     into the table.'
   season: Season by its END year (2026 = 2025-26), from the body's echo of the Season filter.
-  shutout: Shutouts.
+  shutout: Shutouts (games with no goal against).
   team_acronym: Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row.
   team_id: SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000).
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
-  wins: Wins, total.
+  wins: Wins, all decision types.
   wins_intime: Wins in regulation.
-  wins_overtime: Overtime wins.
-  wins_penalty: Shootout wins.
+  wins_overtime: Games won in overtime.
+  wins_penalty: Games won in a shootout.
 sihf_player_faceoffs:
   faceoffs: Faceoffs taken, total.
   faceoffs_defensive_percent: Faceoff win percentage, defensive zone.
-  faceoffs_lost: Faceoffs lost.
+  faceoffs_lost: Number of faceoffs lost.
   faceoffs_lost_per_game: Faceoffs lost per game.
   faceoffs_neutral_percent: Faceoff win percentage, neutral zone.
   faceoffs_offensive_percent: Faceoff win percentage, offensive zone.
   faceoffs_per_game: Faceoffs taken per game.
   faceoffs_percent: Faceoff win percentage; '-' with no faceoffs.
-  faceoffs_won: Faceoffs won.
+  faceoffs_won: Number of faceoffs won.
   faceoffs_won_per_game: Faceoffs won per game.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   player: Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id.
   position: Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-".
@@ -44622,7 +44622,7 @@ sihf_player_faceoffs_by_zone:
   faceoffs_won_defensive: Faceoffs won, defensive zone.
   faceoffs_won_neutral: Faceoffs won, neutral zone.
   faceoffs_won_offensive: Faceoffs won, offensive zone.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   player: Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id.
   position: Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-".
@@ -44644,7 +44644,7 @@ sihf_player_faceoffs_by_zone_per_game:
   faceoffs_won_defensive_per_game: Faceoffs won per game, defensive zone.
   faceoffs_won_neutral_per_game: Faceoffs won per game, neutral zone.
   faceoffs_won_offensive_per_game: Faceoffs won per game, offensive zone.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   player: Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id.
   position: Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-".
@@ -44657,15 +44657,15 @@ sihf_player_faceoffs_by_zone_per_game:
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
 sihf_player_goals_assists:
-  assists: Assists.
+  assists: Assists credited.
   assists1: Primary assists.
   assists2: Secondary assists.
   eq_assists: Even-strength assists.
   eq_goals: Even-strength goals.
   game_winning_goals: Game-winning goals.
-  games_played: Games played.
-  goals: Goals.
-  hattricks: Hat tricks.
+  games_played: Games played in the table's scope.
+  goals: Goals scored (total).
+  hattricks: Hat tricks (games with three or more goals).
   overtime_goals: Overtime goals.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   pk_assists: Short-handed assists.
@@ -44684,7 +44684,7 @@ sihf_player_goals_assists:
     row.
 sihf_player_penalties:
   game_misconducts: Number of game misconducts.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   match_penalties: Number of match penalties.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   pim10: Number of 10-minute misconducts.
@@ -44702,7 +44702,7 @@ sihf_player_penalties:
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
 sihf_player_shootouts:
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   pen_shot_goals: Shootout/penalty goals.
   pen_shot_winning_goals: Deciding shootout goals.
   pen_shots: Shootout/penalty shots taken.
@@ -44720,9 +44720,9 @@ sihf_player_shootouts:
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
 sihf_player_shots:
-  blockings: Blocked shots.
+  blockings: Number of shots blocked.
   blockings_per_game: Blocked shots per game.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   player: Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id.
   position: Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-".
@@ -44734,7 +44734,7 @@ sihf_player_shots:
   sog_missed_per_game: Missed shots per game.
   sog_post: Post/crossbar shots, total.
   sog_post_per_game: Post/crossbar shots per game.
-  sog_sog: Shots on goal.
+  sog_sog: Shots on goal (saved or scored).
   sog_sog_percent: Shooting percentage (goals / shots on goal).
   sog_sog_quotient: Shots on goal per game.
   sog_sog_slot: Slot shots on goal.
@@ -44744,7 +44744,7 @@ sihf_player_shots:
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
 sihf_player_time_on_ice:
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   player: Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas"); season tables carry no player id.
   position: Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-".
@@ -44752,7 +44752,7 @@ sihf_player_time_on_ice:
   row_type: '"data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes
     into the table.'
   season: Season by its END year (2026 = 2025-26), from the body's echo of the Season filter.
-  shifts: Shifts.
+  shifts: Number of shifts on ice.
   shifts_per_game: Shifts per game.
   team_acronym: Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row.
   team_id: SIHF team id (Int64 join key); null on a summary row (the pseudo-team 100000).
@@ -44768,7 +44768,7 @@ sihf_player_time_on_ice:
   time_on_ice_pp: Power-play time on ice, mm:ss string (minutes may exceed 59), not seconds.
   time_on_ice_pp_per_game: Power-play time on ice per game, mm:ss string (minutes may exceed 59), not seconds.
 sihf_team_attendance:
-  home_games: Home games.
+  home_games: Number of home games.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   rank: Rank in the table; null on a summary row, and on a goaltender below the qualification line.
   row_type: '"data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes
@@ -44785,15 +44785,15 @@ sihf_team_attendance:
 sihf_team_faceoffs:
   faceoffs: Faceoffs taken, total.
   faceoffs_defensive_percent: Faceoff win percentage, defensive zone.
-  faceoffs_lost: Faceoffs lost.
+  faceoffs_lost: Number of faceoffs lost.
   faceoffs_lost_per_game: Faceoffs lost per game.
   faceoffs_neutral_percent: Faceoff win percentage, neutral zone.
   faceoffs_offensive_percent: Faceoff win percentage, offensive zone.
   faceoffs_per_game: Faceoffs taken per game.
   faceoffs_percent: Faceoff win percentage; '-' with no faceoffs.
-  faceoffs_won: Faceoffs won.
+  faceoffs_won: Number of faceoffs won.
   faceoffs_won_per_game: Faceoffs won per game.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   rank: Rank in the table; null on a summary row, and on a goaltender below the qualification line.
   row_type: '"data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes
@@ -44816,7 +44816,7 @@ sihf_team_faceoffs_by_zone:
   faceoffs_won_defensive: Faceoffs won, defensive zone.
   faceoffs_won_neutral: Faceoffs won, neutral zone.
   faceoffs_won_offensive: Faceoffs won, offensive zone.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   rank: Rank in the table; null on a summary row, and on a goaltender below the qualification line.
   row_type: '"data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes
@@ -44836,7 +44836,7 @@ sihf_team_faceoffs_by_zone_per_game:
   faceoffs_won_defensive_per_game: Faceoffs won per game, defensive zone.
   faceoffs_won_neutral_per_game: Faceoffs won per game, neutral zone.
   faceoffs_won_offensive_per_game: Faceoffs won per game, offensive zone.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   rank: Rank in the table; null on a summary row, and on a goaltender below the qualification line.
   row_type: '"data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes
@@ -44851,10 +44851,10 @@ sihf_team_goals:
   even_goals_against_quotient: Even-strength goals against per game.
   even_goals_for: Even-strength goals for.
   even_goals_for_quotient: Even-strength goals for per game.
-  games_played: Games played.
-  goals_against: Goals against.
+  games_played: Games played in the table's scope.
+  goals_against: Goals conceded (goals against).
   goals_against_quotient: Goals against per game.
-  goals_for: Goals for.
+  goals_for: Goals scored (goals for).
   goals_for_quotient: Goals for per game.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   pk_goals_against: Goals against while short-handed.
@@ -44874,7 +44874,7 @@ sihf_team_goals:
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
 sihf_team_goals_by_position:
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   goals_for_df: Goals by defencemen.
   goals_for_df_percent: Share of goals by defencemen, percent.
   goals_for_fw: Goals by forwards.
@@ -44895,7 +44895,7 @@ sihf_team_goals_by_position:
     row.
 sihf_team_penalties:
   game_misconducts: Number of game misconducts.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   match_penalties: Number of match penalties.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   pim10: Number of 10-minute misconducts.
@@ -44911,7 +44911,7 @@ sihf_team_penalties:
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
 sihf_team_penalty_kill:
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   penalty_kill_time: Time short-handed, mm:ss string (minutes may exceed 59), not seconds.
   penalty_kill_time_quotient: Time short-handed per game, mm:ss string (minutes may exceed 59), not seconds.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
@@ -44931,7 +44931,7 @@ sihf_team_penalty_kill:
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
 sihf_team_power_play:
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   power_play_time: Time on the power play, mm:ss string (minutes may exceed 59), not seconds.
   power_play_time_quotient: Time on the power play per game, mm:ss string (minutes may exceed 59), not seconds.
@@ -44952,8 +44952,8 @@ sihf_team_power_play:
     row.
 sihf_team_shootouts:
   games_lost_penalty: Shootout losses.
-  games_played: Games played.
-  games_won_penalty: Shootout wins.
+  games_played: Games played in the table's scope.
+  games_won_penalty: Games won in a shootout.
   pen_shot_goals: Shootout/penalty goals.
   pen_shot_goals_against: Shootout/penalty goals allowed.
   pen_shot_saves: Shootout/penalty shots saved.
@@ -44972,9 +44972,9 @@ sihf_team_shootouts:
   team_name: Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total
     row.
 sihf_team_shots:
-  blockings: Blocked shots.
+  blockings: Number of shots blocked.
   blockings_per_game: Blocked shots per game.
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   rank: Rank in the table; null on a summary row, and on a goaltender below the qualification line.
   row_type: '"data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes
@@ -44984,7 +44984,7 @@ sihf_team_shots:
   sog_missed_per_game: Missed shots per game.
   sog_post: Post/crossbar shots, total.
   sog_post_per_game: Post/crossbar shots per game.
-  sog_sog: Shots on goal.
+  sog_sog: Shots on goal (saved or scored).
   sog_sog_percent: Shooting percentage (goals / shots on goal).
   sog_sog_quotient: Shots on goal per game.
   sog_sog_slot: Slot shots on goal.
@@ -45000,8 +45000,8 @@ sihf_team_shots:
 # European hockey: Czech Extraliga (elh).
 elh_events:
   start_date: Scheduled start, local YYYY-MM-DD HH:MM.
-  team_side: home or away.
-  team_name: Team full name.
+  team_side: 'The team''s side: home or away.'
+  team_name: Team full (official) name.
   team_score: The team's final goals.
   minute: Game minute (1-60), the end of which the totals run to.
   shots: Cumulative shot attempts up to the end of the minute.
@@ -45168,13 +45168,13 @@ elh_shots:
   hokejcz_away_team_id: hokej.cz team id of the away team (Vitkovice = 7); NOT the onlajny id of the play-by-play.
   away_team_name: Away team full name.
   away_team_code: Away team code, e.g. VIT.
-  shot_id: Shot id.
+  shot_id: Feed id of the shot event.
   hokejcz_player_id: hokej.cz player id of the shooter (Hradec = 10093378); NOT an onlajny id. No player crosswalk is published.
   jersey: Shooter's jersey number (the join key for a per-game crosswalk with the play-by-play names).
   first_name: Shooter's given name.
   last_name: Shooter's family name.
   hokejcz_team_id: hokej.cz team id of the shooting team (equals the home or away team id).
-  team_side: home or away.
+  team_side: 'The team''s side: home or away.'
   match_shot_resutl_id: 'Shot result code, provider''s typo kept: 4 = goal (verified against the play-by-play); 1/2/3/5 unknown.'
   shot_result_id: 'Alias of match_shot_resutl_id: 4 = goal; 1/2/3/5 unknown.'
   is_goal: True when the result code is 4 (goal).
@@ -45690,7 +45690,7 @@ magnus_teams:
   team_short_name: Short team label (e.g., "GAP", "ANGLET").
   team_label: Back-office label, "<club code> - <NAME> <level>"; use team for display.
   gender: 'Gender of the team: M (men; the only value observed).'
-  logo_url: Team logo URL.
+  logo_url: URL of the team logo image.
   club_id: Id of the club (legal entity) behind the team (Int64).
   club: Name of the club (legal entity).
   club_code: Federation club code (e.g., "93006S").
@@ -45719,7 +45719,7 @@ magnus_schedule:
     of the standings; not a team id).
   away_team_participant_id: Team participant id of the away team in this phase (Int64; joins team_participant_id of the standings).
   venue_id: Rink id (Int64).
-  venue: Rink name.
+  venue: Name of the rink (arena).
   game_label: Game label as published ("HOME / AWAY").
 magnus_round_games:
   game_id: Game id (Int64 join key), the game_id argument of magnus_game, magnus_pbp, magnus_lineups and magnus_shootout.
@@ -45745,7 +45745,7 @@ magnus_round_games:
     of the standings; not a team id).
   away_team_participant_id: Team participant id of the away team in this phase (Int64; joins team_participant_id of the standings).
   venue_id: Rink id (Int64).
-  venue: Rink name.
+  venue: Name of the rink (arena).
   game_label: Game label as published ("HOME / AWAY").
 magnus_rounds:
   round_id: Round id (Int64).
@@ -45764,15 +45764,15 @@ magnus_standings:
   team_abbreviation: Team abbreviation.
   team_participant_id: Team participant id in this phase (Int64; joins home_team_participant_id / away_team_participant_id
     of the schedule).
-  games_played: Games played.
+  games_played: Games played in the table's scope.
   wins: Wins in regulation.
   ot_wins: Wins in overtime or a shootout.
   ot_losses: Losses in overtime or a shootout.
   losses: Losses in regulation.
-  ties: Tied games.
-  points: Table points.
-  goals_for: Goals scored.
-  goals_against: Goals allowed.
+  ties: Number of tied games.
+  points: Points in the standings table.
+  goals_for: Goals scored (total).
+  goals_against: Goals allowed (goals against).
   penalty_minutes: Penalty minutes.
   last_results: 'Form guide: the last results as W (win), L (loss) or T (tie) letters, in the order the table lists them.'
   standings_id: Standings table id (Int64).
@@ -45796,8 +45796,8 @@ magnus_game:
   has_shootout: Whether the game went to a shootout.
   n_periods: Number of regulation periods.
   period_minutes: Length of a regulation period in minutes.
-  attendance: Spectators.
-  venue: Rink name.
+  attendance: Number of spectators (attendance).
+  venue: Name of the rink (arena).
 magnus_pbp:
   game_id: Game id (Int64 join key).
   event_id: Event id as published, the raw type plus a number (e.g., "BUT99238"); unique within a game.
@@ -45833,7 +45833,7 @@ magnus_pbp:
 magnus_lineups:
   game_id: Game id (Int64 join key).
   team_id: Team id (Int64).
-  home_away: home or away.
+  home_away: 'The team''s side: home or away.'
   player_id: Person id (Int64; joueurs[].id = personne.id), stable across games; the player key of every Magnus frame.
   player_participant_id: The player's roster entry in THIS game (Int64; changes every game), the key the sheet's on-ice lists
     and MVPs use; never join across games on it.
@@ -45868,16 +45868,16 @@ del_faceoffs:
   time: Seconds of game time from the opening face-off (0-3600 in regulation, continuing through overtime).
   winner_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
-  winner_name: Player full name.
+  winner_name: Player full name (first and last).
 del_game_info:
   actual_time_alias: 'Short game-state code: `K` = finished.'
   actual_time_name: Display label of the game state, e.g. `end` / `Ende`.
   best_players_home_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in
     rosters, events, boxscores and leaderboards.
-  best_players_home_name: Player full name.
+  best_players_home_name: Player full name (first and last).
   best_players_visitor_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId`
     in rosters, events, boxscores and leaderboards.
-  best_players_visitor_name: Player full name.
+  best_players_visitor_name: Player full name (first and last).
   last_event_time: Game second of the latest event (3600 = end of regulation).
   number_of_viewers: Spectators at the game (attendance).
   overtime_count: Number of overtime periods; null in the samples.
@@ -45909,11 +45909,11 @@ del_game_info:
   team_bilance_visitor_win: Wins of that team in the head-to-head record (unverified).
   team_info_home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  team_info_home_name: Team display name.
+  team_info_home_name: Team display name as the feed prints it.
   team_info_home_shortcut: Three-letter team code.
   team_info_visitor_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` /
     `guest.id` and the `{team_id}` path param.
-  team_info_visitor_name: Team display name.
+  team_info_visitor_name: Team display name as the feed prints it.
   team_info_visitor_shortcut: Three-letter team code.
   trainers_home_head_coach_id: Coach person id, its own key space; not a player id; no other captured file joins to it.
   trainers_home_head_coach_name: Head coach full name.
@@ -45922,20 +45922,20 @@ del_game_info:
 del_goalie_box:
   average: Goals-against average per 60 minutes.
   goals_against: Goals the goalie allowed.
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   lost_matches: Games the goalie lost.
   matches: Games played (1 in a per-game file).
   minutes_in_play: Share of the team's game time in goal, percent (100.0 = the whole game).
-  name: Goalie first name.
+  name: Goaltender's first (given) name.
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
   saves: Shots on goal the goalie stopped.
   saves_percent: Save percentage x 100 (e.g. `85.71`).
   seconds_per_game: Time in goal per game, seconds.
-  surname: Goalie last name.
+  surname: Goaltender's last (family) name.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  team_name: Team display name.
+  team_name: Team display name as the feed prints it.
   team_shortcut: Three-letter team code.
   time_on_ice: Time in goal, seconds.
   won_matches: Games the goalie won.
@@ -46000,15 +46000,15 @@ del_player_box:
   faceoffs_losses: Face-offs the player lost (this game, or to date in the season / league-part files).
   faceoffs_win: Face-offs the player won (this game, or to date in the season / league-part files).
   firstname: First name of the player in this row.
-  games: Games played.
+  games: Games played in the table's scope.
   goals: 'goals in total (goals_home + goals_away: the body splits it by home and away games).'
   goals_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   goals_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   gw_goals: Game-winning goals.
   height: Height in cm; `0` placeholder when unknown.
   holema_id: Unobserved (null in every sample); an external registry id by its name, key space unknown, joins to nothing captured.
-  jersey: Jersey number.
-  name: Player full name.
+  jersey: Player jersey (sweater) number.
+  name: Player full name (first and last).
   nationality: Nationality, country name.
   nationality_short: Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain).
   negative: 'Minus: on ice for goals against at even strength or on the power play.'
@@ -46033,7 +46033,7 @@ del_player_box:
   shots_on_goal_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   shots_on_goal_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   stick: 'Handedness: `left` or `right`; null when unknown.'
-  surname: Player last name.
+  surname: Player's last (family) name.
   team_shortcut: Three-letter team code.
   time_on_ice: Time on ice, whole seconds (`0` when not tracked).
   time_on_ice_per_game: Time on ice per game, seconds.
@@ -46042,16 +46042,16 @@ del_player_box:
   weight: Weight in kg; `0` placeholder when unknown.
 del_roster:
   captain: True for the team captain.
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   match_player_id: Match-player id (one row per player per game; a different key space from the player id); joins to `matchPlayerId`
     in the same game's roster and events only.
-  name: Player first name.
+  name: Player's first (given) name.
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
   position: 'Position code: `GK` goalie, `DE` defence, `FW` / `FO` forward (FO meaning unverified).'
   slot: 'Line slot, three digits <group><line><position>: group 1 = goalies (101, 102), 2 = defence pairs, 3 = forward lines.'
   starting_six: True for the six players who started the game.
-  surname: Player last name.
+  surname: Player's last (family) name.
   team_side: 'Team of the row: home or visitor.'
 del_schedule:
   actual_time_alias: 'Short game-state code: `K` = finished (Czech `konec`), `0` = not started.'
@@ -46064,11 +46064,11 @@ del_schedule:
   first_period_score_home: Home team goals in that span.
   guest_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  guest_name: Team display name.
+  guest_name: Team display name as the feed prints it.
   guest_shortcut: Three-letter team code.
   home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  home_name: Team display name.
+  home_name: Team display name as the feed prints it.
   home_shortcut: Three-letter team code.
   last_event_time: Game second of the latest event, of game time from the opening face-off (0-3600 in regulation, continuing
     through overtime).
@@ -46096,13 +46096,13 @@ del_shifts:
   end_time: Shift end, game second.
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
-  player_name: Player full name.
+  player_name: Player full name (first and last).
   shift_id: Shift id within the shift files.
   start_real_time: Shift start, local wall clock.
   start_time: Shift start, game second.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  team_name: Team display name.
+  team_name: Team display name as the feed prints it.
 del_shots:
   coordinate_x: 'Shot x along the rink LENGTH, centre ice = 0, about -100..100 (units unverified, plausibly percent of half-length).
     Normalised to the attacking direction: each team keeps one sign for the whole game, the home team positive in the three
@@ -46113,10 +46113,10 @@ del_shots:
   first_name: First name of the shooter.
   home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  home_name: Team display name.
+  home_name: Team display name as the feed prints it.
   home_shortcut: Three-letter team code.
   is_goal: True when the shot result code is 4 (goal).
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   last_name: Last name of the shooter.
   match_id: Match id (per-bucket match key space); joins to the {match_id} path param of the game wrappers.
   match_shot_resutl_id: 'Shot result code (the provider''s typo kept): `4` = goal; `1` / `2` / `3` probably on goal / missed
@@ -46134,30 +46134,30 @@ del_shots:
   time: Seconds of game time from the opening face-off (0-3600 in regulation, continuing through overtime).
   visitor_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  visitor_name: Team display name.
+  visitor_name: Team display name as the feed prints it.
   visitor_shortcut: Three-letter team code.
   xg: Expected-goals value of the shot (ICEHL and EIHL only; null elsewhere).
   xg_type: Shot-danger class from the xG model, e.g. LD / MD / HD (ICEHL and EIHL only; null elsewhere).
 del_standings:
   bonus: Bonus or deduction points (DEL).
   datetime: Standings computed at, local time, `YYYY-MM-DD HH:MM:SS`.
-  games: Games played.
+  games: Games played in the table's scope.
   league_part_id: 'League part id (league-part key space, per bucket: one stage of a competition, e.g. ICEHL 56 = 2026/27
     regular season); joins to `league_part_id` in league-matches and the `{league_part_id}` path param.'
   league_part_name: League part name, e.g. `DEL 2026/27`.
   losses: Losses in regulation time.
   losses_ot: Losses after overtime or shootout.
-  name: Team display name.
+  name: Team display name as the feed prints it.
   only_ot_losts: Losses in overtime.
   only_ot_wins: Wins in overtime.
   only_so_losts: Losses in a shootout.
   only_so_wins: Wins in a shootout.
   part_team_id: 'Team-in-league-part id (its own key space: one team in one league part); no other captured file carries it.'
-  points: Table points.
+  points: Points in the standings table.
   position: Table position, 1 = first.
   ppg: Points per game.
   score1: Goals the team scored (goals for).
-  score2: Goals against.
+  score2: Goals conceded (goals against).
   shortcut: Three-letter team code.
   state: Standings state flag (e.g. live or final; values unverified).
   team_id: Team id (per-bucket team key space); joins to home_id / guest_id in the schedule.
@@ -46176,15 +46176,15 @@ del_team_player_stats:
   faceoffs_losses: Face-offs the player lost (this game, or to date in the season / league-part files).
   faceoffs_win: Face-offs the player won (this game, or to date in the season / league-part files).
   firstname: First name of the player in this row.
-  games: Games played.
+  games: Games played in the table's scope.
   goals: 'goals in total (goals_home + goals_away: the body splits it by home and away games).'
   goals_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   goals_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   gw_goals: Game-winning goals.
   height: Height in cm; `0` placeholder when unknown.
   holema_id: Unobserved (null in every sample); an external registry id by its name, key space unknown, joins to nothing captured.
-  jersey: Jersey number.
-  name: Player full name.
+  jersey: Player jersey (sweater) number.
+  name: Player full name (first and last).
   nationality: Nationality, country name.
   nationality_short: Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain).
   negative: 'Minus: on ice for goals against at even strength or on the power play.'
@@ -46209,7 +46209,7 @@ del_team_player_stats:
   shots_on_goal_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   shots_on_goal_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   stick: 'Handedness: `left` or `right`; null when unknown.'
-  surname: Player last name.
+  surname: Player's last (family) name.
   team_shortcut: Three-letter team code.
   time_on_ice: Time on ice, whole seconds (`0` when not tracked).
   time_on_ice_per_game: Time on ice per game, seconds.
@@ -46220,16 +46220,16 @@ del_top_scorers:
   assists: Assists credited to the player in the league-season.
   games: Games played (two names for the same count).
   goals: Goals the player scored in the league-season.
-  name: Player first name.
+  name: Player's first (given) name.
   penalty_minutes: Penalty minutes assessed to the player in the league-season.
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
   points: Points, goals + assists.
-  shots: Shots on goal.
-  surname: Player last name.
+  shots: Shots on goal (saved or scored).
+  surname: Player's last (family) name.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  team_name: Team display name.
+  team_name: Team display name as the feed prints it.
   team_shortcut: Three-letter team code.
   time_on_ice: Time on ice, seconds; `0` placeholder in the samples.
 eihl_game_info:
@@ -46256,11 +46256,11 @@ eihl_game_info:
   team_bilance_visitor_win: Wins of that team in the head-to-head record (unverified).
   team_info_home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  team_info_home_name: Team display name.
+  team_info_home_name: Team display name as the feed prints it.
   team_info_home_shortcut: Three-letter team code.
   team_info_visitor_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` /
     `guest.id` and the `{team_id}` path param.
-  team_info_visitor_name: Team display name.
+  team_info_visitor_name: Team display name as the feed prints it.
   team_info_visitor_shortcut: Three-letter team code.
   trainers_home_head_coach: 'Head coach (ICEHL/EIHL/Denmark: a full-name string; DEL: an object with `id` and `name`).'
   trainers_visitor_head_coach: 'Head coach (ICEHL/EIHL/Denmark: a full-name string; DEL: an object with `id` and `name`).'
@@ -46268,14 +46268,14 @@ eihl_goalie_box:
   average: Goals-against average per 60 minutes.
   birthdate: Birth date `YYYY-MM-DD`.
   goals_against: Goals the goalie allowed.
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   lost_matches: Games the goalie lost.
   matches: Games played (1 in a per-game file).
   milestone_games: Widget value for the next milestone of that stat (unverified).
   milestone_shutouts: Widget value for the next milestone of that stat (unverified).
   milestone_wins: Widget value for the next milestone of that stat (unverified).
   minutes_in_play: Share of the team's game time in goal, percent (100.0 = the whole game).
-  name: Goalie first name.
+  name: Goaltender's first (given) name.
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
   saves: Shots on goal the goalie stopped.
@@ -46284,10 +46284,10 @@ eihl_goalie_box:
   stars_games: Widget star marker for that stat (unverified).
   stars_shutouts: Widget star marker for that stat (unverified).
   stars_wins: Widget star marker for that stat (unverified).
-  surname: Goalie last name.
+  surname: Goaltender's last (family) name.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  team_name: Team display name.
+  team_name: Team display name as the feed prints it.
   team_shortcut: Three-letter team code.
   time_on_ice: Time in goal, seconds.
   visible_games: 'Widget flag: show the milestone for that stat.'
@@ -46347,15 +46347,15 @@ eihl_player_box:
   faceoffs_losses: Face-offs the player lost (this game, or to date in the season / league-part files).
   faceoffs_win: Face-offs the player won (this game, or to date in the season / league-part files).
   firstname: First name of the player in this row.
-  games: Games played.
+  games: Games played in the table's scope.
   goals: 'goals in total (goals_home + goals_away: the body splits it by home and away games).'
   goals_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   goals_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   gw_goals: Game-winning goals.
   height: Height in cm; `0` placeholder when unknown.
   hits: Body checks delivered.
-  jersey: Jersey number.
-  name: Player full name.
+  jersey: Player jersey (sweater) number.
+  name: Player full name (first and last).
   nationality: Nationality, country name.
   nationality_short: Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain).
   negative: 'Minus: on ice for goals against at even strength or on the power play.'
@@ -46378,7 +46378,7 @@ eihl_player_box:
   shots_on_goal_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   shots_on_goal_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   stick: 'Handedness: `left` or `right`; null when unknown.'
-  surname: Player last name.
+  surname: Player's last (family) name.
   team_shortcut: Three-letter team code.
   timeonice: Time on ice, seconds with decimals (tracking-based; differs from `timeOnIce`).
   timeonice_eq: Time on ice at even strength (`EQ`), on the power play (`PP`) or shorthanded (`SH`), seconds with decimals.
@@ -46398,11 +46398,11 @@ eihl_schedule:
   group: Group name in group stages; empty string or null otherwise.
   guest_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  guest_name: Team display name.
+  guest_name: Team display name as the feed prints it.
   guest_shortcut: Three-letter team code.
   home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  home_name: Team display name.
+  home_name: Team display name as the feed prints it.
   home_shortcut: Three-letter team code.
   last_event_time: Game second of the latest event, of game time from the opening face-off (0-3600 in regulation, continuing
     through overtime).
@@ -46429,10 +46429,10 @@ eihl_shots:
   first_name: First name of the shooter.
   home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  home_name: Team display name.
+  home_name: Team display name as the feed prints it.
   home_shortcut: Three-letter team code.
   is_goal: True when the shot result code is 4 (goal).
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   last_name: Last name of the shooter.
   match_id: Match id (per-bucket match key space); joins to the {match_id} path param of the game wrappers.
   match_shot_resutl_id: 'Shot result code (the provider''s typo kept): `4` = goal; `1` / `2` / `3` probably on goal / missed
@@ -46450,31 +46450,31 @@ eihl_shots:
   time: Seconds of game time from the opening face-off (0-3600 in regulation, continuing through overtime).
   visitor_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  visitor_name: Team display name.
+  visitor_name: Team display name as the feed prints it.
   visitor_shortcut: Three-letter team code.
   xg: Expected-goals value of the shot (ICEHL and EIHL only; null elsewhere).
   xg_type: Shot-danger class from the xG model, e.g. LD / MD / HD (ICEHL and EIHL only; null elsewhere).
 eihl_standings:
   complete: True when the standings include every finished game.
-  games: Games played.
+  games: Games played in the table's scope.
   goals_away: Goals scored in away games.
   group_id: Group id (group key space); null when the stage has no groups, so unobserved here.
   group_name: Group name; empty string when the stage has no groups.
   last10: Form over the last ten games as a result string; empty string in the samples.
   losts: Losses in regulation time.
   losts_ot: Losses after overtime or shootout.
-  name: Team display name.
+  name: Team display name as the feed prints it.
   only_ot_losts: Losses in overtime.
   only_ot_wins: Wins in overtime.
   only_so_losts: Losses in a shootout.
   only_so_wins: Wins in a shootout.
   part_team_id: 'Team-in-league-part id (its own key space: one team in one league part); no other captured file carries it.'
-  points: Table points.
+  points: Points in the standings table.
   position: Table position, 1 = first.
   ppg: Points per game.
   qualified: True when the team has clinched qualification.
   score1: Goals the team scored (goals for).
-  score2: Goals against.
+  score2: Goals conceded (goals against).
   shortcut: Three-letter team code.
   team_id: Team id (per-bucket team key space); joins to home_id / guest_id in the schedule.
   team_original: Team's registered name.
@@ -46494,15 +46494,15 @@ eihl_team_player_stats:
   faceoffs_losses: Face-offs the player lost (this game, or to date in the season / league-part files).
   faceoffs_win: Face-offs the player won (this game, or to date in the season / league-part files).
   firstname: First name of the player in this row.
-  games: Games played.
+  games: Games played in the table's scope.
   goals: 'goals in total (goals_home + goals_away: the body splits it by home and away games).'
   goals_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   goals_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   gw_goals: Game-winning goals.
   height: Height in cm; `0` placeholder when unknown.
   hits: Body checks delivered.
-  jersey: Jersey number.
-  name: Player full name.
+  jersey: Player jersey (sweater) number.
+  name: Player full name (first and last).
   nationality: Nationality, country name.
   nationality_short: Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain).
   negative: 'Minus: on ice for goals against at even strength or on the power play.'
@@ -46525,7 +46525,7 @@ eihl_team_player_stats:
   shots_on_goal_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   shots_on_goal_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   stick: 'Handedness: `left` or `right`; null when unknown.'
-  surname: Player last name.
+  surname: Player's last (family) name.
   team_shortcut: Three-letter team code.
   timeonice: Time on ice, seconds with decimals (tracking-based; differs from `timeOnIce`).
   timeonice_eq: Time on ice at even strength (`EQ`), on the power play (`PP`) or shorthanded (`SH`), seconds with decimals.
@@ -46536,20 +46536,20 @@ eihl_top_scorers:
   assists: Assists credited to the player in the league-season.
   birthdate: Birth date `YYYY-MM-DD`.
   goals: Goals the player scored in the league-season.
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   matches: Games played (two names for the same count).
-  name: Player first name.
+  name: Player's first (given) name.
   negatives: 'Minus events of the player: on ice for a goal against (league-season).'
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
   points: Points, goals + assists.
   positives: 'Plus events of the player: on ice for a goal for (league-season).'
   positives_negatives: Plus/minus, positives - negatives.
-  shots: Shots on goal.
-  surname: Player last name.
+  shots: Shots on goal (saved or scored).
+  surname: Player's last (family) name.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  team_name: Team display name.
+  team_name: Team display name as the feed prints it.
   team_shortcut: Three-letter team code.
 icehl_faceoffs:
   id: Face-off id (face-off key space); no other captured file joins to it.
@@ -46561,7 +46561,7 @@ icehl_faceoffs:
   time: Seconds of game time from the opening face-off (0-3600 in regulation, continuing through overtime).
   winner_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
-  winner_name: Player full name.
+  winner_name: Player full name (first and last).
 icehl_game_center:
   calc_time: Server computation time; `0` in the samples.
   data_away_field_players: Skaters of that team with their game stats.
@@ -46724,11 +46724,11 @@ icehl_game_info:
   team_bilance_visitor_win: Wins of that team in the head-to-head record (unverified).
   team_info_home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  team_info_home_name: Team display name.
+  team_info_home_name: Team display name as the feed prints it.
   team_info_home_shortcut: Three-letter team code.
   team_info_visitor_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` /
     `guest.id` and the `{team_id}` path param.
-  team_info_visitor_name: Team display name.
+  team_info_visitor_name: Team display name as the feed prints it.
   team_info_visitor_shortcut: Three-letter team code.
   trainers_home_head_coach: 'Head coach (ICEHL/EIHL/Denmark: a full-name string; DEL: an object with `id` and `name`).'
   trainers_visitor_head_coach: 'Head coach (ICEHL/EIHL/Denmark: a full-name string; DEL: an object with `id` and `name`).'
@@ -46761,14 +46761,14 @@ icehl_goalie_box:
   gate_zone_ur_shots_against: Shots on goal faced in that net zone.
   goals_against: Goals the goalie allowed.
   gsax: Goals saved above expected, xGA minus goals against (ICEHL only).
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   lost_matches: Games the goalie lost.
   matches: Games played (1 in a per-game file).
   milestone_games: Widget value for the next milestone of that stat (unverified).
   milestone_shutouts: Widget value for the next milestone of that stat (unverified).
   milestone_wins: Widget value for the next milestone of that stat (unverified).
   minutes_in_play: Share of the team's game time in goal, percent (100.0 = the whole game).
-  name: Goalie first name.
+  name: Goaltender's first (given) name.
   photo: Goalie photo URL; null when none.
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
@@ -46780,10 +46780,10 @@ icehl_goalie_box:
   stars_games: Widget star marker for that stat (unverified).
   stars_shutouts: Widget star marker for that stat (unverified).
   stars_wins: Widget star marker for that stat (unverified).
-  surname: Goalie last name.
+  surname: Goaltender's last (family) name.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  team_name: Team display name.
+  team_name: Team display name as the feed prints it.
   team_shortcut: Three-letter team code.
   team_time_on_ice: The team's total game time, seconds.
   team_type: 'Side: `home` or `visitor`; null in DEL and EIHL.'
@@ -46807,20 +46807,20 @@ icehl_league_part_player_stats:
   faceoffs_losses: Face-offs the player lost (this game, or to date in the season / league-part files).
   faceoffs_win: Face-offs the player won (this game, or to date in the season / league-part files).
   firstname: First name of the player in this row.
-  games: Games played.
+  games: Games played in the table's scope.
   goals: 'goals in total (goals_home + goals_away: the body splits it by home and away games).'
   goals_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   goals_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   gw_goals: Game-winning goals.
   height: Height in cm; `0` placeholder when unknown.
   hits: Body checks delivered.
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   last_goal: Opaque date-like code of the player's latest goal, e.g. `2026-0-09-02640`; format unverified.
   milestone_assists: Widget value for the next milestone of that stat (unverified).
   milestone_games: Widget value for the next milestone of that stat (unverified).
   milestone_goals: Widget value for the next milestone of that stat (unverified).
   milestone_points: Widget value for the next milestone of that stat (unverified).
-  name: Player full name.
+  name: Player full name (first and last).
   nationality: Nationality, country name.
   nationality_short: Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain).
   negative: 'Minus: on ice for goals against at even strength or on the power play.'
@@ -46848,7 +46848,7 @@ icehl_league_part_player_stats:
   stars_goals: Widget star marker for that stat (unverified).
   stars_points: Widget star marker for that stat (unverified).
   stick: 'Handedness: `left` or `right`; null when unknown.'
-  surname: Player last name.
+  surname: Player's last (family) name.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
   team_shortcut: Three-letter team code.
@@ -46919,15 +46919,15 @@ icehl_player_box:
   faceoffs_losses: Face-offs the player lost (this game, or to date in the season / league-part files).
   faceoffs_win: Face-offs the player won (this game, or to date in the season / league-part files).
   firstname: First name of the player in this row.
-  games: Games played.
+  games: Games played in the table's scope.
   goals: 'goals in total (goals_home + goals_away: the body splits it by home and away games).'
   goals_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   goals_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   gw_goals: Game-winning goals.
   height: Height in cm; `0` placeholder when unknown.
   hits: Body checks delivered.
-  jersey: Jersey number.
-  name: Player full name.
+  jersey: Player jersey (sweater) number.
+  name: Player full name (first and last).
   nationality: Nationality, country name.
   nationality_short: Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain).
   negative: 'Minus: on ice for goals against at even strength or on the power play.'
@@ -46953,7 +46953,7 @@ icehl_player_box:
   shots_on_goal_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   shots_on_goal_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   stick: 'Handedness: `left` or `right`; null when unknown.'
-  surname: Player last name.
+  surname: Player's last (family) name.
   team_shortcut: Three-letter team code.
   timeonice: Time on ice, seconds with decimals (tracking-based; differs from `timeOnIce`).
   timeonice_eq: Time on ice at even strength (`EQ`), on the power play (`PP`) or shorthanded (`SH`), seconds with decimals.
@@ -46979,12 +46979,12 @@ icehl_schedule:
   group: Group name in group stages; empty string or null otherwise.
   guest_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  guest_name: Team display name.
+  guest_name: Team display name as the feed prints it.
   guest_shortcut: Three-letter team code.
   highlights: Highlights video URL; empty string or null when none.
   home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  home_name: Team display name.
+  home_name: Team display name as the feed prints it.
   home_shortcut: Three-letter team code.
   last_event_time: Game second of the latest event, of game time from the opening face-off (0-3600 in regulation, continuing
     through overtime).
@@ -47008,7 +47008,7 @@ icehl_schedule:
   status: 'Match status: `BEFORE_MATCH`, `LIVE`, `AFTER_MATCH`.'
   television2: Second broadcaster, same shape as `television`; null in the samples.
   television_logo: Broadcaster logo image URL.
-  television_name: Broadcaster name.
+  television_name: Name of the broadcaster.
   television_url: Broadcaster URL.
   third_period_score_guest: Visiting team goals in that span.
   third_period_score_home: Home team goals in that span.
@@ -47023,10 +47023,10 @@ icehl_shots:
   first_name: First name of the shooter.
   home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  home_name: Team display name.
+  home_name: Team display name as the feed prints it.
   home_shortcut: Three-letter team code.
   is_goal: True when the shot result code is 4 (goal).
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   last_name: Last name of the shooter.
   match_id: Match id (per-bucket match key space); joins to the {match_id} path param of the game wrappers.
   match_shot_resutl_id: 'Shot result code (the provider''s typo kept): `4` = goal; `1` / `2` / `3` probably on goal / missed
@@ -47044,13 +47044,13 @@ icehl_shots:
   time: Seconds of game time from the opening face-off (0-3600 in regulation, continuing through overtime).
   visitor_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  visitor_name: Team display name.
+  visitor_name: Team display name as the feed prints it.
   visitor_shortcut: Three-letter team code.
   xg: Expected-goals value of the shot (ICEHL and EIHL only; null elsewhere).
   xg_type: Shot-danger class from the xG model, e.g. LD / MD / HD (ICEHL and EIHL only; null elsewhere).
 icehl_standings:
   complete: True when the standings include every finished game.
-  games: Games played.
+  games: Games played in the table's scope.
   goals_away: Goals scored in away games.
   group_id: Group id (group key space); null when the stage has no groups, so unobserved here.
   group_name: Group name; empty string when the stage has no groups.
@@ -47059,20 +47059,20 @@ icehl_standings:
   live_game_score: Score of the live game; null when none, so unobserved here.
   losts: Losses in regulation time.
   losts_ot: Losses after overtime or shootout.
-  name: Team display name.
+  name: Team display name as the feed prints it.
   only_ot_losts: Losses in overtime.
   only_ot_wins: Wins in overtime.
   only_so_losts: Losses in a shootout.
   only_so_wins: Wins in a shootout.
   part_team_id: 'Team-in-league-part id (its own key space: one team in one league part); no other captured file carries it.'
-  points: Table points.
+  points: Points in the standings table.
   points_away: Table points from away games.
   position: Table position, 1 = first.
   position_change: Change in table position since the previous round.
   ppg: Points per game.
   qualified: True when the team has clinched qualification.
   score1: Goals the team scored (goals for).
-  score2: Goals against.
+  score2: Goals conceded (goals against).
   shortcut: Three-letter team code.
   team_id: Team id (per-bucket team key space); joins to home_id / guest_id in the schedule.
   team_original: Team's registered name.
@@ -47092,15 +47092,15 @@ icehl_team_player_stats:
   faceoffs_losses: Face-offs the player lost (this game, or to date in the season / league-part files).
   faceoffs_win: Face-offs the player won (this game, or to date in the season / league-part files).
   firstname: First name of the player in this row.
-  games: Games played.
+  games: Games played in the table's scope.
   goals: 'goals in total (goals_home + goals_away: the body splits it by home and away games).'
   goals_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   goals_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   gw_goals: Game-winning goals.
   height: Height in cm; `0` placeholder when unknown.
   hits: Body checks delivered.
-  jersey: Jersey number.
-  name: Player full name.
+  jersey: Player jersey (sweater) number.
+  name: Player full name (first and last).
   nationality: Nationality, country name.
   nationality_short: Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain).
   negative: 'Minus: on ice for goals against at even strength or on the power play.'
@@ -47126,7 +47126,7 @@ icehl_team_player_stats:
   shots_on_goal_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   shots_on_goal_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   stick: 'Handedness: `left` or `right`; null when unknown.'
-  surname: Player last name.
+  surname: Player's last (family) name.
   team_shortcut: Three-letter team code.
   timeonice: Time on ice, seconds with decimals (tracking-based; differs from `timeOnIce`).
   timeonice_eq: Time on ice at even strength (`EQ`), on the power play (`PP`) or shorthanded (`SH`), seconds with decimals.
@@ -47138,17 +47138,17 @@ icehl_top_scorers:
   assists: Assists credited to the player in the league-season.
   birthdate: Birth date `YYYY-MM-DD`.
   goals: Goals the player scored in the league-season.
-  name: Player first name.
+  name: Player's first (given) name.
   penalty_minutes: Penalty minutes assessed to the player in the league-season.
   photo: Player photo URL; null when none.
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
   points: Points, goals + assists.
-  shots: Shots on goal.
-  surname: Player last name.
+  shots: Shots on goal (saved or scored).
+  surname: Player's last (family) name.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  team_name: Team display name.
+  team_name: Team display name as the feed prints it.
   team_shortcut: Three-letter team code.
 metal_game_center:
   calc_time: Server computation time; `0` in the samples.
@@ -47319,11 +47319,11 @@ metal_game_info:
   team_bilance_visitor_win: Wins of that team in the head-to-head record (unverified).
   team_info_home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  team_info_home_name: Team display name.
+  team_info_home_name: Team display name as the feed prints it.
   team_info_home_shortcut: Three-letter team code.
   team_info_visitor_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` /
     `guest.id` and the `{team_id}` path param.
-  team_info_visitor_name: Team display name.
+  team_info_visitor_name: Team display name as the feed prints it.
   team_info_visitor_shortcut: Three-letter team code.
   trainers_home_head_coach: 'Head coach (ICEHL/EIHL/Denmark: a full-name string; DEL: an object with `id` and `name`).'
   trainers_visitor_head_coach: 'Head coach (ICEHL/EIHL/Denmark: a full-name string; DEL: an object with `id` and `name`).'
@@ -47356,14 +47356,14 @@ metal_goalie_box:
   gate_zone_ur_shots_against: Shots on goal faced in that net zone.
   goals_against: Goals the goalie allowed.
   gsax: Goals saved above expected, xGA minus goals against (ICEHL only).
-  jersey: Jersey number.
+  jersey: Player jersey (sweater) number.
   lost_matches: Games the goalie lost.
   matches: Games played (1 in a per-game file).
   milestone_games: Widget value for the next milestone of that stat (unverified).
   milestone_shutouts: Widget value for the next milestone of that stat (unverified).
   milestone_wins: Widget value for the next milestone of that stat (unverified).
   minutes_in_play: Share of the team's game time in goal, percent (100.0 = the whole game).
-  name: Goalie first name.
+  name: Goaltender's first (given) name.
   photo: Goalie photo URL; null when none.
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
@@ -47375,10 +47375,10 @@ metal_goalie_box:
   stars_games: Widget star marker for that stat (unverified).
   stars_shutouts: Widget star marker for that stat (unverified).
   stars_wins: Widget star marker for that stat (unverified).
-  surname: Goalie last name.
+  surname: Goaltender's last (family) name.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  team_name: Team display name.
+  team_name: Team display name as the feed prints it.
   team_shortcut: Three-letter team code.
   team_type: 'Side: `home` or `visitor`; null in DEL and EIHL.'
   time_on_ice: Time in goal, seconds.
@@ -47450,15 +47450,15 @@ metal_player_box:
   faceoffs_losses: Face-offs the player lost (this game, or to date in the season / league-part files).
   faceoffs_win: Face-offs the player won (this game, or to date in the season / league-part files).
   firstname: First name of the player in this row.
-  games: Games played.
+  games: Games played in the table's scope.
   goals: 'goals in total (goals_home + goals_away: the body splits it by home and away games).'
   goals_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   goals_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   gw_goals: Game-winning goals.
   height: Height in cm; `0` placeholder when unknown.
   hits: Body checks delivered.
-  jersey: Jersey number.
-  name: Player full name.
+  jersey: Player jersey (sweater) number.
+  name: Player full name (first and last).
   nationality: Nationality, country name.
   nationality_short: Nationality, three-letter code (`CAN`, `GER`; `UK` for Britain).
   negative: 'Minus: on ice for goals against at even strength or on the power play.'
@@ -47482,7 +47482,7 @@ metal_player_box:
   shots_on_goal_away: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   shots_on_goal_home: 'Split by venue: `home` = in the player''s home games, `away` = in away games.'
   stick: 'Handedness: `left` or `right`; null when unknown.'
-  surname: Player last name.
+  surname: Player's last (family) name.
   team_shortcut: Three-letter team code.
   timeonice: Time on ice, seconds with decimals (tracking-based; differs from `timeOnIce`).
   timeonice_eq: Time on ice at even strength (`EQ`), on the power play (`PP`) or shorthanded (`SH`), seconds with decimals.
@@ -47505,11 +47505,11 @@ metal_schedule:
   group: Group name in group stages; empty string or null otherwise.
   guest_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id`
     and the `{team_id}` path param.
-  guest_name: Team display name.
+  guest_name: Team display name as the feed prints it.
   guest_shortcut: Three-letter team code.
   home_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  home_name: Team display name.
+  home_name: Team display name as the feed prints it.
   home_shortcut: Three-letter team code.
   last_event_time: Game second of the latest event, of game time from the opening face-off (0-3600 in regulation, continuing
     through overtime).
@@ -47535,7 +47535,7 @@ metal_schedule:
   tickets_url: URL of the ticket shop for the match.
 metal_standings:
   complete: True when the standings include every finished game.
-  games: Games played.
+  games: Games played in the table's scope.
   goals_away: Goals scored in away games.
   group_id: Group id (group key space); null when the stage has no groups, so unobserved here.
   group_name: Group name; empty string when the stage has no groups.
@@ -47544,20 +47544,20 @@ metal_standings:
   live_game_score: Score of the live game; null when none, so unobserved here.
   losts: Losses in regulation time.
   losts_ot: Losses after overtime or shootout.
-  name: Team display name.
+  name: Team display name as the feed prints it.
   only_ot_losts: Losses in overtime.
   only_ot_wins: Wins in overtime.
   only_so_losts: Losses in a shootout.
   only_so_wins: Wins in a shootout.
   part_team_id: 'Team-in-league-part id (its own key space: one team in one league part); no other captured file carries it.'
-  points: Table points.
+  points: Points in the standings table.
   points_away: Table points from away games.
   position: Table position, 1 = first.
   position_change: Change in table position since the previous round.
   ppg: Points per game.
   qualified: True when the team has clinched qualification.
   score1: Goals the team scored (goals for).
-  score2: Goals against.
+  score2: Goals conceded (goals against).
   shortcut: Three-letter team code.
   team_id: Team id (per-bucket team key space); joins to home_id / guest_id in the schedule.
   team_original: Team's registered name.
@@ -47569,13 +47569,13 @@ metal_top_scorers:
   assists: Assists credited to the player in the league-season.
   birthdate: Birth date `YYYY-MM-DD`.
   goals: Goals the player scored in the league-season.
-  name: Player first name.
+  name: Player's first (given) name.
   player_id: Player id (player key space, per bucket, stable across games and seasons); joins to `playerId` in rosters, events,
     boxscores and leaderboards.
   points: Points, goals + assists.
-  shots: Shots on goal.
-  surname: Player last name.
+  shots: Shots on goal (saved or scored).
+  surname: Player's last (family) name.
   team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches` `home.id` / `guest.id` and
     the `{team_id}` path param.
-  team_name: Team display name.
+  team_name: Team display name as the feed prints it.
   team_shortcut: Three-letter team code.

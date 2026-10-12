@@ -27,7 +27,7 @@ endpoints:
   path: /wp-admin/admin-ajax.php
   returns_schema: native/magnus/competitions
   short: competitions
-  summary: Competitions (one per season) of a competition type
+  summary: Competitions (one per season) of a competition type.
 - docstring:
     example_import: true
     raises:
@@ -134,7 +134,7 @@ endpoints:
   path: /wp-admin/admin-ajax.php
   returns_schema: native/magnus/phases
   short: phases
-  summary: Phases of a competition (regular season, playoffs, relegation)
+  summary: Phases of a competition (regular season, playoffs, relegation).
 - example_args:
     phase_id: 714
     round: 1
@@ -156,7 +156,7 @@ endpoints:
   path: /wp-admin/admin-ajax.php
   returns_schema: native/magnus/round_games
   short: round_games
-  summary: One round of a phase with its games
+  summary: One round of a phase with its games.
 - example_args:
     phase_id: 714
   extra_params:
@@ -171,7 +171,7 @@ endpoints:
   path: /wp-admin/admin-ajax.php
   returns_schema: native/magnus/rounds
   short: rounds
-  summary: Rounds (journees) of a phase with their dates (games via get_rencontrestours)
+  summary: Rounds (journees) of a phase with their dates (games via get_rencontrestours).
 - example_args:
     season: 2027
   extra_params:
@@ -215,7 +215,7 @@ endpoints:
   returns_schema: native/magnus/schedule
   short: schedule
   summary: Games (schedule and results); Laravel-paginated, par_page=700 returns a
-    full season
+    full season.
 - docstring:
     example_import: true
     raises:
@@ -259,7 +259,7 @@ endpoints:
   path: /wp-admin/admin-ajax.php
   returns_schema: native/magnus/standings
   short: standings
-  summary: Standings of a phase
+  summary: Standings of a phase.
 - example_args:
     phase_id: 714
   extra_params:
@@ -275,7 +275,7 @@ endpoints:
   path: /wp-admin/admin-ajax.php
   returns_schema: native/magnus/teams
   short: teams
-  summary: Teams of a phase
+  summary: Teams of a phase.
 getter_module: sportsdataverse.hockey.magnus.magnus_runtime
 host: https://liguemagnus.com
 module: magnus

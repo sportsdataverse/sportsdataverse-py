@@ -84,9 +84,9 @@ Skater goals and assists by situation: even strength, power play, short-handed, 
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
 | `position` | character | Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-". |
-| `games_played` | integer | Games played. |
-| `goals` | integer | Goals. |
-| `assists` | integer | Assists. |
+| `games_played` | integer | Games played in the table's scope. |
+| `goals` | integer | Goals scored (total). |
+| `assists` | integer | Assists credited. |
 | `assists1` | integer | Primary assists. |
 | `assists2` | integer | Secondary assists. |
 | `game_winning_goals` | integer | Game-winning goals. |
@@ -97,7 +97,7 @@ Skater goals and assists by situation: even strength, power play, short-handed, 
 | `pk_goals` | integer | Short-handed goals. |
 | `pk_assists` | integer | Short-handed assists. |
 | `overtime_goals` | integer | Overtime goals. |
-| `hattricks` | integer | Hat tricks. |
+| `hattricks` | integer | Hat tricks (games with three or more goals). |
 | `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -139,8 +139,8 @@ Skater shots: on goal (total, slot, shooting percentage), missed, post and block
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
 | `position` | character | Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-". |
-| `games_played` | integer | Games played. |
-| `sog_sog` | integer | Shots on goal. |
+| `games_played` | integer | Games played in the table's scope. |
+| `sog_sog` | integer | Shots on goal (saved or scored). |
 | `sog_sog_percent` | double | Shooting percentage (goals / shots on goal). |
 | `sog_sog_quotient` | double | Shots on goal per game. |
 | `sog_sog_slot` | integer | Slot shots on goal. |
@@ -149,7 +149,7 @@ Skater shots: on goal (total, slot, shooting percentage), missed, post and block
 | `sog_missed_per_game` | double | Missed shots per game. |
 | `sog_post` | integer | Post/crossbar shots, total. |
 | `sog_post_per_game` | double | Post/crossbar shots per game. |
-| `blockings` | integer | Blocked shots. |
+| `blockings` | integer | Number of shots blocked. |
 | `blockings_per_game` | double | Blocked shots per game. |
 | `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
@@ -192,7 +192,7 @@ Skater penalties: penalty minutes, 2-, 5- and 10-minute penalties, game miscondu
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
 | `position` | character | Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-". |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `pim_total` | integer | Penalty minutes, total. |
 | `pim2` | integer | Number of 2-minute minor penalties. |
 | `pim5` | integer | Number of 5-minute major penalties. |
@@ -240,7 +240,7 @@ Skater shootouts: attempts, goals, misses, percentage and shootout-winning goals
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
 | `position` | character | Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-". |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `pen_shots` | integer | Shootout/penalty shots taken. |
 | `pen_shot_goals` | integer | Shootout/penalty goals. |
 | `pen_shots_missed` | integer | Shootout/penalty shots missed. |
@@ -287,12 +287,12 @@ Skater faceoffs: taken, won, lost, per game, and win percentage overall and by z
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
 | `position` | character | Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-". |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `faceoffs` | integer | Faceoffs taken, total. |
 | `faceoffs_per_game` | double | Faceoffs taken per game. |
 | `faceoffs_percent` | double | Faceoff win percentage; '-' with no faceoffs. |
-| `faceoffs_won` | integer | Faceoffs won. |
-| `faceoffs_lost` | integer | Faceoffs lost. |
+| `faceoffs_won` | integer | Number of faceoffs won. |
+| `faceoffs_lost` | integer | Number of faceoffs lost. |
 | `faceoffs_won_per_game` | double | Faceoffs won per game. |
 | `faceoffs_lost_per_game` | double | Faceoffs lost per game. |
 | `faceoffs_offensive_percent` | double | Faceoff win percentage, offensive zone. |
@@ -339,7 +339,7 @@ Skater faceoffs by zone (offensive, neutral, defensive): taken, won, lost and wi
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
 | `position` | character | Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-". |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `faceoffs_offensive` | integer | Faceoffs taken, offensive zone. |
 | `faceoffs_offensive_percent` | double | Faceoff win percentage, offensive zone. |
 | `faceoffs_won_offensive` | integer | Faceoffs won, offensive zone. |
@@ -393,7 +393,7 @@ Skater faceoffs by zone (offensive, neutral, defensive) per game: taken, won and
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
 | `position` | character | Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-". |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `faceoffs_offensive_per_game` | double | Faceoffs taken per game, offensive zone. |
 | `faceoffs_won_offensive_per_game` | double | Faceoffs won per game, offensive zone. |
 | `faceoffs_lost_offensive_per_game` | double | Faceoffs lost per game, offensive zone. |
@@ -444,7 +444,7 @@ Skater ice time by situation (even strength, power play, penalty kill), totals a
 | `team_name` | character | Team display name as SIHF publishes it; "Durchschnitt" on the league-average row, "Total" on the attendance total row. |
 | `team_acronym` | character | Team abbreviation as SIHF publishes it (e.g., "HCD"); null on a summary row. |
 | `position` | character | Position, German whatever the language (e.g., "Stürmer"); null when SIHF prints "-". |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Games played in the table's scope. |
 | `time_on_ice_eq` | character | Even-strength time on ice, mm:ss string (minutes may exceed 59), not seconds. |
 | `time_on_ice_eq_per_game` | character | Even-strength time on ice per game, mm:ss string (minutes may exceed 59), not seconds. |
 | `time_on_ice_pp` | character | Power-play time on ice, mm:ss string (minutes may exceed 59), not seconds. |
@@ -453,7 +453,7 @@ Skater ice time by situation (even strength, power play, penalty kill), totals a
 | `time_on_ice_pk_per_game` | character | Short-handed time on ice per game, mm:ss string (minutes may exceed 59), not seconds. |
 | `time_on_ice` | character | Time on ice, total, mm:ss string (minutes may exceed 59), not seconds. |
 | `time_on_ice_per_game` | character | Time on ice per game, mm:ss string (minutes may exceed 59), not seconds. |
-| `shifts` | integer | Shifts. |
+| `shifts` | integer | Number of shifts on ice. |
 | `time_on_ice_per_shift` | character | Average time on ice per shift, mm:ss string (minutes may exceed 59), not seconds; '-' with no shifts. |
 | `shifts_per_game` | double | Shifts per game. |
 | `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
