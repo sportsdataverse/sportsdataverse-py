@@ -120,7 +120,7 @@ def _touchdown_did_not_stand() -> pl.Expr:
     text = pl.col("text")
     unscored = _PENALTY_NEGATED_TEXT + "|reversed"
     return (
-        pl.when(pl.col("scoringPlay") == True)  # noqa: E712
+        pl.when(pl.col("scoringPlay") == True)
         .then(text.str.contains("(?i)nullified by penalty"))
         .otherwise(text.str.contains(unscored))
         .fill_null(False)
