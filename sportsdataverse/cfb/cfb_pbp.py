@@ -4059,7 +4059,12 @@ class CFBPlayProcess(object):
             play_df.with_columns(
                 period=pl.col("period.number"),
                 half=pl.when(pl.col("period.number") <= 2).then(1).otherwise(2),
+                # C-L1: the order is final here (re-sorted, copies and markers dropped), so the
+                # row-index columns follow it. The numbers keep their gaps; only their order moves.
+                game_play_number=pl.col("game_play_number").sort(),
             )
+            # one chunk per column: polars 2.0 panics on a later struct whose fields disagree
+            .rechunk()
             .with_columns(
                 # A kickoff the receiving team returns ends at its first down. ESPN files
                 # that end at down -1 ("Kickoff Return (Offense)", 2014 on), and the EP and
@@ -4074,6 +4079,7 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("end.down"))
                 .alias("end.down"),
                 lead_half=pl.col("half").shift(-1),
+                lag_half=pl.col("half").shift(1),  # C-L1: the previous row of the final order
                 lag_scoringPlay=pl.col("scoringPlay").shift(1),
             )
             .with_columns(

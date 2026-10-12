@@ -72,7 +72,7 @@ Oracle per column
     The feed's chronology: never decreases along the emitted rows. XFAIL C-M18.
 ``game_play_number``, ``lag_half``
     Recomputed after the final sort: ``game_play_number`` strictly increases along the rows and
-    ``lag_half`` is the previous row's ``half`` (null on row 1). XFAIL C-L1.
+    ``lag_half`` is the previous row's ``half`` (null on row 1). Green (C-L1, fixed in 3.4(b2)).
 ``id``
     The feed: every emitted row is a feed play, emitted once (C-L11's row-count diagnostic). Green.
 feed ``text`` literals
@@ -702,29 +702,7 @@ def test_period_never_decreases_along_the_rows(game_id):
     assert steps_back == [], f"period decreases at rows {steps_back}"
 
 
-_L1 = {
-    gid: f"C-L1: game_play_number / lag_half are set before the final sort (cfb_pbp.py:2536, :2619); {note}"
-    for gid, note in {
-        282430151: "lag_half stale on rows 0, 2",
-        282570328: "lag_half stale on rows 0, 2",
-        293250145: "lag_half stale on rows 0, 1",
-        302540025: "lag_half stale on rows 0, 1",
-        332990030: "lag_half stale on rows 0, 1",
-        401282146: "lag_half stale on rows 0, 201",
-        401301042: "lag_half stale on rows 0, 183",
-        401425418: "lag_half stale on rows 0, 1, 10",
-        401525860: "lag_half stale on rows 0, 98",
-        401525903: "game_play_number steps back at row 117",
-        401628439: "lag_half stale on row 173",
-        401752817: "lag_half stale on row 81",
-        401752854: "lag_half stale on row 84",
-        401754585: "lag_half stale on rows 40, 51, 191",
-        401858224: "lag_half stale on rows 35, 83, 174",
-    }.items()
-}
-
-
-@pytest.mark.parametrize("game_id", _params(CAPTURES, _L1))
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
 def test_game_play_number_and_lag_half_follow_the_rows(game_id):
     df = _frame(game_id)
     gpn = df["game_play_number"].cast(pl.Int64)

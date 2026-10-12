@@ -253,6 +253,28 @@
     an unconditional warning at the default/core site survived both earlier tests (review PR-828 M4);
     live 2024+ games with an ESPN BET spread would then warn, or fail in strict mode
 
+# --- C-L1: lag_half and game_play_number follow the final row order -------------------------------
+# Killer (3.4(b2)): test_cfb_whole_game_oracle.py's row-order check, now a plain assert on every capture.
+- id: cfb-lag-half-after-final-sort
+  group: cfb-row-order
+  finding: C-L1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'lag_half=pl.col("half").shift(1),  # C-L1'
+  mutant: 'lag_half=pl.col("lag_half"),  # C-L1'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "game_play_number_and_lag_half and 401754585"
+  expected: kill
+  note: keeps the lag_half set before the re-sort and the marker drop (stale on rows 40, 51, 191)
+
+- id: cfb-game-play-number-after-final-sort
+  group: cfb-row-order
+  finding: C-L1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'game_play_number=pl.col("game_play_number").sort(),'
+  mutant: 'game_play_number=pl.col("game_play_number"),'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "game_play_number_and_lag_half and 401525903"
+  expected: kill
+  note: the two-point try the re-sort moves ahead of its kickoff keeps its larger number (row 117)
+
 # --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13
