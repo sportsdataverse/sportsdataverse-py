@@ -152,12 +152,36 @@ _SCORE_COLS = (
     "game_spread_available",
     "period_number",
     "start_game_seconds_remaining",
-    "start_quarter_seconds_remaining",
     "home_score",
     "away_score",
     "team_id",
     "home_team_id",
 )
+
+#: The period clock: ``start_quarter_seconds_remaining`` (NBA / WNBA / WBB frames, pre-2023 MBB releases) or
+#: ``start_period_seconds_remaining`` (``helper_mbb_play_by_play`` and 2023+ MBB releases).
+_CLOCK_COLUMNS = ("start_quarter_seconds_remaining", "start_period_seconds_remaining")
+
+
+def _period_clock(pbp: pl.DataFrame) -> pl.Expr:
+    """Seconds left in the current period, from whichever clock column(s) the frame carries."""
+    present = [c for c in _CLOCK_COLUMNS if c in pbp.columns]
+    if not present:
+        raise pl.exceptions.ColumnNotFoundError(
+            "needs the period clock: start_quarter_seconds_remaining or start_period_seconds_remaining"
+        )
+    return pl.coalesce([pl.col(c).cast(pl.Float64) for c in present])
+
+
+def _in_game_win_prob(lg: str, tagged: pl.DataFrame, prior: float) -> pl.Series:
+    """The league's in-game model: NBA / WNBA booster through nba_in_game_win_prob, college through mbb_in_game_win_prob."""
+    if lg in _NCAA:
+        from sportsdataverse.mbb.mbb_game_predict import mbb_in_game_win_prob
+
+        scored = mbb_in_game_win_prob(tagged, prior, league=_NCAA[lg])
+    else:
+        scored = nba_in_game_win_prob(tagged, prior, league_id=_NBA_FAMILY_IDS[lg])
+    return scored["home_win_prob"].cast(pl.Float64)
 
 
 def _check_league(league_id: str) -> None:
@@ -241,23 +265,27 @@ def home_prior(
     return _margin_to_prob(lg, _hfa(lg)), "hfa"
 
 
-def ot_adjusted_seconds(pbp: pl.DataFrame) -> pl.DataFrame:
-    """Tag overtime rows and give them the OT period clock as their seconds remaining.
+def ot_adjusted_seconds(pbp: pl.DataFrame, *, regulation_periods: int = REGULATION_PERIODS) -> pl.DataFrame:
+    """Tag overtime rows and give them the overtime period clock as their seconds remaining.
 
-    The in-game model clips ``start_game_seconds_remaining`` at zero, so every overtime play
-    (negative in the hoopR frame) would score as "game over at the current margin". Each OT period
-    is scored as its own five-minute endgame instead: ``start_game_seconds_remaining`` becomes
-    ``start_quarter_seconds_remaining`` on rows with ``period_number > 4``.
+    The in-game models clip ``start_game_seconds_remaining`` at zero, so every overtime play
+    (negative in the NBA frame) would score as "game over at the current margin". Each overtime is
+    scored as its own five-minute endgame instead: on rows with ``period_number > regulation_periods``
+    ``start_game_seconds_remaining`` becomes the period clock, ``start_quarter_seconds_remaining`` or
+    (men's college frames) ``start_period_seconds_remaining``, whichever is present and not null.
+    In a halves game (``regulation_periods=2``) period 3 is the first overtime.
 
     Args:
-        pbp: One game in the ``load_nba_pbp`` schema.
+        pbp: One game in the basketball pbp schema.
+        regulation_periods: The game's regulation periods (4 quarters, 2 halves); see
+            :func:`game_regulation_periods`.
 
     Returns:
         The frame with ``wp_regime`` (``"reg"`` / ``"ot"``) and the adjusted seconds column.
 
     Raises:
-        polars.exceptions.ColumnNotFoundError: If ``period_number``, ``start_game_seconds_remaining`` or
-            ``start_quarter_seconds_remaining`` is missing.
+        polars.exceptions.ColumnNotFoundError: If ``period_number`` or ``start_game_seconds_remaining``
+            is missing, or neither period clock column is present.
 
     Example:
         Quick start::
@@ -269,49 +297,74 @@ def ot_adjusted_seconds(pbp: pl.DataFrame) -> pl.DataFrame:
             tagged = ot_adjusted_seconds(pbp)
             tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining").head()
 
+        A men's college game (two halves)::
+
+            from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+            one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
+            ot_adjusted_seconds(one, regulation_periods=2)
+
         See Also:
-            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
-            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
 
         .. _hoopR: https://hoopR.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    is_ot = pl.col("period_number") > REGULATION_PERIODS
+    is_ot = pl.col("period_number") > regulation_periods
+    clock = _period_clock(pbp)
     return pbp.with_columns(
         pl.when(is_ot).then(pl.lit("ot")).otherwise(pl.lit("reg")).alias("wp_regime"),
         pl.when(is_ot)
-        .then(pl.col("start_quarter_seconds_remaining").cast(pl.Float64))
+        .then(clock)
         .otherwise(pl.col("start_game_seconds_remaining").cast(pl.Float64))
         .alias("start_game_seconds_remaining"),
     )
 
 
-def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
+def score_win_prob(
+    pbp: pl.DataFrame,
+    *,
+    league_id: Optional[str] = None,
+    league: Optional[str] = None,
+    regulation_periods: Optional[int] = None,
+    neutral_site: Optional[bool] = False,
+) -> pl.DataFrame:
     """Per-play home win probability, its play-to-play delta, and the prior, for one game.
 
+    NBA and WNBA games score with the NBA / WNBA in-game booster
+    (:func:`~sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob`), men's and women's college
+    games with the men's / women's college booster
+    (:func:`~sportsdataverse.mbb.mbb_game_predict.mbb_in_game_win_prob`).
+
     Args:
-        pbp: One game in the ``load_nba_pbp`` schema (needs ``home_team_spread``,
+        pbp: One game in the basketball pbp schema (needs ``home_team_spread``,
             ``game_spread_available``, ``period_number``, ``start_game_seconds_remaining``,
-            ``start_quarter_seconds_remaining``, ``home_score``, ``away_score``, ``team_id``,
-            ``home_team_id``), in play order.
-        league_id: ``"00"`` NBA / ``"10"`` WNBA (the only leagues with an in-game model).
+            the period clock (``start_quarter_seconds_remaining`` or ``start_period_seconds_remaining``),
+            ``home_score``, ``away_score``, ``team_id``, ``home_team_id``), in play order.
+        league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
+        regulation_periods: The game's regulation periods (2 halves, 4 quarters); default from the
+            frame's ``season`` via :func:`game_regulation_periods`.
+        neutral_site: Whether the game is at a neutral site: no home-court advantage in a lineless
+            prior; see :func:`home_prior`.
 
     Returns:
-        The input plus ``pregame_home_prob``, ``prior_source``, ``wp_regime``, ``home_win_prob``
-        and ``wp_delta`` (the first play's delta is measured from the prior). ``home_win_prob`` is
-        settled to 1.0 / 0.0 on "End Game" / "End Period" rows (``type_text``) from the 4th period on
-        where the score is not tied, before ``wp_delta`` is taken; tied rows go to overtime and keep
-        the model value. A frame without ``type_text`` is not settled. An empty input returns an
-        empty frame with those columns. A null ``home_score`` / ``away_score`` means "no change" and is
-        carried forward within the game for the model (a null before the first score is 0); the
-        returned ``home_score`` / ``away_score`` are left as given.
+        The input plus ``pregame_home_prob``, ``prior_source`` (``"spread"``, ``"neutral"`` or
+        ``"hfa"``), ``wp_regime``, ``home_win_prob`` and ``wp_delta`` (the first play's delta is
+        measured from the prior). ``home_win_prob`` is settled to 1.0 / 0.0 on "End Game" /
+        "End Period" rows (``type_text``) from the last regulation period on (period 2 in a halves
+        game, 4 in a quarters game) where the score is not tied, before ``wp_delta`` is taken; tied
+        rows go to overtime and keep the model value. A frame without ``type_text`` is not settled.
+        An empty input returns an empty frame with those columns. A null ``home_score`` /
+        ``away_score`` means "no change" and is carried forward within the game for the model (a
+        null before the first score is 0); the returned ``home_score`` / ``away_score`` are left as given.
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If a required column is missing (``home_team_spread``,
             ``game_spread_available``, ``period_number``, ``start_game_seconds_remaining``,
-            ``start_quarter_seconds_remaining``, ``home_score``, ``away_score``, ``team_id``,
-            ``home_team_id``).
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``pbp`` holds more than one ``game_id``.
+            ``home_score``, ``away_score``, ``team_id``, ``home_team_id``, or neither period clock column).
+        ValueError: If the league is unknown, ``league`` contradicts ``league_id``, or ``pbp`` holds
+            more than one ``game_id``.
 
     Example:
         Quick start::
@@ -326,17 +379,24 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
 
             wp.sort(pl.col("wp_delta").abs(), descending=True).select("text", "wp_delta").head(10)
 
+        A men's college tournament game::
+
+            from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+            one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
+            score_win_prob(one, league="mbb", neutral_site=True)
+
         See Also:
-            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
-            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
 
         .. _hoopR: https://hoopR.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    _check_league(league_id)
+    lg = _resolve_league(league, league_id)
     for c in _SCORE_COLS:
         if c not in pbp.columns:
             raise pl.exceptions.ColumnNotFoundError(f"score_win_prob needs column {c!r}")
+    _period_clock(pbp)  # raises before the empty-frame return, like the column loop
     if "game_id" in pbp.columns and pbp.height and pbp["game_id"].n_unique() > 1:
         raise ValueError(f"score_win_prob scores one game; got {pbp['game_id'].n_unique()} game_id values")
     if pbp.height == 0:
@@ -347,19 +407,22 @@ def score_win_prob(pbp: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame:
             pl.lit(None, dtype=pl.Float64).alias("home_win_prob"),
             pl.lit(None, dtype=pl.Float64).alias("wp_delta"),
         )
+    season = pbp["season"][0] if "season" in pbp.columns else None
+    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
     # a null score on a play means the score did not change; a null before the first score is 0-0.
     # Only the model input is filled: the returned score columns stay as given.
     filled = pbp.with_columns(pl.col("home_score", "away_score").forward_fill().fill_null(0))
     first = filled.row(0, named=True)
-    prior, source = home_prior(first["home_team_spread"], first["game_spread_available"], league_id=league_id)
-    tagged = ot_adjusted_seconds(filled)
-    scored = nba_in_game_win_prob(tagged, prior, league_id=league_id)
-    wp = scored["home_win_prob"].cast(pl.Float64)
+    prior, source = home_prior(
+        first["home_team_spread"], first["game_spread_available"], league=lg, neutral_site=neutral_site
+    )
+    tagged = ot_adjusted_seconds(filled, regulation_periods=reg)
+    wp = _in_game_win_prob(lg, tagged, prior)
     if "type_text" in pbp.columns:
-        # a period from the 4th on that ends with a lead ends the game; a tie goes to overtime
+        # a period from the end of regulation on that ends with a lead ends the game; a tie goes to overtime
         ends = (
             filled["type_text"].is_in(["End Game", "End Period"])
-            & (filled["period_number"] >= REGULATION_PERIODS)
+            & (filled["period_number"] >= reg)
             & (filled["home_score"] != filled["away_score"])
         ).fill_null(False)
         settled = (filled["home_score"] > filled["away_score"]).cast(pl.Float64)
@@ -405,11 +468,11 @@ def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
             shots.select("text", "x_legacy", "y_legacy").head()
 
         See Also:
-            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
-            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
 
         .. _hoopR: https://hoopR.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
     located = (
         (pl.col("shooting_play") == True)
@@ -546,11 +609,11 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4, league_id: str 
             team_game_rates(box, league_id="10")
 
         See Also:
-            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
-            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
 
         .. _hoopR: https://hoopR.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
     _check_two_teams(team_box, "team_game_rates")
     tov = _team_tov(team_box.columns)
@@ -621,11 +684,11 @@ def player_game_rates(
             player_game_rates(player_box, team_box).sort("usg_pct", descending=True).head()
 
         See Also:
-            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
-            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
 
         .. _hoopR: https://hoopR.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
     _check_two_teams(team_box, "player_game_rates")
     team_minutes = 5.0 * game_minutes(periods, league_id=league_id)
@@ -686,11 +749,11 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
             frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
 
         See Also:
-            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
-            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
 
         .. _hoopR: https://hoopR.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
     _check_league(league_id)
     from sportsdataverse.nba.nba_play_by_play import helper_nba_play_by_play

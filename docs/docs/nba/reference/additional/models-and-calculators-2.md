@@ -293,20 +293,23 @@ war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
 
 ### ot_adjusted_seconds {#ot_adjusted_seconds}
 
-`ot_adjusted_seconds(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
+`ot_adjusted_seconds(pbp: 'pl.DataFrame', *, regulation_periods: 'int' = 4) -> 'pl.DataFrame'`
 
-Tag overtime rows and give them the OT period clock as their seconds remaining.
+Tag overtime rows and give them the overtime period clock as their seconds remaining.
 
-The in-game model clips `start_game_seconds_remaining` at zero, so every overtime play
-(negative in the hoopR frame) would score as "game over at the current margin". Each OT period
-is scored as its own five-minute endgame instead: `start_game_seconds_remaining` becomes
-`start_quarter_seconds_remaining` on rows with `period_number > 4`.
+The in-game models clip `start_game_seconds_remaining` at zero, so every overtime play
+(negative in the NBA frame) would score as "game over at the current margin". Each overtime is
+scored as its own five-minute endgame instead: on rows with `period_number > regulation_periods`
+`start_game_seconds_remaining` becomes the period clock, `start_quarter_seconds_remaining` or
+(men's college frames) `start_period_seconds_remaining`, whichever is present and not null.
+In a halves game (`regulation_periods=2`) period 3 is the first overtime.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | One game in the `load_nba_pbp` schema. |
+| `pbp` | `DataFrame` |  | One game in the basketball pbp schema. |
+| `regulation_periods` | `int` | `4` | The game's regulation periods (4 quarters, 2 halves); see `game_regulation_periods`. |
 
 **Returns**
 
@@ -326,6 +329,12 @@ from sportsdataverse.nba.nba_loaders import load_nba_pbp
 pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
 tagged = ot_adjusted_seconds(pbp)
 tagged.filter(pl.col("wp_regime") == "ot").select("start_game_seconds_remaining").head()
+
+# A men's college game (two halves)
+
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
+ot_adjusted_seconds(one, regulation_periods=2)
 ```
 
 ### player_game_rates {#player_game_rates}
@@ -510,20 +519,28 @@ with open("validation_card.md", "w") as f:
 
 ### score_win_prob {#score_win_prob}
 
-`score_win_prob(pbp: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'pl.DataFrame'`
+`score_win_prob(pbp: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False) -> 'pl.DataFrame'`
 
 Per-play home win probability, its play-to-play delta, and the prior, for one game.
+
+NBA and WNBA games score with the NBA / WNBA in-game booster
+(`~sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob`), men's and women's college
+games with the men's / women's college booster
+(`~sportsdataverse.mbb.mbb_game_predict.mbb_in_game_win_prob`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | One game in the `load_nba_pbp` schema (needs `home_team_spread`, `game_spread_available`, `period_number`, `start_game_seconds_remaining`, `start_quarter_seconds_remaining`, `home_score`, `away_score`, `team_id`, `home_team_id`), in play order. |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA (the only leagues with an in-game model). |
+| `pbp` | `DataFrame` |  | One game in the basketball pbp schema (needs `home_team_spread`, `game_spread_available`, `period_number`, `start_game_seconds_remaining`, the period clock (`start_quarter_seconds_remaining` or `start_period_seconds_remaining`), `home_score`, `away_score`, `team_id`, `home_team_id`), in play order. |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 halves, 4 quarters); default from the frame's `season` via `game_regulation_periods`. |
+| `neutral_site` | `Optional[bool]` | `False` | Whether the game is at a neutral site: no home-court advantage in a lineless prior; see `home_prior`. |
 
 **Returns**
 
-The input plus `pregame_home_prob`, `prior_source`, `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). `home_win_prob` is settled to 1.0 / 0.0 on "End Game" / "End Period" rows (`type_text`) from the 4th period on where the score is not tied, before `wp_delta` is taken; tied rows go to overtime and keep the model value. A frame without `type_text` is not settled. An empty input returns an empty frame with those columns. A null `home_score` / `away_score` means "no change" and is carried forward within the game for the model (a null before the first score is 0); the returned `home_score` / `away_score` are left as given.
+The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"neutral"` or `"hfa"`), `wp_regime`, `home_win_prob` and `wp_delta` (the first play's delta is measured from the prior). `home_win_prob` is settled to 1.0 / 0.0 on "End Game" / "End Period" rows (`type_text`) from the last regulation period on (period 2 in a halves game, 4 in a quarters game) where the score is not tied, before `wp_delta` is taken; tied rows go to overtime and keep the model value. A frame without `type_text` is not settled. An empty input returns an empty frame with those columns. A null `home_score` / `away_score` means "no change" and is carried forward within the game for the model (a null before the first score is 0); the returned `home_score` / `away_score` are left as given.
 
 | col_name | type | description |
 |---|---|---|
@@ -545,6 +562,12 @@ wp = score_win_prob(one)
 # Biggest swings
 
 wp.sort(pl.col("wp_delta").abs(), descending=True).select("text", "wp_delta").head(10)
+
+# A men's college tournament game
+
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+one = load_mbb_pbp([2026]).filter(pl.col("game_id") == 401830342)
+score_win_prob(one, league="mbb", neutral_site=True)
 ```
 
 ### shot_coordinates {#shot_coordinates}

@@ -17,6 +17,7 @@ import pytest
 
 from sportsdataverse.mbb import mbb_game_predict as ncaa_predict
 from sportsdataverse.mbb import mbb_prediction_constants as ncaa_constants
+from sportsdataverse.mbb.mbb_game_predict import mbb_in_game_win_prob
 from sportsdataverse.nba import nba_game_page as gp
 
 ESPN = Path(__file__).resolve().parents[1] / "fixtures" / "espn"
@@ -158,3 +159,82 @@ def test_nba_prior_is_unchanged() -> None:
     assert gp.home_prior(None, None) == (win_prob_from_margin(2.184, league_id="00"), "hfa")
     assert gp.home_prior(None, None, league_id="10") == (win_prob_from_margin(1.184, league_id="10"), "hfa")
     assert gp.home_prior(3.0, True) == (win_prob_from_margin(3.0, league_id="00"), "spread")
+
+
+def _filled(pbp: pl.DataFrame) -> pl.DataFrame:
+    return pbp.with_columns(pl.col("home_score", "away_score").forward_fill().fill_null(0))
+
+
+def test_mbb_double_overtime_reads_the_period_clock(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, pbp, _, _ = _frames(monkeypatch, "mbb", "mbb_401830342.json.gz")
+    assert "start_quarter_seconds_remaining" not in pbp.columns  # the KeyError the NBA-only module hit
+    tagged = gp.ot_adjusted_seconds(pbp, regulation_periods=2)
+    ot = tagged.filter(pl.col("wp_regime") == "ot")
+    assert ot.height == pbp.filter(pl.col("period_number") > 2).height == 69
+    assert (
+        ot["start_game_seconds_remaining"].to_list() == ot["start_period_seconds_remaining"].cast(pl.Float64).to_list()
+    )
+    assert ot["start_game_seconds_remaining"].max() <= 300.0
+
+
+def test_mbb_halves_settle_and_overtime(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, pbp, _, _ = _frames(monkeypatch, "mbb", "mbb_401830342.json.gz")
+    wp = gp.score_win_prob(pbp, league="mbb", neutral_site=True)  # regulation 2 from league, season 2026
+    ends = wp.filter(pl.col("type_text").is_in(["End Period", "End Game"]))
+    by = {(r["period_number"], r["type_text"]): r["home_win_prob"] for r in ends.iter_rows(named=True)}
+    assert by[(1, "End Period")] not in (0.0, 1.0)  # first half: the game goes on
+    assert by[(2, "End Period")] not in (0.0, 1.0)  # 65-65: overtime, not the end
+    assert by[(3, "End Period")] not in (0.0, 1.0)  # 73-73: second overtime
+    assert by[(4, "End Game")] == 0.0  # 75-81, the home side lost
+    assert wp["prior_source"][0] == "neutral" and wp["pregame_home_prob"][0] == pytest.approx(0.5)
+    # every unsettled play is the men's model on the OT-adjusted frame
+    raw = mbb_in_game_win_prob(gp.ot_adjusted_seconds(_filled(pbp), regulation_periods=2), 0.5, league="mens")
+    keep = ~pbp["type_text"].is_in(["End Period", "End Game"])
+    assert wp["home_win_prob"].filter(keep).to_list() == raw["home_win_prob"].cast(pl.Float64).filter(keep).to_list()
+
+
+def test_regulation_end_of_a_halves_game_settles(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, pbp, _, _ = _frames(monkeypatch, "mbb", "mbb_401812161.json.gz")
+    wp = gp.score_win_prob(pbp, league="mbb")
+    end2 = wp.filter((pl.col("period_number") == 2) & pl.col("type_text").is_in(["End Period", "End Game"]))
+    assert end2["home_win_prob"].to_list() == [1.0, 1.0]  # 75-62 home win; the NBA rule (period >= 4) never fired
+    assert wp["prior_source"][0] == "spread" and wp["home_team_spread"][0] == -1.5
+
+
+def test_wnba_2005_halves_overtime(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, pbp, _, _ = _frames(monkeypatch, "wnba", "wnba_250603003.json.gz")
+    wp = gp.score_win_prob(pbp, league="wnba")  # regulation 2 from season 2005
+    assert wp.filter(pl.col("wp_regime") == "ot").height == pbp.filter(pl.col("period_number") == 3).height == 58
+    tied = wp.filter((pl.col("period_number") == 2) & (pl.col("type_text") == "End Period"))
+    assert tied["home_score"][0] == tied["away_score"][0] == 54 and tied["home_win_prob"][0] not in (0.0, 1.0)
+    assert wp["home_win_prob"][-1] == 1.0 and wp["prior_source"][0] == "hfa"
+    # the NBA-only module scored period 3 as regulation and never settled period 2
+    assert gp.score_win_prob(pbp, league="wnba", regulation_periods=4)["wp_regime"].unique().to_list() == ["reg"]
+
+
+def test_wbb_scores_with_the_womens_model(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, pbp, _, _ = _frames(monkeypatch, "wbb", "summary_wbb.json")
+    wp = gp.score_win_prob(pbp, league="wbb", neutral_site=True)
+    womens = mbb_in_game_win_prob(gp.ot_adjusted_seconds(_filled(pbp)), 0.5, league="womens")["home_win_prob"]
+    unsettled = ~pbp["type_text"].is_in(["End Period", "End Game"])
+    assert wp["home_win_prob"].filter(unsettled).to_list() == womens.cast(pl.Float64).filter(unsettled).to_list()
+    wnba = gp.score_win_prob(pbp, league="wnba", neutral_site=True)["home_win_prob"]
+    assert (wp["home_win_prob"] - wnba).abs().max() > 0.01  # the old league_id="10" route used the WNBA model
+
+
+def test_a_frame_without_either_period_clock_raises() -> None:
+    df = pl.DataFrame(
+        {
+            "game_id": [1],
+            "home_team_id": [1],
+            "team_id": [1],
+            "home_score": [0],
+            "away_score": [0],
+            "period_number": [1],
+            "start_game_seconds_remaining": [2400.0],
+            "home_team_spread": [2.5],
+            "game_spread_available": [False],
+        }
+    )
+    with pytest.raises(pl.exceptions.ColumnNotFoundError, match="period clock"):
+        gp.score_win_prob(df, league="mbb")
