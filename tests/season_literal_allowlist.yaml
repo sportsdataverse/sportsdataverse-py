@@ -26,41 +26,6 @@
   rule: cfb-2014-espn-participants-and-text-template
   reason: 'through 2013 the try is its own "Extra point by X is good" row (ESPN''s pre-2014 text template); landed with main''s #771 (81f9718458), reached this branch in the main sync. Plan task 3.11'
 - file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__add_yardage_cols'
-  snippet: 'pl.col("season") <= 2013'
-  count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__add_yardage_cols'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__helper_cfb_pbp_features'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__process_epa'
-  snippet: 'pl.col("season") <= 2013'
-  count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__process_epa'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
-- file: sportsdataverse/cfb/cfb_pbp.py
   scope: 'CFBPlayProcess.__process_wpa'
   snippet: 'pl.col("season") <= 2013'
   count: 4
