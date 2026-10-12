@@ -25,7 +25,7 @@ LEAGUES = ("mbb", "wbb")
 #: normalizer or a stale ESPN reference table fails immediately.
 RECENT_FLOOR = 0.97
 OVERALL_FLOOR = 0.95
-RECENT_SEASONS = ("2023-24", "2024-25", "2025-26")
+RECENT_SEASONS = ("2024-25", "2025-26", "2026-27")
 
 
 @pytest.fixture(scope="module", params=LEAGUES)
