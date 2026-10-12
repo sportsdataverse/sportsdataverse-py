@@ -184,7 +184,7 @@ def test_a_phase_name_of_the_wrong_type_is_null(entry):
 def test_phases_parser_empty_keeps_its_columns(payload):
     df = parse_sihf_phases(payload)
     assert df.height == 0
-    assert df.columns == ["season", "phase_id", "phase_name", "n_games"]
+    assert df.schema == {"season": pl.Int64, "phase_id": pl.Int64, "phase_name": pl.String, "n_games": pl.Int64}
 
 
 # --- the game page ------------------------------------------------------------
