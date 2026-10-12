@@ -87,7 +87,8 @@ schema
     exact both ways, so the allowlist only shrinks.
 odds round trip (401301042)
     The offline-reprocess contract (CLAUDE.md, 0.0.52): the payload's resolved odds persist as JSON
-    and, fed back as ``odds_override``, rebuild the same frame. XFAIL C-M19.
+    and, fed back as ``odds_override``, rebuild the same frame; the persisted values are ESPN's
+    pickcenter numbers. Green since task 3.4(b1) (C-M19).
 
 Not oracles, and why. ``cfbfastR-cfb-data`` publishes this processor's own output (comparing to it is
 the snapshot ban in another form). ``cfbfastR-data`` holds three play-by-play trees: ``pbp/`` (2002-21)
@@ -819,18 +820,16 @@ _ODDS_KEYS = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable")
 
 
 @pytest.mark.xdist_group("cfb-oracle-401301042")
-@pytest.mark.xfail(
-    strict=True,
-    raises=(KeyError, TypeError),
-    reason="C-M19: on the summary_pickcenter path gameSpread/overUnder are shape-(1,) ndarrays and "
-    "homeFavorite is missing from the payload (cfb_pbp.py:3655-3667), so the persisted odds cannot round trip",
-)
 def test_pickcenter_odds_round_trip_rebuilds_the_frame_401301042():
     first = CFBPlayProcess(gameId=401301042, join_participants=False)
     first.espn_cfb_pbp(summary=_load(PATHS[401301042]))
     payload = first.run_processing_pipeline()
     assert payload["odds_source"] == "summary_pickcenter"
     persisted = json.loads(json.dumps({k: payload[k] for k in _ODDS_KEYS}))
+    # the oracle: ESPN's pickcenter in the capture (both providers carry -4.0 / 58.5 / home favored)
+    espn = _load(PATHS[401301042])["pickcenter"]
+    assert {(p["spread"], p["overUnder"], p["homeTeamOdds"]["favorite"]) for p in espn} == {(-4.0, 58.5, True)}
+    assert persisted == {"gameSpread": -4.0, "overUnder": 58.5, "homeFavorite": True, "gameSpreadAvailable": True}
     again = CFBPlayProcess(gameId=401301042, join_participants=False, odds_override=persisted)
     again.espn_cfb_pbp(summary=_load(PATHS[401301042]))
     again.run_processing_pipeline()

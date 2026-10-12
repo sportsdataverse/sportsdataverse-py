@@ -205,6 +205,29 @@
   expected: kill
   note: the pre-3.2 touchdown-before test, season-gated; 401112489 and 401628439 attempts after a misfiled touchdown
 
+# --- C-M19: the summary_pickcenter odds are Python scalars, so they round trip as odds_override ----
+# Killer (3.4(b1)): tests/cfb/test_cfb_pbp.py, the offline type + ESPN-value + JSON round trip on
+# 401301042 (the whole-game frame round trip in test_cfb_whole_game_oracle.py kills both as well).
+- id: cfb-pickcenter-home-favorite-ndarray
+  group: cfb-pickcenter
+  finding: C-M19
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'homeFavorite = bool(np.asarray(homeFavorite).item())'
+  mutant: 'homeFavorite = np.asarray(homeFavorite)'
+  test: tests/cfb/test_cfb_pbp.py -k "pickcenter_round_trip"
+  expected: kill
+  note: keeps homeFavorite the shape-(1,) row pandas returns, which json.dumps rejects (the pre-fix state)
+
+- id: cfb-pickcenter-game-spread-ndarray
+  group: cfb-pickcenter
+  finding: C-M19
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'gameSpread = float(np.asarray(gameSpread).item())'
+  mutant: 'gameSpread = np.asarray(gameSpread)'
+  test: tests/cfb/test_cfb_pbp.py -k "pickcenter_round_trip"
+  expected: kill
+  note: the gate's MUTATION line; a shape-(1,) gameSpread cannot persist as JSON odds_override
+
 # --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13

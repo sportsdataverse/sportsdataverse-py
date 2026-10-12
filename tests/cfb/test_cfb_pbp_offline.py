@@ -43,6 +43,26 @@ def test_odds_source_tag_summary_path():
     assert proc.gameSpreadAvailable is True
 
 
+def test_default_odds_warn(caplog):
+    """W-M14: falling to the default spread (an unknown recorded as a number) is logged, not silent."""
+    proc = CFBPlayProcess(gameId=401628455)
+    proc._offline = True
+    with caplog.at_level("WARNING", logger="sdv.cfb_pbp"):
+        proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert proc.odds_source == "default"
+    assert [r.getMessage() for r in caplog.records] == [
+        "401628455: no pregame odds resolved (odds_source='default'); EPA/WP use the default spread 2.5 / "
+        "total 55.5. Pass odds_override for an offline rebuild.",
+    ]
+    caplog.clear()
+    with caplog.at_level("WARNING", logger="sdv.cfb_pbp"):
+        proc._CFBPlayProcess__helper_cfb_pickcenter(
+            {"pickcenter": [{"provider": {"id": "58"}, "spread": -7.5, "overUnder": 52.5}]},
+        )
+    assert proc.odds_source == "summary_pickcenter"
+    assert not caplog.records
+
+
 def test_injected_odds_bypasses_network(monkeypatch):
     proc = CFBPlayProcess(
         gameId=401628455,

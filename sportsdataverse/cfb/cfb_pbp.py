@@ -3876,6 +3876,11 @@ class CFBPlayProcess(object):
                 if "overUnder" in pickcenter.columns
                 else 55.0
             )
+            # .values[0] is a shape-(1,) row: unwrap to Python scalars so the payload's odds are a
+            # valid (JSON-safe) odds_override (C-M19); the values chosen are unchanged
+            homeFavorite = bool(np.asarray(homeFavorite).item())
+            gameSpread = float(np.asarray(gameSpread).item())
+            overUnder = float(np.asarray(overUnder).item())
             gameSpreadAvailable = True
             self.odds_source = "summary_pickcenter"
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
@@ -3892,6 +3897,15 @@ class CFBPlayProcess(object):
                 gameSpreadAvailable,
             ) = (2.5, 55.5, True, False) if offline else self.__helper__espn_cfb_odds_information__()
             self.odds_source = "core_odds_api" if gameSpreadAvailable else "default"
+            if self.odds_source == "default":
+                # a default spread is an unknown recorded as a number (W-M14): say so
+                logger.warning(
+                    "%s: no pregame odds resolved (odds_source='default'); EPA/WP use the default spread %s / "
+                    "total %s. Pass odds_override for an offline rebuild.",
+                    self.gameId,
+                    gameSpread,
+                    overUnder,
+                )
         self.gameSpread = gameSpread
         self.overUnder = overUnder
         self.homeFavorite = homeFavorite
@@ -10413,6 +10427,7 @@ class CFBPlayProcess(object):
                 "timeouts": pbp_txt["timeouts"],
                 "homeTeamSpread": np.array(pbp_txt["homeTeamSpread"]).tolist(),
                 "gameSpread": pbp_txt["gameSpread"],
+                "homeFavorite": pbp_txt["homeFavorite"],
                 "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
                 "overUnder": pbp_txt["overUnder"],
                 "odds_source": pbp_txt.get("odds_source"),
@@ -10489,6 +10504,7 @@ class CFBPlayProcess(object):
                     "timeouts": pbp_txt["timeouts"],
                     "homeTeamSpread": np.array(pbp_txt["homeTeamSpread"]).tolist(),
                     "gameSpread": pbp_txt["gameSpread"],
+                    "homeFavorite": pbp_txt["homeFavorite"],
                     "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
                     "overUnder": pbp_txt["overUnder"],
                     "odds_source": pbp_txt.get("odds_source"),
@@ -10689,6 +10705,7 @@ class CFBPlayProcess(object):
                 "timeouts": pbp_txt["timeouts"],
                 "homeTeamSpread": np.array(pbp_txt["homeTeamSpread"]).tolist(),
                 "gameSpread": pbp_txt["gameSpread"],
+                "homeFavorite": pbp_txt["homeFavorite"],
                 "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
                 "overUnder": pbp_txt["overUnder"],
                 "odds_source": pbp_txt.get("odds_source"),
@@ -10744,6 +10761,7 @@ class CFBPlayProcess(object):
                     "timeouts": pbp_txt["timeouts"],
                     "homeTeamSpread": np.array(pbp_txt["homeTeamSpread"]).tolist(),
                     "gameSpread": pbp_txt["gameSpread"],
+                    "homeFavorite": pbp_txt["homeFavorite"],
                     "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
                     "overUnder": pbp_txt["overUnder"],
                     "odds_source": pbp_txt.get("odds_source"),
