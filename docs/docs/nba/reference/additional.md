@@ -166,12 +166,14 @@ not covered by the generated API-endpoint reference above.
 | [external_validity](additional/models-and-calculators.md#external_validity) | Oracle 5: correlate a model's ratings against a published external metric. |
 | [fit_aging_curve](additional/models-and-calculators.md#fit_aging_curve) | Fit the aging curve by the delta method: avg YoY rating change grouped by starting age. |
 | [game_minutes](additional/models-and-calculators.md#game_minutes) | Minutes played in a game of `periods` periods: the league's regulation length plus five per overtime. |
-| [game_page_frames](additional/models-and-calculators.md#game_page_frames) | Everything the Game on Paper NBA game page needs, from one `espn_nba_pbp` payload. |
+| [game_page_frames](additional/models-and-calculators.md#game_page_frames) | Everything the Game on Paper basketball game page needs, from one `espn_<league>_pbp` payload. |
+| [game_page_tables](additional/models-and-calculators.md#game_page_tables) | Every game-page table for one game, from its basketball pbp / team box / player box frames. |
 | [game_regulation_periods](additional/models-and-calculators.md#game_regulation_periods) | Regulation periods of one game: 2 (halves) or 4 (quarters). |
 | [get_constants](additional/models-and-calculators.md#get_constants) | Return the `LeagueConstants` for a `league_id`. |
 | [get_shrinkage_k](additional/models-and-calculators.md#get_shrinkage_k) | Shooter-talent shrinkage `k` for a league. |
 | [home_prior](additional/models-and-calculators.md#home_prior) | Pregame home win probability for the in-game model, and where it came from. |
 | [in_game_features](additional/models-and-calculators.md#in_game_features) | Per-play in-game win-probability features from a `load_nba_pbp` frame. |
+| [league_pbp_functions](additional/models-and-calculators.md#league_pbp_functions) | The ESPN fetch and parse pair for one league: `(espn_<league>_pbp, helper_<league>_pbp)`. |
 | [luck_adjusted_response](additional/models-and-calculators.md#luck_adjusted_response) | Attach a per-possession `la_points` expected-points response. |
 | [nba_adj_rapm](additional/models-and-calculators.md#nba_adj_rapm) | 5179.47467923,  13894.95494373,  37275.93720315, 100000.        ]), n_samples: 'int' = 200, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> … |
 | [nba_aging_curve](additional/models-and-calculators.md#nba_aging_curve) | Load the bundled per-age value-multiplier curve. |
@@ -182,8 +184,8 @@ not covered by the generated API-endpoint reference above.
 | [nba_draft_model](additional/models-and-calculators.md#nba_draft_model) | Project prospect career value + draft probability from combine measurements. |
 | [nba_expected_turnovers](additional/models-and-calculators.md#nba_expected_turnovers) | Expected TOV + residual ball-security skill from Synergy play-type mix. |
 | [nba_four_factor_rapm](additional/models-and-calculators.md#nba_four_factor_rapm) | Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design. |
-| [nba_in_game_win_prob](additional/models-and-calculators.md#nba_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
-| [nba_la_rapm](additional/models-and-calculators.md#nba_la_rapm) | Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed). |
+| [nba_in_game_win_prob](additional/models-and-calculators-2.md#nba_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
+| [nba_la_rapm](additional/models-and-calculators-2.md#nba_la_rapm) | Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed). |
 | [nba_matchup_drapm](additional/models-and-calculators-2.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
 | [nba_predict_games](additional/models-and-calculators-2.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
 | [nba_rookie_projection](additional/models-and-calculators-2.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |

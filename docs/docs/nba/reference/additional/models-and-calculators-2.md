@@ -1,10 +1,105 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_matchup–win_prob"
-sidebar_label: "Models and calculators: nba_matchup–win_prob"
+title: "NBA — additional Python functions — Models and calculators: nba_in–win_prob"
+sidebar_label: "Models and calculators: nba_in–win_prob"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: nba_matchup–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_in–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_matchup–win_prob
+# NBA — additional Python functions — Models and calculators: nba_in–win_prob
+
+### nba_in_game_win_prob {#nba_in_game_win_prob}
+
+`nba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Per-play home win probability from the bundled in-game model.
+
+Scores `in_game_features` through the committed artifact
+(`sportsdataverse/nba/models/nba_in_game_wp.ubj` for NBA -- a shallow
+xgboost booster, trained on 2022-23 so the 2023-24 calibration backtest
+stays out-of-sample; escalated from a plain logistic that failed the
+per-bucket calibration gate).
+
+Gate note: the plan's concurrent oracle (stats.nba.com
+`winprobabilitypbp` HOME_PCT) is a dead endpoint, so this model is
+validated ONLY on realized-outcome calibration, not against a native WP
+feed. See the fixtures README + SDD ledger.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play for ONE game in the `load_nba_pbp` schema (`start_game_seconds_remaining`, `home_score`, `away_score`, `team_id`, `home_team_id`). |
+| `pregame_home_prob` | `float` |  | Pregame home win probability (e.g. from `win_prob_from_margin`). |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League (selects the bundled artifact). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per play: the five feature columns plus `home_win_prob`.
+
+| col_name | type | description |
+|---|---|---|
+| `score_diff` | double |  |
+| `sec_left` | double |  |
+| `sqrt_sec_left` | double |  |
+| `pregame_logit` | double |  |
+| `home_has_ball` | integer |  |
+| `home_win_prob` | double |  |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import nba_in_game_win_prob
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+wp = nba_in_game_win_prob(pbp, 0.62)
+```
+
+### nba_la_rapm {#nba_la_rapm}
+
+`nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, alphas: 'Optional[np.ndarray]' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed).
+
+Replaces realized 3-point and free-throw outcomes with the shooter's shrunk
+expected value (`luck_adjusted_response`); 2-pt makes stay realized.
+**DECISION 2/3/4** govern the response recipe and shrinkage constants.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup frame with team-level `fg2m` and the ten lineup columns; join keys `game_id` + `possession_number` + `offense_team_id` (the last is required by `luck_adjusted_response`'s defense-shooter leak filter). Must also carry a `points` column even though the LA response (`la_points`) supersedes it for fitting -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally via prepare`) requires it unconditionally. |
+| `shooting` | `DataFrame` |  | Per-(possession, shooter) frame from `build_possession_shooting`. |
+| `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override; `None` → shrink from `shooting`. |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule (`cv=` `ORACLE_RAPM_CV` always; there is no plain-schedule mode). |
+| `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
+| `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `LA_RAPM_SCHEMA`. Empty input → zero-row frame.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `o_la_rapm` | double |  |
+| `d_la_rapm` | double |  |
+| `la_rapm` | double |  |
+| `off_poss` | integer |  |
+| `def_poss` | integer |  |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_rapm_variants import nba_la_rapm
+df = nba_la_rapm(season_poss, season_shooting)
+print(df.sort("la_rapm", descending=True).head())
+
+# Planted-truth shooter rates (e.g. for testing)
+
+df = nba_la_rapm(season_poss, season_shooting, {7: (0.4, 0.8)})
+```
 
 ### nba_matchup_drapm {#nba_matchup_drapm}
 
@@ -317,8 +412,8 @@ The frame with `wp_regime` (`"reg"` / `"ot"`) and the adjusted seconds column.
 
 | col_name | type | description |
 |---|---|---|
-| `wp_regime` | character | "reg" for regulation plays; "ot" for overtime plays, which are scored on the overtime period clock as a five-minute endgame. |
-| `start_game_seconds_remaining` | double | Seconds remaining the model sees: the game clock in regulation, the overtime period clock on overtime plays. |
+| `wp_regime` | character | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
+| `start_game_seconds_remaining` | double | Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men's college frames) on overtime plays. |
 
 **Example**
 
@@ -359,7 +454,7 @@ is null there). A player with no shots, no minutes, or `did_not_play` gets `null
 | `periods` | `Optional[int]` | `None` | Highest period played (default: the regulation periods). |
 | `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
-| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league without a season (MBB 2, otherwise 4). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league and the team box's `season`. |
 
 **Returns**
 
@@ -371,7 +466,7 @@ One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
 | `athlete_id` | integer | ESPN athlete id, the join key to the player box score. |
 | `team_id` | integer | ESPN team id, the join key to the team box score. |
 | `ts_pct` | double | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
-| `usg_pct` | double | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes or a DNP. |
+| `usg_pct` | double | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009). |
 
 **Example**
 
@@ -547,9 +642,9 @@ The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"neutral"` or `
 
 | col_name | type | description |
 |---|---|---|
-| `pregame_home_prob` | double | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone. |
-| `prior_source` | character | Where the prior came from: "spread" (a real line) or "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model). |
-| `wp_regime` | character | "reg" for regulation plays; "ot" for overtime plays, which are scored on the overtime period clock as a five-minute endgame. |
+| `pregame_home_prob` | double | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone (0.5 at a neutral site without a line). |
+| `prior_source` | character | Where the prior came from: "spread" (a real line), "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line at a neutral site; prior 0.5). |
+| `wp_regime` | character | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
 | `home_win_prob` | double | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |
 | `wp_delta` | double | Change in home win probability from the previous play; the first play's delta is measured from the pregame prior. |
 
@@ -641,7 +736,7 @@ zero denominator gives `null`.
 | `periods` | `Optional[int]` | `None` | Highest period played (default: the regulation periods), for the pace denominator. |
 | `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA (48-minute regulation) / `"10"` WNBA (40). |
 | `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA); overtime is 5 minutes in all four. |
-| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league without a season (MBB 2, otherwise 4). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league and the box's `season`. |
 
 **Returns**
 
@@ -652,15 +747,15 @@ One row per `(game_id, team_id)` with `efg_pct, tov_pct, orb_pct, ft_rate, posse
 | `game_id` | integer | ESPN game id, the join key to the play-by-play and box-score frames. |
 | `team_id` | integer | ESPN team id, the join key to the team box score. |
 | `efg_pct` | double | Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts. |
-| `tov_pct` | double | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive. |
+| `tov_pct` | double | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive or the box records no turnovers (WBB before 2009). |
 | `orb_pct` | double | Offensive rebound rate, own ORB / (own ORB + opponent DRB); null when the denominator is not positive. |
 | `ft_rate` | double | Free-throw rate, FTA / FGA; null with no attempts. |
-| `possessions` | double | Oliver's possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams. |
+| `possessions` | double | Oliver's possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams; null when the box records no turnovers (WBB before 2009). |
 | `off_rtg` | double | Points scored per 100 possessions; null when possessions are not positive. |
 | `def_rtg` | double | Points allowed per 100 possessions; null when possessions are not positive. |
-| `pace` | double | Possessions per 48 minutes (overtime minutes included in the denominator). |
-| `total_turnovers` | integer | The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 total is repaired to the player count. |
-| `game_minutes` | integer | Minutes played in the game: 48 plus five per overtime. |
+| `pace` | double | Possessions per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB), overtime minutes included in the denominator; null when the box records no turnovers. |
+| `total_turnovers` | integer | The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 NBA total is repaired to the player count; college: the box turnovers (team_turnovers in WBB 2009-2012), null when not recorded (WBB before 2009). |
+| `game_minutes` | integer | Minutes played in the game: regulation (48 NBA, 40 WNBA and college) plus five per overtime. |
 
 **Example**
 

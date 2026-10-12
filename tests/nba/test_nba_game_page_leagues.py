@@ -321,3 +321,141 @@ def test_halves_overtime_pace_and_usage_use_the_games_minutes(monkeypatch: pytes
     assert out["pace"][0] == pytest.approx(40 * out["possessions"][0] / 50)
     reg = gp.player_game_rates(pb, tb, periods=4, league="mbb")
     assert reg.height == pb.height and reg["usg_pct"].drop_nulls().max() < 60
+
+
+def test_wbb_halves_box_without_regulation_reads_the_box_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    # The real WBB 2010 box (two halves) with one overtime played: the default regulation comes from the
+    # box's own season, so period 3 is an overtime (45 minutes), not a third quarter (40).
+    _, _, tb, pb = _frames(monkeypatch, "wbb", "wbb_293170052.json.gz")
+    assert tb["season"].unique().to_list() == [2010]
+    assert gp.team_game_rates(tb, periods=3, league="wbb")["game_minutes"].to_list() == [45, 45]
+    # a float season column with a NaN (a warehouse frame) still reads the season
+    nan_season = tb.with_columns(pl.Series("season", [float("nan"), 2010.0]))
+    assert gp.team_game_rates(nan_season, periods=3, league="wbb")["game_minutes"].to_list() == [45, 45]
+    want = gp.player_game_rates(pb, tb, periods=3, league="wbb", regulation_periods=2)
+    assert gp.player_game_rates(pb, tb, periods=3, league="wbb").equals(want)
+
+
+GOLDEN = json.loads((BB / "nba_game_page_golden.json").read_text(encoding="utf-8"))
+PBP_COLS = ["home_win_prob", "wp_delta", "wp_regime", "prior_source", "pregame_home_prob", "x_legacy", "y_legacy"]
+
+
+@pytest.mark.parametrize(
+    ("lg", "name", "kwargs"),
+    [
+        ("nba", "summary_nba.json", {}),
+        ("nba", "summary_nba.json", {"league_id": "00"}),
+        ("nba", "summary_nba.json", {"league": "nba"}),
+        ("wnba", "summary_wnba.json", {"league_id": "10"}),
+        ("wnba", "summary_wnba.json", {"league": "wnba"}),
+    ],
+)
+def test_nba_and_wnba_frames_are_byte_identical_to_the_shipped_module(
+    monkeypatch: pytest.MonkeyPatch, lg: str, name: str, kwargs: dict
+) -> None:
+    # the golden was written by the shipped (NBA-only) module at e4894f0817; never regenerate it from this one
+    fr = gp.game_page_frames(_final(monkeypatch, lg, name), **kwargs)
+    want = GOLDEN[name]
+    assert fr["pbp"].select(PBP_COLS).to_dict(as_series=False) == want["pbp"]
+    assert fr["team_game_rates"].sort("team_id").to_dict(as_series=False) == want["team_game_rates"]
+    assert fr["player_game_rates"].sort("athlete_id").to_dict(as_series=False) == want["player_game_rates"]
+    assert (fr["periods"], fr["prior"]) == (want["periods"], want["prior"])
+
+
+@pytest.mark.parametrize(
+    ("lg", "name", "reg", "kind", "neutral", "periods", "source"),
+    [
+        ("mbb", "summary_mbb.json", 2, "half", True, 2, "neutral"),
+        ("mbb", "mbb_401830342.json.gz", 2, "half", True, 4, "neutral"),
+        ("mbb", "mbb_401856600.json.gz", 2, "half", True, 2, "spread"),
+        ("mbb", "mbb_401812161.json.gz", 2, "half", False, 2, "spread"),
+        ("wbb", "summary_wbb.json", 4, "quarter", True, 4, "neutral"),
+        ("wbb", "wbb_293170052.json.gz", 2, "half", False, 2, "hfa"),
+        ("wbb", "wbb_273130043.json.gz", 2, "half", False, 2, "hfa"),
+        ("wnba", "wnba_250603003.json.gz", 2, "half", False, 3, "hfa"),
+        ("wnba", "summary_wnba.json", 4, "quarter", False, 5, "hfa"),
+    ],
+)
+def test_game_page_frames_for_every_league(
+    monkeypatch: pytest.MonkeyPatch, lg: str, name: str, reg: int, kind: str, neutral: bool, periods: int, source: str
+) -> None:
+    final = _final(monkeypatch, lg, name)
+    fr = gp.game_page_frames(final, league=lg)
+    assert (fr["league"], fr["regulation_periods"], fr["period_kind"], fr["neutral_site"], fr["periods"]) == (
+        lg,
+        reg,
+        kind,
+        neutral,
+        periods,
+    )
+    pbp = fr["pbp"]
+    assert fr["prior"]["source"] == source == pbp["prior_source"][0]
+    assert pbp["home_win_prob"].null_count() == 0
+    # overtime is every period past the game's own regulation
+    assert pbp.filter(pl.col("wp_regime") == "ot").height == pbp.filter(pl.col("period_number") > reg).height
+    # the final play settles on the official result
+    comp = final["header"]["competitions"][0]
+    score = {c["homeAway"]: int(c["score"]) for c in comp["competitors"]}
+    assert pbp["home_win_prob"][-1] == (1.0 if score["home"] > score["away"] else 0.0)
+    # no free throw is placed on the court
+    shots = pbp.filter(pl.col("x_legacy").is_not_null())
+    assert not shots["type_text"].str.contains("(?i)free ?throw").any()
+    assert fr["team_game_rates"].height == 2
+    assert fr["team_game_rates"]["game_minutes"].to_list() == [40 + 5 * max(periods - reg, 0)] * 2
+    assert fr["player_game_rates"].height == fr["player_box"].height
+
+
+def test_game_page_tables_is_the_warehouse_path(monkeypatch: pytest.MonkeyPatch) -> None:
+    final, pbp, tb, pb = _frames(monkeypatch, "wnba", "wnba_250603003.json.gz")
+    live = gp.game_page_frames(final, league="wnba")
+    # the warehouse has no ESPN header: regulation comes from the frame's season (2005 -> halves)
+    wh = gp.game_page_tables(pbp, tb, pb, league="wnba")
+    assert (wh["regulation_periods"], wh["period_kind"], wh["periods"]) == (2, "half", 3)
+    assert wh["pbp"].select(PBP_COLS).equals(live["pbp"].select(PBP_COLS))
+    assert wh["team_game_rates"].equals(live["team_game_rates"])
+
+
+def test_game_page_tables_before_tip_off(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, _, tb, pb = _frames(monkeypatch, "mbb", "summary_mbb.json")
+    out = gp.game_page_tables(pl.DataFrame(), tb.clear(), pb.clear(), league="mbb", neutral_site=True)
+    assert (out["periods"], out["regulation_periods"], out["period_kind"]) == (2, 2, "half")
+    assert out["prior"]["source"] == "neutral" and out["prior"]["home_win_prob"] == pytest.approx(0.5)
+    assert out["team_game_rates"].height == 0 and "efg_pct" in out["team_game_rates"].columns
+
+
+@pytest.mark.parametrize("cell", [None, float("nan"), "pd.NA"])
+def test_a_null_warehouse_neutral_site_is_not_neutral(monkeypatch: pytest.MonkeyPatch, cell: object) -> None:
+    # a schedule's neutral_site can arrive as None, NaN or pandas' nullable-boolean NA (which raises in `if`)
+    import pandas as pd
+
+    na = pd.NA if cell == "pd.NA" else cell
+    final, pbp, tb, pb = _frames(monkeypatch, "mbb", "summary_mbb.json")
+    assert final["header"]["competitions"][0]["neutralSite"] is True
+    out = gp.game_page_tables(pbp, tb, pb, league="mbb", neutral_site=na)  # type: ignore[arg-type]
+    assert out["prior"]["source"] == "hfa" == out["pbp"]["prior_source"][0]
+    assert gp.home_prior(None, None, league="mbb", neutral_site=na)[1] == "hfa"  # type: ignore[arg-type]
+
+
+def test_league_pbp_functions_give_the_flask_route_its_fetch_and_parse(monkeypatch: pytest.MonkeyPatch) -> None:
+    for lg in gp.GAME_PAGE_LEAGUES:
+        fetch, parse = gp.league_pbp_functions(lg)
+        assert (fetch.__name__, parse.__name__) == (f"espn_{lg}_pbp", f"helper_{lg}_pbp")
+    with pytest.raises(ValueError, match="nhl"):
+        gp.league_pbp_functions("nhl")
+    # the Flask flow: one raw fetch, then the parse, then the frames
+    raw = _raw("wbb_293170052.json.gz")
+    mod = importlib.import_module("sportsdataverse.wbb.wbb_pbp")
+    monkeypatch.setattr(mod, "download", lambda url, **kwargs: _Resp(copy.deepcopy(raw)))
+    fetch, parse = gp.league_pbp_functions("wbb")
+    summary = fetch(293170052, raw=True)
+    frames = gp.game_page_frames(parse(293170052, summary), league="wbb")
+    assert frames["regulation_periods"] == 2 and frames["team_game_rates"]["total_turnovers"].sort().to_list() == [
+        23,
+        28,
+    ]
+
+
+def test_contradicting_league_and_league_id_raise(monkeypatch: pytest.MonkeyPatch) -> None:
+    final = _final(monkeypatch, "mbb", "summary_mbb.json")
+    with pytest.raises(ValueError, match="contradicts"):
+        gp.game_page_frames(final, league="mbb", league_id="10")

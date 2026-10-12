@@ -1,17 +1,18 @@
 # sportsdataverse/nba/nba_game_page.py
-"""Game-page derivations for one NBA game (shared by the GOP processor and the sdv-db stage).
+"""Game-page derivations for one NBA, WNBA, men's or women's college basketball game (shared by the GOP processor and the sdv-db stage).
 
-Every function takes the hoopR-schema frames (``load_nba_pbp`` / ``load_nba_team_boxscore`` /
+Every function takes the hoopR / wehoop basketball frames (``load_nba_pbp`` / ``load_nba_team_boxscore`` /
 ``load_nba_player_boxscore`` column names) so one implementation serves both callers: the Game on
-Paper Flask processor builds those frames live from ESPN through
-:func:`~sportsdataverse.nba.nba_pbp.espn_nba_pbp` + the ``helper_nba_*`` converters (see
-:func:`game_page_frames`), and the sdv-db nightly stage reads the same shapes from the warehouse.
+Paper Flask processor builds those frames live from ESPN through ``espn_<league>_pbp`` + the
+``helper_<league>_*`` converters (see :func:`game_page_frames` and :func:`league_pbp_functions`), and the
+sdv-db nightly stage reads the same shapes from the warehouse (see :func:`game_page_tables`).
 """
 
 from __future__ import annotations
 
+import importlib
 import math
-from typing import Optional
+from typing import Any, Callable, Optional
 
 import polars as pl
 
@@ -31,7 +32,9 @@ __all__ = [
     "ot_adjusted_seconds",
     "score_win_prob",
     "shot_coordinates",
+    "game_page_tables",
     "game_page_frames",
+    "league_pbp_functions",
 ]
 
 #: Oliver's free-throw possession weight, used by every rate below.
@@ -122,9 +125,6 @@ def game_regulation_periods(
     return 2 if int(season) < _QUARTERS_FROM[lg] else 4
 
 
-#: League ids the game page can score (the in-game win-probability artifacts ship for these two).
-_SUPPORTED_LEAGUES = ("00", "10")
-
 _TEAM_RATES_SCHEMA: dict[str, pl.DataType] = {
     "game_id": pl.Int32,
     "team_id": pl.Int32,
@@ -184,11 +184,6 @@ def _in_game_win_prob(lg: str, tagged: pl.DataFrame, prior: float) -> pl.Series:
     return scored["home_win_prob"].cast(pl.Float64)
 
 
-def _check_league(league_id: str) -> None:
-    if league_id not in _SUPPORTED_LEAGUES:
-        raise ValueError(f"league_id {league_id!r} is not supported by the game page; use one of {_SUPPORTED_LEAGUES}")
-
-
 def _margin_to_prob(lg: str, margin: float) -> float:
     """The league's pregame model: home win probability from an expected home margin."""
     if lg in _NCAA:
@@ -205,6 +200,14 @@ def _hfa(lg: str) -> float:
 
         return ncaa_constants(_NCAA[lg]).hfa
     return get_constants(_NBA_FAMILY_IDS[lg]).hfa
+
+
+def _is_neutral(neutral_site: object) -> bool:
+    """A neutral-site flag; ``None``, NaN and pandas' ``pd.NA`` (a null schedule cell) are not neutral."""
+    try:
+        return bool(neutral_site) and neutral_site == neutral_site  # NaN != NaN
+    except TypeError:  # bool(pd.NA) raises
+        return False
 
 
 def home_prior(
@@ -231,7 +234,8 @@ def home_prior(
         game_spread_available: Whether a real line backed that spread.
         league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
         league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
-        neutral_site: ESPN ``neutralSite`` / the schedule's ``neutral_site``; ``None`` or NaN counts as false.
+        neutral_site: ESPN ``neutralSite`` / the schedule's ``neutral_site``; ``None``, NaN or ``pd.NA``
+            counts as false.
 
     Returns:
         ``(probability, source)`` with ``source`` ``"spread"``, ``"neutral"`` or ``"hfa"``.
@@ -260,7 +264,7 @@ def home_prior(
     lg = _resolve_league(league, league_id)
     if game_spread_available and home_team_spread is not None and not math.isnan(float(home_team_spread)):
         return _margin_to_prob(lg, float(home_team_spread)), "spread"
-    if neutral_site and neutral_site == neutral_site:  # NaN (a null pandas cell) is not a neutral site
+    if _is_neutral(neutral_site):
         return _margin_to_prob(lg, 0.0), "neutral"
     return _margin_to_prob(lg, _hfa(lg)), "hfa"
 
@@ -567,10 +571,12 @@ _WBB_FIRST_TURNOVER_SEASON = 2009
 
 
 def _box_season(team_box: pl.DataFrame) -> Optional[int]:
-    """The game's season from its team box (every converter and sdv-db's team box carry ``season``)."""
+    """The game's season from a frame's ``season`` column (every converter and sdv-db's team box carry it)."""
     if "season" not in team_box.columns:
         return None
     seasons = team_box["season"].drop_nulls()
+    if seasons.dtype.is_float():  # a warehouse float column can carry NaN
+        seasons = seasons.drop_nans()
     return int(seasons[0]) if seasons.len() else None
 
 
@@ -632,7 +638,7 @@ def team_game_rates(
         league_id: Legacy alias: ``"00"`` NBA (48-minute regulation) / ``"10"`` WNBA (40).
         league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA); overtime is 5 minutes in all four.
         regulation_periods: The game's regulation periods (2 or 4); default
-            :func:`game_regulation_periods` for the league without a season (MBB 2, otherwise 4).
+            :func:`game_regulation_periods` for the league and the box's ``season``.
 
     Returns:
         One row per ``(game_id, team_id)`` with ``efg_pct, tov_pct, orb_pct, ft_rate,
@@ -672,8 +678,9 @@ def team_game_rates(
     """
     lg = _resolve_league(league, league_id)
     _check_two_teams(team_box, "team_game_rates")
-    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg)
-    tov = _tov(team_box, lg, _box_season(team_box))
+    season = _box_season(team_box)
+    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
+    tov = _tov(team_box, lg, season)
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
     own = team_box.with_columns(
         (fga - pl.col("offensive_rebounds") + tov + FT_WEIGHT * fta).cast(pl.Float64).alias("_own_poss")
@@ -730,7 +737,7 @@ def player_game_rates(
         league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
         league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
         regulation_periods: The game's regulation periods (2 or 4); default
-            :func:`game_regulation_periods` for the league without a season (MBB 2, otherwise 4).
+            :func:`game_regulation_periods` for the league and the team box's ``season``.
 
     Returns:
         One row per ``(game_id, athlete_id)`` with ``team_id, ts_pct, usg_pct``.
@@ -760,8 +767,9 @@ def player_game_rates(
     """
     lg = _resolve_league(league, league_id)
     _check_two_teams(team_box, "player_game_rates")
-    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg)
-    tov = _tov(team_box, lg, _box_season(team_box))
+    season = _box_season(team_box)
+    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
+    tov = _tov(team_box, lg, season)
     team_minutes = 5.0 * game_minutes(periods if periods is not None else reg, league=lg, regulation_periods=reg)
     team = team_box.select(
         "game_id",
@@ -786,30 +794,142 @@ def player_game_rates(
     )
 
 
-def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]:
-    """Everything the Game on Paper NBA game page needs, from one ``espn_nba_pbp`` payload.
+def game_page_tables(
+    pbp: pl.DataFrame,
+    team_box: pl.DataFrame,
+    player_box: pl.DataFrame,
+    *,
+    league_id: Optional[str] = None,
+    league: Optional[str] = None,
+    regulation_periods: Optional[int] = None,
+    neutral_site: Optional[bool] = False,
+) -> dict[str, object]:
+    """Every game-page table for one game, from its basketball pbp / team box / player box frames.
 
-    Runs the hoopR converters (``helper_nba_play_by_play`` / ``helper_nba_team_box`` /
-    ``helper_nba_player_box``) and then :func:`score_win_prob`, :func:`shot_coordinates`,
-    :func:`team_game_rates` and :func:`player_game_rates`. The sdv-db nightly stage calls those four
-    directly on the warehouse's copies of the same frames, so a game renders identically from
-    either source.
+    The warehouse path: the sdv-db nightly stage reads one game's rows from ``<league>.pbp`` /
+    ``team_box`` / ``player_box`` and its schedule row (``season``, ``format_regulation_periods``,
+    ``neutral_site``) and calls this. :func:`game_page_frames` builds the same frames live from ESPN
+    and calls this too, so a game renders identically from either source. Runs
+    :func:`score_win_prob`, :func:`shot_coordinates`, :func:`team_game_rates` and
+    :func:`player_game_rates` on the game's own regulation.
 
     Args:
-        final: The dict :func:`~sportsdataverse.nba.nba_pbp.espn_nba_pbp` returns.
-        league_id: ``"00"`` NBA / ``"10"`` WNBA (48 / 40-minute regulation for the rates).
+        pbp: One game's plays in the basketball pbp schema, in play order (empty before tip-off).
+        team_box: The game's team box rows (rates need exactly two).
+        player_box: The game's player box rows.
+        league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
+        regulation_periods: The game's regulation periods; default :func:`game_regulation_periods`
+            from the frame's ``season``. Pass the schedule's ``format_regulation_periods`` through
+            :func:`game_regulation_periods` when you have it.
+        neutral_site: Whether the game was at a neutral site (no home-court advantage in a lineless
+            prior); ``None``, NaN or ``pd.NA`` counts as false.
 
     Returns:
-        ``{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior"}``
-        where ``prior`` is ``{"home_win_prob", "source", "home_team_spread",
-        "game_spread_available"}``. Before both team box rows exist, ``team_game_rates`` and
-        ``player_game_rates`` are empty frames with their documented columns.
+        ``{"pbp", "team_game_rates", "player_game_rates", "periods", "regulation_periods",
+        "period_kind", "prior"}``: the scored plays with shot coordinates, the two rate frames
+        (empty with their documented columns without two team rows), the highest period played
+        (the regulation count before tip-off), the regulation periods, ``"half"`` or ``"quarter"``,
+        and ``{"home_win_prob", "source", "home_team_spread", "game_spread_available"}``.
 
     Raises:
-        ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
+        ValueError: If the league is unknown, ``league`` contradicts ``league_id``, or ``pbp`` holds
+            more than one game.
+        polars.exceptions.ColumnNotFoundError: If a frame lacks a column the derivations need.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.nba.nba_game_page import game_page_tables, game_regulation_periods
+            from sportsdataverse.wbb.wbb_loaders import load_wbb_pbp, load_wbb_player_boxscore, load_wbb_team_boxscore
+            gid = 293170052
+            pbp = load_wbb_pbp([2010]).filter(pl.col("game_id") == gid)
+            tb = load_wbb_team_boxscore([2010]).filter(pl.col("game_id") == gid)
+            pb = load_wbb_player_boxscore([2010]).filter(pl.col("game_id") == gid)
+            tables = game_page_tables(pbp, tb, pb, league="wbb", regulation_periods=game_regulation_periods("wbb", season=2010))
+
+        The win-probability chart::
+
+            tables["pbp"].select("game_play_number", "home_win_prob", "wp_delta", "wp_regime")
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    lg = _resolve_league(league, league_id)
+    season = _box_season(pbp)  # the first non-null, non-NaN season, or None
+    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
+    periods = int(pbp["period_number"].max() or reg) if pbp.height else reg
+    if pbp.height:  # a game with 10 or fewer plays parses to a zero-column frame; nothing to score yet
+        pbp = shot_coordinates(score_win_prob(pbp, league=lg, regulation_periods=reg, neutral_site=neutral_site))
+        prior_prob, prior_source = pbp["pregame_home_prob"][0], pbp["prior_source"][0]
+        spread, available = pbp["home_team_spread"][0], bool(pbp["game_spread_available"][0] or False)
+    else:
+        (prior_prob, prior_source), spread, available = (
+            home_prior(None, None, league=lg, neutral_site=neutral_site),
+            None,
+            False,
+        )
+    two_teams = team_box.height == 2
+    if season is not None and "season" not in team_box.columns:  # D12: _tov reads the season from the box
+        team_box = team_box.with_columns(pl.lit(season).alias("season"))
+    return {
+        "pbp": pbp,
+        "team_game_rates": team_game_rates(team_box, periods=periods, league=lg, regulation_periods=reg)
+        if two_teams
+        else pl.DataFrame(schema=_TEAM_RATES_SCHEMA),
+        "player_game_rates": player_game_rates(player_box, team_box, periods=periods, league=lg, regulation_periods=reg)
+        if two_teams
+        else pl.DataFrame(schema=_PLAYER_RATES_SCHEMA),
+        "periods": periods,
+        "regulation_periods": reg,
+        "period_kind": "half" if reg == 2 else "quarter",
+        "prior": {
+            "home_win_prob": prior_prob,
+            "source": prior_source,
+            "home_team_spread": spread,
+            "game_spread_available": available,
+        },
+    }
+
+
+def _converter(lg: str, kind: str) -> Callable[[dict], pl.DataFrame]:
+    """``helper_<lg>_<kind>`` from ``sportsdataverse.<lg>.<lg>_<kind>`` (play_by_play / team_box / player_box)."""
+    return getattr(importlib.import_module(f"sportsdataverse.{lg}.{lg}_{kind}"), f"helper_{lg}_{kind}")
+
+
+def game_page_frames(
+    final: dict, *, league_id: Optional[str] = None, league: Optional[str] = None
+) -> dict[str, object]:
+    """Everything the Game on Paper basketball game page needs, from one ``espn_<league>_pbp`` payload.
+
+    Reads the game's regulation (``format.regulation.periods``, else the season cutoff of
+    :func:`game_regulation_periods`) and neutral site (``header.competitions[0].neutralSite``),
+    runs the league's hoopR / wehoop converters (``helper_<league>_play_by_play`` /
+    ``helper_<league>_team_box`` / ``helper_<league>_player_box``) and then
+    :func:`game_page_tables`. The sdv-db nightly stage calls :func:`game_page_tables` directly on
+    the warehouse's copies of the same frames.
+
+    Args:
+        final: The dict ``espn_<league>_pbp`` returns (for example
+            :func:`~sportsdataverse.nba.nba_pbp.espn_nba_pbp`).
+        league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
+
+    Returns:
+        ``{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods",
+        "prior", "league", "regulation_periods", "period_kind", "neutral_site"}``; see
+        :func:`game_page_tables` for the shared keys. Before both team box rows exist,
+        ``team_game_rates`` and ``player_game_rates`` are empty frames with their documented columns.
+
+    Raises:
+        ValueError: If the league is unknown or ``league`` contradicts ``league_id``.
         KeyError: If ``final`` lacks the ``header`` or ``plays`` keys the converters read.
-        polars.exceptions.ColumnNotFoundError: If a converter frame lacks a column the
-            derivations need.
+        polars.exceptions.ColumnNotFoundError: If a converter frame lacks a column the derivations need.
 
     Example:
         Quick start::
@@ -819,6 +939,12 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
             frames = game_page_frames(espn_nba_pbp(401766458))
             frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
 
+        A men's college game::
+
+            from sportsdataverse.mbb.mbb_pbp import espn_mbb_pbp
+            frames = game_page_frames(espn_mbb_pbp(401830342), league="mbb")
+            frames["regulation_periods"], frames["period_kind"], frames["periods"]  # (2, 'half', 4)
+
         See Also:
             * `hoopR`_ -- the R companion for NBA and men's college play-by-play
             * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
@@ -826,38 +952,66 @@ def game_page_frames(final: dict, *, league_id: str = "00") -> dict[str, object]
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    _check_league(league_id)
-    from sportsdataverse.nba.nba_play_by_play import helper_nba_play_by_play
-    from sportsdataverse.nba.nba_player_box import helper_nba_player_box
-    from sportsdataverse.nba.nba_team_box import helper_nba_team_box
-
-    pbp = helper_nba_play_by_play(final)
-    periods = int(pbp["period_number"].max() or REGULATION_PERIODS) if pbp.height else REGULATION_PERIODS
-    if pbp.height:  # a game with 10 or fewer plays parses to a zero-column frame; nothing to score yet
-        pbp = shot_coordinates(score_win_prob(pbp, league_id=league_id))
-    team_box = helper_nba_team_box(final)
-    player_box = helper_nba_player_box(final)
-    if pbp.height:
-        prior_prob, prior_source = pbp["pregame_home_prob"][0], pbp["prior_source"][0]
-        spread, available = pbp["home_team_spread"][0], bool(pbp["game_spread_available"][0] or False)
-    else:
-        (prior_prob, prior_source), spread, available = home_prior(None, None, league_id=league_id), None, False
-    two_teams = team_box.height == 2
+    lg = _resolve_league(league, league_id)
+    header = final["header"]
+    comp = (header.get("competitions") or [{}])[0]
+    reg = game_regulation_periods(
+        lg,
+        season=(header.get("season") or {}).get("year"),
+        format_regulation_periods=((final.get("format") or {}).get("regulation") or {}).get("periods"),
+    )
+    neutral = _is_neutral(comp.get("neutralSite"))
+    pbp = _converter(lg, "play_by_play")(final)  # same converter order as the shipped NBA function
+    team_box = _converter(lg, "team_box")(final)
+    player_box = _converter(lg, "player_box")(final)
+    tables = game_page_tables(pbp, team_box, player_box, league=lg, regulation_periods=reg, neutral_site=neutral)
     return {
-        "pbp": pbp,
+        "pbp": tables["pbp"],
         "team_box": team_box,
-        "team_game_rates": team_game_rates(team_box, periods=periods, league_id=league_id)
-        if two_teams
-        else pl.DataFrame(schema=_TEAM_RATES_SCHEMA),
+        "team_game_rates": tables["team_game_rates"],
         "player_box": player_box,
-        "player_game_rates": player_game_rates(player_box, team_box, periods=periods, league_id=league_id)
-        if two_teams
-        else pl.DataFrame(schema=_PLAYER_RATES_SCHEMA),
-        "periods": periods,
-        "prior": {
-            "home_win_prob": prior_prob,
-            "source": prior_source,
-            "home_team_spread": spread,
-            "game_spread_available": available,
-        },
+        "player_game_rates": tables["player_game_rates"],
+        "periods": tables["periods"],
+        "prior": tables["prior"],
+        "league": lg,
+        "regulation_periods": reg,
+        "period_kind": tables["period_kind"],
+        "neutral_site": neutral,
     }
+
+
+def league_pbp_functions(league: str) -> tuple[Callable[..., dict], Callable[[Any, dict], dict]]:
+    """The ESPN fetch and parse pair for one league: ``(espn_<league>_pbp, helper_<league>_pbp)``.
+
+    A live processor fetches once (``fetch(game_id, raw=True)``, the summary with its keys
+    defaulted and nothing parsed), checks the payload has plays, then parses (``parse(game_id,
+    summary)``) and hands the result to :func:`game_page_frames`. Splitting the two keeps an
+    upstream failure (fetch) apart from a parsing bug (parse).
+
+    Args:
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``.
+
+    Returns:
+        ``(fetch, parse)``.
+
+    Raises:
+        ValueError: If ``league`` is not one of the four.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_game_page import game_page_frames, league_pbp_functions
+            fetch, parse = league_pbp_functions("wnba")
+            summary = fetch(401726992, raw=True)
+            frames = game_page_frames(parse(401726992, summary), league="wnba")
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    lg = _resolve_league(league, None)
+    mod = importlib.import_module(f"sportsdataverse.{lg}.{lg}_pbp")
+    return getattr(mod, f"espn_{lg}_pbp"), getattr(mod, f"helper_{lg}_pbp")
