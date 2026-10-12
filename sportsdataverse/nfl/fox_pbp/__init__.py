@@ -5,11 +5,11 @@ re-exported from :mod:`sportsdataverse.nfl`: every name is ``_``-prefixed, so no
 reference-doc regeneration is involved, exactly as for the Shield and CBS adapters.
 """
 
+from sportsdataverse.nfl.fox_pbp.game_id import _resolve_fox_game_id, _segment_ids
 from sportsdataverse.nfl.fox_pbp.to_espn_summary import (
     _fox_adapter,
     _fox_nfl_to_espn_summary,
     _resolve_fox_event_id,
-    _segment_ids,
 )
 
-__all__ = ["_fox_adapter", "_fox_nfl_to_espn_summary", "_resolve_fox_event_id", "_segment_ids"]
+__all__ = ["_fox_adapter", "_fox_nfl_to_espn_summary", "_resolve_fox_event_id", "_resolve_fox_game_id", "_segment_ids"]

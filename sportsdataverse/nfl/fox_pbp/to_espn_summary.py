@@ -1,9 +1,9 @@
 """Fox Bifrost NFL -> an ESPN-summary-shaped dict ``NFLPlayProcess`` consumes unchanged.
 
 Everything that decides a number lives in :mod:`sportsdataverse.football.fox_common`, which
-both Fox adapters share; this module is the NFL half: ESPN's NFL play-type vocabulary, the
-ESPN <-> Fox franchise table the id resolver joins on, and the dispatch registration for
-``source="fox"``.
+both Fox adapters share; this module is the NFL half: ESPN's NFL play-type vocabulary and the
+dispatch registration for ``source="fox"``. The id resolver and its ESPN <-> Fox franchise
+table live in :mod:`sportsdataverse.nfl.fox_pbp.game_id`.
 
 Fox is the **last** NFL source in ``...sources.dispatch.SOURCE_ORDER``: its play-by-play only
 reaches the **2024 season** and its text is not GSIS, so rusher / receiver / sacker names and
@@ -27,54 +27,12 @@ from sportsdataverse.football.fox_common import (
     _fox_team_id,
     _has_pbp,
 )
+from sportsdataverse.nfl.fox_pbp.game_id import _resolve_fox_game_id
 from sportsdataverse.nfl.shield_pbp.to_espn_summary import _ESPN_TEAMS
 
 #: ESPN NFL ``type.id`` -> ``(type.text, type.abbreviation)``; the same table the Shield and
 #: CBS adapters emit, re-exported here so the Fox projection never invents a type string.
 from sportsdataverse.nfl.shield_pbp.to_espn_summary import ESPN_PLAY_TYPES  # noqa: E402  (re-export)
-
-#: ESPN franchise id -> Fox Bifrost team id. Fox's ids are its own (Cleveland is 7 on Fox and
-#: 5 on ESPN), and the id map's ``fox_team_id`` column is still null for the NFL because there
-#: is no offline producer for it, so the resolver joins the week's Fox scoreboard on this.
-#: Derived -- not invented -- by joining the captured Fox ``scores-segment`` rows to nfl-raw's
-#: ``crosswalk/teams.json`` on the **full team name**, which the source study proved 16/16 on
-#: two 2026 weeks; Fox abbreviations are unusable for the join (``WAS``/``WSH``, ``JAC``/``JAX``).
-# ponytail: a static 32-row snapshot keyed by ESPN's franchise id, which survives relocations.
-# If it ever needs to move, fill the id map's ``TEAM_SCHEMA.fox_team_id`` column instead.
-_FOX_TEAM_BY_ESPN: Dict[str, str] = {
-    "1": "25",  # ATL
-    "2": "1",  # BUF
-    "3": "20",  # CHI
-    "4": "6",  # CIN
-    "5": "7",  # CLE
-    "6": "15",  # DAL
-    "7": "10",  # DEN
-    "8": "21",  # DET
-    "9": "22",  # GB
-    "10": "8",  # TEN
-    "11": "2",  # IND
-    "12": "11",  # KC
-    "13": "12",  # LV
-    "14": "26",  # LAR
-    "15": "3",  # MIA
-    "16": "23",  # MIN
-    "17": "4",  # NE
-    "18": "27",  # NO
-    "19": "16",  # NYG
-    "20": "5",  # NYJ
-    "21": "17",  # PHI
-    "22": "18",  # ARI
-    "23": "9",  # PIT
-    "24": "13",  # LAC
-    "25": "28",  # SF
-    "26": "14",  # SEA
-    "27": "24",  # TB
-    "28": "19",  # WSH
-    "29": "32",  # CAR
-    "30": "31",  # JAX
-    "33": "33",  # BAL
-    "34": "34",  # HOU
-}
 
 #: Club codes Fox's Stats-Perform **play text** spells differently from its own header, mapped
 #: to the header code. The processor charges timeouts ("Timeout #1 by CLE.") and attributes
@@ -82,38 +40,10 @@ _FOX_TEAM_BY_ESPN: Dict[str, str] = {
 #: text, so an unmapped code silently costs every timeout and every penalty team in the game.
 _FOX_TEXT_ALIASES: Dict[str, str] = {"JAC": "JAX", "WAS": "WSH", "LA": "LAR"}
 
-#: ESPN ``season_type`` -> Fox segment type digit (1 REG, 2 POST, 3 PRE).
-_SEGMENT_TYPE = {1: 3, 2: 1, 3: 2}
-#: ESPN postseason week -> Fox postseason week. ESPN numbers the Pro Bowl 4 and the Super Bowl
-#: 5; Fox has no Pro Bowl and numbers the Super Bowl 4.
-_POST_WEEK = {1: 1, 2: 2, 3: 3, 4: None, 5: 4}
-
 _TEAM_META: Dict[str, Dict[str, Any]] = {
     espn_id: {"abbreviation": abbr, "color": color, "alternateColor": alternate}
     for espn_id, (abbr, color, alternate) in _ESPN_TEAMS.items()
 }
-
-
-def _segment_ids(season: Any, season_type: Any, week: Any) -> List[str]:
-    """Fox ``scores-segment`` ids to try for one ESPN (season, season_type, week), best first.
-
-    A Fox segment id is ``{season}-{week}-{type}``. Regular season and preseason are a single
-    candidate; the postseason gets the rest of its weeks as fall-backs, because the segment is
-    only a *search space* -- the game is identified by its Fox team-id pair, so a wrong segment
-    simply yields no match rather than a wrong game.
-    """
-    try:
-        season, season_type, week = int(season), int(season_type), int(week)
-    except (TypeError, ValueError):
-        return []
-    digit = _SEGMENT_TYPE.get(season_type)
-    if digit is None:
-        return []
-    if season_type != 3:
-        return [f"{season}-{week}-{digit}"]
-    first = _POST_WEEK.get(week)
-    candidates = ([first] if first else []) + [w for w in (1, 2, 3, 4) if w != first]
-    return [f"{season}-{w}-{digit}" for w in candidates]
 
 
 def _resolve_fox_event_id(idmap_row: Mapping[str, Any], *, transport: Any = None) -> Tuple[Optional[str], str]:
@@ -123,33 +53,22 @@ def _resolve_fox_event_id(idmap_row: Mapping[str, Any], *, transport: Any = None
 
     1. the id map's stored ``fox_event_id`` -- a fact, not a search;
     2. Fox's own week scoreboard (``nfl/league/scores-segment/{season}-{week}-{type}``), joined
-       on the **Fox team-id pair** from :data:`_FOX_TEAM_BY_ESPN`. This is the leg that has to
+       on the **Fox team-id pair** from :data:`...game_id._FOX_TEAM_BY_ESPN`. This is the leg that has to
        work while ESPN is unreachable, and it does: the segment is Fox's own schedule.
     3. nothing. An id is **never** invented -- a game Fox does not list falls through to the
        next source rather than fetching a wrong one.
     """
-    stored = (idmap_row or {}).get("fox_event_id")
-    if stored:
-        return str(stored), "idmap"
-    home = _FOX_TEAM_BY_ESPN.get(str((idmap_row or {}).get("home_espn_team_id") or ""))
-    away = _FOX_TEAM_BY_ESPN.get(str((idmap_row or {}).get("away_espn_team_id") or ""))
-    if not (home and away):
-        return None, "unresolved"
-    from sportsdataverse._fox_layout import fox_get, parse_segment_events
-
-    get = transport or fox_get
-    for segment in _segment_ids(
-        (idmap_row or {}).get("season"), (idmap_row or {}).get("season_type"), (idmap_row or {}).get("week")
-    ):
-        try:
-            raw = get(f"nfl/league/scores-segment/{segment}")
-        except Exception:  # noqa: BLE001 -- a 404 or a timeout is a miss on this segment, not a raise
-            continue
-        for event in parse_segment_events(raw, segment):
-            if str(event.get("home_team_id") or "") == home and str(event.get("away_team_id") or "") == away:
-                if event.get("game_id"):
-                    return str(event["game_id"]), f"scores_segment:{segment}"
-    return None, "unresolved"
+    row = idmap_row or {}
+    if row.get("fox_event_id"):
+        return str(row["fox_event_id"]), "idmap"
+    return _resolve_fox_game_id(
+        row.get("season"),
+        row.get("season_type"),
+        row.get("week"),
+        row.get("home_espn_team_id"),
+        row.get("away_espn_team_id"),
+        transport=transport,
+    )
 
 
 def _fox_nfl_to_espn_summary(

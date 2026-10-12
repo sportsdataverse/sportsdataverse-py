@@ -8,12 +8,8 @@ import pathlib
 import pytest
 
 from sportsdataverse.football.sources.dispatch import SourceUnavailable, _process_game
-from sportsdataverse.nfl.fox_pbp.to_espn_summary import (
-    _FOX_TEAM_BY_ESPN,
-    _fox_adapter,
-    _resolve_fox_event_id,
-    _segment_ids,
-)
+from sportsdataverse.nfl.fox_pbp.game_id import _FOX_TEAM_BY_ESPN, _resolve_fox_game_id, _segment_ids
+from sportsdataverse.nfl.fox_pbp.to_espn_summary import _fox_adapter, _resolve_fox_event_id
 
 FIXTURES = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "fox"
 
@@ -121,6 +117,43 @@ def test_the_week_scoreboard_resolves_the_id_from_the_fox_team_pair(meta):
     )
     assert (fox_id, provenance) == (meta["fox_event_id"], "scores_segment:2024-12-1")
     assert calls == ["nfl/league/scores-segment/2024-12-1"]
+
+
+def test_a_failed_segment_is_a_miss_and_the_postseason_tries_its_neighbours():
+    """ESPN's Super Bowl (postseason week 5) is Fox's week 4; a segment that raises is skipped."""
+    calls = []
+
+    def transport(path):
+        calls.append(path)
+        if path.endswith("2025-4-2"):
+            raise TimeoutError("segment down")
+        return (
+            {
+                "sectionList": [
+                    {
+                        "events": [
+                            {
+                                "contentUri": "football/nfl/events/11187",
+                                "entityLink": {
+                                    "layout": {
+                                        "tokens": {
+                                            "id": "11187",
+                                            "homeUri": "football/nfl/teams/4",
+                                            "awayUri": "football/nfl/teams/14",
+                                        }
+                                    }
+                                },
+                            }
+                        ]
+                    }
+                ]
+            }
+            if path.endswith("2025-1-2")
+            else {"sectionList": []}
+        )
+
+    assert _resolve_fox_game_id(2025, 3, 5, "17", "26", transport=transport) == ("11187", "scores_segment:2025-1-2")
+    assert calls[:2] == ["nfl/league/scores-segment/2025-4-2", "nfl/league/scores-segment/2025-1-2"]
 
 
 def test_an_unlisted_game_resolves_to_nothing_rather_than_a_guess(meta):
