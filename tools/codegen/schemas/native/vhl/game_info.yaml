@@ -1,0 +1,110 @@
+columns:
+- description: 'Game id (the calendar''s game_id; the report''s and the broadcast''s
+    idgame). The report and broadcast pages do not print it: it comes from the request.'
+  name: game_id
+  type: integer
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: 'Season stage: regular or playoff.'
+  name: stage
+  type: character
+- description: Official game number (from '№984'); checked against the request.
+  name: game_number
+  type: integer
+- description: Tournament id of the season stage (2025/26 regular season = 1374, playoffs
+    = 1375); vhl_tn maps season + stage to it.
+  name: tn
+  type: integer
+- description: Game date, ISO 'YYYY-MM-DD', parsed from date_text.
+  name: date
+  type: character
+- description: Start time 'HH:MM' from date_text; local time zone unverified (likely
+    Moscow).
+  name: local_time
+  type: character
+- description: Date line verbatim; RUSSIAN month and weekday even on /en/ ('18 Март
+    2026, Среда, 17:00'). The <time datetime> attribute is a constant placeholder
+    (2020-01-23 18:00) and is ignored.
+  name: date_text
+  type: character
+- description: Attendance (from '910 sp').
+  name: attendance
+  type: integer
+- description: Final score 'home:away' (the shootout counts as one goal).
+  name: score
+  type: character
+- description: Home final goals.
+  name: home_score
+  type: integer
+- description: Away final goals.
+  name: away_score
+  type: integer
+- description: OT or SO when the game went past regulation; null otherwise.
+  name: decision
+  type: character
+- description: 'Score of each period ''home:away'', overtime and shootout included
+    (SO game: ''0:2'',''0:0'',''2:0'',''0:0'',''0:1'').'
+  name: period_scores
+  type: character
+- description: 'Home team page id. Team page id (vhlru.ru only): the {team_id} of
+    /en/teams/{team_id}/ (Toros = 390). Neither a club id nor a team-season id; it
+    joins nothing else (bridge: the calendar row of the same game_id).'
+  name: home_team_page_id
+  type: integer
+- description: 'Home team name (Latin, FULL form: ''Kristall S''; the report''s tables
+    use the short ''Kristall'').'
+  name: home_team
+  type: character
+- description: Home team short name (the report tables' form).
+  name: home_short
+  type: character
+- description: Home team city.
+  name: home_city
+  type: character
+- description: Home head coach, 'Surname Given'.
+  name: home_coach
+  type: character
+- description: 'Away team page id. Team page id (vhlru.ru only): the {team_id} of
+    /en/teams/{team_id}/ (Toros = 390). Neither a club id nor a team-season id; it
+    joins nothing else (bridge: the calendar row of the same game_id).'
+  name: away_team_page_id
+  type: integer
+- description: Away team name (Latin, FULL form).
+  name: away_team
+  type: character
+- description: Away team short name (the report tables' form).
+  name: away_short
+  type: character
+- description: Away team city.
+  name: away_city
+  type: character
+- description: Away head coach, 'Surname Given'.
+  name: away_coach
+  type: character
+- description: First referee's sweater number.
+  name: referee1_number
+  type: integer
+- description: First referee, 'Surname Given'.
+  name: referee1
+  type: character
+- description: Second referee's sweater number.
+  name: referee2_number
+  type: integer
+- description: Second referee, 'Surname Given'.
+  name: referee2
+  type: character
+- description: First linesman's sweater number.
+  name: linesman1_number
+  type: integer
+- description: First linesman, 'Surname Given'.
+  name: linesman1
+  type: character
+- description: Second linesman's sweater number.
+  name: linesman2_number
+  type: integer
+- description: Second linesman, 'Surname Given'.
+  name: linesman2
+  type: character
+kind: dataframe
+schema: vhl_game_info

@@ -1,0 +1,55 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: 'Season stage: regular or playoff.'
+  name: stage
+  type: character
+- description: Tournament id of the season stage (2025/26 regular season = 1374, playoffs
+    = 1375); vhl_tn maps season + stage to it.
+  name: tn
+  type: integer
+- description: Rank (unlabelled first column).
+  name: rank
+  type: integer
+- description: Team short name (Latin; the report tables' form).
+  name: team
+  type: character
+- description: 'Team-season id (khl/ terminology): one id per team per tournament,
+    from the KHL''s sequence (khl/: Spartak = 14934 in 1369; here Metallurg = 15017
+    in 1374). The {id} of /calendar/{tn}/0/{id}/ and /stats/players/{tn}/all/{id}/.
+    Not the stable club id (*_club_id) and not the team page id.'
+  name: team_season_id
+  type: integer
+- description: Games played (GP).
+  name: games_played
+  type: integer
+- description: Regulation wins (W).
+  name: wins
+  type: integer
+- description: Overtime wins (OTW).
+  name: ot_wins
+  type: integer
+- description: Shootout wins (SOW).
+  name: so_wins
+  type: integer
+- description: Shootout losses (SOL).
+  name: so_losses
+  type: integer
+- description: Overtime losses (OTL).
+  name: ot_losses
+  type: integer
+- description: Regulation losses (L).
+  name: losses
+  type: integer
+- description: Goals for (left side of the G column '226-131').
+  name: goals_for
+  type: integer
+- description: Goals against (right side of the G column).
+  name: goals_against
+  type: integer
+- description: 'Points (PTS): 2 per win of any kind, 1 per OT or SO loss.'
+  name: points
+  type: integer
+kind: dataframe
+schema: vhl_standings

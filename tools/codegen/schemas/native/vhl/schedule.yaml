@@ -1,0 +1,71 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: 'Season stage: regular or playoff.'
+  name: stage
+  type: character
+- description: Tournament id of the season stage (2025/26 regular season = 1374, playoffs
+    = 1375); vhl_tn maps season + stage to it.
+  name: tn
+  type: integer
+- description: 'Game id (the calendar''s game_id; the report''s and the broadcast''s
+    idgame). The report and broadcast pages do not print it: it comes from the request.'
+  name: game_id
+  type: integer
+- description: Official game number within the tournament (from '№986').
+  name: game_number
+  type: integer
+- description: 'Game date, ISO ''YYYY-MM-DD'': the calendar day heading plus the season
+    (August-December = START year).'
+  name: game_date
+  type: character
+- description: Day header in English, day and month only ('18 March'); the page prints
+    no year and no start time.
+  name: date
+  type: character
+- description: Weekday of the day header (English).
+  name: weekday
+  type: character
+- description: 'Home team name (Latin, FULL form: ''Kristall S''; standings, stats
+    and the team page use the short ''Kristall'').'
+  name: home_team
+  type: character
+- description: 'Home club id: stable across seasons (the img.khl.ru logo path id).
+    Neither a team-season id nor a team page id.'
+  name: home_club_id
+  type: integer
+- description: Away team name (Latin, FULL form, like home_team).
+  name: away_team
+  type: character
+- description: 'Away club id: stable across seasons (the img.khl.ru logo path id).'
+  name: away_club_id
+  type: integer
+- description: City of the home team's arena (English).
+  name: city
+  type: character
+- description: Final score 'home:away'; '-:-' before the game.
+  name: score
+  type: character
+- description: Home goals including the shootout winner goal; null before the game.
+  name: home_score
+  type: integer
+- description: Away goals including the shootout winner goal; null before the game.
+  name: away_score
+  type: integer
+- description: 'How the game ended beyond regulation: OT (overtime) or SO (shootout);
+    null for regulation or unplayed games.'
+  name: decision
+  type: character
+- description: 'Winning side from the win-home / win-visitor class: home or away;
+    null before the game.'
+  name: winner
+  type: character
+- description: Unobserved in samples (null in every capture); type and meaning unverified.
+  name: status
+  type: character
+- description: Text-broadcast URL (online.vhlru.ru/online/{game_id}.html).
+  name: online_url
+  type: character
+kind: dataframe
+schema: vhl_schedule

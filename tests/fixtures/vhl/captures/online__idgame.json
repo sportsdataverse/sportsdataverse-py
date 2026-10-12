@@ -1,0 +1,178 @@
+{
+  "game": {
+    "title": "Хоккей. ВХЛ. Регулярный чемпионат. Игра номер 984 18 мар 2026: Торос-Магнитка (онлайн трансляция)",
+    "stage_ru": "Регулярный чемпионат",
+    "game_number": 984,
+    "date_text": "18 мар 2026",
+    "home_team": "Торос",
+    "away_team": "Магнитка",
+    "home_city": "Нефтекамск",
+    "away_city": "Магнитогорск"
+  },
+  "events": [
+    {
+      "kind": "game_state",
+      "kind_code": "ga",
+      "time": "21:20",
+      "clock": "wall",
+      "score": null,
+      "strength_code": null,
+      "strength": null,
+      "text": "Окончание игры",
+      "player_ids": []
+    },
+    {
+      "kind": "goal",
+      "kind_code": "go",
+      "time": "65:00",
+      "clock": "game",
+      "score": "2-3",
+      "strength_code": "БУЛ",
+      "strength": "penalty_shot_or_shootout",
+      "text": "Изменение счета: Магнитка. 31. Мирзабалаев Александр Буллит.",
+      "player_ids": [
+        34526
+      ]
+    },
+    {
+      "kind": "shootout_attempt",
+      "kind_code": "bu",
+      "time": null,
+      "clock": null,
+      "score": "0-1",
+      "strength_code": null,
+      "strength": null,
+      "text": "Послематчевый буллит: Выполнил 56. Суворов Александр (Торос). В воротах 23. Амирбеков Джелал-Ад-Дин (Магнитка). Мимо.",
+      "player_ids": []
+    },
+    {
+      "kind": "comment",
+      "kind_code": "co",
+      "time": null,
+      "clock": null,
+      "score": null,
+      "strength_code": null,
+      "strength": null,
+      "text": "Статистика матча: Броски: 62-37 ; Броски в створ: 32-15 ; Голы: 2-2 ; Вбрасывания: 26-22 ; Блокированные броски: 7-12 ; Силовые приемы: 1-5 ; Штраф: 2-4",
+      "player_ids": []
+    },
+    {
+      "kind": "penalty",
+      "kind_code": "pn",
+      "time": "45:16",
+      "clock": "game",
+      "score": null,
+      "strength_code": null,
+      "strength": null,
+      "text": "Удаление. Торос. 22. Сорокин Евгений. 2 мин. Задержка соперника.",
+      "player_ids": [
+        25292
+      ]
+    },
+    {
+      "kind": "goalie_change",
+      "kind_code": "gc",
+      "time": "42:08",
+      "clock": "game",
+      "score": null,
+      "strength_code": null,
+      "strength": null,
+      "text": "Торос. Вратарь в воротах",
+      "player_ids": []
+    }
+  ],
+  "team_stats": [
+    {
+      "period": "match",
+      "team": "Торос",
+      "goals": 2,
+      "shots_on_goal": 32,
+      "penalty_minutes": 2,
+      "faceoffs_won": 26,
+      "faceoff_pct": 54.17,
+      "blocked_shots": 7,
+      "hits": 1
+    },
+    {
+      "period": 1,
+      "team": "Торос",
+      "goals": 0,
+      "shots_on_goal": 3,
+      "penalty_minutes": 0,
+      "faceoffs_won": 8,
+      "faceoff_pct": 57.14,
+      "blocked_shots": 3,
+      "hits": 1
+    },
+    {
+      "period": 2,
+      "team": "Торос",
+      "goals": 0,
+      "shots_on_goal": 14,
+      "penalty_minutes": 0,
+      "faceoffs_won": 10,
+      "faceoff_pct": 62.5,
+      "blocked_shots": 1,
+      "hits": 0
+    }
+  ],
+  "player_stats": [
+    {
+      "team_side": "home",
+      "period": "match",
+      "jersey": 17,
+      "player": "Сычёв Владимир",
+      "position_code": "н",
+      "goals": 1,
+      "assists": 0,
+      "points": 1,
+      "shots_on_goal": 2,
+      "penalty_minutes": 0,
+      "faceoffs": 9,
+      "faceoffs_won": 3,
+      "faceoff_pct": 33.33,
+      "blocked_shots": 1,
+      "hits": 0,
+      "toi": "19:31",
+      "shifts": 22
+    },
+    {
+      "team_side": "home",
+      "period": 1,
+      "jersey": 17,
+      "player": "Сычёв Владимир",
+      "position_code": "н",
+      "goals": 0,
+      "assists": 0,
+      "points": 0,
+      "shots_on_goal": 0,
+      "penalty_minutes": 0,
+      "faceoffs": 2,
+      "faceoffs_won": 1,
+      "faceoff_pct": 50.0,
+      "blocked_shots": 1,
+      "hits": 0,
+      "toi": "4:53",
+      "shifts": 6
+    },
+    {
+      "team_side": "home",
+      "period": 2,
+      "jersey": 17,
+      "player": "Сычёв Владимир",
+      "position_code": "н",
+      "goals": 0,
+      "assists": 0,
+      "points": 0,
+      "shots_on_goal": 0,
+      "penalty_minutes": 0,
+      "faceoffs": 3,
+      "faceoffs_won": 2,
+      "faceoff_pct": 66.67,
+      "blocked_shots": 0,
+      "hits": 0,
+      "toi": "5:24",
+      "shifts": 5
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+columns:
+- description: 'Game id (the calendar''s game_id; the report''s and the broadcast''s
+    idgame). The report and broadcast pages do not print it: it comes from the request.'
+  name: game_id
+  type: integer
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: 'Season stage: regular or playoff.'
+  name: stage
+  type: character
+- description: Official game number (from '№984'); checked against the request.
+  name: game_number
+  type: integer
+- description: 'Side of the game the row belongs to: home or away.'
+  name: team_side
+  type: character
+- description: Team page id (vhlru.ru /en/teams/{team_page_id}/), stable across seasons;
+    for report rows the page id of the row's side.
+  name: team_page_id
+  type: integer
+- description: Goal number in the game (G).
+  name: goal_number
+  type: integer
+- description: 'Period (Per) as printed: ''1'', ''2'', ''3'', overtime unverified,
+    ''РБ'' (Cyrillic even on /en/: shootout, решающий бросок).'
+  name: period
+  type: character
+- description: Elapsed game time 'mm:ss' from the opening faceoff (Time); the shootout
+    row says '65:00'.
+  name: time
+  type: character
+- description: Score after the goal 'home:away' (Score).
+  name: score
+  type: character
+- description: 'Goal strength code (PMG): eq (even), ppg (power play), shg (shorthanded);
+    null on the shootout row.'
+  name: strength
+  type: character
+- description: 'Player id of the scorer: the {player_id} of /en/players/{player_id}/,
+    stable across seasons and teams; also the photo id on img.khl.ru. Same numeric
+    sequence as khl.ru player ids; whether it equals the same person''s khl.ru id
+    is unverified.'
+  name: scorer_id
+  type: integer
+- description: Scorer name.
+  name: scorer
+  type: character
+- description: Scorer jersey number.
+  name: scorer_jersey
+  type: integer
+- description: The scorer's season goal count after this goal (the '(13)' suffix);
+    null on the shootout row.
+  name: scorer_season_total
+  type: integer
+- description: Player id of the first assist; null when unassisted.
+  name: assist1_id
+  type: integer
+- description: First assist name; null when unassisted.
+  name: assist1
+  type: character
+- description: First assist jersey number.
+  name: assist1_jersey
+  type: integer
+- description: The first assist's season assist count after this goal (the '(14)'
+    suffix).
+  name: assist1_season_total
+  type: integer
+- description: Player id of the second assist; null when none.
+  name: assist2_id
+  type: integer
+- description: Second assist name; null when none.
+  name: assist2
+  type: character
+- description: Second assist jersey number.
+  name: assist2_jersey
+  type: integer
+- description: The second assist's season assist count after this goal.
+  name: assist2_season_total
+  type: integer
+- description: 'Jersey numbers of the home players on ice at the goal (goalie included);
+    the column header is the home team''s short name. Shootout row: the goalie only.'
+  name: home_on_ice
+  type: character
+- description: Jersey numbers of the away players on ice at the goal (goalie included);
+    the column header is the away team's short name. Empty on the shootout row.
+  name: away_on_ice
+  type: character
+kind: dataframe
+schema: vhl_goals
