@@ -325,37 +325,42 @@
   note: calculate_win_probability scores the flag as 1 - is_home, whatever the caller's column says.
 
 # --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012; main's #778) ------
-- id: cfb-kickoff-touchback-75-from-2014
+- id: cfb-kickoff-touchback-75-from-2012
   group: cfb-touchback
   finding: C-H4
-  file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: |-
-    pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
-                    .then(75)
-  mutant: |-
-    pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
-                    .then(80)
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 80))'
+  mutant: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 80), (0, 80))'
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (322590228 or 400547866 or 401628455)"
   expected: kill
   note: >-
     a regression of the 75 spot from 2012 (2012's 322590228, 2014+'s 400547866 / 401628455 go red).
-    Re-keyed on main's #778 (2b73fa5a5e) snippet; the id keeps its old name so ledgers still resolve.
+    Renamed from cfb-kickoff-touchback-75-from-2014 (the spot is 75 from 2012, R807-2) and re-keyed on the
+    catalogued table in cfb/model_vars.py (plan task 3.1), which every former _KICKOFF_2012_RULES_FROM site reads.
 
 - id: cfb-kickoff-touchback-80-through-2011
   group: cfb-touchback
   finding: C-H4
-  file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: |-
-    .when(kick_mask)
-                    .then(80)
-  mutant: |-
-    .when(kick_mask)
-                    .then(75)
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 80))'
+  mutant: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 75))'
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (313090025 or 243040130)"
   expected: kill
   note: >-
     cfbfastR's unconditional 75 (create_epa.R:233), the parity "fix" the owner ruled against: 2011's
-    313090025 and 2004's 243040130 go red. Re-keyed on main's #778 (2b73fa5a5e) snippet.
+    313090025 and 2004's 243040130 go red. Re-keyed on the catalogued table (plan task 3.1).
+
+- id: cfb-kickoff-touchback-cut-2012
+  group: cfb-touchback
+  finding: C-H4
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 80))'
+  mutant: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2014, 75), (0, 80))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "kickoff_touchback_spot and (322590228 or 332570254)"
+  expected: kill
+  note: >-
+    the rule's first season moved off 2012 (the C-H4 bug's shape: 2012-13 scored at 80): 2012's 322590228 and
+    2013's 332570254 go red in test_kickoff_touchback_spot_follows_the_rule (gate cfb-touchback-constant).
 
 # --- C-H1 (CFB twin) / C-NF-3: the CFB rushing decomposition --------------------------------------
 - id: cfb-second-level-yards-offset

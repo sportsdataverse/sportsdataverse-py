@@ -2,7 +2,8 @@
 # Measured on the 1.2 branch point (36f7a02f1b). Rows are keyed on (file, scope, snippet) -- never a line
 # number -- with the exact count. id: the finding, or C-T3, the tier-C era-literal class, when the literal
 # has no graded finding of its own. rule: the sdv-internal-refs rules/*.yaml id, when the catalogue has one.
-# The list may only shrink: main's #778 removed the C-H4 touchback rows (_KICKOFF_2012_RULES_FROM); plan task
+# The list may only shrink: main's #778 removed the C-H4 touchback rows (now cfb/model_vars.py
+# TOUCHBACK_YARDLINE_BY_SEASON, plan task 3.1); plan task
 # 3.11 removes the other CFB/NFL processor rows. A literal that moves into a constant fails the gate until its
 # row's count is lowered to the inline occurrences left, or the row is deleted when none remain.
 - file: sportsdataverse/cfb/cfb_pbp.py
