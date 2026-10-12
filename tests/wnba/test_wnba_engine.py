@@ -463,3 +463,6 @@ def test_rotation_coverage_error_flags_overlapping_stints(game_id: str) -> None:
     key = "HomeTeam" if rot.get("HomeTeam") else "homeTeam"
     longest = max(rot[key], key=lambda s: float(s["OUT_TIME_REAL"]) - float(s["IN_TIME_REAL"]))
     assert _rotation_coverage_error({**rot, key: [*rot[key], longest]}) > 0.02
+    # Negative clocks (as in the WNBA 2004-05 payloads) are malformed whatever they sum to.
+    shifted = [{**s, "IN_TIME_REAL": -2320.0} if s is longest else s for s in rot[key]]
+    assert _rotation_coverage_error({**rot, key: shifted}) == float("inf")

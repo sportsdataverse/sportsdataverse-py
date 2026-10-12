@@ -504,11 +504,17 @@ def _rotation_coverage_error(rotation: dict[str, list[dict]]) -> float:
     final ``OUT_TIME_REAL``. A payload that overlaps stints (7-10 "on court" at
     once) or drops some is malformed; mapped faithfully it credits players
     with minutes they never played. Returns ``max |sum / (5 x end) - 1|`` over
-    the teams with stints, ``0.0`` when there are none.
+    the teams with stints, ``0.0`` when there are none, and ``inf`` when any
+    stint has a negative or inverted clock (WNBA 2004-05 payloads carry
+    ``IN_TIME_REAL = -2320`` and stop at 600 s).
     """
     worst = 0.0
     for key in ("HomeTeam", "AwayTeam", "homeTeam", "awayTeam"):
         stints = rotation.get(key) or []
+        for s in stints:
+            t_in, t_out = float(s.get("IN_TIME_REAL") or 0.0), float(s.get("OUT_TIME_REAL") or 0.0)
+            if t_in < 0 or t_out < t_in:
+                return float("inf")
         ends = [float(s.get("OUT_TIME_REAL") or 0.0) for s in stints]
         end = max(ends, default=0.0)
         if end <= 0:
