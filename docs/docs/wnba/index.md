@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 39 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 84 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 85 | — |
 
 ## ESPN {#espn}
 
@@ -101,6 +101,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 
 ### IDs and crosswalks {#ids-and-crosswalks}
 
+- [`wnba_crosswalks_from_archive`](reference/additional/ids-and-crosswalks#wnba_crosswalks_from_archive)
 - [`wnba_player_crosswalk`](reference/additional/ids-and-crosswalks#wnba_player_crosswalk)
 - [`wnba_schedule_crosswalk`](reference/additional/ids-and-crosswalks#wnba_schedule_crosswalk)
 - [`wnba_team_crosswalk`](reference/additional/ids-and-crosswalks#wnba_team_crosswalk)

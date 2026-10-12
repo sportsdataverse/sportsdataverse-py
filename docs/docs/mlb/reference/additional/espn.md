@@ -276,13 +276,13 @@ Polars dataframe containing the schedule. Returns `None` if no games.
 | `home_name` | character |  |
 | `home_abbreviation` | character |  |
 | `home_display_name` | character |  |
-| `home_score` | character | Home team run total after the play. |
+| `home_score` | character | Home team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string). |
 | `home_winner` | logical |  |
 | `away_id` | character |  |
 | `away_name` | character |  |
 | `away_abbreviation` | character |  |
 | `away_display_name` | character |  |
-| `away_score` | character | Away team run total after the play. |
+| `away_score` | character | Away team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string). |
 | `away_winner` | logical |  |
 
 **Example**

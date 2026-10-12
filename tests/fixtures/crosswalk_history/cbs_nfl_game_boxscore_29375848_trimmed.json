@@ -1,0 +1,285 @@
+{
+ "coverageLevel": {
+  "coverageLevelId": 8,
+  "details": "STATS Primary Feed",
+  "name": "Level 1"
+ },
+ "teams": [
+  {
+   "teamId": 417,
+   "linescoreTotal": 27,
+   "linescores": [
+    {
+     "period": 1,
+     "score": 7
+    },
+    {
+     "period": 2,
+     "score": 6
+    },
+    {
+     "period": 3,
+     "score": 7
+    },
+    {
+     "period": 4,
+     "score": 7
+    }
+   ]
+  },
+  {
+   "teamId": 406,
+   "linescoreTotal": 20,
+   "linescores": [
+    {
+     "period": 1,
+     "score": 7
+    },
+    {
+     "period": 2,
+     "score": 3
+    },
+    {
+     "period": 3,
+     "score": 0
+    },
+    {
+     "period": 4,
+     "score": 10
+    }
+   ]
+  }
+ ],
+ "boxScores": [
+  {
+   "teamId": 417,
+   "playerStats": {
+    "passingStats": [
+     {
+      "player": {
+       "statsIncGlobalPlayerId": 839031,
+       "playerId": 2142052,
+       "firstName": "Patrick",
+       "lastName": "Mahomes",
+       "uniform": "15"
+      },
+      "completions": 20,
+      "attempts": 28,
+      "interceptions": 1,
+      "yards": 291,
+      "yardsPerAttempt": "10.39",
+      "sacked": 2,
+      "sackedYardsLost": 10,
+      "long": 35,
+      "isLongTouchdown": true,
+      "touchdowns": 1,
+      "rating": 101.9,
+      "firstDowns": 15,
+      "fumbles": 0,
+      "fumblesLost": 0,
+      "targets": 27,
+      "bigPlays": [
+       {
+        "value": 20,
+        "number": 5,
+        "touchdowns": 1
+       },
+       {
+        "value": 30,
+        "number": 2,
+        "touchdowns": 1
+       },
+       {
+        "value": 40,
+        "number": 0,
+        "touchdowns": 0
+       },
+       {
+        "value": 50,
+        "number": 0,
+        "touchdowns": 0
+       }
+      ]
+     }
+    ],
+    "rushingStats": [
+     {
+      "player": {
+       "statsIncGlobalPlayerId": 1106832,
+       "playerId": 2966551,
+       "firstName": "Isiah",
+       "lastName": "Pacheco",
+       "uniform": "10"
+      },
+      "attempts": 15,
+      "yards": 45,
+      "yardsPerAttempt": "3.0",
+      "long": 5,
+      "isLongTouchdown": false,
+      "touchdowns": 1,
+      "firstDowns": 2,
+      "fumbles": 0,
+      "fumblesLost": 0,
+      "bigPlays": [
+       {
+        "value": 20,
+        "number": 0,
+        "touchdowns": 0
+       },
+       {
+        "value": 40,
+        "number": 0,
+        "touchdowns": 0
+       }
+      ]
+     },
+     {
+      "player": {
+       "statsIncGlobalPlayerId": 1326638,
+       "playerId": 26730787,
+       "firstName": "Xavier",
+       "lastName": "Worthy",
+       "uniform": "1"
+      },
+      "attempts": 1,
+      "yards": 21,
+      "yardsPerAttempt": "21.0",
+      "long": 21,
+      "isLongTouchdown": true,
+      "touchdowns": 1,
+      "firstDowns": 1,
+      "fumbles": 0,
+      "fumblesLost": 0,
+      "bigPlays": [
+       {
+        "value": 20,
+        "number": 1,
+        "touchdowns": 1
+       },
+       {
+        "value": 40,
+        "number": 0,
+        "touchdowns": 0
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "teamId": 406,
+   "playerStats": {
+    "passingStats": [
+     {
+      "player": {
+       "statsIncGlobalPlayerId": 877745,
+       "playerId": 2181169,
+       "firstName": "Lamar",
+       "lastName": "Jackson",
+       "uniform": "8"
+      },
+      "completions": 26,
+      "attempts": 41,
+      "interceptions": 0,
+      "yards": 273,
+      "yardsPerAttempt": "6.66",
+      "sacked": 1,
+      "sackedYardsLost": 6,
+      "long": 49,
+      "isLongTouchdown": true,
+      "touchdowns": 1,
+      "rating": 90.8,
+      "firstDowns": 11,
+      "fumbles": 1,
+      "fumblesLost": 1,
+      "targets": 40,
+      "bigPlays": [
+       {
+        "value": 20,
+        "number": 2,
+        "touchdowns": 1
+       },
+       {
+        "value": 30,
+        "number": 2,
+        "touchdowns": 1
+       },
+       {
+        "value": 40,
+        "number": 1,
+        "touchdowns": 1
+       },
+       {
+        "value": 50,
+        "number": 0,
+        "touchdowns": 0
+       }
+      ]
+     }
+    ],
+    "rushingStats": [
+     {
+      "player": {
+       "statsIncGlobalPlayerId": 877745,
+       "playerId": 2181169,
+       "firstName": "Lamar",
+       "lastName": "Jackson",
+       "uniform": "8"
+      },
+      "attempts": 16,
+      "yards": 122,
+      "yardsPerAttempt": "7.6",
+      "long": 16,
+      "isLongTouchdown": false,
+      "touchdowns": 0,
+      "firstDowns": 7,
+      "fumbles": 0,
+      "fumblesLost": 0,
+      "bigPlays": [
+       {
+        "value": 20,
+        "number": 0,
+        "touchdowns": 0
+       },
+       {
+        "value": 40,
+        "number": 0,
+        "touchdowns": 0
+       }
+      ]
+     },
+     {
+      "player": {
+       "statsIncGlobalPlayerId": 732145,
+       "playerId": 2061188,
+       "firstName": "Derrick",
+       "lastName": "Henry",
+       "uniform": "22"
+      },
+      "attempts": 13,
+      "yards": 46,
+      "yardsPerAttempt": "3.5",
+      "long": 9,
+      "isLongTouchdown": false,
+      "touchdowns": 1,
+      "firstDowns": 5,
+      "fumbles": 0,
+      "fumblesLost": 0,
+      "bigPlays": [
+       {
+        "value": 20,
+        "number": 0,
+        "touchdowns": 0
+       },
+       {
+        "value": 40,
+        "number": 0,
+        "touchdowns": 0
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -10,11 +10,13 @@ import polars as pl
 from tools.validation.checks import (
     boundary_leakage,
     boxscore_parity,
+    boxscore_parity_player,
     combo_drift,
     constant_column,
     definitional,
     extraction,
     numeric_parity,
+    pbp_integrity,
     rate_anomaly,
     r_python_output_parity,
     schema_contract,
@@ -42,6 +44,8 @@ _CHECKS = (
     combo_drift,
     rate_anomaly,
     boxscore_parity,
+    boxscore_parity_player,
+    pbp_integrity,
 )
 
 _LINTERS: dict[str, ModuleType] = {"python": leakage_python, "r": leakage_r}

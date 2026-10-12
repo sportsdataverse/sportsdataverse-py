@@ -83,7 +83,7 @@ def test_season_loader_is_404_safe_and_concats(loader, stem, monkeypatch: pytest
 def test_season_loader_min_season_guard(loader, stem, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(cl, "_read_release_parquet", lambda url: None)
     with pytest.raises(SeasonNotFoundError):
-        loader(seasons=2013)  # below the 2014 multi-source floor
+        loader(seasons=2012)  # below the 2013 floor (NCAA MFB / Yahoo start in fall 2013)
 
 
 @pytest.mark.parametrize("loader,stem", _SEASON_LOADERS)

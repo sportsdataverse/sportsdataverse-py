@@ -35,7 +35,7 @@ Public surface:
 
 * :func:`cfb_teams_crosswalk` — ESPN x Fox x Yahoo team-id crosswalk.
 * :func:`cfb_schedule_crosswalk` — ESPN x Yahoo game-id crosswalk for a week.
-* :func:`cfb_rosters_crosswalk` — ESPN x Fox player-id crosswalk for a team.
+* :func:`cfb_rosters_crosswalk` — ESPN x Fox (x Yahoo) player-id crosswalk for a team.
 * :func:`cfb_odds_events_crosswalk` — Odds API event-id ↔ ESPN game-id.
 """
 
@@ -44,6 +44,7 @@ from __future__ import annotations
 import logging
 import re
 import unicodedata
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from email.utils import parsedate_to_datetime
@@ -56,16 +57,14 @@ if TYPE_CHECKING:
     from polars._typing import PolarsDataType
 
 from sportsdataverse._codegen_runtime import _get
+from sportsdataverse._common_crosswalk_basketball import normalize_name
 from sportsdataverse._crosswalk_basketball_sources import FetchTally
 from sportsdataverse._common_espn_parsers import parse_team_roster
 from sportsdataverse.cfb.cfb_fox_ext import fox_cfb_schedule, fox_cfb_team_roster, fox_cfb_teams
 from sportsdataverse.cfb.cfb_schedule import espn_cfb_calendar, espn_cfb_schedule, most_recent_cfb_season
 from sportsdataverse.cfb.cfb_teams import espn_cfb_teams
-from sportsdataverse.cfb.cfb_yahoo_ext import (
-    yahoo_cfb_player_season_stats,
-    yahoo_cfb_scoreboard,
-    yahoo_cfb_teams,
-)
+from sportsdataverse.cfb.cfb_yahoo_ext import yahoo_cfb_scoreboard, yahoo_cfb_teams
+from sportsdataverse.yahoo.yahoo_shangrila import yahoo_team_roster
 
 __all__ = [
     "cfb_teams_crosswalk",
@@ -361,24 +360,20 @@ def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
 
     Driven by the ESPN calendar so the exact (week, season_type) slots are used:
     regular weeks (season_type 2), bowls (season_type 3, week 1), and the CFP
-    (season_type 3, week 999). season_type 4 (all-star) is skipped. The weeks
-    share one :class:`FetchTally`: a 404 week contributes nothing, an isolated
-    failed week is skipped and logged, and a season where no WEEK answered raises
-    :class:`CrosswalkSourceError` -- a failed fetch is never an empty week. The
-    calendar is tallied apart (an answered calendar must not mask failed weeks); a
-    failed calendar is logged and falls back to the default week slots.
+    (season_type 3, week 999). season_type 4 (all-star) is skipped. A 404 week
+    contributes nothing; any failed fetch -- the calendar or one week -- raises
+    :class:`CrosswalkSourceError`. The season is a join spine published nightly,
+    so a skipped week (or default slots standing in for a failed calendar) would
+    add and drop rows from one build to the next.
     """
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
-    cal_tally = FetchTally("espn_cfb_calendar")
-    cal = cal_tally.fetch(f"season={season}", lambda: espn_cfb_calendar(season=season, **kwargs))
-    if cal_tally.failed:
-        logger.warning(
-            "espn_cfb_calendar failed for %s; using the default week slots: %s", season, cal_tally.failed[0][1]
-        )
-    tally = FetchTally("espn_cfb_schedule")
+    cal = FetchTally("espn_cfb_calendar", strict=True).fetch(
+        f"season={season}", lambda: espn_cfb_calendar(season=season, **kwargs)
+    )
+    tally = FetchTally("espn_cfb_schedule", strict=True)
     slots: List[tuple[Any, Any]] = [] if cal is None else [(r.get("week"), r.get("season_type")) for r in _rows(cal)]
-    if not slots:  # calendar unavailable -> sensible default coverage
+    if not slots:  # no calendar (404 / empty) -> sensible default coverage
         slots = [(str(w), "2") for w in range(1, 17)] + [("1", "3"), ("999", "3")]
     valid = [(w, st) for (w, st) in slots if w is not None and str(st) in ("2", "3")]
 
@@ -473,12 +468,12 @@ def _fox_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
 def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # Yahoo scoreboard is per-week; loop the regular season + postseason weeks
     # (bowls/CFP run into the low 20s -- the national championship is ~week 21).
-    # One FetchTally: a 404 week is empty, an isolated failed week is skipped and
-    # logged, and a season where no week answered raises CrosswalkSourceError.
-    # Dedup by game id across weeks.
+    # A 404 week is empty; any failed week raises CrosswalkSourceError. Skipping it
+    # dropped that week's Yahoo ids and Yahoo-only rows, so two builds of the same
+    # season differed (1,565 vs 1,608 rows on 2026-10-12). Dedup by game id.
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
-    tally = FetchTally("yahoo_cfb_scoreboard")
+    tally = FetchTally("yahoo_cfb_scoreboard", strict=True)
 
     def _fetch(week: int) -> List[Dict[str, Any]]:
         return tally.fetch(f"season={season} week={week}", lambda: _yahoo_games(season, week, **kwargs)) or []
@@ -568,50 +563,55 @@ def _fox_roster(team_id: Union[int, str], **kwargs: Any) -> List[Dict[str, Any]]
 def _espn_team_name_keys(espn_team_id: Union[int, str], **kwargs: Any) -> set[str]:
     """Normalized name keys for an ESPN team id (location + display + name).
 
-    Used to filter Yahoo's league-wide player list down to one team, since
-    Yahoo tags each player only with a team *name* (often the location, e.g.
-    ``"Ohio State"``), not an id.
+    Used to find the ESPN team in Yahoo's team directory when the caller did not
+    pass a Yahoo team id (Yahoo's full name, e.g. ``"Ohio State Buckeyes"``,
+    matches the ESPN display name after :func:`_norm_team`). ESPN's default
+    team directory is FBS only, so an FCS team is looked up in group 81.
     """
-    keys: set[str] = set()
     target = str(espn_team_id)
-    for r in _rows(espn_cfb_teams(**kwargs)):
-        if str(_pick(r, "team_id")) != target:
-            continue
-        for k in ("team_location", "team_display_name", "team_name", "team_nickname"):
-            nk = _norm_team(_pick(r, k))
-            if nk:
-                keys.add(nk)
-        break
-    return keys
+    for groups in (None, 81):  # the default (FBS) directory, then FCS
+        for r in _rows(espn_cfb_teams(groups=groups, **kwargs)):
+            if str(_pick(r, "team_id")) == target:
+                keys = {
+                    _norm_team(_pick(r, k))
+                    for k in ("team_location", "team_display_name", "team_name", "team_nickname")
+                }
+                return keys - {""}
+    return set()
 
 
-def _yahoo_roster(season: int, team_keys: set[str], **kwargs: Any) -> List[Dict[str, Any]]:
-    """Yahoo players for one team, from the season player-stats leaderboard.
+def _yahoo_team_id(espn_team_id: Union[int, str], season: int, **kwargs: Any) -> Optional[str]:
+    """Yahoo's dotted team id (``ncaaf.t.<n>``) for an ESPN team, or ``None``."""
+    keys = _espn_team_name_keys(espn_team_id, **kwargs)
+    for t in _yahoo_team_dir(season, 1, **kwargs):
+        if t["norm_key"] in keys:
+            return t["team_id"]
+    return None
 
-    Yahoo has no roster endpoint, so this is the season stat-leaders
-    (``yahoo_cfb_player_season_stats``) filtered to the target team -- i.e.
-    **very partial** coverage: that endpoint returns only the league's top ~200
-    players (roughly one per team), not full rosters. Yahoo also abbreviates
-    team names ("Ohio St." vs ESPN "Ohio State"), so the trailing ``st`` token is
-    expanded to ``state`` before matching. Empty ``team_keys`` yields no players.
+
+def _yahoo_roster(yahoo_team_id: str, **kwargs: Any) -> List[Dict[str, Any]]:
+    """Yahoo's current roster for one team (shangrila ``teamRoster``).
+
+    ``teamRoster`` ignores any season and also lists the team's former players
+    (``active: false``, ``lastYear`` before the current season), so only the
+    ``active`` entries are kept.
     """
-    if not team_keys:
-        return []
+    raw = yahoo_team_roster(team_id=yahoo_team_id, return_parsed=False, **kwargs)
+    teams = (raw.get("data") or {}).get("teams") if isinstance(raw, dict) else None
     out: List[Dict[str, Any]] = []
-    for r in _rows(yahoo_cfb_player_season_stats(season, **kwargs)):
-        team_norm = _norm_team(_pick(r, "team"))
-        team_norm_state = re.sub(r" st$", " state", team_norm)  # "ohio st" -> "ohio state"
-        if team_norm not in team_keys and team_norm_state not in team_keys:
+    for p in ((teams or [{}])[0] or {}).get("roster") or []:
+        if not p.get("active"):
             continue
-        name = _pick(r, "display_name")
+        name = p.get("displayName")
+        jersey = p.get("uniformNumber")
         out.append(
             {
                 "person_key": _norm_person(name),
-                "jersey_key": "",  # Yahoo player stats carry no jersey
-                "athlete_id": _pick(r, "player_id"),
+                "jersey_key": _norm_jersey(jersey),
+                "athlete_id": p.get("playerId"),
                 "name": name,
-                "jersey": None,
-                "position": _pick(r, "position", "positions"),
+                "jersey": jersey,
+                "position": ((p.get("positions") or [{}])[0] or {}).get("abbreviation"),
             }
         )
     return out
@@ -844,16 +844,16 @@ def _merge_rosters(
 ) -> List[Dict[str, Any]]:
     """Full-outer-join ESPN + Fox + Yahoo rosters on normalized name (pure).
 
-    Matches on ``person_key`` (normalized name). ``match_method`` reflects the
-    ESPN/Fox jersey agreement (Yahoo player stats carry no jersey): ``name_jersey``
-    when both jerseys agree, ``name_jersey_conflict`` when they differ (review),
-    ``name`` for a name-only match, ``unmatched`` otherwise. Players appearing on
-    only one source surface with that source's columns and the rest null.
+    ESPN and Fox match on ``person_key`` (normalized name). ``match_method``
+    reflects the ESPN/Fox jersey agreement: ``name_jersey`` when both jerseys
+    agree, ``name_jersey_conflict`` when they differ (review), ``name`` for a
+    name-only match, ``unmatched`` otherwise. Yahoo then attaches to each
+    ESPN/Fox row by :func:`_match_yahoo` (name + jersey, then a unique name).
+    Players appearing on only one source surface with that source's columns and
+    the rest null.
     """
     fox_by = _index_by(fox, "person_key")
-    yahoo_by = _index_by(yahoo, "person_key")
     espn_keys = {r["person_key"] for r in espn if r.get("person_key")}
-    fox_keys = {r["person_key"] for r in fox if r.get("person_key")}
 
     def method(e: Optional[Mapping[str, Any]], f: Optional[Mapping[str, Any]]) -> str:
         if e is None or f is None:
@@ -886,18 +886,59 @@ def _merge_rosters(
             ),
         }
 
-    out: List[Dict[str, Any]] = []
-    for e in espn:
-        key = e.get("person_key")
-        out.append(row(e, fox_by.get(key) if key else None, yahoo_by.get(key) if key else None))
-    for f in fox:  # Fox players ESPN didn't list
-        key = f.get("person_key")
-        if key and key not in espn_keys:
-            out.append(row(None, f, yahoo_by.get(key)))
-    for y in yahoo:  # Yahoo players neither ESPN nor Fox listed
-        key = y.get("person_key")
-        if key and key not in espn_keys and key not in fox_keys:
-            out.append(row(None, None, y))
+    # Fox players ESPN didn't list
+    fox_only = [f for f in fox if f.get("person_key") and f["person_key"] not in espn_keys]
+    pairs: List[tuple[Optional[Mapping[str, Any]], Optional[Mapping[str, Any]]]] = [
+        (e, fox_by.get(e["person_key"]) if e.get("person_key") else None) for e in espn
+    ]
+    pairs += [(None, f) for f in fox_only]
+    # An ESPN anchor without a jersey borrows its paired Fox player's jersey.
+    anchors = [
+        {**e, "jersey_key": f["jersey_key"]}
+        if e and f and not e.get("jersey_key") and f.get("jersey_key")
+        else (e or f)
+        for e, f in pairs
+    ]
+    ys = _match_yahoo([a for a in anchors if a is not None], yahoo)
+    out = [row(e, f, y) for (e, f), y in zip(pairs, ys)]
+    matched = {id(y) for y in ys if y is not None}
+    out += [row(None, None, y) for y in yahoo if id(y) not in matched]  # Yahoo players neither ESPN nor Fox listed
+    return out
+
+
+def _match_yahoo(
+    anchors: Sequence[Mapping[str, Any]], yahoo: Sequence[Mapping[str, Any]]
+) -> List[Optional[Mapping[str, Any]]]:
+    """Pair each ESPN/Fox anchor with at most one Yahoo player of the same team (pure).
+
+    Pass 1 matches on name + jersey, pass 2 on name alone; each pass pairs a
+    key only when exactly one player on *each* side carries it, so two
+    same-named teammates never trade ids by roster order. Names go through
+    :func:`normalize_name` (drops "Jr."/"III" suffixes, folds punctuation).
+    """
+
+    def nk(r: Mapping[str, Any]) -> str:
+        return normalize_name(r.get("person_key"))
+
+    out: List[Optional[Mapping[str, Any]]] = [None] * len(anchors)
+    left_nj = Counter((nk(a), a.get("jersey_key") or "") for a in anchors)
+    by_name_jersey: Dict[tuple[str, str], List[Mapping[str, Any]]] = {}
+    for y in yahoo:
+        if nk(y) and y.get("jersey_key"):
+            by_name_jersey.setdefault((nk(y), y["jersey_key"]), []).append(y)
+    for i, a in enumerate(anchors):
+        key = (nk(a), a.get("jersey_key") or "")
+        hits = by_name_jersey.get(key, [])
+        if left_nj[key] == 1 and len(hits) == 1:
+            out[i] = hits[0]
+    left = Counter(nk(a) for a in anchors)
+    right: Dict[str, List[Mapping[str, Any]]] = {}
+    for y in yahoo:
+        right.setdefault(nk(y), []).append(y)
+    for i, a in enumerate(anchors):
+        k = nk(a)
+        if out[i] is None and k and left[k] == 1 and len(right.get(k, [])) == 1:
+            out[i] = right[k][0]
     return out
 
 
@@ -1086,9 +1127,9 @@ def cfb_schedule_crosswalk(
       conference-championship or CFP rematch of the same teams).
     * **Single week** (``week`` given): just that week's slate, matched on team.
 
-    Each provider leg is best-effort: a Fox outage, a Yahoo per-week parser
-    hiccup, or Fox's offseason-projected CFP matchups simply leave that
-    provider's columns null rather than failing the call.
+    A provider with no game for a matchup (Fox's offseason-projected CFP games, a
+    404 week) leaves that provider's columns null. A fetch that FAILED raises, so
+    the same upstream data always builds the same rows.
 
     Args:
         season: Season year (e.g. ``2024``).
@@ -1110,6 +1151,10 @@ def cfb_schedule_crosswalk(
         ``matchup_key``, ``espn_game_id``, ``fox_game_id``, ``yahoo_game_id``,
         ``yahoo_global_game_id``, ``home_team``, ``away_team``, ``espn_date``,
         ``fox_date``, ``yahoo_date``, ``matched_sources``.
+
+    Raises:
+        CrosswalkSourceError: Full-season mode, a provider fetch failed after its
+            retries (a 404 is "no games", never a failure).
 
     Example:
         Crosswalk the whole season (regular + bowls + CFP)::
@@ -1147,6 +1192,7 @@ def cfb_rosters_crosswalk(
     *,
     season: Optional[int] = None,
     providers: Optional[Sequence[str]] = None,
+    yahoo_team_id: Optional[str] = None,
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> DataFrameT:
@@ -1158,23 +1204,28 @@ def cfb_rosters_crosswalk(
     :func:`cfb_teams_crosswalk` first to translate an ESPN team id into the
     matching Fox team id.
 
-    ESPN and Fox provide full rosters, so the default is ``("espn", "fox")``.
-    **Yahoo is opt-in** (pass ``providers=("espn", "fox", "yahoo")``) because it
-    has no roster endpoint — its only player feed is the season stat-leaderboard
-    (:func:`sportsdataverse.cfb.yahoo_cfb_player_season_stats`), which is the
-    league's top ~200 players (roughly one per team) and frequently includes no
-    player for a given team at all. When selected, the team is resolved by
-    matching Yahoo's (abbreviated) team name against the ESPN team's name; if it
-    can't be resolved, the Yahoo columns are simply null.
+    The default is ``("espn", "fox")``. **Yahoo is opt-in** (pass
+    ``providers=("espn", "fox", "yahoo")``): its leg is Yahoo's current roster
+    (:func:`sportsdataverse.yahoo.yahoo_team_roster`, active players only), and
+    each Yahoo player attaches to the ESPN/Fox player with the same name and
+    jersey, else the same name when that name is unique on the team. Pass
+    ``yahoo_team_id`` (``yahoo_team_id`` of :func:`cfb_teams_crosswalk`) to skip
+    the lookup of the Yahoo team in Yahoo's team directory; when no Yahoo team
+    matches, the Yahoo columns are null and a warning is logged.
 
     Args:
         espn_team_id: ESPN team id (e.g. ``194`` for Ohio State).
         fox_team_id: Fox Bifrost team id (e.g. ``25`` for Ohio State).
-        season: Season year for the Yahoo player-stats leg. Defaults to the most
-            recent CFB season. Unused when Yahoo isn't selected.
+        season: Season of Yahoo's team directory, used to find the Yahoo team
+            when ``yahoo_team_id`` is not given. Defaults to the most recent CFB
+            season. All three roster feeds return the current roster whatever
+            the season.
         providers: Which sources to include — any of ``"espn"``, ``"fox"``,
             ``"yahoo"``. ``None`` (default) uses ``("espn", "fox")``; add
-            ``"yahoo"`` explicitly for its (sparse) leg, or pass a single source.
+            ``"yahoo"`` explicitly for its leg, or pass a single source.
+        yahoo_team_id: Yahoo dotted team id (e.g. ``"ncaaf.t.33"`` for Ohio
+            State). Optional; looked up by team name when ``None``. Unused when
+            Yahoo isn't selected.
         return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
             polars.
         **kwargs: Forwarded to the underlying provider HTTP getters.
@@ -1189,26 +1240,31 @@ def cfb_rosters_crosswalk(
         ``name_jersey_conflict`` (jerseys differ — review), or ``unmatched``.
 
     Example:
-        Crosswalk Ohio State's roster across all three::
+        Crosswalk Ohio State's roster across ESPN and Fox::
 
             from sportsdataverse.cfb import cfb_rosters_crosswalk
-            xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25, season=2024)
+            xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25)
             matched = xwalk.filter(pl.col("matched_sources") == "espn+fox")
 
-        Just ESPN vs Fox (skip Yahoo's partial leg)::
+        Add Yahoo's ids, with the Yahoo team id from the teams crosswalk::
 
-            espn_fox = cfb_rosters_crosswalk(194, 25, providers=("espn", "fox"))
+            three = cfb_rosters_crosswalk(194, 25, providers=("espn", "fox", "yahoo"), yahoo_team_id="ncaaf.t.33")
 
         See Also:
             * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB rosters
     """
-    # Yahoo is opt-in for rosters (no roster endpoint); default is ESPN + Fox.
+    # Yahoo is opt-in for rosters; default is ESPN + Fox.
     sel = _resolve_providers(providers or ("espn", "fox"), ("espn", "fox", "yahoo"))
     yahoo: List[Dict[str, Any]] = []
     if "yahoo" in sel:
-        if season is None:
-            season = most_recent_cfb_season()
-        yahoo = _yahoo_roster(season, _espn_team_name_keys(espn_team_id, **kwargs), **kwargs)
+        if yahoo_team_id is None:
+            yahoo_team_id = _yahoo_team_id(espn_team_id, season or most_recent_cfb_season(), **kwargs)
+        if yahoo_team_id:
+            yahoo = _yahoo_roster(yahoo_team_id, **kwargs)
+        else:
+            logger.warning(
+                "cfb_rosters_crosswalk: no Yahoo team matches ESPN team %s; Yahoo columns null", espn_team_id
+            )
     rows = _merge_rosters(
         _espn_roster(espn_team_id, **kwargs) if "espn" in sel else [],
         _fox_roster(fox_team_id, **kwargs) if "fox" in sel else [],

@@ -9,6 +9,8 @@ smoke-tests the real endpoints.
 
 from __future__ import annotations
 
+import json
+from collections import Counter
 from typing import Any, Dict
 
 import pandas as pd
@@ -393,6 +395,84 @@ def test_merge_rosters_name_only_when_no_jersey() -> None:
     assert rows[0]["match_method"] == "name"
 
 
+def _player(name: str, jersey: str, athlete_id: Any) -> Dict[str, Any]:
+    return {
+        "person_key": cw._norm_person(name),
+        "jersey_key": jersey,
+        "athlete_id": athlete_id,
+        "name": name,
+        "jersey": jersey or None,
+        "position": None,
+    }
+
+
+def test_merge_rosters_yahoo_name_jersey_then_unique_name() -> None:
+    espn = [
+        _player("John Smith", "5", 1),
+        _player("John Smith", "9", 2),
+        _player("Al Jones", "1", 3),  # jersey changed on Yahoo, name unique -> name-only match
+    ]
+    yahoo = [
+        _player("John Smith", "9", "y9"),
+        _player("John Smith", "12", "y12"),  # jersey matches neither ESPN John Smith -> no guess
+        _player("Al Jones Jr.", "2", "yaj"),
+    ]
+    rows = _merge_rosters(espn, [], yahoo)
+    by_espn = {r["espn_athlete_id"]: r for r in rows if r["espn_athlete_id"] is not None}
+    assert by_espn[2]["yahoo_athlete_id"] == "y9"
+    assert by_espn[1]["yahoo_athlete_id"] is None
+    assert by_espn[3]["yahoo_athlete_id"] == "yaj"
+    yahoo_only = [r["yahoo_athlete_id"] for r in rows if r["matched_sources"] == "yahoo"]
+    assert yahoo_only == ["y12"]
+
+
+def test_merge_rosters_yahoo_ambiguous_name_jersey_never_first_hit() -> None:
+    # two Yahoo players share name AND jersey -> neither attaches (no roster-order guess)
+    rows = _merge_rosters(
+        [_player("John Smith", "5", 1)], [], [_player("John Smith", "5", "ya"), _player("John Smith", "5", "yb")]
+    )
+    assert next(r for r in rows if r["espn_athlete_id"] == 1)["yahoo_athlete_id"] is None
+    assert sorted(r["yahoo_athlete_id"] for r in rows if r["matched_sources"] == "yahoo") == ["ya", "yb"]
+    # same on the anchor side: two ESPN players share name + jersey
+    rows = _merge_rosters(
+        [_player("John Smith", "5", 1), _player("John Smith", "5", 2)], [], [_player("John Smith", "5", "ya")]
+    )
+    assert all(r["yahoo_athlete_id"] is None for r in rows if r["espn_athlete_id"] is not None)
+
+
+def test_merge_rosters_yahoo_uses_fox_jersey_when_espn_has_none() -> None:
+    espn = [_player("Al Jones", "", 3)]
+    fox = [_player("Al Jones", "4", "f4")]
+    yahoo = [_player("Al Jones", "4", "y4"), _player("Al Jones", "8", "y8")]  # name alone is ambiguous
+    rows = _merge_rosters(espn, fox, yahoo)
+    row = next(r for r in rows if r["espn_athlete_id"] == 3)
+    assert row["fox_athlete_id"] == "f4" and row["yahoo_athlete_id"] == "y4"
+    assert row["espn_jersey"] is None  # the borrowed jersey is for matching only
+
+
+def test_yahoo_team_id_falls_back_to_fcs_directory(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[Any] = []
+
+    def fake_teams(groups: Any = None, **k: Any) -> pl.DataFrame:
+        calls.append(groups)
+        if groups == 81:
+            return pl.DataFrame(
+                {"team_id": [2], "team_location": ["Montana"], "team_display_name": ["Montana Grizzlies"]}
+            )
+        return pl.DataFrame(
+            {"team_id": [194], "team_location": ["Ohio State"], "team_display_name": ["Ohio State Buckeyes"]}
+        )
+
+    monkeypatch.setattr(cw, "espn_cfb_teams", fake_teams)
+    monkeypatch.setattr(
+        cw,
+        "yahoo_cfb_teams",
+        lambda season, week, **k: pl.DataFrame({"team_id": ["ncaaf.t.200"], "full_name": ["Montana Grizzlies"]}),
+    )
+    assert cw._yahoo_team_id(2, 2026) == "ncaaf.t.200"
+    assert calls == [None, 81]
+
+
 def test_merge_odds_matches_to_espn() -> None:
     mk = _matchup_key("ohio state buckeyes", "akron zips")
     events = [
@@ -642,31 +722,34 @@ def test_fox_games_404_is_no_fox_games(monkeypatch: pytest.MonkeyPatch) -> None:
     assert cw._fox_season_games(2024) == []
 
 
-def test_weekly_loops_skip_isolated_failures_and_refuse_all_failed(monkeypatch: pytest.MonkeyPatch) -> None:
-    # One failed Yahoo week is skipped (and logged); every week failing raises.
+def test_weekly_loops_raise_on_any_failed_week(monkeypatch: pytest.MonkeyPatch) -> None:
+    # The season is a join spine: one failed week raises, it is never skipped
+    # (a skipped week dropped its rows from one nightly build and not the next).
     from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError
-    from sportsdataverse.errors import AssetFetchError
+    from sportsdataverse.errors import AssetFetchError, NoDataError
 
     def some(season: int, week: int, **k: Any) -> list:
         if week == 3:
             raise AssetFetchError("graphite-secure.sports.yahoo.com/... answered HTTP 503")
+        if week == 4:
+            raise NoDataError("graphite-secure.sports.yahoo.com/... answered HTTP 404")
         return [{"game_id": f"g{week}", "matchup_key": "a|b"}]
 
     monkeypatch.setattr(cw, "_yahoo_games", some)
-    rows = cw._yahoo_season_games(2024)
-    assert len(rows) == 22 and "g3" not in {r["game_id"] for r in rows}
-
-    def none(season: int, week: int, **k: Any) -> list:
-        raise AssetFetchError("graphite-secure.sports.yahoo.com/... answered HTTP 503")
-
-    monkeypatch.setattr(cw, "_yahoo_games", none)
-    with pytest.raises(CrosswalkSourceError, match="all 23 per-item fetches failed"):
+    with pytest.raises(CrosswalkSourceError, match=r"yahoo_cfb_scoreboard\(season=2024 week=3\)"):
         cw._yahoo_season_games(2024)
 
-    # ESPN: a failed calendar falls back to the default slots; all weeks failing raises.
+    monkeypatch.setattr(cw, "_yahoo_games", lambda season, week, **k: some(season, 1 if week == 3 else week))
+    rows = cw._yahoo_season_games(2024)  # a 404 week is "no games", not a failure
+    assert len(rows) == 21 and "g4" not in {r["game_id"] for r in rows}  # weeks 1+3 share g1
+
+    # ESPN: a failed calendar raises (no default-slot stand-in), as does a failed week.
     monkeypatch.setattr(cw, "espn_cfb_calendar", lambda **k: (_ for _ in ()).throw(AssetFetchError("cal 503")))
+    with pytest.raises(CrosswalkSourceError, match="espn_cfb_calendar"):
+        cw._espn_season_games(2024)
+    monkeypatch.setattr(cw, "espn_cfb_calendar", lambda **k: (_ for _ in ()).throw(NoDataError("cal 404")))
     monkeypatch.setattr(cw, "espn_cfb_schedule", lambda **k: (_ for _ in ()).throw(AssetFetchError("sched 503")))
-    with pytest.raises(CrosswalkSourceError, match="espn_cfb_schedule: all 18 per-item"):
+    with pytest.raises(CrosswalkSourceError, match="espn_cfb_schedule"):
         cw._espn_season_games(2024)
 
 
@@ -685,7 +768,7 @@ def test_espn_weeks_all_failing_raise_even_when_the_calendar_answered(monkeypatc
         )
 
     monkeypatch.setattr(cw, "espn_cfb_schedule", rate_limited)
-    with pytest.raises(CrosswalkSourceError, match="espn_cfb_schedule: all 3 per-item fetches failed"):
+    with pytest.raises(CrosswalkSourceError, match="espn_cfb_schedule"):
         cw._espn_season_games(2024)
 
 
@@ -1042,26 +1125,26 @@ def test_cfb_schedule_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> N
     assert row["espn_game_id"] == 401752687 and row["fox_game_id"] == "41999"
 
 
-def test_yahoo_season_games_swallows_week_errors(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_yahoo_season_games_raises_on_a_week_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError
+
     def fake_week(season: int, week: int, **k: Any) -> list:
-        if week in (3, 5):  # a per-week parser hiccup must not sink the season
+        if week == 5:  # a per-week parser bug fails the season, never drops the week
             raise RuntimeError("yahoo parser bug")
-        if week > 2:
-            return []
-        return [
-            {"matchup_key": f"k{week}", "game_id": f"g{week}", "date": "2024-09-01", "home_team": "A", "away_team": "B"}
-        ]
+        return []
 
     monkeypatch.setattr(cw, "_yahoo_games", fake_week)
-    out = cw._yahoo_season_games(2024)
-    assert sorted(r["game_id"] for r in out) == ["g1", "g2"]
+    with pytest.raises(CrosswalkSourceError, match="RuntimeError: yahoo parser bug"):
+        cw._yahoo_season_games(2024)
 
 
-def test_espn_season_games_default_slots_when_calendar_fails(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_espn_season_games_default_slots_when_calendar_404s(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.errors import NoDataError
+
     calls: list = []
 
     def boom_cal(season: int, **k: Any) -> pl.DataFrame:
-        raise RuntimeError("no calendar")
+        raise NoDataError("no calendar")
 
     def fake_sched(dates: int, week: int, season_type: int, **k: Any) -> pl.DataFrame:
         calls.append((week, season_type))
@@ -1150,40 +1233,54 @@ def test_cfb_rosters_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> No
     assert row["match_method"] == "name"  # Fox has no jersey -> name-only
 
 
-def test_cfb_rosters_crosswalk_three_way(monkeypatch: pytest.MonkeyPatch) -> None:
-    _patch_espn_roster(
-        monkeypatch,
-        pl.DataFrame({"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}),
-    )
-    monkeypatch.setattr(
-        cw,
-        "fox_cfb_team_roster",
-        lambda tid, **k: pl.DataFrame({"athlete_id": ["f7"], "player": ["CJ Stroud"], "pos": ["QB"]}),
-    )
-    # _espn_team_name_keys -> espn_cfb_teams; _yahoo_roster -> player season stats
+@pytest.mark.parametrize("yahoo_team_id", ["ncaaf.t.73", None])
+def test_cfb_rosters_crosswalk_yahoo_roster_leg(monkeypatch: pytest.MonkeyPatch, yahoo_team_id: Any) -> None:
+    """Real captures: ESPN's Alabama roster (2026 preseason) against Yahoo's Alabama
+    ``teamRoster`` (2026-10-11, trimmed to 7 entries). Yahoo ids attach by name +
+    jersey, then by a unique name (jerseys changed after the ESPN capture); a
+    former player (``active: false``) never attaches; an unmatched current Yahoo
+    player surfaces as a Yahoo-only row. With ``yahoo_team_id=None`` the Yahoo
+    team is found in Yahoo's team directory by name."""
+    import sportsdataverse.cfb.cfb_yahoo_ext as yext
+    import sportsdataverse.yahoo.yahoo_shangrila as ysh
+
+    monkeypatch.setattr(cw, "_get", lambda url, params=None, **k: load_fixture("espn", "team_roster_cfb"))
     monkeypatch.setattr(
         cw,
         "espn_cfb_teams",
         lambda **k: pl.DataFrame(
-            {"team_id": [194], "team_location": ["Ohio State"], "team_display_name": ["Ohio State Buckeyes"]}
+            {"team_id": [333], "team_location": ["Alabama"], "team_display_name": ["Alabama Crimson Tide"]}
         ),
     )
     monkeypatch.setattr(
         cw,
-        "yahoo_cfb_player_season_stats",
-        lambda season, **k: pl.DataFrame(
-            {"player_id": ["ncaaf.p.1"], "display_name": ["C.J. Stroud"], "team": ["Ohio State"]}
-        ),
+        "yahoo_cfb_teams",
+        lambda season, week, **k: pl.DataFrame({"team_id": ["ncaaf.t.73"], "full_name": ["Alabama Crimson Tide"]}),
     )
-    df = cfb_rosters_crosswalk(194, 25, season=2024, providers=("espn", "fox", "yahoo"))
-    assert df.height == 1
-    row = df.row(0, named=True)
-    # Fox writes "CJ" vs ESPN "C.J." -> still name-matched after normalization;
-    # all three providers present
-    assert row["espn_athlete_id"] == 4432
-    assert row["fox_athlete_id"] == "f7"
-    assert row["yahoo_athlete_id"] == "ncaaf.p.1"
-    assert row["matched_sources"] == "espn+fox+yahoo"
+    yahoo_urls: list[str] = []
+
+    def fake_yahoo_get(url: str, params: Any = None, **k: Any) -> Dict[str, Any]:
+        yahoo_urls.append(url)
+        if url.endswith("/teamRoster") and (params or {}).get("teamId") == "ncaaf.t.73":
+            return load_fixture("yahoo", "shangrila_team_roster_ncaaf")
+        return {}
+
+    monkeypatch.setattr(ysh, "_get", fake_yahoo_get)
+    monkeypatch.setattr(yext, "_get", fake_yahoo_get)
+
+    df = cfb_rosters_crosswalk(333, 101, season=2026, providers=("espn", "yahoo"), yahoo_team_id=yahoo_team_id)
+    by_espn = {r["espn_athlete_id"]: r["yahoo_athlete_id"] for r in df.iter_rows(named=True) if r["espn_athlete_id"]}
+    assert len(by_espn) == 100
+    assert by_espn[4692044] == "ncaaf.p.316903"  # Jah-Marien Latham, #20 on both
+    assert by_espn[4685507] == "ncaaf.p.333303"  # Keon Sabb, #3 on both (Yahoo also has Brooks at #3)
+    assert by_espn[4888707] == "ncaaf.p.337785"  # Danny Lewis Jr., #87 on both
+    assert by_espn[5110500] == "ncaaf.p.455512"  # Kevin Riley, ESPN #28 / Yahoo #6 -> unique name
+    assert by_espn[5141394] == "ncaaf.p.470421"  # Lotzeir Brooks, ESPN #17 / Yahoo #3 -> unique name
+    assert by_espn[5093292] is None  # Cade Carruth: Yahoo lists him only as a former player
+    assert sum(v is not None for v in by_espn.values()) == 5
+    yahoo_only = df.filter(pl.col("matched_sources") == "yahoo")
+    assert yahoo_only["yahoo_athlete_id"].to_list() == ["ncaaf.p.312695"]  # Kedrick Bingley-Jones
+    assert any(u.endswith("/teamRoster") for u in yahoo_urls)
 
 
 def test_cfb_odds_events_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -1341,3 +1438,61 @@ def test_schedule_crosswalk_espn_leg_uses_plain_http_site_api(monkeypatch: pytes
     assert len(urls) == 20  # calendar + 16 regular weeks + bowls + CFP, then the week-5 slate
     prefix = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
     assert all(u == prefix for u in urls), sorted(set(urls))
+
+
+# ---------------------------------------------------------------------------
+# Determinism: a truncated Yahoo body (regression, 2026-10-12)
+# ---------------------------------------------------------------------------
+class _Resp:
+    def __init__(self, text: str) -> None:
+        self.text, self.status_code = text, 200
+
+    def json(self) -> Any:
+        return json.loads(self.text)
+
+
+def _yahoo_week_body(week: int) -> str:
+    """The committed real Yahoo scoreboard, its game ids made unique per week."""
+    raw = load_fixture("yahoo", "editorial_scoreboard_ncaaf")
+    sb = raw["service"]["scoreboard"]
+    sb["games"] = {f"{gid}.w{week}": g for gid, g in sb["games"].items()}
+    return json.dumps(raw)
+
+
+def _yahoo_transport(monkeypatch: pytest.MonkeyPatch, cut: Any) -> Counter:
+    """Serve every Yahoo week; ``cut(week, n)`` truncates the n-th fetch of a week mid-body."""
+    import sportsdataverse._codegen_runtime as rt
+
+    calls: Counter = Counter()
+
+    def download(url: str, params: Dict[str, Any], **k: Any) -> _Resp:
+        week = params["week"]
+        calls[week] += 1
+        body = _yahoo_week_body(week)
+        return _Resp(body[: len(body) // 2] if cut(week, calls[week]) else body)
+
+    monkeypatch.setattr(rt, "download", download)
+    monkeypatch.setattr(rt, "_TRUNCATED_JSON_DELAY", 0)
+    return calls
+
+
+def test_schedule_crosswalk_is_stable_across_a_truncated_yahoo_body(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Yahoo answered HTTP 200 with a cut-off JSON body for weeks 5 and 12 in one of
+    # three builds. The week was skipped, so its Yahoo-only rows vanished (1,565 vs
+    # 1,608 rows) and its ESPN rows lost their Yahoo id. It is re-fetched now.
+    _yahoo_transport(monkeypatch, lambda week, n: False)
+    clean = cfb_schedule_crosswalk(2026, providers=("yahoo",))
+    calls = _yahoo_transport(monkeypatch, lambda week, n: week in (5, 12) and n == 1)
+    flaky = cfb_schedule_crosswalk(2026, providers=("yahoo",))
+    assert flaky.height == clean.height > 0
+    assert flaky.equals(clean)
+    assert calls[5] == calls[12] == 2 and calls[6] == 1
+
+
+def test_schedule_crosswalk_fails_when_a_yahoo_week_stays_truncated(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError
+
+    calls = _yahoo_transport(monkeypatch, lambda week, n: week == 5)
+    with pytest.raises(CrosswalkSourceError, match=r"week=5.*non-JSON body"):
+        cfb_schedule_crosswalk(2026, providers=("yahoo",))
+    assert calls[5] == 3  # one fetch + two re-fetches, then the build fails

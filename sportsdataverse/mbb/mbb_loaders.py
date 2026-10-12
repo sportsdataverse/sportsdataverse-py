@@ -1064,6 +1064,7 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         |fox_position_group |String  |
         |yahoo_player_id    |String  |
         |yahoo_player_name  |String  |
+        |kp_player_id       |String  |
         |match_method       |String  |
         |match_confidence   |Float64 |
         |match_keys         |String  |

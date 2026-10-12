@@ -40,7 +40,7 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | [`espn_wbb_calendar`](../wbb/reference/site.md#espn_wbb_calendar) | Valid game dates for a season | ESPN |
 | [`load_wbb_schedule`](../wbb/reference/loaders/other.md#load_wbb_schedule) | Season-long schedule (parquet release) | release |
 | [`load_wbb_pbp`](../wbb/reference/loaders/other.md#load_wbb_pbp) | Season-long play-by-play (parquet, back to 2002) | release |
-| [`load_wbb_team_boxscore`](../wbb/reference/loaders/other.md#load_wbb_team_boxscore) | Season-long team boxscores (parquet) | release |
+| [`load_wbb_team_boxscore`](../wbb/reference/loaders/team.md#load_wbb_team_boxscore) | Season-long team boxscores (parquet) | release |
 | [`load_wbb_player_boxscore`](../wbb/reference/loaders/player.md#load_wbb_player_boxscore) | Season-long player boxscores (parquet) | release |
 
 ## 🔌 Setup

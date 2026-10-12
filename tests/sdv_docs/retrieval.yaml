@@ -26,7 +26,7 @@
 - {id: ep-openapi-odds, tool: find_endpoints, args: {query: historical odds}, expect: ["https://api.the-odds-api.com/v4/historical/sports/{sport}/odds", "api: The Odds API · source: openapi"]}
 - {id: ep-miss, tool: find_endpoints, args: {query: zzqx}, expect: ["No endpoints match"]}
 # Datasets and releases
-- {id: ds-nhl-shifts, tool: list_datasets, args: {league: nhl, query: shifts}, expect: ["| load_nhl_shifts | nhl | nhl_shifts | 2025 |"], reject: ["pwhl_shifts"]}
+- {id: ds-nhl-shifts, tool: list_datasets, args: {league: nhl, query: shifts}, expect: ["| load_nhl_shifts | nhl | nhl_shifts | 2010 |"], reject: ["pwhl_shifts"]}
 - {id: ds-nfl-pbp, tool: list_datasets, args: {league: nfl, query: pbp}, expect: ["| load_nfl_pbp | nfl | pbp | 1999 |"]}
 - {id: ds-cfb-ratings, tool: list_datasets, args: {league: cfb, query: ratings}, expect: ["| load_cfb_ratings | cfb | cfb_ratings | 2004 |"]}
 - {id: ds-wnba-pbp-by-tag, tool: list_datasets, args: {query: espn_wnba_pbp}, expect: ["| load_wnba_pbp | wnba | espn_wnba_pbp | 2002 |"]}
