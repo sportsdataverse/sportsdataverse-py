@@ -1,0 +1,34 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.
+  name: team_statnet_id
+  type: character
+- description: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
+    id.
+  name: team_code
+  type: character
+- description: Short club name.
+  name: name
+  type: character
+- description: Full club name.
+  name: full_name
+  type: character
+- description: 'Logo: icon-size logo URL.'
+  name: logos_icon
+  type: character
+- description: 'Logo: large logo URL.'
+  name: logos_large
+  type: character
+- description: 'Logo: small logo rendition (500 px).'
+  name: logos_small
+  type: character
+- description: 'Logo: medium logo URL.'
+  name: logos_medium
+  type: character
+- description: 'Logo: extra-large logo URL.'
+  name: logos_xlarge
+  type: character
+kind: dataframe
+schema: ha_teams

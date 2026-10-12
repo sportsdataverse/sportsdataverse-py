@@ -1,0 +1,283 @@
+{
+  "count": 455,
+  "page": 1,
+  "page_size": 1000,
+  "total_pages": 1,
+  "results": [
+    {
+      "rank": 1,
+      "player": "Johan Åkerman",
+      "team": "SAIK",
+      "GP": 40,
+      "TP": 61,
+      "G": 15,
+      "A": 46,
+      "PIM": 52,
+      "GWG": 1,
+      "PPG": 11,
+      "SOG": 212,
+      "Hits": 0,
+      "BKS": 0,
+      "Plus": 52,
+      "Minus": 23,
+      "PlusMinus": 29,
+      "TOI_GP": "0:00",
+      "TPPG": "1.52"
+    },
+    {
+      "rank": 2,
+      "player": "Magnus Wernblom",
+      "team": "SAIK",
+      "GP": 42,
+      "TP": 58,
+      "G": 37,
+      "A": 21,
+      "PIM": 69,
+      "GWG": 10,
+      "PPG": 20,
+      "SOG": 208,
+      "Hits": 0,
+      "BKS": 0,
+      "Plus": 43,
+      "Minus": 16,
+      "PlusMinus": 27,
+      "TOI_GP": "0:00",
+      "TPPG": "1.38"
+    },
+    {
+      "rank": 3,
+      "player": "Anders Söderberg",
+      "team": "SAIK",
+      "GP": 42,
+      "TP": 55,
+      "G": 17,
+      "A": 38,
+      "PIM": 14,
+      "GWG": 2,
+      "PPG": 4,
+      "SOG": 116,
+      "Hits": 0,
+      "BKS": 0,
+      "Plus": 42,
+      "Minus": 21,
+      "PlusMinus": 21,
+      "TOI_GP": "0:00",
+      "TPPG": "1.31"
+    }
+  ],
+  "sorted_by": "TP",
+  "sort_direction": "desc",
+  "sort_by_options": [
+    "A",
+    "BKS",
+    "G",
+    "GP",
+    "GWG",
+    "Hits",
+    "Minus",
+    "PIM",
+    "PPG",
+    "Plus",
+    "PlusMinus",
+    "SOG",
+    "TOI_GP",
+    "TP"
+  ],
+  "teams": [
+    {
+      "statNetId": "AIK",
+      "teamCode": "AIK",
+      "name": "AIK",
+      "fullName": "AIK",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/aik_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/aik_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/aik_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/aik_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/aik_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "AIS",
+      "teamCode": "AIS",
+      "name": "Almtuna",
+      "fullName": "Almtuna IS",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/ais_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/ais_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/ais_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/ais_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/ais_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "ARB",
+      "teamCode": "ARB",
+      "name": "Arboga",
+      "fullName": "IFK Arboga",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/arb_icon.webp?ver=202610120731",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/arb_large.webp?ver=202610120731",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/arb_small.webp?ver=202610120731",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/arb_medium.webp?ver=202610120731",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/arb_xlarge.webp?ver=202610120731"
+      }
+    },
+    {
+      "statNetId": "BIK",
+      "teamCode": "BIK",
+      "name": "Karlskoga",
+      "fullName": "BIK Karlskoga",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/bik_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/bik_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/bik_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/bik_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/bik_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "HIF",
+      "teamCode": "HIF",
+      "name": "Hammarby",
+      "fullName": "Hammarby IF",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/hif_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/hif_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/hif_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/hif_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/hif_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "IFB",
+      "teamCode": "IFB",
+      "name": "Björklöven",
+      "fullName": "IF Björklöven",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifb_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifb_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifb_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifb_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifb_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "IFSH",
+      "teamCode": "SUN",
+      "name": "Sundsvall",
+      "fullName": "IF Sundsvall Hockey",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifsh_icon.webp?ver=202610121230",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifsh_large.webp?ver=202610121230",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifsh_small.webp?ver=202610121230",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifsh_medium.webp?ver=202610121230",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/ifsh_xlarge.webp?ver=202610121230"
+      }
+    },
+    {
+      "statNetId": "IKO",
+      "teamCode": "IKO",
+      "name": "Oskarshamn",
+      "fullName": "IK Oskarshamn",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/iko_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/iko_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/iko_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/iko_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/iko_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "MIF",
+      "teamCode": "MIF",
+      "name": "Malmö",
+      "fullName": "IF Malmö Redhawks",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/mif_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/mif_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/mif_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/mif_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/mif_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "NHK",
+      "teamCode": "NHK",
+      "name": "Nyköping",
+      "fullName": "Nyköpings HK",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/nhk_icon.webp?ver=202610121230",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/nhk_large.webp?ver=202610121230",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/nhk_small.webp?ver=202610121230",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/nhk_medium.webp?ver=202610121230",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/nhk_xlarge.webp?ver=202610121230"
+      }
+    },
+    {
+      "statNetId": "NYB",
+      "teamCode": "NVIF",
+      "name": "Nybro",
+      "fullName": "Nybro Vikings",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/nyb_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/nyb_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/nyb_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/nyb_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/nyb_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "RBK",
+      "teamCode": "RBK",
+      "name": "Rögle",
+      "fullName": "Rögle BK",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/rbk_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/rbk_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/rbk_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/rbk_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/rbk_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "SAIK",
+      "teamCode": "SKE",
+      "name": "Skellefteå",
+      "fullName": "Skellefteå AIK",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/saik_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/saik_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/saik_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/saik_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/saik_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "VIK",
+      "teamCode": "VIK",
+      "name": "Västerås",
+      "fullName": "Västerås IK",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/vik_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/vik_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/vik_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/vik_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/vik_xlarge.webp?ver=202609230706"
+      }
+    },
+    {
+      "statNetId": "VLH",
+      "teamCode": "VLH",
+      "name": "Växjö",
+      "fullName": "Växjö Lakers",
+      "logos": {
+        "icon": "https://ha-media.hadigital.se/ha-league/statnet-logos/vlh_icon.webp?ver=202609230706",
+        "large": "https://ha-media.hadigital.se/ha-league/statnet-logos/vlh_large.webp?ver=202609230706",
+        "small": "https://ha-media.hadigital.se/ha-league/statnet-logos/vlh_small.webp?ver=202609230706",
+        "medium": "https://ha-media.hadigital.se/ha-league/statnet-logos/vlh_medium.webp?ver=202609230706",
+        "xlarge": "https://ha-media.hadigital.se/ha-league/statnet-logos/vlh_xlarge.webp?ver=202609230706"
+      }
+    }
+  ]
+}

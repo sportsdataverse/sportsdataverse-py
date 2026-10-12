@@ -1,0 +1,52 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: Rank in the table.
+  name: rank
+  type: integer
+- description: Player name (the table carries no player id).
+  name: player_name
+  type: character
+- description: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.
+  name: team_statnet_id
+  type: character
+- description: Saves.
+  name: svs
+  type: integer
+- description: Save percentage ('92.61').
+  name: svs_perc
+  type: numeric
+- description: Games played.
+  name: gp
+  type: integer
+- description: Games played in (appeared).
+  name: gpi
+  type: integer
+- description: Goals against.
+  name: ga
+  type: integer
+- description: Goals-against average.
+  name: gaa
+  type: numeric
+- description: Wins.
+  name: w
+  type: integer
+- description: Ties.
+  name: t
+  type: integer
+- description: Losses.
+  name: l
+  type: integer
+- description: Shutouts.
+  name: so
+  type: integer
+- description: Minutes played, total mm:ss string ('1726:51').
+  name: mip
+  type: character
+- description: 1 when the goalkeeper qualifies for the ranked list (minimum games),
+    else 0.
+  name: valid_ranking
+  type: integer
+kind: dataframe
+schema: ha_goalie_stats

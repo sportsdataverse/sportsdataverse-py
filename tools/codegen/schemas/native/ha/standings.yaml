@@ -1,0 +1,61 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: Rank in the table.
+  name: rank
+  type: integer
+- description: 'Upstream standings teamCode: the StatNet id for some clubs (MODO),
+    the display code for others (MORA, NVIF, ÖIK). Join on team_code instead.'
+  name: team_code_mixed
+  type: character
+- description: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
+    id.
+  name: team_code
+  type: character
+- description: Games played.
+  name: games_played
+  type: integer
+- description: Regulation wins only (the team table's wins_total also counts OT and
+    shootout wins).
+  name: regulation_wins
+  type: integer
+- description: Regulation losses only.
+  name: regulation_losses
+  type: integer
+- description: Ties (0 in the overtime era).
+  name: ties
+  type: integer
+- description: Overtime wins, shootout wins included.
+  name: overtime_and_shootout_wins
+  type: integer
+- description: Overtime losses, shootout losses included.
+  name: overtime_and_shootout_losses
+  type: integer
+- description: 'Shootout wins as sent (0 in every sampled row: they are counted in
+    overtime_and_shootout_wins).'
+  name: shootouts_wins
+  type: integer
+- description: Shootout losses as sent (0 in every sampled row).
+  name: shootouts_losses
+  type: integer
+- description: Goals for.
+  name: goals
+  type: integer
+- description: Goals against.
+  name: goals_against
+  type: integer
+- description: Goal difference.
+  name: goal_difference
+  type: integer
+- description: Points.
+  name: total_points
+  type: integer
+- description: Power-play percentage; empty-string placeholder '' in every sample.
+  name: power_play_perc
+  type: numeric
+- description: Penalty-kill percentage; empty-string placeholder '' in every sample.
+  name: penalty_kill_perc
+  type: numeric
+kind: dataframe
+schema: ha_standings

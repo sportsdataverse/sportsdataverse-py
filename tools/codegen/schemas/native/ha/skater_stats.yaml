@@ -1,0 +1,61 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: Rank in the table.
+  name: rank
+  type: integer
+- description: Player name (the table carries no player id).
+  name: player_name
+  type: character
+- description: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.
+  name: team_statnet_id
+  type: character
+- description: Games played.
+  name: gp
+  type: integer
+- description: Points (goals + assists).
+  name: tp
+  type: integer
+- description: Goals.
+  name: g
+  type: integer
+- description: Assists.
+  name: a
+  type: integer
+- description: Penalty minutes.
+  name: pim
+  type: integer
+- description: Game-winning goals.
+  name: gwg
+  type: integer
+- description: Power-play goals.
+  name: ppg
+  type: integer
+- description: Shots on goal.
+  name: sog
+  type: integer
+- description: Hits (0 in seasons before tracking).
+  name: hits
+  type: integer
+- description: Blocked shots (0 in seasons before tracking).
+  name: bks
+  type: integer
+- description: Even-strength / short-handed goals for while on ice (plus count).
+  name: plus
+  type: integer
+- description: Goals against while on ice (minus count).
+  name: minus
+  type: integer
+- description: 'Plus/minus: the Plus count less the Minus count.'
+  name: plus_minus
+  type: integer
+- description: Average time on ice per game, mm:ss string ('0:00' = not tracked, e.g.
+    2010).
+  name: toi_gp
+  type: character
+- description: Points per game.
+  name: tppg
+  type: numeric
+kind: dataframe
+schema: ha_skater_stats
