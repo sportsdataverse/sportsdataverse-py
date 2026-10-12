@@ -734,32 +734,6 @@ st = special_teams_ratings(pbp)
 st.sort("adj_st_epa", descending=True).head()
 ```
 
-### touchback_yardline_expr {#touchback_yardline_expr}
-
-`touchback_yardline_expr(season: polars.expr.expr.Expr) -> polars.expr.expr.Expr`
-
-Polars form of `touchback_yardline` for a `season` column expression.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Expr` |  | Integer season expression (`pl.col("season")`). |
-
-**Returns**
-
-An integer expression of the touchback yards-to-endzone per row.
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.cfb.model_vars import touchback_yardline_expr
-
-df = pl.DataFrame({"season": [2011, 2012]})
-print(df.select(touchback_yardline_expr(pl.col("season"))).to_series().to_list())  # [80, 75]
-```
-
 ### win_prob_from_margin {#win_prob_from_margin}
 
 `win_prob_from_margin(exp_margin: 'float', *, era: 'str' = 'modern') -> 'float'`

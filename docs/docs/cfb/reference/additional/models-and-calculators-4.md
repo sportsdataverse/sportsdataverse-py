@@ -674,32 +674,6 @@ out = get_punt_wp(fourth_down_rows)
 print(out[["punt_wp"]].head())
 ```
 
-### kickoff_out_of_bounds_spot_expr {#kickoff_out_of_bounds_spot_expr}
-
-`kickoff_out_of_bounds_spot_expr(season: polars.expr.expr.Expr) -> polars.expr.expr.Expr`
-
-The receiving team's yardline after a kickoff out of bounds (the 40 through 2011, the 35 from 2012).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Expr` |  | Integer season expression (`pl.col("season")`). |
-
-**Returns**
-
-An integer expression of the out-of-bounds spot per row.
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.cfb.model_vars import kickoff_out_of_bounds_spot_expr
-
-df = pl.DataFrame({"season": [2011, 2012]})
-print(df.select(kickoff_out_of_bounds_spot_expr(pl.col("season"))).to_series().to_list())  # [40, 35]
-```
-
 ### load_draft_outcomes {#load_draft_outcomes}
 
 `load_draft_outcomes(years: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

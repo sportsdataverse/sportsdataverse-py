@@ -361,6 +361,7 @@ from sportsdataverse.cfb import cfb_compute_results as cfb_compute_results  # no
 from sportsdataverse.cfb import cfb_draft_projection as cfb_draft_projection  # noqa: F401
 from sportsdataverse.cfb import cfb_field_position as cfb_field_position  # noqa: F401
 from sportsdataverse.cfb import cfb_games_from_schedule as cfb_games_from_schedule  # noqa: F401
+from sportsdataverse.cfb import cfb_kickoff_out_of_bounds_spot_expr as cfb_kickoff_out_of_bounds_spot_expr  # noqa: F401
 from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_playoff_seeds as cfb_playoff_seeds  # noqa: F401
 from sportsdataverse.cfb import cfb_predict_games as cfb_predict_games  # noqa: F401
@@ -375,6 +376,7 @@ from sportsdataverse.cfb import cfb_season_odds as cfb_season_odds  # noqa: F401
 from sportsdataverse.cfb import cfb_simulations as cfb_simulations  # noqa: F401
 from sportsdataverse.cfb import cfb_standings as cfb_standings  # noqa: F401
 from sportsdataverse.cfb import cfb_teams_crosswalk as cfb_teams_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_touchback_yardline_expr as cfb_touchback_yardline_expr  # noqa: F401
 from sportsdataverse.cfb import cfb_transfer_impact as cfb_transfer_impact  # noqa: F401
 from sportsdataverse.cfb import cfb_transfer_moves as cfb_transfer_moves  # noqa: F401
 from sportsdataverse.cfb import check_box_invariants as check_box_invariants  # noqa: F401
@@ -419,7 +421,6 @@ from sportsdataverse.cfb import helper_cfb_athlete_items as helper_cfb_athlete_i
 from sportsdataverse.cfb import helper_cfb_game_items as helper_cfb_game_items  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_roster_items as helper_cfb_roster_items  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_team_items as helper_cfb_team_items  # noqa: F401
-from sportsdataverse.cfb import kickoff_out_of_bounds_spot_expr as kickoff_out_of_bounds_spot_expr  # noqa: F401
 from sportsdataverse.cfb import load_cfb_adv_defensive as load_cfb_adv_defensive  # noqa: F401
 from sportsdataverse.cfb import load_cfb_adv_defensive_players as load_cfb_adv_defensive_players  # noqa: F401
 from sportsdataverse.cfb import load_cfb_adv_drives as load_cfb_adv_drives  # noqa: F401
@@ -523,7 +524,6 @@ from sportsdataverse.cfb import scoreboard_event_parsing as scoreboard_event_par
 from sportsdataverse.cfb import slope_for_games as slope_for_games  # noqa: F401
 from sportsdataverse.cfb import special_teams_ratings as special_teams_ratings  # noqa: F401
 from sportsdataverse.cfb import to_cfbfastr as to_cfbfastr  # noqa: F401
-from sportsdataverse.cfb import touchback_yardline_expr as touchback_yardline_expr  # noqa: F401
 from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 from sportsdataverse.cfb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 
@@ -552,6 +552,7 @@ __all__ = [
     "cfb_draft_projection",
     "cfb_field_position",
     "cfb_games_from_schedule",
+    "cfb_kickoff_out_of_bounds_spot_expr",
     "cfb_odds_events_crosswalk",
     "cfb_playoff_seeds",
     "cfb_predict_games",
@@ -566,6 +567,7 @@ __all__ = [
     "cfb_simulations",
     "cfb_standings",
     "cfb_teams_crosswalk",
+    "cfb_touchback_yardline_expr",
     "cfb_transfer_impact",
     "cfb_transfer_moves",
     "check_box_invariants",
@@ -744,7 +746,6 @@ __all__ = [
     "helper_cfb_game_items",
     "helper_cfb_roster_items",
     "helper_cfb_team_items",
-    "kickoff_out_of_bounds_spot_expr",
     "load_cfb_adv_defensive",
     "load_cfb_adv_defensive_players",
     "load_cfb_adv_drives",
@@ -977,7 +978,6 @@ __all__ = [
     "sports247_transfer_portal_team_feed",
     "sports247_transfers",
     "to_cfbfastr",
-    "touchback_yardline_expr",
     "underscore",
     "win_prob_from_margin",
     "yahoo_cfb_boxscore",

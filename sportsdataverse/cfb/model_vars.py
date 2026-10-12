@@ -305,38 +305,20 @@ KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 35),
 
 def _by_season_expr(table: tuple[tuple[int, int], ...], season: pl.Expr) -> pl.Expr:
     """Resolve a newest-first ``(first_season, value)`` table into a per-row polars expression."""
-    # ponytail: untyped literals on purpose (the NFL twin casts Int64) -- the processor's columns keep the
-    # dtypes they had when these spots were inline ``.then(75)`` literals (byte-stable on the 1.2 suite).
+    # Untyped literals on purpose (the NFL twin casts Int64): the processor's columns keep the dtypes they
+    # had when these spots were inline ``.then(75)`` literals (byte-stable on the 1.2 suite).
     expr = pl.lit(table[-1][1])
     for first_season, value in reversed(table[:-1]):
         expr = pl.when(season >= first_season).then(pl.lit(value)).otherwise(expr)
     return expr
 
 
-def touchback_yardline(season: int) -> int:
-    """Kickoff-touchback yards-to-endzone for *season* (80 through 2011, 75 from 2012).
+def cfb_touchback_yardline_expr(season: pl.Expr) -> pl.Expr:
+    """Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012.
 
-    Args:
-        season: CFB season year.
-
-    Returns:
-        80 through 2011, 75 from 2012.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.cfb.model_vars import touchback_yardline
-
-            print([touchback_yardline(s) for s in (2011, 2012)])  # [80, 75]
-    """
-    for first_season, spot in TOUCHBACK_YARDLINE_BY_SEASON:
-        if season >= first_season:
-            return spot
-    return TOUCHBACK_YARDLINE_BY_SEASON[-1][1]  # pragma: no cover - the (0, 80) row always matches
-
-
-def touchback_yardline_expr(season: pl.Expr) -> pl.Expr:
-    """Polars form of :func:`touchback_yardline` for a ``season`` column expression.
+    Reads :data:`TOUCHBACK_YARDLINE_BY_SEASON` (the NCAA 2012 kickoff rule). Named with the ``cfb_``
+    prefix so the top-level ``sportsdataverse`` namespace keeps NFL's ``touchback_yardline_expr``
+    (2016 cut) distinct from this one.
 
     Args:
         season: Integer season expression (``pl.col("season")``).
@@ -348,16 +330,24 @@ def touchback_yardline_expr(season: pl.Expr) -> pl.Expr:
         Quick start::
 
             import polars as pl
-            from sportsdataverse.cfb.model_vars import touchback_yardline_expr
+            from sportsdataverse.cfb import cfb_touchback_yardline_expr
 
             df = pl.DataFrame({"season": [2011, 2012]})
-            print(df.select(touchback_yardline_expr(pl.col("season"))).to_series().to_list())  # [80, 75]
+            print(df.select(cfb_touchback_yardline_expr(pl.col("season"))).to_series().to_list())  # [80, 75]
+
+        See Also:
+            * `cfbfastR`_ -- ``create_epa.R`` sets the same kickoff-touchback spot by season
+            * ``sportsdataverse.nfl.model_vars.touchback_yardline_expr`` -- the NFL twin (2016, 2024 and 2025 cuts)
+
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     return _by_season_expr(TOUCHBACK_YARDLINE_BY_SEASON, season)
 
 
-def kickoff_out_of_bounds_spot_expr(season: pl.Expr) -> pl.Expr:
-    """The receiving team's yardline after a kickoff out of bounds (the 40 through 2011, the 35 from 2012).
+def cfb_kickoff_out_of_bounds_spot_expr(season: pl.Expr) -> pl.Expr:
+    """The receiving team's yardline after a kickoff out of bounds: the 40 through 2011, the 35 from 2012.
+
+    Reads :data:`KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON` (the NCAA 2012 kickoff rule).
 
     Args:
         season: Integer season expression (``pl.col("season")``).
@@ -369,9 +359,15 @@ def kickoff_out_of_bounds_spot_expr(season: pl.Expr) -> pl.Expr:
         Quick start::
 
             import polars as pl
-            from sportsdataverse.cfb.model_vars import kickoff_out_of_bounds_spot_expr
+            from sportsdataverse.cfb import cfb_kickoff_out_of_bounds_spot_expr
 
             df = pl.DataFrame({"season": [2011, 2012]})
-            print(df.select(kickoff_out_of_bounds_spot_expr(pl.col("season"))).to_series().to_list())  # [40, 35]
+            print(df.select(cfb_kickoff_out_of_bounds_spot_expr(pl.col("season"))).to_series().to_list())  # [40, 35]
+
+        See Also:
+            * `cfbfastR`_ -- the R package whose play-by-play this processor mirrors
+            * ``sportsdataverse.nfl.model_vars.touchback_yardline_expr`` -- the NFL kickoff-spot twin
+
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     return _by_season_expr(KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON, season)

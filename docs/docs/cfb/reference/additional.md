@@ -114,11 +114,13 @@ not covered by the generated API-endpoint reference above.
 | [cfb_compute_results](additional/models-and-calculators-2.md#cfb_compute_results) | Default results generator — nflseedR's dynamic ELO model for CFB. |
 | [cfb_draft_projection](additional/models-and-calculators-2.md#cfb_draft_projection) | Project NFL-draft probability per player + expected picks per team. |
 | [cfb_field_position](additional/models-and-calculators-2.md#cfb_field_position) | Team-season field-position value: avg start, drive EP, margin, pts/drive. |
+| [cfb_kickoff_out_of_bounds_spot_expr](additional/models-and-calculators-2.md#cfb_kickoff_out_of_bounds_spot_expr) | The receiving team's yardline after a kickoff out of bounds: the 40 through 2011, the 35 from 2012. |
 | [cfb_predict_games](additional/models-and-calculators-2.md#cfb_predict_games) | Predict a whole schedule of games from a ratings frame (vectorized). |
 | [cfb_ratings](additional/models-and-calculators-2.md#cfb_ratings) | One row per team: the full CFB ratings spine (off/def/ST EPA + FEI). |
 | [cfb_recruiting_projection](additional/models-and-calculators-2.md#cfb_recruiting_projection) | Project team wins / scoring margin for a season from preseason roster features. |
 | [cfb_roster_talent](additional/models-and-calculators-2.md#cfb_roster_talent) | Team-talent composite per team-season (247 Team Talent Composite style). |
 | [cfb_simulations](additional/models-and-calculators-2.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |
+| [cfb_touchback_yardline_expr](additional/models-and-calculators-2.md#cfb_touchback_yardline_expr) | Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012. |
 | [efficiency_ratings](additional/models-and-calculators-2.md#efficiency_ratings) | One row per team: opponent-adjusted offensive/defensive efficiency. |
 | [fei_ratings](additional/models-and-calculators-2.md#fei_ratings) | One row per team: opponent-adjusted per-drive efficiency (FEI-style). |
 | [fit_field_position_ep](additional/models-and-calculators-2.md#fit_field_position_ep) | Fit the monotone EP-by-starting-yardline curve from a drives frame. |
@@ -127,7 +129,6 @@ not covered by the generated API-endpoint reference above.
 | [get_fg_wp](additional/models-and-calculators-4.md#get_fg_wp) | Expected win probability of attempting a field goal (cfb4th `get_fg_wp`). |
 | [get_go_wp](additional/models-and-calculators-4.md#get_go_wp) | Expected win probability of going for it on 4th down (cfb4th `get_go_wp`). |
 | [get_punt_wp](additional/models-and-calculators-4.md#get_punt_wp) | Expected win probability of punting on 4th down (cfb4th `get_punt_wp`). |
-| [kickoff_out_of_bounds_spot_expr](additional/models-and-calculators-4.md#kickoff_out_of_bounds_spot_expr) | The receiving team's yardline after a kickoff out of bounds (the 40 through 2011, the 35 from 2012). |
 | [load_draft_outcomes](additional/models-and-calculators-4.md#load_draft_outcomes) | NFL draft picks with the college of each pick, for the requested draft years. |
 | [load_fp_curve](additional/models-and-calculators-4.md#load_fp_curve) | Load the bundled EP-by-yardline curve (no network, no first-use download). |
 | [load_recruit_classes](additional/models-and-calculators-4.md#load_recruit_classes) | Load recruiting classes as per-recruit rows from the 247 RDB feed. |
@@ -137,7 +138,6 @@ not covered by the generated API-endpoint reference above.
 | [predict_total](additional/models-and-calculators-5.md#predict_total) | Expected combined point total from the four efficiency ratings + tempo. |
 | [slope_for_games](additional/models-and-calculators-5.md#slope_for_games) | Points per unit of rating differential, given how many games back it. |
 | [special_teams_ratings](additional/models-and-calculators-5.md#special_teams_ratings) | One row per team: a per-unit special-teams EPA composite. |
-| [touchback_yardline_expr](additional/models-and-calculators-5.md#touchback_yardline_expr) | Polars form of `touchback_yardline` for a `season` column expression. |
 | [win_prob_from_margin](additional/models-and-calculators-5.md#win_prob_from_margin) | Home win probability from an expected margin via the Gaussian CDF. |
 
 ## Analytics
