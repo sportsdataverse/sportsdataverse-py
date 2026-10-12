@@ -225,15 +225,13 @@ def _vendor_fetcher(
     """
     import re as _re
     import time
-    import tomllib
 
-    from .canary import _vendor_ready, build_fetcher
+    from .canary import _toml_loads, _vendor_ready, build_fetcher
 
     cfg_path = Path(root) / "canary_vendors.toml"
     if not cfg_path.exists():
         raise SystemExit(f"--vendor requires {cfg_path} (copy from canary_vendors.toml.example)")
-    with open(cfg_path, "rb") as f:
-        doc = tomllib.load(f)
+    doc = _toml_loads(cfg_path.read_text(encoding="utf-8"))
     vendors = {v.get("name"): dict(v) for v in doc.get("vendor", [])}
     if vendor_name not in vendors:
         raise SystemExit(f"vendor {vendor_name!r} not in {cfg_path} (have: {sorted(vendors)})")

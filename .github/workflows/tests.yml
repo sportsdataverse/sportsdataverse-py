@@ -13,9 +13,10 @@
 #            only job that exercises the xgboost/libomp import path -- and keeps
 #            the live coverage, off the critical path.
 #
-# SCOPE (still narrowed, unchanged by this split): Python 3.9 (the declared floor)
-# and Windows are NOT exercised. CONTRIBUTING.md promises the floor is covered; it
-# is not. Restore by re-adding a matrix `include:` block.
+# SCOPE (still narrowed, unchanged by this split): the suite runs on 3.13.2 only and
+# Windows is NOT exercised; the `floor-import` job below imports the package on the
+# 3.10 floor so a 3.11+-only construct cannot ship again. Restore a full version
+# sweep by re-adding a matrix `include:` block.
 #
 # Uses `uv sync --all-extras --all-groups` against the committed uv.lock.
 name: tests
@@ -90,6 +91,30 @@ jobs:
           uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -q
           --ignore=tests/codegen
           --deselect tests/test_mlb_statcast_codegen.py::test_codegen_drift_clean
+
+  floor-import:
+    name: import on the 3.10 floor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.10
+      # The package once stopped importing on the 3.9 floor without CI noticing
+      # (a `set[int] | str | None` evaluated at def time). tests/test_import_sweep.py
+      # imports every module under sportsdataverse/ in a subprocess, so a 3.11+-only
+      # construct anywhere in the package fails here. Every extra is installed so the
+      # sweep imports the extra-gated modules too (it treats a missing optional
+      # extra as a skip, not a failure, which would otherwise leave them unchecked).
+      - name: Install project + extras + dep groups on 3.10
+        run: uv sync --all-extras --all-groups --frozen --python 3.10
+      - name: Import every module on 3.10
+        run: uv run --python 3.10 --frozen pytest tests/test_import_sweep.py -q -p no:cacheprovider
 
   live:
     name: pytest (live APIs)
