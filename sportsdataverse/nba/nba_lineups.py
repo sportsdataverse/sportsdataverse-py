@@ -53,10 +53,19 @@ The rotation-based reconstruction is a faithful port of hoopR's
 For each team, ``nba_gamerotation`` provides stint rows with
 ``IN_TIME_REAL`` / ``OUT_TIME_REAL`` as tenths-of-second elapsed from
 game start.  Each PBP row's elapsed time is computed from its period and
-``seconds_remaining`` clock using the same formula:
+``seconds_remaining`` clock with the game's OWN regulation shape (league and
+era, from the game id -- :func:`_regulation_clock`): NBA four 12-minute
+quarters; WNBA four 10-minute quarters from 2006 and two 20-minute halves
+before; 5-minute overtimes everywhere.  For ``P`` regulation periods of ``L``
+seconds:
 
-  periods 1-4:  elapsed = ((period - 1) * 720 + (720 - seconds_remaining)) * 10
-  OT (periods 5+): elapsed = (2880 + (period - 5) * 300 + (300 - seconds_remaining)) * 10
+  regulation:  elapsed = ((period - 1) * L + (L - seconds_remaining)) * 10
+  OT:          elapsed = (P * L + (period - P - 1) * 300 + (300 - seconds_remaining)) * 10
+
+Hard-coding the NBA's 720 s quarters for a WNBA game shifts every event 120 s
+per period later than the rotation clock (480 s by the fourth quarter), so the
+lineups land on the wrong stints -- a WNBA player who checked in with 8 s left
+was credited with the last eight minutes.
 
 ``_resolve_team_oncourt`` maps elapsed times to a sorted 5-player lineup
 using a boundary-interval approach (equivalent to R's ``findInterval``):
@@ -74,8 +83,8 @@ When a PBP event's elapsed time exactly coincides with a rotation boundary,
 we need to decide whether the event sees the lineup *before* or *after* the
 rotation change.  Two heuristics resolve this:
 
-- **Period-start**: an event with ``seconds_remaining >= 720`` (regulation)
-  or ``>= 300`` (OT) is at the very start of a period — it sees the new
+- **Period-start**: an event with ``seconds_remaining`` at or above the
+  regulation period length (720 NBA) or ``>= 300`` (OT) is at the very start of a period — it sees the new
   lineup set after the period-transition substitutions.  POST-boundary
   (``side='right'``) is correct here.
 
@@ -434,28 +443,79 @@ def _parse_sub_in_name(description: str) -> Optional[str]:
     return match.group(1).strip().lower()
 
 
-def _elapsed_time(period: int, seconds_remaining: float) -> float:
+#: ``(regulation periods, seconds per regulation period)`` -- the NBA shape, and
+#: the fallback for an id whose league or season cannot be decoded.
+_NBA_CLOCK: Tuple[int, float] = (4, 720.0)
+
+
+def _regulation_clock(game_id: object) -> Tuple[int, float]:
+    """``(regulation periods, seconds per period)`` for *game_id*'s league and era.
+
+    A ``10``-prefixed stats id is a WNBA game: two 20-minute halves through
+    2005, four 10-minute quarters from 2006
+    (:func:`sportsdataverse.scrape.stats.periods.regulation_shape`, the same
+    table the ``-raw`` capture windows use). Every other id (NBA ``00``, G
+    League ``20``) plays four 12-minute quarters.
+    """
+    from sportsdataverse.scrape.stats.periods import regulation_shape, season_of
+
+    gid = str(game_id or "").zfill(10)
+    if not gid.startswith("10"):
+        return _NBA_CLOCK
+    try:
+        periods, secs = regulation_shape(season_of(gid, "10"), "10")
+    except (KeyError, ValueError):
+        return _NBA_CLOCK
+    return periods, float(secs)
+
+
+def _elapsed_time(period: int, seconds_remaining: float, clock: Tuple[int, float] = _NBA_CLOCK) -> float:
     """Convert period + seconds_remaining to tenths-of-second elapsed from game start.
 
-    Mirrors the formula used by ``nba_gamerotation`` for ``IN_TIME_REAL`` and
-    ``OUT_TIME_REAL``:
+    Mirrors the formula ``gamerotation`` uses for ``IN_TIME_REAL`` and
+    ``OUT_TIME_REAL``, for a game with ``clock = (P, L)`` (*P* regulation
+    periods of *L* seconds, :func:`_regulation_clock`):
 
-    - Periods 1-4 (12-minute quarters): ``((period-1)*720 + (720-sr))*10``
-    - OT periods (5+, 5-minute periods): ``(2880 + (period-5)*300 + (300-sr))*10``
+    - Regulation: ``((period-1)*L + (L-sr))*10`` -- NBA ``L = 720``
+    - Overtime (5-minute periods): ``(P*L + (period-P-1)*300 + (300-sr))*10``
     """
-    if period <= 4:
-        return ((period - 1) * 720.0 + (720.0 - seconds_remaining)) * 10.0
-    return (2880.0 + (period - 5) * 300.0 + (300.0 - seconds_remaining)) * 10.0
+    n_periods, period_len = clock
+    if period <= n_periods:
+        return ((period - 1) * period_len + (period_len - seconds_remaining)) * 10.0
+    return (n_periods * period_len + (period - n_periods - 1) * 300.0 + (300.0 - seconds_remaining)) * 10.0
 
 
-def _is_period_start(period: int, seconds_remaining: float) -> bool:
+def _is_period_start(period: int, seconds_remaining: float, clock: Tuple[int, float] = _NBA_CLOCK) -> bool:
     """Return True if this clock value is at the very start of *period*.
 
-    For regulation periods (1-4) the period is 720 seconds; for OT (5+) it is
-    300 seconds.  An event whose ``seconds_remaining`` equals or exceeds the
-    period length is at the start boundary and should see the POST-rotation lineup.
+    A regulation period is ``clock[1]`` seconds (720 NBA); an overtime is 300.
+    An event whose ``seconds_remaining`` equals or exceeds the period length is
+    at the start boundary and should see the POST-rotation lineup.
     """
-    return seconds_remaining >= (720.0 if period <= 4 else 300.0)
+    n_periods, period_len = clock
+    return seconds_remaining >= (period_len if period <= n_periods else 300.0)
+
+
+def _rotation_coverage_error(rotation: dict[str, list[dict]]) -> float:
+    """Worst per-team relative gap between rotation stint time and five players' worth of game.
+
+    Each team has exactly five players on court for the whole game, so a team's
+    stints (``OUT_TIME_REAL - IN_TIME_REAL``) must sum to ``5 x`` the game's
+    final ``OUT_TIME_REAL``. A payload that overlaps stints (7-10 "on court" at
+    once) or drops some is malformed; mapped faithfully it credits players
+    with minutes they never played. Returns ``max |sum / (5 x end) - 1|`` over
+    the teams with stints, ``0.0`` when there are none.
+    """
+    worst = 0.0
+    for key in ("HomeTeam", "AwayTeam", "homeTeam", "awayTeam"):
+        stints = rotation.get(key) or []
+        ends = [float(s.get("OUT_TIME_REAL") or 0.0) for s in stints]
+        end = max(ends, default=0.0)
+        if end <= 0:
+            continue
+        total = sum(float(s.get("OUT_TIME_REAL") or 0.0) - float(s.get("IN_TIME_REAL") or 0.0) for s in stints)
+        worst = max(worst, abs(total / (5.0 * end) - 1.0))
+    return worst
 
 
 def _build_sub_map(
@@ -729,13 +789,16 @@ def players_on_court_from_rotation(
     need_cols = ["game_id", "action_number", "period", "seconds_remaining", "is_substitution", "team_id"]
     pbp_rows = enhanced_pbp.select(need_cols).to_dicts()
 
+    # The rotation clock runs on the game's own period lengths (WNBA quarters
+    # are 600 s, its pre-2006 halves 1200 s) -- never assume the NBA's 720 s.
+    clock = _regulation_clock(pbp_rows[0]["game_id"])
     pbp_times: list[float] = []
     pbp_period_start: list[bool] = []
     for r in pbp_rows:
         period = int(r["period"])
         sr = float(r["seconds_remaining"] or 0.0)
-        pbp_times.append(_elapsed_time(period, sr))
-        pbp_period_start.append(_is_period_start(period, sr))
+        pbp_times.append(_elapsed_time(period, sr, clock))
+        pbp_period_start.append(_is_period_start(period, sr, clock))
 
     # Build per-team substitution ordering maps (elapsed → min action_number).
     # Kept separate so that an away sub at time T does not affect home boundary

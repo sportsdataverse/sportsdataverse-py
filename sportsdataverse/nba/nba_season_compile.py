@@ -26,7 +26,11 @@ _LOG = logging.getLogger(__name__)
 #: the forward-fill accepted and so reset the running score. Possession points
 #: are a score difference, so every cached pre-2018 game holds corrupted points
 #: (up to +/-140 per possession) and must be recompiled rather than reused.
-PIPELINE_VERSION: int = 4
+#: v5: the rotation lineup mapper timed every event on the NBA's 720 s quarters,
+#: so WNBA rotation-derived lineups ran 120 s per period behind the rotation clock
+#: (player minutes off by ~3.3 min per game vs the box); malformed rotation
+#: payloads (stints not summing to five players' game time) now fall back.
+PIPELINE_VERSION: int = 5
 
 _LEAGUE_ID = "00"
 
