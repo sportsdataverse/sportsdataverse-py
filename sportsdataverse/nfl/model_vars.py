@@ -36,10 +36,10 @@ _EP_POINT_VALUES: np.ndarray = np.array([7.0, -7.0, 3.0, -3.0, 2.0, -2.0, 0.0], 
 #:     era3  2014 .. 2017
 #:     era4  >= 2018
 #:
-#: These exact cuts are replicated in ``_make_model_mutations()`` and
-#: ``_espn_ep_features()`` / ``_espn_wp_features()`` / ``_espn_cp_features()``
-#: in ``ep_wp.py``.  If the model is ever retrained with different era bins,
-#: update this tuple and those functions together.
+#: ``ep_wp.py`` (``_make_model_mutations()``, ``_espn_*_features()``,
+#: ``calculate_xpass``) and ``nfl_fourth_down._prepare`` read these cuts; none
+#: restates them (sdv-internal-refs ``rules/nfl.yaml#nfl-2002-nflfastr-era-bins``).
+#: If the model is ever retrained with different era bins, update this tuple.
 ERA_SEASON_CUTS: tuple[int, int, int, int] = (2001, 2005, 2013, 2017)
 
 #: Last season the era bins above (and the kickoff-touchback substitution below)

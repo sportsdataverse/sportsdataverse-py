@@ -1,3 +1,6 @@
+from typing import Any
+
+import numpy as np
 import polars as pl
 
 ep_class_to_score_mapping = {0: 7, 1: -7, 2: 3, 3: -3, 4: 2, 5: -2, 6: 0}
@@ -274,6 +277,22 @@ kickoff_turnovers = ["Kickoff Team Fumble Recovery", "Kickoff Team Fumble Recove
 # no longer reads it.
 qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "era0", "era1", "era2", "era3"]
 
+#: The trained CFB rule-era cuts, the LAST season of era0 / era1 / era2 (era3 is open-ended):
+#: sdv-internal-refs ``rules/cfb.yaml`` ``cfb-2007-model-era-cut``, ``cfb-2014-model-era-cut``,
+#: ``cfb-2021-model-era-cut``; the bundled model cards' ``era.cuts`` (a test pins them equal). The
+#: QBR era dummies and the fourth-down / two-point ``FD_ERA_BOUNDS`` read it.
+CFB_MODEL_ERA_CUTS: tuple[int, int, int] = (2006, 2013, 2020)
+
+#: First season ESPN writes the try on the touchdown row (its 2014 participants/text template);
+#: through 2013 the try is its own "Extra point by X is good" row, so the touchdown row's score
+#: lacks it (the WPA ``+ 0.92`` expected-try adjustment). ``rules/cfb.yaml``
+#: ``cfb-2014-espn-participants-and-text-template``.
+CFB_ESPN_TRY_ON_TD_ROW_FROM: int = 2014
+
+#: First season a fair-caught kickoff inside the receiver's 25 is a touchback.
+#: ``rules/cfb.yaml`` ``cfb-2018-kickoff-fair-catch-touchback``.
+CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2018
+
 #: ``(first season, first period)`` from which every overtime period is a two-point shootout:
 #: one alternating two-point play per team, no possession from the 25 (ESPN period 5 is the
 #: first overtime). No shootout before 2019 (sdv-internal-refs ``rules/cfb.yaml``
@@ -311,6 +330,18 @@ def _by_season_expr(table: tuple[tuple[int, int], ...], season: pl.Expr) -> pl.E
     for first_season, value in reversed(table[:-1]):
         expr = pl.when(season >= first_season).then(pl.lit(value)).otherwise(expr)
     return expr
+
+
+def _cfb_touchback_yardline_np(season: Any) -> np.ndarray:
+    """:data:`TOUCHBACK_YARDLINE_BY_SEASON` per element of a season array (the numpy decision surfaces).
+
+    A NaN season falls to the oldest spot, as a null season does in :func:`cfb_touchback_yardline_expr`.
+    """
+    s = np.asarray(season, dtype=float)
+    out = np.full(s.shape, TOUCHBACK_YARDLINE_BY_SEASON[-1][1], dtype=np.int64)
+    for first_season, value in reversed(TOUCHBACK_YARDLINE_BY_SEASON[:-1]):
+        out = np.where(s >= first_season, value, out)
+    return out
 
 
 def cfb_touchback_yardline_expr(season: pl.Expr) -> pl.Expr:

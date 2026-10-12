@@ -355,6 +355,9 @@ from sportsdataverse.cfb.model_vars import (
     ep_final_names,
     ep_start_columns,
     ep_start_touchback_columns,
+    CFB_ESPN_TRY_ON_TD_ROW_FROM,
+    CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM,
+    CFB_MODEL_ERA_CUTS,
     OT_SHOOTOUT_FROM_PERIOD,
     int_vec,
     cfb_kickoff_out_of_bounds_spot_expr,
@@ -4152,7 +4155,7 @@ class CFBPlayProcess(object):
                 .when(
                     (pl.col("text").str.contains(r"(?i)fair catch|fair caught"))
                     .and_(pl.col("kickoff_play") == True)
-                    .and_(pl.col("season") >= 2018),
+                    .and_(pl.col("season") >= CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM),
                 )
                 .then(True)
                 .when((pl.col("text").str.contains("(?i)kickoff$")).and_(pl.col("kickoff_play") == True))
@@ -7007,7 +7010,11 @@ class CFBPlayProcess(object):
             if "orig_play_type" in play_df.columns
             else pl.lit(False)
         )
-        gated = ((pl.col("season") >= 2014) | folded_kick_row) & is_td_row & pl.col("text").is_not_null()
+        gated = (
+            ((pl.col("season") >= CFB_ESPN_TRY_ON_TD_ROW_FROM) | folded_kick_row)
+            & is_td_row
+            & pl.col("text").is_not_null()
+        )
 
         made_name = pl.col("text").str.extract(xp_made_re, 1)
         miss_kw_name = pl.col("text").str.extract(xp_miss_kw_re, 1)
@@ -7040,7 +7047,7 @@ class CFBPlayProcess(object):
         # (2004-06), "Felipe Macias extra point GOOD." (2007-13). The row is the attempt; its
         # result is in the text, else in the type. 46.6k such rows had no flags.
         standalone = (
-            (pl.col("season") <= 2013)
+            (pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM)
             & (
                 pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
                 # a kicked try the defence returned, retyped above; 2014+ counts it on the TD row
@@ -8581,20 +8588,20 @@ class CFBPlayProcess(object):
                     (pl.col("scoringPlay") == True)
                     .and_(pl.col("td_play") == True)
                     .and_(pl.col("type.text").is_in(defense_score_vec))
-                    .and_(pl.col("season") <= 2013),
+                    .and_(pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM),
                 )
                 .then(pl.col("pos_score_diff_end") - 0.92)
                 .when(
                     (pl.col("scoringPlay") == True)
                     .and_(pl.col("td_play") == True)
                     .and_(pl.col("type.text").is_in(offense_score_vec))
-                    .and_(pl.col("season") <= 2013),
+                    .and_(pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM),
                 )
                 .then(pl.col("pos_score_diff_end") + 0.92)
                 .when(
                     (pl.col("type.text") == "Timeout")
                     .and_(pl.col("lag_scoringPlay") == True)
-                    .and_(pl.col("season") <= 2013),
+                    .and_(pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM),
                 )
                 .then(pl.col("pos_score_diff_end") + 0.92)
                 .otherwise(pl.col("pos_score_diff_end"))
@@ -8657,7 +8664,10 @@ class CFBPlayProcess(object):
         _flip_df = play_df.with_columns((-pl.col("end.pos_score_diff")).alias("end.pos_score_diff")).with_columns(
             pl.when(_flipped_td)
             .then(
-                (pl.col("end.pos_score_diff") + pl.when(pl.col("season") <= 2013).then(0.92).otherwise(0.0))
+                (
+                    pl.col("end.pos_score_diff")
+                    + pl.when(pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM).then(0.92).otherwise(0.0)
+                )
                 / (pl.col("end.adj_TimeSecsRem") + 1)
             )
             .otherwise(pl.col("end.ExpScoreDiff_Time_Ratio"))
@@ -9016,14 +9026,15 @@ class CFBPlayProcess(object):
             .pipe(_fill_missing)
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
-        # One-hot rule-era dummies (era0..era3, cuts 2006/2013/2020). Era is constant
+        # One-hot rule-era dummies (era0..era3, cuts CFB_MODEL_ERA_CUTS). Era is constant
         # within a game, so they are added as literal columns from the game's season.
         _qbr_season = int(play_df["season"].drop_nulls().max())
+        _era_lo, _era_mid, _era_hi = CFB_MODEL_ERA_CUTS
         pass_qbr = pass_qbr.with_columns(
-            era0=pl.lit(1 if _qbr_season <= 2006 else 0, dtype=pl.Int32),
-            era1=pl.lit(1 if 2006 < _qbr_season <= 2013 else 0, dtype=pl.Int32),
-            era2=pl.lit(1 if 2013 < _qbr_season <= 2020 else 0, dtype=pl.Int32),
-            era3=pl.lit(1 if _qbr_season > 2020 else 0, dtype=pl.Int32),
+            era0=pl.lit(1 if _qbr_season <= _era_lo else 0, dtype=pl.Int32),
+            era1=pl.lit(1 if _era_lo < _qbr_season <= _era_mid else 0, dtype=pl.Int32),
+            era2=pl.lit(1 if _era_mid < _qbr_season <= _era_hi else 0, dtype=pl.Int32),
+            era3=pl.lit(1 if _qbr_season > _era_hi else 0, dtype=pl.Int32),
         )
         # # self.logger.info(pass_qbr)
 

@@ -362,6 +362,100 @@
     the rule's first season moved off 2012 (the C-H4 bug's shape: 2012-13 scored at 80): 2012's 322590228 and
     2013's 332570254 go red in test_kickoff_touchback_spot_follows_the_rule (gate cfb-touchback-constant).
 
+# --- R829-5 / EX-3.1-a: the post-score kickoff in the CFB decision surfaces (plan task 3.11) -----
+# Each state reads TOUCHBACK_YARDLINE_BY_SEASON per row; the mutant restores cfb4th's unconditional 75,
+# which the owner ruled against (80 through 2011). The 2011 parametrisation goes red.
+- id: cfb-4th-go-touchdown-kickoff-touchback-by-season
+  group: cfb-decision-touchback
+  finding: R829-5
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: 'ytg = np.where(td_mask, _cfb_touchback_yardline_np(state["season"]), ytg)'
+  mutant: 'ytg = np.where(td_mask, 75, ytg)'
+  test: tests/cfb/test_cfb_fourth_down.py -k "go_touchdown_kicks_off"
+  expected: kill
+  note: the go-for-it touchdown outcome's kickoff (get_go_wp)
+
+- id: cfb-4th-punt-return-td-kickoff-touchback-by-season
+  group: cfb-decision-touchback
+  finding: R829-5
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: 'new_ytg = np.where(return_td, _cfb_touchback_yardline_np(flipped_state["season"]), new_ytg)'
+  mutant: 'new_ytg = np.where(return_td, 75, new_ytg)'
+  test: tests/cfb/test_cfb_fourth_down.py -k "punt_return_touchdown_kicks_off"
+  expected: kill
+  note: the punt-return-touchdown outcome's kickoff (get_punt_wp)
+
+- id: cfb-4th-made-fg-kickoff-touchback-by-season
+  group: cfb-decision-touchback
+  finding: R829-5
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: 'make_state["yards_to_goal"] = _cfb_touchback_yardline_np(make_state["season"])'
+  mutant: 'make_state["yards_to_goal"] = 75'
+  test: tests/cfb/test_cfb_fourth_down.py -k "fg_make_state_kicks_off"
+  expected: kill
+  note: the made-field-goal outcome's kickoff (get_fg_wp)
+
+- id: cfb-2pt-kickoff-touchback-by-season
+  group: cfb-decision-touchback
+  finding: R829-5
+  file: sportsdataverse/cfb/cfb_two_point.py
+  snippet: 'flipped["yards_to_goal"] = _cfb_touchback_yardline_np(flipped["season"])'
+  mutant: 'flipped["yards_to_goal"] = 75'
+  test: tests/cfb/test_cfb_fourth_down.py -k "two_point_states_kick_off"
+  expected: kill
+  note: the kickoff after every try outcome (get_2pt_probs)
+
+# --- C-T3 / R-010: the era literals plan task 3.11 moved into catalogued constants -----------------
+- id: cfb-model-era-cuts-match-the-cards
+  group: cfb-era-literals
+  finding: C-T3
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'CFB_MODEL_ERA_CUTS: tuple[int, int, int] = (2006, 2013, 2020)'
+  mutant: 'CFB_MODEL_ERA_CUTS: tuple[int, int, int] = (2006, 2012, 2020)'
+  test: tests/cfb/test_model_cards.py -k "catalogued_era_cuts"
+  expected: kill
+  note: the QBR one-hots and FD_ERA_BOUNDS read the constant; the bundled cards' era.cuts pin it
+
+- id: cfb-try-on-td-row-from-2014
+  group: cfb-era-literals
+  finding: C-T3
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'CFB_ESPN_TRY_ON_TD_ROW_FROM: int = 2014'
+  mutant: 'CFB_ESPN_TRY_ON_TD_ROW_FROM: int = 2004'
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py -k "standalone_pat_rows"
+  expected: kill
+  note: the 2004 standalone "Extra point by X is good" rows lose their xp flags (__add_xp_suffix_cols)
+
+- id: cfb-kickoff-fair-catch-touchback-from-2018
+  group: cfb-era-literals
+  finding: C-T3
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2018'
+  mutant: 'CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2025'
+  test: tests/cfb/test_cfb_036_reconciliation.py -k "b1_kickoff_fair_catch"
+  expected: kill
+  note: 2024's 401677179 fair-caught kickoffs stop being touchbacks (__add_play_type_flags)
+
+- id: nfl-ep-wp-era-cuts-off-by-one
+  group: nfl-era-literals
+  finding: C-T3
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = ERA_SEASON_CUTS'
+  mutant: '_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = (c - 1 for c in ERA_SEASON_CUTS)'
+  test: tests/nfl/test_nfl_ep_wp.py -k "era_bins"
+  expected: kill
+  note: every boundary season (2001/2005/2013/2017) lands in the next era; the ep_wp era helpers read the unpack
+
+- id: nfl-4th-era-cuts-off-by-one
+  group: nfl-era-literals
+  finding: C-T3
+  file: sportsdataverse/nfl/nfl_fourth_down.py
+  snippet: '_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = ERA_SEASON_CUTS'
+  mutant: '_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = (c - 1 for c in ERA_SEASON_CUTS)'
+  test: tests/nfl/test_nfl_fourth_down.py -k "era_one_hots_break"
+  expected: kill
+  note: nfl_fourth_down._prepare's era one-hots read the unpack (no other nfl_fourth_down test sits on a cut season)
+
 # --- C-H1 (CFB twin) / C-NF-3: the CFB rushing decomposition --------------------------------------
 - id: cfb-second-level-yards-offset
   group: cfb-rush-yards
