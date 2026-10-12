@@ -126,6 +126,17 @@ def _table_dtype(col: str) -> Any:
     return pl.Float64 if col in _FLOAT_COLS else pl.String
 
 
+def _raw_cell_dtype(col: str) -> Any:
+    """The dtype a table column holds BEFORE ``_typed``: the parser's own ids, scores, period lists
+    and flags keep their dtype; every header cell is still a string (``_typed`` casts it after)."""
+    dtype = _table_dtype(col)
+    if isinstance(dtype, pl.List) or dtype == pl.Boolean:
+        return dtype
+    if dtype == pl.Int64 and (col in _TABLE_DTYPES or col == "id" or col.endswith("_id")):
+        return pl.Int64
+    return pl.String
+
+
 def _int(value: Any) -> Optional[int]:
     """``int(value)`` for an int or a digit string; ``None`` for anything else (incl. ``0`` ids handled by callers)."""
     if isinstance(value, bool):
@@ -163,6 +174,26 @@ def _joined(values: Iterable[Any], sep: str) -> Optional[str]:
     """The present values joined by ``sep``; ``None`` when there are none (a missing name never becomes ``"None"``)."""
     text = [str(v) for v in values if v is not None and str(v).strip()]
     return sep.join(text) if text else None
+
+
+def _coerce(value: Any, dtype: Any) -> Any:
+    """``value`` as its column's dtype allows, else ``None``: a scalar of the wrong type (an object
+    where a name belongs) must not make polars raise. A number in a String column is stringified."""
+    if value is None:
+        return None
+    if isinstance(dtype, pl.List):
+        return [_coerce(v, dtype.inner) for v in value] if isinstance(value, list) else None
+    if dtype == pl.Boolean:
+        return value if isinstance(value, bool) else None
+    if isinstance(value, (bool, dict, list)):
+        return None
+    if dtype == pl.String:
+        return value if isinstance(value, str) else str(value) if isinstance(value, (int, float)) else None
+    if dtype == pl.Int64:
+        return _int(value)
+    if dtype == pl.Float64:
+        return float(value) if isinstance(value, (int, float)) else None
+    return value
 
 
 def _blank(value: Any) -> Any:
@@ -261,7 +292,9 @@ def _table_frame(raw: Any, extra: Optional[Mapping[str, Any]] = None) -> pl.Data
         for h, value in zip(header, cells):
             row.update(_expand_cell(aliases[str(h.get("alias"))], value))
         row["row_type"] = summary.get(i, "data")
-        rows.append(row)
+        # A cell of the wrong type (a list where a string belongs) becomes null; header string
+        # cells stay strings, which _typed casts afterwards.
+        rows.append({c: _coerce(v, _raw_cell_dtype(c)) for c, v in row.items()})
     if not rows:
         return pl.DataFrame()
     df = _typed(pl.from_dicts(rows, infer_schema_length=None), aliases)
@@ -474,7 +507,7 @@ def _stats_table(game: Mapping[str, Any], alias: str) -> Optional[Mapping[str, A
 
 
 def _frame(rows: Iterable[Mapping[str, Any]], schema: Mapping[str, Any]) -> pl.DataFrame:
-    rows = list(rows)
+    rows = [{c: _coerce(r.get(c), t) for c, t in schema.items()} for r in rows]
     if not rows:
         return pl.DataFrame(schema=dict(schema))
     return pl.from_dicts(rows, schema=dict(schema))

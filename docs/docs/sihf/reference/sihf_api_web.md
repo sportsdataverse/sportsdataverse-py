@@ -15,7 +15,7 @@ Games of a league season: date, teams, score, per-period score, decision, status
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/table`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=results&searchQuery=1%2F%2F&Season=2026&League=1&language=en](https://data.sihf.ch/statistic/api/cms/table?alias=results&searchQuery=1%2F%2F&Season=2026&League=1&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=results&searchQuery=1%2F%2F1&language=en&filterBy=Season%2CDate&filterQuery=2026%2F01.07.2025-30.06.2026](https://data.sihf.ch/statistic/api/cms/table?alias=results&searchQuery=1%2F%2F1&language=en&filterBy=Season%2CDate&filterQuery=2026%2F01.07.2025-30.06.2026)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -73,7 +73,7 @@ League table of a season (every game, or home / away games only): rank, games, p
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/table`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&ContentType=All&language=en](https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&ContentType=All&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F1&language=en&filterBy=Season%2CContentType&filterQuery=2026%2FAll](https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F1&language=en&filterBy=Season%2CContentType&filterQuery=2026%2FAll)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -126,7 +126,7 @@ Skater season totals: games, goals, assists, points, penalty minutes, plus-minus
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/table`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=player&searchQuery=1%2F%2F&Season=2026&League=1&language=en](https://data.sihf.ch/statistic/api/cms/table?alias=player&searchQuery=1%2F%2F&Season=2026&League=1&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=player&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026](https://data.sihf.ch/statistic/api/cms/table?alias=player&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -174,7 +174,7 @@ Goaltender season totals: games, starts, goals against, GAA, shots, saves, save 
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/table`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=goalkeeper&searchQuery=1%2F%2F&Season=2026&League=1&language=en](https://data.sihf.ch/statistic/api/cms/table?alias=goalkeeper&searchQuery=1%2F%2F&Season=2026&League=1&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=goalkeeper&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026](https://data.sihf.ch/statistic/api/cms/table?alias=goalkeeper&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

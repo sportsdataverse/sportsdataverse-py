@@ -27,7 +27,9 @@ top of the shared getter, all measured live (2026-10-08):
   answers the AWAY-games table (26 of the 52 National League games in 2025-26, measured
   2026-10-12 against the season's ``results``) and does not echo the filter. ``ContentType=All``
   answers the full table and echoes ``All``; ``Home`` / ``Away`` give the split tables. The
-  ``sihf_standings`` wrapper always sends it.
+  ``sihf_standings`` wrapper always sends it. A dropped or different ``ContentType`` echo
+  raises :class:`~sportsdataverse.errors.AssetFetchError`: every season has all three tables,
+  so it is a broken answer, never "no data".
 * **An unknown value is never an error upstream.** An unknown ``Season`` / ``Phase`` is
   answered with another one (``Season=1890`` serves the current season) and only the
   body's ``filters[].selected`` echo shows it; an unknown league answers a single
@@ -99,6 +101,12 @@ def _check_table(url: str, raw: Any, filters: List[Tuple[str, str]]) -> None:
         got = str(by_alias[name].get("selected")) if name in by_alias else None
         if got != value:
             answered = f"answered {name}={got}" if got is not None else f"dropped the {name} filter"
+            if name == "ContentType":
+                # Every season has an All / Home / Away table, so ignoring ContentType is SIHF
+                # breaking its own contract, not "nothing here": a failed fetch, never an empty season.
+                raise AssetFetchError(
+                    f"{_rt._where(url)}: SIHF {answered} for ContentType={value}, so the table cannot be verified"
+                )
             raise NoDataError(
                 f"{_rt._where(url)}: SIHF has no data for {name}={value} with the other filters given; "
                 f"it {answered} instead"
@@ -147,7 +155,8 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         ValueError: the host answered 400 / 422 -- the request is wrong.
         AssetFetchError: any other non-2xx after retries, a connection failure after
             retries, a 2xx whose body is empty or not JSON, a table body without its
-            filter echo (or a phase echo without its ``entries``), or a table body with
+            filter echo (or a phase echo without its ``entries``), a ``ContentType`` echo that
+            is missing or differs from the request, or a table body with
             fewer or more rows than its ``pages`` row count announces.
     """
     query, filters = _build_query(params)

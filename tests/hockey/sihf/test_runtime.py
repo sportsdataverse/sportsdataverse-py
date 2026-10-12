@@ -64,9 +64,14 @@ def test_standings_content_type_folds_last(monkeypatch):
     assert (calls[0]["filterBy"], calls[0]["filterQuery"]) == ("Season,Phase,ContentType", "2026/4940/All")
 
 
-def test_a_dropped_content_type_raises_no_data(monkeypatch):
-    _patch(monkeypatch, _body(Season="2026"))
-    with pytest.raises(NoDataError, match="dropped the ContentType filter"):
+@pytest.mark.parametrize(
+    ("echo", "match"),
+    [({}, "dropped the ContentType filter"), ({"ContentType": "Away"}, "answered ContentType=Away")],
+)
+def test_a_dropped_or_swapped_content_type_is_a_failed_fetch(monkeypatch, echo, match):
+    # Every season has an All table: an answer without it is broken, not empty (never NoDataError).
+    _patch(monkeypatch, _body(Season="2026", **echo))
+    with pytest.raises(AssetFetchError, match=match):
         rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026, "ContentType": "All"})
 
 
