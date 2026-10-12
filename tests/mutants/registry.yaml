@@ -939,18 +939,164 @@
   expected: kill
   note: the whole fix unwired; EPA corr with nflverse falls from 0.933 to 0.426 on the 2021 capture
 
-- id: nfl-end-down-only-where-espn-states-one
+# --- C-H5 / EX-1.1-c (task 2.3): ESPN's end.down -1 on non-scoring plays -------------------------
+- id: nfl-end-down-minus-one-rewrite
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.when(pl.col("_first_down")).then(1).otherwise(pl.col("end.down")).alias("end.down"),'
+  mutant: 'pl.col("end.down").alias("end.down"),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "end_down_minus_one_only_on_a_score and 401326467"
+  expected: kill
+  note: >-
+    The ledger gate kickoff-return-down. Deleting the rewrite restores 29 non-scoring plays at
+    down -1 in 14 captures (21 kickoff returns, 8 pre-2014 missed field goals), 8 of them on
+    401326467; 401872922 has none (its 15 rows at -1 are scores and timeouts, which keep it).
+
+- id: nfl-kickoff-first-down-on-every-unscored-kickoff
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'first_down = no_down | (kickoff & unscored) | missed_fg'
+  mutant: 'first_down = no_down | missed_fg'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_end_down_minus_one_kickoff_ignores_espn_down_and_distance
+  expected: kill
+  note: >-
+    The owner's kickoff model (EP of 1st & 10 at the net spot - EP of 1st & 10 at the touchback):
+    narrowing the first-down rewrite back to ESPN's -1 rows leaves ESPN's down / distance on the
+    other unscored kickoffs (penalty spots, onside, out of bounds).
+
+- id: nfl-kickoff-net-spot-from-next-snap
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.col("_nxt").struct.field("y2e"))'
+  mutant: '.then(pl.col("end.yardsToEndzone"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_net_spot_falls_back_to_espn"
+  expected: kill
+  note: >-
+    The kickoff's net spot is the receiver's next snap; ESPN's own end spot is flipped on some
+    returns (R810-5: 400874512's return ends at ESPN's 85, the next snap is at the 53).
+
+- id: nfl-kickoff-next-snap-adjacency-guard
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& (pl.col("_nxt").struct.field("r") == seq_rank + 1)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_net_spot_falls_back_to_espn and out_of_order"
+  expected: kill
+  note: >-
+    Pre-2014 play ids are not always in game order (R785-4): the next row by id must also be the
+    next snap by sequenceNumber, or ESPN's end spot stands.
+
+- id: nfl-kickoff-next-snap-not-a-kickoff
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '(pl.col("_nxt").struct.field("kick") == False) & (pl.col("_nxt").struct.field("r")'
+  mutant: 'pl.lit(True) & (pl.col("_nxt").struct.field("r")'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_net_spot_falls_back_to_espn and next_is_kickoff"
+  expected: kill
+  note: >-
+    A next row that is itself a kickoff (a re-kick, or a half-ending play ESPN files under the next
+    period) is not the receiver's snap, so ESPN's end spot stands (review PR-810: the kick arm was
+    unpinned).
+
+- id: nfl-rewritten-row-distance-ten
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.when(goal_to_go).then(pl.col("end.yardsToEndzone")).otherwise(10))'
+  mutant: '.then(pl.col("end.distance"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_ends_at_the_next_snap_in_nflverse or every_kickoff_ends_at_a_first_down"
+  expected: kill
+  note: >-
+    R810-1: keeping ESPN's stale end distance on a rewritten return ends it at 1st & 4-20 where the
+    receiver's next snap (nflverse ydstogo) is 1st & 10.
+
+- id: nfl-missed-fg-kick-spot
   group: nfl-end-state
   finding: EX-1.1-c
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'real_down = use & pl.col("end.down").is_between(1, 4) & n.field("down")'
-  mutant: 'real_down = use & n.field("down")'
-  test: tests/nfl/test_nfl_whole_game_oracle.py::test_missed_field_goal_ends_on_a_real_down[251113015]
+  snippet: '.then(pl.min_horizontal(100 - pl.col("start.yardsToEndzone") - 7, pl.lit(80)))'
+  mutant: '.then(pl.min_horizontal(100 - pl.col("start.yardsToEndzone") - 0, pl.lit(80)))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "spot_on_real_rows or (epa_agrees_with_nflverse and field_goal)"
   expected: kill
   note: >-
-    The task 2.3 boundary: 2.18 replaces a down ESPN states, never its -1 (C-H5 kickoff returns,
-    EX-1.1-c pre-2014 missed field goals). Filling -1 too XPASSes 2.3's strict xfails; 2.3 owns
-    that fix and rewrites this row.
+    The owner's missed field goal model: the other team's 1st & 10 at the spot of the kick, 7 yards
+    behind the line of scrimmage. Spotting it at the line moves every receiver 7 yards closer.
+
+- id: nfl-missed-fg-inside-the-20-goes-to-the-20
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.min_horizontal(100 - pl.col("start.yardsToEndzone") - 7, pl.lit(80)))'
+  mutant: '.then(100 - pl.col("start.yardsToEndzone") - 7)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "spot_on_real_rows and capped_at_the_20"
+  expected: kill
+  note: >-
+    Since 1994 a missed kick from inside the 20 gives the ball at the 20: 271209010's kick from the
+    11 would otherwise put the receiver at its own 18 (nflverse's next snap: the 80).
+
+- id: nfl-end-down-score-keeps-minus-one
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'no_down = (pl.col("end.down") == -1) & ~stop & unscored'
+  mutant: 'no_down = (pl.col("end.down") == -1) & ~stop'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "score_keeps_espns_minus_one"
+  expected: kill
+  note: >-
+    R810-8: the gate's "scores keep ESPN's -1". Rewriting the 321 scored -1 rows in the captures
+    moves first_down_created on 160, series on 18, series_result on 5 and wpa on 76.
+
+- id: nfl-kickoff-first-down-skips-scored-kickoffs
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'first_down = no_down | (kickoff & unscored) | missed_fg'
+  mutant: 'first_down = no_down | kickoff | missed_fg'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "score_keeps_espns_minus_one"
+  expected: kill
+  note: >-
+    R810-8: a scored kickoff (a return touchdown) keeps its scoring end; the kickoff model covers
+    unscored kickoffs only.
+
+- id: nfl-missed-fg-blocked-text-left-alone
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ~pl.col("text").str.contains("(?i)block").fill_null(False)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "model_branches and blocked_text_is_left_alone"
+  expected: kill
+  note: >-
+    R810-9: a "Field Goal Missed" row whose text says blocked is a live ball (168 in nfl-raw); the
+    missed field goal model leaves its end alone.
+
+- id: nfl-missed-fg-first-down-clause
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'first_down = no_down | (kickoff & unscored) | missed_fg'
+  mutant: 'first_down = no_down | (kickoff & unscored)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "model_branches and espn_second_and_five_becomes_first_and_ten"
+  expected: kill
+  note: >-
+    R810-9: a missed field goal ends at the other team's 1st & 10 whatever down / distance ESPN ships
+    (about 100 2014+ misses in nfl-raw do not end at ESPN's 1st & 10).
+
+- id: nfl-missed-fg-scored-miss-left-alone
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ~(pl.col("scoringPlay") == True).fill_null(False)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "model_branches and scored_miss_is_left_alone"
+  expected: kill
+  note: >-
+    R810-9: a scored "Field Goal Missed" row (3 in nfl-raw) is left to the scoring logic.
 
 - id: nfl-end-state-half-end-held
   group: nfl-end-state
