@@ -238,6 +238,153 @@
   expected: kill
   note: the third unwrap (review R828-8); a shape-(1,) overUnder cannot persist as JSON odds_override
 
+# --- R828-9: DefaultOddsWarning never fires when the core odds endpoint has a spread ----------------
+# Killer (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py, `_download_json` mocked to an ESPN BET spread
+# with the warning set to error.
+- id: cfb-default-odds-warn-core-api-always
+  group: cfb-default-odds
+  finding: R828-9
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'if not gameSpreadAvailable:'
+  mutant: 'if True:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "default_odds_warning_not_on_core_odds_api_spread"
+  expected: kill
+  note: >-
+    an unconditional warning at the default/core site survived both earlier tests (review PR-828 M4);
+    live 2024+ games with an ESPN BET spread would then warn, or fail in strict mode
+
+# --- C-L1: lag_half and game_play_number follow the final row order -------------------------------
+# Killer (3.4(b2)): test_cfb_whole_game_oracle.py's row-order check, now a plain assert on every capture.
+- id: cfb-lag-half-after-final-sort
+  group: cfb-row-order
+  finding: C-L1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'lag_half=pl.col("half").shift(1),  # C-L1'
+  mutant: 'lag_half=pl.col("lag_half"),  # C-L1'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "game_play_number_and_lag_half and 401754585"
+  expected: kill
+  note: keeps the lag_half set before the re-sort and the marker drop (stale on rows 40, 51, 191)
+
+- id: cfb-game-play-number-after-final-sort
+  group: cfb-row-order
+  finding: C-L1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'game_play_number=pl.col("game_play_number").sort(),'
+  mutant: 'game_play_number=pl.col("game_play_number"),'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "game_play_number_and_lag_half and 401525903"
+  expected: kill
+  note: the two-point try the re-sort moves ahead of its kickoff keeps its larger number (row 117)
+
+# --- C-M18: row order rests on the play id and the period label ------------------------------------
+# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py, on 401425418 (out-of-scheme id placed by its
+# clock, PlayOrderWarning as error) and 401628439 (a wrong period label warns).
+- id: cfb-out-of-scheme-id-placed-by-clock
+  group: cfb-row-order
+  finding: C-M18
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'plays_df = _place_out_of_scheme_plays(plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True))'
+  mutant: 'plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "out_of_scheme_play_id"
+  expected: kill
+  note: the Q3 kickoff filed under id 4014254180 sorts back to row 0, against the opening state
+
+- id: cfb-period-order-warning-silent
+  group: cfb-row-order
+  finding: C-M18
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '    if back.height:'
+  mutant: '    if False:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "period_order_warning_on_a_mislabelled_period"
+  expected: kill
+  note: the overtime touchdown ESPN labels period 2 would go unreported
+
+# --- C-NF-10(a): a play field absent from every play (no column at all) ---------------------------
+# Killers (3.4(b2)): real captures with the block stripped from every play (CFB 401628455, NFL 401872922).
+- id: cfb-missing-play-fields-materialized
+  group: cfb-crash-guards
+  finding: C-NF-10
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        if _missing:'
+  mutant: '        if False:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "absent_from_every_play"
+  expected: kill
+  note: an absent `end` block or score raises ColumnNotFoundError on end.down / homeScore
+
+- id: nfl-missing-play-fields-materialized
+  group: cfb-crash-guards
+  finding: C-NF-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        if _missing:'
+  mutant: '        if False:'
+  test: tests/nfl/test_nfl_offline_inputs.py -k "absent_from_every_play"
+  expected: kill
+  note: an absent start / end block, clock or score raises ColumnNotFoundError
+
+# --- C-NF-10(b) / R828-3: pickcenter fields that every provider leaves null -------------------------
+# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py on the 401301042 / 400869817 pickcenters.
+- id: cfb-pickcenter-null-spread-falls-through
+  group: cfb-crash-guards
+  finding: C-NF-10
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'if pickcenter is not None and _first("spread", None) is not None:'
+  mutant: 'if pickcenter is not None:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "all_null_spread"
+  expected: kill
+  note: a spread-less pickcenter would publish the 2.5 default as an available market spread
+
+- id: cfb-default-total-one-constant
+  group: cfb-default-odds
+  finding: R828-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_DEFAULT_TOTAL = 55.5'
+  mutant: '_DEFAULT_TOTAL = 55.0'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pickcenter_without_a_total"
+  expected: kill
+  note: the pickcenter path's old 55.0 against 55.5 on every other path
+
+- id: cfb-default-total-warns-pickcenter
+  group: cfb-default-odds
+  finding: R828-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_warn_default_total(self.gameId, "summary_pickcenter", overUnder)'
+  mutant: 'pass'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pickcenter_without_a_total"
+  expected: kill
+  note: 400869817 (and 322590228, 401761665) would record the default total as summary_pickcenter, unwarned
+
+- id: cfb-default-total-warns-core-api
+  group: cfb-default-odds
+  finding: R828-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'if gameSpreadAvailable and ou_raw is None:'
+  mutant: 'if False:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "core_odds_api_spread_without_a_total"
+  expected: kill
+  note: an ESPN BET item with a spread and no total would default the total silently
+
+# --- C-L6 / C-L16: the lows ------------------------------------------------------------------------
+# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py on 401628559 (literal "null" text) and
+# 401628334 (its sacked-and-recovered fumble with the text upper-cased).
+- id: cfb-player-name-literal-null
+  group: cfb-lows
+  finding: C-L6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '^.$|^null$"'
+  mutant: '^.$"'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "literal_null_play_text"
+  expected: kill
+  note: 401628559's blocked punt names a punter "null"
+
+- id: cfb-pass-flag-literals-fold-case
+  group: cfb-lows
+  finding: C-L16
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("(?i)sacked"))'
+  mutant: '(pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("sacked"))'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pass_flag_literals_fold_case"
+  expected: kill
+  note: a "SACKED" text on a recovered fumble would not be a pass play (R matches with ignore_case)
+
 # --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13

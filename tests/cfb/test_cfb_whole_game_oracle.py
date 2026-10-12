@@ -69,10 +69,11 @@ Oracle per column
 ``line_yards + second_level_yards + open_field_yards`` on gains
     The decomposition identity: the three pieces sum to ``yds_rushed``. Green (C-H1's CFB twin).
 ``period``
-    The feed's chronology: never decreases along the emitted rows. XFAIL C-M18.
+    The feed's chronology: never decreases along the emitted rows. XFAIL C-M18 on 401628439 only (the
+    period label is wrong; ``errors.PlayOrderWarning`` names it).
 ``game_play_number``, ``lag_half``
     Recomputed after the final sort: ``game_play_number`` strictly increases along the rows and
-    ``lag_half`` is the previous row's ``half`` (null on row 1). XFAIL C-L1.
+    ``lag_half`` is the previous row's ``half`` (null on row 1). Green (C-L1, fixed in 3.4(b2)).
 ``id``
     The feed: every emitted row is a feed play, emitted once (C-L11's row-count diagnostic). Green.
 feed ``text`` literals
@@ -142,7 +143,12 @@ SCHEMA_ALLOWLIST_MAX_ROWS = 93
 
 # Processing a default-odds capture warns DefaultOddsWarning incidentally;
 # tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
-pytestmark = [pytest.mark.whole_game, pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")]
+# 401628439 warns PlayOrderWarning; test_cfb_pbp_offline.py::test_period_order_warning_on_a_mislabelled_period asserts it.
+pytestmark = [
+    pytest.mark.whole_game,
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning"),
+]
 
 
 def _load(path: Path) -> dict:
@@ -688,9 +694,11 @@ def test_rush_decomposition_sums_to_the_gain(game_id):
 
 # --- C-M18 / C-L1: row order ------------------------------------------------------------------------
 
+# 401425418's third-quarter kickoff under an out-of-scheme id is placed by its clock since 3.4(b2).
+# 401628439's is a provider label defect, not a sort one: ESPN files an overtime touchdown (id period
+# digit 6) as period 2; PlayOrderWarning names it (test_cfb_pbp_offline.py asserts the warning).
 _M18 = {
-    401425418: "C-M18: a third-quarter kickoff sorts first (game_play_number 1), so period steps back from 3 to 1",
-    401628439: "C-M18: an overtime touchdown ESPN labels period 2 sorts after period 5 rows",
+    401628439: "C-M18: an overtime touchdown ESPN labels period 2 sorts to the end of regulation",
 }
 
 
@@ -702,29 +710,7 @@ def test_period_never_decreases_along_the_rows(game_id):
     assert steps_back == [], f"period decreases at rows {steps_back}"
 
 
-_L1 = {
-    gid: f"C-L1: game_play_number / lag_half are set before the final sort (cfb_pbp.py:2536, :2619); {note}"
-    for gid, note in {
-        282430151: "lag_half stale on rows 0, 2",
-        282570328: "lag_half stale on rows 0, 2",
-        293250145: "lag_half stale on rows 0, 1",
-        302540025: "lag_half stale on rows 0, 1",
-        332990030: "lag_half stale on rows 0, 1",
-        401282146: "lag_half stale on rows 0, 201",
-        401301042: "lag_half stale on rows 0, 183",
-        401425418: "lag_half stale on rows 0, 1, 10",
-        401525860: "lag_half stale on rows 0, 98",
-        401525903: "game_play_number steps back at row 117",
-        401628439: "lag_half stale on row 173",
-        401752817: "lag_half stale on row 81",
-        401752854: "lag_half stale on row 84",
-        401754585: "lag_half stale on rows 40, 51, 191",
-        401858224: "lag_half stale on rows 35, 83, 174",
-    }.items()
-}
-
-
-@pytest.mark.parametrize("game_id", _params(CAPTURES, _L1))
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
 def test_game_play_number_and_lag_half_follow_the_rows(game_id):
     df = _frame(game_id)
     gpn = df["game_play_number"].cast(pl.Int64)
@@ -747,6 +733,24 @@ def test_every_row_is_a_feed_play_once(game_id):
     assert ids.n_unique() == ids.len(), "a play id is emitted twice"
     invented = set(ids.to_list()) - FEEDS[game_id].play_ids
     assert invented == set(), f"rows that are not feed plays: {sorted(invented)}"
+
+
+_PRE_2005 = tuple(gid for gid in CAPTURES if FEEDS[gid].season < 2005)
+#: the feed rows that are not plays: period/game markers and the 2004 feed's drive banners
+_ADMIN_TEXT = re.compile(r"(?i)^(?:end of|start of|begin drive)")
+
+
+@pytest.mark.parametrize("game_id", _params(_PRE_2005))
+def test_pre_2005_rows_dropped_from_the_feed_are_admin_rows(game_id):
+    """C-L11: before 2005 ``sequenceNumber`` restarts per drive (nearly every value repeats), so it is
+    no key; the copy drops key on ``id``. Every feed row the output lacks is a marker, never a play."""
+    summary = _load(PATHS[game_id])
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    sequences = [p.get("sequenceNumber") for p in plays]
+    assert len(set(sequences)) < len(sequences) / 2, "the capture no longer repeats sequenceNumber"
+    kept = set(_frame(game_id)["id"].cast(pl.Int64).to_list())
+    dropped = [p.get("text") or "" for p in plays if int(p["id"]) not in kept]
+    assert dropped and all(_ADMIN_TEXT.search(text) for text in dropped), dropped
 
 
 def test_flag_literals_meet_no_other_casing():

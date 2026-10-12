@@ -30,7 +30,11 @@ from sportsdataverse.cfb.model_vars import OT_SHOOTOUT_FROM_PERIOD
 
 # Processing a default-odds capture warns DefaultOddsWarning incidentally;
 # tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
-pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+# 401628439 warns PlayOrderWarning; test_cfb_pbp_offline.py::test_period_order_warning_on_a_mislabelled_period asserts it.
+pytestmark = [
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning"),
+]
 
 FIX = Path(__file__).parent / "fixtures"
 _TWO_POINT = ["Two Point Pass", "Two Point Rush"]
