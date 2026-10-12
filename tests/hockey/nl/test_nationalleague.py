@@ -273,13 +273,14 @@ class _Resp:
 
 @pytest.fixture()
 def transport(monkeypatch: pytest.MonkeyPatch) -> Dict[str, Any]:
-    """Mock the HTTP transport under the real getter chain; record waits and requests."""
+    """Mock the HTTP transport under the real getter chain; record requests and throttled attempts."""
     state: Dict[str, Any] = {"waits": [], "calls": [], "status": 200, "text": "[]"}
-    monkeypatch.setattr(_euro, "_polite_wait", lambda url, *a: state["waits"].append(url))
     monkeypatch.setattr(_rt.time, "sleep", lambda s: None)
 
     def download(url: str, params: Optional[dict] = None, **kw: Any) -> _Resp:
         state["calls"].append((url, dict(params or {})))
+        if kw.get("session") is _euro.SESSION:  # SESSION waits for the host's slot before every attempt
+            state["waits"].append(url)
         return _Resp(state["status"], state["text"])
 
     monkeypatch.setattr(_rt, "download", download)
@@ -311,7 +312,7 @@ REQUESTS = [
 def test_every_real_capture_passes_the_runtime_checks(transport, path, params, capture) -> None:
     _answer(transport, _load(capture))
     assert rt._get(HOST + path, params) is not None
-    assert transport["waits"] == [HOST + path]  # the polite wait ran before the request
+    assert transport["waits"] == [HOST + path]  # sent over the throttled session
     assert transport["calls"] == [(HOST + path, params)]
 
 

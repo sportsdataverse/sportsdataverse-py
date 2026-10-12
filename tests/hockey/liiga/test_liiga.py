@@ -29,6 +29,7 @@ ROOT = Path(__file__).parents[3]
 FIXTURES = ROOT / "tests" / "fixtures" / "liiga"
 YAML_PATH = ROOT / "tools" / "codegen" / "endpoints" / "liiga.yaml"
 SCHEMA_DIR = ROOT / "tools" / "codegen" / "schemas" / "native" / "liiga"
+MANUAL = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
 HOST = "https://liiga.fi/api/v2"
 
 sys.path.insert(0, str(ROOT / "tools" / "codegen"))
@@ -348,10 +349,17 @@ def test_yaml_lists_every_route():
     assert doc["getter_module"] == "sportsdataverse.hockey.liiga.liiga_runtime"
 
 
-def test_schemas_carry_no_descriptions_and_the_snippet_does():
+def _descriptions() -> Dict[str, Dict[str, str]]:
+    """The ``liiga_<short>`` blocks of manual_column_descriptions.yaml (gen_liiga's snippet, merged)."""
+    loader = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+    manual = yaml.load(MANUAL.read_text(encoding="utf-8"), Loader=loader)
+    return {k: v for k, v in manual.items() if k.startswith("liiga_")}
+
+
+def test_schemas_carry_no_descriptions_and_the_manual_file_does():
     # Descriptions live in manual_column_descriptions.yaml (merged from the snippet), keyed liiga_<short>.
     assert _yaml()["schema_prefix"] == "liiga_"
-    snippet = yaml.safe_load(gen_liiga.SNIPPET.read_text(encoding="utf-8"))
+    snippet = _descriptions()
     assert set(snippet) == {f"liiga_{s}" for s in gen_liiga.ENDPOINTS}
     banned = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.I)
     for short in gen_liiga.ENDPOINTS:
@@ -366,7 +374,7 @@ def test_schemas_carry_no_descriptions_and_the_snippet_does():
 
 
 def test_descriptions_keep_their_route_context():
-    snippet = yaml.safe_load(gen_liiga.SNIPPET.read_text(encoding="utf-8"))
+    snippet = _descriptions()
     assert "season to date" in snippet["liiga_standings"]["games"]
     assert "season to date" in snippet["liiga_standings"]["points"]
     assert "this period" not in snippet["liiga_standings"]["power_play_goals"]
@@ -423,16 +431,17 @@ class _Resp:
 
 @pytest.fixture
 def transport(monkeypatch):
-    """Fake ``download``: answers queued responses, records each call; no throttle sleeps."""
+    """Fake ``download``: answers queued responses, records each call and each attempt over SESSION."""
     state: Dict[str, Any] = {"calls": [], "queue": [], "waited": []}
 
     def fake(url: str, params: Any = None, **kw: Any) -> _Resp:
         state["calls"].append({"url": url, "params": dict(params or {}), **kw})
+        if kw.get("session") is euro_hockey_runtime.SESSION:  # SESSION waits for the host before every attempt
+            state["waited"].append(url)
         return state["queue"].pop(0) if len(state["queue"]) > 1 else state["queue"][0]
 
     monkeypatch.setattr(_codegen_runtime, "download", fake)
     monkeypatch.setattr(_codegen_runtime.time, "sleep", lambda s: None)
-    monkeypatch.setattr(euro_hockey_runtime, "_polite_wait", lambda url, *a: state["waited"].append(url))
     return state
 
 
