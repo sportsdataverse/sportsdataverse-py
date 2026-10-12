@@ -178,15 +178,18 @@ columns, one per quarterback-game ESPN rated in 2023 (regular season and playoff
   asset `https://github.com/nflverse/nflverse-data/releases/download/espn_data/qbr_week_level.parquet`, as
   read by `load_nfl_espn_qbr([2023], summary_type="week")` on 2026-10-11.
 - **Model inputs** (`qbr_epa`, `pass_epa`, `rush_epa`, `sack_epa`, `pen_epa`, `spread`): `NFLPlayProcess` run
-  offline (devel-nfl ece03537a6) over nfl-raw's 286 committed 2023 ESPN summaries
-  (`sportsdataverse/nfl-raw` @ 4f85a779, `nfl/espn/raw/2023/<game_id>.json.gz`, added in 3ecf9147), read
-  back from `advBoxScore["pass"]`. The inputs do not depend on the feature order; 401616889 (the Pro Bowl
-  Games) has no passing box and is skipped.
+  offline (devel-nfl a345c60771 plus the R795-1 empty-group fix, #802) over nfl-raw's 286 committed 2023
+  ESPN summaries (`sportsdataverse/nfl-raw` @ 4f85a779, `nfl/espn/raw/2023/<game_id>.json.gz`, added in
+  3ecf9147), read back from `advBoxScore["pass"]`. The inputs do not depend on the feature order; 401616889
+  (the Pro Bowl Games) has no passing box and is skipped.
 - **Join**: ESPN game id plus first initial + last name, case and punctuation folded ("B.Purdy" ==
   Brock Purdy, "C.Stroud" == C.J. Stroud); all 573 ESPN rows matched, one row each.
 - **Recorded** 2026-10-11 with `PYTHONPATH=. uv run --frozen --all-extras python
-  tests/nfl/fixtures/record_espn_qbr_2023_slice.py <nfl-raw>/nfl/espn/raw/2023` (never loads a
-  download-on-demand model).
+  tests/nfl/fixtures/record_espn_qbr_2023_slice.py <nfl-raw>/nfl/espn/raw/2023` (about 5 minutes on 6
+  processes; never loads a download-on-demand model). The first recording (#795, at ece03537a6) is
+  superseded: merged PRs had since moved every EPA input.
+- **Re-record** whenever a merged PR moves an `exp_qbr` input (the EPA, the weights, the QBR aggregate), and
+  re-pin the floor in `test_qbr_oracle.py` to the measured value.
 
 ## Other files
 
