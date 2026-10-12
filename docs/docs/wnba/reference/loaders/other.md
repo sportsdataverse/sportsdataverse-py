@@ -511,10 +511,10 @@ Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-dat
 | `wnba_game_code` | String | stats.wnba.com game code (date/matchup slug) for the matched game. |
 | `wnba_home_team_id` | String | Home team identifier on stats.wnba.com for the matched game. |
 | `wnba_away_team_id` | String | Away team identifier on stats.wnba.com for the matched game. |
-| `fox_game_id` | String | Fox game id (NA placeholder). |
-| `fox_home_team_id` | String | Home team identifier on Fox Sports for the matched game. |
-| `fox_away_team_id` | String | Away team identifier on Fox Sports for the matched game. |
-| `yahoo_game_id` | String | Yahoo game id (NA placeholder). |
+| `fox_game_id` | String | Fox Sports game id (string), filled when the crosswalk is built with fox=True from Fox's per-date scoreboard, matched on the US-Eastern date and the two teams in either home/away order; null otherwise and where Fox lists no matching game. |
+| `fox_home_team_id` | String | Fox Sports team id of the side Fox calls home in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of home_espn_team_id. Null when fox_game_id is. |
+| `fox_away_team_id` | String | Fox Sports team id of the side Fox calls away in fox_game_id, filled with fox=True; at a neutral site it can be the reverse of away_espn_team_id. Null when fox_game_id is. |
+| `yahoo_game_id` | String | Yahoo Sports game id, wnba.g.<YYYYMMDD US-Eastern date><home Yahoo team id, 3 digits>, filled when built with yahoo=True and checked against the ids Yahoo lists, so a neutral-site game carries the side Yahoo calls home; null otherwise and where Yahoo lists no such game (a non-Division-I home team). |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 
@@ -543,9 +543,9 @@ Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-dat
 | `wnba_team_slug` | String | WNBA Stats team slug. |
 | `fox_team_id` | String | Fox Bifrost team id (NA if unmatched). |
 | `fox_team_name` | String | Fox team name (NA if unmatched). |
-| `yahoo_team_id` | String | Yahoo team id (NA placeholder). |
-| `yahoo_team_abbreviation` | String | Yahoo abbreviation (NA placeholder). |
-| `yahoo_team_name` | String | Yahoo team name (NA placeholder). |
+| `yahoo_team_id` | String | Dotted Yahoo Sports team id (e.g. 'wnba.t.4'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched. |
+| `yahoo_team_abbreviation` | String | Yahoo Sports team abbreviation for yahoo_team_id; null when yahoo_team_id is. |
+| `yahoo_team_name` | String | Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is. |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 

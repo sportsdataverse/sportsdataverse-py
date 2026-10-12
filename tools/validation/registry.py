@@ -445,6 +445,7 @@ _CFB_PBP_READ_COLUMNS = (
     "fg_made",
     "fumble_vec",
     "fumble_lost",
+    "fumble_or_muff",
     "safety",
     "td_play",
     "kneel_down",
@@ -458,7 +459,44 @@ _CFB_PBP_READ_COLUMNS = (
     # Team keys + yardage the boxscore_parity check aggregates on. `pos_team`
     # in this dataset is a DISPLAY NAME, so only the *_id columns are join keys.
     "pos_team_id",
-    "def_pos_team_id",
+    "def_pos_team_id",  # Accepted-foul team, offense/defense fumble split and first downs --
+    # boxscore_parity's definitions.
+    "pos_fumble_lost",
+    "def_fumble_lost",
+    "penalty_team_id",
+    "first_down_yards",
+    "first_down_penalty",
+    # Player lines for boxscore_parity_player (ids are Int64 join keys
+    # against espn_cfb_player_box.athlete_id).
+    "passer_player_id",
+    "rusher_player_id",
+    "receiver_player_id",
+    "sack_player_id",
+    "interception_player_id",
+    "punter_player_id",
+    "fg_kicker_player_id",
+    "kickoff_return_player_id",
+    "punt_return_player_id",
+    "pass_td",
+    "rush_td",
+    "punt",
+    "kickoff_fair_catch",
+    "punt_fair_catch",
+    # pbp_integrity: clock / down / drive sequence and the regex-fallback
+    # names it screens for clause run-ons.
+    "clock.displayValue",
+    "start.down",
+    "drive.id",
+    "passer_player_name",
+    "rusher_player_name",
+    "receiver_player_name",
+    "sack_player_name",
+    "interception_player_name",
+    "kickoff_return_player_name",
+    "punt_return_player_name",
+    "fumble_player_name",
+    "fg_block_player_name",
+    "punt_block_player_name",
 )
 
 DATASETS["cfb_pbp"] = DatasetSpec(

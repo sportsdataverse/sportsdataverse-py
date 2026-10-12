@@ -1,0 +1,985 @@
+{
+ "data": {
+  "leagues": [
+   {
+    "shortName": "NCAAB",
+    "divisions": [
+     {
+      "teams": [
+       {
+        "teamId": "ncaab.t.6",
+        "displayName": "Alabama",
+        "fullName": "Alabama Crimson Tide",
+        "location": "Alabama",
+        "nickname": "Crimson Tide",
+        "abbreviation": "ALA",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 10,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/2pCFcNTEpQL.rpQj_bKmYA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Southeastern_Conference_logo.png"
+         },
+         "name": "Southeastern"
+        }
+       },
+       {
+        "teamId": "ncaab.t.19",
+        "displayName": "Arkansas",
+        "fullName": "Arkansas Razorbacks",
+        "location": "Arkansas",
+        "nickname": "Razorbacks",
+        "abbreviation": "ARK",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 10,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/2pCFcNTEpQL.rpQj_bKmYA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Southeastern_Conference_logo.png"
+         },
+         "name": "Southeastern"
+        }
+       },
+       {
+        "teamId": "ncaab.t.57",
+        "displayName": "Boise St.",
+        "fullName": "Boise State Broncos",
+        "location": "Boise State",
+        "nickname": "Broncos",
+        "abbreviation": "BSU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 2,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/tF1ixW6VY9_ibkiuTnXCow--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Pac-12_logo.png"
+         },
+         "name": "Pac-12"
+        }
+       },
+       {
+        "teamId": "ncaab.t.68",
+        "displayName": "BYU",
+        "fullName": "BYU Cougars",
+        "location": "BYU",
+        "nickname": "Cougars",
+        "abbreviation": "BYU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 103,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/HYHRo5PZ.m4EO1h3Ggli8w--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big-12.png"
+         },
+         "name": "Big 12"
+        }
+       },
+       {
+        "teamId": "ncaab.t.125",
+        "displayName": "Colorado",
+        "fullName": "Colorado Buffaloes",
+        "location": "Colorado",
+        "nickname": "Buffaloes",
+        "abbreviation": "COLO",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 103,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/HYHRo5PZ.m4EO1h3Ggli8w--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big-12.png"
+         },
+         "name": "Big 12"
+        }
+       },
+       {
+        "teamId": "ncaab.t.126",
+        "displayName": "Colorado St.",
+        "fullName": "Colorado State Rams",
+        "location": "Colorado State",
+        "nickname": "Rams",
+        "abbreviation": "CSU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 2,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/tF1ixW6VY9_ibkiuTnXCow--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Pac-12_logo.png"
+         },
+         "name": "Pac-12"
+        }
+       },
+       {
+        "teamId": "ncaab.t.133",
+        "displayName": "Creighton",
+        "fullName": "Creighton Bluejays",
+        "location": "Creighton",
+        "nickname": "Bluejays",
+        "abbreviation": "CREI",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 102,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/SJrNY50_W5AsqMwC_tnRkg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_East_Conference_logo.png"
+         },
+         "name": "Big East"
+        }
+       },
+       {
+        "teamId": "ncaab.t.157",
+        "displayName": "Dayton",
+        "fullName": "Dayton Flyers",
+        "location": "Dayton",
+        "nickname": "Flyers",
+        "abbreviation": "DAY",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 101,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/ZTk2V84zzT9Lyg2wKTAQZw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_10_Conference_logo.png"
+         },
+         "name": "Atlantic 10"
+        }
+       },
+       {
+        "teamId": "ncaab.t.173",
+        "displayName": "Duke",
+        "fullName": "Duke Blue Devils",
+        "location": "Duke",
+        "nickname": "Blue Devils",
+        "abbreviation": "DUKE",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 6,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/_k6FL4fv.ZzhhtMeKxLFQw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_Coast.png"
+         },
+         "name": "Atlantic Coast"
+        }
+       },
+       {
+        "teamId": "ncaab.t.178",
+        "displayName": "East Carolina",
+        "fullName": "East Carolina Pirates",
+        "location": "East Carolina",
+        "nickname": "Pirates",
+        "abbreviation": "ECU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 201,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/cKUuPB9T2oCD1wsDrpakHQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/American_Athletic_Conference_logo.png"
+         },
+         "name": "American Conference"
+        }
+       },
+       {
+        "teamId": "ncaab.t.210",
+        "displayName": "Florida",
+        "fullName": "Florida Gators",
+        "location": "Florida",
+        "nickname": "Gators",
+        "abbreviation": "FLA",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 10,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/2pCFcNTEpQL.rpQj_bKmYA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Southeastern_Conference_logo.png"
+         },
+         "name": "Southeastern"
+        }
+       },
+       {
+        "teamId": "ncaab.t.220",
+        "displayName": "Furman",
+        "fullName": "Furman Paladins",
+        "location": "Furman",
+        "nickname": "Paladins",
+        "abbreviation": "FUR",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 29,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/20frsPPLIBO4zsJFUCGrAA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Southern_Conference_logo.png"
+         },
+         "name": "Southern"
+        }
+       },
+       {
+        "teamId": "ncaab.t.229",
+        "displayName": "Georgetown",
+        "fullName": "Georgetown Hoyas",
+        "location": "Georgetown",
+        "nickname": "Hoyas",
+        "abbreviation": "GTWN",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 102,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/SJrNY50_W5AsqMwC_tnRkg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_East_Conference_logo.png"
+         },
+         "name": "Big East"
+        }
+       },
+       {
+        "teamId": "ncaab.t.234",
+        "displayName": "Grambling St.",
+        "fullName": "Grambling State Tigers",
+        "location": "Grambling State",
+        "nickname": "Tigers",
+        "abbreviation": "GRAM",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 105,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/yBzoucpj_ytjdG7JyBRGOA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Southwestern_Athletic_Conference_logo.png"
+         },
+         "name": "Southwestern Athletic"
+        }
+       },
+       {
+        "teamId": "ncaab.t.241",
+        "displayName": "Southern",
+        "fullName": "Southern University Jaguars",
+        "location": "Southern University",
+        "nickname": "Jaguars",
+        "abbreviation": "SOU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 105,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/yBzoucpj_ytjdG7JyBRGOA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Southwestern_Athletic_Conference_logo.png"
+         },
+         "name": "Southwestern Athletic"
+        }
+       },
+       {
+        "teamId": "ncaab.t.269",
+        "displayName": "Illinois St.",
+        "fullName": "Illinois State Redbirds",
+        "location": "Illinois State",
+        "nickname": "Redbirds",
+        "abbreviation": "ILST",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 21,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/hAflsZrjzUtBhnyVkyMuSA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Missouri_Valley_Football_Conference_logo.png"
+         },
+         "name": "Missouri Valley"
+        }
+       },
+       {
+        "teamId": "ncaab.t.309",
+        "displayName": "LIU Brooklyn",
+        "fullName": "LIU Sharks",
+        "location": "LIU",
+        "nickname": "Sharks",
+        "abbreviation": "LIU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 32,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/kLHc36iEChJpjyRpAAsnvg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Northeast_Conference_logo.png"
+         },
+         "name": "Northeast"
+        }
+       },
+       {
+        "teamId": "ncaab.t.343",
+        "displayName": "Maryland",
+        "fullName": "Maryland Terrapins",
+        "location": "Maryland",
+        "nickname": "Terrapins",
+        "abbreviation": "UMD",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 3,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/7deR_90zdOIk.yn5LxlcUQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_Ten_Conference_logo.png"
+         },
+         "name": "Big Ten"
+        }
+       },
+       {
+        "teamId": "ncaab.t.355",
+        "displayName": "Miami (FL)",
+        "fullName": "Miami (FL) Hurricanes",
+        "location": "Miami (FL)",
+        "nickname": "Hurricanes",
+        "abbreviation": "MIA",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 6,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/_k6FL4fv.ZzhhtMeKxLFQw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_Coast.png"
+         },
+         "name": "Atlantic Coast"
+        }
+       },
+       {
+        "teamId": "ncaab.t.358",
+        "displayName": "Michigan St.",
+        "fullName": "Michigan State Spartans",
+        "location": "Michigan State",
+        "nickname": "Spartans",
+        "abbreviation": "MSU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 3,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/7deR_90zdOIk.yn5LxlcUQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_Ten_Conference_logo.png"
+         },
+         "name": "Big Ten"
+        }
+       },
+       {
+        "teamId": "ncaab.t.363",
+        "displayName": "Minnesota",
+        "fullName": "Minnesota Golden Gophers",
+        "location": "Minnesota",
+        "nickname": "Golden Gophers",
+        "abbreviation": "MINN",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 3,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/7deR_90zdOIk.yn5LxlcUQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_Ten_Conference_logo.png"
+         },
+         "name": "Big Ten"
+        }
+       },
+       {
+        "teamId": "ncaab.t.365",
+        "displayName": "Mississippi",
+        "fullName": "Ole Miss Rebels",
+        "location": "Ole Miss",
+        "nickname": "Rebels",
+        "abbreviation": "MISS",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 10,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/2pCFcNTEpQL.rpQj_bKmYA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Southeastern_Conference_logo.png"
+         },
+         "name": "Southeastern"
+        }
+       },
+       {
+        "teamId": "ncaab.t.395",
+        "displayName": "Charlotte",
+        "fullName": "Charlotte 49ers",
+        "location": "Charlotte",
+        "nickname": "49ers",
+        "abbreviation": "CHAR",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 201,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/cKUuPB9T2oCD1wsDrpakHQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/American_Athletic_Conference_logo.png"
+         },
+         "name": "American Conference"
+        }
+       },
+       {
+        "teamId": "ncaab.t.401",
+        "displayName": "UNLV",
+        "fullName": "UNLV Runnin' Rebels",
+        "location": "UNLV",
+        "nickname": "Runnin' Rebels",
+        "abbreviation": "UNLV",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 112,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/p40xWisyLSfP.JkmGps4Ug--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Mountain_West_Conference_logo.png"
+         },
+         "name": "Mountain West"
+        }
+       },
+       {
+        "teamId": "ncaab.t.402",
+        "displayName": "Nevada",
+        "fullName": "Nevada Wolf Pack",
+        "location": "Nevada",
+        "nickname": "Wolf Pack",
+        "abbreviation": "NEV",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 112,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/p40xWisyLSfP.JkmGps4Ug--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Mountain_West_Conference_logo.png"
+         },
+         "name": "Mountain West"
+        }
+       },
+       {
+        "teamId": "ncaab.t.413",
+        "displayName": "N. Carolina",
+        "fullName": "North Carolina Tar Heels",
+        "location": "North Carolina",
+        "nickname": "Tar Heels",
+        "abbreviation": "UNC",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 6,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/_k6FL4fv.ZzhhtMeKxLFQw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_Coast.png"
+         },
+         "name": "Atlantic Coast"
+        }
+       },
+       {
+        "teamId": "ncaab.t.421",
+        "displayName": "Northwestern",
+        "fullName": "Northwestern Wildcats",
+        "location": "Northwestern",
+        "nickname": "Wildcats",
+        "abbreviation": "NW",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 3,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/7deR_90zdOIk.yn5LxlcUQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_Ten_Conference_logo.png"
+         },
+         "name": "Big Ten"
+        }
+       },
+       {
+        "teamId": "ncaab.t.446",
+        "displayName": "Oklahoma St.",
+        "fullName": "Oklahoma State Cowboys",
+        "location": "Oklahoma State",
+        "nickname": "Cowboys",
+        "abbreviation": "OKST",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 103,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/HYHRo5PZ.m4EO1h3Ggli8w--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big-12.png"
+         },
+         "name": "Big 12"
+        }
+       },
+       {
+        "teamId": "ncaab.t.449",
+        "displayName": "Oregon",
+        "fullName": "Oregon Ducks",
+        "location": "Oregon",
+        "nickname": "Ducks",
+        "abbreviation": "ORE",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 3,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/7deR_90zdOIk.yn5LxlcUQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_Ten_Conference_logo.png"
+         },
+         "name": "Big Ten"
+        }
+       },
+       {
+        "teamId": "ncaab.t.460",
+        "displayName": "Pennsylvania",
+        "fullName": "Penn Quakers",
+        "location": "Penn",
+        "nickname": "Quakers",
+        "abbreviation": "PENN",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 18,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/Dg4zDj8aXOkGhcl6hIJosw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Ivy_League_logo.png"
+         },
+         "name": "Ivy League"
+        }
+       },
+       {
+        "teamId": "ncaab.t.472",
+        "displayName": "Providence",
+        "fullName": "Providence Friars",
+        "location": "Providence",
+        "nickname": "Friars",
+        "abbreviation": "PROV",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 102,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/SJrNY50_W5AsqMwC_tnRkg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_East_Conference_logo.png"
+         },
+         "name": "Big East"
+        }
+       },
+       {
+        "teamId": "ncaab.t.487",
+        "displayName": "Richmond",
+        "fullName": "Richmond Spiders",
+        "location": "Richmond",
+        "nickname": "Spiders",
+        "abbreviation": "RICH",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 101,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/ZTk2V84zzT9Lyg2wKTAQZw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_10_Conference_logo.png"
+         },
+         "name": "Atlantic 10"
+        }
+       },
+       {
+        "teamId": "ncaab.t.492",
+        "displayName": "Rutgers",
+        "fullName": "Rutgers Scarlet Knights",
+        "location": "Rutgers",
+        "nickname": "Scarlet Knights",
+        "abbreviation": "RUTG",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 3,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/7deR_90zdOIk.yn5LxlcUQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_Ten_Conference_logo.png"
+         },
+         "name": "Big Ten"
+        }
+       },
+       {
+        "teamId": "ncaab.t.499",
+        "displayName": "San Francisco",
+        "fullName": "San Francisco Dons",
+        "location": "San Francisco",
+        "nickname": "Dons",
+        "abbreviation": "SAN F",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 110,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/76ocCVTnoaATCsZrFegodQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/West_Coast_Conference_logo_2019.png"
+         },
+         "name": "West Coast"
+        }
+       },
+       {
+        "teamId": "ncaab.t.502",
+        "displayName": "Santa Clara",
+        "fullName": "Santa Clara Broncos",
+        "location": "Santa Clara",
+        "nickname": "Broncos",
+        "abbreviation": "SCU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 110,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/76ocCVTnoaATCsZrFegodQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/West_Coast_Conference_logo_2019.png"
+         },
+         "name": "West Coast"
+        }
+       },
+       {
+        "teamId": "ncaab.t.526",
+        "displayName": "South Florida",
+        "fullName": "South Florida Bulls",
+        "location": "South Florida",
+        "nickname": "Bulls",
+        "abbreviation": "S FLA",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 201,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/cKUuPB9T2oCD1wsDrpakHQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/American_Athletic_Conference_logo.png"
+         },
+         "name": "American Conference"
+        }
+       },
+       {
+        "teamId": "ncaab.t.531",
+        "displayName": "St. Bonaventure",
+        "fullName": "St. Bonaventure Bonnies",
+        "location": "St. Bonaventure",
+        "nickname": "Bonnies",
+        "abbreviation": "ST B",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 101,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/ZTk2V84zzT9Lyg2wKTAQZw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_10_Conference_logo.png"
+         },
+         "name": "Atlantic 10"
+        }
+       },
+       {
+        "teamId": "ncaab.t.536",
+        "displayName": "Saint Louis",
+        "fullName": "Saint Louis Billikens",
+        "location": "Saint Louis",
+        "nickname": "Billikens",
+        "abbreviation": "ST L",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 101,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/ZTk2V84zzT9Lyg2wKTAQZw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_10_Conference_logo.png"
+         },
+         "name": "Atlantic 10"
+        }
+       },
+       {
+        "teamId": "ncaab.t.538",
+        "displayName": "St. Mary's",
+        "fullName": "Saint Mary's Gaels",
+        "location": "Saint Mary's",
+        "nickname": "Gaels",
+        "abbreviation": "ST M",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 110,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/76ocCVTnoaATCsZrFegodQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/West_Coast_Conference_logo_2019.png"
+         },
+         "name": "West Coast"
+        }
+       },
+       {
+        "teamId": "ncaab.t.545",
+        "displayName": "Stanford",
+        "fullName": "Stanford Cardinal",
+        "location": "Stanford",
+        "nickname": "Cardinal",
+        "abbreviation": "STAN",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 6,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/_k6FL4fv.ZzhhtMeKxLFQw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_Coast.png"
+         },
+         "name": "Atlantic Coast"
+        }
+       },
+       {
+        "teamId": "ncaab.t.576",
+        "displayName": "TCU",
+        "fullName": "TCU Horned Frogs",
+        "location": "TCU",
+        "nickname": "Horned Frogs",
+        "abbreviation": "TCU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 103,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/HYHRo5PZ.m4EO1h3Ggli8w--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big-12.png"
+         },
+         "name": "Big 12"
+        }
+       },
+       {
+        "teamId": "ncaab.t.610",
+        "displayName": "Utah",
+        "fullName": "Utah Runnin' Utes",
+        "location": "Utah",
+        "nickname": "Runnin' Utes",
+        "abbreviation": "UTAH",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 103,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/HYHRo5PZ.m4EO1h3Ggli8w--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big-12.png"
+         },
+         "name": "Big 12"
+        }
+       },
+       {
+        "teamId": "ncaab.t.613",
+        "displayName": "VCU",
+        "fullName": "VCU Rams",
+        "location": "VCU",
+        "nickname": "Rams",
+        "abbreviation": "VCU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 101,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/ZTk2V84zzT9Lyg2wKTAQZw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_10_Conference_logo.png"
+         },
+         "name": "Atlantic 10"
+        }
+       },
+       {
+        "teamId": "ncaab.t.615",
+        "displayName": "Vanderbilt",
+        "fullName": "Vanderbilt Commodores",
+        "location": "Vanderbilt",
+        "nickname": "Commodores",
+        "abbreviation": "VAN",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 10,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/2pCFcNTEpQL.rpQj_bKmYA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Southeastern_Conference_logo.png"
+         },
+         "name": "Southeastern"
+        }
+       },
+       {
+        "teamId": "ncaab.t.620",
+        "displayName": "Virginia Tech",
+        "fullName": "Virginia Tech Hokies",
+        "location": "Virginia Tech",
+        "nickname": "Hokies",
+        "abbreviation": "VT",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 6,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/_k6FL4fv.ZzhhtMeKxLFQw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_Coast.png"
+         },
+         "name": "Atlantic Coast"
+        }
+       },
+       {
+        "teamId": "ncaab.t.630",
+        "displayName": "Washington",
+        "fullName": "Washington Huskies",
+        "location": "Washington",
+        "nickname": "Huskies",
+        "abbreviation": "UW",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 3,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/7deR_90zdOIk.yn5LxlcUQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_Ten_Conference_logo.png"
+         },
+         "name": "Big Ten"
+        }
+       },
+       {
+        "teamId": "ncaab.t.639",
+        "displayName": "W. Kentucky",
+        "fullName": "Western Kentucky Hilltoppers",
+        "location": "Western Kentucky",
+        "nickname": "Hilltoppers",
+        "abbreviation": "WKU",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 1,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/IMquCPeSOv14gLETQIFrJA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Colonial.png"
+         },
+         "name": "Conference USA"
+        }
+       },
+       {
+        "teamId": "ncaab.t.648",
+        "displayName": "Wichita St.",
+        "fullName": "Wichita State Shockers",
+        "location": "Wichita State",
+        "nickname": "Shockers",
+        "abbreviation": "WICH",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 201,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/cKUuPB9T2oCD1wsDrpakHQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/American_Athletic_Conference_logo.png"
+         },
+         "name": "American Conference"
+        }
+       },
+       {
+        "teamId": "ncaab.t.657",
+        "displayName": "Wisconsin",
+        "fullName": "Wisconsin Badgers",
+        "location": "Wisconsin",
+        "nickname": "Badgers",
+        "abbreviation": "WIS",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 3,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/7deR_90zdOIk.yn5LxlcUQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big_Ten_Conference_logo.png"
+         },
+         "name": "Big Ten"
+        }
+       },
+       {
+        "teamId": "ncaab.t.1176",
+        "displayName": "University at Albany",
+        "fullName": "University at Albany Great Danes",
+        "location": "University at Albany",
+        "nickname": "Great Danes",
+        "abbreviation": "ALBY",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 99,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/QYuNytvSRIqtbOfZ065hSg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/America_East_Conference_logo.png"
+         },
+         "name": "America East"
+        }
+       },
+       {
+        "teamId": "ncaab.t.1237",
+        "displayName": "Queens University",
+        "fullName": "Queens University Royals",
+        "location": "Queens University",
+        "nickname": "Royals",
+        "abbreviation": "QUC",
+        "division": {
+         "divisionId": 1,
+         "name": "I"
+        },
+        "conference": {
+         "conferenceId": 107,
+         "conferenceLogo": {
+          "url": "https://s.yimg.com/iu/api/res/1.2/yhBEo2XEzACGuf.2L9R5HA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Atlantic_Sun_Conference_logo.png"
+         },
+         "name": "Atlantic Sun"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "extensions": {}
+}

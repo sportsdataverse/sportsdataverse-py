@@ -44,7 +44,7 @@ requirements:
     - lxml >=4.9.0
     - numpy >=1.23.0
     - pandas >=2.0.0
-    - polars >=1.0,<3
+    - polars >=2.0,<3
     - pyarrow >=14.0.0
     - requests >=2.30.0
     - scipy >=1.10.0
