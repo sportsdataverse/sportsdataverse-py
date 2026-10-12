@@ -23,7 +23,7 @@ def test_every_reference_page_has_required_sections():
 def test_every_documented_league_has_an_index():
     for prefix in generate._doc_leagues():
         md = generate.render_league_index(prefix)
-        assert f"`sportsdataverse.{prefix}`" in md
+        assert f"`{generate._home_module(prefix)}`" in md
 
 
 def test_apis_for_resolves_flat_and_espn_families():

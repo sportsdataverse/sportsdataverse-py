@@ -102,11 +102,24 @@ def _candidate_leagues(api: str, short: str, limit: int = 8) -> list[str]:
     return ordered[:limit] or [""]
 
 
+def _registered_fixture(api: str, short: str) -> str | None:
+    """The file name native_fixture_map.yaml maps ``short`` to in ``api``'s block (as the value, or
+    inside a list value: one SIHF game capture feeds six parsers); ``None`` when it is not mapped."""
+    import yaml
+
+    block = (yaml.safe_load(NATIVE_MAP.read_text(encoding="utf-8")) or {}).get(api) or {}
+    return next((f for f, v in block.items() if v == short or (isinstance(v, list) and short in v)), None)
+
+
 def fixture_path(api: str, short: str, league: str = "") -> Path:
-    """Where ``refresh_return_schemas`` reads this endpoint's capture."""
+    """Where ``refresh_return_schemas`` reads this endpoint's capture.
+
+    A flat API's endpoint already in native_fixture_map.yaml is captured over the file the map
+    names (``table__standing__2026__1.json``), so a re-capture refreshes its schema instead of
+    leaving an orphan ``<short>.json`` nothing reads; anything else is ``<short>.json``."""
     if api in generate.ESPN_APIS:
         return FIXTURES / "espn" / f"{short}_{league}.json"
-    return FIXTURES / api / f"{short}.json"
+    return FIXTURES / api / (_registered_fixture(api, short) or f"{short}.json")
 
 
 def _call(api: str, short: str, league: str):
@@ -132,14 +145,15 @@ def _register_native(api: str, short: str, fname: str) -> None:
     """Add ``fname: short`` under ``api`` in native_fixture_map.yaml, keeping its comments.
 
     Registration is checked inside ``api``'s own block (two APIs can share an endpoint short),
-    and the block header is matched at the start of a line (``fox_api:`` is inside ``wbb_fox_api:``)."""
+    and the block header is matched at the start of a line (``fox_api:`` is inside ``wbb_fox_api:``).
+    A short already mapped under ANY file name -- as the value, or inside a list value (one SIHF
+    game capture feeds six parsers) -- counts as registered: a second mapping would make two
+    fixtures write the same ``schemas/native/<api>/<short>.yaml``, and the last one would win."""
     import re
 
-    import yaml
-
-    text = NATIVE_MAP.read_text(encoding="utf-8")
-    if ((yaml.safe_load(text) or {}).get(api) or {}).get(fname) == short:
+    if _registered_fixture(api, short) is not None:
         return
+    text = NATIVE_MAP.read_text(encoding="utf-8")
     line = f"  {fname}: {short}\n"
     head = re.search(rf"^{re.escape(api)}:[ \t]*\n", text, re.M)
     if head is None:

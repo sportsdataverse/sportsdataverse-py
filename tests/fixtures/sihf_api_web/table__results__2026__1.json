@@ -1,0 +1,867 @@
+{
+ "title": "Spiele",
+ "description": "",
+ "pages": 414,
+ "selectedPage": 1,
+ "orderBy": "",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Ics",
+  "Pdf"
+ ],
+ "updateDateTime": "2026-05-29T07:05:05.8393681+02:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    }
+   ],
+   "selected": "2026",
+   "type": "Dropdown",
+   "alias": "Season"
+  },
+  {
+   "title": "Datum",
+   "entries": [
+    {
+     "name": "2026",
+     "entries": [
+      {
+       "name": "4",
+       "entries": [
+        {
+         "name": "30",
+         "alias": "30"
+        },
+        {
+         "name": "28",
+         "alias": "28"
+        },
+        {
+         "name": "26",
+         "alias": "26"
+        },
+        {
+         "name": "24",
+         "alias": "24"
+        },
+        {
+         "name": "22",
+         "alias": "22"
+        },
+        {
+         "name": "20",
+         "alias": "20"
+        },
+        {
+         "name": "18",
+         "alias": "18"
+        },
+        {
+         "name": "12",
+         "alias": "12"
+        },
+        {
+         "name": "10",
+         "alias": "10"
+        },
+        {
+         "name": "8",
+         "alias": "8"
+        },
+        {
+         "name": "6",
+         "alias": "6"
+        },
+        {
+         "name": "4",
+         "alias": "4"
+        },
+        {
+         "name": "2",
+         "alias": "2"
+        },
+        {
+         "name": "1",
+         "alias": "1"
+        }
+       ],
+       "alias": "4"
+      },
+      {
+       "name": "3",
+       "entries": [
+        {
+         "name": "31",
+         "alias": "31"
+        },
+        {
+         "name": "30",
+         "alias": "30"
+        },
+        {
+         "name": "29",
+         "alias": "29"
+        },
+        {
+         "name": "28",
+         "alias": "28"
+        },
+        {
+         "name": "27",
+         "alias": "27"
+        },
+        {
+         "name": "26",
+         "alias": "26"
+        },
+        {
+         "name": "25",
+         "alias": "25"
+        },
+        {
+         "name": "24",
+         "alias": "24"
+        },
+        {
+         "name": "23",
+         "alias": "23"
+        },
+        {
+         "name": "22",
+         "alias": "22"
+        },
+        {
+         "name": "21",
+         "alias": "21"
+        },
+        {
+         "name": "20",
+         "alias": "20"
+        },
+        {
+         "name": "18",
+         "alias": "18"
+        },
+        {
+         "name": "16",
+         "alias": "16"
+        },
+        {
+         "name": "14",
+         "alias": "14"
+        },
+        {
+         "name": "12",
+         "alias": "12"
+        },
+        {
+         "name": "9",
+         "alias": "9"
+        },
+        {
+         "name": "7",
+         "alias": "7"
+        },
+        {
+         "name": "5",
+         "alias": "5"
+        }
+       ],
+       "alias": "3"
+      },
+      {
+       "name": "2",
+       "entries": [
+        {
+         "name": "28",
+         "alias": "28"
+        },
+        {
+         "name": "27",
+         "alias": "27"
+        },
+        {
+         "name": "24",
+         "alias": "24"
+        },
+        {
+         "name": "1",
+         "alias": "1"
+        }
+       ],
+       "alias": "2"
+      },
+      {
+       "name": "1",
+       "entries": [
+        {
+         "name": "31",
+         "alias": "31"
+        },
+        {
+         "name": "30",
+         "alias": "30"
+        },
+        {
+         "name": "29",
+         "alias": "29"
+        },
+        {
+         "name": "27",
+         "alias": "27"
+        },
+        {
+         "name": "26",
+         "alias": "26"
+        },
+        {
+         "name": "24",
+         "alias": "24"
+        },
+        {
+         "name": "23",
+         "alias": "23"
+        },
+        {
+         "name": "18",
+         "alias": "18"
+        },
+        {
+         "name": "17",
+         "alias": "17"
+        },
+        {
+         "name": "16",
+         "alias": "16"
+        },
+        {
+         "name": "15",
+         "alias": "15"
+        },
+        {
+         "name": "14",
+         "alias": "14"
+        },
+        {
+         "name": "11",
+         "alias": "11"
+        },
+        {
+         "name": "10",
+         "alias": "10"
+        },
+        {
+         "name": "9",
+         "alias": "9"
+        },
+        {
+         "name": "8",
+         "alias": "8"
+        },
+        {
+         "name": "7",
+         "alias": "7"
+        },
+        {
+         "name": "6",
+         "alias": "6"
+        },
+        {
+         "name": "3",
+         "alias": "3"
+        },
+        {
+         "name": "2",
+         "alias": "2"
+        }
+       ],
+       "alias": "1"
+      }
+     ],
+     "alias": "2026"
+    },
+    {
+     "name": "2025",
+     "entries": [
+      {
+       "name": "12",
+       "entries": [
+        {
+         "name": "23",
+         "alias": "23"
+        },
+        {
+         "name": "22",
+         "alias": "22"
+        },
+        {
+         "name": "20",
+         "alias": "20"
+        },
+        {
+         "name": "19",
+         "alias": "19"
+        },
+        {
+         "name": "17",
+         "alias": "17"
+        },
+        {
+         "name": "7",
+         "alias": "7"
+        },
+        {
+         "name": "6",
+         "alias": "6"
+        },
+        {
+         "name": "5",
+         "alias": "5"
+        },
+        {
+         "name": "4",
+         "alias": "4"
+        },
+        {
+         "name": "3",
+         "alias": "3"
+        }
+       ],
+       "alias": "12"
+      },
+      {
+       "name": "11",
+       "entries": [
+        {
+         "name": "30",
+         "alias": "30"
+        },
+        {
+         "name": "29",
+         "alias": "29"
+        },
+        {
+         "name": "28",
+         "alias": "28"
+        },
+        {
+         "name": "27",
+         "alias": "27"
+        },
+        {
+         "name": "26",
+         "alias": "26"
+        },
+        {
+         "name": "25",
+         "alias": "25"
+        },
+        {
+         "name": "22",
+         "alias": "22"
+        },
+        {
+         "name": "21",
+         "alias": "21"
+        },
+        {
+         "name": "20",
+         "alias": "20"
+        },
+        {
+         "name": "19",
+         "alias": "19"
+        },
+        {
+         "name": "16",
+         "alias": "16"
+        },
+        {
+         "name": "15",
+         "alias": "15"
+        },
+        {
+         "name": "14",
+         "alias": "14"
+        },
+        {
+         "name": "13",
+         "alias": "13"
+        },
+        {
+         "name": "12",
+         "alias": "12"
+        },
+        {
+         "name": "1",
+         "alias": "1"
+        }
+       ],
+       "alias": "11"
+      },
+      {
+       "name": "10",
+       "entries": [
+        {
+         "name": "31",
+         "alias": "31"
+        },
+        {
+         "name": "30",
+         "alias": "30"
+        },
+        {
+         "name": "29",
+         "alias": "29"
+        },
+        {
+         "name": "28",
+         "alias": "28"
+        },
+        {
+         "name": "25",
+         "alias": "25"
+        },
+        {
+         "name": "24",
+         "alias": "24"
+        },
+        {
+         "name": "23",
+         "alias": "23"
+        },
+        {
+         "name": "21",
+         "alias": "21"
+        },
+        {
+         "name": "19",
+         "alias": "19"
+        },
+        {
+         "name": "18",
+         "alias": "18"
+        },
+        {
+         "name": "17",
+         "alias": "17"
+        },
+        {
+         "name": "16",
+         "alias": "16"
+        },
+        {
+         "name": "12",
+         "alias": "12"
+        },
+        {
+         "name": "11",
+         "alias": "11"
+        },
+        {
+         "name": "10",
+         "alias": "10"
+        },
+        {
+         "name": "9",
+         "alias": "9"
+        },
+        {
+         "name": "5",
+         "alias": "5"
+        },
+        {
+         "name": "4",
+         "alias": "4"
+        },
+        {
+         "name": "3",
+         "alias": "3"
+        },
+        {
+         "name": "1",
+         "alias": "1"
+        }
+       ],
+       "alias": "10"
+      },
+      {
+       "name": "9",
+       "entries": [
+        {
+         "name": "30",
+         "alias": "30"
+        },
+        {
+         "name": "28",
+         "alias": "28"
+        },
+        {
+         "name": "27",
+         "alias": "27"
+        },
+        {
+         "name": "26",
+         "alias": "26"
+        },
+        {
+         "name": "23",
+         "alias": "23"
+        },
+        {
+         "name": "20",
+         "alias": "20"
+        },
+        {
+         "name": "19",
+         "alias": "19"
+        },
+        {
+         "name": "18",
+         "alias": "18"
+        },
+        {
+         "name": "16",
+         "alias": "16"
+        },
+        {
+         "name": "14",
+         "alias": "14"
+        },
+        {
+         "name": "13",
+         "alias": "13"
+        },
+        {
+         "name": "12",
+         "alias": "12"
+        },
+        {
+         "name": "11",
+         "alias": "11"
+        },
+        {
+         "name": "9",
+         "alias": "9"
+        }
+       ],
+       "alias": "9"
+      }
+     ],
+     "alias": "2025"
+    }
+   ],
+   "selected": "01.07.2025-30.06.2026",
+   "type": "Datepicker",
+   "alias": "Date"
+  }
+ ],
+ "secondaryMenu": null,
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [],
+ "header": [
+  {
+   "name": "Tag",
+   "description": "Wochentag",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "day"
+  },
+  {
+   "name": "Datum",
+   "description": "Spieldatum",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "date"
+  },
+  {
+   "name": "Zeit",
+   "description": "Spielbeginn",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "time"
+  },
+  {
+   "name": "Home",
+   "description": "Heim-Team",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "homeTeam"
+  },
+  {
+   "name": "Away",
+   "description": "Gast-Team",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "awayTeam"
+  },
+  {
+   "name": "Resultat",
+   "description": "Spielresultat",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "score"
+  },
+  {
+   "name": "Drittel",
+   "description": "Drittels-Resultate",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "scorePerPeriod"
+  },
+  {
+   "name": "OT/SO",
+   "description": "Verlängerung / Shootout",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "decision"
+  },
+  {
+   "name": "Status",
+   "description": "Spielstatus",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "status"
+  },
+  {
+   "name": "Details",
+   "description": "Spieldetails",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "details"
+  },
+  {
+   "name": "TV/Online",
+   "description": "TV-Sender mit Live-Übertragung",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "broadcasts"
+  }
+ ],
+ "data": [
+  [
+   "Di",
+   "09.09.2025",
+   "19:45",
+   {
+    "id": 101152,
+    "name": "HC Ambri-Piotta",
+    "acronym": "HCAP",
+    "signed": true,
+    "type": "team"
+   },
+   {
+    "id": 101149,
+    "name": "EHC Kloten",
+    "acronym": "EHCK",
+    "signed": false,
+    "type": "team"
+   },
+   {
+    "homeTeam": "2",
+    "awayTeam": "1",
+    "type": "result"
+   },
+   {
+    "homeTeam": [
+     "0",
+     "1",
+     "1"
+    ],
+    "awayTeam": [
+     "0",
+     "1",
+     "0"
+    ],
+    "type": "periods"
+   },
+   "",
+   {
+    "id": 12,
+    "updateDateTime": "2026-03-07T22:23:14.2967918+01:00",
+    "startDateTime": "2025-09-09T19:45:00+02:00",
+    "endDateTime": "2025-09-09T21:53:00+02:00",
+    "percent": 100,
+    "name": "Ende",
+    "canceled": false,
+    "type": "gameStatus"
+   },
+   {
+    "gameId": "20261105000001",
+    "type": "linkToGameDetail"
+   },
+   {
+    "entries": [
+     "MYSPORTS"
+    ],
+    "type": "broadcasts"
+   }
+  ],
+  [
+   "Di",
+   "09.09.2025",
+   "19:45",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": true,
+    "type": "team"
+   },
+   {
+    "id": 103141,
+    "name": "Lausanne HC",
+    "acronym": "LHC",
+    "signed": false,
+    "type": "team"
+   },
+   {
+    "homeTeam": "4",
+    "awayTeam": "1",
+    "type": "result"
+   },
+   {
+    "homeTeam": [
+     "0",
+     "1",
+     "3"
+    ],
+    "awayTeam": [
+     "0",
+     "0",
+     "1"
+    ],
+    "type": "periods"
+   },
+   "",
+   {
+    "id": 12,
+    "updateDateTime": "2025-10-07T11:20:35.8091575+02:00",
+    "startDateTime": "2025-09-09T19:45:00+02:00",
+    "endDateTime": "2025-09-09T22:03:00+02:00",
+    "percent": 100,
+    "name": "Ende",
+    "canceled": false,
+    "type": "gameStatus"
+   },
+   {
+    "gameId": "20261105000002",
+    "type": "linkToGameDetail"
+   },
+   {
+    "entries": [
+     "MYSPORTS"
+    ],
+    "type": "broadcasts"
+   }
+  ],
+  [
+   "Di",
+   "09.09.2025",
+   "19:45",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": true,
+    "type": "team"
+   },
+   {
+    "id": 101150,
+    "name": "HC Lugano",
+    "acronym": "HCL",
+    "signed": false,
+    "type": "team"
+   },
+   {
+    "homeTeam": "3",
+    "awayTeam": "2",
+    "type": "result"
+   },
+   {
+    "homeTeam": [
+     "1",
+     "0",
+     "1",
+     "1"
+    ],
+    "awayTeam": [
+     "0",
+     "1",
+     "1",
+     "0"
+    ],
+    "type": "periods"
+   },
+   "OT",
+   {
+    "id": 12,
+    "updateDateTime": "2025-11-13T15:54:05.4335162+01:00",
+    "startDateTime": "2025-09-09T19:45:00+02:00",
+    "endDateTime": "2025-09-09T22:10:00+02:00",
+    "percent": 100,
+    "name": "Ende",
+    "canceled": false,
+    "type": "gameStatus"
+   },
+   {
+    "gameId": "20261105000003",
+    "type": "linkToGameDetail"
+   },
+   {
+    "entries": [
+     "MYSPORTS",
+     "TELETICINO"
+    ],
+    "type": "broadcasts"
+   }
+  ]
+ ],
+ "alias": "results"
+}

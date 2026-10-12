@@ -1,0 +1,467 @@
+{
+ "title": "Rangliste",
+ "description": null,
+ "pages": 0,
+ "selectedPage": 0,
+ "orderBy": "",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2026-02-09T11:12:33.7117128+01:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    }
+   ],
+   "selected": "2026",
+   "type": "Dropdown",
+   "alias": "Season"
+  },
+  {
+   "title": "Heim/Auswärts",
+   "entries": [
+    {
+     "name": "Heim/Auswärts",
+     "alias": "All"
+    },
+    {
+     "name": "Heim",
+     "alias": "Home"
+    },
+    {
+     "name": "Auswärts",
+     "alias": "Away"
+    }
+   ],
+   "selected": "All",
+   "type": "Dropdown",
+   "alias": "ContentType"
+  }
+ ],
+ "secondaryMenu": null,
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [
+  {
+   "name": null,
+   "style": "line",
+   "rows": [
+    6,
+    10
+   ]
+  }
+ ],
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "rank"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "GP",
+   "description": "Gespielte Spiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesPlayed"
+  },
+  {
+   "name": "PTS",
+   "description": "Punktetotal",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "points"
+  },
+  {
+   "name": "P/GP",
+   "description": "Punktetotal pro Spiel",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "pointsQuotient"
+  },
+  {
+   "name": "W",
+   "description": "Siege nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonInTime"
+  },
+  {
+   "name": "OTW",
+   "description": "Siege nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonExtraTime"
+  },
+  {
+   "name": "SOW",
+   "description": "Siege nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonPenalty"
+  },
+  {
+   "name": "SOL",
+   "description": "Niederlagen nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostPenalty"
+  },
+  {
+   "name": "OTL",
+   "description": "Niederlage nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostExtraTime"
+  },
+  {
+   "name": "L",
+   "description": "Niederlagen nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostInTime"
+  },
+  {
+   "name": "GF",
+   "description": "Tore geschossen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsFor"
+  },
+  {
+   "name": "GA",
+   "description": "Tore erhalten",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsAgainst"
+  },
+  {
+   "name": "GDF",
+   "description": "Tordifferenz",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsDifference"
+  },
+  {
+   "name": "Streak",
+   "description": "Letzte Spiele",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": false,
+   "alias": "streak"
+  }
+ ],
+ "data": [
+  [
+   "1",
+   {
+    "id": 103216,
+    "name": "EHC Seewen",
+    "acronym": "EHCS",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "68",
+   "2.267",
+   "21",
+   "2",
+   "0",
+   "1",
+   "0",
+   "6",
+   "115",
+   "66",
+   "49",
+   "L+W-L+W+L+W+W+L+W+W+"
+  ],
+  [
+   "2",
+   {
+    "id": 103065,
+    "name": "HC Franches-Montagnes",
+    "acronym": "HCFM",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "64",
+   "2.133",
+   "20",
+   "1",
+   "1",
+   "0",
+   "0",
+   "8",
+   "128",
+   "64",
+   "64",
+   "W+W+W+W+W+W+W+W+L+W-"
+  ],
+  [
+   "3",
+   {
+    "id": 102032,
+    "name": "Hockey Huttwil",
+    "acronym": "HoHu",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "63",
+   "2.100",
+   "19",
+   "2",
+   "0",
+   "1",
+   "1",
+   "7",
+   "117",
+   "75",
+   "42",
+   "W+W+W-W+L+W+L+W-W+W+"
+  ],
+  [
+   "4",
+   {
+    "id": 102080,
+    "name": "EHC Thun",
+    "acronym": "EHCT",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "55",
+   "1.833",
+   "15",
+   "3",
+   "1",
+   "0",
+   "2",
+   "9",
+   "99",
+   "70",
+   "29",
+   "W+W+L-L+W+W+W+W+W+L+"
+  ],
+  [
+   "5",
+   {
+    "id": 101021,
+    "name": "EHC Dübendorf",
+    "acronym": "EHCD",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "52",
+   "1.733",
+   "15",
+   "1",
+   "1",
+   "0",
+   "3",
+   "10",
+   "97",
+   "90",
+   "7",
+   "W+L+W+W+L-L+W+L+L+W+"
+  ],
+  [
+   "6",
+   {
+    "id": 101033,
+    "name": "EHC Frauenfeld",
+    "acronym": "EHCF",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "48",
+   "1.600",
+   "15",
+   "0",
+   "0",
+   "2",
+   "1",
+   "12",
+   "95",
+   "93",
+   "2",
+   "L+L-W+L+W+L+W+W+W+W+"
+  ],
+  [
+   "7",
+   {
+    "id": 105994,
+    "name": "SC Langenthal",
+    "acronym": "SC Langenthal",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "41",
+   "1.367",
+   "10",
+   "2",
+   "3",
+   "0",
+   "1",
+   "14",
+   "94",
+   "83",
+   "11",
+   "W+W+L+L+W+L+L-L+W+L+"
+  ],
+  [
+   "8",
+   {
+    "id": 101011,
+    "name": "EHC Bülach",
+    "acronym": "BUL",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "33",
+   "1.100",
+   "9",
+   "1",
+   "1",
+   "2",
+   "0",
+   "17",
+   "64",
+   "103",
+   "-39",
+   "L+L+W+W+L+L+W+W+L+W+"
+  ],
+  [
+   "9",
+   {
+    "id": 101083,
+    "name": "EHC Wetzikon",
+    "acronym": "EHCW",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "30",
+   "1.000",
+   "8",
+   "0",
+   "1",
+   "1",
+   "3",
+   "17",
+   "71",
+   "100",
+   "-29",
+   "L+L+L-L+W+L+L+L+L+L-"
+  ],
+  [
+   "10",
+   {
+    "id": 102054,
+    "name": "SC Lyss",
+    "acronym": "Lyss",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "29",
+   "0.967",
+   "7",
+   "0",
+   "1",
+   "3",
+   "3",
+   "16",
+   "83",
+   "123",
+   "-40",
+   "L-L+L+L+L+L+W+L+L+L+"
+  ],
+  [
+   "11",
+   {
+    "id": 103205,
+    "name": "PIKES EHC Oberthurgau",
+    "acronym": "PIKES EHC Oberthurgau",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "12",
+   "0.400",
+   "1",
+   "3",
+   "1",
+   "0",
+   "1",
+   "24",
+   "56",
+   "152",
+   "-96",
+   "W-L+L+W-W-L+L+L+L+L+"
+  ]
+ ],
+ "alias": "standing"
+}

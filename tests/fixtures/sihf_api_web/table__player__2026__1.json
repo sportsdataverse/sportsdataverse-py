@@ -1,0 +1,265 @@
+{
+ "title": "Player Stats",
+ "description": "Player Stats - Summary",
+ "pages": 427,
+ "selectedPage": 1,
+ "orderBy": "points",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2026-05-01T13:10:10.7252787+02:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    }
+   ],
+   "selected": "2026",
+   "type": "Dropdown",
+   "alias": "Season"
+  }
+ ],
+ "secondaryMenu": [
+  {
+   "name": "Summary",
+   "rowIdentifierKey": "points",
+   "isOrderDescending": true,
+   "alias": "player"
+  },
+  {
+   "name": "Goals/Assists",
+   "rowIdentifierKey": "goals",
+   "isOrderDescending": true,
+   "alias": "playerGoalAssist"
+  },
+  {
+   "name": "Shots",
+   "rowIdentifierKey": "sogSog",
+   "isOrderDescending": true,
+   "alias": "playerShotDetail"
+  },
+  {
+   "name": "Penalties",
+   "rowIdentifierKey": "pimTotal",
+   "isOrderDescending": true,
+   "alias": "playerFoul"
+  },
+  {
+   "name": "Shootouts",
+   "rowIdentifierKey": "penShots",
+   "isOrderDescending": true,
+   "alias": "playerShootout"
+  },
+  {
+   "name": "Faceoffs Summary",
+   "rowIdentifierKey": "faceoffs",
+   "isOrderDescending": true,
+   "alias": "playerFaceoff"
+  },
+  {
+   "name": "Faceoffs/Zone",
+   "rowIdentifierKey": "faceoffsOffensive",
+   "isOrderDescending": true,
+   "alias": "playerFaceoffZone"
+  },
+  {
+   "name": "Faceoffs/Spiel",
+   "rowIdentifierKey": "faceoffsOffensivePerGame",
+   "isOrderDescending": true,
+   "alias": "playerFaceoffZoneGame"
+  },
+  {
+   "name": "Time on ice",
+   "rowIdentifierKey": "timeOnIcePerGame",
+   "isOrderDescending": true,
+   "alias": "playerTimeOnIce"
+  }
+ ],
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": null,
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": false,
+   "alias": "rank"
+  },
+  {
+   "name": "Spieler",
+   "description": "Spielername",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "player"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "Pos",
+   "description": "Spielerposition",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "position"
+  },
+  {
+   "name": "GP",
+   "description": "Gespielte Spiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesPlayed"
+  },
+  {
+   "name": "G",
+   "description": "Tore",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goals"
+  },
+  {
+   "name": "A",
+   "description": "Assists",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "assists"
+  },
+  {
+   "name": "PTS",
+   "description": "Punktetotal",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "points"
+  },
+  {
+   "name": "P/GP",
+   "description": "Punkte / Spiel",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "pointsPerGame"
+  },
+  {
+   "name": "PIM Total",
+   "description": "PIM Total",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "pimTotal"
+  },
+  {
+   "name": "+/-",
+   "description": "Plus / Minus",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "plusMinus"
+  }
+ ],
+ "data": [
+  [
+   "427",
+   "Paschoud Claude-C.",
+   {
+    "id": 102127,
+    "name": "SCL Tigers",
+    "acronym": "SCL",
+    "signed": false,
+    "type": "team"
+   },
+   "Verteidiger",
+   "36",
+   "0",
+   "0",
+   "0",
+   "0.00",
+   "8",
+   "-6"
+  ],
+  [
+   "426",
+   "Pouilly Bastien",
+   {
+    "id": 103144,
+    "name": "HC Ajoie",
+    "acronym": "HCA",
+    "signed": false,
+    "type": "team"
+   },
+   "Verteidiger",
+   "30",
+   "0",
+   "0",
+   "0",
+   "0.00",
+   "2",
+   "-4"
+  ],
+  [
+   "425",
+   "Rod Julien",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "Stürmer",
+   "29",
+   "0",
+   "0",
+   "0",
+   "0.00",
+   "2",
+   "-1"
+  ]
+ ],
+ "alias": "player"
+}
