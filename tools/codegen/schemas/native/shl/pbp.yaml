@@ -1,0 +1,218 @@
+columns:
+- description: StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same
+    game as gameId.
+  name: game_source_id
+  type: character
+- description: StatNet game number (StatNet key space, e.g. 22003); keys stats-info
+    games{} and equals sports-v2 game-info extId. Not the game uuid.
+  name: game_id
+  type: integer
+- description: StatNet event sequence number; unique within one game only (pair it
+    with gameId or gameUuid).
+  name: event_id
+  type: integer
+- description: Event uuid (platform key space), unique across games. eventId is the
+    StatNet per-game sequence number.
+  name: event_uuid
+  type: character
+- description: Schedule round of the game (1 = first game day).
+  name: round
+  type: integer
+- description: 'StatNet league label: Elitserien (SHL''s name until 2013).'
+  name: game_type
+  type: character
+- description: Name of the arena hosting the game.
+  name: arena
+  type: character
+- description: Spectators at the game.
+  name: attendance
+  type: integer
+- description: Scheduled start (local).
+  name: start_date_and_time
+  type: character
+- description: Period (1-3, 4 = overtime, 5 = shootout).
+  name: period
+  type: integer
+- description: Game clock in the period (MM:SS, counting up from 00:00). Clock/duration
+    as an mm:ss string.
+  name: time
+  type: character
+- description: Game state (e.g. GameEnded).
+  name: game_state
+  type: character
+- description: Event revision counter.
+  name: revision
+  type: integer
+- description: 'Event type: goal, shot, penalty, goalkeeper (goalie in / out), period
+    (start / end), timeout.'
+  name: type
+  type: character
+- description: Wall-clock time of the event (local).
+  name: real_world_time
+  type: character
+- description: Last update time of the event.
+  name: updated_time
+  type: character
+- description: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  name: home_team_id
+  type: character
+- description: Team display name (e.g. Frölunda HC).
+  name: home_team_name
+  type: character
+- description: Team code (FHC, LHC, ...).
+  name: home_team_code
+  type: character
+- description: Goals scored by the team in the game.
+  name: home_score
+  type: integer
+- description: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  name: away_team_id
+  type: character
+- description: Team display name (e.g. Frölunda HC).
+  name: away_team_name
+  type: character
+- description: Team code (FHC, LHC, ...).
+  name: away_team_code
+  type: character
+- description: Goals scored by the team in the game.
+  name: away_score
+  type: integer
+- description: Team code (e.g. FHC) in gameday and standings payloads; not the team
+    uuid.
+  name: event_team_id
+  type: character
+- description: home or away.
+  name: event_place
+  type: character
+- description: Team code (FHC, LHC, ...).
+  name: event_team_code
+  type: character
+- description: Team display name (e.g. Frölunda HC).
+  name: event_team_name
+  type: character
+- description: isa (StatNet) player id, Int64. Play-by-play sends it as a string,
+    every other route as an integer; it is cast here so the frames join.
+  name: player_id
+  type: integer
+- description: Given name.
+  name: player_first_name
+  type: character
+- description: Surname.
+  name: player_family_name
+  type: character
+- description: Jersey number in this game. Numeric value sent as a string.
+  name: player_jersey_today
+  type: character
+- description: Goalie event, true when the goalie enters the ice and false when leaving.
+  name: is_entering
+  type: logical
+- description: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  name: game_uuid
+  type: character
+- description: Shot x coordinate. Units, origin and orientation unverified; range
+    -29..481 over the 118 located events of game bdhvuc5tex (discovery download, 2026-10-12).
+  name: location_x
+  type: integer
+- description: Shot y coordinate. Units, origin and orientation unverified; range
+    -140..129 over the 118 located events of game bdhvuc5tex (discovery download,
+    2026-10-12).
+  name: location_y
+  type: integer
+- description: Goal-mouth section of the shot/goal (-3 lines up with blocked shots;
+    unverified).
+  name: goal_section
+  type: integer
+- description: Whether the shot/goal was a penalty shot.
+  name: is_penalty_shot
+  type: logical
+- description: Penalty type (Minor, Major, ...).
+  name: variant_short_name
+  type: character
+- description: Minor-penalty minutes. Numeric value sent as a string.
+  name: variant_minor_time
+  type: character
+- description: Double-minor minutes in the penalty. Numeric value sent as a string.
+  name: variant_double_minor_time
+  type: character
+- description: Bench minor minutes in the penalty. Numeric value sent as a string.
+  name: variant_bench_time
+  type: character
+- description: Major-penalty minutes. Numeric value sent as a string.
+  name: variant_major_time
+  type: character
+- description: Misconduct minutes. Numeric value sent as a string.
+  name: variant_misconduct_time
+  type: character
+- description: Game-misconduct minutes in the penalty. Numeric value sent as a string.
+  name: variant_g_m_time
+  type: character
+- description: Match-penalty minutes. Numeric value sent as a string.
+  name: variant_m_p_time
+  type: character
+- description: Text description (penalty, media).
+  name: variant_description
+  type: character
+- description: Penalty offence code (e.g. CROSS, HOOK, TRIP).
+  name: offence
+  type: character
+- description: Whether the penalty led to a penalty shot.
+  name: did_render_in_penalty_shot
+  type: logical
+- description: Home goals after this event (running score).
+  name: home_goals
+  type: integer
+- description: Away goals after this event (running score).
+  name: away_goals
+  type: integer
+- description: Whether the goal went into an empty net.
+  name: is_empty_net_goal
+  type: logical
+- description: isa ids of the scoring side's players on the ice for the goal (List[Int64]).
+  name: pop_player_ids
+  type: character
+- description: isa ids of the conceding side's players on the ice for the goal (List[Int64]).
+  name: nep_player_ids
+  type: character
+- description: isa id of the first assist.
+  name: assist1_player_id
+  type: integer
+- description: 'First assist: given name.'
+  name: assist1_first_name
+  type: character
+- description: 'First assist: surname.'
+  name: assist1_family_name
+  type: character
+- description: 'First assist: jersey number in this game (string).'
+  name: assist1_jersey_today
+  type: character
+- description: isa id of the second assist.
+  name: assist2_player_id
+  type: integer
+- description: 'Second assist: given name.'
+  name: assist2_first_name
+  type: character
+- description: 'Second assist: surname.'
+  name: assist2_family_name
+  type: character
+- description: 'Second assist: jersey number in this game (string).'
+  name: assist2_jersey_today
+  type: character
+- description: Goal strength (e.g. EQ, PP1, SH1).
+  name: goal_status
+  type: character
+- description: Whether the period has started.
+  name: started
+  type: logical
+- description: Period start time (ISO 8601 UTC).
+  name: started_at
+  type: character
+- description: Whether the period is finished.
+  name: finished
+  type: logical
+- description: Period end time (ISO 8601 UTC).
+  name: finished_at
+  type: character
+kind: dataframe
+schema: shl_pbp

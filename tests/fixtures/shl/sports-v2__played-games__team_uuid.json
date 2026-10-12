@@ -1,0 +1,165 @@
+{
+  "playedGames": [
+    {
+      "date": "10 oct 26",
+      "time": "16:00",
+      "uuid": "wlwcftkp4r",
+      "startDateTime": "2026-10-10T16:00:00.000Z",
+      "state": "post-game",
+      "overtime": false,
+      "shootout": false,
+      "ssgtUuid": "qa98unlbd6",
+      "homeTeamInfo": {
+        "status": "WIN",
+        "uuid": "4519-4519Rdei6",
+        "ownerInstanceId": "ifb1_ifb",
+        "code": "IFB",
+        "names": {
+          "code": "IFB",
+          "short": "Björklöven",
+          "long": "Björklöven",
+          "full": "Idrottsföreningen Björklöven",
+          "codeSite": "IFB Herr",
+          "shortSite": "Björklöven Herr",
+          "fullSite": "Idrottsföreningen Björklöven Herr",
+          "longSite": "Björklöven"
+        },
+        "score": 3,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/ifb1_ifb.svg"
+      },
+      "awayTeamInfo": {
+        "status": "LOSE",
+        "uuid": "087a-087aTQv9u",
+        "ownerInstanceId": "fhc1_fhc",
+        "code": "FHC",
+        "names": {
+          "code": "FHC",
+          "short": "Frölunda ",
+          "long": "Frölunda HC",
+          "full": "Frölunda Hockey Club",
+          "codeSite": "FHC",
+          "shortSite": "Frölunda",
+          "fullSite": "Frölunda Hockey Club / Herr",
+          "longSite": "Frölunda HC"
+        },
+        "score": 2,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg"
+      },
+      "venueInfo": {
+        "uuid": "qQ9-0fe24X0mb",
+        "name": "Winpos Arena"
+      },
+      "seriesInfo": {
+        "uuid": "qQ9-bb0bzEWUk",
+        "code": "SHL",
+        "displayName": "SHL"
+      }
+    },
+    {
+      "date": "8 oct 26",
+      "time": "17:00",
+      "uuid": "u3wr91jirr",
+      "startDateTime": "2026-10-08T17:00:00.000Z",
+      "state": "post-game",
+      "overtime": false,
+      "shootout": false,
+      "ssgtUuid": "qa98unlbd6",
+      "homeTeamInfo": {
+        "status": "WIN",
+        "uuid": "31d1-31d1NbSlR",
+        "ownerInstanceId": "tik1_tik",
+        "code": "TIK",
+        "names": {
+          "code": "TIK",
+          "short": "Timrå",
+          "long": "Timrå IK",
+          "full": "Timrå Idrottsklubb",
+          "codeSite": "TIK",
+          "shortSite": "Timrå",
+          "fullSite": "Timrå Idrottsklubb",
+          "longSite": "Timrå IK"
+        },
+        "score": 4,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/tik1_tik.svg"
+      },
+      "awayTeamInfo": {
+        "status": "LOSE",
+        "uuid": "087a-087aTQv9u",
+        "ownerInstanceId": "fhc1_fhc",
+        "code": "FHC",
+        "names": {
+          "code": "FHC",
+          "short": "Frölunda ",
+          "long": "Frölunda HC",
+          "full": "Frölunda Hockey Club",
+          "codeSite": "FHC",
+          "shortSite": "Frölunda",
+          "fullSite": "Frölunda Hockey Club / Herr",
+          "longSite": "Frölunda HC"
+        },
+        "score": 1,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg"
+      },
+      "venueInfo": {
+        "uuid": "qQ9-8134w5pTr",
+        "name": "NHC Arena"
+      },
+      "seriesInfo": {
+        "uuid": "qQ9-bb0bzEWUk",
+        "code": "SHL",
+        "displayName": "SHL"
+      }
+    },
+    {
+      "date": "6 oct 26",
+      "time": "16:00",
+      "uuid": "qQ1-5b5lCGXcP",
+      "startDateTime": "2026-10-06T16:00:00.000Z",
+      "state": "post-game",
+      "overtime": true,
+      "shootout": false,
+      "ssgtUuid": "aigy31hpwc",
+      "homeTeamInfo": {
+        "status": "WIN",
+        "uuid": "9397-476cGlUFJ",
+        "ownerInstanceId": "lib1_lib",
+        "code": "LIB",
+        "names": {
+          "code": "LIB",
+          "short": "Liberec",
+          "long": "Bílí Tygři Liberec",
+          "full": "Bílí Tygři Liberec"
+        },
+        "score": 3,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/lib1_lib.svg"
+      },
+      "awayTeamInfo": {
+        "status": "LOSE",
+        "uuid": "087a-087aTQv9u",
+        "ownerInstanceId": "fhc1_fhc",
+        "code": "FHC",
+        "names": {
+          "code": "FHC",
+          "short": "Frölunda ",
+          "long": "Frölunda HC",
+          "full": "Frölunda Hockey Club",
+          "codeSite": "FHC",
+          "shortSite": "Frölunda",
+          "fullSite": "Frölunda Hockey Club / Herr",
+          "longSite": "Frölunda HC"
+        },
+        "score": 2,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg"
+      },
+      "venueInfo": {
+        "uuid": "miyk19jqna",
+        "name": "Home Credit Arena"
+      },
+      "seriesInfo": {
+        "uuid": "qQ9-9397drVEh",
+        "code": "CHL",
+        "displayName": "CHL"
+      }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  name: ssgt_uuid
+  type: character
+- description: StatNet team code (SAIK, FHC).
+  name: team_code
+  type: character
+- description: Platform team uuid.
+  name: team_uuid
+  type: character
+- description: Team name.
+  name: team_name
+  type: character
+- description: Team short name.
+  name: team_short_name
+  type: character
+- description: Position in the table (1 = top).
+  name: rank
+  type: integer
+- description: Rank change.
+  name: rank_diff
+  type: integer
+- description: Games played.
+  name: gp
+  type: integer
+- description: Regulation wins.
+  name: w
+  type: integer
+- description: Games tied after regulation, decided in overtime or a shootout (= OTW
+    + OTL).
+  name: t
+  type: integer
+- description: Regulation losses.
+  name: l
+  type: integer
+- description: Overtime and shootout wins.
+  name: otw
+  type: integer
+- description: Overtime and shootout losses.
+  name: otl
+  type: integer
+- description: Standings points (3 per regulation win, 2 per OT/SO win, 1 per OT/SO
+    loss).
+  name: p
+  type: integer
+- description: Goals for.
+  name: gf
+  type: integer
+- description: Goals against.
+  name: ga
+  type: integer
+- description: Goal difference.
+  name: diff
+  type: integer
+kind: dataframe
+schema: shl_standings

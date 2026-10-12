@@ -1,0 +1,96 @@
+columns:
+- description: Display abbreviation; differs from the team code for some clubs (SKE
+    vs SAIK, ÖRE vs OHK).
+  name: names_code
+  type: character
+- description: Short club name ('Herr' = men's team).
+  name: names_short
+  type: character
+- description: Long club name ('Herr' = men's team).
+  name: names_long
+  type: character
+- description: Full club name ('Herr' = men's team).
+  name: names_full
+  type: character
+- description: Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr').
+  name: names_code_site
+  type: character
+- description: Short club name as shown on the site ('Herr' = men's team).
+  name: names_short_site
+  type: character
+- description: Full club name as shown on the site ('Herr' = men's team).
+  name: names_full_site
+  type: character
+- description: Long club name as shown on the site ('Herr' = men's team).
+  name: names_long_site
+  type: character
+- description: Club founding year (text). Numeric value sent as a string.
+  name: info_founded
+  type: character
+- description: Club's championships (text).
+  name: info_golds
+  type: character
+- description: Club's final appearances (text).
+  name: info_finals
+  type: character
+- description: Retired jersey numbers (text).
+  name: info_retired_numbers
+  type: character
+- description: Club postal address.
+  name: info_address
+  type: character
+- description: Club phone.
+  name: info_phone
+  type: character
+- description: Club fax.
+  name: info_fax
+  type: character
+- description: Club email.
+  name: info_email
+  type: character
+- description: Club chairman.
+  name: info_chairman
+  type: character
+- description: Club general manager.
+  name: info_manager
+  type: character
+- description: Press-accreditation contact, free Swedish text (e.g. 'Senast dagen
+    före match till …' = 'no later than the day before the game, to …').
+  name: info_accreditation
+  type: character
+- description: Club Facebook URL.
+  name: info_facebook
+  type: character
+- description: Club Instagram URL.
+  name: info_instagram
+  type: character
+- description: Club X/Twitter URL.
+  name: info_twitter
+  type: character
+- description: Club contact text.
+  name: contact
+  type: character
+- description: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  name: uuid
+  type: character
+- description: Nationality (ISO country code).
+  name: nationality
+  type: character
+- description: Name of the arena hosting the game. Empty string in every sample (placeholder).
+  name: arena_name
+  type: character
+- description: Public image URL.
+  name: public_url
+  type: character
+- description: Logo URL.
+  name: icon
+  type: character
+- description: Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  name: owner_instance_id
+  type: character
+- description: Club name as shown on its own site (e.g. Frölunda HC).
+  name: site_display_name
+  type: character
+kind: dataframe
+schema: shl_team

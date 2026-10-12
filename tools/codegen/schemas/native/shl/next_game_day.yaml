@@ -1,0 +1,128 @@
+columns:
+- description: Platform game uuid (bdhvuc5tex); every gameday route takes it.
+  name: game_uuid
+  type: character
+- description: Scheduled start, local time (Europe/Stockholm).
+  name: start_date_time
+  type: character
+- description: 'Game state: pre-game or post-game (hyphenated; a live value was not
+    observed).'
+  name: state
+  type: character
+- description: Whether the game went to overtime.
+  name: overtime
+  type: logical
+- description: Whether the game went to a shootout.
+  name: shootout
+  type: logical
+- description: 'ssgt uuid (platform key space: one season + series + game type); label
+    via layout-info seasonSeriesGameTypeTeams[].'
+  name: ssgt_uuid
+  type: character
+- description: Result for the team (WIN, LOSE) or record status.
+  name: home_team_status
+  type: character
+- description: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  name: home_team_uuid
+  type: character
+- description: Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  name: home_team_owner_instance_id
+  type: character
+- description: Home team code (e.g. FHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  name: home_team_code
+  type: character
+- description: Display abbreviation; differs from the team code for some clubs (SKE
+    vs SAIK, ÖRE vs OHK).
+  name: home_team_names_code
+  type: character
+- description: Short club name ('Herr' = men's team).
+  name: home_team_names_short
+  type: character
+- description: Long club name ('Herr' = men's team).
+  name: home_team_names_long
+  type: character
+- description: Full club name ('Herr' = men's team).
+  name: home_team_names_full
+  type: character
+- description: Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr').
+  name: home_team_names_code_site
+  type: character
+- description: Short club name as shown on the site ('Herr' = men's team).
+  name: home_team_names_short_site
+  type: character
+- description: Full club name as shown on the site ('Herr' = men's team).
+  name: home_team_names_full_site
+  type: character
+- description: Long club name as shown on the site ('Herr' = men's team).
+  name: home_team_names_long_site
+  type: character
+- description: Goals scored by the team in the game.
+  name: home_team_score
+  type: character
+- description: Logo URL.
+  name: home_team_icon
+  type: character
+- description: Result for the team (WIN, LOSE) or record status.
+  name: away_team_status
+  type: character
+- description: Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid}
+    and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code.
+  name: away_team_uuid
+  type: character
+- description: Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg.
+  name: away_team_owner_instance_id
+  type: character
+- description: Away team code (e.g. LHC); joins to gameday teamId and the code-keyed
+    teams{} maps.
+  name: away_team_code
+  type: character
+- description: Display abbreviation; differs from the team code for some clubs (SKE
+    vs SAIK, ÖRE vs OHK).
+  name: away_team_names_code
+  type: character
+- description: Short club name ('Herr' = men's team).
+  name: away_team_names_short
+  type: character
+- description: Long club name ('Herr' = men's team).
+  name: away_team_names_long
+  type: character
+- description: Full club name ('Herr' = men's team).
+  name: away_team_names_full
+  type: character
+- description: Goals scored by the team in the game.
+  name: away_team_score
+  type: character
+- description: Logo URL.
+  name: away_team_icon
+  type: character
+- description: Arena uuid (platform key space).
+  name: venue_uuid
+  type: character
+- description: Arena name.
+  name: venue_name
+  type: character
+- description: Series uuid (platform key space; SHL = qQ9-bb0bzEWUk).
+  name: series_uuid
+  type: character
+- description: Series code (SHL, CHL).
+  name: series_code
+  type: character
+- description: Series label shown on the site (SHL, CHL).
+  name: series_display_name
+  type: character
+- description: Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr').
+  name: away_team_names_code_site
+  type: character
+- description: Short club name as shown on the site ('Herr' = men's team).
+  name: away_team_names_short_site
+  type: character
+- description: Full club name as shown on the site ('Herr' = men's team).
+  name: away_team_names_full_site
+  type: character
+- description: Long club name as shown on the site ('Herr' = men's team).
+  name: away_team_names_long_site
+  type: character
+kind: dataframe
+schema: shl_next_game_day

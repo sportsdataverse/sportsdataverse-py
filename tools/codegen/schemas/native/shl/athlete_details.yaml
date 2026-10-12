@@ -1,0 +1,57 @@
+columns:
+- description: Athlete uuid (platform key space; qQ9-... or 10-char form); joins to
+    the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy
+    id.
+  name: athlete_data_uuid
+  type: character
+- description: Contact info (null in captures).
+  name: athlete_data_contact_info
+  type: character
+- description: Record creation time (ISO 8601; often null).
+  name: athlete_data_created_at
+  type: character
+- description: Record creator (site instance id; often null).
+  name: athlete_data_created_by
+  type: character
+- description: Site that created the record (null in captures).
+  name: athlete_data_creator_site
+  type: character
+- description: Height in cm.
+  name: athlete_data_height
+  type: integer
+- description: Date of birth (YYYY-MM-DD).
+  name: athlete_data_date_of_birth
+  type: character
+- description: Soft-delete flag of the record (false in every sample).
+  name: athlete_data_deleted
+  type: logical
+- description: Given name.
+  name: athlete_data_first_name
+  type: character
+- description: Sex of the athlete or team (male / female).
+  name: athlete_data_gender
+  type: character
+- description: Record last-modified time (ISO 8601).
+  name: athlete_data_last_modified
+  type: character
+- description: Surname.
+  name: athlete_data_last_name
+  type: character
+- description: Free-form metadata.
+  name: athlete_data_metadata
+  type: character
+- description: Nationality (ISO country code).
+  name: athlete_data_nationality
+  type: character
+- description: Shooting side (L / R; Left / Right).
+  name: athlete_data_shoots
+  type: character
+- description: Weight in kg.
+  name: athlete_data_weight
+  type: integer
+- description: External ids of the athlete (isa, ramses_legacy, ramses_generic_legacy,
+    ramses_merged).
+  name: athlete_data_player_ext_ids
+  type: character
+kind: dataframe
+schema: shl_athlete_details

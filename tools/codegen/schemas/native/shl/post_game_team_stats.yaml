@@ -1,0 +1,47 @@
+columns:
+- description: Translation key of the side.
+  name: home_team_side_translate_key
+  type: character
+- description: Stat code compared on the left (e.g. G, PPG).
+  name: home_team_left_type
+  type: character
+- description: Value (string-encoded).
+  name: home_team_left_value
+  type: integer
+- description: Stat code compared on the right (e.g. SOG, PPOpp).
+  name: home_team_right_type
+  type: character
+- description: Value (string-encoded).
+  name: home_team_right_value
+  type: integer
+- description: Stat code compared in the middle (e.g. SEff, PPPerc).
+  name: home_team_center_type
+  type: character
+- description: Value (string-encoded). Numeric, but sent as a string in some rows
+    and as a number in others.
+  name: home_team_center_value
+  type: character
+- description: Translation key of the side.
+  name: away_team_side_translate_key
+  type: character
+- description: Stat code compared on the left (e.g. G, PPG).
+  name: away_team_left_type
+  type: character
+- description: Value (string-encoded).
+  name: away_team_left_value
+  type: integer
+- description: Stat code compared on the right (e.g. SOG, PPOpp).
+  name: away_team_right_type
+  type: character
+- description: Value (string-encoded).
+  name: away_team_right_value
+  type: integer
+- description: Stat code compared in the middle (e.g. SEff, PPPerc).
+  name: away_team_center_type
+  type: character
+- description: Value (string-encoded). Numeric, but sent as a string in some rows
+    and as a number in others.
+  name: away_team_center_value
+  type: character
+kind: dataframe
+schema: shl_post_game_team_stats

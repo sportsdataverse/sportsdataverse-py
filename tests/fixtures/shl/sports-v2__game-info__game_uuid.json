@@ -1,0 +1,61 @@
+{
+  "instanceContext": {
+    "siteTeamIsInGame": true,
+    "siteTeamIsHomeTeam": true,
+    "siteTeamIsAwayTeam": true
+  },
+  "gameInfo": {
+    "gameUuid": "bdhvuc5tex",
+    "extId": "22003",
+    "startDateTime": "2025-09-13T13:15:00.000Z",
+    "arenaName": "Scandinavium",
+    "state": "post_game",
+    "overtime": false,
+    "shootout": false,
+    "seriesCode": "SHL",
+    "seriesName": "SHL",
+    "roundNumber": 1,
+    "roundLabel": "",
+    "seriesDisplayName": "SHL"
+  },
+  "homeTeam": {
+    "names": {
+      "code": "FHC",
+      "short": "Frölunda ",
+      "long": "Frölunda HC",
+      "full": "Frölunda Hockey Club",
+      "codeSite": "FHC",
+      "shortSite": "Frölunda",
+      "fullSite": "Frölunda Hockey Club / Herr",
+      "longSite": "Frölunda HC"
+    },
+    "uuid": "087a-087aTQv9u",
+    "instanceId": "fhc1_fhc",
+    "foundedOn": "1944",
+    "address": "Frölunda HC\r\nFrölundaborgs Isstadion\r\nBox 12127\r\n402 42 Göteborg",
+    "email": "kontakt@frolundahockey.com",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+    "score": 2
+  },
+  "awayTeam": {
+    "names": {
+      "code": "LHC",
+      "short": "Linköping",
+      "long": "Linköping HC",
+      "full": "Linköping Hockey Club",
+      "codeSite": "LHC",
+      "shortSite": "Linköping",
+      "fullSite": "Linköping Hockey Club",
+      "longSite": "Linköping HC"
+    },
+    "uuid": "41c4-41c4BiYZU",
+    "instanceId": "lhc1_lhc",
+    "foundedOn": "1976",
+    "address": "Stångebro Ishall, Gumpekullavägen 3 582 78 Linköping",
+    "email": "info@lhc.eu",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/lhc1_lhc.svg",
+    "score": 1
+  },
+  "ssgtUuid": "iuzqg7dqk9",
+  "seriesUuid": "qQ9-bb0bzEWUk"
+}
