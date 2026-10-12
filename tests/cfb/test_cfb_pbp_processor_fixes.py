@@ -854,6 +854,48 @@ def test_two_point_pass_the_defence_returned_is_not_a_kick():
     assert row["xp_attempt"] is False
 
 
+# --- R7: fumble_lost reads who recovered, not whether possession changed ---------------------------
+
+
+def _fixture_plays(game_id: int) -> pl.DataFrame:
+    trimmed = FIX / f"summary_{game_id}_trimmed.json.gz"
+    return _trimmed_plays(game_id) if trimmed.exists() else _plays(game_id)
+
+
+@pytest.mark.parametrize(
+    "game_id, needle, lost",
+    [
+        # the returner recovers his own punt fumble: possession changed on the punt, nothing was lost
+        (401628439, "Anthony Evans III fumbled, recovered by UGA Anthony Evans III", False),
+        # a muffed punt the kicking team recovers: possession did not change, the receiving team lost it
+        (401754598, "muffed by #24 K.Kirkland at FSU35 recovered", True),
+    ],
+)
+def test_fumble_lost_follows_the_recovering_team(game_id, needle, lost):
+    row = _row(_fixture_plays(game_id), needle)
+    assert row["fumble_lost"] is lost
+    assert row["fumble_recovered"] is (row["fumble_vec"] and not lost)
+
+
+# --- R8: the kickoff touchback came out to the 25 from 2012, not 2014 -----------------------------
+
+
+@pytest.mark.parametrize("game_id", [322590228, 332570254])
+def test_2012_13_kickoff_touchbacks_are_spotted_at_the_25(game_id):
+    # NCAA moved the kickoff touchback to the 25 in 2012; the next snap in every 2012-13 fixture
+    # touchback starts at the receiver's 25, but the code switched from 20 only after 2013.
+    plays = _fixture_plays(game_id)
+    tbs = plays.filter((pl.col("kickoff_play") == True) & (pl.col("kickoff_tb") == True))
+    assert tbs.height > 0
+    assert tbs["yds_kickoff_return"].unique().to_list() == [25]
+
+
+def test_2004_fumble_returned_for_a_touchdown_carries_its_yards():
+    # 2004-06 write "returned for a 33 yard touchdown"; the reader only knew "return for N".
+    row = _row(_fixture_plays(243110264), "recovered by Wilrey Fontenot (UA), returned for a 33 yard touchdown")
+    assert row["yds_fumble_return"] == 33
+
+
 # --- R4: kick / punt flags follow the re-typed play, not ESPN's raw label ---------------------------
 
 
@@ -876,3 +918,23 @@ def test_summary_format_touchdown_is_a_td_play():
     # neither "touchdown" nor "for a TD", so td_play stayed False beside its touchdown type.
     row = _row(_trimmed_plays(400547673), "Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)")
     assert (row["type.text"], row["touchdown"], row["td_play"]) == ("Interception Return Touchdown", True, True)
+
+
+@pytest.mark.parametrize("game_id, spot", [(282432641, 80), (322590228, 75)])
+def test_kickoff_touchback_end_spot_follows_the_era(game_id, spot):
+    # The END state of a touchback was 75 in every season, while the start used 80 before 2012:
+    # a phantom +0.26 EPA on every 2004-11 kickoff touchback.
+    tbs = _fixture_plays(game_id).filter((pl.col("kickoff_play") == True) & (pl.col("kickoff_tb") == True))
+    assert tbs.height > 0
+    assert tbs["end.yardsToEndzone"].unique().to_list() == [spot]
+
+
+@pytest.mark.parametrize(
+    "game_id, needle, yards",
+    [
+        (302540025, "Giorgio Tavecchio kickoff for 52 yards out-of-bounds.", 40),  # receiver's 40 before 2012
+        (400876049, "Rigoberto Sanchez kickoff for 55 yds out of bounds.", 35),  # the 35 from 2012
+    ],
+)
+def test_kickoff_out_of_bounds_spot_follows_the_era(game_id, needle, yards):
+    assert _row(_fixture_plays(game_id), needle)["yds_kickoff_return"] == yards

@@ -327,8 +327,10 @@ Build the MBB cross-source player crosswalk (ESPN / Fox).
 
 One row per ESPN athlete per team. Fox is matched by normalized name
 within each team block -- exact first (jersey-tiebroken, per hoopR), then
-Jaro-Winkler at or above `min_confidence`. KenPom and Torvik publish no
-per-player tables, so neither is joined.
+Jaro-Winkler at or above `min_confidence`. Torvik is not joined, and
+neither is KenPom: the published `mbb_player_crosswalk` asset
+(`load_mbb_player_crosswalk`) carries an 18th column,
+`kp_player_id`, which hoopR-mbb-data adds after this builder runs.
 
 **Parameters**
 
@@ -381,9 +383,9 @@ df.filter(pl.col("match_method") == "fuzzy_jw").head()
 
 ### mbb_schedule_crosswalk {#mbb_schedule_crosswalk}
 
-`mbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`mbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, fox: 'bool' = False, yahoo: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-Build the MBB cross-source schedule crosswalk (ESPN / Torvik).
+Build the MBB cross-source schedule crosswalk (ESPN / Torvik / Fox / Yahoo).
 
 One row per game. Dates reduce to the Eastern-Time game date before
 joining and Torvik's unordered `team1`/`team2` join through a sorted
@@ -399,6 +401,8 @@ paid subscription and is not ported.
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 | `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `fox` | `bool` | `False` | Fill `fox_game_id` from Fox's Division I scoreboard, one Fox call per game date. A Fox game matches the row on the same US-Eastern date holding every Fox team that resolves to ESPN (by name, through `FOX_DISPLAY_ALIAS`), in either home/away order. A failed Fox fetch logs a warning and leaves the column null. |
+| `yahoo` | `bool` | `False` | Fill `yahoo_game_id` = `ncaab.g.{YYYYMMDD ET}{home Yahoo id, 4 digits}`, checked against the ids Yahoo lists for the season's dates so a neutral-site game takes Yahoo's home side and a game Yahoo does not list (a non-Division-I home team) stays null. A failed Yahoo fetch logs a warning; without the team listing the ids stay null, without the id list the unverified home-side id is kept. |
 
 **Returns**
 
@@ -420,9 +424,9 @@ df.filter(pl.col("match_method") == "both").select("espn_game_id", "bart_muid").
 
 ### mbb_team_crosswalk {#mbb_team_crosswalk}
 
-`mbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, kenpom: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`mbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, kenpom: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, yahoo: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom).
+Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom / Yahoo).
 
 One row per ESPN team, keyed on `espn_team_id`. Fox joins on the
 normalized mascot name via `FOX_DISPLAY_ALIAS`; Torvik and KenPom
@@ -439,6 +443,7 @@ each join on the normalized school name after `BART_ALIAS` /
 | `kenpom` | `Optional[DataFrame]` | `None` | KenPom teams frame with `Team` / `Conf`. `None` (the default) uses the KenPom team/conference directory bundled with sdv-py (hoopR's `teams_links`, seasons 2002-2026), filtered to *season*. A season the bundle does not carry gets null `kp_*` columns -- never another season's labels. Pass an empty frame to skip KenPom. No KenPom subscription or credential is involved: the bundled data is the public directory, not ratings. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 | `strict` | `bool` | `False` | Accepted for parity with the schedule and player crosswalks, which forward it; the team build has no per-item fetch loop to relax, so every source failure raises. |
+| `yahoo` | `bool` | `False` | Fill `yahoo_team_id` / `yahoo_team_name` from Yahoo's Division I listing (one call), joined on the full name, then the school, then the nickname. A failed Yahoo fetch logs a warning and leaves them null; Yahoo teams no ESPN team took are logged. |
 
 **Returns**
 
@@ -461,8 +466,8 @@ each join on the normalized school name after `BART_ALIAS` /
 | `bart_conf` | character | Torvik conference abbreviation (NA if unmatched). |
 | `kp_team` | character | KenPom team name (NA if unmatched). |
 | `kp_conf` | character | KenPom conference abbreviation (NA if unmatched). |
-| `yahoo_team_id` | character | Yahoo team id (NA placeholder). |
-| `yahoo_team_name` | character | Yahoo team name (NA placeholder). |
+| `yahoo_team_id` | character | Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched. |
+| `yahoo_team_name` | character | Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is. |
 | `fox_match_confidence` | double | 1 for matched, NA for unmatched. |
 | `bart_match_confidence` | double | 1 for matched, NA for unmatched. |
 | `kp_match_confidence` | double | 1 for matched, NA for unmatched. |

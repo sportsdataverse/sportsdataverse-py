@@ -50,6 +50,7 @@
  "fg_made": "Boolean",
  "fumble_vec": "Boolean",
  "fumble_lost": "Boolean",
+ "fumble_or_muff": "Boolean",
  "safety": "Boolean",
  "td_play": "Boolean",
  "kneel_down": "Boolean",

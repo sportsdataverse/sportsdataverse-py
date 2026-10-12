@@ -445,6 +445,7 @@ _CFB_PBP_READ_COLUMNS = (
     "fg_made",
     "fumble_vec",
     "fumble_lost",
+    "fumble_or_muff",
     "safety",
     "td_play",
     "kneel_down",

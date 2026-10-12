@@ -1,0 +1,248 @@
+{
+ "id": "20260302",
+ "sectionList": [
+  {
+   "id": "20260302",
+   "sectionDate": "2026-03-02T05:00:00Z",
+   "segmentId": "20260302",
+   "selectionId": "20260302",
+   "subtitle": "MON, MAR 2",
+   "menuTitle": "MON, MAR 2",
+   "events": [
+    {
+     "template": "scores-team",
+     "id": "nba44357",
+     "uri": "https://api.foxsports.com/bifrost/v1/nba/scorechip/nba44357",
+     "contentUri": "basketball/nba/events/44357",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2026-03-03T00:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/nba/houston-rockets-vs-washington-wizards-mar-02-2026-game-boxscore-44357",
+      "contentUri": "basketball/nba/events/44357",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nbaEventLayout",
+       "tokens": {
+        "id": "44357",
+        "eventUri": "basketball/nba/events/44357",
+        "homeUri": "basketball/nba/teams/7",
+        "awayUri": "basketball/nba/teams/17"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "NBA",
+     "eventHeadline": "Sheppard drops 10 dimes, adds 19 points as Rockets top Wizards",
+     "importance": 0,
+     "upperTeam": {
+      "name": "HOU",
+      "uri": "basketball/nba/teams/17",
+      "longName": "Rockets",
+      "stackedNameTop": "Houston",
+      "stackedNameBottom": "Rockets",
+      "record": "38-22",
+      "score": 123,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "WAS",
+      "uri": "basketball/nba/teams/7",
+      "longName": "Wizards",
+      "stackedNameTop": "Washington",
+      "stackedNameBottom": "Wizards",
+      "record": "16-44",
+      "score": 118,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "WAS +14.5",
+     "overUnderLine": "OVER 225.5"
+    },
+    {
+     "template": "scores-team",
+     "id": "nba44358",
+     "uri": "https://api.foxsports.com/bifrost/v1/nba/scorechip/nba44358",
+     "contentUri": "basketball/nba/events/44358",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2026-03-03T00:30:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/nba/boston-celtics-vs-milwaukee-bucks-mar-02-2026-game-boxscore-44358",
+      "contentUri": "basketball/nba/events/44358",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nbaEventLayout",
+       "tokens": {
+        "id": "44358",
+        "eventUri": "basketball/nba/events/44358",
+        "homeUri": "basketball/nba/teams/14",
+        "awayUri": "basketball/nba/teams/1"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "NBA",
+     "importance": 0,
+     "upperTeam": {
+      "name": "BOS",
+      "uri": "basketball/nba/teams/1",
+      "longName": "Celtics",
+      "stackedNameTop": "Boston",
+      "stackedNameBottom": "Celtics",
+      "record": "41-20",
+      "score": 108,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "MIL",
+      "uri": "basketball/nba/teams/14",
+      "longName": "Bucks",
+      "stackedNameTop": "Milwaukee",
+      "stackedNameBottom": "Bucks",
+      "record": "26-34",
+      "score": 81,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "BOS -2.5",
+     "overUnderLine": "UNDER 216.5"
+    },
+    {
+     "template": "scores-team",
+     "id": "nba44359",
+     "uri": "https://api.foxsports.com/bifrost/v1/nba/scorechip/nba44359",
+     "contentUri": "basketball/nba/events/44359",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2026-03-03T02:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/nba/denver-nuggets-vs-utah-jazz-mar-02-2026-game-boxscore-44359",
+      "contentUri": "basketball/nba/events/44359",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nbaEventLayout",
+       "tokens": {
+        "id": "44359",
+        "eventUri": "basketball/nba/events/44359",
+        "homeUri": "basketball/nba/teams/20",
+        "awayUri": "basketball/nba/teams/16"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "NBA",
+     "eventHeadline": "Murray goes 8-13 on threes, scores 45 as Nuggets edge past Jazz",
+     "importance": 0,
+     "upperTeam": {
+      "name": "DEN",
+      "uri": "basketball/nba/teams/16",
+      "longName": "Nuggets",
+      "stackedNameTop": "Denver",
+      "stackedNameBottom": "Nuggets",
+      "record": "38-24",
+      "score": 128,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "UTA",
+      "uri": "basketball/nba/teams/20",
+      "longName": "Jazz",
+      "stackedNameTop": "Utah",
+      "stackedNameBottom": "Jazz",
+      "record": "18-43",
+      "score": 125,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "UTA +11.5",
+     "overUnderLine": "OVER 242.5"
+    },
+    {
+     "template": "scores-team",
+     "id": "nba44360",
+     "uri": "https://api.foxsports.com/bifrost/v1/nba/scorechip/nba44360",
+     "contentUri": "basketball/nba/events/44360",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2026-03-03T03:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/nba/la-clippers-vs-golden-state-warriors-mar-02-2026-game-boxscore-44360",
+      "contentUri": "basketball/nba/events/44360",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nbaEventLayout",
+       "tokens": {
+        "id": "44360",
+        "eventUri": "basketball/nba/events/44360",
+        "homeUri": "basketball/nba/teams/21",
+        "awayUri": "basketball/nba/teams/22"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "NBA",
+     "eventHeadline": "Clippers fight back from 17 down to top Warriors",
+     "importance": 0,
+     "upperTeam": {
+      "name": "LAC",
+      "uri": "basketball/nba/teams/22",
+      "longName": "Clippers",
+      "stackedNameTop": "LA",
+      "stackedNameBottom": "Clippers",
+      "record": "29-31",
+      "score": 114,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "GSW",
+      "uri": "basketball/nba/teams/21",
+      "longName": "Warriors",
+      "stackedNameTop": "Golden State",
+      "stackedNameBottom": "Warriors",
+      "record": "31-30",
+      "score": 101,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "LAC -1.5",
+     "overUnderLine": "UNDER 216.5"
+    }
+   ]
+  }
+ ],
+ "currentSectionId": "20260302",
+ "quickNav": [
+  {
+   "id": "20260301",
+   "uri": "https://api.foxsports.com/bifrost/v1/nba/league/scores-segment/20260301",
+   "webUrl": "/nba/scores?date=2026-03-01",
+   "date": "2026-03-01T05:00:00Z"
+  },
+  {
+   "id": "20260302",
+   "uri": "https://api.foxsports.com/bifrost/v1/nba/league/scores-segment/20260302",
+   "webUrl": "/nba/scores?date=2026-03-02",
+   "date": "2026-03-02T05:00:00Z",
+   "selected": true
+  },
+  {
+   "id": "20260303",
+   "uri": "https://api.foxsports.com/bifrost/v1/nba/league/scores-segment/20260303",
+   "webUrl": "/nba/scores?date=2026-03-03",
+   "date": "2026-03-03T05:00:00Z"
+  }
+ ]
+}
