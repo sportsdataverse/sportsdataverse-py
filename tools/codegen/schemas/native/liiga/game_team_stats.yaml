@@ -1,0 +1,71 @@
+columns:
+- description: Season END year (2026 = 2025-26).
+  name: season
+  type: integer
+- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+  name: game_id
+  type: integer
+- description: home or away.
+  name: side
+  type: character
+- description: Period number.
+  name: period
+  type: integer
+- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
+    string, a bare integer or a digit string depending on the route).
+  name: team_id
+  type: integer
+- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
+    (e.g. hpk).
+  name: team_slug
+  type: character
+- description: Goals.
+  name: goals
+  type: integer
+- description: Shots (player, all-time).
+  name: shots
+  type: integer
+- description: Power play instances.
+  name: power_play_instances
+  type: character
+- description: Power play goals (team, this period).
+  name: power_play_goals
+  type: integer
+- description: Short handed instances.
+  name: short_handed_instances
+  type: character
+- description: Short handed goals against (team, this period).
+  name: short_handed_goals_against
+  type: integer
+- description: Penalty minutes.
+  name: penalty_minutes
+  type: integer
+- description: Face off wins (team, this period).
+  name: face_off_wins
+  type: integer
+- description: Two minute penalties (team, this period).
+  name: two_minute_penalties
+  type: integer
+- description: Five minute penalties (team, this period).
+  name: five_minute_penalties
+  type: integer
+- description: Ten minute penalties (team, this period).
+  name: ten_minute_penalties
+  type: integer
+- description: Twenty minute penalties (team, this period).
+  name: twenty_minute_penalties
+  type: integer
+- description: Distance skated by the team in the period (unit not stated).
+  name: total_distance_travelled
+  type: numeric
+- description: Seconds this team controlled the puck in the period.
+  name: puck_control_duration
+  type: numeric
+- description: Seconds the other team controlled the puck in the period.
+  name: opponent_puck_control_duration
+  type: numeric
+- description: Seconds the puck was contested in the period.
+  name: contested_control_duration
+  type: numeric
+kind: dataframe
+schema: game_team_stats

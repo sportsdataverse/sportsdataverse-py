@@ -1,0 +1,70 @@
+{
+  "teamStats": [
+    {
+      "sortDesc": false,
+      "teamId": 168761288,
+      "teamName": "HIFK",
+      "teamShortName": "IFK",
+      "teamLogos": {
+        "darkBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2F46a26a5506f543b3a32e0035f260302b",
+        "lightBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2F46a26a5506f543b3a32e0035f260302b",
+        "darkBgOriginal": null,
+        "lightBgOriginal": null
+      },
+      "games": 60,
+      "ranking": 1,
+      "previousGameDayRanking": 1,
+      "2minutesPenalties": 201,
+      "5minutesPenalties": 7,
+      "10minutesPenalties": 2,
+      "20minutesPenalties": 7,
+      "25minutesPenalties": 0,
+      "penaltyMinutes": 597,
+      "penalties": 217
+    },
+    {
+      "sortDesc": false,
+      "teamId": 55786244,
+      "teamName": "HPK",
+      "teamShortName": "HPK",
+      "teamLogos": {
+        "darkBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2F6020edd6d9bc45b68a50bd191b826deb",
+        "lightBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2F6020edd6d9bc45b68a50bd191b826deb",
+        "darkBgOriginal": null,
+        "lightBgOriginal": null
+      },
+      "games": 60,
+      "ranking": 2,
+      "previousGameDayRanking": 2,
+      "2minutesPenalties": 200,
+      "5minutesPenalties": 3,
+      "10minutesPenalties": 3,
+      "20minutesPenalties": 3,
+      "25minutesPenalties": 0,
+      "penaltyMinutes": 505,
+      "penalties": 209
+    },
+    {
+      "sortDesc": false,
+      "teamId": 951626834,
+      "teamName": "Ilves",
+      "teamShortName": "ILV",
+      "teamLogos": {
+        "darkBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2F079e0e0bde4f43b8b8afa667d3285ebc",
+        "lightBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2F079e0e0bde4f43b8b8afa667d3285ebc",
+        "darkBgOriginal": null,
+        "lightBgOriginal": null
+      },
+      "games": 60,
+      "ranking": 3,
+      "previousGameDayRanking": 3,
+      "2minutesPenalties": 198,
+      "5minutesPenalties": 7,
+      "10minutesPenalties": 2,
+      "20minutesPenalties": 7,
+      "25minutesPenalties": 0,
+      "penaltyMinutes": 591,
+      "penalties": 214
+    }
+  ]
+}

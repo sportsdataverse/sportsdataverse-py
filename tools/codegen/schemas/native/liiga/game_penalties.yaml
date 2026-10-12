@@ -1,0 +1,58 @@
+columns:
+- description: Season END year (2026 = 2025-26).
+  name: season
+  type: integer
+- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+  name: game_id
+  type: integer
+- description: home or away.
+  name: side
+  type: character
+- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
+    string, a bare integer or a digit string depending on the route).
+  name: team_id
+  type: integer
+- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
+    (e.g. hpk).
+  name: team_slug
+  type: character
+- description: Player id; the same number in lineups, rosters, stat tables and the
+    profile (fihaId).
+  name: player_id
+  type: integer
+- description: Player who served the penalty.
+  name: sufferer_player_id
+  type: integer
+- description: Event id within the game.
+  name: event_id
+  type: integer
+- description: Wall-clock time the event was logged, ISO 8601 UTC.
+  name: log_time
+  type: character
+- description: 'Seconds from the start of the game. Regular season: 3900 (65:00) =
+    the end of the 5-minute overtime; playoff overtime runs past it.'
+  name: game_time
+  type: integer
+- description: Period number.
+  name: period
+  type: integer
+- description: Penalty start, seconds from game start.
+  name: penalty_begintime
+  type: integer
+- description: Penalty end, seconds from game start.
+  name: penalty_endtime
+  type: integer
+- description: Infraction, in Finnish.
+  name: penalty_fault_name
+  type: character
+- description: Infraction code.
+  name: penalty_fault_type
+  type: character
+- description: Penalty info.
+  name: penalty_info
+  type: character
+- description: Penalty minutes.
+  name: penalty_minutes
+  type: integer
+kind: dataframe
+schema: game_penalties

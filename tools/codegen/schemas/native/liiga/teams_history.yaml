@@ -1,0 +1,80 @@
+columns:
+- description: Rink id.
+  name: id
+  type: integer
+- description: Season END year (2026 = 2025-26).
+  name: season
+  type: integer
+- description: 'League id: 1 = Liiga (SM-liiga) on every /teams/info row 1976-2027.'
+  name: league_id
+  type: integer
+- description: 'Tournament id, the same every season: 1188 regular season, 1189 playoffs,
+    1194 preseason, 1890 CHL.'
+  name: serie_id
+  type: integer
+- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
+    string, a bare integer or a digit string depending on the route).
+  name: team_id
+  type: integer
+- description: Away games (team, that regular season).
+  name: away_games
+  type: integer
+- description: Away losses (team, that regular season).
+  name: away_losses
+  type: integer
+- description: Away ties (team, that regular season).
+  name: away_ties
+  type: integer
+- description: Away wins (team, that regular season).
+  name: away_wins
+  type: integer
+- description: Away wins in extra time (team, that regular season).
+  name: away_wins_in_extra_time
+  type: integer
+- description: Games (player, all-time).
+  name: games
+  type: integer
+- description: Goals against (team, season to date in that table's tournament).
+  name: goals_against
+  type: integer
+- description: Goals scored (team, that regular season).
+  name: goals_scored
+  type: integer
+- description: Home games (team, that regular season).
+  name: home_games
+  type: integer
+- description: Home losses (team, that regular season).
+  name: home_losses
+  type: integer
+- description: Home ties (team, that regular season).
+  name: home_ties
+  type: integer
+- description: Home wins (team, that regular season).
+  name: home_wins
+  type: integer
+- description: Home wins in extra time (team, that regular season).
+  name: home_wins_in_extra_time
+  type: integer
+- description: Losses (team, season to date in that table's tournament).
+  name: losses
+  type: integer
+- description: Playoff rank (team, that regular season).
+  name: playoff_rank
+  type: integer
+- description: Points (player, all-time).
+  name: points
+  type: integer
+- description: Regular season rank (team, that regular season).
+  name: regular_season_rank
+  type: integer
+- description: Ties (team, season to date in that table's tournament).
+  name: ties
+  type: integer
+- description: Wins (team, season to date in that table's tournament).
+  name: wins
+  type: integer
+- description: Wins in extra time (team, that regular season).
+  name: wins_in_extra_time
+  type: integer
+kind: dataframe
+schema: teams_history

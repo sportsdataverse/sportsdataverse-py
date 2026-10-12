@@ -1,0 +1,13 @@
+columns:
+- description: Season END year (2026 = 2025-26).
+  name: season
+  type: integer
+- description: Tournament code, uppercase (RUNKOSARJA, PLAYOFFS, PRACTICE, ...); in
+    /schedule the integer tournament id instead (see serieId and Divergence notes).
+  name: serie
+  type: character
+- description: Number of game weeks.
+  name: nb_weeks
+  type: integer
+kind: dataframe
+schema: gameweeks

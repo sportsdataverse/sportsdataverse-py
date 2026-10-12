@@ -1,0 +1,146 @@
+columns:
+- description: Player id; the same number in lineups, rosters, stat tables and the
+    profile (fihaId).
+  name: player_id
+  type: integer
+- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
+    string, a bare integer or a digit string depending on the route).
+  name: team_id
+  type: integer
+- description: Team display name.
+  name: team_name
+  type: character
+- description: Team abbreviation.
+  name: team_short_name
+  type: character
+- description: 'Position: CENTER, LEFT_WING, RIGHT_WING, LEFT_DEFENSEMAN, RIGHT_DEFENSEMAN,
+    SEVENTH_DEFENSEMAN, GOALIE.'
+  name: role
+  type: character
+- description: First name.
+  name: first_name
+  type: character
+- description: Last name.
+  name: last_name
+  type: character
+- description: Nationality, 3-letter code.
+  name: nationality
+  type: character
+- description: Tournament.
+  name: tournament
+  type: character
+- description: Photo URL.
+  name: picture_url
+  type: character
+- description: Earlier teams of a player traded during the tournament.
+  name: previous_teams_for_tournament
+  type: character
+- description: Injured.
+  name: injured
+  type: logical
+- description: Jersey number.
+  name: jersey
+  type: integer
+- description: Last season (player, summed over the season range).
+  name: last_season
+  type: integer
+- description: Goalkeeper.
+  name: goalkeeper
+  type: logical
+- description: Games (player, all-time).
+  name: games
+  type: integer
+- description: Played games (player, that season and tournament).
+  name: played_games
+  type: integer
+- description: Rookie.
+  name: rookie
+  type: logical
+- description: Suspended.
+  name: suspended
+  type: logical
+- description: Removed from the roster.
+  name: removed
+  type: logical
+- description: Time on ice (player, that season and tournament). Seconds.
+  name: time_on_ice
+  type: integer
+- description: Player is on the team now.
+  name: current
+  type: logical
+- description: 'Is u 2 #0.'
+  name: is_u20
+  type: logical
+- description: Golden helmets (player, summed over the season range).
+  name: golden_helmets
+  type: integer
+- description: Alumni points (player, summed over the season range).
+  name: alumni_points
+  type: integer
+- description: Goals.
+  name: goals
+  type: integer
+- description: Assists (player, all-time).
+  name: assists
+  type: integer
+- description: Points (player, all-time).
+  name: points
+  type: integer
+- description: On ice for goals for (the + of plus/minus).
+  name: plus
+  type: integer
+- description: On ice for goals against (the - of plus/minus).
+  name: minus
+  type: integer
+- description: plus minus minus.
+  name: plus_minus
+  type: integer
+- description: Penalty minutes.
+  name: penalty_minutes
+  type: integer
+- description: Powerplay goals.
+  name: powerplay_goals
+  type: integer
+- description: Penaltykill goals (player, this game).
+  name: penaltykill_goals
+  type: integer
+- description: Winning goals (player, that season and tournament).
+  name: winning_goals
+  type: integer
+- description: Shots (player, all-time).
+  name: shots
+  type: integer
+- description: Shots into goal (player, that season and tournament).
+  name: shots_into_goal
+  type: integer
+- description: 'Expected goals (xG), computed by the provider with an undocumented
+    model: the team''s total for the game in /games and /games/{season}/{id}; the
+    player''s sum over the season range in /players/stats/summed. /shotmap has no
+    per-shot xG.'
+  name: expected_goals
+  type: numeric
+- description: Contest won (player, summed over the season range).
+  name: contest_won
+  type: integer
+- description: Contest lost (player, summed over the season range).
+  name: contest_lost
+  type: integer
+- description: Goals to empty goal (goalkeeper, this period).
+  name: goals_to_empty_goal
+  type: integer
+- description: Time on ice (player, summed over the season range). Seconds per game.
+  name: time_on_ice_avg
+  type: numeric
+- description: Contest won percentage (player, summed over the season range). Percent,
+    0-100.
+  name: contest_won_percentage
+  type: numeric
+- description: Goals minus expectedGoals over the season range (4 goals on 5.0956
+    xG = -1.0956).
+  name: xge
+  type: numeric
+- description: Shot percentage (player, all-time). Percent, 0-100.
+  name: shot_percentage
+  type: numeric
+kind: dataframe
+schema: player_stats

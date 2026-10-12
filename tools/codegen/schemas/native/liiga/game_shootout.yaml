@@ -1,0 +1,36 @@
+columns:
+- description: Season END year (2026 = 2025-26).
+  name: season
+  type: integer
+- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+  name: game_id
+  type: integer
+- description: Shooter's player id.
+  name: shooting_player_id
+  type: integer
+- description: Goalkeeper's player id.
+  name: blocking_player_id
+  type: integer
+- description: Attempt number in the shootout.
+  name: shot_number
+  type: integer
+- description: Shooting team id.
+  name: shooting_team_id
+  type: integer
+- description: Shooting team slug.
+  name: shooting_team_slug
+  type: character
+- description: Goalkeeper's team id.
+  name: blocking_team_id
+  type: integer
+- description: Goalkeeper's team slug.
+  name: blocking_team_slug
+  type: character
+- description: The attempt scored.
+  name: goal_scored
+  type: logical
+- description: Game-winning goal.
+  name: winning_goal
+  type: logical
+kind: dataframe
+schema: game_shootout
