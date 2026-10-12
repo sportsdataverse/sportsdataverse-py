@@ -1,0 +1,155 @@
+{
+  "success": true,
+  "data": {
+    "data": [
+      {
+        "id": 9695,
+        "tour": 1,
+        "phase": {
+          "id": 714,
+          "libelle": "Saison régulière",
+          "visible": true,
+          "type_phase": "C",
+          "parametrage": {
+            "appuis": 0,
+            "grille_id": null,
+            "extra_poule": false,
+            "aller_retour": 0,
+            "phase_finale": false,
+            "prolongation": true,
+            "score_cumule": false,
+            "nombre_groupe": 1,
+            "petite_finale": true,
+            "nombre_plateaux": null,
+            "type_assignation": "M",
+            "avec_bascule_auto": true,
+            "nombre_participant": 12,
+            "avec_classement_final": true,
+            "nombre_match_par_confrontation": 4
+          },
+          "competition_libelle": "Synerglace Ligue Magnus"
+        },
+        "libelle": null,
+        "date_fin": "15/09/2026",
+        "phase_id": 714,
+        "date_debut": "15/09/2026",
+        "rencontres": null,
+        "competition": {
+          "id": 240,
+          "type": {
+            "id": 1,
+            "code": "NA",
+            "libelle": "Ligue Magnus",
+            "created_at": "2021-07-13 15:12:51",
+            "updated_at": "2021-07-13 15:12:51"
+          },
+          "saison": 2027,
+          "libelle": "Synerglace Ligue Magnus",
+          "parametres": {
+            "url_externe": "https://www.magnus.tv",
+            "publier_sur_site": true
+          }
+        }
+      },
+      {
+        "id": 9696,
+        "tour": 2,
+        "phase": {
+          "id": 714,
+          "libelle": "Saison régulière",
+          "visible": true,
+          "type_phase": "C",
+          "parametrage": {
+            "appuis": 0,
+            "grille_id": null,
+            "extra_poule": false,
+            "aller_retour": 0,
+            "phase_finale": false,
+            "prolongation": true,
+            "score_cumule": false,
+            "nombre_groupe": 1,
+            "petite_finale": true,
+            "nombre_plateaux": null,
+            "type_assignation": "M",
+            "avec_bascule_auto": true,
+            "nombre_participant": 12,
+            "avec_classement_final": true,
+            "nombre_match_par_confrontation": 4
+          },
+          "competition_libelle": "Synerglace Ligue Magnus"
+        },
+        "libelle": null,
+        "date_fin": "18/09/2026",
+        "phase_id": 714,
+        "date_debut": "18/09/2026",
+        "rencontres": null,
+        "competition": {
+          "id": 240,
+          "type": {
+            "id": 1,
+            "code": "NA",
+            "libelle": "Ligue Magnus",
+            "created_at": "2021-07-13 15:12:51",
+            "updated_at": "2021-07-13 15:12:51"
+          },
+          "saison": 2027,
+          "libelle": "Synerglace Ligue Magnus",
+          "parametres": {
+            "url_externe": "https://www.magnus.tv",
+            "publier_sur_site": true
+          }
+        }
+      },
+      {
+        "id": 9697,
+        "tour": 3,
+        "phase": {
+          "id": 714,
+          "libelle": "Saison régulière",
+          "visible": true,
+          "type_phase": "C",
+          "parametrage": {
+            "appuis": 0,
+            "grille_id": null,
+            "extra_poule": false,
+            "aller_retour": 0,
+            "phase_finale": false,
+            "prolongation": true,
+            "score_cumule": false,
+            "nombre_groupe": 1,
+            "petite_finale": true,
+            "nombre_plateaux": null,
+            "type_assignation": "M",
+            "avec_bascule_auto": true,
+            "nombre_participant": 12,
+            "avec_classement_final": true,
+            "nombre_match_par_confrontation": 4
+          },
+          "competition_libelle": "Synerglace Ligue Magnus"
+        },
+        "libelle": null,
+        "date_fin": "22/09/2026",
+        "phase_id": 714,
+        "date_debut": "22/09/2026",
+        "rencontres": null,
+        "competition": {
+          "id": 240,
+          "type": {
+            "id": 1,
+            "code": "NA",
+            "libelle": "Ligue Magnus",
+            "created_at": "2021-07-13 15:12:51",
+            "updated_at": "2021-07-13 15:12:51"
+          },
+          "saison": 2027,
+          "libelle": "Synerglace Ligue Magnus",
+          "parametres": {
+            "url_externe": "https://www.magnus.tv",
+            "publier_sur_site": true
+          }
+        }
+      }
+    ],
+    "time": "0.0015 sec."
+  }
+}

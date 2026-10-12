@@ -1,0 +1,969 @@
+{
+  "success": true,
+  "data": {
+    "data": [
+      {
+        "id": 78007,
+        "rencontre_libelle": "BRIANÇON / ANGERS",
+        "calendrier": {
+          "date_debut": "2027-03-02 20:00:00",
+          "date_fin": "2027-03-02 21:00:00"
+        },
+        "phase_id": 714,
+        "phase": {
+          "id": 714,
+          "libelle": "Saison régulière",
+          "competition_libelle": "Synerglace Ligue Magnus",
+          "type_phase": "C",
+          "parametrage": {
+            "aller_retour": 0,
+            "appuis": 0,
+            "nombre_match_par_confrontation": 4,
+            "nombre_participant": 12,
+            "nombre_groupe": 1,
+            "grille_id": null,
+            "type_assignation": "M",
+            "prolongation": true,
+            "petite_finale": true,
+            "avec_bascule_auto": true,
+            "score_cumule": false,
+            "avec_classement_final": true,
+            "extra_poule": false,
+            "nombre_plateaux": null,
+            "phase_finale": false
+          },
+          "visible": true
+        },
+        "competition": {
+          "id": 240,
+          "libelle": "Synerglace Ligue Magnus",
+          "parametres": {
+            "url_externe": "https://www.magnus.tv",
+            "publier_sur_site": true
+          },
+          "saison": 2027,
+          "type": {
+            "id": 1,
+            "libelle": "Ligue Magnus",
+            "code": "NA",
+            "created_at": "2021-07-13 15:12:51",
+            "updated_at": "2021-07-13 15:12:51"
+          }
+        },
+        "date_rencontre": "2027-03-02 20:00",
+        "receveur": {
+          "id": 3409,
+          "libelle": "93003S - DIABLES ROUGES BRIANÇON",
+          "libelle_complet": "DIABLES ROUGES BRIANÇON",
+          "libelle_court": "BRIANÇON",
+          "abreviation": "BRI",
+          "logo": "https://hockeynet.fr/storage/logos_equipes/394/ViMCUPL6rjozws3LVGEc2gdqMYgSXbrLZ694rDrQ.png",
+          "sexe": "M",
+          "structure": {
+            "id": 394,
+            "nom": "S.A. LES DIABLES ROUGES DE BRIANCON",
+            "nom_court": "S.A. LES DIABLES ROUGES DE BRIANCON",
+            "code": "93003S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "50/93/50932d8f-83b8-423c-9224-8b40448ed2ea.png"
+          },
+          "id_compet": [
+            240,
+            256,
+            249
+          ]
+        },
+        "visiteur": {
+          "id": 553,
+          "libelle": "52007S - 52007S LES DUCS D'ANGERS",
+          "libelle_complet": "Ducs d'Angers",
+          "libelle_court": "ANGERS",
+          "abreviation": "ANG",
+          "logo": "https://hockeynet.fr/storage/logos_equipes/197/Zv0ZlavF4DHFurqwTySpECtE4Hj7NOQl4gPCQPlK.png",
+          "sexe": "M",
+          "structure": {
+            "id": 381,
+            "nom": "SASP LES DUCS D'ANGERS",
+            "nom_court": "SASP DUCS ANGERS",
+            "code": "52007S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "ySqoYzy26jgo3sqjFRklAAEaibhTdWncPCTSUodQ.png"
+          },
+          "id_compet": [
+            1,
+            19,
+            21,
+            26,
+            34,
+            54,
+            62,
+            79,
+            95,
+            99,
+            120,
+            140,
+            135,
+            157,
+            166,
+            170,
+            228,
+            197,
+            219,
+            223,
+            240,
+            249,
+            256
+          ]
+        },
+        "score": [
+          {
+            "sportif_rencontre_id": 78007,
+            "participant_id": 9131,
+            "equipe_id": 3409,
+            "score": 0
+          },
+          {
+            "sportif_rencontre_id": 78007,
+            "participant_id": 9130,
+            "equipe_id": 553,
+            "score": 0
+          }
+        ],
+        "lieu_de_pratique": {
+          "id": 20,
+          "nom": "Briançon - René Froger"
+        },
+        "tour": 44,
+        "tour_libelle": null,
+        "infos_complementaires": {
+          "url_live": null,
+          "liens_externes": []
+        },
+        "en_cours": false,
+        "etat": null,
+        "victoire_par": "S",
+        "lot": null
+      },
+      {
+        "id": 78003,
+        "rencontre_libelle": "AMIENS / GRENOBLE",
+        "calendrier": {
+          "date_debut": "2027-03-02 20:15:00",
+          "date_fin": "2027-03-02 20:15:00"
+        },
+        "phase_id": 714,
+        "phase": {
+          "id": 714,
+          "libelle": "Saison régulière",
+          "competition_libelle": "Synerglace Ligue Magnus",
+          "type_phase": "C",
+          "parametrage": {
+            "aller_retour": 0,
+            "appuis": 0,
+            "nombre_match_par_confrontation": 4,
+            "nombre_participant": 12,
+            "nombre_groupe": 1,
+            "grille_id": null,
+            "type_assignation": "M",
+            "prolongation": true,
+            "petite_finale": true,
+            "avec_bascule_auto": true,
+            "score_cumule": false,
+            "avec_classement_final": true,
+            "extra_poule": false,
+            "nombre_plateaux": null,
+            "phase_finale": false
+          },
+          "visible": true
+        },
+        "competition": {
+          "id": 240,
+          "libelle": "Synerglace Ligue Magnus",
+          "parametres": {
+            "url_externe": "https://www.magnus.tv",
+            "publier_sur_site": true
+          },
+          "saison": 2027,
+          "type": {
+            "id": 1,
+            "libelle": "Ligue Magnus",
+            "code": "NA",
+            "created_at": "2021-07-13 15:12:51",
+            "updated_at": "2021-07-13 15:12:51"
+          }
+        },
+        "date_rencontre": "2027-03-02 20:15",
+        "receveur": {
+          "id": 103,
+          "libelle": "22001S - AMIENS HOCKEY ELITE",
+          "libelle_complet": "Gothiques d'Amiens",
+          "libelle_court": "AMIENS",
+          "abreviation": "AMI",
+          "logo": "https://hockeynet.fr/storage/logos_structures/sU3oyYLGok4OV2px1Iz8beKLPXzV2MWm5SN79fhw.png",
+          "sexe": "M",
+          "structure": {
+            "id": 389,
+            "nom": "AMIENS HOCKEY ELITE",
+            "nom_court": "AMIENS HOCKEY ELITE",
+            "code": "22001S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "sU3oyYLGok4OV2px1Iz8beKLPXzV2MWm5SN79fhw.png"
+          },
+          "id_compet": [
+            1,
+            26,
+            19,
+            34,
+            54,
+            62,
+            67,
+            79,
+            99,
+            95,
+            120,
+            140,
+            157,
+            197,
+            240
+          ]
+        },
+        "visiteur": {
+          "id": 327,
+          "libelle": "82007S - BRULEURS DE LOUPS MAGNUS SENIORS",
+          "libelle_complet": "Brûleurs de Loups de Grenoble",
+          "libelle_court": "GRENOBLE",
+          "abreviation": "GRE",
+          "logo": "https://hockeynet.fr/storage/logos_equipes/217/9TimMBPBo3YpojQE22R9GljG05A7fpSdzJMEyWvr.png",
+          "sexe": "M",
+          "structure": {
+            "id": 380,
+            "nom": "GRENOBLE GMH 38",
+            "nom_court": "GMH 38",
+            "code": "82007S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "K5gIKm1DUQ8mz11nG4dCLIKVZMSkCkjvSDhvLSNW.png"
+          },
+          "id_compet": [
+            1,
+            19,
+            26,
+            34,
+            54,
+            62,
+            79,
+            99,
+            95,
+            108,
+            120,
+            140,
+            135,
+            170,
+            157,
+            166,
+            188,
+            197,
+            228,
+            223,
+            219,
+            240,
+            249,
+            255,
+            256
+          ]
+        },
+        "score": [
+          {
+            "sportif_rencontre_id": 78003,
+            "participant_id": 9125,
+            "equipe_id": 327,
+            "score": 0
+          },
+          {
+            "sportif_rencontre_id": 78003,
+            "participant_id": 9120,
+            "equipe_id": 103,
+            "score": 0
+          }
+        ],
+        "lieu_de_pratique": {
+          "id": 2,
+          "nom": "Amiens - Le Coliseum"
+        },
+        "tour": 44,
+        "tour_libelle": null,
+        "infos_complementaires": "",
+        "en_cours": false,
+        "etat": null,
+        "victoire_par": "S",
+        "lot": null
+      },
+      {
+        "id": 78004,
+        "rencontre_libelle": "BORDEAUX / CHAMONIX",
+        "calendrier": {
+          "date_debut": "2027-03-02 20:15:00",
+          "date_fin": "2027-03-02 20:15:00"
+        },
+        "phase_id": 714,
+        "phase": {
+          "id": 714,
+          "libelle": "Saison régulière",
+          "competition_libelle": "Synerglace Ligue Magnus",
+          "type_phase": "C",
+          "parametrage": {
+            "aller_retour": 0,
+            "appuis": 0,
+            "nombre_match_par_confrontation": 4,
+            "nombre_participant": 12,
+            "nombre_groupe": 1,
+            "grille_id": null,
+            "type_assignation": "M",
+            "prolongation": true,
+            "petite_finale": true,
+            "avec_bascule_auto": true,
+            "score_cumule": false,
+            "avec_classement_final": true,
+            "extra_poule": false,
+            "nombre_plateaux": null,
+            "phase_finale": false
+          },
+          "visible": true
+        },
+        "competition": {
+          "id": 240,
+          "libelle": "Synerglace Ligue Magnus",
+          "parametres": {
+            "url_externe": "https://www.magnus.tv",
+            "publier_sur_site": true
+          },
+          "saison": 2027,
+          "type": {
+            "id": 1,
+            "libelle": "Ligue Magnus",
+            "code": "NA",
+            "created_at": "2021-07-13 15:12:51",
+            "updated_at": "2021-07-13 15:12:51"
+          }
+        },
+        "date_rencontre": "2027-03-02 20:15",
+        "receveur": {
+          "id": 1671,
+          "libelle": "72003S - SASP BOXERS DE BORDEAUX",
+          "libelle_complet": "BOXERS DE BORDEAUX",
+          "libelle_court": "BORDEAUX",
+          "abreviation": "BOR",
+          "logo": "https://hockeynet.fr/storage/logos_equipes/386/R8vOEnj4uHFFiJku4QE2YdeNWURr2hAPjAy9Gpqf.png",
+          "sexe": "M",
+          "structure": {
+            "id": 386,
+            "nom": "SASP BOXERS DE BORDEAUX",
+            "nom_court": "SASP BOXERS DE BORDEAUX",
+            "code": "72003S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "LwAtoTPZfun1UvgiLafO4Oa6ab3h3IZ6BICgACxW.png"
+          },
+          "id_compet": [
+            135,
+            228,
+            219,
+            249,
+            240,
+            256
+          ]
+        },
+        "visiteur": {
+          "id": 611,
+          "libelle": "82005S - CHAMONIX SLM",
+          "libelle_complet": "Pionniers de Chamonix",
+          "libelle_court": "CHAMONIX",
+          "abreviation": "CHA",
+          "logo": "https://hockeynet.fr/storage/logos_equipes/215/qM4Isk3zWu6RuAeylfZimNqv3I8KmRFpoqTjl9ka.png",
+          "sexe": "M",
+          "structure": {
+            "id": 392,
+            "nom": "SASP CHAMONIX HOCKEY CLUB ELITE",
+            "nom_court": "SASP CHAMONIX HOCKEY CLUB ELITE",
+            "code": "82005S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "e5H1LDVa1NMNnwGnVS4DpE4OAoBuPoFUlvz64WwC.png"
+          },
+          "id_compet": [
+            1,
+            19,
+            21,
+            26,
+            34,
+            54,
+            62,
+            63,
+            67,
+            79,
+            99,
+            135,
+            157,
+            170,
+            166,
+            188,
+            228,
+            197,
+            219,
+            223,
+            240,
+            249,
+            256,
+            255
+          ]
+        },
+        "score": [
+          {
+            "sportif_rencontre_id": 78004,
+            "participant_id": 9121,
+            "equipe_id": 1671,
+            "score": 0
+          },
+          {
+            "sportif_rencontre_id": 78004,
+            "participant_id": 9123,
+            "equipe_id": 611,
+            "score": 0
+          }
+        ],
+        "lieu_de_pratique": {
+          "id": 1,
+          "nom": "Bordeaux - Mériadeck"
+        },
+        "tour": 44,
+        "tour_libelle": null,
+        "infos_complementaires": "",
+        "en_cours": false,
+        "etat": null,
+        "victoire_par": "S",
+        "lot": null
+      },
+      {
+        "id": 78005,
+        "rencontre_libelle": "MARSEILLE / GAP",
+        "calendrier": {
+          "date_debut": "2027-03-02 20:15:00",
+          "date_fin": "2027-03-02 21:15:00"
+        },
+        "phase_id": 714,
+        "phase": {
+          "id": 714,
+          "libelle": "Saison régulière",
+          "competition_libelle": "Synerglace Ligue Magnus",
+          "type_phase": "C",
+          "parametrage": {
+            "aller_retour": 0,
+            "appuis": 0,
+            "nombre_match_par_confrontation": 4,
+            "nombre_participant": 12,
+            "nombre_groupe": 1,
+            "grille_id": null,
+            "type_assignation": "M",
+            "prolongation": true,
+            "petite_finale": true,
+            "avec_bascule_auto": true,
+            "score_cumule": false,
+            "avec_classement_final": true,
+            "extra_poule": false,
+            "nombre_plateaux": null,
+            "phase_finale": false
+          },
+          "visible": true
+        },
+        "competition": {
+          "id": 240,
+          "libelle": "Synerglace Ligue Magnus",
+          "parametres": {
+            "url_externe": "https://www.magnus.tv",
+            "publier_sur_site": true
+          },
+          "saison": 2027,
+          "type": {
+            "id": 1,
+            "libelle": "Ligue Magnus",
+            "code": "NA",
+            "created_at": "2021-07-13 15:12:51",
+            "updated_at": "2021-07-13 15:12:51"
+          }
+        },
+        "date_rencontre": "2027-03-02 20:15",
+        "receveur": {
+          "id": 3095,
+          "libelle": "93019S - Spartiates de Marseille",
+          "libelle_complet": "Spartiates de Marseille",
+          "libelle_court": "MARSEILLE",
+          "abreviation": "MAR",
+          "logo": "https://hockeynet.fr/storage/logos_equipes/408/eSDOP4Dz2ctdRc8RqoVgkpwF1Rlv8z6mMhmQnG77.png",
+          "sexe": "M",
+          "structure": {
+            "id": 408,
+            "nom": "SAS MARSEILLE HOCKEY CLUB",
+            "nom_court": "SAS MHC",
+            "code": "93019S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": null
+          },
+          "id_compet": [
+            197,
+            219,
+            228,
+            240,
+            249,
+            256
+          ]
+        },
+        "visiteur": {
+          "id": 366,
+          "libelle": "93006S - RAPACES DE GAP",
+          "libelle_complet": "Rapaces de Gap",
+          "libelle_court": "GAP",
+          "abreviation": "GAP",
+          "logo": "https://hockeynet.fr/storage/logos_structures/8wEqPG81zcvlxzrmX73wQQy4UNsgWuKWV30YXrgo.png",
+          "sexe": "M",
+          "structure": {
+            "id": 390,
+            "nom": "SASP LES RAPACES DE GAP",
+            "nom_court": "SASP LES RAPACES DE GAP",
+            "code": "93006S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "8wEqPG81zcvlxzrmX73wQQy4UNsgWuKWV30YXrgo.png"
+          },
+          "id_compet": [
+            1,
+            19,
+            26,
+            34,
+            62,
+            70,
+            54,
+            79,
+            95,
+            99,
+            108,
+            120,
+            140,
+            135,
+            157,
+            166,
+            170,
+            197,
+            219,
+            228,
+            223,
+            240,
+            249,
+            256
+          ]
+        },
+        "score": [
+          {
+            "sportif_rencontre_id": 78005,
+            "participant_id": 9129,
+            "equipe_id": 3095,
+            "score": 0
+          },
+          {
+            "sportif_rencontre_id": 78005,
+            "participant_id": 9124,
+            "equipe_id": 366,
+            "score": 0
+          }
+        ],
+        "lieu_de_pratique": {
+          "id": 27,
+          "nom": "Palais Omnisports Marseille Grand-Est (POMGE)"
+        },
+        "tour": 44,
+        "tour_libelle": null,
+        "infos_complementaires": {
+          "url_live": null,
+          "liens_externes": []
+        },
+        "en_cours": false,
+        "etat": null,
+        "victoire_par": "S",
+        "lot": null
+      },
+      {
+        "id": 78002,
+        "rencontre_libelle": "CERGY-PONTOISE / ROUEN",
+        "calendrier": {
+          "date_debut": "2027-03-02 20:30:00",
+          "date_fin": "2027-03-02 20:30:00"
+        },
+        "phase_id": 714,
+        "phase": {
+          "id": 714,
+          "libelle": "Saison régulière",
+          "competition_libelle": "Synerglace Ligue Magnus",
+          "type_phase": "C",
+          "parametrage": {
+            "aller_retour": 0,
+            "appuis": 0,
+            "nombre_match_par_confrontation": 4,
+            "nombre_participant": 12,
+            "nombre_groupe": 1,
+            "grille_id": null,
+            "type_assignation": "M",
+            "prolongation": true,
+            "petite_finale": true,
+            "avec_bascule_auto": true,
+            "score_cumule": false,
+            "avec_classement_final": true,
+            "extra_poule": false,
+            "nombre_plateaux": null,
+            "phase_finale": false
+          },
+          "visible": true
+        },
+        "competition": {
+          "id": 240,
+          "libelle": "Synerglace Ligue Magnus",
+          "parametres": {
+            "url_externe": "https://www.magnus.tv",
+            "publier_sur_site": true
+          },
+          "saison": 2027,
+          "type": {
+            "id": 1,
+            "libelle": "Ligue Magnus",
+            "code": "NA",
+            "created_at": "2021-07-13 15:12:51",
+            "updated_at": "2021-07-13 15:12:51"
+          }
+        },
+        "date_rencontre": "2027-03-02 20:30",
+        "receveur": {
+          "id": 345,
+          "libelle": "11013S - LES JOKERS SLM",
+          "libelle_complet": "Jokers de Cergy-Pontoise",
+          "libelle_court": "CERGY-PONTOISE",
+          "abreviation": "CER",
+          "logo": "https://hockeynet.fr/storage/logos_structures/PJd9vkjZZj7SdG2NvDKnbTq27bo7aKDoRKOboSZ6.png",
+          "sexe": "M",
+          "structure": {
+            "id": 401,
+            "nom": "LES JOKERS DE CERGY",
+            "nom_court": "LES JOKERS",
+            "code": "11013S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "PJd9vkjZZj7SdG2NvDKnbTq27bo7aKDoRKOboSZ6.png"
+          },
+          "id_compet": [
+            1,
+            21,
+            26,
+            19,
+            34,
+            62,
+            54,
+            67,
+            99,
+            79,
+            95,
+            135,
+            139,
+            120,
+            140,
+            157,
+            166,
+            170,
+            197,
+            219,
+            223,
+            228,
+            240,
+            249,
+            255,
+            256
+          ]
+        },
+        "visiteur": {
+          "id": 253,
+          "libelle": "23001S - 23001S ROUEN HOCKEY ELITE 76",
+          "libelle_complet": "Dragons de Rouen",
+          "libelle_court": "ROUEN",
+          "abreviation": "ROU",
+          "logo": "https://hockeynet.fr/storage/logos_equipes/166/t70uoBQeQNNaS1c96TfP8cehaisjLYc4CylipPrJ.png",
+          "sexe": "M",
+          "structure": {
+            "id": 388,
+            "nom": "SASP ROUEN HOCKEY ELITE 76",
+            "nom_court": "SASP ROUEN HOCKEY ELITE 76",
+            "code": "23001S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "xga9XBOBA0N4QWD2c6W6J4vNkpLreCCDvIRloIlh.png"
+          },
+          "id_compet": [
+            1,
+            19,
+            26,
+            62,
+            34,
+            40,
+            53,
+            54,
+            67,
+            79,
+            95,
+            99,
+            84,
+            101,
+            108,
+            120,
+            135,
+            140,
+            125,
+            157,
+            165,
+            166,
+            170,
+            188,
+            159,
+            168,
+            197,
+            219,
+            223,
+            228,
+            240,
+            249,
+            255,
+            256
+          ]
+        },
+        "score": [
+          {
+            "sportif_rencontre_id": 78002,
+            "participant_id": 9122,
+            "equipe_id": 345,
+            "score": 0
+          },
+          {
+            "sportif_rencontre_id": 78002,
+            "participant_id": 9127,
+            "equipe_id": 253,
+            "score": 0
+          }
+        ],
+        "lieu_de_pratique": {
+          "id": 13,
+          "nom": "Cergy - Aren'Ice"
+        },
+        "tour": 44,
+        "tour_libelle": null,
+        "infos_complementaires": "",
+        "en_cours": false,
+        "etat": null,
+        "victoire_par": "S",
+        "lot": null
+      },
+      {
+        "id": 78006,
+        "rencontre_libelle": "ANGLET / NICE",
+        "calendrier": {
+          "date_debut": "2027-03-02 20:30:00",
+          "date_fin": "2027-03-02 21:30:00"
+        },
+        "phase_id": 714,
+        "phase": {
+          "id": 714,
+          "libelle": "Saison régulière",
+          "competition_libelle": "Synerglace Ligue Magnus",
+          "type_phase": "C",
+          "parametrage": {
+            "aller_retour": 0,
+            "appuis": 0,
+            "nombre_match_par_confrontation": 4,
+            "nombre_participant": 12,
+            "nombre_groupe": 1,
+            "grille_id": null,
+            "type_assignation": "M",
+            "prolongation": true,
+            "petite_finale": true,
+            "avec_bascule_auto": true,
+            "score_cumule": false,
+            "avec_classement_final": true,
+            "extra_poule": false,
+            "nombre_plateaux": null,
+            "phase_finale": false
+          },
+          "visible": true
+        },
+        "competition": {
+          "id": 240,
+          "libelle": "Synerglace Ligue Magnus",
+          "parametres": {
+            "url_externe": "https://www.magnus.tv",
+            "publier_sur_site": true
+          },
+          "saison": 2027,
+          "type": {
+            "id": 1,
+            "libelle": "Ligue Magnus",
+            "code": "NA",
+            "created_at": "2021-07-13 15:12:51",
+            "updated_at": "2021-07-13 15:12:51"
+          }
+        },
+        "date_rencontre": "2027-03-02 20:30",
+        "receveur": {
+          "id": 75,
+          "libelle": "72001S - ANGLET HORMADI Ligue MAGNUS",
+          "libelle_complet": "Anglet Hormadi",
+          "libelle_court": "ANGLET",
+          "abreviation": "HOR",
+          "logo": "https://hockeynet.fr/storage/logos_equipes/385/sEJ00DulIXaHCoHju1Ocm69qYtKy1SSvfAEex7Ef.png",
+          "sexe": "M",
+          "structure": {
+            "id": 385,
+            "nom": "ANGLET HORMADI ELITE",
+            "nom_court": "ANGLET HORMADI ELITE",
+            "code": "72001S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "01jSIV0dk2fUK7SKgMTCg9w52QQcmkT8DQJ4El8z.png"
+          },
+          "id_compet": [
+            1,
+            19,
+            21,
+            26,
+            34,
+            54,
+            62,
+            79,
+            95,
+            99,
+            120,
+            135,
+            140,
+            166,
+            157,
+            170,
+            188,
+            240,
+            249,
+            256
+          ]
+        },
+        "visiteur": {
+          "id": 472,
+          "libelle": "93008S - NICE SLM",
+          "libelle_complet": "Aigles de Nice",
+          "libelle_court": "NICE",
+          "abreviation": "NIC",
+          "logo": "https://hockeynet.fr/storage/logos_structures/fa/b9/fab96bac-a21d-4c67-ac7b-ab44b3b8fa15.png",
+          "sexe": "M",
+          "structure": {
+            "id": 395,
+            "nom": "NICE HOCKEY  ELITE",
+            "nom_court": "NICE HOCKEY  ELITE",
+            "code": "93008S",
+            "etat": "A",
+            "type": "SOC",
+            "logo": "fa/b9/fab96bac-a21d-4c67-ac7b-ab44b3b8fa15.png"
+          },
+          "id_compet": [
+            1,
+            19,
+            26,
+            62,
+            54,
+            34,
+            70,
+            79,
+            99,
+            95,
+            120,
+            140,
+            135,
+            157,
+            166,
+            170,
+            228,
+            197,
+            219,
+            240,
+            256,
+            249
+          ]
+        },
+        "score": [
+          {
+            "sportif_rencontre_id": 78006,
+            "participant_id": 9126,
+            "equipe_id": 472,
+            "score": 0
+          },
+          {
+            "sportif_rencontre_id": 78006,
+            "participant_id": 9128,
+            "equipe_id": 75,
+            "score": 0
+          }
+        ],
+        "lieu_de_pratique": {
+          "id": 4,
+          "nom": "Anglet - La Barre"
+        },
+        "tour": 44,
+        "tour_libelle": null,
+        "infos_complementaires": {
+          "url_live": null,
+          "liens_externes": []
+        },
+        "en_cours": false,
+        "etat": null,
+        "victoire_par": "S",
+        "lot": null
+      }
+    ],
+    "links": {
+      "first": "https://hockeynet.fr/api/v1/rencontres?page=1",
+      "last": "https://hockeynet.fr/api/v1/rencontres?page=1",
+      "prev": null,
+      "next": null
+    },
+    "meta": {
+      "current_page": 1,
+      "from": 1,
+      "last_page": 1,
+      "links": [
+        {
+          "url": null,
+          "label": "&laquo; Précédent",
+          "page": null,
+          "active": false
+        },
+        {
+          "url": "https://hockeynet.fr/api/v1/rencontres?page=1",
+          "label": "1",
+          "page": 1,
+          "active": true
+        },
+        {
+          "url": null,
+          "label": "Suivant &raquo;",
+          "page": null,
+          "active": false
+        }
+      ],
+      "path": "https://hockeynet.fr/api/v1/rencontres",
+      "per_page": 700,
+      "to": 6,
+      "total": 6
+    }
+  }
+}
