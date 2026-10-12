@@ -895,30 +895,65 @@ def test_real_concat_equals_per_game_runs_nflverse_wpa():
 # so a touchback kickoff is worth 0. EP_start_touchback starts it at the season's rule spot
 # (model_vars.touchback_yardline: 80 before 2016, 75 for 2016-23, 70 in 2024, 65 from 2025); the end
 # state was a literal 75, right only in 2016-23. One or more captures per era; every touchback kickoff in
-# them ends at that spot with |EPA| < 1e-3 (3 older rows elsewhere do not: ESPN's end clock moves on them).
+# them ends at that spot with |EPA| < 1e-3, except the 2024+ landing-zone touchback below. Elsewhere in
+# the captures 25 kickoff_tb rows were not 0 at the season spot, every one with ESPN's end clock moving
+# (R831-3, routed to task 2.19): 22 are 2006-07 bare "KickOff" rows nflverse has as returns (R831-2,
+# task 2.19), which now keep their next snap's spot; 3 are real touchbacks (in the CSV below).
 _TB_ERAS = {
     "pre-2016": (331103020, 400791508),
     "2016-23": (401547449,),
     "2024": (401671740, 401671835),
     "2025": (401772636, 401772726, 401872922),
 }
+# From 2024 a kick that lands in the landing zone and rolls into the end zone is a touchback at the
+# receiving 20, not the 30 / 35 (R831-1): its net spot is the next snap, as on any other kickoff.
+# 401671740 play 3563, "Touchback to the PHI 20": nflverse's next snap is at yardline_100 80.
+_TB_LANDING_ZONE = {401671740: 3563}
 
 
 @pytest.mark.parametrize("game_id", [g for gs in _TB_ERAS.values() for g in gs])
 def test_kickoff_touchback_epa_is_zero(game_id):
     f = run(game_id).plays.filter(_t("kickoff_tb") & ~_t("scoringPlay"))
+    f = f.filter(pl.col("id").cast(pl.Utf8) != f"{game_id}{_TB_LANDING_ZONE.get(game_id, '')}")
     _require(f.height > 0, "no touchback kickoff in the capture")
     ok = (pl.col("end.yardsToEndzone") == touchback_yardline_expr(pl.col("season"))) & (pl.col("EPA").abs() < 1e-3)
     assert _bad(f, ok, ["season", "end.yardsToEndzone", "EP_start", "EP_end", "EPA"]) == []
 
 
+@pytest.mark.parametrize(("game_id", "play_id"), list(_TB_LANDING_ZONE.items()))
+def test_kickoff_touchback_landing_zone_ends_at_the_next_snap(game_id, play_id):
+    # Oracle: nflverse's next snap (the 80), and the owner's model there: EP(1st & 10 at the 80) -
+    # EP(1st & 10 at the 2024 touchback 70) = -0.600 (measured; -0.233 with the literal 75, 0 at the 70).
+    row = run(game_id).plays.filter(pl.col("id").cast(pl.Utf8) == f"{game_id}{play_id}").row(0, named=True)
+    nxt = _nflverse_next_snap(game_id).filter(pl.col("play_id") > play_id).filter(pl.col("down").is_not_null())
+    assert row["kickoff_tb"] is True
+    assert row["end.yardsToEndzone"] == nxt["yardline_100"][0] == 80
+    assert abs(row["EPA"] - (-0.600)) < 0.01, row["EPA"]
+
+
+@pytest.mark.parametrize(
+    ("game_id", "play", "spot"),
+    [(401671740, "401671740343", 70), (401772636, "401772636646", 65)],
+    ids=["2024", "2025"],
+)
+def test_kickoff_touchback_without_a_next_snap_ends_at_the_season_spot(game_id, play, spot):
+    # The season-spot re-spot is the fallback for a touchback whose next snap cannot be read (pre-2014
+    # ids out of game order, R785-4); every 2024+ capture touchback has its next snap, so a real one is
+    # given an out-of-order next row here. It must still end 1st & 10 at the season spot, EPA 0.
+    row = _run_edited(game_id, play, _next_out_of_order).filter(pl.col("id").cast(pl.Utf8) == play).row(0, named=True)
+    assert row["kickoff_tb"] is True
+    assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (1, 10, spot)
+    assert abs(row["EPA"]) < 1e-3, row["EPA"]
+
+
 # nflverse's epa on every touchback kickoff of the captures that nflverse also flags as one
 # (fixtures/nflverse/kickoff_touchback_epa.csv, 124 rows, 2006-2025; the README has the provenance).
-# MAE before -> after the fix: pre-2016 0.328 -> 0.017, 2016-23 0.001 -> 0.001, 2024 0.469 -> 0.267,
+# MAE before -> after the fix: pre-2016 0.328 -> 0.017, 2016-23 0.0005 -> 0.0005, 2024 0.469 -> 0.255,
 # 2025 1.096 -> 0.536. Ceilings are the measured MAE rounded up. From 2024 nflfastR still scores a
 # kickoff at its stale touchback 75 (helper_add_ep_wp.R: `ifelse(season < 2016, 80, 75)`) while the
-# next snap is at the 30 / 35, so nflverse's own touchback epa is +0.21 / +0.54 there, not 0; ours is
-# 0 (test above), and each row may sit no further from nflverse than 0 does.
+# next snap is at the 30 / 35, so nflverse's own touchback epa is not 0 there: +0.258 (2024, 1,880
+# plays) and +0.347 (2025, 610) over each full season, +0.211 / +0.536 on these capture rows. Ours is
+# the owner's model (tests above), and each row may sit no further from nflverse than 0 does.
 _TB_NFLVERSE_MAE = {"pre-2016": 0.02, "2016-23": 0.002}
 
 

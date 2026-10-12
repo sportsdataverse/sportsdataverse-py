@@ -1326,9 +1326,25 @@
   file: sportsdataverse/nfl/nfl_pbp.py
   snippet: '.then(touchback_yardline_expr(pl.col("season")))  # EX-2.3-a: the EP_start_touchback spot'
   mutant: '.then(75)  # EX-2.3-a: the EP_start_touchback spot'
-  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_epa_is_zero[401671740]
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_without_a_next_snap_ends_at_the_season_spot[2024]
   expected: kill
   note: >-
-    The literal 75 back: a 2024 touchback kickoff starts at the 70 (EP_start_touchback) and ends at
-    the 75, EPA about -0.25 on each of 401671740's 8 touchbacks (and +0.38 before 2016, -0.46 from
-    2025) instead of the owner's model's 0.
+    The literal 75 back: a 2024 touchback kickoff whose next snap cannot be read starts at the 70
+    (EP_start_touchback) and ends at the 75, EPA about -0.25 instead of the owner's model's 0
+    (401671740 play 343 given an out-of-order next row). On the base, which re-spotted every
+    touchback, the mean over 96 sampled nfl-raw games was +0.35 before 2016, -0.25 in 2024 and
+    -0.48 in 2025.
+
+- id: nfl-kickoff-touchback-next-snap-guard
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.when((pl.col("kickoff_tb") == True) & ~pl.col("_kick_spot"))  # R831-1: next snap wins'
+  mutant: 'pl.when(pl.col("kickoff_tb") == True)  # R831-1: next snap wins'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_landing_zone_ends_at_the_next_snap
+  expected: kill
+  note: >-
+    Review R831-1: re-spotting every touchback at the season spot throws away the next-snap spot of
+    a 2024+ landing-zone touchback (the receiving 20): 401671740 play 3563 ends at the 70 with EPA 0
+    instead of the 80 and the owner's -0.600. It also re-spots the 2006-07 bare "KickOff" returns
+    (R831-2), MAE vs nflverse 0.040 -> 0.519 on the 32 capture rows.

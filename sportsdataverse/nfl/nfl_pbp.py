@@ -1692,7 +1692,8 @@ class NFLPlayProcess(object):
         # Kickoff EPA (the owner's model) is EP(1st & 10 at the net spot, for the team with the ball
         # after the kick) - EP(1st & 10 at the touchback spot), so every unscored kickoff (returned,
         # out of bounds, penalty spot, onside recovered by either side) ends at a first down whatever
-        # down / distance ESPN ships; a touchback is re-spotted later (kickoff_tb). The net spot is
+        # down / distance ESPN ships; a touchback with no next snap to read is re-spotted later at the
+        # season's touchback spot (kickoff_tb & ~_kick_spot, EX-2.3-a). The net spot is
         # where that team's next snap starts (ESPN's end yard line is flipped on some returns, R810-5).
         # Pre-2014 play ids are not always in game order (R785-4), so the next snap by id must also be
         # the next snap by sequenceNumber in the same half, and not another kickoff; otherwise ESPN's
@@ -1734,7 +1735,8 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("end.distance"))
                 .alias("end.distance"),
             )
-            .drop("_nxt", "_first_down", "_kick_spot")
+            # _kick_spot is kept for the kickoff_tb re-spot in the EP block, which drops it.
+            .drop("_nxt", "_first_down")
             .with_columns(
                 lead_half=pl.col("half").shift(-1),
                 lag_scoringPlay=pl.col("scoringPlay").shift(1),
@@ -5137,10 +5139,13 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .with_columns(
-                # A touchback kickoff ends where EP_start_touchback starts it: the season's rule
-                # spot, so its EPA is 0 (the owner's kickoff model; EX-2.3-a). The punt touchback
-                # below is the 20 in every season.
-                pl.when(pl.col("kickoff_tb") == True)
+                # A touchback kickoff with no next snap to read ends where EP_start_touchback starts
+                # it: the season's rule spot, so its EPA is 0 (the owner's kickoff model; EX-2.3-a).
+                # One the next snap places keeps that spot (_kick_spot, set with the C-H5 rewrite):
+                # from 2024 a kick that lands in the landing zone and rolls into the end zone is a
+                # touchback at the 20, not the 30 / 35 (R831-1). The punt touchback below is the 20
+                # in every season.
+                pl.when((pl.col("kickoff_tb") == True) & ~pl.col("_kick_spot"))  # R831-1: next snap wins
                 .then(touchback_yardline_expr(pl.col("season")))  # EX-2.3-a: the EP_start_touchback spot
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
@@ -5155,6 +5160,7 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
+            .drop("_kick_spot")
         )
 
         X_ep_end = _espn_ep_features(
