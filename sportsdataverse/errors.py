@@ -303,6 +303,30 @@ class EraCoverageWarning(UserWarning):
     """
 
 
+class DefaultOddsWarning(UserWarning):
+    """Warned when a CFB game is processed with no pregame spread (``gameSpreadAvailable`` False).
+
+    ``CFBPlayProcess`` needs a spread and a total as EPA / WP inputs. When neither the summary's
+    ``pickcenter`` nor ESPN's odds endpoint has one -- or an ``odds_override`` says the spread is
+    unavailable, as a rebuild of such a game does -- it uses a default spread and total, and every
+    EPA / WP value of that game rests on a number no market set. The ``gameSpreadAvailable`` play
+    column records it per game; this warning makes it visible at processing time. A producer that
+    must not publish such a game turns it into an error.
+
+    Example:
+        Strict mode for a producer::
+
+            import warnings
+            from sportsdataverse.errors import DefaultOddsWarning
+
+            warnings.simplefilter("error", DefaultOddsWarning)
+
+        Silence it deliberately::
+
+            warnings.filterwarnings("ignore", category=DefaultOddsWarning)
+    """
+
+
 def no_espn_data(response: "requests.Response") -> "requests.Response":
     """Validate an ESPN response, raising :class:`NoDataError` if empty.
 
