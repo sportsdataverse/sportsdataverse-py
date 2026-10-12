@@ -1,0 +1,82 @@
+columns:
+- description: 'Game id (the calendar''s game_id; the report''s and the broadcast''s
+    idgame). The report and broadcast pages do not print it: it comes from the request.'
+  name: game_id
+  type: integer
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: 'Season stage: regular or playoff.'
+  name: stage
+  type: character
+- description: Official game number (from '№984'); checked against the request.
+  name: game_number
+  type: integer
+- description: 'Side of the game the row belongs to: home or away.'
+  name: team_side
+  type: character
+- description: Team page id (vhlru.ru /en/teams/{team_page_id}/), stable across seasons;
+    for report rows the page id of the row's side.
+  name: team_page_id
+  type: integer
+- description: Team short name (Latin; the report tables' form).
+  name: team
+  type: character
+- description: Jersey number (integer).
+  name: jersey
+  type: integer
+- description: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
+    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
+    player ids; whether it equals the same person''s khl.ru id is unverified.'
+  name: player_id
+  type: integer
+- description: Player name, 'Surname Given' (Latin on /en/ pages).
+  name: player
+  type: character
+- description: Unobserved in samples (null in every capture); type and meaning unverified.
+  name: captaincy
+  type: character
+- description: Games played (GP).
+  name: games_played
+  type: integer
+- description: Goalie wins (W).
+  name: wins
+  type: integer
+- description: Goalie losses (L).
+  name: losses
+  type: integer
+- description: Shootouts played (SOP).
+  name: shootouts_played
+  type: integer
+- description: Shots on goal faced (the SOG column of goalie tables).
+  name: shots_against
+  type: integer
+- description: Goals allowed (GA).
+  name: goals_against
+  type: integer
+- description: Saves (Sv).
+  name: saves
+  type: integer
+- description: Save percentage (%Sv); 0-100 scale (93.8 = 93.8 %); null when the page
+    shows '-'.
+  name: save_pct
+  type: numeric
+- description: Goals-against average (GAA) = 60 x GA / TOI minutes; null when the
+    page shows '-'.
+  name: gaa
+  type: numeric
+- description: Assists (A).
+  name: assists
+  type: integer
+- description: Shutouts (SO).
+  name: shutouts
+  type: integer
+- description: Penalty minutes (PIM).
+  name: penalty_minutes
+  type: integer
+- description: Time on ice in this game, 'mm:ss'; null for a dressed goalie who did
+    not play ('-').
+  name: toi
+  type: character
+kind: dataframe
+schema: vhl_goalie_box

@@ -1,0 +1,106 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: 'Season stage: regular or playoff.'
+  name: stage
+  type: character
+- description: Tournament id of the season stage (2025/26 regular season = 1374, playoffs
+    = 1375); vhl_tn maps season + stage to it.
+  name: tn
+  type: integer
+- description: 'Position group: defense or forward.'
+  name: position_group
+  type: character
+- description: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
+    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
+    player ids; whether it equals the same person''s khl.ru id is unverified.'
+  name: player_id
+  type: integer
+- description: Player name, 'Surname Given' (Latin on /en/ pages).
+  name: player
+  type: character
+- description: Jersey number (#; the page legend mislabels this column 'Position').
+  name: jersey
+  type: integer
+- description: Team short name (Latin; the report tables' form).
+  name: team
+  type: character
+- description: Games played (GP).
+  name: games_played
+  type: integer
+- description: Goals (G).
+  name: goals
+  type: integer
+- description: Assists (A).
+  name: assists
+  type: integer
+- description: Points, goals + assists (PTS).
+  name: points
+  type: integer
+- description: Plus/minus (+/-).
+  name: plus_minus
+  type: integer
+- description: 'Plus: on-ice goals for that count toward plus/minus (+).'
+  name: plus
+  type: integer
+- description: 'Minus: on-ice goals against that count toward plus/minus (-).'
+  name: minus
+  type: integer
+- description: Penalty minutes (PIM).
+  name: penalty_minutes
+  type: integer
+- description: Even-strength goals (ESG).
+  name: even_strength_goals
+  type: integer
+- description: Power-play goals (PPG).
+  name: power_play_goals
+  type: integer
+- description: Shorthanded goals (SHG).
+  name: shorthanded_goals
+  type: integer
+- description: Overtime goals (OTG).
+  name: overtime_goals
+  type: integer
+- description: Game-winning goals (GWG).
+  name: game_winning_goals
+  type: integer
+- description: Shootout-deciding goals (SDS; the legend says 'Shootouts deciding shots').
+  name: shootout_deciding_goals
+  type: integer
+- description: Shots on goal (SOG).
+  name: shots_on_goal
+  type: integer
+- description: Shooting percentage, goals / shots on goal x 100 (%SOG); 0-100 scale;
+    null when the page shows '-'.
+  name: shot_pct
+  type: numeric
+- description: Shots on goal per game (S/G).
+  name: shots_per_game
+  type: numeric
+- description: Faceoffs taken (FO).
+  name: faceoffs
+  type: integer
+- description: Faceoffs won (FOW).
+  name: faceoffs_won
+  type: integer
+- description: Faceoff win percentage (%FO); 0-100 scale; null when the page shows
+    '-' (no faceoffs taken).
+  name: faceoff_pct
+  type: numeric
+- description: Average time on ice per game (TOI/G), 'm:ss' / 'mm:ss' string; null
+    when the page shows '-'.
+  name: toi_per_game
+  type: character
+- description: Average shifts per game (Sft/G); integer in a one-game report, decimal
+    in season tables.
+  name: shifts_per_game
+  type: numeric
+- description: Body checks delivered (Hits).
+  name: hits
+  type: integer
+- description: Blocked shots (BLS).
+  name: blocked_shots
+  type: integer
+kind: dataframe
+schema: vhl_skater_stats

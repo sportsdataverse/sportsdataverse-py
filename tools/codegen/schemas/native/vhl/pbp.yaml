@@ -1,0 +1,62 @@
+columns:
+- description: 'Game id (the calendar''s game_id; the report''s and the broadcast''s
+    idgame). The report and broadcast pages do not print it: it comes from the request.'
+  name: game_id
+  type: integer
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: 'Season stage: regular or playoff.'
+  name: stage
+  type: character
+- description: Official game number ('Игра номер 984'); checked against the request.
+  name: game_number
+  type: integer
+- description: Order of the event on the page, 0 = the first listed (the broadcast
+    lists the latest event first).
+  name: event_index
+  type: integer
+- description: 'Event kind from the CSS modifier: game_state (ga), comment (co), goal
+    (go), penalty (pn), goalie_change (gc), video_review (vr), shootout_attempt (bu).'
+  name: kind
+  type: character
+- description: Raw CSS modifier of .game-event-item--<code>.
+  name: kind_code
+  type: character
+- description: 'Time label verbatim: ''mm:ss'' elapsed game time, ''NN мин'' (minute
+    of a comment), or ''HH:MM'' wall clock on game_state events; null when absent.
+    See clock.'
+  name: time
+  type: character
+- description: 'What time means: game (elapsed mm:ss), minute (''58 мин''), wall (local
+    wall clock, game_state rows); null when there is no time.'
+  name: clock
+  type: character
+- description: 'Score ''home-away'' (dash, not colon) after a goal; on a shootout
+    attempt, the shootout score printed beside it (before or after that attempt: unverified).'
+  name: score
+  type: character
+- description: 'Goal strength code in Cyrillic: РАВ (even), БОЛ (power play), МЕН
+    (shorthanded, unobserved), БУЛ (penalty shot / shootout); empty string seen as
+    null.'
+  name: strength_code
+  type: character
+- description: 'strength_code in English: even, power_play, shorthanded, penalty_shot_or_shootout.'
+  name: strength
+  type: character
+- description: Event text verbatim in RUSSIAN (team, players, infraction, period stats);
+    not translated.
+  name: text
+  type: character
+- description: Player ids linked in the event text (//vhlru.ru/players/{id}/), scorer
+    first; empty for most kinds.
+  name: player_ids
+  type: character
+- description: Home team name in Cyrillic.
+  name: home_team
+  type: character
+- description: Away team name in Cyrillic.
+  name: away_team
+  type: character
+kind: dataframe
+schema: vhl_pbp
