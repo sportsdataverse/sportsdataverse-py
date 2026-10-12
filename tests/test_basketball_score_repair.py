@@ -156,3 +156,53 @@ def test_null_espn_scores_are_filled_when_rebuilt(monkeypatch: pytest.MonkeyPatc
     assert out["score_source"].unique().to_list() == ["rebuilt"]
     assert out["home_score"].null_count() == 0 and _last(out) == (120, 95)
     assert out.schema["home_score"] == pl.Int32 and out.schema["score_source"] == pl.String
+
+
+@pytest.mark.parametrize(
+    ("lg", "name", "rows", "periods", "final"),
+    [
+        ("wnba", "summary_wnba.json", 418, 5, (67, 62)),  # quarters + OT
+        ("mbb", "summary_mbb.json", 294, 2, (75, 60)),  # halves
+        ("wbb", "summary_wbb.json", 360, 4, (87, 75)),  # quarters
+        ("mbb", "mbb_401830342.json.gz", 426, 4, (75, 81)),  # halves + 2OT
+    ],
+)
+def test_clean_feeds_rebuild_to_espn_exactly(
+    monkeypatch: pytest.MonkeyPatch, lg: str, name: str, rows: int, periods: int, final: tuple[int, int]
+) -> None:
+    out, espn = _build(lg, _final(lg, name, monkeypatch))
+    assert out.height == rows and out["period_number"].max() == periods
+    assert out["score_source"].unique().to_list() == ["rebuilt"]
+    assert _changed_rows(out, espn) == 0 and _last(out) == final
+
+
+def test_wnba_halves_era_stale_base(monkeypatch: pytest.MonkeyPatch) -> None:
+    # 2004-06-18, two 20-minute halves: ESPN ends 61-69, official 63-69
+    out, espn = _build("wnba", _final("wnba", "wnba_240618004.json.gz", monkeypatch))
+    assert out["period_number"].max() == 2 and out["score_source"].unique().to_list() == ["rebuilt"]
+    assert (espn["home"][-1], espn["away"][-1]) == (61, 69) and _last(out) == (63, 69)
+    assert (espn["home"][116], espn["away"][116]) == (12, 22) and _at_seq(out, 119) == (14, 22)
+    assert _changed_rows(out, espn) == 245
+    assert _never_falls(out)
+
+
+def test_mbb_neutral_site_scores_follow_the_header_sides(monkeypatch: pytest.MonkeyPatch) -> None:
+    final = _final("mbb", "mbb_401829457.json.gz", monkeypatch)
+    assert final["header"]["competitions"][0]["neutralSite"] is True
+    out, espn = _build("mbb", final)
+    assert out["home_team_id"].unique().to_list() == [155]  # UND, header home, 58 points
+    assert (espn["home"][-1], espn["away"][-1]) == (75, 58)  # ESPN's rows carry CCU in homeScore
+    assert out["score_source"].unique().to_list() == ["rebuilt"] and _last(out) == (58, 75)
+    first = out.filter(pl.col("scoring_play") == True).row(0, named=True)
+    assert first["team_id"] == 155 and (first["home_score"], first["away_score"]) == (3, 0)
+    assert _changed_rows(out, espn) == 533
+    assert _never_falls(out)
+
+
+def test_wbb_halves_era_late_free_throws(monkeypatch: pytest.MonkeyPatch) -> None:
+    # 2013-14, two halves: ESPN ends 52-54, official 54-56; the last two rows were never re-based
+    out, espn = _build("wbb", _final("wbb", "wbb_400550784.json.gz", monkeypatch))
+    assert out["period_number"].max() == 2 and out["score_source"].unique().to_list() == ["rebuilt"]
+    assert (espn["home"][-1], espn["away"][-1]) == (52, 54) and _last(out) == (54, 56)
+    assert _changed_rows(out, espn) == 2
+    assert _never_falls(out)
