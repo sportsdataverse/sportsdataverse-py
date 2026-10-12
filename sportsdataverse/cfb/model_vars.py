@@ -304,6 +304,7 @@ KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 35),
 
 
 def _by_season_expr(table: tuple[tuple[int, int], ...], season: pl.Expr) -> pl.Expr:
+    """Resolve a newest-first ``(first_season, value)`` table into a per-row polars expression."""
     # ponytail: untyped literals on purpose (the NFL twin casts Int64) -- the processor's columns keep the
     # dtypes they had when these spots were inline ``.then(75)`` literals (byte-stable on the 1.2 suite).
     expr = pl.lit(table[-1][1])
