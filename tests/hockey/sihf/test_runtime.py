@@ -112,9 +112,15 @@ def test_a_fallback_answer_raises_no_data(monkeypatch, sent, echo, name):
         rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, **sent})
 
 
-def test_a_dropped_filter_raises_no_data(monkeypatch):
-    _patch(monkeypatch, _body(Season="2026"))
-    with pytest.raises(NoDataError, match="dropped the Phase filter"):
+@pytest.mark.parametrize(
+    ("echo", "name"),
+    [({"Season": "2026"}, "Phase"), ({"Phase": "4940"}, "Season")],
+)
+def test_a_filter_missing_from_the_echo_is_a_failed_fetch(monkeypatch, echo, name):
+    # The body has an echo but leaves the requested filter out: SIHF ignored it, so the answer is
+    # unverifiable (AssetFetchError), not "no data" -- like a body with no echo at all.
+    _patch(monkeypatch, _body(**echo))
+    with pytest.raises(AssetFetchError, match=f"dropped the {name} filter"):
         rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026, "Phase": 4940})
 
 
