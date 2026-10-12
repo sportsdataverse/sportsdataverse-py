@@ -1368,6 +1368,8 @@ def _spot_from_text(txt, row):
 #: all three.
 #: Rows that are not snaps and may sit between a play and the one that follows it.
 _ADMIN_ROW_RE = r"(?i)^(?:timeout|end period|end of (?:half|game)|official)"
+#: rows that stop the clock without a snap; possession reads across them (EX-3.4-b)
+_STOPPAGE_TYPES = ["Timeout", "End Period", "End of Half"]
 
 #: ESPN's down-and-distance text for a ``start.distance`` of 0 that is not labelled
 #: "Goal", and the "at <spot>" tail both texts share.
@@ -5722,21 +5724,29 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 # --- Change of pos_team by lead('pos_team', 1)----
-                change_of_pos_team=pl.when(
-                    (pl.col("pos_team") == pl.col("lead_pos_team")).and_(
-                        ((pl.col("lead_play_type").is_in(["End Period", "End of Half"])) == False).or_(
-                            pl.col("lead_play_type").is_null(),
-                        ),
-                    ),
-                )
+                # EX-3.4-b: ESPN files a Timeout row under the team that CALLED it, so a
+                # defensive timeout is no change of possession. A Timeout row never carries
+                # one, and a play followed by stoppage rows (Timeout, End Period, End of Half,
+                # in any number) is compared with the next row that is none of them.
+                # (401864518: NDSU's sack-fumble, UNLV's timeout, NDSU's punt read as two
+                # turnovers; the old lead2 rule also misread Timeout + Timeout and
+                # Timeout + End Period.) A play followed by a real row keeps the old rule.
+                change_of_pos_team=pl.when(pl.col("type.text") == "Timeout")
                 .then(False)
-                .when(
-                    (pl.col("pos_team") == pl.col("lead_pos_team2")).and_(
-                        (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).or_(
-                            pl.col("lead_play_type").is_null(),
-                        ),
-                    ),
+                .when(pl.col("lead_play_type").is_in(_STOPPAGE_TYPES))
+                .then(
+                    (
+                        pl.col("pos_team")
+                        != pl.when(pl.col("type.text").is_in(_STOPPAGE_TYPES))
+                        .then(None)
+                        .otherwise(pl.col("pos_team"))
+                        .shift(-1)
+                        .backward_fill()
+                    ).fill_null(True)
                 )
+                .when(pl.col("pos_team") == pl.col("lead_pos_team"))
+                .then(False)
+                .when((pl.col("lead_play_type").is_null()).and_(pl.col("pos_team") == pl.col("lead_pos_team2")))
                 .then(False)
                 .otherwise(True),
             )
@@ -7622,12 +7632,12 @@ class CFBPlayProcess(object):
                 # below read it as the own 1 (401856682's Q4 Fumble Recovery (Own): EPA -5.91,
                 # where the next snap, 3rd & 1 at the 1, gives -0.41 and Yahoo/CBS -0.39). When the
                 # fumble was not lost and the same team snaps next, that snap's start IS this play's
-                # end. Possession is read from the recovery attribution, not change_of_pos_team,
-                # which is wrong on such rows (401864518's sack-fumble NDSU recovers and punts) and
-                # is set False here, or the next snap's EP_between reads a turnover. The next snap
-                # must be in the same period, or in the same half of regulation (an overtime period
-                # hands the ball back to the team that just had it). Fumble plays only: the same end
-                # block on other play types is a separate finding.
+                # end (yardLine and yard too). Possession is read from the recovery attribution, not
+                # change_of_pos_team. The next snap must be by the same team (401778310's interception
+                # return that fumbles is next snapped by the other side), in the same period or the
+                # same half of regulation (an overtime period hands the ball back to the team that
+                # just had it). Fumble plays only: the same end block on other play types is
+                # EX-3.4-c. Reach over all 20,719 cfb-raw games: 19 rows in 17 games.
                 _supp_002=(pl.col("end.yardLine") == 0)
                 .and_(pl.col("end.yardsToEndzone") == 0)
                 .and_(pl.col("fumble_vec") == True)
@@ -7642,16 +7652,12 @@ class CFBPlayProcess(object):
                 .fill_null(False),
             )
             .with_columns(
-                pl.when(pl.col("_supp_002"))
-                .then(False)
-                .otherwise(pl.col("change_of_pos_team"))
-                .alias("change_of_pos_team"),
                 *[
                     pl.when(pl.col("_supp_002"))
                     .then(_next_real_play(f"start.{c}"))
                     .otherwise(pl.col(f"end.{c}"))
                     .alias(f"end.{c}")
-                    for c in ("down", "distance", "yardsToEndzone")
+                    for c in ("down", "distance", "yardsToEndzone", "yardLine", "yard")
                 ],
             )
             .with_columns(
@@ -8113,7 +8119,14 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("EP_end"))
                 .forward_fill()
                 .shift(1),
-                lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1),
+                # EX-3.4-b: like lag_EP_end, the possession change the next play reads is the
+                # last real play's, never a Timeout row's (punt, receiver's timeout, receiver's
+                # snap is still a change of possession).
+                lag_change_of_pos_team=pl.when(pl.col("type.text") == "Timeout")
+                .then(None)
+                .otherwise(pl.col("change_of_pos_team"))
+                .forward_fill()
+                .shift(1),
             )
             .with_columns(
                 lag_change_of_pos_team=pl.when(pl.col("lag_change_of_pos_team").is_null())
@@ -8136,7 +8149,16 @@ class CFBPlayProcess(object):
                 #
                 # lag_scoringPlay, not lag_scoring_play: the derived flag is not built
                 # until well after __process_epa, while ESPN's own is set at line 2387.
-                EP_between=pl.when(pl.col("lag_scoringPlay") == True)
+                # EX-3.4-b: read across a Timeout row, as lag_EP_end and the lagged possession
+                # do (score, timeout, kickoff: the kickoff's EP_between is 0, not a turnover).
+                EP_between=pl.when(
+                    pl.when(pl.col("type.text") == "Timeout")
+                    .then(None)
+                    .otherwise(pl.col("scoringPlay"))
+                    .forward_fill()
+                    .shift(1)
+                    == True
+                )
                 .then(0.0)
                 .when(pl.col("lag_change_of_pos_team") == True)
                 .then(pl.col("EP_start") + pl.col("lag_EP_end"))
