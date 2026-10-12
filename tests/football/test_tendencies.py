@@ -9,13 +9,17 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 from sportsdataverse.football.play_participants import (
     athlete_lookup_from_summary,
     play_participants_from_items,
 )
 from sportsdataverse.football.tendencies import RATES, SPLITS, aggregate_tendencies, tendencies
-from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 from sportsdataverse.nfl import NFLPlayProcess
+
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
 
 FIX = Path(__file__).parent.parent / "nfl" / "fixtures"
 GAME_ID = 401872922

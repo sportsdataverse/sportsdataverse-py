@@ -21,6 +21,10 @@ from sportsdataverse.football.sources.dispatch import (
 
 from .conftest import CFB_GAME_ID, NFL_GAME_ID
 
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+
 
 def test_espn_offline_dispatch_runs_the_real_pipeline(nfl_processed: ProcessedGame):
     """The ESPN path serves a stored summary through the real pipeline, with full provenance."""
