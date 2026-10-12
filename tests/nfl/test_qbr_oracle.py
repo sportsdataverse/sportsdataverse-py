@@ -19,11 +19,15 @@ ROOT = Path(__file__).resolve().parents[2]
 SLICE = Path(__file__).parent / "fixtures" / "espn_qbr_2023_slice.parquet"
 OLD_ORDER = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "spread"]  # pre-2.7 qbr_vars
 # Measured 2026-10-11 on the slice: trainer order 0.7857, pre-2.7 order 0.7048 (pass/sack swapped: 0.6596).
-FLOOR = 0.785
+# R795-1 (empty play-type group -> 0, as the trainer did): trainer order 0.8097, pre-2.7 order 0.7334.
+FLOOR = 0.809
+EMPTY_GROUP = ["rush_epa", "sack_epa", "pen_epa"]
 
 
 def _spearman(order: list[str]) -> float:
-    df = pl.read_parquet(SLICE)
+    # The slice was recorded before R795-1: its nulls (76 rush, 87 sack, 45 penalty) are QBs with no such play,
+    # which the processor now serves as 0 (the trainer's replace_na). A re-record makes this fill a no-op.
+    df = pl.read_parquet(SLICE).with_columns(pl.col(EMPTY_GROUP).fill_null(0.0))
     b = Booster()
     b.load_model(str(ROOT / "sportsdataverse" / "nfl" / "models" / "qbr_model.ubj"))
     # Unnamed DMatrix: score the column ORDER alone, so a wrong qbr_vars shows up as a worse ranking.

@@ -6647,6 +6647,9 @@ class NFLPlayProcess(object):
                 spread=(pl.col("start.pos_team_spread").first()),
             )
             .fill_null(0.0)
+            # A QB with no sack/rush/penalty plays gets 0/0 = NaN, which fill_null leaves for the booster to read as
+            # missing. The trainer replaced an empty group with 0 (cfb_qbr@9ef6010 qbr_xgb.R:81-85, replace_na).
+            .with_columns(pl.col("qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa").fill_nan(0.0))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
         # # self.logger.info(pass_qbr)

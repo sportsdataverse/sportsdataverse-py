@@ -73,3 +73,16 @@ def test_exp_qbr_is_the_booster_on_the_trainer_order(qb_rows, booster):
 def test_qbr_model_names_its_features_in_the_trainer_order(booster):
     assert booster.feature_names == TRAINER_ORDER
     assert list(qbr_vars) == TRAINER_ORDER
+
+
+def test_a_quarterback_with_no_sack_rush_or_penalty_gets_zero_inputs(booster):
+    """R795-1: an empty play-type group is 0, as the trainer's replace_na made it (cfb_qbr@9ef6010 qbr_xgb.R:81-85).
+
+    In the committed 2016 capture 400874485, Eli Manning has no sack, rush or penalty play, so each of those weighted
+    means is 0/0. Served as NaN, the booster read them as missing, a value it never saw in training.
+    """
+    rows = pl.DataFrame(run(400874485).game["advBoxScore"]["pass"])
+    eli = rows.filter(pl.col("passer_player_name") == "E.Manning")
+    assert eli.height == 1
+    assert eli.select("rush_epa", "sack_epa", "pen_epa").row(0) == (0.0, 0.0, 0.0)
+    np.testing.assert_allclose(eli["exp_qbr"].to_numpy(), _score(booster, eli, TRAINER_ORDER), atol=1e-3)
