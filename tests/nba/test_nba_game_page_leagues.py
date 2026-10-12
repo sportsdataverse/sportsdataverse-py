@@ -238,3 +238,86 @@ def test_a_frame_without_either_period_clock_raises() -> None:
     )
     with pytest.raises(pl.exceptions.ColumnNotFoundError, match="period clock"):
         gp.score_win_prob(df, league="mbb")
+
+
+def test_college_free_throws_get_no_location(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, pbp, _, _ = _frames(monkeypatch, "mbb", "mbb_401830342.json.gz")
+    fts = pbp.filter(pl.col("type_text") == "MadeFreeThrow")
+    assert fts.height == 39 and (fts["shooting_play"] == True).all()  # noqa: E712
+    assert set(zip(fts["coordinate_x_raw"], fts["coordinate_y_raw"])) == {(25.0, 0.0)}  # ESPN pins them to the rim
+    out = gp.shot_coordinates(pbp)
+    assert out.filter(pl.col("type_text") == "MadeFreeThrow")["x_legacy"].null_count() == 39
+    assert (
+        out["x_legacy"].is_not_null().sum()
+        == pbp.filter(
+            (pl.col("shooting_play") == True) & (pl.col("type_text") != "MadeFreeThrow")  # noqa: E712
+        ).height
+    )
+
+
+def test_wbb_2010_turnovers_come_from_team_turnovers(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, _, tb, _ = _frames(monkeypatch, "wbb", "wbb_293170052.json.gz")
+    assert sorted(zip(tb["team_id"], tb["turnovers"], tb["team_turnovers"], tb["total_turnovers"])) == [
+        (52, 0, 23, 0),
+        (2454, 0, 28, 0),
+    ]
+    out = gp.team_game_rates(tb, league="wbb", regulation_periods=2).sort("team_id")
+    assert out["total_turnovers"].to_list() == [23, 28]
+    assert out["tov_pct"].null_count() == 0 and 60 < out["pace"][0] < 95
+    # the NBA turnover rule (the old league_id="10" route) read 0 turnovers here
+    assert gp.team_game_rates(tb, league_id="10")["total_turnovers"].to_list() == [0, 0]
+
+
+def test_wbb_2008_has_no_turnovers_so_the_rates_that_need_them_are_null(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, _, tb, pb = _frames(monkeypatch, "wbb", "wbb_273130043.json.gz")
+    out = gp.team_game_rates(tb, league="wbb", regulation_periods=2)
+    for col in ("total_turnovers", "tov_pct", "possessions", "off_rtg", "def_rtg", "pace"):
+        assert out[col].to_list() == [None, None], col
+    for col in ("efg_pct", "orb_pct", "ft_rate"):
+        assert out[col].null_count() == 0, col
+    # usage needs the team's turnovers too: a player with minutes still gets null, never a number built on 0
+    played = pb.with_columns(pl.lit(30.0).alias("minutes"), pl.lit(False).alias("did_not_play"))
+    rates = gp.player_game_rates(played, tb, league="wbb", regulation_periods=2)
+    assert rates["usg_pct"].null_count() == rates.height
+
+
+def test_modern_college_turnovers_are_the_box_turnovers(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, pbp, tb, _ = _frames(monkeypatch, "mbb", "summary_mbb.json")
+    out = gp.team_game_rates(tb, league="mbb").sort("team_id")
+    assert out["total_turnovers"].to_list() == tb.sort("team_id")["turnovers"].to_list() == [8, 9]
+    tos = pbp.filter(pl.col("type_text").str.contains("(?i)turnover")).group_by("team_id").agg(pl.len()).sort("team_id")
+    assert tos["len"].to_list() == [8, 9]  # the box count matches the plays
+
+
+def test_genuine_zero_college_turnovers_stay_zero_after_2009(monkeypatch: pytest.MonkeyPatch) -> None:
+    # D12: a college 0 is "not recorded" (null) only in WBB before 2009. GMU (2244) committed no
+    # turnover in MBB 401828345 (2026): box 0 under every key, and no turnover play for 2244.
+    _, pbp, tb, _ = _frames(monkeypatch, "mbb", "mbb_401828345.json.gz")
+    assert tb["season"].unique().to_list() == [2026]
+    tos = pbp.filter(pl.col("type_text").str.contains("(?i)turnover")).group_by("team_id").agg(pl.len())
+    assert dict(tos.rows()) == {2325: 4}
+    out = gp.team_game_rates(tb, league="mbb").sort("team_id")
+    assert out["team_id"].to_list() == [2244, 2325]
+    assert out["total_turnovers"].to_list() == [0, 4]
+    assert out["tov_pct"][0] == 0.0 and out["possessions"].null_count() == 0 and out["pace"].null_count() == 0
+
+
+def test_wbb_zero_turnovers_are_null_only_before_2009(monkeypatch: pytest.MonkeyPatch) -> None:
+    # The 2008 box (every turnover key 0) is "not recorded"; the same real box with its season set to
+    # 2010 in-test (a mutation of the real capture, not a synthetic frame) keeps 0, and a box whose
+    # season is unknown is never read as 2009+.
+    _, _, tb, _ = _frames(monkeypatch, "wbb", "wbb_273130043.json.gz")
+    assert tb["season"].unique().to_list() == [2008]
+    as_2010 = tb.with_columns(pl.lit(2010).cast(tb.schema["season"]).alias("season"))
+    assert gp.team_game_rates(as_2010, league="wbb", regulation_periods=2)["total_turnovers"].to_list() == [0, 0]
+    unknown = gp.team_game_rates(tb.drop("season"), league="wbb", regulation_periods=2)
+    assert unknown["total_turnovers"].to_list() == [None, None]
+
+
+def test_halves_overtime_pace_and_usage_use_the_games_minutes(monkeypatch: pytest.MonkeyPatch) -> None:
+    _, _, tb, pb = _frames(monkeypatch, "mbb", "mbb_401830342.json.gz")
+    out = gp.team_game_rates(tb, periods=4, league="mbb")
+    assert out["game_minutes"].to_list() == [50, 50]  # 2 x 20 + 2 x 5
+    assert out["pace"][0] == pytest.approx(40 * out["possessions"][0] / 50)
+    reg = gp.player_game_rates(pb, tb, periods=4, league="mbb")
+    assert reg.height == pb.height and reg["usg_pct"].drop_nulls().max() < 60

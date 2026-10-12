@@ -32,3 +32,4 @@ raw stores the hoopR / wehoop pbp releases are built from
 | `wbb_273130043.json.gz` | `espn_wbb_pbp(273130043, raw=True)` captured 2026-10-12, 2007-11-09 STAN @ YALE | WBB 2008 halves; no turnovers under any box key (all 0) |
 | `mbb_401812161.json.gz` | `espn_mbb_pbp(401812161, raw=True)` captured 2026-10-12, 2026-02-19 UVM @ UMBC | MBB non-neutral conference game, regulation (max period 2), one pickcenter provider |
 | `nba_game_page_golden.json` | `nba_game_page.game_page_frames` output on `summary_nba.json` (league_id "00") and `summary_wnba.json` ("10") at e4894f0817, written before the league generalization | NBA/WNBA byte-identity gate of the league generalization |
+| `mbb_401828345.json.gz` | `espn_mbb_pbp(401828345, raw=True)` captured 2026-10-12, 2025-12-31 GMU @ LAS | D12: GMU (2244) committed no turnover (box 0 under `turnovers`, `totalTurnovers`, `teamTurnovers`; no turnover play for 2244); LAS 4. A college 0 after 2009 stays 0 |

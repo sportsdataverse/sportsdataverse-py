@@ -443,8 +443,10 @@ def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
     growing toward half court (measured on 401766458: dunks at ``y`` about 2, a 22-foot corner
     three at ``(3, 0)``). The chart wants tenths of a foot with the hoop at the origin, so
     ``x_legacy = (x - 25) * 10`` and ``y_legacy = y * 10``. Free throws carry no real location
-    (``load_nba_pbp`` pins them to ``(25, 13.75)``) and ESPN's missing-coordinate sentinel is a
-    large negative number; both become ``null``, as does every non-shooting play.
+    (the NBA frame pins them to ``(25, 13.75)``, the college frames to the rim, ``(25, 0)``;
+    ``(?i)free ?throw`` matches ``Free Throw - 1 of 2`` and college ``MadeFreeThrow``) and ESPN's
+    missing-coordinate sentinel is a large negative number; both become ``null``, as does every
+    non-shooting play.
 
     Args:
         pbp: Plays in the ``load_nba_pbp`` schema (``shooting_play``, ``type_text``,
@@ -476,7 +478,7 @@ def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
     """
     located = (
         (pl.col("shooting_play") == True)
-        & (pl.col("type_text").fill_null("").str.contains("(?i)free throw") == False)
+        & (pl.col("type_text").fill_null("").str.contains("(?i)free ?throw") == False)
         & (pl.col("coordinate_x_raw").cast(pl.Float64) > COORD_SENTINEL)
         & (pl.col("coordinate_y_raw").cast(pl.Float64) > COORD_SENTINEL)
     )
@@ -560,6 +562,39 @@ def _team_tov(cols: list[str]) -> pl.Expr:
     return pl.when(total.is_null()).then(own + team.fill_null(0)).when(doubled).then(own).otherwise(total)
 
 
+#: First WBB season whose box records turnovers (2009-2012 under ``team_turnovers``); before it every key is 0.
+_WBB_FIRST_TURNOVER_SEASON = 2009
+
+
+def _box_season(team_box: pl.DataFrame) -> Optional[int]:
+    """The game's season from its team box (every converter and sdv-db's team box carry ``season``)."""
+    if "season" not in team_box.columns:
+        return None
+    seasons = team_box["season"].drop_nulls()
+    return int(seasons[0]) if seasons.len() else None
+
+
+def _tov(team_box: pl.DataFrame, lg: str, season: Optional[int]) -> pl.Expr:
+    """Team turnovers for the rates: the NBA repair for NBA / WNBA, the college rule for MBB / WBB.
+
+    College boxes count every team turnover under ``turnovers`` (the play-by-play turnover count
+    matches it), except WBB 2009-2012, which files it under ``team_turnovers`` with ``turnovers``
+    and ``total_turnovers`` both 0; :func:`sportsdataverse.mbb.mbb_team_ratings._turnovers` reads
+    both. A college 0 is a real 0 (TOV% 0.0), except in WBB before 2009, where ESPN's box carries
+    no turnovers at all (every key 0): there a 0 means "not recorded" and becomes null, so every
+    rate built on it is null rather than a number built on zero turnovers. A WBB box with no known
+    season is treated as "not recorded" too, never as 2009 or later.
+    """
+    if lg not in _NCAA:
+        return _team_tov(team_box.columns)
+    from sportsdataverse.mbb.mbb_team_ratings import _turnovers
+
+    tov = _turnovers(team_box)
+    if lg == "wbb" and (season is None or season < _WBB_FIRST_TURNOVER_SEASON):
+        return pl.when(tov > 0).then(tov).otherwise(pl.lit(None, dtype=pl.Float64)).cast(pl.Int32)
+    return tov.cast(pl.Int32)
+
+
 def _check_two_teams(team_box: pl.DataFrame, who: str) -> None:
     if team_box.height != 2:
         raise ValueError(f"{who} needs the two team rows of one game, got {team_box.height} team rows")
@@ -567,24 +602,37 @@ def _check_two_teams(team_box: pl.DataFrame, who: str) -> None:
         raise ValueError(f"{who} needs two different teams of the same game_id")
 
 
-def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4, league_id: str = "00") -> pl.DataFrame:
+def team_game_rates(
+    team_box: pl.DataFrame,
+    *,
+    periods: Optional[int] = None,
+    league_id: Optional[str] = None,
+    league: Optional[str] = None,
+    regulation_periods: Optional[int] = None,
+) -> pl.DataFrame:
     """Four factors, possessions, ratings and pace for both teams of one game.
 
     Dean Oliver's estimates on the ``load_nba_team_boxscore`` columns: possessions =
     FGA - ORB + TOV + 0.44 FTA, averaged over the two teams; eFG% = (FGM + 0.5 3PM) / FGA;
     TOV% = TOV / (FGA + 0.44 FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
-    ORtg / DRtg per 100 possessions; pace per regulation length (48 minutes NBA, 40 WNBA). ``TOV`` is the team's player plus team turnovers:
+    ORtg / DRtg per 100 possessions; pace per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB). ``TOV`` is the team's player plus team turnovers:
     ``total_turnovers``, except that when it is null it is ``turnovers + team_turnovers``, and when ESPN
     has duplicated the team turnover (``team_turnovers == turnovers`` and ``total_turnovers == 2 *
     turnovers``, measured on every 2002-2012 game, e.g. 17/17/34) it is ``turnovers``. Without the
-    ``turnovers`` / ``team_turnovers`` columns it is ``total_turnovers`` as given. A zero denominator
-    gives ``null``.
+    ``turnovers`` / ``team_turnovers`` columns it is ``total_turnovers`` as given. For MBB and WBB
+    ``TOV`` is ``turnovers`` (``team_turnovers`` in WBB 2009-2012, where the other two are 0), and a 0
+    is a real 0, except in WBB before 2009, whose box records none: there (and for a WBB box with no
+    ``season``) TOV%, possessions, ratings and pace are null, never computed from zero turnovers. A
+    zero denominator gives ``null``.
 
     Args:
         team_box: Exactly two rows (one per team) of one game in the ``load_nba_team_boxscore``
             schema.
-        periods: Highest period played, for the pace denominator.
-        league_id: ``"00"`` NBA (48-minute regulation) / ``"10"`` WNBA (40); overtime is 5 minutes in both.
+        periods: Highest period played (default: the regulation periods), for the pace denominator.
+        league_id: Legacy alias: ``"00"`` NBA (48-minute regulation) / ``"10"`` WNBA (40).
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA); overtime is 5 minutes in all four.
+        regulation_periods: The game's regulation periods (2 or 4); default
+            :func:`game_regulation_periods` for the league without a season (MBB 2, otherwise 4).
 
     Returns:
         One row per ``(game_id, team_id)`` with ``efg_pct, tov_pct, orb_pct, ft_rate,
@@ -592,7 +640,8 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4, league_id: str 
 
     Raises:
         ValueError: If ``team_box`` does not hold exactly two rows, or the rows are not two different
-            ``team_id`` values of one ``game_id``, or ``league_id`` is unknown.
+            ``team_id`` values of one ``game_id``, or the league is unknown, or ``league``
+            contradicts ``league_id``.
         polars.exceptions.ColumnNotFoundError: If a required box-score column is missing.
 
     Example:
@@ -608,6 +657,12 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4, league_id: str 
 
             team_game_rates(box, league_id="10")
 
+        A women's college game from the halves era::
+
+            from sportsdataverse.wbb.wbb_loaders import load_wbb_team_boxscore
+            box = load_wbb_team_boxscore([2010]).filter(pl.col("game_id") == 293170052)
+            team_game_rates(box, league="wbb", regulation_periods=2)
+
         See Also:
             * `hoopR`_ -- the R companion for NBA and men's college play-by-play
             * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
@@ -615,8 +670,10 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4, league_id: str 
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
+    lg = _resolve_league(league, league_id)
     _check_two_teams(team_box, "team_game_rates")
-    tov = _team_tov(team_box.columns)
+    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg)
+    tov = _tov(team_box, lg, _box_season(team_box))
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
     own = team_box.with_columns(
         (fga - pl.col("offensive_rebounds") + tov + FT_WEIGHT * fta).cast(pl.Float64).alias("_own_poss")
@@ -629,8 +686,8 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4, league_id: str 
         pl.col("_own_poss").alias("_opp_poss"),
     )
     joined = own.join(opp, on="game_id", how="inner").filter(pl.col("team_id") != pl.col("_opp_id"))
-    minutes = game_minutes(periods, league_id=league_id)
-    regulation = get_constants(league_id).game_minutes
+    minutes = game_minutes(periods if periods is not None else reg, league=lg, regulation_periods=reg)
+    regulation = _REGULATION_MINUTES[lg]
     poss = (pl.col("_own_poss") + pl.col("_opp_poss")) / 2.0
     return joined.select(
         "game_id",
@@ -649,28 +706,39 @@ def team_game_rates(team_box: pl.DataFrame, *, periods: int = 4, league_id: str 
 
 
 def player_game_rates(
-    player_box: pl.DataFrame, team_box: pl.DataFrame, *, periods: int = 4, league_id: str = "00"
+    player_box: pl.DataFrame,
+    team_box: pl.DataFrame,
+    *,
+    periods: Optional[int] = None,
+    league_id: Optional[str] = None,
+    league: Optional[str] = None,
+    regulation_periods: Optional[int] = None,
 ) -> pl.DataFrame:
     """True-shooting and usage for every boxed player of one game.
 
     TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
     (MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in :func:`team_game_rates`
     (``total_turnovers``, repaired where ESPN doubled or omitted it) and team
-    minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, 5 per overtime). A player with no shots, no minutes, or ``did_not_play`` gets
-    ``null``.
+    minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, MBB and WBB, 5 per overtime). For MBB and
+    WBB team TOV follows the college rule of :func:`team_game_rates` (null in WBB before 2009, so usage
+    is null there). A player with no shots, no minutes, or ``did_not_play`` gets ``null``.
 
     Args:
         player_box: One game in the ``load_nba_player_boxscore`` schema.
         team_box: The game's two ``load_nba_team_boxscore`` rows.
-        periods: Highest period played.
-        league_id: ``"00"`` NBA / ``"10"`` WNBA.
+        periods: Highest period played (default: the regulation periods).
+        league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
+        regulation_periods: The game's regulation periods (2 or 4); default
+            :func:`game_regulation_periods` for the league without a season (MBB 2, otherwise 4).
 
     Returns:
         One row per ``(game_id, athlete_id)`` with ``team_id, ts_pct, usg_pct``.
 
     Raises:
         ValueError: If ``team_box`` does not hold exactly two different teams of one ``game_id`` (a
-            duplicated team row would double the player rows), or ``league_id`` is unknown.
+            duplicated team row would double the player rows), or the league is unknown, or
+            ``league`` contradicts ``league_id``.
         polars.exceptions.ColumnNotFoundError: If a required box-score column is missing.
 
     Example:
@@ -690,12 +758,15 @@ def player_game_rates(
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
+    lg = _resolve_league(league, league_id)
     _check_two_teams(team_box, "player_game_rates")
-    team_minutes = 5.0 * game_minutes(periods, league_id=league_id)
+    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg)
+    tov = _tov(team_box, lg, _box_season(team_box))
+    team_minutes = 5.0 * game_minutes(periods if periods is not None else reg, league=lg, regulation_periods=reg)
     team = team_box.select(
         "game_id",
         "team_id",
-        (pl.col("field_goals_attempted") + FT_WEIGHT * pl.col("free_throws_attempted") + _team_tov(team_box.columns))
+        (pl.col("field_goals_attempted") + FT_WEIGHT * pl.col("free_throws_attempted") + tov)
         .cast(pl.Float64)
         .alias("_team_tsa"),
     )

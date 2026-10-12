@@ -339,15 +339,16 @@ ot_adjusted_seconds(one, regulation_periods=2)
 
 ### player_game_rates {#player_game_rates}
 
-`player_game_rates(player_box: 'pl.DataFrame', team_box: 'pl.DataFrame', *, periods: 'int' = 4, league_id: 'str' = '00') -> 'pl.DataFrame'`
+`player_game_rates(player_box: 'pl.DataFrame', team_box: 'pl.DataFrame', *, periods: 'Optional[int]' = None, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'pl.DataFrame'`
 
 True-shooting and usage for every boxed player of one game.
 
 TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
 (MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in `team_game_rates`
 (`total_turnovers`, repaired where ESPN doubled or omitted it) and team
-minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, 5 per overtime). A player with no shots, no minutes, or `did_not_play` gets
-`null`.
+minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, MBB and WBB, 5 per overtime). For MBB and
+WBB team TOV follows the college rule of `team_game_rates` (null in WBB before 2009, so usage
+is null there). A player with no shots, no minutes, or `did_not_play` gets `null`.
 
 **Parameters**
 
@@ -355,8 +356,10 @@ minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, 5 per overtime). A play
 |---|---|---|---|
 | `player_box` | `DataFrame` |  | One game in the `load_nba_player_boxscore` schema. |
 | `team_box` | `DataFrame` |  | The game's two `load_nba_team_boxscore` rows. |
-| `periods` | `int` | `4` | Highest period played. |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA. |
+| `periods` | `Optional[int]` | `None` | Highest period played (default: the regulation periods). |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league without a season (MBB 2, otherwise 4). |
 
 **Returns**
 
@@ -580,8 +583,10 @@ ESPN's play coordinates are feet across the court with the hoop at `(25, 0)` and
 growing toward half court (measured on 401766458: dunks at `y` about 2, a 22-foot corner
 three at `(3, 0)`). The chart wants tenths of a foot with the hoop at the origin, so
 `x_legacy = (x - 25) * 10` and `y_legacy = y * 10`. Free throws carry no real location
-(`load_nba_pbp` pins them to `(25, 13.75)`) and ESPN's missing-coordinate sentinel is a
-large negative number; both become `null`, as does every non-shooting play.
+(the NBA frame pins them to `(25, 13.75)`, the college frames to the rim, `(25, 0)`;
+`(?i)free ?throw` matches `Free Throw - 1 of 2` and college `MadeFreeThrow`) and ESPN's
+missing-coordinate sentinel is a large negative number; both become `null`, as does every
+non-shooting play.
 
 **Parameters**
 
@@ -611,27 +616,32 @@ shots.select("text", "x_legacy", "y_legacy").head()
 
 ### team_game_rates {#team_game_rates}
 
-`team_game_rates(team_box: 'pl.DataFrame', *, periods: 'int' = 4, league_id: 'str' = '00') -> 'pl.DataFrame'`
+`team_game_rates(team_box: 'pl.DataFrame', *, periods: 'Optional[int]' = None, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'pl.DataFrame'`
 
 Four factors, possessions, ratings and pace for both teams of one game.
 
 Dean Oliver's estimates on the `load_nba_team_boxscore` columns: possessions =
 FGA - ORB + TOV + 0.44 FTA, averaged over the two teams; eFG% = (FGM + 0.5 3PM) / FGA;
 TOV% = TOV / (FGA + 0.44 FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
-ORtg / DRtg per 100 possessions; pace per regulation length (48 minutes NBA, 40 WNBA). `TOV` is the team's player plus team turnovers:
+ORtg / DRtg per 100 possessions; pace per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB). `TOV` is the team's player plus team turnovers:
 `total_turnovers`, except that when it is null it is `turnovers + team_turnovers`, and when ESPN
 has duplicated the team turnover (`team_turnovers == turnovers` and `total_turnovers == 2 *
 turnovers`, measured on every 2002-2012 game, e.g. 17/17/34) it is `turnovers`. Without the
-`turnovers` / `team_turnovers` columns it is `total_turnovers` as given. A zero denominator
-gives `null`.
+`turnovers` / `team_turnovers` columns it is `total_turnovers` as given. For MBB and WBB
+`TOV` is `turnovers` (`team_turnovers` in WBB 2009-2012, where the other two are 0), and a 0
+is a real 0, except in WBB before 2009, whose box records none: there (and for a WBB box with no
+`season`) TOV%, possessions, ratings and pace are null, never computed from zero turnovers. A
+zero denominator gives `null`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `team_box` | `DataFrame` |  | Exactly two rows (one per team) of one game in the `load_nba_team_boxscore` schema. |
-| `periods` | `int` | `4` | Highest period played, for the pace denominator. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (48-minute regulation) / `"10"` WNBA (40); overtime is 5 minutes in both. |
+| `periods` | `Optional[int]` | `None` | Highest period played (default: the regulation periods), for the pace denominator. |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA (48-minute regulation) / `"10"` WNBA (40). |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA); overtime is 5 minutes in all four. |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league without a season (MBB 2, otherwise 4). |
 
 **Returns**
 
@@ -664,6 +674,12 @@ team_game_rates(box).select("team_id", "efg_pct", "off_rtg", "pace")
 # WNBA box (40-minute regulation)
 
 team_game_rates(box, league_id="10")
+
+# A women's college game from the halves era
+
+from sportsdataverse.wbb.wbb_loaders import load_wbb_team_boxscore
+box = load_wbb_team_boxscore([2010]).filter(pl.col("game_id") == 293170052)
+team_game_rates(box, league="wbb", regulation_periods=2)
 ```
 
 ### train_spm {#train_spm}
