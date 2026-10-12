@@ -8,6 +8,7 @@ so the error vocabulary is exercised end to end. No network.
 
 from __future__ import annotations
 
+import functools
 import json
 import re
 import sys
@@ -30,7 +31,7 @@ ROOT = Path(__file__).parents[3]
 FIXTURES = ROOT / "tests" / "fixtures" / "ha"
 YAML_PATH = ROOT / "tools" / "codegen" / "endpoints" / "ha.yaml"
 SCHEMA_DIR = ROOT / "tools" / "codegen" / "schemas" / "native" / "ha"
-SNIPPET = ROOT / "tools" / "codegen" / "ha_column_descriptions.snippet.yaml"
+MANUAL = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
 #: The spec's routes, request examples and category enums, written by gen_ha.py (CI has no refs checkout).
 SNAPSHOT = json.loads((FIXTURES / "spec_snapshot.json").read_text(encoding="utf-8"))
 HOST = R.HOST
@@ -53,6 +54,12 @@ CAPTURE_PARSERS = {
     "api__player-leaderboard": P.parse_ha_leaders,
     "api__all-players": P.parse_ha_players,
 }
+
+
+@functools.lru_cache(maxsize=1)
+def _manual() -> dict:
+    loader = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+    return yaml.load(MANUAL.read_text(encoding="utf-8"), Loader=loader)
 
 
 def _load(name: str) -> Any:
@@ -100,7 +107,7 @@ def test_committed_schema_matches_the_parser(short):
     df = _parsed(short)
     assert [c["name"] for c in committed["columns"]] == df.columns
     typed = {"integer": pl.Int64, "numeric": pl.Float64, "logical": pl.Boolean, "character": pl.String}
-    texts = yaml.safe_load(SNIPPET.read_text(encoding="utf-8"))[f"ha_{short}"]
+    texts = _manual()[f"ha_{short}"]
     for col in committed["columns"]:
         assert df.schema[col["name"]] == typed[col["type"]], col
         assert col["description"] == "", col["name"]  # descriptions never live in schemas/**
