@@ -23,11 +23,24 @@ Matching, in order:
    on normalized name, tie-broken by jersey, with
    :func:`~sportsdataverse._common_crosswalk_basketball.fuzzy_match`. The per-game
    pairs are then voted into one row per ESPN athlete per team.
+
+Exhibition sides (All-Star, Rising Stars, ``TEAM SPOON``...) are dropped from the
+team and player crosswalks: they never play a franchise, so they fall outside the
+largest connected component of the season's ESPN game graph. Their games stay in
+the schedule crosswalk.
+
+With ``fox=True`` the Fox legs are added through the live builders' own code:
+``fox_team_id`` joins on the normalized team name, and -- for the current season
+only, because Fox rosters are today's -- ``fox_athlete_id`` matches on name and
+jersey within each team. With ``fox_games=True`` ``fox_game_id`` comes from Fox's
+scoreboard, one call per game date. A Fox fetch that fails leaves those columns null
+with a warning rather than failing the build.
 """
 
 from __future__ import annotations
 
 import gzip
+import importlib
 import json
 import logging
 from pathlib import Path
@@ -35,7 +48,9 @@ from typing import Any, Dict, List, Optional, Union
 
 import polars as pl
 
-from sportsdataverse._common_crosswalk_basketball import fuzzy_match, normalize_name
+from sportsdataverse._common_crosswalk_basketball import assemble_player_espn_fox, fuzzy_match, normalize_name
+from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games
+from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError, FetchTally, fox_rosters, require_source
 from sportsdataverse._temporal import as_date
 
 log = logging.getLogger(__name__)
@@ -488,6 +503,104 @@ _NULL_PLAYER_COLUMNS = (
 )
 
 
+_FOX_PLAYER_COLUMNS = ["fox_athlete_id", "fox_player", "fox_jersey", "fox_position_group"]
+
+
+def _franchise_team_ids(espn_games: pl.DataFrame) -> List[int]:
+    """ESPN team ids in the connected component of the game graph that holds the most games.
+
+    All-Star, Rising Stars and other exhibition sides only ever play each other, so
+    they form their own small components; every franchise is linked to every other
+    through the regular season. No team-id or name list is involved.
+    """
+    parent: Dict[int, int] = {}
+
+    def root(x: int) -> int:
+        parent.setdefault(x, x)
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    edges = espn_games.select("home_espn_team_id", "away_espn_team_id").drop_nulls().rows()
+    for home, away in edges:
+        parent[root(home)] = root(away)
+    games: Dict[int, int] = {}
+    for home, _ in edges:
+        games[root(home)] = games.get(root(home), 0) + 1
+    best = max(games, key=games.__getitem__, default=None)
+    return [team for team in parent if root(team) == best]
+
+
+def _current_season(league: str) -> int:
+    if league == "nba":
+        from sportsdataverse.nba.nba_schedule import most_recent_nba_season
+
+        return int(most_recent_nba_season())
+    from sportsdataverse.wnba.wnba_schedule import most_recent_wnba_season
+
+    return int(most_recent_wnba_season())
+
+
+def _with_fox_teams(league: str, season: int, team: pl.DataFrame) -> pl.DataFrame:
+    """Fill ``fox_team_id`` / ``fox_team_name`` through the live team assembler's name join."""
+    mod = _league_module(league)
+
+    def fetch() -> Any:
+        return getattr(importlib.import_module(f"sportsdataverse.{league}.{league}_fox_ext"), f"fox_{league}_teams")()
+
+    try:
+        fox = require_source(f"fox_{league}_teams()", fetch)
+    except CrosswalkSourceError as exc:
+        log.warning("%s %s: Fox teams unavailable, fox_team_* left null: %s", league, season, exc)
+        return team
+    espn_dir = team.select(
+        pl.col("espn_team_id").alias("team_id"),
+        pl.col("espn_abbreviation").alias("abbreviation"),
+        pl.col("espn_display_name").alias("display_name"),
+        pl.col("espn_short_name").alias("short_name"),
+        pl.col("espn_location").alias("team"),
+        pl.col("espn_mascot").alias("mascot"),
+    )
+    fox_ids = mod._assemble_team_crosswalk(espn_dir, None, fox, season).select(
+        "espn_team_id", "fox_team_id", "fox_team_name"
+    )
+    return (
+        team.drop("fox_team_id", "fox_team_name")
+        .join(fox_ids, on="espn_team_id", how="left", maintain_order="left")
+        .select(mod.TEAM_COLUMNS)
+    )
+
+
+def _with_fox_players(
+    league: str, season: int, team: pl.DataFrame, player: pl.DataFrame, min_confidence: float
+) -> pl.DataFrame:
+    """Fill the Fox player columns from today's Fox rosters, matched per team as the live builder does."""
+    tally = FetchTally(f"fox_{league}_team_roster")
+    frames: List[pl.DataFrame] = []
+    try:
+        for espn_team_id, fox_team_id in team.select("espn_team_id", "fox_team_id").drop_nulls().iter_rows():
+            espn = player.filter(pl.col("espn_team_id") == espn_team_id)
+            fox = fox_rosters(league, espn_team_id, fox_team_id, tally=tally)
+            if espn.height and fox.height:
+                matched = assemble_player_espn_fox(espn, fox, season, min_confidence, exact_tiebreak=league == "nba")
+                frames.append(matched.select("espn_team_id", "espn_athlete_id", *_FOX_PLAYER_COLUMNS))
+        tally.finish()
+    except CrosswalkSourceError as exc:
+        log.warning("%s %s: Fox rosters unavailable, fox_* player columns left null: %s", league, season, exc)
+        return player
+    if not frames:
+        return player
+    fox_ids = pl.concat(frames)
+    keys = ["espn_team_id", "espn_athlete_id"]
+    assert all(player.schema[k] == fox_ids.schema[k] for k in keys), "Fox join key dtype mismatch"
+    return (
+        player.drop(_FOX_PLAYER_COLUMNS)
+        .join(fox_ids, on=keys, how="left", maintain_order="left")
+        .select(player.columns)
+    )
+
+
 def build_archive_crosswalks(
     league: str,
     season: int,
@@ -495,8 +608,11 @@ def build_archive_crosswalks(
     espn_game_rosters: pl.DataFrame,
     stats: Dict[str, pl.DataFrame],
     min_confidence: float = 0.92,
+    *,
+    fox: bool = False,
+    fox_games: bool = False,
 ) -> Dict[str, pl.DataFrame]:
-    """Build the team, schedule and player crosswalks for one past season (no I/O).
+    """Build the team, schedule and player crosswalks for one past season (no I/O unless ``fox`` / ``fox_games``).
 
     Args:
         league: ``"nba"`` or ``"wnba"``.
@@ -509,10 +625,23 @@ def build_archive_crosswalks(
             ``athlete_display_name``, ``athlete_jersey``, ``athlete_position``).
         stats: Output of :func:`read_stats_archive`.
         min_confidence: Jaro-Winkler floor for a fuzzy player match.
+        fox: Fetch the Fox legs live. ``fox_team_id`` / ``fox_team_name`` join
+            on the normalized team name, so they fill for any season whose
+            franchise names match today's Fox names (a relocated or renamed
+            franchise stays null). The Fox player columns fill only when
+            ``season`` is the league's current season, because Fox rosters are
+            today's; for any other season they stay null. A failed Fox fetch
+            logs a warning and leaves the columns null.
+        fox_games: Fill ``fox_game_id`` / ``fox_home_team_id`` /
+            ``fox_away_team_id`` from Fox's scoreboard, one call per game date,
+            matched on (US-Eastern date, teams). A failed fetch logs a warning
+            and leaves the columns null.
 
     Returns:
         ``{"team", "schedule", "player"}`` frames with the league module's
         ``TEAM_COLUMNS`` / ``SCHEDULE_COLUMNS`` and the 21 player columns.
+        Exhibition sides (All-Star and the like) are left out of ``team`` and
+        ``player``; their games stay in ``schedule``.
     """
     p = league
     mod = _league_module(league)
@@ -524,4 +653,12 @@ def build_archive_crosswalks(
     player = _player_crosswalk(
         league, season, espn_games, espn_game_rosters, schedule, pairs, stats_games, stats["players"], min_confidence
     )
+    franchises = pl.col("espn_team_id").is_in(pl.Series(_franchise_team_ids(espn_games), dtype=pl.Int32).implode())
+    team, player = team.filter(franchises), player.filter(franchises)
+    if fox:
+        team = _with_fox_teams(league, season, team)
+        if season == _current_season(league):
+            player = _with_fox_players(league, season, team, player, min_confidence)
+    if fox_games:
+        schedule = with_fox_games(league, schedule, team)
     return {"team": team, "schedule": schedule, "player": player}

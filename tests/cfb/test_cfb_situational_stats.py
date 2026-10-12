@@ -599,3 +599,14 @@ def test_by_unit_keys_exist_even_when_empty():
         bu = a[section]["by_unit"]
         assert set(bu) == {"offense", "defense", "special_teams"}
         assert set(bu["special_teams"]) >= {"kickoff", "kickoff_return", "punt", "punt_return", "fg_xp", "n"}
+
+
+def test_a_fumble_the_defense_lost_is_not_charged_to_the_offense():
+    # fumble_lost is "either side lost it": an interception returner who fumbles back to the passing
+    # team is def_fumble_lost, not a fumble the offense (pos_team 10) lost.
+    f = _frame().with_columns(
+        fumble_lost=pl.Series([True] + [False] * 9),
+        def_fumble_lost=pl.Series([True] + [False] * 9),
+    )
+    out = situational_stats.create_situational_stats(f, HOME, AWAY)
+    assert out["teams"][HOME]["turnovers"]["fumbles_lost"] == 0

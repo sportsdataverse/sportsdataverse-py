@@ -527,9 +527,9 @@ df.filter(pl.col("match_method") == "fuzzy_jw").head()
 
 ### wbb_schedule_crosswalk {#wbb_schedule_crosswalk}
 
-`wbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`wbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, fox: 'bool' = False, yahoo: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-Build the WBB cross-source schedule crosswalk (ESPN / Torvik).
+Build the WBB cross-source schedule crosswalk (ESPN / Torvik / Fox / Yahoo).
 
 One row per game. Dates are reduced to the Eastern-Time game date before
 joining and Torvik's unordered `team1`/`team2` join through a sorted
@@ -543,6 +543,8 @@ games whose teams cannot be resolved to ESPN ids survive as `bart_only`.
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WBB season. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 | `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `fox` | `bool` | `False` | Fill `fox_game_id` from Fox's Division I scoreboard, one Fox call per game date. A Fox game matches the row on the same US-Eastern date holding every Fox team that resolves to ESPN (by name, through `FOX_DISPLAY_ALIAS`), in either home/away order. A failed Fox fetch logs a warning and leaves the column null. |
+| `yahoo` | `bool` | `False` | Fill `yahoo_game_id` = `ncaaw.g.{YYYYMMDD ET}{home Yahoo id, 4 digits}`, checked against the ids Yahoo lists for the season's dates so a neutral-site game takes Yahoo's home side and a game Yahoo does not list (a non-Division-I home team) stays null. A failed Yahoo fetch logs a warning; without the team listing the ids stay null, without the id list the unverified home-side id is kept. |
 
 **Returns**
 
@@ -564,14 +566,14 @@ df.filter(pl.col("match_method") == "both").select("espn_game_id", "bart_muid").
 
 ### wbb_team_crosswalk {#wbb_team_crosswalk}
 
-`wbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`wbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, yahoo: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-Build the WBB cross-source team crosswalk (ESPN / Fox / Torvik).
+Build the WBB cross-source team crosswalk (ESPN / Fox / Torvik / Yahoo).
 
 One row per ESPN team, keyed on `espn_team_id`. Fox is joined on the
 normalized full mascot name (with the curated `FOX_DISPLAY_ALIAS`
 bridge); Torvik on the normalized school name after the
-`BART_ALIAS` pass. Yahoo columns are null placeholders.
+`BART_ALIAS` pass. Yahoo is opt-in (`yahoo=True`).
 
 **Parameters**
 
@@ -582,6 +584,7 @@ bridge); Torvik on the normalized school name after the
 | `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `bart_wbb_ratings()` frame. `None` fetches live; women's Torvik starts in 2021, so earlier seasons get null `bart_*`. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 | `strict` | `bool` | `False` | Accepted for parity with the schedule and player crosswalks, which forward it; the team build has no per-item fetch loop to relax, so every source failure raises. |
+| `yahoo` | `bool` | `False` | Fill `yahoo_team_id` / `yahoo_team_name` from Yahoo's Division I listing (one call), joined on the full name, then the school, then the nickname. A failed Yahoo fetch logs a warning and leaves them null; Yahoo teams no ESPN team took are logged. |
 
 **Returns**
 

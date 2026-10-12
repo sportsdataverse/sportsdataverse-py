@@ -158,6 +158,10 @@ _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\
 #: A loss stated after the number -- ESPN's 2021+ vendor text, "rush middle for 3 yards loss", "caught
 #: at ARK23, for 1 yard loss", "for a 2 yard loss" -- which the "for N" readers take as a gain.
 _FOR_N_YARDS_LOSS_RE = r"(?i)for (?:a )?(\d+) y(?:ar)?ds? loss"
+#: First season of the NCAA's 2012 kickoff rules: a touchback comes out to the receiver's 25 (the
+#: 20 before) and a kickoff out of bounds to the 35 (the 40 before). Every 2012-13 fixture
+#: touchback's next snap starts at the 25.
+_KICKOFF_2012_RULES_FROM = 2012
 
 #: The returner clause with no "for": "Shaun Carney return -2 yards to the AFA10" (2005-2007) and
 #: the vendor template's "#16 M.Beltran, Jr. return 18 yards", whatever the name's shape.
@@ -3341,7 +3345,7 @@ class CFBPlayProcess(object):
                     )
                     .and_(pl.col("_ko_pen_rekick_follows") == True),
                 )
-                .then(pl.when(pl.col("season") > 2013).then(pl.lit(75)).otherwise(pl.lit(80)))
+                .then(pl.when(pl.col("season") >= _KICKOFF_2012_RULES_FROM).then(pl.lit(75)).otherwise(pl.lit(80)))
                 .when(
                     (pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)kickoff")))
                     .and_(pl.col("text").str.contains(r"(?i)penalty"))
@@ -5970,10 +5974,12 @@ class CFBPlayProcess(object):
             .then(pl.col("text").str.extract(r"(?i)kick(?:off)? for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
             yds_kickoff_return=pl.when(
-                (pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") > 2013),
+                (pl.col("kickoff_play") == True)
+                .and_(pl.col("kickoff_tb") == True)
+                .and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM),
             )
             .then(25)
-            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") <= 2013))
+            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True))
             .then(20)
             .when(
                 (pl.col("kickoff_play") == True)
@@ -5987,7 +5993,7 @@ class CFBPlayProcess(object):
                 .and_(pl.col("text").str.contains(r"(?i)out-of-bounds|out of bounds"))
                 .and_(pl.col("text").str.contains(_RETURNER_STEPPED_OUT_RE) == False),
             )
-            .then(40)
+            .then(pl.when(pl.col("season") >= _KICKOFF_2012_RULES_FROM).then(35).otherwise(40))
             .when((pl.col("kickoff_downed") == True).or_(pl.col("kickoff_fair_catch") == True))
             .then(0)
             .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)returned by")))
@@ -6042,8 +6048,9 @@ class CFBPlayProcess(object):
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
             .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)"), before_fumble=True))
             .otherwise(None),
+            # "return for 3 yds" (2014+) and "returned for a 33 yard touchdown" (2004-06)
             yds_fumble_return=pl.when((pl.col("fumble_vec") == True).and_(pl.col("kickoff_play") == False))
-            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return(?:ed)?\s+for (.+)")))
             .otherwise(None),
             # The first number after "sacked" is the YARDLINE in 2004-2007 text --
             # "sacked by Pierre Bell at the ECaro 48 for a loss of 8 yards" -- so the
@@ -7011,13 +7018,24 @@ class CFBPlayProcess(object):
 
     def __add_attribution_cols(self, play_df):
         """Resolve the credited team per play (shared football attribution, CFB text parsers)."""
-        return _add_attribution_cols(
+        play_df = _add_attribution_cols(
             play_df,
             parse_recovery_abbrevs=_parse_recovery_abbrevs,
             parse_recovery_sides=_parse_recovery_sides,
             parse_penalty_team_side=_parse_penalty_team_side,
             parse_penalty_spot=_parse_penalty_spot,
         )
+        if {"pos_fumble_lost", "def_fumble_lost"} <= set(play_df.columns):
+            # fumble_lost was "a fumble and the ball changed hands", which calls a punt returner who
+            # recovers his own fumble a loss and misses a muffed punt the kicking team recovers. The
+            # recovering team read from the text matches ESPN's box: 2014-20 team fumbles lost
+            # 79.5% -> 97.9% exact.
+            lost = (pl.col("pos_fumble_lost") == True) | (pl.col("def_fumble_lost") == True)  # noqa: E712
+            play_df = play_df.with_columns(
+                fumble_lost=lost,
+                fumble_recovered=(pl.col("fumble_vec") == True) & ~lost,  # noqa: E712
+            )
+        return play_df
 
     def __refine_play_types_post_attribution(self, play_df):
         """Correct two play-type labels that need the post-attribution turnover signal."""
@@ -7452,9 +7470,9 @@ class CFBPlayProcess(object):
                 pl.lit(99).alias("start.yardsToEndzone.touchback"),
             )
             .with_columns(
-                pl.when((kick_mask).and_(pl.col("season") > 2013))
+                pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
                 .then(75)
-                .when((kick_mask).and_(pl.col("season") <= 2013))
+                .when(kick_mask)
                 .then(80)
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone.touchback"),
@@ -7557,7 +7575,7 @@ class CFBPlayProcess(object):
                 # B5: the flagged penalty's END state is also a touchback (the ensuing
                 # kickoff), alongside the existing kickoff_tb handling.
                 pl.when((pl.col("kickoff_tb") == True).or_(pl.col("penalty_assessed_on_kickoff") == True))
-                .then(75)
+                .then(pl.when(pl.col("season") >= _KICKOFF_2012_RULES_FROM).then(75).otherwise(80))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
                 pl.when((pl.col("kickoff_tb") == True).or_(pl.col("penalty_assessed_on_kickoff") == True))
