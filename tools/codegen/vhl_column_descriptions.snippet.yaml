@@ -1,0 +1,420 @@
+vhl_game_info:
+  attendance: Attendance (from '910 sp').
+  away_city: Away team city.
+  away_coach: Away head coach, 'Surname Given'.
+  away_score: Away final goals.
+  away_short: Away team short name (the report tables' form).
+  away_team: Away team name (Latin, FULL form).
+  away_team_page_id: 'Away team page id. Team page id (vhlru.ru only): the {team_id}
+    of /en/teams/{team_id}/ (Toros = 390). Neither a club id nor a team-season id;
+    it joins nothing else (bridge: the calendar row of the same game_id).'
+  date: Game date, ISO 'YYYY-MM-DD', parsed from date_text.
+  date_text: Date line verbatim; RUSSIAN month and weekday even on /en/ ('18 Март
+    2026, Среда, 17:00'). The <time datetime> attribute is a constant placeholder
+    (2020-01-23 18:00) and is ignored.
+  decision: OT or SO when the game went past regulation; null otherwise.
+  game_id: 'Game id (the calendar''s game_id; the report''s and the broadcast''s idgame).
+    The report and broadcast pages do not print it: it comes from the request.'
+  game_number: Official game number (from '№984'); checked against the request.
+  home_city: Home team city.
+  home_coach: Home head coach, 'Surname Given'.
+  home_score: Home final goals.
+  home_short: Home team short name (the report tables' form).
+  home_team: 'Home team name (Latin, FULL form: ''Kristall S''; the report''s tables
+    use the short ''Kristall'').'
+  home_team_page_id: 'Home team page id. Team page id (vhlru.ru only): the {team_id}
+    of /en/teams/{team_id}/ (Toros = 390). Neither a club id nor a team-season id;
+    it joins nothing else (bridge: the calendar row of the same game_id).'
+  linesman1: First linesman, 'Surname Given'.
+  linesman1_number: First linesman's sweater number.
+  linesman2: Second linesman, 'Surname Given'.
+  linesman2_number: Second linesman's sweater number.
+  local_time: Start time 'HH:MM' from date_text; local time zone unverified (likely
+    Moscow).
+  period_scores: 'Score of each period ''home:away'', overtime and shootout included
+    (SO game: ''0:2'',''0:0'',''2:0'',''0:0'',''0:1'').'
+  referee1: First referee, 'Surname Given'.
+  referee1_number: First referee's sweater number.
+  referee2: Second referee, 'Surname Given'.
+  referee2_number: Second referee's sweater number.
+  score: Final score 'home:away' (the shootout counts as one goal).
+  season: Season END year (2026 = 2025/26).
+  stage: 'Season stage: regular or playoff.'
+  tn: Tournament id of the season stage (2025/26 regular season = 1374, playoffs =
+    1375); vhl_tn maps season + stage to it.
+vhl_goalie_box:
+  assists: 'Assists (A) credited to the player in the row''s scope: the game in a
+    box score, the season stage in stats and career rows.'
+  captaincy: Unobserved in samples (null in every capture); type and meaning unverified.
+  gaa: Goals-against average (GAA) = 60 x GA / TOI minutes; null when the page shows
+    '-'.
+  game_id: 'Game id (the calendar''s game_id; the report''s and the broadcast''s idgame).
+    The report and broadcast pages do not print it: it comes from the request.'
+  game_number: Official game number (from '№984'); checked against the request.
+  games_played: Games played (GP).
+  goals_against: Goals allowed (GA).
+  jersey: Jersey number (integer).
+  losses: Goalie losses (L).
+  penalty_minutes: Penalty minutes (PIM).
+  player: Player name, 'Surname Given' (Latin on /en/ pages).
+  player_id: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
+    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
+    player ids; whether it equals the same person''s khl.ru id is unverified.'
+  save_pct: Save percentage (%Sv); 0-100 scale (93.8 = 93.8 %); null when the page
+    shows '-'.
+  saves: 'Saves (Sv): shots on goal the goalie stopped in the row''s scope (the game,
+    or the season stage in stats and career rows).'
+  season: Season END year (2026 = 2025/26).
+  shootouts_played: Shootouts played (SOP).
+  shots_against: Shots on goal faced (the SOG column of goalie tables).
+  shutouts: 'Shutouts (SO): games in the row''s scope in which the goalie allowed
+    no goal.'
+  stage: 'Season stage: regular or playoff.'
+  team: Team short name (Latin; the report tables' form).
+  team_page_id: Team page id (vhlru.ru /en/teams/{team_page_id}/), stable across seasons;
+    for report rows the page id of the row's side.
+  team_side: 'Side of the game the row belongs to: home or away.'
+  toi: Time on ice in this game, 'mm:ss'; null for a dressed goalie who did not play
+    ('-').
+  wins: Goalie wins (W).
+vhl_goalie_stats:
+  assists: 'Assists (A) credited to the player in the row''s scope: the game in a
+    box score, the season stage in stats and career rows.'
+  gaa: Goals-against average (GAA) = 60 x GA / TOI minutes; null when the page shows
+    '-'.
+  games_played: Games played (GP).
+  goals: 'Goals (G) the player scored in the row''s scope: the game in a box score,
+    the season stage in stats and career rows.'
+  goals_against: Goals allowed (GA).
+  jersey: Jersey number (#; the page legend mislabels this column 'Position').
+  losses: Goalie losses (L).
+  penalty_minutes: Penalty minutes (PIM).
+  player: Player name, 'Surname Given' (Latin on /en/ pages).
+  player_id: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
+    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
+    player ids; whether it equals the same person''s khl.ru id is unverified.'
+  save_pct: Save percentage (%Sv); 0-100 scale (93.8 = 93.8 %); null when the page
+    shows '-'.
+  saves: 'Saves (Sv): shots on goal the goalie stopped in the row''s scope (the game,
+    or the season stage in stats and career rows).'
+  season: Season END year (2026 = 2025/26).
+  shootouts_played: Shootouts played (SOP).
+  shots_against: Shots on goal faced (the SOG column of goalie tables).
+  shutouts: 'Shutouts (SO): games in the row''s scope in which the goalie allowed
+    no goal.'
+  stage: 'Season stage: regular or playoff.'
+  team: Team short name (Latin; the report tables' form).
+  tn: Tournament id of the season stage (2025/26 regular season = 1374, playoffs =
+    1375); vhl_tn maps season + stage to it.
+  toi: Time on ice (TOI), 'mm:ss' string; minutes run past 59 over a season ('2314:48');
+    null when the page shows '-'.
+  wins: Goalie wins (W).
+vhl_goals:
+  assist1: First assist name; null when unassisted.
+  assist1_id: Player id of the first assist; null when unassisted.
+  assist1_jersey: First assist jersey number.
+  assist1_season_total: The first assist's season assist count after this goal (the
+    '(14)' suffix).
+  assist2: Second assist name; null when none.
+  assist2_id: Player id of the second assist; null when none.
+  assist2_jersey: Second assist jersey number.
+  assist2_season_total: The second assist's season assist count after this goal.
+  away_on_ice: Jersey numbers of the away players on ice at the goal (goalie included);
+    the column header is the away team's short name. Empty on the shootout row.
+  game_id: 'Game id (the calendar''s game_id; the report''s and the broadcast''s idgame).
+    The report and broadcast pages do not print it: it comes from the request.'
+  game_number: Official game number (from '№984'); checked against the request.
+  goal_number: Goal number in the game (G).
+  home_on_ice: 'Jersey numbers of the home players on ice at the goal (goalie included);
+    the column header is the home team''s short name. Shootout row: the goalie only.'
+  period: 'Period (Per) as printed: ''1'', ''2'', ''3'', overtime unverified, ''РБ''
+    (Cyrillic even on /en/: shootout, решающий бросок).'
+  score: Score after the goal 'home:away' (Score).
+  scorer: Goal scorer's name, 'Surname Given' as the report prints it.
+  scorer_id: 'Player id of the scorer: the {player_id} of /en/players/{player_id}/,
+    stable across seasons and teams; also the photo id on img.khl.ru. Same numeric
+    sequence as khl.ru player ids; whether it equals the same person''s khl.ru id
+    is unverified.'
+  scorer_jersey: Scorer jersey number.
+  scorer_season_total: The scorer's season goal count after this goal (the '(13)'
+    suffix); null on the shootout row.
+  season: Season END year (2026 = 2025/26).
+  stage: 'Season stage: regular or playoff.'
+  strength: 'Goal strength code (PMG): eq (even), ppg (power play), shg (shorthanded);
+    null on the shootout row.'
+  team_page_id: Team page id (vhlru.ru /en/teams/{team_page_id}/), stable across seasons;
+    for report rows the page id of the row's side.
+  team_side: 'Side of the game the row belongs to: home or away.'
+  time: Elapsed game time 'mm:ss' from the opening faceoff (Time); the shootout row
+    says '65:00'.
+vhl_pbp:
+  away_team: Away team name in Cyrillic.
+  clock: 'What time means: game (elapsed mm:ss), minute (''58 мин''), wall (local
+    wall clock, game_state rows); null when there is no time.'
+  event_index: Order of the event on the page, 0 = the first listed (the broadcast
+    lists the latest event first).
+  game_id: 'Game id (the calendar''s game_id; the report''s and the broadcast''s idgame).
+    The report and broadcast pages do not print it: it comes from the request.'
+  game_number: Official game number ('Игра номер 984'); checked against the request.
+  home_team: Home team name in Cyrillic.
+  kind: 'Event kind from the CSS modifier: game_state (ga), comment (co), goal (go),
+    penalty (pn), goalie_change (gc), video_review (vr), shootout_attempt (bu).'
+  kind_code: Raw CSS modifier of .game-event-item--<code>.
+  player_ids: Player ids linked in the event text (//vhlru.ru/players/{id}/), scorer
+    first; empty for most kinds.
+  score: 'Score ''home-away'' (dash, not colon) after a goal; on a shootout attempt,
+    the shootout score printed beside it (before or after that attempt: unverified).'
+  season: Season END year (2026 = 2025/26).
+  stage: 'Season stage: regular or playoff.'
+  strength: 'strength_code in English: even, power_play, shorthanded, penalty_shot_or_shootout.'
+  strength_code: 'Goal strength code in Cyrillic: РАВ (even), БОЛ (power play), МЕН
+    (shorthanded, unobserved), БУЛ (penalty shot / shootout); empty string seen as
+    null.'
+  text: Event text verbatim in RUSSIAN (team, players, infraction, period stats);
+    not translated.
+  time: 'Time label verbatim: ''mm:ss'' elapsed game time, ''NN мин'' (minute of a
+    comment), or ''HH:MM'' wall clock on game_state events; null when absent. See
+    clock.'
+vhl_penalties:
+  game_id: 'Game id (the calendar''s game_id; the report''s and the broadcast''s idgame).
+    The report and broadcast pages do not print it: it comes from the request.'
+  game_number: Official game number (from '№984'); checked against the request.
+  infraction: Infraction in English ('hooking'); null when the site leaves it blank.
+  minutes: Penalty length in minutes (the unlabelled third column).
+  player: Penalised player name; null for a bench (team) penalty.
+  player_id: Player id of the penalised player; null for a bench (team) penalty.
+  player_jersey: Penalised player's jersey number.
+  season: Season END year (2026 = 2025/26).
+  stage: 'Season stage: regular or playoff.'
+  team: Team short name (Latin; the report tables' form).
+  team_page_id: Team page id (vhlru.ru /en/teams/{team_page_id}/), stable across seasons;
+    for report rows the page id of the row's side.
+  team_side: 'Side of the game the row belongs to: home or away.'
+  time: Elapsed game time of the penalty 'mm:ss'.
+vhl_player:
+  age: Age in years on the capture date (from '24 years old').
+  born: Birth date 'DD.MM.YYYY' as the public page prints it.
+  country: Country (English); null when the card omits it.
+  height_cm: Height in centimetres (Height).
+  jersey: Current jersey number (the h1 '#79' badge); null when the page shows none.
+  name: Player name, 'Surname Given' (Latin), from h1 without the number.
+  photo_url: 'Photo URL on img.khl.ru, /teamplayers/{team_season_id}/{player_id}/320.jpg.
+    The team-season id is the one the photo was filed under, not the current team:
+    34526''s photo uses 15424 = Magnitka in tn 1375 (25/26 playoffs, verified on /en/stats/players/1375/)
+    while his newest row is 15516 (Dynamo-Altai, 1430).'
+  player_id: Player id, read from the page's own /players/{id}/games/ tab link; equals
+    the requested id or the capture refuses.
+  position: 'Position in English (h2.player-card__subtitle): Forward and Goalkeeper
+    seen; the defence label is unverified.'
+  weight_kg: Weight in kilograms (Weight).
+vhl_player_box:
+  assists: 'Assists (A) credited to the player in the row''s scope: the game in a
+    box score, the season stage in stats and career rows.'
+  blocked_shots: Blocked shots (BLS).
+  captaincy: 'Captaincy marker from the name suffix: C (captain), A (alternate); null
+    otherwise.'
+  even_strength_goals: Even-strength goals (ESG).
+  faceoff_pct: Faceoff win percentage (%FO); 0-100 scale; null when the page shows
+    '-' (no faceoffs taken).
+  faceoffs: Faceoffs taken (FO).
+  faceoffs_won: Faceoffs won (FOW).
+  game_id: 'Game id (the calendar''s game_id; the report''s and the broadcast''s idgame).
+    The report and broadcast pages do not print it: it comes from the request.'
+  game_number: Official game number (from '№984'); checked against the request.
+  game_winning_goals: Game-winning goals (GWG).
+  games_played: Games played (GP).
+  goals: 'Goals (G) the player scored in the row''s scope: the game in a box score,
+    the season stage in stats and career rows.'
+  hits: Body checks delivered (Hits).
+  jersey: Jersey number (integer).
+  overtime_goals: Overtime goals (OTG).
+  penalty_minutes: Penalty minutes (PIM).
+  player: Player name, 'Surname Given' (Latin on /en/ pages).
+  player_id: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
+    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
+    player ids; whether it equals the same person''s khl.ru id is unverified.'
+  plus_minus: Plus/minus (+/-).
+  points: Points, goals + assists (PTS).
+  position_group: 'Position group: defense or forward.'
+  power_play_goals: Power-play goals (PPG).
+  season: Season END year (2026 = 2025/26).
+  shifts_per_game: Shifts in this game (Sft/G with GP 1).
+  shootout_deciding_goals: Shootout-deciding goals (SDS; the legend says 'Shootouts
+    deciding shots').
+  shorthanded_goals: Shorthanded goals (SHG).
+  shot_pct: Shooting percentage, goals / shots on goal x 100 (%SOG); 0-100 scale;
+    null when the page shows '-'.
+  shots_on_goal: Shots on goal (SOG).
+  stage: 'Season stage: regular or playoff.'
+  team: Team short name (Latin; the report tables' form).
+  team_page_id: Team page id (vhlru.ru /en/teams/{team_page_id}/), stable across seasons;
+    for report rows the page id of the row's side.
+  team_side: 'Side of the game the row belongs to: home or away.'
+  toi_per_game: Time on ice in this game (TOI/G with GP 1), 'mm:ss'.
+vhl_player_career:
+  assists: 'Assists (A) credited to the player in the row''s scope: the game in a
+    box score, the season stage in stats and career rows.'
+  blocked_shots: Blocked shots (BLS).
+  even_strength_goals: Even-strength goals (ESG).
+  faceoff_pct: Faceoff win percentage (%FO); 0-100 scale; null when the page shows
+    '-' (no faceoffs taken).
+  faceoffs: Faceoffs taken (FO).
+  faceoffs_won: Faceoffs won (FOW).
+  gaa: Goals-against average (GAA) = 60 x GA / TOI minutes; null when the page shows
+    '-'.
+  game_winning_goals: Game-winning goals (GWG).
+  games_played: Games played (GP).
+  goals: 'Goals (G) the player scored in the row''s scope: the game in a box score,
+    the season stage in stats and career rows.'
+  goals_against: Goals allowed (GA).
+  hits: Body checks delivered (Hits).
+  jersey: Jersey number worn for that team that season (#).
+  losses: Goalie losses (L).
+  overtime_goals: Overtime goals (OTG).
+  penalty_minutes: Penalty minutes (PIM).
+  player_id: Player id, read from the page's own /players/{id}/games/ tab link; equals
+    the requested id or the capture refuses.
+  plus_minus: Plus/minus (+/-).
+  points: Points, goals + assists (PTS).
+  power_play_goals: Power-play goals (PPG).
+  save_pct: Save percentage (%Sv); 0-100 scale (93.8 = 93.8 %); null when the page
+    shows '-'.
+  saves: 'Saves (Sv): shots on goal the goalie stopped in the row''s scope (the game,
+    or the season stage in stats and career rows).'
+  season: Season END year (2026 = 2025/26).
+  shifts_per_game: Average shifts per game (Sft/G); integer in a one-game report,
+    decimal in season tables.
+  shootout_deciding_goals: Shootout-deciding goals (SDS; the legend says 'Shootouts
+    deciding shots').
+  shootouts_played: Shootouts played (SOP).
+  shorthanded_goals: Shorthanded goals (SHG).
+  shot_pct: Shooting percentage, goals / shots on goal x 100 (%SOG); 0-100 scale;
+    null when the page shows '-'.
+  shots_against: Shots on goal faced (the SOG column of goalie tables).
+  shots_on_goal: Shots on goal (SOG).
+  shots_per_game: Shots on goal per game (S/G).
+  shutouts: 'Shutouts (SO): games in the row''s scope in which the goalie allowed
+    no goal.'
+  stage: 'Season stage: regular or playoff.'
+  team: Team short name (Latin; the report tables' form).
+  team_season_id: 'Team-season id (khl/ terminology): one id per team per tournament,
+    from the KHL''s sequence (khl/: Spartak = 14934 in 1369; here Metallurg = 15017
+    in 1374). The {id} of /calendar/{tn}/0/{id}/ and /stats/players/{tn}/all/{id}/.
+    Not the stable club id (*_club_id) and not the team page id. With tn, the bridge
+    from a player to every tournament team he played for.'
+  tn: Tournament id of the season stage (2025/26 regular season = 1374, playoffs =
+    1375); vhl_tn maps season + stage to it.
+  toi: Time on ice (TOI), 'mm:ss' string; minutes run past 59 over a season ('2314:48');
+    null when the page shows '-'.
+  toi_per_game: Average time on ice per game (TOI/G), 'm:ss' / 'mm:ss' string; null
+    when the page shows '-'.
+  wins: Goalie wins (W).
+vhl_roster:
+  born: Birth date 'DD.MM.YYYY' as the public page prints it.
+  calendar_team_season_id: The team's team-season id in calendar_tn.
+  calendar_tn: Tournament id of the team's CURRENT season stage (the page's 'To the
+    calendar' link).
+  country: Citizenship (English).
+  jersey: Jersey number (integer).
+  player: Player name, 'Surname Given' — in CYRILLIC even on the /en/ page.
+  player_id: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
+    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
+    player ids; whether it equals the same person''s khl.ru id is unverified.'
+  position: 'Position in English, lower case: goaltender, defense, forward.'
+  roster_as_of: Date the roster is valid for, as printed ('12.10.2026').
+  team: Team short name (Latin; the report tables' form).
+  team_page_id: Team page id (vhlru.ru /en/teams/{team_page_id}/), stable across seasons;
+    for report rows the page id of the row's side.
+vhl_schedule:
+  away_club_id: 'Away club id: stable across seasons (the img.khl.ru logo path id).'
+  away_score: Away goals including the shootout winner goal; null before the game.
+  away_team: Away team name (Latin, FULL form, like home_team).
+  city: City of the home team's arena (English).
+  date: Day header in English, day and month only ('18 March'); the page prints no
+    year and no start time.
+  decision: 'How the game ended beyond regulation: OT (overtime) or SO (shootout);
+    null for regulation or unplayed games.'
+  game_date: 'Game date, ISO ''YYYY-MM-DD'': the calendar day heading plus the season
+    (August-December = START year).'
+  game_id: 'Game id (the calendar''s game_id; the report''s and the broadcast''s idgame).
+    The report and broadcast pages do not print it: it comes from the request.'
+  game_number: Official game number within the tournament (from '№986').
+  home_club_id: 'Home club id: stable across seasons (the img.khl.ru logo path id).
+    Neither a team-season id nor a team page id.'
+  home_score: Home goals including the shootout winner goal; null before the game.
+  home_team: 'Home team name (Latin, FULL form: ''Kristall S''; standings, stats and
+    the team page use the short ''Kristall'').'
+  online_url: Text-broadcast URL (online.vhlru.ru/online/{game_id}.html).
+  score: Final score 'home:away'; '-:-' before the game.
+  season: Season END year (2026 = 2025/26).
+  stage: 'Season stage: regular or playoff.'
+  status: Unobserved in samples (null in every capture); type and meaning unverified.
+  tn: Tournament id of the season stage (2025/26 regular season = 1374, playoffs =
+    1375); vhl_tn maps season + stage to it.
+  weekday: Weekday of the day header (English).
+  winner: 'Winning side from the win-home / win-visitor class: home or away; null
+    before the game.'
+vhl_skater_stats:
+  assists: 'Assists (A) credited to the player in the row''s scope: the game in a
+    box score, the season stage in stats and career rows.'
+  blocked_shots: Blocked shots (BLS).
+  even_strength_goals: Even-strength goals (ESG).
+  faceoff_pct: Faceoff win percentage (%FO); 0-100 scale; null when the page shows
+    '-' (no faceoffs taken).
+  faceoffs: Faceoffs taken (FO).
+  faceoffs_won: Faceoffs won (FOW).
+  game_winning_goals: Game-winning goals (GWG).
+  games_played: Games played (GP).
+  goals: 'Goals (G) the player scored in the row''s scope: the game in a box score,
+    the season stage in stats and career rows.'
+  hits: Body checks delivered (Hits).
+  jersey: Jersey number (#; the page legend mislabels this column 'Position').
+  minus: 'Minus: on-ice goals against that count toward plus/minus (-).'
+  overtime_goals: Overtime goals (OTG).
+  penalty_minutes: Penalty minutes (PIM).
+  player: Player name, 'Surname Given' (Latin on /en/ pages).
+  player_id: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
+    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
+    player ids; whether it equals the same person''s khl.ru id is unverified.'
+  plus: 'Plus: on-ice goals for that count toward plus/minus (+).'
+  plus_minus: Plus/minus (+/-).
+  points: Points, goals + assists (PTS).
+  position_group: 'Position group: defense or forward.'
+  power_play_goals: Power-play goals (PPG).
+  season: Season END year (2026 = 2025/26).
+  shifts_per_game: Average shifts per game (Sft/G); integer in a one-game report,
+    decimal in season tables.
+  shootout_deciding_goals: Shootout-deciding goals (SDS; the legend says 'Shootouts
+    deciding shots').
+  shorthanded_goals: Shorthanded goals (SHG).
+  shot_pct: Shooting percentage, goals / shots on goal x 100 (%SOG); 0-100 scale;
+    null when the page shows '-'.
+  shots_on_goal: Shots on goal (SOG).
+  shots_per_game: Shots on goal per game (S/G).
+  stage: 'Season stage: regular or playoff.'
+  team: Team short name (Latin; the report tables' form).
+  tn: Tournament id of the season stage (2025/26 regular season = 1374, playoffs =
+    1375); vhl_tn maps season + stage to it.
+  toi_per_game: Average time on ice per game (TOI/G), 'm:ss' / 'mm:ss' string; null
+    when the page shows '-'.
+vhl_standings:
+  games_played: Games played (GP).
+  goals_against: Goals against (right side of the G column).
+  goals_for: Goals for (left side of the G column '226-131').
+  losses: Regulation losses (L).
+  ot_losses: Overtime losses (OTL).
+  ot_wins: Overtime wins (OTW).
+  points: 'Points (PTS): 2 per win of any kind, 1 per OT or SO loss.'
+  rank: Rank (unlabelled first column).
+  season: Season END year (2026 = 2025/26).
+  so_losses: Shootout losses (SOL).
+  so_wins: Shootout wins (SOW).
+  stage: 'Season stage: regular or playoff.'
+  team: Team short name (Latin; the report tables' form).
+  team_season_id: 'Team-season id (khl/ terminology): one id per team per tournament,
+    from the KHL''s sequence (khl/: Spartak = 14934 in 1369; here Metallurg = 15017
+    in 1374). The {id} of /calendar/{tn}/0/{id}/ and /stats/players/{tn}/all/{id}/.
+    Not the stable club id (*_club_id) and not the team page id.'
+  tn: Tournament id of the season stage (2025/26 regular season = 1374, playoffs =
+    1375); vhl_tn maps season + stage to it.
+  wins: Regulation wins (W).

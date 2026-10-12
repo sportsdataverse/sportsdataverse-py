@@ -1,6 +1,11 @@
 api: vhl
 docstring:
   example_import: true
+  notes:
+  - 'Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league
+    operators, and several clubs are owned or sponsored by sanctioned state companies.
+    Fetching on your own machine is fine; a published data release or a hosted mirror
+    needs the owner''s sanctions / legal sign-off first.'
   raises:
   - 'sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season
     without that stage, a game not in the season''s calendar, an unknown game, player

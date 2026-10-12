@@ -1,39 +1,35 @@
 columns:
-- description: Team page id (vhlru.ru /en/teams/{team_page_id}/), stable across seasons;
-    for report rows the page id of the row's side.
+- description: ''
   name: team_page_id
   type: integer
-- description: Team short name (Latin; the report tables' form).
+- description: ''
   name: team
   type: character
-- description: Tournament id of the team's CURRENT season stage (the page's 'To the
-    calendar' link).
+- description: ''
   name: calendar_tn
   type: integer
-- description: The team's team-season id in calendar_tn.
+- description: ''
   name: calendar_team_season_id
   type: integer
-- description: Date the roster is valid for, as printed ('12.10.2026').
+- description: ''
   name: roster_as_of
   type: character
-- description: Jersey number (integer).
+- description: ''
   name: jersey
   type: integer
-- description: 'Position in English, lower case: goaltender, defense, forward.'
+- description: ''
   name: position
   type: character
-- description: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
-    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
-    player ids; whether it equals the same person''s khl.ru id is unverified.'
+- description: ''
   name: player_id
   type: integer
-- description: Player name, 'Surname Given' — in CYRILLIC even on the /en/ page.
+- description: ''
   name: player
   type: character
-- description: Birth date 'DD.MM.YYYY' as the public page prints it.
+- description: ''
   name: born
   type: character
-- description: Citizenship (English).
+- description: ''
   name: country
   type: character
 kind: dataframe

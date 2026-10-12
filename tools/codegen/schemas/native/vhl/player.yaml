@@ -1,38 +1,32 @@
 columns:
-- description: Player id, read from the page's own /players/{id}/games/ tab link;
-    equals the requested id or the capture refuses.
+- description: ''
   name: player_id
   type: integer
-- description: Player name, 'Surname Given' (Latin), from h1 without the number.
+- description: ''
   name: name
   type: character
-- description: Current jersey number (the h1 '#79' badge); null when the page shows
-    none.
+- description: ''
   name: jersey
   type: integer
-- description: 'Position in English (h2.player-card__subtitle): Forward and Goalkeeper
-    seen; the defence label is unverified.'
+- description: ''
   name: position
   type: character
-- description: Height in centimetres (Height).
+- description: ''
   name: height_cm
   type: integer
-- description: Weight in kilograms (Weight).
+- description: ''
   name: weight_kg
   type: integer
-- description: Birth date 'DD.MM.YYYY' as the public page prints it.
+- description: ''
   name: born
   type: character
-- description: Age in years on the capture date (from '24 years old').
+- description: ''
   name: age
   type: integer
-- description: Country (English); null when the card omits it.
+- description: ''
   name: country
   type: character
-- description: 'Photo URL on img.khl.ru, /teamplayers/{team_season_id}/{player_id}/320.jpg.
-    The team-season id is the one the photo was filed under, not the current team:
-    34526''s photo uses 15424 = Magnitka in tn 1375 (25/26 playoffs, verified on /en/stats/players/1375/)
-    while his newest row is 15516 (Dynamo-Altai, 1430).'
+- description: ''
   name: photo_url
   type: character
 kind: dataframe

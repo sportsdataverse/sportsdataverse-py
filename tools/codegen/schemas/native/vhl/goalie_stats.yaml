@@ -1,71 +1,65 @@
 columns:
-- description: Season END year (2026 = 2025/26).
+- description: ''
   name: season
   type: integer
-- description: 'Season stage: regular or playoff.'
+- description: ''
   name: stage
   type: character
-- description: Tournament id of the season stage (2025/26 regular season = 1374, playoffs
-    = 1375); vhl_tn maps season + stage to it.
+- description: ''
   name: tn
   type: integer
-- description: 'Player id: the {player_id} of /en/players/{player_id}/, stable across
-    seasons and teams; also the photo id on img.khl.ru. Same numeric sequence as khl.ru
-    player ids; whether it equals the same person''s khl.ru id is unverified.'
+- description: ''
   name: player_id
   type: integer
-- description: Player name, 'Surname Given' (Latin on /en/ pages).
+- description: ''
   name: player
   type: character
-- description: Jersey number (#; the page legend mislabels this column 'Position').
+- description: ''
   name: jersey
   type: integer
-- description: Team short name (Latin; the report tables' form).
+- description: ''
   name: team
   type: character
-- description: Games played (GP).
+- description: ''
   name: games_played
   type: integer
-- description: Goalie wins (W).
+- description: ''
   name: wins
   type: integer
-- description: Goalie losses (L).
+- description: ''
   name: losses
   type: integer
-- description: Shootouts played (SOP).
+- description: ''
   name: shootouts_played
   type: integer
-- description: Shots on goal faced (the SOG column of goalie tables).
+- description: ''
   name: shots_against
   type: integer
-- description: Goals allowed (GA).
+- description: ''
   name: goals_against
   type: integer
-- description: Saves (Sv).
+- description: ''
   name: saves
   type: integer
-- description: Save percentage (%Sv); 0-100 scale (93.8 = 93.8 %); null when the page
-    shows '-'.
+- description: ''
   name: save_pct
   type: numeric
-- description: Goals-against average (GAA) = 60 x GA / TOI minutes; null when the
-    page shows '-'.
+- description: ''
   name: gaa
   type: numeric
-- description: Goals (G).
+- description: ''
   name: goals
   type: integer
-- description: Assists (A).
+- description: ''
   name: assists
   type: integer
-- description: Shutouts (SO).
+- description: ''
   name: shutouts
   type: integer
-- description: Penalty minutes (PIM).
+- description: ''
   name: penalty_minutes
   type: integer
-- description: Time on ice (TOI), 'mm:ss' string; minutes run past 59 over a season
-    ('2314:48'); null when the page shows '-'.
+- description: ''
   name: toi
   type: character
 kind: dataframe

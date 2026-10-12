@@ -2,7 +2,7 @@
 
 The VHL has no JSON API, so this getter fetches the server-rendered page, refuses every page
 that is not the one asked for, parses it into a record with
-:func:`sportsdataverse.hockey.vhl.vhl_parsers.page_record` and returns that record (a dict,
+:func:`sportsdataverse.hockey.vhl.vhl_parsers._page_record` and returns that record (a dict,
 the shape of the refs captures) with the request stamped under ``_request``. The parsers turn
 the record (or the page's HTML) into frames. Measured against the live site (sdv-internal-refs
 ``vhl/``, 2026-10-12):
@@ -37,7 +37,8 @@ the record (or the page's HTML) into frames. Measured against the live site (sdv
 * **Error vocabulary.** ``NoDataError``: HTTP 404, a season with no such stage, a game not in
   the calendar, a report / team shell, a redirect to the 404 page or the online index.
   ``ValueError``: HTTP 400 / 422, an unknown ``stage``, a missing ``idgame`` / ``season``.
-  ``AssetFetchError``: any other non-200 (429 / 5xx after three attempts, 2 s / 4 s apart),
+  ``AssetFetchError``: any other non-200 (429 / 5xx after three attempts, 2 s / 4 s apart, or
+  longer when a 429 / 503 sends ``Retry-After`` in seconds, capped at 120 s),
   a dead connection, a non-HTML or empty body, bytes that do not decode in the declared
   charset, any other redirect, and a page for another scope or with a missing table, header
   drift, zero rows or a row of the wrong width.
@@ -58,7 +59,7 @@ from urllib.parse import urlencode, urlsplit, urlunsplit
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.hockey import euro_hockey_runtime
-from sportsdataverse.hockey.vhl.vhl_parsers import NotParsed, page_record, tournament_table
+from sportsdataverse.hockey.vhl.vhl_parsers import _NotParsed, _page_record, _tournament_table
 
 __all__ = ["STAGES", "vhl_tn"]
 
@@ -146,7 +147,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None) -> str:
             status = getattr(resp, "status_code", None)
             if status not in RETRY_STATUSES or attempt == ATTEMPTS - 1:
                 break
-            if status == 429:
+            if status in (429, 503):  # 429 and 503 may both send Retry-After
                 delay = max(delay, _retry_after(resp))
         time.sleep(delay)
     headers = getattr(resp, "headers", None) or {}
@@ -174,8 +175,8 @@ def _page(kind: str, url: str, params: Optional[Dict[str, Any]], want: Optional[
     """Fetch and parse one page; a refused parse becomes the error vocabulary."""
     text = _fetch(url, params)
     try:
-        return page_record(kind, text, want)
-    except NotParsed as exc:
+        return _page_record(kind, text, want)
+    except _NotParsed as exc:
         if exc.empty:
             raise NoDataError(f"{_rt._where(url)}: {exc}") from None
         raise AssetFetchError(f"{_rt._where(url)}: not the page asked for: {exc}") from None
@@ -197,7 +198,7 @@ def _stage(value: Any) -> str:
 @functools.lru_cache(maxsize=1)
 def _tournaments() -> Dict[Tuple[int, str], int]:
     """``{(END season, stage): tn}`` from the calendar's tournament select (one fetch, cached)."""
-    rows = tournament_table(_fetch(CALENDAR_ROOT))
+    rows = _tournament_table(_fetch(CALENDAR_ROOT))
     if not rows:
         raise AssetFetchError(f"{_rt._where(CALENDAR_ROOT)}: no tournament select on the calendar page")
     return {(r["season"], r["stage"]): r["tn"] for r in rows}

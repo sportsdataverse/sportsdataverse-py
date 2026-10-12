@@ -88,7 +88,7 @@ Frame = Union[pl.DataFrame, pd.DataFrame]
 _REQUEST = "_request"
 
 
-class NotParsed(Exception):
+class _NotParsed(Exception):
     """The page is not the data asked for: a missing table or selector, header drift, zero rows,
     a row of the wrong width, or another scope (season, tournament, game, player).
 
@@ -118,25 +118,25 @@ _CLOSES = {
 _BLOCK = frozenset({"br", "p", "div", "li", "td", "th", "tr"})
 
 
-class Node:
-    """One element: tag, attributes, children (``Node`` or text) and parent."""
+class _Node:
+    """One element: tag, attributes, children (``_Node`` or text) and parent."""
 
     __slots__ = ("attrs", "children", "parent", "tag")
 
-    def __init__(self, tag: str, attrs: Sequence[Tuple[str, str]] = (), parent: Optional["Node"] = None) -> None:
+    def __init__(self, tag: str, attrs: Sequence[Tuple[str, str]] = (), parent: Optional["_Node"] = None) -> None:
         self.tag = tag
         self.attrs: Dict[str, str] = dict(attrs)
-        self.children: List[Union["Node", str]] = []
+        self.children: List[Union["_Node", str]] = []
         self.parent = parent
 
-    def iter(self, tag: Optional[str] = None) -> Iterator["Node"]:
+    def iter(self, tag: Optional[str] = None) -> Iterator["_Node"]:
         """Descendants in document order, through an explicit stack (no recursion)."""
         stack = [iter(self.children)]
         while stack:
             c = next(stack[-1], None)
             if c is None:
                 stack.pop()
-            elif isinstance(c, Node):
+            elif isinstance(c, _Node):
                 if tag is None or c.tag == tag:
                     yield c
                 stack.append(iter(c.children))
@@ -144,10 +144,10 @@ class Node:
     def classes(self) -> List[str]:
         return (self.attrs.get("class") or "").split()
 
-    def find_all(self, tag: Optional[str] = None, cls: Optional[str] = None) -> List["Node"]:
+    def find_all(self, tag: Optional[str] = None, cls: Optional[str] = None) -> List["_Node"]:
         return [n for n in self.iter(tag) if cls is None or cls in n.classes()]
 
-    def find(self, tag: Optional[str] = None, cls: Optional[str] = None) -> Optional["Node"]:
+    def find(self, tag: Optional[str] = None, cls: Optional[str] = None) -> Optional["_Node"]:
         return next((n for n in self.iter(tag) if cls is None or cls in n.classes()), None)
 
     def text(self) -> str:
@@ -174,21 +174,21 @@ class Node:
 class _Builder(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.root = self.cur = Node("#root")
+        self.root = self.cur = _Node("#root")
 
     def handle_starttag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]) -> None:
         while self.cur.parent is not None and tag in _CLOSES.get(self.cur.tag, ()):
             self.cur = self.cur.parent
-        node = Node(tag, [(k, v or "") for k, v in attrs], self.cur)
+        node = _Node(tag, [(k, v or "") for k, v in attrs], self.cur)
         self.cur.children.append(node)
         if tag not in _VOID:
             self.cur = node
 
     def handle_startendtag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]) -> None:
-        self.cur.children.append(Node(tag, [(k, v or "") for k, v in attrs], self.cur))
+        self.cur.children.append(_Node(tag, [(k, v or "") for k, v in attrs], self.cur))
 
     def handle_endtag(self, tag: str) -> None:
-        n: Optional[Node] = self.cur
+        n: Optional[_Node] = self.cur
         while n is not None and n.tag != tag:
             n = n.parent
         if n is not None and n.parent is not None:  # a stray end tag with no open match is ignored
@@ -198,7 +198,7 @@ class _Builder(HTMLParser):
         self.cur.children.append(data)
 
 
-def parse_html(page: str) -> Node:
+def _parse_html(page: str) -> _Node:
     """The DOM root of an HTML page."""
     b = _Builder()
     b.feed(page or "")
@@ -246,27 +246,27 @@ def _id(href: str, kind: str) -> Optional[int]:
 
 def _need(cond: Any, msg: str, *, empty: bool = False) -> None:
     if not cond:
-        raise NotParsed(msg, empty=empty)
+        raise _NotParsed(msg, empty=empty)
 
 
-Cell = Optional[Node]
+Cell = Optional[_Node]
 Conv = Callable[[Cell, str], Dict[str, Any]]
 
 
-def N(cell: Cell, key: str) -> Dict[str, Any]:  # number
+def _N(cell: Cell, key: str) -> Dict[str, Any]:  # number
     return {key: _num(cell.text()) if cell is not None else None}
 
 
-def N0(cell: Cell, key: str) -> Dict[str, Any]:  # broadcast count: a blank cell is zero
+def _N0(cell: Cell, key: str) -> Dict[str, Any]:  # broadcast count: a blank cell is zero
     txt = cell.text().strip() if cell is not None else ""
     return {key: 0 if txt == "" else _num(txt)}
 
 
-def S(cell: Cell, key: str) -> Dict[str, Any]:  # string
+def _S(cell: Cell, key: str) -> Dict[str, Any]:  # string
     return {key: _str(cell.text()) if cell is not None else None}
 
 
-def T(cell: Cell, key: str) -> Dict[str, Any]:  # mm:ss time; '-' (no time on ice) -> None
+def _T(cell: Cell, key: str) -> Dict[str, Any]:  # mm:ss time; '-' (no time on ice) -> None
     v = _str(cell.text()) if cell is not None else None
     return {key: None if v == "-" else v}
 
@@ -281,47 +281,47 @@ def _person(cell: Cell) -> Tuple[Optional[int], Optional[str], Optional[int], Op
     return (ids[0] if ids else None), (name or None), _int(jersey), paren
 
 
-def P(cell: Cell, key: str) -> Dict[str, Any]:  # player link: id + name
+def _P(cell: Cell, key: str) -> Dict[str, Any]:  # player link: id + name
     pid, name, _j, _p = _person(cell)
     return {f"{key}_id": pid, key: name}
 
 
-def PR(cell: Cell, key: str) -> Dict[str, Any]:  # player + captaincy suffix "(C)" / "(A)"
+def _PR(cell: Cell, key: str) -> Dict[str, Any]:  # player + captaincy suffix "(C)" / "(A)"
     pid, name, _j, paren = _person(cell)
     return {f"{key}_id": pid, key: name, "captaincy": paren if paren in ("C", "A") else None}
 
 
-def PJ(cell: Cell, key: str) -> Dict[str, Any]:  # "71.Polshakov Zakhar(12)": id, name, jersey, season count
+def _PJ(cell: Cell, key: str) -> Dict[str, Any]:  # "71.Polshakov Zakhar(12)": id, name, jersey, season count
     pid, name, jersey, paren = _person(cell)
     return {f"{key}_id": pid, key: name, f"{key}_jersey": jersey, f"{key}_season_total": _int(paren)}
 
 
-def PN(cell: Cell, key: str) -> Dict[str, Any]:  # "29. Krasnov Ivan V.": id, name, jersey
+def _PN(cell: Cell, key: str) -> Dict[str, Any]:  # "29. Krasnov Ivan V.": id, name, jersey
     pid, name, jersey, _p = _person(cell)
     return {f"{key}_id": pid, key: name, f"{key}_jersey": jersey}
 
 
-def JL(cell: Cell, key: str) -> Dict[str, Any]:  # "30,5,51,71,90,92" -> [30, 5, 51, 71, 90, 92]
+def _JL(cell: Cell, key: str) -> Dict[str, Any]:  # "30,5,51,71,90,92" -> [30, 5, 51, 71, 90, 92]
     return {key: [int(x) for x in re.findall(r"\d+", cell.text() if cell is not None else "")]}
 
 
-def GFA(cell: Cell, key: str) -> Dict[str, Any]:  # "226-131" -> goals_for, goals_against
+def _GFA(cell: Cell, key: str) -> Dict[str, Any]:  # "226-131" -> goals_for, goals_against
     m = re.fullmatch(r"(\d+)\s*-\s*(\d+)", cell.text() if cell is not None else "")
     return {"goals_for": int(m.group(1)) if m else None, "goals_against": int(m.group(2)) if m else None}
 
 
-def TOIS(cell: Cell, key: str) -> Dict[str, Any]:  # "16:45(22)" -> toi "16:45", shifts 22
+def _TOIS(cell: Cell, key: str) -> Dict[str, Any]:  # "16:45(22)" -> toi "16:45", shifts 22
     m = re.fullmatch(r"(\d+:\d\d)\s*(?:\((\d+)\))?", cell.text() if cell is not None else "")
     return {"toi": m.group(1) if m else None, "shifts": _int(m.group(2)) if m else None}
 
 
-def RUP(cell: Cell, key: str) -> Dict[str, Any]:  # "Жиляков Богдан(з)" -> name + position letter
+def _RUP(cell: Cell, key: str) -> Dict[str, Any]:  # "Жиляков Богдан(з)" -> name + position letter
     txt = cell.text() if cell is not None else ""
     m = re.fullmatch(r"(.*?)\s*\((\w)\)", txt)
     return {key: m.group(1) if m else _str(txt), "position_code": m.group(2) if m else None}
 
 
-def STD_TEAM(cell: Cell, key: str) -> Dict[str, Any]:  # standings: name + /stats/players/<tn>/all/<id>/
+def _STD_TEAM(cell: Cell, key: str) -> Dict[str, Any]:  # standings: name + /stats/players/<tn>/all/<id>/
     href = next(iter(cell.links()), "") if cell is not None else ""
     m = re.search(r"/stats/players/(\d+)/all/(\d+)/", href)
     return {
@@ -334,27 +334,27 @@ def STD_TEAM(cell: Cell, key: str) -> Dict[str, Any]:  # standings: name + /stat
 Spec = List[Tuple[Optional[str], Optional[str], Conv]]
 
 
-def _cells(tr: Node) -> List[Node]:
-    return [c for c in tr.children if isinstance(c, Node) and c.tag in ("td", "th")]
+def _cells(tr: _Node) -> List[_Node]:
+    return [c for c in tr.children if isinstance(c, _Node) and c.tag in ("td", "th")]
 
 
-def _hidden(cell: Node) -> bool:
+def _hidden(cell: _Node) -> bool:
     return "display:none" in (cell.attrs.get("style") or "").replace(" ", "").lower()
 
 
-def _span(cell: Node) -> int:
+def _span(cell: _Node) -> int:
     return max(_int(cell.attrs.get("colspan")) or 1, 1)
 
 
-def _width(cells: List[Node]) -> int:
+def _width(cells: List[_Node]) -> int:
     """Rendered column count of a row: colspans summed."""
     return sum(_span(c) for c in cells)
 
 
-def table_parts(table: Node) -> Tuple[List[Node], List[List[Node]]]:
+def _table_parts(table: _Node) -> Tuple[List[_Node], List[List[_Node]]]:
     """``(header cells, body rows)`` of a table (see the module docstring)."""
-    head: List[Node] = []
-    body: List[List[Node]] = []
+    head: List[_Node] = []
+    body: List[List[_Node]] = []
     has_body = any(c.tag == "tbody" for c in table.iter())
     for tr in table.iter("tr"):
         sect = tr.parent.tag if tr.parent is not None else ""
@@ -369,14 +369,14 @@ def table_parts(table: Node) -> Tuple[List[Node], List[List[Node]]]:
     return head, body
 
 
-def read_table(
-    table: Optional[Node], spec: Spec, what: str, skip: Optional[Callable[[List[Node]], bool]] = None
+def _read_table(
+    table: Optional[_Node], spec: Spec, what: str, skip: Optional[Callable[[List[_Node]], bool]] = None
 ) -> List[Dict[str, Any]]:
     """Rows of a table as dicts per ``spec``; refuses a missing table, header drift, a row of the
     wrong width and zero rows."""
     _need(table is not None, f"{what}: table missing")
     assert table is not None
-    head, body = table_parts(table)
+    head, body = _table_parts(table)
     got = [c.text() for c in head]
     want = [h for h, _k, _c in spec]
     _need(
@@ -392,7 +392,7 @@ def read_table(
         if not cells or (skip and skip(cells)):
             continue
         _need(_width(cells) == w, f"{what}: row {n} spans {_width(cells)} columns, header {w}")
-        grid: List[Node] = []
+        grid: List[_Node] = []
         for c in cells:
             grid += [c] * _span(c)
         row: Dict[str, Any] = {}
@@ -448,74 +448,74 @@ GOALIE_COLS = ("GP", "W", "L", "SOP", "SOG", "GA", "Sv", "%Sv", "GAA")
 
 def _stat(*headers: str, goalie: bool = False) -> Spec:
     m = {**STAT, **(GOALIE_STAT if goalie else {})}
-    return [(h, m[h], T if h in STR_STAT else N) for h in headers]
+    return [(h, m[h], _T if h in STR_STAT else _N) for h in headers]
 
 
 REPORT_GOALS: Spec = [
-    ("G", "goal_number", N),
-    ("Per", "period", S),
-    ("Time", "time", S),
-    ("Score", "score", S),
-    ("PMG", "strength", S),
-    ("Goal Scorer", "scorer", PJ),
-    ("Assist", "assist1", PJ),
-    ("Assist", "assist2", PJ),
-    (None, "home_on_ice", JL),
-    (None, "away_on_ice", JL),  # header = the two short team names (home first)
+    ("G", "goal_number", _N),
+    ("Per", "period", _S),
+    ("Time", "time", _S),
+    ("Score", "score", _S),
+    ("PMG", "strength", _S),
+    ("Goal Scorer", "scorer", _PJ),
+    ("Assist", "assist1", _PJ),
+    ("Assist", "assist2", _PJ),
+    (None, "home_on_ice", _JL),
+    (None, "away_on_ice", _JL),  # header = the two short team names (home first)
 ]
 REPORT_PENALTIES: Spec = [
-    ("Time", "time", S),
-    ("Player", "player", PN),
-    ("", "minutes", N),
-    ("Penalty", "infraction", S),
+    ("Time", "time", _S),
+    ("Player", "player", _PN),
+    ("", "minutes", _N),
+    ("Penalty", "infraction", _S),
 ]
 REPORT_GOALIES: Spec = [
-    ("", "jersey", N),
-    ("Player", "player", PR),
+    ("", "jersey", _N),
+    ("Player", "player", _PR),
     *_stat(*GOALIE_COLS, "A", "SO", "PIM", "TOI", goalie=True),
 ]
-REPORT_SKATERS: Spec = [("", "jersey", N), ("Player", "player", PR), *_stat(*SKATER_COLS, *SKATER_TAIL)]
+REPORT_SKATERS: Spec = [("", "jersey", _N), ("Player", "player", _PR), *_stat(*SKATER_COLS, *SKATER_TAIL)]
 REPORT_POWERPLAY: Spec = [
-    ("Team", "team", S),
-    ("GP", "games_played", N),
-    ("PP", "power_plays", N),
-    ("GF", "power_play_goals", N),
-    ("%PP", "power_play_pct", N),
-    ("SHGA", "shorthanded_goals_against", N),
-    ("TS", "times_shorthanded", N),
-    ("PPGA", "power_play_goals_against", N),
-    ("%PK", "penalty_kill_pct", N),
-    ("SHG", "shorthanded_goals", N),
+    ("Team", "team", _S),
+    ("GP", "games_played", _N),
+    ("PP", "power_plays", _N),
+    ("GF", "power_play_goals", _N),
+    ("%PP", "power_play_pct", _N),
+    ("SHGA", "shorthanded_goals_against", _N),
+    ("TS", "times_shorthanded", _N),
+    ("PPGA", "power_play_goals_against", _N),
+    ("%PK", "penalty_kill_pct", _N),
+    ("SHG", "shorthanded_goals", _N),
 ]
 STRENGTHS = ("5 x 5", "5 x 4", "5 x 3", "4 x 4", "4 x 3", "3 x 3", "3 x 4", "3 x 5", "4 x 5")
 REPORT_BY_STRENGTH: Spec = [
-    ("Team", "team", S),
-    ("GP", "games_played", N),
-    *[(s, "g_" + s.replace(" x ", "v"), N) for s in STRENGTHS],
-    ("EN", "empty_net", N),
-    ("PS", "penalty_shot", N),
-    ("", "total", N),
+    ("Team", "team", _S),
+    ("GP", "games_played", _N),
+    *[(s, "g_" + s.replace(" x ", "v"), _N) for s in STRENGTHS],
+    ("EN", "empty_net", _N),
+    ("PS", "penalty_shot", _N),
+    ("", "total", _N),
 ]
 REPORT_SHOTS: Spec = [
-    ("Period", "period", S),
-    ("G", "home_goals", N),
-    ("SOG", "home_shots_on_goal", N),
-    ("%SOG", "home_shot_pct", N),
-    ("", None, S),
-    ("G", "away_goals", N),
-    ("SOG", "away_shots_on_goal", N),
-    ("%SOG", "away_shot_pct", N),
+    ("Period", "period", _S),
+    ("G", "home_goals", _N),
+    ("SOG", "home_shots_on_goal", _N),
+    ("%SOG", "home_shot_pct", _N),
+    ("", None, _S),
+    ("G", "away_goals", _N),
+    ("SOG", "away_shots_on_goal", _N),
+    ("%SOG", "away_shot_pct", _N),
 ]
 STATS_GOALIES: Spec = [
-    ("Player", "player", P),
-    ("#", "jersey", N),
-    ("Team", "team", S),
+    ("Player", "player", _P),
+    ("#", "jersey", _N),
+    ("Team", "team", _S),
     *_stat(*GOALIE_COLS, "G", "A", "SO", "PIM", "TOI", goalie=True),
 ]
 STATS_SKATERS: Spec = [
-    ("Player", "player", P),
-    ("#", "jersey", N),
-    ("Team", "team", S),
+    ("Player", "player", _P),
+    ("#", "jersey", _N),
+    ("Team", "team", _S),
     *_stat(
         "GP",
         "G",
@@ -538,54 +538,54 @@ STATS_SKATERS: Spec = [
     ),
 ]
 STANDINGS: Spec = [
-    ("", "rank", N),
-    ("Team", "team", STD_TEAM),
-    ("GP", "games_played", N),
-    ("W", "wins", N),
-    ("OTW", "ot_wins", N),
-    ("SOW", "so_wins", N),
-    ("SOL", "so_losses", N),
-    ("OTL", "ot_losses", N),
-    ("L", "losses", N),
-    ("G", "goals", GFA),
-    ("PTS", "points", N),
+    ("", "rank", _N),
+    ("Team", "team", _STD_TEAM),
+    ("GP", "games_played", _N),
+    ("W", "wins", _N),
+    ("OTW", "ot_wins", _N),
+    ("SOW", "so_wins", _N),
+    ("SOL", "so_losses", _N),
+    ("OTL", "ot_losses", _N),
+    ("L", "losses", _N),
+    ("G", "goals", _GFA),
+    ("PTS", "points", _N),
 ]
 CAREER_SKATER = _stat(
     "GP", "G", "A", "PTS", "+/-", "PIM", "ESG", "PPG", "SHG", "OTG", "GWG", "SDS", "SOG", "%SOG", "S/G", *SKATER_TAIL
 )
 CAREER_GOALIE = _stat(*GOALIE_COLS, "G", "A", "SO", "PIM", "TOI", goalie=True)
 ROSTER: Spec = [
-    ("#", "jersey", N),
-    ("Position", "position", S),
-    ("Name", "player", P),
-    ("Born", "born", S),
-    ("Country", "country", S),
+    ("#", "jersey", _N),
+    ("Position", "position", _S),
+    ("Name", "player", _P),
+    ("Born", "born", _S),
+    ("Country", "country", _S),
 ]
 ONLINE_PLAYERS: Spec = [  # online.vhlru.ru has no /en/ mirror: Russian headers
-    ("#", "jersey", N),
-    ("Игрок", "player", RUP),
-    ("Ш", "goals", N0),
-    ("А", "assists", N0),
-    ("О", "points", N0),
-    ("БВ", "shots_on_goal", N0),
-    ("Штр", "penalty_minutes", N0),
-    ("Вбр", "faceoffs", N0),
-    ("ВВбр", "faceoffs_won", N0),
-    ("%ВВбр", "faceoff_pct", N),
-    ("БлБ", "blocked_shots", N0),
-    ("СПр", "hits", N0),
-    ("ВП(См)", "toi", TOIS),
+    ("#", "jersey", _N),
+    ("Игрок", "player", _RUP),
+    ("Ш", "goals", _N0),
+    ("А", "assists", _N0),
+    ("О", "points", _N0),
+    ("БВ", "shots_on_goal", _N0),
+    ("Штр", "penalty_minutes", _N0),
+    ("Вбр", "faceoffs", _N0),
+    ("ВВбр", "faceoffs_won", _N0),
+    ("%ВВбр", "faceoff_pct", _N),
+    ("БлБ", "blocked_shots", _N0),
+    ("СПр", "hits", _N0),
+    ("ВП(См)", "toi", _TOIS),
 ]
 ONLINE_TEAMS: Spec = [
-    ("", None, S),
-    ("Команда", "team", S),
-    ("Ш", "goals", N0),
-    ("БВ", "shots_on_goal", N0),
-    ("Штр", "penalty_minutes", N0),
-    ("ВВбр", "faceoffs_won", N0),
-    ("%ВВбр", "faceoff_pct", N),
-    ("БлБ", "blocked_shots", N0),
-    ("СПр", "hits", N0),
+    ("", None, _S),
+    ("Команда", "team", _S),
+    ("Ш", "goals", _N0),
+    ("БВ", "shots_on_goal", _N0),
+    ("Штр", "penalty_minutes", _N0),
+    ("ВВбр", "faceoffs_won", _N0),
+    ("%ВВбр", "faceoff_pct", _N),
+    ("БлБ", "blocked_shots", _N0),
+    ("СПр", "hits", _N0),
 ]
 EVENT_KINDS = {
     "ga": "game_state",
@@ -634,7 +634,7 @@ EN_MONTHS = {
 
 
 # ------------------------------------------------------------------------ record builders
-def _selected(root: Node, name: str) -> Tuple[Optional[int], Optional[str]]:
+def _selected(root: _Node, name: str) -> Tuple[Optional[int], Optional[str]]:
     """``(tn, label)`` of the selected <option> of <select name=name>; the tn is the first number in its value."""
     sel = next((s for s in root.iter("select") if s.attrs.get("name") == name), None)
     opt = next((o for o in (sel.iter("option") if sel else []) if "selected" in o.attrs), None)
@@ -644,7 +644,7 @@ def _selected(root: Node, name: str) -> Tuple[Optional[int], Optional[str]]:
     return (int(m.group(1)) if m else None), _str(opt.text())
 
 
-def _tournament(root: Node, name: str, tn: Optional[int] = None) -> Dict[str, Any]:
+def _tournament(root: _Node, name: str, tn: Optional[int] = None) -> Dict[str, Any]:
     """The page's own tournament (the selected option); when ``tn`` is given it must be that one
     (a bad or ignored tn silently serves another season)."""
     got, label = _selected(root, name)
@@ -655,7 +655,7 @@ def _tournament(root: Node, name: str, tn: Optional[int] = None) -> Dict[str, An
     return {"tn": got, "label": label, "season": _str(season), "stage": _str(stage)}
 
 
-def tournament_table(page: Union[str, Node]) -> List[Dict[str, Any]]:
+def _tournament_table(page: Union[str, _Node]) -> List[Dict[str, Any]]:
     """Every tournament the calendar's ``<select name="tournament">`` offers, newest first.
 
     Args:
@@ -665,7 +665,7 @@ def tournament_table(page: Union[str, Node]) -> List[Dict[str, Any]]:
         ``[{"tn", "label", "season" (END year), "stage" ("regular" / "playoff")}]``; empty when
         the page has no such select. Options whose label does not parse are skipped.
     """
-    root = parse_html(page) if isinstance(page, str) else page
+    root = _parse_html(page) if isinstance(page, str) else page
     sel = next((s for s in root.iter("select") if s.attrs.get("name") == "tournament"), None)
     out = []
     for o in sel.iter("option") if sel else []:
@@ -678,7 +678,7 @@ def tournament_table(page: Union[str, Node]) -> List[Dict[str, Any]]:
     return out
 
 
-def _calendar(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _calendar(root: _Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     rec: Dict[str, Any] = {"tournament": _tournament(root, "tournament", (want or {}).get("tn"))}
     tn = rec["tournament"]["tn"]
     sel = next((s for s in root.iter("select") if s.attrs.get("name") == "tournament"), None)
@@ -755,7 +755,7 @@ def _ru_date(txt: str) -> Tuple[Optional[str], Optional[str]]:
     return f"{m.group(3)}-{mon:02d}-{int(m.group(1)):02d}", m.group(4)
 
 
-def _officials(p: Optional[Node]) -> List[Dict[str, Any]]:
+def _officials(p: Optional[_Node]) -> List[Dict[str, Any]]:
     out = []
     for part in re.split(r"\s+and\s+", p.text() if p else ""):
         m = re.fullmatch(r"(\d+)\.\s*(.+)", part.strip())
@@ -764,7 +764,7 @@ def _officials(p: Optional[Node]) -> List[Dict[str, Any]]:
     return out
 
 
-def _walk(node: Node) -> List[Tuple[Optional[str], Optional[str], Optional[str], Node]]:
+def _walk(node: _Node) -> List[Tuple[Optional[str], Optional[str], Optional[str], _Node]]:
     """Pre-order walk of the protocol through an explicit stack: track the current h3 / h4 / h5
     headings and emit ``(title, team, desc, table)`` for every table, in document order."""
     ctx: Dict[str, Optional[str]] = {}
@@ -775,7 +775,7 @@ def _walk(node: Node) -> List[Tuple[Optional[str], Optional[str], Optional[str],
         if c is None:
             stack.pop()
             continue
-        if not isinstance(c, Node):
+        if not isinstance(c, _Node):
             continue
         cl = c.classes()
         if c.tag == "table":
@@ -791,10 +791,10 @@ def _walk(node: Node) -> List[Tuple[Optional[str], Optional[str], Optional[str],
     return out
 
 
-def _shootout(table: Node) -> List[Dict[str, Any]]:
+def _shootout(table: _Node) -> List[Dict[str, Any]]:
     """Rows come in pairs per round: A = [score, home shooter, ..., away goalie]; B = [home goalie,
     away shooter]. The score cell (rowspan 2) is the score AFTER the round."""
-    head, body = table_parts(table)
+    head, body = _table_parts(table)
     _need(len(body) >= 2 and len(body) % 2 == 0, f"shootout: {len(body)} rows, expected pairs")
     w = _width(head)
     rounds = []
@@ -807,8 +807,8 @@ def _shootout(table: Node) -> List[Dict[str, Any]]:
         )
         la = [c for c in a if c.links()]
         lb = [c for c in b if c.links()]
-        hs, ag = (PN(la[0], "x"), PN(la[-1], "x")) if len(la) == 2 else ({}, {})
-        hg, as_ = (PN(lb[0], "x"), PN(lb[-1], "x")) if len(lb) == 2 else ({}, {})
+        hs, ag = (_PN(la[0], "x"), _PN(la[-1], "x")) if len(la) == 2 else ({}, {})
+        hg, as_ = (_PN(lb[0], "x"), _PN(lb[-1], "x")) if len(lb) == 2 else ({}, {})
         rounds.append(
             {
                 "round": i // 2 + 1,
@@ -828,12 +828,12 @@ def _shootout(table: Node) -> List[Dict[str, Any]]:
     return rounds
 
 
-def _report(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _report(root: _Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     card = root.find(cls="match-card")
     _need(card is not None, "no match-card (unknown game, or a tn that does not hold this game)", empty=True)
     assert card is not None
 
-    def t(cls: str, node: Node = card) -> Optional[str]:
+    def t(cls: str, node: _Node = card) -> Optional[str]:
         n = node.find(cls=cls)
         return _str(n.text()) if n else None
 
@@ -886,9 +886,9 @@ def _report(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     tables = _walk(prot)
     rec: Dict[str, Any] = {"game": game, "goals": [], "shootout": [], "penalties": [], "goalies": [], "skaters": []}
     goals_t = next((tb for ti, _tm, _d, tb in tables if (ti or "").lower() == "scoring summary"), None)
-    rec["goals"] = read_table(goals_t, REPORT_GOALS, "goals")
+    rec["goals"] = _read_table(goals_t, REPORT_GOALS, "goals")
     assert goals_t is not None
-    short = [c.text() for c in table_parts(goals_t)[0][-2:]]  # short team names, home first
+    short = [c.text() for c in _table_parts(goals_t)[0][-2:]]  # short team names, home first
     game["home_short"], game["away_short"] = short
 
     def side(team: Optional[str]) -> str:  # section headings use the full name, the goals header the short one
@@ -902,20 +902,20 @@ def _report(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         if ti == "shootouts summary":
             rec["shootout"] = _shootout(tb)
         elif ti == "penalty summary":
-            rows = read_table(tb, REPORT_PENALTIES, "penalties", skip=lambda c: c[0].attrs.get("colspan") == "2")
+            rows = _read_table(tb, REPORT_PENALTIES, "penalties", skip=lambda c: c[0].attrs.get("colspan") == "2")
             rec["penalties"] += [{"team_side": side(team), **r} for r in rows]
         elif ti == "players summary":
             s = side(team)
             seen_players.append((s, desc))
             if desc == "Goaltenders":
-                rec["goalies"] += [{"team_side": s, **r} for r in read_table(tb, REPORT_GOALIES, "goalies")]
+                rec["goalies"] += [{"team_side": s, **r} for r in _read_table(tb, REPORT_GOALIES, "goalies")]
             elif desc in ("Defensmen", "Forwards"):  # sic: the site spells it Defensmen
                 pos = "defense" if desc == "Defensmen" else "forward"
                 rec["skaters"] += [
-                    {"team_side": s, "position_group": pos, **r} for r in read_table(tb, REPORT_SKATERS, desc or "")
+                    {"team_side": s, "position_group": pos, **r} for r in _read_table(tb, REPORT_SKATERS, desc or "")
                 ]
             else:
-                raise NotParsed(f"players summary table {desc!r}")
+                raise _NotParsed(f"players summary table {desc!r}")
         elif ti == "teams summary":
             key = {
                 "Powerplays": "team_powerplay",
@@ -924,9 +924,9 @@ def _report(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
             }.get(desc or "")
             _need(key, f"teams summary table {desc!r}")
             assert key is not None
-            rec[key] = read_table(tb, REPORT_POWERPLAY if key == "team_powerplay" else REPORT_BY_STRENGTH, desc or "")
+            rec[key] = _read_table(tb, REPORT_POWERPLAY if key == "team_powerplay" else REPORT_BY_STRENGTH, desc or "")
         elif ti == "shots":
-            rec["shots_by_period"] = read_table(tb, REPORT_SHOTS, "shots")
+            rec["shots_by_period"] = _read_table(tb, REPORT_SHOTS, "shots")
     for s in ("home", "away"):
         _need((s, "Goaltenders") in seen_players, f"no {s} goalie table")
         _need(any(x == s and d != "Goaltenders" for x, d in seen_players), f"no {s} skater table")
@@ -936,7 +936,7 @@ def _report(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     return rec
 
 
-def _online(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _online(root: _Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     title_node = root.find("title")
     title = title_node.text() if title_node else ""
     m = re.search(r"ВХЛ\.\s*(.*?)\.\s*Игра номер (\d+)\s+(.*?):\s*(.*?)\s*\(онлайн", title)
@@ -996,53 +996,53 @@ def _online(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
             period: Any = "match" if pm.group(1) == "match" else int(pm.group(2))
             periods.append(period)
             if sidek is None:
-                rec["team_stats"] += [{"period": period, **r} for r in read_table(tb, ONLINE_TEAMS, f"{tab} {pt}")]
+                rec["team_stats"] += [{"period": period, **r} for r in _read_table(tb, ONLINE_TEAMS, f"{tab} {pt}")]
             else:
                 rec["player_stats"] += [
-                    {"team_side": sidek, "period": period, **r} for r in read_table(tb, ONLINE_PLAYERS, f"{tab} {pt}")
+                    {"team_side": sidek, "period": period, **r} for r in _read_table(tb, ONLINE_PLAYERS, f"{tab} {pt}")
                 ]
         # every tab must hold its whole-game table: a tab with only period tables is not a box score
         _need("match" in periods, f"{tab}: no stats-teams-match table (periods {periods})")
     return rec
 
 
-def _standings(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _standings(root: _Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     rec: Dict[str, Any] = {"tournament": _tournament(root, "team", (want or {}).get("tn"))}
     tn = rec["tournament"]["tn"]
-    rows = read_table(root.find("table"), STANDINGS, "standings")
+    rows = _read_table(root.find("table"), STANDINGS, "standings")
     for r in rows:  # every team link must point into the same tournament (fail closed on a missing link)
         _need(_same(r.pop("_tn"), tn), f"standings row {r.get('team')!r} links outside tn {tn}")
     rec["rows"] = rows
     return rec
 
 
-def _stats_players(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _stats_players(root: _Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     rec: Dict[str, Any] = {"tournament": _tournament(root, "tournament", (want or {}).get("tn"))}
     tables = {}
     for wrap in root.find_all(cls="table__wrapper"):
         h2, tb = wrap.find("h2"), wrap.find("table")
         if h2 and tb:
             tables[h2.text()] = tb
-    rec["goalies"] = read_table(tables.get("Goaltenders"), STATS_GOALIES, "Goaltenders")
-    rec["defensemen"] = read_table(tables.get("Defensemen"), STATS_SKATERS, "Defensemen")
-    rec["forwards"] = read_table(tables.get("Forwards"), STATS_SKATERS, "Forwards")
+    rec["goalies"] = _read_table(tables.get("Goaltenders"), STATS_GOALIES, "Goaltenders")
+    rec["defensemen"] = _read_table(tables.get("Defensemen"), STATS_SKATERS, "Defensemen")
+    rec["forwards"] = _read_table(tables.get("Forwards"), STATS_SKATERS, "Forwards")
     for k in ("goalies", "defensemen", "forwards"):
         _need(all(isinstance(r.get("player_id"), int) for r in rec[k]), f"{k}: a row without a player link")
     return rec
 
 
-def _career(table: Optional[Node], what: str) -> List[Dict[str, Any]]:
+def _career(table: Optional[_Node], what: str) -> List[Dict[str, Any]]:
     """Season-by-season rows: a label row (``'25/26 | Regular Season'``, no stats) precedes that season's team rows."""
-    head = [c.text() for c in table_parts(table)[0]] if table is not None else []
+    head = [c.text() for c in _table_parts(table)[0]] if table is not None else []
     spec: Spec = [
-        ("Season / Team", "team", S),
-        ("#", "jersey", N),
+        ("Season / Team", "team", _S),
+        ("#", "jersey", _N),
         *(CAREER_GOALIE if "SOP" in head else CAREER_SKATER),
     ]
-    rows = read_table(table, spec, what)
+    rows = _read_table(table, spec, what)
     assert table is not None
     out, label = [], None
-    for r, cells in zip(rows, [c for c in table_parts(table)[1] if c]):
+    for r, cells in zip(rows, [c for c in _table_parts(table)[1] if c]):
         if all(v is None for k, v in r.items() if k != "team"):
             label = r["team"]
             continue
@@ -1062,7 +1062,7 @@ def _career(table: Optional[Node], what: str) -> List[Dict[str, Any]]:
     return out
 
 
-def _player(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _player(root: _Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     games = next((h for h in root.links() if re.search(r"/players/\d+/games/", h)), "")
     pid = _id(games.replace("/games/", "/"), "players")
     _need(isinstance(pid, int), "no /players/<id>/games/ link: not a player page")
@@ -1094,13 +1094,13 @@ def _player(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         "seasons": _career(tables[0] if tables else None, "career by season"),
     }
     totals = tables[1] if len(tables) > 1 else None
-    head = [c.text() for c in table_parts(totals)[0]] if totals is not None else []
-    spec: Spec = [("Season / Team", "stage", S), ("", None, S), *(CAREER_GOALIE if "SOP" in head else CAREER_SKATER)]
-    rec["career_totals"] = read_table(totals, spec, "career totals")
+    head = [c.text() for c in _table_parts(totals)[0]] if totals is not None else []
+    spec: Spec = [("Season / Team", "stage", _S), ("", None, _S), *(CAREER_GOALIE if "SOP" in head else CAREER_SKATER)]
+    rec["career_totals"] = _read_table(totals, spec, "career totals")
     return rec
 
 
-def _team(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _team(root: _Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     h1 = root.find("h1", cls="title")
     name = _str(h1.text()) if h1 else None
     content = root.find(cls="team__content")
@@ -1139,7 +1139,7 @@ def _team(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         "calendar_team_season_id": int(cm.group(2)) if cm else None,
         "roster_as_of": _str(re.sub(r"^As of\s*", "", asof.text())) if asof else None,
         "arena_capacity": _int(re.sub(r"\D", "", cap or "") or None),
-        "roster": read_table(root.find("table"), ROSTER, "roster"),
+        "roster": _read_table(root.find("table"), ROSTER, "roster"),
     }
     rec["honours"] = [
         txt
@@ -1149,7 +1149,7 @@ def _team(root: Node, want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     return rec
 
 
-_BUILDERS: Dict[str, Callable[[Node, Optional[Dict[str, Any]]], Dict[str, Any]]] = {
+_BUILDERS: Dict[str, Callable[[_Node, Optional[Dict[str, Any]]], Dict[str, Any]]] = {
     "calendar": _calendar,
     "report": _report,
     "online": _online,
@@ -1160,8 +1160,8 @@ _BUILDERS: Dict[str, Callable[[Node, Optional[Dict[str, Any]]], Dict[str, Any]]]
 }
 
 
-def page_record(kind: str, page: str, want: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """The parsed record of one page, or :class:`NotParsed`.
+def _page_record(kind: str, page: str, want: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """The parsed record of one page, or :class:`_NotParsed`.
 
     Args:
         kind: ``calendar``, ``report``, ``online``, ``standings``, ``stats_players``, ``player``
@@ -1173,15 +1173,15 @@ def page_record(kind: str, page: str, want: Optional[Dict[str, Any]] = None) -> 
             check but keeps every structural one.
 
     Raises:
-        NotParsed: the page is not that kind of page, or not the one ``want`` names. Any
-            parser exception on an odd page (and a ``RecursionError``) becomes ``NotParsed``.
+        _NotParsed: the page is not that kind of page, or not the one ``want`` names. Any
+            parser exception on an odd page (and a ``RecursionError``) becomes ``_NotParsed``.
     """
     try:
-        return _BUILDERS[kind](parse_html(page), want)
-    except NotParsed:
+        return _BUILDERS[kind](_parse_html(page), want)
+    except _NotParsed:
         raise
     except RecursionError:
-        raise NotParsed("page nesting too deep") from None
+        raise _NotParsed("page nesting too deep") from None
     except (
         AttributeError,
         TypeError,
@@ -1189,7 +1189,7 @@ def page_record(kind: str, page: str, want: Optional[Dict[str, Any]] = None) -> 
         IndexError,
         ValueError,
     ) as e:  # a page that breaks the parser is not data
-        raise NotParsed(f"unexpected page shape: {type(e).__name__}: {e}") from None
+        raise _NotParsed(f"unexpected page shape: {type(e).__name__}: {e}") from None
 
 
 # ------------------------------------------------------------------------------- frames
@@ -1206,7 +1206,7 @@ def _spec_cols(spec: Spec) -> List[str]:
 
 
 def _spec_ints(*specs: Spec) -> set:
-    return {k for spec in specs for _h, key, conv in spec if key and conv in (N, N0) for k in conv(None, key)}
+    return {k for spec in specs for _h, key, conv in spec if key and conv in (_N, _N0) for k in conv(None, key)}
 
 
 _INT_COL = _spec_ints(
@@ -1297,8 +1297,8 @@ def _record(raw: Any, kind: str, key: str) -> Optional[Dict[str, Any]]:
             return None
     if isinstance(raw, str) and raw.strip():
         try:
-            return page_record(kind, raw)
-        except NotParsed:
+            return _page_record(kind, raw)
+        except _NotParsed:
             return None
     return None
 
@@ -1388,6 +1388,19 @@ def parse_vhl_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         One row per game: ``season`` / ``stage`` / ``tn``, ``game_id``, ``game_number``,
         ``game_date`` (ISO, from the day heading and the season), the two teams with their
         club ids, score, ``decision`` (OT / SO), ``winner`` and the broadcast URL.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_schedule, parse_vhl_schedule
+
+            raw = vhl_schedule(season=2026, return_parsed=False)
+            games = parse_vhl_schedule(raw)
+
+        A saved calendar page (the parsers also take HTML text)::
+
+            with open("calendar_1374.html", encoding="utf-8") as fh:
+                games = parse_vhl_schedule(fh.read())
     """
     rec = _record(raw, "calendar", "games")
     if rec is None:
@@ -1456,6 +1469,14 @@ def parse_vhl_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Op
         One row: the game key, date and local time, attendance, final and per-period score,
         both teams (page id, full and short name, city, coach) and the officials (the first two
         referees and linesmen, with sweater numbers).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_game_info, parse_vhl_game_info
+
+            raw = vhl_game_info(season=2026, game_id=899223, return_parsed=False)
+            info = parse_vhl_game_info(raw)
     """
     rec = _record(raw, "report", "game")
     g = rec.get("game") if rec is not None else None
@@ -1497,6 +1518,19 @@ def parse_vhl_goals(raw: Any, *, return_as_pandas: bool = False, columns: Option
         One row per goal: number, period, time, score after the goal, ``team_side`` (the side
         whose score went up), strength code, scorer and assists (id, name, jersey, season count)
         and ``home_on_ice`` / ``away_on_ice``, the JERSEY numbers on ice (``List(Int64)``).
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.hockey.vhl import vhl_goals, parse_vhl_goals
+
+            raw = vhl_goals(season=2026, game_id=899223, return_parsed=False)
+            goals = parse_vhl_goals(raw)
+
+        Power-play goals::
+
+            goals.filter(pl.col("strength") == "ppg")
     """
     rec = _record(raw, "report", "goals")
     if rec is None:
@@ -1534,6 +1568,14 @@ def parse_vhl_penalties(raw: Any, *, return_as_pandas: bool = False, columns: Op
     Returns:
         One row per penalty: team, time, player (null for a bench penalty), minutes and the
         infraction (null when the site leaves it blank).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_penalties, parse_vhl_penalties
+
+            raw = vhl_penalties(season=2026, game_id=899223, return_parsed=False)
+            penalties = parse_vhl_penalties(raw)
     """
     rec = _record(raw, "report", "penalties")
     rows = _side_rows(rec, "penalties") if rec is not None else []
@@ -1555,6 +1597,18 @@ def parse_vhl_player_box(raw: Any, *, return_as_pandas: bool = False, columns: O
     Returns:
         One row per skater: team, ``position_group`` (defense / forward), jersey, player,
         captaincy and the game's scoring, shooting, faceoff, time-on-ice, hit and block stats.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_player_box, parse_vhl_goalie_box, parse_vhl_player_box
+
+            raw = vhl_player_box(season=2026, game_id=899223, return_parsed=False)
+            skaters = parse_vhl_player_box(raw)
+
+        The same report, more frames (one fetch)::
+
+            goalies = parse_vhl_goalie_box(raw)
     """
     rec = _record(raw, "report", "skaters")
     rows = _side_rows(rec, "skaters") if rec is not None else []
@@ -1572,6 +1626,14 @@ def parse_vhl_goalie_box(raw: Any, *, return_as_pandas: bool = False, columns: O
     Returns:
         One row per goalie: team, jersey, player, decision counts, shots against, goals
         against, saves, ``save_pct`` (0-100) and ``gaa`` (``Float64``), and time on ice.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_goalie_box, parse_vhl_goalie_box
+
+            raw = vhl_goalie_box(season=2026, game_id=899223, return_parsed=False)
+            goalies = parse_vhl_goalie_box(raw)
     """
     rec = _record(raw, "report", "goalies")
     rows = _side_rows(rec, "goalies") if rec is not None else []
@@ -1611,6 +1673,19 @@ def parse_vhl_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
         latest one): ``kind`` (game_state, goal, penalty, shootout_attempt, goalie_change,
         video_review, comment), the clock (``time`` with ``clock`` = game / minute / wall),
         score, strength, the RUSSIAN text and the linked ``player_ids``. No shot coordinates.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.hockey.vhl import vhl_pbp, parse_vhl_pbp
+
+            raw = vhl_pbp(game_id=899223, season=2026, return_parsed=False)
+            events = parse_vhl_pbp(raw)
+
+        Goals only::
+
+            events.filter(pl.col("kind") == "goal")
     """
     rec = _record(raw, "online", "events")
     if rec is None:
@@ -1644,6 +1719,14 @@ def parse_vhl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
     Returns:
         One row per team: rank, team (short name) and its ``team_season_id``, games, wins and
         losses by decision type, goals for / against and points.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_standings, parse_vhl_standings
+
+            raw = vhl_standings(season=2026, return_parsed=False)
+            table = parse_vhl_standings(raw)
     """
     rec = _record(raw, "standings", "rows")
     if rec is None:
@@ -1670,6 +1753,18 @@ def parse_vhl_skater_stats(
     Returns:
         One row per skater and team (defensemen first, then forwards; ``position_group``),
         with scoring, shooting, faceoff, time-on-ice, hit and block stats.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_skater_stats, parse_vhl_goalie_stats, parse_vhl_skater_stats
+
+            raw = vhl_skater_stats(season=2026, return_parsed=False)
+            skaters = parse_vhl_skater_stats(raw)
+
+        The same page holds the goalies::
+
+            goalies = parse_vhl_goalie_stats(raw)
     """
     rec = _record(raw, "stats_players", "forwards")
     if rec is None:
@@ -1696,6 +1791,14 @@ def parse_vhl_goalie_stats(
     Returns:
         One row per goalie and team: decisions, shots against, goals against, saves,
         ``save_pct`` (0-100), ``gaa``, shutouts and time on ice.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_goalie_stats, parse_vhl_goalie_stats
+
+            raw = vhl_goalie_stats(season=2026, stage="playoff", return_parsed=False)
+            goalies = parse_vhl_goalie_stats(raw, return_as_pandas=True)
     """
     rec = _record(raw, "stats_players", "goalies")
     if rec is None:
@@ -1730,6 +1833,14 @@ def parse_vhl_player(raw: Any, *, return_as_pandas: bool = False, columns: Optio
     Returns:
         One row: id, name, jersey, position, height (cm), weight (kg), birth date
         (``DD.MM.YYYY``, public bio), age, country and photo URL.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_player, parse_vhl_player
+
+            raw = vhl_player(player_id=34526, return_parsed=False)
+            card = parse_vhl_player(raw)
     """
     rec = _record(raw, "player", "player_id")
     rows = [rec] if rec is not None else []
@@ -1754,6 +1865,14 @@ def parse_vhl_player_career(
         One row per season stage and team, with its ``tn`` and ``team_season_id``. Skater and
         goalie pages share one column set: the goalie columns are null for a skater and the
         other way round.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_player_career, parse_vhl_player_career
+
+            raw = vhl_player_career(player_id=34526, return_parsed=False)
+            career = parse_vhl_player_career(raw)
     """
     rec = _record(raw, "player", "seasons")
     if rec is None:
@@ -1787,6 +1906,14 @@ def parse_vhl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Optio
         One row per player: the team (page id from the request, name, the current tournament's
         ``calendar_tn`` + ``calendar_team_season_id``, ``roster_as_of``), jersey, position,
         player id and name (Cyrillic even on /en/), birth date and country.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.vhl import vhl_roster, parse_vhl_roster
+
+            raw = vhl_roster(team_page_id=390, return_parsed=False)
+            roster = parse_vhl_roster(raw)
     """
     rec = _record(raw, "team", "roster")
     if rec is None:
