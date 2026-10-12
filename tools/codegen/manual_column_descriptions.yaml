@@ -45180,9 +45180,12 @@ elh_shots:
   is_goal: True when the result code is 4 (goal).
   time: Seconds from the start of the game; in 2016-17 only the period's start offset (0 / 1200 / 2400), use real_date.
   period: Period number derived from the game clock (20-minute periods; 4 = overtime); null on a clockless entry.
-  coordinate_x: Shot position along the rink LENGTH (goal to goal), centred at 0, normalised so the home team shoots at +x
-    and the away team at -x; about -100..100.
-  coordinate_y: Shot position across the rink WIDTH (board to board), centred at 0; about -100..100.
+  coordinate_x: 'Shot position along the rink LENGTH (goal to goal), centred at 0, normalised so the home team shoots at +x
+    and the away team at -x; about -100..100. The scaling (units) and the orientation are inferred from the data, not
+    documented by the provider.'
+  coordinate_y: 'Shot position across the rink WIDTH (board to board), centred at 0; about -100..100. The scaling (each axis
+    looks independently scaled to -100..100) and which board is positive are inferred from the data, not documented by the
+    provider.'
   real_date: Wall-clock time of the shot, local YYYY-MM-DD HH:MM:SS.
 # European hockey: KHL (khl_rest, khl_webcaster).
 khl_game_header:
