@@ -1,12 +1,12 @@
 columns:
-- description: Cache-busting flag for the site.
+- description: ''
   name: cachebust
   type: logical
-- description: Game week of the season.
+- description: ''
   name: game_week
   type: integer
-- description: Last game week of the season.
+- description: ''
   name: max_game_week
   type: integer
 kind: dataframe
-schema: tournament
+schema: liiga_tournament

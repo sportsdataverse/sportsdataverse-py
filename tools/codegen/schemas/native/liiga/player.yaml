@@ -1,59 +1,57 @@
 columns:
-- description: Seasons (END year) the player appears in.
+- description: ''
   name: active_seasons
   type: character
-- description: Map team id -> seasons (END year) with that team.
+- description: ''
   name: team_seasons
   type: character
-- description: Map team name -> team as `<num>:<slug>`.
+- description: ''
   name: team_list
   type: character
-- description: 'Birth place: country: code.'
+- description: ''
   name: birth_locality_country_code
   type: character
-- description: 'Birth place: country: rink name.'
+- description: ''
   name: birth_locality_country_name
   type: character
-- description: 'Birth place: rink name.'
+- description: ''
   name: birth_locality_name
   type: character
-- description: Date of birth, YYYY-MM-DD.
+- description: ''
   name: date_of_birth
   type: character
-- description: Player id; the same number in lineups, rosters, stat tables and the
-    profile (fihaId).
+- description: ''
   name: player_id
   type: integer
-- description: First name.
+- description: ''
   name: first_name
   type: character
-- description: Last name.
+- description: ''
   name: last_name
   type: character
-- description: Shoots LEFT or RIGHT.
+- description: ''
   name: handedness
   type: character
-- description: Height, cm.
+- description: ''
   name: height
   type: integer
-- description: Suspended.
+- description: ''
   name: is_suspended
   type: logical
-- description: Removed from the roster.
+- description: ''
   name: is_removed
   type: logical
-- description: 'Nationality: code.'
+- description: ''
   name: nationality_code
   type: character
-- description: 'Nationality: rink name.'
+- description: ''
   name: nationality_name
   type: character
-- description: Weight, kg.
+- description: ''
   name: weight
   type: integer
-- description: 'Team directory: a map keyed by team as `<num>:<slug>` (e.g. `1368624751:k-espoo`),
-    one row per current or past team.'
+- description: ''
   name: teams
   type: character
 kind: dataframe
-schema: player
+schema: liiga_player

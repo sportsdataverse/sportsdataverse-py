@@ -1,53 +1,48 @@
 columns:
-- description: Season END year (2026 = 2025-26).
+- description: ''
   name: season
   type: integer
-- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+- description: ''
   name: game_id
   type: integer
-- description: Strength of the shot, e.g. EvenStrengthShot, PowerplayShot.
+- description: ''
   name: type
   type: character
-- description: Shooting team id.
+- description: ''
   name: shooting_team_id
   type: integer
-- description: Team whose shots are drawn at the right end of the rink image (x grows
-    toward it).
+- description: ''
   name: left_team_id
   type: integer
-- description: Team whose shots are drawn at the left end of the rink image.
+- description: ''
   name: right_team_id
   type: integer
-- description: 'Seconds from the start of the game. Regular season: 3900 (65:00) =
-    the end of the 5-minute overtime; playoff overtime runs past it.'
+- description: ''
   name: game_time
   type: integer
-- description: Period number.
+- description: ''
   name: period
   type: integer
-- description: 'Shot x on the site''s rink drawing. Game 1 of 2026: x 90-932; the
-    leftTeam''s shots lie at x 188-932 and the rightTeam''s at 90-379, so x grows
-    toward the right end. Origin, unit and image width are not stated (unverified).'
+- description: ''
   name: shot_x
   type: integer
-- description: 'Shot y on the site''s rink drawing. Game 1 of 2026: y 9-514. Origin,
-    direction and image height are not stated (unverified).'
+- description: ''
   name: shot_y
   type: integer
-- description: Player id of the goalkeeper or skater who stopped the shot, else null.
+- description: ''
   name: blocker_id
   type: integer
-- description: Shooter's player id.
+- description: ''
   name: shooter_id
   type: integer
-- description: 'Shot outcome: GOAL, GOALIE_BLOCKED (saved), MISSED, PLAYER_BLOCKED.'
+- description: ''
   name: event_type
   type: character
-- description: Shooting team's skaters on ice.
+- description: ''
   name: own_team_players_on_ice
   type: integer
-- description: Defending team's skaters on ice.
+- description: ''
   name: other_team_players_on_ice
   type: integer
 kind: dataframe
-schema: shotmap
+schema: liiga_shotmap

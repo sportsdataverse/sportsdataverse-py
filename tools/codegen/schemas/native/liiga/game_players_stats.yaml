@@ -1,226 +1,219 @@
 columns:
-- description: Season END year (2026 = 2025-26).
+- description: ''
   name: season
   type: integer
-- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+- description: ''
   name: game_id
   type: integer
-- description: home or away.
+- description: ''
   name: side
   type: character
-- description: Player id; the same number in lineups, rosters, stat tables and the
-    profile (fihaId).
+- description: ''
   name: player_id
   type: integer
-- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
-    string, a bare integer or a digit string depending on the route).
+- description: ''
   name: team_id
   type: integer
-- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
-    (e.g. hpk).
+- description: ''
   name: team_slug
   type: character
-- description: Team display name.
+- description: ''
   name: team_name
   type: character
-- description: Line number 1-4; null for goalkeepers and extras.
+- description: ''
   name: line
   type: integer
-- description: Country of birth, 3-letter code.
+- description: ''
   name: country_of_birth
   type: character
-- description: Place of birth.
+- description: ''
   name: place_of_birth
   type: character
-- description: Date of birth, YYYY-MM-DD.
+- description: ''
   name: date_of_birth
   type: character
-- description: Nationality, 3-letter code.
+- description: ''
   name: nationality
   type: character
-- description: First name.
+- description: ''
   name: first_name
   type: character
-- description: Last name.
+- description: ''
   name: last_name
   type: character
-- description: 'Position: CENTER, LEFT_WING, RIGHT_WING, LEFT_DEFENSEMAN, RIGHT_DEFENSEMAN,
-    SEVENTH_DEFENSEMAN, GOALIE.'
+- description: ''
   name: role
   type: character
-- description: 'Position code, Finnish: KH = centre, VL/OL = left/right wing, VP/OP
-    = left/right defence, 7. P = seventh defenceman, MV = goalkeeper.'
+- description: ''
   name: role_code
   type: character
-- description: Shoots LEFT or RIGHT.
+- description: ''
   name: handedness
   type: character
-- description: Height, cm.
+- description: ''
   name: height
   type: integer
-- description: Weight, kg.
+- description: ''
   name: weight
   type: integer
-- description: Captain.
+- description: ''
   name: captain
   type: logical
-- description: Rookie.
+- description: ''
   name: rookie
   type: logical
-- description: Alternate captain.
+- description: ''
   name: alternate_captain
   type: logical
-- description: Jersey number.
+- description: ''
   name: jersey
   type: integer
-- description: Photo URL.
+- description: ''
   name: picture_url
   type: character
-- description: Injured.
+- description: ''
   name: injured
   type: logical
-- description: Suspended.
+- description: ''
   name: suspended
   type: logical
-- description: Removed from the roster.
+- description: ''
   name: removed
   type: logical
-- description: Player awards of the game (stars).
+- description: ''
   name: awards
   type: character
-- description: Sponsors.
+- description: ''
   name: sponsors
   type: character
-- description: Extra description.
+- description: ''
   name: extra_description
   type: character
-- description: Extra strengths.
+- description: ''
   name: extra_strengths
   type: character
-- description: Extra rookie picture.
+- description: ''
   name: extra_rookie_picture
   type: logical
-- description: 'All-time stats: games (player, all-time).'
+- description: ''
   name: all_time_stats_games
   type: integer
-- description: 'All-time stats: goals.'
+- description: ''
   name: all_time_stats_goals
   type: integer
-- description: 'All-time stats: assists (player, all-time).'
+- description: ''
   name: all_time_stats_assists
   type: integer
-- description: 'All-time stats: points (player, all-time).'
+- description: ''
   name: all_time_stats_points
   type: integer
-- description: 'All-time stats: on ice for goals for (the + of plus/minus).'
+- description: ''
   name: all_time_stats_plus
   type: integer
-- description: 'All-time stats: on ice for goals against (the - of plus/minus).'
+- description: ''
   name: all_time_stats_minus
   type: integer
-- description: 'All-time stats: plus minus minus.'
+- description: ''
   name: all_time_stats_plus_minus
   type: integer
-- description: 'All-time stats: shots (player, all-time).'
+- description: ''
   name: all_time_stats_shots
   type: integer
-- description: 'All-time stats: shot percentage (player, all-time). Percent, 0-100.'
+- description: ''
   name: all_time_stats_shot_percentage
   type: numeric
-- description: 'All-time stats: penalty minutes.'
+- description: ''
   name: all_time_stats_penalty_minutes
   type: integer
-- description: 'Season stats: games (player, all-time).'
+- description: ''
   name: season_stats_games
   type: integer
-- description: 'Season stats: goals.'
+- description: ''
   name: season_stats_goals
   type: integer
-- description: 'Season stats: assists (player, all-time).'
+- description: ''
   name: season_stats_assists
   type: integer
-- description: 'Season stats: points (player, all-time).'
+- description: ''
   name: season_stats_points
   type: integer
-- description: 'Season stats: on ice for goals for (the + of plus/minus).'
+- description: ''
   name: season_stats_plus
   type: integer
-- description: 'Season stats: on ice for goals against (the - of plus/minus).'
+- description: ''
   name: season_stats_minus
   type: integer
-- description: 'Season stats: plus minus minus.'
+- description: ''
   name: season_stats_plus_minus
   type: integer
-- description: 'Season stats: shots (player, all-time).'
+- description: ''
   name: season_stats_shots
   type: integer
-- description: 'Season stats: shot percentage (player, all-time). Percent, 0-100.'
+- description: ''
   name: season_stats_shot_percentage
   type: numeric
-- description: 'Season stats: penalty minutes.'
+- description: ''
   name: season_stats_penalty_minutes
   type: integer
-- description: 'Season stats with this team: games (player, all-time).'
+- description: ''
   name: season_stats_in_team_games
   type: integer
-- description: 'Season stats with this team: goals.'
+- description: ''
   name: season_stats_in_team_goals
   type: integer
-- description: 'Season stats with this team: assists (player, all-time).'
+- description: ''
   name: season_stats_in_team_assists
   type: integer
-- description: 'Season stats with this team: points (player, all-time).'
+- description: ''
   name: season_stats_in_team_points
   type: integer
-- description: 'Season stats with this team: on ice for goals for (the + of plus/minus).'
+- description: ''
   name: season_stats_in_team_plus
   type: integer
-- description: 'Season stats with this team: on ice for goals against (the - of plus/minus).'
+- description: ''
   name: season_stats_in_team_minus
   type: integer
-- description: 'Season stats with this team: plus minus minus.'
+- description: ''
   name: season_stats_in_team_plus_minus
   type: integer
-- description: 'Season stats with this team: shots (player, all-time).'
+- description: ''
   name: season_stats_in_team_shots
   type: integer
-- description: 'Season stats with this team: shot percentage (player, all-time). Percent,
-    0-100.'
+- description: ''
   name: season_stats_in_team_shot_percentage
   type: numeric
-- description: 'Season stats with this team: penalty minutes.'
+- description: ''
   name: season_stats_in_team_penalty_minutes
   type: integer
-- description: 'Stats versus this opponent: games (player, all-time).'
+- description: ''
   name: vs_team_stats_games
   type: integer
-- description: 'Stats versus this opponent: goals.'
+- description: ''
   name: vs_team_stats_goals
   type: integer
-- description: 'Stats versus this opponent: assists (player, all-time).'
+- description: ''
   name: vs_team_stats_assists
   type: integer
-- description: 'Stats versus this opponent: points (player, all-time).'
+- description: ''
   name: vs_team_stats_points
   type: integer
-- description: 'Stats versus this opponent: on ice for goals for (the + of plus/minus).'
+- description: ''
   name: vs_team_stats_plus
   type: integer
-- description: 'Stats versus this opponent: on ice for goals against (the - of plus/minus).'
+- description: ''
   name: vs_team_stats_minus
   type: integer
-- description: 'Stats versus this opponent: plus minus minus.'
+- description: ''
   name: vs_team_stats_plus_minus
   type: integer
-- description: 'Stats versus this opponent: shots (player, all-time).'
+- description: ''
   name: vs_team_stats_shots
   type: integer
-- description: 'Stats versus this opponent: shot percentage (player, all-time). Percent,
-    0-100.'
+- description: ''
   name: vs_team_stats_shot_percentage
   type: numeric
-- description: 'Stats versus this opponent: penalty minutes.'
+- description: ''
   name: vs_team_stats_penalty_minutes
   type: integer
 kind: dataframe
-schema: game_players_stats
+schema: liiga_game_players_stats

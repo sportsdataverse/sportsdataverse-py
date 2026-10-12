@@ -12,11 +12,14 @@ list-valued key (``/teams/stats`` ``{"teamStats": [...]}``) is that list; any ot
 one row. Nested objects flatten into ``<parent>_<child>`` columns; lists and id-keyed maps
 (``assistsSoFarInSeason``, ``teamSeasons``) become JSON strings.
 
-**Dtypes** are pinned by name, not taken from a sample: Liiga sends ``2`` for an xG of
-2.0 and ``"92.86"`` for a percentage, so a column whose name is a rate (``percent``,
-``per_game``, ``expected``, ``average``, ``speed``, ``distance``, ``duration``,
-``hardest``) is ``Float64``. Percentage strings parse with either decimal mark
-(``"0,00"``, ``"4,583.33"``). The /standings/ ``power_play_percentage``,
+**Dtypes** are pinned, not taken from a sample: each parser's returns-schema dtypes
+(``liiga_dtypes.DTYPES``, generated with the schemas) type an empty frame, a gap-filled
+column and an all-null column, so an empty frame stacks onto a populated one; a column the
+schema does not list is typed by name. Liiga sends ``2`` for an xG of 2.0 and ``"92.86"``
+for a percentage, so a column whose name is a rate (``percent``, ``per_game``, ``expected``,
+``average``, ``speed``, ``distance``, ``duration``, ``hardest``) is ``Float64``. Percentage
+strings parse with either comma (``"0,00"`` decimal mark, ``"4,583.33"`` / ``"4,583"``
+thousands separator; see :func:`_number`). The /standings/ ``power_play_percentage``,
 ``short_handed_percentage`` and ``win_percentage`` stay 0-1 fractions, as sent; every other
 percentage is 0-100.
 
@@ -60,6 +63,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.hockey.liiga.liiga_dtypes import DTYPES
 
 __all__ = [
     "parse_liiga",
@@ -95,10 +99,13 @@ _TEAM_ID = re.compile(r"^\s*(\d+)(?::(.*))?\s*$")
 _ID_COL = re.compile(r"(^|_)id$")
 _FLOAT_COL = re.compile(r"percent|per_game|expected|average|speed|distance|duration|hardest")
 _MAP_KEY = re.compile(r"^\d+(:|$)")
+#: A comma-grouped integer part (``4,583`` / ``1,234,567``): the comma is a thousands separator.
+_THOUSANDS = r"^-?\d{1,3}(,\d{3})+$"
+_DTYPE_CODES = {"i": pl.Int64, "f": pl.Float64, "b": pl.Boolean, "s": pl.String}
 #: An all-null column with a season, period or count-like name is Int64, not String (a box score's faceoff
 #: counts are null for every player of some games).
 _COUNT_COL = re.compile(
-    r"(^|_)(season|period|total|won|lost|goals|assists|points|shots|passes|saves|games|wins|losses)$"
+    r"(^|_)(season|period|total|won|lost|goals|assists|points|shots|passes|saves|games|wins|losses|ranking)$"
 )
 #: Maps keyed by a team NAME (``{"HIFK": [...]}``), kept as JSON like the id-keyed ones.
 _NAME_KEYED = frozenset({"teamList"})
@@ -180,12 +187,20 @@ def _obj(value: Any) -> Mapping[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
+def _key(value: Any) -> Any:
+    """``value`` when it can key a dict (a period number), else None (a list or object never raises)."""
+    return value if isinstance(value, (int, str)) and not isinstance(value, bool) else None
+
+
 def _list(value: Any) -> List[Any]:
     return [v for v in value if isinstance(v, dict)] if isinstance(value, list) else []
 
 
-def _dtype_for(col: str) -> Any:
-    """The dtype a column has by name alone (empty frames and gap-filled columns)."""
+def _dtype_for(col: str, schema: Optional[Mapping[str, str]] = None) -> Any:
+    """A column's dtype without a value to go by: the parser's returns-schema, else the name rules."""
+    code = (schema or {}).get(col)
+    if code:
+        return _DTYPE_CODES[code]
     if _ID_COL.search(col):
         return pl.Int64
     if _FLOAT_COL.search(col):
@@ -196,9 +211,16 @@ def _dtype_for(col: str) -> Any:
 
 
 def _number(expr: pl.Expr) -> pl.Expr:
-    """``"92.86"`` / ``"0,00"`` / ``"4,583.33"`` -> Float64 (unparseable -> null)."""
+    """A numeric string -> Float64 (unparseable -> null).
+
+    Liiga writes a comma two ways (player career, 2026): the thousands separator of an English
+    number (``"4,583.33"``) and the decimal mark of a Finnish one (``"0,00"``). A comma is a
+    thousands separator when the string also has a ``.`` or every comma is followed by exactly
+    three digits (``"4,583"`` -> 4583); otherwise it is the decimal mark (``"12,5"`` -> 12.5).
+    """
     text = expr.str.strip_chars()
-    fixed = pl.when(text.str.contains(".", literal=True)).then(text.str.replace_all(",", "", literal=True))
+    grouped = text.str.contains(".", literal=True) | text.str.contains(_THOUSANDS)
+    fixed = pl.when(grouped).then(text.str.replace_all(",", "", literal=True))
     return fixed.otherwise(text.str.replace(",", ".", literal=True)).cast(pl.Float64, strict=False)
 
 
@@ -230,13 +252,25 @@ def _frame(rows: Iterable[Mapping[str, Any]]) -> pl.DataFrame:
     return _typed(df)
 
 
-def _finish(df: pl.DataFrame, columns: Optional[Sequence[str]], return_as_pandas: bool) -> Frame:
-    """Apply the documented columns (an empty frame keeps them; a missing one is added as nulls)."""
+def _finish(df: pl.DataFrame, columns: Optional[Sequence[str]], return_as_pandas: bool, parser: str = "") -> Frame:
+    """Apply the parser's returns-schema dtypes and the documented columns.
+
+    An all-null column (and a whole-number rate) takes the schema dtype, an empty frame keeps the
+    documented columns and a missing one is added as nulls, all typed like a populated frame.
+    """
+    schema = DTYPES.get(parser, {})
+    if schema and df.width:
+        casts = []
+        for col, dtype in df.schema.items():
+            want = _dtype_for(col, schema) if col in schema else dtype
+            if dtype != want and (df[col].null_count() == df.height or (want == pl.Float64 and dtype.is_numeric())):
+                casts.append(pl.col(col).cast(want))
+        df = df.with_columns(casts) if casts else df
     if columns:
         if df.width == 0:
-            df = pl.DataFrame(schema={c: _dtype_for(c) for c in columns})
+            df = pl.DataFrame(schema={c: _dtype_for(c, schema) for c in columns})
         else:
-            missing = [pl.lit(None, dtype=_dtype_for(c)).alias(c) for c in columns if c not in df.columns]
+            missing = [pl.lit(None, dtype=_dtype_for(c, schema)).alias(c) for c in columns if c not in df.columns]
             if missing:
                 df = df.with_columns(missing)
     return df.to_pandas() if return_as_pandas else df
@@ -291,7 +325,7 @@ def parse_liiga(raw: Any, *, return_as_pandas: bool = False, columns: Optional[S
             from sportsdataverse.hockey.liiga import parse_liiga
             parse_liiga({"teamStats": [{"teamId": 55786244, "goals": 3}]})
     """
-    return _finish(_frame(_flatten(r) for r in _rows(raw)), columns, return_as_pandas)
+    return _finish(_frame(_flatten(r) for r in _rows(raw)), columns, return_as_pandas, "parse_liiga")
 
 
 # --- games and schedule -------------------------------------------------------------------------
@@ -338,7 +372,7 @@ def parse_liiga_games(raw: Any, *, return_as_pandas: bool = False, columns: Opti
             from sportsdataverse.hockey.liiga import parse_liiga_games
             parse_liiga_games([{"id": 1, "season": 2026, "homeTeam": {"teamId": "55786244:hpk"}}])
     """
-    return _finish(_frame(_game_row(g) for g in _list(raw)), columns, return_as_pandas)
+    return _finish(_frame(_game_row(g) for g in _list(raw)), columns, return_as_pandas, "parse_liiga_games")
 
 
 def _goal_rows(game: Mapping[str, Any], req: Mapping[str, Any]) -> List[Dict[str, Any]]:
@@ -397,7 +431,7 @@ def parse_liiga_goals(raw: Any, *, return_as_pandas: bool = False, columns: Opti
             parse_liiga_goals([])  # zero-row frame
     """
     rows = [r for g in _list(raw) for r in _goal_rows(g, {})]
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_goals")
 
 
 def parse_liiga_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
@@ -421,7 +455,7 @@ def parse_liiga_schedule(raw: Any, *, return_as_pandas: bool = False, columns: O
             parse_liiga_schedule([{"id": 1, "season": 2026, "serie": 1188, "homeTeamId": "55786244:hpk"}])
     """
     rows = (_rename(_rename(_flatten(r), "id", "game_id"), "serie", "serie_id") for r in _list(raw))
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_schedule")
 
 
 # --- one game -----------------------------------------------------------------------------------
@@ -453,7 +487,7 @@ def parse_liiga_game(raw: Any, *, return_as_pandas: bool = False, columns: Optio
             parse_liiga_game({"game": {"id": 1, "season": 2026}})
     """
     game, _ = _game_of(raw)
-    return _finish(_frame([_game_row(game)] if game else []), columns, return_as_pandas)
+    return _finish(_frame([_game_row(game)] if game else []), columns, return_as_pandas, "parse_liiga_game")
 
 
 def parse_liiga_game_goals(
@@ -476,7 +510,7 @@ def parse_liiga_game_goals(
             parse_liiga_game_goals({})  # zero-row frame
     """
     game, ids = _game_of(raw)
-    return _finish(_frame(_goal_rows(game, ids) if game else []), columns, return_as_pandas)
+    return _finish(_frame(_goal_rows(game, ids) if game else []), columns, return_as_pandas, "parse_liiga_game_goals")
 
 
 def parse_liiga_game_penalties(
@@ -507,7 +541,7 @@ def parse_liiga_game_penalties(
         team = _obj(game.get(key))
         tid = _team("team_id", team.get("teamId"))
         rows += [{**ids, "side": side, **tid, **_flatten(ev)} for ev in _list(team.get("penaltyEvents"))]
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_game_penalties")
 
 
 def parse_liiga_game_shootout(
@@ -531,7 +565,7 @@ def parse_liiga_game_shootout(
     """
     game, ids = _game_of(raw)
     rows = [{**ids, **_flatten(ev)} for ev in _list(game.get("winningShotCompetitionEvents"))]
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_game_shootout")
 
 
 def parse_liiga_game_lineups(
@@ -560,7 +594,7 @@ def parse_liiga_game_lineups(
         for side, key in (("home", "homeTeamPlayers"), ("away", "awayTeamPlayers"))
         for p in _list(body.get(key))
     ]
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_game_lineups")
 
 
 def parse_liiga_game_players_stats(
@@ -594,7 +628,7 @@ def parse_liiga_game_players_stats(
             row = {**ids, "side": side, **_rename(_flatten(_obj(p.get("playerDTO"))), "id", "player_id")}
             row.update(_flatten({k: v for k, v in p.items() if k != "playerDTO"}))
             rows.append(row)
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_game_players_stats")
 
 
 # --- box score ----------------------------------------------------------------------------------
@@ -650,7 +684,7 @@ def parse_liiga_game_stats(
         tracking = tracking.unique(subset="player_id", keep="first", maintain_order=True)
         assert df.schema["player_id"] == tracking.schema["player_id"], "player_id dtypes differ"
         df = df.join(tracking, on="player_id", how="left", suffix="_game")
-    return _finish(df, columns, return_as_pandas)
+    return _finish(df, columns, return_as_pandas, "parse_liiga_game_stats")
 
 
 def parse_liiga_game_team_stats(
@@ -680,19 +714,20 @@ def parse_liiga_game_team_stats(
     body = raw if isinstance(raw, dict) else {}
     req = _request(raw)
     ids = {"season": req.get("season"), "game_id": req.get("game_id")}
-    puck = {p.get("periodNumber"): p for p in _list(body.get("puckStats"))}
+    puck = {_key(p.get("periodNumber")): p for p in _list(body.get("puckStats"))}
     rows = []
     for side, key in _SIDES:
         other = "away" if side == "home" else "home"
         for tp in _list(body.get(key)):
             row = {**ids, "side": side, "period": tp.get("period")}
             row.update(_flatten({k: v for k, v in tp.items() if k not in ("periodPlayerStats", "goaliePeriodStats")}))
-            p = _obj(puck.get(tp.get("period")))
+            period = _key(tp.get("period"))
+            p = _obj(puck.get(period) if period is not None else None)
             row["puck_control_duration"] = p.get(f"{side}TeamControlDuration")
             row["opponent_puck_control_duration"] = p.get(f"{other}TeamControlDuration")
             row["contested_control_duration"] = p.get("contestedControlDuration")
             rows.append(row)
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_game_team_stats")
 
 
 def parse_liiga_shotmap(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
@@ -717,7 +752,7 @@ def parse_liiga_shotmap(raw: Any, *, return_as_pandas: bool = False, columns: Op
             parse_liiga_shotmap([{"shootingTeamId": 651304385, "shotX": 684, "shotY": 491}])
     """
     rows = (_stamp(_flatten(r), _request(r)) for r in _list(raw))
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_shotmap")
 
 
 # --- season tables ------------------------------------------------------------------------------
@@ -754,7 +789,7 @@ def parse_liiga_standings(
         for key, tournament in _STANDINGS_TABLES.items()
         for r in _list(body.get(key))
     ]
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_standings")
 
 
 def parse_liiga_teams(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
@@ -785,7 +820,7 @@ def parse_liiga_teams(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         num, slug = _split_team_id(key)
         row = {k: v for k, v in _flatten(team).items() if k not in ("id", "slug")}
         rows.append({"team_id": _split_team_id(team.get("id"))[0] or num, "team_slug": team.get("slug") or slug, **row})
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_teams")
 
 
 def parse_liiga_players_info(
@@ -807,7 +842,8 @@ def parse_liiga_players_info(
             from sportsdataverse.hockey.liiga import parse_liiga_players_info
             parse_liiga_players_info([{"id": 21415137, "teamId": "219244634:jyp"}])
     """
-    return _finish(_frame(_rename(_flatten(r), "id", "player_id") for r in _list(raw)), columns, return_as_pandas)
+    rows = (_rename(_flatten(r), "id", "player_id") for r in _list(raw))
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_players_info")
 
 
 # --- one player ---------------------------------------------------------------------------------
@@ -835,7 +871,7 @@ def parse_liiga_player(raw: Any, *, return_as_pandas: bool = False, columns: Opt
     """
     body = {k: v for k, v in raw.items() if k != "historical"} if isinstance(raw, dict) else {}
     row = _rename(_flatten(body), "fiha_id", "player_id")
-    return _finish(_frame([row] if body else []), columns, return_as_pandas)
+    return _finish(_frame([row] if body else []), columns, return_as_pandas, "parse_liiga_player")
 
 
 def parse_liiga_player_career(
@@ -864,7 +900,7 @@ def parse_liiga_player_career(
     body = raw if isinstance(raw, dict) else {}
     pid = body.get("fihaId")
     rows = [{"player_id": pid, **_flatten(r)} for v in _obj(body.get("historical")).values() for r in _list(v)]
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_player_career")
 
 
 def parse_liiga_player_game_log(
@@ -898,4 +934,4 @@ def parse_liiga_player_game_log(
         if key != _REQUEST
         for r in _list(value)
     ]
-    return _finish(_frame(rows), columns, return_as_pandas)
+    return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_player_game_log")

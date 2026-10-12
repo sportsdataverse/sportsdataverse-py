@@ -75,15 +75,53 @@ def test_every_team_data_type_parses(fixture):
     assert df.height == 3 and df.schema["team_id"] == pl.Int64
 
 
+_SCHEMA_DTYPE = {"integer": pl.Int64, "numeric": pl.Float64, "logical": pl.Boolean, "character": pl.String}
+
+
+def _schema(short: str) -> Dict[str, Any]:
+    return yaml.safe_load((SCHEMA_DIR / f"{short}.yaml").read_text(encoding="utf-8"))
+
+
+def _body(short: str) -> Any:
+    entry = gen_liiga.ENDPOINTS[short]
+    body = json.loads((FIXTURES / entry[3]).read_text(encoding="utf-8"))
+    return body if entry[4] is None else R._stamp(HOST + entry[4][0], entry[4][1], body)
+
+
 @pytest.mark.parametrize("short", sorted(gen_liiga.ENDPOINTS))
 def test_committed_schema_matches_the_parser(short):
-    committed = yaml.safe_load((SCHEMA_DIR / f"{short}.yaml").read_text(encoding="utf-8"))
+    committed = _schema(short)
     df = _parsed(short)
     assert [c["name"] for c in committed["columns"]] == df.columns
-    typed = {"integer": [pl.Int64], "numeric": [pl.Float64], "logical": [pl.Boolean]}
-    for col in committed["columns"]:
-        if col["type"] in typed:
-            assert df.schema[col["name"]] in typed[col["type"]], col
+    assert {c["name"]: _SCHEMA_DTYPE[c["type"]] for c in committed["columns"]} == dict(df.schema)
+
+
+@pytest.mark.parametrize("short", sorted(gen_liiga.ENDPOINTS))
+@pytest.mark.parametrize("empty", [{}, [], None])
+def test_empty_frame_stacks_onto_the_populated_one(short, empty):
+    # Parser SHOULD 1: an empty payload carries the populated frame's dtypes (from the returns-schema).
+    parser = gen_liiga.ENDPOINTS[short][2]
+    cols = [c["name"] for c in _schema(short)["columns"]]
+    full, none = parser(_body(short), columns=cols), parser(empty, columns=cols)
+    assert none.height == 0 and dict(none.schema) == dict(full.schema)
+    assert pl.concat([none, full], how="vertical").height == full.height
+    assert pl.concat([parser(empty), parser(_body(short))], how="vertical").height == full.height
+
+
+@pytest.mark.parametrize("short", sorted(gen_liiga.ENDPOINTS))
+def test_dtype_module_is_the_returns_schema(short):
+    parser = gen_liiga.ENDPOINTS[short][2].__name__
+    for col in _schema(short)["columns"]:
+        assert P._dtype_for(col["name"], P.DTYPES[parser]) == _SCHEMA_DTYPE[col["type"]], (parser, col)
+
+
+def test_all_null_column_takes_the_schema_dtype():
+    # home_time_out is an integer second when sent; a body where nobody called a timeout stays Int64.
+    games = [
+        {**g, "homeTeam": {**g["homeTeam"], "timeOut": None}} for g in _load("full/games__playoffs__2026__3games.json")
+    ]
+    df = P.parse_liiga_games(games)
+    assert df.schema["home_time_out"] == pl.Int64 and df["home_time_out"].null_count() == df.height
 
 
 @pytest.mark.parametrize("parser", ALL_PARSERS, ids=lambda f: f.__name__)
@@ -195,6 +233,15 @@ def test_game_xg_sent_as_integer_is_float():
     assert "goal_events" not in " ".join(games.columns)
 
 
+@pytest.mark.parametrize("bad", [[1], {"n": 1}, [[1]]])
+def test_team_box_score_tolerates_unhashable_period_numbers(bad):
+    body = _body("game_team_stats")
+    body = {**body, "puckStats": [{**p, "periodNumber": bad} for p in body["puckStats"]]}
+    body["homeTeam"] = [{**t, "period": bad} for t in body["homeTeam"]]
+    df = P.parse_liiga_game_team_stats(body)
+    assert df.height == 10 and df.filter(pl.col("side") == "away")["puck_control_duration"].null_count() == 5
+
+
 def test_team_box_score_carries_puck_possession():
     df = _parsed("game_team_stats")
     row = df.filter((pl.col("side") == "home") & (pl.col("period") == 1)).row(0, named=True)
@@ -239,6 +286,26 @@ def test_standings_tag_each_table_and_keep_fractions():
     assert (df["internal_id"] == df["team_id"]).all()
 
 
+@pytest.mark.parametrize(
+    ("text", "want"),
+    [
+        ("92.86", 92.86),
+        ("0,00", 0.0),
+        ("12,5", 12.5),
+        ("4,583.33", 4583.33),
+        ("4,583", 4583.0),
+        ("1,234,567", 1234567.0),
+        ("1,234,567.5", 1234567.5),
+        ("-3,5", -3.5),
+        ("", None),
+        ("n/a", None),
+    ],
+)
+def test_number_reads_the_comma_by_its_grouping(text, want):
+    # A comma followed by exactly three digits groups thousands ("4,583" -> 4583, never 4.583).
+    assert pl.select(P._number(pl.lit(text))).item() == want
+
+
 def test_player_career_parses_both_decimal_marks():
     df = _parsed("player_career")
     practice = df.filter(pl.col("tournament") == "PRACTICE").sort("season", descending=True).row(0, named=True)
@@ -272,12 +339,44 @@ def _yaml() -> Dict[str, Any]:
 
 
 def test_yaml_lists_every_route():
+    # The spec's route list is committed by gen_liiga (spec_paths.json): CI has no sdv-internal-refs.
     doc = _yaml()
-    spec = yaml.safe_load((gen_liiga.refs_dir("liiga", gen_liiga.SPEC) / gen_liiga.SPEC).read_text(encoding="utf-8"))
-    assert {e[0] for e in gen_liiga.ENDPOINTS.values()} == set(spec["paths"])
+    paths = json.loads(gen_liiga.SPEC_PATHS.read_text(encoding="utf-8"))
+    assert {e[0] for e in gen_liiga.ENDPOINTS.values()} == set(paths) and len(paths) == 14
     assert [e["short"] for e in doc["endpoints"]] == list(gen_liiga.ENDPOINTS)
     assert len(doc["endpoints"]) == 23
     assert doc["getter_module"] == "sportsdataverse.hockey.liiga.liiga_runtime"
+
+
+def test_schemas_carry_no_descriptions_and_the_snippet_does():
+    # Descriptions live in manual_column_descriptions.yaml (merged from the snippet), keyed liiga_<short>.
+    assert _yaml()["schema_prefix"] == "liiga_"
+    snippet = yaml.safe_load(gen_liiga.SNIPPET.read_text(encoding="utf-8"))
+    assert set(snippet) == {f"liiga_{s}" for s in gen_liiga.ENDPOINTS}
+    banned = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.I)
+    for short in gen_liiga.ENDPOINTS:
+        committed = _schema(short)
+        assert committed["schema"] == f"liiga_{short}"
+        assert all(c["description"] == "" for c in committed["columns"]), short
+        descs = snippet[f"liiga_{short}"]
+        assert set(descs) == {c["name"] for c in committed["columns"]}
+        for col, desc in descs.items():
+            assert len(desc) >= 15 and desc.lower() != col and not banned.match(desc), (short, col, desc)
+            assert not gen_liiga._filler(col, desc), (short, col, desc)
+
+
+def test_descriptions_keep_their_route_context():
+    snippet = yaml.safe_load(gen_liiga.SNIPPET.read_text(encoding="utf-8"))
+    assert "season to date" in snippet["liiga_standings"]["games"]
+    assert "season to date" in snippet["liiga_standings"]["points"]
+    assert "this period" not in snippet["liiga_standings"]["power_play_goals"]
+    assert "this season" in snippet["liiga_game_players_stats"]["season_stats_games"]
+    assert "all-time" in snippet["liiga_game_players_stats"]["all_time_stats_games"]
+    assert "all-time" not in " ".join(snippet["liiga_standings"].values())
+    assert "player" in snippet["liiga_game_stats"]["goals"] and "team" in snippet["liiga_game_team_stats"]["goals"]
+    assert (
+        snippet["liiga_game"]["home_name"].startswith("Home team:") and "rink" not in snippet["liiga_game"]["home_name"]
+    )
 
 
 def test_yaml_enums_are_the_probed_sets():

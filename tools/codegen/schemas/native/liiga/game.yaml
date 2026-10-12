@@ -1,180 +1,168 @@
 columns:
-- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+- description: ''
   name: game_id
   type: integer
-- description: Season END year (2026 = 2025-26).
+- description: ''
   name: season
   type: integer
-- description: Scheduled start, ISO 8601 UTC.
+- description: ''
   name: start
   type: character
-- description: Periods.
+- description: ''
   name: periods
   type: character
-- description: 'How the game ended: ENDED_DURING_REGULAR_GAME_TIME, ENDED_DURING_EXTENDED_GAME_TIME
-    (overtime), ENDED_DURING_WINNING_SHOT_COMPETITION (shootout).'
+- description: ''
   name: finished_type
   type: character
-- description: Game has started.
+- description: ''
   name: started
   type: logical
-- description: Game has ended.
+- description: ''
   name: ended
   type: logical
-- description: 'Seconds from the start of the game. Regular season: 3900 (65:00) =
-    the end of the 5-minute overtime; playoff overtime runs past it.'
+- description: ''
   name: game_time
   type: integer
-- description: Attendance.
+- description: ''
   name: spectators
   type: integer
-- description: 'Rink: rink id.'
+- description: ''
   name: ice_rink_id
   type: integer
-- description: 'Rink: rink name.'
+- description: ''
   name: ice_rink_name
   type: character
-- description: 'Rink: latitude.'
+- description: ''
   name: ice_rink_latitude
   type: numeric
-- description: 'Rink: longitude.'
+- description: ''
   name: ice_rink_longitude
   type: numeric
-- description: 'Rink: street address.'
+- description: ''
   name: ice_rink_street_address
   type: character
-- description: 'Rink: zip.'
+- description: ''
   name: ice_rink_zip
   type: character
-- description: 'Rink: city.'
+- description: ''
   name: ice_rink_city
   type: character
-- description: Last period played (3 = regulation; 4 and up = overtime periods or
-    the shootout; 2026 values 3, 4, 5, 7).
+- description: ''
   name: current_period
   type: integer
-- description: Game officials.
+- description: ''
   name: referees
   type: character
-- description: Live data is stale.
+- description: ''
   name: stale
   type: logical
-- description: Tournament code, uppercase (RUNKOSARJA, PLAYOFFS, PRACTICE, ...); in
-    /schedule the integer tournament id instead (see serieId and Divergence notes).
+- description: ''
   name: serie
   type: character
-- description: Game week of the season.
+- description: ''
   name: game_week
   type: integer
-- description: Home team id (the number of the `<num>:<slug>` key).
+- description: ''
   name: home_team_id
   type: integer
-- description: Home team slug (e.g. hpk).
+- description: ''
   name: home_team_slug
   type: character
-- description: 'Home team: placeholder label for an undecided playoff team, else null.'
+- description: ''
   name: home_placeholder
   type: character
-- description: 'Home team: rink name.'
+- description: ''
   name: home_name
   type: character
-- description: 'Home team: goals.'
+- description: ''
   name: home_goals
   type: integer
-- description: 'Home team: second of the game (from game start) at which the team
-    called its timeout.'
+- description: ''
   name: home_time_out
   type: integer
-- description: 'Home team: powerplay instances.'
+- description: ''
   name: home_powerplay_instances
   type: integer
-- description: 'Home team: powerplay goals.'
+- description: ''
   name: home_powerplay_goals
   type: integer
-- description: 'Home team: short handed instances.'
+- description: ''
   name: home_short_handed_instances
   type: integer
-- description: 'Home team: short handed goals.'
+- description: ''
   name: home_short_handed_goals
   type: integer
-- description: 'Home team: expected goals (xG), computed by the provider with an undocumented
-    model: the team''s total for the game in /games and /games/{season}/{id}; the
-    player''s sum over the season range in /players/stats/summed. /shotmap has no
-    per-shot xG.'
+- description: ''
   name: home_expected_goals
   type: numeric
-- description: 'Home team: table position.'
+- description: ''
   name: home_ranking
-  type: character
-- description: 'Home team: scheduled start, ISO 8601 UTC.'
+  type: integer
+- description: ''
   name: home_game_start_date_time
   type: character
-- description: 'Home team: logo: dark bg.'
+- description: ''
   name: home_logos_dark_bg
   type: character
-- description: 'Home team: logo: light bg.'
+- description: ''
   name: home_logos_light_bg
   type: character
-- description: 'Home team: logo: dark bg original.'
+- description: ''
   name: home_logos_dark_bg_original
   type: character
-- description: 'Home team: logo: light bg original.'
+- description: ''
   name: home_logos_light_bg_original
   type: character
-- description: Away team id (the number of the `<num>:<slug>` key).
+- description: ''
   name: away_team_id
   type: integer
-- description: Away team slug (e.g. tps).
+- description: ''
   name: away_team_slug
   type: character
-- description: 'Away team: placeholder label for an undecided playoff team, else null.'
+- description: ''
   name: away_placeholder
   type: character
-- description: 'Away team: rink name.'
+- description: ''
   name: away_name
   type: character
-- description: 'Away team: goals.'
+- description: ''
   name: away_goals
   type: integer
-- description: 'Away team: second of the game (from game start) at which the team
-    called its timeout.'
+- description: ''
   name: away_time_out
-  type: character
-- description: 'Away team: powerplay instances.'
+  type: integer
+- description: ''
   name: away_powerplay_instances
   type: integer
-- description: 'Away team: powerplay goals.'
+- description: ''
   name: away_powerplay_goals
   type: integer
-- description: 'Away team: short handed instances.'
+- description: ''
   name: away_short_handed_instances
   type: integer
-- description: 'Away team: short handed goals.'
+- description: ''
   name: away_short_handed_goals
   type: integer
-- description: 'Away team: expected goals (xG), computed by the provider with an undocumented
-    model: the team''s total for the game in /games and /games/{season}/{id}; the
-    player''s sum over the season range in /players/stats/summed. /shotmap has no
-    per-shot xG.'
+- description: ''
   name: away_expected_goals
   type: numeric
-- description: 'Away team: table position.'
+- description: ''
   name: away_ranking
-  type: character
-- description: 'Away team: scheduled start, ISO 8601 UTC.'
+  type: integer
+- description: ''
   name: away_game_start_date_time
   type: character
-- description: 'Away team: logo: dark bg.'
+- description: ''
   name: away_logos_dark_bg
   type: character
-- description: 'Away team: logo: light bg.'
+- description: ''
   name: away_logos_light_bg
   type: character
-- description: 'Away team: logo: dark bg original.'
+- description: ''
   name: away_logos_dark_bg_original
   type: character
-- description: 'Away team: logo: light bg original.'
+- description: ''
   name: away_logos_light_bg_original
   type: character
 kind: dataframe
-schema: game
+schema: liiga_game

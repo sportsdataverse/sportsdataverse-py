@@ -1,71 +1,69 @@
 columns:
-- description: Season END year (2026 = 2025-26).
+- description: ''
   name: season
   type: integer
-- description: 'Game id, unique only within a season: key a game as (season, game_id).'
+- description: ''
   name: game_id
   type: integer
-- description: home or away.
+- description: ''
   name: side
   type: character
-- description: Period number.
+- description: ''
   name: period
   type: integer
-- description: Team id, the number of Liiga's `<num>:<slug>` team key (sent as that
-    string, a bare integer or a digit string depending on the route).
+- description: ''
   name: team_id
   type: integer
-- description: Team slug, the part of Liiga's `<num>:<slug>` team key after the colon
-    (e.g. hpk).
+- description: ''
   name: team_slug
   type: character
-- description: Goals.
+- description: ''
   name: goals
   type: integer
-- description: Shots (player, all-time).
+- description: ''
   name: shots
   type: integer
-- description: Power play instances.
+- description: ''
   name: power_play_instances
   type: character
-- description: Power play goals (team, this period).
+- description: ''
   name: power_play_goals
   type: integer
-- description: Short handed instances.
+- description: ''
   name: short_handed_instances
   type: character
-- description: Short handed goals against (team, this period).
+- description: ''
   name: short_handed_goals_against
   type: integer
-- description: Penalty minutes.
+- description: ''
   name: penalty_minutes
   type: integer
-- description: Face off wins (team, this period).
+- description: ''
   name: face_off_wins
   type: integer
-- description: Two minute penalties (team, this period).
+- description: ''
   name: two_minute_penalties
   type: integer
-- description: Five minute penalties (team, this period).
+- description: ''
   name: five_minute_penalties
   type: integer
-- description: Ten minute penalties (team, this period).
+- description: ''
   name: ten_minute_penalties
   type: integer
-- description: Twenty minute penalties (team, this period).
+- description: ''
   name: twenty_minute_penalties
   type: integer
-- description: Distance skated by the team in the period (unit not stated).
+- description: ''
   name: total_distance_travelled
   type: numeric
-- description: Seconds this team controlled the puck in the period.
+- description: ''
   name: puck_control_duration
   type: numeric
-- description: Seconds the other team controlled the puck in the period.
+- description: ''
   name: opponent_puck_control_duration
   type: numeric
-- description: Seconds the puck was contested in the period.
+- description: ''
   name: contested_control_duration
   type: numeric
 kind: dataframe
-schema: game_team_stats
+schema: liiga_game_team_stats
