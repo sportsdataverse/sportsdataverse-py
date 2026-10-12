@@ -1,0 +1,148 @@
+{
+ "data": {
+  "games": [
+   {
+    "gameId": "nba.g.2024102202",
+    "displayName": "New York @ Boston",
+    "startTime": "2024-10-22T18:30:00-05:00",
+    "status": "FINAL",
+    "season": 2024,
+    "seasonPhase": "REGULAR_SEASON",
+    "awayTeamId": "nba.t.18",
+    "homeTeamId": "nba.t.2",
+    "awayTeamLineup": [
+     {
+      "player": {
+       "displayName": "Mikal Bridges",
+       "shortDisplayName": "M. Bridges",
+       "playerId": "nba.p.6021",
+       "alias": {
+        "url": "https://sports.yahoo.com/nba/players/6021/"
+       },
+       "teamId": "nba.t.18",
+       "uniformNumber": "25",
+       "positionIds": [
+        "SMALL_FORWARD"
+       ],
+       "firstName": "Mikal",
+       "lastName": "Bridges",
+       "suggestedHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/RkHvPF2wonvNRQN.A8sJjA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/11252025/6021.png"
+       },
+       "largeHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/JujdpGwA6J_TIWu0RpPnDw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTE4MA--/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/11252025/6021.png"
+       }
+      },
+      "dnpReason": null,
+      "isStarter": true
+     },
+     {
+      "player": {
+       "displayName": "Jalen Brunson",
+       "shortDisplayName": "J. Brunson",
+       "playerId": "nba.p.6044",
+       "alias": {
+        "url": "https://sports.yahoo.com/nba/players/6044/"
+       },
+       "teamId": "nba.t.18",
+       "uniformNumber": "11",
+       "positionIds": [
+        "POINT_GUARD"
+       ],
+       "firstName": "Jalen",
+       "lastName": "Brunson",
+       "suggestedHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/IF81zSV04O875OSFRzMisQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/11252025/6044.png"
+       },
+       "largeHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/3ZoUTl4Bt72rnpdEiU.3nQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTE4MA--/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/11252025/6044.png"
+       }
+      },
+      "dnpReason": null,
+      "isStarter": true
+     },
+     {
+      "player": {
+       "displayName": "OG Anunoby",
+       "shortDisplayName": "O. Anunoby",
+       "playerId": "nba.p.5836",
+       "alias": {
+        "url": "https://sports.yahoo.com/nba/players/5836/"
+       },
+       "teamId": "nba.t.18",
+       "uniformNumber": "8",
+       "positionIds": [
+        "POWER_FORWARD"
+       ],
+       "firstName": "OG",
+       "lastName": "Anunoby",
+       "suggestedHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/uDxeaBWFDTDIX2pOFF74Og--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/11252025/5836.png"
+       },
+       "largeHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/ZioifhKbyONUdTjqvfPScw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTE4MA--/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/11252025/5836.png"
+       }
+      },
+      "dnpReason": null,
+      "isStarter": true
+     }
+    ],
+    "homeTeamLineup": [
+     {
+      "player": {
+       "displayName": "Jrue Holiday",
+       "shortDisplayName": "J. Holiday",
+       "playerId": "nba.p.4622",
+       "alias": {
+        "url": "https://sports.yahoo.com/nba/players/4622/"
+       },
+       "teamId": "nba.t.22",
+       "uniformNumber": "5",
+       "positionIds": [
+        "POINT_GUARD",
+        "SHOOTING_GUARD",
+        "SMALL_FORWARD"
+       ],
+       "firstName": "Jrue",
+       "lastName": "Holiday",
+       "suggestedHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/qj26XPE5YYBw9Mgp5h1OGg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/11172025/4622.png"
+       },
+       "largeHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/SaB3pdEtulArIXmL2TP_6w--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTE4MA--/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/11172025/4622.png"
+       }
+      },
+      "dnpReason": null,
+      "isStarter": true
+     },
+     {
+      "player": {
+       "displayName": "Derrick White",
+       "shortDisplayName": "D. White",
+       "playerId": "nba.p.5842",
+       "alias": {
+        "url": "https://sports.yahoo.com/nba/players/5842/"
+       },
+       "teamId": "nba.t.2",
+       "uniformNumber": "9",
+       "positionIds": [
+        "SHOOTING_GUARD",
+        "POINT_GUARD"
+       ],
+       "firstName": "Derrick",
+       "lastName": "White",
+       "suggestedHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/vOE9yvph_GEx4OKcPKNnOQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/10222024/5842.png"
+       },
+       "largeHeadshot": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/DqDQyzKeEPW8VGiwxSVKhA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTE4MA--/https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/10222024/5842.png"
+       }
+      },
+      "dnpReason": null,
+      "isStarter": true
+     }
+    ]
+   }
+  ]
+ }
+}
