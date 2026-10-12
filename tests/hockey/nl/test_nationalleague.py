@@ -119,6 +119,23 @@ def test_a_value_the_documented_dtype_cannot_hold_is_kept() -> None:
     assert df.schema["game_time"] == pl.Float64 and df["game_time"][0] == 12.5
 
 
+def test_an_id_column_stays_int64_when_a_value_does_not_fit() -> None:
+    # Join keys never flip dtype: a non-digit id is nulled, not a reason to retype the column.
+    rows = [{"gameId": "20261105000325", "homeTeamId": "101151"}, {"gameId": "x1", "homeTeamId": "abc"}]
+    df = P.parse_nationalleague_games(rows)
+    assert df.schema["game_id"] == pl.Int64 and df["game_id"].to_list() == [20261105000325, None]
+    assert df.schema["home_team_id"] == pl.Int64 and df["home_team_id"].to_list() == [101151, None]
+    extra = P.parse_nationalleague_games([{"gameId": "20261105000325", "newThingId": "n/a"}])
+    assert extra.schema["new_thing_id"] == pl.Int64 and extra["new_thing_id"].to_list() == [None]
+
+
+@pytest.mark.parametrize("games", ["x", 3, {"a": 1}, None])
+def test_bracket_tolerates_a_wrong_type_games_value(games: Any) -> None:
+    raw = [{"round": "final", "games": games}, {"round": "semifinal", "games": [{"games": games}]}]
+    df = P.parse_nationalleague_bracket(raw)
+    assert df.height == 0 and df.schema == P.parse_nationalleague_bracket([]).schema
+
+
 @pytest.mark.parametrize("short", sorted(CASES))
 @pytest.mark.parametrize("raw", [{}, [], None, "x", 3, {"overview": "x"}])
 def test_empty_or_malformed_payload_is_a_zero_row_documented_frame(short: str, raw: Any) -> None:
@@ -304,7 +321,7 @@ def test_season_is_sent_as_the_end_year_unchanged(transport) -> None:
     rt._get(f"{HOST}/games", {"season": 2026})
     assert transport["calls"][0][1] == {"season": 2026}
     _answer(transport, _load("games.json"))
-    with pytest.raises(NoDataError, match="asked season 2025"):  # 2026 games for a 2025 request
+    with pytest.raises(AssetFetchError, match="asked season 2025"):  # 2026 games for a 2025 request: a wrong answer
         rt._get(f"{HOST}/games", {"season": 2025})
 
 
@@ -344,12 +361,12 @@ def _game(**overview: Any) -> Dict[str, Any]:
         ("/player/305519", {}, [], AssetFetchError, "not an object"),
         ("/games/playouts", {"season": 2026}, [{"round": "playoutFinal", "games": []}], NoDataError, "no games"),
         # wrong scope
-        ("/games/team/101151", {"season": 2026}, "games__team__teamId.json", NoDataError, "asked team 101151"),
-        ("/player/team/101151", {"season": 2026}, "player__team__teamId.json", NoDataError, "another team"),
-        ("/games/20261105000326", {}, "games__gameId.json", NoDataError, "asked 20261105000326"),
-        ("/player/305520", {}, "player__playerId.json", NoDataError, "asked 305520"),
-        ("/teams/101151/info", {}, "teams__teamId__info.json", NoDataError, "asked 101151"),
-        ("/games/playoffs", {"season": 2027}, "games__playoffs.json", NoDataError, "asked season 2027"),
+        ("/games/team/101151", {"season": 2026}, "games__team__teamId.json", AssetFetchError, "asked team 101151"),
+        ("/player/team/101151", {"season": 2026}, "player__team__teamId.json", AssetFetchError, "another team"),
+        ("/games/20261105000326", {}, "games__gameId.json", AssetFetchError, "asked 20261105000326"),
+        ("/player/305520", {}, "player__playerId.json", AssetFetchError, "asked 305520"),
+        ("/teams/101151/info", {}, "teams__teamId__info.json", AssetFetchError, "asked 101151"),
+        ("/games/playoffs", {"season": 2027}, "games__playoffs.json", AssetFetchError, "asked season 2027"),
         # malformed rows / ids (type-strict: an integer id is refused)
         ("/games/20261105000325", {}, {"result": {}}, AssetFetchError, "no digit-string id"),
         ("/games/20261105000325", {}, _game(gameId=20261105000325), AssetFetchError, "no digit-string id"),

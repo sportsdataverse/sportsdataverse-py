@@ -182,8 +182,9 @@ def _frame(
         values = [row.get(name) for row in rows]
         dtype = schema.get(name) or _infer(name, values)
         cells = [_coerce(v, dtype) for v in values]
-        if any(c is None and v is not None and v != "" for c, v in zip(cells, values)):
+        if not _is_id(name) and any(c is None and v is not None and v != "" for c, v in zip(cells, values)):
             # A value the documented dtype cannot hold (2.5 in an Int64 column): never drop it.
+            # An id stays Int64 whatever arrives (a join key never flips dtype); a misfit is null.
             dtype = _infer(name, values) if dtype != _infer(name, values) else pl.String()
             cells = [_coerce(v, dtype) for v in values]
         series.append(pl.Series(name, cells, dtype=dtype))
@@ -399,12 +400,12 @@ def parse_nationalleague_bracket(raw: Any, *, return_as_pandas: bool = False) ->
     """
     rows: List[Dict[str, Any]] = []
     for rnd in _rows(_scrub(raw)) if isinstance(raw, list) else []:
-        for series in rnd.get("games") or []:
+        for series in _list(rnd.get("games")):
             if not isinstance(series, dict):
                 continue
             head = {f"series_{k}": v for k, v in _flatten({k: v for k, v in series.items() if k != "games"}).items()}
             head["round"] = rnd.get("round")
-            for game in series.get("games") or []:
+            for game in _list(series.get("games")):
                 if isinstance(game, dict):
                     rows.append({**head, **_flatten(game)})
     return _frame(rows, _SCHEMAS["bracket"], return_as_pandas)

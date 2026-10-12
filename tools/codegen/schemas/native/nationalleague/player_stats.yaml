@@ -1,451 +1,437 @@
 columns:
-- description: SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the
-    sihf family's player_id and every SIHF *LicenceNr.
+- description: ''
   name: player_id
   type: integer
-- description: First name
+- description: ''
   name: first_name
   type: character
-- description: Last name
+- description: ''
   name: last_name
   type: character
-- description: SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as
-    the sihf family's team_id.
+- description: ''
   name: team_id
   type: integer
-- description: Team abbreviation
+- description: ''
   name: team_short_name
   type: character
-- description: Team display name
+- description: ''
   name: team_name
   type: character
-- description: Sweater number, a string
+- description: ''
   name: number
   type: character
-- description: goalkeeper, defender or forwarder (sic); one of 502 rows in the full
-    2026 body has the integer 0
+- description: ''
   name: position
   type: character
-- description: PostFinance Top Scorer game score (an app fantasy rating, not on-ice
-    points)
+- description: ''
   name: topscorer_points
   type: integer
-- description: PostFinance Top Scorer game score per game
+- description: ''
   name: topscorer_point_average
   type: numeric
-- description: PostFinance Top Scorer game market value
+- description: ''
   name: topscorer_market_value
   type: integer
-- description: 'Market-value trend: 1 up, 0 flat, -1 down'
+- description: ''
   name: topscorer_market_value_trend
   type: integer
-- description: CHF amount credited to the team's Top Scorer jersey holder (non-zero
-    for 14 players, one per team)
+- description: ''
   name: topscorer_amount
   type: integer
-- description: Wears the team's PostFinance Top Scorer jersey (one per team)
+- description: ''
   name: is_topscorer
   type: logical
-- description: 'Nationality; unobserved: null or empty in every sampled row'
+- description: ''
   name: nationality
   type: character
-- description: Date of birth, YYYY-MM-DD
+- description: ''
   name: birth
   type: character
-- description: 'Height; unobserved: null or empty in every sampled row'
+- description: ''
   name: height
   type: integer
-- description: 'Weight; unobserved: null or empty in every sampled row'
+- description: ''
   name: weight
   type: integer
-- description: 'Shooting or catching hand; unobserved: null or empty in every sampled
-    row'
+- description: ''
   name: hand
   type: character
-- description: Not determined (small integer, 0-4 in 2026)
+- description: ''
   name: lcrid
   type: integer
-- description: Not determined (small integer, 0-2 in 2026)
+- description: ''
   name: noc
   type: integer
-- description: Games played
+- description: ''
   name: gp
   type: integer
-- description: Goals
+- description: ''
   name: g
   type: integer
-- description: First assists
+- description: ''
   name: a1
   type: integer
-- description: Second assists
+- description: ''
   name: a2
   type: integer
-- description: 'Penalties taken (upstream `fo`: fo2 + fo5 + fo10 + gm + mp). Not faceoffs:
-    see face_offs / fot.'
+- description: ''
   name: penalties
   type: integer
-- description: Penalty minutes
+- description: ''
   name: pim
   type: integer
-- description: Even-strength goals
+- description: ''
   name: geq
   type: integer
-- description: Power-play goals
+- description: ''
   name: gpp
   type: integer
-- description: Shorthanded goals
+- description: ''
   name: gpk
   type: integer
-- description: Game-winning goals
+- description: ''
   name: gwg
   type: integer
-- description: Shootout shots taken
+- description: ''
   name: ps
   type: integer
-- description: Not determined; 0 on every 2026 row
+- description: ''
   name: pg
   type: integer
-- description: 'Plus count: on ice for an even-strength or shorthanded goal for'
+- description: ''
   name: pl
   type: integer
-- description: 'Minus count: on ice for a goal against'
+- description: ''
   name: mi
   type: integer
-- description: Time on ice, seconds
+- description: ''
   name: toi
   type: integer
-- description: Even-strength time on ice, seconds
+- description: ''
   name: toi_eq
   type: integer
-- description: Power-play time on ice, seconds (lower-case pp, unlike the box score's
-    toiPp)
+- description: ''
   name: toipp
   type: integer
-- description: Shorthanded time on ice, seconds
+- description: ''
   name: toi_pk
   type: integer
-- description: Shots on goal
+- description: ''
   name: sog
   type: integer
-- description: Shots that missed the net
+- description: ''
   name: shm
   type: integer
-- description: Shots that hit the post
+- description: ''
   name: shp
   type: integer
-- description: Own shots blocked by an opponent
+- description: ''
   name: shb
   type: integer
-- description: Opponent shots blocked
+- description: ''
   name: bks
   type: integer
-- description: Faceoffs won
+- description: ''
   name: fow
   type: integer
-- description: Faceoffs lost
+- description: ''
   name: fol
   type: integer
-- description: Shifts
+- description: ''
   name: shi
   type: integer
-- description: Not determined; 0 on every 2026 row
+- description: ''
   name: gwgk
   type: integer
-- description: Goaltender wins (incl. overtime and shootout)
+- description: ''
   name: gw
   type: integer
-- description: Goaltender losses (incl. overtime and shootout)
+- description: ''
   name: gl
   type: integer
-- description: 'Games started in goal (inferred: fk <= gp; 42 of 44 for the 2026 games-played
-    leader)'
+- description: ''
   name: fk
   type: integer
-- description: Goals against
+- description: ''
   name: ga
   type: integer
-- description: Shots on goal against
+- description: ''
   name: sa
   type: integer
-- description: Saves
+- description: ''
   name: svs
   type: integer
-- description: Shutouts
+- description: ''
   name: so
   type: integer
-- description: Goaltender time played, hundredths of a minute (6000 = 60:00; = seconds
-    / 0.6)
+- description: ''
   name: mip
   type: integer
-- description: Assists (a1 + a2; verified on every 2026 row)
+- description: ''
   name: assists
   type: integer
-- description: Points (g + assists; verified)
+- description: ''
   name: points
   type: integer
-- description: Shooting percentage, 100 * g / sog (verified); -1 with no shots
+- description: ''
   name: goal_efficiency
   type: numeric
-- description: Save percentage, 0-100
+- description: ''
   name: save_percentage
   type: numeric
-- description: Faceoff win percentage, 0-100; -1 with no faceoffs
+- description: ''
   name: face_offs_percentage
   type: numeric
-- description: Faceoffs taken (fow + fol; verified)
+- description: ''
   name: face_offs
   type: integer
-- description: Team captain
+- description: ''
   name: is_captain
   type: logical
-- description: Team's first-choice goaltender
+- description: ''
   name: first_goalkeeper
   type: logical
-- description: Goals against per game (ga / gp; verified)
+- description: ''
   name: ga_per_game
   type: numeric
-- description: Points per game
+- description: ''
   name: points_per_game
   type: numeric
-- description: Saves per game
+- description: ''
   name: svs_per_game
   type: numeric
-- description: Blocked shots per game
+- description: ''
   name: bks_per_game
   type: numeric
-- description: Shots on goal per game
+- description: ''
   name: sog_per_game
   type: numeric
-- description: Missed shots per game
+- description: ''
   name: shm_per_game
   type: numeric
-- description: Post hits per game
+- description: ''
   name: shp_per_game
   type: numeric
-- description: Faceoffs won per game
+- description: ''
   name: fow_per_game
   type: numeric
-- description: Faceoffs lost per game
+- description: ''
   name: fol_per_game
   type: numeric
-- description: Even-strength time on ice per game, seconds
+- description: ''
   name: toi_eq_per_game
   type: numeric
-- description: Power-play time on ice per game, seconds
+- description: ''
   name: toi_pp_per_game
   type: numeric
-- description: Shorthanded time on ice per game, seconds
+- description: ''
   name: toi_pk_per_game
   type: numeric
-- description: Not determined; 0 on the sampled rows
+- description: ''
   name: face_offs_per_game_percentage
   type: numeric
-- description: Time on ice per game, seconds
+- description: ''
   name: toi_average
   type: numeric
-- description: Plus/minus (pl - mi; verified)
+- description: ''
   name: plus_minus
   type: integer
-- description: Team's total game time, seconds (about 3600 per game incl. overtime)
+- description: ''
   name: tgs
   type: integer
-- description: Goaltender time played, seconds
+- description: ''
   name: sep
   type: integer
-- description: Share of the team's game time in goal, 100 * sep / tgs (verified)
+- description: ''
   name: toi_percentage
   type: numeric
-- description: Wins in regulation time (gw = gwit + overtime/shootout wins; verified)
+- description: ''
   name: gwit
   type: integer
-- description: Losses in regulation time (gl = glit + overtime/shootout losses; verified)
+- description: ''
   name: glit
   type: integer
-- description: Shots on goal against that were saved (= svs on every 2026 goaltender
-    row)
+- description: ''
   name: sag
   type: integer
-- description: Shots on goal against that went in (= ga on every 2026 goaltender row)
+- description: ''
   name: sago
   type: integer
-- description: Shots against that missed the net
+- description: ''
   name: sam
   type: integer
-- description: Shots against that hit the post
+- description: ''
   name: sap
   type: integer
-- description: Shots against that were blocked
+- description: ''
   name: sab
   type: integer
-- description: Slot shots against
+- description: ''
   name: saslot
   type: integer
-- description: Slot shots against that went in
+- description: ''
   name: sagoslot
   type: integer
-- description: Even-strength assists
+- description: ''
   name: aeq
   type: integer
-- description: Power-play assists
+- description: ''
   name: app
   type: integer
-- description: Shorthanded assists
+- description: ''
   name: apk
   type: integer
-- description: Hat tricks (inferred; at most 2 in 2026)
+- description: ''
   name: ha
   type: integer
-- description: Minor (2-minute) penalties
+- description: ''
   name: fo2
   type: integer
-- description: Major (5-minute) penalties
+- description: ''
   name: fo5
   type: integer
-- description: 10-minute misconducts
+- description: ''
   name: fo10
   type: integer
-- description: Game misconducts
+- description: ''
   name: gm
   type: integer
-- description: Match penalties
+- description: ''
   name: mp
   type: integer
-- description: Not determined; 0 on every 2026 row
+- description: ''
   name: pm
   type: integer
-- description: Not determined; 0 on every 2026 row
+- description: ''
   name: pwg
   type: integer
-- description: Not determined. Equals gff + gfd on every team row; skater values are
-    close to but not always g
+- description: ''
   name: sgo
   type: integer
-- description: Offensive-zone faceoffs won
+- description: ''
   name: fowoz
   type: integer
-- description: Neutral-zone faceoffs won
+- description: ''
   name: fownz
   type: integer
-- description: Defensive-zone faceoffs won
+- description: ''
   name: fowdz
   type: integer
-- description: Offensive-zone faceoffs lost
+- description: ''
   name: foloz
   type: integer
-- description: Neutral-zone faceoffs lost
+- description: ''
   name: folnz
   type: integer
-- description: Defensive-zone faceoffs lost
+- description: ''
   name: foldz
   type: integer
-- description: Shootout goals
+- description: ''
   name: psg
   type: integer
-- description: Shootout saves
+- description: ''
   name: pssvs
   type: integer
-- description: Overtime goals (a subset of g)
+- description: ''
   name: got
   type: integer
-- description: Overtime-scoring rank; 0 on the 2026 rows (filled in 2027)
+- description: ''
   name: ot_rank
   type: integer
-- description: Overtime goals in the overtime table; 0 on every 2026 row
+- description: ''
   name: ot_g
   type: integer
-- description: Overtime first assists; 0 on every 2026 row
+- description: ''
   name: ot_a1
   type: integer
-- description: Overtime second assists; 0 on every 2026 row
+- description: ''
   name: ot_a2
   type: integer
-- description: Overtime time on ice, seconds; 0 on every 2026 row
+- description: ''
   name: ot_toi
   type: integer
-- description: Overtime assists; 0 on every 2026 row
+- description: ''
   name: ot_a
   type: integer
-- description: Overtime points; 0 on every 2026 row
+- description: ''
   name: ot_p
   type: integer
-- description: Game-deciding shootout goals; 0 on every 2026 row
+- description: ''
   name: psgwg
   type: integer
-- description: Shots on goal from the slot
+- description: ''
   name: sogslot
   type: integer
-- description: Shootout winners (inferred)
+- description: ''
   name: pswg
   type: integer
-- description: Time on ice per shift, seconds
+- description: ''
   name: toishi
   type: numeric
-- description: Shifts per game
+- description: ''
   name: shigp
   type: numeric
-- description: Slot shots against per game
+- description: ''
   name: saslotgp
   type: numeric
-- description: Missed shots against per game
+- description: ''
   name: samgp
   type: numeric
-- description: Post hits against per game
+- description: ''
   name: sapgp
   type: numeric
-- description: Slot save percentage, 100 * (saslot - sagoslot) / saslot
+- description: ''
   name: svs_pslot
   type: numeric
-- description: Shots on goal against per game
+- description: ''
   name: sa_per_game
   type: numeric
-- description: Goaltender overtime or shootout wins
+- description: ''
   name: otw
   type: integer
-- description: Goaltender overtime or shootout losses
+- description: ''
   name: otl
   type: integer
-- description: Offensive-zone faceoff win percentage, 0-100
+- description: ''
   name: fopoz
   type: numeric
-- description: Neutral-zone faceoff win percentage, 0-100
+- description: ''
   name: fopnz
   type: numeric
-- description: Defensive-zone faceoff win percentage, 0-100
+- description: ''
   name: fopdz
   type: numeric
-- description: Faceoffs taken (fow + fol)
+- description: ''
   name: fot
   type: integer
-- description: Faceoffs taken per game
+- description: ''
   name: fogp
   type: numeric
-- description: Shootout misses (inferred; ps = psg + psm fails for 67 of 447 skaters)
+- description: ''
   name: psm
   type: integer
-- description: Shootout success percentage, 0-100
+- description: ''
   name: ps_percentage
   type: numeric
-- description: Not determined; equals gw on goaltender rows
+- description: ''
   name: gw_shutout
   type: integer
-- description: Slot shots on goal per game
+- description: ''
   name: sogslot_per_game
   type: numeric
-- description: Shootout goals against (equals ps on goaltender rows)
+- description: ''
   name: psag
   type: integer
-- description: Shootout save percentage, 0-100; -1 with no shootout shots faced
+- description: ''
   name: pssvs_percentage
   type: numeric
-- description: 'App flag: show the row''s rank'
+- description: ''
   name: show_rank
   type: logical
-- description: 'CHF credited for the player''s points: 300 * points on every 2026
-    row (PostFinance youth-fund scheme; inferred)'
+- description: ''
   name: chf
   type: integer
-- description: 'Per-team split for a player who changed teams; unobserved: null or
-    empty in every sampled row'
+- description: ''
   name: team_stats
   type: character
 kind: dataframe

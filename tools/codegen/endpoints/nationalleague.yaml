@@ -10,11 +10,11 @@ docstring:
     games with one nl_schedule call per run, and fetch season tables at most once
     per game day.'
   raises:
-  - 'sportsdataverse.errors.NoDataError: a 404, an empty answer (no games or rows
-    for that season, team or phase), or an answer for another season, team, game or
-    player.'
+  - 'sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows
+    for that season, team or phase).'
   - 'sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a
-    200, or a body without the ids it must carry.'
+    200, a body without the ids it must carry, or an answer for another season, team,
+    game or player.'
   see_also:
   - name: National League
     note: the league site whose app serves this API

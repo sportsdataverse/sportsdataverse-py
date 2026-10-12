@@ -1,111 +1,104 @@
 columns:
-- description: SIHF game id `<season(4)><competition(4)><sequence(6)>` (Int64; e.g.
-    20261105000325, 1105 = National League). The same id as the sihf family's game_id;
-    its first four digits are the season END year.
+- description: ''
   name: game_id
   type: integer
-- description: 1-based position of the event in the game's timeline.
+- description: ''
   name: event_index
   type: integer
-- description: 'home or away: the side of the team this row belongs to.'
+- description: ''
   name: team_side
   type: character
-- description: Elapsed game time of the event in seconds, from the MMSS `time` (822
-    = 8:22 -> 502).
+- description: ''
   name: game_seconds
   type: integer
-- description: SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as
-    the sihf family's team_id.
+- description: ''
   name: team_id
   type: integer
-- description: Event belongs to the home team
+- description: ''
   name: home_team
   type: logical
-- description: Game clock elapsed as an MMSS string without separator ('822' = 8:22,
-    '5954' = 59:54)
+- description: ''
   name: time
   type: character
-- description: Seconds into the game video; 0 when there is no clip
+- description: ''
   name: video_time
   type: integer
-- description: 'Clip of this event. Vimeo video id (Int64): vimeo.com/<id>.'
+- description: ''
   name: video_vimeo_id
   type: integer
-- description: 'Event type: goal, foul (penalty), in / out (goaltender enters / leaves),
-    revokedGoal'
+- description: ''
   name: action
   type: character
-- description: SIHF penalty code (116-125 in the sample); 0 on non-penalty events
+- description: ''
   name: foul_type
   type: integer
-- description: Penalty minutes; 0 on non-penalty events
+- description: ''
   name: foul_minutes
   type: integer
-- description: Shooter's first name, from the game's lineup.
+- description: ''
   name: player_first_name
   type: character
-- description: Shooter's last name, from the game's lineup.
+- description: ''
   name: player_last_name
   type: character
-- description: Shooter's sweater number, from the game's lineup (a string).
+- description: ''
   name: player_number
   type: character
-- description: Scorer's goals this season including this one; 0 on non-goal events
+- description: ''
   name: player_total
   type: integer
-- description: Period number, an integer (the parent `third` is a string)
+- description: ''
   name: period
   type: integer
-- description: Overtime period number; 0 in regulation
+- description: ''
   name: overtime
   type: integer
-- description: Goal kind; 'normal' on every sampled event
+- description: ''
   name: goal_situation
   type: character
-- description: Home score after the event
+- description: ''
   name: home_team_result
   type: integer
-- description: Away score after the event
+- description: ''
   name: away_team_result
   type: integer
-- description: 'First assist: first name'
+- description: ''
   name: assist1_first_name
   type: character
-- description: 'First assist: last name'
+- description: ''
   name: assist1_last_name
   type: character
-- description: 'First assist: sweater number, a string'
+- description: ''
   name: assist1_number
   type: character
-- description: First assister's assists this season including this one
+- description: ''
   name: assist1_total
   type: integer
-- description: 'Second assist: first name'
+- description: ''
   name: assist2_first_name
   type: character
-- description: 'Second assist: last name'
+- description: ''
   name: assist2_last_name
   type: character
-- description: 'Second assist: sweater number, a string'
+- description: ''
   name: assist2_number
   type: character
-- description: Second assister's assists this season including this one
+- description: ''
   name: assist2_total
   type: integer
-- description: 'Goal tags, comma-separated: EQ (even strength), PP1 (power play),
-    GWG (game-winning goal); null on non-goals'
+- description: ''
   name: situation
   type: character
-- description: Revoked-goal category code (1 on every sampled event)
+- description: ''
   name: revoked_goal_type
   type: integer
-- description: Revoked-goal reason code (1 on the revoked goal, 0 elsewhere)
+- description: ''
   name: revoked_goal_sub_type
   type: integer
-- description: 'Video-review outcome; unobserved: null or empty in every sampled row'
+- description: ''
   name: review_successful
   type: character
-- description: Goal stood after review
+- description: ''
   name: review_goal_counts
   type: logical
 kind: dataframe

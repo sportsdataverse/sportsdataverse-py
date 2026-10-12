@@ -1,45 +1,41 @@
 columns:
-- description: SIHF game id `<season(4)><competition(4)><sequence(6)>` (Int64; e.g.
-    20261105000325, 1105 = National League). The same id as the sihf family's game_id;
-    its first four digits are the season END year.
+- description: ''
   name: game_id
   type: integer
-- description: 'home or away: the side of the team this row belongs to.'
+- description: ''
   name: team_side
   type: character
-- description: SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as
-    the sihf family's team_id.
+- description: ''
   name: team_id
   type: integer
-- description: 'Lineup group: goalkeeper, or the line number 1-4 as a string.'
+- description: ''
   name: unit
   type: character
-- description: SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the
-    sihf family's player_id and every SIHF *LicenceNr.
+- description: ''
   name: player_id
   type: integer
-- description: goalkeeper, defender or forwarder (sic)
+- description: ''
   name: position
   type: character
-- description: Line number, an integer (goalkeepers 1-2 = first / backup)
+- description: ''
   name: line
   type: integer
-- description: First name
+- description: ''
   name: first_name
   type: character
-- description: Last name
+- description: ''
   name: last_name
   type: character
-- description: Sweater number, a string
+- description: ''
   name: number
   type: character
-- description: Wears the team's PostFinance Top Scorer jersey
+- description: ''
   name: is_topscorer
   type: logical
-- description: Team captain
+- description: ''
   name: is_captain
   type: logical
-- description: Starting goaltender
+- description: ''
   name: first_goalkeeper
   type: logical
 kind: dataframe
