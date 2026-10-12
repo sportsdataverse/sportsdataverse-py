@@ -1,0 +1,2924 @@
+{
+ "summary": {
+  "periods": [
+   {
+    "name": "1. Drittel",
+    "fouls": [],
+    "goals": [
+     {
+      "scorerLicenceNr": 346042,
+      "assist1LicenceNr": 340148,
+      "assist2LicenceNr": 156070,
+      "p1LicenceNr": 340148,
+      "p2LicenceNr": 346042,
+      "p3LicenceNr": 156070,
+      "p4LicenceNr": 335823,
+      "p5LicenceNr": 346041,
+      "p6LicenceNr": 0,
+      "m1LicenceNr": 340155,
+      "m2LicenceNr": 343288,
+      "m3LicenceNr": 347707,
+      "m4LicenceNr": 348803,
+      "m5LicenceNr": 302468,
+      "m6LicenceNr": 0,
+      "time": "13:12",
+      "sortOrder": 0,
+      "text": "**EQ** / **1:0** - **Merelä Waltteri (1)**\nAaltonen Miro (1), Marchon Marc (1)",
+      "teamId": 102126
+     }
+    ],
+    "revokedGoals": [],
+    "goalkeepers": []
+   },
+   {
+    "name": "2. Drittel",
+    "fouls": [
+     {
+      "playerLicenceNr": 347707,
+      "time": "23:27",
+      "startTime": "23:27",
+      "endTime": "25:27",
+      "minutes": 2,
+      "sortOrder": 0,
+      "text": "Puljujärvi Jesse  (2 Min  / Behinderung)",
+      "teamId": 103140,
+      "id": 121,
+      "name": "Behinderung"
+     },
+     {
+      "playerLicenceNr": 316952,
+      "time": "30:32",
+      "startTime": "30:32",
+      "endTime": "32:32",
+      "minutes": 2,
+      "sortOrder": 1,
+      "text": "Pouliot Marc-Antoine  (2 Min  / Halten)",
+      "teamId": 103140,
+      "id": 119,
+      "name": "Halten"
+     }
+    ],
+    "goals": [
+     {
+      "scorerLicenceNr": 340155,
+      "assist1LicenceNr": 347707,
+      "assist2LicenceNr": 343288,
+      "p1LicenceNr": 307581,
+      "p2LicenceNr": 347707,
+      "p3LicenceNr": 343288,
+      "p4LicenceNr": 340155,
+      "p5LicenceNr": 340128,
+      "p6LicenceNr": 0,
+      "m1LicenceNr": 135137,
+      "m2LicenceNr": 316233,
+      "m3LicenceNr": 133606,
+      "m4LicenceNr": 313136,
+      "m5LicenceNr": 315299,
+      "m6LicenceNr": 0,
+      "time": "33:04",
+      "sortOrder": 2,
+      "text": "**EQ** / **1:1** - **Granlund Markus (2)**\nPuljujärvi Jesse (2), Manninen Sakari (2)",
+      "teamId": 103140
+     }
+    ],
+    "revokedGoals": [],
+    "goalkeepers": []
+   },
+   {
+    "name": "3. Drittel",
+    "fouls": [
+     {
+      "playerLicenceNr": 315299,
+      "time": "45:49",
+      "startTime": "45:49",
+      "endTime": "47:49",
+      "minutes": 2,
+      "sortOrder": 0,
+      "text": "Füllemann Louis  (2 Min  / Halten)",
+      "teamId": 102126,
+      "id": 119,
+      "name": "Halten"
+     }
+    ],
+    "goals": [],
+    "revokedGoals": [],
+    "goalkeepers": []
+   },
+   {
+    "name": "1. Verlängerung / Shootout",
+    "fouls": [
+     {
+      "playerLicenceNr": 0,
+      "time": "63:10",
+      "startTime": "63:10",
+      "endTime": "65:00",
+      "minutes": 2,
+      "sortOrder": 0,
+      "text": "Team-Strafe (2 Min  / Zu viele Spieler auf dem Eis)",
+      "teamId": 103140,
+      "id": 135,
+      "name": "Zu viele Spieler auf dem Eis"
+     }
+    ],
+    "goals": [
+     {
+      "scorerLicenceNr": 0,
+      "assist1LicenceNr": 0,
+      "assist2LicenceNr": 0,
+      "p1LicenceNr": 0,
+      "p2LicenceNr": 0,
+      "p3LicenceNr": 0,
+      "p4LicenceNr": 0,
+      "p5LicenceNr": 0,
+      "p6LicenceNr": 0,
+      "m1LicenceNr": 0,
+      "m2LicenceNr": 0,
+      "m3LicenceNr": 0,
+      "m4LicenceNr": 0,
+      "m5LicenceNr": 0,
+      "m6LicenceNr": 0,
+      "time": "65:00",
+      "sortOrder": 1,
+      "text": "**SO** / **2:1**",
+      "teamId": 102126
+     }
+    ],
+    "revokedGoals": [],
+    "goalkeepers": []
+   }
+  ],
+  "shootout": {
+   "name": "Shootout",
+   "shoots": [
+    {
+     "scorerLicenceNr": 340148,
+     "goalkeeperLiceneNr": 310640,
+     "text": "Aaltonen Miro  (Torhüter: Charlin Stéphane )",
+     "scored": true,
+     "number": 1
+    },
+    {
+     "scorerLicenceNr": 347707,
+     "goalkeeperLiceneNr": 343175,
+     "text": "Puljujärvi Jesse  (Torhüter: Reideborn Adam )",
+     "scored": false,
+     "number": 2
+    },
+    {
+     "scorerLicenceNr": 313136,
+     "goalkeeperLiceneNr": 310640,
+     "text": "Ritzmann Fabian  (Torhüter: Charlin Stéphane )",
+     "scored": false,
+     "number": 3
+    },
+    {
+     "scorerLicenceNr": 340155,
+     "goalkeeperLiceneNr": 343175,
+     "text": "Granlund Markus  (Torhüter: Reideborn Adam )",
+     "scored": false,
+     "number": 4
+    },
+    {
+     "scorerLicenceNr": 319663,
+     "goalkeeperLiceneNr": 310640,
+     "text": "Baumgartner Benjamin  (Torhüter: Charlin Stéphane )",
+     "scored": false,
+     "number": 5
+    },
+    {
+     "scorerLicenceNr": 348821,
+     "goalkeeperLiceneNr": 343175,
+     "text": "Vesey Jimmy  (Torhüter: Reideborn Adam )",
+     "scored": true,
+     "number": 6
+    },
+    {
+     "scorerLicenceNr": 302818,
+     "goalkeeperLiceneNr": 310640,
+     "text": "Lehmann Marco  (Torhüter: Charlin Stéphane )",
+     "scored": false,
+     "number": 7
+    },
+    {
+     "scorerLicenceNr": 343288,
+     "goalkeeperLiceneNr": 343175,
+     "text": "Manninen Sakari  (Torhüter: Reideborn Adam )",
+     "scored": false,
+     "number": 8
+    },
+    {
+     "scorerLicenceNr": 347558,
+     "goalkeeperLiceneNr": 310640,
+     "text": "Häman Aktell Hardy  (Torhüter: Charlin Stéphane )",
+     "scored": true,
+     "number": 9
+    },
+    {
+     "scorerLicenceNr": 316952,
+     "goalkeeperLiceneNr": 343175,
+     "text": "Pouliot Marc-Antoine  (Torhüter: Reideborn Adam )",
+     "scored": false,
+     "number": 10
+    }
+   ]
+  }
+ },
+ "lineUps": {
+  "homeTeam": {
+   "goalkeepers": [
+    343175,
+    145307
+   ],
+   "defenders": {
+    "left": [
+     346041,
+     315299,
+     318534,
+     347558
+    ],
+    "right": [
+     335823,
+     135137,
+     149851,
+     300687
+    ]
+   },
+   "forwarders": {
+    "left": [
+     144727,
+     156070,
+     312050,
+     133606
+    ],
+    "right": [
+     302818,
+     346042,
+     320106,
+     313136
+    ],
+    "center": [
+     319663,
+     340148,
+     148383,
+     316233
+    ]
+   },
+   "otherPlayers": [],
+   "captain": 135137,
+   "topscorer": 135137,
+   "taggedPlayers": [
+    {
+     "id": 135137,
+     "name": "Captain",
+     "acronym": "C",
+     "type": "captain"
+    },
+    {
+     "id": 343175,
+     "name": "1st Goalkeeper",
+     "acronym": "1st",
+     "type": "goalkeeper"
+    },
+    {
+     "id": 135137,
+     "name": "PostFinance Top Scorer",
+     "acronym": "PF-TS",
+     "type": "pftopscorer"
+    }
+   ],
+   "coach": {
+    "id": 0,
+    "fullName": "Jussi Tapola",
+    "jerseyNumber": 0,
+    "country": ""
+   }
+  },
+  "awayTeam": {
+   "goalkeepers": [
+    310640,
+    133922
+   ],
+   "defenders": {
+    "left": [
+     340128,
+     313546,
+     307581,
+     336420
+    ],
+    "right": [
+     302468,
+     348803,
+     158090,
+     151851
+    ]
+   },
+   "forwarders": {
+    "left": [
+     340155,
+     348821,
+     158487,
+     309283
+    ],
+    "right": [
+     347707,
+     153086,
+     151198,
+     305305
+    ],
+    "center": [
+     343288,
+     333800,
+     316952,
+     153939
+    ]
+   },
+   "otherPlayers": [],
+   "captain": 158487,
+   "topscorer": 316952,
+   "taggedPlayers": [
+    {
+     "id": 158487,
+     "name": "Captain",
+     "acronym": "C",
+     "type": "captain"
+    },
+    {
+     "id": 310640,
+     "name": "1st Goalkeeper",
+     "acronym": "1st",
+     "type": "goalkeeper"
+    },
+    {
+     "id": 316952,
+     "name": "PostFinance Top Scorer",
+     "acronym": "PF-TS",
+     "type": "pftopscorer"
+    }
+   ],
+   "coach": {
+    "id": 0,
+    "fullName": "Yorick Treille",
+    "jerseyNumber": 0,
+    "country": ""
+   }
+  }
+ },
+ "players": [
+  {
+   "teamId": 102126,
+   "ageGroup": 1989,
+   "licence": "",
+   "id": 133606,
+   "fullName": "Moser Simon",
+   "jerseyNumber": 21
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1991,
+   "licence": "",
+   "id": 135137,
+   "fullName": "Untersander Ramon",
+   "jerseyNumber": 65
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1991,
+   "licence": "",
+   "id": 144415,
+   "fullName": "Loeffel Romain",
+   "jerseyNumber": 58
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1991,
+   "licence": "",
+   "id": 144727,
+   "fullName": "Scherwey Tristan",
+   "jerseyNumber": 10
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1990,
+   "licence": "",
+   "id": 145307,
+   "fullName": "Zurkirchen Sandro",
+   "jerseyNumber": 33
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1994,
+   "licence": "",
+   "id": 148383,
+   "fullName": "Müller Marco",
+   "jerseyNumber": 83
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1992,
+   "licence": "",
+   "id": 149851,
+   "fullName": "Vermin Joël",
+   "jerseyNumber": 86
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1994,
+   "licence": "",
+   "id": 152750,
+   "fullName": "Kreis Samuel",
+   "jerseyNumber": 44
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1995,
+   "licence": "",
+   "id": 156070,
+   "fullName": "Marchon Marc",
+   "jerseyNumber": 8
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1996,
+   "licence": "",
+   "id": 300687,
+   "fullName": "Kindschi Simon",
+   "jerseyNumber": 41
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1999,
+   "licence": "",
+   "id": 302818,
+   "fullName": "Lehmann Marco",
+   "jerseyNumber": 23
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2000,
+   "licence": "",
+   "id": 308185,
+   "fullName": "Von Burg Christof",
+   "jerseyNumber": 50
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2003,
+   "licence": "",
+   "id": 312050,
+   "fullName": "Alge Mats",
+   "jerseyNumber": 64
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2001,
+   "licence": "",
+   "id": 312671,
+   "fullName": "Fuss Noah",
+   "jerseyNumber": 13
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2002,
+   "licence": "",
+   "id": 313136,
+   "fullName": "Ritzmann Fabian",
+   "jerseyNumber": 91
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2002,
+   "licence": "",
+   "id": 313602,
+   "fullName": "Henauer Andri",
+   "jerseyNumber": 34
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2004,
+   "licence": "",
+   "id": 315299,
+   "fullName": "Füllemann Louis",
+   "jerseyNumber": 14
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2004,
+   "licence": "",
+   "id": 315310,
+   "fullName": "Weber Gregory",
+   "jerseyNumber": 40
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2005,
+   "licence": "",
+   "id": 316233,
+   "fullName": "Graf Alain",
+   "jerseyNumber": 43
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2005,
+   "licence": "",
+   "id": 318534,
+   "fullName": "Rhyn Nils",
+   "jerseyNumber": 51
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2005,
+   "licence": "",
+   "id": 318579,
+   "fullName": "Zürcher Kevin",
+   "jerseyNumber": 87
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2000,
+   "licence": "",
+   "id": 319663,
+   "fullName": "Baumgartner Benjamin",
+   "jerseyNumber": 98
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2005,
+   "licence": "",
+   "id": 319747,
+   "fullName": "Moser Levin",
+   "jerseyNumber": 82
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 2004,
+   "licence": "",
+   "id": 320106,
+   "fullName": "Schild Thierry",
+   "jerseyNumber": 88
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1998,
+   "licence": "E",
+   "id": 335823,
+   "fullName": "Iakovenko Aleksandr",
+   "jerseyNumber": 75
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1993,
+   "licence": "E",
+   "id": 340148,
+   "fullName": "Aaltonen Miro",
+   "jerseyNumber": 15
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1992,
+   "licence": "E",
+   "id": 343175,
+   "fullName": "Reideborn Adam",
+   "jerseyNumber": 36
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1995,
+   "licence": "E",
+   "id": 346040,
+   "fullName": "Ejdsell Victor",
+   "jerseyNumber": 9
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1994,
+   "licence": "E",
+   "id": 346041,
+   "fullName": "Lindholm Anton",
+   "jerseyNumber": 37
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1998,
+   "licence": "E",
+   "id": 346042,
+   "fullName": "Merelä Waltteri",
+   "jerseyNumber": 19
+  },
+  {
+   "teamId": 102126,
+   "ageGroup": 1998,
+   "licence": "E",
+   "id": 347558,
+   "fullName": "Häman Aktell Hardy",
+   "jerseyNumber": 4
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1989,
+   "licence": "",
+   "id": 133922,
+   "fullName": "Mayer Robert",
+   "jerseyNumber": 29
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1993,
+   "licence": "",
+   "id": 148281,
+   "fullName": "Richard Tanner",
+   "jerseyNumber": 71
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1994,
+   "licence": "",
+   "id": 151198,
+   "fullName": "Bozon Tim",
+   "jerseyNumber": 94
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1992,
+   "licence": "",
+   "id": 151851,
+   "fullName": "Sutter Dave",
+   "jerseyNumber": 77
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1994,
+   "licence": "",
+   "id": 153086,
+   "fullName": "Praplan Vincent",
+   "jerseyNumber": 11
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1995,
+   "licence": "",
+   "id": 153939,
+   "fullName": "Hischier Luca",
+   "jerseyNumber": 13
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1997,
+   "licence": "",
+   "id": 158090,
+   "fullName": "Karrer Roger",
+   "jerseyNumber": 25
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1996,
+   "licence": "",
+   "id": 158487,
+   "fullName": "Rod Noah",
+   "jerseyNumber": 96
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1999,
+   "licence": "",
+   "id": 302468,
+   "fullName": "Le Coultre Simon",
+   "jerseyNumber": 90
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1998,
+   "licence": "",
+   "id": 305305,
+   "fullName": "Miranda Marco",
+   "jerseyNumber": 85
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 2000,
+   "licence": "",
+   "id": 307581,
+   "fullName": "Berni Tim",
+   "jerseyNumber": 21
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 2000,
+   "licence": "",
+   "id": 309283,
+   "fullName": "Verboon Matthew",
+   "jerseyNumber": 23
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 2000,
+   "licence": "",
+   "id": 310640,
+   "fullName": "Charlin Stéphane",
+   "jerseyNumber": 38
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 2002,
+   "licence": "",
+   "id": 313546,
+   "fullName": "Chanton Giancarlo",
+   "jerseyNumber": 14
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1985,
+   "licence": "",
+   "id": 316952,
+   "fullName": "Pouliot Marc-Antoine",
+   "jerseyNumber": 78
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 2005,
+   "licence": "",
+   "id": 319885,
+   "fullName": "Schneller Eric",
+   "jerseyNumber": 27
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1990,
+   "licence": "",
+   "id": 333800,
+   "fullName": "Jooris Josh",
+   "jerseyNumber": 19
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 2007,
+   "licence": "",
+   "id": 336420,
+   "fullName": "Ignatavicius Simas",
+   "jerseyNumber": 80
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1997,
+   "licence": "E",
+   "id": 340128,
+   "fullName": "Saarijärvi Vili",
+   "jerseyNumber": 46
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1993,
+   "licence": "E",
+   "id": 340155,
+   "fullName": "Granlund Markus",
+   "jerseyNumber": 60
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1992,
+   "licence": "E",
+   "id": 343288,
+   "fullName": "Manninen Sakari",
+   "jerseyNumber": 65
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1991,
+   "licence": "E",
+   "id": 347705,
+   "fullName": "Beck Taylor",
+   "jerseyNumber": 41
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1990,
+   "licence": "E",
+   "id": 347706,
+   "fullName": "Akeson Jason",
+   "jerseyNumber": 91
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1998,
+   "licence": "E",
+   "id": 347707,
+   "fullName": "Puljujärvi Jesse",
+   "jerseyNumber": 9
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1990,
+   "licence": "E",
+   "id": 348803,
+   "fullName": "Rutta Jan",
+   "jerseyNumber": 44
+  },
+  {
+   "teamId": 103140,
+   "ageGroup": 1993,
+   "licence": "E",
+   "id": 348821,
+   "fullName": "Vesey Jimmy",
+   "jerseyNumber": 16
+  }
+ ],
+ "stats": [
+  {
+   "title": "Player Stats",
+   "description": "SC Bern",
+   "pages": 0,
+   "selectedPage": 0,
+   "orderBy": null,
+   "orderByDescending": false,
+   "isLive": false,
+   "availableExports": [
+    "Csv",
+    "Pdf"
+   ],
+   "updateDateTime": "2025-09-13T01:46:35.166299+02:00",
+   "filters": null,
+   "secondaryMenu": null,
+   "fixTableLeft": 0,
+   "rowIdentifier": 0,
+   "highlightedPositions": [
+    {
+     "name": null,
+     "style": "total",
+     "rows": [
+      21
+     ]
+    }
+   ],
+   "header": [
+    {
+     "name": "No",
+     "description": "Spielernummer",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "playerNumber"
+    },
+    {
+     "name": "Spieler",
+     "description": "Spielername",
+     "align": "left",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "player"
+    },
+    {
+     "name": "Pos",
+     "description": "Spielerposition",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "playerPosition"
+    },
+    {
+     "name": "G",
+     "description": "Tore",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "goals"
+    },
+    {
+     "name": "A",
+     "description": "Assists",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "assists"
+    },
+    {
+     "name": "A1",
+     "description": "Assists 1",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "assists1"
+    },
+    {
+     "name": "A2",
+     "description": "Assists 2",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "assists2"
+    },
+    {
+     "name": "PTS",
+     "description": "Punktetotal",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "points"
+    },
+    {
+     "name": "PIM Total",
+     "description": "PIM Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "pimTotal"
+    },
+    {
+     "name": "+/-",
+     "description": "Plus / Minus",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "plusMinus"
+    },
+    {
+     "name": "SOG",
+     "description": "Schüsse aufs Tor",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "shotsOnGoal"
+    },
+    {
+     "name": "SHM Total",
+     "description": "Schüsse neben das Tor Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "sogMissed"
+    },
+    {
+     "name": "SHP Total",
+     "description": "Schüsse Torumrandung Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "sogPost"
+    },
+    {
+     "name": "BkS",
+     "description": "geblockte Schüsse",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "blockings"
+    },
+    {
+     "name": "FOW Total",
+     "description": "Gewonnene Bullys Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "faceoffsWon"
+    },
+    {
+     "name": "FOL Total",
+     "description": "Verlorene Bullys Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "faceoffsLost"
+    },
+    {
+     "name": "FO%",
+     "description": "Gewonnene Faceoff in %",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "faceoffsPercent"
+    },
+    {
+     "name": "TOI Total",
+     "description": "Eiszeit total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "timeOnIce"
+    },
+    {
+     "name": "TOI PP",
+     "description": "Eiszeit in Überzahl",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "timeOnIcePp"
+    },
+    {
+     "name": "TOI PK",
+     "description": "Eiszeit in Unterzahl",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "timeOnIcePk"
+    }
+   ],
+   "data": [
+    [
+     "4",
+     "Häman Aktell Hardy",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "2",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "15:41",
+     "03:03",
+     "01:24"
+    ],
+    [
+     "8",
+     "Marchon Marc",
+     "Stürmer",
+     "0",
+     "1",
+     "0",
+     "1",
+     "1",
+     "0",
+     "1",
+     "1",
+     "2",
+     "0",
+     "1",
+     "0",
+     "0",
+     "-",
+     "17:26",
+     "01:41",
+     "00:37"
+    ],
+    [
+     "10",
+     "Scherwey Tristan",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "14:53",
+     "03:03",
+     "00:00"
+    ],
+    [
+     "14",
+     "Füllemann Louis",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "2",
+     "-1",
+     "1",
+     "0",
+     "0",
+     "2",
+     "0",
+     "0",
+     "-",
+     "16:15",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "15",
+     "Aaltonen Miro",
+     "Stürmer",
+     "0",
+     "1",
+     "1",
+     "0",
+     "1",
+     "0",
+     "1",
+     "4",
+     "1",
+     "0",
+     "1",
+     "4",
+     "7",
+     "36.36",
+     "20:33",
+     "03:17",
+     "00:36"
+    ],
+    [
+     "19",
+     "Merelä Waltteri",
+     "Stürmer",
+     "1",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "1",
+     "2",
+     "1",
+     "0",
+     "2",
+     "9",
+     "3",
+     "75.00",
+     "20:23",
+     "03:24",
+     "00:36"
+    ],
+    [
+     "21",
+     "Moser Simon",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-1",
+     "1",
+     "1",
+     "0",
+     "1",
+     "0",
+     "0",
+     "-",
+     "14:23",
+     "00:00",
+     "00:47"
+    ],
+    [
+     "23",
+     "Lehmann Marco",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "3",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "15:43",
+     "02:26",
+     "00:00"
+    ],
+    [
+     "37",
+     "Lindholm Anton",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "1",
+     "0",
+     "3",
+     "0",
+     "0",
+     "-",
+     "22:33",
+     "02:03",
+     "00:36"
+    ],
+    [
+     "41",
+     "Kindschi Simon",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "12:22",
+     "00:00",
+     "01:24"
+    ],
+    [
+     "43",
+     "Graf Alain",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-1",
+     "0",
+     "0",
+     "0",
+     "0",
+     "7",
+     "6",
+     "53.85",
+     "13:17",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "51",
+     "Rhyn Nils",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "3",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "10:50",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "64",
+     "Alge Mats",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "13:25",
+     "00:00",
+     "00:37"
+    ],
+    [
+     "65",
+     "Untersander Ramon",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-1",
+     "2",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "-",
+     "16:51",
+     "00:12",
+     "00:36"
+    ],
+    [
+     "75",
+     "Iakovenko Aleksandr",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "-",
+     "14:51",
+     "03:06",
+     "00:00"
+    ],
+    [
+     "83",
+     "Müller Marco",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "2",
+     "1",
+     "0",
+     "1",
+     "5",
+     "10",
+     "33.33",
+     "16:16",
+     "02:34",
+     "00:00"
+    ],
+    [
+     "86",
+     "Vermin Joël",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "1",
+     "0",
+     "0",
+     "-",
+     "14:06",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "88",
+     "Schild Thierry",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "-",
+     "12:24",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "91",
+     "Ritzmann Fabian",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-1",
+     "0",
+     "0",
+     "0",
+     "0",
+     "2",
+     "3",
+     "40.00",
+     "14:53",
+     "00:00",
+     "00:47"
+    ],
+    [
+     "98",
+     "Baumgartner Benjamin",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "4",
+     "0",
+     "0",
+     "0",
+     "3",
+     "11",
+     "21.43",
+     "17:36",
+     "02:43",
+     "00:00"
+    ],
+    [
+     "",
+     "Total",
+     "",
+     "1",
+     "2",
+     "1",
+     "1",
+     "3",
+     "2",
+     "0",
+     "30",
+     "10",
+     "0",
+     "15",
+     "30",
+     "40",
+     "42.86",
+     "-",
+     "-",
+     "-"
+    ]
+   ],
+   "alias": "gamePlayerStatsHome"
+  },
+  {
+   "title": "Goalie Stats",
+   "description": "SC Bern",
+   "pages": 0,
+   "selectedPage": 0,
+   "orderBy": null,
+   "orderByDescending": false,
+   "isLive": false,
+   "availableExports": [
+    "Csv",
+    "Pdf"
+   ],
+   "updateDateTime": "2025-09-13T01:46:35.166299+02:00",
+   "filters": null,
+   "secondaryMenu": null,
+   "fixTableLeft": 1,
+   "rowIdentifier": 0,
+   "highlightedPositions": null,
+   "header": [
+    {
+     "name": "No",
+     "description": "Spielernummer",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "playerNumber"
+    },
+    {
+     "name": "Spieler",
+     "description": "Spielername",
+     "align": "left",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "player"
+    },
+    {
+     "name": "GA",
+     "description": "Tore erhalten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "goalsAgainst"
+    },
+    {
+     "name": "SVS",
+     "description": "Schüsse gehalten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "saves"
+    },
+    {
+     "name": "SA",
+     "description": "Erhaltene Schüsse aufs Tor",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "shotsAgainst"
+    },
+    {
+     "name": "SVS%",
+     "description": "Schüsse gehalten in %",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "savesPercentage"
+    },
+    {
+     "name": "MIP",
+     "description": "Gespielte Minuten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "secondsPlayed"
+    },
+    {
+     "name": "GAA",
+     "description": "Erhaltene Tore pro 60 Minuten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "goalsAgainstAverage"
+    },
+    {
+     "name": "PIM",
+     "description": "Strafen in Minuten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "penaltyInMinutes"
+    }
+   ],
+   "data": [
+    [
+     "36",
+     "Reideborn Adam",
+     "1",
+     "30",
+     "31",
+     "96.77",
+     "65:00",
+     "0.92",
+     "0"
+    ],
+    [
+     "33",
+     "Zurkirchen Sandro",
+     "0",
+     "0",
+     "0",
+     "-",
+     "00:00",
+     "-",
+     "0"
+    ]
+   ],
+   "alias": "gameGoalieStatsHome"
+  },
+  {
+   "title": "Player Stats",
+   "description": "Genève-Servette HC",
+   "pages": 0,
+   "selectedPage": 0,
+   "orderBy": null,
+   "orderByDescending": false,
+   "isLive": false,
+   "availableExports": [
+    "Csv",
+    "Pdf"
+   ],
+   "updateDateTime": "2025-09-13T01:46:35.166299+02:00",
+   "filters": null,
+   "secondaryMenu": null,
+   "fixTableLeft": 0,
+   "rowIdentifier": 0,
+   "highlightedPositions": [
+    {
+     "name": null,
+     "style": "total",
+     "rows": [
+      21
+     ]
+    }
+   ],
+   "header": [
+    {
+     "name": "No",
+     "description": "Spielernummer",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "playerNumber"
+    },
+    {
+     "name": "Spieler",
+     "description": "Spielername",
+     "align": "left",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "player"
+    },
+    {
+     "name": "Pos",
+     "description": "Spielerposition",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "playerPosition"
+    },
+    {
+     "name": "G",
+     "description": "Tore",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "goals"
+    },
+    {
+     "name": "A",
+     "description": "Assists",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "assists"
+    },
+    {
+     "name": "A1",
+     "description": "Assists 1",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "assists1"
+    },
+    {
+     "name": "A2",
+     "description": "Assists 2",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "assists2"
+    },
+    {
+     "name": "PTS",
+     "description": "Punktetotal",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "points"
+    },
+    {
+     "name": "PIM Total",
+     "description": "PIM Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "pimTotal"
+    },
+    {
+     "name": "+/-",
+     "description": "Plus / Minus",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "plusMinus"
+    },
+    {
+     "name": "SOG",
+     "description": "Schüsse aufs Tor",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "shotsOnGoal"
+    },
+    {
+     "name": "SHM Total",
+     "description": "Schüsse neben das Tor Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "sogMissed"
+    },
+    {
+     "name": "SHP Total",
+     "description": "Schüsse Torumrandung Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "sogPost"
+    },
+    {
+     "name": "BkS",
+     "description": "geblockte Schüsse",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "blockings"
+    },
+    {
+     "name": "FOW Total",
+     "description": "Gewonnene Bullys Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "faceoffsWon"
+    },
+    {
+     "name": "FOL Total",
+     "description": "Verlorene Bullys Total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "faceoffsLost"
+    },
+    {
+     "name": "FO%",
+     "description": "Gewonnene Faceoff in %",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "faceoffsPercent"
+    },
+    {
+     "name": "TOI Total",
+     "description": "Eiszeit total",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "timeOnIce"
+    },
+    {
+     "name": "TOI PP",
+     "description": "Eiszeit in Überzahl",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "timeOnIcePp"
+    },
+    {
+     "name": "TOI PK",
+     "description": "Eiszeit in Unterzahl",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "timeOnIcePk"
+    }
+   ],
+   "data": [
+    [
+     "9",
+     "Puljujärvi Jesse",
+     "Stürmer",
+     "0",
+     "1",
+     "1",
+     "0",
+     "1",
+     "2",
+     "0",
+     "4",
+     "1",
+     "0",
+     "1",
+     "0",
+     "0",
+     "-",
+     "20:50",
+     "02:00",
+     "00:12"
+    ],
+    [
+     "11",
+     "Praplan Vincent",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "-",
+     "14:04",
+     "00:00",
+     "00:23"
+    ],
+    [
+     "13",
+     "Hischier Luca",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "100.00",
+     "09:12",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "14",
+     "Chanton Giancarlo",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "2",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "-",
+     "15:42",
+     "00:00",
+     "03:13"
+    ],
+    [
+     "16",
+     "Vesey Jimmy",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "5",
+     "1",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "19:59",
+     "02:00",
+     "02:15"
+    ],
+    [
+     "19",
+     "Jooris Josh",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "3",
+     "11",
+     "4",
+     "73.33",
+     "19:33",
+     "00:00",
+     "03:06"
+    ],
+    [
+     "21",
+     "Berni Tim",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "1",
+     "0",
+     "2",
+     "0",
+     "0",
+     "-",
+     "20:00",
+     "00:00",
+     "01:44"
+    ],
+    [
+     "23",
+     "Verboon Matthew",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "2",
+     "0",
+     "0",
+     "0",
+     "11",
+     "3",
+     "78.57",
+     "09:44",
+     "00:00",
+     "00:43"
+    ],
+    [
+     "25",
+     "Karrer Roger",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "2",
+     "0",
+     "0",
+     "-",
+     "16:38",
+     "00:00",
+     "01:40"
+    ],
+    [
+     "44",
+     "Rutta Jan",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-1",
+     "2",
+     "0",
+     "0",
+     "2",
+     "0",
+     "0",
+     "-",
+     "19:56",
+     "00:00",
+     "04:02"
+    ],
+    [
+     "46",
+     "Saarijärvi Vili",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "2",
+     "2",
+     "0",
+     "3",
+     "0",
+     "0",
+     "-",
+     "21:49",
+     "02:00",
+     "00:11"
+    ],
+    [
+     "60",
+     "Granlund Markus",
+     "Stürmer",
+     "1",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "4",
+     "1",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "18:55",
+     "02:00",
+     "00:00"
+    ],
+    [
+     "65",
+     "Manninen Sakari",
+     "Stürmer",
+     "0",
+     "1",
+     "0",
+     "1",
+     "1",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "1",
+     "8",
+     "13",
+     "38.10",
+     "21:12",
+     "02:00",
+     "02:04"
+    ],
+    [
+     "77",
+     "Sutter Dave",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "13:39",
+     "00:00",
+     "00:56"
+    ],
+    [
+     "78",
+     "Pouliot Marc-Antoine",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "2",
+     "0",
+     "3",
+     "0",
+     "0",
+     "0",
+     "8",
+     "10",
+     "44.44",
+     "14:02",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "80",
+     "Ignatavicius Simas",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "00:00",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "85",
+     "Miranda Marco",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-",
+     "09:40",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "90",
+     "Le Coultre Simon",
+     "Verteidiger",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "-1",
+     "3",
+     "0",
+     "0",
+     "3",
+     "0",
+     "0",
+     "-",
+     "17:08",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "94",
+     "Bozon Tim",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "100.00",
+     "16:12",
+     "00:00",
+     "00:00"
+    ],
+    [
+     "96",
+     "Rod Noah",
+     "Stürmer",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "3",
+     "0",
+     "0",
+     "-",
+     "12:49",
+     "00:00",
+     "01:12"
+    ],
+    [
+     "",
+     "Total",
+     "",
+     "1",
+     "2",
+     "1",
+     "1",
+     "3",
+     "4",
+     "0",
+     "31",
+     "8",
+     "0",
+     "22",
+     "40",
+     "30",
+     "57.14",
+     "-",
+     "-",
+     "-"
+    ]
+   ],
+   "alias": "gamePlayerStatsAway"
+  },
+  {
+   "title": "Goalie Stats",
+   "description": "Genève-Servette HC",
+   "pages": 0,
+   "selectedPage": 0,
+   "orderBy": null,
+   "orderByDescending": false,
+   "isLive": false,
+   "availableExports": [
+    "Csv",
+    "Pdf"
+   ],
+   "updateDateTime": "2025-09-13T01:46:35.166299+02:00",
+   "filters": null,
+   "secondaryMenu": null,
+   "fixTableLeft": 1,
+   "rowIdentifier": 0,
+   "highlightedPositions": null,
+   "header": [
+    {
+     "name": "No",
+     "description": "Spielernummer",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "playerNumber"
+    },
+    {
+     "name": "Spieler",
+     "description": "Spielername",
+     "align": "left",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "player"
+    },
+    {
+     "name": "GA",
+     "description": "Tore erhalten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "goalsAgainst"
+    },
+    {
+     "name": "SVS",
+     "description": "Schüsse gehalten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "saves"
+    },
+    {
+     "name": "SA",
+     "description": "Erhaltene Schüsse aufs Tor",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "shotsAgainst"
+    },
+    {
+     "name": "SVS%",
+     "description": "Schüsse gehalten in %",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "savesPercentage"
+    },
+    {
+     "name": "MIP",
+     "description": "Gespielte Minuten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "secondsPlayed"
+    },
+    {
+     "name": "GAA",
+     "description": "Erhaltene Tore pro 60 Minuten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "goalsAgainstAverage"
+    },
+    {
+     "name": "PIM",
+     "description": "Strafen in Minuten",
+     "align": "center",
+     "showTooltip": true,
+     "isSortable": true,
+     "alias": "penaltyInMinutes"
+    }
+   ],
+   "data": [
+    [
+     "38",
+     "Charlin Stéphane",
+     "1",
+     "29",
+     "30",
+     "96.67",
+     "65:00",
+     "0.92",
+     "0"
+    ],
+    [
+     "29",
+     "Mayer Robert",
+     "0",
+     "0",
+     "0",
+     "-",
+     "00:00",
+     "-",
+     "0"
+    ]
+   ],
+   "alias": "gameGoalieStatsAway"
+  },
+  {
+   "title": "Team Stats",
+   "description": "SC Bern - Genève-Servette HC",
+   "pages": 0,
+   "selectedPage": 0,
+   "orderBy": null,
+   "orderByDescending": false,
+   "isLive": false,
+   "availableExports": [
+    "Csv",
+    "Pdf"
+   ],
+   "updateDateTime": "2025-09-13T01:46:35.166299+02:00",
+   "filters": null,
+   "secondaryMenu": null,
+   "fixTableLeft": 1,
+   "rowIdentifier": 0,
+   "highlightedPositions": null,
+   "header": [
+    {
+     "name": "Stats",
+     "description": "Statistic",
+     "align": "left",
+     "showTooltip": true,
+     "isSortable": false,
+     "alias": "Statistic"
+    },
+    {
+     "name": "SC Bern",
+     "description": "SC Bern",
+     "align": "center",
+     "showTooltip": false,
+     "isSortable": true,
+     "alias": "SC Bern"
+    },
+    {
+     "name": "Genève-Servette HC",
+     "description": "Genève-Servette HC",
+     "align": "center",
+     "showTooltip": false,
+     "isSortable": true,
+     "alias": "Genève-Servette HC"
+    }
+   ],
+   "data": [
+    [
+     "SOG Total",
+     "30",
+     "31"
+    ],
+    [
+     "SOG 1P",
+     "8",
+     "9"
+    ],
+    [
+     "SOG 2P",
+     "13",
+     "8"
+    ],
+    [
+     "SOG 3P",
+     "6",
+     "14"
+    ],
+    [
+     "SOG OT1",
+     "3",
+     "0"
+    ],
+    [
+     "SHM Total",
+     "10",
+     "8"
+    ],
+    [
+     "SHM 1P",
+     "1",
+     "3"
+    ],
+    [
+     "SHM 2P",
+     "4",
+     "3"
+    ],
+    [
+     "SHM 3P",
+     "4",
+     "0"
+    ],
+    [
+     "SHM OT1",
+     "1",
+     "2"
+    ],
+    [
+     "SHP Total",
+     "0",
+     "0"
+    ],
+    [
+     "SHP 1P",
+     "0",
+     "0"
+    ],
+    [
+     "SHP 2P",
+     "0",
+     "0"
+    ],
+    [
+     "SHP 3P",
+     "0",
+     "0"
+    ],
+    [
+     "SHP OT1",
+     "0",
+     "0"
+    ],
+    [
+     "BkS",
+     "15",
+     "22"
+    ],
+    [
+     "BkS 1P",
+     "6",
+     "6"
+    ],
+    [
+     "BkS 2P",
+     "6",
+     "9"
+    ],
+    [
+     "BkS 3P",
+     "3",
+     "4"
+    ],
+    [
+     "BkS OT1",
+     "0",
+     "3"
+    ],
+    [
+     "FO Total",
+     "70",
+     "70"
+    ],
+    [
+     "FOW Total",
+     "30",
+     "40"
+    ],
+    [
+     "FOL Total",
+     "40",
+     "30"
+    ],
+    [
+     "FO%",
+     "42.86",
+     "57.14"
+    ],
+    [
+     "FO% 1P",
+     "47.83",
+     "52.17"
+    ],
+    [
+     "FO% 2P",
+     "44.44",
+     "55.56"
+    ],
+    [
+     "FO% 3P",
+     "31.25",
+     "68.75"
+    ],
+    [
+     "FO% OT1",
+     "50.00",
+     "50.00"
+    ],
+    [
+     "FO% oz Total",
+     "45.45",
+     "59.38"
+    ],
+    [
+     "FO% oz 1P",
+     "63.64",
+     "40.00"
+    ],
+    [
+     "FO% oz 2P",
+     "40.00",
+     "61.11"
+    ],
+    [
+     "FO% oz 3P",
+     "16.67",
+     "66.67"
+    ],
+    [
+     "FO% oz OT1",
+     "-",
+     "66.67"
+    ],
+    [
+     "FO% nz Total",
+     "43.75",
+     "56.25"
+    ],
+    [
+     "FO% nz 1P",
+     "14.29",
+     "85.71"
+    ],
+    [
+     "FO% nz 2P",
+     "75.00",
+     "25.00"
+    ],
+    [
+     "FO% nz 3P",
+     "50.00",
+     "50.00"
+    ],
+    [
+     "FO% nz OT1",
+     "100.00",
+     "0.00"
+    ],
+    [
+     "FO% dz Total",
+     "40.62",
+     "54.55"
+    ],
+    [
+     "FO% dz 1P",
+     "60.00",
+     "36.36"
+    ],
+    [
+     "FO% dz 2P",
+     "38.89",
+     "60.00"
+    ],
+    [
+     "FO% dz 3P",
+     "33.33",
+     "83.33"
+    ],
+    [
+     "FO% dz OT1",
+     "33.33",
+     "-"
+    ],
+    [
+     "PIM Total",
+     "2",
+     "6"
+    ],
+    [
+     "PIM 1P",
+     "0",
+     "0"
+    ],
+    [
+     "PIM 2P",
+     "0",
+     "4"
+    ],
+    [
+     "PIM 3P",
+     "2",
+     "0"
+    ],
+    [
+     "PIM OT1",
+     "0",
+     "2"
+    ],
+    [
+     "PPT",
+     "05:50",
+     "02:00"
+    ],
+    [
+     "PKT",
+     "02:00",
+     "05:50"
+    ],
+    [
+     "PP OP",
+     "3",
+     "1"
+    ],
+    [
+     "PPG",
+     "0",
+     "0"
+    ],
+    [
+     "PP%",
+     "0.00",
+     "0.00"
+    ],
+    [
+     "PP GA",
+     "0",
+     "0"
+    ],
+    [
+     "PK SI",
+     "1",
+     "3"
+    ],
+    [
+     "PK GA",
+     "0",
+     "0"
+    ],
+    [
+     "SHG",
+     "0",
+     "0"
+    ],
+    [
+     "PK%",
+     "100.00",
+     "100.00"
+    ]
+   ],
+   "alias": "gameTeamStats"
+  }
+ ],
+ "round": 2,
+ "league": {
+  "id": 1,
+  "name": "National League"
+ },
+ "region": {
+  "id": 1,
+  "name": "National"
+ },
+ "group": {
+  "id": 0,
+  "name": "Keine"
+ },
+ "tournament": {
+  "id": 1,
+  "name": "Meisterschaft"
+ },
+ "qualification": {
+  "id": 1,
+  "name": "Regular Season"
+ },
+ "phase": {
+  "id": 4940,
+  "name": "NL Regular Season"
+ },
+ "broadcasts": {
+  "entries": [
+   "MYSPORTS"
+  ],
+  "type": "broadcasts"
+ },
+ "gameId": "20261105000009",
+ "season": 2026,
+ "result": {
+  "homeTeam": "2",
+  "awayTeam": "1",
+  "scores": [
+   {
+    "homeTeam": "1",
+    "awayTeam": "0",
+    "name": "1. Drittel",
+    "indicator": "1"
+   },
+   {
+    "homeTeam": "0",
+    "awayTeam": "1",
+    "name": "2. Drittel",
+    "indicator": "2"
+   },
+   {
+    "homeTeam": "0",
+    "awayTeam": "0",
+    "name": "3. Drittel",
+    "indicator": "3"
+   },
+   {
+    "homeTeam": "1",
+    "awayTeam": "0",
+    "name": "1. Verlängerung / Shootout",
+    "indicator": "OT1"
+   }
+  ],
+  "sogs": [
+   {
+    "homeTeam": "8",
+    "awayTeam": "9",
+    "name": "1. Drittel",
+    "indicator": "1"
+   },
+   {
+    "homeTeam": "13",
+    "awayTeam": "8",
+    "name": "2. Drittel",
+    "indicator": "2"
+   },
+   {
+    "homeTeam": "6",
+    "awayTeam": "14",
+    "name": "3. Drittel",
+    "indicator": "3"
+   },
+   {
+    "homeTeam": "3",
+    "awayTeam": "0",
+    "name": "1. Verlängerung / Shootout",
+    "indicator": "OT1"
+   }
+  ]
+ },
+ "details": {
+  "homeAbsentees": [
+   {
+    "id": 2,
+    "name": "Verletzt",
+    "acronym": "IN",
+    "absentees": [
+     346040,
+     152750,
+     144415
+    ]
+   },
+   {
+    "id": 4,
+    "name": "Farmteam/Swiss League",
+    "acronym": "FT",
+    "absentees": [
+     312671,
+     313602,
+     315310,
+     319747,
+     318579
+    ]
+   },
+   {
+    "id": 3,
+    "name": "Überzählig",
+    "acronym": "SU",
+    "absentees": [
+     308185
+    ]
+   }
+  ],
+  "awayAbsentees": [
+   {
+    "id": 4,
+    "name": "Farmteam/Swiss League",
+    "acronym": "FT",
+    "absentees": [
+     319885
+    ]
+   },
+   {
+    "id": 3,
+    "name": "Überzählig",
+    "acronym": "SU",
+    "absentees": [
+     347705,
+     347706
+    ]
+   },
+   {
+    "id": 2,
+    "name": "Verletzt",
+    "acronym": "IN",
+    "absentees": [
+     148281
+    ]
+   }
+  ],
+  "venue": {
+   "name": "PostFinance Arena",
+   "spectators": "14523",
+   "street": "Mingerstrasse 12",
+   "zip": "3014",
+   "city": "Bern BE",
+   "country": "CH"
+  },
+  "referees": [
+   {
+    "id": 3525,
+    "fullName": "Mikko Kaukokari",
+    "jerseyNumber": 63,
+    "country": "FIN"
+   },
+   {
+    "id": 585,
+    "fullName": "Pascal Hungerbühler",
+    "jerseyNumber": 40,
+    "country": "SUI"
+   }
+  ],
+  "linesmen": [
+   {
+    "id": 2213,
+    "fullName": "Aurélien Urfer",
+    "jerseyNumber": 57,
+    "country": "SUI"
+   },
+   {
+    "id": 1784,
+    "fullName": "Dominik Bichsel",
+    "jerseyNumber": 37,
+    "country": "SUI"
+   }
+  ],
+  "homeTeam": {
+   "id": 102126,
+   "name": "SC Bern",
+   "acronym": "SCB",
+   "signed": false,
+   "type": "team"
+  },
+  "awayTeam": {
+   "id": 103140,
+   "name": "Genève-Servette HC",
+   "acronym": "GSHC",
+   "signed": false,
+   "type": "team"
+  }
+ },
+ "updateDateTime": "2025-09-13T01:46:35.166299+02:00",
+ "startDateTime": "2025-09-12T19:45:00+02:00",
+ "endDateTime": "2025-09-12T22:21:00+02:00",
+ "videoId": "",
+ "info": "",
+ "status": {
+  "id": 12,
+  "updateDateTime": "2025-09-13T01:46:35.166299+02:00",
+  "startDateTime": "2025-09-12T19:45:00+02:00",
+  "endDateTime": "2025-09-12T22:21:00+02:00",
+  "percent": 100,
+  "name": "Ende",
+  "canceled": false,
+  "type": "gameStatus"
+ },
+ "alias": "gameDetail"
+}

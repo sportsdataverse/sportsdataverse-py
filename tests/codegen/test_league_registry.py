@@ -21,6 +21,7 @@ def test_registry_sports_and_labels():
     assert by_sport["football"]["nfl"] == "NFL"
     assert by_sport["hockey"]["pwhl"] == "PWHL"
     assert "ahl" in by_sport["hockey"]
+    assert by_sport["hockey"]["sihf"] == "SIHF (Swiss hockey)"
     assert by_sport["soccer"]["laliga"] == "LaLiga"
     assert by_sport["other"] == {
         "euroleague": "EuroLeague",

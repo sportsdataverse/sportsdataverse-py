@@ -1,0 +1,393 @@
+{
+ "title": "Goalie Stats",
+ "description": "Goalie Stats - Summary",
+ "pages": 35,
+ "selectedPage": 1,
+ "orderBy": "goalsAgainstAverage",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2026-05-01T13:10:18.4908505+02:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    }
+   ],
+   "selected": "2026",
+   "type": "Dropdown",
+   "alias": "Season"
+  }
+ ],
+ "secondaryMenu": [
+  {
+   "name": "Summary",
+   "rowIdentifierKey": "goalsAgainstAverage",
+   "isOrderDescending": false,
+   "alias": "goalkeeper"
+  },
+  {
+   "name": "Shots",
+   "rowIdentifierKey": "sogaSog",
+   "isOrderDescending": true,
+   "alias": "goalkeeperShotDetail"
+  },
+  {
+   "name": "Wins/Shutout",
+   "rowIdentifierKey": "wins",
+   "isOrderDescending": true,
+   "alias": "goalkeeperWin"
+  },
+  {
+   "name": "Shootout",
+   "rowIdentifierKey": "penShotsAgainst",
+   "isOrderDescending": true,
+   "alias": "goalkeeperShootout"
+  }
+ ],
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [
+  {
+   "name": null,
+   "style": "average",
+   "rows": [
+    7
+   ]
+  },
+  {
+   "name": null,
+   "style": "line",
+   "rows": [
+    17
+   ]
+  }
+ ],
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": false,
+   "alias": "rank"
+  },
+  {
+   "name": "Spieler",
+   "description": "Spielername",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "player"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "GP",
+   "description": "Gespielte Spiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesPlayed"
+  },
+  {
+   "name": "GPI",
+   "description": "Spiele als 1. Torhüter",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "firstKeeper"
+  },
+  {
+   "name": "GA",
+   "description": "Tore erhalten",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsAgainst"
+  },
+  {
+   "name": "GAA",
+   "description": "Erhaltene Tore pro 60 Minuten",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsAgainstAverage"
+  },
+  {
+   "name": "SA",
+   "description": "Erhaltene Schüsse aufs Tor",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "shotsAgainst"
+  },
+  {
+   "name": "SVS",
+   "description": "Schüsse gehalten",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "saves"
+  },
+  {
+   "name": "SVS%",
+   "description": "Schüsse gehalten in %",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "savesPercentage"
+  },
+  {
+   "name": "MIP",
+   "description": "Gespielte Minuten",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "secondsPlayed"
+  },
+  {
+   "name": "PIM",
+   "description": "Strafen in Minuten",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "penaltyInMinutes"
+  },
+  {
+   "name": "G",
+   "description": "Tore",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goals"
+  },
+  {
+   "name": "A",
+   "description": "Assists",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "assists"
+  }
+ ],
+ "data": [
+  [
+   "1",
+   "Hrubec Simon",
+   {
+    "id": 101139,
+    "name": "ZSC Lions",
+    "acronym": "ZSC",
+    "signed": false,
+    "type": "team"
+   },
+   "60",
+   "60",
+   "114",
+   "1.89",
+   "1630",
+   "1516",
+   "93.01",
+   "3615:02",
+   "0",
+   "0",
+   "0"
+  ],
+  [
+   "2",
+   "Reideborn Adam",
+   {
+    "id": 102126,
+    "name": "SC Bern",
+    "acronym": "SCB",
+    "signed": false,
+    "type": "team"
+   },
+   "39",
+   "39",
+   "78",
+   "2.03",
+   "991",
+   "913",
+   "92.13",
+   "2307:31",
+   "0",
+   "0",
+   "1"
+  ],
+  [
+   "3",
+   "Berra Reto",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "75",
+   "74",
+   "155",
+   "2.06",
+   "1973",
+   "1818",
+   "92.14",
+   "4522:09",
+   "6",
+   "0",
+   "5"
+  ],
+  [
+   "4",
+   "Aeschlimann Sandro",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": false,
+    "type": "team"
+   },
+   "67",
+   "65",
+   "141",
+   "2.10",
+   "1919",
+   "1778",
+   "92.65",
+   "4027:05",
+   "0",
+   "0",
+   "5"
+  ],
+  [
+   "5",
+   "Meyer Robin",
+   {
+    "id": 102127,
+    "name": "SCL Tigers",
+    "acronym": "SCL",
+    "signed": false,
+    "type": "team"
+   },
+   "22",
+   "21",
+   "49",
+   "2.29",
+   "608",
+   "559",
+   "91.94",
+   "1281:41",
+   "0",
+   "0",
+   "0"
+  ],
+  [
+   "6",
+   "Schlegel Niklas",
+   {
+    "id": 101150,
+    "name": "HC Lugano",
+    "acronym": "HCL",
+    "signed": false,
+    "type": "team"
+   },
+   "42",
+   "42",
+   "99",
+   "2.34",
+   "1132",
+   "1033",
+   "91.25",
+   "2533:19",
+   "0",
+   "0",
+   "0"
+  ],
+  [
+   "",
+   "Durchschnitt",
+   {
+    "id": 100000,
+    "name": "Durchschnitt",
+    "acronym": "Durchschnitt",
+    "signed": false,
+    "type": "team"
+   },
+   "44",
+   "43",
+   "105",
+   "2.43",
+   "1224",
+   "1119",
+   "91.42",
+   "2596:03",
+   "2",
+   "0",
+   "1"
+  ],
+  [
+   "7",
+   "Charlin Stéphane",
+   {
+    "id": 103140,
+    "name": "Genève-Servette HC",
+    "acronym": "GSHC",
+    "signed": false,
+    "type": "team"
+   },
+   "66",
+   "64",
+   "155",
+   "2.47",
+   "1717",
+   "1562",
+   "90.97",
+   "3768:10",
+   "8",
+   "0",
+   "1"
+  ]
+ ],
+ "alias": "goalkeeper"
+}

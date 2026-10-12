@@ -1,0 +1,15 @@
+schema: sihf_game_team_stats
+kind: dataframe
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: statistic
+  type: character
+  description: ''
+- name: home_value
+  type: character
+  description: ''
+- name: away_value
+  type: character
+  description: ''

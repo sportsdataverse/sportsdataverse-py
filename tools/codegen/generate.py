@@ -92,9 +92,13 @@ def _example_url(
     Replays the wrapper body (see ``espn_league_module.py.jinja`` / ``api_module.py.jinja``
     and :meth:`_EndpointView._build_path_expr`): argument defaults, ``default_from``,
     ``transform``, ``[optional segments]`` and ``now_variant``, then every non-None
-    query param in ``_params`` order. Empty when the example omits a required argument,
-    since that call raises before it requests anything.
+    query param in ``_params`` order -- passed through the getter module's own
+    ``_build_query`` when it has one (SIHF folds its filters into ``searchQuery`` /
+    ``filterBy`` / ``filterQuery`` before requesting). Empty when the example omits a
+    required argument, since that call raises before it requests anything.
     """
+    import importlib
+
     params = [*ep.path_params, *ep.query_params]
     if any(p.required and p.default_from is None and p.python_name not in ep.example_args for p in params):
         return ""
@@ -117,6 +121,10 @@ def _example_url(
         path = ep.now_variant
     path = _PATH_TOKEN.sub(lambda m: str(vals.get(m.group(1), m.group(0))), _sub_slugs(path, sport, league))
     qs = {k: v for k, v in qs.items() if v is not None}  # _get strips None params
+    build = getattr(importlib.import_module(getter_module), "_build_query", None)
+    if build is not None:  # the runtime rewrites the query before it requests (sihf_runtime)
+        built = build(qs)
+        qs = built[0] if isinstance(built, tuple) else built
     return f"{host_url}{path}" + (f"?{urlencode(qs, doseq=True)}" if qs else "")
 
 
@@ -142,6 +150,7 @@ _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
         "sportsdataverse.euroleague.euroleague_runtime",
+        "sportsdataverse.hockey.sihf.sihf_runtime",
         "sportsdataverse.thesportsdb.thesportsdb_runtime",
         "sportsdataverse.soccer.football_data_runtime",
         "sportsdataverse.soccer.uefa_runtime",
@@ -447,7 +456,17 @@ _LEAGUE_R_PACKAGE = {
 
 # Package homes that are not leagues: they carry flat-API families but no ESPN league, no
 # loaders and no R counterpart. Ordered, because _doc_leagues() appends them in this order.
-_NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_content", "thesportsdb")
+_NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_content", "thesportsdb", "sihf")
+
+# Homes that live inside a sport-group container from their first release, so they have no
+# top-level alias in ``sportsdataverse._MOVED`` and no ``group`` in leagues.yaml (the ESPN
+# registry). SIHF sits beside the HockeyTech families under ``hockey/`` without being one.
+_NESTED_HOMES = {"sihf": "hockey.sihf"}
+
+
+def _home_module(prefix: str) -> str:
+    """The import path the docs and Examples name for ``prefix`` (``sportsdataverse.<prefix>`` unless nested)."""
+    return f"sportsdataverse.{_NESTED_HOMES.get(prefix, prefix)}"
 
 
 # Flat-API families with NO R counterpart. Their columns never passed through an R package,
@@ -461,7 +480,7 @@ _NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_con
 # A blank cell is honest. A wrong one is worse than blank AND invisible to the description
 # ratchet, which counts it as covered.
 _NO_R_DICT_FAMILIES = frozenset(
-    {"espn_content", "thesportsdb", "football_data", "openligadb", "polymarket", "kalshi"},
+    {"espn_content", "thesportsdb", "football_data", "openligadb", "polymarket", "kalshi", "sihf_api_web"},
 )
 
 
@@ -979,7 +998,7 @@ class _EndpointView:
             auth=auth,
             league_param=league.league_param,
             doc_extras=doc_extras,
-            import_from=f"sportsdataverse.{league.prefix}" if league.prefix else "",
+            import_from=_home_module(league.prefix) if league.prefix else "",
             returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
             vocab_raises=getter_module in _VOCAB_GETTERS,
         )
@@ -1892,6 +1911,52 @@ def _refresh_sport_specific_return_schemas() -> int:
     return written
 
 
+def _write_native_schemas(nat: dict) -> int:
+    """Introspect each flat-API parser on its captured fixture -> ``schemas/native/<api>/<short>.yaml``.
+
+    ``nat`` is ``native_fixture_map.yaml``: ``{api: {fixture file: short}}``. A value may also be
+    a list of shorts, for one capture that several endpoints parse (the SIHF game page feeds six
+    parsers). Returns the number of schemas written."""
+    import importlib
+    import json
+
+    import yaml
+
+    written = 0
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    for api, files in nat.items():
+        fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
+        by_short = {e.short: e for e in fa.endpoints}
+        pmod = importlib.import_module(f"sportsdataverse.{fa.parser_module}")
+        for fname, shorts in files.items():
+            for short in [shorts] if isinstance(shorts, str) else shorts:
+                ep = by_short.get(short)
+                if ep is None or not ep.parser:
+                    continue
+                outdir = ROOT / "tools" / "codegen" / "schemas" / "native" / api
+                key = f"{fa.schema_prefix}{short}"  # what manual_column_descriptions.yaml is keyed by
+                try:
+                    payload = json.loads((ROOT / "tests" / "fixtures" / api / fname).read_text("utf-8"))
+                    df = getattr(pmod, ep.parser)(payload)
+                    if isinstance(df, dict):  # one frame per section (a KenPom page parses to {table_id: frame})
+                        doc = {
+                            "schema": key,
+                            "kind": "frames",
+                            "frames": [{"section": sec, "columns": _cols_from_frame(f, {})} for sec, f in df.items()],
+                        }
+                    else:
+                        doc = {"schema": key, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
+                except Exception as e:  # noqa: BLE001
+                    print(f"  native skip {api}/{short} ({fname}): {e}")
+                    continue
+                outdir.mkdir(parents=True, exist_ok=True)
+                (outdir / f"{short}.yaml").write_text(
+                    yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
+                )
+                written += 1
+    return written
+
+
 def refresh_return_schemas() -> int:
     """Run each parser on every per-league captured fixture and emit per-league
     column schemas under schemas/{name}/{league}.yaml. Descriptions are merged
@@ -1936,38 +2001,8 @@ def refresh_return_schemas() -> int:
     written += _write_auto_espn_schemas(_FIX, ROOT / "tools" / "codegen" / "schemas")
 
     # --- natives ---
-    import importlib
-
     nat = yaml.safe_load((ROOT / "tools" / "codegen" / "native_fixture_map.yaml").read_text("utf-8")) or {}
-    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
-    for api, files in nat.items():
-        fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
-        by_short = {e.short: e for e in fa.endpoints}
-        pmod = importlib.import_module(f"sportsdataverse.{fa.parser_module}")
-        for fname, short in files.items():
-            ep = by_short.get(short)
-            if ep is None or not ep.parser:
-                continue
-            try:
-                payload = json.loads((ROOT / "tests" / "fixtures" / api / fname).read_text("utf-8"))
-                df = getattr(pmod, ep.parser)(payload)
-                if isinstance(df, dict):  # one frame per section (a KenPom page parses to {table_id: frame})
-                    doc = {
-                        "schema": short,
-                        "kind": "frames",
-                        "frames": [{"section": sec, "columns": _cols_from_frame(f, {})} for sec, f in df.items()],
-                    }
-                else:
-                    doc = {"schema": short, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
-            except Exception as e:  # noqa: BLE001
-                print(f"  native skip {api}/{short} ({fname}): {e}")
-                continue
-            outdir = ROOT / "tools" / "codegen" / "schemas" / "native" / api
-            outdir.mkdir(parents=True, exist_ok=True)
-            (outdir / f"{short}.yaml").write_text(
-                yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
-            )
-            written += 1
+    written += _write_native_schemas(nat)
 
     # --- sport-specific ESPN parsers (soccer/cricket) ---
     sport_written = _refresh_sport_specific_return_schemas()
@@ -2193,6 +2228,8 @@ FLAT_APIS = [
     ("openligadb", "soccer"),
     ("polymarket", "odds"),
     ("kalshi", "odds"),
+    # Swiss Ice Hockey Federation statistics API (data.sihf.ch), every SIHF league
+    ("sihf_api_web", "sihf"),
 ]
 
 
@@ -2224,6 +2261,8 @@ def _flat_dest(prefix: str, module: str) -> Path:
     Returns:
         Absolute path the module should be written to.
     """
+    if prefix in _NESTED_HOMES:
+        return LIVE.joinpath(*_NESTED_HOMES[prefix].split("."), f"{module}.py")
     group = _LEAGUE_GROUP.get(prefix, "")
     base = LIVE / group / prefix if group else LIVE / prefix
     return base / f"{module}.py"
@@ -2429,7 +2468,7 @@ def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
     """Build group → sorted-members mapping from the prefix→group dict.
 
     Includes the hand-written HockeyTech modules (``_HOCKEYTECH_MODULE_LEAGUES``)
-    under hockey.
+    and the ``_NESTED_HOMES`` (sihf) under hockey.
     """
     _HOCKEYTECH = _HOCKEYTECH_MODULE_LEAGUES
     result: dict[str, list[str]] = {}
@@ -2444,6 +2483,11 @@ def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
         result.setdefault("hockey", [])
         if ht not in result["hockey"]:
             result["hockey"].append(ht)
+    # And the homes nested from their first release (sihf), under their container.
+    for home, mod in _NESTED_HOMES.items():
+        members = result.setdefault(mod.split(".")[0], [])
+        if home not in members:
+            members.append(home)
     return {g: sorted(members) for g, members in result.items()}
 
 
@@ -2571,6 +2615,7 @@ _COVERAGE_LEAGUES = [
     "f1",
     "espn_content",
     "thesportsdb",
+    "sihf",
     # Joined in 0.1.5: each has hand-written modules, so until now the gates never
     # saw their functions and they had no Additional page.
     "soccer",
@@ -2590,10 +2635,11 @@ _COVERAGE_LEAGUES = [
 def _league_module(prefix: str) -> str:
     """A league's module path under ``sportsdataverse``: the nested home for a name that moved
     (``epl`` -> ``soccer.epl``, ``ahl`` -> ``hockey.ahl``), so codegen never imports the old
-    top-level alias and trips its DeprecationWarning. ``sportsdataverse._MOVED`` is the one list."""
+    top-level alias and trips its DeprecationWarning. ``sportsdataverse._MOVED`` is the one list
+    of moved names; ``_NESTED_HOMES`` holds the homes that were nested from the start (``sihf``)."""
     from sportsdataverse import _MOVED
 
-    return _MOVED.get(prefix, prefix)
+    return _MOVED.get(prefix) or _NESTED_HOMES.get(prefix, prefix)
 
 
 _COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
@@ -2958,6 +3004,7 @@ _FLAT_API_DOC = {
     "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
+    "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
     "football_data": "Football-Data.co.uk CSV archive (football-data.co.uk)",
     "openligadb": "OpenLigaDB (api.openligadb.de, community German football)",
     "polymarket": "Polymarket read APIs (gamma-api + clob.polymarket.com)",
@@ -3135,6 +3182,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     template = render.ENV.get_template("reference_page.md.jinja")
     return template.render(
         prefix=prefix,
+        module=_home_module(prefix),
         title=f"{_doc_display_name(prefix)} — {label}",
         label=label,
         sidebar_position=position,
@@ -3330,6 +3378,7 @@ def render_league_index(
     template = render.ENV.get_template("league_index.md.jinja")
     return template.render(
         prefix=prefix,
+        module=_home_module(prefix),
         display_name=_doc_display_name(prefix),
         api_rows=_apis_for(prefix),
         has_loaders=bool(loaders),
@@ -4375,7 +4424,9 @@ def refresh_autodoc_schemas() -> int:
     timeout = float(os.environ.get("SDV_AUTODOC_CALL_TIMEOUT", "120"))
     for scope, names in _autodoc_names_by_scope().items():
         scope_key = "global" if scope is None else scope
-        mod = importlib.import_module("sportsdataverse" if scope is None else f"sportsdataverse.{scope}")
+        mod = importlib.import_module(
+            "sportsdataverse" if scope is None else f"sportsdataverse.{_league_module(scope)}"
+        )
         scope_args = args_by_scope.get(scope_key, {})
         memo.clear()  # inputs are scope-local; don't hold every league's season loads at once
         for fn in names:
@@ -4882,7 +4933,7 @@ _SPORTS = (
     ("other", "Other"),
 )
 # Sport of a documented league that leagues.yaml does not list (releases-only or hand-written modules).
-_EXTRA_LEAGUE_SPORT = {"pwhl": "hockey", **{lg: "hockey" for lg in _HOCKEYTECH_MODULE_LEAGUES}}
+_EXTRA_LEAGUE_SPORT = {"pwhl": "hockey", "sihf": "hockey", **{lg: "hockey" for lg in _HOCKEYTECH_MODULE_LEAGUES}}
 # Labels for prefixes that are not initials; every other prefix is upper-cased (nfl -> NFL).
 _LEAGUE_LABELS = {
     "bundesliga": "Bundesliga",
@@ -4900,6 +4951,7 @@ _LEAGUE_LABELS = {
     "f1": "Formula 1",
     "espn_content": "ESPN content (news)",
     "thesportsdb": "TheSportsDB",
+    "sihf": "SIHF (Swiss hockey)",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",
@@ -4932,7 +4984,10 @@ _INTRO_MARKERS = (
     "<!-- END generated: leagues-and-sources -->",
 )
 # League prefix -> the import path shown in intro.md, where it is not sportsdataverse.<prefix>.
-_INTRO_MODULE = {lg: f"sportsdataverse.hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES}
+_INTRO_MODULE = {
+    **{lg: f"sportsdataverse.hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES},
+    **{lg: _home_module(lg) for lg in _NESTED_HOMES},
+}
 
 
 def _patch_between_markers(text: str, begin: str, end: str, body: str) -> str:

@@ -394,3 +394,16 @@ kenpom:
   four_factors.json: four_factors
   efficiency.json: efficiency
   ratings.json: ratings
+sihf_api_web:
+  table__results__2026__1.json: results
+  table__standing__2026__1.json: standings
+  table__player__2026__1.json: player_stats
+  table__goalkeeper__2026__1.json: goalie_stats
+  table__results__2026__1__phases.json: phases
+  gameoverview__20261105000325.json:
+    - pbp
+    - game_info
+    - game_player_stats
+    - game_goalie_stats
+    - game_team_stats
+    - game_lineups
