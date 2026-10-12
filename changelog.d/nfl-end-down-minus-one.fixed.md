@@ -1,3 +1,3 @@
-- **NFL:** a returned kickoff (2014 on) and a pre-2014 missed field goal end at the receiver's 1st & 10
-  (or goal) instead of ESPN's down -1, the missed field goal at the receiver's next snap; EPA on those
-  plays is within 0.27 / 0.16 points of nflverse on average (was 0.95 / 1.72). (#810)
+- **NFL:** kickoff and missed field goal EPA score the next possession's 1st & 10: an unscored kickoff
+  at the receiver's next snap (1st & goal inside the 10), a missed field goal at the spot of the kick
+  (the 20 when that is inside it), not ESPN's down -1 or stale end. (#810)

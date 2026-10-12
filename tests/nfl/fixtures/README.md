@@ -108,10 +108,12 @@ uv run python -c "import sys, polars as pl; src, gid, out = sys.argv[1:]; pl.rea
   `pbp_2021.parquet` (`aa8dec05bb188140f08ad56345395a1708e9012c102f90988c76e149e9b9d074`), trimmed
   2026-10-11 with the command above plus a 42nd column, `first_down`, appended to the select list.
 - **`nflverse/end_down_minus_one_epa.csv`** (task 2.3, read by `test_end_down_minus_one_epa_agrees_with_nflverse`):
-  nflverse's `epa` on the 29 plays ESPN ends at down -1 without a score (21 kickoff returns 2015-2024,
-  8 missed field goals 2005-2013) in the committed captures, columns `espn_game_id, play_id,
-  nflverse_game_id, play_type, epa`. Downloaded 2026-10-12 from the same release's
-  `play_by_play_<season>.parquet` assets (2005-2024); the ESPN game id is mapped to nflverse's
+  nflverse's `epa` on 45 plays of the committed captures, columns `espn_game_id, play_id,
+  nflverse_game_id, play_type, epa`: the 21 kickoff returns ESPN ends at down -1 (2015-2024) and every
+  unblocked missed field goal (8 from 2005-2013, 16 from 2014-2025; the test reads the 2014+ ones).
+  Downloaded 2026-10-12 from the same release's `play_by_play_<season>.parquet` assets (2005-2025;
+  the 2014+ field goals from the nfl-data cache of those assets,
+  `nflverse-dev/nfl-data/python/.cache/nflverse_pbp/pbp_<season>.parquet`); the ESPN game id is mapped to nflverse's
   `game_id` by the `espn` column of `https://github.com/nflverse/nfldata/raw/master/data/games.csv`, and
   the play by ESPN's play id (the game id followed by the GSIS `play_id`).
 

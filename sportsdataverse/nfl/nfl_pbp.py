@@ -518,6 +518,15 @@ def _nfl_penalty_first_down() -> pl.Expr:
     )
 
 
+def _missed_fg_unblocked() -> pl.Expr:
+    """An unscored missed field goal; a blocked kick is a live ball, so text saying blocked is not one."""
+    return (
+        (pl.col("type.text") == "Field Goal Missed")
+        & ~pl.col("text").str.contains("(?i)block").fill_null(False)
+        & ~(pl.col("scoringPlay") == True).fill_null(False)
+    )
+
+
 def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
     """A play ends where the next play of its game and half starts (EX-1.5-d).
 
@@ -1672,52 +1681,60 @@ class NFLPlayProcess(object):
         )
         # ESPN ends a returned kickoff (2014 on) and a missed field goal (before 2014) at down -1,
         # and the EP and WP models read that as no down at all: 401282817's return to the 17 scored
-        # 0.79 where the 1st & 10 snapped there scores 1.83. The receiver's possession starts at a
-        # first down (the CFB rewrite in cfb_pbp.py __add_downs_data; C-H5, EX-1.1-c). A score keeps
-        # its -1 (a try or a kickoff follows, and the series and touchdown logic read it), and so
-        # does a timeout: nflverse carries no media timeout and gives a team timeout no down.
+        # 0.79 where the 1st & 10 snapped there scores 1.83. An unscored play at -1 starts the next
+        # possession at a first down (the CFB rewrite in cfb_pbp.py __add_downs_data; C-H5,
+        # EX-1.1-c). A score keeps its -1 (a try or a kickoff follows, and the series and touchdown
+        # logic read it), and so does a timeout: nflverse carries no media timeout and gives a team
+        # timeout no down.
         stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
-        # The pre-2014 missed field goal's end is its start copied (the kicker's own spot, distance
-        # -1), so it ends where the receiver's next snap starts, the state nflfastR reads. Pre-2014
-        # play ids are not always in game order (R785-4), so the next snap by id must also be the
-        # next snap by sequenceNumber in the same half and not a kickoff; otherwise ESPN's end
-        # stands whole, down -1 included (closer to nflverse than 1st & 10 at the kicker's spot).
+        unscored = ~(pl.col("scoringPlay") == True).fill_null(False)
+        no_down = (pl.col("end.down") == -1) & ~stop & unscored
+        # Kickoff EPA (the owner's model) is EP(1st & 10 at the net spot, for the team with the ball
+        # after the kick) - EP(1st & 10 at the touchback spot), so every unscored kickoff (returned,
+        # out of bounds, penalty spot, onside recovered by either side) ends at a first down whatever
+        # down / distance ESPN ships; a touchback is re-spotted later (kickoff_tb). The net spot is
+        # where that team's next snap starts (ESPN's end yard line is flipped on some returns, R810-5).
+        # Pre-2014 play ids are not always in game order (R785-4), so the next snap by id must also be
+        # the next snap by sequenceNumber in the same half, and not another kickoff; otherwise ESPN's
+        # end yard line stands.
+        kickoff = pl.col("type.text").is_in(kickoff_vec).fill_null(False)
         seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")
-        nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=pl.col("type.text").is_in(kickoff_vec), r=seq_rank)
-        missed_fg = pl.col("type.text") == "Field Goal Missed"
+        nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=kickoff, r=seq_rank)
         next_snap = (
             (pl.col("_nxt").struct.field("kick") == False) & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
         ).fill_null(False)
-        no_down = (
-            (pl.col("end.down") == -1)
-            & ~stop
-            & ~(pl.col("scoringPlay") == True).fill_null(False)
-            & ~(missed_fg & ~next_snap).fill_null(False)
-        )
-        # The receiver's first snap is 1st & 10, or 1st & goal inside the 10 (all 21 rewritten
-        # returns in the captures); ESPN's own end distance on a return is often stale (R810-1).
-        goal_to_go = pl.col("end.yardsToEndzone").is_between(1, 9)
+        # A missed field goal starts the other team's possession at a first down (the owner's
+        # missed-field-goal model); its spot is set in __add_play_category_flags, once the kick's
+        # line of scrimmage is final.
+        missed_fg = _missed_fg_unblocked()
+        first_down = no_down | (kickoff & unscored) | missed_fg
+        # The first snap is 1st & 10, or 1st & goal inside the 10; ESPN's end distance on a return is
+        # often stale (R810-1). A missed field goal's spot (set later) is never inside the 10.
+        goal_to_go = pl.col("end.yardsToEndzone").is_between(1, 9) & ~missed_fg
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
                 half=pl.when(pl.col("period.number") <= 2).then(1).otherwise(2),
             )
             .with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("half"))
-            .with_columns(_no_down=no_down.fill_null(False))
             .with_columns(
-                pl.when(pl.col("_no_down") & missed_fg)
+                _first_down=first_down.fill_null(False),
+                _kick_spot=(kickoff & unscored & next_snap).fill_null(False),
+            )
+            .with_columns(
+                pl.when(pl.col("_kick_spot"))
                 .then(pl.col("_nxt").struct.field("y2e"))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
-                pl.when(pl.col("_no_down")).then(1).otherwise(pl.col("end.down")).alias("end.down"),
+                pl.when(pl.col("_first_down")).then(1).otherwise(pl.col("end.down")).alias("end.down"),
             )
             .with_columns(
-                pl.when(pl.col("_no_down"))
+                pl.when(pl.col("_first_down"))
                 .then(pl.when(goal_to_go).then(pl.col("end.yardsToEndzone")).otherwise(10))
                 .otherwise(pl.col("end.distance"))
                 .alias("end.distance"),
             )
-            .drop("_nxt", "_no_down")
+            .drop("_nxt", "_first_down", "_kick_spot")
             .with_columns(
                 lead_half=pl.col("half").shift(-1),
                 lag_scoringPlay=pl.col("scoringPlay").shift(1),
@@ -3007,6 +3024,17 @@ class NFLPlayProcess(object):
                 .then(pl.col("start.yardLine").cast(pl.Int32))
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone"),
+            )
+            .with_columns(
+                # Missed field goal EPA (the owner's model) = EP(the other team, 1st & 10 at the spot
+                # of the kick) - EP_start, every season, whatever end ESPN ships. The kick is 7 yards
+                # behind the line of scrimmage, and since 1994 a kick from inside the 20 gives the
+                # ball at the 20: the receiver's yards to go = min(100 - start.yardsToEndzone - 7, 80).
+                # Down 1 / distance 10 and the possession change are set in __add_downs_data.
+                pl.when(_missed_fg_unblocked() & pl.col("start.yardsToEndzone").is_not_null())
+                .then(pl.min_horizontal(100 - pl.col("start.yardsToEndzone") - 7, pl.lit(80)))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
             )
             .with_columns(
                 pos_unit=pl.when(pl.col("punt") == True)
