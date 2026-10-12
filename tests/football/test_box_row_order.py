@@ -12,8 +12,13 @@ import random
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.football.box import _ordered_rows
+
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
 
 
 def _players():

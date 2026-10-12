@@ -1,5 +1,7 @@
+import copy
 import gzip
 import json
+import warnings
 from collections import Counter
 from pathlib import Path
 
@@ -7,6 +9,10 @@ import polars as pl
 import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess, _drop_espn_play_copies
+from sportsdataverse.errors import DefaultOddsWarning
+
+# the default-odds captures processed here warn incidentally; test_default_odds_warn asserts it
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -43,24 +49,49 @@ def test_odds_source_tag_summary_path():
     assert proc.gameSpreadAvailable is True
 
 
-def test_default_odds_warn(caplog):
-    """W-M14: falling to the default spread (an unknown recorded as a number) is logged, not silent."""
-    proc = CFBPlayProcess(gameId=401628455)
-    proc._offline = True
-    with caplog.at_level("WARNING", logger="sdv.cfb_pbp"):
-        proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
-    assert proc.odds_source == "default"
-    assert [r.getMessage() for r in caplog.records] == [
-        "401628455: no pregame odds resolved (odds_source='default'); EPA/WP use the default spread 2.5 / "
-        "total 55.5. Pass odds_override for an offline rebuild.",
-    ]
-    caplog.clear()
-    with caplog.at_level("WARNING", logger="sdv.cfb_pbp"):
-        proc._CFBPlayProcess__helper_cfb_pickcenter(
-            {"pickcenter": [{"provider": {"id": "58"}, "spread": -7.5, "overUnder": 52.5}]},
+_DEFAULT_ODDS_WARNING = (
+    r"CFB game 401628455: no pregame spread is available \(odds_source='{}', gameSpreadAvailable=False\)"
+)
+_ODDS_KEYS = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable")
+
+
+def test_default_odds_warn():
+    """W-M14 / R828-2: a default-odds capture warns, and so does its rebuild through the persisted odds.
+
+    401628455 (2024) has an empty ``pickcenter``; offline that resolves to the default spread. The
+    rebuild comes back ``odds_source="injected"`` with ``gameSpreadAvailable`` still False, so it must
+    warn too: a gate on ``odds_source != "default"`` alone would pass it.
+    """
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    proc.espn_cfb_pbp(summary=_load_summary())
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_ODDS_WARNING.format("default")):
+        pbp_txt, _ = proc._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(proc.json))
+    persisted = json.loads(json.dumps({k: pbp_txt[k] for k in _ODDS_KEYS}))
+    assert persisted == {"gameSpread": 2.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": False}
+    again = CFBPlayProcess(gameId=401628455, join_participants=False, odds_override=persisted)
+    again.espn_cfb_pbp(summary=_load_summary())
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_ODDS_WARNING.format("injected")):
+        re_txt, _ = again._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(again.json))
+    assert re_txt["odds_source"] == "injected"
+    assert re_txt["gameSpreadAvailable"] is False
+
+
+def test_default_odds_warning_not_on_pickcenter_capture():
+    """A capture whose pickcenter carries a spread (401301042) never warns, nor does its rebuild."""
+    summary = json.loads((FIX / "summary_401301042.json").read_text(encoding="utf-8"))
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DefaultOddsWarning)
+        proc = CFBPlayProcess(gameId=401301042, join_participants=False)
+        proc.espn_cfb_pbp(summary=summary)
+        pbp_txt, _ = proc._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(proc.json))
+        assert pbp_txt["odds_source"] == "summary_pickcenter"
+        again = CFBPlayProcess(
+            gameId=401301042,
+            join_participants=False,
+            odds_override=json.loads(json.dumps({k: pbp_txt[k] for k in _ODDS_KEYS})),
         )
-    assert proc.odds_source == "summary_pickcenter"
-    assert not caplog.records
+        again.espn_cfb_pbp(summary=summary)
+        again._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(again.json))
 
 
 def test_injected_odds_bypasses_network(monkeypatch):

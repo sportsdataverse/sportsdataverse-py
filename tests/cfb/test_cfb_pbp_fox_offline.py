@@ -16,6 +16,10 @@ import pytest
 
 from sportsdataverse.cfb.cfb_pbp_fox import fox_cfb_play_process, fox_to_espn_summary
 
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+
 FIX = Path(__file__).parent / "fixtures"
 
 

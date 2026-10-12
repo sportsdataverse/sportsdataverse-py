@@ -16,8 +16,13 @@ import json
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.cfb.cfb_pbp import _derive_special_teams_from_field_position as derive
+
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
 
 KICKING, RECEIVING = 1, 2
 

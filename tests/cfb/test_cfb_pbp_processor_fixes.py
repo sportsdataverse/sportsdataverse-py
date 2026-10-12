@@ -64,6 +64,10 @@ from polars.testing import assert_frame_equal
 
 from sportsdataverse.cfb.cfb_pbp import _UNTYPED_ADMIN_RE, CFBPlayProcess
 
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+
 FIX = Path(__file__).parent / "fixtures"
 
 

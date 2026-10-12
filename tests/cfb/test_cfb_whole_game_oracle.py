@@ -140,7 +140,9 @@ SUPP_002_EPA_ABS_TOL = 0.1
 #: committed row count of tests/cfb/schema_allowlist.yaml: it may only go down
 SCHEMA_ALLOWLIST_MAX_ROWS = 93
 
-pytestmark = pytest.mark.whole_game
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = [pytest.mark.whole_game, pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")]
 
 
 def _load(path: Path) -> dict:

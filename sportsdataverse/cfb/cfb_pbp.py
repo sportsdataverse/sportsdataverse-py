@@ -10,6 +10,7 @@ import os
 import re
 import time
 import unicodedata
+import warnings
 from functools import reduce
 from importlib.resources import files as _resource_files
 
@@ -381,6 +382,7 @@ from sportsdataverse.cfb.model_vars import (
 )
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import DefaultOddsWarning as _DefaultOddsWarning  # private alias: cfb_pbp is star-imported
 
 ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.ubj")
 wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread.ubj")
@@ -443,6 +445,17 @@ XPASS_FEATURES = _card_features("xpass_model")
 
 logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())
+
+
+def _warn_default_odds(game_id, odds_source, spread, total) -> None:
+    """Warn that a game's EPA/WP inputs carry no market spread (W-M14): an unknown recorded as a number."""
+    warnings.warn(
+        f"CFB game {game_id}: no pregame spread is available (odds_source={odds_source!r}, "
+        f"gameSpreadAvailable=False); EPA/WP use spread {spread} / total {total}, which no market set. "
+        "Make it an error with warnings.simplefilter('error', DefaultOddsWarning).",
+        _DefaultOddsWarning,
+        stacklevel=3,
+    )
 
 
 def _ot_second(play_df, team_col: str):
@@ -3847,6 +3860,9 @@ class CFBPlayProcess(object):
             self.homeFavorite = o["homeFavorite"]
             self.gameSpreadAvailable = o["gameSpreadAvailable"]
             self.odds_source = "injected"
+            if not self.gameSpreadAvailable:
+                # a rebuild of a default-odds game is still a default-odds game (R828-2)
+                _warn_default_odds(self.gameId, self.odds_source, self.gameSpread, self.overUnder)
             return {
                 "gameSpread": self.gameSpread,
                 "overUnder": self.overUnder,
@@ -3897,15 +3913,8 @@ class CFBPlayProcess(object):
                 gameSpreadAvailable,
             ) = (2.5, 55.5, True, False) if offline else self.__helper__espn_cfb_odds_information__()
             self.odds_source = "core_odds_api" if gameSpreadAvailable else "default"
-            if self.odds_source == "default":
-                # a default spread is an unknown recorded as a number (W-M14): say so
-                logger.warning(
-                    "%s: no pregame odds resolved (odds_source='default'); EPA/WP use the default spread %s / "
-                    "total %s. Pass odds_override for an offline rebuild.",
-                    self.gameId,
-                    gameSpread,
-                    overUnder,
-                )
+            if not gameSpreadAvailable:
+                _warn_default_odds(self.gameId, self.odds_source, gameSpread, overUnder)
         self.gameSpread = gameSpread
         self.overUnder = overUnder
         self.homeFavorite = homeFavorite
