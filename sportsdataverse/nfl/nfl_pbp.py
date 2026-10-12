@@ -456,6 +456,44 @@ def _nfl_turnover_in_text(row: dict) -> bool:
     return side is not None and side != ("home" if row["_offense_home"] else "away")
 
 
+# A first down by penalty in ESPN's NFL text (C-H3). The feed never writes the CFB phrase "1st
+# down"; it writes the accepted foul ("PENALTY on TB-V.Vea, Defensive Holding, 5 yards, enforced at
+# TB 49."). The defense's automatic-first-down fouls convert on their own, any other accepted
+# defensive foul only when its yards reach the line to gain on a play that does not stand. Against
+# nflverse ``first_down_penalty`` (GSIS stat 5) on 199 nfl-raw games of 2010/2013/2017/2023: 674 of
+# 682 found, 3 false positives (the CFB phrase found 226).
+_NFL_ACCEPTED_FOUL = r"(?i)penalty on [^,]+, [^,]+, \d+ yards?, enforced"
+_NFL_AUTO_FIRST_DOWN_FOUL = (
+    r"(?i)penalty on [^,]+, (?:defensive pass interference|defensive holding|illegal contact|illegal use of hands"
+    r"|roughing the (?:passer|kicker|snapper)|unnecessary roughness|face ?mask[^,]*|horse collar[^,]*"
+    r"|lowering the head[^,]*|leaping|personal foul[^,]*|disqualification|low block|taunting|tripping"
+    r"|unsportsmanlike conduct), \d+ yards?, enforced"
+)
+
+
+def _nfl_penalty_first_down() -> pl.Expr:
+    """True where an accepted foul by the defense gave the offense a first down (needs ``penalized_team``)."""
+    text = pl.col("text").fill_null("")
+    gains_line = (
+        text.str.contains(_NFL_ACCEPTED_FOUL)
+        & (pl.col("statYardage") >= pl.col("start.distance")).fill_null(False)
+        & (pl.col("penalty_no_play").fill_null(False) | (pl.col("type.text") == "Penalty").fill_null(False))
+    )
+    return (
+        (pl.col("penalized_team") == pl.col("def_pos_team")).fill_null(False)
+        & ~pl.col("penalty_offset").fill_null(False)
+        & ~pl.col("kickoff_play").fill_null(False)
+        & ~pl.col("touchdown").fill_null(False)
+        & ~pl.col("change_of_pos_team").fill_null(False)
+        # a try, or a dead-ball foul after the play, has no line to gain
+        & pl.col("start.down").is_between(1, 4).fill_null(False)
+        & ~text.str.contains(r"(?i)enforced between downs")
+        # on a punt only a foul on the kicker or snapper is the kicking team's first down
+        & (~pl.col("punt").fill_null(False) | text.str.contains(r"(?i)roughing the (?:kicker|snapper)|running into"))
+        & (text.str.contains(_NFL_AUTO_FIRST_DOWN_FOUL) | gains_line)
+    )
+
+
 def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
     """A play ends where the next play of its game and half starts (EX-1.5-d).
 
@@ -4363,13 +4401,31 @@ class NFLPlayProcess(object):
             max_penalty_yards=99,
         )
 
+    def __add_penalty_first_down(self, play_df):
+        """``penalty_1st_conv`` from the NFL grammar, once ``penalized_team`` is known (C-H3).
+
+        The value set in ``__setup_penalty_data`` (the CFB phrase "1st down") feeds attribution's
+        side vote only; everything after reads this one (the refine step's ``downs_turnover``, both
+        series counters).
+        """
+        return play_df.with_columns(penalty_1st_conv=_nfl_penalty_first_down())
+
     def __refine_play_types_post_attribution(self, play_df):
         """Correct two play-type labels that need the post-attribution turnover signal."""
         return _refine_play_types_post_attribution(play_df, normalplay=normalplay, end_change_vec=end_change_vec)
 
     def __add_series_data(self, play_df):
-        """cfbfastR's series / first-down decomposition (shared football series module)."""
-        return _add_series_data(play_df, penalty=penalty, normalplay=normalplay)
+        """cfbfastR's series / first-down decomposition (shared football series module).
+
+        ``first_down_penalty`` is nflfastR's (GSIS stat 5): the play's penalty first down, also
+        where the play's yards reached the line (11% of nflverse's, 2010 and 2023). The shared
+        module's CFB bucket drops those and only knows the NCAA automatic fouls (C-H3).
+        """
+        return (
+            _add_series_data(play_df, penalty=penalty, normalplay=normalplay)
+            .with_columns(first_down_penalty=pl.col("penalty_1st_conv").fill_null(False))
+            .with_columns(first_down_earned=pl.col("first_down_yards") | pl.col("first_down_penalty"))
+        )
 
     def __credit_to_spot_of_foul(self, play_df):
         """Official-scoring credit for a run or catch that drew an offensive foul.
@@ -6115,6 +6171,10 @@ class NFLPlayProcess(object):
         txt = pl.col("text") if "text" in cols else pl.col("desc")
         type_txt = pl.col("type.text") if "type.text" in cols else pl.lit("")
         eoh = pl.col("end_of_half").cast(pl.Boolean) if "end_of_half" in cols else pl.lit(False)
+        # nflverse books a muffed punt the kicking team recovers as a punt with the returner's lost
+        # fumble (helper_add_fixed_drives.R:91-97 then opens a drive). ESPN's text says "MUFFS", so
+        # fumble_lost is False on it, and its pre-2014 type is not a punt (EX-1.1-a).
+        muffed_punt = type_txt.is_in(["Punt Team Fumble Recovery", "Muffed Punt Recovery (Opponent)"])
 
         # ---- map nflfastR inputs from ESPN columns + derive missing signals ----
         play_df = (
@@ -6128,10 +6188,10 @@ class NFLPlayProcess(object):
                 txt.alias("_ff_desc"),
                 pl.col("touchdown").cast(pl.Int8).alias("_ff_td"),
                 pl.col("safety").cast(pl.Int8).alias("_ff_safety"),
-                pl.col("fumble_lost").cast(pl.Int8).alias("_ff_fumlost"),
+                (pl.col("fumble_lost") | muffed_punt).cast(pl.Int8).alias("_ff_fumlost"),
                 pl.col("field_goal_result").alias("_ff_fgr"),
                 pl.col("kickoff_play").cast(pl.Int8).alias("_ff_kick_att"),
-                (pl.col("punt") | pl.col("punt_play")).cast(pl.Int8).alias("_ff_punt_att"),
+                (pl.col("punt") | pl.col("punt_play") | muffed_punt).cast(pl.Int8).alias("_ff_punt_att"),
                 pl.col("fg_attempt").cast(pl.Int8).alias("_ff_fg"),
             )
             .with_columns(
@@ -6164,6 +6224,12 @@ class NFLPlayProcess(object):
                 # td_team: defense on return / interception TDs, else offense
                 pl.when(pl.col("_ff_td") == 0)
                 .then(None)
+                # a blocked-punt or fumble-return score is the defense's; a kickoff's pos_team is
+                # the receiving side, so its return touchdown is pos_team's
+                .when(pl.col("defense_score_play") == True)
+                .then(pl.col("def_pos_team"))
+                .when(pl.col("kickoff_play") == True)
+                .then(pl.col("pos_team"))
                 .when(type_txt.str.contains(r"(?i)return touchdown") | pl.col("int_td"))
                 .then(pl.col("def_pos_team"))
                 .when(
@@ -6220,8 +6286,13 @@ class NFLPlayProcess(object):
         # ===================== fixed_drive (add_drive_results) =====================
         # posteam swap: on a recovered kickoff the kicking team (defteam) owns the
         # drive (helper_add_fixed_drives.R L15-27).
+        # A timeout row has no posteam in nflverse (all 1,996 of 2018), and the lag-2/3 branches
+        # below read through it; ESPN's 2014-2021 timeout rows carry a team that is often the
+        # defense's (EX-1.5-d), which opened a drive at every such timeout.
         play_df = play_df.with_columns(
-            pl.when(
+            pl.when(type_txt.str.contains(r"(?i)timeout"))
+            .then(None)
+            .when(
                 (pl.col("_ff_kick_att") == 1) & ((pl.col("_ff_own_kick_rec") == 1) | (pl.col("_ff_fumlost") == 1)),
             )
             .then(pl.col("_ff_defteam"))
@@ -6312,6 +6383,21 @@ class NFLPlayProcess(object):
                             & lag_ptype2.is_in(["punt", "pass", "run", "field_goal"])
                             & (lag_td2 == 0)
                         )
+                    ),
+                )
+                .then(1)
+                .otherwise(pl.col("_ff_nd"))
+                .alias("_ff_nd"),
+            )
+            .with_columns(
+                # ESPN folds the try into the touchdown row, so after a defensive score the
+                # kickoff follows the score directly with the same pos_team; nflverse's try row
+                # (posteam = the scorer) is what opens the drive there (L32-54 on that row).
+                pl.when(
+                    (pl.col("_ff_kick_att") == 1)
+                    & (
+                        ((lag_td == 1) & (lag_pt != lag_tdteam))
+                        | (lag_pt.is_null() & (lag_td2 == 1) & (lag_pt2 != lag_tdteam2))
                     ),
                 )
                 .then(1)
@@ -7597,6 +7683,7 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
                     .pipe(self.__add_attribution_cols)
+                    .pipe(self.__add_penalty_first_down)
                     .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__credit_to_spot_of_foul)
                     .pipe(self.__add_air_yards_cols)

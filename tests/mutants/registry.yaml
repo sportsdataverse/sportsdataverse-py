@@ -1013,3 +1013,70 @@
     Review R785-9: ESPN types a lateral fumbled away on the game's last snap "Pass Reception", so the
     half-end keep-the-ball rule turned 4 lost fumbles (2021: 1, 2017: 3) into no possession change.
     401326581 play 3846 (nflverse fumble_lost 1) pins it.
+
+# --- C-H3 / C-M3 / EX-1.1-a (task 2.4): first-down penalty and series --------------------------------
+- id: nfl-penalty-first-down-grammar
+  group: nfl-series
+  finding: C-H3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'return play_df.with_columns(penalty_1st_conv=_nfl_penalty_first_down())'
+  mutant: 'return play_df'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_first_down_penalty[401547449]
+  expected: kill
+  note: >-
+    The CFB phrase "1st down" never occurs in ESPN's NFL text: without the NFL grammar the 2023
+    capture has 2 penalty first downs (the shared module's DPI / roughing heuristic) vs nflverse's 6.
+
+- id: nfl-first-down-penalty-not-masked-by-yards
+  group: nfl-series
+  finding: C-H3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.with_columns(first_down_penalty=pl.col("penalty_1st_conv").fill_null(False))'
+  mutant: '.with_columns(first_down_penalty=pl.col("first_down_penalty"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_first_down_penalty[401547449]
+  expected: kill
+  note: >-
+    nflverse's first_down_penalty also marks a defensive foul on a play whose yards reached the line
+    (11% of its rows, 2010 and 2023); the shared CFB bucket drops those (3 of 6 on this capture).
+
+- id: nfl-muffed-punt-opens-a-drive
+  group: nfl-series
+  finding: EX-1.1-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'muffed_punt = type_txt.is_in(["Punt Team Fumble Recovery", "Muffed Punt Recovery (Opponent)"])'
+  mutant: 'muffed_punt = type_txt.is_in(["__none__"])'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_fixed_drive[401671740]
+  expected: kill
+  note: the muffed punt TB recovers on 401671740 opens no drive (20 vs nflverse 21)
+
+- id: nfl-timeout-row-has-no-posteam
+  group: nfl-series
+  finding: C-M3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.when(type_txt.str.contains(r"(?i)timeout"))'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_fixed_drive[401030962]
+  expected: kill
+  note: >-
+    ESPN's 2018 timeout rows carry the defense's team often enough to open a drive at each one
+    (90 of 164 joined rows off nflverse's fixed_drive on the 2018 capture).
+
+- id: nfl-kickoff-after-defensive-td-opens-a-drive
+  group: nfl-series
+  finding: C-M3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '((lag_td == 1) & (lag_pt != lag_tdteam))'
+  mutant: '(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_fixed_drive[401326467]
+  expected: kill
+  note: the blocked-punt touchdown on 401326467 is followed by the kickoff (ESPN folds the try into the score)
+
+- id: nfl-defensive-score-td-team
+  group: nfl-series
+  finding: C-M3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.when(pl.col("defense_score_play") == True)'
+  mutant: '.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_fixed_drive[401326467]
+  expected: kill
+  note: a "Blocked Punt Touchdown" credited to the punting team leaves the next kickoff in its drive

@@ -312,23 +312,49 @@ def _joined(game_id: int) -> pl.DataFrame:
     return joined
 
 
-_H3 = (
-    "C-H3 + C-M3: penalty_1st_conv needs the CFB phrase '1st down', so no penalty first down opens a "
-    "series; fd_gain keys on ESPN's stale end.down"
-)
+# Series and drives are compared on the plays both feeds carry: nflverse also numbers rows ESPN's
+# feed has no row for (its "END GAME" / "END QUARTER 2" rows open a series of their own: 401547449's
+# 62nd series and 401030962's 27th), so a whole-frame count would score the feed, not the processor.
+_ALL_SLICES = (*SLICES, *END_STATE_SLICES)
 
 
-@pytest.mark.parametrize("game_id", _cases(dict.fromkeys(SLICES, _H3), games=tuple(SLICES)))
-def test_series_count_matches_nflverse(game_id):
-    # measured: 57 vs 62 (401547449), 57 vs 59 (401671740)
-    assert run(game_id).plays["series"].n_unique() == _nflverse(game_id)["series"].n_unique()
+@pytest.mark.parametrize("game_id", _ALL_SLICES)
+def test_nflverse_series_count(game_id):
+    # task 2.4 (C-H3, C-M3): base 59/61, 57/59, 49/50, 55/51, 49/51 in _ALL_SLICES order
+    j = _joined(game_id)
+    assert j["series"].n_unique() == j["series_nv"].n_unique()
 
 
-@pytest.mark.parametrize("game_id", _cases(dict.fromkeys(SLICES, _H3), games=tuple(SLICES)))
-def test_first_down_penalty_count_matches_nflverse(game_id):
-    # measured: 2 vs 6, 1 vs 3
-    ours = run(game_id).plays["first_down_penalty"].cast(pl.Int64).sum()
-    assert ours == _nflverse(game_id)["first_down_penalty"].sum()
+@pytest.mark.parametrize("game_id", _ALL_SLICES)
+def test_nflverse_series_starts_on_the_same_plays(game_id):
+    # helper_add_series_data.R:35-47: a series opens on the same joined play in both frames
+    j = _joined(game_id).sort("game_play_number")
+    opens = pl.col("series").diff().fill_null(1) != 0, pl.col("series_nv").diff().fill_null(1) != 0
+    assert j.filter(opens[0] != opens[1]).select("id", "series", "series_nv").rows() == []
+
+
+@pytest.mark.parametrize("game_id", _ALL_SLICES)
+def test_nflverse_series_fixed_drive(game_id):
+    # helper_add_fixed_drives.R:32-137. Base: 401671740 20 vs 21 drives (EX-1.1-a, the muffed punt the
+    # kicking team recovers), 401030962 a drive at every 2018 timeout row (ESPN's team there is often
+    # the defense's; nflverse leaves a timeout's posteam NA), 401326467 no drive after the blocked-punt
+    # touchdown (ESPN folds the try, whose posteam opens nflverse's drive, into the scoring row).
+    j = _joined(game_id)
+    assert (
+        j.filter(pl.col("fixed_drive") != pl.col("fixed_drive_nv")).select("id", "fixed_drive", "fixed_drive_nv").rows()
+        == []
+    )
+
+
+@pytest.mark.parametrize("game_id", _ALL_SLICES)
+def test_nflverse_series_first_down_penalty(game_id):
+    # base 2 vs 6, 1 vs 3, 0 vs 1, 1 vs 5, 1 vs 3: the CFB phrase "1st down" never occurs in NFL text
+    j = _joined(game_id)
+    ours, theirs = pl.col("first_down_penalty").cast(pl.Int64), pl.col("first_down_penalty_nv").cast(pl.Int64)
+    assert (
+        run(game_id).plays["first_down_penalty"].cast(pl.Int64).sum() == _nflverse(game_id)["first_down_penalty"].sum()
+    )
+    assert j.filter(ours != theirs).select("id", "first_down_penalty", "text").rows() == []
 
 
 @pytest.mark.parametrize(
@@ -365,11 +391,6 @@ _EXACT = [
 _EXACT_KNOWN = {
     (401671740, "td_play"): "C-NF-6: two replay-REVERSED scores keep td_play True (nflverse touchdown 0)",
     (401671740, "rush_td"): "C-NF-6: the replay-REVERSED 2-yard run keeps rush_td True",
-    (401671740, "fixed_drive"): (
-        "EX-1.1-a: ESPN's muffed 'Punt' (RECOVERED by the kicking team) is re-typed 'Punt Team Fumble "
-        "Recovery' with fumble_vec / fumble_lost False, so nflfastR helper_add_fixed_drives.R:83-112 never "
-        "opens a drive (20 vs 21)"
-    ),
 }
 
 
