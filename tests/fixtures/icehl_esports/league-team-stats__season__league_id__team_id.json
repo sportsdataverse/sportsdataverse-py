@@ -1,0 +1,185 @@
+[
+  {
+    "id": 4700,
+    "name": "Carter Savoie",
+    "firstname": "Carter",
+    "surname": "Savoie",
+    "photo": "https://esports.ice.hockey/upload/player/photo/4700_6a75c14698c06_1786102086_Carter Savoie.png",
+    "birthdate": "2002-01-23",
+    "active": true,
+    "position": "FW",
+    "stick": "left",
+    "weight": 86,
+    "height": 178,
+    "jersey": 8,
+    "birthCountry": "",
+    "nationality": "Canada",
+    "nationalityShort": "CAN",
+    "onRoster": 1,
+    "statistics": {
+      "teamShortcut": "FTC",
+      "games": 8,
+      "goals": {
+        "home": 2,
+        "away": 2
+      },
+      "assists": {
+        "home": 5,
+        "away": 3
+      },
+      "points": {
+        "home": 7,
+        "away": 5
+      },
+      "penaltyMinutes": 8,
+      "positive": 9,
+      "negative": 8,
+      "pointsPerGame": 1.5,
+      "shotEfficiency": 16.0,
+      "penaltyMinutesPerGame": 1.0,
+      "ppGoals": 2,
+      "shGoals": 0,
+      "gwGoals": 1,
+      "shotsAttempts": 41,
+      "shotsOnGoal": {
+        "home": 17,
+        "away": 8
+      },
+      "shotsMissed": 7,
+      "shotsBlocked": 9,
+      "blockedShotsByPlayer": 2,
+      "faceoffsWin": 2,
+      "faceoffsLosses": 1,
+      "faceoffsCount": 3,
+      "timeonice": 8824.36,
+      "timeoniceEQ": 7392.711,
+      "timeonicePP": 1429.396,
+      "timeoniceSH": 2.25,
+      "hits": 0,
+      "xG": 2.16,
+      "rank": 1
+    }
+  },
+  {
+    "id": 4701,
+    "name": "David Silye",
+    "firstname": "David",
+    "surname": "Silye",
+    "photo": "https://esports.ice.hockey/upload/player/photo/4701_6a75c1b5cfcb7_1786102197_David Silye.png",
+    "birthdate": "1999-03-02",
+    "active": true,
+    "position": "FW",
+    "stick": "right",
+    "weight": 86,
+    "height": 180,
+    "jersey": 62,
+    "birthCountry": "",
+    "nationality": "Canada",
+    "nationalityShort": "CAN",
+    "onRoster": 1,
+    "statistics": {
+      "teamShortcut": "FTC",
+      "games": 8,
+      "goals": {
+        "home": 1,
+        "away": 2
+      },
+      "assists": {
+        "home": 6,
+        "away": 1
+      },
+      "points": {
+        "home": 7,
+        "away": 3
+      },
+      "penaltyMinutes": 6,
+      "positive": 7,
+      "negative": 9,
+      "pointsPerGame": 1.25,
+      "shotEfficiency": 10.71,
+      "penaltyMinutesPerGame": 0.75,
+      "ppGoals": 1,
+      "shGoals": 0,
+      "gwGoals": 1,
+      "shotsAttempts": 39,
+      "shotsOnGoal": {
+        "home": 16,
+        "away": 12
+      },
+      "shotsMissed": 7,
+      "shotsBlocked": 4,
+      "blockedShotsByPlayer": 1,
+      "faceoffsWin": 75,
+      "faceoffsLosses": 46,
+      "faceoffsCount": 121,
+      "timeonice": 10270.67,
+      "timeoniceEQ": 7744.701,
+      "timeonicePP": 1462.624,
+      "timeoniceSH": 1063.345,
+      "hits": 0,
+      "xG": 1.76,
+      "rank": 2
+    }
+  },
+  {
+    "id": 4119,
+    "name": "Rasmus Bengtsson",
+    "firstname": "Rasmus",
+    "surname": "Bengtsson",
+    "photo": "https://esports.ice.hockey/upload/player/photo/4119_1760108120_BENGTSSON_RASMUS.png",
+    "birthdate": "1993-05-14",
+    "active": true,
+    "position": "DE",
+    "stick": "left",
+    "weight": 89,
+    "height": 189,
+    "jersey": 13,
+    "birthCountry": "",
+    "nationality": "Sweden",
+    "nationalityShort": "SWE",
+    "onRoster": 1,
+    "statistics": {
+      "teamShortcut": "FTC",
+      "games": 8,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 6,
+        "away": 1
+      },
+      "points": {
+        "home": 6,
+        "away": 1
+      },
+      "penaltyMinutes": 6,
+      "positive": 6,
+      "negative": 13,
+      "pointsPerGame": 0.88,
+      "shotEfficiency": 0.0,
+      "penaltyMinutesPerGame": 0.75,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 26,
+      "shotsOnGoal": {
+        "home": 15,
+        "away": 5
+      },
+      "shotsMissed": 2,
+      "shotsBlocked": 4,
+      "blockedShotsByPlayer": 1,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeonice": 11359.6,
+      "timeoniceEQ": 8687.658,
+      "timeonicePP": 1480.8929999999998,
+      "timeoniceSH": 1191.036,
+      "hits": 0,
+      "xG": 0.7,
+      "rank": 3
+    }
+  }
+]
