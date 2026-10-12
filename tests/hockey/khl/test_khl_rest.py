@@ -23,7 +23,7 @@ ROOT = Path(__file__).parents[3]
 FIXTURES = ROOT / "tests" / "fixtures" / "khl_rest"
 YAML = ROOT / "tools" / "codegen" / "endpoints" / "khl_rest.yaml"
 SCHEMAS = ROOT / "tools" / "codegen" / "schemas" / "native" / "khl_rest"
-REFS_SPEC = ROOT.parent / "sdv-internal-refs" / "khl" / "khl-rest.openapi.yaml"
+SPEC_ROUTES = FIXTURES / "spec_routes.json"  # the refs spec's route list, committed by gen_khl.py
 FULL = "full/game__text.json"
 
 PARSERS: Dict[str, Callable[..., Any]] = {
@@ -103,6 +103,41 @@ def test_empty_payload_keeps_the_documented_columns():
 def test_fixed_schema_shapers_keep_their_schema_when_empty(full, parser):
     source = _load("calendar__list.json") if parser is P.parse_khl_schedule else full
     assert parser({}).schema == parser(source).schema
+
+
+def _body(ep: Dict[str, Any]) -> Any:
+    fixture = {v.__name__: k for k, v in PARSERS.items()}
+    return _load(FULL) if ep["path"] == "/game/text/" else _load(fixture[ep["parser"]])
+
+
+ENDPOINTS = yaml.safe_load(YAML.read_text(encoding="utf-8"))["endpoints"]
+
+
+@pytest.mark.parametrize("ep", ENDPOINTS, ids=lambda e: e["short"])
+def test_an_empty_frame_concatenates_with_a_populated_one(ep):
+    parser = getattr(P, ep["parser"])
+    empty, full_df = parser({}), parser(_body(ep))
+    assert empty.height == 0 and empty.schema == full_df.schema
+    assert pl.concat([empty, full_df], how="vertical").height == full_df.height
+    assert parser({}, columns=list(P.SCHEMAS[f"khl_{ep['short']}"])).schema == full_df.schema  # as the wrapper calls it
+
+
+@pytest.mark.parametrize("ep", ENDPOINTS, ids=lambda e: e["short"])
+def test_parser_schema_is_the_committed_returns_schema(ep):
+    schema = yaml.safe_load((SCHEMAS / f"{ep['short']}.yaml").read_text(encoding="utf-8"))
+    code = {"integer": pl.Int64, "numeric": pl.Float64, "character": pl.Utf8, "logical": pl.Boolean}
+    assert P.SCHEMAS[schema["schema"]] == {c["name"]: code[c["type"]] for c in schema["columns"]}
+
+
+def test_a_sparse_body_is_backfilled_with_the_documented_dtypes():
+    body = _load("clubs__team.json")
+    for players in body["data"]["players"].values():
+        for p in players:
+            p.pop("age", None)
+            p["favorite"] = None
+    full_df = P.parse_khl_roster(_load("clubs__team.json"))
+    sparse = P.parse_khl_roster(body)
+    assert sparse.schema == full_df.schema and sparse["age"].null_count() == sparse.height
 
 
 def test_return_as_pandas(full):
@@ -252,8 +287,7 @@ def test_player_career_keeps_both_team_id_spaces():
 def test_yaml_lists_every_spec_route():
     doc = yaml.safe_load(YAML.read_text(encoding="utf-8"))
     paths = {e["path"] for e in doc["endpoints"]}
-    if REFS_SPEC.exists():
-        assert paths == set(yaml.safe_load(REFS_SPEC.read_text(encoding="utf-8"))["paths"])
+    assert paths == set(json.loads(SPEC_ROUTES.read_text(encoding="utf-8")))
     assert len(paths) == 11 and len(doc["endpoints"]) == 14  # /game/text/ feeds four wrappers
     assert doc["getter_module"] == "sportsdataverse.hockey.khl.khl_runtime" and doc["auth"] is True
     for ep in doc["endpoints"]:

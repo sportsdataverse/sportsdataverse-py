@@ -2,7 +2,8 @@
 
 Every request goes through a fake transport (no network, no sleeping): the refusal cases are the
 ones ``sdv-internal-refs/khl/tools/capture.py`` refuses to bank (error envelopes, empty answers,
-answers for another game / player / stage, non-200s, cut-off bodies).
+answers for another game / player / stage, non-200s, cut-off bodies). Answers for something other
+than what was asked are failed fetches (``AssetFetchError``); empty answers are ``NoDataError``.
 """
 
 from __future__ import annotations
@@ -14,6 +15,7 @@ from typing import Any, Dict, List
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.hockey import euro_hockey_runtime
 from sportsdataverse.hockey.khl import khl_runtime as R
 from sportsdataverse.hockey.khl import khl_webcaster_runtime as W
 
@@ -32,9 +34,12 @@ def _wc(name: str) -> Any:
 
 
 class _Resp:
-    def __init__(self, status: int = 200, body: Any = None, text: str | None = None) -> None:
+    def __init__(
+        self, status: int = 200, body: Any = None, text: str | None = None, headers: Dict[str, str] | None = None
+    ) -> None:
         self.status_code = status
         self.text = text if text is not None else json.dumps(body)
+        self.headers = headers or {}
 
 
 class _Http:
@@ -47,13 +52,19 @@ class _Http:
 
     def get(self, url: str, timeout: Any = None) -> _Resp:
         self.calls.append(("GET", url))
-        return self.homes.pop(0)
+        home = self.homes.pop(0)
+        if isinstance(home, BaseException):
+            raise home
+        return home
 
     def post(
         self, url: str, data: Any = None, headers: Any = None, allow_redirects: Any = None, timeout: Any = None
     ) -> _Resp:
         self.calls.append(("POST", url, dict(data), dict(headers), allow_redirects))
-        return self.posts.pop(0)
+        post = self.posts.pop(0)
+        if isinstance(post, BaseException):
+            raise post
+        return post
 
 
 @pytest.fixture(autouse=True)
@@ -61,7 +72,7 @@ def _offline(monkeypatch: pytest.MonkeyPatch) -> List[str]:
     """No sleeping, a fresh session table, and a season table from the committed full ``data.json``."""
     waits: List[str] = []
     monkeypatch.setattr(R, "_polite_wait", waits.append)
-    monkeypatch.setattr(W, "_polite_wait", waits.append)
+    monkeypatch.setattr(R.time, "sleep", lambda s: waits.append(f"sleep {s:g}"))
     monkeypatch.setattr(R, "_sessions", {})
     W.season_table.cache_clear()
     yield waits
@@ -150,13 +161,69 @@ def test_an_error_envelope_is_a_failed_fetch(monkeypatch):
         R._get(f"{REST}/game/header/", HEADER)
 
 
-def test_a_stale_sessid_drops_the_session(monkeypatch):
-    stale = {"status": "error", "data": None, "errors": [{"code": "invalid_csrf", "message": "x"}]}
-    http = _http(monkeypatch, _Resp(body=stale), _Resp(body=_rest("game__header.json")))
+STALE = {"status": "error", "data": None, "errors": [{"code": "invalid_csrf", "message": "x"}]}
+
+
+def test_a_stale_sessid_re_primes_a_fresh_session_and_retries_once(monkeypatch, _offline):
+    http = _http(monkeypatch, _Resp(body=STALE), _Resp(body=_rest("game__header.json")))
+    assert R._get(f"{REST}/game/header/", HEADER)["data"]["game"]["id"] == 898236
+    assert [c[0] for c in http.calls] == ["GET", "POST", "GET", "POST"]
+    assert http.calls[1][2]["sessid"] == SID and http.calls[3][2]["sessid"] == SID2  # a freshly primed sessid
+    assert R._sessions["https://www.khl.ru"][1] == SID2
+    assert _offline.count("https://www.khl.ru/") == 2 and _offline.count(f"{REST}/game/header/") == 2
+
+
+def test_a_second_stale_sessid_raises_and_drops_the_session(monkeypatch):
+    homes = [_Resp(text=f'"bitrix_sessid":"{sid}"') for sid in (SID, SID2, SID)]
+    http = _http(monkeypatch, _Resp(body=STALE), _Resp(body=STALE), _Resp(body=_rest("game__header.json")), homes=homes)
     with pytest.raises(AssetFetchError, match="invalid_csrf"):
         R._get(f"{REST}/game/header/", HEADER)
+    assert R._sessions == {}  # dropped: the next call primes afresh
     R._get(f"{REST}/game/header/", HEADER)
-    assert [c[0] for c in http.calls] == ["GET", "POST", "GET", "POST"]  # the next call primed a fresh session
+    assert [c[0] for c in http.calls] == ["GET", "POST", "GET", "POST", "GET", "POST"]
+
+
+# --- retries ---------------------------------------------------------------------------------
+
+
+def test_a_5xx_post_is_retried_with_a_polite_wait_before_each_attempt(monkeypatch, _offline):
+    http = _http(monkeypatch, _Resp(503, text="busy"), _Resp(502, text="bad"), _Resp(body=_rest("game__header.json")))
+    assert R._get(f"{REST}/game/header/", HEADER)["status"] == "success"
+    assert [c[0] for c in http.calls] == ["GET", "POST", "POST", "POST"]
+    post = f"{REST}/game/header/"
+    assert _offline == ["https://www.khl.ru/", post, "sleep 2", post, "sleep 4", post]
+
+
+def test_retry_after_is_honoured_and_capped(monkeypatch, _offline):
+    _http(
+        monkeypatch,
+        _Resp(429, text="slow down", headers={"retry-after": "30"}),
+        _Resp(429, text="slow down", headers={"retry-after": "9999"}),
+        _Resp(body=_rest("game__header.json")),
+    )
+    R._get(f"{REST}/game/header/", HEADER)
+    assert [w for w in _offline if w.startswith("sleep")] == ["sleep 30", f"sleep {R._MAX_RETRY_AFTER:g}"]
+
+
+def test_retries_are_bounded(monkeypatch, _offline):
+    http = _http(monkeypatch, *[_Resp(500, text="boom")] * R.ATTEMPTS)
+    with pytest.raises(AssetFetchError, match="500"):
+        R._get(f"{REST}/game/header/", HEADER)
+    assert sum(c[0] == "POST" for c in http.calls) == R.ATTEMPTS
+
+
+def test_a_dropped_connection_is_retried(monkeypatch, _offline):
+    http = _http(monkeypatch, ConnectionResetError("reset"), _Resp(body=_rest("game__header.json")))
+    assert R._get(f"{REST}/game/header/", HEADER)["status"] == "success"
+    assert [c[0] for c in http.calls] == ["GET", "POST", "POST"] and "sleep 2" in _offline
+
+
+def test_the_session_prime_is_retried(monkeypatch, _offline):
+    homes = [_Resp(503, text="busy"), ConnectionResetError("reset"), _Resp(text=f'"bitrix_sessid":"{SID}"')]
+    http = _http(monkeypatch, _Resp(body=_rest("game__header.json")), homes=homes)
+    R._get(f"{REST}/game/header/", HEADER)
+    assert [c[0] for c in http.calls] == ["GET", "GET", "GET", "POST"]
+    assert _offline[:5] == ["https://www.khl.ru/", "sleep 2", "https://www.khl.ru/", "sleep 4", "https://www.khl.ru/"]
 
 
 @pytest.mark.parametrize(
@@ -184,10 +251,18 @@ def test_an_empty_success_is_no_data(monkeypatch, route, form, body):
     ],
     ids=["header", "text", "career", "profile", "schedule"],
 )
-def test_an_answer_for_something_else_is_no_data(monkeypatch, route, form, fixture, match):
+def test_an_answer_for_something_else_is_a_failed_fetch(monkeypatch, route, form, fixture, match):
     _http(monkeypatch, _Resp(body=_rest(fixture)))
-    with pytest.raises(NoDataError, match=match):
+    with pytest.raises(AssetFetchError, match=match):
         R._get(f"{REST}{route}", form)
+
+
+def test_a_schedule_without_games_is_no_data(monkeypatch):
+    body = _rest("calendar__list.json")
+    body["data"]["GAMES"] = [None, {"2026-01-01": None}]
+    _http(monkeypatch, _Resp(body=body))
+    with pytest.raises(NoDataError, match="no games"):
+        R._get(f"{REST}/calendar/list/", {"values[tournament]": 1369})
 
 
 def test_the_all_star_rows_do_not_fail_the_schedule_scope(monkeypatch):
@@ -204,7 +279,7 @@ def test_the_all_star_rows_do_not_fail_the_schedule_scope(monkeypatch):
     [
         (_Resp(404, text="not found"), NoDataError),
         (_Resp(400, text="bad"), ValueError),
-        (_Resp(500, text="boom"), AssetFetchError),
+        ([_Resp(500, text="boom")] * R.ATTEMPTS, AssetFetchError),
         (_Resp(200, text='{"status": "success", "data": {"ga'), AssetFetchError),  # cut off
         (_Resp(200, text="<html>anti-bot</html>"), AssetFetchError),
         (_Resp(200, text=""), AssetFetchError),
@@ -212,29 +287,27 @@ def test_the_all_star_rows_do_not_fail_the_schedule_scope(monkeypatch):
     ids=["404", "400", "500", "truncated", "html", "empty"],
 )
 def test_status_and_body_follow_the_error_vocabulary(monkeypatch, resp, error):
-    _http(monkeypatch, resp)
+    _http(monkeypatch, *(resp if isinstance(resp, list) else [resp]))
     with pytest.raises(error):
         R._get(f"{REST}/game/header/", HEADER)
 
 
 @pytest.mark.parametrize(
-    "home", [_Resp(text="<html>no token</html>"), _Resp(403, text="access_deny")], ids=["no-sessid", "403"]
+    "home",
+    [_Resp(text="<html>no token</html>"), _Resp(403, text="access_deny"), ConnectionResetError("reset")],
+    ids=["no-sessid", "403", "dead"],
 )
 def test_a_session_that_cannot_be_primed_is_a_failed_fetch(monkeypatch, home):
-    _http(monkeypatch, homes=[home])
+    _http(monkeypatch, homes=[home] * R.ATTEMPTS)
     with pytest.raises(AssetFetchError):
         R._get(f"{REST}/game/header/", HEADER)
 
 
 def test_a_dead_connection_is_a_failed_fetch(monkeypatch):
-    http = _http(monkeypatch)
-
-    def boom(*a: Any, **kw: Any) -> Any:
-        raise ConnectionResetError("reset")
-
-    http.post = boom  # type: ignore[method-assign]
-    with pytest.raises(AssetFetchError, match="fetch failed"):
+    http = _http(monkeypatch, *[ConnectionResetError("reset")] * R.ATTEMPTS)
+    with pytest.raises(AssetFetchError, match="fetch failed after 3 attempts"):
         R._get(f"{REST}/game/header/", HEADER)
+    assert sum(c[0] == "POST" for c in http.calls) == R.ATTEMPTS
 
 
 def test_betting_fields_are_stripped(monkeypatch):
@@ -275,21 +348,20 @@ def _wc_get(monkeypatch: pytest.MonkeyPatch, body: Any) -> List[Dict[str, Any]]:
 
     def fake(url: str, params: Any = None, **kw: Any) -> Any:
         calls.append({"url": url, **(params or {})})
+        assert kw["session"] is euro_hockey_runtime.SESSION  # its request() waits before EVERY attempt
         return body
 
     monkeypatch.setattr(W._rt, "_get", fake)
     return calls
 
 
-def test_webcaster_season_becomes_the_stage_id(monkeypatch, _offline):
+def test_webcaster_season_becomes_the_stage_id(monkeypatch):
     _table(monkeypatch)
     W.season_table()  # cached from the full data.json
     monkeypatch.undo()
-    monkeypatch.setattr(W, "_polite_wait", _offline.append)
     calls = _wc_get(monkeypatch, _wc("teams_v2.json"))
     W._get(f"{WC}/teams_v2.json", {"season": 2026, "stage": "regular", "locale": "en"})
     assert calls == [{"url": f"{WC}/teams_v2.json", "stage_id": 370, "locale": "en"}]
-    assert _offline == [f"{WC}/teams_v2.json"]
 
 
 @pytest.mark.parametrize(
@@ -317,9 +389,9 @@ def test_webcaster_error_envelopes(monkeypatch, body, error):
     ],
     ids=["event", "team", "events-stage", "players"],
 )
-def test_webcaster_answer_for_something_else_is_no_data(monkeypatch, route, params, fixture):
+def test_webcaster_answer_for_something_else_is_a_failed_fetch(monkeypatch, route, params, fixture):
     _wc_get(monkeypatch, _wc(fixture))
-    with pytest.raises(NoDataError):
+    with pytest.raises(AssetFetchError, match="asked for"):
         W._get(f"{WC}/{route}", params)
 
 
@@ -350,4 +422,5 @@ def test_the_proxy_is_used_and_never_reported(monkeypatch):
     with pytest.raises(AssetFetchError) as info:
         W._get(f"{WC}/tables_v2.json", {"locale": "en"})
     assert seen["proxy"] == {"http": secret, "https": secret} and seen["logger"] is W._QUIET
+    assert seen["session"] is euro_hockey_runtime.SESSION
     assert "s3cret" not in str(info.value) and info.value.__cause__ is None and info.value.__suppress_context__

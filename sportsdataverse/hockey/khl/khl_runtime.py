@@ -11,22 +11,28 @@ that client. Measured live (2026-10-12, ``sdv-internal-refs/khl``):
   fields, with ``X-Requested-With: XMLHttpRequest`` and ``Origin`` / ``Referer`` set to the site.
   The generated wrappers hand those fields over as ``params``: the codegen calls every getter
   ``_get(url, params=...)``, so this ``_get`` sends ``params`` as the POST form, not a query string.
-* **307 = rotated WAF cookie.** A POST that answers 307 re-primes the session once (at least one
-  second later) and is retried once; a second 307 raises
+* **Retries.** Every attempt (the priming GET and the POST alike) waits for its host slot first
+  (:func:`sportsdataverse.hockey.euro_hockey_runtime._polite_wait`). A dead connection, a 429 or a
+  5xx is retried up to :data:`ATTEMPTS` times in all, with an exponential back-off that honours a
+  ``Retry-After`` header (capped at two minutes); the last failure raises
   :class:`~sportsdataverse.errors.AssetFetchError`.
+* **307 = rotated WAF cookie.** A POST that answers 307 re-primes the session and is retried once; a
+  second 307 raises :class:`~sportsdataverse.errors.AssetFetchError`.
 * **Errors in a 200.** Bad or missing fields still answer HTTP 200
   ``{"status": "error", "data": null, "errors": [{"message": ...}]}`` (``code: invalid_csrf`` for a
-  stale ``sessid``). ``status != "success"`` or a non-empty ``errors`` raises ``AssetFetchError``;
-  an ``invalid_csrf`` also drops the cached session, so the next call primes a fresh one.
+  stale ``sessid``). ``status != "success"`` or a non-empty ``errors`` raises ``AssetFetchError``.
+  An ``invalid_csrf`` first drops the cached session, primes a fresh one and retries the POST once;
+  only a second ``invalid_csrf`` raises.
 * **Season -> tournament.** No route takes a year. ``season`` (the END year, 2026 = 2025/26) and
   ``stage`` (``regular`` / ``playoff``) become ``values[tournament]`` (the ``tnId``) through the
   webcaster season table (:func:`sportsdataverse.hockey.khl.khl_webcaster_runtime.stage_for`, cached
   in-process), unless ``values[tournament]`` is given (``tournament_id``).
 * **Refusals.** An empty ``data`` (``players/stats`` without a player answers ``success`` with
-  ``data: []``) or an empty row container raises :class:`~sportsdataverse.errors.NoDataError`; so does
-  a game page that names another game or tournament than the one requested, a player page of
-  another player, or a schedule whose rows are not (90 %+) of the requested tournament (the All-Star
-  games ride along under their own tournament id, so 100 % is not required).
+  ``data: []``) or an empty row container raises :class:`~sportsdataverse.errors.NoDataError`. A
+  WRONG answer is a failed fetch, :class:`~sportsdataverse.errors.AssetFetchError`: a game page that
+  names another game or tournament than the one requested, a player page of another player, or a
+  schedule whose rows are not (90 %+) of the requested tournament (the All-Star games ride along
+  under their own tournament id, so 100 % is not required).
 * **Redactions.** ``fonbet`` (the betting-widget flag of ``game/text``) and ``bets`` are removed.
 
 Status and decoding go through the shared vocabulary (404 -> ``NoDataError``, 400/422 ->
@@ -39,7 +45,8 @@ from __future__ import annotations
 
 import re
 import threading
-from typing import Any, Dict, List, Optional, Tuple
+import time
+from typing import Any, Callable, Dict, List, Optional, Tuple
 from urllib.parse import urlsplit
 
 from sportsdataverse import _codegen_runtime as _rt
@@ -51,6 +58,10 @@ __all__: List[str] = []
 
 SESSID_RE = re.compile(r'sessid":"([a-f0-9]{32})')
 TIMEOUT = 60
+#: Statuses worth another attempt, and the attempt budget per request (first try included).
+RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
+ATTEMPTS = 3
+_MAX_RETRY_AFTER = 120.0
 TOURNAMENT = "values[tournament]"
 #: Routes that answer an error envelope without a tournament.
 NEEDS_TOURNAMENT = frozenset({"/game/header/", "/game/text/", "/game/protocol/", "/standings/playoff/"})
@@ -99,12 +110,41 @@ def _headers(site: str) -> Dict[str, str]:
     }
 
 
+def _retry_after(resp: Any) -> float:
+    try:
+        return min(float((getattr(resp, "headers", None) or {}).get("retry-after", 0)), _MAX_RETRY_AFTER)
+    except (TypeError, ValueError):  # an HTTP-date Retry-After falls back to the exponential delay
+        return 0.0
+
+
+def _send(url: str, call: Callable[[], Any]) -> Any:
+    """``call()`` (one request to ``url``), each attempt throttled, retried on a dead connection / 429 / 5xx.
+
+    Returns the last response (a retryable status only once the budget is spent); a connection that
+    fails every attempt raises :class:`~sportsdataverse.errors.AssetFetchError`.
+    """
+    for attempt in range(ATTEMPTS):
+        _polite_wait(url)
+        delay = 2.0 * 2**attempt
+        try:
+            resp = call()
+        except OSError as exc:  # curl_cffi's RequestException subclasses OSError
+            if attempt == ATTEMPTS - 1:
+                raise AssetFetchError(
+                    f"{_rt._where(url)}: fetch failed after {ATTEMPTS} attempts: {type(exc).__name__}"
+                ) from exc
+        else:
+            if getattr(resp, "status_code", None) not in RETRY_STATUSES or attempt == ATTEMPTS - 1:
+                return resp
+            delay = max(delay, _retry_after(resp))
+        time.sleep(delay)
+    raise AssertionError("unreachable")  # pragma: no cover
+
+
 def _prime(http: Any, site: str, timeout: Any) -> str:
     """GET ``site/`` (following the cookie-setting 307) and return the page's ``sessid``."""
     home = site + "/"
-    _polite_wait(home)
-    with _rt._transport_errors(home):
-        resp = http.get(home, timeout=timeout)
+    resp = _send(home, lambda: http.get(home, timeout=timeout))
     status = getattr(resp, "status_code", None)
     _rt._check_status(home, status, "")
     match = SESSID_RE.search(getattr(resp, "text", "") or "")
@@ -158,13 +198,15 @@ def _check(url: str, route: str, raw: Any, form: Dict[str, str]) -> None:
         echo = echo if isinstance(echo, dict) else {}
         got = (str(echo.get("id")), str(echo.get("tnId")))
         if got != (game, tn):
-            raise NoDataError(f"{where}: asked for game {game} of tournament {tn}, answered game {got[0]} of {got[1]}")
+            raise AssetFetchError(
+                f"{where}: asked for game {game} of tournament {tn}, answered game {got[0]} of {got[1]}"
+            )
     if route == "/players/stats/" and str(page.get("id")) != form.get("values[id]"):
-        raise NoDataError(f"{where}: asked for player {form.get('values[id]')}, answered player {page.get('id')}")
+        raise AssetFetchError(f"{where}: asked for player {form.get('values[id]')}, answered player {page.get('id')}")
     if route == "/players/profile/":
         link = str(_dig(page, ("DATA", "pagelink")) or "")
         if f"/players/{form.get('values[id]')}/" != link:
-            raise NoDataError(
+            raise AssetFetchError(
                 f"{where}: asked for player {form.get('values[id]')}, answered {link or 'no player link'}"
             )
     if route == "/calendar/list/" and tn is not None:
@@ -177,8 +219,12 @@ def _check(url: str, route: str, raw: Any, form: Dict[str, str]) -> None:
             for g in day
             if isinstance(g, dict)
         ]
-        if not ids or sum(i == tn for i in ids) / len(ids) < 0.9:
-            raise NoDataError(f"{where}: asked for tournament {tn}, but most of its games are of another tournament")
+        if not ids:
+            raise NoDataError(f"{where}: khl.ru answered no games for tournament {tn}")
+        if sum(i == tn for i in ids) / len(ids) < 0.9:
+            raise AssetFetchError(
+                f"{where}: asked for tournament {tn}, but most of its games are of another tournament"
+            )
 
 
 def _get(url: str, params: Optional[dict] = None, headers: Optional[Dict[str, str]] = None, **kwargs: Any) -> Any:
@@ -196,39 +242,47 @@ def _get(url: str, params: Optional[dict] = None, headers: Optional[Dict[str, st
     Raises:
         ValueError: a route that needs a tournament got neither ``season`` nor ``tournament_id``, a
             malformed ``season`` / ``stage``, or HTTP 400 / 422.
-        NoDataError: HTTP 404, an empty answer, an unknown season, or an answer for another game /
-            player / tournament than the one requested.
-        AssetFetchError: an error envelope, a second 307 after re-priming, a page without a sessid,
-            any other non-2xx, a non-JSON body or a dead connection.
+        NoDataError: HTTP 404, an empty answer or an unknown season.
+        AssetFetchError: an answer for another game / player / tournament than the one requested, an
+            error envelope (a second ``invalid_csrf`` included), a second 307 after re-priming, a page
+            without a sessid, any other non-2xx (429 / 5xx once the retries are spent), a non-JSON body
+            or a dead connection.
     """
     route = urlsplit(url).path.removeprefix("/rest")
     form = _form(route, params)
     timeout = kwargs.pop("timeout", TIMEOUT)
     site = _site(url)
+    # ponytail: one global lock (sessions, re-primes and retries all serialise); per-site locks if it ever matters
     with _lock:
         session = _sessions.get(site)
         if session is None:
             http = _new_http()
             session = _sessions[site] = [http, _prime(http, site, timeout)]
-        http = session[0]
-        for attempt in (0, 1):
-            _polite_wait(url)
-            with _rt._transport_errors(url):
-                resp = http.post(
+        for attempt in (0, 1):  # one recovery: a re-prime after a 307 or after an invalid_csrf
+            http, sessid = session
+            resp = _send(
+                url,
+                lambda: http.post(
                     url,
-                    data={"sessid": session[1], **form},
+                    data={"sessid": sessid, **form},
                     headers={**_headers(site), **(headers or {})},
                     allow_redirects=False,
                     timeout=timeout,
                     **kwargs,
-                )
-            if getattr(resp, "status_code", None) != 307:
+                ),
+            )
+            if getattr(resp, "status_code", None) == 307:
+                if attempt:
+                    raise AssetFetchError(f"{_rt._where(url)} answered 307 again after re-priming the session")
+                session[1] = _prime(http, site, timeout)  # its _polite_wait keeps >= 1 s after the 307
+                continue
+            raw = _rt._json_text(url, getattr(resp, "status_code", None), getattr(resp, "text", "") or "")
+            if not (isinstance(raw, dict) and "invalid_csrf" in str(raw.get("errors"))):
                 break
+            _sessions.pop(site, None)  # the sessid expired: drop the session, prime a fresh one, retry once
             if attempt:
-                raise AssetFetchError(f"{_rt._where(url)} answered 307 again after re-priming the session")
-            session[1] = _prime(http, site, timeout)  # its _polite_wait keeps >= 1 s after the 307
-    raw = _rt._json_text(url, getattr(resp, "status_code", None), getattr(resp, "text", "") or "")
-    if isinstance(raw, dict) and "invalid_csrf" in str(raw.get("errors")):
-        _sessions.pop(site, None)  # the sessid expired: the next call primes a fresh session
+                break  # a second invalid_csrf: _check raises it; the next call primes afresh
+            http = _new_http()
+            session = _sessions[site] = [http, _prime(http, site, timeout)]
     _check(url, route, raw, form)
     return _wc._strip(raw)

@@ -12,9 +12,10 @@ docstring:
     needs owner (sanctions / legal) sign-off first.'
   raises:
   - 'sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status
-    != success), or a 307 again after re-priming the session.'
-  - 'sportsdataverse.errors.NoDataError: khl.ru answered no rows, or a page for another
-    game / player / tournament.'
+    != success), a 307 again after re-priming the session, or a page for another game
+    / player / tournament than the one requested.'
+  - 'sportsdataverse.errors.NoDataError: khl.ru answered no rows, or the season has
+    no such stage.'
   raw_doc: the raw khl.ru envelope ``Dict`` (``{status, data, errors}``)
   see_also:
   - name: KHL
