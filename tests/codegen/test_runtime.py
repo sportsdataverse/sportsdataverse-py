@@ -29,3 +29,29 @@ def test_get_raises_on_download_none():
     with patch("sportsdataverse._codegen_runtime.download", return_value=None):
         with pytest.raises(AssetFetchError, match="no response"):
             _get("https://example.test/x")
+
+
+def test_get_refetches_a_truncated_json_body_but_not_an_html_one(monkeypatch):
+    import sportsdataverse._codegen_runtime as rt
+
+    class Resp:
+        status_code = 200
+
+        def __init__(self, text):
+            self.text = text
+
+        def json(self):
+            import json
+
+            return json.loads(self.text)
+
+    monkeypatch.setattr(rt, "_TRUNCATED_JSON_DELAY", 0)
+    bodies = iter(['{"games": {"a": 1', '{"games": {"a": 1}}'])
+    with patch("sportsdataverse._codegen_runtime.download", side_effect=lambda **k: Resp(next(bodies))) as dl:
+        assert _get("https://example.test/x") == {"games": {"a": 1}}
+    assert dl.call_count == 2
+
+    with patch("sportsdataverse._codegen_runtime.download", return_value=Resp("<html>terms</html>")) as dl:
+        with pytest.raises(AssetFetchError, match="non-JSON body"):
+            _get("https://example.test/x")
+    assert dl.call_count == 1  # an HTML 200 is an answer, not a cut-off body
