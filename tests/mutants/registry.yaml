@@ -1066,3 +1066,29 @@
   note: >-
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
+
+# --- supp-002 (3.4(a)): a degenerate ESPN end block takes the next snap's start ------------------
+# Killer: 23 published "Fumble Recovery (Own)" candidates; exactly 401752881299, 401761641253,
+# 401856682824 and 401864518671 move, the other 19 (incl. 401856797637) stay byte-stable.
+- id: cfb-supp002-possession-from-change-of-pos-team
+  group: cfb-supp002
+  finding: supp-002
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: ".and_(pl.col(\"pos_fumble_lost\") == False)\n                .and_(pl.col(\"def_fumble_lost\") == False)"
+  mutant: ".and_(pl.col(\"change_of_pos_team\") == False)"
+  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_four_named_rows_move
+  expected: kill
+  note: >-
+    change_of_pos_team is True on 401864518671 although NDSU recovers its own sack-fumble and punts
+    next, so the cop predicate leaves that row at EPA -2.72; the recovery attribution moves it
+- id: cfb-supp002-no-degenerate-check
+  group: cfb-supp002
+  finding: supp-002
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "_supp_002=(pl.col(\"end.yardLine\") == 0)\n                .and_(pl.col(\"end.yardsToEndzone\") == 0)\n"
+  mutant: "_supp_002=pl.lit(True)\n"
+  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_four_named_rows_move
+  expected: kill
+  note: >-
+    without the yardLine 0 / yardsToEndzone 0 test every play that kept the ball takes the next
+    snap's start; 401856797637 (a mirrored end, a different defect) moves and the count breaks

@@ -138,7 +138,10 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 `yahoo_cfb/` (`tests/cfb/yahoo_pbp/test_to_espn_summary.py`, `tests/cfb/test_cfb_yahoo_ext.py`),
 `participants_401856682.json` (`tests/cfb/test_cfb_box_score_denominators.py`,
 `tests/cfb/test_cfb_jersey_special_teams.py`) and `fox_cfb_event_41616_data.json`
-(`tests/cfb/test_cfb_pbp_fox_offline.py`).
+(`tests/cfb/test_cfb_pbp_fox_offline.py`). `supp002/` holds 22 trimmed captures (the `trimmed` form above,
+from `cfbfastR-cfb-raw` at `98deb3f091`) for the supp-002 candidate count
+(`tests/cfb/test_cfb_supp002_degenerate_end.py`); they are not `summary_*` files, so the whole-game
+oracle does not pick them up.
 
 ## Captures
 

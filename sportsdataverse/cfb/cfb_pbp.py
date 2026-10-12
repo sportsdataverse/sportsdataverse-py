@@ -7617,6 +7617,54 @@ class CFBPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .with_columns(
+                # supp-002: ESPN ships some non-scoring fumble plays with an end block at yardLine 0
+                # and yardsToEndzone 0, which no play that kept the ball can end at; the <= 0 clamp
+                # below read it as the own 1 (401856682's Q4 Fumble Recovery (Own): EPA -5.91,
+                # where the next snap, 3rd & 1 at the 1, gives -0.41 and Yahoo/CBS -0.39). When the
+                # fumble was not lost and the same team snaps next, that snap's start IS this play's
+                # end. Possession is read from the recovery attribution, not change_of_pos_team,
+                # which is wrong on such rows (401864518's sack-fumble NDSU recovers and punts) and
+                # is set False here, or the next snap's EP_between reads a turnover. The next snap
+                # must be in the same period, or in the same half of regulation (an overtime period
+                # hands the ball back to the team that just had it). Fumble plays only: the same end
+                # block on other play types is a separate finding.
+                _supp_002=(pl.col("end.yardLine") == 0)
+                .and_(pl.col("end.yardsToEndzone") == 0)
+                .and_(pl.col("fumble_vec") == True)
+                .and_(pl.col("scoring_play") == False)
+                .and_(pl.col("pos_fumble_lost") == False)
+                .and_(pl.col("def_fumble_lost") == False)
+                .and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))
+                .and_(
+                    (_next_real_play("period") == pl.col("period"))
+                    | ((pl.col("period") < 5) & (_next_real_play("half") == pl.col("half")))
+                )
+                .fill_null(False),
+            )
+            .with_columns(
+                pl.when(pl.col("_supp_002"))
+                .then(False)
+                .otherwise(pl.col("change_of_pos_team"))
+                .alias("change_of_pos_team"),
+                *[
+                    pl.when(pl.col("_supp_002"))
+                    .then(_next_real_play(f"start.{c}"))
+                    .otherwise(pl.col(f"end.{c}"))
+                    .alias(f"end.{c}")
+                    for c in ("down", "distance", "yardsToEndzone")
+                ],
+            )
+            .with_columns(
+                *[
+                    pl.when(pl.col("_supp_002"))
+                    .then(pl.col("end.down") == d)
+                    .otherwise(pl.col(f"down_{d}_end"))
+                    .alias(f"down_{d}_end")
+                    for d in (1, 2, 3, 4)
+                ],
+            )
+            .drop("_supp_002")
+            .with_columns(
                 pl.when(pl.col("end.yardsToEndzone") >= 100)
                 .then(99)
                 .otherwise(pl.col("end.yardsToEndzone"))
