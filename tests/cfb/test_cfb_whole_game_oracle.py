@@ -50,8 +50,8 @@ Oracle per column
     The ESPN feed: when the same team snaps next, the play ended where that snap starts. Asserted on
     feeds that carry end blocks (a feed whose end blocks are mostly degenerate, e.g. 252532751 from
     2005, has no end state to trust and is skipped), on the plays the processor emits. Green on fumble
-    plays since task 3.4(a); XFAIL supp-002 on the 7 captures whose degenerate end is on another play type
-    (a separate finding: 3.4(a) moves fumble plays only).
+    plays since task 3.4(a); XFAIL EX-3.4-c (the supp-002 class) on the 7 captures whose degenerate
+    end is on another play type (a separate finding: 3.4(a) moves fumble plays only).
 ``EPA`` of 401856682's Q4 Fumble Recovery (Own)
     EP at the next snap's start minus ``EP_start``, within 0.1 (the addendum's tolerance; the Yahoo and
     CBS adapters score -0.39, the next-snap state gives -0.41). The state comes from the feed; the EP
@@ -534,7 +534,7 @@ def test_end_of_half_lands_on_the_last_real_play(game_id):
 
 _DEGENERATE = tuple(gid for gid in CAPTURES if FEEDS[gid].degenerate_ends)
 _SUPP_002 = {
-    gid: f"supp-002: ESPN's {{down 0, yardLine 0, yardsToEndzone 0}} end block is kept ({note}) instead of the next snap's start"
+    gid: f"EX-3.4-c (the supp-002 class on a non-fumble play): ESPN's {{down 0, yardLine 0, yardsToEndzone 0}} end block is kept ({note}) instead of the next snap's start"
     for gid, note in {
         322590228: "end.down 0",
         400869270: "end.down 0 on a declined penalty",

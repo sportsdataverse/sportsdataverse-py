@@ -1076,7 +1076,7 @@
   file: sportsdataverse/cfb/cfb_pbp.py
   snippet: ".and_(pl.col(\"pos_fumble_lost\") == False)\n                .and_(pl.col(\"def_fumble_lost\") == False)"
   mutant: ".and_(pl.col(\"change_of_pos_team\") == False)"
-  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_four_named_rows_move
+  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_rule_rows_move
   expected: kill
   note: >-
     change_of_pos_team is True on 401864518671 although NDSU recovers its own sack-fumble and punts
@@ -1087,8 +1087,20 @@
   file: sportsdataverse/cfb/cfb_pbp.py
   snippet: "_supp_002=(pl.col(\"end.yardLine\") == 0)\n                .and_(pl.col(\"end.yardsToEndzone\") == 0)\n"
   mutant: "_supp_002=pl.lit(True)\n"
-  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_four_named_rows_move
+  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_rule_rows_move
   expected: kill
   note: >-
     without the yardLine 0 / yardsToEndzone 0 test every play that kept the ball takes the next
     snap's start; 401856797637 (a mirrored end, a different defect) moves and the count breaks
+- id: cfb-supp002-no-same-team-check
+  group: cfb-supp002
+  finding: supp-002
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "                .and_(_next_real_play(\"start.pos_team.id\") == pl.col(\"start.pos_team.id\"))\n"
+  mutant: ""
+  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_rule_rows_move
+  expected: kill
+  note: >-
+    R834-3: 401778310647 (an interception return that fumbles, degenerate end) is next snapped by the
+    other team; without the guard it takes that snap's start and is scored from the wrong side (EPA
+    5.10 -> 1.59)

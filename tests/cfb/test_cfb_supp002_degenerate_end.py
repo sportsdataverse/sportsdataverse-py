@@ -3,25 +3,31 @@
 ESPN ships some non-scoring fumble plays with ``end {yardLine 0, yardsToEndzone 0}``. The processor's
 ``<= 0`` clamp read that as the own 1, so a play that kept the ball scored a goal-line disaster
 (401856682's Q4 Fumble Recovery (Own): EPA -5.91, the Yahoo and CBS feeds of the same play -0.39). The
-rule: when the end block is degenerate, the fumble was not lost (``pos_fumble_lost`` / ``def_fumble_lost``,
-not ``change_of_pos_team``) and the same team snaps next, the next snap's start is the play's end.
+rule: when the end block is degenerate, the play's text mentions a fumble that was not lost
+(``pos_fumble_lost`` / ``def_fumble_lost``, not ``change_of_pos_team``) and the same team snaps next, the
+next snap's start is the play's end.
 
-Candidates: every published ``cfbfastR-cfb-data`` 2019-2026 "Fumble Recovery (Own)" row with
-``end.yardsToEndzone >= 95`` and ``EPA < -2.5`` (the auditor's signature; 23 rows on 2026-10-12, 16 when
-fp-check counted). Fixtures: ``fixtures/supp002/`` (see its README) plus the committed
-``fixtures/summary_401856682.json``; every game runs with the one closing line ``ODDS``.
+Reach: over every cfbfastR-cfb-raw game (20,719, raw repo ``98deb3f091``) the rule moves the 19 ``MOVED``
+rows in 17 games (review PR-834; owner ruling: all 19 ship): 6 Fumble Recovery (Own), 6 Rush and 7
+Fumble rows, 2024-2026. Every one has a committed capture here, so the "exactly these rows move" test
+covers the whole corpus reach.
 
-Oracle for the four ``MOVED`` rows: the ESPN feed's next real snap (id, down, distance, yards to the end
-zone, read from the payload, not from the processor), which the play text confirms ("to the UM18",
-"to the ULM24", "to the OSU01", "to the NDSU47"). Their EPA is held within 0.1 of the processor's own EP
+Candidates (``BASE``): the 19 rule rows; every published ``cfbfastR-cfb-data`` 2019-2026 "Fumble Recovery
+(Own)" row with ``end.yardsToEndzone >= 95`` and ``EPA < -2.5`` (the auditor's signature: 23 rows on
+2026-10-12, 4 of them rule rows); and 401778310647, an interception-return fumble with a degenerate end
+whose next snap is the other team's (R834-3: only the same-team guard keeps it from being scored from the
+wrong side). Fixtures: ``fixtures/supp002/`` (see its README) plus ``fixtures/summary_401856682.json``;
+every game runs with the one closing line ``ODDS``.
+
+Oracle for the ``MOVED`` rows: the ESPN feed's next real snap (id, down, distance, yards to the end zone,
+read from the payload, not from the processor). Their EPA is held within 0.1 of the processor's own EP
 at that snap minus ``EP_start``, and that snap's ``EP_between`` within 0.1 of 0 (the ball did not change
-hands between the two rows). Observed residuals: EPA 0.0 on three rows, 0.084 on 401864518671 (the clock
-runs between its end and the punt); never raise the tolerance to pass a new row. Not on 401864518681: a
-UNLV Timeout row filed under the timeout team sits between the two NDSU rows with ``change_of_pos_team``
-True, so the punt's ``EP_between`` reads a turnover (-1.34; -2.61 before the fix), a separate finding.
+hands between the two rows; on 401864518 and 401752886 a Timeout row filed under the defense sits in
+between, the EX-3.4-b case). Observed residuals: 0.084 at most (401864518671, whose ESPN end clock is
+EARLIER than its start clock); never raise the tolerance to pass a new row.
 
 ``BASE`` is NOT an oracle: it is each candidate's (end.down, end.distance, end.yardsToEndzone, EPA) on
-origin/devel-cfb ``87568090f1`` before the fix, a byte-stability pin so that only the four rows move.
+origin/devel-cfb ``87568090f1`` before the fix, a byte-stability pin so that only the rule rows move.
 Several pinned values are wrong for other reasons (the reason column); a fix for one of those updates
 its pin in the same PR.
 """
@@ -70,13 +76,46 @@ BASE = {
     401856785507: (401856785, 2, 13, 99, -2.5574681758880615, "half end, next snap is a kickoff"),
     401856797637: (401856797, 2, 1, 99, -4.6233367919921875, "mirrored end {yardLine 1, ytez 99}, not degenerate"),
     401864518671: (401864518, 0, 20, 99, -2.7226810455322266, "MOVED"),
+    401635627103987701: (401635627, 1, 10, 99, -2.3972766399383545, "MOVED"),
+    401752791691: (401752791, 0, 10, 99, -3.0535194873809814, "MOVED"),
+    401752886602: (401752886, 2, 2, 99, -6.467680931091309, "MOVED"),
+    401754576752: (401754576, 2, 16, 99, -3.4405627250671387, "MOVED"),
+    40175693428: (401756934, 2, 15, 99, -2.404973030090332, "MOVED"),
+    401756934210: (401756934, 4, 23, 99, -3.7762556076049805, "MOVED"),
+    401756935417: (401756935, 2, 14, 99, -0.5536208152770996, "MOVED"),
+    401762443547: (401762443, 2, 19, 99, -3.4458048343658447, "MOVED"),
+    401762443557: (401762443, 4, 18, 99, -3.6605772972106934, "MOVED"),
+    401856814559: (401856814, 0, 10, 99, -6.0166730880737305, "MOVED"),
+    401858248685: (401858248, 0, 10, 99, -3.6202306747436523, "MOVED"),
+    401862703606: (401862703, 0, 10, 99, -1.704806923866272, "MOVED"),
+    401862781639: (401862781, 0, 7, 99, -6.141966342926025, "MOVED"),
+    401864432249: (401864432, 0, 11, 99, -1.1393542289733887, "MOVED"),
+    401864443634: (401864443, 0, 24, 99, -0.25454163551330566, "MOVED"),
+    401778310647: (401778310, 0, 9, 99, 5.10091495513916, "degenerate end, next snap is the other team's"),
 }
 #: play id -> the ESPN feed's next real snap: (id, start.down, start.distance, start.yardsToEndzone)
 MOVED = {
-    401752881299: (401752881305, 4, 17, 82),  # Punt; "rush ... for 16 yards loss to the UM18"
-    401761641253: (401761641259, 2, 1, 24),  # Pass Incompletion; "rush ... for 9 yards gain to the ULM24"
-    401856682824: (401856682831, 3, 1, 1),  # Rushing Touchdown; "rush ... for 0 yards to the OSU01"
-    401864518671: (401864518681, 4, 20, 53),  # Punt; "sacked for loss of 6 yards to the NDSU47"
+    401752881299: (401752881305, 4, 17, 82),  # Fumble Recovery (Own) -> Punt; "16 yards loss to the UM18"
+    401761641253: (401761641259, 2, 1, 24),  # Fumble Recovery (Own) -> Pass Inc; "to the ULM24"
+    401856682824: (401856682831, 3, 1, 1),  # Fumble Recovery (Own) -> Rushing TD; "to the OSU01"
+    401864518671: (401864518681, 4, 20, 53),  # Fumble Recovery (Own) -> Punt; "to the NDSU47" (Timeout between)
+    401635627103987701: (401635627103989101, 1, 1, 1),  # Fumble Recovery (Own) -> Rush; "to the SMU 0"
+    40175693428: (40175693434, 2, 16, 84),  # Fumble Recovery (Own) -> Pass Inc
+    401752886602: (401752886609, 2, 2, 2),  # Rush -> Pass Reception (Timeout between; R834-2)
+    401754576752: (401754576758, 2, 16, 67),  # Rush -> Pass Reception
+    401756934210: (401756934227, 4, 23, 51),  # Rush -> Punt
+    401756935417: (401756935424, 2, 14, 79),  # Rush -> Pass Completion
+    401762443547: (401762443553, 2, 19, 68),  # Rush -> Rush
+    401762443557: (401762443562, 4, 18, 67),  # Rush -> Punt
+    # 401752791691 and 401864432249: ESPN files the next snap twice under one sequenceNumber (906, 289),
+    # so the oracle is the next sequenceNumber ("2nd & 10 at VAN 30", "3rd & 18 at WKU 12")
+    401752791691: (401752791703, 2, 10, 70),  # Fumble -> Pass Reception
+    401856814559: (401856814567, 1, 10, 17),  # Fumble -> its own Fumble Recovery (Opponent) record
+    401858248685: (401858248692, 1, 10, 62),  # Fumble -> its own Fumble Recovery (Opponent) record
+    401862703606: (401862703615, 1, 10, 95),  # Fumble -> Penalty
+    401862781639: (401862781647, 1, 7, 7),  # Fumble -> its own Fumble Recovery (Opponent) record
+    401864432249: (401864432255, 3, 18, 88),  # Fumble -> Rush
+    401864443634: (401864443642, 3, 24, 89),  # Fumble -> its own Fumble Recovery (Opponent) record
 }
 GAMES = sorted({v[0] for v in BASE.values()})
 assert {pid for pid, v in BASE.items() if v[-1] == "MOVED"} == set(MOVED)
@@ -126,12 +165,12 @@ def test_moved_rows_take_the_next_snap_and_the_rest_are_byte_stable(game_id):
         nxt = _row(game_id, nid)
         oracle = nxt["EP_start"] - row["EP_start"]
         assert abs(row["EPA"] - oracle) <= EPA_ABS_TOL, f"{pid}: EPA {row['EPA']} vs next-snap {oracle}"
-        if nid != 401864518681:  # the Timeout-row finding in the module docstring
-            assert abs(nxt["EP_between"]) <= EPA_ABS_TOL, f"{nid}: EP_between {nxt['EP_between']}"
+        assert abs(nxt["EP_between"]) <= EPA_ABS_TOL, f"{nid}: EP_between {nxt['EP_between']}"
 
 
 @pytest.mark.xdist_group("cfb-supp002")
-def test_exactly_the_four_named_rows_move():
+def test_exactly_the_rule_rows_move():
     moved = {pid for pid, v in BASE.items() if _moved(pid, _row(v[0], pid))}
     assert moved == set(MOVED), f"moved {sorted(moved)}"
-    assert 401856797637 not in moved  # the mirrored-ytez row is a different defect
+    assert 401856797637 not in moved  # the mirrored-ytez row is a different defect (EX-3.4-a)
+    assert 401778310647 not in moved  # the next snap is the other team's (R834-3)

@@ -8,9 +8,8 @@
 
 # supp-002 candidate captures
 
-22 ESPN college-football summary payloads, one per game holding a supp-002 candidate row (quality
-program task 3.4(a); the test is `tests/cfb/test_cfb_supp002_degenerate_end.py`, which also reads the
-23rd game, `../summary_401856682.json`).
+36 ESPN college-football summary payloads for quality program task 3.4(a) (supp-002) and EX-3.4-b; the
+test is `tests/cfb/test_cfb_supp002_degenerate_end.py`, which also reads `../summary_401856682.json`.
 
 - **Source:** `https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=<game_id>`,
   as stored by the scraper in `cfbfastR-cfb-raw/cfb/json/raw/<game_id>.json`, raw repo at `98deb3f091`
@@ -18,9 +17,17 @@ program task 3.4(a); the test is `tests/cfb/test_cfb_supp002_degenerate_end.py`,
 - **Form:** `<game_id>_trimmed.json.gz`, the `trimmed` form of `../README.md`: the payload reduced to
   `boxscore`, `drives`, `gameInfo`, `header`, `pickcenter` and `scoringPlays`, whole game kept, gzip
   with mtime 0.
-- **Selection:** the games of every published `cfbfastR-cfb-data` 2019-2026 "Fumble Recovery (Own)" row
-  with `end.yardsToEndzone >= 95` and `EPA < -2.5`, read from `cfb/pbp/parquet/play_by_play_<season>.parquet`
-  on 2026-10-12.
+- **Selection**, three groups:
+  - 22 games: every published `cfbfastR-cfb-data` 2019-2026 "Fumble Recovery (Own)" row with
+    `end.yardsToEndzone >= 95` and `EPA < -2.5` (the auditor's signature), read from
+    `cfb/pbp/parquet/play_by_play_<season>.parquet` on 2026-10-12.
+  - 13 games (401635627, 401752791, 401752886, 401754576, 401756934, 401756935, 401762443, 401856814,
+    401858248, 401862703, 401862781, 401864432, 401864443): with the 4 signature games above, the 17
+    games holding the 19 rows the rule moves across all 20,719 cfb-raw games (review PR-834's raw scan:
+    6 Fumble Recovery (Own), 6 Rush, 7 Fumble rows). 401752886 also carries the EX-3.4-b Timeout row
+    (a defensive timeout between the moved Rush and the next snap).
+  - 401778310: an interception return that fumbles, with a degenerate end block, whose next snap is the
+    other team's: the case the rule's same-team guard exists for (R834-3).
 - Play ids are ESPN's (10 to 18 digits); the test casts them to Int64.
 
 The names do not start with `summary_`, so the whole-game oracle (`summary_*` in `..`) does not pick them up.
