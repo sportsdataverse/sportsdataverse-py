@@ -918,6 +918,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
         & kick_team.is_not_null()
     )
     kick_board = pl.when(kick_team == team).then(kick_wb).otherwise(1 - kick_wb)
+    # the team of the row lead_wp_before is read from (EX-3.4-b: never a Timeout row)
+    lead_team = _next(team, t == "Timeout")
 
     return (
         play_df.with_columns(
@@ -962,7 +964,10 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .alias(awb),
         )
         .with_columns(
-            pl.col(wb).shift(-1).alias(lwb),
+            # EX-3.4-b: the board a play hands to is the next real row's; a Timeout row is
+            # filed under the team that called it with the stale start state of the play
+            # before (401856679: the interception read OU's pre-pick board, 0.52, not 0.37)
+            _next(pl.col(wb), pl.col("type.text") == "Timeout").alias(lwb),
             pl.col(wb).shift(-2).alias(lwb2),
         )
         .with_columns(
@@ -993,7 +998,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .then(kick_board)
             .when(
                 (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
+                .and_(pl.col("start.pos_team.id") == lead_team)
                 .and_(pl.col("type.text") != "Timeout"),
             )
             .then(pl.col(lwb))
@@ -1053,7 +1058,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             # safeties) went from mean |WPA| 0.72, 16 above 0.5, to 0.05 and none.
             .when(
                 (pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(
-                    pl.col("lead_pos_team") == pl.col("start.pos_team.id"),
+                    lead_team == pl.col("start.pos_team.id"),
                 ),
             )
             .then(pl.col(lwb))
@@ -5736,12 +5741,7 @@ class CFBPlayProcess(object):
                 .when(pl.col("lead_play_type").is_in(_STOPPAGE_TYPES))
                 .then(
                     (
-                        pl.col("pos_team")
-                        != pl.when(pl.col("type.text").is_in(_STOPPAGE_TYPES))
-                        .then(None)
-                        .otherwise(pl.col("pos_team"))
-                        .shift(-1)
-                        .backward_fill()
+                        pl.col("pos_team") != _next(pl.col("pos_team"), pl.col("type.text").is_in(_STOPPAGE_TYPES))
                     ).fill_null(True)
                 )
                 .when(pl.col("pos_team") == pl.col("lead_pos_team"))
