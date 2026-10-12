@@ -110,20 +110,53 @@
     row read survive_until 1.5) by 1.1's oracle: the CP booster on nflverse's own inputs must
     reproduce nflverse's cp (corr >= 0.994 / 0.993, MAE <= 0.016 on the two slices).
 
-# --- C-M7 / C-M8: prob_2pt dtype mix across captures ----------------------------------------------
+# --- C-M7 / C-L10: documented dtypes of the processed NFL plays (task 2.17) ------------------------
 - id: nfl-prob-2pt-float64
   finding: C-M7
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'scored_pl = pl.from_pandas(scored).with_columns(pl.col("go_index").cast(pl.UInt32))'
-  mutant: 'scored_pl = pl.from_pandas(scored).with_columns(pl.col("go_index").cast(pl.UInt32), pl.col("prob_2pt").cast(pl.Float64))'
-  test: tests/nfl/test_nfl_schema_allowlist.py::test_prob_2pt_has_one_documented_dtype
+  snippet: 'self.plays_json = self.plays_json.pipe(self.__documented_dtypes)'
+  mutant: 'self.plays_json = self.plays_json  # mutant: no documented-dtype step'
+  test: tests/nfl/test_nfl_schema_allowlist.py -k "prob_2pt or float32 or identical"
   expected: kill
   note: >-
-    The 2.17 fix as a mutant: prob_2pt Float64 whether or not the two-point model scores turns
-    the C-M7 strict xfail (Float32 on 400791508, Float64 on 221013007) into XPASS. Needs the
-    download-on-demand nfl4th WP booster, which the test loads explicitly: without it the test
-    skips by name and the mutant survives. 2.17 drops the marker and rewrites this row (the
-    snippet then carries the cast).
+    Without the output-boundary cast, prob_2pt / first_down_prob are Float32 where the nfl4th
+    boosters scored (400791508) and Float64 where they did not (221013007), the WP family and
+    drive_start are Float32 on every capture, and teamParticipants takes the payload's struct
+    field order (3 dtypes over 31 games). test_processed_plays_carry_no_float32 and
+    test_processed_schema_is_identical_across_captures are hermetic, so the row is killed even
+    when the download-on-demand WP booster cannot load and the prob_2pt test skips (TH-11).
+
+- id: nfl-box-rerun-narrows-widened-floats
+  finding: C-M7
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'for c in getattr(self, "_widened_float32", ()) if c in play_df.columns'
+  mutant: 'for c in () if c in play_df.columns'
+  test: tests/nfl/test_nfl_schema_allowlist.py -k reproduces_adv_box_score
+  expected: kill
+  note: >-
+    R797-2: Game on Paper's ?span= boxes re-run create_box_score on plays_frame. Without narrowing
+    the widened scorer floats back, the box sums Float64 wpa and its Float32-only round(2) skips
+    WPA, so the span boxes stop equalling advBoxScore (31/31 captures).
+- id: cfb-documented-float64
+  finding: C-M8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'self.plays_json = self.plays_json.pipe(self.__documented_dtypes)'
+  mutant: 'self.plays_json = self.plays_json  # mutant: no documented-dtype step'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k shared_column_dtypes_match_nfl
+  expected: kill
+  note: >-
+    The CFB twin of the NFL step (task 2.17): without it CFB's 44 EP/WP / probability columns stay
+    Float32 while NFL's are Float64, and the CFB-vs-NFL shared-column dtype test (cap 49) fails.
+- id: cfb-box-rerun-narrows-widened-floats
+  finding: C-M8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'for c in getattr(self, "_widened_float32", ()) if c in play_df.columns'
+  mutant: 'for c in () if c in play_df.columns'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k reproduces_adv_box_score
+  expected: kill
+  note: >-
+    R797-2's CFB twin: the CFB box reads EPA*, wpa and drive_start, all Float32 in the pipeline and
+    Float64 on plays_frame; without the narrowing the span boxes publish unrounded EPA / WPA.
 
 # --- C-H1: the phase-2 `-3` port flips 1.1's 31 strict xfails --------------------------------------
 - id: nfl-second-level-yards-port

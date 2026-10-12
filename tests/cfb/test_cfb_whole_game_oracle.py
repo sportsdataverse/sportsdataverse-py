@@ -131,7 +131,7 @@ RUSH_YARDS_ABS_TOL = 1e-9
 #: supp-002's bound (addendum W-M6): the fixed EPA within 0.1 of the next-snap value
 SUPP_002_EPA_ABS_TOL = 0.1
 #: committed row count of tests/cfb/schema_allowlist.yaml: it may only go down
-SCHEMA_ALLOWLIST_MAX_ROWS = 93
+SCHEMA_ALLOWLIST_MAX_ROWS = 49
 
 pytestmark = pytest.mark.whole_game
 
@@ -758,6 +758,25 @@ def test_shared_column_dtypes_match_nfl():
     differ = {c for c in cfb if c in nfl and cfb[c] != nfl[c]}
     allowed = {r["column"] for r in _schema_allowlist()["vs_nfl"]}
     assert differ == allowed, {"new": sorted(differ - allowed), "fixed, drop the row": sorted(allowed - differ)}
+
+
+def _canon_box(v):
+    """advBoxScore with every list sorted (its group_by row order is not deterministic) and NaN named."""
+    if isinstance(v, list):
+        return sorted((_canon_box(x) for x in v), key=lambda x: json.dumps(x, sort_keys=True, default=str))
+    if isinstance(v, dict):
+        return {k: _canon_box(x) for k, x in v.items()}
+    return "nan" if isinstance(v, float) and v != v else v
+
+
+@pytest.mark.parametrize("game_id", _params((CAPTURES[0], _SCHEMA_REFERENCE, CAPTURES[-1])))
+def test_box_score_rerun_on_plays_frame_reproduces_adv_box_score(game_id):
+    """R797-2 (task 2.17): Game on Paper's ?span= boxes re-run create_box_score on plays_frame, which
+    publishes the EP/WP floats Float64; the box must still aggregate and round as advBoxScore did."""
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=_load(PATHS[game_id]))
+    adv = proc.run_processing_pipeline()["advBoxScore"]
+    assert _canon_box(proc.create_box_score(proc.plays_frame)) == _canon_box(adv)
 
 
 # --- C-M19: the pickcenter odds round trip ----------------------------------------------------------
