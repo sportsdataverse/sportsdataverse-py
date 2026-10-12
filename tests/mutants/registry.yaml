@@ -1281,6 +1281,41 @@
   expected: kill
   note: td_play True again on the three "TOUCHDOWN NULLIFIED by Penalty" rows of 291018018
 
+# --- R808-2 / R808-3 / R808-4 (task 2.20): touchdown-flag residuals -----------------------------------
+- id: nfl-td-nullified-scored-score-rose
+  group: nfl-td-flags
+  finding: R808-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '(text.str.contains("(?i)nullified by penalty") & ~score_rose)'
+  mutant: 'text.str.contains("(?i)nullified by penalty")'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[311218002-3112180024175]
+  expected: kill
+  note: >-
+    Without the score-rise guard the R.Bush 76-yard touchdown that stood (excessive celebration enforced
+    on the kickoff; nflverse touchdown 1, rush_touchdown 1) is negated again: td_play / rush_td False.
+
+- id: nfl-td-reversed-into-safety
+  group: nfl-td-flags
+  finding: R808-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '| (text.str.contains("(?i)reversed") & (pl.col("type.text") == "Safety"))'
+  mutant: '| pl.lit(False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[291126008-2911260083341]
+  expected: kill
+  note: td_play True again on the 2009 fumble-return touchdown reversed into a safety (nflverse touchdown 0)
+
+- id: nfl-td-mistyped-return-unscored
+  group: nfl-td-flags
+  finding: R808-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.otherwise(text.str.contains(unscored) | mistyped_return)'
+  mutant: '.otherwise(text.str.contains(unscored))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[401671715-4016717152262]
+  expected: kill
+  note: >-
+    td_play True again on the 2024 short-of-landing-zone kickoff ESPN types "Kickoff Return Touchdown"
+    (unscored, no touchdown in the text; nflverse touchdown 0)
+
 # --- C-H2 / C-M2 / C-NF-12 (task 2.2): the play that ends a half, regulation or the game ----------------
 - id: nfl-end-of-half-reads-unfilled-lead-half
   group: nfl-end-of-half

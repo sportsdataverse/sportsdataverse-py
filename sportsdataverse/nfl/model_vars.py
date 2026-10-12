@@ -94,6 +94,14 @@ TOUCHBACK_YARDLINE_2024: int = 70
 #: Dynamic-kickoff touchback spot from 2025 (the 35).
 TOUCHBACK_YARDLINE_2025: int = 65
 
+#: First season ESPN's NFL play text is a full sentence on kickoffs and punts. Not a playing rule: a
+#: feed era (finding R808-4). The 2006-08 feed writes a bare "Kickoff" / "Punt", so an unscored row
+#: typed "Kickoff Return Touchdown" / "Punt Return Touchdown" with no touchdown in its text looks the
+#: same whether it is a real return TD (four in 2006-07, nflverse ``touchdown`` 1) or not (13 rows
+#: 2006-08). From 2009 every such row is an onside or short-of-landing-zone kick or a plain punt
+#: (32 rows in 2024, nflverse ``touchdown`` 0), so ``nfl_pbp._touchdown_did_not_stand`` clears it.
+ESPN_FULL_KICK_TEXT_FROM: int = 2009
+
 
 def touchback_yardline(season: int) -> int:
     """Kickoff-touchback yards-to-endzone for *season* (80 / 75 / 70 / 65).

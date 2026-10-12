@@ -11,6 +11,7 @@
   - [Other files](#other-files)
   - [Overtime rule sets (C-M6)](#overtime-rule-sets-c-m6)
   - [Games that end on a try (`try_endings/`, task 2.2)](#games-that-end-on-a-try-try_endings-task-22)
+  - [Touchdown-flag residuals (`td_flag_residuals/`, task 2.20)](#touchdown-flag-residuals-td_flag_residuals-task-220)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -239,3 +240,17 @@ in a subdirectory so the whole-game captures above (`summary_*` in this director
 |---|---|---|
 | 291122008 | `Extra Point Good` ("J.Hanson extra point is GOOD") | R832-3: the try that ends the game keeps its own EPA (nflfastR `sp == 1`) |
 | 271021004 | `Two Point Pass` (scoringPlay True) | the same on a two-point try |
+
+## Touchdown-flag residuals (`td_flag_residuals/`, task 2.20)
+
+Three untrimmed ESPN Site v2 summaries, copied from `nflverse-dev/nfl-raw`
+`nfl/espn/raw/<season>/<game_id>.json.gz` (nfl-raw commit 044caca9, 2026-09-14; source
+`https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`), each holding a row
+the task 2.5 touchdown rule got wrong (review PR-808, R808-2/3/4). The oracle is nflverse
+(`nflverse-dev/nfl-data` `python/data/pbp_<season>.parquet`, joined on `game_id` + `play_id`).
+
+| game (nflverse) | play | ESPN type / scoringPlay | nflverse `touchdown` / `rush_touchdown` / `epa` | finding |
+|---|---|---|---|---|
+| 311218002 (`2011_15_MIA_BUF`) | 3112180024175, R.Bush 76-yard run, "TOUCHDOWN NULLIFIED by Penalty" (excessive celebration, enforced on the kickoff) | `Rushing Touchdown` / True; ESPN score 13-23 -> 13-24, next row a scored `Extra Point Good` | 1 / 1 / 6.450 | R808-2 |
+| 291126008 (`2009_12_GB_DET`) | 2911260083341, fumble-return TD reversed on challenge into a safety | `Safety` / True | 0 / 0 / -0.438 (`safety` 1) | R808-3 |
+| 401671715 (`2024_12_DAL_WAS`) | 4016717152262 (short of landing zone), 4016717154728 (onside kick) | `Kickoff Return Touchdown` / False | 0 / 0 / 0.926, 1.419 | R808-4 |

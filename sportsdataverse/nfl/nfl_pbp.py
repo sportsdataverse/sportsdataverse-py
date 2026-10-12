@@ -86,6 +86,7 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_xpass,
 )
 from sportsdataverse.nfl.model_vars import (
+    ESPN_FULL_KICK_TEXT_FROM,
     SPREAD_TIME_DECAY_EXPONENT,
     touchback_yardline_expr,
     defense_score_vec,
@@ -107,22 +108,40 @@ from sportsdataverse.cfb.cfb_pbp import _PENALTY_NEGATED_TEXT
 
 
 def _touchdown_did_not_stand() -> pl.Expr:
-    """Whether a touchdown the row's text names did not stand.
+    """Whether a touchdown the row's text or type names did not stand.
 
     The CFB rule (``cfb_pbp._touchdown_negated``, C-M1) with ESPN's ``scoringPlay`` as the gate. On
     a row ESPN did not score, the no-play marker ("TOUCHDOWN NULLIFIED by Penalty") or a replay
     reversal negates it: ESPN still types "... for 29 yards, TOUCHDOWN ... and the play was REVERSED"
-    as a "Passing Touchdown" (291018018, 401671740; C-NF-6). On a row ESPN scored only the nullified
-    marker does (6 published 2009-12 rows score one): its "No Play" belongs to the try or to the
-    ruling a reversal INTO the touchdown overturned (2812140120518, 4005542932688), and the NFL
-    text has no CFB "clock" tail to cut those off at.
+    as a "Passing Touchdown" (291018018, 401671740; C-NF-6). So does a "Kickoff/Punt Return
+    Touchdown" type whose text names no touchdown, from ``ESPN_FULL_KICK_TEXT_FROM`` (2009): ESPN
+    types 2024 onside and short-of-landing-zone kicks that way (R808-4).
+
+    On a row ESPN scored, the "No Play" belongs to the try or to the ruling a reversal INTO the
+    touchdown overturned (2812140120518, 4005542932688), and the NFL text has no CFB "clock" tail to
+    cut those off at. Two markers still negate there. "Nullified by penalty" does unless ESPN's score
+    rises on the row (5 of 6 such rows 2006-24 have no rise); where it rises the touchdown stood and
+    the foul was enforced on the kickoff (3112180024175, R808-2). A rise, not any move: ESPN's raw
+    score can glitch down a row (27 -> 24 on 2911290162862, a nullified TD). A reversal negates when
+    ESPN types the row a Safety: the touchdown was reversed into one (2911260083341, R808-3). The
+    score is compared with the previous row's, so the frame is one game in play order.
     """
     text = pl.col("text")
+    total = pl.col("homeScore") + pl.col("awayScore")
+    score_rose = (total > total.shift(1)).fill_null(False)
     unscored = _PENALTY_NEGATED_TEXT + "|reversed"
+    mistyped_return = (
+        pl.col("type.text").is_in(["Kickoff Return Touchdown", "Punt Return Touchdown"])
+        & ~text.str.contains("(?i)touchdown|for a TD")
+        & (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)
+    )
     return (
         pl.when(pl.col("scoringPlay") == True)
-        .then(text.str.contains("(?i)nullified by penalty"))
-        .otherwise(text.str.contains(unscored))
+        .then(
+            (text.str.contains("(?i)nullified by penalty") & ~score_rose)
+            | (text.str.contains("(?i)reversed") & (pl.col("type.text") == "Safety"))
+        )
+        .otherwise(text.str.contains(unscored) | mistyped_return)
         .fill_null(False)
     )
 
