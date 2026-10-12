@@ -7,6 +7,7 @@ the ESPN schedule / game-roster parquet.
 
 from __future__ import annotations
 
+import json
 from datetime import date
 from pathlib import Path
 
@@ -118,3 +119,145 @@ def test_season_vote_tie_is_left_unmatched() -> None:
     assert row["match_method"].to_list() == ["unmatched"]
     ids = dict(zip(player["espn_athlete_id"], player["nba_player_id"]))
     assert ids["3975"] == "201939"  # Curry, matched in both games, is untouched
+
+
+# The real 2015 NBA All-Star game (ESPN 400606285, East 31 v West 32) and LeBron's roster
+# row in it, copied from hoopR-nba-data schedules / game_rosters 2015. ESPN types this
+# game "STD", so only the game graph can tell it apart from a franchise game.
+_ALL_STAR_GAME = {
+    "game_id": 400606285,
+    "game_date": date(2015, 2, 15),
+    "home_id": 31,
+    "away_id": 32,
+    "home_abbreviation": "EAST",
+    "home_display_name": "Eastern Conf All-Stars",
+    "home_short_display_name": "EAST",
+    "home_location": "Eastern Conf",
+    "home_name": "All-Stars",
+    "away_abbreviation": "WEST",
+    "away_display_name": "Western Conf All-Stars",
+    "away_short_display_name": "WEST",
+    "away_location": "Western Conf",
+    "away_name": "All-Stars",
+}
+_ALL_STAR_ROSTER = {
+    "game_id": "400606285",
+    "team_id": 31,
+    "team_abbreviation": "EAST",
+    "athlete_id": 1966,
+    "athlete_display_name": "LeBron James",
+    "athlete_jersey": "23",
+    "athlete_position": "F",
+}
+
+
+def test_exhibition_teams_leave_team_and_player_but_keep_their_games() -> None:
+    schedule, rosters = _espn("nba")
+    schedule = pl.concat([schedule, pl.DataFrame([_ALL_STAR_GAME], schema=schedule.schema)])
+    rosters = pl.concat([rosters, pl.DataFrame([_ALL_STAR_ROSTER], schema=rosters.schema)])
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json")
+    assert out["team"]["espn_team_id"].to_list() == [5, 9]
+    assert set(out["player"]["espn_team_id"].to_list()) == {5, 9}
+    assert "400606285" in out["schedule"]["espn_game_id"].to_list()
+
+
+# Real-shaped Fox frames: the columns and the ids fox_nba_teams() / fox_nba_team_roster()
+# returned on 2026-10-11 (Fox rosters are today's, so Curry is on Golden State, Cleveland's
+# row is a player who was not on the 2015 Cavaliers).
+_FOX_TEAMS = pl.DataFrame(
+    {
+        "fox_team_id": ["11", "21"],
+        "fox_team_name": ["Cleveland Cavaliers", "Golden State Warriors"],
+        "fox_section": ["2026-27 NBA PRESEASON STANDINGS"] * 2,
+    }
+)
+_FOX_ROSTER_COLUMNS = ["team_id", "position_group", "player", "pos", "age", "ht", "wt", "school", "athlete_id"]
+_FOX_ROSTERS = {
+    "11": [("11", "GUARD", "James Harden", "PG", "37", "6'5\"", "220 lbs", "Arizona State", "1569")],
+    "21": [("21", "GUARD", "Stephen Curry", "PG", "38", "6'2\"", "200 lbs", "Davidson", "1550")],
+}
+
+
+def _stub_fox(monkeypatch: pytest.MonkeyPatch, current: int, *, fail: bool = False) -> None:
+    def roster(team_id: str, **_: object) -> pl.DataFrame:
+        if fail:
+            raise ConnectionError("fox down")
+        return pl.DataFrame(_FOX_ROSTERS[str(team_id)], schema=_FOX_ROSTER_COLUMNS, orient="row")
+
+    def segment(path: str, params: object = None, **_: object) -> dict:
+        if fail:
+            raise ConnectionError("fox down")
+        return json.loads((F / f"fox_nba_scores_segment_{path.rsplit('/', 1)[-1]}.json").read_text())
+
+    monkeypatch.setattr("sportsdataverse.nba.nba_schedule.most_recent_nba_season", lambda: current)
+    monkeypatch.setattr("sportsdataverse.nba.nba_fox_ext.fox_nba_teams", lambda **_: _FOX_TEAMS)
+    monkeypatch.setattr("sportsdataverse.nba.nba_fox_ext.fox_nba_team_roster", roster)
+    monkeypatch.setattr("sportsdataverse._fox_layout.fox_get", segment)
+
+
+def _fox_ids(out: dict) -> tuple[dict, dict]:
+    team = dict(zip(out["team"]["espn_team_id"], out["team"]["fox_team_id"]))
+    player = dict(zip(out["player"]["espn_athlete_id"], out["player"]["fox_athlete_id"]))
+    return team, player
+
+
+def test_fox_legs_fill_teams_and_current_season_players(monkeypatch: pytest.MonkeyPatch) -> None:
+    _stub_fox(monkeypatch, current=2015)
+    schedule, rosters = _espn("nba")
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox=True)
+    team, player = _fox_ids(out)
+    assert team == {5: "11", 9: "21"}
+    assert out["team"]["fox_team_name"].to_list() == ["Cleveland Cavaliers", "Golden State Warriors"]
+    assert player["3975"] == "1550"  # Stephen Curry
+    assert player["1966"] is None  # LeBron is not on today's Fox Cavaliers roster
+    curry = out["player"].filter(pl.col("espn_athlete_id") == "3975")
+    assert curry.select("fox_player", "fox_position_group").row(0) == ("Stephen Curry", "GUARD")
+    assert curry["nba_player_id"].to_list() == ["201939"]  # the Stats match is untouched
+    assert out["player"].width == PLAYER_COLUMNS
+    assert out["player"].schema["fox_athlete_id"] == pl.Utf8
+
+
+def test_fox_leg_fills_game_ids_for_a_past_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Fox serves NBA scoreboards back to 1947; the 2015 Finals segments are real captures.
+    _stub_fox(monkeypatch, current=2027)
+    schedule, rosters = _espn("nba")
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox_games=True)
+    games = out["schedule"].select("espn_game_id", "fox_game_id", "fox_home_team_id", "fox_away_team_id").rows()
+    assert sorted(games) == [("400796849", "102609", "21", "11"), ("400796850", "102824", "11", "21")]
+
+
+def test_fox_players_stay_null_for_a_past_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    _stub_fox(monkeypatch, current=2027)
+    schedule, rosters = _espn("nba")
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox=True)
+    team, player = _fox_ids(out)
+    assert team == {5: "11", 9: "21"}
+    assert set(player.values()) == {None}
+
+
+def test_fox_off_by_default_and_failures_leave_columns_null(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    schedule, rosters = _espn("nba")
+    _stub_fox(monkeypatch, current=2015)
+    off = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json")
+    assert off["team"]["fox_team_id"].null_count() == 2
+
+    _stub_fox(monkeypatch, current=2015, fail=True)
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox=True)
+    team, player = _fox_ids(out)
+    assert team == {5: "11", 9: "21"}
+    assert set(player.values()) == {None}
+    assert "Fox rosters unavailable" in caplog.text
+    assert out["schedule"]["fox_game_id"].null_count() == 2  # fox alone fetches no games
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox_games=True)
+    assert out["schedule"]["fox_game_id"].null_count() == 2
+    assert "Fox games unavailable" in caplog.text
+
+    def down(**_: object) -> pl.DataFrame:
+        raise ConnectionError("fox down")
+
+    monkeypatch.setattr("sportsdataverse.nba.nba_fox_ext.fox_nba_teams", down)
+    out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox=True)
+    assert out["team"]["fox_team_id"].null_count() == 2
+    assert "Fox teams unavailable" in caplog.text

@@ -34,7 +34,7 @@ Oracle per column
     The NCAA rule, sdv-internal-refs ``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``: 80 through
     2011, 75 from 2012. Owner ruling: through 2011 the RULE is the oracle, not cfbfastR -- cfbfastR's
     ``create_epa.R:233`` sets 75 for every season, which is the R bug (a separate cfbfastR PR fixes
-    it). XFAIL C-H4 on the 2012-13 captures (the processor keeps 80 through 2013).
+    it). Green on every capture: main's #778 (2b73fa5a5e) moved the 2012-13 spot to 75 and closed C-H4.
 ``end_of_half`` and ``EPA`` on the last real play of each half
     cfbfastR ``cfbd_pbp_data.R:1366`` (the half's last play ends it), ``:1261`` (a Timeout row is not
     a play) and ``create_epa.R:361`` (a non-scoring half-ending play's EPA is ``-ep_before``). The
@@ -384,10 +384,9 @@ def test_the_kickoff_oracle_agrees_with_cfbfastr_r():
 
 # --- C-H4: the kickoff touchback spot per season --------------------------------------------------
 
-_H4 = (
-    "C-H4: kickoff start.yardsToEndzone.touchback is 80 through 2013 (cfb_pbp.py:7235-7237, :5792-5795, "
-    ":3184); the NCAA moved the touchback to the 25 in 2012 (rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25)"
-)
+# C-H4 (80 through 2013) was a strict xfail on the 2012-13 captures until main's #778 (2b73fa5a5e,
+# "2012+ kickoff touchbacks at the 25") reached this branch; with #778's touchback hunk reverted those
+# 7 captures go red again.
 
 
 def _touchback_rule(season: int) -> int:
@@ -396,7 +395,7 @@ def _touchback_rule(season: int) -> int:
 
 @pytest.mark.parametrize(
     "game_id",
-    _params(CAPTURES, {g: _H4 for g in CAPTURES if FEEDS[g].season in (2012, 2013)}),
+    _params(CAPTURES),
 )
 def test_kickoff_touchback_spot_follows_the_rule(game_id):
     season = FEEDS[game_id].season

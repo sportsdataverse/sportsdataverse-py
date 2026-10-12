@@ -2,7 +2,8 @@
 
 Port of ``hoopR/R/nba_crosswalk.R``. ESPN is the anchor; the NBA Stats API is
 joined on ``espn_team_id`` (the Stats team directory already carries the ESPN
-linkage) and Fox on the normalized team name. Yahoo team and game ids are
+linkage) and Fox on the normalized team name; Fox game ids are opt-in
+(``nba_schedule_crosswalk(fox=True)``). Yahoo team and game ids are
 computed from ESPN's (Yahoo NBA team ids equal ESPN's), from 2014 on; the
 other Yahoo columns are null placeholders.
 
@@ -29,6 +30,7 @@ from sportsdataverse._common_crosswalk_basketball import (
     normalize_team,
     str_id,
 )
+from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games
 from sportsdataverse._crosswalk_basketball_sources import (
     _stats_result_set,
     espn_scoreboard_games,
@@ -474,9 +476,10 @@ def nba_schedule_crosswalk(
     stats_games: Optional[pl.DataFrame] = None,
     return_as_pandas: bool = False,
     strict: bool = False,
+    fox: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats).
+    """Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats / Fox).
 
     One row per game. Both sides reduce to the Eastern-Time game date before
     joining on ``(game_date, home_espn_team_id, away_espn_team_id)``. The
@@ -492,6 +495,11 @@ def nba_schedule_crosswalk(
             skipped) instead of skipping isolated failures. Default ``False`` matches the R
             producers; a provider whose every item failed raises either way. An item
             the host *answered* -- including a 404 -- counts as answered.
+        fox: Fill ``fox_game_id`` / ``fox_home_team_id`` / ``fox_away_team_id``
+            from Fox's scoreboard, one Fox call per game date. A Fox game matches
+            the row with the same US-Eastern date and the same teams (in either
+            home/away order); the Fox home/away ids are Fox's own. A failed Fox
+            fetch logs a warning and leaves the columns null.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -529,6 +537,8 @@ def nba_schedule_crosswalk(
     dates = sorted({d for d in stats_games["game_date"].to_list() if d is not None})
     espn_games = espn_scoreboard_games("nba", dates, strict=strict, **kwargs)
     out = _assemble_schedule_crosswalk(espn_games, stats_games, team_xwalk, season)
+    if fox:
+        out = with_fox_games("nba", out, team_xwalk, **kwargs)
     return out.to_pandas() if return_as_pandas else out
 
 
@@ -648,6 +658,9 @@ def nba_crosswalks_from_archive(
     espn_game_rosters: pl.DataFrame,
     stats_dir: Union[str, Path],
     min_confidence: float = 0.92,
+    *,
+    fox: bool = False,
+    fox_games: bool = False,
 ) -> Dict[str, pl.DataFrame]:
     """Build the NBA team, schedule and player crosswalks for a past season, offline.
 
@@ -670,8 +683,10 @@ def nba_crosswalks_from_archive(
       athlete per team. ``match_confidence`` is the share of that athlete's
       matched games that agree on the chosen ``nba_player_id``.
 
-    Yahoo team and game ids are computed from 2014 on; Fox and Yahoo player
-    columns stay null (they need per-game harvesting).
+    All-Star and other exhibition sides are left out of the team and player
+    crosswalks (they never play a franchise); their games stay in the
+    schedule. Yahoo team and game ids are computed from 2014 on; Yahoo player
+    columns stay null, and Fox columns stay null unless ``fox=True``.
 
     Args:
         season: Season, ending year (``2025`` = 2024-25).
@@ -679,6 +694,18 @@ def nba_crosswalks_from_archive(
         espn_game_rosters: That season's ESPN game rosters parquet.
         stats_dir: The stats archive's ``json`` root.
         min_confidence: Jaro-Winkler floor for a fuzzy player match.
+        fox: Fetch the Fox legs live (the only network call). ``fox_team_id`` /
+            ``fox_team_name`` join on the normalized team name, so they fill for
+            any season whose franchise names match today's Fox names. The Fox
+            player columns fill only for the current season (Fox rosters are
+            today's) and stay null otherwise. A failed Fox fetch logs a warning
+            and leaves the columns null; it never fails the build.
+        fox_games: Fill ``fox_game_id`` and the Fox home/away team ids from
+            Fox's scoreboard, one Fox call per game date, matched on US-Eastern
+            date and teams (either home/away order), for any season Fox serves.
+            Fox teams resolve through ``fox_team_id`` (with ``fox``) or the
+            season's ESPN team names. A failed fetch logs a warning and leaves
+            the columns null.
 
     Returns:
         ``{"team": ..., "schedule": ..., "player": ...}``, with the same columns
@@ -716,4 +743,6 @@ def nba_crosswalks_from_archive(
     stats = read_stats_archive(stats_dir, "nba", season)
     if stats["games"].height == 0:
         raise FileNotFoundError(f"no NBA box scores for season {season} under {stats_dir}")
-    return build_archive_crosswalks("nba", season, espn_schedule, espn_game_rosters, stats, min_confidence)
+    return build_archive_crosswalks(
+        "nba", season, espn_schedule, espn_game_rosters, stats, min_confidence, fox=fox, fox_games=fox_games
+    )

@@ -485,7 +485,8 @@ def create_situational_stats(
             "committed": my_tos.height,
             "epa_swing": _num(my_tos["EPA"].fill_null(0).sum(), 2),
             "fumbles": my_fumbles.height,
-            "fumbles_lost": int(mine.select(_TRUE("fumble_lost").sum()).item()),
+            # fumble_lost is "either side lost it"; the offense's own losses exclude the defense's
+            "fumbles_lost": int(mine.select((_TRUE("fumble_lost") & ~_TRUE("def_fumble_lost")).sum()).item()),
             "by_unit": _by_unit(_unit_of(all_tos, tid), _to_leaf),
         }
 

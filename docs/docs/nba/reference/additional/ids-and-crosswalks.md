@@ -8,7 +8,7 @@ description: "NBA — additional Python functions — IDs and crosswalks — fun
 
 ### nba_crosswalks_from_archive {#nba_crosswalks_from_archive}
 
-`nba_crosswalks_from_archive(season: 'int', espn_schedule: 'pl.DataFrame', espn_game_rosters: 'pl.DataFrame', stats_dir: 'Union[str, Path]', min_confidence: 'float' = 0.92) -> 'Dict[str, pl.DataFrame]'`
+`nba_crosswalks_from_archive(season: 'int', espn_schedule: 'pl.DataFrame', espn_game_rosters: 'pl.DataFrame', stats_dir: 'Union[str, Path]', min_confidence: 'float' = 0.92, *, fox: 'bool' = False, fox_games: 'bool' = False) -> 'Dict[str, pl.DataFrame]'`
 
 Build the NBA team, schedule and player crosswalks for a past season, offline.
 
@@ -31,8 +31,10 @@ parquet, 2002+) and the local stats.nba.com JSON archive
   athlete per team. `match_confidence` is the share of that athlete's
   matched games that agree on the chosen `nba_player_id`.
 
-Yahoo team and game ids are computed from 2014 on; Fox and Yahoo player
-columns stay null (they need per-game harvesting).
+All-Star and other exhibition sides are left out of the team and player
+crosswalks (they never play a franchise); their games stay in the
+schedule. Yahoo team and game ids are computed from 2014 on; Yahoo player
+columns stay null, and Fox columns stay null unless `fox=True`.
 
 **Parameters**
 
@@ -43,6 +45,8 @@ columns stay null (they need per-game harvesting).
 | `espn_game_rosters` | `DataFrame` |  | That season's ESPN game rosters parquet. |
 | `stats_dir` | `Union[str, Path]` |  | The stats archive's `json` root. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for a fuzzy player match. |
+| `fox` | `bool` | `False` | Fetch the Fox legs live (the only network call). `fox_team_id` / `fox_team_name` join on the normalized team name, so they fill for any season whose franchise names match today's Fox names. The Fox player columns fill only for the current season (Fox rosters are today's) and stay null otherwise. A failed Fox fetch logs a warning and leaves the columns null; it never fails the build. |
+| `fox_games` | `bool` | `False` | Fill `fox_game_id` and the Fox home/away team ids from Fox's scoreboard, one Fox call per game date, matched on US-Eastern date and teams (either home/away order), for any season Fox serves. Fox teams resolve through `fox_team_id` (with `fox`) or the season's ESPN team names. A failed fetch logs a warning and leaves the columns null. |
 
 **Returns**
 
@@ -133,9 +137,9 @@ df.filter(pl.col("match_method") == "fuzzy_jw").head()
 
 ### nba_schedule_crosswalk {#nba_schedule_crosswalk}
 
-`nba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`nba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, fox: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats).
+Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats / Fox).
 
 One row per game. Both sides reduce to the Eastern-Time game date before
 joining on `(game_date, home_espn_team_id, away_espn_team_id)`. The
@@ -150,6 +154,7 @@ effectively current-season.
 | `stats_games` | `Optional[DataFrame]` | `None` | Pre-fetched Stats schedule frame; `None` fetches live. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 | `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `fox` | `bool` | `False` | Fill `fox_game_id` / `fox_home_team_id` / `fox_away_team_id` from Fox's scoreboard, one Fox call per game date. A Fox game matches the row with the same US-Eastern date and the same teams (in either home/away order); the Fox home/away ids are Fox's own. A failed Fox fetch logs a warning and leaves the columns null. |
 
 **Returns**
 
@@ -210,7 +215,7 @@ historical relocations are not back-modelled.
 | `nba_division` | character | Team's division as NBA Stats labels it (division) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
 | `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
 | `fox_team_name` | character | Fox team name (NA if unmatched). |
-| `yahoo_team_id` | character | Yahoo team id (NA placeholder). |
+| `yahoo_team_id` | character | Yahoo Sports team id, nba.t.<espn_team_id> (Yahoo's NBA ids equal ESPN's), from the 2014 season on; null for earlier seasons. |
 | `yahoo_team_abbreviation` | character | Yahoo abbreviation (NA placeholder). |
 | `yahoo_team_name` | character | Yahoo team name (NA placeholder). |
 | `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
