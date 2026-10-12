@@ -1,4 +1,4 @@
-"""The processed NFL schema is identical across the 31 committed captures, except the allowlist (C-M8).
+"""The processed NFL schema is identical across the 37 committed captures, except the allowlist (C-M8).
 
 A vertical concat of per-game frames (the season compile) needs one schema; today it relies on
 ``diagonal_relaxed``. ``schema_allowlist.yaml`` names every column allowed to differ and the open

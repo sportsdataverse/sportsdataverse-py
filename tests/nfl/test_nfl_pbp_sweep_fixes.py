@@ -119,18 +119,32 @@ def test_home_wp_after_is_never_the_complement_of_the_next_play(request, which):
 
 
 def test_end_team_flip_on_a_kept_possession_keeps_the_next_plays_perspective(wsh_phi_2015):
+    # ESPN's raw end.team, which the processor now replaces with the next play's (EX-1.5-d)
+    with gzip.open(FIX / "summary_400791508_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        raw = json.load(fh)
+    espn_flip = [
+        int(p["id"])
+        for d in raw["drives"]["previous"]
+        for p in d["plays"]
+        if p.get("end", {}).get("team", {}).get("id") != p.get("start", {}).get("team", {}).get("id")
+    ]
     f = wsh_phi_2015.with_columns(
         pl.col("start.pos_team.id").shift(-1).alias("_next_pos"),
         pl.col("wp_before").shift(-1).alias("_lead_wp_before"),
     )
     flipped = f.filter(
-        (pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+        pl.col("id").is_in(espn_flip)
         & (pl.col("_next_pos") == pl.col("start.pos_team.id"))
         & (pl.col("scoringPlay") == False)  # noqa: E712
         & pl.col("type.text").is_in(["Rush", "Pass Reception", "Pass Incompletion", "Sack"])
     )
     assert flipped.height >= 5  # ESPN's end.team is wrong on eight rows of this game
-    assert (flipped["wp_after"] - flipped["_lead_wp_before"]).abs().max() < 1e-6
+    # since EX-1.5-d these are ordinary kept possessions: wp_after is the model's end state in the
+    # offense's frame, near the next snap's wp_before (measured max 0.141), never its complement
+    assert (flipped["end.pos_team.id"] == flipped["start.pos_team.id"]).all()
+    assert (flipped["wp_after"] - flipped["_lead_wp_before"]).abs().max() < 0.15
+    lead = flipped["_lead_wp_before"]
+    assert (((flipped["wp_after"] - (1 - lead)).abs() > 0.05) | ((lead - 0.5).abs() < 0.05)).all()
     assert flipped["wpa"].abs().max() < 0.25
 
 

@@ -1,6 +1,6 @@
 """Oracle-anchored whole-game characterization of ``NFLPlayProcess`` (quality program task 1.1).
 
-Every committed ESPN capture (``tests/nfl/fixtures/README.md``: 31 games, 2002-2026) is run offline
+Every committed ESPN capture (``tests/nfl/fixtures/README.md``: 37 games, 2002-2026) is run offline
 through the full pipeline and each column that has an oracle OUTSIDE this processor is asserted
 against it:
 
@@ -13,7 +13,7 @@ against it:
 * the CFB processor's fixed copy of the same stage (``cfb_pbp.py``: the ``-3`` rushing block of
   ``24dd2fdec6``, the kickoff-return ``end.down`` rewrite);
 * ESPN's own feed (``scoringPlay``, the play text, the summary's ``boxscore``);
-* the committed nflverse slices of two of the games (``fixtures/nflverse/``), joined play by play:
+* the committed nflverse slices of five of the games (``fixtures/nflverse/``), joined play by play:
   ESPN's play id is the game id followed by the GSIS ``play_id``.
 
 Snapshot ban: no expected value is a stored copy of this processor's output. A check that is red
@@ -32,7 +32,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse.nfl.ep_wp import _derive_wpa, calculate_completion_probability, calculate_epa, calculate_wpa
-from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec
+from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec, normalplay, offense_score_vec
 from tests.nfl._whole_game import CAPTURES, FIX, run
 
 pytestmark = [pytest.mark.whole_game, pytest.mark.xdist_group("nfl_whole_game")]
@@ -176,7 +176,7 @@ def test_half_ending_play(game_id, boundary):
     "game_id",
     _cases(
         dict.fromkeys(
-            (400791590, 400874512, 401671740),
+            (400791590, 400874512, 401326132, 401326383, 401326467, 401326581, 401671740),
             "C-H5: ESPN's end.down -1 on a returned kickoff reaches the EP model (CFB rewrites it to 1)",
         )
     ),
@@ -289,11 +289,14 @@ def test_team_box_touchdowns_match_espn_box(game_id):
 # ---------------------------------------------------------------------------------------------
 
 SLICES = {401547449: "2023_04_LA_IND", 401671740: "2024_04_PHI_TB"}
-_MATCHED = {401547449: 171, 401671740: 159}  # ESPN rows carrying a GSIS play_id nflverse has
+# EX-1.5-d: one capture from each season ESPN's play `end` state is corrupt in (2014-2021)
+END_STATE_SLICES = {400554340: "2014_11_MIN_CHI", 401030962: "2018_13_IND_JAX", 401326467: "2021_10_JAX_IND"}
+# ESPN rows carrying a GSIS play_id nflverse has
+_MATCHED = {401547449: 171, 401671740: 159, 400554340: 152, 401030962: 164, 401326467: 171}
 
 
 def _nflverse(game_id: int) -> pl.DataFrame:
-    return pl.read_parquet(FIX / "nflverse" / f"{SLICES[game_id]}.parquet")
+    return pl.read_parquet(FIX / "nflverse" / f"{(SLICES | END_STATE_SLICES)[game_id]}.parquet")
 
 
 def _joined(game_id: int) -> pl.DataFrame:
@@ -394,11 +397,11 @@ def test_play_column_equals_nflverse(game_id, ours, theirs, domain):
 # here (raise only).
 _MODEL = {
     (401547449, "EP_start", "ep"): (0.996, 0.117, 167),  # 0.99611, 0.11615
-    (401547449, "EPA", "epa"): (0.961, 0.247, 167),  # 0.96175, 0.24653
+    (401547449, "EPA", "epa"): (0.990, 0.112, 167),  # 0.99021, 0.11114 (EX-1.5-d; was 0.96175, 0.24653)
     (401547449, "wp", "wp"): (0.993, 0.024, 167),  # 0.99339, 0.02345
     (401547449, "vegas_wp", "vegas_wp"): (0.987, 0.063, 167),  # 0.98767, 0.06284
-    (401671740, "EP_start", "ep"): (0.992, 0.126, 154),  # 0.99278, 0.12545
-    (401671740, "EPA", "epa"): (0.927, 0.328, 154),  # 0.92781, 0.32713
+    (401671740, "EP_start", "ep"): (0.996, 0.119, 154),  # 0.99609, 0.11813 (EX-1.5-d; was 0.99278, 0.12545)
+    (401671740, "EPA", "epa"): (0.972, 0.132, 154),  # 0.97255, 0.13099 (EX-1.5-d; was 0.92781, 0.32713)
     (401671740, "wp", "wp"): (0.999, 0.007, 154),  # 0.99980, 0.00649
     (401671740, "vegas_wp", "vegas_wp"): (0.991, 0.062, 154),  # 0.99174, 0.06128
 }
@@ -453,6 +456,133 @@ def test_completion_probability_reproduces_nflverse(game_id):
     assert out.height >= rows
     assert not math.isnan(corr) and corr >= corr_floor, corr
     assert mae <= mae_ceiling, mae
+
+
+# ---------------------------------------------------------------------------------------------
+# EX-1.5-d (task 2.18): a play ends where the next play starts, not where ESPN's `end` says
+# ---------------------------------------------------------------------------------------------
+# From 2014 to 2021 ESPN's `end` object carries the defense's team id and a down/distance that does
+# not follow from the play on a growing share of plays (2021: 30% of plain scrimmage plays; the yard
+# line stays right). The oracle is nflverse on the same plays: a possession change is a posteam
+# that differs from the next play's, a first down is nflverse's `first_down`. The domain is a
+# pass or run that is not a touchdown and whose next play is in the same half.
+
+
+def _snaps(game_id: int) -> pl.DataFrame:
+    half = pl.when(pl.col("qtr") <= 2).then(1).when(pl.col("qtr") <= 4).then(2).otherwise(pl.col("qtr"))
+    nxt = (
+        _nflverse(game_id)
+        .filter(pl.col("play_type").is_not_null())
+        .sort("play_id")
+        .select(
+            pl.col("play_id").cast(pl.Int64),
+            next_posteam=pl.col("posteam").shift(-1),
+            same_half=(half == half.shift(-1)).fill_null(False),
+        )
+    )
+    joined = _joined(game_id)
+    _require(joined.schema["play_id"] == nxt.schema["play_id"], "play_id dtypes differ")
+    return joined.join(nxt, on="play_id").filter(
+        pl.col("play_type_nv").is_in(["pass", "run"]) & (pl.col("touchdown_nv") == 0) & pl.col("same_half")
+    )
+
+
+# (snaps, change_of_poss disagreements, first-down agreement floor, EPA corr floor, EPA MAE ceiling)
+# Measured after the fix (before it: 17 / 23 / 67 wrong possession changes, first downs 0.886 /
+# 0.869 / 0.661, EPA corr 0.756 / 0.771 / 0.426), rounded one step toward failing.
+_END_STATE = {
+    400554340: (114, 0, 1.0, 0.761, 0.430),  # 1.0, 0.76179, 0.42959
+    401030962: (122, 0, 1.0, 0.951, 0.197),  # 1.0, 0.95171, 0.19693
+    401326467: (118, 0, 0.991, 0.932, 0.139),  # 0.99153, 0.93294, 0.13892
+}
+
+
+@pytest.mark.parametrize("game_id", list(END_STATE_SLICES))
+def test_EX_1_5_d_change_of_poss_is_nflverse_possession_change(game_id):
+    s = _snaps(game_id)
+    _require(s.height >= _END_STATE[game_id][0], f"{s.height} snaps")
+    ours = pl.col("change_of_poss").cast(pl.Boolean).fill_null(False)
+    wrong = s.filter(ours != (pl.col("posteam_nv") != pl.col("next_posteam")))
+    assert wrong.height <= _END_STATE[game_id][1], wrong.select("id", "text", "change_of_poss").rows()
+
+
+@pytest.mark.parametrize("game_id", list(END_STATE_SLICES))
+def test_EX_1_5_d_first_down_created_is_nflverse_first_down(game_id):
+    s = _snaps(game_id)
+    agree = s.select((pl.col("first_down_created").cast(pl.Int64) == pl.col("first_down_nv")).mean()).item()
+    assert agree >= _END_STATE[game_id][2], agree
+
+
+@pytest.mark.parametrize("game_id", list(END_STATE_SLICES))
+def test_EX_1_5_d_epa_agrees_with_nflverse(game_id):
+    s = _snaps(game_id).filter(pl.col("EPA").is_not_null() & pl.col("epa_nv").is_not_null())
+    corr, mae = s.select(
+        pl.corr("EPA", "epa_nv").alias("corr"), (pl.col("EPA") - pl.col("epa_nv")).abs().mean().alias("mae")
+    ).row(0)
+    assert corr >= _END_STATE[game_id][3], corr
+    assert mae <= _END_STATE[game_id][4], mae
+
+
+# No next play speaks for a half's last play or a play followed by a kickoff (whose start is the
+# receiving team's). nflfastR keeps the snapping team's possession through a play that ends the
+# half (helper_add_ep_wp.R:710-728 scores it 0 - ep; drives and series group by game_half,
+# helper_add_fixed_drives.R:29): a plain snap that is not a 4th-down failure cannot hand the ball
+# over. 401326132 (2021_02_DEN_JAX) play 2030, "(:02) T.Bridgewater pass ... to JAX 23 for 30
+# yards" on 4th & 1, ends the half; ESPN states it for JAX, nflverse has posteam DEN, first_down 1
+# (review R785-2). The same rule covers 400951676's Q4 incompletion before a kickoff (R785-3).
+# ESPN's own type (before the processor re-types fumbles), no turnover in the text, downs 1-3 (the
+# converted 4th down is pinned row by row below).
+_HELD = (
+    pl.col("orig_play_type").is_in([*normalplay, "Penalty"])
+    & ~_t("scoringPlay")
+    & ~pl.col("text").str.contains(r"(?i)fumble|intercept")
+    & pl.col("start.down").is_between(1, 3)
+).fill_null(False)
+
+
+@pytest.mark.parametrize("game_id", CAPTURES)
+def test_EX_1_5_d_plain_snap_without_a_next_play_keeps_possession(game_id):
+    half = pl.when(pl.col("period.number") <= 2).then(1).otherwise(2)
+    f = (
+        run(game_id)
+        .plays.filter(_PLAY)
+        .with_columns(_h=half, _nh=half.shift(-1), _nk=pl.col("type.text").shift(-1).is_in(kickoff_vec))
+    )
+    ends = f.filter(_HELD & (pl.col("_nh").is_null() | (pl.col("_nh") != pl.col("_h")) | _t("_nk")))
+    assert _bad(ends, ~_t("change_of_poss"), ["type.text", "start.down", "change_of_poss"]) == []
+
+
+# The half's last snap, ESPN-stated for the other team on "1st & 10": its first down follows from its
+# own gain. nflverse: 2021_02_DEN_JAX play 2030 posteam DEN, 4th & 1, first_down 1; 2021_04_CAR_DAL
+# play 2167 posteam CAR, 2nd & 17, 6 yards, first_down 0.
+_HALF_END_ROWS = {(401326132, 4013261322030): True, (401326383, 4013263832167): False}
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_HALF_END_ROWS))
+def test_EX_1_5_d_half_ending_snap_keeps_the_ball_and_its_own_first_down(game_id, play_id):
+    row = run(game_id).plays.filter(pl.col("id") == play_id).row(0, named=True)
+    assert (row["change_of_poss"], row["first_down_created"]) == (False, _HALF_END_ROWS[(game_id, play_id)])
+
+
+# ESPN types a lateral fumbled away on the last snap "Pass Reception"; a lost fumble is still a possession
+# change (review R785-9). nflverse 2021_17_LA_BAL play 3846: posteam BAL, fumble_lost 1, LA recovers.
+_HALF_END_TURNOVERS = [(401326581, 4013265813846)]
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), _HALF_END_TURNOVERS)
+def test_EX_1_5_d_half_ending_lateral_fumble_lost_changes_possession(game_id, play_id):
+    row = run(game_id).plays.filter(pl.col("id") == play_id).row(0, named=True)
+    assert row["change_of_poss"] is True
+
+
+# A score keeps ESPN's end (stated for the scorer; the try follows). An offensive score does not
+# hand the ball over on the play itself: the scorer kicks off next (R785-3).
+@pytest.mark.parametrize("game_id", CAPTURES)
+def test_EX_1_5_d_offensive_score_keeps_possession(game_id):
+    f = run(game_id).plays.filter(
+        _t("scoringPlay") & pl.col("type.text").is_in([*offense_score_vec, "Extra Point Good"])
+    )
+    assert _bad(f, ~_t("change_of_poss"), ["type.text", "change_of_poss"]) == []
 
 
 # ---------------------------------------------------------------------------------------------

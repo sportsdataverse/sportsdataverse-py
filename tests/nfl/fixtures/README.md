@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [NFL test fixtures](#nfl-test-fixtures)
-  - [ESPN game summaries (the 31 whole-game captures)](#espn-game-summaries-the-31-whole-game-captures)
+  - [ESPN game summaries (the 37 whole-game captures)](#espn-game-summaries-the-37-whole-game-captures)
   - [nflverse slices (`nflverse/`)](#nflverse-slices-nflverse)
   - [Fourth-down and offline-model fixtures (task 1.5)](#fourth-down-and-offline-model-fixtures-task-15)
     - [Booster replay (`nfl4th_booster_replay.parquet`)](#booster-replay-nfl4th_booster_replayparquet)
@@ -15,7 +15,7 @@
 
 # NFL test fixtures
 
-## ESPN game summaries (the 31 whole-game captures)
+## ESPN game summaries (the 37 whole-game captures)
 
 Each `summary_<game_id>*` file is the ESPN Site v2 summary for one NFL game,
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`. The
@@ -23,7 +23,12 @@ Each `summary_<game_id>*` file is the ESPN Site v2 summary for one NFL game,
 `nfl/espn/raw/<season>/<game_id>.json.gz`) trimmed to the keys `NFLPlayProcess` reads (header,
 drives, boxscore, gameInfo, pickcenter, scoringPlays where present); `summary_401872922.json` is a
 full summary fetched from the URL above. "Committed" is the commit and date that added the file to this
-repository; the ESPN fetch date is not recorded with the fixtures.
+repository; the ESPN fetch date is not recorded with the fixtures, except for the six EX-1.5-d
+captures (400554340, 401030962, 401326467 at 2026-10-11 16:53 UTC; 401326132 at 20:00 and 401326383 at
+21:24 UTC, the review R785-2 half-end rows; 401326581 at 23:17 UTC, the R785-9 lateral fumble): fetched from the URL above, one request each (`curl -s -o summary_<id>_live.json "<url>"`), and trimmed to the same keys with
+`json.dump({k: d[k] for k in ("header", "drives", "boxscore", "gameInfo", "pickcenter", "scoringPlays") if k in d}, gzip_fh, separators=(",", ":"))`.
+Every play's `end` object in those fetches is identical to the nfl-raw copy, so ESPN still serves
+the 2014-2021 end-state corruption they pin.
 `tests/nfl/test_nfl_whole_game_oracle.py` and `test_nfl_schema_allowlist.py` run every one offline.
 
 | game_id | season | week (REG) | away @ home | file | committed |
@@ -43,6 +48,7 @@ repository; the ESPN fetch date is not recorded with the fixtures.
 | 291115014 | 2009 | 10 | NO @ STL | `summary_291115014_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 301003002 | 2010 | 4 | NYJ @ BUF | `summary_301003002_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
 | 331103020 | 2013 | 9 | NO @ NYJ | `summary_331103020_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
+| 400554340 | 2014 | 11 | MIN @ CHI | `summary_400554340_trimmed.json.gz` | task 2.18, 2026-10-11 |
 | 400791508 | 2015 | 16 | WSH @ PHI | `summary_400791508_trimmed.json.gz` | 7591ec61f5, 2026-09-17 |
 | 400791567 | 2015 | 7 | PHI @ CAR | `summary_400791567_trimmed.json.gz` | 9310e773f9, 2026-09-17 |
 | 400791590 | 2015 | 1 | NYG @ DAL | `summary_400791590_trimmed.json.gz` | e9c3ca7c48, 2026-09-18 |
@@ -50,8 +56,13 @@ repository; the ESPN fetch date is not recorded with the fixtures.
 | 400874512 | 2016 | 2 | BAL @ CLE | `summary_400874512_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
 | 400951676 | 2017 | 2 | SF @ SEA | `summary_400951676_trimmed.json.gz` | d28cc51212, 2026-09-18 |
 | 401030824 | 2018 | 17 | LAC @ DEN | `summary_401030824_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
+| 401030962 | 2018 | 13 | IND @ JAX | `summary_401030962_trimmed.json.gz` | task 2.18, 2026-10-11 |
 | 401128075 | 2019 | 11 | JAX @ IND | `summary_401128075_trimmed.json.gz` | 45567d8bf9, 2026-09-25 |
 | 401220341 | 2020 | 10 | BUF @ ARI | `summary_401220341_trimmed.json.gz` | 9310e773f9, 2026-09-17 |
+| 401326132 | 2021 | 2 | DEN @ JAX | `summary_401326132_trimmed.json.gz` | task 2.18, 2026-10-11 |
+| 401326383 | 2021 | 4 | CAR @ DAL | `summary_401326383_trimmed.json.gz` | task 2.18, 2026-10-11 |
+| 401326467 | 2021 | 10 | JAX @ IND | `summary_401326467_trimmed.json.gz` | task 2.18, 2026-10-11 |
+| 401326581 | 2021 | 17 | LAR @ BAL | `summary_401326581_trimmed.json.gz` | task 2.18, 2026-10-11 |
 | 401547449 | 2023 | 4 | LAR @ IND | `summary_401547449_trimmed.json.gz` | c921519970, 2026-09-19 |
 | 401671740 | 2024 | 4 | PHI @ TB | `summary_401671740_trimmed.json.gz` | a43428ecf9, 2026-09-25 |
 | 401671835 | 2024 | 17 | DEN @ CIN | `summary_401671835_trimmed.json.gz` | 9310e773f9, 2026-09-17 |
@@ -62,7 +73,7 @@ repository; the ESPN fetch date is not recorded with the fixtures.
 
 ## nflverse slices (`nflverse/`)
 
-Two games of nflverse's play-by-play, the oracle for the series, fixed-drive, down / distance /
+Five games of nflverse's play-by-play, the oracle for the series, fixed-drive, down / distance /
 yard line, yardage, score, touchdown, EP / EPA / WP and CP columns of the same games' ESPN
 captures. ESPN's play id is the game id followed by nflverse's GSIS `play_id`, so the two join
 exactly.
@@ -71,6 +82,9 @@ exactly.
 |---|---|---|---|
 | `nflverse/2023_04_LA_IND.parquet` | 2023_04_LA_IND (old_game_id 2023100106) | 401547449 | 190 x 41 |
 | `nflverse/2024_04_PHI_TB.parquet` | 2024_04_PHI_TB (old_game_id 2024092907) | 401671740 | 173 x 41 |
+| `nflverse/2014_11_MIN_CHI.parquet` | 2014_11_MIN_CHI | 400554340 | 161 x 42 |
+| `nflverse/2018_13_IND_JAX.parquet` | 2018_13_IND_JAX | 401030962 | 170 x 42 |
+| `nflverse/2021_10_JAX_IND.parquet` | 2021_10_JAX_IND | 401326467 | 180 x 42 |
 
 - **Source.** nflverse-data release `pbp`, assets
   `https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2023.parquet` and
@@ -86,6 +100,13 @@ exactly.
 uv run python -c "import sys, polars as pl; src, gid, out = sys.argv[1:]; pl.read_parquet(src).filter(pl.col('game_id') == gid).select(['game_id', 'old_game_id', 'play_id', 'season', 'week', 'home_team', 'away_team', 'posteam', 'defteam', 'qtr', 'down', 'ydstogo', 'yardline_100', 'play_type', 'desc', 'touchdown', 'pass_touchdown', 'rush_touchdown', 'rushing_yards', 'receiving_yards', 'total_home_score', 'total_away_score', 'home_score', 'away_score', 'fixed_drive', 'fixed_drive_result', 'series', 'series_success', 'series_result', 'first_down_penalty', 'ep', 'epa', 'wp', 'vegas_wp', 'home_wp', 'cp', 'air_yards', 'roof', 'pass_location', 'qb_hit', 'complete_pass']).write_parquet(out)" python/data/pbp_2023.parquet 2023_04_LA_IND <sdv-py>/tests/nfl/fixtures/nflverse/2023_04_LA_IND.parquet
 # and the same with python/data/pbp_2024.parquet 2024_04_PHI_TB .../2024_04_PHI_TB.parquet
 ```
+
+- **The three EX-1.5-d slices** (task 2.18, read by the `test_EX_1_5_d_*` tests) come the same way from
+  the same release's 2014, 2018 and 2021 assets as downloaded to `nfl-data/python/data/` on 2026-06-18:
+  `pbp_2014.parquet` (sha256 `db5f70b59bc6e3cd358b4ff3691738c4fab2f3023a2b792ee8f817f9a326c4a3`),
+  `pbp_2018.parquet` (`c9477ef3065e906f5de0e8489f82f4673fd317c8cf84ab3064388027c78f95be`) and
+  `pbp_2021.parquet` (`aa8dec05bb188140f08ad56345395a1708e9012c102f90988c76e149e9b9d074`), trimmed
+  2026-10-11 with the command above plus a 42nd column, `first_down`, appended to the select list.
 
 ## Fourth-down and offline-model fixtures (task 1.5)
 
