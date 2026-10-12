@@ -216,9 +216,41 @@ def test_game_parsers_empty_keep_their_columns(short, payload):
     assert df.columns == [c["name"] for c in schema["columns"]]
 
 
-@pytest.mark.parametrize("payload", [None, {}, {"header": [], "data": []}, {"header": [{"alias": "a"}], "data": "x"}])
-def test_table_parser_empty(payload):
+_EMPTY_TABLES = [None, {}, [], "x", {"header": [], "data": []}, {"header": [{"alias": "a"}], "data": "x"}]
+
+
+@pytest.mark.parametrize("payload", _EMPTY_TABLES)
+@pytest.mark.parametrize("short", sorted(TABLES))
+def test_table_parser_empty_keeps_the_documented_schema(short, payload):
+    # The columns AND dtypes of an empty table are the ones the real capture parses to.
+    names = [c["name"] for c in yaml.safe_load((SCHEMA_DIR / f"{short}.yaml").read_text(encoding="utf-8"))["columns"]]
+    df = parse_sihf_table(payload, columns=names)
+    assert df.height == 0
+    assert df.columns == names
+    assert df.schema == parse_sihf_table(_load(TABLES[short])).schema
+
+
+@pytest.mark.parametrize("payload", _EMPTY_TABLES)
+def test_table_parser_empty_without_columns(payload):
     assert parse_sihf_table(payload).height == 0
+
+
+@pytest.mark.parametrize(
+    ("fn", "short"),
+    [
+        (sihf_api_web.sihf_results, "results"),
+        (sihf_api_web.sihf_standings, "standings"),
+        (sihf_api_web.sihf_player_stats, "player_stats"),
+        (sihf_api_web.sihf_goalie_stats, "goalie_stats"),
+    ],
+)
+def test_table_wrappers_return_the_documented_schema_when_empty(monkeypatch, fn, short):
+    body = _load(TABLES[short])
+    body["data"] = []  # a season / phase with no rows yet
+    _capture(monkeypatch, body)
+    df = fn(season=2026)
+    assert df.height == 0
+    assert df.schema == parse_sihf_table(_load(TABLES[short])).schema
 
 
 @pytest.mark.parametrize(

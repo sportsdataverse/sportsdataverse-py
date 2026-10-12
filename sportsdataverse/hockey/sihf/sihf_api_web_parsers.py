@@ -31,7 +31,7 @@ is asked.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Union
 
 import pandas as pd
 import polars as pl
@@ -90,6 +90,18 @@ _FLOAT_ALIASES = frozenset(
 )
 # highlightedPositions styles that mark a summary row (the rest -- ``line`` -- are visual separators).
 _SUMMARY_STYLES = frozenset({"average", "total"})
+# Season-table columns whose dtype neither their header alias nor the ``*_id`` rule gives: the
+# expanded ``result`` / ``periods`` / ``gameStatus`` cells, ``date`` and the echoed ``season``.
+_TABLE_DTYPES: Dict[str, Any] = {
+    "season": pl.Int64,
+    "date": pl.Date,
+    "score_home": pl.Int64,
+    "score_away": pl.Int64,
+    "score_per_period_home": pl.List(pl.Int64),
+    "score_per_period_away": pl.List(pl.Int64),
+    "status_percent": pl.Int64,
+    "status_canceled": pl.Boolean,
+}
 
 
 def _out(df: pl.DataFrame, return_as_pandas: bool) -> Frame:
@@ -98,6 +110,19 @@ def _out(df: pl.DataFrame, return_as_pandas: bool) -> Frame:
 
 def _col(alias: str) -> str:
     return underscore(str(alias)).replace(" ", "_").replace(".", "_")
+
+
+_INT_COLS = frozenset(_col(a) for a in _INT_ALIASES)
+_FLOAT_COLS = frozenset(_col(a) for a in _FLOAT_ALIASES)
+
+
+def _table_dtype(col: str) -> Any:
+    """The documented dtype of a season-table column (String for one the parser does not type)."""
+    if col in _TABLE_DTYPES:
+        return _TABLE_DTYPES[col]
+    if col == "id" or col.endswith("_id") or col in _INT_COLS:
+        return pl.Int64
+    return pl.Float64 if col in _FLOAT_COLS else pl.String
 
 
 def _int(value: Any) -> Optional[int]:
@@ -228,7 +253,12 @@ def _table_frame(raw: Any, extra: Optional[Mapping[str, Any]] = None) -> pl.Data
     return df.with_columns(pl.col(c).cast(pl.Int64, strict=False) for c in ids) if ids else df
 
 
-def parse_sihf_table(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_table(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``/table`` body (results, standings, player or goalie stats) into a tidy frame.
 
     Each positional row is keyed by its ``header`` alias, snake_cased (``gamesPlayed`` ->
@@ -247,10 +277,14 @@ def parse_sihf_table(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = 
     Args:
         raw: a SIHF table JSON body.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        columns: the table's documented column names (the generated wrappers pass their
+            returns-schema). A table with no rows then parses to a zero-row frame with exactly
+            these columns, in their documented dtypes.
 
     Returns:
         One row per table row. A zero-row frame when the payload is ``None``, empty or
-        malformed -- callers can chain without a null-check.
+        malformed -- with the ``columns`` schema when given -- so callers can chain without a
+        null-check.
 
     Raises:
         None: malformed payloads yield a zero-row frame rather than an exception.
@@ -273,6 +307,8 @@ def parse_sihf_table(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = 
     .. _SIHF: https://www.sihf.ch/
     """
     df = _table_frame(raw, _echoed(raw))
+    if df.height == 0 and columns is not None:
+        df = pl.DataFrame(schema={c: _table_dtype(c) for c in columns})
     return _out(df, return_as_pandas)
 
 
@@ -369,7 +405,12 @@ _GOALIE_CHANGE = re.compile(r"\((IN|OUT)\)\s*$")
 _TYPE_ORDER = {"penalty": 0, "goal": 1, "revoked_goal": 2, "goalie": 3}
 
 
-def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_pbp(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the game's event timeline, one row per event.
 
     ``event_type`` is ``goal``, ``penalty``, ``goalie`` (a goaltender in / out, see
@@ -389,6 +430,8 @@ def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = Fa
     Args:
         raw: the ``gameoverview`` JSON body.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        columns: accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per event with the documented columns; a zero-row frame with the same
@@ -594,7 +637,12 @@ def _conform(df: pl.DataFrame, schema: Mapping[str, Any]) -> pl.DataFrame:
     return df.select(exprs + [pl.col(c) for c in df.columns if c not in schema])
 
 
-def parse_sihf_game_player_stats(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_player_stats(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the skater box score, one row per player per side.
 
     Stacks the page's ``gamePlayerStatsHome`` and ``gamePlayerStatsAway`` tables, tagged with
@@ -606,6 +654,8 @@ def parse_sihf_game_player_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     Args:
         raw: the ``gameoverview`` JSON body.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        columns: accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per skater plus one total row per side; a zero-row frame with the documented
@@ -636,7 +686,12 @@ def parse_sihf_game_player_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     return _out(_conform(_side_tables(_game(raw), "gamePlayerStats"), _GAME_PLAYER_SCHEMA), return_as_pandas)
 
 
-def parse_sihf_game_goalie_stats(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_goalie_stats(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the goaltender box score, one row per goalie per side.
 
     Stacks ``gameGoalieStatsHome`` and ``gameGoalieStatsAway`` with ``team_side`` /
@@ -647,6 +702,8 @@ def parse_sihf_game_goalie_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     Args:
         raw: the ``gameoverview`` JSON body.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        columns: accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per dressed goaltender; a zero-row frame with the documented columns for a
@@ -683,7 +740,12 @@ _TEAM_STATS_SCHEMA: Dict[str, Any] = {
 }
 
 
-def parse_sihf_game_team_stats(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_team_stats(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the team stats, one row per statistic.
 
     The page's ``gameTeamStats`` table is one row per statistic with one column per team
@@ -695,6 +757,8 @@ def parse_sihf_game_team_stats(raw: Optional[Dict[str, Any]], *, return_as_panda
     Args:
         raw: the ``gameoverview`` JSON body.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        columns: accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per statistic; a zero-row frame with the documented columns for a game not
@@ -783,7 +847,12 @@ _INFO_SCHEMA: Dict[str, Any] = {
 }
 
 
-def parse_sihf_game_info(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_info(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into the game header, one row.
 
     League, region, group, tournament, qualification (``Regular Season``, ``Playoff
@@ -796,6 +865,8 @@ def parse_sihf_game_info(raw: Optional[Dict[str, Any]], *, return_as_pandas: boo
     Args:
         raw: the ``gameoverview`` JSON body.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        columns: accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row; a zero-row frame with the documented columns for an empty or a malformed
@@ -900,7 +971,12 @@ _UNITS = (
 )
 
 
-def parse_sihf_game_lineups(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = False) -> Frame:
+def parse_sihf_game_lineups(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
     """Parse a SIHF ``gameoverview`` body into both lineups and absentees, one row per player.
 
     Dressed players come from ``lineUps``, one row per player per ``unit``
@@ -915,6 +991,8 @@ def parse_sihf_game_lineups(raw: Optional[Dict[str, Any]], *, return_as_pandas: 
     Args:
         raw: the ``gameoverview`` JSON body.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        columns: accepted for the generated wrappers, which pass the documented column names;
+            unused, because a game frame always carries its fixed documented schema.
 
     Returns:
         One row per listed player; a zero-row frame with the documented columns for a game

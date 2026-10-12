@@ -34,6 +34,244 @@ __all__ = [
     "sihf_game_lineups",
 ]
 
+# Documented columns per endpoint (its returns-schema): an empty payload parses to a
+# zero-row frame with this schema, so callers can chain without a null-check.
+_PARSER_COLUMNS = {
+    "results": [
+        "season",
+        "phase_id",
+        "day",
+        "date",
+        "time",
+        "home_team_id",
+        "home_team_name",
+        "home_team_acronym",
+        "away_team_id",
+        "away_team_name",
+        "away_team_acronym",
+        "score_home",
+        "score_away",
+        "score_per_period_home",
+        "score_per_period_away",
+        "decision",
+        "status_id",
+        "status_name",
+        "status_percent",
+        "status_canceled",
+        "start_date_time",
+        "end_date_time",
+        "update_date_time",
+        "game_id",
+        "broadcasts",
+        "row_type",
+    ],
+    "standings": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "points",
+        "points_quotient",
+        "games_won_in_time",
+        "games_won_extra_time",
+        "games_won_penalty",
+        "games_lost_penalty",
+        "games_lost_extra_time",
+        "games_lost_in_time",
+        "goals_for",
+        "goals_against",
+        "goals_difference",
+        "streak",
+        "row_type",
+    ],
+    "player_stats": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "position",
+        "games_played",
+        "goals",
+        "assists",
+        "points",
+        "points_per_game",
+        "pim_total",
+        "plus_minus",
+        "row_type",
+    ],
+    "goalie_stats": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "first_keeper",
+        "goals_against",
+        "goals_against_average",
+        "shots_against",
+        "saves",
+        "saves_percentage",
+        "seconds_played",
+        "penalty_in_minutes",
+        "goals",
+        "assists",
+        "row_type",
+    ],
+    "pbp": [
+        "game_id",
+        "event_index",
+        "period_number",
+        "period",
+        "event_type",
+        "time",
+        "game_seconds",
+        "team_id",
+        "team_side",
+        "player_id",
+        "player_name",
+        "player_jersey",
+        "assist1_player_id",
+        "assist1_player_name",
+        "assist2_player_id",
+        "assist2_player_name",
+        "goalie_id",
+        "goalie_name",
+        "strength",
+        "goal_tags",
+        "score_home",
+        "score_away",
+        "plus_player_ids",
+        "minus_player_ids",
+        "penalty_id",
+        "penalty_name",
+        "penalty_minutes",
+        "penalty_start",
+        "penalty_end",
+        "goalie_change",
+        "revoke_reason",
+        "shootout_number",
+        "shootout_scored",
+        "text",
+    ],
+    "game_info": [
+        "game_id",
+        "season",
+        "round",
+        "league_id",
+        "league_name",
+        "region_id",
+        "region_name",
+        "group_id",
+        "group_name",
+        "tournament_id",
+        "tournament_name",
+        "qualification_id",
+        "qualification_name",
+        "phase_id",
+        "phase_name",
+        "start_date_time",
+        "end_date_time",
+        "update_date_time",
+        "status_id",
+        "status_name",
+        "status_percent",
+        "status_canceled",
+        "home_team_id",
+        "home_team_name",
+        "home_team_acronym",
+        "away_team_id",
+        "away_team_name",
+        "away_team_acronym",
+        "home_score",
+        "away_score",
+        "home_score_by_period",
+        "away_score_by_period",
+        "home_shots_by_period",
+        "away_shots_by_period",
+        "period_indicators",
+        "venue_name",
+        "venue_city",
+        "spectators",
+        "referees",
+        "linesmen",
+        "broadcasts",
+    ],
+    "game_player_stats": [
+        "game_id",
+        "team_side",
+        "team_id",
+        "team_name",
+        "player_number",
+        "player",
+        "player_position",
+        "goals",
+        "assists",
+        "assists1",
+        "assists2",
+        "points",
+        "pim_total",
+        "plus_minus",
+        "shots_on_goal",
+        "sog_missed",
+        "sog_post",
+        "blockings",
+        "faceoffs_won",
+        "faceoffs_lost",
+        "faceoffs_percent",
+        "time_on_ice",
+        "time_on_ice_pp",
+        "time_on_ice_pk",
+        "row_type",
+        "player_id",
+    ],
+    "game_goalie_stats": [
+        "game_id",
+        "team_side",
+        "team_id",
+        "team_name",
+        "player_number",
+        "player",
+        "goals_against",
+        "saves",
+        "shots_against",
+        "saves_percentage",
+        "seconds_played",
+        "goals_against_average",
+        "penalty_in_minutes",
+        "row_type",
+        "player_id",
+    ],
+    "game_team_stats": [
+        "game_id",
+        "statistic",
+        "home_value",
+        "away_value",
+    ],
+    "game_lineups": [
+        "game_id",
+        "team_side",
+        "team_id",
+        "unit",
+        "slot",
+        "player_id",
+        "player_name",
+        "player_jersey",
+        "is_captain",
+        "is_first_goalkeeper",
+        "absence_code",
+        "absence_reason",
+    ],
+}
+
 
 def sihf_results(
     season: int,
@@ -96,7 +334,7 @@ def sihf_results(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_table(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["results"])
     return raw
 
 
@@ -166,7 +404,7 @@ def sihf_standings(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_table(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["standings"])
     return raw
 
 
@@ -231,7 +469,7 @@ def sihf_player_stats(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_table(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["player_stats"])
     return raw
 
 
@@ -296,7 +534,7 @@ def sihf_goalie_stats(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_table(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["goalie_stats"])
     return raw
 
 
@@ -354,7 +592,7 @@ def sihf_pbp(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_pbp(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_pbp(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["pbp"])
     return raw
 
 
@@ -412,7 +650,7 @@ def sihf_game_info(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_game_info(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_game_info(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["game_info"])
     return raw
 
 
@@ -470,7 +708,9 @@ def sihf_game_player_stats(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_game_player_stats(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_game_player_stats(
+            raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["game_player_stats"]
+        )
     return raw
 
 
@@ -528,7 +768,9 @@ def sihf_game_goalie_stats(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_game_goalie_stats(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_game_goalie_stats(
+            raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["game_goalie_stats"]
+        )
     return raw
 
 
@@ -586,7 +828,9 @@ def sihf_game_team_stats(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_game_team_stats(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_game_team_stats(
+            raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["game_team_stats"]
+        )
     return raw
 
 
@@ -644,5 +888,5 @@ def sihf_game_lineups(
         **kwargs,
     )
     if return_parsed:
-        return parse_sihf_game_lineups(raw, return_as_pandas=return_as_pandas)
+        return parse_sihf_game_lineups(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["game_lineups"])
     return raw

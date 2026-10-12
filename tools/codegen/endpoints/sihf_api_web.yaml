@@ -6,6 +6,9 @@ parser_module: hockey.sihf.sihf_api_web_parsers
 getter_module: sportsdataverse.hockey.sihf.sihf_runtime
 qualifier: web
 schema_prefix: sihf_
+# The generated wrappers pass each endpoint's documented column names (columns=), so an empty
+# season table parses to a zero-row frame with its documented schema.
+parser_columns: true
 docstring:
   example_import: true
   raises:
