@@ -1,0 +1,85 @@
+columns:
+- description: Season END year (2026 = 2025/26).
+  name: season
+  type: integer
+- description: Game date (YYYY-MM-DD).
+  name: date
+  type: character
+- description: Display code of the home team (AIK, MoDo, MORA, NVIF, ÖIK), not the
+    StatNet id.
+  name: home_team_code
+  type: character
+- description: Display code of the away team, not the StatNet id.
+  name: away_team_code
+  type: character
+- description: Home goals, final.
+  name: home_score
+  type: integer
+- description: Away goals, final.
+  name: away_score
+  type: integer
+- description: How the game was decided (FT, OT, SO); empty for a game not yet played.
+  name: decided_in
+  type: character
+- description: True when the game has been played (decided_in is not empty).
+  name: is_played
+  type: logical
+- description: Arena.
+  name: arena
+  type: character
+- description: Attendance; null for an unplayed game (0 for a played one means unknown).
+  name: attendance
+  type: integer
+- description: 'Home team: shots on goal.'
+  name: home_shots_total
+  type: integer
+- description: 'Home team: goals.'
+  name: home_shots_goal
+  type: integer
+- description: 'Home team: shooting percentage (goals per 100 shots); sent as text,
+    0 or null.'
+  name: home_shots_efficiency
+  type: numeric
+- description: 'Home team: power-play goals.'
+  name: home_powerplay_goals
+  type: integer
+- description: 'Home team: power plays.'
+  name: home_powerplay_num_pp
+  type: integer
+- description: 'Home team: power-play percentage; sent as text, 0 or null.'
+  name: home_powerplay_efficiency
+  type: numeric
+- description: 'Home team: penalty minutes.'
+  name: home_expulsions_in_minutes
+  type: integer
+- description: 'Away team: shots on goal.'
+  name: away_shots_total
+  type: integer
+- description: 'Away team: goals.'
+  name: away_shots_goal
+  type: integer
+- description: 'Away team: shooting percentage (goals per 100 shots); sent as text,
+    0 or null.'
+  name: away_shots_efficiency
+  type: numeric
+- description: 'Away team: power-play goals.'
+  name: away_powerplay_goals
+  type: integer
+- description: 'Away team: power plays.'
+  name: away_powerplay_num_pp
+  type: integer
+- description: 'Away team: power-play percentage; sent as text, 0 or null.'
+  name: away_powerplay_efficiency
+  type: numeric
+- description: 'Away team: penalty minutes.'
+  name: away_expulsions_in_minutes
+  type: integer
+- description: Goals per period, JSON list of {Home, Away}; null for an unplayed game.
+  name: period_scores
+  type: character
+- description: Top point scorers of the game, JSON list of {player, team (StatNet
+    id), points}.
+  name: most_points
+  type: character
+kind: dataframe
+schema: ha_games

@@ -1,0 +1,227 @@
+{
+  "game_info": {
+    "game_finished": true,
+    "game_finished_at": "2026-09-18T19:26:36.398505Z",
+    "decided_in": "FT",
+    "game_time": {}
+  },
+  "game_events": [
+    {
+      "Period": "1",
+      "period_label": "Period 1",
+      "StartTime": "2026-09-18T17:03:37.149583Z",
+      "EndTime": "2026-09-18T17:37:09.936116Z",
+      "Finisehd": true,
+      "Events": [
+        {
+          "type": "GoalkeeperEvent",
+          "time": "0",
+          "isEntering": true,
+          "team": {
+            "name": "AIK",
+            "code": "AIK",
+            "statNetId": "AIK"
+          },
+          "player": {
+            "statNetId": "920",
+            "firstName": "Jhonas",
+            "familyName": "Enroth",
+            "jerseyNumber": "88"
+          }
+        },
+        {
+          "type": "Shot",
+          "time": "44",
+          "eventDescription": "save",
+          "team": {
+            "name": "MoDo Hockey",
+            "code": "MoDo",
+            "statNetId": "MODO"
+          },
+          "player": {
+            "statNetId": "7028",
+            "firstName": "Bryan",
+            "familyName": "Yoon",
+            "jerseyNumber": "71"
+          }
+        },
+        {
+          "type": "Penalty",
+          "time": "819",
+          "eventDescription": "2 min, Tripping",
+          "team": {
+            "name": "MoDo Hockey",
+            "code": "MoDo",
+            "statNetId": "MODO"
+          },
+          "player": {
+            "statNetId": "3819",
+            "firstName": "Marcus",
+            "familyName": "Karlberg",
+            "jerseyNumber": "7"
+          }
+        }
+      ]
+    },
+    {
+      "Period": "2",
+      "period_label": "Period 2",
+      "StartTime": "2026-09-18T17:55:49.521132Z",
+      "EndTime": "2026-09-18T18:33:18.929837Z",
+      "Finisehd": true,
+      "Events": [
+        {
+          "type": "Shot",
+          "time": "36",
+          "eventDescription": "covered by player",
+          "team": {
+            "name": "MoDo Hockey",
+            "code": "MoDo",
+            "statNetId": "MODO"
+          },
+          "player": {
+            "statNetId": "7100",
+            "firstName": "Jackson",
+            "familyName": "Jutting",
+            "jerseyNumber": "10"
+          }
+        },
+        {
+          "type": "Goal",
+          "time": "345",
+          "eventDescription": "EQ",
+          "runningScore": "0-1",
+          "scorerSeasonGoals": "1",
+          "isPenaltyShot": "false",
+          "Assist1": {
+            "name": "Victor Berglund",
+            "jerseyToday": "51",
+            "seasonAssists": "1"
+          },
+          "Assist2": {
+            "name": "Elias Rosén",
+            "jerseyToday": "28",
+            "seasonAssists": "1"
+          },
+          "team": {
+            "name": "MoDo Hockey",
+            "code": "MoDo",
+            "statNetId": "MODO"
+          },
+          "player": {
+            "statNetId": "4043",
+            "firstName": "Carl",
+            "familyName": "Mattsson",
+            "jerseyNumber": "25"
+          }
+        },
+        {
+          "type": "Penalty",
+          "time": "641",
+          "eventDescription": "2 min, Tripping",
+          "team": {
+            "name": "MoDo Hockey",
+            "code": "MoDo",
+            "statNetId": "MODO"
+          },
+          "player": {
+            "statNetId": "6162",
+            "firstName": "Elias",
+            "familyName": "Rosén",
+            "jerseyNumber": "28"
+          }
+        }
+      ]
+    },
+    {
+      "Period": "3",
+      "period_label": "Period 3",
+      "StartTime": "2026-09-18T18:51:59.617037Z",
+      "EndTime": "2026-09-18T19:26:36.398505Z",
+      "Finisehd": true,
+      "Events": [
+        {
+          "type": "Shot",
+          "time": "62",
+          "eventDescription": "frame hit",
+          "team": {
+            "name": "AIK",
+            "code": "AIK",
+            "statNetId": "AIK"
+          },
+          "player": {
+            "statNetId": "6268",
+            "firstName": "Tim",
+            "familyName": "Theocharidis",
+            "jerseyNumber": "98"
+          }
+        },
+        {
+          "type": "Goal",
+          "time": "148",
+          "eventDescription": "EQ",
+          "runningScore": "1-2",
+          "scorerSeasonGoals": "1",
+          "isPenaltyShot": "false",
+          "Assist1": {
+            "name": "Anders Grönlund",
+            "jerseyToday": "15",
+            "seasonAssists": "1"
+          },
+          "Assist2": {
+            "name": "Sid Boije",
+            "jerseyToday": "45",
+            "seasonAssists": "1"
+          },
+          "team": {
+            "name": "AIK",
+            "code": "AIK",
+            "statNetId": "AIK"
+          },
+          "player": {
+            "statNetId": "2288",
+            "firstName": "Christopher",
+            "familyName": "Bengtsson",
+            "jerseyNumber": "25"
+          }
+        },
+        {
+          "type": "Penalty",
+          "time": "483",
+          "eventDescription": "Team Penalty 2 min, Too many players on the ice",
+          "team": {
+            "name": "MoDo Hockey",
+            "code": "MoDo",
+            "statNetId": "MODO"
+          }
+        },
+        {
+          "type": "Timeout",
+          "time": "1070",
+          "eventDescription": "Requested timeout",
+          "team": {
+            "name": "AIK",
+            "code": "AIK",
+            "statNetId": "AIK"
+          }
+        },
+        {
+          "type": "GoalkeeperEvent",
+          "time": "1093",
+          "isEntering": false,
+          "team": {
+            "name": "AIK",
+            "code": "AIK",
+            "statNetId": "AIK"
+          },
+          "player": {
+            "statNetId": "920",
+            "firstName": "Jhonas",
+            "familyName": "Enroth",
+            "jerseyNumber": "88"
+          }
+        }
+      ]
+    }
+  ]
+}
