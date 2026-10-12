@@ -123,7 +123,9 @@ MOVED = {
 GAMES = sorted({v[0] for v in BASE.values()})
 assert {pid for pid, v in BASE.items() if v[-1] == "MOVED"} == set(MOVED)
 
-pytestmark = [pytest.mark.whole_game]
+# 401752886 and 401864443 warn PlayOrderWarning (a period label steps back along the feed's play
+# order); tests/cfb/test_cfb_pbp_offline.py::test_period_order_warning_on_a_mislabelled_period asserts it.
+pytestmark = [pytest.mark.whole_game, pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning")]
 
 
 def _summary(game_id: int) -> dict:
