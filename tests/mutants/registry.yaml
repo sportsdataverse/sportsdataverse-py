@@ -1096,8 +1096,8 @@
   group: cfb-supp002
   finding: supp-002
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: "                .and_(_next_real_play(\"start.pos_team.id\") == pl.col(\"start.pos_team.id\"))\n"
-  mutant: ""
+  snippet: '.and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))'
+  mutant: ".and_(pl.lit(True))"
   test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_rule_rows_move
   expected: kill
   note: >-
