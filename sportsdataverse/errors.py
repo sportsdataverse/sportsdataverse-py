@@ -327,6 +327,30 @@ class DefaultOddsWarning(UserWarning):
     """
 
 
+class PlayOrderWarning(UserWarning):
+    """Warned when a CFB game's processed plays step back a period along the row order.
+
+    ``CFBPlayProcess`` orders the plays by ESPN's play id and splits overtime by the period
+    label, and nothing else in the feed says which of the two is right. A ``period`` that
+    decreases from one row to the next means one of them is wrong at that row (2024 401628439
+    files an overtime touchdown as period 2), and every feature read from a neighbouring row
+    there (scores, EPA lookbacks, WPA, series) reads the wrong neighbour. The warning names the
+    game and the play ids.
+
+    Example:
+        Strict mode for a producer::
+
+            import warnings
+            from sportsdataverse.errors import PlayOrderWarning
+
+            warnings.simplefilter("error", PlayOrderWarning)
+
+        Silence it deliberately::
+
+            warnings.filterwarnings("ignore", category=PlayOrderWarning)
+    """
+
+
 def no_espn_data(response: "requests.Response") -> "requests.Response":
     """Validate an ESPN response, raising :class:`NoDataError` if empty.
 

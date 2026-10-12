@@ -69,7 +69,8 @@ Oracle per column
 ``line_yards + second_level_yards + open_field_yards`` on gains
     The decomposition identity: the three pieces sum to ``yds_rushed``. Green (C-H1's CFB twin).
 ``period``
-    The feed's chronology: never decreases along the emitted rows. XFAIL C-M18.
+    The feed's chronology: never decreases along the emitted rows. XFAIL C-M18 on 401628439 only (the
+    period label is wrong; ``errors.PlayOrderWarning`` names it).
 ``game_play_number``, ``lag_half``
     Recomputed after the final sort: ``game_play_number`` strictly increases along the rows and
     ``lag_half`` is the previous row's ``half`` (null on row 1). Green (C-L1, fixed in 3.4(b2)).
@@ -142,7 +143,12 @@ SCHEMA_ALLOWLIST_MAX_ROWS = 93
 
 # Processing a default-odds capture warns DefaultOddsWarning incidentally;
 # tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
-pytestmark = [pytest.mark.whole_game, pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")]
+# 401628439 warns PlayOrderWarning; test_cfb_pbp_offline.py::test_period_order_warning_on_a_mislabelled_period asserts it.
+pytestmark = [
+    pytest.mark.whole_game,
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning"),
+]
 
 
 def _load(path: Path) -> dict:
@@ -688,9 +694,11 @@ def test_rush_decomposition_sums_to_the_gain(game_id):
 
 # --- C-M18 / C-L1: row order ------------------------------------------------------------------------
 
+# 401425418's third-quarter kickoff under an out-of-scheme id is placed by its clock since 3.4(b2).
+# 401628439's is a provider label defect, not a sort one: ESPN files an overtime touchdown (id period
+# digit 6) as period 2; PlayOrderWarning names it (test_cfb_pbp_offline.py asserts the warning).
 _M18 = {
-    401425418: "C-M18: a third-quarter kickoff sorts first (game_play_number 1), so period steps back from 3 to 1",
-    401628439: "C-M18: an overtime touchdown ESPN labels period 2 sorts after period 5 rows",
+    401628439: "C-M18: an overtime touchdown ESPN labels period 2 sorts to the end of regulation",
 }
 
 

@@ -9,10 +9,14 @@ import polars as pl
 import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess, _drop_espn_play_copies
-from sportsdataverse.errors import DefaultOddsWarning
+from sportsdataverse.errors import DefaultOddsWarning, PlayOrderWarning
 
-# the default-odds captures processed here warn incidentally; test_default_odds_warn asserts it
-pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+# the default-odds captures processed here warn incidentally; test_default_odds_warn asserts it;
+# 401628439 warns PlayOrderWarning, asserted by test_period_order_warning_on_a_mislabelled_period
+pytestmark = [
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning"),
+]
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -108,6 +112,34 @@ def test_default_odds_warning_not_on_core_odds_api_spread(monkeypatch):
         init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
     assert proc.odds_source == "core_odds_api"
     assert init == {"gameSpread": -6.5, "overUnder": 51.5, "homeFavorite": True, "gameSpreadAvailable": True}
+
+
+def _process_capture(game_id: int) -> CFBPlayProcess:
+    path = next(FIX.glob(f"summary_{game_id}*.json*"))
+    opener = gzip.open if path.suffix == ".gz" else open
+    with opener(path, "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    return proc
+
+
+def test_period_order_warning_on_a_mislabelled_period():
+    """C-M18: 401628439 files an overtime touchdown as period 2, so the period steps back; the warning names it."""
+    with pytest.warns(PlayOrderWarning, match=r"401628439.*\(401628439104999901, 401628439106260230\)"):
+        _process_capture(401628439)
+
+
+def test_an_out_of_scheme_play_id_is_placed_by_its_clock():
+    """C-M18: 401425418's Q3 kickoff (id 4014254180 among 18-digit ids) sits between the 5:20 and 5:14 plays."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", PlayOrderWarning)
+        plays = _process_capture(401425418).plays_frame
+    at = plays["id"].to_list().index(4014254180)
+    assert at > 0
+    assert plays["period"].to_list()[at - 1 : at + 2] == [3, 3, 3]
+    assert plays["clock.displayValue"].to_list()[at - 1 : at + 2] == ["5:20", "5:14", "5:14"]
 
 
 def test_injected_odds_bypasses_network(monkeypatch):

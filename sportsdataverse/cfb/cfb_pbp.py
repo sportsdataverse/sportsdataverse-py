@@ -380,6 +380,7 @@ from sportsdataverse.cfb.model_vars import (
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import DefaultOddsWarning as _DefaultOddsWarning  # private alias: cfb_pbp is star-imported
+from sportsdataverse.errors import PlayOrderWarning as _PlayOrderWarning  # private alias, as above
 
 ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.ubj")
 wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread.ubj")
@@ -453,6 +454,23 @@ def _warn_default_odds(game_id, odds_source, spread, total) -> None:
         _DefaultOddsWarning,
         stacklevel=3,
     )
+
+
+def _warn_period_steps_back(play_df: pl.DataFrame, game_id) -> None:
+    """Warn when ``period.number`` decreases along the final row order (C-M18): a wrong id or label."""
+    if "period.number" not in play_df.columns:
+        return
+    back = play_df.with_columns(_prev_id=pl.col("id").shift(1)).filter(
+        (pl.col("period.number").diff() < 0).fill_null(False)
+    )
+    if back.height:
+        warnings.warn(
+            f"CFB game {game_id}: the period steps back along the play order between play ids "
+            f"{back.select('_prev_id', 'id').rows()}; the row order or the period label is wrong there, "
+            "so the features read from a neighbouring row (scores, EPA lookbacks, WPA) read the wrong one.",
+            _PlayOrderWarning,
+            stacklevel=3,
+        )
 
 
 def _ot_second(play_df, team_col: str):
@@ -2037,6 +2055,39 @@ def _reunite_drive_rows(plays_df: pl.DataFrame) -> pl.DataFrame:
     return plays_df if order == list(range(plays_df.height)) else plays_df[order]
 
 
+def _place_out_of_scheme_plays(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Put a play whose id is outside the feed's numbering where its period and clock say (C-M18).
+
+    401425418 files a third-quarter kickoff (Q3 5:14; between the 5:20 and 5:14 plays in the
+    feed) under the id ``4014254180`` among 18-digit ids, so the id sort made it the game's first
+    row. A row moves only when its id's width differs from both neighbours' AND its period breaks
+    the order there: a feed whose ids change width as they count (the 2025+ vendor feed) already
+    runs in period order and is left alone, and a wrong period LABEL under a well-formed id
+    (401628439) is not a sort problem; :func:`_warn_period_steps_back` names it.
+    """
+    if plays_df.height < 3 or not {"id", "period.number", "start.adj_TimeSecsRem"}.issubset(plays_df.columns):
+        return plays_df
+    period = pl.col("period.number").cast(pl.Int64, strict=False)
+    width = pl.col("id").cast(pl.String).str.len_chars()
+    stray = plays_df.select(
+        ((period.shift(1) > period) | (period.shift(-1) < period)).fill_null(False)
+        & (width != width.shift(1)).fill_null(True)
+        & (width != width.shift(-1)).fill_null(True)
+        & period.is_not_null()
+        & pl.col("start.adj_TimeSecsRem").is_not_null()
+    ).to_series()
+    if not stray.any():
+        return plays_df
+    rest = plays_df.filter(~stray)
+    for row in plays_df.filter(stray).iter_slices(1):
+        p, t = row["period.number"].item(), row["start.adj_TimeSecsRem"].item()
+        rest_p = rest["period.number"].cast(pl.Int64, strict=False)
+        # after every earlier period's play and every play of its own period with more time left
+        at = int(((rest_p < p) | ((rest_p == p) & (rest["start.adj_TimeSecsRem"] > t))).sum())
+        rest = pl.concat([rest.slice(0, at), row, rest.slice(at)])
+    return rest
+
+
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Chronological play sort with an overtime correction.
 
@@ -2050,7 +2101,7 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """
     # maintain_order: a play repeated under drives.current sits after its
     # drives.previous copy, so the same-id dedupe keeps the fresher one
-    plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True)
+    plays_df = _place_out_of_scheme_plays(plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True))
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
         return _reunite_drive_rows(plays_df)
     plays_df = _place_tries_filed_after_the_kickoff(_reunite_drive_rows(_reorder_late_inserts(plays_df)))
@@ -4055,6 +4106,7 @@ class CFBPlayProcess(object):
         play_df = play_df.filter(
             pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
         )
+        _warn_period_steps_back(play_df, self.gameId)
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
