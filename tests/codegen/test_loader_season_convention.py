@@ -34,6 +34,7 @@ CASES = [
     ("load_nba_stats_possessions", "nba", 2025, "nba_possessions_2026.parquet"),
     ("load_nba_stats_game_lineups", "nba", 1996, "nba_lineups_1997.parquet"),
     ("load_nba_stats_game_lineups", "nba", 2025, "nba_lineups_2026.parquet"),
+    ("load_nba_stats_draft", "nba", 2025, "draft_2026.parquet"),
     ("load_wnba_stats_schedules", "wnba", 1997, "wnba_schedule_1997.parquet"),
     ("load_wnba_stats_schedules", "wnba", 2025, "wnba_schedule_2025.parquet"),
     ("load_wnba_stats_pbp", "wnba", 1997, "wnba_play_by_play_1997.parquet"),
@@ -130,6 +131,8 @@ def test_only_nba_stats_families_carry_the_end_year_offset():
         "load_nba_stats_team_season_stats",
         # first published on END-year assets (2026-10-01)
         "load_nba_stats_game_matchups",
+        # draft_{Y} = the June Y-1 draft, so `seasons` is the draft year (2026-10-11)
+        "load_nba_stats_draft",
         # The retired-tag shims inherit their target's END-year asset path.
         "load_nba_stats_pbp_v3",
         "load_nba_stats_possessions_v3",

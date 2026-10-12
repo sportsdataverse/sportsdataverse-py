@@ -54,7 +54,7 @@ matched = xwalk.filter(pl.col("espn_game_id").is_not_null())
 
 ### cfb_rosters_crosswalk {#cfb_rosters_crosswalk}
 
-`cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'`
+`cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, yahoo_team_id: 'Optional[str]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'`
 
 Build the ESPN x Fox x Yahoo player-id crosswalk for one team.
 
@@ -64,14 +64,14 @@ player's ESPN, Fox, and Yahoo athlete ids side by side. Use
 `cfb_teams_crosswalk` first to translate an ESPN team id into the
 matching Fox team id.
 
-ESPN and Fox provide full rosters, so the default is `("espn", "fox")`.
-**Yahoo is opt-in** (pass `providers=("espn", "fox", "yahoo")`) because it
-has no roster endpoint — its only player feed is the season stat-leaderboard
-(`sportsdataverse.cfb.yahoo_cfb_player_season_stats`), which is the
-league's top ~200 players (roughly one per team) and frequently includes no
-player for a given team at all. When selected, the team is resolved by
-matching Yahoo's (abbreviated) team name against the ESPN team's name; if it
-can't be resolved, the Yahoo columns are simply null.
+The default is `("espn", "fox")`. **Yahoo is opt-in** (pass
+`providers=("espn", "fox", "yahoo")`): its leg is Yahoo's current roster
+(`sportsdataverse.yahoo.yahoo_team_roster`, active players only), and
+each Yahoo player attaches to the ESPN/Fox player with the same name and
+jersey, else the same name when that name is unique on the team. Pass
+`yahoo_team_id` (`yahoo_team_id` of `cfb_teams_crosswalk`) to skip
+the lookup of the Yahoo team in Yahoo's team directory; when no Yahoo team
+matches, the Yahoo columns are null and a warning is logged.
 
 **Parameters**
 
@@ -79,8 +79,9 @@ can't be resolved, the Yahoo columns are simply null.
 |---|---|---|---|
 | `espn_team_id` | `Union[int, str]` |  | ESPN team id (e.g. `194` for Ohio State). |
 | `fox_team_id` | `Union[int, str]` |  | Fox Bifrost team id (e.g. `25` for Ohio State). |
-| `season` | `Optional[int]` | `None` | Season year for the Yahoo player-stats leg. Defaults to the most recent CFB season. Unused when Yahoo isn't selected. |
-| `providers` | `Optional[Sequence[str]]` | `None` | Which sources to include — any of `"espn"`, `"fox"`, `"yahoo"`. `None` (default) uses `("espn", "fox")`; add `"yahoo"` explicitly for its (sparse) leg, or pass a single source. |
+| `season` | `Optional[int]` | `None` | Season of Yahoo's team directory, used to find the Yahoo team when `yahoo_team_id` is not given. Defaults to the most recent CFB season. All three roster feeds return the current roster whatever the season. |
+| `providers` | `Optional[Sequence[str]]` | `None` | Which sources to include — any of `"espn"`, `"fox"`, `"yahoo"`. `None` (default) uses `("espn", "fox")`; add `"yahoo"` explicitly for its leg, or pass a single source. |
+| `yahoo_team_id` | `Optional[str]` | `None` | Yahoo dotted team id (e.g. `"ncaaf.t.33"` for Ohio State). Optional; looked up by team name when `None`. Unused when Yahoo isn't selected. |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
 
 **Returns**
@@ -106,12 +107,12 @@ A polars DataFrame (pandas when `return_as_pandas=True`) with columns `person_ke
 
 ```python
 from sportsdataverse.cfb import cfb_rosters_crosswalk
-xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25, season=2024)
+xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25)
 matched = xwalk.filter(pl.col("matched_sources") == "espn+fox")
 
-# Just ESPN vs Fox (skip Yahoo's partial leg)
+# Add Yahoo's ids, with the Yahoo team id from the teams crosswalk
 
-espn_fox = cfb_rosters_crosswalk(194, 25, providers=("espn", "fox"))
+three = cfb_rosters_crosswalk(194, 25, providers=("espn", "fox", "yahoo"), yahoo_team_id="ncaaf.t.33")
 ```
 
 ### cfb_schedule_crosswalk {#cfb_schedule_crosswalk}
@@ -136,9 +137,9 @@ Two modes:
   conference-championship or CFP rematch of the same teams).
 * **Single week** (`week` given): just that week's slate, matched on team.
 
-Each provider leg is best-effort: a Fox outage, a Yahoo per-week parser
-hiccup, or Fox's offseason-projected CFP matchups simply leave that
-provider's columns null rather than failing the call.
+A provider with no game for a matchup (Fox's offseason-projected CFP games, a
+404 week) leaves that provider's columns null. A fetch that FAILED raises, so
+the same upstream data always builds the same rows.
 
 **Parameters**
 

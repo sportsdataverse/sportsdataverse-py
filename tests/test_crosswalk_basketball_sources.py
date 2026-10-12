@@ -58,6 +58,13 @@ FIXTURES = {
 }
 
 
+@pytest.fixture(autouse=True)
+def _live_season_2026(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The live-roster tests below call season 2026; pin it as the live season so they never
+    route to the past-season box-score path (which reads a release) as the calendar moves."""
+    monkeypatch.setattr("sportsdataverse._crosswalk_basketball_sources._current_season", lambda league: 2026)
+
+
 def _payload(league: str) -> dict:
     with FIXTURES[league].open(encoding="utf-8") as handle:
         return json.load(handle)
@@ -1392,3 +1399,58 @@ def test_drop_unconfirmed_fox_sections_keeps_a_mover_fox_lists_correctly() -> No
     # 2335 Liberty (Big South, leaving) is listed correctly; 2916 (ASUN, arriving) is not.
     out = drop_unconfirmed_fox_sections(xwalk, movers=["2335", "2916"])
     assert out["fox_section"].to_list() == ["Big South", "Big South", "Big South", None]
+
+
+# --------------------------------------------------------------------------
+# Past season -- ESPN's /teams/{id}/roster ignores ?season=, so a past season
+# reads that season's box scores, never today's roster (MBB 2025 / WBB 2014-2025
+# player crosswalks shipped the 2025-26 roster under their own labels).
+# --------------------------------------------------------------------------
+
+
+def test_espn_rosters_past_season_reads_box_scores_not_the_live_roster(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse import _crosswalk_basketball_sources as src
+
+    src._SEASON_ROSTERS_CACHE.clear()
+    box = pl.DataFrame(
+        {
+            "game_id": [1, 2, 2, 3],
+            "game_date": [date(2025, 1, 1), date(2025, 2, 1), date(2025, 2, 1), date(2025, 1, 5)],
+            "team_id": [150, 150, 150, 2],
+            "athlete_id": [10, 10, 11, 12],
+            "athlete_display_name": ["Old Name", "A Player", "B Player", "Other Team"],
+            "athlete_jersey": ["1", "5", "2", "3"],
+            "athlete_position_abbreviation": ["G", "G", "F", "C"],
+        },
+        schema_overrides={"team_id": pl.Int32, "athlete_id": pl.Int32, "game_id": pl.Int32},
+    )
+    monkeypatch.setattr(src, "_box_loader", lambda league: lambda season: box)
+
+    def _live(*a: Any, **k: Any) -> pl.DataFrame:
+        raise AssertionError("a past season must not read the live roster")
+
+    monkeypatch.setattr(src, "_espn_accessors", lambda league: {"roster": _live})
+    out = espn_rosters("mbb", 150, "DUKE", 2025)
+    assert out.columns == [
+        "espn_team_id",
+        "team_abbreviation",
+        "espn_athlete_id",
+        "espn_full_name",
+        "espn_jersey",
+        "espn_position",
+        "espn_birth_date",
+    ]
+    assert out.sort("espn_athlete_id").select("espn_athlete_id", "espn_full_name", "espn_jersey").rows() == [
+        ("10", "A Player", "5"),  # last game's name and jersey
+        ("11", "B Player", "2"),
+    ]
+    assert out["team_abbreviation"].to_list() == ["DUKE", "DUKE"]
+
+
+def test_espn_rosters_past_season_without_box_scores_raises(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse import _crosswalk_basketball_sources as src
+
+    src._SEASON_ROSTERS_CACHE.clear()
+    monkeypatch.setattr(src, "_box_loader", lambda league: lambda season: pl.DataFrame())
+    with pytest.raises(CrosswalkSourceError, match="cannot fall back"):
+        espn_rosters("wbb", 1, "X", 2014)

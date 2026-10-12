@@ -488,3 +488,59 @@ def test_interceptor_null_when_text_names_nobody():
         ]
     )
     assert out["interception_player_name"].to_list() == [None, None]
+
+
+def _cleaned(col: str, names: list) -> list:
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    df = pl.DataFrame({col: names, "pos_team": [10] * len(names), "return_team": [10] * len(names)})
+    return proc._CFBPlayProcess__attach_player_ids(df)[col].to_list()
+
+
+def test_regex_name_clause_runons_are_cut():
+    """Regex-fallback names that ran into the next clause (real published strings, 2004-2026).
+    The 25-character capture cuts mid-clause, so the tail is a fragment no tail rule matched."""
+    assert _cleaned(
+        "kickoff_return_player_name",
+        ["Tommylee Lewistackled b", "Daryl Jonestackled by -", "Tyler Allenfumbled at t"],
+    ) == ["Tommylee Lewis", "Daryl Jones", "Tyler Allen"]
+    assert _cleaned(
+        "punt_return_player_name", ["Kevonte Martin-Manley for", "Cordarrelle Patterson at", "Nathanael Hasselbeck  to"]
+    ) == ["Kevonte Martin-Manley", "Cordarrelle Patterson", "Nathanael Hasselbeck"]
+    assert _cleaned(
+        "receiver_player_name",
+        ["Logan Hall, clock:32", "Brett Bartolone, forced by Caleb Saulo, recovered by OrgSt Caleb Saulo at"],
+    ) == ["Logan Hall", "Brett Bartolone"]
+    assert _cleaned("fg_block_player_name", ["L.Webb (H: #19 S.Ashb"]) == ["L.Webb"]
+    assert _cleaned("punt_block_player_name", ["J.Charles recovered by NEB #33 J.Jones at UMD19"]) == ["J.Charles"]
+    assert _cleaned("punter_player_name", ["Tom Malone  by"]) == ["Tom Malone"]
+    assert _cleaned("rusher_player_name", ["RJ Harvey 1 Yd"]) == ["RJ Harvey"]
+
+
+def test_regex_name_that_is_not_a_name_is_nulled():
+    """A spot, a clause, or ESPN's N/A placeholder read as the fumbler / receiver."""
+    assert (
+        _cleaned(
+            "fumble_player_name", ["WAS30", "to the MiaOh 21", "by Darrell Taylor", "up the middle", "p the middle"]
+        )
+        == [None] * 5
+    )
+    assert _cleaned("receiver_player_name", ["N/A", "the"]) == [None, None]
+
+
+def test_valid_names_are_untouched_by_the_clause_cut():
+    names = [
+        "Jaxon Smith-Njigba",
+        "C.J. Moore",
+        "Smith, John",
+        "Armando Allen Jr.",
+        "Le'Vander Liggins",
+        "D'Andre Swift",
+        "Chris Van de Water",
+        "john Gibbs",  # a lowercase typo in ESPN's feed is still the player
+        "Robert Griffin III",
+        "Henry To'oto'o",
+        "henry to'oto'o",  # a lowercase typo of an apostrophe name: "to" + "'" is no connective
+        "Byron Ford",
+    ]
+    assert _cleaned("rusher_player_name", names) == names

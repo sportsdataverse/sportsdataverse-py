@@ -1,0 +1,93 @@
+{
+ "id": "20150614",
+ "sectionList": [
+  {
+   "id": "20150614",
+   "sectionDate": "2015-06-14T04:00:00Z",
+   "segmentId": "20150614",
+   "selectionId": "20150614",
+   "subtitle": "SUN, JUN 14",
+   "menuTitle": "SUN, JUN 14",
+   "events": [
+    {
+     "template": "scores-team",
+     "id": "nba102609",
+     "uri": "https://api.foxsports.com/bifrost/v1/nba/scorechip/nba102609",
+     "contentUri": "basketball/nba/events/102609",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2015-06-15T00:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/nba/nba-finals-game-5-cleveland-cavaliers-vs-golden-state-warriors-jun-14-2015-game-boxscore-102609",
+      "contentUri": "basketball/nba/events/102609",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nbaEventLayout",
+       "tokens": {
+        "id": "102609",
+        "eventUri": "basketball/nba/events/102609",
+        "homeUri": "basketball/nba/teams/21",
+        "awayUri": "basketball/nba/teams/11"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "NBA",
+     "importance": 0,
+     "upperTeam": {
+      "name": "CLE",
+      "uri": "basketball/nba/teams/11",
+      "longName": "Cavaliers",
+      "playoffTopName": "Cleveland",
+      "playoffBottomName": "Cavaliers",
+      "stackedNameTop": "Cleveland",
+      "stackedNameBottom": "Cavaliers",
+      "record": "53-29",
+      "score": 91,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "GSW",
+      "uri": "basketball/nba/teams/21",
+      "longName": "Warriors",
+      "playoffTopName": "Golden State",
+      "playoffBottomName": "Warriors",
+      "stackedNameTop": "Golden State",
+      "stackedNameBottom": "Warriors",
+      "record": "67-15",
+      "score": 104,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "gameNotes": "GM 5 GSW LEADS 3-2",
+     "isPlayoff": true
+    }
+   ]
+  }
+ ],
+ "currentSectionId": "20150614",
+ "quickNav": [
+  {
+   "id": "20150611",
+   "uri": "https://api.foxsports.com/bifrost/v1/nba/league/scores-segment/20150611",
+   "webUrl": "/nba/scores?date=2015-06-11",
+   "date": "2015-06-11T04:00:00Z"
+  },
+  {
+   "id": "20150614",
+   "uri": "https://api.foxsports.com/bifrost/v1/nba/league/scores-segment/20150614",
+   "webUrl": "/nba/scores?date=2015-06-14",
+   "date": "2015-06-14T04:00:00Z",
+   "selected": true
+  },
+  {
+   "id": "20150616",
+   "uri": "https://api.foxsports.com/bifrost/v1/nba/league/scores-segment/20150616",
+   "webUrl": "/nba/scores?date=2015-06-16",
+   "date": "2015-06-16T04:00:00Z"
+  }
+ ]
+}

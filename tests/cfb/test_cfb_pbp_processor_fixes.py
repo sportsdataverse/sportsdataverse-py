@@ -703,3 +703,238 @@ def test_a_yards_loss_stated_after_the_turnover_clause_is_still_read():
     row = _row(_trimmed_plays(401520349), "Champ Harris run for 7 yds to the MASS 36")
     assert (row["start.yardsToEndzone"], row["end.yardsToEndzone"]) == (29, 36)
     assert row["yds_rushed"] == -7
+
+
+# --- R1: through 2013 an extra point is its own row; it carries the flags and the kicker ------------
+
+
+def test_standalone_pat_rows_carry_xp_flags_and_kicker_2004():
+    # "Extra point by Dave Rayner (MSU) is good." -- the 2014+ suffix parser never read these rows,
+    # so 46.6k pre-2014 PATs had xp_attempt False (39.8% of the expected flags).
+    pats = _plays(243040130).filter(pl.col("type.text").str.starts_with("Extra Point"))
+    assert pats.height == 8
+    assert pats["xp_attempt"].all() and pats["xp_made"].all()
+    rivas = pats.filter(pl.col("text") == "Extra point by Garrett Rivas (MICH) is good.")
+    assert rivas.height > 0 and rivas["xp_kicker_player_name"].to_list() == ["Garrett Rivas"] * rivas.height
+
+
+def test_standalone_pat_rows_carry_xp_flags_and_kicker_2008():
+    plays = _trimmed_plays(282432641)
+    cols = ["xp_attempt", "xp_made", "xp_kicker_player_name"]
+    good = plays.filter(pl.col("text") == "Felipe Macias extra point GOOD.").select(cols).unique().rows()
+    blocked = _row(plays, "Donnie Carona extra point BLOCKED.")
+    assert good == [(True, True, "Felipe Macias")]
+    assert tuple(blocked[k] for k in cols) == (True, False, "Donnie Carona")
+
+
+def _trimmed_plays_with_texts(game_id: int, swaps: dict[str, list[str]]) -> pl.DataFrame:
+    """Process a trimmed fixture after rewriting the text of the plays named in ``swaps``."""
+    with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            if swaps.get(play.get("text")):
+                play["text"] = swaps[play["text"]].pop(0)
+    proc = CFBPlayProcess(gameId=game_id)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    return proc.plays_frame
+
+
+def test_two_point_try_typed_as_an_extra_point_is_not_a_kick():
+    # 2012-13 ESPN types "Johnny Manziel pass attempt failed ." as Extra Point Missed/Good: a
+    # two-point try, not a kick, so the kicking box must not count it.
+    tries = ["Johnny Manziel pass attempt failed .", "Clock 07:22, Terre Whitehead rush attempt good."]
+    plays = _trimmed_plays_with_texts(282432641, {"Felipe Macias extra point GOOD.": list(tries)})
+    rows = plays.filter(pl.col("text").is_in(tries))
+    assert rows.height == 2
+    assert rows["xp_attempt"].to_list() == [False, False]
+    assert rows["xp_kicker_player_name"].null_count() == 2
+
+
+def test_team_is_not_an_extra_point_kicker():
+    plays = _trimmed_plays_with_texts(282432641, {"Felipe Macias extra point GOOD.": ["Team extra point GOOD."]})
+    row = _row(plays, "Team extra point GOOD.")
+    assert (row["xp_attempt"], row["xp_made"], row["xp_kicker_player_name"]) == (True, True, None)
+
+
+# --- R10: kneel-downs and yardless vendor rushes carry their yardage ----------------------------
+
+
+@pytest.mark.parametrize(
+    "game_id, expected",
+    [
+        (401636929, [-2, -2]),  # 2024 "[NHSG] Kneel down by TEAM at WVU48 (team loss of 2)."
+        (401752746, [-2, -1]),  # 2025 "Kneel down by #12 A.Daniels at ARK48 for loss of 2 yards"
+        (401628455, [-2]),  # "D. Brown takes a knee": the text has no number; ESPN's statYardage does
+        (401752844, [-3, -3]),
+    ],
+)
+def test_kneel_down_yardage_is_parsed(game_id, expected):
+    # Every 2022-25 kneel came out with null yds_rushed (383 / 801 / 960 / 1,027 rows), which dropped
+    # the victory-formation losses from team rushing; ESPN's box counts them. 2025 team rushing yards
+    # matched the box in 45.9% of team-games before this, 63.9% after.
+    kneels = _plays(game_id).filter(pl.col("text").str.contains(r"(?i)kneel down|takes a knee"))
+    assert kneels["kneel_down"].to_list() == [True] * len(expected)
+    assert kneels["yds_rushed"].to_list() == expected
+
+
+def test_kneel_text_loss_wins_over_a_zero_stat_yardage():
+    # 2024 vendor kneels often carry statYardage 0 beside "(team loss of 2)": the text is the record.
+    row = _row(_plays(401636929), "Kneel down by TEAM at WVU48 (team loss of 2)")
+    assert row["yds_rushed"] == -2
+
+
+def test_yardless_vendor_rush_takes_espn_stat_yardage():
+    # "Wolff,Hayden rush left (Murdock,Red)." states no yardage at all; ESPN's statYardage agrees
+    # with the text-parsed yards on 99.98% of plain rushes, so it is the fallback.
+    plays = _plays(401644749).filter(
+        pl.col("text").str.contains(r"^[A-Z][a-z]+,[A-Za-z]+ rush (?:left|right|middle) \(")
+    )
+    assert plays.height > 0
+    assert plays["yds_rushed"].to_list() == plays["statYardage"].to_list()
+
+
+def test_pre_2014_directional_rush_takes_espn_stat_yardage():
+    # 2004-13 "Adam Muema rush up the middle for 21 yards to the SJSt 20" matched no "rush for"
+    # reader (the direction words sit between them): ~11k "up the middle" and ~9k "left/right side"
+    # rushes in 2007-13 had null yds_rushed. statYardage equals the text yards on 99.98% of plain
+    # rushes in those seasons, so every non-fumble, non-penalty rush now carries it.
+    plays = _plays(333130023)
+    rushes = plays.filter(
+        (pl.col("rush") == True) & (pl.col("fumble_vec") == False) & (pl.col("penalty_flag") == False)
+    )
+    assert rushes["yds_rushed"].null_count() == 0
+    row = _row(plays, "Adam Muema rush up the middle for 21 yards to the SJSt 20")
+    assert row["yds_rushed"] == 21
+
+
+def test_kneels_are_not_stuffed_or_stopped_runs():
+    # Kneels now carry their loss in yds_rushed; that must not make them stuffed / stopped carries.
+    kneels = _plays(401636929).filter(pl.col("kneel_down") == True)
+    assert kneels.height == 2
+    assert kneels["stuffed_run"].to_list() == [False, False]
+    assert kneels["stopped_run"].to_list() == [False, False]
+
+
+def test_yardless_rush_naming_a_foul_does_not_take_stat_yardage():
+    # A foul named without the word "penalty" leaves penalty_flag False but sets penalty_detail;
+    # statYardage there can carry the enforcement, so the fallback must not read it.
+    summary = _summary(401644749)
+    needle = re.compile(r"^[A-Z][a-z]+,[A-Za-z]+ rush (?:left|right|middle) \(")
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    target = next(p for p in plays if needle.search(p.get("text") or ""))
+    target["text"] = target["text"] + " Holding on #55 enforced."
+    proc = CFBPlayProcess(gameId=401644749)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    row = _row(proc.plays_frame, target["text"])
+    assert row["penalty_detail"] is not None
+    assert row["yds_rushed"] is None
+
+
+@pytest.mark.parametrize(
+    "game_id, text, kicker",
+    [
+        (282430151, "Ben Ryan extra point BLOCKED returned for 2 defensive point conversion", "Ben Ryan"),
+        (243392572, "Wendell Hunter (USM), missed PAT returned.", None),
+    ],
+)
+def test_kicked_try_the_defence_returned_is_a_missed_attempt(game_id, text, kicker):
+    # Retyped to Defensive 2pt Conversion before the XP flags; ESPN's box still counts the kick
+    # (2014+ carries it on the TD row's "(... PAT blocked, returned ...)" suffix).
+    row = _row(_trimmed_plays(game_id), text)
+    assert row["type.text"] == "Defensive 2pt Conversion"
+    assert (row["xp_attempt"], row["xp_made"], row["xp_kicker_player_name"]) == (True, False, kicker)
+
+
+def test_two_point_pass_the_defence_returned_is_not_a_kick():
+    row = _row(_trimmed_plays(272650152), "pass attempt failed (intercepted), returned by Hamlin")
+    assert row["type.text"] == "Defensive 2pt Conversion"
+    assert row["xp_attempt"] is False
+
+
+# --- R7: fumble_lost reads who recovered, not whether possession changed ---------------------------
+
+
+def _fixture_plays(game_id: int) -> pl.DataFrame:
+    trimmed = FIX / f"summary_{game_id}_trimmed.json.gz"
+    return _trimmed_plays(game_id) if trimmed.exists() else _plays(game_id)
+
+
+@pytest.mark.parametrize(
+    "game_id, needle, lost",
+    [
+        # the returner recovers his own punt fumble: possession changed on the punt, nothing was lost
+        (401628439, "Anthony Evans III fumbled, recovered by UGA Anthony Evans III", False),
+        # a muffed punt the kicking team recovers: possession did not change, the receiving team lost it
+        (401754598, "muffed by #24 K.Kirkland at FSU35 recovered", True),
+    ],
+)
+def test_fumble_lost_follows_the_recovering_team(game_id, needle, lost):
+    row = _row(_fixture_plays(game_id), needle)
+    assert row["fumble_lost"] is lost
+    assert row["fumble_recovered"] is (row["fumble_vec"] and not lost)
+
+
+# --- R8: the kickoff touchback came out to the 25 from 2012, not 2014 -----------------------------
+
+
+@pytest.mark.parametrize("game_id", [322590228, 332570254])
+def test_2012_13_kickoff_touchbacks_are_spotted_at_the_25(game_id):
+    # NCAA moved the kickoff touchback to the 25 in 2012; the next snap in every 2012-13 fixture
+    # touchback starts at the receiver's 25, but the code switched from 20 only after 2013.
+    plays = _fixture_plays(game_id)
+    tbs = plays.filter((pl.col("kickoff_play") == True) & (pl.col("kickoff_tb") == True))
+    assert tbs.height > 0
+    assert tbs["yds_kickoff_return"].unique().to_list() == [25]
+
+
+def test_2004_fumble_returned_for_a_touchdown_carries_its_yards():
+    # 2004-06 write "returned for a 33 yard touchdown"; the reader only knew "return for N".
+    row = _row(_fixture_plays(243110264), "recovered by Wilrey Fontenot (UA), returned for a 33 yard touchdown")
+    assert row["yds_fumble_return"] == 33
+
+
+# --- R4: kick / punt flags follow the re-typed play, not ESPN's raw label ---------------------------
+
+
+def test_pre_2014_onside_recovery_is_flagged_as_an_onside_kickoff():
+    # 2004 files "Onside kick recovered by Wolverines" as "Kickoff Return (Defense)"; the label was
+    # normalised to Kickoff only after the kick flags were set, so kickoff_play / kickoff_onside
+    # stayed False on every one.
+    onside = _plays(243040130).filter(pl.col("text").str.starts_with("Onside kick recovered"))
+    assert onside.select("type.text", "kickoff_play", "kickoff_onside").rows() == [("Kickoff", True, True)]
+    # Michigan (130) kicked and recovered: renamed before the possession flip, the receiving team
+    # is Michigan State (127) as on every other onside kick, not the kicker.
+    assert onside.select("kicking_team", "return_team").rows() == [(130, 127)]
+
+
+# --- R3: td_play follows a touchdown type the text never spells out --------------------------------
+
+
+def test_summary_format_touchdown_is_a_td_play():
+    # 2014+ scoring-summary text: "Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)" says
+    # neither "touchdown" nor "for a TD", so td_play stayed False beside its touchdown type.
+    row = _row(_trimmed_plays(400547673), "Joseph Ajeigbe 12 Yd Interception Return (Ross Martin Kick)")
+    assert (row["type.text"], row["touchdown"], row["td_play"]) == ("Interception Return Touchdown", True, True)
+
+
+@pytest.mark.parametrize("game_id, spot", [(282432641, 80), (322590228, 75)])
+def test_kickoff_touchback_end_spot_follows_the_era(game_id, spot):
+    # The END state of a touchback was 75 in every season, while the start used 80 before 2012:
+    # a phantom +0.26 EPA on every 2004-11 kickoff touchback.
+    tbs = _fixture_plays(game_id).filter((pl.col("kickoff_play") == True) & (pl.col("kickoff_tb") == True))
+    assert tbs.height > 0
+    assert tbs["end.yardsToEndzone"].unique().to_list() == [spot]
+
+
+@pytest.mark.parametrize(
+    "game_id, needle, yards",
+    [
+        (302540025, "Giorgio Tavecchio kickoff for 52 yards out-of-bounds.", 40),  # receiver's 40 before 2012
+        (400876049, "Rigoberto Sanchez kickoff for 55 yds out of bounds.", 35),  # the 35 from 2012
+    ],
+)
+def test_kickoff_out_of_bounds_spot_follows_the_era(game_id, needle, yards):
+    assert _row(_fixture_plays(game_id), needle)["yds_kickoff_return"] == yards

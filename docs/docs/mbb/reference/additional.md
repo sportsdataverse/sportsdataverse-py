@@ -374,8 +374,8 @@ not covered by the generated API-endpoint reference above.
 | [display_name_to_roster_key](additional/ids-and-crosswalks.md#display_name_to_roster_key) | Box-score and shot-chart pages render a player as `"Surname, First"`, |
 | [fuzzy_box_match](additional/ids-and-crosswalks.md#fuzzy_box_match) | Pick the single unassigned box-score name a mis-spelled play-by-play |
 | [mbb_player_crosswalk](additional/ids-and-crosswalks.md#mbb_player_crosswalk) | Build the MBB cross-source player crosswalk (ESPN / Fox). |
-| [mbb_schedule_crosswalk](additional/ids-and-crosswalks.md#mbb_schedule_crosswalk) | Build the MBB cross-source schedule crosswalk (ESPN / Torvik). |
-| [mbb_team_crosswalk](additional/ids-and-crosswalks.md#mbb_team_crosswalk) | Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom). |
+| [mbb_schedule_crosswalk](additional/ids-and-crosswalks.md#mbb_schedule_crosswalk) | Build the MBB cross-source schedule crosswalk (ESPN / Torvik / Fox / Yahoo). |
+| [mbb_team_crosswalk](additional/ids-and-crosswalks.md#mbb_team_crosswalk) | Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom / Yahoo). |
 | [name_is_initials](additional/ids-and-crosswalks.md#name_is_initials) | Detect a 2-initial name shorthand, e.g. `"A B"` or `"B, A"` |
 | [ncaa_espn_team_crosswalk](additional/ids-and-crosswalks.md#ncaa_espn_team_crosswalk) | Season-keyed stats.ncaa.org -> ESPN team-id crosswalk. |
 | [ncaa_mbb_team_ids](additional/ids-and-crosswalks.md#ncaa_mbb_team_ids) | Men's-basketball `(team, season) -> stats.ncaa.org id` crosswalk. |

@@ -330,6 +330,90 @@ def _pick(df: pl.DataFrame, *candidates: str) -> pl.Expr:
     return pl.lit(None, dtype=pl.Utf8)
 
 
+def _current_season(league: str) -> int:
+    """The league's live season -- the only one ESPN's ``/teams/{id}/roster`` serves."""
+    if league == "mbb":
+        from sportsdataverse.mbb.mbb_schedule import most_recent_mbb_season as current
+    elif league == "wbb":
+        from sportsdataverse.wbb.wbb_schedule import most_recent_wbb_season as current
+    elif league == "nba":
+        from sportsdataverse.nba.nba_schedule import most_recent_nba_season as current
+    elif league == "wnba":
+        from sportsdataverse.wnba.wnba_schedule import most_recent_wnba_season as current
+    else:
+        raise ValueError(f"unknown league {league!r}")
+    return int(current())
+
+
+def _box_loader(league: str) -> Callable[..., Any]:
+    if league == "mbb":
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore as loader
+    elif league == "wbb":
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_player_boxscore as loader
+    elif league == "nba":
+        from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore as loader
+    elif league == "wnba":
+        from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore as loader
+    else:
+        raise ValueError(f"unknown league {league!r}")
+    return loader
+
+
+# (league, season) -> that season's box-score rosters; one release read per season,
+# not one per team in the player builders' team loop.
+_SEASON_ROSTERS_CACHE: Dict[tuple, pl.DataFrame] = {}
+_SEASON_ROSTERS_LOCK = threading.Lock()
+
+
+def season_box_rosters(league: str, season: int) -> pl.DataFrame:
+    """Every (team, athlete) in *season*'s published ESPN player box scores.
+
+    ESPN's ``/teams/{id}/roster`` ignores ``?season=``, so a past season's player
+    crosswalk built from it carries whatever roster ESPN serves today -- the next
+    season's, once rosters roll over. The box scores (DNP rows included) are the
+    season's own rosters. Name, jersey and position come from the athlete's last
+    game for that team.
+
+    Args:
+        league: ``"mbb"``, ``"wbb"``, ``"nba"`` or ``"wnba"``.
+        season: Season year.
+
+    Returns:
+        ``pl.DataFrame`` in :func:`espn_rosters`'s schema, without
+        ``team_abbreviation`` (the caller stamps it); ``espn_birth_date`` is null.
+
+    Raises:
+        CrosswalkSourceError: No player box scores are published for *season*.
+    """
+    key = (league, int(season))
+    with _SEASON_ROSTERS_LOCK:
+        if key in _SEASON_ROSTERS_CACHE:
+            return _SEASON_ROSTERS_CACHE[key]
+    box = _box_loader(league)(int(season))
+    if box is None or box.height == 0:
+        raise CrosswalkSourceError(
+            f"load_{league}_player_boxscore({season}) returned no rows; a past season's "
+            "player crosswalk cannot fall back to ESPN's current roster"
+        )
+    last = (
+        box.filter(pl.col("athlete_id").is_not_null() & pl.col("team_id").is_not_null())
+        .sort("game_date", "game_id", nulls_last=False)
+        .group_by("team_id", "athlete_id", maintain_order=True)
+        .last()
+    )
+    out = last.select(
+        pl.col("team_id").cast(pl.Int32).alias("espn_team_id"),
+        str_id(last, "athlete_id").alias("espn_athlete_id"),
+        pl.col("athlete_display_name").cast(pl.Utf8).alias("espn_full_name"),
+        str_id(last, "athlete_jersey").alias("espn_jersey"),
+        _pick(last, "athlete_position_abbreviation").cast(pl.Utf8).alias("espn_position"),
+        pl.lit(None, dtype=pl.Utf8).alias("espn_birth_date"),
+    )
+    with _SEASON_ROSTERS_LOCK:
+        _SEASON_ROSTERS_CACHE[key] = out
+    return out
+
+
 def _espn_accessors(league: str) -> Dict[str, Callable[..., Any]]:
     if league == "wbb":
         from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_scoreboard
@@ -958,7 +1042,9 @@ def espn_rosters(
         league: ``"mbb"``, ``"wbb"``, ``"nba"`` or ``"wnba"``.
         espn_team_id: ESPN team id.
         abbreviation: Team abbreviation stamped onto every row.
-        season: Season year (recorded, not always sent upstream).
+        season: Season year. A season before the league's live one is read from
+            :func:`season_box_rosters` (ESPN's roster endpoint ignores ``?season=``
+            and would return today's roster under the past season's label).
         tally: Shared per-item tally for the caller's team loop; the caller
             owns :meth:`FetchTally.finish`. ``None`` tallies this call alone.
         strict: Raise on a failed fetch (a 404 still returns empty). Ignored
@@ -995,6 +1081,10 @@ def espn_rosters(
             "espn_birth_date": pl.Utf8,
         }
     )
+    if season is not None and int(season) < _current_season(league):
+        # The live roster endpoint ignores ?season=; a past season reads its own box scores.
+        past = season_box_rosters(league, int(season)).filter(pl.col("espn_team_id") == int(espn_team_id))
+        return past.with_columns(pl.lit(abbreviation, dtype=pl.Utf8).alias("team_abbreviation")).select(empty.columns)
     roster = _espn_accessors(league)["roster"]
     own = tally is None
     if tally is None:

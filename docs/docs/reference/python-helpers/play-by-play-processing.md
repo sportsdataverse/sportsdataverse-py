@@ -59,7 +59,9 @@ Return the rotation-keyed on-court player frame for a G-League game.
 Makes three network calls (play-by-play v3, game rotation,
 box-score traditional v3), infers on-court rosters from the rotation
 stints via
-`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`,
+`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`
+(or, when the rotation is missing or malformed, from the play-by-play
+substitutions via `~sportsdataverse.nba.nba_lineups.players_on_court_from_pbp`),
 and returns one row per PBP action with ten Int64 player-ID columns
 (`home_player_1..5` / `away_player_1..5`).  All transformation is
 performed by the shared `nba/` core with `league_id="20"` forwarded
@@ -106,7 +108,8 @@ Return the possession-level lineup stint matrix for a G-League game.
 Builds possessions from the enhanced PBP via
 `~sportsdataverse.nba.nba_possessions.build_possessions`, resolves
 on-court rosters via
-`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`,
+`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`
+(play-by-play substitutions when the rotation is missing or malformed),
 then attaches the 5v5 lineups via
 `~sportsdataverse.nba.nba_possessions.attach_possession_lineups`.
 All transformation is performed by the shared `nba/` cores — no

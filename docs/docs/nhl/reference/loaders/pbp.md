@@ -221,7 +221,7 @@ load_nhl_pbp_full(seasons=2010)
 
 ## load_nhl_pbp_lite
 
-Release: [nhl_pbp_lite](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pbp_lite) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_lite/play_by_play_{season}_lite.parquet`
+Release: [nhl_pbp_lite](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pbp_lite) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_lite/play_by_play_lite_{season}.parquet`
 ### Returns {#load_nhl_pbp_lite-returns}
 
 | col_name | type | description |

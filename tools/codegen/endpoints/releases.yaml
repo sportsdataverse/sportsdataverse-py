@@ -127,7 +127,7 @@ loaders:
   base: sdv_releases
   url: cfb_crosswalk/cfb_teams_crosswalk_{season}.parquet
   tag: cfb_crosswalk
-  min_season: 2014
+  min_season: 2013
   example_args:
     seasons: 2024
 - fn: load_cfb_schedule_crosswalk
@@ -135,7 +135,7 @@ loaders:
   base: sdv_releases
   url: cfb_crosswalk/cfb_schedule_crosswalk_{season}.parquet
   tag: cfb_crosswalk
-  min_season: 2014
+  min_season: 2013
   example_args:
     seasons: 2024
 # --- ESPN per-game / per-season datasets from the cfb-data python dual-write
@@ -591,6 +591,26 @@ loaders:
   base: sdv_releases
   url: mlb_runners/mlb_runners_{season}.parquet
   tag: mlb_runners
+  min_season: 1988
+  example_args:
+    seasons: 2024
+- fn: load_mlb_statcast
+  league: mlb
+  base: sdv_releases
+  url: mlb_statcast/mlb_statcast_{season}.parquet
+  tag: mlb_statcast
+  min_season: 2015
+  example_args:
+    seasons: 2024
+  id_int64:
+  - on_1b
+  - on_2b
+  - on_3b
+- fn: load_mlb_schedule
+  league: mlb
+  base: sdv_releases
+  url: mlb_schedules/mlb_schedule_{season}.parquet
+  tag: mlb_schedules
   min_season: 1988
   example_args:
     seasons: 2024
@@ -1060,6 +1080,17 @@ loaders:
   min_season: 1996
   example_args:
     seasons: 2025
+- fn: load_nba_stats_draft
+  league: nba
+  base: sdv_releases
+  # draft_{Y}.parquet holds the June Y-1 draft (draft_2026 = the 2025 draft), so
+  # the shared START -> END +1 makes ``seasons`` the draft year itself.
+  url: nba_stats_draft/draft_{season + 1}.parquet
+  tag: nba_stats_draft
+  min_season: 1996
+  notes: "``seasons`` is the draft year: ``load_nba_stats_draft(2025)`` returns the June 2025 draft, read from ``draft_2026.parquet``, whose rows carry ``season`` 2026 (the END year of the 2025-26 season the picks enter). ``season`` is Int32 in this asset, not the Int64 of the other nba_stats loaders."
+  example_args:
+    seasons: 2025
 - fn: load_nba_stats_game_rosters
   league: nba
   base: sdv_releases
@@ -1436,7 +1467,7 @@ loaders:
   base: sdv_releases
   url: nhl_game_info/game_info_{season}.parquet
   tag: nhl_game_info
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_game_rosters
@@ -1444,7 +1475,7 @@ loaders:
   base: sdv_releases
   url: nhl_game_rosters/game_rosters_{season}.parquet
   tag: nhl_game_rosters
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_goalie_boxscores
@@ -1452,7 +1483,7 @@ loaders:
   base: sdv_releases
   url: nhl_goalie_boxscores/goalie_box_{season}.parquet
   tag: nhl_goalie_boxscores
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_linescore
@@ -1460,7 +1491,7 @@ loaders:
   base: sdv_releases
   url: nhl_linescore/linescore_{season}.parquet
   tag: nhl_linescore
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_officials
@@ -1468,7 +1499,7 @@ loaders:
   base: sdv_releases
   url: nhl_officials/officials_{season}.parquet
   tag: nhl_officials
-  min_season: 2025
+  min_season: 2010
   example_args:
     seasons: 2025
 - fn: load_nhl_pbp_full
@@ -1482,7 +1513,7 @@ loaders:
 - fn: load_nhl_pbp_lite
   league: nhl
   base: sdv_releases
-  url: nhl_pbp_lite/play_by_play_{season}_lite.parquet
+  url: nhl_pbp_lite/play_by_play_lite_{season}.parquet
   tag: nhl_pbp_lite
   min_season: 2010
   example_args:
@@ -1492,7 +1523,7 @@ loaders:
   base: sdv_releases
   url: nhl_penalties/penalties_{season}.parquet
   tag: nhl_penalties
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_player_boxscores
@@ -1524,7 +1555,7 @@ loaders:
   base: sdv_releases
   url: nhl_scoring/scoring_{season}.parquet
   tag: nhl_scoring
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_scratches
@@ -1532,7 +1563,7 @@ loaders:
   base: sdv_releases
   url: nhl_scratches/scratches_{season}.parquet
   tag: nhl_scratches
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_shifts
@@ -1540,7 +1571,7 @@ loaders:
   base: sdv_releases
   url: nhl_shifts/shifts_{season}.parquet
   tag: nhl_shifts
-  min_season: 2025
+  min_season: 2010
   example_args:
     seasons: 2025
 - fn: load_nhl_shootout
@@ -1548,7 +1579,7 @@ loaders:
   base: sdv_releases
   url: nhl_shootout/shootout_summary_{season}.parquet
   tag: nhl_shootout
-  min_season: 2025
+  min_season: 2010
   example_args:
     seasons: 2025
 - fn: load_nhl_shots_by_period
@@ -1556,7 +1587,7 @@ loaders:
   base: sdv_releases
   url: nhl_shots_by_period/shots_by_period_{season}.parquet
   tag: nhl_shots_by_period
-  min_season: 2025
+  min_season: 2010
   example_args:
     seasons: 2025
 - fn: load_nhl_skater_boxscores
@@ -1564,7 +1595,7 @@ loaders:
   base: sdv_releases
   url: nhl_skater_boxscores/skater_box_{season}.parquet
   tag: nhl_skater_boxscores
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_team_boxscores
@@ -1580,7 +1611,7 @@ loaders:
   base: sdv_releases
   url: nhl_three_stars/three_stars_{season}.parquet
   tag: nhl_three_stars
-  min_season: 2024
+  min_season: 2010
   example_args:
     seasons: 2024
 # PHF (Premier Hockey Federation) lives in the pwhl module: the frozen

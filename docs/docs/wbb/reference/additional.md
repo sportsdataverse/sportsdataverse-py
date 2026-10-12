@@ -368,5 +368,5 @@ not covered by the generated API-endpoint reference above.
 | [resolve_ncaa_team_id](additional/ids-and-crosswalks.md#resolve_ncaa_team_id) | Resolve a school name + season to its stats.ncaa.org team id. |
 | [tidy_player](additional/ids-and-crosswalks.md#tidy_player) | Resolve a raw play-by-play name to its box-score full name, via an |
 | [wbb_player_crosswalk](additional/ids-and-crosswalks.md#wbb_player_crosswalk) | Build the WBB cross-source player crosswalk (ESPN / Fox). |
-| [wbb_schedule_crosswalk](additional/ids-and-crosswalks.md#wbb_schedule_crosswalk) | Build the WBB cross-source schedule crosswalk (ESPN / Torvik). |
-| [wbb_team_crosswalk](additional/ids-and-crosswalks.md#wbb_team_crosswalk) | Build the WBB cross-source team crosswalk (ESPN / Fox / Torvik). |
+| [wbb_schedule_crosswalk](additional/ids-and-crosswalks.md#wbb_schedule_crosswalk) | Build the WBB cross-source schedule crosswalk (ESPN / Torvik / Fox / Yahoo). |
+| [wbb_team_crosswalk](additional/ids-and-crosswalks.md#wbb_team_crosswalk) | Build the WBB cross-source team crosswalk (ESPN / Fox / Torvik / Yahoo). |
