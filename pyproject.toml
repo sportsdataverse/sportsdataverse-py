@@ -332,6 +332,7 @@ files = [
     "sportsdataverse/_deprecation.py",
     "sportsdataverse/euroleague/euroleague_parsers.py",
     "sportsdataverse/euroleague/euroleague_runtime.py",
+    "sportsdataverse/hockey/sihf/__init__.py",
     "sportsdataverse/hockey/sihf/sihf_api_web_parsers.py",
     "sportsdataverse/hockey/sihf/sihf_runtime.py",
     "sportsdataverse/validation/box_reconcile.py",
