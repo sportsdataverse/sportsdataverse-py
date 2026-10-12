@@ -8,7 +8,7 @@
 
 # supp-002 candidate captures
 
-36 ESPN college-football summary payloads for quality program task 3.4(a) (supp-002) and EX-3.4-b; the
+37 ESPN college-football summary payloads for quality program task 3.4(a) (supp-002) and EX-3.4-b; the
 test is `tests/cfb/test_cfb_supp002_degenerate_end.py`, which also reads `../summary_401856682.json`.
 
 - **Source:** `https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=<game_id>`,
@@ -28,6 +28,9 @@ test is `tests/cfb/test_cfb_supp002_degenerate_end.py`, which also reads `../sum
     (a defensive timeout between the moved Rush and the next snap).
   - 401778310: an interception return that fumbles, with a degenerate end block, whose next snap is the
     other team's: the case the rule's same-team guard exists for (R834-3).
+  - 401856674: a degenerate-end fumble the recovery attribution calls lost while `change_of_pos_team`
+    is False and the same team snaps next: the row that tells the rule's fumble-lost predicate from a
+    `change_of_pos_team` one.
 - Play ids are ESPN's (10 to 18 digits); the test casts them to Int64.
 
 The names do not start with `summary_`, so the whole-game oracle (`summary_*` in `..`) does not pick them up.

@@ -16,8 +16,10 @@ Candidates (``BASE``): the 19 rule rows; every published ``cfbfastR-cfb-data`` 2
 (Own)" row with ``end.yardsToEndzone >= 95`` and ``EPA < -2.5`` (the auditor's signature: 23 rows on
 2026-10-12, 4 of them rule rows); and 401778310647, an interception-return fumble with a degenerate end
 whose next snap is the other team's (R834-3: only the same-team guard keeps it from being scored from the
-wrong side). Fixtures: ``fixtures/supp002/`` (see its README) plus ``fixtures/summary_401856682.json``;
-every game runs with the one closing line ``ODDS``.
+wrong side); and 401856674165, a degenerate-end fumble the recovery attribution calls lost while
+``change_of_pos_team`` is False (the row the ``change_of_pos_team`` predicate would move). Fixtures:
+``fixtures/supp002/`` (see its README) plus ``fixtures/summary_401856682.json``; every game runs with
+the one closing line ``ODDS``.
 
 Oracle for the ``MOVED`` rows: the ESPN feed's next real snap (id, down, distance, yards to the end zone,
 read from the payload, not from the processor). Their EPA is held within 0.1 of the processor's own EP
@@ -92,6 +94,7 @@ BASE = {
     401864432249: (401864432, 0, 11, 99, -1.1393542289733887, "MOVED"),
     401864443634: (401864443, 0, 24, 99, -0.25454163551330566, "MOVED"),
     401778310647: (401778310, 0, 9, 99, 5.10091495513916, "degenerate end, next snap is the other team's"),
+    401856674165: (401856674, 0, 1, 99, -3.1948139667510986, "fumble lost (attribution); change_of_pos_team False"),
 }
 #: play id -> the ESPN feed's next real snap: (id, start.down, start.distance, start.yardsToEndzone)
 MOVED = {
@@ -174,3 +177,4 @@ def test_exactly_the_rule_rows_move():
     assert moved == set(MOVED), f"moved {sorted(moved)}"
     assert 401856797637 not in moved  # the mirrored-ytez row is a different defect (EX-3.4-a)
     assert 401778310647 not in moved  # the next snap is the other team's (R834-3)
+    assert 401856674165 not in moved  # a lost fumble the possession flag misses: the cop predicate would move it
