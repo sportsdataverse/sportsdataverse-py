@@ -7,7 +7,7 @@
   - [Repository Workflow](#repository-workflow)
   - [Commit Convention](#commit-convention)
   - [Code Style](#code-style)
-  - [DataFrame Engine — Polars 1.x and 2.x](#dataframe-engine--polars-1x-and-2x)
+  - [DataFrame Engine — Polars 2.x](#dataframe-engine--polars-2x)
   - [HTTP Layer](#http-layer)
   - [Module Naming](#module-naming)
   - [NFL — nflreadpy Parity](#nfl--nflreadpy-parity)
@@ -52,7 +52,7 @@ under `tests/` as the source of truth.
 ## Repository Workflow
 
 - Use feature branches for changes.
-- `main` is the default branch and release branch. It uses **polars** (1.x and 2.x)
+- `main` is the default branch and release branch. It uses **polars** 2.x
   end-to-end, all packaging metadata lives in `pyproject.toml` (PEP 621),
   and **uv** is the canonical day-to-day package manager.
 - A separate `0.36-live` branch carries pandas-based development with a
@@ -103,10 +103,9 @@ is the sole attributable contributor.
   and it keeps `X | None` working on the 3.10 floor. Modern type syntax
   (`dict[str, X]`, `X | None`, `list[int]`) is allowed everywhere.
 
-## DataFrame Engine — Polars 1.x and 2.x
+## DataFrame Engine — Polars 2.x
 
-Runtime is `polars>=1.0,<3` (the lock resolves 2.0 on every supported Python, 3.10+; the floor
-stays 1.0); code must run on both
+Runtime is `polars>=2.0,<3`; polars 1.x is not supported, so code may use 2.x-only API
 (see `CLAUDE.md`, "Polars version"). Use the modern API surface:
 
 | Use this | Don't use this (0.18-era) |
@@ -462,7 +461,7 @@ uv add --dev some-package           # add dev-only dep
   walkthroughs, one per sport. New sport submodules should add a parallel
   `0X_<sport>_intro.ipynb`. Outputs are intentionally cleared — users
   execute them locally against live APIs.
-- **Polars literal-from-numpy no longer auto-broadcasts in 1.x.** Use
+- **Polars literal-from-numpy does not auto-broadcast (since 1.x).** Use
   `pl.lit(np_array).first()` to extract a scalar, or pass a Python value
   directly.
 

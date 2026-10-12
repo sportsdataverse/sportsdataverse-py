@@ -34,19 +34,19 @@ Everything returns a tidy **polars** `DataFrame` by default — pass `return_as_
 | [`load_pwhl_penalty_summary`](../pwhl/reference/loaders.md#load_pwhl_penalty_summary) | Tidy penalty log (infraction, minutes, who took it) | 📦 loader |
 | [`load_pwhl_shots_by_period`](../pwhl/reference/loaders.md#load_pwhl_shots_by_period) | Per-period shot & goal totals per game | 📦 loader |
 | [`load_pwhl_three_stars`](../pwhl/reference/loaders.md#load_pwhl_three_stars) | Post-game three-star selections | 📦 loader |
-| [`pwhl_schedule`](../pwhl/reference/additional.md#pwhl_schedule) | Live schedule, one row per game | 🛰️ live |
-| [`pwhl_standings`](../pwhl/reference/additional.md#pwhl_standings) | Live standings, one row per team | 🛰️ live |
-| [`pwhl_teams`](../pwhl/reference/additional.md#pwhl_teams) | Teams in a season (grab `team_id`s) | 🛰️ live |
-| [`pwhl_team_roster`](../pwhl/reference/additional.md#pwhl_team_roster) | A team's roster | 🛰️ live |
-| [`pwhl_leaders`](../pwhl/reference/additional.md#pwhl_leaders) | Statistical leaders | 🛰️ live |
-| [`pwhl_stats`](../pwhl/reference/additional.md#pwhl_stats) | Aggregate skater/goalie stats | 🛰️ live |
-| [`pwhl_player_search`](../pwhl/reference/additional.md#pwhl_player_search) | Find a player_id by name | 🛰️ live |
-| [`pwhl_player_stats`](../pwhl/reference/additional.md#pwhl_player_stats) | A player's season-by-season stat lines | 🛰️ live |
-| [`pwhl_pbp`](../pwhl/reference/additional.md#pwhl_pbp) | Enriched single-game play-by-play | 🛰️ live |
-| [`pwhl_game_corsi`](../pwhl/reference/additional.md#pwhl_game_corsi) | On-ice Corsi / Fenwick per player | 🛰️ live |
-| [`pwhl_player_toi`](../pwhl/reference/additional.md#pwhl_player_toi) | Time-on-ice per player | 🛰️ live |
-| [`pwhl_game_shifts`](../pwhl/reference/additional.md#pwhl_game_shifts) | Raw shift stints | 🛰️ live |
-| [`most_recent_pwhl_season`](../pwhl/reference/additional.md#most_recent_pwhl_season) · [`pwhl_season_id`](../pwhl/reference/additional.md#pwhl_season_id) | Season helpers | 🛰️ live |
+| [`pwhl_schedule`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_schedule) | Live schedule, one row per game | 🛰️ live |
+| [`pwhl_standings`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_standings) | Live standings, one row per team | 🛰️ live |
+| [`pwhl_teams`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_teams) | Teams in a season (grab `team_id`s) | 🛰️ live |
+| [`pwhl_team_roster`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_team_roster) | A team's roster | 🛰️ live |
+| [`pwhl_leaders`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_leaders) | Statistical leaders | 🛰️ live |
+| [`pwhl_stats`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_stats) | Aggregate skater/goalie stats | 🛰️ live |
+| [`pwhl_player_search`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_player_search) | Find a player_id by name | 🛰️ live |
+| [`pwhl_player_stats`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_player_stats) | A player's season-by-season stat lines | 🛰️ live |
+| [`pwhl_pbp`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_pbp) | Enriched single-game play-by-play | 🛰️ live |
+| [`pwhl_game_corsi`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_game_corsi) | On-ice Corsi / Fenwick per player | 🛰️ live |
+| [`pwhl_player_toi`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_player_toi) | Time-on-ice per player | 🛰️ live |
+| [`pwhl_game_shifts`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_game_shifts) | Raw shift stints | 🛰️ live |
+| [`most_recent_pwhl_season`](../pwhl/reference/additional/dates-and-seasons.md#most_recent_pwhl_season) · [`pwhl_season_id`](../pwhl/reference/additional/dates-and-seasons.md#pwhl_season_id) | Season helpers | 🛰️ live |
 
 
 ## 🔌 Setup
@@ -411,7 +411,7 @@ A, B = 'Boston', 'Montreal'
 
 ### Recipe 12 — Find a player, then pull her career lines 🛰️🔎
 
-A classic two-step lookup off the live feed: [`pwhl_player_search`](../pwhl/reference/additional.md#pwhl_player_search) resolves a name to a `player_id`, then [`pwhl_player_stats`](../pwhl/reference/additional.md#pwhl_player_stats) returns her season-by-season stat lines. Both are `safe()`-wrapped for offseason resilience.
+A classic two-step lookup off the live feed: [`pwhl_player_search`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_player_search) resolves a name to a `player_id`, then [`pwhl_player_stats`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_player_stats) returns her season-by-season stat lines. Both are `safe()`-wrapped for offseason resilience.
 
 
 ```python
@@ -433,7 +433,7 @@ out
 
 ### Recipe 13 — A team, its roster, and a game's PBP + Corsi 🛰️📈
 
-The full live tour. List teams with [`pwhl_teams`](../pwhl/reference/additional.md#pwhl_teams), grab a `team_id`, pull the roster with [`pwhl_team_roster`](../pwhl/reference/additional.md#pwhl_team_roster), take a `game_id` from the loader schedule, then fetch enriched events with [`pwhl_pbp`](../pwhl/reference/additional.md#pwhl_pbp) and shot-attempt share with [`pwhl_game_corsi`](../pwhl/reference/additional.md#pwhl_game_corsi) — all from the same feed. Everything is `safe()`-wrapped, so offline this prints a friendly note instead of raising.
+The full live tour. List teams with [`pwhl_teams`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_teams), grab a `team_id`, pull the roster with [`pwhl_team_roster`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_team_roster), take a `game_id` from the loader schedule, then fetch enriched events with [`pwhl_pbp`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_pbp) and shot-attempt share with [`pwhl_game_corsi`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_game_corsi) — all from the same feed. Everything is `safe()`-wrapped, so offline this prints a friendly note instead of raising.
 
 
 ```python
@@ -461,7 +461,7 @@ print('live pbp rows:', None if pbp_live is None else pbp_live.height,
 
 ## 🛰️ Live standings & leaders
 
-Straight off the HockeyTech feed: [`pwhl_standings`](../pwhl/reference/additional.md#pwhl_standings) for the live table and [`pwhl_leaders`](../pwhl/reference/additional.md#pwhl_leaders) for the statistical leaderboard. Both take a `season` end-year. We keep them `safe()`-wrapped because live endpoints are seasonal.
+Straight off the HockeyTech feed: [`pwhl_standings`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_standings) for the live table and [`pwhl_leaders`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_leaders) for the statistical leaderboard. Both take a `season` end-year. We keep them `safe()`-wrapped because live endpoints are seasonal.
 
 
 ```python
@@ -493,9 +493,9 @@ Beyond the box score, three analytics helpers derive advanced metrics from the s
 
 | Function | Metric |
 |---|---|
-| [`pwhl_game_corsi`](../pwhl/reference/additional.md#pwhl_game_corsi) | Corsi / Fenwick shot-attempt share, with per-60 rates |
-| [`pwhl_player_toi`](../pwhl/reference/additional.md#pwhl_player_toi) | summed time-on-ice + shift counts per player |
-| [`pwhl_game_shifts`](../pwhl/reference/additional.md#pwhl_game_shifts) | raw shift stints (who's on the ice, when) |
+| [`pwhl_game_corsi`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_game_corsi) | Corsi / Fenwick shot-attempt share, with per-60 rates |
+| [`pwhl_player_toi`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_player_toi) | summed time-on-ice + shift counts per player |
+| [`pwhl_game_shifts`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_game_shifts) | raw shift stints (who's on the ice, when) |
 
 ⚠️ Corsi note: the HockeyTech feed has no *missed-shot* event, so Corsi and Fenwick here are proxies counting shots + blocked shots + goals only (`corsi_includes_missed = False`).
 

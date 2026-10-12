@@ -6,7 +6,9 @@ play-type flags and the ESPN text); only the three text parsers that read a
 team token out of the play text differ per league, so they are injected:
 
 * ``parse_recovery_abbrevs(text) -> list[str]`` -- ordered upper-case team
-  abbreviations that recovered the ball ("recovered by TEAM");
+  abbreviations that recovered the ball ("recovered by TEAM"); a league whose
+  text names the school by more than its abbreviation may also pass
+  ``parse_recovery_sides(row) -> list["home" | "away" | None]``, which wins;
 * ``parse_penalty_team_side(row) -> "home" | "away" | None`` -- the penalized
   side from the play text;
 * ``parse_penalty_spot(row) -> "<home|away|mid>:<yardline>" | None`` -- the
@@ -261,6 +263,7 @@ def add_attribution_cols(
     parse_recovery_abbrevs,
     parse_penalty_team_side,
     parse_penalty_spot,
+    parse_recovery_sides=None,
     trust_text_side: bool = False,
     max_penalty_yards: int | None = None,
 ) -> pl.DataFrame:
@@ -308,6 +311,21 @@ def add_attribution_cols(
         .otherwise(False),
     )
 
+    # The penalty-side matcher and the recovery-side parser consume the team NAME
+    # columns too; synthetic test frames only carry the abbrevs, so null-fill any
+    # that are absent (matching then degrades gracefully to abbrev-only).
+    _team_name_cols = [
+        "homeTeamName",
+        "awayTeamName",
+        "homeTeamNameAlt",
+        "awayTeamNameAlt",
+        "homeTeamMascot",
+        "awayTeamMascot",
+    ]
+    for _c in _team_name_cols:
+        if _c not in play_df.columns:
+            play_df = play_df.with_columns(pl.lit(None, dtype=pl.Utf8).alias(_c))
+
     # --- Cleaned text + ordered recovery chain (strip overturned first) ---
     play_df = (
         play_df.with_columns(
@@ -344,24 +362,29 @@ def add_attribution_cols(
             .otherwise(pl.lit(None, dtype=pl.Int64))
         )
 
-    # The penalty-side matcher consumes the team NAME columns too; synthetic
-    # test frames only carry the abbrevs, so null-fill any that are absent
-    # (matching then degrades gracefully to abbrev-only).
-    for _c in (
-        "homeTeamName",
-        "awayTeamName",
-        "homeTeamNameAlt",
-        "awayTeamNameAlt",
-        "homeTeamMascot",
-        "awayTeamMascot",
-    ):
-        if _c not in play_df.columns:
-            play_df = play_df.with_columns(pl.lit(None, dtype=pl.Utf8).alias(_c))
+    if parse_recovery_sides is not None:
+        play_df = play_df.with_columns(
+            _rec_sides=pl.struct(["_clean_text", "homeTeamAbbrev", "awayTeamAbbrev", *_team_name_cols]).map_elements(
+                parse_recovery_sides, return_dtype=pl.List(pl.Utf8)
+            ),
+        )
+
+    def _recovery_id(i):
+        if parse_recovery_sides is None:
+            return _abbrev_to_team_id(pl.col("_recovery_abbrev_2" if i else "_recovery_abbrev"))
+        side = pl.col("_rec_sides").list.get(i, null_on_oob=True)
+        return (
+            pl.when(side == "home")
+            .then(pl.col("homeTeamId"))
+            .when(side == "away")
+            .then(pl.col("awayTeamId"))
+            .otherwise(pl.lit(None, dtype=pl.Int64))
+        )
 
     play_df = (
         play_df.with_columns(
-            recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
-            recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
+            recovery_team=_recovery_id(0),
+            recovery_team_2=_recovery_id(1),
             # Penalized team parsed from the penalty-team text token (both vendor
             # forms: "PENALTY {TEAM} ..." and "{TEAM} Penalty, ..."). Matched
             # binary home-vs-away against abbrev/name/alt/mascot candidates, so
@@ -781,6 +804,7 @@ def add_attribution_cols(
             "_rec_abbrevs",
             "_recovery_abbrev",
             "_recovery_abbrev_2",
+            "_rec_sides",
             "_penalty_team",
             "_penalty_side",
             "_penalty_spot",
@@ -789,6 +813,7 @@ def add_attribution_cols(
             "_loser_1",
             "_loser_2",
         ],
+        strict=False,  # _rec_sides exists only when parse_recovery_sides was given
     )
 
     # cast all team-id-derived columns to Int32 for join compatibility
