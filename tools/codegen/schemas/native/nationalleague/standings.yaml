@@ -1,377 +1,371 @@
 columns:
-- description: Standings rank
+- description: ''
   name: rank
   type: integer
-- description: SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as
-    the sihf family's team_id.
+- description: ''
   name: team_id
   type: integer
-- description: Team display name
+- description: ''
   name: name
   type: character
-- description: Team abbreviation
+- description: ''
   name: short_name
   type: character
-- description: 'Last results, most recent first: W or L'
+- description: ''
   name: streak
   type: character
-- description: Games played
+- description: ''
   name: gp
   type: integer
-- description: Wins, all kinds
+- description: ''
   name: gw
   type: integer
-- description: Overtime + shootout wins (gwo + gwpe)
+- description: ''
   name: gwot
   type: integer
-- description: Shootout wins
+- description: ''
   name: gwpe
   type: integer
-- description: Losses, all kinds
+- description: ''
   name: gl
   type: integer
-- description: Overtime + shootout losses (glo + glpe)
+- description: ''
   name: glot
   type: integer
-- description: Shootout losses
+- description: ''
   name: glpe
   type: integer
-- description: 'Standings points: 3 per regulation win, 2 per overtime/shootout win,
-    1 per overtime/shootout loss (verified)'
+- description: ''
   name: po
   type: integer
-- description: Goals
+- description: ''
   name: g
   type: integer
-- description: Even-strength goals (geq + gpp + gpk can fall short of g)
+- description: ''
   name: geq
   type: integer
-- description: Power-play goals
+- description: ''
   name: gpp
   type: integer
-- description: Shorthanded goals
+- description: ''
   name: gpk
   type: integer
-- description: Goals against
+- description: ''
   name: ga
   type: integer
-- description: Even-strength goals against
+- description: ''
   name: gaeq
   type: integer
-- description: Shorthanded goals allowed on the power play
+- description: ''
   name: gapp
   type: integer
-- description: Power-play goals allowed while shorthanded
+- description: ''
   name: gapk
   type: integer
-- description: Goal difference, g - ga (verified)
+- description: ''
   name: go
   type: integer
-- description: Power-play opportunities
+- description: ''
   name: ppo
   type: integer
-- description: Times shorthanded
+- description: ''
   name: pks
   type: integer
-- description: Shots on goal
+- description: ''
   name: sog
   type: integer
-- description: 'Penalties taken (upstream `fo`: fo2 + fo5 + fo10 + gm + mp). Not faceoffs:
-    see face_offs / fot.'
+- description: ''
   name: penalties
   type: integer
-- description: Penalty minutes
+- description: ''
   name: pim
   type: integer
-- description: Faceoffs won
+- description: ''
   name: fow
   type: integer
-- description: Faceoffs lost
+- description: ''
   name: fol
   type: integer
-- description: Shots that missed the net
+- description: ''
   name: shm
   type: integer
-- description: Shots that hit the post
+- description: ''
   name: shp
   type: integer
-- description: Own shots blocked by an opponent
+- description: ''
   name: shb
   type: integer
-- description: Opponent shots blocked
+- description: ''
   name: bks
   type: integer
-- description: Shots on goal against
+- description: ''
   name: sa
   type: integer
-- description: Shots against that missed the net; 0 on every 2026 team row
+- description: ''
   name: sam
   type: integer
-- description: Shots against that hit the post; 0 on every 2026 team row
+- description: ''
   name: sap
   type: integer
-- description: Shots against that were blocked; 0 on every 2026 team row
+- description: ''
   name: sab
   type: integer
-- description: App sort key; not the rank
+- description: ''
   name: sort_order
   type: integer
-- description: Club website URL
+- description: ''
   name: website
   type: character
-- description: Rank movement since the last round ('none' on every 2026 row)
+- description: ''
   name: position_change
   type: character
-- description: Team is playing now
+- description: ''
   name: is_live
   type: logical
-- description: Team's goals in a live game; 0 otherwise
+- description: ''
   name: current_result
   type: integer
-- description: Opponent's goals in a live game; 0 otherwise
+- description: ''
   name: current_opponent_result
   type: integer
-- description: Standings position (= rank on every 2026 row)
+- description: ''
   name: pos
   type: integer
-- description: Home games played (gp / 2 on every 2026 row)
+- description: ''
   name: hg
   type: integer
-- description: Shootout wins; duplicate of gwpe (equal on every 2026 row)
+- description: ''
   name: gsow
   type: integer
-- description: Goals by defenders
+- description: ''
   name: gfd
   type: integer
-- description: Goals by forwards
+- description: ''
   name: gff
   type: integer
-- description: Goals by import (non-Swiss-licence) players (inferred; cf. the sihf/
-    teamGoalPosNation table)
+- description: ''
   name: gfi
   type: integer
-- description: Shootout losses; duplicate of glpe (equal on every 2026 row)
+- description: ''
   name: gasow
   type: integer
-- description: Power-play time, seconds
+- description: ''
   name: pp
   type: integer
-- description: Shorthanded (box-play) time, seconds
+- description: ''
   name: bp
   type: integer
-- description: Minor (2-minute) penalties
+- description: ''
   name: fo2
   type: integer
-- description: Major (5-minute) penalties
+- description: ''
   name: fo5
   type: integer
-- description: 10-minute misconducts
+- description: ''
   name: fo10
   type: integer
-- description: Game misconducts
+- description: ''
   name: gm
   type: integer
-- description: Match penalties
+- description: ''
   name: mp
   type: integer
-- description: Shootout attempts taken
+- description: ''
   name: ps
   type: integer
-- description: Shootout goals
+- description: ''
   name: psg
   type: integer
-- description: Shootout misses (ps = psg + psm on every 2026 team row)
+- description: ''
   name: psm
   type: integer
-- description: Shootout shots faced (psga + pssvs)
+- description: ''
   name: psa
   type: integer
-- description: Shootout goals against
+- description: ''
   name: psga
   type: integer
-- description: Shootout saves
+- description: ''
   name: pssvs
   type: integer
-- description: Total home attendance
+- description: ''
   name: spec
   type: integer
-- description: Total home arena capacity over the home games
+- description: ''
   name: cap
   type: integer
-- description: Offensive-zone faceoffs won
+- description: ''
   name: fowoz
   type: integer
-- description: Neutral-zone faceoffs won
+- description: ''
   name: fownz
   type: integer
-- description: Defensive-zone faceoffs won
+- description: ''
   name: fowdz
   type: integer
-- description: Offensive-zone faceoffs lost
+- description: ''
   name: foloz
   type: integer
-- description: Neutral-zone faceoffs lost
+- description: ''
   name: folnz
   type: integer
-- description: Defensive-zone faceoffs lost
+- description: ''
   name: foldz
   type: integer
-- description: Not determined. Equals gff + gfd on every team row; skater values are
-    close to but not always g
+- description: ''
   name: sgo
   type: integer
-- description: Shots from the slot
+- description: ''
   name: sslot
   type: integer
-- description: Shots on goal against that were saved; 0 on every 2026 team row (use
-    sa)
+- description: ''
   name: sag
   type: integer
-- description: Shots on goal against that went in; 0 on every 2026 team row (use ga)
+- description: ''
   name: sago
   type: integer
-- description: Slot shots against
+- description: ''
   name: saslot
   type: integer
-- description: Clinch marker ('none' on every 2026 row)
+- description: ''
   name: qualification_status
   type: character
-- description: Qualified for the Champions Hockey League
+- description: ''
   name: is_qualified_chl
   type: logical
-- description: Shooting percentage, 100 * g / sog (verified); -1 with no shots
+- description: ''
   name: goal_efficiency
   type: numeric
-- description: Power-play percentage, 100 * gpp / ppo (verified)
+- description: ''
   name: ppg_efficiency
   type: numeric
-- description: Power-play goals per game
+- description: ''
   name: ppggp
   type: numeric
-- description: Power-play opportunities per game
+- description: ''
   name: ppopgp
   type: numeric
-- description: Power-play time per game, seconds
+- description: ''
   name: ppgp
   type: numeric
-- description: Goals per game
+- description: ''
   name: gpg
   type: numeric
-- description: Goals against per game
+- description: ''
   name: gagp
   type: numeric
-- description: Shorthanded goals against per game
+- description: ''
   name: gappgp
   type: numeric
-- description: Even-strength goals per game
+- description: ''
   name: geqgp
   type: numeric
-- description: Even-strength goals against per game
+- description: ''
   name: gaeqgp
   type: numeric
-- description: Blocked shots per game
+- description: ''
   name: bks_per_game
   type: numeric
-- description: Penalty minutes per game
+- description: ''
   name: pim_per_game
   type: numeric
-- description: Shootout success percentage, 0-100
+- description: ''
   name: ps_percentage
   type: numeric
-- description: Average home attendance (spec / hg)
+- description: ''
   name: attendance
   type: integer
-- description: Arena capacity (cap / hg)
+- description: ''
   name: capacity
   type: integer
-- description: Capacity utilisation, 100 * spec / cap
+- description: ''
   name: utilization
   type: numeric
-- description: Shots on goal per game
+- description: ''
   name: soggp
   type: numeric
-- description: Slot shots per game
+- description: ''
   name: sslotgp
   type: numeric
-- description: Missed shots per game
+- description: ''
   name: shmgp
   type: numeric
-- description: Post hits per game
+- description: ''
   name: shpgp
   type: numeric
-- description: Shorthanded goals per game
+- description: ''
   name: gpkgp
   type: numeric
-- description: Penalty-kill percentage, 100 * (1 - gapk / pks) (verified)
+- description: ''
   name: pk_efficiency
   type: numeric
-- description: Times shorthanded per game
+- description: ''
   name: pksgp
   type: numeric
-- description: Power-play goals against per game
+- description: ''
   name: gapkgp
   type: numeric
-- description: Shorthanded time per game, seconds
+- description: ''
   name: bpgp
   type: numeric
-- description: Faceoffs taken (fow + fol)
+- description: ''
   name: fot
   type: integer
-- description: Faceoff win percentage, 0-100; -1 with no faceoffs
+- description: ''
   name: face_offs_percentage
   type: numeric
-- description: Faceoffs taken per game
+- description: ''
   name: fogp
   type: numeric
-- description: Faceoffs won per game
+- description: ''
   name: fowgp
   type: numeric
-- description: Faceoffs lost per game
+- description: ''
   name: folgp
   type: numeric
-- description: Offensive-zone faceoff win percentage, 0-100
+- description: ''
   name: fopoz
   type: numeric
-- description: Neutral-zone faceoff win percentage, 0-100
+- description: ''
   name: fopnz
   type: numeric
-- description: Defensive-zone faceoff win percentage, 0-100
+- description: ''
   name: fopdz
   type: numeric
-- description: Shots on goal against per game
+- description: ''
   name: sagp
   type: numeric
-- description: Slot shots against per game
+- description: ''
   name: saslotgp
   type: numeric
-- description: Goals by forwards and defenders (gff + gfd; verified)
+- description: ''
   name: gffd
   type: integer
-- description: Share of goals by forwards, 100 * gff / g
+- description: ''
   name: gffp
   type: numeric
-- description: Share of goals by defenders, 100 * gfd / g
+- description: ''
   name: gfdp
   type: numeric
-- description: Share of goals by import players, 100 * gfi / g
+- description: ''
   name: gfip
   type: numeric
-- description: Shootout save percentage, 0-100; -1 with no shootout shots faced
+- description: ''
   name: pssvs_percentage
   type: numeric
-- description: Standings points per game
+- description: ''
   name: pgp
   type: numeric
-- description: Wins in regulation time (gw = gwit + overtime/shootout wins; verified)
+- description: ''
   name: gwit
   type: integer
-- description: Overtime wins
+- description: ''
   name: gwo
   type: integer
-- description: Losses in regulation time (gl = glit + overtime/shootout losses; verified)
+- description: ''
   name: glit
   type: integer
-- description: Overtime losses
+- description: ''
   name: glo
   type: integer
 kind: dataframe

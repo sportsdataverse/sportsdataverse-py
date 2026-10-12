@@ -13,10 +13,15 @@ The generator reads the frozen spec and the route-scoped ``nationalleague-return
 * ``tools/codegen/schemas/native/nationalleague/<short>.yaml`` -- one returns-schema per wrapper.
   Columns and dtypes come from running the wrapper's parser over a FULL body
   (``tests/fixtures/nationalleague/full/``) where one exists, else over the refs capture: the
-  truncated captures hold three rows, where a rate can look like an integer. Descriptions come
-  from the returns md section of the wrapper's own route (``fo`` is faceoffs in a game and
-  penalties in a season row, so a flat cross-route map would be wrong), then the curated
-  :data:`_DERIVED` prose for the columns the parsers add or rename.
+  truncated captures hold three rows, where a rate can look like an integer. Every
+  ``description`` is written empty: descriptions never live in ``schemas/**`` (a re-capture
+  clobbers them).
+* ``tools/codegen/nationalleague_column_descriptions.snippet.yaml`` -- the returns-table prose,
+  keyed by schema key (``nl_<short>``) then column, for merging into
+  ``manual_column_descriptions.yaml``. It comes from the returns md section of the wrapper's own
+  route (``fo`` is faceoffs in a game and penalties in a season row, so a flat cross-route map
+  would be wrong), then the curated :data:`_DERIVED` prose for the columns the parsers add or
+  rename.
 
 robots.txt disallows ``/api``; the owner approved building on it on 2026-10-12 (polite,
 incremental use). The ruling is carried into every wrapper's docstring (``docstring.notes``).
@@ -41,6 +46,7 @@ HOST = "https://www.nationalleague.ch/api"
 SPEC = "nationalleague.openapi.yaml"
 STEM = "nationalleague"
 FULL = ROOT / "tests" / "fixtures" / STEM / "full"
+SNIPPET = ROOT / "tools" / "codegen" / f"{STEM}_column_descriptions.snippet.yaml"
 
 # (short, spec path, parser, sample, md prefixes, summary or None for the spec's).
 # ``sample`` is a refs capture slug (capture.py: the path with "/" -> "__", braces dropped) or
@@ -214,6 +220,39 @@ _DERIVED: Dict[str, str] = {
 }
 
 
+# Returns-md texts under the description floor (15 characters, tests/codegen/test_manual_descriptions.py),
+# spelled out without changing their meaning.
+_LONGER: Dict[str, str] = {
+    "First assists": "First (primary) assists credited",
+    "Second assists": "Second (secondary) assists credited",
+    "Arena name": "Name of the arena the game is played in",
+    "File extension": "File extension of the club logo media file",
+    "Media title": "Title of the club logo media item in the club CMS",
+    "First name": "First (given) name of the player",
+    "Last name": "Last (family) name of the player",
+    "Faceoffs lost": "Number of faceoffs lost",
+    "Faceoffs won": "Number of faceoffs won",
+    "Goals": "Number of goals scored",
+    "Goals against": "Goals against: number of goals conceded",
+    "Games played": "Number of games played",
+    "Goals per game": "Goals scored per game played",
+    "Overtime wins": "Number of wins in overtime",
+    "Shootout wins": "Number of wins decided in a shootout",
+    "Team captain": "Whether the player is the team captain",
+    "Club name": "Club name from the club's CMS record",
+    "Team display name": "Team name as the league app displays it",
+    "Shootout goals": "Goals scored in shootouts",
+    "Shootout saves": "Saves made in shootouts",
+    "Standings rank": "Position of the team in the standings table",
+    "Shifts": "Number of shifts played",
+    "Shutouts": "Number of shutouts (games without a goal conceded)",
+    "Shots on goal": "Number of shots on goal",
+    "Saves": "Number of saves made by the goaltender",
+    "Saves per game": "Goaltender saves per game played",
+}
+_FILLER = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.I)
+
+
 def _md_sections(path: Path) -> Dict[str, List[Tuple[str, str]]]:
     """``{route: [(column path, description), ...]}`` from the ``## `/route``` tables of the returns md."""
     out: Dict[str, List[Tuple[str, str]]] = {}
@@ -329,10 +368,10 @@ def main() -> None:
         "docstring": {
             "example_import": True,
             "raises": [
-                "sportsdataverse.errors.NoDataError: a 404, an empty answer (no games or rows for that season, "
-                "team or phase), or an answer for another season, team, game or player.",
-                "sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, or a body "
-                "without the ids it must carry.",
+                "sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that "
+                "season, team or phase).",
+                "sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body "
+                "without the ids it must carry, or an answer for another season, team, game or player.",
             ],
             "see_also": [
                 {
@@ -355,16 +394,25 @@ def main() -> None:
     md = _md_sections(refs / f"{STEM}-returns.md")
     schema_dir = ROOT / "tools/codegen/schemas/native" / STEM
     rewrite_schema_dir(schema_dir)
+    snippet: Dict[str, Dict[str, str]] = {}
+    blank = 0
     for short, path, parser, sample, prefixes, _ in ENDPOINTS:
         fn: Callable[..., pl.DataFrame] = getattr(P, parser)
         frame = fn(_sample(refs, sample))
         renames = _RENAMES.get(short, _SEASON_ROW_RENAMES if parser.endswith(("player_stats", "standings")) else {})
         cols = columns_from_frame(frame, [_DERIVED, _descriptions(md[path], prefixes, renames)], leaf_fallback=False)
+        for col in cols:
+            if col["description"]:
+                text = _LONGER.get(col["description"], col["description"])
+                assert len(text) >= 15 and text.lower() != col["name"] and not _FILLER.match(text), (short, col)
+                snippet.setdefault(f"nl_{short}", {})[col["name"]] = text
+            else:
+                blank += 1
+            col["description"] = ""  # prose goes to the snippet, never into schemas/**
         write_yaml(schema_dir / f"{short}.yaml", {"schema": f"nl_{short}", "kind": "dataframe", "columns": cols})
-    blank = sum(
-        1 for f in schema_dir.glob("*.yaml") for line in f.read_text().splitlines() if line == "  description: ''"
-    )
-    print(f"{STEM}: {len(ENDPOINTS)} endpoints over {len(ops)} routes; {blank} undescribed columns")
+    write_yaml(SNIPPET, snippet)
+    total = sum(len(v) for v in snippet.values())
+    print(f"{STEM}: {len(ENDPOINTS)} endpoints over {len(ops)} routes; {total} descriptions, {blank} undescribed")
 
 
 if __name__ == "__main__":

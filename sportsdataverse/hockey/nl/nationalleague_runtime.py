@@ -23,10 +23,11 @@ reaches a parser as data:
   a list route answering a non-list, a row that is not an object or lacks its digit-string id
   (``playerId`` / ``teamId`` / ``gameId``), or a game / player / club page without the id it
   must echo -> ``AssetFetchError`` (the answer is broken, not empty);
-* an empty list (``/games?season=2016`` answers ``200 []``), an empty object, a game whose
-  ``gameId`` does not start with the requested season, a team's schedule or player list holding
-  another team, or a page echoing another game / player / club -> ``NoDataError`` (nothing for
-  what was asked).
+* a wrong answer -- a game whose ``gameId`` does not start with the requested season, a team's
+  schedule or player list holding another team, or a page echoing another game / player / club
+  -> ``AssetFetchError`` (the fetch did not give what was asked; it is not "nothing here");
+* an empty list (``/games?season=2016`` answers ``200 []``), an empty object, or a bracket with
+  no games yet -> ``NoDataError`` (nothing for what was asked).
 
 Ids are type-strict, as in the capture: the API sends them as digit strings, and an integer
 where a digit string belongs is refused. ``/player*`` and ``/teams`` rows carry no season, so a
@@ -108,7 +109,7 @@ def _check(url: str, params: Optional[dict], body: Any) -> None:
             if not (isinstance(row, dict) and row and _is_id(row.get(key))):
                 raise AssetFetchError(f"{url}: a row without a digit-string {key}: {str(row)[:60]}")
         if scope == "team_players" and any(row.get("teamId") != want["team"] for row in body):
-            raise NoDataError(f"{url}: asked team {want['team']}, served a player of another team")
+            raise AssetFetchError(f"{url}: asked team {want['team']}, served a player of another team")
     elif scope in ("games", "team_games", "bracket"):
         games = _games_of(url, body)
         if not games:
@@ -117,11 +118,11 @@ def _check(url: str, params: Optional[dict], body: Any) -> None:
             raise AssetFetchError(f"{url}: a game without a digit-string gameId")
         season = str((params or {}).get("season") or "")
         if season and (bad := next((g["gameId"] for g in games if not g["gameId"].startswith(season)), None)):
-            raise NoDataError(f"{url}: asked season {season}, served game {bad}")
+            raise AssetFetchError(f"{url}: asked season {season}, served game {bad}")
         if scope == "team_games":
             team = want["team"]
             if any(not (_is_id(g.get("homeTeamId"), team) or _is_id(g.get("awayTeamId"), team)) for g in games):
-                raise NoDataError(f"{url}: asked team {team}, served a game without it")
+                raise AssetFetchError(f"{url}: asked team {team}, served a game without it")
     elif scope in ("game", "player", "team_info"):
         if scope == "game":
             got, asked = (body.get("overview") or {}).get("gameId"), want["game"]
@@ -132,7 +133,7 @@ def _check(url: str, params: Optional[dict], body: Any) -> None:
         if not _is_id(got):
             raise AssetFetchError(f"{url}: the page carries no digit-string id to check ({got!r})")
         if got != asked:
-            raise NoDataError(f"{url}: asked {asked}, served {got}")
+            raise AssetFetchError(f"{url}: asked {asked}, served {got}")
 
 
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
@@ -147,9 +148,10 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         The parsed JSON body, without any api-key entry.
 
     Raises:
-        NoDataError: a 404, or an empty / other-scope answer (see the module docstring).
+        NoDataError: a 404, or an empty answer (see the module docstring).
         ValueError: a 400 / 422.
-        AssetFetchError: any other failed fetch, an error envelope or a malformed body.
+        AssetFetchError: any other failed fetch, an error envelope, a malformed body, or an
+            answer for another season, team, game or player.
     """
     body = _euro._get(url, params, **kwargs)  # _polite_wait, then the shared getter
     _check(url, params, body)

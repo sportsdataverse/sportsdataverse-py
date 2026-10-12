@@ -1,70 +1,62 @@
 columns:
-- description: SIHF game id `<season(4)><competition(4)><sequence(6)>` (Int64; e.g.
-    20261105000325, 1105 = National League). The same id as the sihf family's game_id;
-    its first four digits are the season END year.
+- description: ''
   name: game_id
   type: integer
-- description: 'home or away: the side of the team this row belongs to.'
+- description: ''
   name: team_side
   type: character
-- description: SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as
-    the sihf family's team_id.
+- description: ''
   name: team_id
   type: integer
-- description: SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the
-    sihf family's player_id and every SIHF *LicenceNr.
+- description: ''
   name: player_id
   type: integer
-- description: Shooter's sweater number, from the game's lineup (a string).
+- description: ''
   name: player_number
   type: character
-- description: Shooter's first name, from the game's lineup.
+- description: ''
   name: player_first_name
   type: character
-- description: Shooter's last name, from the game's lineup.
+- description: ''
   name: player_last_name
   type: character
-- description: Period number (1-3; overtime follows)
+- description: ''
   name: period
   type: integer
-- description: Game clock elapsed in seconds (period 2 starts at 1200)
+- description: ''
   name: time
   type: integer
-- description: 'Strength: EQ (even), PP (power play), PK (shorthanded)'
+- description: ''
   name: strength
   type: character
-- description: 'Outcome: SOG (saved shot on goal), MISS, POST, BLOCK, GOAL'
+- description: ''
   name: shot_type
   type: character
-- description: Across-ice position in metres, 0-30 (rink width). Both axes run in
-    metres on a 30 x 60 m rink.
+- description: ''
   name: pos_x
   type: numeric
-- description: Distance in metres from the end boards of the attacked end, 0-60 along
-    the rink length. Shots are mirrored to one attacking end (inferred); above 30
-    is a shot from beyond centre; the goal line is 4 m out.
+- description: ''
   name: pos_y
   type: numeric
-- description: posX / 30 (verified on 475 shots)
+- description: ''
   name: pos_x_percentage
   type: numeric
-- description: pos_y / 24, the depth of the app's zone drawing; above 1 for long shots.
+- description: ''
   name: pos_y_percentage
   type: numeric
-- description: Seconds into the game video (= unix - unixStart; verified on 475 shots)
+- description: ''
   name: video_time
   type: integer
-- description: Expected goals of this shot, 0-1. Non-zero from the 2023 season (one
-    sampled game per season; 0 in the 2021 and 2022 games); always 0 on a BLOCK.
+- description: ''
   name: xg
   type: numeric
-- description: Running sum of this team's xg up to and including this shot
+- description: ''
   name: xg_sum
   type: numeric
-- description: Wall-clock time of the shot, Unix epoch seconds
+- description: ''
   name: unix
   type: integer
-- description: Wall-clock start of the game video, Unix epoch seconds
+- description: ''
   name: unix_start
   type: integer
 kind: dataframe

@@ -1,97 +1,89 @@
 columns:
-- description: SIHF game id `<season(4)><competition(4)><sequence(6)>` (Int64; e.g.
-    20261105000325, 1105 = National League). The same id as the sihf family's game_id;
-    its first four digits are the season END year.
+- description: ''
   name: game_id
   type: integer
-- description: Home team abbreviation (e.g. HCD)
+- description: ''
   name: home_team_short_name
   type: character
-- description: Home team display name
+- description: ''
   name: home_team_name
   type: character
-- description: Away team abbreviation
+- description: ''
   name: away_team_short_name
   type: character
-- description: Away team display name
+- description: ''
   name: away_team_name
   type: character
-- description: Home team. SIHF team id (Int64; e.g. 101151 = HC Davos). The same key
-    space as the sihf family's team_id.
+- description: ''
   name: home_team_id
   type: integer
-- description: Away team. SIHF team id (Int64; e.g. 101151 = HC Davos). The same key
-    space as the sihf family's team_id.
+- description: ''
   name: away_team_id
   type: integer
-- description: 'Full-game video. Vimeo video id (Int64): vimeo.com/<id>.'
+- description: ''
   name: vimeo_video_id
   type: integer
-- description: Scheduled start, ISO 8601 with UTC offset
+- description: ''
   name: date
   type: character
-- description: 'Game state: finished, canceled, beforeStartOfPlay (others appear live)'
+- description: ''
   name: status
   type: character
-- description: Coarse game state; equal to status in every sampled game
+- description: ''
   name: base_status
   type: character
-- description: Home team goals (final or current score; 0 before the game)
+- description: ''
   name: home_team_result
   type: integer
-- description: Away team goals (final or current score; 0 before the game)
+- description: ''
   name: away_team_result
   type: integer
-- description: Game went to overtime
+- description: ''
   name: is_overtime
   type: logical
-- description: Game went to a shootout
+- description: ''
   name: is_shootout
   type: logical
-- description: 'Highlights video. Vimeo video id (Int64): vimeo.com/<id>.'
+- description: ''
   name: highlight_vimeo_video_id
   type: integer
-- description: A highlight video exists
+- description: ''
   name: has_highlight
   type: logical
-- description: Game belongs to the current game day
+- description: ''
   name: is_current
   type: logical
-- description: Game is the team's current game (team-scoped views)
+- description: ''
   name: is_current_for_team
   type: logical
-- description: Broadcaster logo image URLs
+- description: ''
   name: tv_partner
   type: character
-- description: Attendance (Int64; the API sends a digit string).
+- description: ''
   name: spectators
   type: integer
-- description: Broadcast on MySports
+- description: ''
   name: has_my_sports
   type: logical
-- description: 'Officials as ''#<number> <name>'' strings (referees and linesmen;
-    one entry in some games); unobserved: null, absent or empty in every sampled row'
+- description: ''
   name: referees
   type: character
-- description: Exhibition game, not NL competition (competition code other than 1105)
+- description: ''
   name: is_exhibition
   type: logical
-- description: 'Home head coach name; filled in a game''s `overview`, null in the
-    season lists; unobserved: null, absent or empty in every sampled row'
+- description: ''
   name: home_team_coach
   type: character
-- description: 'Away head coach name; filled in a game''s `overview`, null in the
-    season lists; unobserved: null, absent or empty in every sampled row'
+- description: ''
   name: away_team_coach
   type: character
-- description: Elapsed game minutes; 0 on every game in the season lists, 60 in a
-    finished game's overview
+- description: ''
   name: game_time
   type: integer
-- description: 'App flag: show gameTime'
+- description: ''
   name: show_game_time
   type: logical
-- description: Arena name
+- description: ''
   name: arena
   type: character
 kind: dataframe

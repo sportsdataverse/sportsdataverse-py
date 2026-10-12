@@ -1,84 +1,83 @@
 columns:
-- description: Club name
+- description: ''
   name: name
   type: character
-- description: Umbraco CMS node id of the club page (Int64; not a team id).
+- description: ''
   name: cms_node_id
   type: integer
-- description: URL slug of the club page
+- description: ''
   name: url_segment
   type: character
-- description: CMS node kind ('Content')
+- description: ''
   name: type
   type: character
-- description: CMS document type ('club')
+- description: ''
   name: content_type
   type: character
-- description: Site path of the club page
+- description: ''
   name: url
   type: character
-- description: 'Page layout blocks; unobserved: null or empty in every sampled row'
+- description: ''
   name: fields_grid
   type: character
-- description: Media title
+- description: ''
   name: fields_logo_name
   type: character
-- description: Umbraco CMS media id; not a team id
+- description: ''
   name: fields_logo_id
   type: integer
-- description: 'URL slug; unobserved: null or empty in every sampled row'
+- description: ''
   name: fields_logo_url_segment
   type: character
-- description: CMS node kind ('Media')
+- description: ''
   name: fields_logo_type
   type: character
-- description: Media kind ('Image')
+- description: ''
   name: fields_logo_content_type
   type: character
-- description: Site path of the image
+- description: ''
   name: fields_logo_url
   type: character
-- description: Site path of the file
+- description: ''
   name: fields_logo_fields_umbraco_file_src
   type: character
-- description: 'Crop focal point; unobserved: null or empty in every sampled row'
+- description: ''
   name: fields_logo_fields_umbraco_file_focal_point
   type: character
-- description: 'Crop presets; unobserved: null or empty in every sampled row'
+- description: ''
   name: fields_logo_fields_umbraco_file_crops
   type: character
-- description: Image width, pixels
+- description: ''
   name: fields_logo_fields_umbraco_width
   type: integer
-- description: Image height, pixels
+- description: ''
   name: fields_logo_fields_umbraco_height
   type: integer
-- description: File size, bytes
+- description: ''
   name: fields_logo_fields_umbraco_bytes
   type: integer
-- description: File extension
+- description: ''
   name: fields_logo_fields_umbraco_extension
   type: character
-- description: SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as
-    the sihf family's team_id.
+- description: ''
   name: team_id
   type: integer
-- description: Club website URL
+- description: ''
   name: fields_website
   type: character
-- description: Club ticket-shop URL
+- description: ''
   name: fields_ticket_url
   type: character
-- description: Per-game ticket URL template; empty string in the sample
+- description: ''
   name: fields_game_ticket_url
   type: character
-- description: Display-name override (sic); empty string in the sample
+- description: ''
   name: fields_overriden_name
   type: character
-- description: Roster override; empty string in the sample
+- description: ''
   name: fields_players
   type: character
-- description: Club key in the app's backend (e.g. 'evz')
+- description: ''
   name: fields_api_name
   type: character
 kind: dataframe

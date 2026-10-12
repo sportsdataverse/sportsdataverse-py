@@ -1,122 +1,116 @@
 columns:
-- description: SIHF game id `<season(4)><competition(4)><sequence(6)>` (Int64; e.g.
-    20261105000325, 1105 = National League). The same id as the sihf family's game_id;
-    its first four digits are the season END year.
+- description: ''
   name: game_id
   type: integer
-- description: 'home or away: the side of the team this row belongs to.'
+- description: ''
   name: team_side
   type: character
-- description: SIHF team id (Int64; e.g. 101151 = HC Davos). The same key space as
-    the sihf family's team_id.
+- description: ''
   name: team_id
   type: integer
-- description: SIHF licence number (Int64; e.g. 305519 = Tobias Geisser). Joins the
-    sihf family's player_id and every SIHF *LicenceNr.
+- description: ''
   name: player_id
   type: integer
-- description: Sweater number, a string
+- description: ''
   name: number
   type: character
-- description: First name
+- description: ''
   name: first_name
   type: character
-- description: Last name
+- description: ''
   name: last_name
   type: character
-- description: Initial and last name, e.g. 'S. Aeschlimann'
+- description: ''
   name: short_name
   type: character
-- description: First and last name
+- description: ''
   name: name
   type: character
-- description: goalkeeper, defender or forwarder (sic)
+- description: ''
   name: position
   type: character
-- description: Faceoffs won
+- description: ''
   name: fow
   type: integer
-- description: Faceoffs lost
+- description: ''
   name: fol
   type: integer
-- description: Shots on goal
+- description: ''
   name: sog
   type: integer
-- description: Shots that missed the net
+- description: ''
   name: shm
   type: integer
-- description: Shots that hit the post
+- description: ''
   name: shp
   type: integer
-- description: Own shots blocked by an opponent
+- description: ''
   name: shb
   type: integer
-- description: Opponent shots blocked
+- description: ''
   name: bks
   type: integer
-- description: Time on ice, seconds
+- description: ''
   name: toi
   type: integer
-- description: Even-strength time on ice, seconds
+- description: ''
   name: toi_eq
   type: integer
-- description: Power-play time on ice, seconds
+- description: ''
   name: toi_pp
   type: integer
-- description: Shorthanded time on ice, seconds
+- description: ''
   name: toi_pk
   type: integer
-- description: Penalty minutes
+- description: ''
   name: pim
   type: integer
-- description: Goals
+- description: ''
   name: g
   type: integer
-- description: First assists
+- description: ''
   name: a1
   type: integer
-- description: Second assists
+- description: ''
   name: a2
   type: integer
-- description: 'Plus count: on ice for an even-strength or shorthanded goal for'
+- description: ''
   name: pl
   type: integer
-- description: 'Minus count: on ice for a goal against'
+- description: ''
   name: mi
   type: integer
-- description: Goaltender time played, hundredths of a minute (6000 = 60:00; = seconds
-    / 0.6)
+- description: ''
   name: mip
   type: integer
-- description: Goals against
+- description: ''
   name: ga
   type: integer
-- description: Saves
+- description: ''
   name: svs
   type: integer
-- description: Shots on goal against
+- description: ''
   name: sa
   type: integer
-- description: Goals-against average; 0 in every sampled row, even for goaltenders
-    who conceded
+- description: ''
   name: gaa
   type: numeric
-- description: Save percentage, 0-100
+- description: ''
   name: save_percentage
   type: numeric
-- description: 'Faceoffs taken (upstream `fo`: fow + fol). Not penalties.'
+- description: ''
   name: faceoffs
   type: integer
-- description: Faceoff win percentage (upstream `foPercentage`); -1 without faceoffs.
+- description: ''
   name: faceoffs_percentage
   type: numeric
-- description: Assists (a1 + a2)
+- description: ''
   name: a
   type: integer
-- description: Points (goals + assists)
+- description: ''
   name: pts
   type: integer
-- description: Plus/minus (pl - mi)
+- description: ''
   name: pl_mi
   type: integer
 kind: dataframe
