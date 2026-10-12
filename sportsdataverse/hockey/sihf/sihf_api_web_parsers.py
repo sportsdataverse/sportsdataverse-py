@@ -301,9 +301,9 @@ def parse_sihf_table(
     pseudo-team ``100000`` / ``Durchschnitt``).
 
     Args:
-        raw: a SIHF table JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
-        columns: the table's documented column names (the generated wrappers pass their
+        raw (dict | None): a SIHF table JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): the table's documented column names (the generated wrappers pass their
             returns-schema). A table with no rows then parses to a zero-row frame with exactly
             these columns, in their documented dtypes.
 
@@ -454,9 +454,9 @@ def parse_sihf_pbp(
     ``goalie_*``.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
-        columns: accepted for the generated wrappers, which pass the documented column names;
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
             unused, because a game frame always carries its fixed documented schema.
 
     Returns:
@@ -471,7 +471,7 @@ def parse_sihf_pbp(
 
             from sportsdataverse.hockey.sihf import sihf_pbp
 
-            pbp = sihf_pbp(game_id=20261105000421)
+            pbp = sihf_pbp(game_id=20261105000325)
             print(pbp.shape)
 
         Pipeline next step (one line)::
@@ -680,9 +680,9 @@ def parse_sihf_game_player_stats(
     ``faceoffs_percent`` is null (``"-"`` upstream) for a player with no faceoffs.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
-        columns: accepted for the generated wrappers, which pass the documented column names;
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
             unused, because a game frame always carries its fixed documented schema.
 
     Returns:
@@ -697,7 +697,7 @@ def parse_sihf_game_player_stats(
 
             from sportsdataverse.hockey.sihf import sihf_game_player_stats
 
-            box = sihf_game_player_stats(game_id=20261105000421)
+            box = sihf_game_player_stats(game_id=20261105000325)
             print(box.shape)
 
         Pipeline next step (one line)::
@@ -728,9 +728,9 @@ def parse_sihf_game_goalie_stats(
     rates.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
-        columns: accepted for the generated wrappers, which pass the documented column names;
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
             unused, because a game frame always carries its fixed documented schema.
 
     Returns:
@@ -745,7 +745,7 @@ def parse_sihf_game_goalie_stats(
 
             from sportsdataverse.hockey.sihf import sihf_game_goalie_stats
 
-            goalies = sihf_game_goalie_stats(game_id=20261105000421)
+            goalies = sihf_game_goalie_stats(game_id=20261105000325)
             print(goalies.shape)
 
         Pipeline next step (one line)::
@@ -783,9 +783,9 @@ def parse_sihf_game_team_stats(
     times (``PPT`` / ``PKT``).
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
-        columns: accepted for the generated wrappers, which pass the documented column names;
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
             unused, because a game frame always carries its fixed documented schema.
 
     Returns:
@@ -800,7 +800,7 @@ def parse_sihf_game_team_stats(
 
             from sportsdataverse.hockey.sihf import sihf_game_team_stats
 
-            stats = sihf_game_team_stats(game_id=20261105000421)
+            stats = sihf_game_team_stats(game_id=20261105000325)
             print(stats.shape)
 
         Pipeline next step (one line)::
@@ -891,9 +891,9 @@ def parse_sihf_game_info(
     venue and ``spectators``; and the officials and broadcasters as comma-joined names.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
-        columns: accepted for the generated wrappers, which pass the documented column names;
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
             unused, because a game frame always carries its fixed documented schema.
 
     Returns:
@@ -908,7 +908,7 @@ def parse_sihf_game_info(
 
             from sportsdataverse.hockey.sihf import sihf_game_info
 
-            info = sihf_game_info(game_id=20261105000421)
+            info = sihf_game_info(game_id=20261105000325)
             print(info.shape)
 
         Pipeline next step (one line)::
@@ -1020,9 +1020,9 @@ def parse_sihf_game_lineups(
     roster.
 
     Args:
-        raw: the ``gameoverview`` JSON body.
-        return_as_pandas: return a pandas DataFrame instead of polars.
-        columns: accepted for the generated wrappers, which pass the documented column names;
+        raw (dict | None): the ``gameoverview`` JSON body.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
             unused, because a game frame always carries its fixed documented schema.
 
     Returns:
@@ -1037,7 +1037,7 @@ def parse_sihf_game_lineups(
 
             from sportsdataverse.hockey.sihf import sihf_game_lineups
 
-            lineups = sihf_game_lineups(game_id=20261105000421)
+            lineups = sihf_game_lineups(game_id=20261105000325)
             print(lineups.shape)
 
         Pipeline next step (one line)::

@@ -549,10 +549,10 @@ def sihf_pbp(
     """Event timeline of one game: goals, penalties, goaltender changes, revoked goals and shootout attempts.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/gameoverview``
-    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en
 
     Args:
-        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
         language: Response language. Only part of the body is translated: status, position and penalty names stay German.
         return_parsed: parse the payload through parse_sihf_pbp -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -570,7 +570,7 @@ def sihf_pbp(
         Quick start::
 
             from sportsdataverse.hockey.sihf import sihf_pbp
-            sihf_pbp(game_id=20261105000421)
+            sihf_pbp(game_id=20261105000325)
 
         See Also:
             * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
@@ -607,10 +607,10 @@ def sihf_game_info(
     """Header of one game: league, phase, teams, final and per-period score and shots, venue, attendance, officials.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/gameoverview``
-    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en
 
     Args:
-        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
         language: Response language. Only part of the body is translated: status, position and penalty names stay German.
         return_parsed: parse the payload through parse_sihf_game_info -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -628,7 +628,7 @@ def sihf_game_info(
         Quick start::
 
             from sportsdataverse.hockey.sihf import sihf_game_info
-            sihf_game_info(game_id=20261105000421)
+            sihf_game_info(game_id=20261105000325)
 
         See Also:
             * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
@@ -665,10 +665,10 @@ def sihf_game_player_stats(
     """Skater box score of one game, both sides, with ice time and faceoffs.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/gameoverview``
-    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en
 
     Args:
-        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
         language: Response language. Only part of the body is translated: status, position and penalty names stay German.
         return_parsed: parse the payload through parse_sihf_game_player_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -686,7 +686,7 @@ def sihf_game_player_stats(
         Quick start::
 
             from sportsdataverse.hockey.sihf import sihf_game_player_stats
-            sihf_game_player_stats(game_id=20261105000421)
+            sihf_game_player_stats(game_id=20261105000325)
 
         See Also:
             * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
@@ -725,10 +725,10 @@ def sihf_game_goalie_stats(
     """Goaltender box score of one game, both sides.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/gameoverview``
-    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en
 
     Args:
-        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
         language: Response language. Only part of the body is translated: status, position and penalty names stay German.
         return_parsed: parse the payload through parse_sihf_game_goalie_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -746,7 +746,7 @@ def sihf_game_goalie_stats(
         Quick start::
 
             from sportsdataverse.hockey.sihf import sihf_game_goalie_stats
-            sihf_game_goalie_stats(game_id=20261105000421)
+            sihf_game_goalie_stats(game_id=20261105000325)
 
         See Also:
             * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
@@ -785,10 +785,10 @@ def sihf_game_team_stats(
     """Team stats of one game: shots by period, faceoffs by zone, penalty minutes, power play and penalty kill.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/gameoverview``
-    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en
 
     Args:
-        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
         language: Response language. Only part of the body is translated: status, position and penalty names stay German.
         return_parsed: parse the payload through parse_sihf_game_team_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -806,7 +806,7 @@ def sihf_game_team_stats(
         Quick start::
 
             from sportsdataverse.hockey.sihf import sihf_game_team_stats
-            sihf_game_team_stats(game_id=20261105000421)
+            sihf_game_team_stats(game_id=20261105000325)
 
         See Also:
             * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
@@ -845,10 +845,10 @@ def sihf_game_lineups(
     """Lineups of one game by unit and slot, plus the absentees.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/gameoverview``
-    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000421&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/gameoverview?alias=gameDetail&searchQuery=20261105000325&language=en
 
     Args:
-        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000421.
+        game_id: Required. SIHF game id (game_id in sihf_results), e.g. 20261105000325.
         language: Response language. Only part of the body is translated: status, position and penalty names stay German.
         return_parsed: parse the payload through parse_sihf_game_lineups -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -866,7 +866,7 @@ def sihf_game_lineups(
         Quick start::
 
             from sportsdataverse.hockey.sihf import sihf_game_lineups
-            sihf_game_lineups(game_id=20261105000421)
+            sihf_game_lineups(game_id=20261105000325)
 
         See Also:
             * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves

@@ -5,6 +5,14 @@ League, MyHockey League, the amateur, junior and women's leagues -- as season ta
 (results, standings, skater and goalie stats) and one page per game (event timeline,
 box scores, team stats, lineups). Unofficial use of a public API: payloads are not
 redistributed as release assets.
+
+The six game wrappers all read the same ``/gameoverview`` page, so fetch it once and parse it
+as many ways as needed::
+
+    from sportsdataverse.hockey.sihf import parse_sihf_game_info, parse_sihf_game_lineups, sihf_pbp
+
+    raw = sihf_pbp(game_id=20261105000325, return_parsed=False)
+    info, lineups = parse_sihf_game_info(raw), parse_sihf_game_lineups(raw)
 """
 
 from __future__ import annotations

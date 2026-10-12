@@ -16683,10 +16683,10 @@ sihf_game_goalie_stats:
   saves: Shots on goal saved by the goaltender.
   shots_against: Shots on goal faced.
   saves_percentage: Save percentage on a 0-100 scale (91.25 = .9125).
-  seconds_played: Ice time as "mm:ss" (a string, despite the upstream name).
+  seconds_played: 'Ice time as "mm:ss" (a string, despite the upstream name). Minutes are not capped at 59: an overtime game reads "65:00", a season total "3615:02".'
   goals_against_average: Goals against per 60 minutes in this game.
   penalty_in_minutes: Penalty minutes.
-  row_type: '"data" for a regular row; "average" or "total" for a summary row SIHF mixes into the table.'
+  row_type: '"data" for every row: a game goalie box has no summary rows.'
   player_id: SIHF licence number of the player (Int64 join key), resolved from the game's roster.
 sihf_game_info:
   game_id: SIHF game id (Int64 join key; the details link of sihf_results, the searchQuery of the game wrappers).
@@ -16778,7 +16778,7 @@ sihf_game_team_stats:
   away_value: Away team's value, as a string.
 sihf_goalie_stats:
   season: Season by its END year (2026 = 2025-26), from the body's echo of the Season filter.
-  phase_id: SIHF phase id (regular season, a playoff round, ...).
+  phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   rank: Rank in the table; null on a summary row.
   player: Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas").
   team_id: SIHF team id (Int64 join key).
@@ -16791,7 +16791,7 @@ sihf_goalie_stats:
   shots_against: Shots on goal faced.
   saves: Shots on goal saved by the goaltender.
   saves_percentage: Save percentage on a 0-100 scale (91.25 = .9125).
-  seconds_played: Ice time as "mm:ss" (a string, despite the upstream name).
+  seconds_played: 'Ice time as "mm:ss" (a string, despite the upstream name). Minutes are not capped at 59: an overtime game reads "65:00", a season total "3615:02".'
   penalty_in_minutes: Penalty minutes.
   goals: Goals scored by the goaltender (almost always 0).
   assists: Assists by the goaltender.
@@ -16833,14 +16833,14 @@ sihf_pbp:
   text: Event text exactly as SIHF prints it (markdown bold included).
 sihf_player_stats:
   season: Season by its END year (2026 = 2025-26), from the body's echo of the Season filter.
-  phase_id: SIHF phase id (regular season, a playoff round, ...).
+  phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   rank: Rank in the table; null on a summary row.
   player: Player name as SIHF prints it, last name first (e.g., "Dahlbeck Klas").
   team_id: SIHF team id (Int64 join key).
   team_name: Team display name as SIHF publishes it.
   team_acronym: Team abbreviation as SIHF publishes it (e.g., "HCD").
   position: Position, German whatever the language (e.g., "Stürmer").
-  games_played: Games the player or team played in the selection.
+  games_played: Games the player played in the selection.
   goals: Goals scored by the player.
   assists: Assists (primary + secondary).
   points: Points (goals + assists).
@@ -16850,7 +16850,7 @@ sihf_player_stats:
   row_type: '"data" for a regular row; "average" or "total" for a summary row SIHF mixes into the table.'
 sihf_results:
   season: Season by its END year (2026 = 2025-26), from the body's echo of the Season filter.
-  phase_id: SIHF phase id (regular season, a playoff round, ...).
+  phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   day: Weekday abbreviation, German (e.g., "Di").
   date: Game date (local).
   time: Scheduled local start time, "hh:mm".
@@ -16877,12 +16877,12 @@ sihf_results:
   row_type: '"data" for a regular row; "average" or "total" for a summary row SIHF mixes into the table.'
 sihf_standings:
   season: Season by its END year (2026 = 2025-26), from the body's echo of the Season filter.
-  phase_id: SIHF phase id (regular season, a playoff round, ...).
+  phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.
   rank: Rank in the table; null on a summary row.
   team_id: SIHF team id (Int64 join key).
   team_name: Team display name as SIHF publishes it.
   team_acronym: Team abbreviation as SIHF publishes it (e.g., "HCD").
-  games_played: Games the player or team played in the selection.
+  games_played: Games the team played in the selection (every game, or home / away games only, per venue).
   points: Table points earned in the standings.
   points_quotient: Points per game.
   games_won_in_time: Wins in regulation.
