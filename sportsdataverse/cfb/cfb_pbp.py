@@ -783,6 +783,14 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     else:
         end_team_score_diff = pl.col("pos_score_diff_end")
 
+    # The game's last play: a game that ends on a Timeout row ends on the play before it (C-NF-12),
+    # which ends the game whatever WP the trailing Timeout row was scored at.
+    real_play = pl.col("type.text").fill_null("") != "Timeout"
+    last_play_number = pl.when(real_play).then(pl.col("game_play_number")).max()
+
+    def _next_play(expr: pl.Expr) -> pl.Expr:
+        return pl.when(real_play).then(expr).shift(-1).backward_fill()
+
     # Dead-ball rows between a touchdown and its try: the clock stoppages and a penalty
     # walked off before the try. The penalty inherits the touchdown's end state like a
     # timeout, instead of the model's placeholder (282710130: the touchdown ends at 0.081,
@@ -907,7 +915,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 (pl.col("status_type_completed") == True)
                 .and_(
                     (pl.col("lead_play_type").is_null()).or_(
-                        pl.col("game_play_number") == pl.col("game_play_number").max(),
+                        pl.col("game_play_number") == last_play_number,
                     ),
                 )
                 .and_(end_team_score_diff > 0),
@@ -917,7 +925,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 (pl.col("status_type_completed") == True)
                 .and_(
                     (pl.col("lead_play_type").is_null()).or_(
-                        pl.col("game_play_number") == pl.col("game_play_number").max(),
+                        pl.col("game_play_number") == last_play_number,
                     ),
                 )
                 .and_(end_team_score_diff < 0),
@@ -925,18 +933,20 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .then(0.0)
             .when(try_to_kickoff)
             .then(kick_board)
+            # the play that ends a half borrows the next real play's wp_before, past a Timeout
+            # row (C-NF-12): 401761665's timeout before overtime is filed to the other team
             .when(
                 (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
+                .and_(pl.col("start.pos_team.id") == _next_play(pl.col("start.pos_team.id")))
                 .and_(pl.col("type.text") != "Timeout"),
             )
-            .then(pl.col(lwb))
+            .then(_next_play(pl.col(wb)))
             .when(
                 (pl.col("end_of_half") == True)
                 .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
                 .and_(pl.col("type.text") != "Timeout"),
             )
-            .then(1 - pl.col(lwb))
+            .then(1 - _next_play(pl.col(wb)))
             .when(
                 (pl.col("end_of_half") == True)
                 .and_(pl.col("start.pos_team_receives_2H_kickoff") == False)
@@ -3991,6 +4001,11 @@ class CFBPlayProcess(object):
         play_df = play_df.filter(
             pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
         )
+        # A half or game that ends on a Timeout row ends on the play before it (C-NF-12): end_of_half
+        # reads the next row that is not a Timeout, and a Timeout row never takes it.
+        half_play = pl.col("type.text").fill_null("") != "Timeout"
+        next_half = pl.when(half_play).then(pl.col("half")).shift(-1).backward_fill()
+        next_period = pl.when(half_play).then(pl.col("period")).shift(-1).backward_fill()
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
@@ -4019,11 +4034,11 @@ class CFBPlayProcess(object):
                 # a fresh possession), and a finished game's last row (a live game's latest row
                 # has no next row YET). This compared against lead_half in the same
                 # with_columns as its fill, so it read the unfilled null on the game's last row.
-                end_of_half=(
-                    (pl.col("half").shift(-1) != pl.col("half"))
-                    | ((pl.col("period") == 4) & (pl.col("period").shift(-1) >= 5))
-                ).fill_null(False)
-                | (pl.col("half").shift(-1).is_null() & (pl.col("status_type_completed") == True)).fill_null(False),
+                end_of_half=half_play
+                & (
+                    ((next_half != pl.col("half")) | ((pl.col("period") == 4) & (next_period >= 5))).fill_null(False)
+                    | (next_half.is_null() & (pl.col("status_type_completed") == True)).fill_null(False)
+                ),
                 down_1=pl.col("start.down") == 1,
                 down_2=pl.col("start.down") == 2,
                 down_3=pl.col("start.down") == 3,

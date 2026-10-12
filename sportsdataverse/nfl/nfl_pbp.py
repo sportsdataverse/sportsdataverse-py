@@ -1676,8 +1676,15 @@ class NFLPlayProcess(object):
             keep="last",
             maintain_order=True,
         )
+        # The 2002-04 feed types its "End of the game." row Unknown, so the text decides (C-M2): as a
+        # play it took an EPA, and the end of the game from the real last play.
+        end_of_game_row = pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)
         play_df = play_df.filter(
-            pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
+            (
+                pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss")
+                | end_of_game_row
+            )
+            == False,
         )
         # ESPN ends a returned kickoff (2014 on) and a missed field goal (before 2014) at down -1,
         # and the EP and WP models read that as no down at all: 401282817's return to the 17 scored
@@ -1711,6 +1718,19 @@ class NFLPlayProcess(object):
         # The first snap is 1st & 10, or 1st & goal inside the 10; ESPN's end distance on a return is
         # often stale (R810-1). A missed field goal's spot (set later) is never inside the 10.
         goal_to_go = pl.col("end.yardsToEndzone").is_between(1, 9) & ~missed_fg
+        # The play that ends a half: the first half's last play, regulation's last play when the game
+        # goes to overtime, and a finished game's last play (nflfastR helper_add_ep_wp.R:710-724; its
+        # EPA is -EP_start unless it scored). It reads the next play that is not a clock stoppage, so a
+        # half that ends on a timeout ends on the play before it (C-NF-12), and the shift, not
+        # lead_half: compared with lead_half in that column's own fill, it read the unfilled null on
+        # the game's last row (C-H2). Port of cfb_pbp.py __add_downs_data.
+        half_play = ~stop
+        next_half = pl.when(half_play).then(pl.col("half")).shift(-1).backward_fill()
+        next_period = pl.when(half_play).then(pl.col("period")).shift(-1).backward_fill()
+        half_end = half_play & (
+            ((next_half != pl.col("half")) | ((pl.col("period") == 4) & (next_period >= 5))).fill_null(False)
+            | (next_half.is_null() & (pl.col("status_type_completed") == True)).fill_null(False)  # noqa: E712
+        )
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
@@ -1741,7 +1761,7 @@ class NFLPlayProcess(object):
             )
             .with_columns(
                 pl.when(pl.col("lead_half").is_null()).then(2).otherwise(pl.col("lead_half")).alias("lead_half"),
-                end_of_half=pl.col("half") != pl.col("lead_half"),
+                end_of_half=half_end,
                 down_1=pl.col("start.down") == 1,
                 down_2=pl.col("start.down") == 2,
                 down_3=pl.col("start.down") == 3,
