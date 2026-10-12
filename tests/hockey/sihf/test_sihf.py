@@ -172,7 +172,13 @@ def test_a_phase_without_a_count_keeps_its_name():
 
 
 @pytest.mark.parametrize(
-    "entry", [{"alias": "657"}, {"alias": "657", "name": ["x"]}, {"alias": "657", "name": {"a": 1}}]
+    "entry",
+    [
+        {"alias": "657"},
+        {"alias": "657", "name": "  "},
+        {"alias": "657", "name": ["x"]},
+        {"alias": "657", "name": {"a": 1}},
+    ],
 )
 def test_a_phase_name_of_the_wrong_type_is_null(entry):
     raw = _load(PHASES)
