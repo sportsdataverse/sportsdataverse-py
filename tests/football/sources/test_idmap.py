@@ -70,6 +70,7 @@ def test_lookup_cle_at_jax(idmap):
     assert row["home_espn_team_id"] == "30" and row["home_team"]["espn_abbr"] == "JAX"
     assert row["home_team"]["shield_team_id"] == "10402250-89fe-7b86-ef98-9062cd354256"
     assert row["home_team"]["yahoo_team_id"] == "nfl.t.30" and row["away_team"]["yahoo_team_id"] == "nfl.t.5"
+    assert row["home_team"]["fox_team_id"] == "31" and row["away_team"]["fox_team_id"] == "7"
     assert _lookup(games, 1) is None
 
 
