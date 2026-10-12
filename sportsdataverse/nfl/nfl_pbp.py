@@ -86,6 +86,7 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_xpass,
 )
 from sportsdataverse.nfl.model_vars import (
+    ESPN_FULL_KICK_TEXT_FROM,
     SPREAD_TIME_DECAY_EXPONENT,
     touchback_yardline_expr,
     defense_score_vec,
@@ -107,22 +108,42 @@ from sportsdataverse.cfb.cfb_pbp import _PENALTY_NEGATED_TEXT
 
 
 def _touchdown_did_not_stand() -> pl.Expr:
-    """Whether a touchdown the row's text names did not stand.
+    """Whether a touchdown the row's text or type names did not stand.
 
     The CFB rule (``cfb_pbp._touchdown_negated``, C-M1) with ESPN's ``scoringPlay`` as the gate. On
     a row ESPN did not score, the no-play marker ("TOUCHDOWN NULLIFIED by Penalty") or a replay
     reversal negates it: ESPN still types "... for 29 yards, TOUCHDOWN ... and the play was REVERSED"
-    as a "Passing Touchdown" (291018018, 401671740; C-NF-6). On a row ESPN scored only the nullified
-    marker does (6 published 2009-12 rows score one): its "No Play" belongs to the try or to the
-    ruling a reversal INTO the touchdown overturned (2812140120518, 4005542932688), and the NFL
-    text has no CFB "clock" tail to cut those off at.
+    as a "Passing Touchdown" (291018018, 401671740; C-NF-6). So does a "Kickoff/Punt Return
+    Touchdown" type whose text names no touchdown, from ``ESPN_FULL_KICK_TEXT_FROM`` (2009): ESPN
+    types 2024 onside and short-of-landing-zone kicks that way (R808-4).
+
+    On a row ESPN scored, the "No Play" belongs to the try or to the ruling a reversal INTO the
+    touchdown overturned (2812140120518, 4005542932688), and the NFL text has no CFB "clock" tail to
+    cut those off at. Two markers still negate there. "Nullified by penalty" does unless the game's
+    next row is a try (Extra Point / Two Point, made or not): only a touchdown that stood is followed
+    by one, the foul having been enforced on the kickoff (3112180024175, R808-2). Of the 38 scored
+    "nullified" rows 2006-24 only that one has a try next; 2911290162862 (nflverse 0) does not. A
+    reversal negates when ESPN types the row a Safety: the touchdown was reversed into one
+    (2911260083341, R808-3). ``__add_play_type_flags`` stores the result once as
+    ``_td_did_not_stand`` (the next row is read within ``game_id``) for td_play, pass_td and rush_td.
     """
     text = pl.col("text")
+    try_follows = (
+        pl.col("type.text").shift(-1).over("game_id").str.contains(r"^(?:Extra Point|Two Point|Two-Point)")
+    ).fill_null(False)
     unscored = _PENALTY_NEGATED_TEXT + "|reversed"
+    mistyped_return = (
+        pl.col("type.text").is_in(["Kickoff Return Touchdown", "Punt Return Touchdown"])
+        & ~text.str.contains("(?i)touchdown|for a TD")
+        & (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)
+    )
     return (
         pl.when(pl.col("scoringPlay") == True)
-        .then(text.str.contains("(?i)nullified by penalty"))
-        .otherwise(text.str.contains(unscored))
+        .then(
+            (text.str.contains("(?i)nullified by penalty") & ~try_follows)
+            | (text.str.contains("(?i)reversed") & (pl.col("type.text") == "Safety"))
+        )
+        .otherwise(text.str.contains(unscored) | mistyped_return)
         .fill_null(False)
     )
 
@@ -1815,13 +1836,14 @@ class NFLPlayProcess(object):
         """
         # --- Touchdown, Fumble, Special Teams flags -----------------
         play_df = (
-            play_df.with_columns(
+            play_df.with_columns(_td_did_not_stand=_touchdown_did_not_stand())
+            .with_columns(
                 scoring_play=pl.when(pl.col("type.text").is_in(scores_vec)).then(True).otherwise(False),
                 td_play=(
                     pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
                     | pl.col("type.text").str.contains("Touchdown")
                 )
-                & ~_touchdown_did_not_stand(),
+                & ~pl.col("_td_did_not_stand"),
                 touchdown=pl.col("type.text").str.contains("(?i)touchdown"),
                 ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
                 td_check=pl.col("text").str.contains("(?i)touchdown"),
@@ -2966,7 +2988,7 @@ class NFLPlayProcess(object):
                 # ``type.text`` alone does not catch every one: ESPN labels some pick-sixes
                 # "Passing Touchdown" and some "Interception Return", so the text -- which
                 # says the ball was intercepted or lost and THEN scored -- gates first (O3).
-                pass_td=pl.when(_touchdown_did_not_stand())
+                pass_td=pl.when(pl.col("_td_did_not_stand"))
                 .then(False)
                 .when(_returned_for_touchdown("text"))
                 .then(False)
@@ -2979,7 +3001,7 @@ class NFLPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                rush_td=pl.when(_touchdown_did_not_stand())
+                rush_td=pl.when(pl.col("_td_did_not_stand"))
                 .then(False)
                 .when(_returned_for_touchdown("text"))
                 .then(False)
@@ -3049,6 +3071,7 @@ class NFLPlayProcess(object):
                 .str.extract(r"(\d+)")
                 .cast(pl.Int32),
             )
+            .drop("_td_did_not_stand")
             .with_columns(
                 # A field goal snaps from ESPN's own yard line; the kick distance is a
                 # fallback for the oldest feeds, and it is 18 yards longer than the

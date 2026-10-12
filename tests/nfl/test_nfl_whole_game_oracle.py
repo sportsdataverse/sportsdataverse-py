@@ -27,6 +27,7 @@ game asserts the oracle plainly. Tolerances on model columns are the agreement m
 from __future__ import annotations
 
 import copy
+import functools
 import gzip
 import json
 import math
@@ -490,8 +491,59 @@ def test_td_flags_scored_row_keeps_a_touchdown_its_no_play_does_not_touch():
         "runner broke the plane ruling, and the play was Upheld. (Kick formation) C.Santos extra point is GOOD. "
         "PENALTY on KC-E.Fisher, False Start, 5 yards, enforced at OAK 2 - No Play.",
     ]
-    f = pl.DataFrame({"text": texts, "scoringPlay": [True, True]})
+    f = pl.DataFrame(
+        {
+            "text": texts,
+            "scoringPlay": [True, True],
+            "type.text": ["Passing Touchdown", "Passing Touchdown"],
+            "game_id": [281214012, 400554293],
+            "season": [2008, 2014],
+        }
+    )
     assert f.select(_touchdown_did_not_stand()).to_series().to_list() == [False, False]
+
+
+# Untrimmed nfl-raw summaries holding the three task 2.20 shapes (fixtures/td_flag_residuals/; not
+# whole-game captures). Oracle: nflverse touchdown / rush_touchdown on the play (local pbp_<season>.parquet,
+# values in the fixtures README) -> the (td_play, rush_td) the row must carry; pass_td is False on all four.
+_TD_RESIDUALS = {
+    # R808-2: "TOUCHDOWN NULLIFIED by Penalty", but the excessive-celebration foul was enforced on the
+    # kickoff and the touchdown stood: the next row is the try, "Extra Point Good" (nflverse 1/1).
+    (311218002, 3112180024175): (True, True),
+    # R840-2: a scored "TOUCHDOWN NULLIFIED" row with no try after it (holding; nflverse 0). ESPN's raw score
+    # glitches on the row before (27 -> 24), which a score-movement signal would have read as a touchdown.
+    (291129016, 2911290162862): (False, False),
+    # R808-3: a fumble-return touchdown reversed on challenge into a safety, which ESPN scores (nflverse 0).
+    (291126008, 2911260083341): (False, False),
+    # R808-4: a 2024 short-of-landing-zone kick and an onside kick, unscored, typed "Kickoff Return
+    # Touchdown" with no touchdown in the text (nflverse 0).
+    (401671715, 4016717152262): (False, False),
+    (401671715, 4016717154728): (False, False),
+    # R840-1: the floor. A real 2007 kickoff return touchdown the bare-text feed writes as "Kickoff", unscored,
+    # with ESPN type "Kickoff Return Touchdown" (nflverse touchdown 1, return_touchdown 1); before 2009 it stands.
+    (271209034, 2712090341856): (True, False),
+}
+
+
+@functools.cache
+def _residual_plays(game_id: int) -> pl.DataFrame:
+    with gzip.open(FIX / "td_flag_residuals" / f"summary_{game_id}.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(nfl_fourth_down, "_try_load", lambda name: None)
+        proc = NFLPlayProcess(gameId=game_id)
+        proc.espn_nfl_pbp(summary=summary)
+        proc.run_processing_pipeline()
+    return proc.plays_frame
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_TD_RESIDUALS))
+def test_td_flags_residual_row_matches_nflverse(game_id, play_id):
+    row = _residual_plays(game_id).filter(pl.col("id") == play_id).row(0, named=True)
+    assert (row["td_play"], row["rush_td"], row["pass_td"]) == (*_TD_RESIDUALS[(game_id, play_id)], False), (
+        row["type.text"],
+        row["text"],
+    )
 
 
 @pytest.mark.parametrize("game_id", _cases())
