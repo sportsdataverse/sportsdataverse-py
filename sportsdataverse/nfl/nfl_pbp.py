@@ -6636,14 +6636,21 @@ class NFLPlayProcess(object):
             & (pl.col("scrimmage_play") == True)
             & (pl.col("athlete_name").is_in(qbs_list)),
         )
+
+        def wmean(x: str, w: str) -> pl.Expr:
+            # A QB with no play of a type has no weight: 0/0 would be NaN, which the booster reads as missing. The
+            # trainer replaced that empty group with 0 (cfb_qbr@9ef6010 qbr_xgb.R:81-85, replace_na); any other NaN
+            # still propagates.
+            return pl.when(pl.col(w).sum() > 0).then((pl.col(x) * pl.col(w)).sum() / pl.col(w).sum()).otherwise(0.0)
+
         pass_qbr = (
             pass_qbr_box.group_by(["pos_team", "athlete_name"])
             .agg(
-                qbr_epa=(pl.col("qbr_epa") * pl.col("weight")).sum() / pl.col("weight").sum(),
-                sack_epa=(pl.col("sack_epa") * pl.col("sack_weight")).sum() / pl.col("sack_weight").sum(),
-                pass_epa=(pl.col("pass_epa") * pl.col("pass_weight")).sum() / pl.col("pass_weight").sum(),
-                rush_epa=(pl.col("rush_epa") * pl.col("rush_weight")).sum() / pl.col("rush_weight").sum(),
-                pen_epa=(pl.col("pen_epa") * pl.col("pen_weight")).sum() / pl.col("pen_weight").sum(),
+                qbr_epa=wmean("qbr_epa", "weight"),
+                sack_epa=wmean("sack_epa", "sack_weight"),
+                pass_epa=wmean("pass_epa", "pass_weight"),
+                rush_epa=wmean("rush_epa", "rush_weight"),
+                pen_epa=wmean("pen_epa", "pen_weight"),
                 spread=(pl.col("start.pos_team_spread").first()),
             )
             .fill_null(0.0)

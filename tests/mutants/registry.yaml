@@ -848,6 +848,18 @@
     the same swap scored on the committed 2023 slice drops Spearman(exp_qbr, ESPN Total QBR) below the
     post-reorder floor
 
+- id: nfl-qbr-empty-group-zero
+  group: qbr-order
+  finding: R795-1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.sum() / pl.col(w).sum()).otherwise(0.0)'
+  mutant: '.sum() / pl.col(w).sum()).otherwise(float("nan"))'
+  test: tests/nfl/test_qbr_feature_order.py -k no_sack_rush_or_penalty
+  expected: kill
+  note: >-
+    without the empty-group guard a QB with no sack/rush/penalty play gets 0/0 = NaN, which the booster
+    reads as missing (the trainer replaced it with 0); Eli Manning in 400874485 then carries nulls, not zeros
+
 - id: nfl-fourth-down-go-wp-scaled
   group: fourth-down-level
   finding: gap-C-125
