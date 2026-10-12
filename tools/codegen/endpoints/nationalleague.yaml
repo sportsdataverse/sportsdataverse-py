@@ -70,9 +70,8 @@ endpoints:
   parser: parse_nationalleague_games
   path: /games/team/{team_id}
   path_params:
-  - description: 'SIHF team id, a digit string (e.g. `101151` = HC Davos): the same
-      key space as the sihf/ table team cell `id` (an integer there). Joins every
-      teamId / homeTeamId / awayTeamId in this API.'
+  - description: SIHF team id (team_id in nl_standings; the same id as the sihf family's
+      team_id), e.g. 101144 = EV Zug.
     name: team_id
     required: true
     type: int
@@ -118,10 +117,8 @@ endpoints:
   parser: parse_nationalleague_game_overview
   path: /games/{game_id}
   path_params:
-  - description: 'SIHF game id, 14 digits `<season(4)><competition code(4)><sequence(6)>`
-      (e.g. `20261105000325`): the same key space as data.sihf.ch `gameoverview?searchQuery=`
-      (sihf/). Competition codes seen: `1105` NL, `1115` Swiss League, `0009`, `6105`,
-      `6115`, `6005`, `6606` exhibitions.'
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
     name: game_id
     required: true
     type: int
@@ -134,10 +131,8 @@ endpoints:
   parser: parse_nationalleague_pbp
   path: /games/{game_id}
   path_params:
-  - description: 'SIHF game id, 14 digits `<season(4)><competition code(4)><sequence(6)>`
-      (e.g. `20261105000325`): the same key space as data.sihf.ch `gameoverview?searchQuery=`
-      (sihf/). Competition codes seen: `1105` NL, `1115` Swiss League, `0009`, `6105`,
-      `6115`, `6005`, `6606` exhibitions.'
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
     name: game_id
     required: true
     type: int
@@ -150,10 +145,8 @@ endpoints:
   parser: parse_nationalleague_lineups
   path: /games/{game_id}
   path_params:
-  - description: 'SIHF game id, 14 digits `<season(4)><competition code(4)><sequence(6)>`
-      (e.g. `20261105000325`): the same key space as data.sihf.ch `gameoverview?searchQuery=`
-      (sihf/). Competition codes seen: `1105` NL, `1115` Swiss League, `0009`, `6105`,
-      `6115`, `6005`, `6606` exhibitions.'
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
     name: game_id
     required: true
     type: int
@@ -166,10 +159,8 @@ endpoints:
   parser: parse_nationalleague_player_box
   path: /games/{game_id}
   path_params:
-  - description: 'SIHF game id, 14 digits `<season(4)><competition code(4)><sequence(6)>`
-      (e.g. `20261105000325`): the same key space as data.sihf.ch `gameoverview?searchQuery=`
-      (sihf/). Competition codes seen: `1105` NL, `1115` Swiss League, `0009`, `6105`,
-      `6115`, `6005`, `6606` exhibitions.'
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
     name: game_id
     required: true
     type: int
@@ -182,10 +173,8 @@ endpoints:
   parser: parse_nationalleague_team_stats
   path: /games/{game_id}
   path_params:
-  - description: 'SIHF game id, 14 digits `<season(4)><competition code(4)><sequence(6)>`
-      (e.g. `20261105000325`): the same key space as data.sihf.ch `gameoverview?searchQuery=`
-      (sihf/). Competition codes seen: `1105` NL, `1115` Swiss League, `0009`, `6105`,
-      `6115`, `6005`, `6606` exhibitions.'
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
     name: game_id
     required: true
     type: int
@@ -198,10 +187,8 @@ endpoints:
   parser: parse_nationalleague_shots
   path: /games/{game_id}
   path_params:
-  - description: 'SIHF game id, 14 digits `<season(4)><competition code(4)><sequence(6)>`
-      (e.g. `20261105000325`): the same key space as data.sihf.ch `gameoverview?searchQuery=`
-      (sihf/). Competition codes seen: `1105` NL, `1115` Swiss League, `0009`, `6105`,
-      `6115`, `6005`, `6606` exhibitions.'
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
     name: game_id
     required: true
     type: int
@@ -285,9 +272,8 @@ endpoints:
   parser: parse_nationalleague_player_stats
   path: /player/team/{team_id}
   path_params:
-  - description: 'SIHF team id, a digit string (e.g. `101151` = HC Davos): the same
-      key space as the sihf/ table team cell `id` (an integer there). Joins every
-      teamId / homeTeamId / awayTeamId in this API.'
+  - description: SIHF team id (team_id in nl_standings; the same id as the sihf family's
+      team_id), e.g. 101144 = EV Zug.
     name: team_id
     required: true
     type: int
@@ -318,9 +304,8 @@ endpoints:
   parser: parse_nationalleague_player_stats
   path: /player/{player_id}
   path_params:
-  - description: 'SIHF licence number, a digit string: the player id of this API and
-      the sihf/ licence number (`players[].id`, every `*LicenceNr`; 305519 = Tobias
-      Geisser in both).'
+  - description: SIHF licence number (player_id in nl_player_stats; joins the sihf
+      family's player_id), e.g. 305519.
     name: player_id
     required: true
     type: int
@@ -356,9 +341,8 @@ endpoints:
   parser: parse_nationalleague_team_info
   path: /teams/{team_id}/info
   path_params:
-  - description: 'SIHF team id, a digit string (e.g. `101151` = HC Davos): the same
-      key space as the sihf/ table team cell `id` (an integer there). Joins every
-      teamId / homeTeamId / awayTeamId in this API.'
+  - description: SIHF team id (team_id in nl_standings; the same id as the sihf family's
+      team_id), e.g. 101144 = EV Zug.
     name: team_id
     required: true
     type: int

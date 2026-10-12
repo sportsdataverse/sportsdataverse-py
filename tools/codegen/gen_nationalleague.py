@@ -133,6 +133,14 @@ ENDPOINTS: List[Tuple[str, str, str, str, Tuple[str, ...], Any]] = [
 # Path tokens -> wrapper argument names (ids are Int64 in every frame, so they are ints here too).
 _PATH_PARAM = {"gameId": "game_id", "teamId": "team_id", "playerId": "player_id"}
 
+# Argument prose for the path ids (the spec describes the wire's digit string; the argument is an int).
+_PATH_DOC = {
+    "game_id": "SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>` (game_id in nl_schedule; the same "
+    "id as the sihf family's game_id), e.g. 20261105000325.",
+    "team_id": "SIHF team id (team_id in nl_standings; the same id as the sihf family's team_id), e.g. 101144 = EV Zug.",
+    "player_id": "SIHF licence number (player_id in nl_player_stats; joins the sihf family's player_id), e.g. 305519.",
+}
+
 # The game page ignores ``season`` (the game id fixes it; dropping it served the same game), so the
 # six game wrappers do not take it.
 _IGNORED_QUERY = {_GAME: {"season"}}
@@ -266,7 +274,7 @@ def _params(path: str, op: dict) -> Tuple[List[dict], List[dict], Dict[str, Any]
         wire, desc = prm["name"], str(prm.get("description") or "").strip()
         if prm.get("in") == "path":
             name = _PATH_PARAM[wire]
-            pps.append({"name": name, "type": "int", "required": True, "description": desc})
+            pps.append({"name": name, "type": "int", "required": True, "description": _PATH_DOC[name]})
         elif prm.get("in") == "query" and wire not in _IGNORED_QUERY.get(path, set()):
             name = underscore(wire)
             qps.append({"name": name, "query_key": wire, "type": "int", "description": desc})
