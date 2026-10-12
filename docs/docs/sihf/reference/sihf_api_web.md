@@ -225,7 +225,7 @@ Phases of a league season (regular season, play-in and playoff rounds, playout):
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/table`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?searchQuery=1%2F%2F&Phase=&Season=2026&League=1&alias=results&language=en](https://data.sihf.ch/statistic/api/cms/table?searchQuery=1%2F%2F&Phase=&Season=2026&League=1&alias=results&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?searchQuery=1%2F%2F1&alias=results&language=en&filterBy=Season%2CPhase%2CDate&filterQuery=2026%2F%2F01.07.2025-30.06.2026](https://data.sihf.ch/statistic/api/cms/table?searchQuery=1%2F%2F1&alias=results&language=en&filterBy=Season%2CPhase%2CDate&filterQuery=2026%2F%2F01.07.2025-30.06.2026)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

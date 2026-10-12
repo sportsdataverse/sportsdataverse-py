@@ -559,7 +559,7 @@ def sihf_phases(
     """Phases of a league season (regular season, play-in and playoff rounds, playout): the phase_id values the table wrappers take, with each phase's name and game count.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
-    Example URL: https://data.sihf.ch/statistic/api/cms/table?searchQuery=1%2F%2F&Phase=&Season=2026&League=1&alias=results&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?searchQuery=1%2F%2F1&alias=results&language=en&filterBy=Season%2CPhase%2CDate&filterQuery=2026%2F%2F01.07.2025-30.06.2026
 
     Args:
         season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
