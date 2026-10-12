@@ -284,39 +284,54 @@ def compare(baseline: dict, current: dict, *upstream: dict) -> list[str]:
     """Regressions of ``current``: metrics worse than EVERY baseline that tracks them.
 
     ``baseline`` is the base branch's; ``upstream`` holds the extra baselines a sync PR may match
-    (the workflow passes one only when the PR brings in an upstream tip the base lacks). With more
-    than one baseline, each row and regression names the baseline it was judged against: the first
-    one the value is not worse than, else the one it is least worse than.
+    (the workflow passes one only when the PR brings in an upstream tip the base lacks). With one
+    baseline the table is the plain before/after one. With more, every row shows the change against
+    EACH baseline, so what an upstream allowance absorbs stays visible (a row allowed by the upstream
+    still reads WORSE in the base column), and each regression names the baseline it is least worse
+    than. A metric the BASE tracks may never be dropped, whatever the upstream holds.
     """
     baselines = [baseline, *upstream]
-    multi = len(baselines) > 1
-    for b in baselines:
-        print(f"Baseline {b['commit']} ({b['measured_at']})")
-    print(f"  vs  now {current['commit']}\n")
-    print("| Metric | Baseline | Now | Change | Status |" + (" Judged against |" if multi else ""))
-    print("|---|---:|---:|---:|---|" + ("---|" if multi else ""))
     regressions = []
+    if upstream:
+        for i, b in enumerate(baselines):
+            print(f"{'Upstream' if i else 'Base'} baseline {b['commit']} ({b['measured_at']})")
+        print(f"  vs  now {current['commit']}\n")
+        print("| Metric | Base | " + "Upstream | " * len(upstream) + "Now | Status |")
+        print("|---|---:|" + "---:|" * len(upstream) + "---:|---|")
+    else:
+        print(f"Baseline {baseline['commit']} ({baseline['measured_at']})  vs  now {current['commit']}\n")
+        print("| Metric | Baseline | Now | Change | Status |\n|---|---:|---:|---:|---|")
     for name, now in current["metrics"].items():
-        judged = [(b, *judge(name, now, b["metrics"][name])) for b in baselines if name in b["metrics"]]
+        verdicts = [judge(name, now, b["metrics"][name]) if name in b["metrics"] else None for b in baselines]
+        judged = [(b, *v) for b, v in zip(baselines, verdicts) if v is not None]
         if not judged:
-            print(f"| {now['label']} | (new) | {now['value']} | | new |" + (" |" if multi else ""))
-            continue
-        if all(status == "WORSE" for _, _, status in judged):  # worse than every baseline
-            b, delta, status = min(judged, key=lambda j: abs(j[1]))
-            vs = f" (vs baseline {b['commit']})" if multi else ""
+            status = "new"
+        elif all(status == "WORSE" for _, _, status in judged):  # worse than every baseline
+            b, _, status = min(judged, key=lambda j: abs(j[1]))
+            vs = f" (vs baseline {b['commit']})" if upstream else ""
             regressions.append(f"{now['label']}: {b['metrics'][name]['value']} -> {now['value']}{vs}")
         else:
-            b, delta, status = next(j for j in judged if j[2] != "WORSE")
-        print(
-            f"| {now['label']} | {b['metrics'][name]['value']} | {now['value']} | {delta:+} | {status} |"
-            + (f" {b['commit']} |" if multi else "")
-        )
-    # A dropped metric matches a baseline that does not track it either, so it fails only when all do.
-    for name in sorted(set().union(*(b["metrics"].keys() for b in baselines)) - current["metrics"].keys()):
-        if not all(name in b["metrics"] for b in baselines):
-            continue
+            b, _, status = next(j for j in judged if j[2] != "WORSE")
+            if b is not baseline:
+                status = f"allowed by upstream {b['commit']}"
+        if upstream:
+            cells = [
+                "(not tracked)" if v is None else f"{b['metrics'][name]['value']} ({v[0]:+}, {v[1]})"
+                for b, v in zip(baselines, verdicts)
+            ]
+            print(f"| {now['label']} | " + " | ".join(cells) + f" | {now['value']} | {status} |")
+        elif verdicts[0] is None:
+            print(f"| {now['label']} | (new) | {now['value']} | | new |")
+        else:
+            delta, status = verdicts[0]
+            print(f"| {now['label']} | {baseline['metrics'][name]['value']} | {now['value']} | {delta:+} | {status} |")
+    for name in sorted(baseline["metrics"].keys() - current["metrics"].keys()):  # the base's metrics only
         before = baseline["metrics"][name]
-        print(f"| {before['label']} | {before['value']} | (not measured) | | WORSE |" + (" all |" if multi else ""))
+        if upstream:
+            ups = [str(b["metrics"][name]["value"]) if name in b["metrics"] else "(not tracked)" for b in upstream]
+            print(f"| {before['label']} | {before['value']} | " + " | ".join(ups) + " | (not measured) | WORSE |")
+        else:
+            print(f"| {before['label']} | {before['value']} | (not measured) | | WORSE |")
         regressions.append(f"{before['label']}: {before['value']} -> not measured (a tracked metric cannot be dropped)")
     return regressions
 

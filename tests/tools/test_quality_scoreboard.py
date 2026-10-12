@@ -202,4 +202,33 @@ def test_cli_takes_baseline_more_than_once(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", [*argv, "--baseline", str(upstream)])
     assert qs.main() == 0
     out = capsys.readouterr().out
-    assert "| lint_likely_bugs | 20 | 18 | -2 | better | upstream |" in out
+    assert "| lint_likely_bugs | 15 (+3, WORSE) | 20 (-2, better) | 18 | allowed by upstream upstream |" in out
+
+
+def test_with_two_baselines_each_row_shows_the_change_against_both(capsys):
+    """What an upstream allowance absorbs stays visible: the base column still reads WORSE."""
+    base = _named("devel-cfb", lint_likely_bugs=104, coverage_handwritten_percent=85.0)
+    upstream = _named("devel-test-harness", lint_likely_bugs=112, coverage_handwritten_percent=84.0)
+    capsys.readouterr()
+    assert qs.compare(base, snap(lint_likely_bugs=112, coverage_handwritten_percent=85.0), upstream) == []
+    out = capsys.readouterr().out
+    assert "| Metric | Base | Upstream | Now | Status |" in out
+    assert (
+        "| lint_likely_bugs | 104 (+8, WORSE) | 112 (+0, same) | 112 | allowed by upstream devel-test-harness |" in out
+    )
+    assert "| coverage_handwritten_percent | 85.0 (+0.0, same) | 84.0 (+1.0, better) | 85.0 | same |" in out
+
+
+def test_a_metric_the_base_tracks_cannot_be_dropped_even_if_the_upstream_lacks_it():
+    base = _named("base", lint_likely_bugs=15, modules_never_run_by_tests=0)
+    upstream = _named("upstream", lint_likely_bugs=15)
+    assert qs.compare(base, snap(lint_likely_bugs=15), upstream) == [
+        "modules_never_run_by_tests: 0 -> not measured (a tracked metric cannot be dropped)"
+    ]
+    # a metric only the upstream tracks is not the base's to keep
+    assert qs.compare(upstream, snap(lint_likely_bugs=15), base) == []
+
+
+def test_single_baseline_header_stays_on_one_line(capsys):
+    qs.compare(_named("base", lint_likely_bugs=1), snap(lint_likely_bugs=1))
+    assert capsys.readouterr().out.startswith("Baseline base (2026-10-08T00:00:00+00:00)  vs  now abc1234\n")

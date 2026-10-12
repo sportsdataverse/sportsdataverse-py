@@ -842,8 +842,8 @@
   group: ci-harness
   finding: scoreboard-upstream-baseline
   file: tools/quality_scoreboard.py
-  snippet: '        if all(status == "WORSE" for _, _, status in judged):  # worse than every baseline'
-  mutant: '        if any(status == "WORSE" for _, _, status in judged):  # worse than every baseline'
+  snippet: '        elif all(status == "WORSE" for _, _, status in judged):  # worse than every baseline'
+  mutant: '        elif any(status == "WORSE" for _, _, status in judged):  # worse than every baseline'
   test: tests/tools/test_quality_scoreboard.py -k "upstream_baseline_allows or baseline_more_than_once or own_direction"
   expected: kill
   note: >-
