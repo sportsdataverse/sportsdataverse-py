@@ -2203,6 +2203,10 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         if "defensive_two_point_conv" in df.columns
         else pl.lit(False)
     )
+    # A kickoff the kicking team recovers (NFLPlayProcess's _kicker_recovers, R810-3).
+    kicker_recovers = (
+        (pl.col("_kicker_recovers") == True).fill_null(False) if "_kicker_recovers" in df.columns else pl.lit(False)
+    )
     kick_good = _lower.str.contains(r"kick\)")
     kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
     if "xp_attempt" in df.columns and "xp_made" in df.columns:
@@ -2321,6 +2325,10 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             .then(pl.col("EP_end") * -1)
             # Onside kicks
             .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
+            .then(pl.col("EP_end") * -1)
+            # Any other kickoff the kicking team recovers (a muff; R810-3): EP_end is the kicker's.
+            # NFLPlayProcess flags it as _kicker_recovers; a frame without the flag has none.
+            .when(pl.col("type.text").is_in(kickoff_vec) & kicker_recovers)
             .then(pl.col("EP_end") * -1)
             .otherwise(pl.col("EP_end")),
         )

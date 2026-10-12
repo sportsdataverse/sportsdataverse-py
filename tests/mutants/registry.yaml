@@ -994,8 +994,8 @@
   group: nfl-end-state
   finding: C-H5
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '(pl.col("_nxt").struct.field("kick") == False) & (pl.col("_nxt").struct.field("r")'
-  mutant: 'pl.lit(True) & (pl.col("_nxt").struct.field("r")'
+  snippet: '(pl.col("_nxt").struct.field("kick") == False)'
+  mutant: 'pl.lit(True)'
   test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_net_spot_falls_back_to_espn and next_is_kickoff"
   expected: kill
   note: >-
@@ -1242,6 +1242,8 @@
                         .pipe(self.__add_series_data)
                         .pipe(self.__add_spread_time)
                         .pipe(self.__add_description_features)
+                        # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
+                        .drop("_kick_spot", "_kicker_recovers", strict=False)
                     )
   mutant: |-
     .pipe(self.__refine_play_types_post_attribution)
@@ -1251,6 +1253,8 @@
                         .pipe(self.__add_series_data)
                         .pipe(self.__add_spread_time)
                         .pipe(self.__add_description_features)
+                        # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
+                        .drop("_kick_spot", "_kicker_recovers", strict=False)
                     )
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_first_down_penalty_cleaning_pipeline[401547449]
   expected: kill
@@ -1425,3 +1429,97 @@
   note: >-
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
+
+# --- EX-2.3-a (task 2.21): a touchback kickoff ends at the season's touchback spot ----------------
+- id: nfl-kickoff-touchback-end-at-season-spot
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(touchback_yardline_expr(pl.col("season")))  # EX-2.3-a: the EP_start_touchback spot'
+  mutant: '.then(75)  # EX-2.3-a: the EP_start_touchback spot'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_without_a_next_snap_ends_at_the_season_spot[2024]
+  expected: kill
+  note: >-
+    The literal 75 back: a 2024 touchback kickoff whose next snap cannot be read starts at the 70
+    (EP_start_touchback) and ends at the 75, EPA about -0.25 instead of the owner's model's 0
+    (401671740 play 343 given an out-of-order next row). On the base, which re-spotted every
+    touchback, the mean over 96 sampled nfl-raw games was +0.35 before 2016, -0.25 in 2024 and
+    -0.48 in 2025.
+
+- id: nfl-kickoff-touchback-next-snap-guard
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'tb_fallback = (pl.col("kickoff_tb") == True) & ~pl.col("_kick_spot")  # R831-1: next snap wins'
+  mutant: 'tb_fallback = pl.col("kickoff_tb") == True  # R831-1: next snap wins'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_landing_zone_ends_at_the_next_snap
+  expected: kill
+  note: >-
+    Review R831-1: re-spotting every touchback at the season spot throws away the next-snap spot of
+    a 2024+ landing-zone touchback (the receiving 20): 401671740 play 3563 ends at the 70 with EPA 0
+    instead of the 80 and the owner's -0.600. It also re-spots the 2006-07 bare "KickOff" returns
+    (R831-2), MAE vs nflverse 0.040 -> 0.519 on the 32 capture rows.
+
+- id: nfl-cleaning-pipeline-drops-kick-spot
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.drop("_kick_spot", "_kicker_recovers", strict=False)'
+  mutant: '.drop("_no_such_column", strict=False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_cleaning_pipeline_has_no_kick_spot_column
+  expected: kill
+  note: >-
+    The C-H5 block's _kick_spot flag rides to the EP block, which drops it; run_cleaning_pipeline
+    stops before the EP block, so without its own drop every cleaned play carries the temporary
+    column (CodeRabbit thread on #831).
+
+- id: nfl-kickoff-next-snap-is-the-receivers
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball'
+  mutant: '& pl.lit(True)  # the snap of the team with the ball'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_net_spot_is_the_receivers_next_snap
+  expected: kill
+  note: >-
+    The owner's net spot is the RECEIVER's next snap. ESPN files 401326517's touchback 1442 between two
+    PHI snaps; without the possession check the PHI snap at the NYJ 30 is read as NYJ's net spot and
+    the touchback scores EPA +2.508 instead of 0 (nflverse 0.000).
+
+- id: nfl-kickoff-kicking-team-recovery
+  group: nfl-end-state
+  finding: R810-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'kickoff & (pl.col("type.text").is_in(kickoff_turnovers) | (recovered_by == kick_abbr))  # R810-3'
+  mutant: 'kickoff & pl.lit(False)  # R810-3'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kicking_team_recovery_ends_at_the_kickers_snap"
+  expected: kill
+  note: >-
+    Without the kicking-team branch the team with the ball after a muff or onside recovery is taken
+    to be the receiver: the kicker's next snap fails the possession check and EP_end is not flipped,
+    so 301003002/297 reads 0.625 (nflverse -3.890) and 400554238/568 -2.855 (nflverse -3.798).
+
+- id: nfl-epa-kicking-team-recovery-flip
+  group: nfl-end-state
+  finding: R810-3
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.when(pl.col("type.text").is_in(kickoff_vec) & kicker_recovers)'
+  mutant: '.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kicking_team_recovery_ends_at_the_kickers_snap and muff"
+  expected: kill
+  note: >-
+    A muff the kicking team recovers ends at the kicker's snap; EP_end is the kicker's and must be
+    flipped to the receiver's side (onside kicks and "Kickoff Team Fumble Recovery" have their own
+    clauses). Unflipped, 301003002/297 reads about +2.25 against nflverse -3.890.
+
+- id: nfl-kickoff-recovery-after-reversal
+  group: nfl-end-state
+  finding: R810-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'ruled = pl.col("text").str.split("REVERSED").list.last()  # the play as it stands'
+  mutant: 'ruled = pl.col("text")  # the play as it stands'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_reversed_recovery_stays_the_receivers_ball
+  expected: kill
+  note: >-
+    A recovery the replay REVERSED is not the kicking team's ball: 301114003/3734 read it and scored
+    EPA -1.289 against nflverse 0.399 (the one sample kickoff the kicking-team branch made worse).
