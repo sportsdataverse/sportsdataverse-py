@@ -991,6 +991,7 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             row["home_espn_team_id"],
             row["away_espn_team_id"],
             kickoff_utc=row.get("kickoff_utc"),
+            season_type=int(row.get("season_type") or 2),
         )
         resolved_by = "week_scoreboard"
         if not cbs_game_id:

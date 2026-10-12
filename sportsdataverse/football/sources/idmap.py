@@ -14,7 +14,9 @@ and are filled in the same pass (checked against Yahoo's own scoreboard ids on 2
 2013-2026, every regular-season and postseason game). The NFL CBS and Fox game ids come from
 each source's week scoreboard (``nfl.cbs_pbp.game_id`` / ``nfl.fox_pbp.game_id``), which
 sdv-db's nightly resolves into the stored table; Fox and Yahoo CFB come from
-``cfb_schedule_crosswalk``; NCAA from ``ncaa-mfb-football-raw`` stage 06 restricted to its
+``cfb_schedule_crosswalk``; CBS CFB from the CFB week scoreboard (``cfb.cbs_pbp.game_id``,
+FBS + FCS, nightly) and, for past seasons, the stored cards of the ``cfbfastR-cfb-alt-raw``
+harvest (``_match_cbs_card``); NCAA from ``ncaa-mfb-football-raw`` stage 06 restricted to its
 pre-game tiers.
 """
 
