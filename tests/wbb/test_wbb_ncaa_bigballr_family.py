@@ -129,7 +129,7 @@ def test_ncaa_wbb_date_games_missing_seasons_raise() -> None:
 
 def test_ncaa_wbb_team_ids_table() -> None:
     df = ncaa_wbb_team_ids()
-    assert df.height == 5972
+    assert df.height == 6335
     assert df.columns == ["team", "conference", "id", "season"]
     assert df.schema["id"] == pl.Int64
     # 2025-26 backfilled 2026-08-01 via refresh_ncaa_team_ids (wbigballR, the
@@ -137,6 +137,8 @@ def test_ncaa_wbb_team_ids_table() -> None:
     # the CSV can't silently drop the season and re-block WBB discovery.
     latest = df.filter(pl.col("season") == "2025-26")
     assert latest.height == 359
+    # 2026-27 captured 2026-10-12 from stats.ncaa.org inst_team_list (D-I): 363 teams.
+    assert df.filter(pl.col("season") == "2026-27").height == 363
     # Renamed upstream: the new label must be present AND the legacy one gone.
     # Asserting only the former would pass if a stale "Fairleigh Dickinson" row
     # co-existed with "FDU" while some other team silently went missing.
