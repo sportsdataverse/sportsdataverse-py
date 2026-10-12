@@ -96,6 +96,7 @@ del_pbp:
   codename: Penalty code, e.g. `HOOK`, `TRIP`, `ROUGH`, `BOARD`, `DELAY`.
   create_time: Game second at which the event was entered (unverified).
   current_score: Score after the goal, as `home:visitor` text, e.g. `1:0`.
+  decision_after_review: Final call after the review.
   disciplined_bm: True when the penalty was a bench minor.
   disciplined_functionary: True when the penalty was assessed to a team official.
   duration: Penalty length in seconds (120 = minor).
@@ -105,12 +106,14 @@ del_pbp:
   event_type: 'Event type: goal, penalty, goalkeeperChange, timeout, periodStart,
     periodEnd, videoReview, ...'
   extra_attacker: True when the scoring team had an extra attacker on (goalie pulled).
+  goal_review: Video review subject, e.g. a goal (EIHL `videoReview` events).
   goalie_jersey: Jersey number of the goalie entering the game (goalkeeperChange).
   goalie_name: Full name of the goalie entering the game (goalkeeperChange).
   goalie_player_id: Player id (playerId key space) of the goalie entering the game
     (goalkeeperChange).
   minus_player_ids: Comma-separated player ids (playerId key space) of the conceding
     team's players on ice.
+  on_ice_decision: Call on the ice before the review.
   outgoing_goalie_jersey: Jersey number of the goalie leaving the game (goalkeeperChange).
   outgoing_goalie_name: Full name of the goalie leaving the game (goalkeeperChange).
   outgoing_goalie_player_id: Player id (playerId key space) of the goalie leaving
@@ -127,6 +130,7 @@ del_pbp:
   plus_player_ids: Comma-separated player ids (playerId key space) of the scoring
     team's players on ice.
   real_time: Wall-clock local time, `YYYY-MM-DD HH:MM:SS`.
+  reason_for_review: Why the play was reviewed (free text).
   replaced_jersey: Jersey number of the player serving the penalty in the penalized
     player's place.
   replaced_name: Full name of the player serving the penalty in the penalized player's
@@ -139,6 +143,9 @@ del_pbp:
   scorer_name: Full name of the goal scorer.
   scorer_player_id: Player id (playerId key space) of the goal scorer.
   shooting: True for a goal scored on a penalty shot.
+  team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches`
+    `home.id` / `guest.id` and the `{team_id}` path param.
+  team_shortcut: Three-letter team code.
   team_side: 'Team of the row: home or visitor.'
   technical: True for a technical penalty (unverified).
   time: Game second of the event from the opening face-off (0-3600 in regulation,
@@ -532,8 +539,13 @@ eihl_pbp:
   assist2_name: Full name of the second assist.
   assist2_player_id: Player id (playerId key space) of the second assist.
   balance: 'Goal strength: `EQ` even, `PP1` / `PP2` power play, `SH1` / `SH2` shorthanded.'
+  codename: Penalty code, e.g. `HOOK`, `TRIP`, `ROUGH`, `BOARD`, `DELAY`.
+  create_time: Game second at which the event was entered (unverified).
   current_score: Score after the goal, as `home:visitor` text, e.g. `1:0`.
   decision_after_review: Final call after the review.
+  disciplined_bm: True when the penalty was a bench minor.
+  disciplined_functionary: True when the penalty was assessed to a team official.
+  duration: Penalty length in seconds (120 = minor).
   empty_net: True when the goal went into an empty net.
   event_id: Event id within its event type.
   event_index: Row order of the event within the game (0-based), across periods.
@@ -552,12 +564,25 @@ eihl_pbp:
   outgoing_goalie_name: Full name of the goalie leaving the game (goalkeeperChange).
   outgoing_goalie_player_id: Player id (playerId key space) of the goalie leaving
     the game (goalkeeperChange).
+  penalized_jersey: Jersey number of the penalized player.
+  penalized_name: Full name of the penalized player.
+  penalized_player_id: Player id (playerId key space) of the penalized player.
+  penalty_from_real_time: Penalty start, local wall clock YYYY-MM-DD HH:MM:SS.
+  penalty_from_scoreboard_time: Penalty start, game second.
+  penalty_to_real_time: Penalty end, local wall clock YYYY-MM-DD HH:MM:SS.
+  penalty_to_scoreboard_time: Penalty end, game second.
   period: 'Period key as the body sends it: 1, 2, 3, OT (overtime) or SO (shootout).'
   period_number: 'Period number: 1-3, 4 = overtime, 5 = shootout.'
   plus_player_ids: Comma-separated player ids (playerId key space) of the scoring
     team's players on ice.
   real_time: Wall-clock local time, `YYYY-MM-DD HH:MM:SS`.
   reason_for_review: Why the play was reviewed (free text).
+  replaced_jersey: Jersey number of the player serving the penalty in the penalized
+    player's place.
+  replaced_name: Full name of the player serving the penalty in the penalized player's
+    place.
+  replaced_player_id: Player id (playerId key space) of the player serving the penalty
+    in the penalized player's place.
   scoreboard_time: Seconds of game time from the opening face-off (0-3600 in regulation,
     continuing through overtime).
   scorer_jersey: Jersey number of the goal scorer.
@@ -1254,6 +1279,7 @@ icehl_pbp:
   codename: Penalty code, e.g. `HOOK`, `TRIP`, `ROUGH`, `BOARD`, `DELAY`.
   create_time: Game second at which the event was entered (unverified).
   current_score: Score after the goal, as `home:visitor` text, e.g. `1:0`.
+  decision_after_review: Final call after the review.
   disciplined_bm: True when the penalty was a bench minor.
   disciplined_functionary: True when the penalty was assessed to a team official.
   duration: Penalty length in seconds (120 = minor).
@@ -1263,12 +1289,14 @@ icehl_pbp:
   event_type: 'Event type: goal, penalty, goalkeeperChange, timeout, periodStart,
     periodEnd, videoReview, ...'
   extra_attacker: True when the scoring team had an extra attacker on (goalie pulled).
+  goal_review: Video review subject, e.g. a goal (EIHL `videoReview` events).
   goalie_jersey: Jersey number of the goalie entering the game (goalkeeperChange).
   goalie_name: Full name of the goalie entering the game (goalkeeperChange).
   goalie_player_id: Player id (playerId key space) of the goalie entering the game
     (goalkeeperChange).
   minus_player_ids: Comma-separated player ids (playerId key space) of the conceding
     team's players on ice.
+  on_ice_decision: Call on the ice before the review.
   outgoing_goalie_jersey: Jersey number of the goalie leaving the game (goalkeeperChange).
   outgoing_goalie_name: Full name of the goalie leaving the game (goalkeeperChange).
   outgoing_goalie_player_id: Player id (playerId key space) of the goalie leaving
@@ -1285,12 +1313,22 @@ icehl_pbp:
   plus_player_ids: Comma-separated player ids (playerId key space) of the scoring
     team's players on ice.
   real_time: Wall-clock local time, `YYYY-MM-DD HH:MM:SS`.
+  reason_for_review: Why the play was reviewed (free text).
+  replaced_jersey: Jersey number of the player serving the penalty in the penalized
+    player's place.
+  replaced_name: Full name of the player serving the penalty in the penalized player's
+    place.
+  replaced_player_id: Player id (playerId key space) of the player serving the penalty
+    in the penalized player's place.
   scoreboard_time: Seconds of game time from the opening face-off (0-3600 in regulation,
     continuing through overtime).
   scorer_jersey: Jersey number of the goal scorer.
   scorer_name: Full name of the goal scorer.
   scorer_player_id: Player id (playerId key space) of the goal scorer.
   shooting: True for a goal scored on a penalty shot.
+  team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches`
+    `home.id` / `guest.id` and the `{team_id}` path param.
+  team_shortcut: Three-letter team code.
   team_side: 'Team of the row: home or visitor.'
   technical: True for a technical penalty (unverified).
   time: Game second of the event from the opening face-off (0-3600 in regulation,
@@ -1913,6 +1951,7 @@ metal_pbp:
   codename: Penalty code, e.g. `HOOK`, `TRIP`, `ROUGH`, `BOARD`, `DELAY`.
   create_time: Game second at which the event was entered (unverified).
   current_score: Score after the goal, as `home:visitor` text, e.g. `1:0`.
+  decision_after_review: Final call after the review.
   disciplined_bm: True when the penalty was a bench minor.
   disciplined_functionary: True when the penalty was assessed to a team official.
   duration: Penalty length in seconds (120 = minor).
@@ -1922,12 +1961,14 @@ metal_pbp:
   event_type: 'Event type: goal, penalty, goalkeeperChange, timeout, periodStart,
     periodEnd, videoReview, ...'
   extra_attacker: True when the scoring team had an extra attacker on (goalie pulled).
+  goal_review: Video review subject, e.g. a goal (EIHL `videoReview` events).
   goalie_jersey: Jersey number of the goalie entering the game (goalkeeperChange).
   goalie_name: Full name of the goalie entering the game (goalkeeperChange).
   goalie_player_id: Player id (playerId key space) of the goalie entering the game
     (goalkeeperChange).
   minus_player_ids: Comma-separated player ids (playerId key space) of the conceding
     team's players on ice.
+  on_ice_decision: Call on the ice before the review.
   outgoing_goalie_jersey: Jersey number of the goalie leaving the game (goalkeeperChange).
   outgoing_goalie_name: Full name of the goalie leaving the game (goalkeeperChange).
   outgoing_goalie_player_id: Player id (playerId key space) of the goalie leaving
@@ -1944,6 +1985,7 @@ metal_pbp:
   plus_player_ids: Comma-separated player ids (playerId key space) of the scoring
     team's players on ice.
   real_time: Wall-clock local time, `YYYY-MM-DD HH:MM:SS`.
+  reason_for_review: Why the play was reviewed (free text).
   replaced_jersey: Jersey number of the player serving the penalty in the penalized
     player's place.
   replaced_name: Full name of the player serving the penalty in the penalized player's
@@ -1956,6 +1998,9 @@ metal_pbp:
   scorer_name: Full name of the goal scorer.
   scorer_player_id: Player id (playerId key space) of the goal scorer.
   shooting: True for a goal scored on a penalty shot.
+  team_id: Team id (team key space, per bucket, stable across seasons); joins to `league-matches`
+    `home.id` / `guest.id` and the `{team_id}` path param.
+  team_shortcut: Three-letter team code.
   team_side: 'Team of the row: home or visitor.'
   technical: True for a technical penalty (unverified).
   time: Game second of the event from the opening face-off (0-3600 in regulation,

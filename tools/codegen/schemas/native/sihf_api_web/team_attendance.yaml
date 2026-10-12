@@ -26,10 +26,10 @@ columns:
   type: integer
   description: ''
 - name: stadium_capacity_quotient
-  type: integer
+  type: double
   description: ''
 - name: spectators_quotient
-  type: integer
+  type: double
   description: ''
 - name: stadium_capacity_percent
   type: double

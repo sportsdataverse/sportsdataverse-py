@@ -513,7 +513,8 @@ def parse_elh_shots(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     Ids are HOKEJ.CZ ids (``hokejcz_player_id``, ``hokejcz_team_id``), not the onlajny ids of
     :func:`parse_elh_pbp`. ``coordinate_x`` runs along the rink LENGTH (goal to goal),
     centred at 0 and normalised so the home team shoots at +x and the away team at -x;
-    ``coordinate_y`` runs across the WIDTH; both are about -100..100. The provider's
+    ``coordinate_y`` runs across the WIDTH; both are about -100..100. That scaling and
+    orientation are inferred from the data; the provider does not document them. The provider's
     ``match_shot_resutl_id`` (sic) is kept and aliased ``shot_result_id``: ``4`` = goal
     (``is_goal``); ``1`` / ``2`` / ``3`` / ``5`` are unknown. ``time`` is seconds from the
     start of the game, EXCEPT in 2016-17, where it is only the period's start offset

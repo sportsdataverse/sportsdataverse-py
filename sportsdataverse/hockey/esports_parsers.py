@@ -10,6 +10,15 @@ A column holding one JSON type keeps it (bool, Int64, Float64); a mixed one is S
 columns (``*percent*``, ``*per_game*``, ``xg`` ...) are Float64 even when one body happens to send
 only whole numbers, so a column's dtype does not change from game to game.
 
+Dtypes come from the returns schemas (``_esports_schemas.SCHEMAS``, written by the codegen from
+``tools/codegen/schemas/native/<stem>/<short>.yaml``). When the wrapper passes ``columns`` (the
+documented column list, which names one schema), every frame, empty, partial or full, carries all
+of those columns, in that order, with the schema's dtypes: a documented column the body does not
+send (EIHL ``penalty_*`` in a game without penalties) is a null column of its schema dtype, and
+columns the schema does not know follow at the end. So ``pl.concat`` of any two answers of one
+route never fails on width or dtype. Without ``columns`` an all-null column takes the dtype the
+schemas give its name (when they agree), else a name rule (ids Int64, rates Float64, else String).
+
 Body shapes and their parsers:
 
 * ``league-matches/{season}/{league_id}.json`` ``{"matches": [...]}`` ->
@@ -49,13 +58,14 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any, Dict, List, Optional, Sequence, Union
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.hockey._esports_schemas import SCHEMAS
 
 __all__ = [
     "parse_esports",
@@ -145,14 +155,45 @@ def _series(name: str, values: List[Any]) -> pl.Series:
     return pl.Series(name, [None if v is None else _text(v) for v in values], dtype=pl.String)
 
 
-def _empty_dtype(name: str) -> Any:
+#: R-style returns-schema type -> polars dtype.
+_SCHEMA_TYPES = {"integer": pl.Int64, "numeric": pl.Float64, "double": pl.Float64, "logical": pl.Boolean}
+
+
+def _schema_index() -> Tuple[Dict[Tuple[str, ...], Dict[str, Any]], Dict[str, Any]]:
+    """``({documented column tuple: {column: dtype}}, {column: dtype where every schema agrees})``."""
+    by_columns: Dict[Tuple[str, ...], Dict[str, Any]] = {}
+    seen: Dict[str, set] = {}
+    for shorts in SCHEMAS.values():
+        for cols in shorts.values():
+            by_columns[tuple(cols)] = {c: _SCHEMA_TYPES.get(t, pl.String) for c, t in cols.items()}
+            for c, t in cols.items():
+                seen.setdefault(c, set()).add(_SCHEMA_TYPES.get(t, pl.String))
+    return by_columns, {c: next(iter(ts)) for c, ts in seen.items() if len(ts) == 1}
+
+
+_BY_COLUMNS, _BY_NAME = _schema_index()
+
+
+def _empty_dtype(name: str, schema: Optional[Dict[str, Any]] = None) -> Any:
+    """The dtype of an all-null column: its route's schema, else every schema's, else the name rule."""
+    dtype = (schema or {}).get(name) or _BY_NAME.get(name)
+    if dtype is not None:
+        return dtype
     if _ID.search(name) or name.endswith("_count"):  # e.g. overtime_count, null until a game goes to overtime
         return pl.Int64
     return pl.Float64 if _FLOAT.search(name) else pl.String
 
 
+def _widens(src: Any, dst: Any) -> bool:
+    """True when ``src`` casts to the schema dtype ``dst`` without losing a value."""
+    if src == pl.Int64 and dst == pl.Float64:
+        return True
+    return dst == pl.String and src in (pl.Int64, pl.Float64, pl.Boolean)
+
+
 def _frame(rows: List[Row], columns: Optional[Sequence[str]], return_as_pandas: bool) -> Frame:
-    """Rows -> frame: ids Int64, rate columns Float64, all-null columns String (Int64 for ids)."""
+    """Rows -> frame with the schema dtypes (see the module docstring); ``columns`` are backfilled."""
+    schema = _BY_COLUMNS.get(tuple(columns or ()), {})
     names: Dict[str, None] = {}
     for row in rows:
         names.update(dict.fromkeys(row))
@@ -160,14 +201,22 @@ def _frame(rows: List[Row], columns: Optional[Sequence[str]], return_as_pandas: 
         df = pl.DataFrame([_series(n, [row.get(n) for row in rows]) for n in names])
         casts = {}
         for name, dtype in df.schema.items():
+            want = schema.get(name) or _BY_NAME.get(name)
             if dtype == pl.Null:
-                casts[name] = _empty_dtype(name)
+                casts[name] = _empty_dtype(name, schema)
+            elif want is not None and want != dtype and _widens(dtype, want):
+                casts[name] = want
             elif dtype == pl.Int64 and _FLOAT.search(name) and not _ID.search(name):
                 casts[name] = pl.Float64
         df = df.with_columns(pl.col(n).cast(t) for n, t in casts.items()) if casts else df
         df = _cast_ids_int64(df, [n for n, t in df.schema.items() if _ID.search(n) and t == pl.String])
+        if columns:
+            missing = [c for c in columns if c not in df.columns]
+            df = df.with_columns(pl.lit(None, dtype=_empty_dtype(c, schema)).alias(c) for c in missing)
+            documented = set(columns)
+            df = df.select([*columns, *(c for c in df.columns if c not in documented)])
     else:
-        df = pl.DataFrame(schema={c: _empty_dtype(c) for c in columns or []})
+        df = pl.DataFrame(schema={c: _empty_dtype(c, schema) for c in columns or []})
     return df.to_pandas() if return_as_pandas else df
 
 

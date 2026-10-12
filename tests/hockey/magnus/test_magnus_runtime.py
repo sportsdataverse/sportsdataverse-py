@@ -20,6 +20,7 @@ from typing import Any, Dict, List
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.hockey import euro_hockey_runtime as ehr
 from sportsdataverse.hockey.magnus import magnus_runtime as rt
 
 FIXTURES = Path(__file__).parents[2] / "fixtures" / "magnus"
@@ -41,7 +42,7 @@ class _Resp:
 
 
 class _Transport:
-    """The mocked transport: ``calls`` logs each request, ``waits`` each throttle call."""
+    """The mocked transport: ``calls`` logs each request, ``waits`` each one sent over the throttled session."""
 
     def __init__(self) -> None:
         self.calls: List[Dict[str, Any]] = []
@@ -50,6 +51,8 @@ class _Transport:
 
     def download(self, url: str, params: Any = None, **kw: Any) -> Any:
         self.calls.append({"url": url, "params": dict(params or {})})
+        if kw.get("session") is ehr.SESSION:  # every attempt on SESSION waits for the host's slot
+            self.waits.append(url)
         if isinstance(self._answer, BaseException):
             raise self._answer
         return self._answer
@@ -72,7 +75,6 @@ class _Transport:
 def transport(monkeypatch: pytest.MonkeyPatch) -> _Transport:
     t = _Transport()
     monkeypatch.setattr(rt._rt, "download", t.download)
-    monkeypatch.setattr(rt, "_polite_wait", t.waits.append)
     return t
 
 
@@ -145,6 +147,11 @@ def test_a_good_body_is_returned_unchanged_and_none_params_are_dropped(transport
     ("body", "exc", "match"),
     [
         ({"success": False, "data": "Aucune donnée disponible"}, NoDataError, "success=false"),
+        ({"success": False, "data": "  AUCUNE   DONNEE\tdisponible. "}, NoDataError, "success=false"),
+        ({"success": False, "data": "aucune donnée disponible pour cette phase"}, NoDataError, "success=false"),
+        ({"success": False, "data": "Erreur interne du serveur"}, AssetFetchError, "unknown message"),
+        ({"success": False, "data": {"code": 500}}, AssetFetchError, "unknown message"),
+        ({"success": False, "data": ""}, AssetFetchError, "unknown message"),
         ({"success": True, "data": ""}, NoDataError, "empty data"),
         (
             {"success": True, "data": {"competition_id": ["Le champ competition id est invalide."]}},
@@ -223,11 +230,31 @@ def test_a_partial_schedule_page_is_refused(transport):
         _ajax({"action": "get_rencontres", "competition_id": 240})
 
 
-def test_a_whole_page_with_a_matching_total_passes(transport):
+def test_a_single_page_with_a_matching_total_passes(transport):
     body = _load("ajax__get_rencontres@round2.json")
-    body["data"]["meta"].update({"last_page": 2, "total": 6})
+    assert body["data"]["meta"]["last_page"] == 1 and body["data"]["meta"]["total"] == 6
     transport.json(body)
     assert _ajax({"action": "get_rencontres", "competition_id": 240}) == body
+
+
+@pytest.mark.parametrize(
+    "meta",
+    [
+        {"last_page": 2, "total": 6},  # rows match the total, but it is not the only page: both must hold
+        {"last_page": 1, "total": 7},  # one page, but it does not hold every game
+        {"last_page": True, "total": 6},  # True == 1 in Python; not a page count
+        {"last_page": "1", "total": 6},
+        {"last_page": 1.0, "total": 6},
+        {"last_page": 1, "total": "6"},
+        {"last_page": 1, "total": None},
+    ],
+)
+def test_the_paging_check_is_type_strict_and_needs_both_conditions(transport, meta):
+    body = _load("ajax__get_rencontres@round2.json")
+    body["data"]["meta"].update(meta)
+    transport.json(body)
+    with pytest.raises(AssetFetchError, match="partial schedule"):
+        _ajax({"action": "get_rencontres", "competition_id": 240})
 
 
 @pytest.mark.parametrize(

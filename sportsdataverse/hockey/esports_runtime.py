@@ -14,7 +14,9 @@ The four leagues' scoring system writes one key layout into four public S3 bucke
   ``NoDataError`` for a 200 that carries no rows (``[]``, ``{}``, a schedule with no
   ``matches``, a game with no events, and the shot shells Denmark writes for every game:
   ``{"match": {"shots": [], "status": "LIVE"}}``), and ``AssetFetchError`` for an error
-  envelope or a body for another season or game than the URL asked for.
+  envelope, a body of the wrong shape (a list where the schedule, shot, widget or
+  period-events route answers an object), or a body for another season or game than the URL
+  asked for.
 
 Requests to the shared host are spaced at least one second apart
 (:func:`sportsdataverse.hockey.euro_hockey_runtime._get`).
@@ -38,6 +40,8 @@ _SCHEDULE = re.compile(r"/league-matches/(\d+)/\d+\.json$")
 _SHOTS = re.compile(r"/visualization/shots/(\d+)\.json$")
 _WIDGET = re.compile(r"/widget/esports/match/(\d+)\.json$")
 _EVENTS = re.compile(r"/period-events\.json$")
+#: Routes whose body is a JSON object; anything else there is a wrong-shape answer.
+_OBJECT_ROUTES = (_SCHEDULE, _SHOTS, _WIDGET, _EVENTS)
 
 
 def season_start_year(season: Any) -> int:
@@ -79,6 +83,8 @@ def _check(url: str, body: Any) -> None:
     if not _has_rows(body):
         raise NoDataError(f"{where}: answered a body with no rows")
     path = url.split("?", 1)[0]
+    if any(r.search(path) for r in _OBJECT_ROUTES) and not isinstance(body, dict):
+        raise AssetFetchError(f"{where}: expected a JSON object, the body is a {type(body).__name__}")
     if m := _SCHEDULE.search(path):
         matches = _dig(body, "matches")
         if not (isinstance(matches, list) and matches):
@@ -115,8 +121,8 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
 
     Raises:
         NoDataError: the key does not exist (404 ``NoSuchKey``) or the body has no rows.
-        AssetFetchError: any other non-2xx (403 ``AccessDenied``), an error envelope, or a body
-            for another season or game.
+        AssetFetchError: any other non-2xx (403 ``AccessDenied``), an error envelope, a body of
+            the wrong shape, or a body for another season or game.
     """
     body = _eh._get(url, params, **kwargs)
     _check(url, body)

@@ -26,7 +26,9 @@ Emits, idempotently:
   ``manual_column_descriptions.yaml``);
 * ``tools/codegen/notes/esports_hokejovyzapis_descriptions.yaml``: the descriptions for that file,
   keyed by schema, translated from the refs ``esports-hokejovyzapis-returns.md`` (integration merges
-  them).
+  them);
+* ``sportsdataverse/hockey/_esports_schemas.py``: the same columns and types as package data, so the
+  parsers give an empty or partial frame the dtypes of a populated one without reading ``tools/``.
 
 Run: ``python tools/codegen/gen_esports_hokejovyzapis.py``
 """
@@ -39,6 +41,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+import polars as pl
 from gen_soccer_common import ROOT, columns_from_frame, load_spec, refs_dir, rewrite_schema_dir, write_yaml
 
 from sportsdataverse.hockey import esports_parsers as P
@@ -47,6 +50,29 @@ SOURCE = "esports-hokejovyzapis"
 SPEC = f"{SOURCE}.openapi.yaml"
 SERVER = "https://s3.eu-west-1.amazonaws.com/{bucket}"
 NOTES = ROOT / "tools/codegen/notes/esports_hokejovyzapis_descriptions.yaml"
+PACKAGE_SCHEMAS = ROOT / "sportsdataverse/hockey/_esports_schemas.py"
+_PACKAGE_SCHEMAS_HEAD = '''"""Returns-schema columns and types of the eSports hokejovyzapis families (package data).
+
+``SCHEMAS[stem][short]`` is ``{column: type}`` in documented order, the R-style type of
+``tools/codegen/schemas/native/<stem>/<short>.yaml`` (``integer``, ``numeric``, ``character``,
+``logical``). :mod:`sportsdataverse.hockey.esports_parsers` reads it to give an empty or partial
+frame the dtypes of a populated one. Written by ``tools/codegen/gen_esports_hokejovyzapis.py``;
+do not edit.
+"""
+
+from typing import Dict, List
+
+__all__: List[str] = []
+
+# fmt: off
+SCHEMAS: Dict[str, Dict[str, Dict[str, str]]] = '''
+
+
+def write_package_schemas(schemas: Dict[str, Dict[str, Dict[str, str]]]) -> None:
+    """Write :data:`PACKAGE_SCHEMAS` (``json.dumps`` layout, left alone by ruff format)."""
+    body = json.dumps(schemas, indent=4, ensure_ascii=False)
+    with PACKAGE_SCHEMAS.open("w", encoding="utf-8", newline="\n") as fh:
+        fh.write(f"{_PACKAGE_SCHEMAS_HEAD}{body}\n# fmt: on\n")
 
 
 @dataclass(frozen=True)
@@ -410,6 +436,13 @@ def describe(short: str, col: str, cols: List[str], section: Dict[str, str]) -> 
     return section.get(col, "")
 
 
+#: Shorts whose schema is the union of every bucket's columns. One scoring system writes the same
+#: period-events layout everywhere, but a capture only shows the event types its game had (the EIHL
+#: one has no penalty, so no ``penalty_*`` / ``penalized_*`` columns): a column another bucket's
+#: capture shows is documented for every bucket, so a game with that event never leaves the schema.
+UNION_SHORTS = frozenset({"pbp"})
+
+
 def main() -> None:
     refs = refs_dir(SOURCE, SPEC)
     spec = load_spec(refs, SPEC)
@@ -417,30 +450,48 @@ def main() -> None:
     if unknown:
         raise SystemExit(f"{SOURCE}: spec paths without a route entry: {unknown}")
     sections = section_maps(refs / f"{SOURCE}-returns.md")
+    plan = [(fam, bucket_paths(spec, fam.bucket)) for fam in FAMILIES]
+    frames: Dict[Tuple[str, str], Any] = {}
+    for fam, ops in plan:
+        for path, _op in ops:
+            body = source_body(refs, fam, path)
+            if body is None:
+                raise SystemExit(f"{fam.stem}: no capture for {path}")
+            frames[(fam.stem, path)] = ROUTES[path][1](json.loads(body.read_text(encoding="utf-8")))
+    union: Dict[str, Dict[str, Any]] = {}  # path -> {column: dtype}, first bucket that shows it wins
+    for (_stem, path), df in frames.items():
+        if ROUTES[path][0] in UNION_SHORTS:
+            for name, dtype in df.schema.items():
+                union.setdefault(path, {}).setdefault(name, dtype)
     notes: Dict[str, Dict[str, str]] = {}
-    for fam in FAMILIES:
-        ops = bucket_paths(spec, fam.bucket)
+    package: Dict[str, Dict[str, Dict[str, str]]] = {}
+    for fam, ops in plan:
         write_yaml(ROOT / f"tools/codegen/endpoints/{fam.stem}.yaml", family_doc(fam, ops))
         schema_dir = ROOT / f"tools/codegen/schemas/native/{fam.stem}"
         rewrite_schema_dir(schema_dir)
         described = total = 0
         for path, _op in ops:
-            short, parser, _summary = ROUTES[path]
-            body = source_body(refs, fam, path)
-            if body is None:
-                raise SystemExit(f"{fam.stem}: no capture for {path}")
-            df = parser(json.loads(body.read_text(encoding="utf-8")))
+            short = ROUTES[path][0]
+            df = frames[(fam.stem, path)]
+            extra = {n: t for n, t in union.get(path, {}).items() if n not in df.columns}
+            df = df.with_columns(pl.lit(None, dtype=t).alias(n) for n, t in extra.items()) if extra else df
             key = f"{fam.prefix}_{short}"
             columns = columns_from_frame(df, [], leaf_fallback=False)
             write_yaml(schema_dir / f"{short}.yaml", {"schema": key, "kind": "dataframe", "columns": columns})
-            section = sections.get((path, fam.capture_dir), {})
-            notes[key] = {
-                c: describe(short, c, df.columns, section).replace("{prefix}", fam.prefix) for c in df.columns
-            }
+            package.setdefault(fam.stem, {})[short] = {c["name"]: c["type"] for c in columns}
+            own = sections.get((path, fam.capture_dir), {})
+            others = [sections.get((path, f.capture_dir), {}) for f in FAMILIES if f is not fam]
+            notes[key] = {}
+            for c in df.columns:
+                text = describe(short, c, df.columns, own)
+                if not text and c in extra:  # documented from the bucket whose capture shows it
+                    text = next((t for o in others if (t := describe(short, c, df.columns, o))), "")
+                notes[key][c] = text.replace("{prefix}", fam.prefix)
             total += len(df.columns)
             described += sum(1 for v in notes[key].values() if v)
         print(f"{fam.stem}: {len(ops)} endpoints, {described}/{total} columns described")
     write_yaml(NOTES, notes)
+    write_package_schemas({stem: dict(sorted(shorts.items())) for stem, shorts in sorted(package.items())})
 
 
 if __name__ == "__main__":

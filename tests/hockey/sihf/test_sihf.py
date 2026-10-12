@@ -18,6 +18,7 @@ import pytest
 import yaml
 
 from sportsdataverse.hockey.sihf import sihf_api_web
+from sportsdataverse.hockey.sihf import sihf_api_web_parsers as P
 from sportsdataverse.hockey.sihf.sihf_api_web_parsers import (
     _col,
     parse_sihf_game_goalie_stats,
@@ -243,7 +244,30 @@ def test_attendance_drops_the_thousands_separator_and_tags_the_total_row():
     teams = df.filter(pl.col("row_type") == "data")
     assert teams["spectators"].sum() == 3458381  # "3’458’381" upstream; the 14 teams add up to the total
     assert teams["home_games"].sum() == 460
-    assert df.schema["spectators_quotient"] == df.schema["stadium_capacity_quotient"] == pl.Int64
+    # quotients are per-game rates: Float64 like every other *_quotient, even when SIHF rounds them
+    assert df.schema["spectators_quotient"] == df.schema["stadium_capacity_quotient"] == pl.Float64
+    assert teams.filter(pl.col("team_name") == "HC Ajoie")["spectators_quotient"].to_list() == [4231.0]
+
+
+def test_every_quotient_alias_is_a_float_rate():
+    """``*Quotient`` columns are ratios; time quotients (``mm:ss``) stay String, the rest are Float64."""
+    quotients = {a for a in P._INT_ALIASES | P._FLOAT_ALIASES if a.endswith("Quotient")}
+    assert quotients and quotients <= P._FLOAT_ALIASES
+    assert not {a for a in P._INT_ALIASES if a.endswith("Quotient") or a.endswith("Percent")}
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        {"filters": [{"alias": ["Season"], "selected": 2026}, {"alias": {"x": 1}, "selected": 1}]},
+        {"highlightedPositions": [{"style": ["total"], "rows": [1]}, {"style": {"a": 1}, "rows": [2]}]},
+    ],
+)
+def test_an_unhashable_filter_alias_or_highlight_style_is_ignored_not_a_crash(bad):
+    raw = json.loads((FIXTURES / "full" / "table__teamSpectator__2026__1.json").read_text())
+    raw.update(bad)
+    df = parse_sihf_table(raw)
+    assert df.height == len(raw["data"])
 
 
 def test_goalies_below_the_line_have_no_rank_but_are_not_summary_rows():

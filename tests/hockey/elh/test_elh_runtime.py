@@ -46,11 +46,13 @@ class _Resp:
 
 @pytest.fixture
 def transport(monkeypatch: pytest.MonkeyPatch) -> Dict[str, Any]:
-    """Serve queued answers; record every request and every throttle call."""
+    """Serve queued answers; record every request and every attempt sent over the throttled session."""
     state: Dict[str, Any] = {"answers": [], "calls": [], "waits": []}
 
     def download(url: str, params: Any = None, **kw: Any) -> _Resp:
         state["calls"].append((url, dict(params or {})))
+        if kw.get("session") is ehr.SESSION:  # every attempt on SESSION waits for the host's slot
+            state["waits"].append(url)
         answer = state["answers"].pop(0)
         if isinstance(answer, Exception):
             raise answer
@@ -58,7 +60,6 @@ def transport(monkeypatch: pytest.MonkeyPatch) -> Dict[str, Any]:
         return _Resp(text if isinstance(text, str) else json.dumps(text), status)
 
     monkeypatch.setattr(rt._rt, "download", download)
-    monkeypatch.setattr(ehr, "_polite_wait", lambda url, *a, **k: state["waits"].append(url))
     return state
 
 

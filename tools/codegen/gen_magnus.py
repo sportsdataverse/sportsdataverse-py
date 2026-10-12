@@ -148,10 +148,12 @@ GAME_ENDPOINTS: Dict[str, Dict[str, str]] = {
 }
 
 RAISES = [
-    "sportsdataverse.errors.NoDataError: liguemagnus.com has no data for the request (success=false, an "
-    "empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game).",
-    "sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is outside the requested scope, "
-    "a partial schedule page, or a game page without its embedded game sheet.",
+    "sportsdataverse.errors.NoDataError: liguemagnus.com has no data for the request (success=false "
+    "'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown "
+    "or unplayed game).",
+    "sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is success=false with any other "
+    "message, outside the requested scope, a partial schedule page, or a game page without its embedded game "
+    "sheet.",
 ]
 SEE_ALSO = [
     {"name": "Ligue Magnus", "url": "https://liguemagnus.com/", "note": "the league site whose data the wrappers read"},

@@ -241,12 +241,14 @@ def test_a_stub_or_redirect_table_body_is_a_failed_fetch(monkeypatch, body, matc
         rt._get(URL, {"alias": "team", "searchQuery": "1//", "League": 1, "Season": 2026})
 
 
-def test_every_request_waits_for_the_host_first(monkeypatch):
-    order: List[str] = []
-    monkeypatch.setattr(rt, "_polite_wait", lambda url: order.append(f"wait {url}"))
-    monkeypatch.setattr(rt._rt, "_get", lambda url, params=None, **kw: order.append("get") or _body(Season="2026"))
+def test_every_request_goes_over_the_throttled_session(monkeypatch):
+    """``SESSION`` waits for the host's slot before every attempt, retries included (no extra explicit wait)."""
+    seen: List[Any] = []
+    monkeypatch.setattr(
+        rt._rt, "_get", lambda url, params=None, **kw: seen.append(kw.get("session")) or _body(Season="2026")
+    )
     rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026})
-    assert order == [f"wait {URL}", "get"]
+    assert seen == [rt._eh.SESSION]
 
 
 def test_a_matching_echo_returns_the_body(monkeypatch):

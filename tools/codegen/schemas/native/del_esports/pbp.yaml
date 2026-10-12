@@ -140,5 +140,23 @@ columns:
 - description: ''
   name: outgoing_goalie_name
   type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_shortcut
+  type: character
+- description: ''
+  name: goal_review
+  type: character
+- description: ''
+  name: on_ice_decision
+  type: character
+- description: ''
+  name: reason_for_review
+  type: character
+- description: ''
+  name: decision_after_review
+  type: character
 kind: dataframe
 schema: del_pbp
