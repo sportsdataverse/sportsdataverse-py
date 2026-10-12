@@ -345,9 +345,9 @@ A polars (or pandas) DataFrame, one row per pitch. A window with no games return
 | `release_speed` | double | Pitch velocity out of the hand (mph). |
 | `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
 | `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
-| `player_name` | character | Player name. |
+| `player_name` | character | Name of the `player_type`-side player, `Last, First` -- the batter under the default `player_type="batter"`, the pitcher under `player_type="pitcher"`. |
 | `batter` | integer | MLBAM player id of the batter. |
-| `pitcher` | integer | Whether the position is a pitcher. |
+| `pitcher` | integer | MLBAM player id of the pitcher. |
 | `events` | character | Nested list of non-game events. |
 | `description` | character | Long-form description text. |
 | `spin_dir` | double | Deprecated spin direction field, no longer populated. |
@@ -417,8 +417,8 @@ A polars (or pandas) DataFrame, one row per pitch. A window with no games return
 | `at_bat_number` | integer | Sequential plate-appearance number within the game. |
 | `pitch_number` | integer | Pitch number within the plate appearance. |
 | `pitch_name` | character | Full name of the pitch type (e.g. 4-Seam Fastball, Slider). |
-| `home_score` | integer | Home team run total after the play. |
-| `away_score` | integer | Away team run total after the play. |
+| `home_score` | integer | Home team score before the pitch (see post_home_score). |
+| `away_score` | integer | Away team score before the pitch (see post_away_score). |
 | `bat_score` | integer | Batting team score before the pitch. |
 | `fld_score` | integer | Fielding team score before the pitch. |
 | `post_away_score` | integer | Away team score after the pitch. |
@@ -501,9 +501,9 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 | `release_speed` | double | Pitch velocity out of the hand (mph). |
 | `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
 | `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
-| `player_name` | character | Player name. |
+| `player_name` | character | Name of the `player_type`-side player, `Last, First` -- the batter under the default `player_type="batter"`, the pitcher under `player_type="pitcher"`. |
 | `batter` | integer | MLBAM player id of the batter. |
-| `pitcher` | integer | Whether the position is a pitcher. |
+| `pitcher` | integer | MLBAM player id of the pitcher. |
 | `events` | character | Nested list of non-game events. |
 | `description` | character | Long-form description text. |
 | `spin_dir` | double | Deprecated spin direction field, no longer populated. |
@@ -573,8 +573,8 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 | `at_bat_number` | integer | Sequential plate-appearance number within the game. |
 | `pitch_number` | integer | Pitch number within the plate appearance. |
 | `pitch_name` | character | Full name of the pitch type (e.g. 4-Seam Fastball, Slider). |
-| `home_score` | integer | Home team run total after the play. |
-| `away_score` | integer | Away team run total after the play. |
+| `home_score` | integer | Home team score before the pitch (see post_home_score). |
+| `away_score` | integer | Away team score before the pitch (see post_away_score). |
 | `bat_score` | integer | Batting team score before the pitch. |
 | `fld_score` | integer | Fielding team score before the pitch. |
 | `post_away_score` | integer | Away team score after the pitch. |
@@ -658,9 +658,9 @@ A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games re
 | `release_speed` | double | Pitch velocity out of the hand (mph). |
 | `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
 | `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
-| `player_name` | character | Player name. |
+| `player_name` | character | Name of the `player_type`-side player, `Last, First` -- the batter under the default `player_type="batter"`, the pitcher under `player_type="pitcher"`. |
 | `batter` | integer | MLBAM player id of the batter. |
-| `pitcher` | integer | Whether the position is a pitcher. |
+| `pitcher` | integer | MLBAM player id of the pitcher. |
 | `events` | character | Nested list of non-game events. |
 | `description` | character | Long-form description text. |
 | `spin_dir` | double | Deprecated spin direction field, no longer populated. |
@@ -730,8 +730,8 @@ A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games re
 | `at_bat_number` | integer | Sequential plate-appearance number within the game. |
 | `pitch_number` | integer | Pitch number within the plate appearance. |
 | `pitch_name` | character | Full name of the pitch type (e.g. 4-Seam Fastball, Slider). |
-| `home_score` | integer | Home team run total after the play. |
-| `away_score` | integer | Away team run total after the play. |
+| `home_score` | integer | Home team score before the pitch (see post_home_score). |
+| `away_score` | integer | Away team score before the pitch (see post_away_score). |
 | `bat_score` | integer | Batting team score before the pitch. |
 | `fld_score` | integer | Fielding team score before the pitch. |
 | `post_away_score` | integer | Away team score after the pitch. |

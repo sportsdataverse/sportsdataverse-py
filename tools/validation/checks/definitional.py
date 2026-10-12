@@ -846,9 +846,10 @@ _CFB_PBP_RULES: tuple[Rule, ...] = (
     ),
     Rule(
         "fumble_lost_implies_fumble",
-        ("fumble_lost", "fumble_vec"),
-        (_c("fumble_lost") == True) & (_c("fumble_vec") == False),  # noqa: E712
-        "a lost fumble requires a fumble",
+        ("fumble_lost", "fumble_vec", "fumble_or_muff"),
+        # a muffed punt the kicking team recovers is lost without the word "fumble"
+        (_c("fumble_lost") == True) & (_c("fumble_vec") == False) & (_c("fumble_or_muff") == False),  # noqa: E712
+        "a lost fumble requires a fumble or a muff",
     ),
     Rule(
         "fg_made_implies_fg_attempt",

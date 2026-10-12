@@ -1,0 +1,42 @@
+schema: load_nba_stats_draft_combine_drills
+kind: dataframe
+columns:
+- name: temp_player_id
+  type: integer
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: standing_vertical_leap
+  type: double
+  description: ''
+- name: max_vertical_leap
+  type: double
+  description: ''
+- name: lane_agility_time
+  type: double
+  description: ''
+- name: modified_lane_agility_time
+  type: double
+  description: ''
+- name: three_quarter_sprint
+  type: double
+  description: ''
+- name: bench_press
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''

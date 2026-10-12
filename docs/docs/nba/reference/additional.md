@@ -34,7 +34,17 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
+| [load_nba_stats_draft_combine_anthro](additional/sportsdataverse-data-releases.md#load_nba_stats_draft_combine_anthro) | Load draft-combine anthropometric measurements (`draftcombineplayeranthro`). |
+| [load_nba_stats_draft_combine_drills](additional/sportsdataverse-data-releases.md#load_nba_stats_draft_combine_drills) | Load draft-combine athletic drill results (`draftcombinedrillresults`). |
+| [load_nba_stats_draft_combine_nonstationary_shooting](additional/sportsdataverse-data-releases.md#load_nba_stats_draft_combine_nonstationary_shooting) | Load draft-combine off-the-dribble and on-the-move shooting (`draftcombinenonstationaryshooting`). |
+| [load_nba_stats_draft_combine_spot_shooting](additional/sportsdataverse-data-releases.md#load_nba_stats_draft_combine_spot_shooting) | Load draft-combine spot-up shooting drills (`draftcombinespotshooting`). |
+| [load_nba_stats_draft_combine_stats](additional/sportsdataverse-data-releases.md#load_nba_stats_draft_combine_stats) | Load the draft-combine summary table (`nba_stats_draft_combine`, `draftcombinestats`). |
+| [load_nba_stats_hustle_player](additional/sportsdataverse-data-releases.md#load_nba_stats_hustle_player) | Load player hustle stats (the `nba_stats_hustle` release, player files). |
+| [load_nba_stats_hustle_team](additional/sportsdataverse-data-releases.md#load_nba_stats_hustle_team) | Load team hustle stats (the `nba_stats_hustle` release, team files). |
 | [load_nba_stats_leaguedash](additional/sportsdataverse-data-releases.md#load_nba_stats_leaguedash) | Load one asset family of the `nba_stats_leaguedash` release. |
+| [load_nba_stats_matchups](additional/sportsdataverse-data-releases.md#load_nba_stats_matchups) | Load offensive-vs-defensive player matchups (`nba_stats_matchups`, season files). |
+| [load_nba_stats_matchups_rollup](additional/sportsdataverse-data-releases.md#load_nba_stats_matchups_rollup) | Load defensive matchup roll-ups by position (`nba_stats_matchups`, rollup files). |
+| [load_nba_stats_synergy](additional/sportsdataverse-data-releases.md#load_nba_stats_synergy) | Load Synergy play-type stats (the `nba_stats_synergy` release). |
 
 ## NBA Stats API
 
@@ -268,5 +278,5 @@ not covered by the generated API-endpoint reference above.
 |---|---|
 | [nba_crosswalks_from_archive](additional/ids-and-crosswalks.md#nba_crosswalks_from_archive) | Build the NBA team, schedule and player crosswalks for a past season, offline. |
 | [nba_player_crosswalk](additional/ids-and-crosswalks.md#nba_player_crosswalk) | Build the NBA cross-source player crosswalk (ESPN / NBA Stats / Fox). |
-| [nba_schedule_crosswalk](additional/ids-and-crosswalks.md#nba_schedule_crosswalk) | Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats). |
+| [nba_schedule_crosswalk](additional/ids-and-crosswalks.md#nba_schedule_crosswalk) | Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats / Fox). |
 | [nba_team_crosswalk](additional/ids-and-crosswalks.md#nba_team_crosswalk) | Build the NBA cross-source team crosswalk (ESPN / NBA Stats / Fox). |

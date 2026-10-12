@@ -2,13 +2,11 @@
 
 The contract tests read the copy bundled with sdv-py (the loader's fallback);
 the loader itself reads the ``{league}_crosswalk`` release first. Covers both
-leagues from one file because the loader is league-parameterized and the alias
-table is shared.
+leagues from one file because the loader is league-parameterized. The build and
+its curated alias table live in sdv-reference-data (``sdv_reference/crosswalks/``).
 """
 
 from __future__ import annotations
-
-from pathlib import Path
 
 import polars as pl
 import pytest
@@ -20,7 +18,6 @@ from sportsdataverse.wbb import ncaa_wbb_team_ids
 from tests.conftest import skip_if_no_live
 
 LEAGUES = ("mbb", "wbb")
-ALIAS_CSV = Path(__file__).resolve().parents[2] / "tools" / "crosswalk" / "alias_ncaa_espn.csv"
 
 #: Observed floors, NOT aspirational: the build currently resolves 100% of every
 #: season in both leagues. Held a little under that so a single upstream rename
@@ -122,23 +119,6 @@ def test_espn_columns_are_populated_when_matched(crosswalks, league):
     matched = crosswalks[league].filter(pl.col("espn_team_id").is_not_null())
     for col in ("espn_display_name", "espn_location", "espn_mascot"):
         assert matched[col].null_count() == 0, col
-
-
-def test_alias_table_has_no_unused_rows(crosswalks):
-    """Every hand-curated alias must still be earning its keep in some league."""
-    alias = pl.read_csv(ALIAS_CSV, schema_overrides={"espn_team_id": pl.Utf8})
-    used = set()
-    for df in crosswalks.values():
-        used |= set(df.filter(pl.col("match_method") == "alias")["ncaa_team"].unique())
-    unused = sorted(set(alias["ncaa_team"]) - used)
-    assert not unused, f"alias rows matched nothing: {unused}"
-
-
-def test_alias_table_is_unambiguous():
-    alias = pl.read_csv(ALIAS_CSV, schema_overrides={"espn_team_id": pl.Utf8})
-    assert alias["ncaa_team"].n_unique() == alias.height
-    assert alias["espn_team_id"].null_count() == 0
-    assert alias["note"].null_count() == 0, "every alias needs a written justification"
 
 
 def test_known_hard_cases(crosswalks):

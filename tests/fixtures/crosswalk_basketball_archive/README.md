@@ -18,3 +18,4 @@ Real, trimmed inputs for `tests/test_crosswalk_basketball_archive.py`, copied 20
 | `wnba_stats/json/boxscoretraditionalv3/2015/1041500305.json`, `boxscoresummaryv2/2015/1041500305.json` | `wehoop-wnba-stats-raw` (stats.wnba.com, 2015 WNBA Finals game 5), unmodified |
 | `espn/{nba,wnba}_schedule_2015.parquet` | `hoopR-nba-data` / `wehoop-wnba-data` `schedules/parquet/*_schedule_2015.parquet`, filtered to those games and the columns the builder reads |
 | `espn/{nba,wnba}_game_rosters_2015.parquet` | `*/game_rosters/parquet/game_rosters_2015.parquet`, filtered the same way |
+| `fox_nba_scores_segment_20150614.json`, `fox_nba_scores_segment_20150616.json` | `api.foxsports.com/bifrost/v1/nba/league/scores-segment/{date}` (the same two Finals games), captured 2026-10-11; image, sort and favorite keys dropped |
