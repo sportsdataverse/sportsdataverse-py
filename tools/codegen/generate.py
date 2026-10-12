@@ -235,7 +235,7 @@ def _build_docstring(
         else:
             lines.append(f"Bound to sport={sport!r}, league={league!r}.")
         lines.append("")
-    lines.append(f"Endpoint: ``GET {host_url}{ep.path}``")
+    lines.append(f"Endpoint: ``{ep.method.upper()} {host_url}{ep.path}``")
     if example_url:
         lines.append(f"Example URL: {example_url}")
     lines.append("")
@@ -248,8 +248,9 @@ def _build_docstring(
     lines.append("Args:")
     for p in ep.path_params:
         lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} path parameter.')}")
+    q_kind = "body field" if ep.method == "post" else "query parameter"
     for p in ep.query_params:
-        lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} query parameter.')}")
+        lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} {q_kind}.')}")
     if auth:
         # Families differ in how their headers are minted and whether an
         # unauthenticated token is even usable, so the default text is only a
@@ -995,10 +996,15 @@ class _EndpointView:
         # never displace ``headers`` / later positional args of an existing wrapper.
         self.signature_params = [p for p in ordered if not p.kw_only]
         self.kw_only_params = [p for p in ordered if p.kw_only]
+
         # A closed value set (``choices:``) is checked BEFORE the request: a path-token
         # typo would otherwise reach the host and surface as a misleading NoDataError.
+        # An optional param defaulting to None skips the check when left unset.
+        def _unset_ok(p: spec.Param) -> str:
+            return f"{p.python_name} is not None and " if not p.required and p.default is None else ""
+
         self.choice_checks = [
-            f"if {p.python_name} not in {tuple(p.choices)!r}:"
+            f"if {_unset_ok(p)}{p.python_name} not in {tuple(p.choices)!r}:"
             + "\n        raise ValueError("
             + f'f"{p.python_name} must be one of {tuple(p.choices)!r}; got {{{p.python_name}!r}}")'
             for p in ordered
@@ -1051,6 +1057,7 @@ class _EndpointView:
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
         # Every attribute below is read under StrictUndefined, so all must exist.
         self.endpoint_url = f"{ep_host}{_sub_slugs(ep.path, league.sport, league.league)}"
+        self.http_method = ep.method.upper()
         self.valid_url = self.example_url
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
         self.return_table = _return_table(ep.returns_schema, league.prefix)

@@ -204,6 +204,7 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
                     "name": "position",
                     "query_key": "values[amplua_full]",
                     "type": "str",
+                    "choices": ["goalies", "defenses", "forwards", "skaters", "all"],
                     "description": "Position group: goalies, defenses, forwards, skaters or all. None = the site's default.",
                 },
                 {
@@ -613,6 +614,7 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
                 "path": path,
                 "parser": parser,
                 "returns_schema": f"native/khl_rest/{short}",
+                "method": "post",  # khl_runtime._get POSTs params as the form
                 "example_args": example,
             }
             if params:

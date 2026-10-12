@@ -66,6 +66,7 @@ endpoints:
     name: played_date_time
     query_key: playedDateTime
     type: str
+  method: post
   parser: parse_ha_pbp
   path: /api/play-by-play
   returns_schema: native/ha/pbp
@@ -142,6 +143,7 @@ endpoints:
     name: decided_in
     query_key: decided_in
     type: str
+  method: post
   parser: parse_ha_games
   path: /api/all-time-games-stats
   returns_schema: native/ha/games
@@ -176,6 +178,7 @@ endpoints:
     name: location
     query_key: location
     type: str
+  method: post
   parser: parse_ha_standings
   path: /api/league-standings-all-time
   returns_schema: native/ha/standings
@@ -293,6 +296,7 @@ endpoints:
     name: decided_in
     query_key: decided_in
     type: str
+  method: post
   parser: parse_ha
   path: /api/all-time-skaters-stats
   returns_schema: native/ha/skater_stats
@@ -381,6 +385,7 @@ endpoints:
     name: decided_in
     query_key: decided_in
     type: str
+  method: post
   parser: parse_ha
   path: /api/all-time-goalkeepers-stats
   returns_schema: native/ha/goalie_stats
@@ -477,6 +482,7 @@ endpoints:
     name: decided_in
     query_key: decided_in
     type: str
+  method: post
   parser: parse_ha_team_stats
   path: /api/all-time-teams-stats
   returns_schema: native/ha/team_stats
@@ -502,6 +508,7 @@ endpoints:
     name: phase
     query_key: phase
     type: str
+  method: post
   parser: parse_ha_teams
   path: /api/all-time-goalkeepers-stats
   returns_schema: native/ha/teams
@@ -535,6 +542,7 @@ endpoints:
     name: is_goalkeeper
     query_key: isGoalkeeper
     type: bool
+  method: post
   parser: parse_ha_leaders
   path: /api/player-leaderboard
   returns_schema: native/ha/leaders
@@ -562,6 +570,7 @@ endpoints:
     name: search_query
     query_key: searchQuery
     type: str
+  method: post
   parser: parse_ha_players
   path: /api/all-players
   returns_schema: native/ha/players

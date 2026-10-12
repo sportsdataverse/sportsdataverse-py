@@ -48,6 +48,7 @@ endpoints:
     name: tournament_id
     query_key: values[tournament]
     type: int
+  method: post
   parser: parse_khl_schedule
   path: /calendar/list/
   returns_schema: native/khl_rest/schedule
@@ -65,6 +66,7 @@ endpoints:
     type: int
   fixed_params:
     page: team
+  method: post
   parser: parse_khl_roster
   path: /clubs/team/
   returns_schema: native/khl_rest/roster
@@ -94,6 +96,7 @@ endpoints:
     name: tournament_id
     query_key: values[tournament]
     type: int
+  method: post
   parser: parse_khl_stat_filters
   path: /filters/statplayers/
   returns_schema: native/khl_rest/stat_filters
@@ -133,6 +136,7 @@ endpoints:
     type: int
   fixed_params:
     page: resume
+  method: post
   parser: parse_khl_game_header
   path: /game/header/
   returns_schema: native/khl_rest/game_header
@@ -169,6 +173,7 @@ endpoints:
     name: tournament_id
     query_key: values[tournament]
     type: int
+  method: post
   parser: parse_khl_game_protocol
   path: /game/protocol/
   returns_schema: native/khl_rest/game_protocol
@@ -206,6 +211,7 @@ endpoints:
     name: tournament_id
     query_key: values[tournament]
     type: int
+  method: post
   parser: parse_khl_game_info
   path: /game/text/
   returns_schema: native/khl_rest/game_info
@@ -242,6 +248,7 @@ endpoints:
     name: tournament_id
     query_key: values[tournament]
     type: int
+  method: post
   parser: parse_khl_player_box
   path: /game/text/
   returns_schema: native/khl_rest/player_box
@@ -279,6 +286,7 @@ endpoints:
     name: tournament_id
     query_key: values[tournament]
     type: int
+  method: post
   parser: parse_khl_pbp
   path: /game/text/
   returns_schema: native/khl_rest/pbp
@@ -316,6 +324,7 @@ endpoints:
     name: tournament_id
     query_key: values[tournament]
     type: int
+  method: post
   parser: parse_khl_shots
   path: /game/text/
   returns_schema: native/khl_rest/shots
@@ -330,6 +339,7 @@ endpoints:
     query_key: values[id]
     required: true
     type: int
+  method: post
   parser: parse_khl_player_profile
   path: /players/profile/
   returns_schema: native/khl_rest/player_profile
@@ -343,6 +353,7 @@ endpoints:
     query_key: values[id]
     required: true
     type: int
+  method: post
   parser: parse_khl_player_career
   path: /players/stats/
   returns_schema: native/khl_rest/player_career
@@ -367,6 +378,7 @@ endpoints:
   fixed_params:
     stage: playoff
     values[type]: playoff
+  method: post
   parser: parse_khl_playoff_bracket
   path: /standings/playoff/
   returns_schema: native/khl_rest/playoff_bracket
@@ -390,6 +402,7 @@ endpoints:
     type: int
   fixed_params:
     values[type]: regular
+  method: post
   parser: parse_khl_standings
   path: /standings/regular/
   returns_schema: native/khl_rest/standings
@@ -421,7 +434,13 @@ endpoints:
     name: tournament_id
     query_key: values[tournament]
     type: int
-  - description: 'Position group: goalies, defenses, forwards, skaters or all. None
+  - choices:
+    - goalies
+    - defenses
+    - forwards
+    - skaters
+    - all
+    description: 'Position group: goalies, defenses, forwards, skaters or all. None
       = the site''s default.'
     name: position
     query_key: values[amplua_full]
@@ -443,6 +462,7 @@ endpoints:
     name: per_page
     query_key: nav[count]
     type: int
+  method: post
   parser: parse_khl_player_stats
   path: /stat/players/
   returns_schema: native/khl_rest/player_stats
