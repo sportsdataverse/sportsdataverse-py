@@ -118,6 +118,16 @@ uv run python -c "import sys, polars as pl; src, gid, out = sys.argv[1:]; pl.rea
   `nflverse-dev/nfl-data/python/.cache/nflverse_pbp/pbp_<season>.parquet`); the ESPN game id is mapped to nflverse's
   `game_id` by the `espn` column of `https://github.com/nflverse/nfldata/raw/master/data/games.csv`, and
   the play by ESPN's play id (the game id followed by the GSIS `play_id`).
+- **`nflverse/kickoff_touchback_epa.csv`** (task 2.21, EX-2.3-a, read by
+  `test_kickoff_touchback_epa_agrees_with_nflverse`): nflverse's `epa` on 124 plays of the committed
+  captures, columns `espn_game_id, play_id, nflverse_game_id, season, epa`: every play the processor
+  flags `kickoff_tb` (unscored) that nflverse also has as `play_type == "kickoff"` with `touchback == 1`
+  (2006-2025). The other 32 unscored 2006-2007 `kickoff_tb` rows are left out: ESPN describes those kicks only
+  as "KickOff", the touchback pattern flags them, and nflverse has every one as a returned kick
+  (`touchback == 0`), not a touchback (review R831-2, routed to task 2.19).
+  Read 2026-10-12 from the nfl-data cache of the same release's `play_by_play_<season>.parquet`
+  assets (`nflverse-dev/nfl-data/python/.cache/nflverse_pbp/pbp_<season>.parquet`), mapped and joined as
+  the file above.
 
 ## Fourth-down and offline-model fixtures (task 1.5)
 
@@ -207,6 +217,21 @@ columns, one per quarterback-game ESPN rated in 2023 (regular season and playoff
 - `plays_401872922.json.gz`, `box_401872925_espn_trimmed.json.gz`: see the tests that read them.
 - `athlete_refs_401872922.json.gz`: the Core v2 `$ref` payloads (`sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/<id>`) of the 7 athletes in `plays_401872922.json.gz` that the summary's athlete lookup misses, keyed by `$ref` URL; one request each, 2026-10-11, whole payloads. Read by `tests/football/test_play_participants_resolve.py` (supp-007).
 - `fox/`, `nfl_cbs/`, `yahoo_nfl/`: provider captures with their own READMEs where present.
+- `kickoff_misfiled_401326517_trimmed.json.gz` (task 2.21, read by `test_kickoff_net_spot_is_the_receivers_next_snap`):
+  the ESPN summary of 401326517 (2021 week 13, PHI @ NYJ) from the nfl-raw library
+  (`nfl/espn/raw/2021/401326517.json.gz`, nfl-raw commit 5ca32021, 2026-09-14), trimmed to the same keys as the
+  whole-game captures. It is NOT one of them (the name keeps it out of the `summary_*` glob): ESPN files the
+  touchback kickoff 1442 between two PHI snaps of one drive, the case the kickoff net-spot possession check covers.
+- `kickoff_onside_400554238_trimmed.json.gz` (task 2.21 / R810-3, read by
+  `test_kickoff_kicking_team_recovery_ends_at_the_kickers_snap[onside]`): the ESPN summary of 400554238
+  (2014 week 4, TEN @ IND; nflverse 2014_04_TEN_IND) from the nfl-raw library
+  (`nfl/espn/raw/2014/400554238.json.gz`, nfl-raw commit f2d99262, 2026-09-14), trimmed the same way and
+  likewise outside the `summary_*` glob. Play 568 is an onside kick IND recovers (nflverse epa -3.798).
+- `kickoff_reversed_recovery_301114003_trimmed.json.gz` (task 2.21 / R810-3, read by
+  `test_kickoff_reversed_recovery_stays_the_receivers_ball`): the ESPN summary of 301114003 (2010 week 10,
+  MIN @ CHI; nflverse 2010_10_MIN_CHI) from the nfl-raw library (`nfl/espn/raw/2010/301114003.json.gz`,
+  nfl-raw commit 56da67ca, 2026-09-14), trimmed the same way. Play 3734 is a kickoff whose fumble recovery by
+  the kicking team was REVERSED (nflverse epa 0.399).
 
 ## Overtime rule sets (C-M6)
 
