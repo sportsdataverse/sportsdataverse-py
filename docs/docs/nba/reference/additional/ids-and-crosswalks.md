@@ -8,7 +8,7 @@ description: "NBA — additional Python functions — IDs and crosswalks — fun
 
 ### nba_crosswalks_from_archive {#nba_crosswalks_from_archive}
 
-`nba_crosswalks_from_archive(season: 'int', espn_schedule: 'pl.DataFrame', espn_game_rosters: 'pl.DataFrame', stats_dir: 'Union[str, Path]', min_confidence: 'float' = 0.92, *, fox: 'bool' = False, fox_games: 'bool' = False) -> 'Dict[str, pl.DataFrame]'`
+`nba_crosswalks_from_archive(season: 'int', espn_schedule: 'pl.DataFrame', espn_game_rosters: 'pl.DataFrame', stats_dir: 'Union[str, Path]', min_confidence: 'float' = 0.92, *, fox: 'bool' = False, fox_games: 'bool' = False, alt_root: 'Optional[Union[str, Path]]' = None) -> 'Dict[str, pl.DataFrame]'`
 
 Build the NBA team, schedule and player crosswalks for a past season, offline.
 
@@ -34,7 +34,8 @@ parquet, 2002+) and the local stats.nba.com JSON archive
 All-Star and other exhibition sides are left out of the team and player
 crosswalks (they never play a franchise); their games stay in the
 schedule. Yahoo team and game ids are computed from 2014 on; Yahoo player
-columns stay null, and Fox columns stay null unless `fox=True`.
+columns stay null unless `alt_root` is set, and Fox columns stay null
+unless `fox=True` or `alt_root` is set.
 
 **Parameters**
 
@@ -47,6 +48,7 @@ columns stay null, and Fox columns stay null unless `fox=True`.
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for a fuzzy player match. |
 | `fox` | `bool` | `False` | Fetch the Fox legs live (the only network call). `fox_team_id` / `fox_team_name` join on the normalized team name, so they fill for any season whose franchise names match today's Fox names. The Fox player columns fill only for the current season (Fox rosters are today's) and stay null otherwise. A failed Fox fetch logs a warning and leaves the columns null; it never fails the build. |
 | `fox_games` | `bool` | `False` | Fill `fox_game_id` and the Fox home/away team ids from Fox's scoreboard, one Fox call per game date, matched on US-Eastern date and teams (either home/away order), for any season Fox serves. Fox teams resolve through `fox_team_id` (with `fox`) or the season's ESPN team names. A failed fetch logs a warning and leaves the columns null. |
+| `alt_root` | `Optional[Union[str, Path]]` | `None` | The league's `*-alt-data` checkout (e.g. `hoopR-nba-alt-data`). When set, the Fox and Yahoo player columns are filled offline from its parsed history (`{provider}/game_rosters` and `{provider}/games` parquet for `season`): provider games join ESPN's on (US-Eastern date, team pair) and players match inside each game and team, voted across the season. Only null ids are filled; a provider with no parsed season is skipped. |
 
 **Returns**
 

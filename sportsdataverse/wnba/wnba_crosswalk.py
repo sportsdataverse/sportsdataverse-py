@@ -523,6 +523,7 @@ def wnba_crosswalks_from_archive(
     fox: bool = False,
     fox_games: bool = False,
     yahoo: bool = False,
+    alt_root: Optional[Union[str, Path]] = None,
 ) -> Dict[str, pl.DataFrame]:
     """Build the WNBA team, schedule and player crosswalks for a past season, offline.
 
@@ -568,6 +569,14 @@ def wnba_crosswalks_from_archive(
             digits}``, kept only where Yahoo lists that id for the season (one
             call per week). A failed fetch logs a warning and leaves the columns
             null; it never fails the build.
+
+        alt_root: The league's ``*-alt-data`` checkout (e.g. ``wehoop-wnba-alt-data``).
+            When set, the Fox and Yahoo player columns are filled offline from
+            its parsed history (``{provider}/game_rosters`` and
+            ``{provider}/games`` parquet for ``season``): provider games join
+            ESPN's on (US-Eastern date, team pair) and players match inside
+            each game and team, voted across the season. Only null ids are
+            filled; a provider with no parsed season is skipped.
 
     Returns:
         ``{"team": ..., "schedule": ..., "player": ...}``, with the same columns
@@ -615,4 +624,5 @@ def wnba_crosswalks_from_archive(
         fox=fox,
         fox_games=fox_games,
         yahoo=yahoo,
+        alt_root=alt_root,
     )
