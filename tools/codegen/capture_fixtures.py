@@ -132,13 +132,17 @@ def _register_native(api: str, short: str, fname: str) -> None:
     """Add ``fname: short`` under ``api`` in native_fixture_map.yaml, keeping its comments.
 
     Registration is checked inside ``api``'s own block (two APIs can share an endpoint short),
-    and the block header is matched at the start of a line (``fox_api:`` is inside ``wbb_fox_api:``)."""
+    and the block header is matched at the start of a line (``fox_api:`` is inside ``wbb_fox_api:``).
+    A short already mapped under ANY file name -- as the value, or inside a list value (one SIHF
+    game capture feeds six parsers) -- counts as registered: a second mapping would make two
+    fixtures write the same ``schemas/native/<api>/<short>.yaml``, and the last one would win."""
     import re
 
     import yaml
 
     text = NATIVE_MAP.read_text(encoding="utf-8")
-    if ((yaml.safe_load(text) or {}).get(api) or {}).get(fname) == short:
+    block = (yaml.safe_load(text) or {}).get(api) or {}
+    if any(v == short or (isinstance(v, list) and short in v) for v in block.values()):
         return
     line = f"  {fname}: {short}\n"
     head = re.search(rf"^{re.escape(api)}:[ \t]*\n", text, re.M)
