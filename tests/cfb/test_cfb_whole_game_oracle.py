@@ -58,8 +58,9 @@ Oracle per column
     of 4+ (the processor credits 100% through 3, 50% of 4-8, cap 5.5).
 ``yds_rushed``
     The feed's text states every rush's yardage (a number, "no gain", "loss of N"); a rush row without
-    it is a parse gap. XFAIL EX-1.2-a (a finding surfaced by this suite's null-aware review) on the 42
-    captures where it happens; the line-yards checks below read only the rows that carry a yardage.
+    it is a parse gap. XFAIL EX-1.2-a (a finding surfaced by this suite's null-aware review) on the 15
+    captures where it still happens (#768 closed 27 of the original 42); the line-yards checks below read
+    only the rows that carry a yardage.
 ``line_yards + second_level_yards + open_field_yards`` on gains
     The decomposition identity: the three pieces sum to ``yds_rushed``. Green (C-H1's CFB twin).
 ``period``
@@ -542,10 +543,13 @@ def _rushes(game_id: int) -> pl.DataFrame:
     )
 
 
+# 27 captures left this table when main's #768 (6c5a48e44f, "kneel-down and yardless vendor rush yardage")
+# reached this branch: they now assert plainly. With #768's cfb_pbp.py hunk reverted every count below and
+# every removed capture returns to its pre-#768 value (303102638 48, 313090025 47, 401644749 7).
 _EX_1_2_A = {
     gid: f"EX-1.2-a: {n} rush row(s) lose yds_rushed (and so line_yards) because the text pattern is unmatched "
-    "('rush up the middle for 3 yards', 'rushed ... for 1 yard', 'Kneel down ... for loss of 3 yards'; "
-    "cfb_pbp.py yds_rushed chain)"
+    "('rushed up the middle for 1 yard', fumbled rushes with no yardage clause, a '1 Yd Run' with a "
+    "two-point try; cfb_pbp.py yds_rushed chain)"
     for gid, n in {
         242972641: 14,
         243040130: 9,
@@ -555,40 +559,13 @@ _EX_1_2_A = {
         243392572: 5,
         252532751: 6,
         282430151: 1,
-        282432641: 6,
         282570328: 1,
-        293182305: 16,
-        303102638: 48,
-        313090025: 47,
+        303102638: 3,
+        313090025: 2,
         322802005: 1,
-        333130023: 15,
         400756970: 1,
-        400787459: 2,
         400953391: 1,
-        401628455: 1,
-        401628559: 1,
-        401636929: 2,
-        401643775: 2,
-        401644749: 7,
-        401752744: 1,
-        401752746: 2,
-        401752753: 1,
-        401752817: 8,
-        401752844: 2,
-        401754543: 1,
-        401754571: 1,
-        401756930: 2,
-        401756960: 2,
-        401760419: 1,
-        401761656: 3,
-        401762835: 1,
-        401762856: 1,
-        401762858: 3,
-        401778334: 2,
-        401831583: 1,
-        401856682: 1,
-        401858228: 3,
-        401858426: 1,
+        401644749: 2,
     }.items()
 }
 

@@ -13,7 +13,7 @@
   - [Parser Layer (0.0.51+)](#parser-layer-0051)
     - [`return_parsed` parameter](#return_parsed-parameter)
     - [Summary dispatcher (21 sub-frames)](#summary-dispatcher-21-sub-frames)
-    - [Test fixtures (1,730 fixture files across 102 directories)](#test-fixtures-1730-fixture-files-across-102-directories)
+    - [Test fixtures (1,743 fixture files across 103 directories)](#test-fixtures-1743-fixture-files-across-103-directories)
     - [Test infrastructure summary](#test-infrastructure-summary)
   - [Key Coding Conventions](#key-coding-conventions)
     - [Module pattern (NEW modules)](#module-pattern-new-modules)
@@ -67,7 +67,7 @@ When this guide differs from current repository docs, treat
 - **Branch:** `main` is the default branch and release branch.
 - **Python target:** 3.10, 3.11, 3.12, 3.13, 3.14
 - **Packaging:** uv (PEP 621 `[project]` + PEP 735 `[dependency-groups]`)
-- **DataFrame engine:** polars 1.x and 2.x (the `0.36-live` branch is a parallel
+- **DataFrame engine:** polars 2.x (`polars>=2.0,<3`; the `0.36-live` branch is a parallel
   pandas-based line of development; see "Branches" below)
 
 ## Commit Convention
@@ -96,8 +96,9 @@ is the sole attributable contributor.
 
 ## Branches
 
-- **`main`** — default; uses **polars** (1.x and 2.x) end-to-end. Migrated
-  from polars 0.18 → 1.x and converted to uv-based packaging (May 2026).
+- **`main`** — default; uses **polars** 2.x end-to-end. Migrated from polars
+  0.18 → 1.x and converted to uv-based packaging (May 2026), made 2.0-safe in
+  #719, and the floor raised to `polars>=2` (October 2026).
 - **`0.36-live`** — parallel pandas-based line of development. Carries CFB
   PBP bug fixes (kneel-down handling, half-edge cases, turnover detection,
   WP cases, punt/yardage parsing, etc.) that have not yet been ported into
@@ -364,10 +365,10 @@ Cross-league shape divergences captured by tests:
 - NCAA W basketball `officials` sometimes ships < 3 rows; CFB
   national championship shipped 0 officials.
 
-### Test fixtures (1,730 fixture files across 102 directories)
+### Test fixtures (1,743 fixture files across 103 directories)
 
 Captured fixtures live under `tests/fixtures/{espn,mlb_api,nhl_api_web,
-nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 101 directories
+nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 103 directories
 in all). Each directory has a
 `README.md` documenting provenance (URL + capture date). See
 each fixture directory's own `README.md` for provenance (URL + capture date).
@@ -932,13 +933,12 @@ two a missing file is — and never let a 403 take the "absent" branch.
 
 ### Polars version
 
-Constrained to `polars>=1.0,<3`. With the 3.10 floor the lock resolves **2.0** on every supported
-Python (the 1.36 resolution went with Python 3.9), but the `>=1.0` floor stays, so every change
-must still run on both 1.x and 2.0. All seven `*_pbp.py`
-modules were migrated from the 0.18 surface to 1.x in May 2026 (about 165 call sites) and made
-2.0-safe in #719. A 0.18-style API in this codebase is a bug, not a style preference.
+Constrained to `polars>=2.0,<3`; the lock resolves **2.0** on every supported Python. polars 1.x
+is no longer supported, so code may use 2.x-only API. All seven `*_pbp.py` modules were migrated
+from the 0.18 surface to 1.x in May 2026 (about 165 call sites) and made 2.0-safe in #719. A
+0.18-style API in this codebase is a bug, not a style preference.
 
-Rules that keep code working on both 1.x and 2.0:
+polars 2.0 behaviour rules:
 
 - `list.to_struct(fields=[...])`, with `fields` as a keyword. `upper_bound` and `n_field_strategy` are gone in 2.0.
 - Pass `empty_as_null=` explicitly to every `explode()`. In 2.0 an empty list explodes to zero rows, not a null row.
@@ -950,11 +950,11 @@ Rules that keep code working on both 1.x and 2.0:
 - `pl.DataFrame()` has height 0 in 2.0, so `pl.DataFrame().with_columns(x=pl.lit(1))` is empty. Build the frame
   from its data instead.
 - Lazy `collect()` runs the streaming engine by default in 2.0.
-- `cut()`/`qcut()` are deprecated in 2.0, but their `bin_*` replacements don't exist in 1.x. Keep `cut`/`qcut`
-  until the floor moves to 2.0.
+- `cut()`/`qcut()` are deprecated in 2.0; their `bin_*` replacements are available now that the floor is 2.0.
+  Use them in new code. Existing `cut`/`qcut` call sites are a separate migration.
 - `hash()` / `hash_rows()` values change between polars versions. Never persist them.
-- `unpivot(variable_name=, value_name=)` raises in 2.0 when a melted column already has that name (1.x allowed
-  it; the upgrade guide does not mention it). Use names no input column can take, such as `value_name="__value"`.
+- `unpivot(variable_name=, value_name=)` raises in 2.0 when a melted column already has that name (the
+  upgrade guide does not mention it). Use names no input column can take, such as `value_name="__value"`.
 - Never hand a GitHub release URL to polars' own reader (`pl.read_parquet(url)`, `scan_parquet`,
   `read_parquet_schema`). In 2.0 it requests the footer with a suffix range, and the release CDN answers
   HTTP 501. Read with `use_pyarrow=True`, as `_fetch_release_parquet` does. For a footer-only schema, pass
@@ -1172,7 +1172,7 @@ code at the source; never blanket-ignore a category.
 - **`psutil` is optional in `decorators.py`.** It's imported lazily so
   the package still imports cleanly when `psutil` isn't installed.
   Don't promote it to a hard runtime dep without a deliberate decision.
-- **Polars literal-from-numpy no longer auto-broadcasts in 1.x.** Use
+- **Polars literal-from-numpy does not auto-broadcast (since 1.x).** Use
   `pl.lit(np_array).first()` to extract a scalar, or pass a Python value
   directly.
 - **ESPN injuries come from the LEAGUE endpoint, never the game summary.**
@@ -1208,7 +1208,7 @@ code at the source; never blanket-ignore a category.
 - `CONTRIBUTING.md` is the canonical contributor onboarding file (covers
   uv, conda, lint/typecheck, dep-bumping flow).
 - `README.md` has Standard pip / Modern uv / Development install paths plus the
-  runtime notes (Python 3.10-3.14, polars 1.x/2.x, NFL cache). There is no Conda
+  runtime notes (Python 3.10-3.14, polars 2.x, NFL cache). There is no Conda
   section in the README; the recipe lives in `recipe/`.
 - `recipe/meta.yaml` + `recipe/README.md` ship the conda-build recipe and
   document the conda-forge feedstock submission flow. The local-source

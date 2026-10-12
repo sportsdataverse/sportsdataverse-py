@@ -393,6 +393,84 @@ def test_merge_rosters_name_only_when_no_jersey() -> None:
     assert rows[0]["match_method"] == "name"
 
 
+def _player(name: str, jersey: str, athlete_id: Any) -> Dict[str, Any]:
+    return {
+        "person_key": cw._norm_person(name),
+        "jersey_key": jersey,
+        "athlete_id": athlete_id,
+        "name": name,
+        "jersey": jersey or None,
+        "position": None,
+    }
+
+
+def test_merge_rosters_yahoo_name_jersey_then_unique_name() -> None:
+    espn = [
+        _player("John Smith", "5", 1),
+        _player("John Smith", "9", 2),
+        _player("Al Jones", "1", 3),  # jersey changed on Yahoo, name unique -> name-only match
+    ]
+    yahoo = [
+        _player("John Smith", "9", "y9"),
+        _player("John Smith", "12", "y12"),  # jersey matches neither ESPN John Smith -> no guess
+        _player("Al Jones Jr.", "2", "yaj"),
+    ]
+    rows = _merge_rosters(espn, [], yahoo)
+    by_espn = {r["espn_athlete_id"]: r for r in rows if r["espn_athlete_id"] is not None}
+    assert by_espn[2]["yahoo_athlete_id"] == "y9"
+    assert by_espn[1]["yahoo_athlete_id"] is None
+    assert by_espn[3]["yahoo_athlete_id"] == "yaj"
+    yahoo_only = [r["yahoo_athlete_id"] for r in rows if r["matched_sources"] == "yahoo"]
+    assert yahoo_only == ["y12"]
+
+
+def test_merge_rosters_yahoo_ambiguous_name_jersey_never_first_hit() -> None:
+    # two Yahoo players share name AND jersey -> neither attaches (no roster-order guess)
+    rows = _merge_rosters(
+        [_player("John Smith", "5", 1)], [], [_player("John Smith", "5", "ya"), _player("John Smith", "5", "yb")]
+    )
+    assert next(r for r in rows if r["espn_athlete_id"] == 1)["yahoo_athlete_id"] is None
+    assert sorted(r["yahoo_athlete_id"] for r in rows if r["matched_sources"] == "yahoo") == ["ya", "yb"]
+    # same on the anchor side: two ESPN players share name + jersey
+    rows = _merge_rosters(
+        [_player("John Smith", "5", 1), _player("John Smith", "5", 2)], [], [_player("John Smith", "5", "ya")]
+    )
+    assert all(r["yahoo_athlete_id"] is None for r in rows if r["espn_athlete_id"] is not None)
+
+
+def test_merge_rosters_yahoo_uses_fox_jersey_when_espn_has_none() -> None:
+    espn = [_player("Al Jones", "", 3)]
+    fox = [_player("Al Jones", "4", "f4")]
+    yahoo = [_player("Al Jones", "4", "y4"), _player("Al Jones", "8", "y8")]  # name alone is ambiguous
+    rows = _merge_rosters(espn, fox, yahoo)
+    row = next(r for r in rows if r["espn_athlete_id"] == 3)
+    assert row["fox_athlete_id"] == "f4" and row["yahoo_athlete_id"] == "y4"
+    assert row["espn_jersey"] is None  # the borrowed jersey is for matching only
+
+
+def test_yahoo_team_id_falls_back_to_fcs_directory(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[Any] = []
+
+    def fake_teams(groups: Any = None, **k: Any) -> pl.DataFrame:
+        calls.append(groups)
+        if groups == 81:
+            return pl.DataFrame(
+                {"team_id": [2], "team_location": ["Montana"], "team_display_name": ["Montana Grizzlies"]}
+            )
+        return pl.DataFrame(
+            {"team_id": [194], "team_location": ["Ohio State"], "team_display_name": ["Ohio State Buckeyes"]}
+        )
+
+    monkeypatch.setattr(cw, "espn_cfb_teams", fake_teams)
+    monkeypatch.setattr(
+        cw,
+        "yahoo_cfb_teams",
+        lambda season, week, **k: pl.DataFrame({"team_id": ["ncaaf.t.200"], "full_name": ["Montana Grizzlies"]}),
+    )
+    assert cw._yahoo_team_id(2, 2026) == "ncaaf.t.200"
+    assert calls == [None, 81]
+
+
 def test_merge_odds_matches_to_espn() -> None:
     mk = _matchup_key("ohio state buckeyes", "akron zips")
     events = [
@@ -1150,40 +1228,54 @@ def test_cfb_rosters_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> No
     assert row["match_method"] == "name"  # Fox has no jersey -> name-only
 
 
-def test_cfb_rosters_crosswalk_three_way(monkeypatch: pytest.MonkeyPatch) -> None:
-    _patch_espn_roster(
-        monkeypatch,
-        pl.DataFrame({"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}),
-    )
-    monkeypatch.setattr(
-        cw,
-        "fox_cfb_team_roster",
-        lambda tid, **k: pl.DataFrame({"athlete_id": ["f7"], "player": ["CJ Stroud"], "pos": ["QB"]}),
-    )
-    # _espn_team_name_keys -> espn_cfb_teams; _yahoo_roster -> player season stats
+@pytest.mark.parametrize("yahoo_team_id", ["ncaaf.t.73", None])
+def test_cfb_rosters_crosswalk_yahoo_roster_leg(monkeypatch: pytest.MonkeyPatch, yahoo_team_id: Any) -> None:
+    """Real captures: ESPN's Alabama roster (2026 preseason) against Yahoo's Alabama
+    ``teamRoster`` (2026-10-11, trimmed to 7 entries). Yahoo ids attach by name +
+    jersey, then by a unique name (jerseys changed after the ESPN capture); a
+    former player (``active: false``) never attaches; an unmatched current Yahoo
+    player surfaces as a Yahoo-only row. With ``yahoo_team_id=None`` the Yahoo
+    team is found in Yahoo's team directory by name."""
+    import sportsdataverse.cfb.cfb_yahoo_ext as yext
+    import sportsdataverse.yahoo.yahoo_shangrila as ysh
+
+    monkeypatch.setattr(cw, "_get", lambda url, params=None, **k: load_fixture("espn", "team_roster_cfb"))
     monkeypatch.setattr(
         cw,
         "espn_cfb_teams",
         lambda **k: pl.DataFrame(
-            {"team_id": [194], "team_location": ["Ohio State"], "team_display_name": ["Ohio State Buckeyes"]}
+            {"team_id": [333], "team_location": ["Alabama"], "team_display_name": ["Alabama Crimson Tide"]}
         ),
     )
     monkeypatch.setattr(
         cw,
-        "yahoo_cfb_player_season_stats",
-        lambda season, **k: pl.DataFrame(
-            {"player_id": ["ncaaf.p.1"], "display_name": ["C.J. Stroud"], "team": ["Ohio State"]}
-        ),
+        "yahoo_cfb_teams",
+        lambda season, week, **k: pl.DataFrame({"team_id": ["ncaaf.t.73"], "full_name": ["Alabama Crimson Tide"]}),
     )
-    df = cfb_rosters_crosswalk(194, 25, season=2024, providers=("espn", "fox", "yahoo"))
-    assert df.height == 1
-    row = df.row(0, named=True)
-    # Fox writes "CJ" vs ESPN "C.J." -> still name-matched after normalization;
-    # all three providers present
-    assert row["espn_athlete_id"] == 4432
-    assert row["fox_athlete_id"] == "f7"
-    assert row["yahoo_athlete_id"] == "ncaaf.p.1"
-    assert row["matched_sources"] == "espn+fox+yahoo"
+    yahoo_urls: list[str] = []
+
+    def fake_yahoo_get(url: str, params: Any = None, **k: Any) -> Dict[str, Any]:
+        yahoo_urls.append(url)
+        if url.endswith("/teamRoster") and (params or {}).get("teamId") == "ncaaf.t.73":
+            return load_fixture("yahoo", "shangrila_team_roster_ncaaf")
+        return {}
+
+    monkeypatch.setattr(ysh, "_get", fake_yahoo_get)
+    monkeypatch.setattr(yext, "_get", fake_yahoo_get)
+
+    df = cfb_rosters_crosswalk(333, 101, season=2026, providers=("espn", "yahoo"), yahoo_team_id=yahoo_team_id)
+    by_espn = {r["espn_athlete_id"]: r["yahoo_athlete_id"] for r in df.iter_rows(named=True) if r["espn_athlete_id"]}
+    assert len(by_espn) == 100
+    assert by_espn[4692044] == "ncaaf.p.316903"  # Jah-Marien Latham, #20 on both
+    assert by_espn[4685507] == "ncaaf.p.333303"  # Keon Sabb, #3 on both (Yahoo also has Brooks at #3)
+    assert by_espn[4888707] == "ncaaf.p.337785"  # Danny Lewis Jr., #87 on both
+    assert by_espn[5110500] == "ncaaf.p.455512"  # Kevin Riley, ESPN #28 / Yahoo #6 -> unique name
+    assert by_espn[5141394] == "ncaaf.p.470421"  # Lotzeir Brooks, ESPN #17 / Yahoo #3 -> unique name
+    assert by_espn[5093292] is None  # Cade Carruth: Yahoo lists him only as a former player
+    assert sum(v is not None for v in by_espn.values()) == 5
+    yahoo_only = df.filter(pl.col("matched_sources") == "yahoo")
+    assert yahoo_only["yahoo_athlete_id"].to_list() == ["ncaaf.p.312695"]  # Kedrick Bingley-Jones
+    assert any(u.endswith("/teamRoster") for u in yahoo_urls)
 
 
 def test_cfb_odds_events_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -19,6 +19,13 @@
   rule: cfb-2014-espn-participants-and-text-template
   reason: 'the folded-try suffix gate keys on ESPN''s 2014 text template. Plan task 3.11'
 - file: sportsdataverse/cfb/cfb_pbp.py
+  scope: 'CFBPlayProcess.__add_xp_suffix_cols'
+  snippet: 'pl.col("season") <= 2013'
+  count: 1
+  id: C-T3
+  rule: cfb-2014-espn-participants-and-text-template
+  reason: 'through 2013 the try is its own "Extra point by X is good" row (ESPN''s pre-2014 text template); landed with main''s #771 (81f9718458), reached this branch in the main sync. Plan task 3.11'
+- file: sportsdataverse/cfb/cfb_pbp.py
   scope: 'CFBPlayProcess.__add_yardage_cols'
   snippet: 'pl.col("season") <= 2013'
   count: 1
