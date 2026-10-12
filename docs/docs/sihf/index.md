@@ -9,13 +9,13 @@ description: "sdv-py SIHF: endpoint references, dataset loaders and parsers for 
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [SIHF statistics API](#sihf-statistics-api) | `data.sihf.ch` | 11 | none |
+| [SIHF statistics API](#sihf-statistics-api) | `data.sihf.ch` | 33 | none |
 
 ## SIHF statistics API {#sihf-statistics-api}
 
 | Reference | Functions |
 |---|---:|
-| [SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)](reference/sihf_api_web) | 11 |
+| [SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)](reference/sihf_api_web) | 33 |
 
 ## Examples
 
