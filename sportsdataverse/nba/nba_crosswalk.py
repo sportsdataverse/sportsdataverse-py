@@ -661,6 +661,7 @@ def nba_crosswalks_from_archive(
     *,
     fox: bool = False,
     fox_games: bool = False,
+    alt_root: Optional[Union[str, Path]] = None,
 ) -> Dict[str, pl.DataFrame]:
     """Build the NBA team, schedule and player crosswalks for a past season, offline.
 
@@ -686,7 +687,8 @@ def nba_crosswalks_from_archive(
     All-Star and other exhibition sides are left out of the team and player
     crosswalks (they never play a franchise); their games stay in the
     schedule. Yahoo team and game ids are computed from 2014 on; Yahoo player
-    columns stay null, and Fox columns stay null unless ``fox=True``.
+    columns stay null unless ``alt_root`` is set, and Fox columns stay null
+    unless ``fox=True`` or ``alt_root`` is set.
 
     Args:
         season: Season, ending year (``2025`` = 2024-25).
@@ -706,6 +708,13 @@ def nba_crosswalks_from_archive(
             Fox teams resolve through ``fox_team_id`` (with ``fox``) or the
             season's ESPN team names. A failed fetch logs a warning and leaves
             the columns null.
+        alt_root: The league's ``*-alt-data`` checkout (e.g. ``hoopR-nba-alt-data``).
+            When set, the Fox and Yahoo player columns are filled offline from
+            its parsed history (``{provider}/game_rosters`` and
+            ``{provider}/games`` parquet for ``season``): provider games join
+            ESPN's on (US-Eastern date, team pair) and players match inside
+            each game and team, voted across the season. Only null ids are
+            filled; a provider with no parsed season is skipped.
 
     Returns:
         ``{"team": ..., "schedule": ..., "player": ...}``, with the same columns
@@ -744,5 +753,13 @@ def nba_crosswalks_from_archive(
     if stats["games"].height == 0:
         raise FileNotFoundError(f"no NBA box scores for season {season} under {stats_dir}")
     return build_archive_crosswalks(
-        "nba", season, espn_schedule, espn_game_rosters, stats, min_confidence, fox=fox, fox_games=fox_games
+        "nba",
+        season,
+        espn_schedule,
+        espn_game_rosters,
+        stats,
+        min_confidence,
+        fox=fox,
+        fox_games=fox_games,
+        alt_root=alt_root,
     )
