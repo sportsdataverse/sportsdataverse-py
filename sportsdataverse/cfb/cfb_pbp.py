@@ -314,9 +314,9 @@ _PLAYER_NAME_CLAUSE_LEAD = (
     r"|(?:to|by|at|for|in|the|up|lateral|complete|incomplete|direct|from|returned|recovered|fumbled|muffed)"
     r"(?:\s|$).*$)"
 )
-#: After the cut, a name holding a digit (a spot such as "WAS30"), ESPN's "N/A" placeholder, or a
-#: single character is not a name.
-_PLAYER_NAME_NOT_A_NAME = r"\d|^N/A(?:[\s,.]|$)|^.$"
+#: After the cut, a name holding a digit (a spot such as "WAS30"), ESPN's "N/A" placeholder, a
+#: single character, or ESPN's literal play text "null" (401628559's blocked punt, C-L6) is not a name.
+_PLAYER_NAME_NOT_A_NAME = r"\d|^N/A(?:[\s,.]|$)|^.$|^null$"
 
 #: Narrative tails that bleed into a captured name where the extraction regex
 #: has no stopword boundary: pass-direction phrases (``"Russell Wilson deep
@@ -383,6 +383,7 @@ from sportsdataverse.cfb.model_vars import (
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import DefaultOddsWarning as _DefaultOddsWarning  # private alias: cfb_pbp is star-imported
+from sportsdataverse.errors import PlayOrderWarning as _PlayOrderWarning  # private alias, as above
 
 ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.ubj")
 wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread.ubj")
@@ -458,6 +459,38 @@ def _warn_default_odds(game_id, odds_source, spread, total) -> None:
     )
 
 
+#: The total every odds path falls back to when no provider has one (the pickcenter path used 55.0, R828-3).
+_DEFAULT_TOTAL = 55.5
+
+
+def _warn_default_total(game_id, odds_source, total) -> None:
+    """Warn that a game with a market spread has no market total (R828-3): the total is a default."""
+    warnings.warn(
+        f"CFB game {game_id}: no pregame total is available (odds_source={odds_source!r}); the overUnder "
+        f"column and the fourth-down decision surface (team implied totals) use {total}, which no market set. "
+        "Make it an error with warnings.simplefilter('error', DefaultOddsWarning).",
+        _DefaultOddsWarning,
+        stacklevel=3,
+    )
+
+
+def _warn_period_steps_back(play_df: pl.DataFrame, game_id) -> None:
+    """Warn when ``period.number`` decreases along the final row order (C-M18): a wrong id or label."""
+    if "period.number" not in play_df.columns:
+        return
+    back = play_df.with_columns(_prev_id=pl.col("id").shift(1)).filter(
+        (pl.col("period.number").diff() < 0).fill_null(False)
+    )
+    if back.height:
+        warnings.warn(
+            f"CFB game {game_id}: the period steps back along the play order between play ids "
+            f"{back.select('_prev_id', 'id').rows()}; the row order or the period label is wrong there, "
+            "so the features read from a neighbouring row (scores, EPA lookbacks, WPA) read the wrong one.",
+            _PlayOrderWarning,
+            stacklevel=3,
+        )
+
+
 def _ot_second(play_df, team_col: str):
     """Per row: is ``team_col`` second in its overtime period? Null where unknown."""
     if not {"period", "start.pos_team.id", team_col}.issubset(play_df.columns):
@@ -493,7 +526,7 @@ def _as_trained_2h_flag(features: pl.DataFrame) -> pl.DataFrame:
     only on the opening kicker's first-half possessions) degrades ``wp_before_naive``; feeding
     the trained semantics keeps WP as it was while the published column stays correct.
     """
-    return features.with_columns((~pl.col("is_home")).alias("pos_team_receives_2H_kickoff"))
+    return features.with_columns((pl.col("is_home") == False).alias("pos_team_receives_2H_kickoff"))
 
 
 def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
@@ -1786,7 +1819,7 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
     )
     if not df["_late"].any():
         return plays_df
-    fixed = df.filter(~pl.col("_late")).select("_pos", "_seq", "_drv")
+    fixed = df.filter(pl.col("_late") == False).select("_pos", "_seq", "_drv")
     late = df.filter(pl.col("_late")).select("_pos", "_seq", "_drv")
     target = (
         late.join(fixed.rename({"_pos": "_tpos", "_seq": "_tseq", "_drv": "_tdrv"}), how="cross")
@@ -1813,7 +1846,7 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
     # defensive twos meet this in 2014-2026 (7 rows, 2020-24).
     tries = df.filter(pl.col("_late") & pl.col("type.text").is_in(_TRY_TYPES)).join(target, on="_pos", how="anti")
     if tries.height:
-        tds = df.filter(~pl.col("_late") & pl.col("type.text").str.contains("(?i)touchdown")).select(
+        tds = df.filter((pl.col("_late") == False) & pl.col("type.text").str.contains("(?i)touchdown")).select(
             _tpos="_pos", _tseq="_seq", _tper="_per"
         )
         target = pl.concat(
@@ -2040,6 +2073,39 @@ def _reunite_drive_rows(plays_df: pl.DataFrame) -> pl.DataFrame:
     return plays_df if order == list(range(plays_df.height)) else plays_df[order]
 
 
+def _place_out_of_scheme_plays(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Put a play whose id is outside the feed's numbering where its period and clock say (C-M18).
+
+    401425418 files a third-quarter kickoff (Q3 5:14; between the 5:20 and 5:14 plays in the
+    feed) under the id ``4014254180`` among 18-digit ids, so the id sort made it the game's first
+    row. A row moves only when its id's width differs from both neighbours' AND its period breaks
+    the order there: a feed whose ids change width as they count (the 2025+ vendor feed) already
+    runs in period order and is left alone, and a wrong period LABEL under a well-formed id
+    (401628439) is not a sort problem; :func:`_warn_period_steps_back` names it.
+    """
+    if plays_df.height < 3 or not {"id", "period.number", "start.adj_TimeSecsRem"}.issubset(plays_df.columns):
+        return plays_df
+    period = pl.col("period.number").cast(pl.Int64, strict=False)
+    width = pl.col("id").cast(pl.String).str.len_chars()
+    stray = plays_df.select(
+        ((period.shift(1) > period) | (period.shift(-1) < period)).fill_null(False)
+        & (width != width.shift(1)).fill_null(True)
+        & (width != width.shift(-1)).fill_null(True)
+        & period.is_not_null()
+        & pl.col("start.adj_TimeSecsRem").is_not_null()
+    ).to_series()
+    if not stray.any():
+        return plays_df
+    rest = plays_df.filter(~stray)
+    for row in plays_df.filter(stray).iter_slices(1):
+        p, t = row["period.number"].item(), row["start.adj_TimeSecsRem"].item()
+        rest_p = rest["period.number"].cast(pl.Int64, strict=False)
+        # after every earlier period's play and every play of its own period with more time left
+        at = int(((rest_p < p) | ((rest_p == p) & (rest["start.adj_TimeSecsRem"] > t))).sum())
+        rest = pl.concat([rest.slice(0, at), row, rest.slice(at)])
+    return rest
+
+
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Chronological play sort with an overtime correction.
 
@@ -2053,7 +2119,7 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """
     # maintain_order: a play repeated under drives.current sits after its
     # drives.previous copy, so the same-id dedupe keeps the fresher one
-    plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True)
+    plays_df = _place_out_of_scheme_plays(plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True))
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
         return _reunite_drive_rows(plays_df)
     plays_df = _place_tries_filed_after_the_kickoff(_reunite_drive_rows(_reorder_late_inserts(plays_df)))
@@ -2682,6 +2748,8 @@ class CFBPlayProcess(object):
         # String-null because the chain runs `.str.*` ops on them (split/contains/to_lowercase),
         # which raise on an untyped Null column; the numeric/bool columns stay untyped Null so
         # their explicit downstream `.cast(...)` owns the final dtype.
+        # A play's whole ``end`` block or its scores can be absent from every play too (C-NF-10(a));
+        # the scores are created Int64-null, their published dtype.
         _required_play_cols = [
             "period.number",
             "clock.displayValue",
@@ -2690,6 +2758,8 @@ class CFBPlayProcess(object):
             "sequenceNumber",
             "text",
             "scoringPlay",
+            "homeScore",
+            "awayScore",
             "start.team.id",
             "start.down",
             "start.distance",
@@ -2697,13 +2767,25 @@ class CFBPlayProcess(object):
             "start.yardLine",
             "start.downDistanceText",
             "end.team.id",
+            "end.down",
+            "end.distance",
+            "end.yardsToEndzone",
             "end.yardLine",
         ]
         _string_play_cols = {"clock.displayValue", "type.text", "text", "start.downDistanceText"}
         _missing = [c for c in _required_play_cols if c not in pbp_txt["plays"].columns]
         if _missing:
             pbp_txt["plays"] = pbp_txt["plays"].with_columns(
-                [(pl.lit(None, dtype=pl.String) if c in _string_play_cols else pl.lit(None)).alias(c) for c in _missing]
+                [
+                    (
+                        pl.lit(None, dtype=pl.String)
+                        if c in _string_play_cols
+                        else pl.lit(None, dtype=pl.Int64)
+                        if c in ("homeScore", "awayScore")
+                        else pl.lit(None)
+                    ).alias(c)
+                    for c in _missing
+                ]
             )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
@@ -3847,7 +3929,9 @@ class CFBPlayProcess(object):
 
         gameSpreadAvailable = spread_raw is not None
         gameSpread = float(spread_raw) if spread_raw is not None else 2.5
-        overUnder = float(ou_raw) if ou_raw is not None else 55.5
+        overUnder = float(ou_raw) if ou_raw is not None else _DEFAULT_TOTAL
+        if gameSpreadAvailable and ou_raw is None:
+            _warn_default_total(self.gameId, "core_odds_api", overUnder)
         homeFavorite = bool(home_fav_raw) if home_fav_raw is not None else True
         return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable)
 
@@ -3874,25 +3958,29 @@ class CFBPlayProcess(object):
         # offline (a supplied summary): the summary's own pickcenter is the only
         # odds source, so one provider is enough and an empty array means the
         # documented defaults, never a request
+        pickcenter = None
         if n_pick > 1 or (offline and n_pick >= 1):
             pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
             pickcenter = pickcenter.sort_values(by=["provider.id"])
-            homeFavorite = (
-                pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
-                if "homeTeamOdds.favorite" in pickcenter.columns
-                else True
-            )
-            gameSpread = (
-                pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0]
-                if "spread" in pickcenter.columns
-                else 2.5
-            )
-            overUnder = (
-                pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
-                if "overUnder" in pickcenter.columns
-                else 55.0
-            )
-            # .values[0] is a shape-(1,) row: unwrap to Python scalars so the payload's odds are a
+
+        def _first(column, default):
+            """The first provider's non-null ``column`` (``provider.id`` order), else ``default``.
+
+            An all-null column used to raise IndexError on the empty filter (C-NF-10(b), R828-3).
+            """
+            values = pickcenter[column].dropna() if column in pickcenter.columns else ()
+            return values.iloc[0] if len(values) else default
+
+        # a pickcenter whose providers carry no spread is no spread: it takes the path below, as an
+        # empty pickcenter does (C-NF-10(b))
+        if pickcenter is not None and _first("spread", None) is not None:
+            homeFavorite = _first("homeTeamOdds.favorite", True)
+            gameSpread = _first("spread", 2.5)
+            overUnder = _first("overUnder", None)
+            if overUnder is None:
+                overUnder = _DEFAULT_TOTAL
+                _warn_default_total(self.gameId, "summary_pickcenter", overUnder)
+            # pandas hands back numpy values: unwrap to Python scalars so the payload's odds are a
             # valid (JSON-safe) odds_override (C-M19); the values chosen are unchanged
             homeFavorite = bool(np.asarray(homeFavorite).item())
             gameSpread = float(np.asarray(gameSpread).item())
@@ -4058,11 +4146,17 @@ class CFBPlayProcess(object):
         play_df = play_df.filter(
             pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
         )
+        _warn_period_steps_back(play_df, self.gameId)
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
                 half=pl.when(pl.col("period.number") <= 2).then(1).otherwise(2),
+                # C-L1: the order is final here (re-sorted, copies and markers dropped), so the
+                # row-index columns follow it. The numbers keep their gaps; only their order moves.
+                game_play_number=pl.col("game_play_number").sort(),
             )
+            # one chunk per column: polars 2.0 panics on a later struct whose fields disagree
+            .rechunk()
             .with_columns(
                 # A kickoff the receiving team returns ends at its first down. ESPN files
                 # that end at down -1 ("Kickoff Return (Offense)", 2014 on), and the EP and
@@ -4077,6 +4171,7 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("end.down"))
                 .alias("end.down"),
                 lead_half=pl.col("half").shift(-1),
+                lag_half=pl.col("half").shift(1),  # C-L1: the previous row of the final order
                 lag_scoringPlay=pl.col("scoringPlay").shift(1),
             )
             .with_columns(
@@ -4295,51 +4390,56 @@ class CFBPlayProcess(object):
                             ],
                         )
                     )
-                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("sacked")))
-                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("pass complete")))
+                    # the text literals fold case, as cfbfastR's ignore_case does (C-L16)
+                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("(?i)sacked")))
+                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("(?i)pass complete")))
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Own)").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
-                        ),
-                    )
-                    .or_((pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("sacked")))
-                    .or_(
-                        (pl.col("type.text") == "Fumble Recovery (Own) Touchdown").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
                         ),
                     )
                     .or_(
+                        (pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("(?i)sacked"))
+                    )
+                    .or_(
                         (pl.col("type.text") == "Fumble Recovery (Own) Touchdown").and_(
-                            pl.col("text").str.contains("sacked"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
+                        ),
+                    )
+                    .or_(
+                        (pl.col("type.text") == "Fumble Recovery (Own) Touchdown").and_(
+                            pl.col("text").str.contains("(?i)sacked"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent)").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent)").and_(
-                            pl.col("text").str.contains("sacked"),
+                            pl.col("text").str.contains("(?i)sacked"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent) Touchdown").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Return Touchdown").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete"),
                         ),
                     )
                     .or_(
-                        (pl.col("type.text") == "Fumble Return Touchdown").and_(pl.col("text").str.contains("sacked")),
+                        (pl.col("type.text") == "Fumble Return Touchdown").and_(
+                            pl.col("text").str.contains("(?i)sacked")
+                        ),
                     )
                     # 2025+ ESPN type for a fumble with no recovery (out of bounds)
                     .or_(
                         (pl.col("type.text") == "Fumble").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
                         ),
                     )
                     # Interception plays are pass attempts. The branches above
@@ -4640,7 +4740,7 @@ class CFBPlayProcess(object):
             play_df.with_columns(
                 # 2025+ ESPN files a pick whose returner fumbles out of bounds as "Fumble";
                 # it is an interception, not a strip sack for the rule below to retype.
-                pl.when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass intercepted")))
+                pl.when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("(?i)pass intercepted")))
                 .then(pl.lit("Interception Return"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
@@ -5431,7 +5531,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
                 .then(True)
-                .when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass complete")))
+                .when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("(?i)pass complete")))
                 .then(True)
                 .otherwise(False),
                 pass_attempt=pl.when(
@@ -10395,7 +10495,11 @@ class CFBPlayProcess(object):
 
         Returns:
             dict: The fully-processed game payload. If the constructor was
-            given ``return_keys``, only those keys are returned.
+            given ``return_keys``, only those keys are returned. Its ``plays`` are
+            the feed's plays without the administrative rows (coin toss, period and
+            game markers, drive banners) and ESPN's duplicate copies, so there are
+            fewer of them than the summary's drive plays. Key a play on ``id``:
+            before 2005 ``sequenceNumber`` restarts with every drive.
 
         Example:
             Quick start::

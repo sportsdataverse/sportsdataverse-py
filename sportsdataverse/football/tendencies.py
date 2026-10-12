@@ -297,7 +297,7 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
     df = df.with_columns(
         t_half=half,
         t_neutral=neutral,
-        t_standing=(pl.col("t_scrimmage") & ~pl.col("t_no_play")),
+        t_standing=(pl.col("t_scrimmage") & (pl.col("t_no_play") == False)),
         # red zone from yards to go: NFL rz_play reads ESPN's absolute yardLine, which is the
         # wrong end of the field for one team a game; the flag only fills a missing distance
         t_rz=pl.coalesce(pl.col("t_ytg") <= 20, b("rz_play")),
@@ -310,7 +310,7 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
         # a fourth-down DECISION: the offense ran, threw, punted or kicked (and it stood)
         t_fourth_decision=(
             (pl.col("t_down") == 4)
-            & ~pl.col("t_no_play")
+            & (pl.col("t_no_play") == False)
             & (pl.col("t_rush") | pl.col("t_pass") | pl.col("t_punt") | pl.col("t_fg"))
         ).fill_null(False),
         t_fourth_went=((pl.col("t_down") == 4) & (pl.col("t_rush") | pl.col("t_pass"))).fill_null(False),
@@ -532,11 +532,11 @@ def _drive_counts(drv: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
         scripted_epa=pl.col("epa").filter(pl.col("scripted")).sum(),
         scripted_successes=pl.col("successes").filter(pl.col("scripted")).sum(),
         scripted_points=pl.col("pts").filter(pl.col("scripted")).sum(),
-        non_scripted_drives=(~pl.col("scripted")).sum(),
-        non_scripted_plays=pl.col("plays").filter(~pl.col("scripted")).sum(),
-        non_scripted_epa=pl.col("epa").filter(~pl.col("scripted")).sum(),
-        non_scripted_successes=pl.col("successes").filter(~pl.col("scripted")).sum(),
-        non_scripted_points=pl.col("pts").filter(~pl.col("scripted")).sum(),
+        non_scripted_drives=(pl.col("scripted") == False).sum(),
+        non_scripted_plays=pl.col("plays").filter(pl.col("scripted") == False).sum(),
+        non_scripted_epa=pl.col("epa").filter(pl.col("scripted") == False).sum(),
+        non_scripted_successes=pl.col("successes").filter(pl.col("scripted") == False).sum(),
+        non_scripted_points=pl.col("pts").filter(pl.col("scripted") == False).sum(),
     )
 
 

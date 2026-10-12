@@ -350,7 +350,7 @@ Idempotent -- subsequent calls return the cached `self.json`.
 
 **Returns**
 
-The fully-processed game payload. If the constructor was given `return_keys`, only those keys are returned.
+The fully-processed game payload. If the constructor was given `return_keys`, only those keys are returned. Its `plays` are the feed's plays without the administrative rows (coin toss, period and game markers, drive banners) and ESPN's duplicate copies, so there are fewer of them than the summary's drive plays. Key a play on `id`: before 2005 `sequenceNumber` restarts with every drive.
 
 **Example**
 

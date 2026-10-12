@@ -9,10 +9,14 @@ import polars as pl
 import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess, _drop_espn_play_copies
-from sportsdataverse.errors import DefaultOddsWarning
+from sportsdataverse.errors import DefaultOddsWarning, PlayOrderWarning
 
-# the default-odds captures processed here warn incidentally; test_default_odds_warn asserts it
-pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+# the default-odds captures processed here warn incidentally; test_default_odds_warn asserts it;
+# 401628439 warns PlayOrderWarning, asserted by test_period_order_warning_on_a_mislabelled_period
+pytestmark = [
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning"),
+]
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -92,6 +96,140 @@ def test_default_odds_warning_not_on_pickcenter_capture():
         )
         again.espn_cfb_pbp(summary=summary)
         again._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(again.json))
+
+
+def test_default_odds_warning_not_on_core_odds_api_spread(monkeypatch):
+    """R828-9: an empty pickcenter whose core odds endpoint carries a spread (live 2024+) never warns."""
+    odds = {
+        "items": [
+            {"provider": {"name": "ESPN BET"}, "spread": -6.5, "overUnder": 51.5, "homeTeamOdds": {"favorite": True}}
+        ]
+    }
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp._download_json", lambda *a, **k: odds)
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DefaultOddsWarning)
+        init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert proc.odds_source == "core_odds_api"
+    assert init == {"gameSpread": -6.5, "overUnder": 51.5, "homeFavorite": True, "gameSpreadAvailable": True}
+
+
+_DEFAULT_TOTAL_WARNING = r"CFB game {}: no pregame total is available \(odds_source='{}'\)"
+
+
+def _pickcenter_odds(game_id: int, edit=None) -> dict:
+    """Resolve a real capture's odds offline, after ``edit`` mutates its pickcenter providers."""
+    summary = json.loads((FIX / f"summary_{game_id}.json").read_text(encoding="utf-8"))
+    for provider in summary["pickcenter"]:
+        (edit or (lambda _: None))(provider)
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    return proc._CFBPlayProcess__helper_cfb_pickcenter(copy.deepcopy(proc.json))
+
+
+def test_pickcenter_without_a_total_defaults_it_and_warns():
+    """R828-3: no provider in 400869817's pickcenter has a total; it was 55.0 (55.5 on every other
+    path) with no warning. The total feeds the fourth-down surface's implied team totals."""
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_TOTAL_WARNING.format(400869817, "summary_pickcenter")):
+        odds = _pickcenter_odds(400869817)
+    assert odds["overUnder"] == 55.5
+    assert odds["gameSpreadAvailable"] is True
+
+
+def test_pickcenter_all_null_total_does_not_raise():
+    """R828-3: an explicit null total on every provider raised IndexError on the empty filter."""
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_TOTAL_WARNING.format(401301042, "summary_pickcenter")):
+        odds = _pickcenter_odds(401301042, lambda provider: provider.update(overUnder=None))
+    assert odds["overUnder"] == 55.5
+    assert odds["gameSpreadAvailable"] is True
+
+
+def test_pickcenter_all_null_spread_takes_the_default_path():
+    """C-NF-10(b): a pickcenter whose providers all carry a null spread raised IndexError; it is no
+    spread, so it takes the empty-pickcenter path (offline: the defaults, warned)."""
+    with pytest.warns(DefaultOddsWarning, match=r"CFB game 401301042: no pregame spread is available"):
+        odds = _pickcenter_odds(401301042, lambda provider: provider.update(spread=None))
+    assert odds == {"gameSpread": 2.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": False}
+
+
+def test_core_odds_api_spread_without_a_total_warns(monkeypatch):
+    """R828-3: the core odds endpoint's ESPN BET item with a spread and no total defaults the total, warned."""
+    odds = {"items": [{"provider": {"name": "ESPN BET"}, "spread": -6.5, "homeTeamOdds": {"favorite": True}}]}
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp._download_json", lambda *a, **k: odds)
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_TOTAL_WARNING.format(401628455, "core_odds_api")):
+        init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert init == {"gameSpread": -6.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": True}
+
+
+def _process_capture(game_id: int, edit=None) -> CFBPlayProcess:
+    """Process a committed capture offline, after ``edit`` mutates each of its drive plays."""
+    path = next(FIX.glob(f"summary_{game_id}*.json*"))
+    opener = gzip.open if path.suffix == ".gz" else open
+    with opener(path, "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            (edit or (lambda _: None))(play)
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    return proc
+
+
+def test_the_literal_null_play_text_is_not_a_player_name():
+    """C-L6: ESPN's play text "null punt blocked by blocked by" (401628559) named a punter "null"."""
+    plays = _process_capture(401628559).plays_frame
+    row = plays.filter(pl.col("id") == 401628559102988701)
+    assert row["text"].to_list() == ["null punt blocked by blocked by"]
+    assert row["punter_player_name"].to_list() == [None]
+
+
+def test_the_pass_flag_literals_fold_case():
+    """C-L16: cfbfastR matches "sacked" with ignore_case. 401628334's sacked-and-recovered fumble is a
+    pass play whatever the case of its text (the captures carry no other casing, so this edits one)."""
+    sack_id = 401628334102944601
+
+    def shout(play):
+        if int(play["id"]) == sack_id:
+            play["text"] = play["text"].replace("sacked", "SACKED")
+
+    row = _process_capture(401628334, shout).plays_frame.filter(pl.col("id") == sack_id)
+    assert row["type.text"].to_list() == ["Fumble Recovery (Own)"]
+    assert "SACKED" in row["text"].item()
+    assert row.select("pass", "sack").rows() == [(True, True)]
+
+
+def test_period_order_warning_on_a_mislabelled_period():
+    """C-M18: 401628439 files an overtime touchdown as period 2, so the period steps back; the warning names it."""
+    with pytest.warns(PlayOrderWarning, match=r"401628439.*\(401628439104999901, 401628439106260230\)"):
+        _process_capture(401628439)
+
+
+def test_an_out_of_scheme_play_id_is_placed_by_its_clock():
+    """C-M18: 401425418's Q3 kickoff (id 4014254180 among 18-digit ids) sits between the 5:20 and 5:14 plays."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", PlayOrderWarning)
+        plays = _process_capture(401425418).plays_frame
+    at = plays["id"].to_list().index(4014254180)
+    assert at > 0
+    assert plays["period"].to_list()[at - 1 : at + 2] == [3, 3, 3]
+    assert plays["clock.displayValue"].to_list()[at - 1 : at + 2] == ["5:20", "5:14", "5:14"]
+
+
+@pytest.mark.parametrize("keys", [("end",), ("homeScore", "awayScore")], ids=lambda k: k[0])
+def test_a_play_field_absent_from_every_play_does_not_crash(keys):
+    """C-NF-10(a): a block absent from EVERY play leaves json_normalize no column for it; the plays
+    build raised ColumnNotFoundError on ``end.down`` / ``homeScore``. Now those columns are null."""
+    summary = _load_summary()
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            for key in keys:
+                play.pop(key, None)
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    assert proc.plays_frame.height > 100
 
 
 def test_injected_odds_bypasses_network(monkeypatch):
