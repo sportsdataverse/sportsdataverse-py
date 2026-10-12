@@ -128,6 +128,7 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         |athlete_name_2                 |String                                                 |
         |athlete_name_3                 |String                                                 |
         |media_id                       |String                                                 |
+        |score_source                   |String                                                 |
         |pregame_home_prob              |Float64                                                |
         |home_win_prob                  |Float64                                                |
 
