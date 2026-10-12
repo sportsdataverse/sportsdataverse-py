@@ -27,6 +27,8 @@ non-National-League table, because each league publishes its own table header).
 | `table__standing__2026__100.json` | `/table?alias=standing&searchQuery=1//100&language=en&filterBy=Season,ContentType&filterQuery=2026/All` (MyHockey League, captured 2026-10-12) | 11 of 11 |
 | `table__player__2026__1.json` | `/table?alias=player&searchQuery=1//1&language=en&filterBy=Season&filterQuery=2026` | 3 of 427 |
 | `table__goalkeeper__2026__1.json` | `/table?alias=goalkeeper&searchQuery=1//1&language=en&filterBy=Season&filterQuery=2026` | 8 of 35 (row 7 is the league-average row) |
+| `table__results__2026__1__phases.json` | `/table?alias=results&searchQuery=1//1&language=en&filterBy=Season,Phase,Date&filterQuery=2026//01.07.2025-30.06.2026` (captured 2026-10-12) | 3 of 414; the Phase entries are whole (8) |
+| `table__standing__2026__1__phases.json` | `/table?alias=standing&searchQuery=1//1&language=en&filterBy=Season,Phase&filterQuery=2026/` (captured 2026-10-12) | 3 of 14; its one Phase entry is `Regular Season (3)`, where 3 is not a game count |
 | `gameoverview__20261105000325.json` | `/gameoverview?alias=gameDetail&searchQuery=20261105000325` | whole (has a goaltender change and a revoked goal) |
 | `gameoverview__20261105000009.json` | `/gameoverview?alias=gameDetail&searchQuery=20261105000009` | whole (decided by a shootout) |
 
@@ -52,6 +54,9 @@ full contract):
   standings fixtures were re-captured with `ContentType=All` on that date (the 2026-10-08 captures
   were the away table).
 - `/table` without `searchQuery`, or with an unknown `alias`, answers an empty HTTP 501.
+- The `Phase` echo lists its `entries` only when `Phase` is in `filterBy`. An empty `Phase`
+  (`filterQuery=2026/`) lets SIHF pick its default phase and still lists every one, which is
+  how the two `__phases` fixtures were requested (measured 2026-10-12).
 - `/gameoverview` with an unknown game answers 404 `{"error":"GameNotFound"}`, and without
   `searchQuery` it answers 400 `{"error":"MissingSearchQuery"}`.
 

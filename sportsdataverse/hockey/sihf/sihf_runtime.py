@@ -15,6 +15,11 @@ top of the shared getter, all measured live (2026-10-08):
   ``Phase=all``: ``standing`` answers it with the regular season and ``player`` /
   ``goalkeeper`` with Playoff Overall (one phase each), while ``results`` answers every
   game. No Phase filter is the documented way to get the whole season.
+* **An empty Phase asks for the phase list.** The ``Phase`` echo lists its ``entries``
+  (the phase ids of that league, season and table) only when ``Phase`` is in
+  ``filterBy``. Sent empty (``filterQuery=2026/``), SIHF picks its own default phase and
+  still lists every one; ``sihf_phases`` sends that. An empty Phase is not checked
+  against the echo (SIHF chooses the phase), but its ``entries`` list must be there.
 * **Results need a season-wide date range.** Without a ``Date`` filter the current
   season's ``results`` table answers only today's game day (one row). ``results``
   therefore always sends ``Date=01.07.<season-1>-30.06.<season>``.
@@ -87,6 +92,10 @@ def _check_table(url: str, raw: Any, filters: List[Tuple[str, str]]) -> None:
         raise AssetFetchError(f"{_rt._where(url)}: the body carries no filter echo, so the answer cannot be verified")
     by_alias = {str(f.get("alias")): f for f in echoed if isinstance(f, dict)}
     for name, value in filters:
+        if name == "Phase" and value == "":
+            if not isinstance((by_alias.get(name) or {}).get("entries"), list):
+                raise AssetFetchError(f"{_rt._where(url)}: the body carries no Phase entries to list")
+            continue
         got = str(by_alias[name].get("selected")) if name in by_alias else None
         if got != value:
             answered = f"answered {name}={got}" if got is not None else f"dropped the {name} filter"

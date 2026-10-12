@@ -25,6 +25,7 @@ from sportsdataverse.hockey.sihf.sihf_api_web_parsers import (
     parse_sihf_game_player_stats,
     parse_sihf_game_team_stats,
     parse_sihf_pbp,
+    parse_sihf_phases,
     parse_sihf_table,
 )
 from tests.conftest import skip_if_no_live
@@ -48,6 +49,7 @@ TABLES = {
     "player_stats": "table__player__2026__1.json",
     "goalie_stats": "table__goalkeeper__2026__1.json",
 }
+PHASES = "table__results__2026__1__phases.json"
 
 
 def _load(name: str) -> Dict[str, Any]:
@@ -143,6 +145,37 @@ def test_all_blank_table_columns_keep_their_documented_dtypes():
 
 def test_table_pandas():
     assert isinstance(parse_sihf_table(_load(TABLES["standings"]), return_as_pandas=True), pd.DataFrame)
+
+
+# --- phases -------------------------------------------------------------------
+
+
+def test_phases_split_the_game_count_and_drop_all():
+    df = parse_sihf_phases(_load(PHASES))
+    assert df.schema == {"season": pl.Int64, "phase_id": pl.Int64, "phase_name": pl.String, "n_games": pl.Int64}
+    assert set(df["season"]) == {2026}
+    assert df.row(0) == (2026, 5318, "Playoff Final", 7)
+    assert df.filter(pl.col("phase_id") == 4940).row(0) == (2026, 4940, "Regular Season", 364)
+    assert df.height == 7  # 8 entries less the "all" pseudo-entry
+
+
+def test_standings_phase_count_is_not_a_game_count():
+    # The standings table writes "Regular Season (3)" in every league; 3 is not its game count.
+    df = parse_sihf_phases(_load("table__standing__2026__1__phases.json"))
+    assert df.rows() == [(2026, 4940, "Regular Season", None)]
+
+
+def test_a_phase_without_a_count_keeps_its_name():
+    raw = _load(PHASES)
+    raw["filters"][1]["entries"] = [{"alias": "657", "name": "Regular Season"}]
+    assert parse_sihf_phases(raw).rows() == [(2026, 657, "Regular Season", None)]
+
+
+@pytest.mark.parametrize("payload", [None, {}, [], "x", {"filters": [{"alias": "Season", "selected": "2026"}]}])
+def test_phases_parser_empty_keeps_its_columns(payload):
+    df = parse_sihf_phases(payload)
+    assert df.height == 0
+    assert df.columns == ["season", "phase_id", "phase_name", "n_games"]
 
 
 # --- the game page ------------------------------------------------------------
@@ -323,7 +356,7 @@ def test_table_wrappers_return_the_documented_schema_when_empty(monkeypatch, fn,
 )
 def test_committed_schema_matches_the_parser(short, fname):
     schema = yaml.safe_load((SCHEMA_DIR / f"{short}.yaml").read_text(encoding="utf-8"))
-    parser = GAME_PARSERS.get(short, parse_sihf_table)
+    parser = {**GAME_PARSERS, "phases": parse_sihf_phases}.get(short, parse_sihf_table)
     df = parser(_load(fname))
     assert df.columns == [c["name"] for c in schema["columns"]]
 
@@ -362,6 +395,20 @@ def test_table_wrappers_send_alias_and_filters(monkeypatch, fn, alias):
     assert p.get("ContentType") == ("All" if alias == "standing" else None)
 
 
+def test_phases_wrapper_asks_for_the_phase_list(monkeypatch):
+    calls = _capture(monkeypatch, _load(PHASES))
+    df = sihf_api_web.sihf_phases(season=2026, league_id=2, table="player")
+    p = calls[0]["params"]
+    # an empty Phase is what makes SIHF list the phases (the runtime folds it into filterQuery)
+    assert (p["alias"], p["searchQuery"], p["Season"], p["League"], p["Phase"]) == ("player", "1//", 2026, 2, "")
+    assert df.height == 7
+
+
+def test_phases_table_is_a_closed_set():
+    with pytest.raises(ValueError, match="table"):
+        sihf_api_web.sihf_phases(season=2026, table="player_stats")
+
+
 def test_game_wrapper_sends_game_id(monkeypatch):
     calls = _capture(monkeypatch, _load(GAME))
     df = sihf_api_web.sihf_pbp(game_id=20261105000325)
@@ -393,6 +440,20 @@ def test_live_standings_and_game():
         sihf_api_web.sihf_results(season=1890)
     with pytest.raises(NoDataError):
         sihf_api_web.sihf_standings(season=2026, league_id=999)
+
+
+@skip_if_no_live
+def test_live_phases_feed_the_table_wrappers():
+    from sportsdataverse.errors import NoDataError
+
+    phases = sihf_api_web.sihf_phases(season=2026, league_id=1)
+    final = phases.filter(pl.col("phase_name") == "Playoff Final").row(0, named=True)
+    games = sihf_api_web.sihf_results(season=2026, league_id=1, phase_id=final["phase_id"])
+    assert games.height == final["n_games"]
+    overall = sihf_api_web.sihf_phases(season=2026, league_id=1, table="player")
+    assert "Playoff Overall" in set(overall["phase_name"])
+    with pytest.raises(NoDataError):
+        sihf_api_web.sihf_phases(season=1890)
 
 
 @skip_if_no_live

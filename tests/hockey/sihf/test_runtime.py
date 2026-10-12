@@ -130,6 +130,27 @@ def test_a_phase_echo_without_entries_cannot_be_verified(monkeypatch):
         rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026, "Phase": 4940})
 
 
+def test_an_empty_phase_asks_for_the_list_without_checking_the_echo(monkeypatch):
+    # sihf_phases sends Phase="": SIHF picks its default phase and lists every one.
+    calls = _patch(monkeypatch, _body(Season="2026", Phase="5297"))
+    rt._get(URL, {"alias": "player", "searchQuery": "1//", "League": 1, "Season": 2026, "Phase": ""})
+    assert (calls[0]["filterBy"], calls[0]["filterQuery"]) == ("Season,Phase", "2026/")
+
+
+def test_an_empty_phase_still_checks_the_season(monkeypatch):
+    _patch(monkeypatch, _body(Season="2027", Phase="657"))
+    with pytest.raises(NoDataError, match="Season=1890"):
+        rt._get(URL, {"alias": "player", "searchQuery": "1//", "League": 1, "Season": 1890, "Phase": ""})
+
+
+def test_an_empty_phase_needs_the_entries_list(monkeypatch):
+    body = _body(Season="2026", Phase="5297")
+    del body["filters"][1]["entries"]
+    _patch(monkeypatch, body)
+    with pytest.raises(AssetFetchError, match="no Phase entries"):
+        rt._get(URL, {"alias": "player", "searchQuery": "1//", "League": 1, "Season": 2026, "Phase": ""})
+
+
 def test_unknown_league_sentinel_raises_no_data(monkeypatch):
     _patch(monkeypatch, _body([["Keine Tabelle gefunden!"]], Season="2027"))
     with pytest.raises(NoDataError, match="Keine Tabelle gefunden"):

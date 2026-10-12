@@ -45,6 +45,7 @@ __all__ = [
     "parse_sihf_game_player_stats",
     "parse_sihf_game_team_stats",
     "parse_sihf_pbp",
+    "parse_sihf_phases",
     "parse_sihf_table",
 ]
 
@@ -336,6 +337,98 @@ def parse_sihf_table(
     if df.height == 0 and columns is not None:
         df = pl.DataFrame(schema={c: _table_dtype(c) for c in columns})
     return _out(df, return_as_pandas)
+
+
+_PHASES_SCHEMA: Dict[str, Any] = {
+    "season": pl.Int64,
+    "phase_id": pl.Int64,
+    "phase_name": pl.String,
+    "n_games": pl.Int64,
+}
+# ``Regular Season (364)``: a phase name may end with a count, a game count only in the results table.
+_PHASE_COUNT = re.compile(r"^(.*?)\s*\((\d+)\)$")
+
+
+def parse_sihf_phases(
+    raw: Optional[Dict[str, Any]],
+    *,
+    return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
+) -> Frame:
+    """Parse the ``Phase`` filter of a SIHF ``/table`` body into one row per phase.
+
+    The body lists its phases in ``filters[alias=Phase].entries`` (``{alias: id, name}``) when
+    the request filtered on ``Phase``. The ids depend on the league, the season and the table.
+    The results table lists the playoff and play-in rounds, the regular season and any
+    playout or league-qualification round, and suffixes each name with its game count
+    (``Regular Season (364)``). That count becomes ``n_games``. It is null for the other
+    tables and for a phase still in progress, which has no count. The standings table also
+    suffixes a number (``Regular Season (3)``, in every league), but that number is not a
+    game count, so it is stripped from the name and dropped. The player and goalie tables
+    also list the ``Playoff Overall`` / ``Play-In Overall`` totals. The standings table
+    lists only the phases played as a table (the regular season, in some seasons a playout
+    round). The ``all`` pseudo-entry is dropped, because ``phase_id=None`` already means
+    every phase.
+    ``season`` comes from the body's Season echo. Rows keep SIHF's order.
+
+    Args:
+        raw: a SIHF table JSON body requested with a ``Phase`` filter.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+        columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
+            unused, because the phase frame always carries its fixed documented schema.
+
+    Returns:
+        Columns ``season``, ``phase_id`` (``Int64``), ``phase_name`` and ``n_games``. A
+        zero-row frame with those columns when the payload is ``None``, empty or malformed,
+        or carries no Phase filter.
+
+    Raises:
+        None: malformed payloads yield a zero-row frame rather than an exception.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_phases
+
+            df = sihf_phases(season=2026, league_id=1)
+            print(df)
+
+        Feed a phase id to a table wrapper::
+
+            from sportsdataverse.hockey.sihf import sihf_results
+
+            final = df.filter(df["phase_name"] == "Playoff Final")["phase_id"][0]
+            sihf_results(season=2026, league_id=1, phase_id=final)
+
+    See Also:
+        * `SIHF`_ -- the Swiss Ice Hockey Federation site the API serves.
+
+    .. _SIHF: https://www.sihf.ch/
+    """
+    season = _echoed(raw)["season"]
+    # Only the results table (the one with home / away team columns) counts games per phase.
+    counts_games = isinstance(raw, dict) and any(
+        isinstance(h, dict) and h.get("alias") == "homeTeam" for h in raw.get("header") or []
+    )
+    rows: List[Dict[str, Any]] = []
+    for f in (raw.get("filters") if isinstance(raw, dict) else None) or []:
+        if not (isinstance(f, dict) and f.get("alias") == "Phase"):
+            continue
+        for e in f.get("entries") or []:
+            phase_id = _int(e.get("alias")) if isinstance(e, dict) else None
+            if phase_id is None:  # the "all" pseudo-entry
+                continue
+            name = str(e.get("name") or "").strip()
+            m = _PHASE_COUNT.match(name)
+            rows.append(
+                {
+                    "season": season,
+                    "phase_id": phase_id,
+                    "phase_name": m.group(1) if m else name,
+                    "n_games": int(m.group(2)) if m and counts_games else None,
+                }
+            )
+    return _out(pl.DataFrame(rows, schema=_PHASES_SCHEMA), return_as_pandas)
 
 
 # ---------------------------------------------------------------------------

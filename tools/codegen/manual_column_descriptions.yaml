@@ -16875,6 +16875,11 @@ sihf_results:
   game_id: SIHF game id (Int64 join key; the details link of sihf_results, the searchQuery of the game wrappers).
   broadcasts: Broadcasters, comma-joined (e.g., "MYSPORTS,TV24").
   row_type: '"data" for a regular row; "average" or "total" for a summary row SIHF mixes into the table.'
+sihf_phases:
+  season: Season by its END year (2026 = 2025-26), from the body's echo of the Season filter.
+  phase_id: SIHF phase id (Int64), the value the phase_id argument of sihf_results, sihf_standings, sihf_player_stats and sihf_goalie_stats takes. Ids differ by league, season and table.
+  phase_name: Phase name as SIHF publishes it, without the trailing count (e.g., "Regular Season", "Playoff 1/4 Final", "Playoff Overall").
+  n_games: Games played in the phase, from the results table's phase list; null for the other tables and for a phase still in progress.
 sihf_standings:
   season: Season by its END year (2026 = 2025-26), from the body's echo of the Season filter.
   phase_id: SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed.

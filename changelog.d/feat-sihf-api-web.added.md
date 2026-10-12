@@ -1,7 +1,9 @@
 - **Hockey:** `sportsdataverse.hockey.sihf` wraps the keyless Swiss Ice Hockey Federation statistics
   API (`data.sihf.ch`), covering every SIHF league (National League, Swiss League, MyHockey
-  League, the amateur, junior and women's leagues). There are ten `sihf_*` wrappers. Four return
+  League, the amateur, junior and women's leagues). There are eleven `sihf_*` wrappers. Four return
   season tables: `sihf_results`, `sihf_standings`, `sihf_player_stats` and `sihf_goalie_stats`.
+  `sihf_phases` lists the `phase_id` values those four take for a league and season (the ids
+  differ by league, season and table), with each phase's name and game count.
   Six read one game: `sihf_pbp` (goals, penalties, goaltender changes, revoked goals and
   shootout attempts), `sihf_game_info`, `sihf_game_player_stats`, `sihf_game_goalie_stats`,
   `sihf_game_team_stats` and `sihf_game_lineups`. SIHF answers an unknown season, league or

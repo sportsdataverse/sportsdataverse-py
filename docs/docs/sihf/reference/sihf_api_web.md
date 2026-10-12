@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # SIHF — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)
 
-`sportsdataverse.hockey.sihf` — 10 endpoints.
+`sportsdataverse.hockey.sihf` — 11 endpoints.
 
 ## sihf_results
 
@@ -215,6 +215,42 @@ Goaltender season totals: games, starts, goals against, GAA, shots, saves, save 
 
 ```python
 sihf_goalie_stats(season=2026, league_id=1)
+```
+
+_Last validated n/a._
+
+## sihf_phases
+
+Phases of a league season (regular season, play-in and playoff rounds, playout): the phase_id values the table wrappers take, with each phase's name and game count.
+
+**Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/table`
+
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?searchQuery=1%2F%2F&Phase=&Season=2026&League=1&alias=results&language=en](https://data.sihf.ch/statistic/api/cms/table?searchQuery=1%2F%2F&Phase=&Season=2026&League=1&alias=results&language=en)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `Season` | `season` |  | `Y` |  | Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one). |
+| `League` | `league_id` |  |  | `Y` | SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError. |
+| `alias` | `table` |  |  | `Y` | SIHF table whose phase list to read; each table lists its own. results (sihf_results) lists every round with its game count; player / goalkeeper (sihf_player_stats / sihf_goalie_stats) add the Playoff Overall and Play-In Overall totals; standing (sihf_standings) lists only the phases played as a table (the regular season, in some seasons a playout round). |
+| `language` | `language` |  |  | `Y` | Response language. Only part of the body is translated: status, position and penalty names stay German. |
+
+### Returns {#sihf_phases-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
+| `phase_id` | integer | SIHF phase id (Int64), the value the phase_id argument of sihf_results, sihf_standings, sihf_player_stats and sihf_goalie_stats takes. Ids differ by league, season and table. |
+| `phase_name` | character | Phase name as SIHF publishes it, without the trailing count (e.g., "Regular Season", "Playoff 1/4 Final", "Playoff Overall"). |
+| `n_games` | integer | Games played in the phase, from the results table's phase list; null for the other tables and for a phase still in progress. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#sihf_phases-example}
+
+```python
+sihf_phases(season=2026, league_id=1)
 ```
 
 _Last validated n/a._

@@ -14,6 +14,7 @@ from sportsdataverse.hockey.sihf.sihf_api_web_parsers import (
     parse_sihf_game_player_stats,
     parse_sihf_game_team_stats,
     parse_sihf_pbp,
+    parse_sihf_phases,
     parse_sihf_table,
 )
 
@@ -26,6 +27,7 @@ __all__ = [
     "sihf_standings",
     "sihf_player_stats",
     "sihf_goalie_stats",
+    "sihf_phases",
     "sihf_pbp",
     "sihf_game_info",
     "sihf_game_player_stats",
@@ -125,6 +127,12 @@ _PARSER_COLUMNS = {
         "goals",
         "assists",
         "row_type",
+    ],
+    "phases": [
+        "season",
+        "phase_id",
+        "phase_name",
+        "n_games",
     ],
     "pbp": [
         "game_id",
@@ -535,6 +543,73 @@ def sihf_goalie_stats(
     )
     if return_parsed:
         return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["goalie_stats"])
+    return raw
+
+
+def sihf_phases(
+    season: int,
+    league_id: Optional[int] = 1,
+    table: Optional[str] = "results",
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Phases of a league season (regular season, play-in and playoff rounds, playout): the phase_id values the table wrappers take, with each phase's name and game count.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?searchQuery=1%2F%2F&Phase=&Season=2026&League=1&alias=results&language=en
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        table: SIHF table whose phase list to read; each table lists its own. results (sihf_results) lists every round with its game count; player / goalkeeper (sihf_player_stats / sihf_goalie_stats) add the Playoff Overall and Play-In Overall totals; standing (sihf_standings) lists only the phases played as a table (the regular season, in some seasons a playout round).
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_phases -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_phases
+            sihf_phases(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if table not in ("results", "standing", "player", "goalkeeper"):
+        raise ValueError(f"table must be one of ('results', 'standing', 'player', 'goalkeeper'); got {table!r}")
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "searchQuery": "1//",
+        "Phase": "",
+        "Season": season,
+        "League": league_id,
+        "alias": table,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_phases(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["phases"])
     return raw
 
 

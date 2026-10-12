@@ -203,6 +203,57 @@ endpoints:
     league_id: 1
   parser: parse_sihf_table
   returns_schema: native/sihf_api_web/goalie_stats
+- short: phases
+  summary: 'Phases of a league season (regular season, play-in and playoff rounds, playout): the phase_id
+    values the table wrappers take, with each phase''s name and game count.'
+  path: /table
+  fixed_params:
+    searchQuery: 1//
+    Phase: ''
+  extra_params:
+  - name: season
+    query_key: Season
+    type: int
+    required: true
+    description: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises
+      NoDataError (the API itself silently answers another one).
+  - name: league_id
+    query_key: League
+    type: int
+    default: 1
+    description: 'SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1.
+      Liga, 43 = SWHL B, 113 = U21-Elit (the body''s League filter lists them). An id SIHF does not have
+      for the season raises NoDataError.'
+  - name: table
+    query_key: alias
+    type: str
+    default: results
+    choices:
+    - results
+    - standing
+    - player
+    - goalkeeper
+    description: 'SIHF table whose phase list to read; each table lists its own. results (sihf_results)
+      lists every round with its game count; player / goalkeeper (sihf_player_stats / sihf_goalie_stats)
+      add the Playoff Overall and Play-In Overall totals; standing (sihf_standings) lists only the phases
+      played as a table (the regular season, in some seasons a playout round).'
+  - name: language
+    query_key: language
+    type: str
+    default: en
+    choices:
+    - en
+    - de
+    - fr
+    - it
+    kw_only: true
+    description: 'Response language. Only part of the body is translated: status, position and penalty
+      names stay German.'
+  example_args:
+    season: 2026
+    league_id: 1
+  parser: parse_sihf_phases
+  returns_schema: native/sihf_api_web/phases
 - short: pbp
   summary: 'Event timeline of one game: goals, penalties, goaltender changes, revoked goals and shootout
     attempts.'

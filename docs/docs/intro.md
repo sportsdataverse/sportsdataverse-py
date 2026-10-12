@@ -142,7 +142,7 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16) |
 | [ESPN content (news)](espn_content/) | `sportsdataverse.espn_content` | ESPN (3) |
 | [TheSportsDB](thesportsdb/) | `sportsdataverse.thesportsdb` | TheSportsDB (12) |
-| [SIHF (Swiss hockey)](sihf/) | `sportsdataverse.hockey.sihf` | SIHF statistics API (10) |
+| [SIHF (Swiss hockey)](sihf/) | `sportsdataverse.hockey.sihf` | SIHF statistics API (11) |
 <!-- END generated: leagues-and-sources -->
 
 ## Errors (0.1.5)
