@@ -6,8 +6,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse.sihf.sihf_runtime import _get
-from sportsdataverse.sihf.sihf_api_web_parsers import (
+from sportsdataverse.hockey.sihf.sihf_runtime import _get
+from sportsdataverse.hockey.sihf.sihf_api_web_parsers import (
     parse_sihf_game_goalie_stats,
     parse_sihf_game_info,
     parse_sihf_game_lineups,
@@ -70,7 +70,7 @@ def sihf_results(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_results
+            from sportsdataverse.hockey.sihf import sihf_results
             sihf_results(season=2026, league_id=1)
 
         See Also:
@@ -135,7 +135,7 @@ def sihf_standings(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_standings
+            from sportsdataverse.hockey.sihf import sihf_standings
             sihf_standings(season=2026, league_id=1)
 
         See Also:
@@ -200,7 +200,7 @@ def sihf_player_stats(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_player_stats
+            from sportsdataverse.hockey.sihf import sihf_player_stats
             sihf_player_stats(season=2026, league_id=1)
 
         See Also:
@@ -265,7 +265,7 @@ def sihf_goalie_stats(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_goalie_stats
+            from sportsdataverse.hockey.sihf import sihf_goalie_stats
             sihf_goalie_stats(season=2026, league_id=1)
 
         See Also:
@@ -326,7 +326,7 @@ def sihf_pbp(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_pbp
+            from sportsdataverse.hockey.sihf import sihf_pbp
             sihf_pbp(game_id=20261105000421)
 
         See Also:
@@ -384,7 +384,7 @@ def sihf_game_info(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_info
+            from sportsdataverse.hockey.sihf import sihf_game_info
             sihf_game_info(game_id=20261105000421)
 
         See Also:
@@ -442,7 +442,7 @@ def sihf_game_player_stats(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_player_stats
+            from sportsdataverse.hockey.sihf import sihf_game_player_stats
             sihf_game_player_stats(game_id=20261105000421)
 
         See Also:
@@ -500,7 +500,7 @@ def sihf_game_goalie_stats(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_goalie_stats
+            from sportsdataverse.hockey.sihf import sihf_game_goalie_stats
             sihf_game_goalie_stats(game_id=20261105000421)
 
         See Also:
@@ -558,7 +558,7 @@ def sihf_game_team_stats(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_team_stats
+            from sportsdataverse.hockey.sihf import sihf_game_team_stats
             sihf_game_team_stats(game_id=20261105000421)
 
         See Also:
@@ -616,7 +616,7 @@ def sihf_game_lineups(
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_lineups
+            from sportsdataverse.hockey.sihf import sihf_game_lineups
             sihf_game_lineups(game_id=20261105000421)
 
         See Also:

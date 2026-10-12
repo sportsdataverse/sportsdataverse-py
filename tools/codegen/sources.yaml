@@ -154,7 +154,7 @@ providers:
     auth: none
     flat_apis: [sihf_api_web]
     modules:
-      - sportsdataverse.sihf.sihf_runtime
+      - sportsdataverse.hockey.sihf.sihf_runtime
 
   ncaa_stats:
     label: stats.ncaa.org

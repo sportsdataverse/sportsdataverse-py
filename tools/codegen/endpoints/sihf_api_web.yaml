@@ -2,8 +2,8 @@ api: sihf_api_web
 host: https://data.sihf.ch/statistic/api/cms
 name_pattern: sihf_{short}
 module: sihf_api_web
-parser_module: sihf.sihf_api_web_parsers
-getter_module: sportsdataverse.sihf.sihf_runtime
+parser_module: hockey.sihf.sihf_api_web_parsers
+getter_module: sportsdataverse.hockey.sihf.sihf_runtime
 qualifier: web
 schema_prefix: sihf_
 docstring:

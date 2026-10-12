@@ -3,7 +3,7 @@ title: {{ display_name }}
 sidebar_label: {{ display_name }}
 description: "sdv-py {{ display_name }}: endpoint references, dataset loaders and parsers for {{ display_name }} in the SportsDataverse Python package."
 ---
-# {{ display_name }} (`sportsdataverse.{{ prefix }}`)
+# {{ display_name }} (`{{ module }}`)
 
 {% if source_rows %}
 ## Data sources
@@ -57,7 +57,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 Each `sportsdataverse` function and its equivalent in the sister R package, [`{{ r_pkg }}`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
 
-| `sportsdataverse.{{ prefix }}` (Python) | `{{ r_pkg }}` (R) |
+| `{{ module }}` (Python) | `{{ r_pkg }}` (R) |
 |---|---|
 {% for row in r_parity %}| [`{{ row.py }}`]({{ row.py_url }}) | [`{{ row.r }}`]({{ row.r_url }}) |
 {% endfor %}

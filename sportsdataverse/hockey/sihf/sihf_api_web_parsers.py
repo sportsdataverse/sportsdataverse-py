@@ -258,7 +258,7 @@ def parse_sihf_table(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = 
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_standings
+            from sportsdataverse.hockey.sihf import sihf_standings
 
             df = sihf_standings(season=2026, league_id=1)
             print(df.shape)
@@ -400,7 +400,7 @@ def parse_sihf_pbp(raw: Optional[Dict[str, Any]], *, return_as_pandas: bool = Fa
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_pbp
+            from sportsdataverse.hockey.sihf import sihf_pbp
 
             pbp = sihf_pbp(game_id=20261105000421)
             print(pbp.shape)
@@ -617,7 +617,7 @@ def parse_sihf_game_player_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_player_stats
+            from sportsdataverse.hockey.sihf import sihf_game_player_stats
 
             box = sihf_game_player_stats(game_id=20261105000421)
             print(box.shape)
@@ -658,7 +658,7 @@ def parse_sihf_game_goalie_stats(raw: Optional[Dict[str, Any]], *, return_as_pan
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_goalie_stats
+            from sportsdataverse.hockey.sihf import sihf_game_goalie_stats
 
             goalies = sihf_game_goalie_stats(game_id=20261105000421)
             print(goalies.shape)
@@ -706,7 +706,7 @@ def parse_sihf_game_team_stats(raw: Optional[Dict[str, Any]], *, return_as_panda
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_team_stats
+            from sportsdataverse.hockey.sihf import sihf_game_team_stats
 
             stats = sihf_game_team_stats(game_id=20261105000421)
             print(stats.shape)
@@ -807,7 +807,7 @@ def parse_sihf_game_info(raw: Optional[Dict[str, Any]], *, return_as_pandas: boo
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_info
+            from sportsdataverse.hockey.sihf import sihf_game_info
 
             info = sihf_game_info(game_id=20261105000421)
             print(info.shape)
@@ -926,7 +926,7 @@ def parse_sihf_game_lineups(raw: Optional[Dict[str, Any]], *, return_as_pandas: 
     Example:
         Quick start::
 
-            from sportsdataverse.sihf import sihf_game_lineups
+            from sportsdataverse.hockey.sihf import sihf_game_lineups
 
             lineups = sihf_game_lineups(game_id=20261105000421)
             print(lineups.shape)

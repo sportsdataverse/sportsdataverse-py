@@ -1,6 +1,6 @@
 """The SIHF runtime builds the scoped query SIHF needs and refuses an answer it did not ask for.
 
-Measured live on 2026-10-08 (see ``sportsdataverse.sihf.sihf_runtime``):
+Measured live on 2026-10-08 (see ``sportsdataverse.hockey.sihf.sihf_runtime``):
 
 * the league must travel in ``searchQuery=1//<league>``; as a ``League`` filter the current
   season answers ``400 MissingLeagueId``;
@@ -17,7 +17,7 @@ from typing import Any, Dict, List
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
-from sportsdataverse.sihf import sihf_runtime as rt
+from sportsdataverse.hockey.sihf import sihf_runtime as rt
 
 URL = "https://data.sihf.ch/statistic/api/cms/table"
 

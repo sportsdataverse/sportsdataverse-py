@@ -17,8 +17,8 @@ import polars as pl
 import pytest
 import yaml
 
-from sportsdataverse.sihf import sihf_api_web
-from sportsdataverse.sihf.sihf_api_web_parsers import (
+from sportsdataverse.hockey.sihf import sihf_api_web
+from sportsdataverse.hockey.sihf.sihf_api_web_parsers import (
     parse_sihf_game_goalie_stats,
     parse_sihf_game_info,
     parse_sihf_game_lineups,
@@ -29,8 +29,8 @@ from sportsdataverse.sihf.sihf_api_web_parsers import (
 )
 from tests.conftest import skip_if_no_live
 
-FIXTURES = Path(__file__).parents[1] / "fixtures" / "sihf_api_web"
-SCHEMA_DIR = Path(__file__).parents[2] / "tools" / "codegen" / "schemas" / "native" / "sihf_api_web"
+FIXTURES = Path(__file__).parents[2] / "fixtures" / "sihf_api_web"
+SCHEMA_DIR = Path(__file__).parents[3] / "tools" / "codegen" / "schemas" / "native" / "sihf_api_web"
 GAME = "gameoverview__20261105000325.json"  # goaltender change + revoked goal
 SHOOTOUT = "gameoverview__20261105000009.json"
 

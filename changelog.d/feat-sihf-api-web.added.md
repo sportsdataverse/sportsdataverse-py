@@ -1,4 +1,4 @@
-- **Hockey:** `sportsdataverse.sihf` wraps the keyless Swiss Ice Hockey Federation statistics
+- **Hockey:** `sportsdataverse.hockey.sihf` wraps the keyless Swiss Ice Hockey Federation statistics
   API (`data.sihf.ch`), covering every SIHF league (National League, Swiss League, MyHockey
   League, the amateur, junior and women's leagues). There are ten `sihf_*` wrappers. Four return
   season tables: `sihf_results`, `sihf_standings`, `sihf_player_stats` and `sihf_goalie_stats`.

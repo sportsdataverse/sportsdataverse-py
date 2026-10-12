@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # SIHF — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)
 
-`sportsdataverse.sihf` — 10 endpoints.
+`sportsdataverse.hockey.sihf` — 10 endpoints.
 
 ## sihf_results
 
