@@ -515,10 +515,11 @@ reject initials-only roster rows).
 
 Season-keyed stats.ncaa.org -> ESPN team-id crosswalk.
 
-One row per `(season, ncaa_team_id)`. Teams that could not be resolved to
-an ESPN team are kept with a null `espn_team_id` and
-`match_method="unmatched"` -- never dropped -- so the row count always
-equals `ncaa_{league}_team_ids()`.
+One row per `(season, ncaa_team_id)`. Reads the `{league}_crosswalk`
+sportsdataverse-data release, which gains a season as soon as it is
+published; when that cannot be read it warns and returns the copy bundled
+with sdv-py. Teams that could not be resolved to an ESPN team are kept with
+a null `espn_team_id` and `match_method="unmatched"` -- never dropped.
 
 **Parameters**
 
@@ -529,7 +530,7 @@ equals `ncaa_{league}_team_ids()`.
 
 **Returns**
 
-DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the season-specific stats.ncaa.org id), `ncaa_team` / `ncaa_conference` (str), `conference_id` (str, nullable -- the SDV group id, e.g. `"mbb:big-ten"`), `espn_team_id` (str, nullable -- ESPN ids are strings throughout sdv-py), `espn_display_name` / `espn_location` / `espn_mascot` / `espn_abbreviation` / `espn_conference_name` / `espn_conference_id` (str, nullable), and `match_method` (str -- `"exact"`, `"dict"`, `"alias"` or `"unmatched"`). The three conference columns and `ncaa_conference` are per season: Maryland is ACC in 2013-14 and Big Ten in 2014-15.
+DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the season-specific stats.ncaa.org id), `ncaa_team` / `ncaa_conference` (str), `conference_id` (str, nullable -- the SDV group id, e.g. `"mbb:big-ten"`), `espn_team_id` (str, nullable -- ESPN ids are strings throughout sdv-py), `espn_display_name` / `espn_location` / `espn_mascot` / `espn_abbreviation` / `espn_conference_name` / `espn_conference_id` (str, nullable), and `match_method` (str -- `"exact"`, `"dict"`, `"alias"`, `"org"` (the school's ESPN id from its other seasons) or `"unmatched"`). The three conference columns and `ncaa_conference` are per season: Maryland is ACC in 2013-14 and Big Ten in 2014-15.
 
 | col_name | type | description |
 |---|---|---|
