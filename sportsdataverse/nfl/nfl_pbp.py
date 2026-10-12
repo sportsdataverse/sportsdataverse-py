@@ -482,6 +482,10 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
         kick=pl.col("type.text").is_in(kickoff_vec).fill_null(False),
     )
     plays = plays.with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("game_id", "half"))
+    # ponytail: a Python pass over the rows (one game, ~180), so the parser runs where coverage traces it
+    offense_home = (pl.col("start.pos_team.id") == pl.col("homeTeamId")).alias("_offense_home")
+    rows = plays.select("text", "homeTeamAbbrev", "awayTeamAbbrev", offense_home).iter_rows(named=True)
+    plays = plays.with_columns(_turnover=pl.Series([_nfl_turnover_in_text(r) for r in rows], dtype=pl.Boolean))
     n = pl.col("_nxt").struct
     # the snap's own gain, from ESPN's yard lines (right where its end team and down are not, and
     # unlike statYardage it counts a lateral's whole gain); an incompletion gains nothing
@@ -501,9 +505,7 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
         & ~use
         & pl.col("type.text").is_in([*normalplay, "Penalty"]).fill_null(False)
         # ESPN types a lateral fumbled away at the gun "Pass Reception": a turnover in the text keeps ESPN's end
-        & ~pl.struct("text", "homeTeamAbbrev", "awayTeamAbbrev", home.alias("_offense_home"))
-        .map_elements(_nfl_turnover_in_text, return_dtype=pl.Boolean)
-        .fill_null(False)
+        & ~pl.col("_turnover")
         & (pl.col("start.down").is_between(1, 3) | ((pl.col("start.down") == 4) & gained)).fill_null(False)
     )
     held_snap = held & pl.col("type.text").is_in(normalplay).fill_null(False) & gain.is_not_null()
@@ -527,7 +529,7 @@ def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
         .then(pl.when(gained).then(10).otherwise(pl.col("start.distance") - gain))
         .otherwise(pl.col("end.distance"))
         .alias("end.distance"),
-    ).drop("_nxt")
+    ).drop("_nxt", "_turnover")
 
 
 # "td" : float(p[0]),

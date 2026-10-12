@@ -938,8 +938,8 @@
   group: nfl-end-state
   finding: EX-1.5-d
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '.map_elements(_nfl_turnover_in_text, return_dtype=pl.Boolean)'
-  mutant: '.map_elements(lambda r: False, return_dtype=pl.Boolean)'
+  snippet: '& ~pl.col("_turnover")'
+  mutant: '& pl.lit(True)'
   test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_ending_lateral_fumble_lost"
   expected: kill
   note: >-
