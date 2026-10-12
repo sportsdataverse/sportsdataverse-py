@@ -146,18 +146,20 @@ _INT_ALIASES = frozenset(
         "sowGoalsAgainst",
         "sowGoalsFor",
         "spectators",
-        "spectatorsQuotient",
-        "stadiumCapacityQuotient",
         "wins",
         "winsIntime",
         "winsOvertime",
         "winsPenalty",
     }
 )
-# Rates: decimals (``"2.25"``) in every row of the full bodies. The ``timeOnIce*``, ``powerPlayTime*``
-# and ``penaltyKillTime*`` columns are ``"mm:ss"`` strings, quotient or not, and stay String.
+# Rates: decimals (``"2.25"``) in every row of the full bodies. Every ``*Quotient`` (a per-game ratio)
+# is a rate, Float64 even where SIHF rounds it to a whole number (``spectatorsQuotient`` ``"5’276"``),
+# so a quotient never changes dtype between tables. The ``timeOnIce*``, ``powerPlayTime*`` and
+# ``penaltyKillTime*`` columns are ``"mm:ss"`` strings, quotient or not, and stay String.
 _FLOAT_ALIASES = frozenset(
     {
+        "spectatorsQuotient",
+        "stadiumCapacityQuotient",
         "pointsQuotient",
         "pointsPerGame",
         "goalsAgainstAverage",
@@ -392,7 +394,8 @@ def _echoed(raw: Any) -> Dict[str, Optional[int]]:
     names = {"Season": "season", "Phase": "phase_id"}
     out: Dict[str, Optional[int]] = dict.fromkeys(names.values())
     for f in _list(raw.get("filters") if isinstance(raw, dict) else None):
-        if isinstance(f, dict) and f.get("alias") in names:
+        # a list / dict alias is unhashable: only a string can be one of the echoed filter names
+        if isinstance(f, dict) and isinstance(f.get("alias"), str) and f["alias"] in names:
             out[names[f["alias"]]] = _int(f.get("selected"))
     return out
 
@@ -408,7 +411,7 @@ def _table_frame(raw: Any, extra: Optional[Mapping[str, Any]] = None) -> pl.Data
     aliases = {str(h.get("alias")): _col(str(h.get("alias"))) for h in header}
     summary: Dict[int, str] = {}
     for hp in _list(raw.get("highlightedPositions")):
-        if isinstance(hp, dict) and hp.get("style") in _SUMMARY_STYLES:
+        if isinstance(hp, dict) and isinstance(hp.get("style"), str) and hp["style"] in _SUMMARY_STYLES:
             for r in _list(hp.get("rows")):
                 if isinstance(r, int):
                     summary[r - 1] = str(hp["style"])  # rows are 1-based
