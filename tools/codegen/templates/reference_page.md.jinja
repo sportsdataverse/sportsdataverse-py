@@ -9,6 +9,10 @@ toc_max_heading_level: 2
 # {{ title }}
 
 `{{ module }}` — {{ count }} endpoint{{ "" if count == 1 else "s" }}.
+{% for note in notes %}
+
+> **Note:** {{ note }}
+{% endfor %}
 
 {% for ep in endpoints %}
 {{ block(ep) }}

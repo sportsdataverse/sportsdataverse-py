@@ -1,0 +1,3884 @@
+{
+  "status": "success",
+  "data": {
+    "goals": {
+      "2": [
+        {
+          "num": 1,
+          "scoreA": "0",
+          "scoreB": "1",
+          "per": 2,
+          "pmg_time": "22:02",
+          "teamAB": "B",
+          "scorer": {
+            "name": "Точилкин Герман(15)",
+            "photo": "//img.khl.ru/teamplayers/14929/39868/200.jpg",
+            "link": "/players/39868/",
+            "num": "33"
+          },
+          "assist_1": {
+            "name": "Селезнёв Григорий(8)",
+            "photo": "//img.khl.ru/teamplayers/14929/35141/200.jpg",
+            "link": "/players/35141/",
+            "num": "21"
+          },
+          "assist_2": {
+            "name": "Квартальнов Данила(5)",
+            "photo": "//img.khl.ru/teamplayers/14929/21593/200.jpg",
+            "link": "/players/21593/",
+            "num": "23"
+          },
+          "oniceA": "40,4,13,28,76,94",
+          "oniceB": "53,21,23,33,55,73",
+          "pmg": "РАВ",
+          "pmg_trans": "В равенстве"
+        },
+        {
+          "num": 2,
+          "scoreA": "1",
+          "scoreB": "1",
+          "per": 2,
+          "pmg_time": "23:41",
+          "teamAB": "A",
+          "scorer": {
+            "name": "Рубцов Герман(13)",
+            "photo": "//img.khl.ru/teamplayers/14934/22494/200.jpg",
+            "link": "/players/22494/",
+            "num": "95"
+          },
+          "assist_1": {
+            "name": "Гутик Даниил(26)",
+            "photo": "//img.khl.ru/teamplayers/14934/29928/200.jpg",
+            "link": "/players/29928/",
+            "num": "87"
+          },
+          "assist_2": {
+            "name": "Филин Егор(13)",
+            "photo": "//img.khl.ru/teamplayers/14934/24118/200.jpg",
+            "link": "/players/24118/",
+            "num": "99"
+          },
+          "oniceA": "40,4,87,94,95,99",
+          "oniceB": "53,5,13,19,72,73",
+          "pmg": "РАВ",
+          "pmg_trans": "В равенстве"
+        },
+        {
+          "num": 3,
+          "scoreA": "2",
+          "scoreB": "1",
+          "per": 2,
+          "pmg_time": "34:47",
+          "teamAB": "A",
+          "scorer": {
+            "name": "Рубцов Герман(14)",
+            "photo": "//img.khl.ru/teamplayers/14934/22494/200.jpg",
+            "link": "/players/22494/",
+            "num": "95"
+          },
+          "assist_1": {
+            "name": "Филин Егор(14)",
+            "photo": "//img.khl.ru/teamplayers/14934/24118/200.jpg",
+            "link": "/players/24118/",
+            "num": "99"
+          },
+          "assist_2": {
+            "name": "Гутик Даниил(27)",
+            "photo": "//img.khl.ru/teamplayers/14934/29928/200.jpg",
+            "link": "/players/29928/",
+            "num": "87"
+          },
+          "oniceA": "40,8,33,87,95,99",
+          "oniceB": "53,13,19,24,29,72",
+          "pmg": "РАВ",
+          "pmg_trans": "В равенстве"
+        }
+      ],
+      "4": [
+        {
+          "num": 5,
+          "scoreA": "2",
+          "scoreB": "3",
+          "per": 4,
+          "pmg_time": "65:00",
+          "teamAB": "B",
+          "scorer": {
+            "name": "Артамонов Никита",
+            "photo": "//img.khl.ru/teamplayers/14929/41257/200.jpg",
+            "link": "/players/41257/",
+            "num": "69"
+          },
+          "oniceA": "40",
+          "oniceB": "",
+          "pmg": "",
+          "pmg_trans": ""
+        }
+      ]
+    },
+    "ranking": {
+      "pp": [
+        {
+          "data": {
+            "rank": "1",
+            "id": "71",
+            "teid": "14929",
+            "name": "Нефтехимик",
+            "gp": "1",
+            "pp": "5",
+            "ppgf": "0",
+            "pp_pct": "0.0",
+            "shgf": "0",
+            "shga": "0",
+            "sh": "3",
+            "ppga": "0",
+            "tipp": "10:00",
+            "pk_pct": "100.0"
+          },
+          "team": {
+            "logo": "//img.khl.ru/teams/ru/1369/71/200.png?u=2026",
+            "name": "Нефтехимик"
+          }
+        },
+        {
+          "data": {
+            "rank": "2",
+            "id": "7",
+            "teid": "14934",
+            "name": "Спартак",
+            "gp": "1",
+            "pp": "3",
+            "ppgf": "0",
+            "pp_pct": "0.0",
+            "shgf": "0",
+            "shga": "0",
+            "sh": "5",
+            "ppga": "0",
+            "tipp": "06:00",
+            "pk_pct": "100.0"
+          },
+          "team": {
+            "logo": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+            "name": "Спартак"
+          }
+        }
+      ],
+      "gf": [
+        {
+          "data": {
+            "rank": "1",
+            "id": "71",
+            "teid": "14929",
+            "name": "Нефтехимик",
+            "gp": "1",
+            "gf54": "0",
+            "gf53": "0",
+            "gf44": "0",
+            "gf43": "0",
+            "gf55": "2",
+            "gf33": "0",
+            "gf34": "0",
+            "gf35": "0",
+            "gf45": "0",
+            "gfen": "0",
+            "gfps": "1",
+            "gf": "3",
+            "gf_avg": "3.00",
+            "ps": "0",
+            "psg": "0",
+            "psg_pct": "-"
+          },
+          "team": {
+            "logo": "//img.khl.ru/teams/ru/1369/71/200.png?u=2026",
+            "name": "Нефтехимик"
+          }
+        },
+        {
+          "data": {
+            "rank": "2",
+            "id": "7",
+            "teid": "14934",
+            "name": "Спартак",
+            "gp": "1",
+            "gf54": "0",
+            "gf53": "0",
+            "gf44": "0",
+            "gf43": "0",
+            "gf55": "2",
+            "gf33": "0",
+            "gf34": "0",
+            "gf35": "0",
+            "gf45": "0",
+            "gfen": "0",
+            "gfps": "0",
+            "gf": "2",
+            "gf_avg": "2.00",
+            "ps": "0",
+            "psg": "0",
+            "psg_pct": "-"
+          },
+          "team": {
+            "logo": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+            "name": "Спартак"
+          }
+        }
+      ],
+      "ga": [
+        {
+          "data": {
+            "rank": "1",
+            "id": "71",
+            "teid": "14929",
+            "name": "Нефтехимик",
+            "gp": "1",
+            "ga55": "2",
+            "ga54": "0",
+            "ga53": "0",
+            "ga44": "0",
+            "ga43": "0",
+            "ga33": "0",
+            "ga34": "0",
+            "ga35": "0",
+            "ga45": "0",
+            "gaen": "0",
+            "gaps": "0",
+            "ga": "2",
+            "ga_avg": "2.00",
+            "ps": "0",
+            "psga": "0",
+            "pssv_pct": "-"
+          },
+          "team": {
+            "logo": "//img.khl.ru/teams/ru/1369/71/200.png?u=2026",
+            "name": "Нефтехимик"
+          }
+        },
+        {
+          "data": {
+            "rank": "2",
+            "id": "7",
+            "teid": "14934",
+            "name": "Спартак",
+            "gp": "1",
+            "ga55": "2",
+            "ga54": "0",
+            "ga53": "0",
+            "ga44": "0",
+            "ga43": "0",
+            "ga33": "0",
+            "ga34": "0",
+            "ga35": "0",
+            "ga45": "0",
+            "gaen": "0",
+            "gaps": "1",
+            "ga": "3",
+            "ga_avg": "3.00",
+            "ps": "0",
+            "psga": "0",
+            "pssv_pct": "-"
+          },
+          "team": {
+            "logo": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+            "name": "Спартак"
+          }
+        }
+      ]
+    },
+    "shootsOut": [
+      {
+        "pnoA": "98",
+        "pnoB": "69",
+        "gkA": "40",
+        "gkB": "31",
+        "sc": "0:1",
+        "goalB": "yes",
+        "pnoAname": "Беляев Александр Вл.",
+        "pnoAid": "24862",
+        "pnoAlink": "/players/24862/",
+        "pnoAphoto": "//img.khl.ru/teamplayers/14934/24862/200.jpg",
+        "gkAname": "Георгиев Александр",
+        "gkAid": "21376",
+        "gkAlink": "/players/21376/",
+        "gkAphoto": "//img.khl.ru/teamplayers/14934/21376/200.jpg",
+        "pnoBname": "Артамонов Никита",
+        "pnoBid": "41257",
+        "pnoBlink": "/players/41257/",
+        "pnoBphoto": "//img.khl.ru/teamplayers/14929/41257/200.jpg",
+        "gkBname": "Озолин Ярослав",
+        "gkBid": "27072",
+        "gkBlink": "/players/27072/",
+        "gkBphoto": "//img.khl.ru/teamplayers/14929/27072/200.jpg"
+      },
+      {
+        "pnoA": "95",
+        "pnoB": "33",
+        "gkA": "40",
+        "gkB": "31",
+        "sc": "0:1",
+        "gkAname": "Георгиев Александр",
+        "gkAid": "21376",
+        "gkAlink": "/players/21376/",
+        "gkAphoto": "//img.khl.ru/teamplayers/14934/21376/200.jpg",
+        "pnoAname": "Рубцов Герман",
+        "pnoAid": "22494",
+        "pnoAlink": "/players/22494/",
+        "pnoAphoto": "//img.khl.ru/teamplayers/14934/22494/200.jpg",
+        "gkBname": "Озолин Ярослав",
+        "gkBid": "27072",
+        "gkBlink": "/players/27072/",
+        "gkBphoto": "//img.khl.ru/teamplayers/14929/27072/200.jpg",
+        "pnoBname": "Точилкин Герман",
+        "pnoBid": "39868",
+        "pnoBlink": "/players/39868/",
+        "pnoBphoto": "//img.khl.ru/teamplayers/14929/39868/200.jpg"
+      },
+      {
+        "pnoA": "20",
+        "pnoB": "",
+        "gkA": "",
+        "gkB": "31",
+        "sc": "0:1",
+        "pnoAname": "Локхарт Лукас",
+        "pnoAid": "27992",
+        "pnoAlink": "/players/27992/",
+        "pnoAphoto": "//img.khl.ru/teamplayers/14934/27992/200.jpg",
+        "gkBname": "Озолин Ярослав",
+        "gkBid": "27072",
+        "gkBlink": "/players/27072/",
+        "gkBphoto": "//img.khl.ru/teamplayers/14929/27072/200.jpg"
+      }
+    ],
+    "teams": {
+      "home": {
+        "name": "Спартак",
+        "city": "Москва",
+        "logo": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+        "cid": 14934,
+        "link": "/clubs/spartak/",
+        "penalties": {
+          "periods": {
+            "1": {
+              "fouldes": [
+                {
+                  "team": "A",
+                  "per": "1",
+                  "tbeg": "10:31",
+                  "pnum": "13",
+                  "time": "2",
+                  "code": "6",
+                  "tend": "12:31",
+                  "appointed": "10:31",
+                  "notServed": "0",
+                  "converted": "0",
+                  "ps_pno": "",
+                  "player": {
+                    "name": "Мальцев Михаил Г.",
+                    "photo": "//img.khl.ru/teamplayers/14934/23461/200.jpg",
+                    "link": "/players/23461/"
+                  },
+                  "title": "Толчок клюшкой"
+                }
+              ],
+              "count": 1
+            },
+            "2": {
+              "fouldes": [
+                {
+                  "team": "A",
+                  "per": "2",
+                  "tbeg": "30:20",
+                  "pnum": "87",
+                  "time": "2",
+                  "code": "5",
+                  "tend": "32:20",
+                  "appointed": "30:20",
+                  "notServed": "0",
+                  "converted": "0",
+                  "ps_pno": "",
+                  "player": {
+                    "name": "Гутик Даниил",
+                    "photo": "//img.khl.ru/teamplayers/14934/29928/200.jpg",
+                    "link": "/players/29928/"
+                  },
+                  "title": "Подножка"
+                }
+              ],
+              "count": 1
+            },
+            "3": {
+              "fouldes": [
+                {
+                  "team": "A",
+                  "per": "3",
+                  "tbeg": "53:20",
+                  "pnum": "16",
+                  "time": "2",
+                  "code": "2",
+                  "tend": "55:20",
+                  "appointed": "53:20",
+                  "notServed": "0",
+                  "converted": "0",
+                  "ps_pno": "",
+                  "player": {
+                    "name": "Пивчулин Данил",
+                    "photo": "//img.khl.ru/teamplayers/14934/40673/200.jpg",
+                    "link": "/players/40673/"
+                  },
+                  "title": "Задержка клюшкой"
+                },
+                {
+                  "team": "A",
+                  "per": "3",
+                  "tbeg": "55:31",
+                  "pnum": "17",
+                  "time": "2",
+                  "code": "8",
+                  "tend": "57:31",
+                  "appointed": "55:31",
+                  "notServed": "0",
+                  "converted": "0",
+                  "ps_pno": "",
+                  "player": {
+                    "name": "Морозов Иван Д.",
+                    "photo": "//img.khl.ru/teamplayers/14934/26742/200.jpg",
+                    "link": "/players/26742/"
+                  },
+                  "title": "Игра высоко поднятой клюшкой"
+                },
+                {
+                  "team": "A",
+                  "per": "3",
+                  "tbeg": "58:48",
+                  "pnum": "0",
+                  "time": "2",
+                  "code": "30",
+                  "tend": "60:48",
+                  "appointed": "58:48",
+                  "whoServed": {
+                    "name": "Гутик Даниил",
+                    "photo": "//img.khl.ru/teamplayers/14934/29928/200.jpg",
+                    "link": "/players/29928/",
+                    "pnum": "87"
+                  },
+                  "notServed": "0",
+                  "converted": "0",
+                  "ps_pno": "",
+                  "player": {
+                    "name": "Беляев Александр Вл.",
+                    "photo": "//img.khl.ru/teamplayers/14934/24862/200.jpg",
+                    "link": "/players/24862/"
+                  },
+                  "title": "Нарушение численного состава"
+                }
+              ],
+              "count": 3
+            }
+          },
+          "total_count": 5
+        },
+        "stats": {
+          "gk": [
+            {
+              "id": "21376",
+              "pos": "в",
+              "clubidt": "14934",
+              "clubidg": "7",
+              "teamname": "Спартак",
+              "teamnameen": "Spartak",
+              "clubids": "7",
+              "name": "Георгиев Александр",
+              "nameen": "Georgiyev Alexander",
+              "middlename": "Георгиевич",
+              "lastname": "Георгиев",
+              "firstname": "Александр",
+              "lastnameen": "Georgiyev",
+              "firstnameen": "Alexander",
+              "birthdate": "1996-02-10",
+              "stick": "l",
+              "height": "186",
+              "weight": "80",
+              "gp": "1",
+              "jn": "40",
+              "capt": "",
+              "w": "0",
+              "l": "0",
+              "n": "1",
+              "sop": "1",
+              "sog": "36",
+              "ga": "2",
+              "sv": "34",
+              "sv_pct": "94.4",
+              "gaa": "1.85",
+              "g": "0",
+              "a": "0",
+              "so": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "toi": "65:00",
+              "toi_pct": "100.0",
+              "ps": "0",
+              "psga": "0",
+              "pssv_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Георгиев Александр",
+                "photo": "//img.khl.ru/teamplayers/14934/21376/200.jpg",
+                "link": "/players/21376/"
+              }
+            },
+            {
+              "id": "19184",
+              "pos": "в",
+              "clubidt": "14934",
+              "clubidg": "7",
+              "teamname": "Спартак",
+              "teamnameen": "Spartak",
+              "clubids": "7",
+              "name": "Загидулин Артём",
+              "nameen": "Zagidulin Artyom",
+              "middlename": "Ринатович",
+              "lastname": "Загидулин",
+              "firstname": "Артём",
+              "lastnameen": "Zagidulin",
+              "firstnameen": "Artyom",
+              "birthdate": "1995-08-08",
+              "stick": "l",
+              "height": "187",
+              "weight": "84",
+              "gp": "0",
+              "jn": "50",
+              "capt": "",
+              "w": "0",
+              "l": "0",
+              "n": "0",
+              "sop": "0",
+              "sog": "0",
+              "ga": "0",
+              "sv": "0",
+              "sv_pct": "-",
+              "gaa": "-",
+              "g": "0",
+              "a": "0",
+              "so": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "toi": "-",
+              "toi_pct": "-",
+              "ps": "0",
+              "psga": "0",
+              "pssv_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Загидулин Артём",
+                "photo": "//img.khl.ru/teamplayers/14934/19184/200.jpg",
+                "link": "/players/19184/"
+              }
+            }
+          ],
+          "def": [
+            {
+              "id": "30201",
+              "pos": "з",
+              "clubidt": "14934",
+              "clubidg": "7",
+              "teamname": "Спартак",
+              "teamnameen": "Spartak",
+              "clubids": "7",
+              "name": "Бычков Роман",
+              "nameen": "Bychkov Roman",
+              "middlename": "Максимович",
+              "lastname": "Бычков",
+              "firstname": "Роман",
+              "lastnameen": "Bychkov",
+              "firstnameen": "Roman",
+              "birthdate": "2001-02-10",
+              "stick": "l",
+              "height": "181",
+              "weight": "84",
+              "gp": "1",
+              "jn": "78",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "0",
+              "plus": "0",
+              "minus": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "1",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "0",
+              "bls": "0",
+              "toi_avg": "19:35",
+              "sft_avg": "32.0",
+              "sog_avg": "1.0",
+              "toa_avg": "04:19",
+              "tie_avg": "15:13",
+              "tipp_avg": "00:00",
+              "tish_avg": "04:22",
+              "tien_avg": "00:00",
+              "sfte_avg": "25",
+              "sftpp_avg": "0",
+              "sftsh_avg": "9",
+              "sften_avg": "0",
+              "tie_pct_of_team": "31.05",
+              "tipp_pct_of_team": "0",
+              "tish_pct_of_team": "43.67",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Бычков Роман",
+                "photo": "//img.khl.ru/teamplayers/14934/30201/200.jpg",
+                "link": "/players/30201/"
+              },
+              "topSpeed": 30.96,
+              "distanceTravelled": 4.11,
+              "puckControlDistance": 0.15,
+              "averageSpeed": 12.13
+            },
+            {
+              "id": "15299",
+              "pos": "з",
+              "clubidt": "14934",
+              "clubidg": "7",
+              "teamname": "Спартак",
+              "teamnameen": "Spartak",
+              "clubids": "7",
+              "name": "Вишневский Дмитрий",
+              "nameen": "Vishnevsky Dmitry",
+              "middlename": "Олегович",
+              "lastname": "Вишневский",
+              "firstname": "Дмитрий",
+              "lastnameen": "Vishnevsky",
+              "firstnameen": "Dmitry",
+              "birthdate": "1990-01-03",
+              "stick": "r",
+              "height": "180",
+              "weight": "85",
+              "gp": "1",
+              "jn": "55",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "0",
+              "plus": "0",
+              "minus": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "1",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "1",
+              "hits": "2",
+              "bls": "0",
+              "toi_avg": "23:13",
+              "sft_avg": "37.0",
+              "sog_avg": "1.0",
+              "toa_avg": "07:34",
+              "tie_avg": "15:31",
+              "tipp_avg": "03:31",
+              "tish_avg": "04:11",
+              "tien_avg": "00:00",
+              "sfte_avg": "28",
+              "sftpp_avg": "3",
+              "sftsh_avg": "9",
+              "sften_avg": "0",
+              "tie_pct_of_team": "31.67",
+              "tipp_pct_of_team": "58.61",
+              "tish_pct_of_team": "41.83",
+              "tien_pct_of_team": "-",
+              "p_intc": "1",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Вишневский Дмитрий",
+                "photo": "//img.khl.ru/teamplayers/14934/15299/200.jpg",
+                "link": "/players/15299/"
+              },
+              "topSpeed": 31.25,
+              "distanceTravelled": 5.11,
+              "puckControlDistance": 0.43,
+              "averageSpeed": 15.44
+            },
+            {
+              "id": "41928",
+              "pos": "з",
+              "clubidt": "14934",
+              "clubidg": "7",
+              "teamname": "Спартак",
+              "teamnameen": "Spartak",
+              "clubids": "7",
+              "name": "Кин Джозеф",
+              "nameen": "Keane Joseph",
+              "middlename": "",
+              "lastname": "Кин",
+              "firstname": "Джозеф",
+              "lastnameen": "Keane",
+              "firstnameen": "Joseph",
+              "birthdate": "1999-07-02",
+              "stick": "r",
+              "height": "183",
+              "weight": "84",
+              "gp": "1",
+              "jn": "4",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "0",
+              "plus": "1",
+              "minus": "1",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "1",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "0",
+              "bls": "0",
+              "toi_avg": "24:50",
+              "sft_avg": "37.0",
+              "sog_avg": "1.0",
+              "toa_avg": "05:13",
+              "tie_avg": "16:46",
+              "tipp_avg": "02:27",
+              "tish_avg": "05:37",
+              "tien_avg": "00:00",
+              "sfte_avg": "27",
+              "sftpp_avg": "4",
+              "sftsh_avg": "12",
+              "sften_avg": "0",
+              "tie_pct_of_team": "34.22",
+              "tipp_pct_of_team": "40.83",
+              "tish_pct_of_team": "56.17",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Кин Джозеф",
+                "photo": "//img.khl.ru/teamplayers/14934/41928/200.jpg",
+                "link": "/players/41928/"
+              },
+              "topSpeed": 31.9,
+              "distanceTravelled": 5.18,
+              "puckControlDistance": 0.55,
+              "averageSpeed": 17.21
+            }
+          ],
+          "fwd": [
+            {
+              "id": "24862",
+              "pos": "н",
+              "clubidt": "14934",
+              "clubidg": "7",
+              "teamname": "Спартак",
+              "teamnameen": "Spartak",
+              "clubids": "7",
+              "name": "Беляев Александр Вл.",
+              "nameen": "Belyayev Alexander Vl.",
+              "middlename": "Владиславович",
+              "lastname": "Беляев",
+              "firstname": "Александр Вл.",
+              "lastnameen": "Belyayev",
+              "firstnameen": "Alexander Vl.",
+              "birthdate": "1999-03-28",
+              "stick": "l",
+              "height": "181",
+              "weight": "86",
+              "gp": "1",
+              "jn": "98",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "-1",
+              "plus": "0",
+              "minus": "1",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "0",
+              "sog_pct": "-",
+              "fo": "1",
+              "fow": "1",
+              "fo_pct": "100.0",
+              "foa": "0",
+              "tka": "0",
+              "hits": "0",
+              "bls": "1",
+              "toi_avg": "10:35",
+              "sft_avg": "14.0",
+              "sog_avg": "-",
+              "toa_avg": "02:56",
+              "tie_avg": "10:32",
+              "tipp_avg": "00:03",
+              "tish_avg": "00:00",
+              "tien_avg": "00:00",
+              "sfte_avg": "14",
+              "sftpp_avg": "1",
+              "sftsh_avg": "0",
+              "sften_avg": "0",
+              "tie_pct_of_team": "21.5",
+              "tipp_pct_of_team": "0.83",
+              "tish_pct_of_team": "0",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Беляев Александр Вл.",
+                "photo": "//img.khl.ru/teamplayers/14934/24862/200.jpg",
+                "link": "/players/24862/"
+              },
+              "topSpeed": 32.29,
+              "distanceTravelled": 2.76,
+              "puckControlDistance": 0.11,
+              "averageSpeed": 20.16
+            },
+            {
+              "id": "29928",
+              "pos": "н",
+              "clubidt": "14934",
+              "clubidg": "7",
+              "teamname": "Спартак",
+              "teamnameen": "Spartak",
+              "clubids": "7",
+              "name": "Гутик Даниил",
+              "nameen": "Gutik Daniil",
+              "middlename": "Сергеевич",
+              "lastname": "Гутик",
+              "firstname": "Даниил",
+              "lastnameen": "Gutik",
+              "firstnameen": "Daniil",
+              "birthdate": "2001-08-31",
+              "stick": "r",
+              "height": "191",
+              "weight": "86",
+              "gp": "1",
+              "jn": "87",
+              "capt": "",
+              "g": "0",
+              "a": "2",
+              "a1": "1",
+              "a2": "1",
+              "pts": "2",
+              "pm": "2",
+              "plus": "2",
+              "minus": "0",
+              "pim": "2",
+              "sham": "0",
+              "fouls": "1",
+              "fouls_ps": "0",
+              "fouls_2m": "1",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "2",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "0",
+              "bls": "0",
+              "toi_avg": "15:54",
+              "sft_avg": "19.0",
+              "sog_avg": "2.0",
+              "toa_avg": "04:51",
+              "tie_avg": "12:25",
+              "tipp_avg": "03:29",
+              "tish_avg": "00:00",
+              "tien_avg": "00:00",
+              "sfte_avg": "17",
+              "sftpp_avg": "4",
+              "sftsh_avg": "0",
+              "sften_avg": "0",
+              "tie_pct_of_team": "25.34",
+              "tipp_pct_of_team": "58.06",
+              "tish_pct_of_team": "0",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Гутик Даниил",
+                "photo": "//img.khl.ru/teamplayers/14934/29928/200.jpg",
+                "link": "/players/29928/"
+              },
+              "topSpeed": 34.02,
+              "distanceTravelled": 3.64,
+              "puckControlDistance": 0.2,
+              "averageSpeed": 14.51
+            },
+            {
+              "id": "22149",
+              "pos": "н",
+              "clubidt": "14934",
+              "clubidg": "7",
+              "teamname": "Спартак",
+              "teamnameen": "Spartak",
+              "clubids": "7",
+              "name": "Коростелёв Никита",
+              "nameen": "Korostelyov Nikita",
+              "middlename": "Дмитриевич",
+              "lastname": "Коростелёв",
+              "firstname": "Никита",
+              "lastnameen": "Korostelyov",
+              "firstnameen": "Nikita",
+              "birthdate": "1997-02-08",
+              "stick": "r",
+              "height": "187",
+              "weight": "93",
+              "gp": "1",
+              "jn": "35",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "0",
+              "plus": "0",
+              "minus": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "3",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "1",
+              "bls": "0",
+              "toi_avg": "12:59",
+              "sft_avg": "17.0",
+              "sog_avg": "3.0",
+              "toa_avg": "03:57",
+              "tie_avg": "10:32",
+              "tipp_avg": "02:27",
+              "tish_avg": "00:00",
+              "tien_avg": "00:00",
+              "sfte_avg": "15",
+              "sftpp_avg": "3",
+              "sftsh_avg": "0",
+              "sften_avg": "0",
+              "tie_pct_of_team": "21.5",
+              "tipp_pct_of_team": "40.83",
+              "tish_pct_of_team": "0",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Коростелёв Никита",
+                "photo": "//img.khl.ru/teamplayers/14934/22149/200.jpg",
+                "link": "/players/22149/"
+              },
+              "topSpeed": 30.06,
+              "distanceTravelled": 3.18,
+              "puckControlDistance": 0.14,
+              "averageSpeed": 19.48
+            }
+          ]
+        },
+        "sort": {
+          "gk": {
+            "name": "asc"
+          },
+          "def": {
+            "name": "asc"
+          },
+          "fwd": {
+            "name": "asc"
+          }
+        },
+        "params": {
+          "stat": {
+            "gk": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "w": {
+                "short": "В",
+                "full": "Выигрыши"
+              },
+              "l": {
+                "short": "П",
+                "full": "Проигрыши"
+              },
+              "sop": {
+                "short": "ИБ",
+                "full": "Игры с буллитными сериями"
+              },
+              "sog": {
+                "short": "БВ",
+                "full": "Броски по воротам"
+              },
+              "ga": {
+                "short": "ПШ",
+                "full": "Пропущено шайб"
+              },
+              "sv": {
+                "short": "ОБ",
+                "full": "Отраженные броски"
+              },
+              "sv_pct": {
+                "short": "%ОБ",
+                "full": "Процент отраженных бросков"
+              },
+              "gaa": {
+                "short": "КН",
+                "full": "Коэффициент надежности = 60мин*ПШ/ВП"
+              },
+              "g": {
+                "short": "Ш",
+                "full": "Заброшенные шайбы"
+              },
+              "a": {
+                "short": "А",
+                "full": "Передачи"
+              },
+              "so": {
+                "short": "И\"0\"",
+                "full": "Сухие игры"
+              },
+              "pim": {
+                "short": "Штр",
+                "full": "Штрафное время"
+              },
+              "toi": {
+                "short": "ВП",
+                "full": "Время на площадке"
+              }
+            },
+            "def": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "g": {
+                "short": "Ш",
+                "full": "Заброшенные шайбы"
+              },
+              "a": {
+                "short": "А",
+                "full": "Передачи"
+              },
+              "pts": {
+                "short": "О",
+                "full": "Количество набранных очков"
+              },
+              "pm": {
+                "short": "+/-",
+                "full": "Плюс/Минус"
+              },
+              "plus": {
+                "short": "+",
+                "full": "Плюс"
+              },
+              "minus": {
+                "short": "-",
+                "full": "Минус"
+              },
+              "pim": {
+                "short": "Штр",
+                "full": "Штрафное время"
+              },
+              "eqg": {
+                "short": "ШР",
+                "full": "Шайбы в равенстве"
+              },
+              "ppg": {
+                "short": "ШБ",
+                "full": "Шайбы в большинстве"
+              },
+              "shg": {
+                "short": "ШМ",
+                "full": "Шайбы в меньшинстве"
+              },
+              "otg": {
+                "short": "ШО",
+                "full": "Шайбы в овертайме"
+              },
+              "gwg": {
+                "short": "ШП",
+                "full": "Победные шайбы"
+              },
+              "sds": {
+                "short": "РБ",
+                "full": "Решающие буллиты"
+              },
+              "sog": {
+                "short": "БВ",
+                "full": "Броски по воротам"
+              },
+              "sog_pct": {
+                "short": "%БВ",
+                "full": "Процент реализованных бросков"
+              },
+              "fo": {
+                "short": "Вбр",
+                "full": "Вбрасывания"
+              },
+              "fow": {
+                "short": "ВВбр",
+                "full": "Выигранные вбрасывания"
+              },
+              "fo_pct": {
+                "short": "%Вбр",
+                "full": "Процент выигранных вбрасываний"
+              },
+              "toi_avg": {
+                "short": "ВП/И",
+                "full": "Среднее время на площадке за игру"
+              },
+              "sft_avg": {
+                "short": "См/И",
+                "full": "Среднее количество смен за игру"
+              },
+              "tie_avg": {
+                "short": "ВПР/И",
+                "full": "Среднее время на площадке при игре в равных составах за игру"
+              },
+              "sfte_avg": {
+                "short": "СмР/И",
+                "full": "Среднее количество смен при игре в равных составах за игру"
+              },
+              "tipp_avg": {
+                "short": "ВПБ/И",
+                "full": "Среднее время на площадке при игре в большинстве за игру"
+              },
+              "sftpp_avg": {
+                "short": "СмБ/И",
+                "full": "Среднее количество смен при игре в большинстве за игру"
+              },
+              "tish_avg": {
+                "short": "ВПМ/И",
+                "full": "Среднее время на площадке при игре в меньшинстве за игру"
+              },
+              "sftsh_avg": {
+                "short": "СмМ/И",
+                "full": "Среднее количество смен при игре в меньшинстве за игру"
+              },
+              "tien_avg": {
+                "short": "ВППВ",
+                "full": "Время на площадке при игре без вратаря (пустые ворота)"
+              },
+              "sften_avg": {
+                "short": "СмПВ",
+                "full": "Количество смен при игре без вратаря (пустые ворота)"
+              },
+              "hits": {
+                "short": "СПр",
+                "full": "Силовые приемы"
+              },
+              "bls": {
+                "short": "БлБ",
+                "full": "Блокированные броски"
+              },
+              "toa_avg": {
+                "short": "ВВА",
+                "full": "Время в атаке"
+              },
+              "tka": {
+                "short": "ОТБ",
+                "full": "Отборы шайбы"
+              },
+              "p_intc": {
+                "short": "ПХТ",
+                "full": "Перехват передачи"
+              },
+              "averageSpeed": {
+                "short": "СрС",
+                "full": "Средняя скорость (км/ч)"
+              },
+              "topSpeed": {
+                "short": "МС",
+                "full": "Максимальная скорость (км/ч)"
+              },
+              "distanceTravelled": {
+                "short": "ПД",
+                "full": "Пройденная дистанция (км)"
+              }
+            },
+            "fwd": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "g": {
+                "short": "Ш",
+                "full": "Заброшенные шайбы"
+              },
+              "a": {
+                "short": "А",
+                "full": "Передачи"
+              },
+              "pts": {
+                "short": "О",
+                "full": "Количество набранных очков"
+              },
+              "pm": {
+                "short": "+/-",
+                "full": "Плюс/Минус"
+              },
+              "plus": {
+                "short": "+",
+                "full": "Плюс"
+              },
+              "minus": {
+                "short": "-",
+                "full": "Минус"
+              },
+              "pim": {
+                "short": "Штр",
+                "full": "Штрафное время"
+              },
+              "eqg": {
+                "short": "ШР",
+                "full": "Шайбы в равенстве"
+              },
+              "ppg": {
+                "short": "ШБ",
+                "full": "Шайбы в большинстве"
+              },
+              "shg": {
+                "short": "ШМ",
+                "full": "Шайбы в меньшинстве"
+              },
+              "otg": {
+                "short": "ШО",
+                "full": "Шайбы в овертайме"
+              },
+              "gwg": {
+                "short": "ШП",
+                "full": "Победные шайбы"
+              },
+              "sds": {
+                "short": "РБ",
+                "full": "Решающие буллиты"
+              },
+              "sog": {
+                "short": "БВ",
+                "full": "Броски по воротам"
+              },
+              "sog_pct": {
+                "short": "%БВ",
+                "full": "Процент реализованных бросков"
+              },
+              "fo": {
+                "short": "Вбр",
+                "full": "Вбрасывания"
+              },
+              "fow": {
+                "short": "ВВбр",
+                "full": "Выигранные вбрасывания"
+              },
+              "fo_pct": {
+                "short": "%Вбр",
+                "full": "Процент выигранных вбрасываний"
+              },
+              "toi_avg": {
+                "short": "ВП/И",
+                "full": "Среднее время на площадке за игру"
+              },
+              "sft_avg": {
+                "short": "См/И",
+                "full": "Среднее количество смен за игру"
+              },
+              "tie_avg": {
+                "short": "ВПР/И",
+                "full": "Среднее время на площадке при игре в равных составах за игру"
+              },
+              "sfte_avg": {
+                "short": "СмР/И",
+                "full": "Среднее количество смен при игре в равных составах за игру"
+              },
+              "tipp_avg": {
+                "short": "ВПБ/И",
+                "full": "Среднее время на площадке при игре в большинстве за игру"
+              },
+              "sftpp_avg": {
+                "short": "СмБ/И",
+                "full": "Среднее количество смен при игре в большинстве за игру"
+              },
+              "tish_avg": {
+                "short": "ВПМ/И",
+                "full": "Среднее время на площадке при игре в меньшинстве за игру"
+              },
+              "sftsh_avg": {
+                "short": "СмМ/И",
+                "full": "Среднее количество смен при игре в меньшинстве за игру"
+              },
+              "tien_avg": {
+                "short": "ВППВ",
+                "full": "Время на площадке при игре без вратаря (пустые ворота)"
+              },
+              "sften_avg": {
+                "short": "СмПВ",
+                "full": "Количество смен при игре без вратаря (пустые ворота)"
+              },
+              "hits": {
+                "short": "СПр",
+                "full": "Силовые приемы"
+              },
+              "bls": {
+                "short": "БлБ",
+                "full": "Блокированные броски"
+              },
+              "toa_avg": {
+                "short": "ВВА",
+                "full": "Время в атаке"
+              },
+              "tka": {
+                "short": "ОТБ",
+                "full": "Отборы шайбы"
+              },
+              "p_intc": {
+                "short": "ПХТ",
+                "full": "Перехват передачи"
+              },
+              "averageSpeed": {
+                "short": "СрС",
+                "full": "Средняя скорость (км/ч)"
+              },
+              "topSpeed": {
+                "short": "МС",
+                "full": "Максимальная скорость (км/ч)"
+              },
+              "distanceTravelled": {
+                "short": "ПД",
+                "full": "Пройденная дистанция (км)"
+              }
+            }
+          },
+          "ranking": {
+            "pp": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "pp": {
+                "short": "Бол",
+                "full": "Количество полученных численных преимуществ"
+              },
+              "ppgf": {
+                "short": "ШБ",
+                "full": "Шайбы, заброшенные в большинстве"
+              },
+              "pp_pct": {
+                "short": "%Б",
+                "full": "Процент реализованных численных преимуществ"
+              },
+              "shga": {
+                "short": "ПШБ",
+                "full": "Шайбы, пропущенные в большинстве"
+              },
+              "sh": {
+                "short": "Мен",
+                "full": "Количество численных преимуществ, полученных соперниками"
+              },
+              "ppga": {
+                "short": "ПШМ",
+                "full": "Шайбы, пропущенные в меньшинстве"
+              },
+              "pk_pct": {
+                "short": "%М",
+                "full": "Процент нереализованных численных преимуществ соперников"
+              },
+              "shgf": {
+                "short": "ШМ",
+                "full": "Шайбы, заброшенные в меньшинстве"
+              }
+            },
+            "gf": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "ga55": {
+                "short": "5на5",
+                "full": "5на5"
+              },
+              "ga54": {
+                "short": "5на4",
+                "full": "5на4"
+              },
+              "ga53": {
+                "short": "5на3",
+                "full": "5на3"
+              },
+              "ga44": {
+                "short": "4на4",
+                "full": "4на4"
+              },
+              "ga43": {
+                "short": "4на3",
+                "full": "4на3"
+              },
+              "ga33": {
+                "short": "3на3",
+                "full": "3на3"
+              },
+              "ga34": {
+                "short": "3на4",
+                "full": "3на4"
+              },
+              "ga45": {
+                "short": "4на5",
+                "full": "4на5"
+              },
+              "gfen": {
+                "short": "ПВ",
+                "full": "Пустые ворота"
+              },
+              "gfps": {
+                "short": "БУЛ",
+                "full": "Буллиты (реализованные штрафные броски и решающие буллиты)"
+              },
+              "ga_avg": {
+                "short": "ШП/И",
+                "full": "Среднее количество шайб, пропущенных за игру"
+              }
+            },
+            "ga": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "ga55": {
+                "short": "5на5",
+                "full": "5на5"
+              },
+              "ga54": {
+                "short": "5на4",
+                "full": "5на4"
+              },
+              "ga53": {
+                "short": "5на3",
+                "full": "5на3"
+              },
+              "ga44": {
+                "short": "4на4",
+                "full": "4на4"
+              },
+              "ga43": {
+                "short": "4на3",
+                "full": "4на3"
+              },
+              "ga33": {
+                "short": "3на3",
+                "full": "3на3"
+              },
+              "ga34": {
+                "short": "3на4",
+                "full": "3на4"
+              },
+              "ga45": {
+                "short": "4на5",
+                "full": "4на5"
+              },
+              "gfen": {
+                "short": "ПВ",
+                "full": "Пустые ворота"
+              },
+              "gfps": {
+                "short": "БУЛ",
+                "full": "Буллиты (реализованные штрафные броски и решающие буллиты)"
+              },
+              "ga_avg": {
+                "short": "ШП/И",
+                "full": "Среднее количество шайб, пропущенных за игру"
+              }
+            }
+          },
+          "shots": {
+            "g": {
+              "short": "Ш",
+              "full": "Заброшенные шайбы"
+            },
+            "sog": {
+              "short": "БВ",
+              "full": "Броски по воротам"
+            },
+            "sog_pct": {
+              "short": "%БВ",
+              "full": "Процент реализованных бросков"
+            }
+          },
+          "team_values": {
+            "bls": {
+              "short": "БлБ",
+              "full": "Блокированные броски"
+            },
+            "hits": {
+              "short": "СПр",
+              "full": "Силовые приемы"
+            },
+            "toa_avg": {
+              "short": "ВВА",
+              "full": "Время в атаке"
+            },
+            "tka": {
+              "short": "ОТБ",
+              "full": "Отборы шайбы"
+            },
+            "p_intc": {
+              "short": "ПХТ",
+              "full": "Перехват передачи"
+            },
+            "gva": {
+              "short": "ПТР",
+              "full": "Потеря шайбы"
+            }
+          },
+          "t_onice": {
+            "TIE": {
+              "short": "ВПР",
+              "full": "Игровое время команды при игре в равных составах"
+            },
+            "TIPP": {
+              "short": "ВПБ",
+              "full": "Игровое время команды при игре в большинстве"
+            },
+            "TISH": {
+              "short": "ВПМ",
+              "full": "Игровое время команды при игре в меньшинстве"
+            },
+            "TIEN": {
+              "short": "ВППВ",
+              "full": "Игровое время команды при игре без вратаря (пустые ворота)"
+            }
+          },
+          "distance": {
+            "control": {
+              "short": "ВВШ",
+              "full": "Время владения шайбой (мин.)"
+            },
+            "distanceTravelled": {
+              "short": "ПД",
+              "full": "Пройденная дистанция (км)"
+            },
+            "contested": {
+              "short": "НВШ",
+              "full": "Нейтральное владение шайбой (мин.)"
+            }
+          }
+        },
+        "shotsList": {
+          "g": {
+            "1": 0,
+            "2": 2,
+            "3": 0,
+            "sum": 2
+          },
+          "sog": {
+            "1": "6",
+            "sum": 33,
+            "2": "10",
+            "3": "12",
+            "4": "5"
+          },
+          "sog_pct": {
+            "1": 0,
+            "2": 20,
+            "3": 0,
+            "4": 0,
+            "sum": 6.06
+          }
+        },
+        "team_values": {
+          "bls": {
+            "1": "4",
+            "2": "0",
+            "3": "4",
+            "4": "0",
+            "sum": 8
+          },
+          "hits": {
+            "1": "3",
+            "2": "5",
+            "3": "1",
+            "4": "0",
+            "sum": 9
+          },
+          "toa_avg": {
+            "1": "04:36",
+            "2": "05:39",
+            "3": "06:29",
+            "4": "01:27",
+            "sum": "18:11"
+          },
+          "tka": {
+            "1": "2",
+            "2": "1",
+            "3": "3",
+            "4": "1",
+            "sum": "7"
+          },
+          "p_intc": {
+            "1": "0",
+            "2": "1",
+            "3": "2",
+            "4": "1",
+            "sum": "4"
+          },
+          "gva": {
+            "1": "11",
+            "2": "7",
+            "3": "6",
+            "4": "0",
+            "sum": "24"
+          }
+        },
+        "timeonice": {
+          "TIE": {
+            "1": "18:00",
+            "2": "14:31",
+            "3": "12:17",
+            "4": "04:12",
+            "sum": "49:00"
+          },
+          "TIPP": {
+            "1": "00:00",
+            "2": "03:29",
+            "3": "02:31",
+            "4": "00:00",
+            "sum": "06:00"
+          },
+          "TISH": {
+            "1": "02:00",
+            "2": "02:00",
+            "3": "05:12",
+            "4": "00:48",
+            "sum": "10:00"
+          },
+          "TIEN": {
+            "1": "00:00",
+            "2": "00:00",
+            "3": "00:00",
+            "4": "00:00",
+            "sum": "00:00"
+          }
+        },
+        "puck": {
+          "control": {
+            "1": "05:53",
+            "2": "07:27",
+            "3": "06:00",
+            "4": "02:27",
+            "sum": "21:48"
+          },
+          "contested": {
+            "1": "02:13",
+            "2": "01:35",
+            "3": "01:43",
+            "4": "00:21",
+            "sum": "05:53"
+          },
+          "distanceTravelled": {
+            "sum": 70.89,
+            "1": 22.01,
+            "2": 23.59,
+            "3": 21.18,
+            "4": 4.11
+          }
+        }
+      },
+      "visitor": {
+        "name": "Нефтехимик",
+        "city": "Нижнекамск",
+        "logo": "//img.khl.ru/teams/ru/1369/71/200.png?u=2026",
+        "cid": 14929,
+        "link": "/clubs/neftekhimik/",
+        "penalties": {
+          "periods": {
+            "2": {
+              "fouldes": [
+                {
+                  "team": "B",
+                  "per": "2",
+                  "tbeg": "35:46",
+                  "pnum": "73",
+                  "time": "2",
+                  "code": "23",
+                  "tend": "37:46",
+                  "appointed": "35:46",
+                  "notServed": "0",
+                  "converted": "0",
+                  "ps_pno": "",
+                  "player": {
+                    "name": "Юзленко Егор",
+                    "photo": "//img.khl.ru/teamplayers/14929/35029/200.jpg",
+                    "link": "/players/35029/"
+                  },
+                  "title": "Выброс шайбы"
+                },
+                {
+                  "team": "B",
+                  "per": "2",
+                  "tbeg": "38:31",
+                  "pnum": "7",
+                  "time": "2",
+                  "code": "2",
+                  "tend": "40:31",
+                  "appointed": "38:31",
+                  "notServed": "0",
+                  "converted": "0",
+                  "ps_pno": "",
+                  "player": {
+                    "name": "Хлыстов Никита",
+                    "photo": "//img.khl.ru/teamplayers/14929/17881/200.jpg",
+                    "link": "/players/17881/"
+                  },
+                  "title": "Задержка клюшкой"
+                }
+              ],
+              "count": 2
+            },
+            "3": {
+              "fouldes": [
+                {
+                  "team": "B",
+                  "per": "3",
+                  "tbeg": "50:03",
+                  "pnum": "88",
+                  "time": "2",
+                  "code": "1",
+                  "tend": "52:03",
+                  "appointed": "50:03",
+                  "notServed": "0",
+                  "converted": "0",
+                  "ps_pno": "",
+                  "player": {
+                    "name": "Жафяров Дамир",
+                    "photo": "//img.khl.ru/teamplayers/14929/17591/200.jpg",
+                    "link": "/players/17591/"
+                  },
+                  "title": "Блокировка"
+                }
+              ],
+              "count": 1
+            }
+          },
+          "total_count": 3
+        },
+        "stats": {
+          "gk": [
+            {
+              "id": "23431",
+              "pos": "в",
+              "clubidt": "14929",
+              "clubidg": "71",
+              "teamname": "Нефтехимик",
+              "teamnameen": "Neftekhimik",
+              "clubids": "71",
+              "name": "Долганов Филипп",
+              "nameen": "Dolganov Filipp",
+              "middlename": "Николаевич",
+              "lastname": "Долганов",
+              "firstname": "Филипп",
+              "lastnameen": "Dolganov",
+              "firstnameen": "Filipp",
+              "birthdate": "1998-07-17",
+              "stick": "l",
+              "height": "179",
+              "weight": "77",
+              "gp": "1",
+              "jn": "53",
+              "capt": "",
+              "w": "0",
+              "l": "0",
+              "n": "1",
+              "sop": "0",
+              "sog": "33",
+              "ga": "2",
+              "sv": "31",
+              "sv_pct": "93.9",
+              "gaa": "1.85",
+              "g": "0",
+              "a": "0",
+              "so": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "toi": "65:00",
+              "toi_pct": "100.0",
+              "ps": "0",
+              "psga": "0",
+              "pssv_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Долганов Филипп",
+                "photo": "//img.khl.ru/teamplayers/14929/23431/200.jpg",
+                "link": "/players/23431/"
+              }
+            },
+            {
+              "id": "27072",
+              "pos": "в",
+              "clubidt": "14929",
+              "clubidg": "71",
+              "teamname": "Нефтехимик",
+              "teamnameen": "Neftekhimik",
+              "clubids": "71",
+              "name": "Озолин Ярослав",
+              "nameen": "Ozolin Yaroslav",
+              "middlename": "Алексеевич",
+              "lastname": "Озолин",
+              "firstname": "Ярослав",
+              "lastnameen": "Ozolin",
+              "firstnameen": "Yaroslav",
+              "birthdate": "2000-07-25",
+              "stick": "l",
+              "height": "186",
+              "weight": "83",
+              "gp": "1",
+              "jn": "31",
+              "capt": "",
+              "w": "0",
+              "l": "0",
+              "n": "0",
+              "sop": "1",
+              "sog": "0",
+              "ga": "0",
+              "sv": "0",
+              "sv_pct": "-",
+              "gaa": "-",
+              "g": "0",
+              "a": "0",
+              "so": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "toi": "-",
+              "toi_pct": "-",
+              "ps": "0",
+              "psga": "0",
+              "pssv_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Озолин Ярослав",
+                "photo": "//img.khl.ru/teamplayers/14929/27072/200.jpg",
+                "link": "/players/27072/"
+              }
+            }
+          ],
+          "def": [
+            {
+              "id": "32390",
+              "pos": "з",
+              "clubidt": "14929",
+              "clubidg": "71",
+              "teamname": "Нефтехимик",
+              "teamnameen": "Neftekhimik",
+              "clubids": "71",
+              "name": "Крощинский Фёдор",
+              "nameen": "Kroshchinsky Fyodor",
+              "middlename": "Владимирович",
+              "lastname": "Крощинский",
+              "firstname": "Фёдор",
+              "lastnameen": "Kroshchinsky",
+              "firstnameen": "Fyodor",
+              "birthdate": "2002-03-27",
+              "stick": "l",
+              "height": "192",
+              "weight": "90",
+              "gp": "1",
+              "jn": "5",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "-1",
+              "plus": "0",
+              "minus": "1",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "1",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "2",
+              "bls": "3",
+              "toi_avg": "15:06",
+              "sft_avg": "18.0",
+              "sog_avg": "1.0",
+              "toa_avg": "02:35",
+              "tie_avg": "12:31",
+              "tipp_avg": "00:00",
+              "tish_avg": "02:35",
+              "tien_avg": "00:00",
+              "sfte_avg": "16",
+              "sftpp_avg": "0",
+              "sftsh_avg": "3",
+              "sften_avg": "0",
+              "tie_pct_of_team": "25.54",
+              "tipp_pct_of_team": "0",
+              "tish_pct_of_team": "43.06",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Крощинский Фёдор",
+                "photo": "//img.khl.ru/teamplayers/14929/32390/200.jpg",
+                "link": "/players/32390/"
+              },
+              "topSpeed": 31,
+              "distanceTravelled": 2.86,
+              "puckControlDistance": 0.11,
+              "averageSpeed": 14.44
+            },
+            {
+              "id": "31247",
+              "pos": "з",
+              "clubidt": "14929",
+              "clubidg": "71",
+              "teamname": "Нефтехимик",
+              "teamnameen": "Neftekhimik",
+              "clubids": "71",
+              "name": "Пастухов Илья",
+              "nameen": "Pastukhov Ilya",
+              "middlename": "Сергеевич",
+              "lastname": "Пастухов",
+              "firstname": "Илья",
+              "lastnameen": "Pastukhov",
+              "firstnameen": "Ilya",
+              "birthdate": "2001-01-24",
+              "stick": "l",
+              "height": "186",
+              "weight": "92",
+              "gp": "1",
+              "jn": "55",
+              "capt": "А",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "2",
+              "plus": "2",
+              "minus": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "1",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "1",
+              "bls": "0",
+              "toi_avg": "18:13",
+              "sft_avg": "22.0",
+              "sog_avg": "1.0",
+              "toa_avg": "03:14",
+              "tie_avg": "15:11",
+              "tipp_avg": "00:03",
+              "tish_avg": "02:59",
+              "tien_avg": "00:00",
+              "sfte_avg": "20",
+              "sftpp_avg": "1",
+              "sftsh_avg": "4",
+              "sften_avg": "0",
+              "tie_pct_of_team": "30.99",
+              "tipp_pct_of_team": "0.5",
+              "tish_pct_of_team": "49.72",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Пастухов Илья",
+                "photo": "//img.khl.ru/teamplayers/14929/31247/200.jpg",
+                "link": "/players/31247/"
+              },
+              "topSpeed": 31.72,
+              "distanceTravelled": 3.77,
+              "puckControlDistance": 0.05,
+              "averageSpeed": 10.04
+            },
+            {
+              "id": "27216",
+              "pos": "з",
+              "clubidt": "14929",
+              "clubidg": "71",
+              "teamname": "Нефтехимик",
+              "teamnameen": "Neftekhimik",
+              "clubids": "71",
+              "name": "Сериков Артём",
+              "nameen": "Serikov Artyom",
+              "middlename": "Андреевич",
+              "lastname": "Сериков",
+              "firstname": "Артём",
+              "lastnameen": "Serikov",
+              "firstnameen": "Artyom",
+              "birthdate": "2000-12-28",
+              "stick": "l",
+              "height": "186",
+              "weight": "94",
+              "gp": "1",
+              "jn": "24",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "-1",
+              "plus": "0",
+              "minus": "1",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "0",
+              "sog_pct": "-",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "0",
+              "bls": "3",
+              "toi_avg": "20:30",
+              "sft_avg": "25.0",
+              "sog_avg": "-",
+              "toa_avg": "04:14",
+              "tie_avg": "12:26",
+              "tipp_avg": "05:05",
+              "tish_avg": "02:59",
+              "tien_avg": "00:00",
+              "sfte_avg": "18",
+              "sftpp_avg": "6",
+              "sftsh_avg": "4",
+              "sften_avg": "0",
+              "tie_pct_of_team": "25.37",
+              "tipp_pct_of_team": "50.83",
+              "tish_pct_of_team": "49.72",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Сериков Артём",
+                "photo": "//img.khl.ru/teamplayers/14929/27216/200.jpg",
+                "link": "/players/27216/"
+              },
+              "topSpeed": 35.57,
+              "distanceTravelled": 4.2,
+              "puckControlDistance": 0.41,
+              "averageSpeed": 16.88
+            }
+          ],
+          "fwd": [
+            {
+              "id": "41257",
+              "pos": "н",
+              "clubidt": "14929",
+              "clubidg": "71",
+              "teamname": "Нефтехимик",
+              "teamnameen": "Neftekhimik",
+              "clubids": "71",
+              "name": "Артамонов Никита",
+              "nameen": "Artamonov Nikita",
+              "middlename": "Сергеевич",
+              "lastname": "Артамонов",
+              "firstname": "Никита",
+              "lastnameen": "Artamonov",
+              "firstnameen": "Nikita",
+              "birthdate": "2005-11-17",
+              "stick": "l",
+              "height": "180",
+              "weight": "87",
+              "gp": "1",
+              "jn": "69",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "0",
+              "plus": "0",
+              "minus": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "1",
+              "sog": "2",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "0",
+              "bls": "1",
+              "toi_avg": "14:23",
+              "sft_avg": "19.0",
+              "sog_avg": "2.0",
+              "toa_avg": "02:53",
+              "tie_avg": "10:15",
+              "tipp_avg": "04:08",
+              "tish_avg": "00:00",
+              "tien_avg": "00:00",
+              "sfte_avg": "14",
+              "sftpp_avg": "5",
+              "sftsh_avg": "0",
+              "sften_avg": "0",
+              "tie_pct_of_team": "20.92",
+              "tipp_pct_of_team": "41.33",
+              "tish_pct_of_team": "0",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Артамонов Никита",
+                "photo": "//img.khl.ru/teamplayers/14929/41257/200.jpg",
+                "link": "/players/41257/"
+              },
+              "topSpeed": 30.78,
+              "distanceTravelled": 3.31,
+              "puckControlDistance": 0.12,
+              "averageSpeed": 12.89
+            },
+            {
+              "id": "20700",
+              "pos": "н",
+              "clubidt": "14929",
+              "clubidg": "71",
+              "teamname": "Нефтехимик",
+              "teamnameen": "Neftekhimik",
+              "clubids": "71",
+              "name": "Белозёров Андрей Ал.",
+              "nameen": "Belozyorov Andrei Al.",
+              "middlename": "Александрович",
+              "lastname": "Белозёров",
+              "firstname": "Андрей Ал.",
+              "lastnameen": "Belozyorov",
+              "firstnameen": "Andrei Al.",
+              "birthdate": "1996-04-27",
+              "stick": "r",
+              "height": "180",
+              "weight": "92",
+              "gp": "1",
+              "jn": "71",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "0",
+              "plus": "0",
+              "minus": "0",
+              "pim": "0",
+              "sham": "0",
+              "fouls": "0",
+              "fouls_ps": "0",
+              "fouls_2m": "0",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "4",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "0",
+              "bls": "0",
+              "toi_avg": "22:45",
+              "sft_avg": "24.0",
+              "sog_avg": "4.0",
+              "toa_avg": "05:21",
+              "tie_avg": "17:00",
+              "tipp_avg": "05:45",
+              "tish_avg": "00:00",
+              "tien_avg": "00:00",
+              "sfte_avg": "21",
+              "sftpp_avg": "7",
+              "sftsh_avg": "0",
+              "sften_avg": "0",
+              "tie_pct_of_team": "34.69",
+              "tipp_pct_of_team": "57.5",
+              "tish_pct_of_team": "0",
+              "tien_pct_of_team": "-",
+              "p_intc": "0",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Белозёров Андрей Ал.",
+                "photo": "//img.khl.ru/teamplayers/14929/20700/200.jpg",
+                "link": "/players/20700/"
+              },
+              "topSpeed": 30.28,
+              "distanceTravelled": 5.48,
+              "puckControlDistance": 0.33,
+              "averageSpeed": 19.01
+            },
+            {
+              "id": "17591",
+              "pos": "н",
+              "clubidt": "14929",
+              "clubidg": "71",
+              "teamname": "Нефтехимик",
+              "teamnameen": "Neftekhimik",
+              "clubids": "71",
+              "name": "Жафяров Дамир",
+              "nameen": "Zhafyarov Damir",
+              "middlename": "Равилевич",
+              "lastname": "Жафяров",
+              "firstname": "Дамир",
+              "lastnameen": "Zhafyarov",
+              "firstnameen": "Damir",
+              "birthdate": "1994-03-17",
+              "stick": "l",
+              "height": "176",
+              "weight": "71",
+              "gp": "1",
+              "jn": "88",
+              "capt": "",
+              "g": "0",
+              "a": "0",
+              "a1": "0",
+              "a2": "0",
+              "pts": "0",
+              "pm": "0",
+              "plus": "0",
+              "minus": "0",
+              "pim": "2",
+              "sham": "0",
+              "fouls": "1",
+              "fouls_ps": "0",
+              "fouls_2m": "1",
+              "ppg": "0",
+              "shg": "0",
+              "gwg": "0",
+              "eqg": "0",
+              "otg": "0",
+              "sds": "0",
+              "sog": "1",
+              "sog_pct": "0.0",
+              "fo": "0",
+              "fow": "0",
+              "fo_pct": "-",
+              "foa": "0",
+              "tka": "0",
+              "hits": "0",
+              "bls": "1",
+              "toi_avg": "20:05",
+              "sft_avg": "23.0",
+              "sog_avg": "1.0",
+              "toa_avg": "05:05",
+              "tie_avg": "14:15",
+              "tipp_avg": "05:50",
+              "tish_avg": "00:00",
+              "tien_avg": "00:00",
+              "sfte_avg": "21",
+              "sftpp_avg": "7",
+              "sftsh_avg": "0",
+              "sften_avg": "0",
+              "tie_pct_of_team": "29.08",
+              "tipp_pct_of_team": "58.33",
+              "tish_pct_of_team": "0",
+              "tien_pct_of_team": "-",
+              "p_intc": "1",
+              "ps": "0",
+              "psg": "0",
+              "psg_pct": "-",
+              "notkhl": "",
+              "experience": "",
+              "se": "0",
+              "clubs": "",
+              "inteam": "Y",
+              "data": {
+                "name": "Жафяров Дамир",
+                "photo": "//img.khl.ru/teamplayers/14929/17591/200.jpg",
+                "link": "/players/17591/"
+              },
+              "topSpeed": 33.26,
+              "distanceTravelled": 4.64,
+              "puckControlDistance": 0.21,
+              "averageSpeed": 14.36
+            }
+          ]
+        },
+        "sort": {
+          "gk": {
+            "name": "asc"
+          },
+          "def": {
+            "name": "asc"
+          },
+          "fwd": {
+            "name": "asc"
+          }
+        },
+        "params": {
+          "stat": {
+            "gk": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "w": {
+                "short": "В",
+                "full": "Выигрыши"
+              },
+              "l": {
+                "short": "П",
+                "full": "Проигрыши"
+              },
+              "sop": {
+                "short": "ИБ",
+                "full": "Игры с буллитными сериями"
+              },
+              "sog": {
+                "short": "БВ",
+                "full": "Броски по воротам"
+              },
+              "ga": {
+                "short": "ПШ",
+                "full": "Пропущено шайб"
+              },
+              "sv": {
+                "short": "ОБ",
+                "full": "Отраженные броски"
+              },
+              "sv_pct": {
+                "short": "%ОБ",
+                "full": "Процент отраженных бросков"
+              },
+              "gaa": {
+                "short": "КН",
+                "full": "Коэффициент надежности = 60мин*ПШ/ВП"
+              },
+              "g": {
+                "short": "Ш",
+                "full": "Заброшенные шайбы"
+              },
+              "a": {
+                "short": "А",
+                "full": "Передачи"
+              },
+              "so": {
+                "short": "И\"0\"",
+                "full": "Сухие игры"
+              },
+              "pim": {
+                "short": "Штр",
+                "full": "Штрафное время"
+              },
+              "toi": {
+                "short": "ВП",
+                "full": "Время на площадке"
+              }
+            },
+            "def": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "g": {
+                "short": "Ш",
+                "full": "Заброшенные шайбы"
+              },
+              "a": {
+                "short": "А",
+                "full": "Передачи"
+              },
+              "pts": {
+                "short": "О",
+                "full": "Количество набранных очков"
+              },
+              "pm": {
+                "short": "+/-",
+                "full": "Плюс/Минус"
+              },
+              "plus": {
+                "short": "+",
+                "full": "Плюс"
+              },
+              "minus": {
+                "short": "-",
+                "full": "Минус"
+              },
+              "pim": {
+                "short": "Штр",
+                "full": "Штрафное время"
+              },
+              "eqg": {
+                "short": "ШР",
+                "full": "Шайбы в равенстве"
+              },
+              "ppg": {
+                "short": "ШБ",
+                "full": "Шайбы в большинстве"
+              },
+              "shg": {
+                "short": "ШМ",
+                "full": "Шайбы в меньшинстве"
+              },
+              "otg": {
+                "short": "ШО",
+                "full": "Шайбы в овертайме"
+              },
+              "gwg": {
+                "short": "ШП",
+                "full": "Победные шайбы"
+              },
+              "sds": {
+                "short": "РБ",
+                "full": "Решающие буллиты"
+              },
+              "sog": {
+                "short": "БВ",
+                "full": "Броски по воротам"
+              },
+              "sog_pct": {
+                "short": "%БВ",
+                "full": "Процент реализованных бросков"
+              },
+              "fo": {
+                "short": "Вбр",
+                "full": "Вбрасывания"
+              },
+              "fow": {
+                "short": "ВВбр",
+                "full": "Выигранные вбрасывания"
+              },
+              "fo_pct": {
+                "short": "%Вбр",
+                "full": "Процент выигранных вбрасываний"
+              },
+              "toi_avg": {
+                "short": "ВП/И",
+                "full": "Среднее время на площадке за игру"
+              },
+              "sft_avg": {
+                "short": "См/И",
+                "full": "Среднее количество смен за игру"
+              },
+              "tie_avg": {
+                "short": "ВПР/И",
+                "full": "Среднее время на площадке при игре в равных составах за игру"
+              },
+              "sfte_avg": {
+                "short": "СмР/И",
+                "full": "Среднее количество смен при игре в равных составах за игру"
+              },
+              "tipp_avg": {
+                "short": "ВПБ/И",
+                "full": "Среднее время на площадке при игре в большинстве за игру"
+              },
+              "sftpp_avg": {
+                "short": "СмБ/И",
+                "full": "Среднее количество смен при игре в большинстве за игру"
+              },
+              "tish_avg": {
+                "short": "ВПМ/И",
+                "full": "Среднее время на площадке при игре в меньшинстве за игру"
+              },
+              "sftsh_avg": {
+                "short": "СмМ/И",
+                "full": "Среднее количество смен при игре в меньшинстве за игру"
+              },
+              "tien_avg": {
+                "short": "ВППВ",
+                "full": "Время на площадке при игре без вратаря (пустые ворота)"
+              },
+              "sften_avg": {
+                "short": "СмПВ",
+                "full": "Количество смен при игре без вратаря (пустые ворота)"
+              },
+              "hits": {
+                "short": "СПр",
+                "full": "Силовые приемы"
+              },
+              "bls": {
+                "short": "БлБ",
+                "full": "Блокированные броски"
+              },
+              "toa_avg": {
+                "short": "ВВА",
+                "full": "Время в атаке"
+              },
+              "tka": {
+                "short": "ОТБ",
+                "full": "Отборы шайбы"
+              },
+              "p_intc": {
+                "short": "ПХТ",
+                "full": "Перехват передачи"
+              },
+              "averageSpeed": {
+                "short": "СрС",
+                "full": "Средняя скорость (км/ч)"
+              },
+              "topSpeed": {
+                "short": "МС",
+                "full": "Максимальная скорость (км/ч)"
+              },
+              "distanceTravelled": {
+                "short": "ПД",
+                "full": "Пройденная дистанция (км)"
+              }
+            },
+            "fwd": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "g": {
+                "short": "Ш",
+                "full": "Заброшенные шайбы"
+              },
+              "a": {
+                "short": "А",
+                "full": "Передачи"
+              },
+              "pts": {
+                "short": "О",
+                "full": "Количество набранных очков"
+              },
+              "pm": {
+                "short": "+/-",
+                "full": "Плюс/Минус"
+              },
+              "plus": {
+                "short": "+",
+                "full": "Плюс"
+              },
+              "minus": {
+                "short": "-",
+                "full": "Минус"
+              },
+              "pim": {
+                "short": "Штр",
+                "full": "Штрафное время"
+              },
+              "eqg": {
+                "short": "ШР",
+                "full": "Шайбы в равенстве"
+              },
+              "ppg": {
+                "short": "ШБ",
+                "full": "Шайбы в большинстве"
+              },
+              "shg": {
+                "short": "ШМ",
+                "full": "Шайбы в меньшинстве"
+              },
+              "otg": {
+                "short": "ШО",
+                "full": "Шайбы в овертайме"
+              },
+              "gwg": {
+                "short": "ШП",
+                "full": "Победные шайбы"
+              },
+              "sds": {
+                "short": "РБ",
+                "full": "Решающие буллиты"
+              },
+              "sog": {
+                "short": "БВ",
+                "full": "Броски по воротам"
+              },
+              "sog_pct": {
+                "short": "%БВ",
+                "full": "Процент реализованных бросков"
+              },
+              "fo": {
+                "short": "Вбр",
+                "full": "Вбрасывания"
+              },
+              "fow": {
+                "short": "ВВбр",
+                "full": "Выигранные вбрасывания"
+              },
+              "fo_pct": {
+                "short": "%Вбр",
+                "full": "Процент выигранных вбрасываний"
+              },
+              "toi_avg": {
+                "short": "ВП/И",
+                "full": "Среднее время на площадке за игру"
+              },
+              "sft_avg": {
+                "short": "См/И",
+                "full": "Среднее количество смен за игру"
+              },
+              "tie_avg": {
+                "short": "ВПР/И",
+                "full": "Среднее время на площадке при игре в равных составах за игру"
+              },
+              "sfte_avg": {
+                "short": "СмР/И",
+                "full": "Среднее количество смен при игре в равных составах за игру"
+              },
+              "tipp_avg": {
+                "short": "ВПБ/И",
+                "full": "Среднее время на площадке при игре в большинстве за игру"
+              },
+              "sftpp_avg": {
+                "short": "СмБ/И",
+                "full": "Среднее количество смен при игре в большинстве за игру"
+              },
+              "tish_avg": {
+                "short": "ВПМ/И",
+                "full": "Среднее время на площадке при игре в меньшинстве за игру"
+              },
+              "sftsh_avg": {
+                "short": "СмМ/И",
+                "full": "Среднее количество смен при игре в меньшинстве за игру"
+              },
+              "tien_avg": {
+                "short": "ВППВ",
+                "full": "Время на площадке при игре без вратаря (пустые ворота)"
+              },
+              "sften_avg": {
+                "short": "СмПВ",
+                "full": "Количество смен при игре без вратаря (пустые ворота)"
+              },
+              "hits": {
+                "short": "СПр",
+                "full": "Силовые приемы"
+              },
+              "bls": {
+                "short": "БлБ",
+                "full": "Блокированные броски"
+              },
+              "toa_avg": {
+                "short": "ВВА",
+                "full": "Время в атаке"
+              },
+              "tka": {
+                "short": "ОТБ",
+                "full": "Отборы шайбы"
+              },
+              "p_intc": {
+                "short": "ПХТ",
+                "full": "Перехват передачи"
+              },
+              "averageSpeed": {
+                "short": "СрС",
+                "full": "Средняя скорость (км/ч)"
+              },
+              "topSpeed": {
+                "short": "МС",
+                "full": "Максимальная скорость (км/ч)"
+              },
+              "distanceTravelled": {
+                "short": "ПД",
+                "full": "Пройденная дистанция (км)"
+              }
+            }
+          },
+          "ranking": {
+            "pp": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "pp": {
+                "short": "Бол",
+                "full": "Количество полученных численных преимуществ"
+              },
+              "ppgf": {
+                "short": "ШБ",
+                "full": "Шайбы, заброшенные в большинстве"
+              },
+              "pp_pct": {
+                "short": "%Б",
+                "full": "Процент реализованных численных преимуществ"
+              },
+              "shga": {
+                "short": "ПШБ",
+                "full": "Шайбы, пропущенные в большинстве"
+              },
+              "sh": {
+                "short": "Мен",
+                "full": "Количество численных преимуществ, полученных соперниками"
+              },
+              "ppga": {
+                "short": "ПШМ",
+                "full": "Шайбы, пропущенные в меньшинстве"
+              },
+              "pk_pct": {
+                "short": "%М",
+                "full": "Процент нереализованных численных преимуществ соперников"
+              },
+              "shgf": {
+                "short": "ШМ",
+                "full": "Шайбы, заброшенные в меньшинстве"
+              }
+            },
+            "gf": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "ga55": {
+                "short": "5на5",
+                "full": "5на5"
+              },
+              "ga54": {
+                "short": "5на4",
+                "full": "5на4"
+              },
+              "ga53": {
+                "short": "5на3",
+                "full": "5на3"
+              },
+              "ga44": {
+                "short": "4на4",
+                "full": "4на4"
+              },
+              "ga43": {
+                "short": "4на3",
+                "full": "4на3"
+              },
+              "ga33": {
+                "short": "3на3",
+                "full": "3на3"
+              },
+              "ga34": {
+                "short": "3на4",
+                "full": "3на4"
+              },
+              "ga45": {
+                "short": "4на5",
+                "full": "4на5"
+              },
+              "gfen": {
+                "short": "ПВ",
+                "full": "Пустые ворота"
+              },
+              "gfps": {
+                "short": "БУЛ",
+                "full": "Буллиты (реализованные штрафные броски и решающие буллиты)"
+              },
+              "ga_avg": {
+                "short": "ШП/И",
+                "full": "Среднее количество шайб, пропущенных за игру"
+              }
+            },
+            "ga": {
+              "gp": {
+                "short": "И",
+                "full": "Количество проведенных игр"
+              },
+              "ga55": {
+                "short": "5на5",
+                "full": "5на5"
+              },
+              "ga54": {
+                "short": "5на4",
+                "full": "5на4"
+              },
+              "ga53": {
+                "short": "5на3",
+                "full": "5на3"
+              },
+              "ga44": {
+                "short": "4на4",
+                "full": "4на4"
+              },
+              "ga43": {
+                "short": "4на3",
+                "full": "4на3"
+              },
+              "ga33": {
+                "short": "3на3",
+                "full": "3на3"
+              },
+              "ga34": {
+                "short": "3на4",
+                "full": "3на4"
+              },
+              "ga45": {
+                "short": "4на5",
+                "full": "4на5"
+              },
+              "gfen": {
+                "short": "ПВ",
+                "full": "Пустые ворота"
+              },
+              "gfps": {
+                "short": "БУЛ",
+                "full": "Буллиты (реализованные штрафные броски и решающие буллиты)"
+              },
+              "ga_avg": {
+                "short": "ШП/И",
+                "full": "Среднее количество шайб, пропущенных за игру"
+              }
+            }
+          },
+          "shots": {
+            "g": {
+              "short": "Ш",
+              "full": "Заброшенные шайбы"
+            },
+            "sog": {
+              "short": "БВ",
+              "full": "Броски по воротам"
+            },
+            "sog_pct": {
+              "short": "%БВ",
+              "full": "Процент реализованных бросков"
+            }
+          },
+          "team_values": {
+            "bls": {
+              "short": "БлБ",
+              "full": "Блокированные броски"
+            },
+            "hits": {
+              "short": "СПр",
+              "full": "Силовые приемы"
+            },
+            "toa_avg": {
+              "short": "ВВА",
+              "full": "Время в атаке"
+            },
+            "tka": {
+              "short": "ОТБ",
+              "full": "Отборы шайбы"
+            },
+            "p_intc": {
+              "short": "ПХТ",
+              "full": "Перехват передачи"
+            },
+            "gva": {
+              "short": "ПТР",
+              "full": "Потеря шайбы"
+            }
+          },
+          "t_onice": {
+            "TIE": {
+              "short": "ВПР",
+              "full": "Игровое время команды при игре в равных составах"
+            },
+            "TIPP": {
+              "short": "ВПБ",
+              "full": "Игровое время команды при игре в большинстве"
+            },
+            "TISH": {
+              "short": "ВПМ",
+              "full": "Игровое время команды при игре в меньшинстве"
+            },
+            "TIEN": {
+              "short": "ВППВ",
+              "full": "Игровое время команды при игре без вратаря (пустые ворота)"
+            }
+          },
+          "distance": {
+            "control": {
+              "short": "ВВШ",
+              "full": "Время владения шайбой (мин.)"
+            },
+            "distanceTravelled": {
+              "short": "ПД",
+              "full": "Пройденная дистанция (км)"
+            },
+            "contested": {
+              "short": "НВШ",
+              "full": "Нейтральное владение шайбой (мин.)"
+            }
+          }
+        },
+        "shotsList": {
+          "g": {
+            "1": 0,
+            "2": 2,
+            "3": 0,
+            "sum": 3,
+            "4": 1
+          },
+          "sog": {
+            "1": "8",
+            "sum": 36,
+            "2": "15",
+            "3": "11",
+            "4": "2"
+          },
+          "sog_pct": {
+            "1": 0,
+            "2": 13.33,
+            "3": 0,
+            "4": 50,
+            "sum": 8.33
+          }
+        },
+        "team_values": {
+          "bls": {
+            "1": "3",
+            "2": "6",
+            "3": "5",
+            "4": "0",
+            "sum": 14
+          },
+          "hits": {
+            "1": "3",
+            "2": "1",
+            "3": "3",
+            "4": "0",
+            "sum": 7
+          },
+          "toa_avg": {
+            "1": "04:35",
+            "2": "03:11",
+            "3": "04:56",
+            "4": "00:42",
+            "sum": "13:24"
+          },
+          "tka": {
+            "1": "2",
+            "2": "0",
+            "3": "1",
+            "4": "0",
+            "sum": "3"
+          },
+          "p_intc": {
+            "1": "0",
+            "2": "1",
+            "3": "0",
+            "4": "0",
+            "sum": "1"
+          },
+          "gva": {
+            "1": "8",
+            "2": "7",
+            "3": "8",
+            "4": "1",
+            "sum": "24"
+          }
+        },
+        "timeonice": {
+          "TIE": {
+            "1": "18:00",
+            "2": "14:31",
+            "3": "12:17",
+            "4": "04:12",
+            "sum": "49:00"
+          },
+          "TIPP": {
+            "1": "02:00",
+            "2": "02:00",
+            "3": "05:12",
+            "4": "00:48",
+            "sum": "10:00"
+          },
+          "TISH": {
+            "1": "00:00",
+            "2": "03:29",
+            "3": "02:31",
+            "4": "00:00",
+            "sum": "06:00"
+          },
+          "TIEN": {
+            "1": "00:00",
+            "2": "00:00",
+            "3": "00:00",
+            "4": "00:00",
+            "sum": "00:00"
+          }
+        },
+        "puck": {
+          "control": {
+            "1": "05:09",
+            "2": "04:16",
+            "3": "06:09",
+            "4": "01:28",
+            "sum": "17:03"
+          },
+          "contested": {
+            "1": "02:13",
+            "2": "01:35",
+            "3": "01:43",
+            "4": "00:21",
+            "sum": "05:53"
+          },
+          "distanceTravelled": {
+            "sum": 70.13,
+            "1": 22.38,
+            "2": 21.92,
+            "3": 21.92,
+            "4": 3.91
+          }
+        }
+      }
+    },
+    "config": {
+      "team_val": {
+        "bls": true,
+        "hits": true,
+        "toa_avg": true,
+        "tka": true,
+        "p_intc": true,
+        "gva": true
+      },
+      "puck": true
+    },
+    "params": {
+      "stat": {
+        "gk": {
+          "gp": {
+            "short": "И",
+            "full": "Количество проведенных игр"
+          },
+          "w": {
+            "short": "В",
+            "full": "Выигрыши"
+          },
+          "l": {
+            "short": "П",
+            "full": "Проигрыши"
+          },
+          "sop": {
+            "short": "ИБ",
+            "full": "Игры с буллитными сериями"
+          },
+          "sog": {
+            "short": "БВ",
+            "full": "Броски по воротам"
+          },
+          "ga": {
+            "short": "ПШ",
+            "full": "Пропущено шайб"
+          },
+          "sv": {
+            "short": "ОБ",
+            "full": "Отраженные броски"
+          },
+          "sv_pct": {
+            "short": "%ОБ",
+            "full": "Процент отраженных бросков"
+          },
+          "gaa": {
+            "short": "КН",
+            "full": "Коэффициент надежности = 60мин*ПШ/ВП"
+          },
+          "g": {
+            "short": "Ш",
+            "full": "Заброшенные шайбы"
+          },
+          "a": {
+            "short": "А",
+            "full": "Передачи"
+          },
+          "so": {
+            "short": "И\"0\"",
+            "full": "Сухие игры"
+          },
+          "pim": {
+            "short": "Штр",
+            "full": "Штрафное время"
+          },
+          "toi": {
+            "short": "ВП",
+            "full": "Время на площадке"
+          }
+        },
+        "def": {
+          "gp": {
+            "short": "И",
+            "full": "Количество проведенных игр"
+          },
+          "g": {
+            "short": "Ш",
+            "full": "Заброшенные шайбы"
+          },
+          "a": {
+            "short": "А",
+            "full": "Передачи"
+          },
+          "pts": {
+            "short": "О",
+            "full": "Количество набранных очков"
+          },
+          "pm": {
+            "short": "+/-",
+            "full": "Плюс/Минус"
+          },
+          "plus": {
+            "short": "+",
+            "full": "Плюс"
+          },
+          "minus": {
+            "short": "-",
+            "full": "Минус"
+          },
+          "pim": {
+            "short": "Штр",
+            "full": "Штрафное время"
+          },
+          "eqg": {
+            "short": "ШР",
+            "full": "Шайбы в равенстве"
+          },
+          "ppg": {
+            "short": "ШБ",
+            "full": "Шайбы в большинстве"
+          },
+          "shg": {
+            "short": "ШМ",
+            "full": "Шайбы в меньшинстве"
+          },
+          "otg": {
+            "short": "ШО",
+            "full": "Шайбы в овертайме"
+          },
+          "gwg": {
+            "short": "ШП",
+            "full": "Победные шайбы"
+          },
+          "sds": {
+            "short": "РБ",
+            "full": "Решающие буллиты"
+          },
+          "sog": {
+            "short": "БВ",
+            "full": "Броски по воротам"
+          },
+          "sog_pct": {
+            "short": "%БВ",
+            "full": "Процент реализованных бросков"
+          },
+          "fo": {
+            "short": "Вбр",
+            "full": "Вбрасывания"
+          },
+          "fow": {
+            "short": "ВВбр",
+            "full": "Выигранные вбрасывания"
+          },
+          "fo_pct": {
+            "short": "%Вбр",
+            "full": "Процент выигранных вбрасываний"
+          },
+          "toi_avg": {
+            "short": "ВП/И",
+            "full": "Среднее время на площадке за игру"
+          },
+          "sft_avg": {
+            "short": "См/И",
+            "full": "Среднее количество смен за игру"
+          },
+          "tie_avg": {
+            "short": "ВПР/И",
+            "full": "Среднее время на площадке при игре в равных составах за игру"
+          },
+          "sfte_avg": {
+            "short": "СмР/И",
+            "full": "Среднее количество смен при игре в равных составах за игру"
+          },
+          "tipp_avg": {
+            "short": "ВПБ/И",
+            "full": "Среднее время на площадке при игре в большинстве за игру"
+          },
+          "sftpp_avg": {
+            "short": "СмБ/И",
+            "full": "Среднее количество смен при игре в большинстве за игру"
+          },
+          "tish_avg": {
+            "short": "ВПМ/И",
+            "full": "Среднее время на площадке при игре в меньшинстве за игру"
+          },
+          "sftsh_avg": {
+            "short": "СмМ/И",
+            "full": "Среднее количество смен при игре в меньшинстве за игру"
+          },
+          "tien_avg": {
+            "short": "ВППВ",
+            "full": "Время на площадке при игре без вратаря (пустые ворота)"
+          },
+          "sften_avg": {
+            "short": "СмПВ",
+            "full": "Количество смен при игре без вратаря (пустые ворота)"
+          },
+          "hits": {
+            "short": "СПр",
+            "full": "Силовые приемы"
+          },
+          "bls": {
+            "short": "БлБ",
+            "full": "Блокированные броски"
+          },
+          "toa_avg": {
+            "short": "ВВА",
+            "full": "Время в атаке"
+          },
+          "tka": {
+            "short": "ОТБ",
+            "full": "Отборы шайбы"
+          },
+          "p_intc": {
+            "short": "ПХТ",
+            "full": "Перехват передачи"
+          },
+          "averageSpeed": {
+            "short": "СрС",
+            "full": "Средняя скорость (км/ч)"
+          },
+          "topSpeed": {
+            "short": "МС",
+            "full": "Максимальная скорость (км/ч)"
+          },
+          "distanceTravelled": {
+            "short": "ПД",
+            "full": "Пройденная дистанция (км)"
+          }
+        },
+        "fwd": {
+          "gp": {
+            "short": "И",
+            "full": "Количество проведенных игр"
+          },
+          "g": {
+            "short": "Ш",
+            "full": "Заброшенные шайбы"
+          },
+          "a": {
+            "short": "А",
+            "full": "Передачи"
+          },
+          "pts": {
+            "short": "О",
+            "full": "Количество набранных очков"
+          },
+          "pm": {
+            "short": "+/-",
+            "full": "Плюс/Минус"
+          },
+          "plus": {
+            "short": "+",
+            "full": "Плюс"
+          },
+          "minus": {
+            "short": "-",
+            "full": "Минус"
+          },
+          "pim": {
+            "short": "Штр",
+            "full": "Штрафное время"
+          },
+          "eqg": {
+            "short": "ШР",
+            "full": "Шайбы в равенстве"
+          },
+          "ppg": {
+            "short": "ШБ",
+            "full": "Шайбы в большинстве"
+          },
+          "shg": {
+            "short": "ШМ",
+            "full": "Шайбы в меньшинстве"
+          },
+          "otg": {
+            "short": "ШО",
+            "full": "Шайбы в овертайме"
+          },
+          "gwg": {
+            "short": "ШП",
+            "full": "Победные шайбы"
+          },
+          "sds": {
+            "short": "РБ",
+            "full": "Решающие буллиты"
+          },
+          "sog": {
+            "short": "БВ",
+            "full": "Броски по воротам"
+          },
+          "sog_pct": {
+            "short": "%БВ",
+            "full": "Процент реализованных бросков"
+          },
+          "fo": {
+            "short": "Вбр",
+            "full": "Вбрасывания"
+          },
+          "fow": {
+            "short": "ВВбр",
+            "full": "Выигранные вбрасывания"
+          },
+          "fo_pct": {
+            "short": "%Вбр",
+            "full": "Процент выигранных вбрасываний"
+          },
+          "toi_avg": {
+            "short": "ВП/И",
+            "full": "Среднее время на площадке за игру"
+          },
+          "sft_avg": {
+            "short": "См/И",
+            "full": "Среднее количество смен за игру"
+          },
+          "tie_avg": {
+            "short": "ВПР/И",
+            "full": "Среднее время на площадке при игре в равных составах за игру"
+          },
+          "sfte_avg": {
+            "short": "СмР/И",
+            "full": "Среднее количество смен при игре в равных составах за игру"
+          },
+          "tipp_avg": {
+            "short": "ВПБ/И",
+            "full": "Среднее время на площадке при игре в большинстве за игру"
+          },
+          "sftpp_avg": {
+            "short": "СмБ/И",
+            "full": "Среднее количество смен при игре в большинстве за игру"
+          },
+          "tish_avg": {
+            "short": "ВПМ/И",
+            "full": "Среднее время на площадке при игре в меньшинстве за игру"
+          },
+          "sftsh_avg": {
+            "short": "СмМ/И",
+            "full": "Среднее количество смен при игре в меньшинстве за игру"
+          },
+          "tien_avg": {
+            "short": "ВППВ",
+            "full": "Время на площадке при игре без вратаря (пустые ворота)"
+          },
+          "sften_avg": {
+            "short": "СмПВ",
+            "full": "Количество смен при игре без вратаря (пустые ворота)"
+          },
+          "hits": {
+            "short": "СПр",
+            "full": "Силовые приемы"
+          },
+          "bls": {
+            "short": "БлБ",
+            "full": "Блокированные броски"
+          },
+          "toa_avg": {
+            "short": "ВВА",
+            "full": "Время в атаке"
+          },
+          "tka": {
+            "short": "ОТБ",
+            "full": "Отборы шайбы"
+          },
+          "p_intc": {
+            "short": "ПХТ",
+            "full": "Перехват передачи"
+          },
+          "averageSpeed": {
+            "short": "СрС",
+            "full": "Средняя скорость (км/ч)"
+          },
+          "topSpeed": {
+            "short": "МС",
+            "full": "Максимальная скорость (км/ч)"
+          },
+          "distanceTravelled": {
+            "short": "ПД",
+            "full": "Пройденная дистанция (км)"
+          }
+        }
+      },
+      "ranking": {
+        "pp": {
+          "gp": {
+            "short": "И",
+            "full": "Количество проведенных игр"
+          },
+          "pp": {
+            "short": "Бол",
+            "full": "Количество полученных численных преимуществ"
+          },
+          "ppgf": {
+            "short": "ШБ",
+            "full": "Шайбы, заброшенные в большинстве"
+          },
+          "pp_pct": {
+            "short": "%Б",
+            "full": "Процент реализованных численных преимуществ"
+          },
+          "shga": {
+            "short": "ПШБ",
+            "full": "Шайбы, пропущенные в большинстве"
+          },
+          "sh": {
+            "short": "Мен",
+            "full": "Количество численных преимуществ, полученных соперниками"
+          },
+          "ppga": {
+            "short": "ПШМ",
+            "full": "Шайбы, пропущенные в меньшинстве"
+          },
+          "pk_pct": {
+            "short": "%М",
+            "full": "Процент нереализованных численных преимуществ соперников"
+          },
+          "shgf": {
+            "short": "ШМ",
+            "full": "Шайбы, заброшенные в меньшинстве"
+          }
+        },
+        "gf": {
+          "gp": {
+            "short": "И",
+            "full": "Количество проведенных игр"
+          },
+          "ga55": {
+            "short": "5на5",
+            "full": "5на5"
+          },
+          "ga54": {
+            "short": "5на4",
+            "full": "5на4"
+          },
+          "ga53": {
+            "short": "5на3",
+            "full": "5на3"
+          },
+          "ga44": {
+            "short": "4на4",
+            "full": "4на4"
+          },
+          "ga43": {
+            "short": "4на3",
+            "full": "4на3"
+          },
+          "ga33": {
+            "short": "3на3",
+            "full": "3на3"
+          },
+          "ga34": {
+            "short": "3на4",
+            "full": "3на4"
+          },
+          "ga45": {
+            "short": "4на5",
+            "full": "4на5"
+          },
+          "gfen": {
+            "short": "ПВ",
+            "full": "Пустые ворота"
+          },
+          "gfps": {
+            "short": "БУЛ",
+            "full": "Буллиты (реализованные штрафные броски и решающие буллиты)"
+          },
+          "ga_avg": {
+            "short": "ШП/И",
+            "full": "Среднее количество шайб, пропущенных за игру"
+          }
+        },
+        "ga": {
+          "gp": {
+            "short": "И",
+            "full": "Количество проведенных игр"
+          },
+          "ga55": {
+            "short": "5на5",
+            "full": "5на5"
+          },
+          "ga54": {
+            "short": "5на4",
+            "full": "5на4"
+          },
+          "ga53": {
+            "short": "5на3",
+            "full": "5на3"
+          },
+          "ga44": {
+            "short": "4на4",
+            "full": "4на4"
+          },
+          "ga43": {
+            "short": "4на3",
+            "full": "4на3"
+          },
+          "ga33": {
+            "short": "3на3",
+            "full": "3на3"
+          },
+          "ga34": {
+            "short": "3на4",
+            "full": "3на4"
+          },
+          "ga45": {
+            "short": "4на5",
+            "full": "4на5"
+          },
+          "gfen": {
+            "short": "ПВ",
+            "full": "Пустые ворота"
+          },
+          "gfps": {
+            "short": "БУЛ",
+            "full": "Буллиты (реализованные штрафные броски и решающие буллиты)"
+          },
+          "ga_avg": {
+            "short": "ШП/И",
+            "full": "Среднее количество шайб, пропущенных за игру"
+          }
+        }
+      },
+      "shots": {
+        "g": {
+          "short": "Ш",
+          "full": "Заброшенные шайбы"
+        },
+        "sog": {
+          "short": "БВ",
+          "full": "Броски по воротам"
+        },
+        "sog_pct": {
+          "short": "%БВ",
+          "full": "Процент реализованных бросков"
+        }
+      },
+      "team_values": {
+        "bls": {
+          "short": "БлБ",
+          "full": "Блокированные броски"
+        },
+        "hits": {
+          "short": "СПр",
+          "full": "Силовые приемы"
+        },
+        "toa_avg": {
+          "short": "ВВА",
+          "full": "Время в атаке"
+        },
+        "tka": {
+          "short": "ОТБ",
+          "full": "Отборы шайбы"
+        },
+        "p_intc": {
+          "short": "ПХТ",
+          "full": "Перехват передачи"
+        },
+        "gva": {
+          "short": "ПТР",
+          "full": "Потеря шайбы"
+        }
+      },
+      "t_onice": {
+        "TIE": {
+          "short": "ВПР",
+          "full": "Игровое время команды при игре в равных составах"
+        },
+        "TIPP": {
+          "short": "ВПБ",
+          "full": "Игровое время команды при игре в большинстве"
+        },
+        "TISH": {
+          "short": "ВПМ",
+          "full": "Игровое время команды при игре в меньшинстве"
+        },
+        "TIEN": {
+          "short": "ВППВ",
+          "full": "Игровое время команды при игре без вратаря (пустые ворота)"
+        }
+      },
+      "distance": {
+        "control": {
+          "short": "ВВШ",
+          "full": "Время владения шайбой (мин.)"
+        },
+        "distanceTravelled": {
+          "short": "ПД",
+          "full": "Пройденная дистанция (км)"
+        },
+        "contested": {
+          "short": "НВШ",
+          "full": "Нейтральное владение шайбой (мин.)"
+        }
+      }
+    },
+    "per": [
+      1,
+      2,
+      3
+    ],
+    "pdf": {
+      "teams": {
+        "HASH": "d7dc7d71b848db34aba9c29e0416502d",
+        "URL": "/pdf/1369/898236/game-898236-start-ru.pdf",
+        "TAG": "START"
+      },
+      "stat": {
+        "HASH": "7167cba00e5391d14b59aac2e100f9b1",
+        "URL": "/pdf/1369/898236/game-898236-ru.pdf",
+        "TAG": "STAT"
+      }
+    },
+    "text": {
+      "match_protocol": "Протокол матча",
+      "download": "Скачать PDF",
+      "Goals": "Заброшенные шайбы",
+      "Folues": "Штрафы",
+      "players_stat": "Статистика игроков",
+      "team_stat": "Командная статистика",
+      "shots": "Броски по воротам",
+      "team_val": "Командные показатели",
+      "team_penalty": "Командный штраф",
+      "total_for": "Всего за",
+      "total": "Всего",
+      "icetime": "Время на льду",
+      "icetimedistance": "Время владения шайбой и пройденная дистанция",
+      "team": "Команда",
+      "whoServed": "Отбывал",
+      "shootsOut": "Буллиты",
+      "player": "Игрок",
+      "gk": "Вратарь",
+      "per": {
+        "1": "первый период",
+        "2": "второй период",
+        "3": "третий период"
+      },
+      "tables": {
+        "fwd": "Нападающие",
+        "def": "Защитники",
+        "gk": "Вратари"
+      },
+      "ranking": {
+        "pp": "В неравных составах",
+        "gf": "Все заброшенные шайбы",
+        "ga": "Все пропущенные голы"
+      },
+      "goals_table": {
+        "g": {
+          "g": {
+            "short": "Ш",
+            "full": "Заброшенные шайбы"
+          }
+        },
+        "per": "Пер",
+        "time": "Вр",
+        "score": "Счет",
+        "team": null,
+        "autor": "Автор",
+        "ass": "Передача"
+      },
+      "foules_table": {
+        "time": "Вр",
+        "per": "Пер",
+        "player": "Игрок",
+        "min": "Мин",
+        "foul": "Нарушение"
+      }
+    }
+  },
+  "errors": []
+}

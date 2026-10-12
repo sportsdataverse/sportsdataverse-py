@@ -1,0 +1,3797 @@
+[
+  {
+    "season": "2025/2026",
+    "stages": [
+      {
+        "id": 370,
+        "title": "Регулярный чемпионат",
+        "type": "regular",
+        "regular": [
+          {
+            "id": 30,
+            "tv_image": "/images/khl_tv/teams/30.png",
+            "khl_id": 37,
+            "gp": "15",
+            "w": "9",
+            "otw": "1",
+            "sow": "1",
+            "sol": "0",
+            "otl": "1",
+            "l": "3",
+            "pts": "23",
+            "pts_pct": "71.11",
+            "gf": "48",
+            "ga": "28",
+            "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+            "name": "Metallurg Mg",
+            "location": "Magnitogorsk",
+            "division": "Kharlamov division",
+            "division_key": "kharlamov",
+            "conference": "East",
+            "conference_key": "east"
+          },
+          {
+            "id": 26,
+            "tv_image": "/images/khl_tv/teams/26.png",
+            "khl_id": 1,
+            "gp": "14",
+            "w": "10",
+            "otw": "1",
+            "sow": "0",
+            "sol": "0",
+            "otl": "0",
+            "l": "3",
+            "pts": "22",
+            "pts_pct": "76.19",
+            "gf": "38",
+            "ga": "23",
+            "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+            "name": "Lokomotiv",
+            "location": "Yaroslavl",
+            "division": "Tarasov division",
+            "division_key": "tarasov",
+            "conference": "West",
+            "conference_key": "west"
+          },
+          {
+            "id": 16,
+            "tv_image": "/images/khl_tv/teams/16.png",
+            "khl_id": 2,
+            "gp": "14",
+            "w": "9",
+            "otw": "0",
+            "sow": "2",
+            "sol": "0",
+            "otl": "0",
+            "l": "3",
+            "pts": "22",
+            "pts_pct": "73.80",
+            "gf": "49",
+            "ga": "27",
+            "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/16/original/cska_2016_rus__200x200.png",
+            "name": "CSKA",
+            "location": "Moscow",
+            "division": "Tarasov division",
+            "division_key": "tarasov",
+            "conference": "West",
+            "conference_key": "west"
+          }
+        ],
+        "playin": null,
+        "playoff": null,
+        "display_rule": "default"
+      },
+      {
+        "id": 395,
+        "title": "Плей-офф",
+        "type": "playoff",
+        "regular": null,
+        "playin": null,
+        "playoff": [
+          {
+            "level": 3,
+            "pairs": [
+              {
+                "games": [
+                  {
+                    "score": "5:3",
+                    "visitor": 1,
+                    "event_id": 2953919,
+                    "ots": null
+                  },
+                  {
+                    "score": "1:2",
+                    "visitor": 1,
+                    "event_id": 2953951,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "4:3",
+                    "visitor": 0,
+                    "event_id": 2953983,
+                    "ots": "OT"
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/26.png",
+                    "id": 26,
+                    "khl_id": 1,
+                    "name": "Lokomotiv",
+                    "pos": 1,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdl/team_pics/26/original/lokomotiv_2022__200x200.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/18.png",
+                    "id": 18,
+                    "khl_id": 7,
+                    "name": "Spartak",
+                    "pos": 8,
+                    "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/26.png",
+                  "id": 26,
+                  "khl_id": 1,
+                  "name": "Lokomotiv",
+                  "pos": 1,
+                  "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/18.png",
+                  "id": 18,
+                  "khl_id": 7,
+                  "name": "Spartak",
+                  "pos": 8,
+                  "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "2:0",
+                    "visitor": 1,
+                    "event_id": 2953915,
+                    "ots": null
+                  },
+                  {
+                    "score": "0:1",
+                    "visitor": 1,
+                    "event_id": 2953947,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:4",
+                    "visitor": 0,
+                    "event_id": 2953979,
+                    "ots": null
+                  }
+                ],
+                "winner": 1,
+                "score": [
+                  2,
+                  4
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/56.png",
+                    "id": 56,
+                    "khl_id": 190,
+                    "name": "Avtomobilist",
+                    "pos": 4,
+                    "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/56/original/avtomobilist__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/32.png",
+                    "id": 32,
+                    "khl_id": 38,
+                    "name": "Salavat Yulaev",
+                    "pos": 5,
+                    "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdc/team_pics/32/original/salavat_yulaev_2020__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/56.png",
+                  "id": 56,
+                  "khl_id": 190,
+                  "name": "Avtomobilist",
+                  "pos": 4,
+                  "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sdc/team_pics/56/original/avtomobilist__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/32.png",
+                  "id": 32,
+                  "khl_id": 38,
+                  "name": "Salavat Yulaev",
+                  "pos": 5,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdc/team_pics/32/original/salavat_yulaev_2020__200x200.png",
+                  "conference_key": "east"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "4:2",
+                    "visitor": 1,
+                    "event_id": 2953931,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:4",
+                    "visitor": 1,
+                    "event_id": 2953963,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "2:1",
+                    "visitor": 0,
+                    "event_id": 2953995,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/10.png",
+                    "id": 10,
+                    "khl_id": 34,
+                    "name": "Avangard",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-2-2.webcaster.pro/fc/sdh/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/36.png",
+                    "id": 36,
+                    "khl_id": 71,
+                    "name": "Neftekhimik",
+                    "pos": 7,
+                    "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/36/original/neftekhimik_2022__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/10.png",
+                  "id": 10,
+                  "khl_id": 34,
+                  "name": "Avangard",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-2-2.webcaster.pro/fc/sdh/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/36.png",
+                  "id": 36,
+                  "khl_id": 71,
+                  "name": "Neftekhimik",
+                  "pos": 7,
+                  "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/36/original/neftekhimik_2022__200x200.png",
+                  "conference_key": "east"
+                }
+              }
+            ],
+            "title": "Pairs of Conference West 1/4 final"
+          },
+          {
+            "level": 3,
+            "pairs": [
+              {
+                "games": [
+                  {
+                    "score": "4:1",
+                    "visitor": 1,
+                    "event_id": 2953927,
+                    "ots": null
+                  },
+                  {
+                    "score": "5:1",
+                    "visitor": 1,
+                    "event_id": 2953959,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:1",
+                    "visitor": 0,
+                    "event_id": 2953991,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/30.png",
+                    "id": 30,
+                    "khl_id": 37,
+                    "name": "Metallurg Mg",
+                    "pos": 1,
+                    "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/24.png",
+                    "id": 24,
+                    "khl_id": 29,
+                    "name": "Sibir",
+                    "pos": 8,
+                    "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/24/original/sibir_rus__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/30.png",
+                  "id": 30,
+                  "khl_id": 37,
+                  "name": "Metallurg Mg",
+                  "pos": 1,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/30/original/metallurg_mg_2020__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/24.png",
+                  "id": 24,
+                  "khl_id": 29,
+                  "name": "Sibir",
+                  "pos": 8,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/24/original/sibir_rus__200x200.png",
+                  "conference_key": "east"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "1:4",
+                    "visitor": 1,
+                    "event_id": 2953903,
+                    "ots": null
+                  },
+                  {
+                    "score": "4:0",
+                    "visitor": 1,
+                    "event_id": 2953935,
+                    "ots": null
+                  },
+                  {
+                    "score": "1:3",
+                    "visitor": 0,
+                    "event_id": 2953967,
+                    "ots": null
+                  }
+                ],
+                "winner": 1,
+                "score": [
+                  1,
+                  4
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/42.png",
+                    "id": 42,
+                    "khl_id": 56,
+                    "name": "Severstal",
+                    "pos": 3,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/42/original/severstal_2021__200x200.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/22.png",
+                    "id": 22,
+                    "khl_id": 26,
+                    "name": "Torpedo",
+                    "pos": 6,
+                    "image": "https://thumbs.webcaster.pro/rec-1-1.webcaster.pro/fc/sda/team_pics/22/original/Torpedo_2025_200x200_NEW.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/42.png",
+                  "id": 42,
+                  "khl_id": 56,
+                  "name": "Severstal",
+                  "pos": 3,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/42/original/severstal_2021__200x200.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/22.png",
+                  "id": 22,
+                  "khl_id": 26,
+                  "name": "Torpedo",
+                  "pos": 6,
+                  "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sdc/team_pics/22/original/Torpedo_2025_200x200_NEW.png",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "3:1",
+                    "visitor": 1,
+                    "event_id": 2953923,
+                    "ots": null
+                  },
+                  {
+                    "score": "4:1",
+                    "visitor": 1,
+                    "event_id": 2953955,
+                    "ots": null
+                  },
+                  {
+                    "score": "2:1",
+                    "visitor": 0,
+                    "event_id": 2953987,
+                    "ots": "OT"
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/38.png",
+                    "id": 38,
+                    "khl_id": 207,
+                    "name": "Dinamo Mn",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdb/team_pics/38/original/dinamo_mn_2019_alternative__200x200.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/8.png",
+                    "id": 8,
+                    "khl_id": 719,
+                    "name": "Dynamo Msk",
+                    "pos": 7,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdi/team_pics/8/original/dynamo_msk_2019__200x200.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/38.png",
+                  "id": 38,
+                  "khl_id": 207,
+                  "name": "Dinamo Mn",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/38/original/dinamo_mn_2019_alternative__200x200.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/8.png",
+                  "id": 8,
+                  "khl_id": 719,
+                  "name": "Dynamo Msk",
+                  "pos": 7,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/8/original/dynamo_msk_2019__200x200.png",
+                  "conference_key": "west"
+                }
+              }
+            ],
+            "title": "Pairs of Conference East 1/4 final"
+          },
+          {
+            "level": 2,
+            "pairs": [
+              {
+                "games": [
+                  {
+                    "score": "1:0",
+                    "visitor": 1,
+                    "event_id": 2962511,
+                    "ots": null
+                  },
+                  {
+                    "score": "2:0",
+                    "visitor": 1,
+                    "event_id": 2962527,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:2",
+                    "visitor": 0,
+                    "event_id": 2962543,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/26.png",
+                    "id": 26,
+                    "khl_id": 1,
+                    "name": "Lokomotiv",
+                    "pos": 1,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdl/team_pics/26/original/lokomotiv_2022__200x200.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/32.png",
+                    "id": 32,
+                    "khl_id": 38,
+                    "name": "Salavat Yulaev",
+                    "pos": 5,
+                    "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdc/team_pics/32/original/salavat_yulaev_2020__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/26.png",
+                  "id": 26,
+                  "khl_id": 1,
+                  "name": "Lokomotiv",
+                  "pos": 1,
+                  "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/32.png",
+                  "id": 32,
+                  "khl_id": 38,
+                  "name": "Salavat Yulaev",
+                  "pos": 5,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdc/team_pics/32/original/salavat_yulaev_2020__200x200.png",
+                  "conference_key": "east"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "3:0",
+                    "visitor": 1,
+                    "event_id": 2962515,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:2",
+                    "visitor": 1,
+                    "event_id": 2962531,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:2",
+                    "visitor": 0,
+                    "event_id": 2962547,
+                    "ots": "OT"
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/10.png",
+                    "id": 10,
+                    "khl_id": 34,
+                    "name": "Avangard",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-2-2.webcaster.pro/fc/sdh/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/16.png",
+                    "id": 16,
+                    "khl_id": 2,
+                    "name": "CSKA",
+                    "pos": 4,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/16/original/cska_2016_rus__200x200.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/10.png",
+                  "id": 10,
+                  "khl_id": 34,
+                  "name": "Avangard",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdb/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/16.png",
+                  "id": 16,
+                  "khl_id": 2,
+                  "name": "CSKA",
+                  "pos": 4,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/16/original/cska_2016_rus__200x200.png",
+                  "conference_key": "west"
+                }
+              }
+            ],
+            "title": "Pairs of Conference West 1/2 final"
+          }
+        ],
+        "display_rule": "playoff_2024"
+      }
+    ],
+    "tables": {
+      "championship": [
+        {
+          "gp": "68",
+          "w": "37",
+          "otw": "8",
+          "sow": "4",
+          "sol": "3",
+          "otl": "4",
+          "otl_en": "0",
+          "l": "12",
+          "pts": "105",
+          "pts_pct": "69.60",
+          "soa": "1",
+          "so": "2",
+          "gf": "252",
+          "ga": "184",
+          "pim": "546",
+          "pima": "721",
+          "id": 30,
+          "khl_id": 37,
+          "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/30/original/metallurg_mg_2020__200x200.png",
+          "tv_image": "/images/khl_tv/teams/30.png",
+          "name": "Metallurg Mg",
+          "location": "Magnitogorsk",
+          "division": "Kharlamov division",
+          "division_key": "kharlamov",
+          "conference": "East",
+          "conference_key": "east"
+        },
+        {
+          "gp": "68",
+          "w": "36",
+          "otw": "6",
+          "sow": "5",
+          "sol": "1",
+          "otl": "4",
+          "otl_en": "0",
+          "l": "16",
+          "pts": "99",
+          "pts_pct": "66.17",
+          "soa": "2",
+          "so": "5",
+          "gf": "228",
+          "ga": "159",
+          "pim": "595",
+          "pima": "505",
+          "id": 10,
+          "khl_id": 34,
+          "image": "https://thumbs.webcaster.pro/rec-2-2.webcaster.pro/fc/sdh/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+          "tv_image": "/images/khl_tv/teams/10.png",
+          "name": "Avangard",
+          "location": "Omsk Region",
+          "division": "Chernyshev division",
+          "division_key": "chernyshev",
+          "conference": "East",
+          "conference_key": "east"
+        },
+        {
+          "gp": "68",
+          "w": "34",
+          "otw": "6",
+          "sow": "6",
+          "sol": "2",
+          "otl": "4",
+          "otl_en": "0",
+          "l": "16",
+          "pts": "98",
+          "pts_pct": "64.70",
+          "soa": "7",
+          "so": "7",
+          "gf": "185",
+          "ga": "135",
+          "pim": "566",
+          "pima": "504",
+          "id": 26,
+          "khl_id": 1,
+          "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+          "tv_image": "/images/khl_tv/teams/26.png",
+          "name": "Lokomotiv",
+          "location": "Yaroslavl",
+          "division": "Tarasov division",
+          "division_key": "tarasov",
+          "conference": "West",
+          "conference_key": "west"
+        }
+      ],
+      "west": [
+        {
+          "gp": "68",
+          "w": "34",
+          "otw": "6",
+          "sow": "6",
+          "sol": "2",
+          "otl": "4",
+          "otl_en": "0",
+          "l": "16",
+          "pts": "98",
+          "pts_pct": "64.70",
+          "soa": "7",
+          "so": "7",
+          "gf": "185",
+          "ga": "135",
+          "pim": "566",
+          "pima": "504",
+          "id": 26,
+          "khl_id": 1,
+          "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdl/team_pics/26/original/lokomotiv_2022__200x200.png",
+          "tv_image": "/images/khl_tv/teams/26.png",
+          "name": "Lokomotiv",
+          "location": "Yaroslavl",
+          "division": "Tarasov division",
+          "division_key": "tarasov",
+          "conference": "West",
+          "conference_key": "west"
+        },
+        {
+          "gp": "68",
+          "w": "33",
+          "otw": "2",
+          "sow": "4",
+          "sol": "5",
+          "otl": "5",
+          "otl_en": "0",
+          "l": "19",
+          "pts": "88",
+          "pts_pct": "59.31",
+          "soa": "2",
+          "so": "6",
+          "gf": "247",
+          "ga": "173",
+          "pim": "497",
+          "pima": "594",
+          "id": 38,
+          "khl_id": 207,
+          "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdb/team_pics/38/original/dinamo_mn_2019_alternative__200x200.png",
+          "tv_image": "/images/khl_tv/teams/38.png",
+          "name": "Dinamo Mn",
+          "location": "Minsk",
+          "division": "Tarasov division",
+          "division_key": "tarasov",
+          "conference": "West",
+          "conference_key": "west"
+        },
+        {
+          "gp": "68",
+          "w": "29",
+          "otw": "9",
+          "sow": "2",
+          "sol": "4",
+          "otl": "2",
+          "otl_en": "0",
+          "l": "22",
+          "pts": "86",
+          "pts_pct": "56.37",
+          "soa": "4",
+          "so": "5",
+          "gf": "197",
+          "ga": "185",
+          "pim": "379",
+          "pima": "464",
+          "id": 42,
+          "khl_id": 56,
+          "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/42/original/severstal_2021__200x200.png",
+          "tv_image": "/images/khl_tv/teams/42.png",
+          "name": "Severstal",
+          "location": "Cherepovets",
+          "division": "Tarasov division",
+          "division_key": "tarasov",
+          "conference": "West",
+          "conference_key": "west"
+        }
+      ],
+      "east": [
+        {
+          "gp": "68",
+          "w": "37",
+          "otw": "8",
+          "sow": "4",
+          "sol": "3",
+          "otl": "4",
+          "otl_en": "0",
+          "l": "12",
+          "pts": "105",
+          "pts_pct": "69.60",
+          "soa": "1",
+          "so": "2",
+          "gf": "252",
+          "ga": "184",
+          "pim": "546",
+          "pima": "721",
+          "id": 30,
+          "khl_id": 37,
+          "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/30/original/metallurg_mg_2020__200x200.png",
+          "tv_image": "/images/khl_tv/teams/30.png",
+          "name": "Metallurg Mg",
+          "location": "Magnitogorsk",
+          "division": "Kharlamov division",
+          "division_key": "kharlamov",
+          "conference": "East",
+          "conference_key": "east"
+        },
+        {
+          "gp": "68",
+          "w": "36",
+          "otw": "6",
+          "sow": "5",
+          "sol": "1",
+          "otl": "4",
+          "otl_en": "0",
+          "l": "16",
+          "pts": "99",
+          "pts_pct": "66.17",
+          "soa": "2",
+          "so": "5",
+          "gf": "228",
+          "ga": "159",
+          "pim": "595",
+          "pima": "505",
+          "id": 10,
+          "khl_id": 34,
+          "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdb/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+          "tv_image": "/images/khl_tv/teams/10.png",
+          "name": "Avangard",
+          "location": "Omsk Region",
+          "division": "Chernyshev division",
+          "division_key": "chernyshev",
+          "conference": "East",
+          "conference_key": "east"
+        },
+        {
+          "gp": "68",
+          "w": "38",
+          "otw": "2",
+          "sow": "3",
+          "sol": "6",
+          "otl": "2",
+          "otl_en": "0",
+          "l": "17",
+          "pts": "94",
+          "pts_pct": "64.70",
+          "soa": "3",
+          "so": "6",
+          "gf": "212",
+          "ga": "169",
+          "pim": "544",
+          "pima": "553",
+          "id": 40,
+          "khl_id": 53,
+          "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/40/original/ak_bars_2022__200x200.png",
+          "tv_image": "/images/khl_tv/teams/40.png",
+          "name": "Ak Bars",
+          "location": "Kazan",
+          "division": "Kharlamov division",
+          "division_key": "kharlamov",
+          "conference": "East",
+          "conference_key": "east"
+        }
+      ],
+      "divisions": [
+        {
+          "name": "Bobrov division",
+          "key": "bobrov",
+          "table": [
+            {
+              "gp": "68",
+              "w": "28",
+              "otw": "7",
+              "sow": "2",
+              "sol": "4",
+              "otl": "3",
+              "otl_en": "0",
+              "l": "24",
+              "pts": "81",
+              "pts_pct": "53.43",
+              "soa": "2",
+              "so": "7",
+              "gf": "197",
+              "ga": "170",
+              "pim": "545",
+              "pima": "565",
+              "id": 44,
+              "khl_id": 24,
+              "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+              "tv_image": "/images/khl_tv/teams/44.png",
+              "name": "SKA",
+              "location": "Saint Petersburg",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "68",
+              "w": "27",
+              "otw": "6",
+              "sow": "4",
+              "sol": "2",
+              "otl": "5",
+              "otl_en": "0",
+              "l": "24",
+              "pts": "81",
+              "pts_pct": "52.94",
+              "soa": "6",
+              "so": "6",
+              "gf": "191",
+              "ga": "191",
+              "pim": "472",
+              "pima": "566",
+              "id": 22,
+              "khl_id": 26,
+              "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sdc/team_pics/22/original/Torpedo_2025_200x200_NEW.png",
+              "tv_image": "/images/khl_tv/teams/22.png",
+              "name": "Torpedo",
+              "location": "Nizhny Novgorod",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "68",
+              "w": "29",
+              "otw": "3",
+              "sow": "3",
+              "sol": "5",
+              "otl": "4",
+              "otl_en": "0",
+              "l": "24",
+              "pts": "79",
+              "pts_pct": "52.94",
+              "soa": "7",
+              "so": "5",
+              "gf": "204",
+              "ga": "201",
+              "pim": "571",
+              "pima": "704",
+              "id": 18,
+              "khl_id": 7,
+              "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png",
+              "tv_image": "/images/khl_tv/teams/18.png",
+              "name": "Spartak",
+              "location": "Moscow",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            }
+          ]
+        },
+        {
+          "name": "Tarasov division",
+          "key": "tarasov",
+          "table": [
+            {
+              "gp": "68",
+              "w": "34",
+              "otw": "6",
+              "sow": "6",
+              "sol": "2",
+              "otl": "4",
+              "otl_en": "0",
+              "l": "16",
+              "pts": "98",
+              "pts_pct": "64.70",
+              "soa": "7",
+              "so": "7",
+              "gf": "185",
+              "ga": "135",
+              "pim": "566",
+              "pima": "504",
+              "id": 26,
+              "khl_id": 1,
+              "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+              "tv_image": "/images/khl_tv/teams/26.png",
+              "name": "Lokomotiv",
+              "location": "Yaroslavl",
+              "division": "Tarasov division",
+              "division_key": "tarasov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "68",
+              "w": "33",
+              "otw": "2",
+              "sow": "4",
+              "sol": "5",
+              "otl": "5",
+              "otl_en": "0",
+              "l": "19",
+              "pts": "88",
+              "pts_pct": "59.31",
+              "soa": "2",
+              "so": "6",
+              "gf": "247",
+              "ga": "173",
+              "pim": "497",
+              "pima": "594",
+              "id": 38,
+              "khl_id": 207,
+              "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/38/original/dinamo_mn_2019_alternative__200x200.png",
+              "tv_image": "/images/khl_tv/teams/38.png",
+              "name": "Dinamo Mn",
+              "location": "Minsk",
+              "division": "Tarasov division",
+              "division_key": "tarasov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "68",
+              "w": "29",
+              "otw": "9",
+              "sow": "2",
+              "sol": "4",
+              "otl": "2",
+              "otl_en": "0",
+              "l": "22",
+              "pts": "86",
+              "pts_pct": "56.37",
+              "soa": "4",
+              "so": "5",
+              "gf": "197",
+              "ga": "185",
+              "pim": "379",
+              "pima": "464",
+              "id": 42,
+              "khl_id": 56,
+              "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/42/original/severstal_2021__200x200.png",
+              "tv_image": "/images/khl_tv/teams/42.png",
+              "name": "Severstal",
+              "location": "Cherepovets",
+              "division": "Tarasov division",
+              "division_key": "tarasov",
+              "conference": "West",
+              "conference_key": "west"
+            }
+          ]
+        },
+        {
+          "name": "Kharlamov division",
+          "key": "kharlamov",
+          "table": [
+            {
+              "gp": "68",
+              "w": "37",
+              "otw": "8",
+              "sow": "4",
+              "sol": "3",
+              "otl": "4",
+              "otl_en": "0",
+              "l": "12",
+              "pts": "105",
+              "pts_pct": "69.60",
+              "soa": "1",
+              "so": "2",
+              "gf": "252",
+              "ga": "184",
+              "pim": "546",
+              "pima": "721",
+              "id": 30,
+              "khl_id": 37,
+              "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+              "tv_image": "/images/khl_tv/teams/30.png",
+              "name": "Metallurg Mg",
+              "location": "Magnitogorsk",
+              "division": "Kharlamov division",
+              "division_key": "kharlamov",
+              "conference": "East",
+              "conference_key": "east"
+            },
+            {
+              "gp": "68",
+              "w": "38",
+              "otw": "2",
+              "sow": "3",
+              "sol": "6",
+              "otl": "2",
+              "otl_en": "0",
+              "l": "17",
+              "pts": "94",
+              "pts_pct": "64.70",
+              "soa": "3",
+              "so": "6",
+              "gf": "212",
+              "ga": "169",
+              "pim": "544",
+              "pima": "553",
+              "id": 40,
+              "khl_id": 53,
+              "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/40/original/ak_bars_2022__200x200.png",
+              "tv_image": "/images/khl_tv/teams/40.png",
+              "name": "Ak Bars",
+              "location": "Kazan",
+              "division": "Kharlamov division",
+              "division_key": "kharlamov",
+              "conference": "East",
+              "conference_key": "east"
+            },
+            {
+              "gp": "68",
+              "w": "32",
+              "otw": "4",
+              "sow": "4",
+              "sol": "0",
+              "otl": "4",
+              "otl_en": "0",
+              "l": "24",
+              "pts": "84",
+              "pts_pct": "56.86",
+              "soa": "6",
+              "so": "5",
+              "gf": "206",
+              "ga": "164",
+              "pim": "710",
+              "pima": "577",
+              "id": 56,
+              "khl_id": 190,
+              "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/56/original/avtomobilist__200x200.png",
+              "tv_image": "/images/khl_tv/teams/56.png",
+              "name": "Avtomobilist",
+              "location": "Ekaterinburg",
+              "division": "Kharlamov division",
+              "division_key": "kharlamov",
+              "conference": "East",
+              "conference_key": "east"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "season": "2013/2014",
+    "stages": [
+      {
+        "id": 3,
+        "title": "Регулярный чемпионат",
+        "type": "regular",
+        "regular": [
+          {
+            "id": 30,
+            "tv_image": "/images/khl_tv/teams/30.png",
+            "khl_id": 37,
+            "gp": "15",
+            "w": "9",
+            "otw": "1",
+            "sow": "1",
+            "sol": "0",
+            "otl": "1",
+            "l": "3",
+            "pts": "23",
+            "pts_pct": "71.11",
+            "gf": "48",
+            "ga": "28",
+            "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/30/original/metallurg_mg_2020__200x200.png",
+            "name": "Metallurg Mg",
+            "location": "Magnitogorsk",
+            "division": "Kharlamov division",
+            "division_key": "kharlamov",
+            "conference": "East",
+            "conference_key": "east"
+          },
+          {
+            "id": 26,
+            "tv_image": "/images/khl_tv/teams/26.png",
+            "khl_id": 1,
+            "gp": "14",
+            "w": "10",
+            "otw": "1",
+            "sow": "0",
+            "sol": "0",
+            "otl": "0",
+            "l": "3",
+            "pts": "22",
+            "pts_pct": "76.19",
+            "gf": "38",
+            "ga": "23",
+            "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+            "name": "Lokomotiv",
+            "location": "Yaroslavl",
+            "division": "Tarasov division",
+            "division_key": "tarasov",
+            "conference": "West",
+            "conference_key": "west"
+          },
+          {
+            "id": 16,
+            "tv_image": "/images/khl_tv/teams/16.png",
+            "khl_id": 2,
+            "gp": "14",
+            "w": "9",
+            "otw": "0",
+            "sow": "2",
+            "sol": "0",
+            "otl": "0",
+            "l": "3",
+            "pts": "22",
+            "pts_pct": "73.80",
+            "gf": "49",
+            "ga": "27",
+            "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/16/original/cska_2016_rus__200x200.png",
+            "name": "CSKA",
+            "location": "Moscow",
+            "division": "Tarasov division",
+            "division_key": "tarasov",
+            "conference": "West",
+            "conference_key": "west"
+          }
+        ],
+        "playin": null,
+        "playoff": null,
+        "display_rule": "default"
+      },
+      {
+        "id": 7,
+        "title": "Плей-офф",
+        "type": "playoff",
+        "regular": null,
+        "playin": null,
+        "playoff": [
+          {
+            "level": 3,
+            "pairs": [
+              {
+                "games": [
+                  {
+                    "score": "4:3",
+                    "visitor": 1,
+                    "event_id": 164765,
+                    "ots": null
+                  },
+                  {
+                    "score": "5:2",
+                    "visitor": 1,
+                    "event_id": 164797,
+                    "ots": null
+                  },
+                  {
+                    "score": "5:2",
+                    "visitor": 0,
+                    "event_id": 164829,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/52.png",
+                    "id": 52,
+                    "khl_id": 359,
+                    "name": "Lev Pr",
+                    "pos": 3,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/52/original/lev_praga.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/65.png",
+                    "id": 65,
+                    "khl_id": 419,
+                    "name": "Medvescak",
+                    "pos": 6,
+                    "image": "https://thumbs.webcaster.pro/rec-2-13.webcaster.pro/fc/sdb/team_pics/65/original/medvescak.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/52.png",
+                  "id": 52,
+                  "khl_id": 359,
+                  "name": "Lev Pr",
+                  "pos": 3,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/52/original/lev_praga.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/65.png",
+                  "id": 65,
+                  "khl_id": 419,
+                  "name": "Medvescak",
+                  "pos": 6,
+                  "image": "https://thumbs.webcaster.pro/rec-2-13.webcaster.pro/fc/sdb/team_pics/65/original/medvescak.png",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "5:2",
+                    "visitor": 1,
+                    "event_id": 164769,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:1",
+                    "visitor": 1,
+                    "event_id": 164801,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:7",
+                    "visitor": 0,
+                    "event_id": 164833,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  3
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/50.png",
+                    "id": 50,
+                    "khl_id": 317,
+                    "name": "Donbass",
+                    "pos": 4,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/50/original/Donbass.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/54.png",
+                    "id": 54,
+                    "khl_id": 208,
+                    "name": "Dinamo R",
+                    "pos": 5,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/54/original/Dinamo_Riga_Logotype_Symbol_RGB.PNG",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/50.png",
+                  "id": 50,
+                  "khl_id": 317,
+                  "name": "Donbass",
+                  "pos": 4,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/50/original/Donbass.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/54.png",
+                  "id": 54,
+                  "khl_id": 208,
+                  "name": "Dinamo R",
+                  "pos": 5,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/54/original/Dinamo_Riga_Logotype_Symbol_RGB.PNG",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "1:0",
+                    "visitor": 1,
+                    "event_id": 164761,
+                    "ots": null
+                  },
+                  {
+                    "score": "5:1",
+                    "visitor": 1,
+                    "event_id": 164793,
+                    "ots": null
+                  },
+                  {
+                    "score": "2:1",
+                    "visitor": 0,
+                    "event_id": 164825,
+                    "ots": "OT"
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/44.png",
+                    "id": 44,
+                    "khl_id": 24,
+                    "name": "SKA",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/16.png",
+                    "id": 16,
+                    "khl_id": 2,
+                    "name": "CSKA",
+                    "pos": 7,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/16/original/cska_2016_rus__200x200.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/44.png",
+                  "id": 44,
+                  "khl_id": 24,
+                  "name": "SKA",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/16.png",
+                  "id": 16,
+                  "khl_id": 2,
+                  "name": "CSKA",
+                  "pos": 7,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/16/original/cska_2016_rus__200x200.png",
+                  "conference_key": "west"
+                }
+              }
+            ],
+            "title": "Pairs of Conference West 1/4 final"
+          },
+          {
+            "level": 3,
+            "pairs": [
+              {
+                "games": [
+                  {
+                    "score": "3:1",
+                    "visitor": 1,
+                    "event_id": 164773,
+                    "ots": null
+                  },
+                  {
+                    "score": "5:3",
+                    "visitor": 1,
+                    "event_id": 164805,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:4",
+                    "visitor": 0,
+                    "event_id": 164837,
+                    "ots": "OT"
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/30.png",
+                    "id": 30,
+                    "khl_id": 37,
+                    "name": "Metallurg Mg",
+                    "pos": 1,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/30/original/metallurg_mg_2020__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/61.png",
+                    "id": 61,
+                    "khl_id": 418,
+                    "name": "Admiral",
+                    "pos": 8,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/61/original/admiral_2024_200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/30.png",
+                  "id": 30,
+                  "khl_id": 37,
+                  "name": "Metallurg Mg",
+                  "pos": 1,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/30/original/metallurg_mg_2020__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/61.png",
+                  "id": 61,
+                  "khl_id": 418,
+                  "name": "Admiral",
+                  "pos": 8,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdg/team_pics/61/original/admiral_2024_200x200.png",
+                  "conference_key": "east"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "1:3",
+                    "visitor": 1,
+                    "event_id": 164781,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:2",
+                    "visitor": 1,
+                    "event_id": 164813,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "1:7",
+                    "visitor": 0,
+                    "event_id": 164845,
+                    "ots": null
+                  }
+                ],
+                "winner": 1,
+                "score": [
+                  2,
+                  4
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/40.png",
+                    "id": 40,
+                    "khl_id": 53,
+                    "name": "Ak Bars",
+                    "pos": 3,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/40/original/ak_bars_2022__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/24.png",
+                    "id": 24,
+                    "khl_id": 29,
+                    "name": "Sibir",
+                    "pos": 6,
+                    "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/24/original/sibir_rus__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/40.png",
+                  "id": 40,
+                  "khl_id": 53,
+                  "name": "Ak Bars",
+                  "pos": 3,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/40/original/ak_bars_2022__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/24.png",
+                  "id": 24,
+                  "khl_id": 29,
+                  "name": "Sibir",
+                  "pos": 6,
+                  "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/24/original/sibir_rus__200x200.png",
+                  "conference_key": "east"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "3:2",
+                    "visitor": 1,
+                    "event_id": 164777,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "5:4",
+                    "visitor": 1,
+                    "event_id": 164809,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "2:1",
+                    "visitor": 0,
+                    "event_id": 164841,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/46.png",
+                    "id": 46,
+                    "khl_id": 198,
+                    "name": "Barys",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/46/original/barys_2022_head_only__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/56.png",
+                    "id": 56,
+                    "khl_id": 190,
+                    "name": "Avtomobilist",
+                    "pos": 7,
+                    "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/56/original/avtomobilist__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/46.png",
+                  "id": 46,
+                  "khl_id": 198,
+                  "name": "Barys",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/46/original/barys_2022_head_only__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/56.png",
+                  "id": 56,
+                  "khl_id": 190,
+                  "name": "Avtomobilist",
+                  "pos": 7,
+                  "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sdc/team_pics/56/original/avtomobilist__200x200.png",
+                  "conference_key": "east"
+                }
+              }
+            ],
+            "title": "Pairs of Conference East 1/4 final"
+          },
+          {
+            "level": 2,
+            "pairs": [
+              {
+                "games": [
+                  {
+                    "score": "5:2",
+                    "visitor": 1,
+                    "event_id": 168617,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:4",
+                    "visitor": 1,
+                    "event_id": 168633,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "3:2",
+                    "visitor": 0,
+                    "event_id": 168649,
+                    "ots": "OT"
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  2
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/52.png",
+                    "id": 52,
+                    "khl_id": 359,
+                    "name": "Lev Pr",
+                    "pos": 3,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/52/original/lev_praga.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/50.png",
+                    "id": 50,
+                    "khl_id": 317,
+                    "name": "Donbass",
+                    "pos": 4,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/50/original/Donbass.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/52.png",
+                  "id": 52,
+                  "khl_id": 359,
+                  "name": "Lev Pr",
+                  "pos": 3,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/52/original/lev_praga.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/50.png",
+                  "id": 50,
+                  "khl_id": 317,
+                  "name": "Donbass",
+                  "pos": 4,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/50/original/Donbass.png",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "1:0",
+                    "visitor": 1,
+                    "event_id": 168613,
+                    "ots": null
+                  },
+                  {
+                    "score": "4:5",
+                    "visitor": 1,
+                    "event_id": 168629,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "1:4",
+                    "visitor": 0,
+                    "event_id": 168645,
+                    "ots": null
+                  }
+                ],
+                "winner": 1,
+                "score": [
+                  2,
+                  4
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/44.png",
+                    "id": 44,
+                    "khl_id": 24,
+                    "name": "SKA",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/26.png",
+                    "id": 26,
+                    "khl_id": 1,
+                    "name": "Lokomotiv",
+                    "pos": 8,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdl/team_pics/26/original/lokomotiv_2022__200x200.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/44.png",
+                  "id": 44,
+                  "khl_id": 24,
+                  "name": "SKA",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/26.png",
+                  "id": 26,
+                  "khl_id": 1,
+                  "name": "Lokomotiv",
+                  "pos": 8,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdl/team_pics/26/original/lokomotiv_2022__200x200.png",
+                  "conference_key": "west"
+                }
+              }
+            ],
+            "title": "Pairs of Conference West 1/2 final"
+          }
+        ],
+        "display_rule": "default"
+      },
+      {
+        "id": 11,
+        "title": "Кубок Надежды",
+        "type": "playoff",
+        "regular": null,
+        "playin": null,
+        "playoff": [
+          {
+            "level": 3,
+            "pairs": [
+              {
+                "games": [],
+                "winner": null,
+                "score": [
+                  0,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/645.png",
+                    "id": 645,
+                    "khl_id": 279,
+                    "name": "Dynamo Msk",
+                    "pos": 1,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/26.png",
+                    "id": 26,
+                    "khl_id": 1,
+                    "name": "Lokomotiv",
+                    "pos": 8,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdl/team_pics/26/original/lokomotiv_2022__200x200.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/645.png",
+                  "id": 645,
+                  "khl_id": 279,
+                  "name": "Dynamo Msk",
+                  "pos": 1,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/26.png",
+                  "id": 26,
+                  "khl_id": 1,
+                  "name": "Lokomotiv",
+                  "pos": 8,
+                  "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [],
+                "winner": null,
+                "score": [
+                  0,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/44.png",
+                    "id": 44,
+                    "khl_id": 24,
+                    "name": "SKA",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sda/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/16.png",
+                    "id": 16,
+                    "khl_id": 2,
+                    "name": "CSKA",
+                    "pos": 7,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/16/original/cska_2016_rus__200x200.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/44.png",
+                  "id": 44,
+                  "khl_id": 24,
+                  "name": "SKA",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/16.png",
+                  "id": 16,
+                  "khl_id": 2,
+                  "name": "CSKA",
+                  "pos": 7,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/16/original/cska_2016_rus__200x200.png",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [],
+                "winner": null,
+                "score": [
+                  0,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/52.png",
+                    "id": 52,
+                    "khl_id": 359,
+                    "name": "Lev Pr",
+                    "pos": 3,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/52/original/lev_praga.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/65.png",
+                    "id": 65,
+                    "khl_id": 419,
+                    "name": "Medvescak",
+                    "pos": 6,
+                    "image": "https://thumbs.webcaster.pro/rec-2-13.webcaster.pro/fc/sdb/team_pics/65/original/medvescak.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/52.png",
+                  "id": 52,
+                  "khl_id": 359,
+                  "name": "Lev Pr",
+                  "pos": 3,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/52/original/lev_praga.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/65.png",
+                  "id": 65,
+                  "khl_id": 419,
+                  "name": "Medvescak",
+                  "pos": 6,
+                  "image": "https://thumbs.webcaster.pro/rec-2-13.webcaster.pro/fc/sdb/team_pics/65/original/medvescak.png",
+                  "conference_key": "west"
+                }
+              }
+            ],
+            "title": "Pairs of Conference West 1/4 final"
+          },
+          {
+            "level": 3,
+            "pairs": [
+              {
+                "games": [],
+                "winner": null,
+                "score": [
+                  0,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/30.png",
+                    "id": 30,
+                    "khl_id": 37,
+                    "name": "Metallurg Mg",
+                    "pos": 1,
+                    "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/61.png",
+                    "id": 61,
+                    "khl_id": 418,
+                    "name": "Admiral",
+                    "pos": 8,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/61/original/admiral_2024_200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/30.png",
+                  "id": 30,
+                  "khl_id": 37,
+                  "name": "Metallurg Mg",
+                  "pos": 1,
+                  "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/61.png",
+                  "id": 61,
+                  "khl_id": 418,
+                  "name": "Admiral",
+                  "pos": 8,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/61/original/admiral_2024_200x200.png",
+                  "conference_key": "east"
+                }
+              },
+              {
+                "games": [],
+                "winner": null,
+                "score": [
+                  0,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/46.png",
+                    "id": 46,
+                    "khl_id": 198,
+                    "name": "Barys",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/46/original/barys_2022_head_only__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/56.png",
+                    "id": 56,
+                    "khl_id": 190,
+                    "name": "Avtomobilist",
+                    "pos": 7,
+                    "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sdc/team_pics/56/original/avtomobilist__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/46.png",
+                  "id": 46,
+                  "khl_id": 198,
+                  "name": "Barys",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/46/original/barys_2022_head_only__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/56.png",
+                  "id": 56,
+                  "khl_id": 190,
+                  "name": "Avtomobilist",
+                  "pos": 7,
+                  "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sdc/team_pics/56/original/avtomobilist__200x200.png",
+                  "conference_key": "east"
+                }
+              },
+              {
+                "games": [],
+                "winner": null,
+                "score": [
+                  0,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/40.png",
+                    "id": 40,
+                    "khl_id": 53,
+                    "name": "Ak Bars",
+                    "pos": 3,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/40/original/ak_bars_2022__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/24.png",
+                    "id": 24,
+                    "khl_id": 29,
+                    "name": "Sibir",
+                    "pos": 6,
+                    "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/24/original/sibir_rus__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/40.png",
+                  "id": 40,
+                  "khl_id": 53,
+                  "name": "Ak Bars",
+                  "pos": 3,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/40/original/ak_bars_2022__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/24.png",
+                  "id": 24,
+                  "khl_id": 29,
+                  "name": "Sibir",
+                  "pos": 6,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/24/original/sibir_rus__200x200.png",
+                  "conference_key": "east"
+                }
+              }
+            ],
+            "title": "Pairs of Conference East 1/4 final"
+          },
+          {
+            "level": 2,
+            "pairs": [],
+            "title": "Pairs of Conference West 1/2 final"
+          }
+        ],
+        "display_rule": "default"
+      }
+    ],
+    "tables": {
+      "championship": [
+        {
+          "gp": "54",
+          "w": "34",
+          "otw": "2",
+          "sow": "2",
+          "sol": "5",
+          "otl": "0",
+          "otl_en": "0",
+          "l": "11",
+          "pts": "115",
+          "pts_pct": "70.98",
+          "soa": "2",
+          "so": "7",
+          "gf": "171",
+          "ga": "113",
+          "pim": "724",
+          "pima": "825",
+          "id": 645,
+          "khl_id": 279,
+          "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+          "tv_image": "/images/khl_tv/teams/645.png",
+          "name": "Dynamo Msk",
+          "location": "Moscow",
+          "division": "Bobrov division",
+          "division_key": "bobrov",
+          "conference": "West",
+          "conference_key": "west"
+        },
+        {
+          "gp": "54",
+          "w": "30",
+          "otw": "3",
+          "sow": "2",
+          "sol": "6",
+          "otl": "2",
+          "otl_en": "0",
+          "l": "11",
+          "pts": "108",
+          "pts_pct": "66.66",
+          "soa": "2",
+          "so": "9",
+          "gf": "166",
+          "ga": "113",
+          "pim": "676",
+          "pima": "642",
+          "id": 30,
+          "khl_id": 37,
+          "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+          "tv_image": "/images/khl_tv/teams/30.png",
+          "name": "Metallurg Mg",
+          "location": "Magnitogorsk",
+          "division": "Kharlamov division",
+          "division_key": "kharlamov",
+          "conference": "East",
+          "conference_key": "east"
+        },
+        {
+          "gp": "54",
+          "w": "30",
+          "otw": "1",
+          "sow": "4",
+          "sol": "4",
+          "otl": "1",
+          "otl_en": "0",
+          "l": "14",
+          "pts": "105",
+          "pts_pct": "64.81",
+          "soa": "4",
+          "so": "5",
+          "gf": "175",
+          "ga": "115",
+          "pim": "721",
+          "pima": "587",
+          "id": 44,
+          "khl_id": 24,
+          "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sda/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+          "tv_image": "/images/khl_tv/teams/44.png",
+          "name": "SKA",
+          "location": "Saint Petersburg",
+          "division": "Bobrov division",
+          "division_key": "bobrov",
+          "conference": "West",
+          "conference_key": "west"
+        }
+      ],
+      "west": [
+        {
+          "gp": "54",
+          "w": "34",
+          "otw": "2",
+          "sow": "2",
+          "sol": "5",
+          "otl": "0",
+          "otl_en": "0",
+          "l": "11",
+          "pts": "115",
+          "pts_pct": "70.98",
+          "soa": "2",
+          "so": "7",
+          "gf": "171",
+          "ga": "113",
+          "pim": "724",
+          "pima": "825",
+          "id": 645,
+          "khl_id": 279,
+          "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+          "tv_image": "/images/khl_tv/teams/645.png",
+          "name": "Dynamo Msk",
+          "location": "Moscow",
+          "division": "Bobrov division",
+          "division_key": "bobrov",
+          "conference": "West",
+          "conference_key": "west"
+        },
+        {
+          "gp": "54",
+          "w": "30",
+          "otw": "1",
+          "sow": "4",
+          "sol": "4",
+          "otl": "1",
+          "otl_en": "0",
+          "l": "14",
+          "pts": "105",
+          "pts_pct": "64.81",
+          "soa": "4",
+          "so": "5",
+          "gf": "175",
+          "ga": "115",
+          "pim": "721",
+          "pima": "587",
+          "id": 44,
+          "khl_id": 24,
+          "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+          "tv_image": "/images/khl_tv/teams/44.png",
+          "name": "SKA",
+          "location": "Saint Petersburg",
+          "division": "Bobrov division",
+          "division_key": "bobrov",
+          "conference": "West",
+          "conference_key": "west"
+        },
+        {
+          "gp": "54",
+          "w": "23",
+          "otw": "3",
+          "sow": "9",
+          "sol": "2",
+          "otl": "4",
+          "otl_en": "0",
+          "l": "13",
+          "pts": "99",
+          "pts_pct": "61.11",
+          "soa": "3",
+          "so": "6",
+          "gf": "149",
+          "ga": "107",
+          "pim": "629",
+          "pima": "764",
+          "id": 52,
+          "khl_id": 359,
+          "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/52/original/lev_praga.png",
+          "tv_image": "/images/khl_tv/teams/52.png",
+          "name": "Lev Pr",
+          "location": "Prague",
+          "division": "Bobrov division",
+          "division_key": "bobrov",
+          "conference": "West",
+          "conference_key": "west"
+        }
+      ],
+      "east": [
+        {
+          "gp": "54",
+          "w": "30",
+          "otw": "3",
+          "sow": "2",
+          "sol": "6",
+          "otl": "2",
+          "otl_en": "0",
+          "l": "11",
+          "pts": "108",
+          "pts_pct": "66.66",
+          "soa": "2",
+          "so": "9",
+          "gf": "166",
+          "ga": "113",
+          "pim": "676",
+          "pima": "642",
+          "id": 30,
+          "khl_id": 37,
+          "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+          "tv_image": "/images/khl_tv/teams/30.png",
+          "name": "Metallurg Mg",
+          "location": "Magnitogorsk",
+          "division": "Kharlamov division",
+          "division_key": "kharlamov",
+          "conference": "East",
+          "conference_key": "east"
+        },
+        {
+          "gp": "54",
+          "w": "26",
+          "otw": "2",
+          "sow": "4",
+          "sol": "2",
+          "otl": "2",
+          "otl_en": "0",
+          "l": "18",
+          "pts": "94",
+          "pts_pct": "58.02",
+          "soa": "2",
+          "so": "2",
+          "gf": "182",
+          "ga": "157",
+          "pim": "688",
+          "pima": "581",
+          "id": 46,
+          "khl_id": 198,
+          "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/46/original/barys_2022_head_only__200x200.png",
+          "tv_image": "/images/khl_tv/teams/46.png",
+          "name": "Barys",
+          "location": "Astana",
+          "division": "Chernyshev division",
+          "division_key": "chernyshev",
+          "conference": "East",
+          "conference_key": "east"
+        },
+        {
+          "gp": "54",
+          "w": "26",
+          "otw": "4",
+          "sow": "4",
+          "sol": "5",
+          "otl": "1",
+          "otl_en": "0",
+          "l": "14",
+          "pts": "100",
+          "pts_pct": "61.72",
+          "soa": "5",
+          "so": "8",
+          "gf": "139",
+          "ga": "108",
+          "pim": "690",
+          "pima": "544",
+          "id": 40,
+          "khl_id": 53,
+          "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/40/original/ak_bars_2022__200x200.png",
+          "tv_image": "/images/khl_tv/teams/40.png",
+          "name": "Ak Bars",
+          "location": "Kazan",
+          "division": "Kharlamov division",
+          "division_key": "kharlamov",
+          "conference": "East",
+          "conference_key": "east"
+        }
+      ],
+      "divisions": [
+        {
+          "name": "Bobrov division",
+          "key": "bobrov",
+          "table": [
+            {
+              "gp": "54",
+              "w": "30",
+              "otw": "1",
+              "sow": "4",
+              "sol": "4",
+              "otl": "1",
+              "otl_en": "0",
+              "l": "14",
+              "pts": "105",
+              "pts_pct": "64.81",
+              "soa": "4",
+              "so": "5",
+              "gf": "175",
+              "ga": "115",
+              "pim": "721",
+              "pima": "587",
+              "id": 44,
+              "khl_id": 24,
+              "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sda/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+              "tv_image": "/images/khl_tv/teams/44.png",
+              "name": "SKA",
+              "location": "Saint Petersburg",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "54",
+              "w": "23",
+              "otw": "3",
+              "sow": "9",
+              "sol": "2",
+              "otl": "4",
+              "otl_en": "0",
+              "l": "13",
+              "pts": "99",
+              "pts_pct": "61.11",
+              "soa": "3",
+              "so": "6",
+              "gf": "149",
+              "ga": "107",
+              "pim": "629",
+              "pima": "764",
+              "id": 52,
+              "khl_id": 359,
+              "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/52/original/lev_praga.png",
+              "tv_image": "/images/khl_tv/teams/52.png",
+              "name": "Lev Pr",
+              "location": "Prague",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "54",
+              "w": "22",
+              "otw": "5",
+              "sow": "6",
+              "sol": "4",
+              "otl": "1",
+              "otl_en": "0",
+              "l": "16",
+              "pts": "93",
+              "pts_pct": "57.40",
+              "soa": "2",
+              "so": "4",
+              "gf": "141",
+              "ga": "122",
+              "pim": "590",
+              "pima": "577",
+              "id": 54,
+              "khl_id": 208,
+              "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/54/original/Dinamo_Riga_Logotype_Symbol_RGB.PNG",
+              "tv_image": "/images/khl_tv/teams/54.png",
+              "name": "Dinamo R",
+              "location": "Riga",
+              "division": "Tarasov division",
+              "division_key": "tarasov",
+              "conference": "West",
+              "conference_key": "west"
+            }
+          ]
+        },
+        {
+          "name": "Tarasov division",
+          "key": "tarasov",
+          "table": [
+            {
+              "gp": "54",
+              "w": "34",
+              "otw": "2",
+              "sow": "2",
+              "sol": "5",
+              "otl": "0",
+              "otl_en": "0",
+              "l": "11",
+              "pts": "115",
+              "pts_pct": "70.98",
+              "soa": "2",
+              "so": "7",
+              "gf": "171",
+              "ga": "113",
+              "pim": "724",
+              "pima": "825",
+              "id": 645,
+              "khl_id": 279,
+              "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+              "tv_image": "/images/khl_tv/teams/645.png",
+              "name": "Dynamo Msk",
+              "location": "Moscow",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "54",
+              "w": "27",
+              "otw": "3",
+              "sow": "4",
+              "sol": "2",
+              "otl": "0",
+              "otl_en": "0",
+              "l": "18",
+              "pts": "97",
+              "pts_pct": "59.87",
+              "soa": "4",
+              "so": "9",
+              "gf": "135",
+              "ga": "99",
+              "pim": "647",
+              "pima": "678",
+              "id": 50,
+              "khl_id": 317,
+              "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/50/original/Donbass.png",
+              "tv_image": "/images/khl_tv/teams/50.png",
+              "name": "Donbass",
+              "location": "Donetsk",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "54",
+              "w": "23",
+              "otw": "2",
+              "sow": "3",
+              "sol": "4",
+              "otl": "1",
+              "otl_en": "0",
+              "l": "21",
+              "pts": "84",
+              "pts_pct": "51.85",
+              "soa": "7",
+              "so": "9",
+              "gf": "109",
+              "ga": "103",
+              "pim": "711",
+              "pima": "815",
+              "id": 26,
+              "khl_id": 1,
+              "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdl/team_pics/26/original/lokomotiv_2022__200x200.png",
+              "tv_image": "/images/khl_tv/teams/26.png",
+              "name": "Lokomotiv",
+              "location": "Yaroslavl",
+              "division": "Tarasov division",
+              "division_key": "tarasov",
+              "conference": "West",
+              "conference_key": "west"
+            }
+          ]
+        },
+        {
+          "name": "Kharlamov division",
+          "key": "kharlamov",
+          "table": [
+            {
+              "gp": "54",
+              "w": "30",
+              "otw": "3",
+              "sow": "2",
+              "sol": "6",
+              "otl": "2",
+              "otl_en": "0",
+              "l": "11",
+              "pts": "108",
+              "pts_pct": "66.66",
+              "soa": "2",
+              "so": "9",
+              "gf": "166",
+              "ga": "113",
+              "pim": "676",
+              "pima": "642",
+              "id": 30,
+              "khl_id": 37,
+              "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+              "tv_image": "/images/khl_tv/teams/30.png",
+              "name": "Metallurg Mg",
+              "location": "Magnitogorsk",
+              "division": "Kharlamov division",
+              "division_key": "kharlamov",
+              "conference": "East",
+              "conference_key": "east"
+            },
+            {
+              "gp": "54",
+              "w": "26",
+              "otw": "4",
+              "sow": "4",
+              "sol": "5",
+              "otl": "1",
+              "otl_en": "0",
+              "l": "14",
+              "pts": "100",
+              "pts_pct": "61.72",
+              "soa": "5",
+              "so": "8",
+              "gf": "139",
+              "ga": "108",
+              "pim": "690",
+              "pima": "544",
+              "id": 40,
+              "khl_id": 53,
+              "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/40/original/ak_bars_2022__200x200.png",
+              "tv_image": "/images/khl_tv/teams/40.png",
+              "name": "Ak Bars",
+              "location": "Kazan",
+              "division": "Kharlamov division",
+              "division_key": "kharlamov",
+              "conference": "East",
+              "conference_key": "east"
+            },
+            {
+              "gp": "54",
+              "w": "25",
+              "otw": "2",
+              "sow": "5",
+              "sol": "3",
+              "otl": "2",
+              "otl_en": "0",
+              "l": "17",
+              "pts": "94",
+              "pts_pct": "58.02",
+              "soa": "5",
+              "so": "9",
+              "gf": "153",
+              "ga": "121",
+              "pim": "659",
+              "pima": "855",
+              "id": 22,
+              "khl_id": 26,
+              "image": "https://thumbs.webcaster.pro/rec-1-1.webcaster.pro/fc/sda/team_pics/22/original/Torpedo_2025_200x200_NEW.png",
+              "tv_image": "/images/khl_tv/teams/22.png",
+              "name": "Torpedo",
+              "location": "Nizhny Novgorod",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "season": "2014/2015",
+    "stages": [
+      {
+        "id": 15,
+        "title": "Регулярный чемпионат",
+        "type": "regular",
+        "regular": [
+          {
+            "id": 30,
+            "tv_image": "/images/khl_tv/teams/30.png",
+            "khl_id": 37,
+            "gp": "15",
+            "w": "9",
+            "otw": "1",
+            "sow": "1",
+            "sol": "0",
+            "otl": "1",
+            "l": "3",
+            "pts": "23",
+            "pts_pct": "71.11",
+            "gf": "48",
+            "ga": "28",
+            "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+            "name": "Metallurg Mg",
+            "location": "Magnitogorsk",
+            "division": "Kharlamov division",
+            "division_key": "kharlamov",
+            "conference": "East",
+            "conference_key": "east"
+          },
+          {
+            "id": 26,
+            "tv_image": "/images/khl_tv/teams/26.png",
+            "khl_id": 1,
+            "gp": "14",
+            "w": "10",
+            "otw": "1",
+            "sow": "0",
+            "sol": "0",
+            "otl": "0",
+            "l": "3",
+            "pts": "22",
+            "pts_pct": "76.19",
+            "gf": "38",
+            "ga": "23",
+            "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+            "name": "Lokomotiv",
+            "location": "Yaroslavl",
+            "division": "Tarasov division",
+            "division_key": "tarasov",
+            "conference": "West",
+            "conference_key": "west"
+          },
+          {
+            "id": 16,
+            "tv_image": "/images/khl_tv/teams/16.png",
+            "khl_id": 2,
+            "gp": "14",
+            "w": "9",
+            "otw": "0",
+            "sow": "2",
+            "sol": "0",
+            "otl": "0",
+            "l": "3",
+            "pts": "22",
+            "pts_pct": "73.80",
+            "gf": "49",
+            "ga": "27",
+            "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/16/original/cska_2016_rus__200x200.png",
+            "name": "CSKA",
+            "location": "Moscow",
+            "division": "Tarasov division",
+            "division_key": "tarasov",
+            "conference": "West",
+            "conference_key": "west"
+          }
+        ],
+        "playin": null,
+        "playoff": null,
+        "display_rule": "default"
+      },
+      {
+        "id": 19,
+        "title": "Плей-офф",
+        "type": "playoff",
+        "regular": null,
+        "playin": null,
+        "playoff": [
+          {
+            "level": 3,
+            "pairs": [
+              {
+                "games": [
+                  {
+                    "score": "3:0",
+                    "visitor": 1,
+                    "event_id": 278637,
+                    "ots": null
+                  },
+                  {
+                    "score": "3:1",
+                    "visitor": 1,
+                    "event_id": 278669,
+                    "ots": null
+                  },
+                  {
+                    "score": "2:1",
+                    "visitor": 0,
+                    "event_id": 278701,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  0
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/16.png",
+                    "id": 16,
+                    "khl_id": 2,
+                    "name": "CSKA",
+                    "pos": 1,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/16/original/cska_2016_rus__200x200.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/113.png",
+                    "id": 113,
+                    "khl_id": 451,
+                    "name": "HC Sochi",
+                    "pos": 8,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/113/original/hc_sochi_2024__200x200_new.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/16.png",
+                  "id": 16,
+                  "khl_id": 2,
+                  "name": "CSKA",
+                  "pos": 1,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/16/original/cska_2016_rus__200x200.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/113.png",
+                  "id": 113,
+                  "khl_id": 451,
+                  "name": "HC Sochi",
+                  "pos": 8,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/113/original/hc_sochi_2024__200x200_new.png",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "2:3",
+                    "visitor": 1,
+                    "event_id": 278649,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "4:1",
+                    "visitor": 1,
+                    "event_id": 278681,
+                    "ots": null
+                  },
+                  {
+                    "score": "5:0",
+                    "visitor": 0,
+                    "event_id": 278713,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/109.png",
+                    "id": 109,
+                    "khl_id": 450,
+                    "name": "Jokerit",
+                    "pos": 4,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/109/original/Jokerit_2019.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/38.png",
+                    "id": 38,
+                    "khl_id": 207,
+                    "name": "Dinamo Mn",
+                    "pos": 5,
+                    "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdb/team_pics/38/original/dinamo_mn_2019_alternative__200x200.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/109.png",
+                  "id": 109,
+                  "khl_id": 450,
+                  "name": "Jokerit",
+                  "pos": 4,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/109/original/Jokerit_2019.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/38.png",
+                  "id": 38,
+                  "khl_id": 207,
+                  "name": "Dinamo Mn",
+                  "pos": 5,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdb/team_pics/38/original/dinamo_mn_2019_alternative__200x200.png",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "6:3",
+                    "visitor": 1,
+                    "event_id": 278641,
+                    "ots": null
+                  },
+                  {
+                    "score": "1:2",
+                    "visitor": 1,
+                    "event_id": 278673,
+                    "ots": null
+                  },
+                  {
+                    "score": "4:2",
+                    "visitor": 0,
+                    "event_id": 278705,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/44.png",
+                    "id": 44,
+                    "khl_id": 24,
+                    "name": "SKA",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/22.png",
+                    "id": 22,
+                    "khl_id": 26,
+                    "name": "Torpedo",
+                    "pos": 7,
+                    "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sdc/team_pics/22/original/Torpedo_2025_200x200_NEW.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/44.png",
+                  "id": 44,
+                  "khl_id": 24,
+                  "name": "SKA",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sda/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/22.png",
+                  "id": 22,
+                  "khl_id": 26,
+                  "name": "Torpedo",
+                  "pos": 7,
+                  "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sdc/team_pics/22/original/Torpedo_2025_200x200_NEW.png",
+                  "conference_key": "west"
+                }
+              }
+            ],
+            "title": "Pairs of Conference West 1/4 final"
+          },
+          {
+            "level": 3,
+            "pairs": [
+              {
+                "games": [
+                  {
+                    "score": "3:2",
+                    "visitor": 1,
+                    "event_id": 278653,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "3:2",
+                    "visitor": 1,
+                    "event_id": 278685,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "0:2",
+                    "visitor": 0,
+                    "event_id": 278717,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/40.png",
+                    "id": 40,
+                    "khl_id": 53,
+                    "name": "Ak Bars",
+                    "pos": 1,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/40/original/ak_bars_2022__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/56.png",
+                    "id": 56,
+                    "khl_id": 190,
+                    "name": "Avtomobilist",
+                    "pos": 8,
+                    "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/56/original/avtomobilist__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/40.png",
+                  "id": 40,
+                  "khl_id": 53,
+                  "name": "Ak Bars",
+                  "pos": 1,
+                  "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/40/original/ak_bars_2022__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/56.png",
+                  "id": 56,
+                  "khl_id": 190,
+                  "name": "Avtomobilist",
+                  "pos": 8,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/56/original/avtomobilist__200x200.png",
+                  "conference_key": "east"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "5:2",
+                    "visitor": 1,
+                    "event_id": 278665,
+                    "ots": null
+                  },
+                  {
+                    "score": "0:2",
+                    "visitor": 1,
+                    "event_id": 278697,
+                    "ots": null
+                  },
+                  {
+                    "score": "0:3",
+                    "visitor": 0,
+                    "event_id": 278729,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  3
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/10.png",
+                    "id": 10,
+                    "khl_id": 34,
+                    "name": "Avangard",
+                    "pos": 4,
+                    "image": "https://thumbs.webcaster.pro/rec-2-2.webcaster.pro/fc/sdh/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/46.png",
+                    "id": 46,
+                    "khl_id": 198,
+                    "name": "Barys",
+                    "pos": 5,
+                    "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/46/original/barys_2022_head_only__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/10.png",
+                  "id": 10,
+                  "khl_id": 34,
+                  "name": "Avangard",
+                  "pos": 4,
+                  "image": "https://thumbs.webcaster.pro/rec-2-2.webcaster.pro/fc/sdh/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/46.png",
+                  "id": 46,
+                  "khl_id": 198,
+                  "name": "Barys",
+                  "pos": 5,
+                  "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/46/original/barys_2022_head_only__200x200.png",
+                  "conference_key": "east"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "1:4",
+                    "visitor": 1,
+                    "event_id": 278657,
+                    "ots": null
+                  },
+                  {
+                    "score": "5:2",
+                    "visitor": 1,
+                    "event_id": 278689,
+                    "ots": null
+                  },
+                  {
+                    "score": "7:3",
+                    "visitor": 0,
+                    "event_id": 278721,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  2
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/24.png",
+                    "id": 24,
+                    "khl_id": 29,
+                    "name": "Sibir",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/24/original/sibir_rus__200x200.png",
+                    "conference_key": "east"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/28.png",
+                    "id": 28,
+                    "khl_id": 25,
+                    "name": "Traktor",
+                    "pos": 7,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdb/team_pics/28/original/traktor_2020__200x200.png",
+                    "conference_key": "east"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/24.png",
+                  "id": 24,
+                  "khl_id": 29,
+                  "name": "Sibir",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/24/original/sibir_rus__200x200.png",
+                  "conference_key": "east"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/28.png",
+                  "id": 28,
+                  "khl_id": 25,
+                  "name": "Traktor",
+                  "pos": 7,
+                  "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/28/original/traktor_2020__200x200.png",
+                  "conference_key": "east"
+                }
+              }
+            ],
+            "title": "Pairs of Conference East 1/4 final"
+          },
+          {
+            "level": 2,
+            "pairs": [
+              {
+                "games": [
+                  {
+                    "score": "3:2",
+                    "visitor": 1,
+                    "event_id": 282573,
+                    "ots": null
+                  },
+                  {
+                    "score": "4:0",
+                    "visitor": 1,
+                    "event_id": 282585,
+                    "ots": null
+                  },
+                  {
+                    "score": "2:3",
+                    "visitor": 0,
+                    "event_id": 282601,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/16.png",
+                    "id": 16,
+                    "khl_id": 2,
+                    "name": "CSKA",
+                    "pos": 1,
+                    "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/16/original/cska_2016_rus__200x200.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/109.png",
+                    "id": 109,
+                    "khl_id": 450,
+                    "name": "Jokerit",
+                    "pos": 4,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/109/original/Jokerit_2019.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/16.png",
+                  "id": 16,
+                  "khl_id": 2,
+                  "name": "CSKA",
+                  "pos": 1,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/16/original/cska_2016_rus__200x200.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/109.png",
+                  "id": 109,
+                  "khl_id": 450,
+                  "name": "Jokerit",
+                  "pos": 4,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/109/original/Jokerit_2019.png",
+                  "conference_key": "west"
+                }
+              },
+              {
+                "games": [
+                  {
+                    "score": "3:2",
+                    "visitor": 1,
+                    "event_id": 282577,
+                    "ots": "OT"
+                  },
+                  {
+                    "score": "1:4",
+                    "visitor": 1,
+                    "event_id": 282589,
+                    "ots": null
+                  },
+                  {
+                    "score": "2:0",
+                    "visitor": 0,
+                    "event_id": 282597,
+                    "ots": null
+                  }
+                ],
+                "winner": 0,
+                "score": [
+                  4,
+                  1
+                ],
+                "teams": [
+                  {
+                    "tv_image": "/images/khl_tv/teams/44.png",
+                    "id": 44,
+                    "khl_id": 24,
+                    "name": "SKA",
+                    "pos": 2,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                    "conference_key": "west"
+                  },
+                  {
+                    "tv_image": "/images/khl_tv/teams/645.png",
+                    "id": 645,
+                    "khl_id": 279,
+                    "name": "Dynamo Msk",
+                    "pos": 3,
+                    "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+                    "conference_key": "west"
+                  }
+                ],
+                "team_a": {
+                  "tv_image": "/images/khl_tv/teams/44.png",
+                  "id": 44,
+                  "khl_id": 24,
+                  "name": "SKA",
+                  "pos": 2,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+                  "conference_key": "west"
+                },
+                "team_b": {
+                  "tv_image": "/images/khl_tv/teams/645.png",
+                  "id": 645,
+                  "khl_id": 279,
+                  "name": "Dynamo Msk",
+                  "pos": 3,
+                  "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+                  "conference_key": "west"
+                }
+              }
+            ],
+            "title": "Pairs of Conference West 1/2 final"
+          }
+        ],
+        "display_rule": "default"
+      }
+    ],
+    "tables": {
+      "championship": [
+        {
+          "gp": "60",
+          "w": "39",
+          "otw": "4",
+          "sow": "6",
+          "sol": "1",
+          "otl": "1",
+          "otl_en": "0",
+          "l": "9",
+          "pts": "139",
+          "pts_pct": "77.22",
+          "soa": "2",
+          "so": "13",
+          "gf": "207",
+          "ga": "98",
+          "pim": "949",
+          "pima": "846",
+          "id": 16,
+          "khl_id": 2,
+          "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/16/original/cska_2016_rus__200x200.png",
+          "tv_image": "/images/khl_tv/teams/16.png",
+          "name": "CSKA",
+          "location": "Moscow",
+          "division": "Tarasov division",
+          "division_key": "tarasov",
+          "conference": "West",
+          "conference_key": "west"
+        },
+        {
+          "gp": "60",
+          "w": "36",
+          "otw": "2",
+          "sow": "3",
+          "sol": "3",
+          "otl": "2",
+          "otl_en": "0",
+          "l": "14",
+          "pts": "123",
+          "pts_pct": "68.33",
+          "soa": "1",
+          "so": "2",
+          "gf": "210",
+          "ga": "136",
+          "pim": "715",
+          "pima": "715",
+          "id": 44,
+          "khl_id": 24,
+          "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sda/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+          "tv_image": "/images/khl_tv/teams/44.png",
+          "name": "SKA",
+          "location": "Saint Petersburg",
+          "division": "Bobrov division",
+          "division_key": "bobrov",
+          "conference": "West",
+          "conference_key": "west"
+        },
+        {
+          "gp": "60",
+          "w": "35",
+          "otw": "5",
+          "sow": "1",
+          "sol": "6",
+          "otl": "0",
+          "otl_en": "0",
+          "l": "13",
+          "pts": "123",
+          "pts_pct": "68.33",
+          "soa": "2",
+          "so": "9",
+          "gf": "172",
+          "ga": "120",
+          "pim": "621",
+          "pima": "799",
+          "id": 645,
+          "khl_id": 279,
+          "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+          "tv_image": "/images/khl_tv/teams/645.png",
+          "name": "Dynamo Msk",
+          "location": "Moscow",
+          "division": "Bobrov division",
+          "division_key": "bobrov",
+          "conference": "West",
+          "conference_key": "west"
+        }
+      ],
+      "west": [
+        {
+          "gp": "60",
+          "w": "39",
+          "otw": "4",
+          "sow": "6",
+          "sol": "1",
+          "otl": "1",
+          "otl_en": "0",
+          "l": "9",
+          "pts": "139",
+          "pts_pct": "77.22",
+          "soa": "2",
+          "so": "13",
+          "gf": "207",
+          "ga": "98",
+          "pim": "949",
+          "pima": "846",
+          "id": 16,
+          "khl_id": 2,
+          "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdc/team_pics/16/original/cska_2016_rus__200x200.png",
+          "tv_image": "/images/khl_tv/teams/16.png",
+          "name": "CSKA",
+          "location": "Moscow",
+          "division": "Tarasov division",
+          "division_key": "tarasov",
+          "conference": "West",
+          "conference_key": "west"
+        },
+        {
+          "gp": "60",
+          "w": "36",
+          "otw": "2",
+          "sow": "3",
+          "sol": "3",
+          "otl": "2",
+          "otl_en": "0",
+          "l": "14",
+          "pts": "123",
+          "pts_pct": "68.33",
+          "soa": "1",
+          "so": "2",
+          "gf": "210",
+          "ga": "136",
+          "pim": "715",
+          "pima": "715",
+          "id": 44,
+          "khl_id": 24,
+          "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdd/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+          "tv_image": "/images/khl_tv/teams/44.png",
+          "name": "SKA",
+          "location": "Saint Petersburg",
+          "division": "Bobrov division",
+          "division_key": "bobrov",
+          "conference": "West",
+          "conference_key": "west"
+        },
+        {
+          "gp": "60",
+          "w": "35",
+          "otw": "5",
+          "sow": "1",
+          "sol": "6",
+          "otl": "0",
+          "otl_en": "0",
+          "l": "13",
+          "pts": "123",
+          "pts_pct": "68.33",
+          "soa": "2",
+          "so": "9",
+          "gf": "172",
+          "ga": "120",
+          "pim": "621",
+          "pima": "799",
+          "id": 645,
+          "khl_id": 279,
+          "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+          "tv_image": "/images/khl_tv/teams/645.png",
+          "name": "Dynamo Msk",
+          "location": "Moscow",
+          "division": "Bobrov division",
+          "division_key": "bobrov",
+          "conference": "West",
+          "conference_key": "west"
+        }
+      ],
+      "east": [
+        {
+          "gp": "60",
+          "w": "34",
+          "otw": "2",
+          "sow": "4",
+          "sol": "6",
+          "otl": "0",
+          "otl_en": "0",
+          "l": "14",
+          "pts": "120",
+          "pts_pct": "66.66",
+          "soa": "3",
+          "so": "5",
+          "gf": "169",
+          "ga": "115",
+          "pim": "698",
+          "pima": "715",
+          "id": 40,
+          "khl_id": 53,
+          "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/40/original/ak_bars_2022__200x200.png",
+          "tv_image": "/images/khl_tv/teams/40.png",
+          "name": "Ak Bars",
+          "location": "Kazan",
+          "division": "Kharlamov division",
+          "division_key": "kharlamov",
+          "conference": "East",
+          "conference_key": "east"
+        },
+        {
+          "gp": "60",
+          "w": "34",
+          "otw": "2",
+          "sow": "1",
+          "sol": "1",
+          "otl": "2",
+          "otl_en": "0",
+          "l": "20",
+          "pts": "111",
+          "pts_pct": "61.66",
+          "soa": "4",
+          "so": "7",
+          "gf": "176",
+          "ga": "125",
+          "pim": "773",
+          "pima": "974",
+          "id": 24,
+          "khl_id": 29,
+          "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/24/original/sibir_rus__200x200.png",
+          "tv_image": "/images/khl_tv/teams/24.png",
+          "name": "Sibir",
+          "location": "Novosibirsk Region",
+          "division": "Chernyshev division",
+          "division_key": "chernyshev",
+          "conference": "East",
+          "conference_key": "east"
+        },
+        {
+          "gp": "60",
+          "w": "32",
+          "otw": "4",
+          "sow": "4",
+          "sol": "2",
+          "otl": "3",
+          "otl_en": "0",
+          "l": "15",
+          "pts": "117",
+          "pts_pct": "65.00",
+          "soa": "3",
+          "so": "6",
+          "gf": "174",
+          "ga": "129",
+          "pim": "761",
+          "pima": "645",
+          "id": 30,
+          "khl_id": 37,
+          "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+          "tv_image": "/images/khl_tv/teams/30.png",
+          "name": "Metallurg Mg",
+          "location": "Magnitogorsk",
+          "division": "Kharlamov division",
+          "division_key": "kharlamov",
+          "conference": "East",
+          "conference_key": "east"
+        }
+      ],
+      "divisions": [
+        {
+          "name": "Bobrov division",
+          "key": "bobrov",
+          "table": [
+            {
+              "gp": "60",
+              "w": "36",
+              "otw": "2",
+              "sow": "3",
+              "sol": "3",
+              "otl": "2",
+              "otl_en": "0",
+              "l": "14",
+              "pts": "123",
+              "pts_pct": "68.33",
+              "soa": "1",
+              "so": "2",
+              "gf": "210",
+              "ga": "136",
+              "pim": "715",
+              "pima": "715",
+              "id": 44,
+              "khl_id": 24,
+              "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sda/team_pics/44/original/SKA_logo_2025_RU_200x200_NEW.png",
+              "tv_image": "/images/khl_tv/teams/44.png",
+              "name": "SKA",
+              "location": "Saint Petersburg",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "60",
+              "w": "35",
+              "otw": "3",
+              "sow": "2",
+              "sol": "2",
+              "otl": "2",
+              "otl_en": "0",
+              "l": "16",
+              "pts": "119",
+              "pts_pct": "66.11",
+              "soa": "1",
+              "so": "5",
+              "gf": "171",
+              "ga": "136",
+              "pim": "630",
+              "pima": "692",
+              "id": 109,
+              "khl_id": 450,
+              "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/109/original/Jokerit_2019.png",
+              "tv_image": "/images/khl_tv/teams/109.png",
+              "name": "Jokerit",
+              "location": "Helsinki",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "60",
+              "w": "27",
+              "otw": "3",
+              "sow": "4",
+              "sol": "4",
+              "otl": "1",
+              "otl_en": "0",
+              "l": "21",
+              "pts": "100",
+              "pts_pct": "55.55",
+              "soa": "1",
+              "so": "5",
+              "gf": "171",
+              "ga": "159",
+              "pim": "582",
+              "pima": "659",
+              "id": 38,
+              "khl_id": 207,
+              "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/38/original/dinamo_mn_2019_alternative__200x200.png",
+              "tv_image": "/images/khl_tv/teams/38.png",
+              "name": "Dinamo Mn",
+              "location": "Minsk",
+              "division": "Tarasov division",
+              "division_key": "tarasov",
+              "conference": "West",
+              "conference_key": "west"
+            }
+          ]
+        },
+        {
+          "name": "Tarasov division",
+          "key": "tarasov",
+          "table": [
+            {
+              "gp": "60",
+              "w": "39",
+              "otw": "4",
+              "sow": "6",
+              "sol": "1",
+              "otl": "1",
+              "otl_en": "0",
+              "l": "9",
+              "pts": "139",
+              "pts_pct": "77.22",
+              "soa": "2",
+              "so": "13",
+              "gf": "207",
+              "ga": "98",
+              "pim": "949",
+              "pima": "846",
+              "id": 16,
+              "khl_id": 2,
+              "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/16/original/cska_2016_rus__200x200.png",
+              "tv_image": "/images/khl_tv/teams/16.png",
+              "name": "CSKA",
+              "location": "Moscow",
+              "division": "Tarasov division",
+              "division_key": "tarasov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "60",
+              "w": "35",
+              "otw": "5",
+              "sow": "1",
+              "sol": "6",
+              "otl": "0",
+              "otl_en": "0",
+              "l": "13",
+              "pts": "123",
+              "pts_pct": "68.33",
+              "soa": "2",
+              "so": "9",
+              "gf": "172",
+              "ga": "120",
+              "pim": "621",
+              "pima": "799",
+              "id": 645,
+              "khl_id": 279,
+              "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdk/team_pics/645/original/279.png",
+              "tv_image": "/images/khl_tv/teams/645.png",
+              "name": "Dynamo Msk",
+              "location": "Moscow",
+              "division": "Bobrov division",
+              "division_key": "bobrov",
+              "conference": "West",
+              "conference_key": "west"
+            },
+            {
+              "gp": "60",
+              "w": "24",
+              "otw": "4",
+              "sow": "4",
+              "sol": "7",
+              "otl": "2",
+              "otl_en": "0",
+              "l": "19",
+              "pts": "97",
+              "pts_pct": "53.88",
+              "soa": "7",
+              "so": "3",
+              "gf": "155",
+              "ga": "143",
+              "pim": "620",
+              "pima": "613",
+              "id": 26,
+              "khl_id": 1,
+              "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+              "tv_image": "/images/khl_tv/teams/26.png",
+              "name": "Lokomotiv",
+              "location": "Yaroslavl",
+              "division": "Tarasov division",
+              "division_key": "tarasov",
+              "conference": "West",
+              "conference_key": "west"
+            }
+          ]
+        },
+        {
+          "name": "Kharlamov division",
+          "key": "kharlamov",
+          "table": [
+            {
+              "gp": "60",
+              "w": "34",
+              "otw": "2",
+              "sow": "4",
+              "sol": "6",
+              "otl": "0",
+              "otl_en": "0",
+              "l": "14",
+              "pts": "120",
+              "pts_pct": "66.66",
+              "soa": "3",
+              "so": "5",
+              "gf": "169",
+              "ga": "115",
+              "pim": "698",
+              "pima": "715",
+              "id": 40,
+              "khl_id": 53,
+              "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdi/team_pics/40/original/ak_bars_2022__200x200.png",
+              "tv_image": "/images/khl_tv/teams/40.png",
+              "name": "Ak Bars",
+              "location": "Kazan",
+              "division": "Kharlamov division",
+              "division_key": "kharlamov",
+              "conference": "East",
+              "conference_key": "east"
+            },
+            {
+              "gp": "60",
+              "w": "32",
+              "otw": "4",
+              "sow": "4",
+              "sol": "2",
+              "otl": "3",
+              "otl_en": "0",
+              "l": "15",
+              "pts": "117",
+              "pts_pct": "65.00",
+              "soa": "3",
+              "so": "6",
+              "gf": "174",
+              "ga": "129",
+              "pim": "761",
+              "pima": "645",
+              "id": 30,
+              "khl_id": 37,
+              "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+              "tv_image": "/images/khl_tv/teams/30.png",
+              "name": "Metallurg Mg",
+              "location": "Magnitogorsk",
+              "division": "Kharlamov division",
+              "division_key": "kharlamov",
+              "conference": "East",
+              "conference_key": "east"
+            },
+            {
+              "gp": "60",
+              "w": "21",
+              "otw": "2",
+              "sow": "6",
+              "sol": "3",
+              "otl": "4",
+              "otl_en": "0",
+              "l": "24",
+              "pts": "86",
+              "pts_pct": "47.77",
+              "soa": "7",
+              "so": "1",
+              "gf": "144",
+              "ga": "154",
+              "pim": "600",
+              "pima": "633",
+              "id": 28,
+              "khl_id": 25,
+              "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/28/original/traktor_2020__200x200.png",
+              "tv_image": "/images/khl_tv/teams/28.png",
+              "name": "Traktor",
+              "location": "Chelyabinsk",
+              "division": "Kharlamov division",
+              "division_key": "kharlamov",
+              "conference": "East",
+              "conference_key": "east"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

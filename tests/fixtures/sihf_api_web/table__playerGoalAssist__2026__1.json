@@ -1,0 +1,286 @@
+{
+  "title": "Player Stats",
+  "description": "Player Stats - Goals/Assists",
+  "pages": 427,
+  "selectedPage": 1,
+  "orderBy": "goals",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:10:10.7252787+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Summary",
+      "rowIdentifierKey": "points",
+      "isOrderDescending": true,
+      "alias": "player"
+    },
+    {
+      "name": "Goals/Assists",
+      "rowIdentifierKey": "goals",
+      "isOrderDescending": true,
+      "alias": "playerGoalAssist"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogSog",
+      "isOrderDescending": true,
+      "alias": "playerShotDetail"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": null,
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": false,
+      "alias": "rank"
+    },
+    {
+      "name": "Spieler",
+      "description": "Spielername",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "player"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "Pos",
+      "description": "Spielerposition",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "position"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "G",
+      "description": "Tore",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "goals"
+    },
+    {
+      "name": "A",
+      "description": "Assists",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "assists"
+    },
+    {
+      "name": "A1",
+      "description": "Assists 1",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "assists1"
+    },
+    {
+      "name": "A2",
+      "description": "Assists 2",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "assists2"
+    },
+    {
+      "name": "GWG",
+      "description": "Game winning goals",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gameWinningGoals"
+    },
+    {
+      "name": "EQG",
+      "description": "Gleichzahl Tore",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "eqGoals"
+    },
+    {
+      "name": "EQA",
+      "description": "Gleichzahl Assists",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "eqAssists"
+    },
+    {
+      "name": "PPG",
+      "description": "Überzahl Tore",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppGoals"
+    },
+    {
+      "name": "PPA",
+      "description": "Überzahl Assists",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppAssists"
+    },
+    {
+      "name": "SHG",
+      "description": "Unterzahl Tore",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "pkGoals"
+    },
+    {
+      "name": "SHA",
+      "description": "Unterzahl Assists",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "pkAssists"
+    },
+    {
+      "name": "OTG",
+      "description": "Overtime goals",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "overtimeGoals"
+    },
+    {
+      "name": "HAT",
+      "description": "Hattricks",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "hattricks"
+    }
+  ],
+  "data": [
+    [
+      "427",
+      "Paschoud Claude-C.",
+      {
+        "id": 102127,
+        "name": "SCL Tigers",
+        "acronym": "SCL",
+        "signed": false,
+        "type": "team"
+      },
+      "Verteidiger",
+      "36",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "426",
+      "Pouilly Bastien",
+      {
+        "id": 103144,
+        "name": "HC Ajoie",
+        "acronym": "HCA",
+        "signed": false,
+        "type": "team"
+      },
+      "Verteidiger",
+      "30",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "425",
+      "Rod Julien",
+      {
+        "id": 103138,
+        "name": "Fribourg-Gottéron",
+        "acronym": "FRI",
+        "signed": false,
+        "type": "team"
+      },
+      "Stürmer",
+      "29",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ]
+  ],
+  "alias": "playerGoalAssist"
+}

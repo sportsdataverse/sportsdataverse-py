@@ -2,6 +2,8 @@
 
 import ast
 
+import pytest
+
 from tools.codegen import generate, spec
 
 
@@ -163,3 +165,75 @@ def test_espn_template_renders_kw_only_params_after_star():
     assert hits, f"{pname} not keyword-only in any *_{ep.short} wrapper"
     for fn in hits:
         assert pname not in {a.arg for a in fn.args.args}
+
+
+def _render_and_load(tmp_path, yaml_text, name):
+    import importlib.util
+
+    y = tmp_path / f"{name}.yaml"
+    y.write_text(yaml_text, encoding="utf-8")
+    src = generate.render_flat_module(spec.load_flat_api(y, {}))
+    path = tmp_path / f"{name}.py"
+    path.write_text(src, encoding="utf-8")
+    s = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(s)
+    s.loader.exec_module(mod)
+    return src, mod
+
+
+def test_choices_with_none_default_accept_none(tmp_path):
+    # An optional ``choices`` param defaulting to None used to raise on every call
+    # (``if x not in choices`` with no None guard).
+    from unittest.mock import patch
+
+    src, mod = _render_and_load(
+        tmp_path,
+        "api: x\nhost: 'https://x.test'\nname_pattern: 'x_{short}'\nmodule: x\nruntime_imports: [_get]\n"
+        "endpoints:\n"
+        "  - short: stats\n    summary: 'Stats.'\n    path: '/stats'\n"
+        "    extra_params:\n"
+        "      - { name: position, query_key: pos, type: str, choices: [f, d] }\n"
+        "      - { name: side, query_key: side, type: str, default: all, choices: [all, home] }\n",
+        "_gen_choices",
+    )
+    assert "if side not in ('all', 'home'):" in src  # a non-None default keeps the plain check
+
+    class R:
+        def json(self):
+            return {}
+
+    with patch("sportsdataverse._codegen_runtime.download", return_value=R()):
+        mod.x_stats()  # position=None: no ValueError
+        mod.x_stats(position="f")
+        with pytest.raises(ValueError, match="position must be one of"):
+            mod.x_stats(position="g")
+
+
+def test_post_method_renders_post_endpoint_and_body_fields(tmp_path):
+    src, _ = _render_and_load(
+        tmp_path,
+        "api: y\nhost: 'https://y.test'\nname_pattern: 'y_{short}'\nmodule: y\nruntime_imports: [_get]\n"
+        "endpoints:\n"
+        "  - short: games\n    summary: 'Games.'\n    path: '/rest/games/'\n    method: post\n"
+        "    extra_params: [ { name: season, query_key: season, type: int } ]\n"
+        "  - short: teams\n    summary: 'Teams.'\n    path: '/teams'\n"
+        "    extra_params: [ { name: season, query_key: season, type: int } ]\n",
+        "_gen_post",
+    )
+    games, teams = src.split("def y_teams")
+    assert "Endpoint: ``POST https://y.test/rest/games/``" in games
+    assert "season: season body field." in games
+    assert "Endpoint: ``GET https://y.test/teams``" in teams  # default stays GET
+    assert "season: season query parameter." in teams
+    assert src.count("_get(") == 2  # the call itself is unchanged
+
+
+def test_unknown_method_is_a_spec_error(tmp_path):
+    y = tmp_path / "z.yaml"
+    y.write_text(
+        "api: z\nhost: 'https://z.test'\nname_pattern: 'z_{short}'\nmodule: z\n"
+        "endpoints:\n  - { short: a, path: '/a', method: put }\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(spec.SpecError, match="method 'put'"):
+        spec.load_flat_api(y, {})

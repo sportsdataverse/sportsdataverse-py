@@ -151,6 +151,54 @@
         {
           "prefix": "sihf",
           "label": "SIHF (Swiss hockey)"
+        },
+        {
+          "prefix": "del",
+          "label": "DEL"
+        },
+        {
+          "prefix": "icehl",
+          "label": "ICE Hockey League"
+        },
+        {
+          "prefix": "eihl",
+          "label": "EIHL"
+        },
+        {
+          "prefix": "metal",
+          "label": "Metal Ligaen"
+        },
+        {
+          "prefix": "elh",
+          "label": "Czech Extraliga"
+        },
+        {
+          "prefix": "liiga",
+          "label": "Liiga"
+        },
+        {
+          "prefix": "shl",
+          "label": "SHL"
+        },
+        {
+          "prefix": "ha",
+          "label": "HockeyAllsvenskan"
+        },
+        {
+          "prefix": "nl",
+          "label": "National League"
+        },
+        {
+          "prefix": "magnus",
+          "label": "Ligue Magnus"
+        },
+        {
+          "prefix": "khl",
+          "label": "KHL"
+        },
+        {
+          "prefix": "vhl",
+          "label": "VHL"
         }
       ]
     },

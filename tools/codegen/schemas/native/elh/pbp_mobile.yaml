@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: comment_id
+  type: integer
+- description: ''
+  name: event_type
+  type: character
+- description: ''
+  name: game_seconds
+  type: integer
+- description: ''
+  name: content
+  type: character
+kind: dataframe
+schema: elh_pbp_mobile

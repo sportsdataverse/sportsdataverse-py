@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: id
+  type: integer
+- description: ''
+  name: khl_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: image
+  type: character
+- description: ''
+  name: shirt_number
+  type: integer
+- description: ''
+  name: role_key
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_khl_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_location
+  type: character
+- description: ''
+  name: pos
+  type: character
+- description: ''
+  name: stats
+  type: character
+kind: dataframe
+schema: khl_webcaster_leaders

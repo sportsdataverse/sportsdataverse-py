@@ -1,0 +1,47 @@
+[
+  {
+    "type": "EvenStrengthShot",
+    "shootingTeamId": 651304385,
+    "leftTeam": 651304385,
+    "rightTeam": 55786244,
+    "gameTime": 13,
+    "period": 1,
+    "shotX": 684,
+    "shotY": 491,
+    "blockerId": 40107053,
+    "shooterId": 60953551,
+    "eventType": "GOALIE_BLOCKED",
+    "ownTeamPlayersOnIce": 6,
+    "otherTeamPlayersOnIce": 6
+  },
+  {
+    "type": "EvenStrengthShot",
+    "shootingTeamId": 651304385,
+    "leftTeam": 651304385,
+    "rightTeam": 55786244,
+    "gameTime": 18,
+    "period": 1,
+    "shotX": 771,
+    "shotY": 29,
+    "blockerId": 40107053,
+    "shooterId": 29948541,
+    "eventType": "GOALIE_BLOCKED",
+    "ownTeamPlayersOnIce": 6,
+    "otherTeamPlayersOnIce": 6
+  },
+  {
+    "type": "EvenStrengthShot",
+    "shootingTeamId": 651304385,
+    "leftTeam": 651304385,
+    "rightTeam": 55786244,
+    "gameTime": 62,
+    "period": 1,
+    "shotX": 762,
+    "shotY": 111,
+    "blockerId": 40107053,
+    "shooterId": 27023853,
+    "eventType": "MISSED",
+    "ownTeamPlayersOnIce": 6,
+    "otherTeamPlayersOnIce": 6
+  }
+]

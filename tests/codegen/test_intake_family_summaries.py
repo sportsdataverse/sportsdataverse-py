@@ -28,6 +28,20 @@ FAMILIES = (
     "kalshi",
     # SIHF (data.sihf.ch)
     "sihf_api_web",
+    # European hockey (Phase B)
+    "del_esports",
+    "icehl_esports",
+    "eihl_esports",
+    "metal_esports",
+    "elh",
+    "liiga",
+    "shl",
+    "ha",
+    "nationalleague",
+    "magnus",
+    "khl_rest",
+    "khl_webcaster",
+    "vhl",
 )
 
 

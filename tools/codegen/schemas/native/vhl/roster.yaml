@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: team_page_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: calendar_tn
+  type: integer
+- description: ''
+  name: calendar_team_season_id
+  type: integer
+- description: ''
+  name: roster_as_of
+  type: character
+- description: ''
+  name: jersey
+  type: integer
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player
+  type: character
+- description: ''
+  name: born
+  type: character
+- description: ''
+  name: country
+  type: character
+kind: dataframe
+schema: vhl_roster

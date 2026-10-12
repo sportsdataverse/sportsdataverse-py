@@ -1,0 +1,351 @@
+{
+  "dataColumns": [
+    {
+      "name": "Player",
+      "displayed": true
+    },
+    {
+      "name": "NR",
+      "displayed": true
+    },
+    {
+      "name": "POS",
+      "displayed": true
+    }
+  ],
+  "players": {
+    "homeTeamValue": {
+      "1115": {
+        "fullName": "Nicklas Lasu",
+        "firstName": "Nicklas",
+        "lastName": "Lasu"
+      },
+      "1332": {
+        "fullName": "Henrik Tömmernes",
+        "firstName": "Henrik",
+        "lastName": "Tömmernes"
+      },
+      "1639": {
+        "fullName": "Erik Thorell",
+        "firstName": "Erik",
+        "lastName": "Thorell"
+      }
+    },
+    "awayTeamValue": {
+      "2364": {
+        "fullName": "Jakub Vrana",
+        "firstName": "Jakub",
+        "lastName": "Vrana"
+      },
+      "2404": {
+        "fullName": "Robin Kovacs",
+        "firstName": "Robin",
+        "lastName": "Kovacs"
+      },
+      "2558": {
+        "fullName": "Theodor Lennström",
+        "firstName": "Theodor",
+        "lastName": "Lennström"
+      }
+    }
+  },
+  "stats": {
+    "homeTeamValue": [
+      {
+        "NR": 2,
+        "POS": "RD",
+        "LINE": 3,
+        "G": 0,
+        "A": 0,
+        "TP": 0,
+        "SHG": 0,
+        "PPG": 0,
+        "SW": 0,
+        "PIM": 0,
+        "SOG": 0,
+        "PPSOG": 0,
+        "NEP": 0,
+        "POP": 0,
+        "+/-": 0,
+        "TOI": "13:16",
+        "Hits": 0,
+        "FO_tot": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "NumPen": 0,
+        "FOPerc": 0,
+        "MS": 0,
+        "BkS": 1,
+        "info": {
+          "period": 0,
+          "playerId": 4724,
+          "team": "home"
+        }
+      },
+      {
+        "NR": 6,
+        "POS": "LD",
+        "LINE": 4,
+        "G": 0,
+        "A": 0,
+        "TP": 0,
+        "SHG": 0,
+        "PPG": 0,
+        "SW": 0,
+        "PIM": 0,
+        "SOG": 0,
+        "PPSOG": 0,
+        "NEP": 0,
+        "POP": 0,
+        "+/-": 0,
+        "TOI": "03:17",
+        "Hits": 0,
+        "FO_tot": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "NumPen": 0,
+        "FOPerc": 0,
+        "MS": 0,
+        "BkS": 0,
+        "info": {
+          "period": 0,
+          "playerId": 3910,
+          "team": "home"
+        }
+      },
+      {
+        "NR": 7,
+        "POS": "LD",
+        "LINE": 1,
+        "G": 0,
+        "A": 0,
+        "TP": 0,
+        "SHG": 0,
+        "PPG": 0,
+        "SW": 2,
+        "PIM": 0,
+        "SOG": 2,
+        "PPSOG": 0,
+        "NEP": 0,
+        "POP": 0,
+        "+/-": 0,
+        "TOI": "22:21",
+        "Hits": 0,
+        "FO_tot": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "NumPen": 0,
+        "FOPerc": 0,
+        "MS": 6,
+        "BkS": 2,
+        "info": {
+          "period": 0,
+          "playerId": 1332,
+          "team": "home"
+        }
+      }
+    ],
+    "awayTeamValue": [
+      {
+        "NR": 4,
+        "POS": "LW",
+        "LINE": 4,
+        "G": 0,
+        "A": 0,
+        "TP": 0,
+        "SHG": 0,
+        "PPG": 0,
+        "SW": 0,
+        "PIM": 0,
+        "SOG": 0,
+        "PPSOG": 0,
+        "NEP": 0,
+        "POP": 0,
+        "+/-": 0,
+        "TOI": "01:51",
+        "Hits": 0,
+        "FO_tot": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "NumPen": 0,
+        "FOPerc": 0,
+        "MS": 0,
+        "BkS": 0,
+        "info": {
+          "period": 0,
+          "playerId": 4097,
+          "team": "away"
+        }
+      },
+      {
+        "NR": 8,
+        "POS": "RD",
+        "LINE": 4,
+        "G": 0,
+        "A": 0,
+        "TP": 0,
+        "SHG": 0,
+        "PPG": 0,
+        "SW": 0,
+        "PIM": 2,
+        "SOG": 1,
+        "PPSOG": 0,
+        "NEP": 0,
+        "POP": 0,
+        "+/-": 0,
+        "TOI": "08:04",
+        "Hits": 0,
+        "FO_tot": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "NumPen": 1,
+        "FOPerc": 0,
+        "MS": 1,
+        "BkS": 0,
+        "info": {
+          "period": 0,
+          "playerId": 4982,
+          "team": "away"
+        }
+      },
+      {
+        "NR": 9,
+        "POS": "RD",
+        "LINE": 3,
+        "G": 0,
+        "A": 0,
+        "TP": 0,
+        "SHG": 0,
+        "PPG": 0,
+        "SW": 1,
+        "PIM": 2,
+        "SOG": 0,
+        "PPSOG": 0,
+        "NEP": 0,
+        "POP": 0,
+        "+/-": 0,
+        "TOI": "15:48",
+        "Hits": 1,
+        "FO_tot": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "NumPen": 1,
+        "FOPerc": 0,
+        "MS": 4,
+        "BkS": 2,
+        "info": {
+          "period": 0,
+          "playerId": 4287,
+          "team": "away"
+        }
+      }
+    ]
+  },
+  "provider": "statnet",
+  "gkStats": {
+    "homeTeamValue": [
+      {
+        "NR": 1,
+        "POS": "GK",
+        "LINE": 1,
+        "GA": 1,
+        "SOGA": 29,
+        "SPGA": 14,
+        "SVS": 28,
+        "SVS%": "0.96551724137931039",
+        "info": {
+          "period": 0,
+          "playerId": 2427,
+          "team": "home"
+        }
+      },
+      {
+        "NR": 30,
+        "POS": "GK",
+        "LINE": 2,
+        "GA": 0,
+        "SOGA": 0,
+        "SPGA": 0,
+        "SVS": 0,
+        "SVS%": 0,
+        "info": {
+          "period": 0,
+          "playerId": 6154,
+          "team": "home"
+        }
+      }
+    ],
+    "awayTeamValue": [
+      {
+        "NR": 31,
+        "POS": "GK",
+        "LINE": 1,
+        "GA": 2,
+        "SOGA": 31,
+        "SPGA": 9,
+        "SVS": 29,
+        "SVS%": "0.93548387096774188",
+        "info": {
+          "period": 0,
+          "playerId": 3858,
+          "team": "away"
+        }
+      },
+      {
+        "NR": 36,
+        "POS": "GK",
+        "LINE": 2,
+        "GA": 0,
+        "SOGA": 0,
+        "SPGA": 0,
+        "SVS": 0,
+        "SVS%": 0,
+        "info": {
+          "period": 0,
+          "playerId": 5596,
+          "team": "away"
+        }
+      }
+    ]
+  },
+  "gkDataColumns": [
+    {
+      "name": "Player",
+      "displayed": true
+    },
+    {
+      "name": "NR",
+      "displayed": true
+    },
+    {
+      "name": "POS",
+      "displayed": true
+    }
+  ],
+  "goalkeepers": {
+    "homeTeamValue": {
+      "2427": {
+        "fullName": "Lars Johansson",
+        "firstName": "Lars",
+        "lastName": "Johansson"
+      },
+      "6154": {
+        "fullName": "Tobias Normann",
+        "firstName": "Tobias",
+        "lastName": "Normann"
+      }
+    },
+    "awayTeamValue": {
+      "3858": {
+        "fullName": "Jesper Myrenberg",
+        "firstName": "Jesper",
+        "lastName": "Myrenberg"
+      },
+      "5596": {
+        "fullName": "Waltteri Ignatjew",
+        "firstName": "Waltteri",
+        "lastName": "Ignatjew"
+      }
+    }
+  }
+}

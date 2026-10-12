@@ -1,0 +1,135 @@
+[
+  {
+    "games": [],
+    "round": "leagueQualifications"
+  },
+  {
+    "games": [
+      {
+        "games": [
+          {
+            "gameId": "20261105000431",
+            "homeTeamShortName": "HCAP",
+            "homeTeamName": "HC Ambri-Piotta",
+            "awayTeamShortName": "HCA",
+            "awayTeamName": "HC Ajoie",
+            "homeTeamId": "101152",
+            "awayTeamId": "103144",
+            "vimeoVideoId": "1175819004",
+            "date": "2026-03-21T19:00:00+00:00",
+            "status": "finished",
+            "baseStatus": "finished",
+            "homeTeamResult": 5,
+            "awayTeamResult": 3,
+            "isOvertime": false,
+            "isShootout": false,
+            "highlightVimeoVideoId": "1175814517",
+            "hasHighlight": true,
+            "isCurrent": false,
+            "isCurrentForTeam": false,
+            "tvPartner": [
+              "http://app-nationalleague-prod-001.azurewebsites.net/media/io1gx2jx/sunrise_vert_logo_neg_rgb_2026.png"
+            ],
+            "spectators": "6357",
+            "hasMySports": true,
+            "referees": [
+              "#20 Marc Wiegand",
+              "#50 Phillip Ströbel",
+              "#21 Michael Stalder"
+            ],
+            "isExhibition": false,
+            "homeTeamCoach": null,
+            "awayTeamCoach": null,
+            "gameTime": 0,
+            "showGameTime": false,
+            "arena": "Gottardo Arena"
+          },
+          {
+            "gameId": "20261105000432",
+            "homeTeamShortName": "HCA",
+            "homeTeamName": "HC Ajoie",
+            "awayTeamShortName": "HCAP",
+            "awayTeamName": "HC Ambri-Piotta",
+            "homeTeamId": "103144",
+            "awayTeamId": "101152",
+            "vimeoVideoId": "1176724661",
+            "date": "2026-03-24T19:00:00+00:00",
+            "status": "finished",
+            "baseStatus": "finished",
+            "homeTeamResult": 3,
+            "awayTeamResult": 6,
+            "isOvertime": false,
+            "isShootout": false,
+            "highlightVimeoVideoId": "1176716385",
+            "hasHighlight": true,
+            "isCurrent": false,
+            "isCurrentForTeam": false,
+            "tvPartner": [
+              "http://app-nationalleague-prod-001.azurewebsites.net/media/io1gx2jx/sunrise_vert_logo_neg_rgb_2026.png"
+            ],
+            "spectators": "3570",
+            "hasMySports": true,
+            "referees": [
+              "#55 Cedric Borga",
+              "#91 Daniel Stricker",
+              "#81 Stany Gnemmi"
+            ],
+            "isExhibition": false,
+            "homeTeamCoach": null,
+            "awayTeamCoach": null,
+            "gameTime": 0,
+            "showGameTime": false,
+            "arena": "Raiffeisen Arena"
+          },
+          {
+            "gameId": "20261105000433",
+            "homeTeamShortName": "HCAP",
+            "homeTeamName": "HC Ambri-Piotta",
+            "awayTeamShortName": "HCA",
+            "awayTeamName": "HC Ajoie",
+            "homeTeamId": "101152",
+            "awayTeamId": "103144",
+            "vimeoVideoId": "1178055502",
+            "date": "2026-03-28T19:00:00+00:00",
+            "status": "finished",
+            "baseStatus": "finished",
+            "homeTeamResult": 3,
+            "awayTeamResult": 2,
+            "isOvertime": false,
+            "isShootout": false,
+            "highlightVimeoVideoId": "1178051629",
+            "hasHighlight": true,
+            "isCurrent": false,
+            "isCurrentForTeam": false,
+            "tvPartner": [
+              "http://app-nationalleague-prod-001.azurewebsites.net/media/io1gx2jx/sunrise_vert_logo_neg_rgb_2026.png"
+            ],
+            "spectators": "6594",
+            "hasMySports": true,
+            "referees": [
+              "#86 Michaël Tscherrig",
+              "#9 Loïc Ruprecht",
+              "#73 Dominik Schlegel"
+            ],
+            "isExhibition": false,
+            "homeTeamCoach": null,
+            "awayTeamCoach": null,
+            "gameTime": 0,
+            "showGameTime": false,
+            "arena": "Gottardo Arena"
+          }
+        ],
+        "group": 0,
+        "homeTeamShortName": "HCAP",
+        "awayTeamShortName": "HCA",
+        "homeTeamId": "101152",
+        "awayTeamId": "103144",
+        "homeTeamResult": 4,
+        "awayTeamResult": 0,
+        "bestOf": 7,
+        "title": "Best of 7"
+      }
+    ],
+    "round": "playoutFinal"
+  }
+]

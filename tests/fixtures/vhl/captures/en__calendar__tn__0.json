@@ -1,0 +1,92 @@
+{
+  "tournament": {
+    "tn": 1374,
+    "label": "25/26 | Regular Season",
+    "season": "25/26",
+    "stage": "Regular Season"
+  },
+  "tournaments": [
+    {
+      "tn": 1430,
+      "label": "26/27 | Regular Season"
+    },
+    {
+      "tn": 1375,
+      "label": "25/26 | Playoffs"
+    },
+    {
+      "tn": 1374,
+      "label": "25/26 | Regular Season"
+    }
+  ],
+  "team_seasons": [
+    {
+      "team_season_id": 15005,
+      "name": "AKM"
+    },
+    {
+      "team_season_id": 15006,
+      "name": "Bars"
+    },
+    {
+      "team_season_id": 15007,
+      "name": "Buran"
+    }
+  ],
+  "games": [
+    {
+      "game_id": 899223,
+      "game_number": 984,
+      "date": "18 March",
+      "weekday": "Wednesday",
+      "home_team": "Toros",
+      "home_club_id": 192,
+      "away_team": "Magnitka",
+      "away_club_id": 892,
+      "city": "Neftekamsk",
+      "score": "2:3",
+      "home_score": 2,
+      "away_score": 3,
+      "decision": "SO",
+      "winner": "away",
+      "status": null,
+      "online_url": "https://online.vhlru.ru/online/899223.html"
+    },
+    {
+      "game_id": 899210,
+      "game_number": 971,
+      "date": "16 March",
+      "weekday": "Monday",
+      "home_team": "Molot",
+      "home_club_id": 32,
+      "away_team": "Gornyak-UGMK",
+      "away_club_id": 794,
+      "city": "Perm",
+      "score": "4:3",
+      "home_score": 4,
+      "away_score": 3,
+      "decision": "SO",
+      "winner": "home",
+      "status": null,
+      "online_url": "https://online.vhlru.ru/online/899210.html"
+    },
+    {
+      "game_id": 899218,
+      "game_number": 979,
+      "date": "16 March",
+      "weekday": "Monday",
+      "home_team": "Chelny",
+      "home_club_id": 286,
+      "away_team": "Zauralye",
+      "away_club_id": 109,
+      "city": "Naberezhnye Chelny",
+      "score": "5:6",
+      "home_score": 5,
+      "away_score": 6,
+      "decision": "OT",
+      "winner": "away",
+      "status": null,
+      "online_url": "https://online.vhlru.ru/online/899218.html"
+    }
+  ]
+}

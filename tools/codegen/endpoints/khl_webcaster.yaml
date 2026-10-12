@@ -1,0 +1,331 @@
+api: khl_webcaster
+docstring:
+  example_import: true
+  notes:
+  - 'Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform
+    are run by Russian operators, some clubs by sanctioned state companies. Fetching
+    on your own machine is fine; any published data release, hosted mirror or redistribution
+    needs owner (sanctions / legal) sign-off first.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown
+    id), an empty object, or an unknown season.'
+  - 'sportsdataverse.errors.AssetFetchError: a body for another id / stage / player
+    than the one requested, or any other error envelope.'
+  raw_doc: the raw JSON body (betting fields and the caller's IP removed)
+  see_also:
+  - name: KHL
+    note: the league site whose front end these routes feed
+    url: https://www.khl.ru/
+  - name: fastRhockey
+    note: SportsDataverse hockey package (R)
+    url: https://fastRhockey.sportsdataverse.org
+endpoints:
+- example_args: {}
+  extra_params:
+  - choices:
+    - en
+    - ru
+    default: en
+    description: 'Response language: en or ru.'
+    kw_only: true
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_khl_webcaster_stages
+  path: /data.json
+  returns_schema: native/khl_webcaster/stages
+  short: stages
+  summary: 'Season table: every stage (season END year, regular / playoff) with its
+    khl.ru tournament id and webcaster stage id.'
+- example_args:
+    event_id: 2786714
+  extra_params:
+  - description: Required. Webcaster event id (khl_webcaster_events id), not the khl.ru
+      game id.
+    name: event_id
+    query_key: id
+    required: true
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: 'Response language: en or ru.'
+    kw_only: true
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_khl_webcaster
+  path: /event_v2.json
+  returns_schema: native/khl_webcaster/event
+  short: event
+  summary: 'One game: officials, team totals, per-player match stats, goals, penalties
+    (one row; lists as JSON text).'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season by its END year (2026 = 2025-26), mapped to the KHL webcaster
+      stage id through the webcaster season table (khl_webcaster_stages). None = the
+      current stage.
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Which stage of the season: regular or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  - description: Webcaster stage id, sent as is instead of season / stage (370 = 2025-26
+      regular season; khl_webcaster_stages lists them). Not a khl.ru tournament id.
+    kw_only: true
+    name: stage_id
+    query_key: stage_id
+    type: int
+  - default: 1
+    description: 1-based page of 16 games; an empty page ends the stage.
+    name: page
+    query_key: page
+    type: int
+  - description: 'Webcaster team id(s) (khl_webcaster_teams id, not a khl.ru club
+      id): games of these teams.'
+    kw_only: true
+    name: team_ids
+    query_key: q[team_a_or_team_b_in][]
+    type: int|List[int]
+  - description: Games starting after this unix time (seconds). Needs a stage.
+    kw_only: true
+    name: start_after
+    query_key: q[start_at_gt_time_from_unixtime]
+    type: int
+  - description: Games starting before this unix time (seconds). Needs a stage.
+    kw_only: true
+    name: start_before
+    query_key: q[start_at_lt_time_from_unixtime]
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: 'Response language: en or ru.'
+    kw_only: true
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_khl_webcaster
+  path: /events_v2.json
+  returns_schema: native/khl_webcaster/events
+  short: events
+  summary: Games of a stage, 16 per page (one row per game; khl_id is the khl.ru game
+    id).
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season by its END year (2026 = 2025-26), mapped to the KHL webcaster
+      stage id through the webcaster season table (khl_webcaster_stages). None = the
+      current stage.
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Which stage of the season: regular or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  - description: Webcaster stage id, sent as is instead of season / stage (370 = 2025-26
+      regular season; khl_webcaster_stages lists them). Not a khl.ru tournament id.
+    kw_only: true
+    name: stage_id
+    query_key: stage_id
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: 'Response language: en or ru.'
+    kw_only: true
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_khl_webcaster_leaders
+  path: /leaders_v2.json
+  returns_schema: native/khl_webcaster/leaders
+  short: leaders
+  summary: 'Stat leaders of a stage: one row per player per category.'
+- example_args:
+    player_ids:
+    - 33405
+    - 1144
+    season: 2026
+  extra_params:
+  - description: Webcaster player id(s), not khl.ru ids. None = every player of the
+      stage (a large body).
+    name: player_ids
+    query_key: q[id_in][]
+    type: int|List[int]
+  - description: Season by its END year (2026 = 2025-26), mapped to the KHL webcaster
+      stage id through the webcaster season table (khl_webcaster_stages). None = the
+      current stage.
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Which stage of the season: regular or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  - description: Webcaster stage id, sent as is instead of season / stage (370 = 2025-26
+      regular season; khl_webcaster_stages lists them). Not a khl.ru tournament id.
+    kw_only: true
+    name: stage_id
+    query_key: stage_id
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: 'Response language: en or ru.'
+    kw_only: true
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_khl_webcaster
+  path: /players_v2.json
+  returns_schema: native/khl_webcaster/players
+  short: players
+  summary: Players with stage-scoped stats (one row per player; khl_id is the khl.ru
+    player id).
+- example_args: {}
+  extra_params:
+  - choices:
+    - en
+    - ru
+    default: en
+    description: 'Response language: en or ru.'
+    kw_only: true
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_khl_webcaster
+  path: /players_v2_light.json
+  returns_schema: native/khl_webcaster/players_light
+  short: players_light
+  summary: 'Every current player: webcaster id, khl.ru id, jersey and team (one row
+    per player).'
+- example_args: {}
+  extra_params:
+  - choices:
+    - en
+    - ru
+    default: en
+    description: 'Response language: en or ru.'
+    kw_only: true
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_khl_webcaster_tables
+  path: /tables_v2.json
+  returns_schema: native/khl_webcaster/tables
+  short: tables
+  summary: League table of every season (one row per season per team, from the championship
+    table).
+- example_args:
+    season: 2026
+    team_id: 18
+  extra_params:
+  - description: Required. Webcaster team id (khl_webcaster_teams id), not the khl.ru
+      club id.
+    name: team_id
+    query_key: id
+    required: true
+    type: int
+  - description: Season by its END year (2026 = 2025-26), mapped to the KHL webcaster
+      stage id through the webcaster season table (khl_webcaster_stages). None = the
+      current stage.
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Which stage of the season: regular or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  - description: Webcaster stage id, sent as is instead of season / stage (370 = 2025-26
+      regular season; khl_webcaster_stages lists them). Not a khl.ru tournament id.
+    kw_only: true
+    name: stage_id
+    query_key: stage_id
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: 'Response language: en or ru.'
+    kw_only: true
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_khl_webcaster
+  path: /team_v2.json
+  returns_schema: native/khl_webcaster/team
+  short: team
+  summary: One team with roster, stats and news feed (one row; lists as JSON text).
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season by its END year (2026 = 2025-26), mapped to the KHL webcaster
+      stage id through the webcaster season table (khl_webcaster_stages). None = the
+      current stage.
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Which stage of the season: regular or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  - description: Webcaster stage id, sent as is instead of season / stage (370 = 2025-26
+      regular season; khl_webcaster_stages lists them). Not a khl.ru tournament id.
+    kw_only: true
+    name: stage_id
+    query_key: stage_id
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: 'Response language: en or ru.'
+    kw_only: true
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_khl_webcaster
+  path: /teams_v2.json
+  returns_schema: native/khl_webcaster/teams
+  short: teams
+  summary: Teams of a stage (one row per team; khl_id is the khl.ru club id).
+getter_module: sportsdataverse.hockey.khl.khl_webcaster_runtime
+host: https://khl.api.webcaster.pro/api/khl_mobile
+module: khl_webcaster
+name_pattern: khl_webcaster_{short}
+parser_columns: true
+parser_module: hockey.khl.khl_webcaster_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: khl_webcaster_

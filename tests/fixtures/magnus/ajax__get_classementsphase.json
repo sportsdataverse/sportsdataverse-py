@@ -1,0 +1,266 @@
+{
+  "success": true,
+  "data": {
+    "data": {
+      "positions": [
+        {
+          "logo": "https://hockeynet.fr/storage/logos_equipes/408/eSDOP4Dz2ctdRc8RqoVgkpwF1Rlv8z6mMhmQnG77.png",
+          "equipe": {
+            "id": 3095,
+            "nom": "93019S - Spartiates de Marseille",
+            "code": "EQ2243",
+            "logo": "https://hockeynet.fr/storage/logos_equipes/408/eSDOP4Dz2ctdRc8RqoVgkpwF1Rlv8z6mMhmQnG77.png",
+            "nom_court": "MARSEILLE",
+            "abreviation": "MAR",
+            "proprietaire": {
+              "code": "93019S"
+            }
+          },
+          "position": 1,
+          "nombre_nul": 0,
+          "nombre_dprl": 0,
+          "nombre_vprl": 2,
+          "nombre_point": 22,
+          "nombre_defaite": 1,
+          "participant_id": 9129,
+          "nombre_victoire": 6,
+          "nombre_penalites": 69,
+          "dernier_resultats": [
+            {
+              "scores": [
+                {
+                  "score": 4,
+                  "equipe_id": 3095,
+                  "participant_id": 9129,
+                  "sportif_rencontre_id": 77771
+                },
+                {
+                  "score": 3,
+                  "equipe_id": 472,
+                  "participant_id": 9126,
+                  "sportif_rencontre_id": 77771
+                }
+              ],
+              "match_nul": false,
+              "sportif_rencontre_id": 77771,
+              "participant_gagnant_id": 9129
+            },
+            {
+              "scores": [
+                {
+                  "score": 2,
+                  "equipe_id": 611,
+                  "participant_id": 9123,
+                  "sportif_rencontre_id": 77778
+                },
+                {
+                  "score": 3,
+                  "equipe_id": 3095,
+                  "participant_id": 9129,
+                  "sportif_rencontre_id": 77778
+                }
+              ],
+              "match_nul": false,
+              "sportif_rencontre_id": 77778,
+              "participant_gagnant_id": 9129
+            },
+            {
+              "scores": [
+                {
+                  "score": 4,
+                  "equipe_id": 3095,
+                  "participant_id": 9129,
+                  "sportif_rencontre_id": 77785
+                },
+                {
+                  "score": 1,
+                  "equipe_id": 553,
+                  "participant_id": 9130,
+                  "sportif_rencontre_id": 77785
+                }
+              ],
+              "match_nul": false,
+              "sportif_rencontre_id": 77785,
+              "participant_gagnant_id": 9129
+            }
+          ],
+          "nombre_but_marque": 34,
+          "nombre_but_concede": 20,
+          "nombre_rencontres_joues": 9
+        },
+        {
+          "logo": "https://hockeynet.fr/storage/logos_equipes/217/9TimMBPBo3YpojQE22R9GljG05A7fpSdzJMEyWvr.png",
+          "equipe": {
+            "id": 327,
+            "nom": "82007S - BRULEURS DE LOUPS MAGNUS SENIORS",
+            "code": "EQ0801",
+            "logo": "https://hockeynet.fr/storage/logos_equipes/217/9TimMBPBo3YpojQE22R9GljG05A7fpSdzJMEyWvr.png",
+            "nom_court": "GRENOBLE",
+            "abreviation": "GRE",
+            "proprietaire": {
+              "code": "82007S"
+            }
+          },
+          "position": 2,
+          "nombre_nul": 0,
+          "nombre_dprl": 1,
+          "nombre_vprl": 0,
+          "nombre_point": 22,
+          "nombre_defaite": 1,
+          "participant_id": 9125,
+          "nombre_victoire": 7,
+          "nombre_penalites": 56,
+          "dernier_resultats": [
+            {
+              "scores": [
+                {
+                  "score": 2,
+                  "equipe_id": 75,
+                  "participant_id": 9128,
+                  "sportif_rencontre_id": 77770
+                },
+                {
+                  "score": 3,
+                  "equipe_id": 327,
+                  "participant_id": 9125,
+                  "sportif_rencontre_id": 77770
+                }
+              ],
+              "match_nul": false,
+              "sportif_rencontre_id": 77770,
+              "participant_gagnant_id": 9125
+            },
+            {
+              "scores": [
+                {
+                  "score": 3,
+                  "equipe_id": 327,
+                  "participant_id": 9125,
+                  "sportif_rencontre_id": 77775
+                },
+                {
+                  "score": 0,
+                  "equipe_id": 345,
+                  "participant_id": 9122,
+                  "sportif_rencontre_id": 77775
+                }
+              ],
+              "match_nul": false,
+              "sportif_rencontre_id": 77775,
+              "participant_gagnant_id": 9125
+            },
+            {
+              "scores": [
+                {
+                  "score": 1,
+                  "equipe_id": 3409,
+                  "participant_id": 9131,
+                  "sportif_rencontre_id": 77784
+                },
+                {
+                  "score": 3,
+                  "equipe_id": 327,
+                  "participant_id": 9125,
+                  "sportif_rencontre_id": 77784
+                }
+              ],
+              "match_nul": false,
+              "sportif_rencontre_id": 77784,
+              "participant_gagnant_id": 9125
+            }
+          ],
+          "nombre_but_marque": 35,
+          "nombre_but_concede": 20,
+          "nombre_rencontres_joues": 9
+        },
+        {
+          "logo": "https://hockeynet.fr/storage/logos_equipes/166/t70uoBQeQNNaS1c96TfP8cehaisjLYc4CylipPrJ.png",
+          "equipe": {
+            "id": 253,
+            "nom": "23001S - 23001S ROUEN HOCKEY ELITE 76",
+            "code": "EQ0801",
+            "logo": "https://hockeynet.fr/storage/logos_equipes/166/t70uoBQeQNNaS1c96TfP8cehaisjLYc4CylipPrJ.png",
+            "nom_court": "ROUEN",
+            "abreviation": "ROU",
+            "proprietaire": {
+              "code": "23001S"
+            }
+          },
+          "position": 3,
+          "nombre_nul": 0,
+          "nombre_dprl": 0,
+          "nombre_vprl": 1,
+          "nombre_point": 20,
+          "nombre_defaite": 2,
+          "participant_id": 9127,
+          "nombre_victoire": 6,
+          "nombre_penalites": 52,
+          "dernier_resultats": [
+            {
+              "scores": [
+                {
+                  "score": 1,
+                  "equipe_id": 1671,
+                  "participant_id": 9121,
+                  "sportif_rencontre_id": 77768
+                },
+                {
+                  "score": 2,
+                  "equipe_id": 253,
+                  "participant_id": 9127,
+                  "sportif_rencontre_id": 77768
+                }
+              ],
+              "match_nul": false,
+              "sportif_rencontre_id": 77768,
+              "participant_gagnant_id": 9127
+            },
+            {
+              "scores": [
+                {
+                  "score": 2,
+                  "equipe_id": 253,
+                  "participant_id": 9127,
+                  "sportif_rencontre_id": 77774
+                },
+                {
+                  "score": 0,
+                  "equipe_id": 103,
+                  "participant_id": 9120,
+                  "sportif_rencontre_id": 77774
+                }
+              ],
+              "match_nul": false,
+              "sportif_rencontre_id": 77774,
+              "participant_gagnant_id": 9127
+            },
+            {
+              "scores": [
+                {
+                  "score": 0,
+                  "equipe_id": 472,
+                  "participant_id": 9126,
+                  "sportif_rencontre_id": 77782
+                },
+                {
+                  "score": 5,
+                  "equipe_id": 253,
+                  "participant_id": 9127,
+                  "sportif_rencontre_id": 77782
+                }
+              ],
+              "match_nul": false,
+              "sportif_rencontre_id": 77782,
+              "participant_gagnant_id": 9127
+            }
+          ],
+          "nombre_but_marque": 29,
+          "nombre_but_concede": 15,
+          "nombre_rencontres_joues": 9
+        }
+      ],
+      "classement_id": 929
+    },
+    "time": "0.0013 sec."
+  }
+}

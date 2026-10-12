@@ -1,0 +1,369 @@
+{
+  "defaultPairType": "most_points",
+  "comparisonTypes": [
+    {
+      "id": "most_points",
+      "code": "TP",
+      "positionGroup": "non-GK"
+    },
+    {
+      "id": "most_goals",
+      "code": "G",
+      "positionGroup": "non-GK"
+    },
+    {
+      "id": "most_assists",
+      "code": "A",
+      "positionGroup": "non-GK"
+    }
+  ],
+  "defaultSelectionByType": {
+    "most_points": {
+      "p1Id": "qQ9-9d31rLEXi",
+      "p2Id": "qZn-BWlb8Aoj"
+    },
+    "most_goals": {
+      "p1Id": "qcw-3QbUIyuRn",
+      "p2Id": "qRe-glixIcxZ"
+    },
+    "most_assists": {
+      "p1Id": "qQ9-9d31rLEXi",
+      "p2Id": "qZn-BWlb8Aoj"
+    },
+    "best_plus_minus": {
+      "p1Id": "qQ9-9d31rLEXi",
+      "p2Id": "qV0-1dPP3DJH6"
+    },
+    "most_hits": {
+      "p1Id": "qQ9-9d31rLEXi",
+      "p2Id": "qRo-4uyOhblgh"
+    },
+    "most_pim": {
+      "p1Id": "qee-2LDnbExBt",
+      "p2Id": "qWb-2harGUCbA"
+    },
+    "best_faceoff_pct": {
+      "p1Id": "qQ9-d14fFrVkN",
+      "p2Id": "qd1-1JVJz0ku7"
+    }
+  },
+  "players": [
+    {
+      "uuid": "qQ9-9d31rLEXi",
+      "firstName": "Max",
+      "lastName": "Friberg",
+      "fullName": "Max Friberg",
+      "birthDate": "1992-11-20",
+      "nationality": "SE",
+      "gender": "male",
+      "jerseyNumber": 12,
+      "position": "Forward",
+      "positionCode": "F",
+      "age": {
+        "value": 33,
+        "format": "years"
+      },
+      "height": {
+        "value": 179,
+        "format": "cm"
+      },
+      "weight": {
+        "value": 86,
+        "format": "kg"
+      },
+      "team": {
+        "uuid": "087a-087aTQv9u",
+        "instanceId": "fhc1_fhc",
+        "name": "Frölunda HC",
+        "code": "FHC",
+        "media": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg"
+      },
+      "media": {
+        "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&s=2a9d5431d076639c5a1a76b14af02e3a",
+        "alt": "",
+        "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=160&s=e3d9e35d1eaad7bcd2d5791d6021fffc 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=320&s=7ce13ad07ca7a332d3a13091f29b039a 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=480&s=2ea8e5fbda5057df617b26d47b96ca11 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=640&s=969a8cdf4570c93416aff4c45b23a43b 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=960&s=9cc76008555fca7da9c4c084295e152b 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=1280&s=c1efb3dac9ed824564b97f7ddcc3c2ed 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=1600&s=6da385e77d0620345a1784467d399e1a 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=1920&s=8d841944cd702b310697891e2ab7abd2 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=2560&s=529a7c0adab886e37bbc206825c307fb 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F6135350d-a56e-44df-8dcd-c2a1a1feb6caMax%20Friberg.png?ixlib=js-3.8.0&w=2880&s=8bfa382854afb5cbcc1243aadbd34f63 2880w"
+      },
+      "seasonStats": [],
+      "careerStats": [],
+      "matchStats": {
+        "NR": 12,
+        "POS": "RW",
+        "LINE": 1,
+        "G": 0,
+        "A": 1,
+        "TP": 1,
+        "SHG": 0,
+        "PPG": 0,
+        "SW": 0,
+        "PIM": 0,
+        "SOG": 1,
+        "PPSOG": 0,
+        "NEP": 0,
+        "POP": 1,
+        "TOI": "23:47",
+        "Hits": 3,
+        "FO_tot": 2,
+        "FOW": 1,
+        "FOL": 1,
+        "NumPen": 0,
+        "FOPerc": 50,
+        "MS": 1,
+        "BkS": 3,
+        "PlusMinus": 1
+      },
+      "seasonAvgStats": {},
+      "statisticsProvider": "statnet",
+      "isInSquad": true
+    },
+    {
+      "uuid": "qZn-BWlb8Aoj",
+      "firstName": "Ty",
+      "lastName": "Rattie",
+      "fullName": "Ty Rattie",
+      "birthDate": "1993-02-05",
+      "nationality": "CA",
+      "gender": "male",
+      "jerseyNumber": "N/A",
+      "position": "N/A",
+      "positionCode": "N/A",
+      "age": {
+        "value": 33,
+        "format": "years"
+      },
+      "height": {
+        "value": 182,
+        "format": "cm"
+      },
+      "weight": {
+        "value": 88,
+        "format": "kg"
+      },
+      "team": {
+        "uuid": "41c4-41c4BiYZU",
+        "name": "",
+        "media": ""
+      },
+      "media": {
+        "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&s=c248ea8005c58b5bb78b000d24bfd2e0",
+        "alt": "",
+        "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=160&s=506257f935092ccc25353fda0d6d6513 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=320&s=7ccc9343b11d303116314e93fd2f1083 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=480&s=dec0d964e38ef4866c91ef27ad255252 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=640&s=e89c7b114c7184361a639eaae050f5b6 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=960&s=601141e8a1bcb7216dcc0abff8daefcf 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=1280&s=e4f520cc9adb701d230857ab9bbd89d4 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=1600&s=ecb5861a4c60db9904816b1c47617539 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=1920&s=cff639a770700864e2b92b0349e97d97 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=2560&s=52e3647accde0fc989410759e7a9a5e2 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Faabf1a5c-9bcb-43ef-aaa3-e45fc7f90838TyRattie500x600.png?ixlib=js-3.8.0&w=2880&s=50f22a46d9b4fbfc47264873b229ceb5 2880w"
+      },
+      "seasonStats": [],
+      "careerStats": [],
+      "matchStats": {
+        "NR": 39,
+        "POS": "RW",
+        "LINE": 3,
+        "G": 0,
+        "A": 1,
+        "TP": 1,
+        "SHG": 0,
+        "PPG": 0,
+        "SW": 1,
+        "PIM": 0,
+        "SOG": 2,
+        "PPSOG": 1,
+        "NEP": 0,
+        "POP": 0,
+        "TOI": "16:36",
+        "Hits": 0,
+        "FO_tot": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "NumPen": 0,
+        "FOPerc": 0,
+        "MS": 3,
+        "BkS": 0,
+        "PlusMinus": 0
+      },
+      "seasonAvgStats": {},
+      "statisticsProvider": "statnet",
+      "isInSquad": false
+    },
+    {
+      "uuid": "qcw-3QbUIyuRn",
+      "firstName": "Arttu",
+      "lastName": "Ruotsalainen",
+      "fullName": "Arttu Ruotsalainen",
+      "birthDate": "1997-10-29",
+      "nationality": "FI",
+      "gender": "",
+      "jerseyNumber": "N/A",
+      "position": "N/A",
+      "positionCode": "N/A",
+      "age": {
+        "value": 28,
+        "format": "years"
+      },
+      "height": {
+        "value": 175,
+        "format": "cm"
+      },
+      "weight": {
+        "value": 85,
+        "format": "kg"
+      },
+      "team": {
+        "uuid": "087a-087aTQv9u",
+        "instanceId": "fhc1_fhc",
+        "name": "Frölunda HC",
+        "code": "FHC",
+        "media": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg"
+      },
+      "media": {
+        "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&s=d36bb46c7e5c7d736270ebeb4abdac1f",
+        "alt": "",
+        "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=160&s=8215860a3552a16d06337aa316b94817 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=320&s=1d86568b66a914e33b91ae73b0e05233 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=480&s=b6de67b5f07cede57ad7f05cb2bc6b85 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=640&s=87b53783cc2760608f6744913e875033 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=960&s=b8bc9cc391032a9700f8c337d842c0a8 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=1280&s=f8c18bc38861a0ec4a7e56b45fc14c64 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=1600&s=f09d3afd240b84a7982f7e28fc66c916 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=1920&s=6337ae0c051f4726844a798341698839 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=2560&s=121e5b2cefa9d272ea9aff8887edb9f9 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5efe6074-0a00-4fa9-b9d2-b89dd1347133Arttu%20Ruotasalainen.png?ixlib=js-3.8.0&w=2880&s=1098e5d8425229e2cdb85eb5ec4a5e37 2880w"
+      },
+      "seasonStats": [],
+      "careerStats": [],
+      "matchStats": {
+        "NR": 25,
+        "POS": "CE",
+        "LINE": 2,
+        "G": 1,
+        "A": 0,
+        "TP": 1,
+        "SHG": 0,
+        "PPG": 1,
+        "SW": 0,
+        "PIM": 0,
+        "SOG": 4,
+        "PPSOG": 2,
+        "NEP": 0,
+        "POP": 0,
+        "TOI": "15:02",
+        "Hits": 0,
+        "FO_tot": 9,
+        "FOW": 5,
+        "FOL": 4,
+        "NumPen": 0,
+        "FOPerc": 55,
+        "MS": 0,
+        "BkS": 3,
+        "PlusMinus": 0
+      },
+      "seasonAvgStats": {},
+      "statisticsProvider": "statnet",
+      "isInSquad": false
+    }
+  ],
+  "statSections": [
+    {
+      "title": "overall_performance",
+      "keys": [
+        "GP",
+        "G",
+        "A"
+      ]
+    }
+  ],
+  "statSectionsByType": {
+    "most_points": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "GP",
+          "G",
+          "A"
+        ]
+      }
+    ],
+    "most_goals": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "GP",
+          "G",
+          "A"
+        ]
+      }
+    ],
+    "most_assists": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "GP",
+          "G",
+          "A"
+        ]
+      }
+    ],
+    "best_plus_minus": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "GP",
+          "G",
+          "A"
+        ]
+      }
+    ],
+    "most_hits": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "GP",
+          "G",
+          "A"
+        ]
+      }
+    ],
+    "most_pim": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "GP",
+          "G",
+          "A"
+        ]
+      }
+    ],
+    "best_save_pct": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "GP",
+          "SVSPerc",
+          "SOGA"
+        ]
+      }
+    ],
+    "best_faceoff_pct": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "GP",
+          "G",
+          "A"
+        ]
+      }
+    ]
+  },
+  "matchStatSectionsByType": {
+    "best_faceoff_pct": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "G",
+          "A",
+          "TP"
+        ]
+      }
+    ],
+    "best_save_pct": [
+      {
+        "title": "overall_performance",
+        "keys": [
+          "SVSPerc",
+          "SOGA",
+          "SVS"
+        ]
+      }
+    ]
+  },
+  "homeTeamUuid": "087a-087aTQv9u",
+  "awayTeamUuid": "41c4-41c4BiYZU",
+  "effectiveSsgtUuid": "qa98unlbd6",
+  "effectiveSeasonLabel": "2026/2027"
+}

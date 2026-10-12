@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: round
+  type: integer
+- description: ''
+  name: wins_to_advance
+  type: integer
+- description: ''
+  name: pair
+  type: integer
+- description: ''
+  name: conference
+  type: character
+- description: ''
+  name: seed
+  type: integer
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: series_wins
+  type: integer
+- description: ''
+  name: game_ids
+  type: character
+kind: dataframe
+schema: khl_playoff_bracket

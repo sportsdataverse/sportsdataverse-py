@@ -1,0 +1,361 @@
+api: nationalleague
+docstring:
+  example_import: true
+  notes:
+  - 'robots.txt on www.nationalleague.ch disallows /api. The owner approved building
+    on it on 2026-10-12 for polite, incremental use: requests are spaced at least
+    1 s apart, and a bulk backfill or a published mirror needs the owner''s sign-off
+    first.'
+  - 'Crawl incrementally: fetch a finished game once (keyed by game_id), find new
+    games with one nl_schedule call per run, and fetch season tables at most once
+    per game day.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows
+    for that season, team or phase).'
+  - 'sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a
+    200, a body without the ids it must carry, or an answer for another season, team,
+    game or player.'
+  see_also:
+  - name: National League
+    note: the league site whose app serves this API
+    url: https://www.nationalleague.ch/
+  - name: fastRhockey
+    note: the SportsDataverse hockey package for R
+    url: https://fastRhockey.sportsdataverse.org
+endpoints:
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'Season END year: `2026` = 2025/26. Diffing 2026 vs 2027 changes
+      every list, and /player/{playerId} gp (51 vs 7), so it scopes. Lists are served
+      for 2019-2027 (the app''s season picker, /api/content/metadata `seasons`) and
+      patchily before: 2012 and 2017 answered, 2010/2014/2015/2016/2018 answered `[]`
+      (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_nationalleague_games
+  path: /games
+  returns_schema: native/nationalleague/schedule
+  short: schedule
+  summary: 'Schedule and results for one season: NL plus exhibitions.'
+- example_args:
+    season: 2027
+  extra_params:
+  - description: 'The running season''s END year (2027 on 2026-10-12). Season END
+      year: `2026` = 2025/26. Diffing 2026 vs 2027 changes every list, and /player/{playerId}
+      gp (51 vs 7), so it scopes. Lists are served for 2019-2027 (the app''s season
+      picker, /api/content/metadata `seasons`) and patchily before: 2012 and 2017
+      answered, 2010/2014/2015/2016/2018 answered `[]` (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_nationalleague_games
+  path: /games/current
+  returns_schema: native/nationalleague/current_games
+  short: current_games
+  summary: The current or next game day.
+- example_args:
+    season: 2026
+    team_id: 101144
+  extra_params:
+  - description: 'Season END year: `2026` = 2025/26. Diffing 2026 vs 2027 changes
+      every list, and /player/{playerId} gp (51 vs 7), so it scopes. Lists are served
+      for 2019-2027 (the app''s season picker, /api/content/metadata `seasons`) and
+      patchily before: 2012 and 2017 answered, 2010/2014/2015/2016/2018 answered `[]`
+      (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_nationalleague_games
+  path: /games/team/{team_id}
+  path_params:
+  - description: SIHF team id (team_id in nl_standings; the same id as the sihf family's
+      team_id), e.g. 101144 = EV Zug.
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/team_schedule
+  short: team_schedule
+  summary: One team's games for one season.
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'Season END year: `2026` = 2025/26. Diffing 2026 vs 2027 changes
+      every list, and /player/{playerId} gp (51 vs 7), so it scopes. Lists are served
+      for 2019-2027 (the app''s season picker, /api/content/metadata `seasons`) and
+      patchily before: 2012 and 2017 answered, 2010/2014/2015/2016/2018 answered `[]`
+      (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_nationalleague_bracket
+  path: /games/playoffs
+  returns_schema: native/nationalleague/playoffs
+  short: playoffs
+  summary: 'Playoff and play-in series by round: one row per game, with its series
+    score.'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'Season END year: `2026` = 2025/26. Diffing 2026 vs 2027 changes
+      every list, and /player/{playerId} gp (51 vs 7), so it scopes. Lists are served
+      for 2019-2027 (the app''s season picker, /api/content/metadata `seasons`) and
+      patchily before: 2012 and 2017 answered, 2010/2014/2015/2016/2018 answered `[]`
+      (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_nationalleague_bracket
+  path: /games/playouts
+  returns_schema: native/nationalleague/playouts
+  short: playouts
+  summary: 'Playout and league-qualification series by round: one row per game, with
+    its series score.'
+- example_args:
+    game_id: 20261105000325
+  parser: parse_nationalleague_game_overview
+  path: /games/{game_id}
+  path_params:
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/game_overview
+  short: game_overview
+  summary: 'One game''s header: teams, date, status, final and per-period score, coaches,
+    referees, arena, attendance.'
+- example_args:
+    game_id: 20261105000325
+  parser: parse_nationalleague_pbp
+  path: /games/{game_id}
+  path_params:
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/pbp
+  short: pbp
+  summary: 'One game''s event timeline: goals with assists, penalties, goaltender
+    changes, revoked goals.'
+- example_args:
+    game_id: 20261105000325
+  parser: parse_nationalleague_lineups
+  path: /games/{game_id}
+  path_params:
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/lineups
+  short: lineups
+  summary: 'One game''s lineups: every dressed player by unit, with licence number,
+    position and line.'
+- example_args:
+    game_id: 20261105000325
+  parser: parse_nationalleague_player_box
+  path: /games/{game_id}
+  path_params:
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/player_box
+  short: player_box
+  summary: 'One game''s player box score: goals, assists, shots, faceoffs, ice time,
+    goaltending.'
+- example_args:
+    game_id: 20261105000325
+  parser: parse_nationalleague_team_stats
+  path: /games/{game_id}
+  path_params:
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/team_stats
+  short: team_stats
+  summary: 'One game''s team totals: shots by period, faceoffs by zone, power play
+    and penalty kill.'
+- example_args:
+    game_id: 20261105000325
+  parser: parse_nationalleague_shots
+  path: /games/{game_id}
+  path_params:
+  - description: SIHF game id, 14 digits `<season(4)><competition(4)><sequence(6)>`
+      (game_id in nl_schedule; the same id as the sihf family's game_id), e.g. 20261105000325.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/shots
+  short: shots
+  summary: One game's shot attempts with rink location (metres) and expected goals
+    (xG); NL games only.
+- example_args:
+    phase: 4940
+    season: 2026
+  extra_params:
+  - description: 'Season END year: `2026` = 2025/26. Diffing 2026 vs 2027 changes
+      every list, and /player/{playerId} gp (51 vs 7), so it scopes. Lists are served
+      for 2019-2027 (the app''s season picker, /api/content/metadata `seasons`) and
+      patchily before: 2012 and 2017 answered, 2010/2014/2015/2016/2018 answered `[]`
+      (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  - description: 'SIHF phase id (see x-phase-ids). Omitted = the regular season: `/player?season=2026`
+      and `phase=4940` answer byte-identical bodies, `phase=5297` (playoffs) a different
+      one (max gp 19 vs 52). Phase ids change every season; whether the metadata ids
+      apply to 2027 is unverified.'
+    name: phase
+    query_key: phase
+    type: int
+  parser: parse_nationalleague_player_stats
+  path: /player
+  returns_schema: native/nationalleague/player_stats
+  short: player_stats
+  summary: Season stats for every player, with playerId.
+- example_args:
+    phase: 4940
+    season: 2026
+    take: 3
+  extra_params:
+  - description: Number of rows (take=3 answered 3).
+    name: take
+    query_key: take
+    type: int
+  - description: 'Season END year: `2026` = 2025/26. Diffing 2026 vs 2027 changes
+      every list, and /player/{playerId} gp (51 vs 7), so it scopes. Lists are served
+      for 2019-2027 (the app''s season picker, /api/content/metadata `seasons`) and
+      patchily before: 2012 and 2017 answered, 2010/2014/2015/2016/2018 answered `[]`
+      (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  - description: SIHF phase id (see x-phase-ids). On /player, omitting it served the
+      regular season (byte-identical to phase=4940); that default is assumed but unverified
+      on this route. Phase ids change every season; whether the metadata ids apply
+      to 2027 is unverified.
+    name: phase
+    query_key: phase
+    type: int
+  parser: parse_nationalleague_player_stats
+  path: /player/topscorer
+  returns_schema: native/nationalleague/top_scorers
+  short: top_scorers
+  summary: Top scorers (same row shape as /player).
+- example_args:
+    phase: 4940
+    season: 2026
+    team_id: 101144
+  extra_params:
+  - description: 'Season END year: `2026` = 2025/26. Diffing 2026 vs 2027 changes
+      every list, and /player/{playerId} gp (51 vs 7), so it scopes. Lists are served
+      for 2019-2027 (the app''s season picker, /api/content/metadata `seasons`) and
+      patchily before: 2012 and 2017 answered, 2010/2014/2015/2016/2018 answered `[]`
+      (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  - description: SIHF phase id (see x-phase-ids). On /player, omitting it served the
+      regular season (byte-identical to phase=4940); that default is assumed but unverified
+      on this route. Phase ids change every season; whether the metadata ids apply
+      to 2027 is unverified.
+    name: phase
+    query_key: phase
+    type: int
+  parser: parse_nationalleague_player_stats
+  path: /player/team/{team_id}
+  path_params:
+  - description: SIHF team id (team_id in nl_standings; the same id as the sihf family's
+      team_id), e.g. 101144 = EV Zug.
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/team_player_stats
+  short: team_player_stats
+  summary: Season stats for one team's players.
+- example_args:
+    phase: 4940
+    player_id: 305519
+    season: 2026
+  extra_params:
+  - description: 'Omitted = the current season: /player/305519 without it answered
+      2027 (gp 7; 51 for season=2026). Season END year: `2026` = 2025/26. Diffing
+      2026 vs 2027 changes every list, and /player/{playerId} gp (51 vs 7), so it
+      scopes. Lists are served for 2019-2027 (the app''s season picker, /api/content/metadata
+      `seasons`) and patchily before: 2012 and 2017 answered, 2010/2014/2015/2016/2018
+      answered `[]` (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  - description: SIHF phase id (see x-phase-ids). On /player, omitting it served the
+      regular season (byte-identical to phase=4940); that default is assumed but unverified
+      on this route. Phase ids change every season; whether the metadata ids apply
+      to 2027 is unverified.
+    name: phase
+    query_key: phase
+    type: int
+  parser: parse_nationalleague_player_stats
+  path: /player/{player_id}
+  path_params:
+  - description: SIHF licence number (player_id in nl_player_stats; joins the sihf
+      family's player_id), e.g. 305519.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/player_season
+  short: player_season
+  summary: One player's season stats.
+- example_args:
+    phase: 4940
+    season: 2026
+  extra_params:
+  - description: 'Season END year: `2026` = 2025/26. Diffing 2026 vs 2027 changes
+      every list, and /player/{playerId} gp (51 vs 7), so it scopes. Lists are served
+      for 2019-2027 (the app''s season picker, /api/content/metadata `seasons`) and
+      patchily before: 2012 and 2017 answered, 2010/2014/2015/2016/2018 answered `[]`
+      (probed 2026-10-12).'
+    name: season
+    query_key: season
+    type: int
+  - description: SIHF phase id (see x-phase-ids). On /player, omitting it served the
+      regular season (byte-identical to phase=4940); that default is assumed but unverified
+      on this route. Phase ids change every season; whether the metadata ids apply
+      to 2027 is unverified.
+    name: phase
+    query_key: phase
+    type: int
+  parser: parse_nationalleague_standings
+  path: /teams
+  returns_schema: native/nationalleague/standings
+  short: standings
+  summary: Standings with team season stats.
+- example_args:
+    team_id: 101144
+  parser: parse_nationalleague_team_info
+  path: /teams/{team_id}/info
+  path_params:
+  - description: SIHF team id (team_id in nl_standings; the same id as the sihf family's
+      team_id), e.g. 101144 = EV Zug.
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/nationalleague/team_info
+  short: team_info
+  summary: 'Club CMS record: names, logo, website, ticket links.'
+getter_module: sportsdataverse.hockey.nl.nationalleague_runtime
+host: https://www.nationalleague.ch/api
+module: nationalleague
+name_pattern: nl_{short}
+parser_module: hockey.nl.nationalleague_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: nl_

@@ -258,6 +258,21 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "native/openligadb": 139,
     "native/polymarket": 292,
     "native/kalshi": 157,
+    # European hockey intake families, pinned to their measured counts at integration (2026-10-12).
+    # Only KHL has blanks (re-pinned after review): columns no source documents and the data does not settle.
+    "native/del_esports": 0,
+    "native/icehl_esports": 0,
+    "native/eihl_esports": 0,
+    "native/metal_esports": 0,
+    "native/elh": 0,
+    "native/liiga": 0,
+    "native/shl": 0,
+    "native/ha": 0,
+    "native/nationalleague": 0,
+    "native/magnus": 0,
+    "native/khl_rest": 2,
+    "native/khl_webcaster": 11,
+    "native/vhl": 0,
 }
 
 

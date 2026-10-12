@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: phase_id
+  type: integer
+- description: ''
+  name: phase
+  type: character
+- description: ''
+  name: phase_type_code
+  type: character
+- description: ''
+  name: visible
+  type: logical
+- description: ''
+  name: competition
+  type: character
+- description: ''
+  name: n_teams
+  type: integer
+- description: ''
+  name: overtime
+  type: logical
+- description: ''
+  name: games_per_matchup
+  type: integer
+kind: dataframe
+schema: magnus_phases

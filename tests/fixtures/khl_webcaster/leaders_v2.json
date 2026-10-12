@@ -1,0 +1,359 @@
+[
+  {
+    "name": "Points",
+    "players": [
+      {
+        "id": 39739,
+        "khl_id": 43033,
+        "name": "Anas Sam",
+        "image": "https://www.khl.ru/img/teamplayers_db/15548/43033.jpg",
+        "shirt_number": 7,
+        "role_key": "forward",
+        "team": {
+          "id": 38,
+          "khl_id": 207,
+          "name": "Dinamo Mn",
+          "location": "Minsk"
+        },
+        "pos": "1",
+        "stats": [
+          {
+            "id": "pts",
+            "title": "Points",
+            "val": 89.0,
+            "max": 89.0,
+            "leading": true
+          },
+          {
+            "id": "g",
+            "title": "Goals",
+            "val": 32.0,
+            "max": 36.0,
+            "leading": false
+          },
+          {
+            "id": "gp",
+            "title": "Games played",
+            "val": 67.0,
+            "max": 68.0,
+            "leading": false
+          }
+        ]
+      },
+      {
+        "id": 3449,
+        "khl_id": 18770,
+        "name": "Okulov Konstantin",
+        "image": "https://www.khl.ru/img/teamplayers_db/15542/18770.jpg",
+        "shirt_number": 17,
+        "role_key": "forward",
+        "team": {
+          "id": 10,
+          "khl_id": 34,
+          "name": "Avangard",
+          "location": "Omsk Region"
+        },
+        "pos": "2",
+        "stats": [
+          {
+            "id": "pts",
+            "title": "Points",
+            "val": 74.0,
+            "max": 89.0,
+            "leading": true
+          },
+          {
+            "id": "g",
+            "title": "Goals",
+            "val": 24.0,
+            "max": 36.0,
+            "leading": false
+          },
+          {
+            "id": "gp",
+            "title": "Games played",
+            "val": 68.0,
+            "max": 68.0,
+            "leading": false
+          }
+        ]
+      },
+      {
+        "id": 47255,
+        "khl_id": 45401,
+        "name": "Limoges Alex",
+        "image": "https://www.khl.ru/img/teamplayers_db/15548/45401.jpg",
+        "shirt_number": 12,
+        "role_key": "forward",
+        "team": {
+          "id": 38,
+          "khl_id": 207,
+          "name": "Dinamo Mn",
+          "location": "Minsk"
+        },
+        "pos": "3",
+        "stats": [
+          {
+            "id": "pts",
+            "title": "Points",
+            "val": 73.0,
+            "max": 89.0,
+            "leading": true
+          },
+          {
+            "id": "g",
+            "title": "Goals",
+            "val": 24.0,
+            "max": 36.0,
+            "leading": false
+          },
+          {
+            "id": "gp",
+            "title": "Games played",
+            "val": 68.0,
+            "max": 68.0,
+            "leading": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Points (Defensemen)",
+    "players": [
+      {
+        "id": 18905,
+        "khl_id": 19242,
+        "name": "Sharipzyanov Damir",
+        "image": "https://www.khl.ru/img/teamplayers_db/15542/19242.jpg",
+        "shirt_number": 44,
+        "role_key": "defensemen",
+        "team": {
+          "id": 10,
+          "khl_id": 34,
+          "name": "Avangard",
+          "location": "Omsk Region"
+        },
+        "pos": "1",
+        "stats": [
+          {
+            "id": "pts",
+            "title": "Points",
+            "val": 67.0,
+            "max": 67.0,
+            "leading": true
+          },
+          {
+            "id": "g",
+            "title": "Goals",
+            "val": 23.0,
+            "max": 23.0,
+            "leading": false
+          },
+          {
+            "id": "gp",
+            "title": "Games played",
+            "val": 66.0,
+            "max": 68.0,
+            "leading": false
+          }
+        ]
+      },
+      {
+        "id": 27053,
+        "khl_id": 26646,
+        "name": "Pylenkov Daniil",
+        "image": "https://www.khl.ru/img/teamplayers_db/15549/26646.jpg",
+        "shirt_number": 45,
+        "role_key": "defensemen",
+        "team": {
+          "id": 8,
+          "khl_id": 719,
+          "name": "Dynamo Msk",
+          "location": "Moscow"
+        },
+        "pos": "2",
+        "stats": [
+          {
+            "id": "pts",
+            "title": "Points",
+            "val": 54.0,
+            "max": 67.0,
+            "leading": true
+          },
+          {
+            "id": "g",
+            "title": "Goals",
+            "val": 9.0,
+            "max": 23.0,
+            "leading": false
+          },
+          {
+            "id": "gp",
+            "title": "Games played",
+            "val": 64.0,
+            "max": 68.0,
+            "leading": false
+          }
+        ]
+      },
+      {
+        "id": 41667,
+        "khl_id": 43519,
+        "name": "Miller Mitchell",
+        "image": "https://www.khl.ru/img/teamplayers_db/15545/43519.jpg",
+        "shirt_number": 58,
+        "role_key": "defensemen",
+        "team": {
+          "id": 40,
+          "khl_id": 53,
+          "name": "Ak Bars",
+          "location": "Kazan"
+        },
+        "pos": "3",
+        "stats": [
+          {
+            "id": "pts",
+            "title": "Points",
+            "val": 47.0,
+            "max": 67.0,
+            "leading": true
+          },
+          {
+            "id": "g",
+            "title": "Goals",
+            "val": 20.0,
+            "max": 23.0,
+            "leading": false
+          },
+          {
+            "id": "gp",
+            "title": "Games played",
+            "val": 67.0,
+            "max": 68.0,
+            "leading": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Saves Percentage",
+    "players": [
+      {
+        "id": 34493,
+        "khl_id": 34163,
+        "name": "Pleshkov Artemy",
+        "image": "https://www.khl.ru/img/teamplayers_db/15557/34163.jpg",
+        "shirt_number": 73,
+        "role_key": "goaltender",
+        "team": {
+          "id": 44,
+          "khl_id": 24,
+          "name": "SKA",
+          "location": "Saint Petersburg"
+        },
+        "pos": "1",
+        "stats": [
+          {
+            "id": "sv_pct",
+            "title": "Saves percentage",
+            "val": 93.9,
+            "max": 93.9,
+            "leading": true
+          },
+          {
+            "id": "gp",
+            "title": "Games played",
+            "val": 32.0,
+            "max": 59.0,
+            "leading": false
+          },
+          {
+            "id": "sv",
+            "title": "Saves",
+            "val": 896.0,
+            "max": 1722.0,
+            "leading": false
+          }
+        ]
+      },
+      {
+        "id": 31781,
+        "khl_id": 35221,
+        "name": "Gamzin Dmitry",
+        "image": "https://www.khl.ru/img/teamplayers_db/15562/35221.jpg",
+        "shirt_number": 33,
+        "role_key": "goaltender",
+        "team": {
+          "id": 16,
+          "khl_id": 2,
+          "name": "CSKA",
+          "location": "Moscow"
+        },
+        "pos": "2",
+        "stats": [
+          {
+            "id": "sv_pct",
+            "title": "Saves percentage",
+            "val": 93.8,
+            "max": 93.9,
+            "leading": true
+          },
+          {
+            "id": "gp",
+            "title": "Games played",
+            "val": 40.0,
+            "max": 59.0,
+            "leading": false
+          },
+          {
+            "id": "sv",
+            "title": "Saves",
+            "val": 868.0,
+            "max": 1722.0,
+            "leading": false
+          }
+        ]
+      },
+      {
+        "id": 25433,
+        "khl_id": 27076,
+        "name": "Galkin Vladimir",
+        "image": "https://www.khl.ru/img/teamplayers_db/15543/27076.jpg",
+        "shirt_number": 1,
+        "role_key": "goaltender",
+        "team": {
+          "id": 56,
+          "khl_id": 190,
+          "name": "Avtomobilist",
+          "location": "Ekaterinburg"
+        },
+        "pos": "3",
+        "stats": [
+          {
+            "id": "sv_pct",
+            "title": "Saves percentage",
+            "val": 93.4,
+            "max": 93.9,
+            "leading": true
+          },
+          {
+            "id": "gp",
+            "title": "Games played",
+            "val": 37.0,
+            "max": 59.0,
+            "leading": false
+          },
+          {
+            "id": "sv",
+            "title": "Saves",
+            "val": 1001.0,
+            "max": 1722.0,
+            "leading": false
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "name": "Kristall",
+  "full_name": "Kristall",
+  "city": "Saratov",
+  "founded": 1947,
+  "phone": null,
+  "site": "http://www.kristallsaratov.ru",
+  "officials": [
+    {
+      "role": "Director",
+      "name": "Vyacheslav Natalichev"
+    },
+    {
+      "role": "Head Coach",
+      "name": "Denis Platonov"
+    }
+  ],
+  "address": "410004, Russia, Saratov, Chernyshevskogo str., 63",
+  "calendar_tn": 1430,
+  "calendar_team_season_id": 15534,
+  "roster_as_of": "12.10.2026",
+  "arena_capacity": 5141,
+  "roster": [
+    {
+      "jersey": 51,
+      "position": "forward",
+      "player_id": 39618,
+      "player": "Асылаев Никита",
+      "born": "DD.MM.YYYY",
+      "country": "Russia"
+    },
+    {
+      "jersey": 9,
+      "position": "forward",
+      "player_id": 19850,
+      "player": "Балаболкин Илья",
+      "born": "DD.MM.YYYY",
+      "country": "Russia"
+    },
+    {
+      "jersey": 88,
+      "position": "goaltender",
+      "player_id": 43016,
+      "player": "Баранчиков Иван",
+      "born": "DD.MM.YYYY",
+      "country": "Russia"
+    }
+  ],
+  "honours": [
+    "Победитель Первенства СССР среди команд первой лиги 1974, 1976",
+    "Серебряный призёр Первенства СССР среди команд первой лиги 1970, 1973, 1979, 1981, 1983, 1984",
+    "Бронзовый призёр Первенства СССР среди команд первой лиги 1980"
+  ]
+}
