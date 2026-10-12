@@ -742,6 +742,7 @@ files = [
     "sportsdataverse/scrape/ncaa/bundle.py",
     "sportsdataverse/scrape/ncaa/reference.py",
     "sportsdataverse/scrape/ncaa/espn_game_xwalk.py",
+    "sportsdataverse/scrape/ncaa/espn_player_xwalk.py",
     "sportsdataverse/scrape/ncaa/rosters.py",
     "sportsdataverse/scrape/ncaa/discover.py",
     "sportsdataverse/scrape/ncaa/capture.py",
