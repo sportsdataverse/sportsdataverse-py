@@ -1080,3 +1080,32 @@
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_fixed_drive[401326467]
   expected: kill
   note: a "Blocked Punt Touchdown" credited to the punting team leaves the next kickoff in its drive
+
+- id: nfl-cleaning-pipeline-penalty-first-down
+  group: nfl-series
+  finding: C-H3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: |-
+    .pipe(self.__add_penalty_first_down)
+                        .pipe(self.__refine_play_types_post_attribution)
+                        .pipe(self.__credit_to_spot_of_foul)
+                        .pipe(self.__add_air_yards_cols)
+                        .pipe(self.__after_cols)
+                        .pipe(self.__add_series_data)
+                        .pipe(self.__add_spread_time)
+                        .pipe(self.__add_description_features)
+                    )
+  mutant: |-
+    .pipe(self.__refine_play_types_post_attribution)
+                        .pipe(self.__credit_to_spot_of_foul)
+                        .pipe(self.__add_air_yards_cols)
+                        .pipe(self.__after_cols)
+                        .pipe(self.__add_series_data)
+                        .pipe(self.__add_spread_time)
+                        .pipe(self.__add_description_features)
+                    )
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_first_down_penalty_cleaning_pipeline[401547449]
+  expected: kill
+  note: >-
+    Review R806-1: without the step run_cleaning_pipeline() copies the setup-stage CFB-phrase
+    penalty_1st_conv into first_down_penalty, 0 on every slice (nflverse 6 on 401547449).

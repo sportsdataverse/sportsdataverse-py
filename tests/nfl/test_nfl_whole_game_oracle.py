@@ -33,7 +33,8 @@ import pytest
 
 from sportsdataverse.nfl.ep_wp import _derive_wpa, calculate_completion_probability, calculate_epa, calculate_wpa
 from sportsdataverse.nfl.model_vars import clock_stoppage_vec, kickoff_vec, normalplay, offense_score_vec
-from tests.nfl._whole_game import CAPTURES, FIX, run
+from sportsdataverse.nfl import NFLPlayProcess
+from tests.nfl._whole_game import CAPTURES, FIX, load_summary, run
 
 pytestmark = [pytest.mark.whole_game, pytest.mark.xdist_group("nfl_whole_game")]
 
@@ -355,6 +356,15 @@ def test_nflverse_series_first_down_penalty(game_id):
         run(game_id).plays["first_down_penalty"].cast(pl.Int64).sum() == _nflverse(game_id)["first_down_penalty"].sum()
     )
     assert j.filter(ours != theirs).select("id", "first_down_penalty", "text").rows() == []
+
+
+@pytest.mark.parametrize("game_id", _ALL_SLICES)
+def test_nflverse_series_first_down_penalty_cleaning_pipeline(game_id):
+    # review R806-1: run_cleaning_pipeline() skipped the penalty step and returned 0 on every slice
+    proc = NFLPlayProcess(gameId=game_id)
+    proc.espn_nfl_pbp(summary=load_summary(game_id))  # a supplied summary never touches the network
+    plays = proc.run_cleaning_pipeline()["plays"]
+    assert sum(bool(p["first_down_penalty"]) for p in plays) == _nflverse(game_id)["first_down_penalty"].sum()
 
 
 @pytest.mark.parametrize(

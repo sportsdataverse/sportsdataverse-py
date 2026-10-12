@@ -461,7 +461,8 @@ def _nfl_turnover_in_text(row: dict) -> bool:
 # TB 49."). The defense's automatic-first-down fouls convert on their own, any other accepted
 # defensive foul only when its yards reach the line to gain on a play that does not stand. Against
 # nflverse ``first_down_penalty`` (GSIS stat 5) on 199 nfl-raw games of 2010/2013/2017/2023: 674 of
-# 682 found, 3 false positives (the CFB phrase found 226).
+# 682 found, 3 false positives (the CFB phrase found 226). The 2002-2008 feed writes no accepted-foul
+# clause ("5 yard penalty on Giants.", "Face Mask (15 Yards)"), so those seasons find none (2007: 0 of 63).
 _NFL_ACCEPTED_FOUL = r"(?i)penalty on [^,]+, [^,]+, \d+ yards?, enforced"
 _NFL_AUTO_FIRST_DOWN_FOUL = (
     r"(?i)penalty on [^,]+, (?:defensive pass interference|defensive holding|illegal contact|illegal use of hands"
@@ -7841,6 +7842,7 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
                     .pipe(self.__add_attribution_cols)
+                    .pipe(self.__add_penalty_first_down)
                     .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__credit_to_spot_of_foul)
                     .pipe(self.__add_air_yards_cols)
