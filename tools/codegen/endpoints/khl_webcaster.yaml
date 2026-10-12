@@ -8,7 +8,9 @@ docstring:
     needs owner (sanctions / legal) sign-off first.'
   raises:
   - 'sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown
-    id), an unknown season, or a body for another id / stage than the one requested.'
+    id), an empty object, or an unknown season.'
+  - 'sportsdataverse.errors.AssetFetchError: a body for another id / stage / player
+    than the one requested, or any other error envelope.'
   raw_doc: the raw JSON body (betting fields and the caller's IP removed)
   see_also:
   - name: KHL

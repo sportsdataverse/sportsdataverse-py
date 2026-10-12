@@ -34,6 +34,8 @@ import polars as pl
 from sportsdataverse.hockey.khl.khl_rest_parsers import (
     Columns,
     Frame,
+    _columns,
+    _conform,
     _generic,
     _int,
     _list,
@@ -72,6 +74,23 @@ def parse_khl_webcaster(raw: Any, *, return_as_pandas: bool = False, columns: Co
     Returns:
         One row per object (zero rows when unusable, or for an empty page: ``events_v2`` answers
         ``[]`` past the last page).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_webcaster_events
+            from sportsdataverse.hockey.khl.khl_webcaster_parsers import parse_khl_webcaster
+            raw = khl_webcaster_events(season=2026, return_parsed=False)
+            df = parse_khl_webcaster(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_webcaster(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.select("id", "khl_id", "team_a_name", "team_b_name")
     """
     if isinstance(raw, list):
         rows = [_unwrap(item) for item in raw]
@@ -79,7 +98,7 @@ def parse_khl_webcaster(raw: Any, *, return_as_pandas: bool = False, columns: Co
         rows = [_unwrap(raw)]
     else:
         rows = []
-    return _out(_generic(rows, columns), return_as_pandas)
+    return _out(_conform(_generic(rows, columns), columns), return_as_pandas)
 
 
 _STAGES_SCHEMA = {
@@ -115,6 +134,23 @@ def parse_khl_webcaster_stages(raw: Any, *, return_as_pandas: bool = False, colu
 
     Returns:
         The stages with a fixed schema (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_webcaster_stages
+            from sportsdataverse.hockey.khl.khl_webcaster_parsers import parse_khl_webcaster_stages
+            raw = khl_webcaster_stages(return_parsed=False)
+            df = parse_khl_webcaster_stages(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_webcaster_stages(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("season") == 2026)
     """
     stages = _list(_obj(raw).get("stages_v2"))
     rows: List[Dict[str, Any]] = [
@@ -146,13 +182,31 @@ def parse_khl_webcaster_leaders(raw: Any, *, return_as_pandas: bool = False, col
 
     Returns:
         The leaders (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_webcaster_leaders
+            from sportsdataverse.hockey.khl.khl_webcaster_parsers import parse_khl_webcaster_leaders
+            raw = khl_webcaster_leaders(season=2026, return_parsed=False)
+            df = parse_khl_webcaster_leaders(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_webcaster_leaders(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("rank") == 1)
     """
+    columns = _columns(columns, "khl_webcaster_leaders")
     rows = [
         {"category": _obj(cat).get("name"), "rank": i, **_obj(p)}
         for cat in _list(raw)
         for i, p in enumerate(_list(_obj(cat).get("players")), start=1)
     ]
-    return _out(_generic(rows, columns), return_as_pandas)
+    return _out(_conform(_generic(rows, columns), columns), return_as_pandas)
 
 
 _TABLE_TEXT = frozenset(
@@ -175,7 +229,25 @@ def parse_khl_webcaster_tables(raw: Any, *, return_as_pandas: bool = False, colu
 
     Returns:
         The tables (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_webcaster_tables
+            from sportsdataverse.hockey.khl.khl_webcaster_parsers import parse_khl_webcaster_tables
+            raw = khl_webcaster_tables(return_parsed=False)
+            df = parse_khl_webcaster_tables(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_webcaster_tables(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("season") == 2026).select("rank", "name", "pts")
     """
+    columns = _columns(columns, "khl_webcaster_tables")
     rows = [
         {
             "season": _end_year(_obj(block).get("season")),
@@ -188,4 +260,4 @@ def parse_khl_webcaster_tables(raw: Any, *, return_as_pandas: bool = False, colu
     ]
     df = _generic(rows, columns)
     skip = {"season", "season_label", "rank", "id", "khl_id", *_TABLE_TEXT}
-    return _out(_stat_cast(df, [c for c in df.columns if c not in skip]), return_as_pandas)
+    return _out(_conform(_stat_cast(df, [c for c in df.columns if c not in skip]), columns), return_as_pandas)

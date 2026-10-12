@@ -35,8 +35,9 @@ because no generic row rule fits these deeply nested page objects:
   ``players.{A,B}.<jn>.id``. ``gameItem.gkA`` / ``gkB`` are jerseys too (``gk_a_jn`` / ``gk_b_jn``).
 
 Contract: polars by default, pandas with ``return_as_pandas=True``; empty or malformed input returns
-a zero-row frame (with the ``columns`` schema when the generated wrapper passes it), never an
-exception; snake_case columns. Values stay as the site sends them: www.khl.ru names are Russian
+a zero-row frame, never an exception, typed exactly like a populated one (the returns schemas in
+:data:`SCHEMAS`, so ``pl.concat`` of an empty and a full answer works); a documented column a body
+lacks is backfilled as typed nulls; snake_case columns. Values stay as the site sends them: www.khl.ru names are Russian
 (``*_en`` siblings carry English where the site has them).
 """
 
@@ -52,6 +53,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.hockey.khl.khl_schemas import SCHEMAS as _SPECS
 
 __all__ = [
     "parse_khl_game_header",
@@ -153,9 +155,55 @@ def _typed(rows: Iterable[Mapping[str, Any]], schema: Mapping[str, Any]) -> pl.D
     return pl.DataFrame({c: [_coerce(r.get(c), t) for r in rows] for c, t in schema.items()}, schema=dict(schema))
 
 
+_CODES = {"i": pl.Int64, "f": pl.Float64, "s": pl.Utf8, "b": pl.Boolean}
+#: Every KHL returns schema (``khl_<short>`` / ``khl_webcaster_<short>``) as ``{column: dtype}``, from
+#: :mod:`sportsdataverse.hockey.khl.khl_schemas` (generated from ``tools/codegen/schemas/native/khl_*``).
+SCHEMAS: Dict[str, Dict[str, Any]] = {
+    key: {name: _CODES[code] for name, code in (tok.rsplit(":", 1) for tok in spec.split())}
+    for key, spec in _SPECS.items()
+}
+_BY_COLUMNS: Dict[tuple, Dict[str, Any]] = {}
+for _schema in SCHEMAS.values():
+    _BY_COLUMNS.setdefault(tuple(_schema), _schema)
+
+
+def _columns(columns: Columns, key: str) -> Sequence[str]:
+    """The wrapper's documented ``columns``, else the parser's own returns schema ``key``."""
+    return list(columns) if columns is not None else list(SCHEMAS[key])
+
+
+def _documented(columns: Columns) -> Dict[str, Any]:
+    """``{column: dtype}`` of the returns schema whose column list is exactly ``columns`` (else ``{}``)."""
+    return _BY_COLUMNS.get(tuple(columns or ()), {})
+
+
 def _empty(columns: Columns) -> pl.DataFrame:
-    """A zero-row frame for the documented columns: ids ``Int64``, everything else ``Utf8``."""
-    return pl.DataFrame(schema={c: (pl.Int64 if _ID.search(c) else pl.Utf8) for c in columns or ()})
+    """A zero-row frame for the documented columns, typed as the returns schema types them.
+
+    ``columns`` that match no KHL returns schema fall back to ids ``Int64``, everything else ``Utf8``.
+    """
+    schema = _documented(columns) or {c: (pl.Int64 if _ID.search(c) else pl.Utf8) for c in columns or ()}
+    return pl.DataFrame(schema=schema)
+
+
+def _conform(df: pl.DataFrame, columns: Columns) -> pl.DataFrame:
+    """Documented columns first, typed as documented, then any extra the body carried.
+
+    A documented column the body lacks is backfilled as typed nulls and an all-null one is cast, so a
+    sparse body has the dtypes of a full one; a column holding values keeps them (never nulled by a cast).
+    """
+    schema = _documented(columns)
+    if not schema:
+        return df
+    if df.height == 0:
+        return pl.DataFrame(schema=schema)
+    fixes = [
+        pl.lit(None, dtype=t).alias(c) if c not in df.columns else pl.col(c).cast(t)
+        for c, t in schema.items()
+        if c not in df.columns or (df.schema[c] != t and df[c].null_count() == df.height)
+    ]
+    df = df.with_columns(fixes) if fixes else df
+    return df.select([*schema, *[c for c in df.columns if c not in schema]])
 
 
 def _cell(value: Any) -> Any:
@@ -325,8 +373,26 @@ def parse_khl_game_header(raw: Any, *, return_as_pandas: bool = False, columns: 
         One row: ``game_id``, ``tournament_id``, ``home_club_id`` / ``away_club_id`` (club ids),
         ``home_team_season_id`` / ``away_team_season_id`` (team-season ids), ``arena_id``, the score
         and every other scalar of ``data.game`` snake_cased; zero rows when unusable.
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_game_header
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_game_header
+            raw = khl_game_header(game_id=898236, season=2026, return_parsed=False)
+            df = parse_khl_game_header(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_game_header(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.select("game_id", "home_score", "away_score", "ots")
     """
-    return _out(_game_frame(_game_row(_game(raw)), columns), return_as_pandas)
+    columns = _columns(columns, "khl_game_header")
+    return _out(_conform(_game_frame(_game_row(_game(raw)), columns), columns), return_as_pandas)
 
 
 def parse_khl_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
@@ -342,14 +408,32 @@ def parse_khl_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Co
 
     Returns:
         One row (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_game_info
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_game_info
+            raw = khl_game_info(game_id=898236, season=2026, return_parsed=False)
+            df = parse_khl_game_info(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_game_info(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.select("game_id", "gk_a_player_id", "gk_b_player_id")
     """
+    columns = _columns(columns, "khl_game_info")
     game = _game(raw)
     row = _game_row(_obj(game.get("info")).get("data"), game.get("gameItem"))
     roster = {(r["team_side"], r["jn"]): r["player_id"] for r in _roster(game).iter_rows(named=True)}
     for side, key in (("A", "gk_a_jn"), ("B", "gk_b_jn")):
         if key in row:
             row[key.replace("_jn", "_player_id")] = roster.get((side, _int(row[key])))
-    return _out(_game_frame(row, columns), return_as_pandas)
+    return _out(_conform(_game_frame(row, columns), columns), return_as_pandas)
 
 
 _BOX_STATS = {
@@ -396,6 +480,23 @@ def parse_khl_player_box(raw: Any, *, return_as_pandas: bool = False, columns: C
 
     Returns:
         The box score with a fixed schema (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_player_box
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_player_box
+            raw = khl_player_box(game_id=898236, season=2026, return_parsed=False)
+            df = parse_khl_player_box(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_player_box(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("period") == 0).sort("g", descending=True)
     """
     game = _game(raw)
     ids = _ids(game)
@@ -463,6 +564,23 @@ def parse_khl_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Columns 
 
     Returns:
         The play-by-play with a fixed schema (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_pbp
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_pbp
+            raw = khl_pbp(game_id=898236, season=2026, return_parsed=False)
+            df = parse_khl_pbp(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_pbp(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("event_type") == "goal")
     """
     game = _game(raw)
     ids = _ids(game)
@@ -549,6 +667,23 @@ def parse_khl_shots(raw: Any, *, return_as_pandas: bool = False, columns: Column
 
     Returns:
         The shots with a fixed schema (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_shots
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_shots
+            raw = khl_shots(game_id=898236, season=2026, return_parsed=False)
+            df = parse_khl_shots(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_shots(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.group_by("team_side", "shot_type").len()
     """
     game = _game(raw)
     ids = _ids(game)
@@ -620,6 +755,23 @@ def parse_khl_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Col
 
     Returns:
         The schedule with a fixed schema (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_schedule
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_schedule
+            raw = khl_schedule(season=2026, return_parsed=False)
+            df = parse_khl_schedule(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_schedule(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("decision") == "SO").select("game_id", "home_name", "away_name")
     """
     data = _data(raw)
     games = [
@@ -694,6 +846,23 @@ def parse_khl_game_protocol(raw: Any, *, return_as_pandas: bool = False, columns
 
     Returns:
         The goals with a fixed schema (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_game_protocol
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_game_protocol
+            raw = khl_game_protocol(game_id=898236, season=2026, return_parsed=False)
+            df = parse_khl_game_protocol(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_game_protocol(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.select("period", "time", "scorer_player_id", "strength")
     """
     data = _data(raw)
     ids: Dict[str, Optional[int]] = {"tournament_id": None, "game_id": None}
@@ -769,6 +938,23 @@ def parse_khl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Co
 
     Returns:
         The standings with a fixed schema (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_standings
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_standings
+            raw = khl_standings(season=2026, return_parsed=False)
+            df = parse_khl_standings(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_standings(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("table") == "league").select("rank", "name", "pts")
     """
     tables = _obj(_data(raw).get("json"))
     rows = []
@@ -822,6 +1008,23 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
 
     Returns:
         The bracket with a fixed schema (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_playoff_bracket
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_playoff_bracket
+            raw = khl_playoff_bracket(season=2026, return_parsed=False)
+            df = parse_khl_playoff_bracket(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_playoff_bracket(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("round") == 1)
     """
     data = _data(raw)
     clubs = _obj(data.get("CLUBS"))
@@ -865,7 +1068,25 @@ def parse_khl_player_stats(raw: Any, *, return_as_pandas: bool = False, columns:
 
     Returns:
         The page of player stats (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_player_stats
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_player_stats
+            raw = khl_player_stats(position="forwards", season=2026, return_parsed=False)
+            df = parse_khl_player_stats(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_player_stats(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.sort("pts", descending=True).head()
     """
+    columns = _columns(columns, "khl_player_stats")
     rows = []
     for group in _list(_data(raw).get("list")):
         group = _obj(group)
@@ -885,7 +1106,8 @@ def parse_khl_player_stats(raw: Any, *, return_as_pandas: bool = False, columns:
                 }
             )
     df = _generic(rows, columns)
-    return _out(_stat_cast(df, [c for c in df.columns if c not in ("group", "player_name", "image")]), return_as_pandas)
+    df = _stat_cast(df, [c for c in df.columns if c not in ("group", "player_name", "image")])
+    return _out(_conform(df, columns), return_as_pandas)
 
 
 def parse_khl_player_profile(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
@@ -900,12 +1122,31 @@ def parse_khl_player_profile(raw: Any, *, return_as_pandas: bool = False, column
 
     Returns:
         One row (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_player_profile
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_player_profile
+            raw = khl_player_profile(player_id=41928, return_parsed=False)
+            df = parse_khl_player_profile(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_player_profile(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.select("player_id", "summary_stats_gp", "summary_stats_pts")
     """
+    columns = _columns(columns, "khl_player_profile")
     person = _obj(_data(raw).get("DATA"))
     if not person:
         return _out(_empty(columns), return_as_pandas)
     df = _generic([{"player_id": _player_id(person.get("pagelink")), **person}], columns)
-    return _out(_stat_cast(df, [c for c in df.columns if c.startswith("summary_stats_")]), return_as_pandas)
+    df = _stat_cast(df, [c for c in df.columns if c.startswith("summary_stats_")])
+    return _out(_conform(df, columns), return_as_pandas)
 
 
 def parse_khl_player_career(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
@@ -922,7 +1163,25 @@ def parse_khl_player_career(raw: Any, *, return_as_pandas: bool = False, columns
 
     Returns:
         The career rows (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_player_career
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_player_career
+            raw = khl_player_career(player_id=41928, return_parsed=False)
+            df = parse_khl_player_career(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_player_career(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.select("season_label", "tournament_id", "gp", "pts")
     """
+    columns = _columns(columns, "khl_player_career")
     data = _data(raw)
     rows = []
     for season in _list(data.get("tournament_summary")):
@@ -946,7 +1205,7 @@ def parse_khl_player_career(raw: Any, *, return_as_pandas: bool = False, columns
         df, [c for c in ("player_id", "tournament_id", "team_season_id", "club_id") if c in df.columns]
     )
     keep = ("player_id", "season_label", "tournament_id", "team_season_id", "club_id", "team_name")
-    return _out(_stat_cast(df, [c for c in df.columns if c not in keep]), return_as_pandas)
+    return _out(_conform(_stat_cast(df, [c for c in df.columns if c not in keep]), columns), return_as_pandas)
 
 
 def parse_khl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
@@ -962,13 +1221,31 @@ def parse_khl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Colum
 
     Returns:
         The roster (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_roster
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_roster
+            raw = khl_roster(club_id=7, return_parsed=False)
+            df = parse_khl_roster(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_roster(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("group") == "goalkeepers")
     """
+    columns = _columns(columns, "khl_roster")
     rows = [
         {"group": group, "player_id": _obj(p).get("id"), **{k: v for k, v in _obj(p).items() if k != "id"}}
         for group, players in _obj(_data(raw).get("players")).items()
         for p in _list(players)
     ]
-    return _out(_generic(rows, columns), return_as_pandas)
+    return _out(_conform(_generic(rows, columns), columns), return_as_pandas)
 
 
 def parse_khl_stat_filters(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
@@ -985,7 +1262,25 @@ def parse_khl_stat_filters(raw: Any, *, return_as_pandas: bool = False, columns:
 
     Returns:
         The filter options (zero rows when unusable).
+
+    Example:
+        Parse a raw body::
+
+            import polars as pl
+            from sportsdataverse.hockey.khl import khl_stat_filters
+            from sportsdataverse.hockey.khl.khl_rest_parsers import parse_khl_stat_filters
+            raw = khl_stat_filters(season=2026, return_parsed=False)
+            df = parse_khl_stat_filters(raw)
+
+        As pandas::
+
+            df_pd = parse_khl_stat_filters(raw, return_as_pandas=True)
+
+        Next step::
+
+            df.filter(pl.col("filter") == "season")
     """
+    columns = _columns(columns, "khl_stat_filters")
     rows = [
         {
             "filter": code,
@@ -999,4 +1294,5 @@ def parse_khl_stat_filters(raw: Any, *, return_as_pandas: bool = False, columns:
     df = _generic(rows, columns)
     if "value" in df.columns:
         df = df.with_columns(pl.col("value").cast(pl.Utf8))
-    return _out(_cast_ids_int64(df, [c for c in ("def",) if c in df.columns]), return_as_pandas)
+    df = _cast_ids_int64(df, [c for c in ("def",) if c in df.columns])
+    return _out(_conform(df, columns), return_as_pandas)

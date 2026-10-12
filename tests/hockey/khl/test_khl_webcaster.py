@@ -16,13 +16,14 @@ import polars as pl
 import pytest
 import yaml
 
+from sportsdataverse.hockey.khl import khl_rest_parsers as P
 from sportsdataverse.hockey.khl import khl_webcaster_parsers as W
 
 ROOT = Path(__file__).parents[3]
 FIXTURES = ROOT / "tests" / "fixtures" / "khl_webcaster"
 YAML = ROOT / "tools" / "codegen" / "endpoints" / "khl_webcaster.yaml"
 SCHEMAS = ROOT / "tools" / "codegen" / "schemas" / "native" / "khl_webcaster"
-REFS_SPEC = ROOT.parent / "sdv-internal-refs" / "khl" / "khl-webcaster.openapi.yaml"
+SPEC_ROUTES = FIXTURES / "spec_routes.json"  # the refs spec's route list, committed by gen_khl.py
 
 PARSERS: Dict[str, Callable[..., Any]] = {
     "data.json": W.parse_khl_webcaster_stages,
@@ -75,6 +76,17 @@ def test_empty_page_keeps_the_documented_columns():
     assert df.schema == {"id": pl.Int64, "khl_id": pl.Int64, "name": pl.Utf8}
 
 
+@pytest.mark.parametrize("ep", yaml.safe_load(YAML.read_text(encoding="utf-8"))["endpoints"], ids=lambda e: e["short"])
+def test_an_empty_frame_concatenates_with_a_populated_one(ep):
+    parser = getattr(W, ep["parser"])
+    columns = list(P.SCHEMAS[f"khl_webcaster_{ep['short']}"])  # what the generated wrapper passes
+    empty, full_df = parser({}, columns=columns), parser(_load(SHORT_FIXTURE[ep["short"]]), columns=columns)
+    assert empty.height == 0 and empty.schema == full_df.schema
+    assert pl.concat([empty, full_df], how="vertical").height == full_df.height
+    if ep["parser"] != "parse_khl_webcaster":  # one schema per parser: no columns needed
+        assert parser({}).schema == full_df.schema
+
+
 def test_return_as_pandas():
     assert isinstance(W.parse_khl_webcaster(_load("events_v2.json"), return_as_pandas=True), pd.DataFrame)
 
@@ -119,8 +131,7 @@ def test_tables_read_the_championship_table_and_type_the_stats():
 def test_yaml_lists_every_spec_route():
     doc = yaml.safe_load(YAML.read_text(encoding="utf-8"))
     paths = {e["path"] for e in doc["endpoints"]}
-    if REFS_SPEC.exists():
-        assert paths == set(yaml.safe_load(REFS_SPEC.read_text(encoding="utf-8"))["paths"])
+    assert paths == set(json.loads(SPEC_ROUTES.read_text(encoding="utf-8")))
     assert len(doc["endpoints"]) == len(SHORT_FIXTURE) == 9
     assert doc["getter_module"] == "sportsdataverse.hockey.khl.khl_webcaster_runtime"
     for ep in doc["endpoints"]:
