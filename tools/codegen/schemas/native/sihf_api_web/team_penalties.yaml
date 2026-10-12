@@ -1,0 +1,45 @@
+schema: sihf_team_penalties
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: phase_id
+  type: integer
+  description: ''
+- name: rank
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: team_name
+  type: character
+  description: ''
+- name: team_acronym
+  type: character
+  description: ''
+- name: games_played
+  type: integer
+  description: ''
+- name: pim2
+  type: integer
+  description: ''
+- name: pim5
+  type: integer
+  description: ''
+- name: pim10
+  type: integer
+  description: ''
+- name: game_misconducts
+  type: integer
+  description: ''
+- name: match_penalties
+  type: integer
+  description: ''
+- name: pim_total
+  type: integer
+  description: ''
+- name: row_type
+  type: character
+  description: ''

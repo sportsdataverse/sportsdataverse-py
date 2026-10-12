@@ -1,0 +1,209 @@
+{
+  "title": "Player Stats",
+  "description": "Player Stats - Penalties",
+  "pages": 427,
+  "selectedPage": 1,
+  "orderBy": "pimTotal",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:10:10.7252787+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Summary",
+      "rowIdentifierKey": "points",
+      "isOrderDescending": true,
+      "alias": "player"
+    },
+    {
+      "name": "Goals/Assists",
+      "rowIdentifierKey": "goals",
+      "isOrderDescending": true,
+      "alias": "playerGoalAssist"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogSog",
+      "isOrderDescending": true,
+      "alias": "playerShotDetail"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": null,
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": false,
+      "alias": "rank"
+    },
+    {
+      "name": "Spieler",
+      "description": "Spielername",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "player"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "Pos",
+      "description": "Spielerposition",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "position"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "PIM Total",
+      "description": "PIM Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "pimTotal"
+    },
+    {
+      "name": "2' ",
+      "description": "Anzahl 2' Strafen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "pim2"
+    },
+    {
+      "name": "5'",
+      "description": "Anzahl 5' Strafen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "pim5"
+    },
+    {
+      "name": "10'",
+      "description": "Anzahl 10' Strafen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "pim10"
+    },
+    {
+      "name": "GM",
+      "description": "Anzahl Spieldauerdisziplinarstrafen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gameMisconducts"
+    },
+    {
+      "name": "MP",
+      "description": "Anzahl Matchstrafen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "matchPenalties"
+    }
+  ],
+  "data": [
+    [
+      "427",
+      "Zürcher Kevin",
+      {
+        "id": 102126,
+        "name": "SC Bern",
+        "acronym": "SCB",
+        "signed": false,
+        "type": "team"
+      },
+      "Stürmer",
+      "3",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "426",
+      "Wülser Nic",
+      {
+        "id": 103138,
+        "name": "Fribourg-Gottéron",
+        "acronym": "FRI",
+        "signed": false,
+        "type": "team"
+      },
+      "Verteidiger",
+      "4",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "425",
+      "Wenger Nicolas Lars",
+      {
+        "id": 103141,
+        "name": "Lausanne HC",
+        "acronym": "LHC",
+        "signed": false,
+        "type": "team"
+      },
+      "Stürmer",
+      "4",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ]
+  ],
+  "alias": "playerFoul"
+}
