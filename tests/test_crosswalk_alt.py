@@ -262,3 +262,29 @@ def test_with_alt_player_legs_fills_yahoo_and_skips_missing_providers(tmp_path):
     assert out["yahoo_player_id"].null_count() == 0
     assert out.filter(pl.col("espn_full_name") == "Luka Doncic")["yahoo_player_name"].item() == "Luka Dončić"
     assert out["fox_athlete_id"].null_count() == out.height  # no parsed Fox 2024 season: untouched
+
+
+def test_with_alt_game_legs_fills_fox_and_keeps_existing_legs(tmp_path):
+    from sportsdataverse._crosswalk_alt import fill_game_legs, with_alt_game_legs
+
+    argv = ["--provider", "fox", "--league", "nba", "--season", "2002", "--raw-root", str(RAW), "--out-root"]
+    assert main([*argv, str(tmp_path)]) == 0
+    sched = pl.read_parquet(FIX / "espn" / "nba_schedule_2002_211106024.parquet")
+    rosters = pl.read_parquet(FIX / "espn" / "nba_game_rosters_2002_211106024.parquet")
+    games, espn_rosters = basketball_espn_side(sched, rosters)
+    legs = ("fox_game_id", "fox_home_team_id", "fox_away_team_id", "yahoo_game_id")
+    xwalk = games.with_columns(*[pl.lit(None, dtype=pl.Utf8).alias(c) for c in legs])
+
+    out = with_alt_game_legs("nba", 2002, xwalk, sched, rosters, tmp_path)
+    assert out.columns == xwalk.columns and out.schema == xwalk.schema
+    row = out.row(0, named=True)
+    assert row["fox_game_id"] == "85726"
+    assert row["fox_home_team_id"] is not None and row["fox_away_team_id"] is not None
+    assert row["fox_home_team_id"] != row["fox_away_team_id"]
+    assert row["yahoo_game_id"] is None  # no parsed Yahoo 2002 season: untouched
+
+    kept = xwalk.with_columns(pl.lit("live").alias("fox_game_id"))
+    m = match_season(games, espn_rosters, read_season(tmp_path, "fox", "nba", 2002))
+    again = fill_game_legs(kept, m["games"], m["teams"], ("fox_game_id", "fox_home_team_id", "fox_away_team_id"))
+    assert again.row(0, named=True)["fox_game_id"] == "live"
+    assert again["fox_home_team_id"].null_count() == again.height  # a set game id keeps every leg as-is
