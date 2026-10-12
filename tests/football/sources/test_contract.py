@@ -13,6 +13,12 @@ from sportsdataverse.football.sources.contract import _validate_summary
 
 from .conftest import CFB_FIX, NFL_FIX, NFL_GAME_ID
 
+# 401761665's pickcenter has no total on any provider: it warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_pickcenter_without_a_total_defaults_it_and_warns asserts it.
+pytestmark = pytest.mark.filterwarnings(
+    "ignore:CFB game 401761665. no pregame total:sportsdataverse.errors.DefaultOddsWarning"
+)
+
 _CFB_FIXTURES = sorted(CFB_FIX.glob("summary_*.json"))
 
 
