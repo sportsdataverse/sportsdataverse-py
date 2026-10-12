@@ -33,8 +33,9 @@ top of the shared getter, all measured live (2026-10-08):
   has to be one of the ids the body's own ``Phase`` filter lists in ``entries``.
   :func:`_get` raises :class:`~sportsdataverse.errors.NoDataError` for all of these, so a
   typo can never return another season's or phase's rows labelled as the requested one. A
-  table body with no filter echo at all, or a phase echo without its ``entries`` list,
-  cannot be verified and raises :class:`~sportsdataverse.errors.AssetFetchError`.
+  table body with no filter echo at all, an echo that leaves out a requested filter, or a
+  phase echo without its ``entries`` list, cannot be verified and raises
+  :class:`~sportsdataverse.errors.AssetFetchError`.
 
 A table body also announces its row count in ``pages`` (``0`` on ``standing``); a body whose
 rows disagree with it raises :class:`~sportsdataverse.errors.AssetFetchError` rather than
@@ -92,11 +93,12 @@ def _check_table(url: str, raw: Any, filters: List[Tuple[str, str]]) -> None:
         got = str(by_alias[name].get("selected")) if name in by_alias else None
         if got != value:
             answered = f"answered {name}={got}" if got is not None else f"dropped the {name} filter"
-            if name == "ContentType":
-                # Every season has an All / Home / Away table, so ignoring ContentType is SIHF
-                # breaking its own contract, not "nothing here": a failed fetch, never an empty season.
+            if name == "ContentType" or got is None:
+                # A filter missing from the echo was ignored, not answered: unverifiable, like a body
+                # with no echo at all. And every season has an All / Home / Away table, so a swapped
+                # ContentType is SIHF breaking its own contract: a failed fetch, never an empty season.
                 raise AssetFetchError(
-                    f"{_rt._where(url)}: SIHF {answered} for ContentType={value}, so the table cannot be verified"
+                    f"{_rt._where(url)}: SIHF {answered} for {name}={value}, so the table cannot be verified"
                 )
             raise NoDataError(
                 f"{_rt._where(url)}: SIHF has no data for {name}={value} with the other filters given; "
@@ -141,13 +143,14 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a SIHF route as JSON: build the scoped query, fetch, then verify a table answer.
 
     Raises:
-        NoDataError: the host answered 404, ignored a requested season / phase, does not
-            list the requested phase, or has no table for the league.
+        NoDataError: the host answered 404, answered another season / phase than the one
+            requested, does not list the requested phase, or has no table for the league.
         ValueError: the host answered 400 / 422 -- the request is wrong.
         AssetFetchError: any other non-2xx after retries, a connection failure after
             retries, a 2xx whose body is empty or not JSON, a table body without its
-            filter echo (or a phase echo without its ``entries``), a ``ContentType`` echo that
-            is missing or differs from the request, or a table body with
+            filter echo, an echo that leaves out a requested filter (or a phase echo without
+            its ``entries``), a ``ContentType`` echo that differs from the request, or a table
+            body with
             fewer or more rows than its ``pages`` row count announces.
     """
     query, filters = _build_query(params)
