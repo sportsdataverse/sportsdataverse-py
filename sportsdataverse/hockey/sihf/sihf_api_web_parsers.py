@@ -158,6 +158,12 @@ def _list(value: Any) -> List[Any]:
     return value if isinstance(value, list) else []
 
 
+def _joined(values: Iterable[Any], sep: str) -> Optional[str]:
+    """The present values joined by ``sep``; ``None`` when there are none (a missing name never becomes ``"None"``)."""
+    text = [str(v) for v in values if v is not None and str(v).strip()]
+    return sep.join(text) if text else None
+
+
 def _blank(value: Any) -> Any:
     return None if isinstance(value, str) and not value.strip() else value
 
@@ -198,7 +204,7 @@ def _expand_cell(col: str, value: Any) -> Dict[str, Any]:
     if kind == "linkToGameDetail":
         return {"game_id": _int(value.get("gameId"))}
     if kind == "broadcasts":
-        return {col: ",".join(str(e) for e in _list(value.get("entries")))}
+        return {col: _joined(_list(value.get("entries")), ",")}
     # An object type not seen when the parser was written: keep its name / id when it has them.
     return {f"{col}_id": _licence(value.get("id")), f"{col}_name": value.get("name")}
 
@@ -950,16 +956,19 @@ def parse_sihf_game_info(
                 _int(s.get(f"{side}Team")) for s in _list(result.get("sogs")) if isinstance(s, dict)
             ],
         }
-    row["period_indicators"] = [str(s.get("indicator")) for s in _list(result.get("scores")) if isinstance(s, dict)]
+    # aligned with the per-period lists, so a missing indicator stays a null element (never "None")
+    row["period_indicators"] = [
+        None if s.get("indicator") is None else str(s.get("indicator"))
+        for s in _list(result.get("scores"))
+        if isinstance(s, dict)
+    ]
     row |= {
         "venue_name": venue.get("name"),
         "venue_city": venue.get("city"),
         "spectators": _int(venue.get("spectators")),
-        "referees": ", ".join(str(o.get("fullName")) for o in _list(details.get("referees")) if isinstance(o, dict))
-        or None,
-        "linesmen": ", ".join(str(o.get("fullName")) for o in _list(details.get("linesmen")) if isinstance(o, dict))
-        or None,
-        "broadcasts": ",".join(str(e) for e in _list(_obj(game.get("broadcasts")).get("entries"))) or None,
+        "referees": _joined([_obj(o).get("fullName") for o in _list(details.get("referees"))], ", "),
+        "linesmen": _joined([_obj(o).get("fullName") for o in _list(details.get("linesmen"))], ", "),
+        "broadcasts": _joined(_list(_obj(game.get("broadcasts")).get("entries")), ","),
     }
     return _out(_frame([row], _INFO_SCHEMA), return_as_pandas)
 

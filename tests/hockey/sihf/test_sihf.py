@@ -187,6 +187,19 @@ def test_game_info_one_row():
     assert row["spectators"] and row["referees"]
 
 
+def test_game_info_missing_names_stay_null():
+    # A missing indicator / official name / broadcaster must be a null, never the string "None".
+    body = _load(GAME)
+    for s in body["result"]["scores"]:
+        del s["indicator"]
+    body["details"]["referees"] = [{"fullName": None}, {}]
+    body["details"]["linesmen"] = [{"fullName": "A B"}, {"fullName": None}]
+    body["broadcasts"] = {"entries": [None]}
+    row = parse_sihf_game_info(body).row(0, named=True)
+    assert row["period_indicators"] == [None] * len(row["home_score_by_period"])
+    assert (row["referees"], row["linesmen"], row["broadcasts"]) == (None, "A B", None)
+
+
 def test_game_player_stats_resolve_player_ids():
     df = parse_sihf_game_player_stats(_load(GAME))
     players = df.filter(pl.col("row_type") == "data")
