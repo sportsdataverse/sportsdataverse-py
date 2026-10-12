@@ -22,6 +22,8 @@ __all__ = [
     "FT_WEIGHT",
     "REGULATION_PERIODS",
     "COORD_SENTINEL",
+    "GAME_PAGE_LEAGUES",
+    "game_regulation_periods",
     "game_minutes",
     "team_game_rates",
     "player_game_rates",
@@ -37,6 +39,87 @@ FT_WEIGHT: float = 0.44
 REGULATION_PERIODS: int = 4
 #: ESPN marks a missing play coordinate with ``-214748340``; anything below this is "no location".
 COORD_SENTINEL: float = -1000.0
+
+#: The leagues the game page scores. ``league_id`` ``"00"`` / ``"10"`` remain aliases of ``"nba"`` / ``"wnba"``.
+GAME_PAGE_LEAGUES: tuple[str, ...] = ("nba", "wnba", "mbb", "wbb")
+_LEAGUE_IDS: dict[str, str] = {"00": "nba", "10": "wnba"}
+_NBA_FAMILY_IDS: dict[str, str] = {"nba": "00", "wnba": "10"}
+#: ``mbb_prediction_constants`` keys of the college leagues.
+_NCAA: dict[str, str] = {"mbb": "mens", "wbb": "womens"}
+_REGULATION_MINUTES: dict[str, int] = {"nba": 48, "wnba": 40, "mbb": 40, "wbb": 40}
+#: First season played in quarters; earlier seasons were two 20-minute halves (MBB always plays halves).
+_QUARTERS_FROM: dict[str, int] = {"wnba": 2006, "wbb": 2016}
+
+
+def _resolve_league(league: Optional[str], league_id: Optional[str]) -> str:
+    """The game-page league from ``league`` and/or the legacy ``league_id``; both absent means NBA."""
+    if league_id is not None and league_id not in _LEAGUE_IDS:
+        raise ValueError(
+            f"league_id {league_id!r} is not supported by the game page; use one of {tuple(_LEAGUE_IDS)}"
+            f" or league= one of {GAME_PAGE_LEAGUES}"
+        )
+    if league is not None and league not in GAME_PAGE_LEAGUES:
+        raise ValueError(f"league {league!r} is not supported by the game page; use one of {GAME_PAGE_LEAGUES}")
+    if league is not None and league_id is not None and _LEAGUE_IDS[league_id] != league:
+        raise ValueError(f"league={league!r} contradicts league_id={league_id!r}")
+    return league or _LEAGUE_IDS[league_id or "00"]
+
+
+def game_regulation_periods(
+    league: str,
+    *,
+    season: Optional[int] = None,
+    format_regulation_periods: Optional[float] = None,
+) -> int:
+    """Regulation periods of one game: 2 (halves) or 4 (quarters).
+
+    The game's own value wins: ESPN's summary ``format.regulation.periods`` on the live path, the
+    schedule's ``format_regulation_periods`` in the warehouse. Without it (null, NaN, or anything
+    other than 2 or 4) the season decides: the NBA always plays quarters, men's college basketball
+    always halves, the WNBA halves before 2006 and women's college basketball halves before the
+    2015-16 season (``season`` 2016, ESPN's end year). With neither, WNBA and WBB default to quarters.
+
+    Args:
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``.
+        season: ESPN ``season.year`` of the game (the end year for college).
+        format_regulation_periods: The game's own regulation period count, if known.
+
+    Returns:
+        ``2`` or ``4``.
+
+    Raises:
+        ValueError: If ``league`` is not one of the four.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_game_page import game_regulation_periods
+            game_regulation_periods("wbb", season=2015)  # 2: halves before 2015-16
+            game_regulation_periods("wnba", season=2024, format_regulation_periods=4.0)  # 4
+
+        A warehouse schedule row::
+
+            game_regulation_periods("mbb", season=2024, format_regulation_periods=2.0)  # 2
+
+        See Also:
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    lg = _resolve_league(league, None)
+    try:
+        own = int(format_regulation_periods) if format_regulation_periods is not None else None
+    except (TypeError, ValueError):  # NaN from a null schedule cell
+        own = None
+    if own in (2, 4):
+        return int(own)
+    if lg == "mbb":
+        return 2
+    if lg == "nba" or season is None:
+        return 4
+    return 2 if int(season) < _QUARTERS_FROM[lg] else 4
 
 
 #: League ids the game page can score (the in-game win-probability artifacts ship for these two).
@@ -309,22 +392,33 @@ def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def game_minutes(periods: int, *, league_id: str = "00") -> int:
+def game_minutes(
+    periods: int,
+    *,
+    league_id: Optional[str] = None,
+    league: Optional[str] = None,
+    regulation_periods: Optional[int] = None,
+) -> int:
     """Minutes played in a game of ``periods`` periods: the league's regulation length plus five per overtime.
 
-    Regulation is 48 minutes for the NBA (``"00"``) and 40 for the WNBA (``"10"``), read from
-    :func:`~sportsdataverse.nba.nba_prediction_constants.get_constants`; an overtime is 5 minutes in both.
+    Regulation is 48 minutes in the NBA and 40 in the WNBA and both college leagues (two 20-minute
+    halves or four 10-minute quarters); every overtime is 5 minutes. A period past the game's
+    ``regulation_periods`` is an overtime, so period 3 of a halves game is the first overtime.
 
     Args:
-        periods: Highest period number played (``4`` for regulation, ``5`` for one OT, ...).
-        league_id: ``"00"`` NBA / ``"10"`` WNBA.
+        periods: Highest period number played.
+        league_id: Legacy alias: ``"00"`` NBA / ``"10"`` WNBA.
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"`` (default NBA).
+        regulation_periods: The game's regulation periods (2 or 4); default
+            :func:`game_regulation_periods` for the league without a season (MBB 2, otherwise 4).
 
     Returns:
         Game minutes.
 
     Raises:
         TypeError: If ``periods`` is ``None`` or another non-numeric type.
-        ValueError: If ``periods`` is a string that is not an integer, or ``league_id`` is unknown.
+        ValueError: If ``periods`` is a string that is not an integer, the league is unknown, or
+            ``league`` contradicts ``league_id``.
 
     Example:
         Quick start::
@@ -332,18 +426,20 @@ def game_minutes(periods: int, *, league_id: str = "00") -> int:
             from sportsdataverse.nba.nba_game_page import game_minutes
             game_minutes(5)  # 53
 
-        WNBA::
+        A double-overtime men's college game (two halves + two OTs)::
 
-            game_minutes(5, league_id="10")  # 45
+            game_minutes(4, league="mbb")  # 50
 
         See Also:
-            * `hoopR`_ -- the R companion for NBA play-by-play and box scores
-            * `nba_api`_ -- Python client for the official stats.nba.com endpoints
+            * `hoopR`_ -- the R companion for NBA and men's college play-by-play
+            * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
 
         .. _hoopR: https://hoopR.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    return get_constants(league_id).game_minutes + 5 * max(int(periods) - REGULATION_PERIODS, 0)
+    lg = _resolve_league(league, league_id)
+    reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg)
+    return _REGULATION_MINUTES[lg] + 5 * max(int(periods) - reg, 0)
 
 
 def _ratio(num: pl.Expr, den: pl.Expr) -> pl.Expr:

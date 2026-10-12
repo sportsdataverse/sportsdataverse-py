@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_matchup"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_la"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_la"
 sidebar_position: 10
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_la — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_la
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -778,19 +778,22 @@ print(curve.delta(24))  # ~1.0
 
 ### game_minutes {#game_minutes}
 
-`game_minutes(periods: 'int', *, league_id: 'str' = '00') -> 'int'`
+`game_minutes(periods: 'int', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'int'`
 
 Minutes played in a game of `periods` periods: the league's regulation length plus five per overtime.
 
-Regulation is 48 minutes for the NBA (`"00"`) and 40 for the WNBA (`"10"`), read from
-`~sportsdataverse.nba.nba_prediction_constants.get_constants`; an overtime is 5 minutes in both.
+Regulation is 48 minutes in the NBA and 40 in the WNBA and both college leagues (two 20-minute
+halves or four 10-minute quarters); every overtime is 5 minutes. A period past the game's
+`regulation_periods` is an overtime, so period 3 of a halves game is the first overtime.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `periods` | `int` |  | Highest period number played (`4` for regulation, `5` for one OT, ...). |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA. |
+| `periods` | `int` |  | Highest period number played. |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league without a season (MBB 2, otherwise 4). |
 
 **Returns**
 
@@ -802,9 +805,9 @@ Game minutes.
 from sportsdataverse.nba.nba_game_page import game_minutes
 game_minutes(5)  # 53
 
-# WNBA
+# A double-overtime men's college game (two halves + two OTs)
 
-game_minutes(5, league_id="10")  # 45
+game_minutes(4, league="mbb")  # 50
 ```
 
 ### game_page_frames {#game_page_frames}
@@ -837,6 +840,42 @@ from sportsdataverse.nba.nba_game_page import game_page_frames
 from sportsdataverse.nba.nba_pbp import espn_nba_pbp
 frames = game_page_frames(espn_nba_pbp(401766458))
 frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
+```
+
+### game_regulation_periods {#game_regulation_periods}
+
+`game_regulation_periods(league: 'str', *, season: 'Optional[int]' = None, format_regulation_periods: 'Optional[float]' = None) -> 'int'`
+
+Regulation periods of one game: 2 (halves) or 4 (quarters).
+
+The game's own value wins: ESPN's summary `format.regulation.periods` on the live path, the
+schedule's `format_regulation_periods` in the warehouse. Without it (null, NaN, or anything
+other than 2 or 4) the season decides: the NBA always plays quarters, men's college basketball
+always halves, the WNBA halves before 2006 and women's college basketball halves before the
+2015-16 season (`season` 2016, ESPN's end year). With neither, WNBA and WBB default to quarters.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`. |
+| `season` | `Optional[int]` | `None` | ESPN `season.year` of the game (the end year for college). |
+| `format_regulation_periods` | `Optional[float]` | `None` | The game's own regulation period count, if known. |
+
+**Returns**
+
+`2` or `4`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import game_regulation_periods
+game_regulation_periods("wbb", season=2015)  # 2: halves before 2015-16
+game_regulation_periods("wnba", season=2024, format_regulation_periods=4.0)  # 4
+
+# A warehouse schedule row
+
+game_regulation_periods("mbb", season=2024, format_regulation_periods=2.0)  # 2
 ```
 
 ### get_constants {#get_constants}
@@ -1521,60 +1560,4 @@ print(df.sort("la_rapm", descending=True).head())
 # Planted-truth shooter rates (e.g. for testing)
 
 df = nba_la_rapm(season_poss, season_shooting, {7: (0.4, 0.8)})
-```
-
-### nba_matchup_drapm {#nba_matchup_drapm}
-
-`nba_matchup_drapm(season: 'str', *, league_id: 'str' = '00', matchups: 'Optional[pl.DataFrame]' = None, config: 'Optional[PlaytypeConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Matchup-based defensive RAPM (offense-quality-controlled).
-
-Fits `points_allowed_per_100 ~ defender_FE + offense_FE` via
-`~sklearn.linear_model.RidgeCV` (weighted by matchup possessions),
-reusing the shipped RAPM ridge machinery on the
-`build_matchup_drapm_design` two-way-FE design.
-
-**Sign + scale:** the design target `y` is already points-allowed *per 100*
-matchup possessions (`100 * player_pts / partial_poss`), so the defender
-coefficient is already on the per-100 scale -- `matchup_drapm =
--(beta_defender - mean_beta_defender)` (centered, NO extra ×100, unlike
-`~sportsdataverse.nba.nba_rapm.nba_rapm` whose `y` is per-*possession*
-and needs the ×100). Sign is negated so higher = better defense (fewer points
-allowed), matching the `d_rapm` convention. Typical magnitudes are a few to
-low-double-digit points per 100 vs the league defender average.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `matchups` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leagueseasonmatchups`-shaped frame (bypasses the live fetch -- used for tests / oracle fixtures). |
-| `config` | `Optional[PlaytypeConfig]` | `None` | `~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig`; defaults to a fresh instance (`ridge_alphas` = the shared RAPM grid, `min_matchup_poss` = 25.0 inclusion floor). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per defender: `player_id` (Int64), `matchup_drapm` (Float64, points-allowed-per-100 estimate, higher = better defense), `matchup_poss` (Float64, total matchup possessions guarded). Returns a zero-row frame with this schema when the upstream fetch/injection is empty or no row survives the `min_matchup_poss` floor (sparse-coverage leagues never raise).
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `matchup_drapm` | double |  |
-| `matchup_poss` | double |  |
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_matchup_drapm
-d = nba_matchup_drapm("2023-24")
-print(d.sort("matchup_drapm", descending=True).head(10))
-
-# Injected offline (oracle / test) path
-
-d = nba_matchup_drapm("2023-24", matchups=matchups_df)
-
-# Pipeline next step
-
-d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
 ```

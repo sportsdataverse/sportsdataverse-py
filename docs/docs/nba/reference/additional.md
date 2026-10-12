@@ -167,6 +167,7 @@ not covered by the generated API-endpoint reference above.
 | [fit_aging_curve](additional/models-and-calculators.md#fit_aging_curve) | Fit the aging curve by the delta method: avg YoY rating change grouped by starting age. |
 | [game_minutes](additional/models-and-calculators.md#game_minutes) | Minutes played in a game of `periods` periods: the league's regulation length plus five per overtime. |
 | [game_page_frames](additional/models-and-calculators.md#game_page_frames) | Everything the Game on Paper NBA game page needs, from one `espn_nba_pbp` payload. |
+| [game_regulation_periods](additional/models-and-calculators.md#game_regulation_periods) | Regulation periods of one game: 2 (halves) or 4 (quarters). |
 | [get_constants](additional/models-and-calculators.md#get_constants) | Return the `LeagueConstants` for a `league_id`. |
 | [get_shrinkage_k](additional/models-and-calculators.md#get_shrinkage_k) | Shooter-talent shrinkage `k` for a league. |
 | [home_prior](additional/models-and-calculators.md#home_prior) | Pregame home win probability for the in-game model, and where it came from. |
@@ -183,7 +184,7 @@ not covered by the generated API-endpoint reference above.
 | [nba_four_factor_rapm](additional/models-and-calculators.md#nba_four_factor_rapm) | Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design. |
 | [nba_in_game_win_prob](additional/models-and-calculators.md#nba_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
 | [nba_la_rapm](additional/models-and-calculators.md#nba_la_rapm) | Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed). |
-| [nba_matchup_drapm](additional/models-and-calculators.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
+| [nba_matchup_drapm](additional/models-and-calculators-2.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
 | [nba_predict_games](additional/models-and-calculators-2.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
 | [nba_rookie_projection](additional/models-and-calculators-2.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |
 | [nba_spm](additional/models-and-calculators-2.md#nba_spm) | Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM. |

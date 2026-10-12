@@ -17,7 +17,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 199 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 200 | — |
 
 ## ESPN {#espn}
 
@@ -103,6 +103,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`fit_aging_curve`](reference/additional/models-and-calculators#fit_aging_curve)
 - [`game_minutes`](reference/additional/models-and-calculators#game_minutes)
 - [`game_page_frames`](reference/additional/models-and-calculators#game_page_frames)
+- [`game_regulation_periods`](reference/additional/models-and-calculators#game_regulation_periods)
 - [`get_constants`](reference/additional/models-and-calculators#get_constants)
 - [`get_shrinkage_k`](reference/additional/models-and-calculators#get_shrinkage_k)
 - [`home_prior`](reference/additional/models-and-calculators#home_prior)
@@ -119,7 +120,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_four_factor_rapm`](reference/additional/models-and-calculators#nba_four_factor_rapm)
 - [`nba_in_game_win_prob`](reference/additional/models-and-calculators#nba_in_game_win_prob)
 - [`nba_la_rapm`](reference/additional/models-and-calculators#nba_la_rapm)
-- [`nba_matchup_drapm`](reference/additional/models-and-calculators#nba_matchup_drapm)
+- [`nba_matchup_drapm`](reference/additional/models-and-calculators-2#nba_matchup_drapm)
 - [`nba_predict_games`](reference/additional/models-and-calculators-2#nba_predict_games)
 - [`nba_rookie_projection`](reference/additional/models-and-calculators-2#nba_rookie_projection)
 - [`nba_spm`](reference/additional/models-and-calculators-2#nba_spm)

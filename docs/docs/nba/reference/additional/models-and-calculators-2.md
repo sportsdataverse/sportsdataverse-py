@@ -1,10 +1,66 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_predict–win_prob"
-sidebar_label: "Models and calculators: nba_predict–win_prob"
+title: "NBA — additional Python functions — Models and calculators: nba_matchup–win_prob"
+sidebar_label: "Models and calculators: nba_matchup–win_prob"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: nba_predict–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_matchup–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_predict–win_prob
+# NBA — additional Python functions — Models and calculators: nba_matchup–win_prob
+
+### nba_matchup_drapm {#nba_matchup_drapm}
+
+`nba_matchup_drapm(season: 'str', *, league_id: 'str' = '00', matchups: 'Optional[pl.DataFrame]' = None, config: 'Optional[PlaytypeConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Matchup-based defensive RAPM (offense-quality-controlled).
+
+Fits `points_allowed_per_100 ~ defender_FE + offense_FE` via
+`~sklearn.linear_model.RidgeCV` (weighted by matchup possessions),
+reusing the shipped RAPM ridge machinery on the
+`build_matchup_drapm_design` two-way-FE design.
+
+**Sign + scale:** the design target `y` is already points-allowed *per 100*
+matchup possessions (`100 * player_pts / partial_poss`), so the defender
+coefficient is already on the per-100 scale -- `matchup_drapm =
+-(beta_defender - mean_beta_defender)` (centered, NO extra ×100, unlike
+`~sportsdataverse.nba.nba_rapm.nba_rapm` whose `y` is per-*possession*
+and needs the ×100). Sign is negated so higher = better defense (fewer points
+allowed), matching the `d_rapm` convention. Typical magnitudes are a few to
+low-double-digit points per 100 vs the league defender average.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `matchups` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leagueseasonmatchups`-shaped frame (bypasses the live fetch -- used for tests / oracle fixtures). |
+| `config` | `Optional[PlaytypeConfig]` | `None` | `~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig`; defaults to a fresh instance (`ridge_alphas` = the shared RAPM grid, `min_matchup_poss` = 25.0 inclusion floor). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per defender: `player_id` (Int64), `matchup_drapm` (Float64, points-allowed-per-100 estimate, higher = better defense), `matchup_poss` (Float64, total matchup possessions guarded). Returns a zero-row frame with this schema when the upstream fetch/injection is empty or no row survives the `min_matchup_poss` floor (sparse-coverage leagues never raise).
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `matchup_drapm` | double |  |
+| `matchup_poss` | double |  |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_matchup_drapm
+d = nba_matchup_drapm("2023-24")
+print(d.sort("matchup_drapm", descending=True).head(10))
+
+# Injected offline (oracle / test) path
+
+d = nba_matchup_drapm("2023-24", matchups=matchups_df)
+
+# Pipeline next step
+
+d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
+```
 
 ### nba_predict_games {#nba_predict_games}
 

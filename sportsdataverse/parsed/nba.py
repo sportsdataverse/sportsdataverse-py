@@ -219,6 +219,7 @@ from sportsdataverse.nba import fox_nba_team_header as fox_nba_team_header  # no
 from sportsdataverse.nba import fox_nba_teamnav as fox_nba_teamnav  # noqa: F401
 from sportsdataverse.nba import game_minutes as game_minutes  # noqa: F401
 from sportsdataverse.nba import game_page_frames as game_page_frames  # noqa: F401
+from sportsdataverse.nba import game_regulation_periods as game_regulation_periods  # noqa: F401
 from sportsdataverse.nba import get_constants as get_constants  # noqa: F401
 from sportsdataverse.nba import get_shrinkage_k as get_shrinkage_k  # noqa: F401
 from sportsdataverse.nba import helper_nba_athlete_items as helper_nba_athlete_items  # noqa: F401
@@ -618,6 +619,7 @@ __all__ = [
     "fox_nba_teams",
     "game_minutes",
     "game_page_frames",
+    "game_regulation_periods",
     "get_constants",
     "get_shrinkage_k",
     "helper_nba_athlete_items",
