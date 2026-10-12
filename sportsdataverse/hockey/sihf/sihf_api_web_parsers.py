@@ -250,7 +250,15 @@ def _table_frame(raw: Any, extra: Optional[Mapping[str, Any]] = None) -> pl.Data
     df = _typed(pl.from_dicts(rows, infer_schema_length=None), aliases)
     # Ids are Int64 join keys even when every row is null (inference would make them Null).
     ids = [c for c in df.columns if c == "id" or c.endswith("_id")]
-    return df.with_columns(pl.col(c).cast(pl.Int64, strict=False) for c in ids) if ids else df
+    df = df.with_columns(pl.col(c).cast(pl.Int64, strict=False) for c in ids) if ids else df
+    # A column that is blank in every row (or ``season`` when the body does not echo it) infers as
+    # Null, and a periods column of empty lists as List(Null): give each its documented dtype.
+    blank: Dict[str, Any] = {}
+    for c, dtype in df.schema.items():
+        doc = _table_dtype(c)
+        if dtype == pl.Null or (dtype == pl.List(pl.Null) and isinstance(doc, pl.List)):
+            blank[c] = doc
+    return df.with_columns(pl.col(c).cast(t) for c, t in blank.items()) if blank else df
 
 
 def parse_sihf_table(

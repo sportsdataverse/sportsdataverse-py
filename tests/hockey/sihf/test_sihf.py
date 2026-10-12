@@ -119,6 +119,21 @@ def test_second_season_fixture_echoes_its_season():
     assert "Fribourg-Gottéron" in parse_sihf_table(_load(TABLES["standings"]))["team_name"].to_list()  # UTF-8 intact
 
 
+def test_all_blank_table_columns_keep_their_documented_dtypes():
+    # A column blank in every row infers as Null, a periods column of empty lists as List(Null),
+    # and season is null when the body does not echo it: each still gets its documented dtype.
+    body = _load(TABLES["results"])
+    header = [h["alias"] for h in body["header"]]
+    for row in body["data"]:
+        row[header.index("date")] = ""
+        row[header.index("decision")] = ""
+        row[header.index("scorePerPeriod")] = {"type": "periods", "homeTeam": [], "awayTeam": []}
+    body["filters"] = [f for f in body["filters"] if f.get("alias") != "Season"]
+    df = parse_sihf_table(body)
+    assert df.schema == parse_sihf_table(_load(TABLES["results"])).schema
+    assert df["date"].null_count() == df["season"].null_count() == df.height
+
+
 def test_table_pandas():
     assert isinstance(parse_sihf_table(_load(TABLES["standings"]), return_as_pandas=True), pd.DataFrame)
 
