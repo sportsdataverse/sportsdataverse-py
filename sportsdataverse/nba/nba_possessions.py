@@ -1808,9 +1808,10 @@ def nba_possessions(
             game_id, league_id, proxy_url=proxy_url, raw_store_dir=raw_store_dir, raw_store_readonly=raw_store_readonly
         )
         rot = parse_rotation_resultsets(raw_rot)
-        oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
+        # A malformed rotation (stints off five players' game time) comes back empty too.
+        oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away, league_id=league_id)
         if oc.is_empty():
-            raise ValueError("rotation produced empty on-court frame")
+            raise ValueError("rotation produced empty (or rejected malformed) on-court frame")
         # Coverage guard: a partially-degraded rotation payload (e.g. one side missing
         # stints) yields a non-empty frame with null player slots. Treat that as a
         # failure so "auto" falls back to the complete pbp reconstruction.
