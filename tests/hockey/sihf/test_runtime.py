@@ -77,7 +77,7 @@ def test_results_always_send_the_season_date_range(monkeypatch):
 
 
 def test_season_date_range_spans_july_to_june():
-    assert rt.season_date_range(2026) == "01.07.2025-30.06.2026"
+    assert rt._season_date_range(2026) == "01.07.2025-30.06.2026"
 
 
 def test_unset_filters_are_not_sent(monkeypatch):

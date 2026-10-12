@@ -220,6 +220,18 @@ def test_game_player_stats_resolve_player_ids():
         assert side_players["goals"].sum() == side_total["goals"].item()
 
 
+def test_a_shared_jersey_leaves_the_player_id_null():
+    # Two roster players on one team with one jersey: the box-score row cannot be resolved, so no guess.
+    body = _load(GAME)
+    box = parse_sihf_game_player_stats(body).filter(pl.col("row_type") == "data").row(0, named=True)
+    twin = next(p for p in body["players"] if str(p["id"]) == str(box["player_id"]))
+    body["players"].append({**twin, "id": 99999999, "fullName": "Twin Player"})
+    again = parse_sihf_game_player_stats(body).filter(
+        (pl.col("team_side") == box["team_side"]) & (pl.col("player_number") == box["player_number"])
+    )
+    assert again["player_id"].to_list() == [None]
+
+
 def test_game_goalie_and_team_stats():
     goalies = parse_sihf_game_goalie_stats(_load(GAME))
     assert goalies.height == 4 and goalies["player_id"].null_count() == 0

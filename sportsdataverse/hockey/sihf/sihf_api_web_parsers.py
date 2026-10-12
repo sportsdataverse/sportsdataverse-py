@@ -583,11 +583,12 @@ def parse_sihf_pbp(
 def _side_tables(game: Mapping[str, Any], alias: str) -> pl.DataFrame:
     """The per-side ``stats`` tables ``{alias}Home`` + ``{alias}Away``, stacked with side / team / player ids."""
     details = _obj(game.get("details"))
-    by_jersey: Dict[tuple, int] = {}
+    # (team, jersey) -> licence; a jersey two roster players share maps to None rather than a guess.
+    by_jersey: Dict[tuple, Optional[int]] = {}
     for pid, p in _roster(game).items():
         tid, jersey = _licence(p.get("teamId")), _int(p.get("jerseyNumber"))
         if tid is not None and jersey is not None:
-            by_jersey[(tid, jersey)] = pid
+            by_jersey[(tid, jersey)] = None if (tid, jersey) in by_jersey else pid
     frames = []
     for side in ("home", "away"):
         table = _stats_table(game, f"{alias}{side.title()}")

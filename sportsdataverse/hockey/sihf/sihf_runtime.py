@@ -57,7 +57,7 @@ __all__: List[str] = []
 FILTER_KEYS: Tuple[str, ...] = ("Season", "Phase", "Date", "ContentType")
 
 
-def season_date_range(season: Any) -> str:
+def _season_date_range(season: Any) -> str:
     """``01.07.<season-1>-30.06.<season>``: every date of a season keyed by its END year."""
     end = int(season)
     return f"01.07.{end - 1}-30.06.{end}"
@@ -70,7 +70,7 @@ def _build_query(params: Optional[Dict[str, Any]]) -> Tuple[Dict[str, Any], List
     if league is not None:
         clean["searchQuery"] = f"{clean.get('searchQuery', '1//')}{league}"
     if clean.get("alias") == "results" and "Season" in clean and "Date" not in clean:
-        clean["Date"] = season_date_range(clean["Season"])
+        clean["Date"] = _season_date_range(clean["Season"])
     filters = [(k, str(clean.pop(k))) for k in FILTER_KEYS if k in clean]
     if filters:
         clean["filterBy"] = ",".join(k for k, _ in filters)
