@@ -296,3 +296,32 @@ def test_parse_cbs_skips_a_basketball_box_under_a_football_id():
     payload = _read(RAW / "cbs" / "cfb" / "game_boxscore" / "2017" / "2843743.json.gz")
     assert any(isinstance(b.get("playerStats"), list) for b in payload["boxScores"])
     assert _cbs_players(payload, 2017, "2843743") == []
+
+
+def test_known_teams_are_taken_as_given_and_contradictions_counted():
+    games, rosters = _nba_espn(2024, 401584775)
+    alt = parse_season("yahoo", "nba", 2024, RAW)
+    schema = {"espn_team_id": pl.Int32, "team_id": pl.Utf8}
+
+    agree = match_season(
+        games, rosters, alt, known_teams=pl.DataFrame({"espn_team_id": [6], "team_id": ["nba.t.6"]}, schema=schema)
+    )
+    assert dict(agree["teams"].select("espn_team_id", "team_id").iter_rows()) == {6: "nba.t.6", 19: "nba.t.19"}
+    assert agree["stats"]["teams_contradicting_known"] == 0
+
+    swapped = pl.DataFrame({"espn_team_id": [6, 19], "team_id": ["nba.t.19", "nba.t.6"]}, schema=schema)
+    m = match_season(games, rosters, alt, known_teams=swapped)
+    assert dict(m["teams"].select("espn_team_id", "team_id").iter_rows()) == {6: "nba.t.19", 19: "nba.t.6"}
+    assert m["teams"]["match_confidence"].to_list() == [1.0, 1.0]
+    assert m["stats"]["teams_contradicting_known"] == 2
+
+
+def test_known_teams_ships_the_cbs_cfb_map_only():
+    from sportsdataverse._crosswalk_alt import known_teams
+
+    cbs = known_teams("cbs", "cfb")
+    assert cbs is not None and cbs.height >= 320
+    assert cbs.schema == {"espn_team_id": pl.Int32, "team_id": pl.Utf8}
+    assert cbs["espn_team_id"].is_unique().all() and cbs["team_id"].is_unique().all()
+    assert cbs.filter(pl.col("espn_team_id") == 2405)["team_id"].item() == "709"  # Monmouth
+    assert known_teams("fox", "nba") is None
