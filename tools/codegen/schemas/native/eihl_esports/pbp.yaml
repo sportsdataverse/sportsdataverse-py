@@ -113,5 +113,50 @@ columns:
 - description: ''
   name: outgoing_goalie_name
   type: character
+- description: ''
+  name: create_time
+  type: integer
+- description: ''
+  name: penalized_player_id
+  type: integer
+- description: ''
+  name: penalized_jersey
+  type: integer
+- description: ''
+  name: penalized_name
+  type: character
+- description: ''
+  name: penalty_from_real_time
+  type: character
+- description: ''
+  name: penalty_from_scoreboard_time
+  type: integer
+- description: ''
+  name: penalty_to_real_time
+  type: character
+- description: ''
+  name: penalty_to_scoreboard_time
+  type: integer
+- description: ''
+  name: duration
+  type: integer
+- description: ''
+  name: disciplined_functionary
+  type: logical
+- description: ''
+  name: disciplined_bm
+  type: logical
+- description: ''
+  name: codename
+  type: character
+- description: ''
+  name: replaced_player_id
+  type: integer
+- description: ''
+  name: replaced_jersey
+  type: integer
+- description: ''
+  name: replaced_name
+  type: character
 kind: dataframe
 schema: eihl_pbp

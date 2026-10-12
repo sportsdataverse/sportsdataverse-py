@@ -79,7 +79,16 @@ def test_returns_schema_names_and_dtypes_come_from_the_full_body(body):
     ep = next(e for e in _yaml(stem)["endpoints"] if _slug(e["path"]) == body.stem)
     df = _parser(ep)(_load(body))
     schema = yaml.safe_load((CODEGEN / "schemas" / f"{ep['returns_schema']}.yaml").read_text(encoding="utf-8"))
-    assert [(c["name"], c["type"]) for c in schema["columns"]] == [(n, _rtype(t)) for n, t in df.schema.items()]
+    documented = [(c["name"], c["type"]) for c in schema["columns"]]
+    parsed = [(n, _rtype(t)) for n, t in df.schema.items()]
+    if (
+        ep["short"] == "pbp"
+    ):  # the union of every bucket's pbp columns: this body's, then the others' (gen UNION_SHORTS)
+        assert documented[: len(parsed)] == parsed
+    else:
+        assert documented == parsed
+    with_columns = _parser(ep)(_load(body), columns=[n for n, _ in documented])
+    assert [(n, _rtype(t)) for n, t in with_columns.schema.items()] == documented
 
 
 def test_every_family_has_one_full_body():
@@ -321,6 +330,10 @@ def test_runtime_returns_a_good_body_after_the_throttle(serve):
             {"periods": {"1": {"start": None}}, "1": [], "2": [], "3": [], "overtime": [], "shootout": []},
             NoDataError,
         ),
+        (f"{B}/matches/575/period-events.json", 200, [{"type": "goal"}], AssetFetchError),
+        (f"{B}/league-matches/2026/1.json", 200, [{"id": 1, "season": "2026"}], AssetFetchError),
+        (f"{B}/visualization/shots/575.json", 200, [{"id": 1}], AssetFetchError),
+        (f"{B}/widget/esports/match/575.json", 200, [{"id": 575}], AssetFetchError),
     ],
     ids=[
         "404-NoSuchKey",
@@ -335,9 +348,86 @@ def test_runtime_returns_a_good_body_after_the_throttle(serve):
         "shots-other-match",
         "widget-other-match",
         "pbp-no-events",
+        "pbp-list-body",
+        "schedule-list-body",
+        "shots-list-body",
+        "widget-list-body",
     ],
 )
 def test_runtime_refusals(serve, url, status, body, error):
     serve(status, body)
     with pytest.raises(error):
         rt._get(url)
+
+
+# ------------------------------------------------------------------ empty / partial frames vs the schemas
+
+
+def _schema(stem, ep):
+    doc = yaml.safe_load((CODEGEN / "schemas" / f"{ep['returns_schema']}.yaml").read_text(encoding="utf-8"))
+    return {c["name"]: c["type"] for c in doc["columns"]}
+
+
+_POLARS = {"integer": pl.Int64, "numeric": pl.Float64, "character": pl.String, "logical": pl.Boolean}
+
+
+def test_the_package_schemas_mirror_the_returns_schemas():
+    """``_esports_schemas`` is package data written by the gen script; it must match the committed YAML."""
+    from sportsdataverse.hockey._esports_schemas import SCHEMAS
+
+    assert {(stem, ep["short"]) for stem, ep in ROUTES} == {(s, k) for s, v in SCHEMAS.items() for k in v}
+    for stem, ep in ROUTES:
+        assert list(SCHEMAS[stem][ep["short"]].items()) == list(_schema(stem, ep).items()), (stem, ep["short"])
+
+
+@pytest.mark.parametrize("route", ROUTES, ids=_id)
+def test_empty_and_populated_frames_share_the_schema_and_concat(route):
+    stem, ep = route
+    schema = _schema(stem, ep)
+    cols = list(schema)
+    parse = _parser(ep)
+    full = parse(_load(FIX / stem / f"{_slug(ep['path'])}.json"), columns=cols)
+    assert full.height > 0
+    assert dict(full.schema) == {c: _POLARS[t] for c, t in schema.items()}
+    for empty in (parse({}, columns=cols), parse(None, columns=cols), parse([], columns=cols)):
+        assert empty.height == 0 and empty.schema == full.schema
+        assert pl.concat([empty, full], how="vertical").height == full.height
+    assert pl.concat([parse({}), parse(_load(FIX / stem / f"{_slug(ep['path'])}.json"))], how="vertical").height > 0
+
+
+@pytest.mark.parametrize("stem", ["eihl_esports", "icehl_esports", "del_esports", "metal_esports"])
+def test_a_pbp_without_penalties_still_carries_the_penalty_columns(stem):
+    """The optional ``data.time`` block exists only on penalties: a game without one keeps its columns."""
+    ep = next(e for s, e in ROUTES if s == stem and e["short"] == "pbp")
+    cols = list(_schema(stem, ep))
+    raw = _load(FIX / stem / f"{_slug(ep['path'])}.json")
+    bare = {k: [e for e in v if e.get("type") != "penalty"] if isinstance(v, list) else v for k, v in raw.items()}
+    assert not [c for c in P.parse_esports_pbp(bare).columns if c.startswith("penalty_")]  # the body lacks them
+    full, partial = P.parse_esports_pbp(raw, columns=cols), P.parse_esports_pbp(bare, columns=cols)
+    penalty = [c for c in cols if c.startswith(("penalty_", "penalized_"))]
+    assert len(penalty) == 7 and partial.height > 0
+    assert partial.columns == full.columns == cols
+    assert partial.schema == full.schema
+    assert partial.select(penalty).null_count().row(0) == (partial.height,) * len(penalty)
+    assert pl.concat([full, partial], how="vertical").height == full.height + partial.height
+
+
+def test_a_body_with_an_undocumented_column_keeps_it_after_the_documented_ones():
+    stem, ep = next((s, e) for s, e in ROUTES if s == "del_esports" and e["short"] == "shifts")
+    cols = list(_schema(stem, ep))
+    raw = _load(FIX / stem / f"{_slug(ep['path'])}.json")
+    raw[0]["brandNew"] = 1
+    df = P.parse_esports_shifts(raw, columns=cols)
+    assert df.columns == [*cols, "brand_new"]
+
+
+def test_an_all_null_column_takes_its_schema_dtype_not_the_name_rule():
+    """``position`` is Int64 in the standings schema; the name rule alone would make it String."""
+    stem, ep = next((s, e) for s, e in ROUTES if s == "del_esports" and e["short"] == "standings")
+    cols = list(_schema(stem, ep))
+    assert _schema(stem, ep)["position"] == "integer"
+    raw = _load(FIX / stem / f"{_slug(ep['path'])}.json")
+    for block in raw:
+        for team in block["tableData"]["table"]:
+            team["position"] = None
+    assert P.parse_esports_standings(raw, columns=cols).schema["position"] == pl.Int64
