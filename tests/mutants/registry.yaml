@@ -1037,6 +1037,65 @@
     Since 1994 a missed kick from inside the 20 gives the ball at the 20: 271209010's kick from the
     11 would otherwise put the receiver at its own 18 (nflverse's next snap: the 80).
 
+- id: nfl-end-down-score-keeps-minus-one
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'no_down = (pl.col("end.down") == -1) & ~stop & unscored'
+  mutant: 'no_down = (pl.col("end.down") == -1) & ~stop'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "score_keeps_espns_minus_one"
+  expected: kill
+  note: >-
+    R810-8: the gate's "scores keep ESPN's -1". Rewriting the 321 scored -1 rows in the captures
+    moves first_down_created on 160, series on 18, series_result on 5 and wpa on 76.
+
+- id: nfl-kickoff-first-down-skips-scored-kickoffs
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'first_down = no_down | (kickoff & unscored) | missed_fg'
+  mutant: 'first_down = no_down | kickoff | missed_fg'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "score_keeps_espns_minus_one"
+  expected: kill
+  note: >-
+    R810-8: a scored kickoff (a return touchdown) keeps its scoring end; the kickoff model covers
+    unscored kickoffs only.
+
+- id: nfl-missed-fg-blocked-text-left-alone
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ~pl.col("text").str.contains("(?i)block").fill_null(False)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "model_branches and blocked_text_is_left_alone"
+  expected: kill
+  note: >-
+    R810-9: a "Field Goal Missed" row whose text says blocked is a live ball (168 in nfl-raw); the
+    missed field goal model leaves its end alone.
+
+- id: nfl-missed-fg-first-down-clause
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'first_down = no_down | (kickoff & unscored) | missed_fg'
+  mutant: 'first_down = no_down | (kickoff & unscored)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "model_branches and espn_second_and_five_becomes_first_and_ten"
+  expected: kill
+  note: >-
+    R810-9: a missed field goal ends at the other team's 1st & 10 whatever down / distance ESPN ships
+    (about 100 2014+ misses in nfl-raw do not end at ESPN's 1st & 10).
+
+- id: nfl-missed-fg-scored-miss-left-alone
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ~(pl.col("scoringPlay") == True).fill_null(False)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "model_branches and scored_miss_is_left_alone"
+  expected: kill
+  note: >-
+    R810-9: a scored "Field Goal Missed" row (3 in nfl-raw) is left to the scoring logic.
+
 - id: nfl-end-state-half-end-held
   group: nfl-end-state
   finding: EX-1.5-d
