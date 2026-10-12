@@ -127,6 +127,7 @@ not covered by the generated API-endpoint reference above.
 | [get_fg_wp](additional/models-and-calculators-4.md#get_fg_wp) | Expected win probability of attempting a field goal (cfb4th `get_fg_wp`). |
 | [get_go_wp](additional/models-and-calculators-4.md#get_go_wp) | Expected win probability of going for it on 4th down (cfb4th `get_go_wp`). |
 | [get_punt_wp](additional/models-and-calculators-4.md#get_punt_wp) | Expected win probability of punting on 4th down (cfb4th `get_punt_wp`). |
+| [kickoff_out_of_bounds_spot_expr](additional/models-and-calculators-4.md#kickoff_out_of_bounds_spot_expr) | The receiving team's yardline after a kickoff out of bounds (the 40 through 2011, the 35 from 2012). |
 | [load_draft_outcomes](additional/models-and-calculators-4.md#load_draft_outcomes) | NFL draft picks with the college of each pick, for the requested draft years. |
 | [load_fp_curve](additional/models-and-calculators-4.md#load_fp_curve) | Load the bundled EP-by-yardline curve (no network, no first-use download). |
 | [load_recruit_classes](additional/models-and-calculators-4.md#load_recruit_classes) | Load recruiting classes as per-recruit rows from the 247 RDB feed. |
@@ -136,6 +137,7 @@ not covered by the generated API-endpoint reference above.
 | [predict_total](additional/models-and-calculators-5.md#predict_total) | Expected combined point total from the four efficiency ratings + tempo. |
 | [slope_for_games](additional/models-and-calculators-5.md#slope_for_games) | Points per unit of rating differential, given how many games back it. |
 | [special_teams_ratings](additional/models-and-calculators-5.md#special_teams_ratings) | One row per team: a per-unit special-teams EPA composite. |
+| [touchback_yardline_expr](additional/models-and-calculators-5.md#touchback_yardline_expr) | Polars form of `touchback_yardline` for a `season` column expression. |
 | [win_prob_from_margin](additional/models-and-calculators-5.md#win_prob_from_margin) | Home win probability from an expected margin via the Gaussian CDF. |
 
 ## Analytics

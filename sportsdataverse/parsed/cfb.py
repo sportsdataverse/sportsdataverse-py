@@ -419,6 +419,7 @@ from sportsdataverse.cfb import helper_cfb_athlete_items as helper_cfb_athlete_i
 from sportsdataverse.cfb import helper_cfb_game_items as helper_cfb_game_items  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_roster_items as helper_cfb_roster_items  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_team_items as helper_cfb_team_items  # noqa: F401
+from sportsdataverse.cfb import kickoff_out_of_bounds_spot_expr as kickoff_out_of_bounds_spot_expr  # noqa: F401
 from sportsdataverse.cfb import load_cfb_adv_defensive as load_cfb_adv_defensive  # noqa: F401
 from sportsdataverse.cfb import load_cfb_adv_defensive_players as load_cfb_adv_defensive_players  # noqa: F401
 from sportsdataverse.cfb import load_cfb_adv_drives as load_cfb_adv_drives  # noqa: F401
@@ -522,6 +523,7 @@ from sportsdataverse.cfb import scoreboard_event_parsing as scoreboard_event_par
 from sportsdataverse.cfb import slope_for_games as slope_for_games  # noqa: F401
 from sportsdataverse.cfb import special_teams_ratings as special_teams_ratings  # noqa: F401
 from sportsdataverse.cfb import to_cfbfastr as to_cfbfastr  # noqa: F401
+from sportsdataverse.cfb import touchback_yardline_expr as touchback_yardline_expr  # noqa: F401
 from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 from sportsdataverse.cfb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 
@@ -742,6 +744,7 @@ __all__ = [
     "helper_cfb_game_items",
     "helper_cfb_roster_items",
     "helper_cfb_team_items",
+    "kickoff_out_of_bounds_spot_expr",
     "load_cfb_adv_defensive",
     "load_cfb_adv_defensive_players",
     "load_cfb_adv_drives",
@@ -974,6 +977,7 @@ __all__ = [
     "sports247_transfer_portal_team_feed",
     "sports247_transfers",
     "to_cfbfastr",
+    "touchback_yardline_expr",
     "underscore",
     "win_prob_from_margin",
     "yahoo_cfb_boxscore",

@@ -1,3 +1,5 @@
+import polars as pl
+
 ep_class_to_score_mapping = {0: 7, 1: -7, 2: 3, 3: -3, 4: 2, 5: -2, 6: 0}
 
 wp_start_touchback_columns = [
@@ -285,3 +287,90 @@ qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "era0", "e
 #: "This is a change from the previous rule, which started to use 2-point plays in the fifth
 #: overtime period".
 OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))
+
+#: Kickoff-touchback yards-to-endzone by the FIRST season each spot applied, newest first (the twin of
+#: :data:`sportsdataverse.nfl.model_vars.TOUCHBACK_YARDLINE_BY_SEASON`). sdv-internal-refs
+#: ``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``: PROP (February 2012) moved free-kick touchbacks
+#: from the 20 to the 25, so a kickoff touchback's next snap is 80 to go through 2011 and 75 from 2012.
+#: Every 2012-13 fixture touchback's next snap starts at the 25. cfbfastR's ``create_epa.R`` mirrors this
+#: table (cfbfastR #184).
+TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 80))
+
+#: The receiving team's yardline after a kickoff out of bounds, by the FIRST season each spot applied,
+#: newest first: the 35 from 2012, the 40 before. The same 2012 rule set
+#: (``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``, which moved the kick from the 30 to the 35; the
+#: catalogue entry does not itself state the out-of-bounds spot).
+KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 35), (0, 40))
+
+
+def _by_season_expr(table: tuple[tuple[int, int], ...], season: pl.Expr) -> pl.Expr:
+    # ponytail: untyped literals on purpose (the NFL twin casts Int64) -- the processor's columns keep the
+    # dtypes they had when these spots were inline ``.then(75)`` literals (byte-stable on the 1.2 suite).
+    expr = pl.lit(table[-1][1])
+    for first_season, value in reversed(table[:-1]):
+        expr = pl.when(season >= first_season).then(pl.lit(value)).otherwise(expr)
+    return expr
+
+
+def touchback_yardline(season: int) -> int:
+    """Kickoff-touchback yards-to-endzone for *season* (80 through 2011, 75 from 2012).
+
+    Args:
+        season: CFB season year.
+
+    Returns:
+        80 through 2011, 75 from 2012.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.model_vars import touchback_yardline
+
+            print([touchback_yardline(s) for s in (2011, 2012)])  # [80, 75]
+    """
+    for first_season, spot in TOUCHBACK_YARDLINE_BY_SEASON:
+        if season >= first_season:
+            return spot
+    return TOUCHBACK_YARDLINE_BY_SEASON[-1][1]  # pragma: no cover - the (0, 80) row always matches
+
+
+def touchback_yardline_expr(season: pl.Expr) -> pl.Expr:
+    """Polars form of :func:`touchback_yardline` for a ``season`` column expression.
+
+    Args:
+        season: Integer season expression (``pl.col("season")``).
+
+    Returns:
+        An integer expression of the touchback yards-to-endzone per row.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.cfb.model_vars import touchback_yardline_expr
+
+            df = pl.DataFrame({"season": [2011, 2012]})
+            print(df.select(touchback_yardline_expr(pl.col("season"))).to_series().to_list())  # [80, 75]
+    """
+    return _by_season_expr(TOUCHBACK_YARDLINE_BY_SEASON, season)
+
+
+def kickoff_out_of_bounds_spot_expr(season: pl.Expr) -> pl.Expr:
+    """The receiving team's yardline after a kickoff out of bounds (the 40 through 2011, the 35 from 2012).
+
+    Args:
+        season: Integer season expression (``pl.col("season")``).
+
+    Returns:
+        An integer expression of the out-of-bounds spot per row.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.cfb.model_vars import kickoff_out_of_bounds_spot_expr
+
+            df = pl.DataFrame({"season": [2011, 2012]})
+            print(df.select(kickoff_out_of_bounds_spot_expr(pl.col("season"))).to_series().to_list())  # [40, 35]
+    """
+    return _by_season_expr(KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON, season)

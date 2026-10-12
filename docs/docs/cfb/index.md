@@ -17,7 +17,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 | [247Sports Recruit Database](#247sports-recruit-database) | `247sports.com`, `ipa.247sports.com` | 47 | none |
 | [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `graphite-secure.sports.yahoo.com` | 7 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 29 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 105 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 107 | — |
 
 ## ESPN {#espn}
 
@@ -107,6 +107,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 - [`get_fg_wp`](reference/additional/models-and-calculators-4#get_fg_wp)
 - [`get_go_wp`](reference/additional/models-and-calculators-4#get_go_wp)
 - [`get_punt_wp`](reference/additional/models-and-calculators-4#get_punt_wp)
+- [`kickoff_out_of_bounds_spot_expr`](reference/additional/models-and-calculators-4#kickoff_out_of_bounds_spot_expr)
 - [`load_draft_outcomes`](reference/additional/models-and-calculators-4#load_draft_outcomes)
 - [`load_fp_curve`](reference/additional/models-and-calculators-4#load_fp_curve)
 - [`load_recruit_classes`](reference/additional/models-and-calculators-4#load_recruit_classes)
@@ -116,6 +117,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 - [`predict_total`](reference/additional/models-and-calculators-5#predict_total)
 - [`slope_for_games`](reference/additional/models-and-calculators-5#slope_for_games)
 - [`special_teams_ratings`](reference/additional/models-and-calculators-5#special_teams_ratings)
+- [`touchback_yardline_expr`](reference/additional/models-and-calculators-5#touchback_yardline_expr)
 - [`win_prob_from_margin`](reference/additional/models-and-calculators-5#win_prob_from_margin)
 
 ### Analytics {#analytics}
