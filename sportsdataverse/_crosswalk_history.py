@@ -69,6 +69,8 @@ FLOORS: Dict[str, Dict[str, int]] = {
 #: CBS serves box scores from these seasons (CFB 2015 is listings only) and plays from 2018.
 _CBS_BOX_FLOOR = {"nfl": 2016, "cfb": 2016}
 _CBS_PLAYS_FLOOR = 2018
+#: Fox WBB box scores carry players only from 2023; earlier seasons are listings only.
+_FOX_BOX_FLOOR = {"wbb": 2023}
 
 _DEFAULT_RPS = {"fox": 1.0, "yahoo": 1.0, "cbs": 0.5}
 #: Retry only server errors; a 403/429 must surface at once and stop the run.
@@ -536,7 +538,7 @@ def _fetch_games(
     tally: Dict[str, Any] = {"written": 0, "skipped": 0, "missing": 0, "failed": 0, "players": []}
     jobs: List[Tuple[str, Dict[str, Any]]] = []
     if provider == "fox":
-        jobs = [("event_data", g) for g in games]
+        jobs = [("event_data", g) for g in games] if season >= _FOX_BOX_FLOOR.get(league, 0) else []
     elif provider == "yahoo":
         jobs = [("playbook_boxscore", g) for g in games]
     else:
