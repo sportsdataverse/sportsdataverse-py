@@ -852,13 +852,13 @@
   group: qbr-order
   finding: R795-1
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '.with_columns(pl.col("qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa").fill_nan(0.0))'
-  mutant: '.with_columns(pl.col("qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa"))'
+  snippet: '.sum() / pl.col(w).sum()).otherwise(0.0)'
+  mutant: '.sum() / pl.col(w).sum()).otherwise(float("nan"))'
   test: tests/nfl/test_qbr_feature_order.py -k no_sack_rush_or_penalty
   expected: kill
   note: >-
-    without the fill an empty sack/rush/penalty group is 0/0 = NaN, which the booster reads as missing
-    (the trainer replaced it with 0); Eli Manning in 400874485 then carries nulls, not zeros
+    without the empty-group guard a QB with no sack/rush/penalty play gets 0/0 = NaN, which the booster
+    reads as missing (the trainer replaced it with 0); Eli Manning in 400874485 then carries nulls, not zeros
 
 - id: nfl-fourth-down-go-wp-scaled
   group: fourth-down-level
