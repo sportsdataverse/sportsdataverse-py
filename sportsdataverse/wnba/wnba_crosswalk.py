@@ -1,8 +1,8 @@
 """WNBA cross-source identity crosswalks (ESPN / WNBA Stats API / Fox Sports).
 
 Port of ``wehoop/R/wnba_crosswalk.R``. ESPN is the anchor; the WNBA Stats API
-and Fox are both joined on the normalized full team name. Yahoo columns are
-null placeholders.
+and Fox are both joined on the normalized full team name. Fox game ids and the
+Yahoo team / game ids are opt-in (``fox=True`` / ``yahoo=True``).
 
 Public surface:
 
@@ -13,6 +13,7 @@ Public surface:
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 import polars as pl
@@ -25,6 +26,7 @@ from sportsdataverse._common_crosswalk_basketball import (
     normalize_team,
     str_id,
 )
+from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games, with_yahoo_games, with_yahoo_teams
 from sportsdataverse._crosswalk_basketball_sources import (
     espn_scoreboard_games,
     espn_team_directory,
@@ -35,6 +37,7 @@ __all__ = [
     "wnba_team_crosswalk",
     "wnba_schedule_crosswalk",
     "wnba_player_crosswalk",
+    "wnba_crosswalks_from_archive",
 ]
 
 TEAM_COLUMNS = [
@@ -244,9 +247,10 @@ def wnba_team_crosswalk(
     stats: Optional[pl.DataFrame] = None,
     fox: Optional[pl.DataFrame] = None,
     return_as_pandas: bool = False,
+    yahoo: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Build the WNBA cross-source team crosswalk (ESPN / WNBA Stats / Fox).
+    """Build the WNBA cross-source team crosswalk (ESPN / WNBA Stats / Fox / Yahoo).
 
     One row per ESPN team, keyed on ``espn_team_id``. The Stats side is
     derived from the season schedule's home/away team fields (as in wehoop)
@@ -259,6 +263,10 @@ def wnba_team_crosswalk(
             Stats schedule.
         fox: Pre-fetched ``fox_wnba_teams()`` frame. ``None`` fetches live.
         return_as_pandas: Return pandas instead of polars.
+        yahoo: Fill ``yahoo_team_id`` / ``yahoo_team_abbreviation`` /
+            ``yahoo_team_name`` from Yahoo's team listing (one call), joined on
+            the normalized name. A failed Yahoo fetch logs a warning and leaves
+            them null; Yahoo teams no ESPN team took are logged.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -314,6 +322,8 @@ def wnba_team_crosswalk(
 
         fox = require_source("fox_wnba_teams()", _fox)
     out = _assemble_team_crosswalk(espn, stats, fox, season)
+    if yahoo:
+        out = with_yahoo_teams("wnba", out, **kwargs)
     return out.to_pandas() if return_as_pandas else out
 
 
@@ -323,9 +333,11 @@ def wnba_schedule_crosswalk(
     stats_games: Optional[pl.DataFrame] = None,
     return_as_pandas: bool = False,
     strict: bool = False,
+    fox: bool = False,
+    yahoo: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats).
+    """Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats / Fox / Yahoo).
 
     One row per game, joined on ``(game_date, home_espn_team_id,
     away_espn_team_id)`` after both sides reduce to the Eastern-Time date. The
@@ -341,6 +353,18 @@ def wnba_schedule_crosswalk(
             skipped) instead of skipping isolated failures. Default ``False`` matches the R
             producers; a provider whose every item failed raises either way. An item
             the host *answered* -- including a 404 -- counts as answered.
+        fox: Fill ``fox_game_id`` / ``fox_home_team_id`` / ``fox_away_team_id``
+            from Fox's scoreboard, one Fox call per game date. A Fox game matches
+            the row with the same US-Eastern date and the same teams (in either
+            home/away order); the Fox home/away ids are Fox's own. A failed Fox
+            fetch logs a warning and leaves the columns null.
+        yahoo: Fill ``yahoo_game_id`` = ``wnba.g.{YYYYMMDD ET}{home Yahoo id, 3
+            digits}``, checked against the ids Yahoo lists for the season's dates
+            so a neutral-site game takes Yahoo's home side and a game Yahoo does
+            not list stays null. The Yahoo team ids come from
+            :func:`wnba_team_crosswalk` with ``yahoo=True``. A failed Yahoo fetch
+            logs a warning; without the team listing the ids stay null, without
+            the id list the unverified home-side id is kept.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -374,10 +398,14 @@ def wnba_schedule_crosswalk(
     season = int(season) if season is not None else most_recent_wnba_season()
     if stats_games is None:
         stats_games = stats_schedule_games("wnba", season, **kwargs)
-    team_xwalk = wnba_team_crosswalk(season=season, **kwargs)
+    team_xwalk = wnba_team_crosswalk(season=season, yahoo=yahoo, **kwargs)
     dates = sorted({d for d in stats_games["game_date"].to_list() if d is not None})
     espn_games = espn_scoreboard_games("wnba", dates, strict=strict, **kwargs)
     out = _assemble_schedule_crosswalk(espn_games, stats_games, team_xwalk, season)
+    if fox:
+        out = with_fox_games("wnba", out, team_xwalk, **kwargs)
+    if yahoo:
+        out = with_yahoo_games("wnba", season, out, team_xwalk, **kwargs)
     return out.to_pandas() if return_as_pandas else out
 
 
@@ -483,3 +511,92 @@ def wnba_player_crosswalk(
         )
     )
     return out.to_pandas() if return_as_pandas else out
+
+
+def wnba_crosswalks_from_archive(
+    season: int,
+    espn_schedule: pl.DataFrame,
+    espn_game_rosters: pl.DataFrame,
+    stats_dir: Union[str, Path],
+    min_confidence: float = 0.92,
+    *,
+    fox: bool = False,
+    fox_games: bool = False,
+) -> Dict[str, pl.DataFrame]:
+    """Build the WNBA team, schedule and player crosswalks for a past season, offline.
+
+    The live builders read current-season endpoints, so they cannot produce
+    history. This one reads stored data only: the season's ESPN schedule and
+    ESPN game rosters (``espn_wnba_schedules`` / ``espn_wnba_game_rosters``
+    parquet, 2002+) and the local stats.wnba.com JSON archive
+    (``wehoop-wnba-stats-raw/wnba_stats/json``: ``boxscoretraditionalv3``, with
+    ``boxscoresummaryv2`` / ``leaguegamelog`` for the game date).
+
+    Teams pair by game-date co-occurrence (``match_method`` ``game_dates``),
+    games join on (US-Eastern date, home ESPN team, away ESPN team), and
+    players match inside each matched (game, team) on normalized name and
+    jersey, then vote across the season into one row per ESPN athlete per
+    team (``match_confidence`` = the share of matched games that agree).
+    All-Star and other exhibition sides are left out of the team and player
+    crosswalks; their games stay in the schedule. Yahoo columns stay null
+    (Yahoo WNBA team ids differ from ESPN's), and Fox columns stay null unless
+    ``fox=True``.
+
+    Args:
+        season: Season (calendar year).
+        espn_schedule: That season's ESPN schedule parquet.
+        espn_game_rosters: That season's ESPN game rosters parquet.
+        stats_dir: The stats archive's ``json`` root.
+        min_confidence: Jaro-Winkler floor for a fuzzy player match.
+        fox: Fetch the Fox legs live (the only network call). ``fox_team_id`` /
+            ``fox_team_name`` join on the normalized team name, so they fill for
+            any season whose franchise names match today's Fox names. The Fox
+            player columns fill only for the current season (Fox rosters are
+            today's) and stay null otherwise. A failed Fox fetch logs a warning
+            and leaves the columns null; it never fails the build.
+        fox_games: Fill ``fox_game_id`` and the Fox home/away team ids from
+            Fox's scoreboard, one Fox call per game date, matched on US-Eastern
+            date and teams (either home/away order), for any season Fox serves.
+            Fox teams resolve through ``fox_team_id`` (with ``fox``) or the
+            season's ESPN team names. A failed fetch logs a warning and leaves
+            the columns null.
+
+    Returns:
+        ``{"team": ..., "schedule": ..., "player": ...}``, with the same columns
+        as :func:`wnba_team_crosswalk`, :func:`wnba_schedule_crosswalk` and
+        :func:`wnba_player_crosswalk`.
+
+    Raises:
+        FileNotFoundError: ``stats_dir`` holds no box scores for ``season``.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.wnba import wnba_crosswalks_from_archive
+
+            out = wnba_crosswalks_from_archive(
+                2015,
+                pl.read_parquet("wnba/schedules/parquet/wnba_schedule_2015.parquet"),
+                pl.read_parquet("wnba/game_rosters/parquet/game_rosters_2015.parquet"),
+                "../wehoop-wnba-stats-raw/wnba_stats/json",
+            )
+            print(out["player"]["match_method"].value_counts())
+
+        Pipeline next step (one line)::
+
+            out["schedule"].filter(pl.col("match_method") != "both").head()
+
+        See Also:
+            * `wehoop`_ -- R sister package with the live crosswalks
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    from sportsdataverse._crosswalk_basketball_archive import build_archive_crosswalks, read_stats_archive
+
+    stats = read_stats_archive(stats_dir, "wnba", season)
+    if stats["games"].height == 0:
+        raise FileNotFoundError(f"no WNBA box scores for season {season} under {stats_dir}")
+    return build_archive_crosswalks(
+        "wnba", season, espn_schedule, espn_game_rosters, stats, min_confidence, fox=fox, fox_games=fox_games
+    )

@@ -1,0 +1,305 @@
+{
+ "data": {
+  "teams": [
+   {
+    "league": {
+     "currentSeason": 2026
+    },
+    "roster": [
+     {
+      "playerId": "ncaaf.p.312695",
+      "displayName": "Kedrick Bingley-Jones",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/players/312695/"
+      },
+      "firstName": "Kedrick",
+      "lastName": "Bingley-Jones",
+      "suggestedHeadshot": null,
+      "positions": [
+       {
+        "positionId": "DEFENSIVE_LINEMAN",
+        "name": "Defensive Lineman",
+        "abbreviation": "DL",
+        "positionGroup": {
+         "positionGroupId": "DEFENSIVE_LINE",
+         "displayName": "Defensive Line"
+        }
+       }
+      ],
+      "age": null,
+      "active": true,
+      "status": null,
+      "uniformNumber": "22",
+      "displayHeight": "6'4\"",
+      "birthDate": null,
+      "birthCity": "Concord",
+      "birthState": "North Carolina",
+      "birthCountry": "United States",
+      "college": null,
+      "injury": null,
+      "weight": 302,
+      "firstYear": null,
+      "lastYear": 2026,
+      "experienceInYears": null,
+      "collegeExperience": {
+       "displayName": "Freshman HS",
+       "classYear": 1
+      }
+     },
+     {
+      "playerId": "ncaaf.p.316903",
+      "displayName": "Jah-Marien Latham",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/players/316903/"
+      },
+      "firstName": "Jah-Marien",
+      "lastName": "Latham",
+      "suggestedHeadshot": {
+       "url": "https://s.yimg.com/iu/api/res/1.2/fDjCV464VMhQw_M8NBr4cA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/ncaaf_cutout/players_l/08042026/316903.1.png.cf.webp"
+      },
+      "positions": [
+       {
+        "positionId": "LINEBACKER",
+        "name": "Linebacker",
+        "abbreviation": "LB",
+        "positionGroup": {
+         "positionGroupId": "LINEBACKERS",
+         "displayName": "Linebackers"
+        }
+       }
+      ],
+      "age": null,
+      "active": true,
+      "status": null,
+      "uniformNumber": "20",
+      "displayHeight": "6'3\"",
+      "birthDate": null,
+      "birthCity": "Reform",
+      "birthState": "Alabama",
+      "birthCountry": "United States",
+      "college": null,
+      "injury": null,
+      "weight": 273,
+      "firstYear": null,
+      "lastYear": 2026,
+      "experienceInYears": null,
+      "collegeExperience": {
+       "displayName": "Freshman HS",
+       "classYear": 1
+      }
+     },
+     {
+      "playerId": "ncaaf.p.333303",
+      "displayName": "Keon Sabb",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/players/333303/"
+      },
+      "firstName": "Keon",
+      "lastName": "Sabb",
+      "suggestedHeadshot": {
+       "url": "https://s.yimg.com/iu/api/res/1.2/1igS_PdYi2QATQuQM2zpyg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/ncaaf_cutout/players_l/08042026/333303.1.png.cf.webp"
+      },
+      "positions": [
+       {
+        "positionId": "DEFENSIVE_BACK",
+        "name": "Defensive Back",
+        "abbreviation": "DB",
+        "positionGroup": {
+         "positionGroupId": "SECONDARY",
+         "displayName": "Secondary"
+        }
+       }
+      ],
+      "age": null,
+      "active": true,
+      "status": null,
+      "uniformNumber": "3",
+      "displayHeight": "6'3\"",
+      "birthDate": null,
+      "birthCity": "Glassboro",
+      "birthState": "New Jersey",
+      "birthCountry": "United States",
+      "college": null,
+      "injury": null,
+      "weight": 205,
+      "firstYear": null,
+      "lastYear": 2026,
+      "experienceInYears": null,
+      "collegeExperience": {
+       "displayName": "Freshman HS",
+       "classYear": 1
+      }
+     },
+     {
+      "playerId": "ncaaf.p.337754",
+      "displayName": "Cade Carruth",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/players/337754/"
+      },
+      "firstName": "Cade",
+      "lastName": "Carruth",
+      "suggestedHeadshot": {
+       "url": "https://s.yimg.com/iu/api/res/1.2/hQxH_qBDzs08WYC.uMp8rQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/ncaaf_cutout/players_l/08042026/337754.1.png.cf.webp"
+      },
+      "positions": [
+       {
+        "positionId": "QUARTERBACK",
+        "name": "Quarterback",
+        "abbreviation": "QB",
+        "positionGroup": {
+         "positionGroupId": "QUARTERBACKS",
+         "displayName": "Quarterbacks"
+        }
+       }
+      ],
+      "age": null,
+      "active": false,
+      "status": null,
+      "uniformNumber": null,
+      "displayHeight": "6'1\"",
+      "birthDate": null,
+      "birthCity": "Trussville",
+      "birthState": "Alabama",
+      "birthCountry": "United States",
+      "college": null,
+      "injury": null,
+      "weight": 215,
+      "firstYear": null,
+      "lastYear": 2025,
+      "experienceInYears": 4,
+      "collegeExperience": {
+       "displayName": "Senior",
+       "classYear": 4
+      }
+     },
+     {
+      "playerId": "ncaaf.p.337785",
+      "displayName": "Danny Lewis Jr.",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/players/337785/"
+      },
+      "firstName": "Danny",
+      "lastName": "Lewis Jr.",
+      "suggestedHeadshot": {
+       "url": "https://s.yimg.com/iu/api/res/1.2/mDasu6J1j6jtXhOBw4EqHg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/ncaaf_cutout/players_l/08042026/337785.1.png.cf.webp"
+      },
+      "positions": [
+       {
+        "positionId": "TIGHT_END",
+        "name": "Tight End",
+        "abbreviation": "TE",
+        "positionGroup": {
+         "positionGroupId": "TIGHT_ENDS",
+         "displayName": "Tight Ends"
+        }
+       }
+      ],
+      "age": null,
+      "active": true,
+      "status": null,
+      "uniformNumber": "87",
+      "displayHeight": "6'5\"",
+      "birthDate": null,
+      "birthCity": "New Iberia",
+      "birthState": "Louisiana",
+      "birthCountry": "United States",
+      "college": null,
+      "injury": null,
+      "weight": 260,
+      "firstYear": null,
+      "lastYear": 2026,
+      "experienceInYears": null,
+      "collegeExperience": {
+       "displayName": "Freshman HS",
+       "classYear": 1
+      }
+     },
+     {
+      "playerId": "ncaaf.p.455512",
+      "displayName": "Kevin Riley",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/players/455512/"
+      },
+      "firstName": "Kevin",
+      "lastName": "Riley",
+      "suggestedHeadshot": {
+       "url": "https://s.yimg.com/iu/api/res/1.2/zw7w7BJWBUaB3BTASu5lAQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/ncaaf_cutout/players_l/08042026/455512.1.png.cf.webp"
+      },
+      "positions": [
+       {
+        "positionId": "RUNNING_BACK",
+        "name": "Running Back",
+        "abbreviation": "RB",
+        "positionGroup": {
+         "positionGroupId": "RUNNING_BACKS",
+         "displayName": "Running Backs"
+        }
+       }
+      ],
+      "age": null,
+      "active": true,
+      "status": null,
+      "uniformNumber": "6",
+      "displayHeight": "5'11\"",
+      "birthDate": null,
+      "birthCity": "Northport",
+      "birthState": "Alabama",
+      "birthCountry": "United States",
+      "college": null,
+      "injury": null,
+      "weight": 198,
+      "firstYear": null,
+      "lastYear": 2026,
+      "experienceInYears": 3,
+      "collegeExperience": {
+       "displayName": "Junior",
+       "classYear": 3
+      }
+     },
+     {
+      "playerId": "ncaaf.p.470421",
+      "displayName": "Lotzeir Brooks",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/players/470421/"
+      },
+      "firstName": "Lotzeir",
+      "lastName": "Brooks",
+      "suggestedHeadshot": {
+       "url": "https://s.yimg.com/iu/api/res/1.2/tC3KDtjP3O1_o13P.0kq9w--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTk2O3c9OTY-/https://s.yimg.com/xe/i/us/sp/v/ncaaf_cutout/players_l/08042026/470421.1.png.cf.webp"
+      },
+      "positions": [
+       {
+        "positionId": "WIDE_RECEIVER",
+        "name": "Wide Receiver",
+        "abbreviation": "WR",
+        "positionGroup": {
+         "positionGroupId": "WIDE_RECEIVERS",
+         "displayName": "Wide Receivers"
+        }
+       }
+      ],
+      "age": null,
+      "active": true,
+      "status": null,
+      "uniformNumber": "3",
+      "displayHeight": "5'9\"",
+      "birthDate": null,
+      "birthCity": "Millville",
+      "birthState": "New Jersey",
+      "birthCountry": "United States",
+      "college": null,
+      "injury": null,
+      "weight": 197,
+      "firstYear": null,
+      "lastYear": 2026,
+      "experienceInYears": 2,
+      "collegeExperience": {
+       "displayName": "Sophomore",
+       "classYear": 2
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

@@ -1,9 +1,10 @@
 # Inline season-era literals allowed outside a constants module (tests/test_no_inline_season_literals.py).
 # Measured on the 1.2 branch point (36f7a02f1b). Rows are keyed on (file, scope, snippet) -- never a line
-# number -- with the exact count. id: the finding (C-H4 for the touchback), or C-T3, the tier-C era-literal
-# class, when the literal has no graded finding of its own. rule: the sdv-internal-refs rules/*.yaml id,
-# when the catalogue has one. The list may only shrink: plan task 3.1 removes the C-H4 rows, 3.11 the other
-# CFB/NFL processor rows; a literal that moves into a constant fails the gate until its row is deleted.
+# number -- with the exact count. id: the finding, or C-T3, the tier-C era-literal class, when the literal
+# has no graded finding of its own. rule: the sdv-internal-refs rules/*.yaml id, when the catalogue has one.
+# The list may only shrink: main's #778 removed the C-H4 touchback rows (_KICKOFF_2012_RULES_FROM); plan task
+# 3.11 removes the other CFB/NFL processor rows. A literal that moves into a constant fails the gate until its
+# row's count is lowered to the inline occurrences left, or the row is deleted when none remain.
 - file: sportsdataverse/cfb/cfb_pbp.py
   scope: 'CFBPlayProcess.__add_play_type_flags'
   snippet: 'pl.col("season") >= 2018'
@@ -19,40 +20,12 @@
   rule: cfb-2014-espn-participants-and-text-template
   reason: 'the folded-try suffix gate keys on ESPN''s 2014 text template. Plan task 3.11'
 - file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__add_yardage_cols'
+  scope: 'CFBPlayProcess.__add_xp_suffix_cols'
   snippet: 'pl.col("season") <= 2013'
   count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__add_yardage_cols'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__helper_cfb_pbp_features'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__process_epa'
-  snippet: 'pl.col("season") <= 2013'
-  count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__process_epa'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-H4
-  rule: cfb-2012-kickoff-35-touchback-25
-  reason: 'kickoff touchback spot cut at 2013 (80 / 75); the NCAA rule moves it in 2012. Plan task 3.1 replaces it with a cfb/model_vars.py constant'
+  id: C-T3
+  rule: cfb-2014-espn-participants-and-text-template
+  reason: 'through 2013 the try is its own "Extra point by X is good" row (ESPN''s pre-2014 text template); landed with main''s #771 (81f9718458), reached this branch in the main sync. Plan task 3.11'
 - file: sportsdataverse/cfb/cfb_pbp.py
   scope: 'CFBPlayProcess.__process_wpa'
   snippet: 'pl.col("season") <= 2013'

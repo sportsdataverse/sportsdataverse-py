@@ -1,0 +1,1274 @@
+{
+ "id": "20251127",
+ "sectionList": [
+  {
+   "id": "20251127",
+   "sectionDate": "2025-11-27T05:00:00Z",
+   "segmentId": "20251127",
+   "selectionId": "20251127",
+   "subtitle": "THU, NOV 27",
+   "menuTitle": "THU, NOV 27",
+   "events": [
+    {
+     "template": "scores-team",
+     "id": "cbk263945",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk263945",
+     "contentUri": "basketball/cbk/events/263945",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T05:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/acrisure-classic-utah-runnin-utes-vs-ole-miss-rebels-nov-27-2025-game-boxscore-263945",
+      "contentUri": "basketball/cbk/events/263945",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "263945",
+        "eventUri": "basketball/cbk/events/263945",
+        "homeUri": "basketball/cbk/teams/247",
+        "awayUri": "basketball/cbk/teams/197"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "importance": 0,
+     "upperTeam": {
+      "name": "UTAH",
+      "uri": "basketball/cbk/teams/197",
+      "longName": "Utah",
+      "stackedNameTop": "Utah",
+      "stackedNameBottom": "Runnin' Utes",
+      "record": "6-2",
+      "score": 75,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "MISS",
+      "uri": "basketball/cbk/teams/247",
+      "longName": "Ole Miss",
+      "stackedNameTop": "Ole Miss",
+      "stackedNameBottom": "Rebels",
+      "record": "5-2",
+      "score": 74,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "UTAH +10.5",
+     "overUnderLine": "OVER 145.5",
+     "gameNotes": "ACRISURE CLASSIC"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk263979",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk263979",
+     "contentUri": "basketball/cbk/events/263979",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T05:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/southwest-maui-invitational-boise-state-broncos-vs-chaminade-silverswords-nov-27-2025-game-boxscore-263979",
+      "contentUri": "basketball/cbk/events/263979",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "263979",
+        "eventUri": "basketball/cbk/events/263979",
+        "homeUri": "basketball/cbk/teams/346",
+        "awayUri": "basketball/cbk/teams/95"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "importance": 0,
+     "upperTeam": {
+      "name": "BSU",
+      "uri": "basketball/cbk/teams/95",
+      "longName": "Boise State",
+      "stackedNameTop": "Boise State",
+      "stackedNameBottom": "Broncos",
+      "record": "5-3",
+      "score": 102,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "CHA",
+      "uri": "basketball/cbk/teams/346",
+      "longName": "Chaminade",
+      "stackedNameTop": "Chaminade",
+      "stackedNameBottom": "Silverswords",
+      "record": "0-3",
+      "score": 76,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "CHA +28.0",
+     "overUnderLine": "OVER 164.5",
+     "gameNotes": "SOUTHWEST MAUI INVITATIONAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk264002",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk264002",
+     "contentUri": "basketball/cbk/events/264002",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T05:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/players-era-festival-maryland-terrapins-vs-alabama-crimson-tide-nov-27-2025-game-boxscore-264002",
+      "contentUri": "basketball/cbk/events/264002",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "264002",
+        "eventUri": "basketball/cbk/events/264002",
+        "homeUri": "basketball/cbk/teams/243",
+        "awayUri": "basketball/cbk/teams/26"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Holloway dishes out 10 assists, adds 17 points as #8 Alabama handles Maryland",
+     "importance": 0,
+     "upperTeam": {
+      "name": "MD",
+      "uri": "basketball/cbk/teams/26",
+      "longName": "Maryland",
+      "stackedNameTop": "Maryland",
+      "stackedNameBottom": "Terrapins",
+      "record": "5-3",
+      "score": 72,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "ALA",
+      "uri": "basketball/cbk/teams/243",
+      "longName": "Alabama",
+      "stackedNameTop": "Alabama",
+      "stackedNameBottom": "Crimson Tide",
+      "record": "5-2",
+      "score": 105,
+      "isLoser": false,
+      "rank": "8",
+      "hasPossession": false
+     },
+     "oddsLine": "ALA -15.5",
+     "overUnderLine": "OVER 166.5",
+     "gameNotes": "PLAYERS ERA FESTIVAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk261518",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk261518",
+     "contentUri": "basketball/cbk/events/261518",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T16:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/espn-events-invitational-richmond-spiders-vs-furman-paladins-nov-27-2025-game-boxscore-261518",
+      "contentUri": "basketball/cbk/events/261518",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "261518",
+        "eventUri": "basketball/cbk/events/261518",
+        "homeUri": "basketball/cbk/teams/252",
+        "awayUri": "basketball/cbk/teams/110"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Furman beats Richmond, powered by Wilkins' 26 points (12-26)",
+     "importance": 0,
+     "upperTeam": {
+      "name": "RICH",
+      "uri": "basketball/cbk/teams/110",
+      "longName": "Richmond",
+      "stackedNameTop": "Richmond",
+      "stackedNameBottom": "Spiders",
+      "record": "5-1",
+      "score": 72,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "FUR",
+      "uri": "basketball/cbk/teams/252",
+      "longName": "Furman",
+      "stackedNameTop": "Furman",
+      "stackedNameBottom": "Paladins",
+      "record": "4-3",
+      "score": 73,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "FUR +4.0",
+     "overUnderLine": "UNDER 147.5",
+     "gameNotes": "ESPN EVENTS INVITATIONAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk260612",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk260612",
+     "contentUri": "basketball/cbk/events/260612",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T17:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/st-bonaventure-bonnies-vs-east-carolina-pirates-nov-27-2025-game-boxscore-260612",
+      "contentUri": "basketball/cbk/events/260612",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "260612",
+        "eventUri": "basketball/cbk/events/260612",
+        "homeUri": "basketball/cbk/teams/105",
+        "awayUri": "basketball/cbk/teams/17"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "St. Bonaventure tops East Carolina, powered by Mitchell's 17 points, 12 rebounds",
+     "importance": 0,
+     "upperTeam": {
+      "name": "SBON",
+      "uri": "basketball/cbk/teams/17",
+      "longName": "St Bonaventure",
+      "stackedNameTop": "St. Bonaventure",
+      "stackedNameBottom": "Bonnies",
+      "record": "6-1",
+      "score": 67,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "ECU",
+      "uri": "basketball/cbk/teams/105",
+      "longName": "East Carolina",
+      "stackedNameTop": "East Carolina",
+      "stackedNameBottom": "Pirates",
+      "record": "2-5",
+      "score": 58,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "ECU +10.5",
+     "overUnderLine": "UNDER 144"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk264000",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk264000",
+     "contentUri": "basketball/cbk/events/264000",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T17:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/marriott-bonvoy-battle-4-atlantis-vanderbilt-commodores-vs-vcu-rams-nov-27-2025-game-boxscore-264000",
+      "contentUri": "basketball/cbk/events/264000",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "264000",
+        "eventUri": "basketball/cbk/events/264000",
+        "homeUri": "basketball/cbk/teams/111",
+        "awayUri": "basketball/cbk/teams/242"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "importance": 0,
+     "upperTeam": {
+      "name": "VAN",
+      "uri": "basketball/cbk/teams/242",
+      "longName": "Vanderbilt",
+      "stackedNameTop": "Vanderbilt",
+      "stackedNameBottom": "Commodores",
+      "record": "7-0",
+      "score": 89,
+      "isLoser": false,
+      "rank": "24",
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "VCU",
+      "uri": "basketball/cbk/teams/111",
+      "longName": "VCU",
+      "stackedNameTop": "VCU",
+      "stackedNameBottom": "Rams",
+      "record": "4-3",
+      "score": 74,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "VAN -6.5",
+     "overUnderLine": "OVER 161.5",
+     "gameNotes": "MARRIOTT BONVOY BATTLE 4 ATLANTIS"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk261519",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk261519",
+     "contentUri": "basketball/cbk/events/261519",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T18:30:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/espn-events-invitational-charlotte-49ers-vs-illinois-state-redbirds-nov-27-2025-game-boxscore-261519",
+      "contentUri": "basketball/cbk/events/261519",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "261519",
+        "eventUri": "basketball/cbk/events/261519",
+        "homeUri": "basketball/cbk/teams/185",
+        "awayUri": "basketball/cbk/teams/123"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Skunberg scores 22 and grabs 10 rebounds as Illinois State beats UNC-Charlotte",
+     "importance": 0,
+     "upperTeam": {
+      "name": "CHAR",
+      "uri": "basketball/cbk/teams/123",
+      "longName": "Charlotte",
+      "stackedNameTop": "Charlotte",
+      "stackedNameBottom": "49ers",
+      "record": "3-4",
+      "score": 69,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "ILST",
+      "uri": "basketball/cbk/teams/185",
+      "longName": "Illinois State",
+      "stackedNameTop": "Illinois State",
+      "stackedNameBottom": "Redbirds",
+      "record": "5-2",
+      "score": 79,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "ILST -5.5",
+     "overUnderLine": "OVER 138.5",
+     "gameNotes": "ESPN EVENTS INVITATIONAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk260613",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk260613",
+     "contentUri": "basketball/cbk/events/260613",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T19:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/acrisure-holiday-classic-colorado-buffaloes-vs-san-francisco-dons-nov-27-2025-game-boxscore-260613",
+      "contentUri": "basketball/cbk/events/260613",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "260613",
+        "eventUri": "basketball/cbk/events/260613",
+        "homeUri": "basketball/cbk/teams/309",
+        "awayUri": "basketball/cbk/teams/42"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "importance": 0,
+     "upperTeam": {
+      "name": "COLO",
+      "uri": "basketball/cbk/teams/42",
+      "longName": "Colorado",
+      "stackedNameTop": "Colorado",
+      "stackedNameBottom": "Buffaloes",
+      "record": "6-0",
+      "score": 79,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "SF",
+      "uri": "basketball/cbk/teams/309",
+      "longName": "San Francisco",
+      "stackedNameTop": "San Francisco",
+      "stackedNameBottom": "Dons",
+      "record": "5-2",
+      "score": 69,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "COLO +1.5",
+     "overUnderLine": "UNDER 150.5",
+     "gameNotes": "ACRISURE HOLIDAY CLASSIC"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk264001",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk264001",
+     "contentUri": "basketball/cbk/events/264001",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T19:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/players-era-festival-oregon-ducks-vs-creighton-bluejays-nov-27-2025-game-boxscore-264001",
+      "contentUri": "basketball/cbk/events/264001",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "264001",
+        "eventUri": "basketball/cbk/events/264001",
+        "homeUri": "basketball/cbk/teams/182",
+        "awayUri": "basketball/cbk/teams/223"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "importance": 0,
+     "upperTeam": {
+      "name": "ORE",
+      "uri": "basketball/cbk/teams/223",
+      "longName": "Oregon",
+      "stackedNameTop": "Oregon",
+      "stackedNameBottom": "Ducks",
+      "record": "4-3",
+      "score": 66,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "CREI",
+      "uri": "basketball/cbk/teams/182",
+      "longName": "Creighton",
+      "stackedNameTop": "Creighton",
+      "stackedNameBottom": "Bluejays",
+      "record": "4-3",
+      "score": 76,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "CREI -2.5",
+     "overUnderLine": "UNDER 150.5",
+     "gameNotes": "PLAYERS ERA FESTIVAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk264006",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk264006",
+     "contentUri": "basketball/cbk/events/264006",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T19:30:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/marriott-bonvoy-battle-4-atlantis-virginia-tech-hokies-vs-saint-marys-gaels-nov-27-2025-game-boxscore-264006",
+      "contentUri": "basketball/cbk/events/264006",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "264006",
+        "eventUri": "basketball/cbk/events/264006",
+        "homeUri": "basketball/cbk/teams/307",
+        "awayUri": "basketball/cbk/teams/59"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Hansberry's double-double (18 Pts, 10 Reb) not enough as Saint Mary's tops Virginia Tech",
+     "importance": 0,
+     "upperTeam": {
+      "name": "VT",
+      "uri": "basketball/cbk/teams/59",
+      "longName": "Virginia Tech",
+      "stackedNameTop": "Virginia Tech",
+      "stackedNameBottom": "Hokies",
+      "record": "6-1",
+      "score": 66,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "SMC",
+      "uri": "basketball/cbk/teams/307",
+      "longName": "Saint Mary's",
+      "stackedNameTop": "Saint Mary's",
+      "stackedNameBottom": "Gaels",
+      "record": "8-0",
+      "score": 77,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "SMC -4.5",
+     "overUnderLine": "UNDER 144.5",
+     "gameNotes": "MARRIOTT BONVOY BATTLE 4 ATLANTIS"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk261520",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk261520",
+     "contentUri": "basketball/cbk/events/261520",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T20:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/rady-childrens-invitational-tcu-horned-frogs-vs-florida-gators-nov-27-2025-game-boxscore-261520",
+      "contentUri": "basketball/cbk/events/261520",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "261520",
+        "eventUri": "basketball/cbk/events/261520",
+        "homeUri": "basketball/cbk/teams/237",
+        "awayUri": "basketball/cbk/teams/317"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "TCU stuns #10 Florida, led by Harding's 19 points, 12 assists",
+     "importance": 0,
+     "upperTeam": {
+      "name": "TCU",
+      "uri": "basketball/cbk/teams/317",
+      "longName": "TCU",
+      "stackedNameTop": "TCU",
+      "stackedNameBottom": "Horned Frogs",
+      "record": "4-2",
+      "score": 84,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "FLA",
+      "uri": "basketball/cbk/teams/237",
+      "longName": "Florida",
+      "stackedNameTop": "Florida",
+      "stackedNameBottom": "Gators",
+      "record": "4-2",
+      "score": 80,
+      "isLoser": true,
+      "rank": "10",
+      "hasPossession": false
+     },
+     "oddsLine": "TCU +11.5",
+     "overUnderLine": "OVER 156.5",
+     "gameNotes": "RADY CHILDREN'S INVITATIONAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk260611",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk260611",
+     "contentUri": "basketball/cbk/events/260611",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T21:30:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/north-carolina-tar-heels-vs-michigan-state-spartans-nov-27-2025-game-boxscore-260611",
+      "contentUri": "basketball/cbk/events/260611",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "260611",
+        "eventUri": "basketball/cbk/events/260611",
+        "homeUri": "basketball/cbk/teams/88",
+        "awayUri": "basketball/cbk/teams/27"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "importance": 1,
+     "upperTeam": {
+      "name": "UNC",
+      "uri": "basketball/cbk/teams/27",
+      "longName": "North Carolina",
+      "stackedNameTop": "North Carolina",
+      "stackedNameBottom": "Tar Heels",
+      "record": "6-1",
+      "score": 58,
+      "isLoser": true,
+      "rank": "16",
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "MSU",
+      "uri": "basketball/cbk/teams/88",
+      "longName": "Michigan State",
+      "stackedNameTop": "Michigan State",
+      "stackedNameBottom": "Spartans",
+      "record": "7-0",
+      "score": 74,
+      "isLoser": false,
+      "rank": "11",
+      "hasPossession": false
+     },
+     "oddsLine": "MSU -1.5",
+     "overUnderLine": "UNDER 152.5"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk261521",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk261521",
+     "contentUri": "basketball/cbk/events/261521",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T21:30:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/acrisure-holiday-classic-nevada-wolf-pack-vs-washington-huskies-nov-27-2025-game-boxscore-261521",
+      "contentUri": "basketball/cbk/events/261521",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "261521",
+        "eventUri": "basketball/cbk/events/261521",
+        "homeUri": "basketball/cbk/teams/228",
+        "awayUri": "basketball/cbk/teams/313"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Washington rallies from 16 down to beat Nevada",
+     "importance": 0,
+     "upperTeam": {
+      "name": "NEV",
+      "uri": "basketball/cbk/teams/313",
+      "longName": "Nevada",
+      "stackedNameTop": "Nevada",
+      "stackedNameBottom": "Wolf Pack",
+      "record": "4-3",
+      "score": 66,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "WASH",
+      "uri": "basketball/cbk/teams/228",
+      "longName": "Washington",
+      "stackedNameTop": "Washington",
+      "stackedNameBottom": "Huskies",
+      "record": "5-1",
+      "score": 83,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "WASH -3.5",
+     "overUnderLine": "OVER 145.5",
+     "gameNotes": "ACRISURE HOLIDAY CLASSIC"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk264004",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk264004",
+     "contentUri": "basketball/cbk/events/264004",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T21:30:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/players-era-festival-unlv-runnin-rebels-vs-rutgers-scarlet-knights-nov-27-2025-game-boxscore-264004",
+      "contentUri": "basketball/cbk/events/264004",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "264004",
+        "eventUri": "basketball/cbk/events/264004",
+        "homeUri": "basketball/cbk/teams/63",
+        "awayUri": "basketball/cbk/teams/196"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Ogbole drops 21 and grabs 13 rebounds as Rutgers beats UNLV",
+     "importance": 0,
+     "upperTeam": {
+      "name": "UNLV",
+      "uri": "basketball/cbk/teams/196",
+      "longName": "UNLV",
+      "stackedNameTop": "UNLV",
+      "stackedNameBottom": "Runnin' Rebels",
+      "record": "3-5",
+      "score": 65,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "RUTG",
+      "uri": "basketball/cbk/teams/63",
+      "longName": "Rutgers",
+      "stackedNameTop": "Rutgers",
+      "stackedNameBottom": "Scarlet Knights",
+      "record": "5-3",
+      "score": 80,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "RUTG +4.5",
+     "overUnderLine": "UNDER 153.5",
+     "gameNotes": "PLAYERS ERA FESTIVAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk261522",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk261522",
+     "contentUri": "basketball/cbk/events/261522",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T22:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/espn-events-invitational-byu-cougars-vs-miami-fl-hurricanes-nov-27-2025-game-boxscore-261522",
+      "contentUri": "basketball/cbk/events/261522",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "261522",
+        "eventUri": "basketball/cbk/events/261522",
+        "homeUri": "basketball/cbk/teams/55",
+        "awayUri": "basketball/cbk/teams/192"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "importance": 0,
+     "upperTeam": {
+      "name": "BYU",
+      "uri": "basketball/cbk/teams/192",
+      "longName": "BYU",
+      "stackedNameTop": "BYU",
+      "stackedNameBottom": "Cougars",
+      "record": "5-1",
+      "score": 72,
+      "isLoser": false,
+      "rank": "9",
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "MIA",
+      "uri": "basketball/cbk/teams/55",
+      "longName": "Miami (FL)",
+      "stackedNameTop": "Miami (FL)",
+      "stackedNameBottom": "Hurricanes",
+      "record": "5-2",
+      "score": 62,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "BYU -7.5",
+     "overUnderLine": "UNDER 165.5",
+     "gameNotes": "ESPN EVENTS INVITATIONAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk261523",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk261523",
+     "contentUri": "basketball/cbk/events/261523",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T22:30:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/rady-childrens-invitational-providence-friars-vs-wisconsin-badgers-nov-27-2025-game-boxscore-261523",
+      "contentUri": "basketball/cbk/events/261523",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "261523",
+        "eventUri": "basketball/cbk/events/261523",
+        "homeUri": "basketball/cbk/teams/94",
+        "awayUri": "basketball/cbk/teams/56"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Boyd scores 36 with 7 assists as Wisconsin tops Providence",
+     "importance": 0,
+     "upperTeam": {
+      "name": "PROV",
+      "uri": "basketball/cbk/teams/56",
+      "longName": "Providence",
+      "stackedNameTop": "Providence",
+      "stackedNameBottom": "Friars",
+      "record": "4-3",
+      "score": 83,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "WIS",
+      "uri": "basketball/cbk/teams/94",
+      "longName": "Wisconsin",
+      "stackedNameTop": "Wisconsin",
+      "stackedNameBottom": "Badgers",
+      "record": "5-1",
+      "score": 104,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "WIS -6.5",
+     "overUnderLine": "OVER 166.5",
+     "gameNotes": "RADY CHILDREN'S INVITATIONAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk264007",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk264007",
+     "contentUri": "basketball/cbk/events/264007",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-27T22:30:00Z",
+     "statusLine": "FINAL / OT",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/marriott-bonvoy-battle-4-atlantis-western-kentucky-hilltoppers-vs-south-florida-bulls-nov-27-2025-game-boxscore-264007",
+      "contentUri": "basketball/cbk/events/264007",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "264007",
+        "eventUri": "basketball/cbk/events/264007",
+        "homeUri": "basketball/cbk/teams/115",
+        "awayUri": "basketball/cbk/teams/296"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Brown leads, scores 18 as South Florida defeats Western Kentucky in OT",
+     "importance": 0,
+     "upperTeam": {
+      "name": "WKU",
+      "uri": "basketball/cbk/teams/296",
+      "longName": "Western Kentucky",
+      "stackedNameTop": "Western Kentucky",
+      "stackedNameBottom": "Hilltoppers",
+      "record": "4-2",
+      "score": 91,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "USF",
+      "uri": "basketball/cbk/teams/115",
+      "longName": "South Florida",
+      "stackedNameTop": "South Florida",
+      "stackedNameBottom": "Bulls",
+      "record": "4-3",
+      "score": 97,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "WKU +7.5",
+     "overUnderLine": "OVER 167.5",
+     "gameNotes": "MARRIOTT BONVOY BATTLE 4 ATLANTIS"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk261524",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk261524",
+     "contentUri": "basketball/cbk/events/261524",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-28T00:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/acrisure-invitational-saint-louis-billikens-vs-santa-clara-broncos-nov-27-2025-game-boxscore-261524",
+      "contentUri": "basketball/cbk/events/261524",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "261524",
+        "eventUri": "basketball/cbk/events/261524",
+        "homeUri": "basketball/cbk/teams/310",
+        "awayUri": "basketball/cbk/teams/124"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "importance": 0,
+     "upperTeam": {
+      "name": "SLU",
+      "uri": "basketball/cbk/teams/124",
+      "longName": "Saint Louis",
+      "stackedNameTop": "Saint Louis",
+      "stackedNameBottom": "Billikens",
+      "record": "6-0",
+      "score": 71,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "SCU",
+      "uri": "basketball/cbk/teams/310",
+      "longName": "Santa Clara",
+      "stackedNameTop": "Santa Clara",
+      "stackedNameBottom": "Broncos",
+      "record": "6-1",
+      "score": 70,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "SCU +1.5",
+     "overUnderLine": "UNDER 158.5",
+     "gameNotes": "ACRISURE INVITATIONAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk261525",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk261525",
+     "contentUri": "basketball/cbk/events/261525",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-28T00:30:00Z",
+     "statusLine": "FINAL / OT",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/espn-events-invitational-georgetown-hoyas-vs-dayton-flyers-nov-27-2025-game-boxscore-261525",
+      "contentUri": "basketball/cbk/events/261525",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "261525",
+        "eventUri": "basketball/cbk/events/261525",
+        "homeUri": "basketball/cbk/teams/21",
+        "awayUri": "basketball/cbk/teams/60"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Dayton tops Georgetown in OT, despite 24 Pts, 4 Reb, 4 Ast from Mack",
+     "importance": 0,
+     "upperTeam": {
+      "name": "GTWN",
+      "uri": "basketball/cbk/teams/60",
+      "longName": "Georgetown",
+      "stackedNameTop": "Georgetown",
+      "stackedNameBottom": "Hoyas",
+      "record": "5-1",
+      "score": 79,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "DAY",
+      "uri": "basketball/cbk/teams/21",
+      "longName": "Dayton",
+      "stackedNameTop": "Dayton",
+      "stackedNameBottom": "Flyers",
+      "record": "6-1",
+      "score": 84,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "DAY -1.5",
+     "overUnderLine": "OVER 145.5",
+     "gameNotes": "ESPN EVENTS INVITATIONAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk260615",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk260615",
+     "contentUri": "basketball/cbk/events/260615",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-28T01:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/arkansas-razorbacks-vs-duke-blue-devils-nov-27-2025-game-boxscore-260615",
+      "contentUri": "basketball/cbk/events/260615",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "260615",
+        "eventUri": "basketball/cbk/events/260615",
+        "homeUri": "basketball/cbk/teams/23",
+        "awayUri": "basketball/cbk/teams/244"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "#22 Arkansas falls to Boozer (35 Pts, 9 Reb, 3 Ast) and #4 Duke",
+     "importance": 0,
+     "upperTeam": {
+      "name": "ARK",
+      "uri": "basketball/cbk/teams/244",
+      "longName": "Arkansas",
+      "stackedNameTop": "Arkansas",
+      "stackedNameBottom": "Razorbacks",
+      "record": "5-2",
+      "score": 71,
+      "isLoser": true,
+      "rank": "22",
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "DUKE",
+      "uri": "basketball/cbk/teams/23",
+      "longName": "Duke",
+      "stackedNameTop": "Duke",
+      "stackedNameBottom": "Blue Devils",
+      "record": "8-0",
+      "score": 80,
+      "isLoser": false,
+      "rank": "4",
+      "hasPossession": false
+     },
+     "oddsLine": "ARK +11.5",
+     "overUnderLine": "UNDER 159.5"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk264008",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk264008",
+     "contentUri": "basketball/cbk/events/264008",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-28T01:00:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/marriott-bonvoy-battle-4-atlantis-colorado-state-rams-vs-wichita-state-shockers-nov-27-2025-game-boxscore-264008",
+      "contentUri": "basketball/cbk/events/264008",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "264008",
+        "eventUri": "basketball/cbk/events/264008",
+        "homeUri": "basketball/cbk/teams/190",
+        "awayUri": "basketball/cbk/teams/193"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "importance": 0,
+     "upperTeam": {
+      "name": "CSU",
+      "uri": "basketball/cbk/teams/193",
+      "longName": "Colorado State",
+      "stackedNameTop": "Colorado State",
+      "stackedNameBottom": "Rams",
+      "record": "5-2",
+      "score": 76,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "WICH",
+      "uri": "basketball/cbk/teams/190",
+      "longName": "Wichita State",
+      "stackedNameTop": "Wichita State",
+      "stackedNameBottom": "Shockers",
+      "record": "4-3",
+      "score": 70,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "CSU -2.5",
+     "overUnderLine": "OVER 142.5",
+     "gameNotes": "MARRIOTT BONVOY BATTLE 4 ATLANTIS"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk261526",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk261526",
+     "contentUri": "basketball/cbk/events/261526",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-28T02:30:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/acrisure-invitational-minnesota-golden-gophers-vs-stanford-cardinal-nov-27-2025-game-boxscore-261526",
+      "contentUri": "basketball/cbk/events/261526",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "261526",
+        "eventUri": "basketball/cbk/events/261526",
+        "homeUri": "basketball/cbk/teams/226",
+        "awayUri": "basketball/cbk/teams/89"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Okorie scores 25 (11-28) as Stanford beats Minnesota",
+     "importance": 0,
+     "upperTeam": {
+      "name": "MINN",
+      "uri": "basketball/cbk/teams/89",
+      "longName": "Minnesota",
+      "stackedNameTop": "Minnesota",
+      "stackedNameBottom": "Golden Gophers",
+      "record": "4-3",
+      "score": 68,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "STAN",
+      "uri": "basketball/cbk/teams/226",
+      "longName": "Stanford",
+      "stackedNameTop": "Stanford",
+      "stackedNameBottom": "Cardinal",
+      "record": "5-1",
+      "score": 72,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "oddsLine": "STAN -2.5",
+     "overUnderLine": "UNDER 142.5",
+     "gameNotes": "ACRISURE INVITATIONAL"
+    },
+    {
+     "template": "scores-team",
+     "id": "cbk260614",
+     "uri": "https://api.foxsports.com/bifrost/v1/cbk/scorechip/cbk260614",
+     "contentUri": "basketball/cbk/events/260614",
+     "contentType": "event",
+     "eventStatus": 3,
+     "eventTime": "2025-11-28T03:30:00Z",
+     "statusLine": "FINAL",
+     "isTba": false,
+     "entityLink": {
+      "webUrl": "/college-basketball/oklahoma-state-cowboys-vs-northwestern-wildcats-nov-27-2025-game-boxscore-260614",
+      "contentUri": "basketball/cbk/events/260614",
+      "contentType": "event",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cbkEventLayout",
+       "tokens": {
+        "id": "260614",
+        "eventUri": "basketball/cbk/events/260614",
+        "homeUri": "basketball/cbk/teams/90",
+        "awayUri": "basketball/cbk/teams/49"
+       }
+      },
+      "type": "entity"
+     },
+     "league": "MCBB",
+     "eventHeadline": "Oklahoma State tops Northwestern, despite 28 Pts, 10 Reb, 2 Ast from Martinelli",
+     "importance": 0,
+     "upperTeam": {
+      "name": "OKST",
+      "uri": "basketball/cbk/teams/49",
+      "longName": "Oklahoma State",
+      "stackedNameTop": "Oklahoma State",
+      "stackedNameBottom": "Cowboys",
+      "record": "7-0",
+      "score": 86,
+      "isLoser": false,
+      "hasPossession": false
+     },
+     "lowerTeam": {
+      "name": "NW",
+      "uri": "basketball/cbk/teams/90",
+      "longName": "Northwestern",
+      "stackedNameTop": "Northwestern",
+      "stackedNameBottom": "Wildcats",
+      "record": "5-2",
+      "score": 81,
+      "isLoser": true,
+      "hasPossession": false
+     },
+     "oddsLine": "OKST +2.5",
+     "overUnderLine": "OVER 159.5"
+    }
+   ]
+  }
+ ],
+ "currentSectionId": "20251127",
+ "quickNav": [
+  {
+   "id": "20251126",
+   "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251126?groupId=2",
+   "webUrl": "/college-basketball/scores?groupId=2&date=2025-11-26",
+   "date": "2025-11-26T05:00:00Z"
+  },
+  {
+   "id": "20251127",
+   "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251127?groupId=2",
+   "webUrl": "/college-basketball/scores?groupId=2&date=2025-11-27",
+   "date": "2025-11-27T05:00:00Z",
+   "selected": true
+  },
+  {
+   "id": "20251128",
+   "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251128?groupId=2",
+   "webUrl": "/college-basketball/scores?groupId=2&date=2025-11-28",
+   "date": "2025-11-28T05:00:00Z"
+  }
+ ]
+}

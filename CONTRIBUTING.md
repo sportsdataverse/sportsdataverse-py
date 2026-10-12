@@ -132,8 +132,8 @@ standalone import-sorting hook is inactive — plus
   per-module strictness but can't scope the gate, so it would pull the
   whole package into checking (~95 pre-existing legacy errors) and the
   gate would never be green.
-- **Polars 1.x and 2.x.** Runtime is `polars>=1.0,<3`; the lock resolves 2.0 on every supported
-  Python (3.10+), but the floor stays 1.0, so new code must run on both (see `CLAUDE.md`, "Polars version"). New code uses
+- **Polars 2.x.** Runtime is `polars>=2.0,<3`; polars 1.x is not supported, so new code may use
+  2.x-only API (see `CLAUDE.md`, "Polars version"). New code uses
   the modern API surface (`group_by`, `with_row_index`, `map_elements`,
   varargs `pl.struct(*cols)`, etc.). The 0.18 → 1.x migration of the
   legacy `*_pbp.py` modules landed in May 2026; if you see lingering
