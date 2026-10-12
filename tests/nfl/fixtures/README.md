@@ -120,8 +120,10 @@ uv run python -c "import sys, polars as pl; src, gid, out = sys.argv[1:]; pl.rea
   `test_kickoff_touchback_epa_agrees_with_nflverse`): nflverse's `epa` on 124 plays of the committed
   captures, columns `espn_game_id, play_id, nflverse_game_id, season, epa`: every play the processor
   flags `kickoff_tb` (unscored) that nflverse also has as `play_type == "kickoff"` with `touchback == 1`
-  (2006-2025; the 32 2006-2007 rows whose ESPN id does not land on a nflverse touchback kickoff are left
-  out). Read 2026-10-12 from the nfl-data cache of the same release's `play_by_play_<season>.parquet`
+  (2006-2025). The other 32 unscored 2006-2007 `kickoff_tb` rows are left out: ESPN describes those kicks only
+  as "KickOff", the touchback pattern flags them, and nflverse has every one as a returned kick
+  (`touchback == 0`), not a touchback (review R831-2, routed to task 2.19).
+  Read 2026-10-12 from the nfl-data cache of the same release's `play_by_play_<season>.parquet`
   assets (`nflverse-dev/nfl-data/python/.cache/nflverse_pbp/pbp_<season>.parquet`), mapped and joined as
   the file above.
 
