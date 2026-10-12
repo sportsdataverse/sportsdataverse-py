@@ -227,3 +227,43 @@ def test_live_player_season_stats():
     for col in ("player_id", "display_name", "team", "passing_yards", "season"):
         assert col in df.columns
     assert len(df) > 0
+
+
+# --------------------------------------------------------------------------------------
+# B-L50: the season-stat tables on real Yahoo captures (tests/fixtures/yahoo/README.md):
+# the modern team table (leagueStatsByTeam, 2024 FBS, trimmed to its first 3 teams) and the
+# legacy player table (season-stats passing leaders). Every expected value is read from the
+# payload: one row per entity, one column per statId holding that stat's value.
+# --------------------------------------------------------------------------------------
+
+_YAHOO = Path(__file__).resolve().parents[1] / "fixtures" / "yahoo"
+
+
+def _yahoo(name):
+    return json.loads((_YAHOO / f"{name}.json").read_text(encoding="utf-8"))
+
+
+def test_team_season_stats_on_a_real_capture(monkeypatch):
+    raw = _yahoo("shangrila_team_season_stats_ncaaf_2024")
+    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: raw)
+    df = y.yahoo_cfb_team_season_stats(season=2024)
+    teams = raw["data"]["leagues"][0]["footballStats"]
+    assert df["team"].to_list() == ["Clemson", "Duke", "Florida St."] == [t["team"]["displayName"] for t in teams]
+    assert df["team_abbreviation"].to_list() == [t["team"]["abbreviation"] for t in teams]
+    assert df["season"].unique().to_list() == [2024]
+    for i, team in enumerate(teams):
+        for stat in team["stats"]:
+            assert df[y._clean(stat["statId"])][i] == stat["value"], (team["team"]["displayName"], stat["statId"])
+
+
+def test_player_season_stats_legacy_on_a_real_capture(monkeypatch):
+    raw = _yahoo("shangrila_season_stats_football_passing_ncaaf")
+    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: raw)
+    df = y.yahoo_cfb_player_season_stats_legacy(season=2024, category="Passing", sort_stat="PASSING_YARDS")
+    leaders = raw["data"]["leagues"][0]["leaders"]
+    assert df.height == len(leaders) == 3
+    assert df["player_id"].to_list() == [r["player"]["playerId"] for r in leaders]
+    assert df["display_name"].to_list() == [r["player"]["displayName"] for r in leaders]
+    for i, row in enumerate(leaders):
+        for stat in row["stats"]:
+            assert df[y._clean(stat["statId"])][i] == stat["value"], (row["player"]["displayName"], stat["statId"])

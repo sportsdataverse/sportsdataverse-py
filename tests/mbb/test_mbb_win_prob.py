@@ -15,6 +15,7 @@ import datetime
 
 import pandas as pd
 import polars as pl
+import pytest
 
 from sportsdataverse.mbb.mbb_game_predict import mbb_in_game_win_prob, predict_margin, win_prob_from_margin
 from sportsdataverse.mbb.mbb_win_prob import _WP_COLS, _compile_season_wp, build_mbb_season_wp
@@ -185,3 +186,41 @@ def test_return_as_pandas(monkeypatch):
     out = build_mbb_season_wp(2024, return_as_pandas=True)
     assert isinstance(out, pd.DataFrame)
     assert set(_WP_COLS).issubset(out.columns)
+
+
+# --- supp-013: compiled from a REAL season slice, scored against real outcomes ----------------------
+# The tests above run on hand-built games. Here build_mbb_season_wp compiles the committed real 2023-24
+# corpus (tests/fixtures/mbb_prediction/, README there): the first 400 games of pbp_sample_2024 (every
+# 25th play; game_play_number = play order by clock), the full results_2024 schedule and team_box_2024.
+# The oracle is each game's real result (`home_win`). Observed 2026-10-11: Brier in-game 0.14316,
+# pregame 0.20503, base rate 0.23487. Floors rounded to the safe side, never raised.
+
+
+@pytest.mark.filterwarnings(
+    # one 2024 game has 0 under every turnover key; the warning is asserted by
+    # tests/mbb/test_mbb_team_ratings.py::test_zero_turnover_game_is_dropped_with_a_warning
+    "ignore:raw_game_efficiency.*0 turnovers under every turnover key:UserWarning"
+)
+def test_real_season_slice_compiles_and_scores_against_real_outcomes(monkeypatch):
+    import importlib
+    from pathlib import Path
+
+    fix = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
+    pbp = pl.read_parquet(fix / "pbp_sample_2024.parquet")
+    pbp = pbp.filter(pl.col("game_id").is_in(pbp["game_id"].unique().sort()[:400].implode())).with_columns(
+        pl.int_range(pl.len())
+        .over("game_id", order_by=-pl.col("start_game_seconds_remaining"))
+        .alias("game_play_number")
+    )
+    sched, box = pl.read_parquet(fix / "results_2024.parquet"), pl.read_parquet(fix / "team_box_2024.parquet")
+    core = importlib.import_module("sportsdataverse.mbb.mbb_win_prob")
+    monkeypatch.setattr(core, "_load_league_frames", lambda season, league: (pbp, sched, box))
+    out = build_mbb_season_wp(2024)
+    assert out.height == pbp.height and set(pbp.columns) <= set(out.columns)
+    y = out["home_win"].cast(pl.Float64)
+    brier_wp = float(((out["home_win_prob"] - y) ** 2).mean())
+    brier_pre = float(((out["pregame_home_prob"] - y) ** 2).mean())
+    brier_base = float(((y.mean() - y) ** 2).mean())
+    assert brier_wp <= 0.1432 and brier_pre <= 0.2051, (brier_wp, brier_pre)
+    assert brier_wp < brier_pre < brier_base
+    print("MBB_SEASON_WP_REAL_OK", round(brier_wp, 5), round(brier_pre, 5))

@@ -14,8 +14,8 @@ proves they are gone). These tests verify:
    ``stat_type`` / ``summary_level`` combination.
 2. Invalid ``stat_type`` / ``summary_level`` raise ``ValueError``.
 
-Column-name assertions are intentionally avoided — the upstream nflverse
-parquet schemas drift and we don't want spurious failures.
+The value asserts stick to the stable keys every nflverse release carries (``season``, the
+player id, ``week``) rather than full column lists, which drift upstream (B-L64).
 """
 
 from __future__ import annotations
@@ -40,8 +40,10 @@ from tests.conftest import skip_if_no_live
 def test_load_nfl_nextgen_stats_2024(stat_type):
     df = load_nfl_nextgen_stats(seasons=[2024], stat_type=stat_type)
     assert isinstance(df, pl.DataFrame)
-    assert df.height > 0
-    assert df.width > 0
+    assert df["season"].unique().to_list() == [2024]
+    assert df["player_gsis_id"].null_count() == 0 and df.height > 100
+    # week 0 is NGS's season-total row; weeks 1-23 cover the regular season and playoffs
+    assert df["week"].min() == 0 and df["week"].max() <= 23
 
 
 def test_load_nfl_nextgen_stats_invalid_stat_type():
@@ -60,8 +62,12 @@ def test_load_nfl_nextgen_stats_invalid_stat_type():
 def test_load_nfl_pfr_advstats_2024(stat_type, summary_level):
     df = load_nfl_pfr_advstats(seasons=[2024], stat_type=stat_type, summary_level=summary_level)
     assert isinstance(df, pl.DataFrame)
-    assert df.height > 0
-    assert df.width > 0
+    assert df["season"].unique().to_list() == [2024]
+    player = "pfr_player_id" if summary_level == "week" else "pfr_id"
+    # nflverse leaves pfr_id null for a few same-name players (4 of 1,030 in the 2024 def season file)
+    assert df[player].is_not_null().mean() > 0.99 and df.height > 50
+    if summary_level == "week":  # one row per player-game: never two rows for the same pair
+        assert df.select("pfr_game_id", "pfr_player_id").is_duplicated().sum() == 0
 
 
 def test_load_nfl_pfr_advstats_invalid_stat_type():

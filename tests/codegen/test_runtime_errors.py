@@ -13,7 +13,7 @@ retries, a connection failure after retries, an empty 200 or a non-JSON 2xx ->
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Callable, List, Tuple, Union
+from typing import Any, Callable, Dict, List, Tuple, Union
 
 import pytest
 import requests
@@ -433,3 +433,193 @@ def test_247_refused_after_a_failed_remint_is_a_failed_fetch(monkeypatch):
 def test_the_two_errors_stay_distinct():
     assert not issubclass(NoDataError, AssetFetchError)
     assert not issubclass(AssetFetchError, NoDataError)
+
+
+# --------------------------------------------------------------------------------------
+# every ``*_runtime.py`` getter, DISCOVERED (A-M5): a new runtime is enrolled by construction
+# --------------------------------------------------------------------------------------
+
+_PKG = Path(__file__).resolve().parents[2] / "sportsdataverse"
+_RUNTIMES = sorted(
+    p.relative_to(_PKG.parent).with_suffix("").as_posix().replace("/", ".") for p in _PKG.rglob("*_runtime.py")
+)
+_JSON_CT = "application/json"
+_CASES = {  # case -> (status, body, content type, the vocabulary's answer)
+    "400": (400, '{"message": "bad request"}', _JSON_CT, ValueError),
+    "404": (404, "", "text/html", NoDataError),
+    "403": (403, "<html>Forbidden</html>", "text/html", AssetFetchError),
+    "429": (429, '{"error": "rate limited"}', _JSON_CT, AssetFetchError),
+    "503": (503, '{"message": "Service Unavailable"}', _JSON_CT, AssetFetchError),
+    "204": (204, "", _JSON_CT, "nothing"),
+    "empty_200": (200, "", _JSON_CT, AssetFetchError),
+    "html_200": (200, "<html>Just a moment...</html>", "text/html", AssetFetchError),
+    "scalar_200": (200, "42", _JSON_CT, AssetFetchError),
+}
+# Only the arguments a getter cannot run without; everything else is called as ``_get(url)``.
+_URL = {"nba_stats_runtime": "https://stats.nba.com/stats/x", "wnba_stats_runtime": "https://stats.wnba.com/stats/x"}
+_KWARGS: Dict[str, Callable[[], Dict[str, Any]]] = {
+    "kenpom_runtime": lambda: {"session": requests.Session()},  # a session skips the subscription login
+    "nfl_api_runtime": lambda: {"headers": {}},  # no token mint
+    "nflpro_runtime": lambda: {"headers": {}},
+    "pff_runtime": lambda: {"cookies": {"_premium_key": "PK"}},
+    "pff_api_runtime": lambda: {"api_key": "k"},
+    "sports247_runtime": lambda: {"auth": False},  # no guest-JWT mint
+}
+_HTML_IS_DATA = {"kenpom_runtime"}  # its pages are the payload
+_SCALAR = "B-GB-16: a 2xx scalar JSON body is returned as data; task 4.1 (_json_body: dict or list only)"
+_SCALAR_EMPTY = "A-L18: a 2xx scalar body becomes {} ('nothing here'); task 4.1"
+_NFLPRO = "A-M4: nflpro_runtime._fetch skips _check_status/_json_body; task 4.1b"
+_KNOWN: Dict[Tuple[str, str], str] = {
+    **{
+        (rt, "scalar_200"): _SCALAR
+        for rt in (
+            "_codegen_runtime",
+            "euroleague_runtime",
+            "football_data_runtime",
+            "mls_api_runtime",
+            "mlb_statcast_runtime",
+            "nba_stats_runtime",
+            "nfl_api_runtime",
+            "nwsl_api_runtime",
+            "thesportsdb_runtime",
+            "torvik_runtime",
+            "uefa_runtime",
+            "wnba_stats_runtime",
+        )
+    },
+    **{
+        (rt, "scalar_200"): _SCALAR_EMPTY
+        for rt in ("on3_runtime", "sports247_runtime", "sports247_site_pages_runtime", "yahoo_shangrila_runtime")
+    },
+    ("pff_runtime", "scalar_200"): "B-L75: the LEGACY PFF runtime turns a 200 non-object into {}; task 4.1b",
+    **{
+        (rt, "html_200"): "A-L63: _text_body accepts an HTML challenge page as CSV text; task 4.1"
+        for rt in ("mlb_statcast_runtime", "torvik_runtime")
+    },
+    **{
+        ("nflpro_runtime", case): _NFLPRO
+        for case in ("400", "403", "429", "503", "204", "empty_200", "html_200", "scalar_200")
+    },
+    ("pff_api_runtime", "204"): "A-L69: pff_api_runtime hand-rolls status, so a 204 is AssetFetchError; task 4.1b",
+}
+
+
+def _raises(stem: str, case: str) -> Any:
+    """What an open case fails with today: a getter that returns where it should raise fails
+    ``pytest.raises`` (DID NOT RAISE); nflpro raises its own types; pff_api raises on a 204."""
+    if stem == "nflpro_runtime" and case != "scalar_200":
+        from sportsdataverse.nfl.nflpro_runtime import NFLProAuthError
+
+        return {"403": NFLProAuthError, "204": ValueError, "empty_200": ValueError, "html_200": ValueError}.get(
+            case, requests.HTTPError
+        )
+    if stem == "pff_api_runtime":
+        return AssetFetchError
+    return pytest.fail.Exception
+
+
+def _matrix_params() -> List[Any]:
+    out = []
+    for mod in _RUNTIMES:
+        stem = mod.rsplit(".", 1)[1]
+        for case in _CASES:
+            marks = (
+                [pytest.mark.xfail(strict=True, raises=_raises(stem, case), reason=_KNOWN[stem, case])]
+                if (stem, case) in _KNOWN
+                else []
+            )
+            out.append(pytest.param(mod, case, id=f"{stem}-{case}", marks=marks))
+    return out
+
+
+def _answer_every_transport(monkeypatch, status: int, body: str, ctype: str) -> Tuple[List[str], List[str]]:
+    """Serve one answer to requests AND curl_cffi; refuse and record every other way out.
+
+    Below the two patched entry points, DNS, Python sockets and libcurl's ``Curl.perform`` (curl_cffi
+    bypasses Python sockets) all raise and are recorded, so a getter that finds another path to the
+    network fails the case even when its ``OSError`` would have surfaced as the expected
+    ``AssetFetchError``. Returns ``(urls served, attempts blocked)``.
+    """
+    import socket
+
+    import sportsdataverse.cache as _cache
+
+    calls: List[str] = []
+
+    def request(self, method, url, *args, **kwargs):
+        calls.append(url)
+        resp = requests.Response()
+        resp.status_code = status
+        resp._content = body.encode("utf-8")
+        resp.encoding = "utf-8"
+        resp.headers["Content-Type"] = ctype
+        resp.url = url
+        return resp
+
+    blocked: List[str] = []
+
+    def no_network(*a, **k):
+        blocked.append(repr(a[:2])[:120])
+        raise OSError("network blocked in the vocabulary matrix")
+
+    monkeypatch.setattr(requests.Session, "request", request)
+    try:  # the stats.nba.com / 247Sports transports; absent, those getters raise ImportError loudly
+        from curl_cffi import requests as curl
+
+        from curl_cffi.curl import Curl
+
+        monkeypatch.setattr(curl.Session, "request", request)
+        monkeypatch.setattr(Curl, "perform", no_network)
+    except ImportError:
+        pass
+    for name in ("getaddrinfo", "gethostbyname", "create_connection"):
+        monkeypatch.setattr(socket, name, no_network)
+    monkeypatch.setattr(socket.socket, "connect", no_network)
+    monkeypatch.setattr(socket.socket, "connect_ex", no_network)
+    monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+    monkeypatch.setattr("time.sleep", lambda *a, **k: None)
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "0")
+    return calls, blocked
+
+
+def test_every_getter_module_is_a_discovered_runtime():
+    """Every ``getter_module:`` an endpoint YAML names is enrolled in the matrix below."""
+    import yaml
+
+    named = set()
+    for y in (_PKG.parent / "tools/codegen/endpoints").glob("*.yaml"):
+        doc = yaml.safe_load(y.read_text(encoding="utf-8")) or {}
+        if isinstance(doc, dict) and doc.get("getter_module"):
+            named.add(doc["getter_module"])
+    assert named and named <= set(_RUNTIMES), sorted(named - set(_RUNTIMES))
+
+
+@pytest.mark.parametrize(("mod", "case"), _matrix_params())
+def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
+    import importlib
+    import inspect
+    import warnings
+
+    from sportsdataverse.errors import EmptyResponseWarning
+
+    stem = mod.rsplit(".", 1)[1]
+    status, body, ctype, want = _CASES[case]
+    calls, blocked = _answer_every_transport(monkeypatch, status, body, ctype)
+    get = importlib.import_module(mod)._get
+    kwargs = _KWARGS.get(stem, dict)()
+    sig = inspect.signature(get).parameters
+    if "num_retries" in sig or any(p.kind is p.VAR_KEYWORD for p in sig.values()):
+        kwargs["num_retries"] = 0
+    url = _URL.get(stem, "https://example.test/x")
+    with warnings.catch_warnings():
+        # nba_stats warns on a 204; tests/nba/test_nba_stats_runtime.py asserts that warning.
+        warnings.filterwarnings("ignore", category=EmptyResponseWarning)
+        if stem in _HTML_IS_DATA and case in ("html_200", "scalar_200"):
+            assert get(url, **kwargs) == body
+        elif want == "nothing":
+            assert get(url, **kwargs) in ({}, [], "")
+        else:
+            with pytest.raises(want):
+                get(url, **kwargs)
+    assert calls, f"{mod}._get never reached the transport"
+    assert blocked == [], f"{mod}._get tried the network below the patched transports: {blocked}"

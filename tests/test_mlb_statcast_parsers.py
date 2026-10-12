@@ -290,3 +290,20 @@ def test_header_only_csv_unknown_columns_are_null_not_string():
     assert {c: empty.schema[c] for c in _SEARCH_ID_COLS} == dict.fromkeys(_SEARCH_ID_COLS, pl.Int64)
     widened = pl.concat([empty, full], how="diagonal_relaxed")
     assert widened.schema == full.schema and widened.height == full.height
+
+
+def test_player_page_served_as_html_200_reaches_the_parser(monkeypatch):
+    """B-L81: the real page (``player_page.html``, Aaron Judge) served as an HTTP 200 ``text/html``
+    body through the real ``dl_utils.download`` -- not a hand-built string -- comes back byte-for-
+    byte with ``raw=True`` and parses to the same frame as the page itself."""
+    from sportsdataverse.mlb import mlb_statcast_player
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_player
+    from tests.codegen.test_runtime_errors import _serve
+
+    page = (FIX / "player_page.html").read_text(encoding="utf-8")
+    calls = _serve(monkeypatch, 200, page, "text/html; charset=utf-8")
+    assert mlb_statcast_player(592450, raw=True) == page
+    df = mlb_statcast_player(592450)
+    assert calls == ["https://baseballsavant.mlb.com/savant-player/592450"] * 2
+    assert df.shape == (2, 266)
+    assert df.equals(parse_mlb_statcast_player(page))

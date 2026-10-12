@@ -248,3 +248,32 @@ def test_the_odds_payload_yields_the_closing_line(row):
     # a payload with no six-pack is a miss, never a made-up line
     assert _fox_odds_override({}, home_name) is None
     assert _fox_odds_override(odds, None) is None
+
+
+#: supp-012: observed 2026-10-11 against ESPN's own summary of 401671775 (170 / 157 plays, 139 paired):
+#: agreement type.* .9640, rush .9856, pass .9712, start.yardLine / end.pos_team.id / td_play 1.0; corr
+#: EP_start 1.0, EP_end .9740, EPA .9308, wp_before .9998, wp_after .9938. Floors, never lowered.
+ESPN_REFERENCE_PINNED = {
+    "paired_share": 0.99,
+    "agreement": {
+        "type.id": 0.96,
+        "type.text": 0.96,
+        "type.abbreviation": 0.96,
+        "start.yardLine": 0.99,
+        "end.pos_team.id": 0.99,
+        "rush": 0.98,
+        "pass": 0.97,
+        "td_play": 0.99,
+    },
+    "correlation": {"EP_start": 0.999, "EP_end": 0.97, "EPA": 0.93, "wp_before": 0.999, "wp_after": 0.99},
+}
+
+
+def test_fox_nfl_espn_reference_parity(row):
+    """Fox NFL vs the ESPN summary of the same game (supp-012): per-play floors."""
+    from tests.football.sources._espn_reference import espn_reference_report
+
+    odds = {"gameSpread": 1.5, "overUnder": 46.5, "homeFavorite": True, "gameSpreadAvailable": True}
+    report = espn_reference_report("nfl", int(row["espn_event_id"]), "fox", _load("fox_nfl_401671775.json"), row, odds)
+    assert report.check(ESPN_REFERENCE_PINNED) == [], report.gates()
+    print("FOX_NFL_ESPN_REFERENCE_OK", report.gates()["paired_share"])

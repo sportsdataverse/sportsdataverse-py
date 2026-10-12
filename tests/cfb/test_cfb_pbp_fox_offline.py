@@ -93,3 +93,59 @@ def test_fox_cfb_pbp_cleaning_pipeline(monkeypatch):
     # cleaning path stops before EPA
     df = pl.DataFrame(out["plays"], infer_schema_length=None)
     assert "EPA" not in df.columns
+
+
+# --------------------------------------------------------------------------------------
+# Field position against Fox's own geometry (B-M37). ``yardStart`` is an ABSOLUTE 0-100 spot
+# measured from the AWAY goal line (football/fox_common.py, the Game on Paper path), so the
+# yards to the end zone are ``spot`` when the home team has the ball and ``100 - spot`` when
+# the away team does. Possession is the drive group's team (``entityLink``), never the play.
+# --------------------------------------------------------------------------------------
+
+_SPECIAL = ("Kickoff", "Punt", "Field Goal", "Extra Point", "Two-Point", "Timeout", "End ", "Penalty")
+
+
+def _snaps_by_side():
+    from sportsdataverse.football.fox_common import _pos
+
+    fox = _load_fox()
+    head = fox["header"]
+    names = {}
+    for team, side in ((head["leftTeam"], "away"), (head["rightTeam"], "home")):  # Fox: left = away
+        for key in (team.get("imageAltText"), team.get("longName"), team.get("name")):
+            if key:
+                names[key.strip()] = side
+    emitted = [p for d in fox_to_espn_summary(fox)["drives"]["previous"] for p in d["plays"]]
+    raw = []
+    for section in fox["pbp"]["sections"]:
+        for group in section.get("groups") or []:
+            side = names.get(((group.get("entityLink") or {}).get("imageAltText") or "").strip())
+            raw.extend((side, play) for play in group.get("plays") or [])
+    assert len(raw) == len(emitted)  # the adapter emits one play per Fox play, in order
+    out = {"home": [], "away": []}
+    for (side, play), espn in zip(raw, emitted):
+        events = ((play.get("modalPlay") or {}).get("play") or {}).get("events") or []
+        spot = _pos(events[0].get("yardStart")) if events else None
+        if side is None or spot is None or any(s in espn["type"]["text"] for s in _SPECIAL):
+            continue
+        want = spot if side == "home" else 100 - spot
+        out[side].append((espn["text"], espn["start"]["yardsToEndzone"], want))
+    return out
+
+
+def test_home_snap_field_position_matches_fox_geometry():
+    home = _snaps_by_side()["home"]
+    assert len(home) > 60
+    assert [got for _, got, _ in home] == [want for _, _, want in home]
+
+
+@pytest.mark.xfail(
+    strict=True,
+    raises=AssertionError,
+    reason="B-H3: away-offense snaps read the absolute yardStart as yards-to-goal (mirrored field); task 2.8",
+)
+def test_away_snap_field_position_matches_fox_geometry():
+    away = _snaps_by_side()["away"]
+    assert len(away) > 50
+    wrong = [(text, got, want) for text, got, want in away if got != want]
+    assert not wrong, f"{len(wrong)} of {len(away)} away snaps mirrored, e.g. {wrong[:2]}"

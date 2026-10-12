@@ -1,6 +1,6 @@
 {% set name = "sportsdataverse" %}
-{% set version = "0.0.51" %}
-{% set python_min = "3.9" %}
+{% set version = "0.1.5" %}
+{% set python_min = "3.10" %}
 
 # Conda recipe for the sportsdataverse-py package.
 #
@@ -36,23 +36,28 @@ requirements:
     - wheel
   run:
     - python >={{ python_min }}
-    # Mirror [project.dependencies] in pyproject.toml. Keep the lower bounds
-    # in sync — conda-forge requires explicit lower bounds to be re-renderable.
-    - attrs >=20.3.0
+    # Mirror [project.dependencies] in pyproject.toml, same order, same lower
+    # bounds -- conda-forge requires explicit lower bounds to be re-renderable.
+    # `uv run python tools/check_recipe_mirror.py` diffs the two lists and the
+    # version; CI's conda-build job builds the recipe on every PR touching it.
     - beautifulsoup4 >=4.11.0
-    - inflection >=0.5.1
     - lxml >=4.9.0
-    - matplotlib-base >=3.5.0
     - numpy >=1.23.0
     - pandas >=2.0.0
-    - polars >=1.0,<3
+    - polars >=2.0,<3
     - pyarrow >=14.0.0
-    - pyjanitor >=0.23.1
-    - rapidfuzz >=3.13.0
-    - requests >=2.28.0
+    - requests >=2.30.0
     - scipy >=1.10.0
     - tqdm >=4.50.0
+    - scikit-learn >=1.0.0
     - xgboost >=2.0.0
+    - rapidfuzz >=3.13.0
+    - urllib3 >=2.8.0
+    # pyproject's `tomli>=2.0; python_version < '3.11'`: a noarch recipe is built
+    # once, so a `# [py<311]` selector would be evaluated against the build
+    # interpreter rather than the install target. Listed unconditionally instead
+    # (the conda-forge convention for noarch); it is a no-op on 3.11+.
+    - tomli >=2.0
     # pyproject's `tzdata; sys_platform == 'win32'` is intentionally omitted:
     # noarch recipes can't carry platform selectors, and conda's python
     # package already depends on tzdata on every platform.

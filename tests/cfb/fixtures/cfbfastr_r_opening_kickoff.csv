@@ -1,0 +1,90 @@
+game_id,season,r_home,r_away,r_receives_2h_kickoff,r_play1_type,r_play1_def_pos_team,source
+400547673,2014,Duke,Tulane,0,Rush,Tulane,cfbfastR-data/data/rds/pbp_players_pos_2014.rds
+400547699,2014,SMU,Memphis,1,Kickoff,SMU,cfbfastR-data/data/rds/pbp_players_pos_2014.rds
+400547865,2014,Texas,Baylor,1,Kickoff,Texas,cfbfastR-data/data/rds/pbp_players_pos_2014.rds
+400547866,2014,West Virginia,Kansas,0,Kickoff,Kansas,cfbfastR-data/data/rds/pbp_players_pos_2014.rds
+400547980,2014,Notre Dame,Northwestern,0,Kickoff,Northwestern,cfbfastR-data/data/rds/pbp_players_pos_2014.rds
+400548023,2014,Texas A&M,Rice,1,Kickoff,Texas A&M,cfbfastR-data/data/rds/pbp_players_pos_2014.rds
+400548134,2014,Kent State,Army,0,Interception Return,Army,cfbfastR-data/data/rds/pbp_players_pos_2014.rds
+400548250,2014,Boise State,Utah State,1,Kickoff,Boise State,cfbfastR-data/data/rds/pbp_players_pos_2014.rds
+400548425,2014,Georgia Southern,Idaho,1,Kickoff,Georgia Southern,cfbfastR-data/data/rds/pbp_players_pos_2014.rds
+400756970,2015,Duke,Miami,1,Kickoff Team Fumble Recovery,Duke,cfbfastR-data/data/rds/pbp_players_pos_2015.rds
+400763571,2015,Maryland,Indiana,1,Kickoff,Maryland,cfbfastR-data/data/rds/pbp_players_pos_2015.rds
+400787459,2015,Georgia Southern,Texas State,1,Kickoff,Georgia Southern,cfbfastR-data/data/rds/pbp_players_pos_2015.rds
+400869264,2016,Ohio,Texas State,0,Kickoff,Texas State,cfbfastR-data/data/rds/pbp_players_pos_2016.rds
+400869270,2016,Oklahoma State,Central Michigan,0,Kickoff,Central Michigan,cfbfastR-data/data/rds/pbp_players_pos_2016.rds
+400869817,2016,South Alabama,Nicholls,0,Kickoff Return Touchdown,Nicholls,cfbfastR-data/data/rds/pbp_players_pos_2016.rds
+400876049,2016,Middle Tennessee,Hawai'i,1,Kickoff,Middle Tennessee,cfbfastR-data/data/rds/pbp_players_pos_2016.rds
+400953391,2017,Army,San Diego State,1,Kickoff Return (Offense),Army,cfbfastR-data/data/rds/pbp_players_pos_2017.rds
+401012682,2018,Ohio State,Oregon State,1,Kickoff,Ohio State,cfbfastR-data/data/rds/pbp_players_pos_2018.rds
+401032062,2018,BYU,Western Michigan,1,Kickoff,BYU,cfbfastR-data/data/rds/pbp_players_pos_2018.rds
+401110775,2019,Florida,UT Martin,1,Kickoff,Florida,cfbfastR-data/data/rds/pbp_players_pos_2019.rds
+401112081,2019,TCU,Baylor,0,Kickoff,Baylor,cfbfastR-data/data/rds/pbp_players_pos_2019.rds
+401112489,2019,Virginia Tech,North Carolina,1,Kickoff,Virginia Tech,cfbfastR-data/data/rds/pbp_players_pos_2019.rds
+401135269,2019,BYU,Hawai'i,1,Kickoff,BYU,cfbfastR-data/data/rds/pbp_players_pos_2019.rds
+401234597,2020,Boston College,North Carolina,0,Kickoff,North Carolina,cfbfastR-data/data/rds/pbp_players_pos_2020.rds
+401234617,2020,Boston College,Georgia Tech,1,Kickoff,Boston College,cfbfastR-data/data/rds/pbp_players_pos_2020.rds
+401236002,2020,Texas,TCU,0,Kickoff,TCU,cfbfastR-data/data/rds/pbp_players_pos_2020.rds
+401282146,2021,Auburn,Alabama,0,Kickoff Return (Offense),Alabama,cfbfastR-data/data/rds/pbp_players_pos_2021.rds
+401301042,2021,Memphis,East Carolina,0,Kickoff,East Carolina,cfbfastR-data/data/rds/pbp_players_pos_2021.rds
+401309611,2021,UL Monroe,Troy,1,Kickoff,UL Monroe,cfbfastR-data/data/rds/pbp_players_pos_2021.rds
+401309854,2021,BYU,Arizona State,1,Kickoff Team Fumble Recovery,BYU,cfbfastR-data/data/rds/pbp_players_pos_2021.rds
+401403886,2022,Georgia Tech,Ole Miss,1,Kickoff Return (Offense),Georgia Tech,cfbfastR-data/data/rds/pbp_players_pos_2022.rds
+401411109,2022,Louisville,Florida State,0,Kickoff Return (Offense),Florida State,cfbfastR-data/data/rds/pbp_players_pos_2022.rds
+401424416,2022,Baylor,UAlbany,1,Kickoff,Baylor,cfbfastR-data/data/rds/pbp_players_pos_2022.rds
+401425418,2022,Arkansas State,Grambling,0,Kickoff Return (Offense),Grambling,cfbfastR-data/data/rds/pbp_players_pos_2022.rds
+401520349,2023,Army,Massachusetts,1,Kickoff,Army,cfbfastR-data/data/rds/pbp_players_pos_2023.rds
+401525860,2023,Kansas,UCF,1,Kickoff,Kansas,cfbfastR-data/data/rds/pbp_players_pos_2023.rds
+401525903,2023,Cincinnati,Kansas,0,Kickoff,Kansas,cfbfastR-data/data/rds/pbp_players_pos_2023.rds
+401628334,2024,LSU,USC,0,Kickoff Return (Offense),USC,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401628344,2024,Missouri,Buffalo,1,Kickoff,Missouri,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401628374,2024,Alabama,Georgia,0,Kickoff,Georgia,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401628439,2024,Georgia,Georgia Tech,1,Kickoff,Georgia,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401628455,2024,Ohio State,Akron,0,Rush,Akron,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401628559,2024,Minnesota,Penn State,1,Kickoff,Minnesota,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401636889,2024,Iowa State,Baylor,0,Kickoff,Baylor,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401636929,2024,West Virginia,Baylor,0,Kickoff Return (Offense),Baylor,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401643775,2024,South Alabama,North Texas,1,Kickoff Return (Offense),South Alabama,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401644749,2024,Buffalo,Western Michigan,1,Kickoff,Buffalo,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401645333,2024,Rice,Charlotte,1,Kickoff,Rice,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401677179,2024,Notre Dame,Indiana,1,Kickoff,Notre Dame,cfbfastR-data/data/rds/pbp_players_pos_2024.rds
+401752671,2025,Clemson,LSU,1,Kickoff,Clemson,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401752684,2025,Florida,South Florida,1,Kickoff,Florida,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401752744,2025,South Carolina,Oklahoma,1,Kickoff,South Carolina,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401752746,2025,Arkansas,Auburn,0,Pass Incompletion,Auburn,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401752753,2025,Arkansas,Mississippi State,0,Kickoff,Mississippi State,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401752817,2025,Northwestern,Western Illinois,1,Rush,Northwestern,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401752844,2025,Rutgers,Iowa,1,Kickoff Return Touchdown,Rutgers,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401752854,2025,Penn State,Oregon,0,Pass Reception,Oregon,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401752914,2025,Maryland,Michigan,0,Kickoff,Michigan,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401752946,2025,Washington State,Oregon State,0,Pass Reception,Oregon State,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401754543,2025,Virginia,Florida State,1,Rush,Virginia,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401754554,2025,Louisville,Virginia,0,Pass Reception,Virginia,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401754571,2025,Georgia Tech,Syracuse,0,Pass Incompletion,Syracuse,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401754579,2025,NC State,Georgia Tech,0,Pass Reception,Georgia Tech,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401754585,2025,Louisville,California,0,Rushing Touchdown,California,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401754598,2025,NC State,Florida State,0,Rush,Florida State,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401754623,2025,Georgia Tech,Clemson,0,Kickoff,Clemson,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401756930,2025,Cincinnati,Baylor,0,Rush,Baylor,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401756960,2025,Utah,Kansas State,NA,Penalty,Kansas State,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401760419,2025,Wyoming,Nevada,0,Rush,Nevada,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401761622,2025,Georgia Southern,Southern Miss,0,Kickoff,Southern Miss,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401761656,2025,App State,Marshall,0,Rush,Marshall,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401761657,2025,Georgia Southern,Old Dominion,1,Rush,Georgia Southern,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401761665,2025,Louisiana,UL Monroe,0,Rush,UL Monroe,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401762461,2025,Western Michigan,North Texas,0,Kickoff Return (Offense),North Texas,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401762835,2025,Bowling Green,Toledo,1,Kickoff,Bowling Green,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401762856,2025,Akron,Kent State,NA,Penalty,Akron,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401762858,2025,Central Michigan,Buffalo,1,Rush,Central Michigan,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401777353,2025,Ohio State,Indiana,0,Pass Reception,Indiana,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401778334,2025,Mississippi State,Wake Forest,0,Rush,Wake Forest,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401831583,2025,SMU,Arizona,1,Rush,SMU,cfbfastR-data/data/rds/pbp_players_pos_2025.rds
+401856682,2026,Texas,Ohio State,0,Kickoff,Ohio State,cfbfastR-data/data/rds/pbp_players_pos_2026.rds
+401856766,2026,TCU,North Carolina,1,Kickoff,TCU,cfbfastR-data/data/rds/pbp_players_pos_2026.rds
+401858213,2026,Miami,Florida A&M,1,Kickoff,Miami,cfbfastR-data/data/rds/pbp_players_pos_2026.rds
+401858221,2026,Virginia Tech,Old Dominion,0,Kickoff,Old Dominion,cfbfastR-data/data/rds/pbp_players_pos_2026.rds
+401858224,2026,Purdue,Wake Forest,0,Kickoff,Wake Forest,cfbfastR-data/data/rds/pbp_players_pos_2026.rds
+401858228,2026,Georgia Tech,Mercer,0,Kickoff,Mercer,cfbfastR-data/data/rds/pbp_players_pos_2026.rds
+401858426,2026,Iowa,Northern Illinois,0,Kickoff,Northern Illinois,cfbfastR-data/data/rds/pbp_players_pos_2026.rds
+401858435,2026,Purdue,Indiana State,0,Kickoff,Indiana State,cfbfastR-data/data/rds/pbp_players_pos_2026.rds
+401858439,2026,Indiana,Howard,0,Kickoff,Howard,cfbfastR-data/data/rds/pbp_players_pos_2026.rds

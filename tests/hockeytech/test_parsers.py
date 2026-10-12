@@ -161,8 +161,12 @@ def test_parse_teams_and_roster():
 
     teams = parse_teams(_load("pwhl_teams_5"))
     assert "team_name" in teams.columns and "team_id" in teams.columns
-    roster = parse_roster(_load("pwhl_roster_1_5"))
-    assert roster.height > 0
+    raw = _load("pwhl_roster_1_5")
+    roster = parse_roster(raw)
+    players = [r for r in raw["SiteKit"]["Roster"] if isinstance(r, dict)]  # the payload ends with a list stub
+    assert roster.height == len(players) == 28
+    assert roster["player_id"].to_list() == [r["player_id"] for r in players]
+    assert roster["last_name"].to_list() == [r["last_name"] for r in players]
 
 
 def test_parse_pbp_a_one_row_per_event_with_fastrhockey_cols():
@@ -260,13 +264,13 @@ def test_parse_player_stats_has_season_and_points():
 def test_parse_leaders_has_player_and_team():
     from sportsdataverse.hockeytech._parsers import parse_leaders
 
-    df = parse_leaders(_load("pwhl_leaders_5"))
-    assert isinstance(df, pl.DataFrame)
-    # The re-captured fixture uses season_id=5 and returns non-empty results.
-    # player_id and team_id are present in the leadersExtended shape.
-    if df.height > 0:
-        for col in ("player_id", "team_id"):
-            assert col in df.columns, f"missing column {col}"
+    raw = _load("pwhl_leaders_5")
+    df = parse_leaders(raw)
+    # The re-captured fixture uses season_id=5: one row per leader, Points board then Goals board.
+    boards = [row for board in ("Points", "Goals") for row in raw["skaters"][board]["results"]]
+    assert df.height == len(boards) == 10
+    for col in ("player_id", "team_id", "name", "type_formatted"):
+        assert df[col].to_list() == [row[col] for row in boards], col
 
 
 def test_parse_game_summary_returns_named_subframes():

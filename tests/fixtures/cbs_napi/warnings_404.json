@@ -1,0 +1,1 @@
+{"warnings":[{"code":404,"type":"NotFoundException","message":"No scoring plays data for that game.","meta":{"gameId":1,"endpointPath":"/resource/game/scoring/plays/{gameId}","endpointClass":"GameScoringPlaysResource"}}]}
