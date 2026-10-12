@@ -35,6 +35,12 @@ only, because Fox rosters are today's -- ``fox_athlete_id`` matches on name and
 jersey within each team. With ``fox_games=True`` ``fox_game_id`` comes from Fox's
 scoreboard, one call per game date. A Fox fetch that fails leaves those columns null
 with a warning rather than failing the build.
+
+With ``yahoo=True`` (WNBA only; the NBA's Yahoo ids are ESPN's and always fill) the
+Yahoo legs come from the live builders' code too: ``yahoo_team_*`` from Yahoo's team
+listing by name tiers, and ``yahoo_game_id`` = ``wnba.g.{YYYYMMDD ET}{home Yahoo id}``
+checked against the ids Yahoo lists for the season. A failed Yahoo fetch also leaves
+the columns null with a warning.
 """
 
 from __future__ import annotations
@@ -49,7 +55,7 @@ from typing import Any, Dict, List, Optional, Union
 import polars as pl
 
 from sportsdataverse._common_crosswalk_basketball import assemble_player_espn_fox, fuzzy_match, normalize_name
-from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games
+from sportsdataverse._crosswalk_basketball_fox_yahoo import with_fox_games, with_yahoo_games, with_yahoo_teams
 from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError, FetchTally, fox_rosters, require_source
 from sportsdataverse._temporal import as_date
 
@@ -611,8 +617,9 @@ def build_archive_crosswalks(
     *,
     fox: bool = False,
     fox_games: bool = False,
+    yahoo: bool = False,
 ) -> Dict[str, pl.DataFrame]:
-    """Build the team, schedule and player crosswalks for one past season (no I/O unless ``fox`` / ``fox_games``).
+    """Build the team, schedule and player crosswalks for one past season (no I/O unless a Fox or Yahoo leg is on).
 
     Args:
         league: ``"nba"`` or ``"wnba"``.
@@ -636,6 +643,12 @@ def build_archive_crosswalks(
             ``fox_away_team_id`` from Fox's scoreboard, one call per game date,
             matched on (US-Eastern date, teams). A failed fetch logs a warning
             and leaves the columns null.
+        yahoo: WNBA only. Fill ``yahoo_team_*`` from Yahoo's team listing
+            (name tiers, so a relocated or renamed franchise stays null) and
+            ``yahoo_game_id`` from the ET date and the home side's Yahoo id,
+            kept only where Yahoo lists it. A failed fetch logs a warning and
+            leaves the columns null (unverified home-side ids when only the id
+            list fails). Ignored for the NBA, whose Yahoo ids always fill.
 
     Returns:
         ``{"team", "schedule", "player"}`` frames with the league module's
@@ -661,4 +674,7 @@ def build_archive_crosswalks(
             player = _with_fox_players(league, season, team, player, min_confidence)
     if fox_games:
         schedule = with_fox_games(league, schedule, team)
+    if yahoo and league == "wnba":
+        team = with_yahoo_teams(league, team)
+        schedule = with_yahoo_games(league, season, schedule, team)
     return {"team": team, "schedule": schedule, "player": player}

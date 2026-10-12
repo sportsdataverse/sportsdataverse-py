@@ -1,0 +1,132 @@
+{
+ "data": {
+  "leagues": [
+   {
+    "shortName": "WNBA",
+    "teams": [
+     {
+      "teamId": "wnba.t.4",
+      "displayName": "Los Angeles",
+      "fullName": "Los Angeles Sparks",
+      "location": "Los Angeles",
+      "nickname": "Sparks",
+      "abbreviation": "LAS"
+     },
+     {
+      "teamId": "wnba.t.5",
+      "displayName": "New York",
+      "fullName": "New York Liberty",
+      "location": "New York",
+      "nickname": "Liberty",
+      "abbreviation": "NYL"
+     },
+     {
+      "teamId": "wnba.t.6",
+      "displayName": "Phoenix",
+      "fullName": "Phoenix Mercury",
+      "location": "Phoenix",
+      "nickname": "Mercury",
+      "abbreviation": "PHX"
+     },
+     {
+      "teamId": "wnba.t.8",
+      "displayName": "Las Vegas",
+      "fullName": "Las Vegas Aces",
+      "location": "Las Vegas",
+      "nickname": "Aces",
+      "abbreviation": "LVA"
+     },
+     {
+      "teamId": "wnba.t.9",
+      "displayName": "Washington",
+      "fullName": "Washington Mystics",
+      "location": "Washington",
+      "nickname": "Mystics",
+      "abbreviation": "WAS"
+     },
+     {
+      "teamId": "wnba.t.10",
+      "displayName": "Dallas",
+      "fullName": "Dallas Wings",
+      "location": "Dallas",
+      "nickname": "Wings",
+      "abbreviation": "DAL"
+     },
+     {
+      "teamId": "wnba.t.11",
+      "displayName": "Minnesota",
+      "fullName": "Minnesota Lynx",
+      "location": "Minnesota",
+      "nickname": "Lynx",
+      "abbreviation": "MIN"
+     },
+     {
+      "teamId": "wnba.t.12",
+      "displayName": "Connecticut",
+      "fullName": "Connecticut Sun",
+      "location": "Connecticut",
+      "nickname": "Sun",
+      "abbreviation": "CON"
+     },
+     {
+      "teamId": "wnba.t.13",
+      "displayName": "Indiana",
+      "fullName": "Indiana Fever",
+      "location": "Indiana",
+      "nickname": "Fever",
+      "abbreviation": "IND"
+     },
+     {
+      "teamId": "wnba.t.15",
+      "displayName": "Portland",
+      "fullName": "Portland Fire",
+      "location": "Portland",
+      "nickname": "Fire",
+      "abbreviation": "PDX"
+     },
+     {
+      "teamId": "wnba.t.16",
+      "displayName": "Seattle",
+      "fullName": "Seattle Storm",
+      "location": "Seattle",
+      "nickname": "Storm",
+      "abbreviation": "SEA"
+     },
+     {
+      "teamId": "wnba.t.17",
+      "displayName": "Chicago",
+      "fullName": "Chicago Sky",
+      "location": "Chicago",
+      "nickname": "Sky",
+      "abbreviation": "CHI"
+     },
+     {
+      "teamId": "wnba.t.18",
+      "displayName": "Atlanta",
+      "fullName": "Atlanta Dream",
+      "location": "Atlanta",
+      "nickname": "Dream",
+      "abbreviation": "ATL"
+     },
+     {
+      "teamId": "wnba.t.19",
+      "displayName": "Golden State",
+      "fullName": "Golden State Valkyries",
+      "location": "Golden State",
+      "nickname": "Valkyries",
+      "abbreviation": "GSV"
+     },
+     {
+      "teamId": "wnba.t.48",
+      "displayName": "Toronto",
+      "fullName": "Toronto Tempo",
+      "location": "Toronto",
+      "nickname": "Tempo",
+      "abbreviation": "TOR"
+     }
+    ]
+   }
+  ]
+ },
+ "extensions": {}
+}
