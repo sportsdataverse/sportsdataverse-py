@@ -13,7 +13,7 @@
   - [Parser Layer (0.0.51+)](#parser-layer-0051)
     - [`return_parsed` parameter](#return_parsed-parameter)
     - [Summary dispatcher (21 sub-frames)](#summary-dispatcher-21-sub-frames)
-    - [Test fixtures (1,727 fixture files across 99 directories)](#test-fixtures-1727-fixture-files-across-99-directories)
+    - [Test fixtures (1,736 fixture files across 100 directories)](#test-fixtures-1736-fixture-files-across-100-directories)
     - [Test infrastructure summary](#test-infrastructure-summary)
   - [Key Coding Conventions](#key-coding-conventions)
     - [Module pattern (NEW modules)](#module-pattern-new-modules)
@@ -364,10 +364,10 @@ Cross-league shape divergences captured by tests:
 - NCAA W basketball `officials` sometimes ships < 3 rows; CFB
   national championship shipped 0 officials.
 
-### Test fixtures (1,727 fixture files across 99 directories)
+### Test fixtures (1,736 fixture files across 100 directories)
 
 Captured fixtures live under `tests/fixtures/{espn,mlb_api,nhl_api_web,
-nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 98 directories
+nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 100 directories
 in all). Each directory has a
 `README.md` documenting provenance (URL + capture date). See
 each fixture directory's own `README.md` for provenance (URL + capture date).
