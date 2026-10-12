@@ -1,0 +1,111 @@
+{
+  "comments": {
+    "comment": [
+      {
+        "@attributes": {
+          "id": "23987055",
+          "order": "23987055000",
+          "written": "2016-09-20 20:16:19",
+          "last_change": "2016-09-20 20:16:19",
+          "label": "normal",
+          "type": "",
+          "country_code": "",
+          "external_id": "",
+          "score1": "2",
+          "score2": "1",
+          "shootout_score1": "0",
+          "shootout_score2": "0",
+          "relates_to": ""
+        },
+        "time": {
+          "@attributes": {
+            "period": "ERT"
+          }
+        },
+        "details": [],
+        "title": [],
+        "message": "Ode mě je to již pro dnešek vše, děkuji za pozornost a přeji krásný zbytek úterního večera."
+      },
+      {
+        "@attributes": {
+          "id": "23986951",
+          "order": "23986951000",
+          "written": "2016-09-20 20:13:17",
+          "last_change": "2016-09-20 20:13:17",
+          "label": "time",
+          "type": "end",
+          "country_code": "",
+          "external_id": "",
+          "score1": "2",
+          "score2": "1",
+          "shootout_score1": "0",
+          "shootout_score2": "0",
+          "relates_to": ""
+        },
+        "time": {
+          "@attributes": {
+            "period": "ERT"
+          }
+        },
+        "details": [],
+        "title": [],
+        "message": "Konec zápasu."
+      },
+      {
+        "@attributes": {
+          "id": "23986823",
+          "order": "23986823000",
+          "written": "2016-09-20 20:08:41",
+          "last_change": "2016-09-20 20:08:41",
+          "label": "penalty",
+          "type": "",
+          "country_code": "",
+          "external_id": "",
+          "score1": "2",
+          "score2": "1",
+          "shootout_score1": "0",
+          "shootout_score2": "0",
+          "relates_to": ""
+        },
+        "time": "57:30",
+        "details": {
+          "detail": {
+            "@attributes": {
+              "id": "2567374"
+            },
+            "opponent": {
+              "@attributes": {
+                "id": "166",
+                "global_id": "166",
+                "code": "PLZ"
+              }
+            },
+            "player1": {
+              "@attributes": {
+                "id": "35135",
+                "global_id": "35135",
+                "name": "Johnson"
+              }
+            },
+            "player2": {
+              "@attributes": {
+                "id": "0",
+                "global_id": "0",
+                "name": ""
+              }
+            },
+            "player3": {
+              "@attributes": {
+                "id": "0",
+                "global_id": "0",
+                "name": ""
+              }
+            }
+          }
+        },
+        "title": [],
+        "message": "Vyloučení v týmu HC Škoda Plzeň (Nicholas Johnson – 2 min., podražení)."
+      }
+    ]
+  }
+}

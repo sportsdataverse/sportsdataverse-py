@@ -1,0 +1,141 @@
+{
+  "comments": {
+    "comment": [
+      {
+        "@attributes": {
+          "id": "23987055",
+          "order": "23987055000",
+          "written": "2016-09-20 20:16:19",
+          "last_change": "2016-09-20 20:16:19",
+          "label": "normal",
+          "type": "",
+          "country_code": "",
+          "external_id": "",
+          "score1": "2",
+          "score2": "1",
+          "shootout_score1": "0",
+          "shootout_score2": "0",
+          "relates_to": ""
+        },
+        "time": {
+          "@attributes": {
+            "period": "ERT"
+          }
+        },
+        "details": [],
+        "title": [],
+        "message": "Ode mě je to již pro dnešek vše, děkuji za pozornost a přeji krásný zbytek úterního večera."
+      },
+      {
+        "@attributes": {
+          "id": "23986823",
+          "order": "23986823000",
+          "written": "2016-09-20 20:08:41",
+          "last_change": "2016-09-20 20:08:41",
+          "label": "penalty",
+          "type": "",
+          "country_code": "",
+          "external_id": "",
+          "score1": "2",
+          "score2": "1",
+          "shootout_score1": "0",
+          "shootout_score2": "0",
+          "relates_to": ""
+        },
+        "time": "57:30",
+        "details": {
+          "detail": {
+            "@attributes": {
+              "id": "2567374"
+            },
+            "opponent": {
+              "@attributes": {
+                "id": "166",
+                "global_id": "166",
+                "code": "PLZ"
+              }
+            },
+            "player1": {
+              "@attributes": {
+                "id": "35135",
+                "global_id": "35135",
+                "name": "Johnson"
+              }
+            },
+            "player2": {
+              "@attributes": {
+                "id": "0",
+                "global_id": "0",
+                "name": ""
+              }
+            },
+            "player3": {
+              "@attributes": {
+                "id": "0",
+                "global_id": "0",
+                "name": ""
+              }
+            }
+          }
+        },
+        "title": [],
+        "message": "Vyloučení v týmu HC Škoda Plzeň (Nicholas Johnson – 2 min., podražení)."
+      },
+      {
+        "@attributes": {
+          "id": "23985408",
+          "order": "23985453100",
+          "written": "2016-09-20 18:59:22",
+          "last_change": "2016-09-20 19:01:11",
+          "label": "goal",
+          "type": "",
+          "country_code": "",
+          "external_id": "",
+          "score1": "2",
+          "score2": "1",
+          "shootout_score1": "0",
+          "shootout_score2": "0",
+          "relates_to": ""
+        },
+        "time": "26:48",
+        "details": {
+          "detail": {
+            "@attributes": {
+              "id": "2566976"
+            },
+            "opponent": {
+              "@attributes": {
+                "id": "157",
+                "global_id": "157",
+                "code": "LIB"
+              }
+            },
+            "player1": {
+              "@attributes": {
+                "id": "35010",
+                "global_id": "35010",
+                "name": "Bližňák"
+              }
+            },
+            "player2": {
+              "@attributes": {
+                "id": "35009",
+                "global_id": "35009",
+                "name": "Bartovič"
+              }
+            },
+            "player3": {
+              "@attributes": {
+                "id": "35002",
+                "global_id": "35002",
+                "name": "D. Špaček"
+              }
+            }
+          }
+        },
+        "title": [],
+        "message": "Liberec právě vstřelil branku!<br /> Nevedlo a naopak skórují Tygři! Špaček vyjel zpoza branky a vymyslel geniální pas na Bartoviče, jeho střelu nejprve tečoval a pak dorazil za záda Matěje Machovského MÁRIO BLIŽŇÁK. Ten se tak prosadil proti svému bývalému celku! Asistence: Milan Bartovič, Daniel Špaček."
+      }
+    ]
+  }
+}
