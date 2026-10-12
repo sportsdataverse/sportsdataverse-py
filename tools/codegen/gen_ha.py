@@ -11,8 +11,14 @@ checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
   of its parser run over its committed fixture, stamped the way the runtime stamps a live body.
   The games table uses the FULL body in ``tests/fixtures/ha/full/`` (``efficiency`` arrives as
   ``"8.82"``, ``0`` or null, which a 3-row capture cannot show); every other wrapper uses its
-  refs capture. Descriptions come from :data:`LOCAL`, then the spec, then the leaf of each
-  ``hockeyallsvenskan-returns.md`` row.
+  refs capture. Columns are written with ``description: ''`` (re-capture clobbers schemas).
+* ``tools/codegen/ha_column_descriptions.snippet.yaml`` -- the column descriptions, keyed by
+  schema key (``ha_<short>``), merged into ``manual_column_descriptions.yaml``. They come from
+  :data:`LOCAL`, then the spec, then the leaf of each ``hockeyallsvenskan-returns.md`` row.
+* ``sportsdataverse/hockey/ha/_ha_schema.py`` -- column -> returns-schema type, which the
+  parsers cast to, so an empty frame carries the dtypes of a populated one.
+* ``tests/fixtures/ha/spec_snapshot.json`` -- the spec's routes, POST request examples and
+  ``categories`` enums, so the tests check the runtime and the YAML without the refs checkout.
 
 **What the flat-API YAML cannot express**, and how this family works around it: an endpoint has
 no HTTP method and no body, so every wrapper renders as ``_get(url, params=...)``. The YAML's
@@ -48,6 +54,9 @@ from sportsdataverse.hockey.ha.ha_runtime import BODIES, CATEGORIES, HOST, PHASE
 
 SPEC = "hockeyallsvenskan.openapi.yaml"
 FIXTURES = ROOT / "tests" / "fixtures" / "ha"
+SNAPSHOT = FIXTURES / "spec_snapshot.json"
+SNIPPET = ROOT / "tools" / "codegen" / "ha_column_descriptions.snippet.yaml"
+SCHEMA_MODULE = ROOT / "sportsdataverse" / "hockey" / "ha" / "_ha_schema.py"
 
 SEASON = (
     "Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. "
@@ -357,7 +366,7 @@ LOCAL: Dict[str, str] = {
     "wins_total": "Wins in total, overtime and shootout wins included (otw and sow are subsets).",
     "losses_total": "Losses in total, overtime and shootout losses included (otl and sol are subsets).",
     "event_type": "Event type: Shot, Goal, Penalty, GoalkeeperEvent or Timeout.",
-    "period": "Period number.",
+    "period": "Period number the event belongs to.",
     "time": "Seconds into the period.",
     "event_description": "Shot outcome, goal strength (EQ), penalty text or timeout note.",
     "is_entering": "Goalkeeper event: true when the goalkeeper enters, false when he leaves.",
@@ -375,11 +384,32 @@ LOCAL: Dict[str, str] = {
     "away_team_logo_url": "Logo URL of the away team.",
     "team_logo_url": "Logo URL of the team.",
     "rank": "Rank in the table.",
-    "goals": "Goals for.",
+    "goals": "Goals scored by the team (goals for).",
     "ties": "Ties (0 in the overtime era).",
     "goal_difference": "Goal difference.",
-    "height": "Height in cm.",
-    "name": "Club name.",
+    "height": "Player height in centimetres.",
+    "name": "Short club name (the teams list's name).",
+    "full_name": "Full club name (the teams list's fullName).",
+    "arena": "Arena the game is played in, as the games table names it.",
+    "venue": "Arena name on the CMS game record.",
+    "round": "Round number of the game in the season schedule.",
+    "games_played": "Games played in the season and phase.",
+    "gp": "Games played in the season and phase.",
+    "goals_against": "Goals conceded by the team.",
+    "ga": "Goals against: goals allowed in the season and phase.",
+    "total_points": "Standings points of the team.",
+    "otw": "Overtime wins (a subset of wins_total).",
+    "sow": "Shootout wins (a subset of wins_total).",
+    "a": "Assists credited to the skater.",
+    "sog": "Shots on goal by the skater.",
+    "svs": "Saves made by the goalkeeper.",
+    "so": "Shutouts recorded by the goalkeeper.",
+    "w": "Wins credited to the goalkeeper.",
+    "l": "Losses credited to the goalkeeper.",
+    "t": "Ties credited to the goalkeeper (0 in the overtime era).",
+    "is_rookie": "True when the CMS directory flags the player as a rookie.",
+    "weight": "Player weight in kilograms.",
+    "team_logo": "Logo URL of the player's team.",
     "created_at": "CMS creation time of the record (ISO 8601 UTC).",
     "updated_at": "CMS update time of the record (ISO 8601 UTC).",
     "published_at": "CMS publish time of the record (ISO 8601 UTC).",
@@ -403,7 +433,8 @@ LOCAL: Dict[str, str] = {
 LOCAL_BY_SHORT: Dict[Tuple[str, str], str] = {
     ("leaders", "slug"): "Player slug; joins ha_players.",
     ("players", "slug"): "Player slug; joins ha_leaders.",
-    ("teams", "name"): "Short club name.",
+    ("skater_stats", "g"): "Goals scored by the skater.",
+    ("team_stats", "g"): "Goals scored by the team.",
 }
 #: Wire-type remarks in the refs descriptions that the parsers make untrue (they cast the value).
 _WIRE_NOTE = re.compile(r",? decimal string| \(string\)| as a string")
@@ -482,14 +513,46 @@ def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
 _PER_CALL = frozenset({"season", "teamShortName"})
 
 
-def _check_bodies(spec: Dict[str, Any]) -> None:
+def _json_request(ops: Dict[str, Any]) -> Dict[str, Any]:
+    return ((ops.get("post") or {}).get("requestBody") or {}).get("content", {}).get("application/json", {})
+
+
+def spec_snapshot(spec: Dict[str, Any]) -> Dict[str, Any]:
+    """What the tests check against the spec: routes, POST request examples, ``categories`` enums."""
+    paths = spec["paths"]
+    examples = {p: _json_request(ops).get("example") for p, ops in paths.items()}
+    categories = {
+        p: ((_json_request(ops).get("schema") or {}).get("properties") or {}).get("categories", {}).get("enum")
+        for p, ops in paths.items()
+    }
+    return {
+        "routes": sorted(paths),
+        "request_examples": {p: v for p, v in sorted(examples.items()) if v},
+        "categories": {p: v for p, v in sorted(categories.items()) if v},
+    }
+
+
+def _check_bodies(examples: Dict[str, Dict[str, Any]]) -> None:
     """The runtime's default bodies are the spec's request examples (minus the per-call fields)."""
-    for path, ops in spec["paths"].items():
-        example = ((ops.get("post") or {}).get("requestBody") or {}).get("content", {}).get("application/json", {})
-        example = {k: v for k, v in (example.get("example") or {}).items() if k not in _PER_CALL}
+    for path, example in examples.items():
+        example = {k: v for k, v in example.items() if k not in _PER_CALL}
         if example and path != "/api/play-by-play":
             default = {k: v for k, v in BODIES[path].items() if k not in _PER_CALL}
             assert default == example, (path, default, example)
+
+
+def _write_schema_module(types: Dict[str, str]) -> None:
+    lines = [
+        '"""Column -> returns-schema type for the ``ha`` parsers (written by tools/codegen/gen_ha.py)."""',
+        "",
+        "from typing import Dict",
+        "",
+        "DTYPES: Dict[str, str] = {",
+        *(f"    {json.dumps(name, ensure_ascii=False)}: {json.dumps(typ)}," for name, typ in sorted(types.items())),
+        "}",
+        "",
+    ]
+    SCHEMA_MODULE.write_text("\n".join(lines), encoding="utf-8", newline="\n")
 
 
 def main() -> None:
@@ -498,7 +561,9 @@ def main() -> None:
     missing = {e[0] for e in ENDPOINTS.values()} ^ set(spec["paths"])
     if missing:
         raise SystemExit(f"ha: spec paths and ENDPOINTS differ: {sorted(missing)}")
-    _check_bodies(spec)
+    snapshot = spec_snapshot(spec)
+    _check_bodies(snapshot["request_examples"])
+    SNAPSHOT.write_text(json.dumps(snapshot, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     doc = {
         "api": "ha",
         "host": HOST,
@@ -538,13 +603,20 @@ def main() -> None:
     sources = [LOCAL, spec_descriptions(spec), _md_leaves(refs / "hockeyallsvenskan-returns.md")]
     schema_dir = ROOT / "tools/codegen/schemas/native/ha"
     rewrite_schema_dir(schema_dir)
+    snippet: Dict[str, Dict[str, str]] = {}
+    types: Dict[str, str] = {}
     for short, entry in ENDPOINTS.items():
         cols = columns_from_frame(_frame(entry), [], leaf_fallback=False)
+        texts = snippet.setdefault(f"ha_{short}", {})
         for col in cols:
             desc = LOCAL_BY_SHORT.get((short, col["name"])) or _describe(col["name"], sources)
-            col["description"] = _WIRE_NOTE.sub("", desc) if col["type"] != "character" else desc
+            texts[col["name"]] = _WIRE_NOTE.sub("", desc) if col["type"] != "character" else desc
+            col["description"] = ""
+            assert types.setdefault(col["name"], col["type"]) == col["type"], (short, col)  # one dtype per name
         write_yaml(schema_dir / f"{short}.yaml", {"schema": f"ha_{short}", "kind": "dataframe", "columns": cols})
-    print(f"ha: {len(ENDPOINTS)} endpoints")
+    write_yaml(SNIPPET, snippet)
+    _write_schema_module(types)
+    print(f"ha: {len(ENDPOINTS)} endpoints, {sum(map(len, snippet.values()))} descriptions")
 
 
 if __name__ == "__main__":

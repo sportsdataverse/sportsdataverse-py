@@ -1,0 +1,363 @@
+ha_game:
+  attendance: Attendance; null for an unplayed game (0 for a played one means unknown).
+  away_ot_score: Away overtime goals; null when the game had no overtime.
+  away_score: Away goals, final.
+  away_score_p1: Away goals in period 1.
+  away_score_p2: Away goals in period 2.
+  away_score_p3: Away goals in period 3.
+  away_so_score: Away shootout goals; null when the game had no shootout.
+  away_statnet_id: StatNet team id of the away team.
+  away_team_alternate_color_hex: 'Away team: secondary colour (hex).'
+  away_team_arena_address: 'Away team: postal address of the arena (multi-line, newline-separated).'
+  away_team_arena_latitude: 'Away team: arena latitude, decimal degrees.'
+  away_team_arena_longitude: 'Away team: arena longitude, decimal degrees.'
+  away_team_arena_telephone: 'Away team: arena telephone contact.'
+  away_team_club_mate_lottery_url: 'Away team: club lottery URL.'
+  away_team_cms_id: CMS (Strapi) record id of the away team.
+  away_team_code: Display code of the away team, not the StatNet id.
+  away_team_created_at: 'Away team: CMS creation time of the record (ISO 8601 UTC).'
+  away_team_document_id: 'Away team: CMS (Strapi) document id (string; stable across
+    drafts and locales).'
+  away_team_logo_url: Logo URL of the away team.
+  away_team_main_color_hex: 'Away team: primary colour (hex).'
+  away_team_name: 'Away team: short club name (the teams list''s name).'
+  away_team_published_at: 'Away team: CMS publish time of the record (ISO 8601 UTC).'
+  away_team_team_arena: 'Away team: home arena.'
+  away_team_tickets_provider_url: 'Away team: ticket shop URL.'
+  away_team_updated_at: 'Away team: CMS update time of the record (ISO 8601 UTC).'
+  cms_season: 'CMS season key as sent (season_2026 = 2026/27: a START year).'
+  created_at: CMS creation time of the record (ISO 8601 UTC).
+  current_period: Live period while the game runs; empty string '' before and after.
+  current_period_start: Start time of the live period; null outside a live game.
+  decided_in: How the game was decided (FT, OT, SO); empty for a game not yet played.
+  ended_date_time: End time (ISO 8601 UTC).
+  game_cms_id: CMS (Strapi) record id of the game.
+  game_document_id: CMS (Strapi) document id of the game.
+  game_type: 'Game type (phase): HA regular season, HAPlayoff playoffs, HAkval playout.'
+  home_ot_score: Home overtime goals; null when the game had no overtime.
+  home_score: Home goals, final.
+  home_score_p1: Home goals in period 1.
+  home_score_p2: Home goals in period 2.
+  home_score_p3: Home goals in period 3.
+  home_so_score: Home shootout goals; null when the game had no shootout.
+  home_statnet_id: StatNet team id of the home team (AIK, MODO, MIK).
+  home_team_alternate_color_hex: 'Home team: secondary colour (hex).'
+  home_team_arena_address: 'Home team: postal address of the arena (multi-line, newline-separated).'
+  home_team_arena_latitude: 'Home team: arena latitude, decimal degrees.'
+  home_team_arena_longitude: 'Home team: arena longitude, decimal degrees.'
+  home_team_arena_telephone: 'Home team: arena telephone contact.'
+  home_team_club_mate_lottery_url: 'Home team: club lottery URL.'
+  home_team_cms_id: CMS (Strapi) record id of the home team (81 = AIK).
+  home_team_code: Display code of the home team (AIK, MoDo, MORA, NVIF, ÖIK), not
+    the StatNet id.
+  home_team_created_at: 'Home team: CMS creation time of the record (ISO 8601 UTC).'
+  home_team_document_id: 'Home team: CMS (Strapi) document id (string; stable across
+    drafts and locales).'
+  home_team_logo_url: Logo URL of the home team.
+  home_team_main_color_hex: 'Home team: primary colour (hex).'
+  home_team_name: 'Home team: short club name (the teams list''s name).'
+  home_team_published_at: 'Home team: CMS publish time of the record (ISO 8601 UTC).'
+  home_team_team_arena: 'Home team: home arena.'
+  home_team_tickets_provider_url: 'Home team: ticket shop URL.'
+  home_team_updated_at: 'Home team: CMS update time of the record (ISO 8601 UTC).'
+  is_completed: true once the game is final.
+  play_off_game: Game of the playoff series (1, 2, ...); null outside the playoffs.
+  play_off_game_level: Playoff round label.
+  played_date_time: Actual start time (ISO 8601 UTC).
+  published_at: CMS publish time of the record (ISO 8601 UTC).
+  round: Round number of the game in the season schedule.
+  scheduled_date_time: Scheduled face-off time (ISO 8601 UTC).
+  season: Season END year (2026 = 2025/26).
+  slug: Game slug yyyymmdd-home-away (lower-case CMS short names); the /api/game?slug=
+    key.
+  statnet_game_number: StatNet game number (23401 = 2026/27 game 1); the play-by-play
+    request key.
+  updated_at: CMS update time of the record (ISO 8601 UTC).
+  venue: Arena name on the CMS game record.
+ha_games:
+  arena: Arena the game is played in, as the games table names it.
+  attendance: Attendance; null for an unplayed game (0 for a played one means unknown).
+  away_expulsions_in_minutes: 'Away team: penalty minutes.'
+  away_powerplay_efficiency: 'Away team: power-play percentage; sent as text, 0 or
+    null.'
+  away_powerplay_goals: 'Away team: power-play goals.'
+  away_powerplay_num_pp: 'Away team: power plays.'
+  away_score: Away goals, final.
+  away_shots_efficiency: 'Away team: shooting percentage (goals per 100 shots); sent
+    as text, 0 or null.'
+  away_shots_goal: 'Away team: goals.'
+  away_shots_total: 'Away team: shots on goal.'
+  away_team_code: Display code of the away team, not the StatNet id.
+  date: Game date (YYYY-MM-DD).
+  decided_in: How the game was decided (FT, OT, SO); empty for a game not yet played.
+  home_expulsions_in_minutes: 'Home team: penalty minutes.'
+  home_powerplay_efficiency: 'Home team: power-play percentage; sent as text, 0 or
+    null.'
+  home_powerplay_goals: 'Home team: power-play goals.'
+  home_powerplay_num_pp: 'Home team: power plays.'
+  home_score: Home goals, final.
+  home_shots_efficiency: 'Home team: shooting percentage (goals per 100 shots); sent
+    as text, 0 or null.'
+  home_shots_goal: 'Home team: goals.'
+  home_shots_total: 'Home team: shots on goal.'
+  home_team_code: Display code of the home team (AIK, MoDo, MORA, NVIF, ÖIK), not
+    the StatNet id.
+  is_played: True when the game has been played (decided_in is not empty).
+  most_points: Top point scorers of the game, JSON list of {player, team (StatNet
+    id), points}.
+  period_scores: Goals per period, JSON list of {Home, Away}; null for an unplayed
+    game.
+  season: Season END year (2026 = 2025/26).
+ha_goalie_stats:
+  ga: 'Goals against: goals allowed in the season and phase.'
+  gaa: Goals-against average.
+  gp: Games played in the season and phase.
+  gpi: Games played in (appeared).
+  l: Losses credited to the goalkeeper.
+  mip: Minutes played, total mm:ss string ('1726:51').
+  player_name: Player name (the table carries no player id).
+  rank: Rank in the table.
+  season: Season END year (2026 = 2025/26).
+  so: Shutouts recorded by the goalkeeper.
+  svs: Saves made by the goalkeeper.
+  svs_perc: Save percentage ('92.61').
+  t: Ties credited to the goalkeeper (0 in the overtime era).
+  team_statnet_id: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.
+  valid_ranking: 1 when the goalkeeper qualifies for the ranked list (minimum games),
+    else 0.
+  w: Wins credited to the goalkeeper.
+ha_leaders:
+  family_name: Family name of the player.
+  first_name: First name of the player.
+  headshot: Headshot URL (medium rendition).
+  headshot_medium: Medium headshot URL.
+  headshot_small: Small headshot URL.
+  jersey_number: Jersey number of the player.
+  metric: Metric code (echo of the request metric).
+  metric_value: Value of the metric (a count, a percentage or a clock, as text).
+  player_name: Player name (the table carries no player id).
+  player_statnet_id: StatNet player id (the same id space as SHL's isa id, verified
+    on one player).
+  position: 'Playing position: F forward, D defence (G goalkeeper on goalie metrics).'
+  rank: Rank in the table.
+  slug: Player slug; joins ha_players.
+  team_code: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
+    id.
+  team_logo: Logo URL of the player's team.
+  team_main_color: Team primary colour (hex).
+  team_name: Team label as shown on the card (the display team code).
+  team_statnet_id: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.
+ha_pbp:
+  assist1_jersey_today: First assist's jersey number in this game.
+  assist1_name: First assist, by name (no id).
+  assist1_season_assists: First assist's season assists after this goal.
+  assist2_jersey_today: Second assist's jersey number in this game.
+  assist2_name: Second assist, by name (no id).
+  assist2_season_assists: Second assist's season assists after this goal.
+  away_statnet_id: StatNet team id of the away team.
+  event_description: Shot outcome, goal strength (EQ), penalty text or timeout note.
+  event_type: 'Event type: Shot, Goal, Penalty, GoalkeeperEvent or Timeout.'
+  home_statnet_id: StatNet team id of the home team (AIK, MODO, MIK).
+  is_entering: 'Goalkeeper event: true when the goalkeeper enters, false when he leaves.'
+  is_penalty_shot: Goal scored on a penalty shot.
+  period: Period number the event belongs to.
+  period_label: Period label ('Period 1').
+  player_family_name: 'Player: family name of the player.'
+  player_first_name: 'Player: first name of the player.'
+  player_jersey_number: 'Player: jersey number of the player.'
+  player_statnet_id: StatNet player id (the same id space as SHL's isa id, verified
+    on one player).
+  running_score: Score after the goal, home-away.
+  scorer_season_goals: Scorer's season goals after this goal.
+  statnet_game_number: StatNet game number (23401 = 2026/27 game 1); the play-by-play
+    request key.
+  team_code: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
+    id.
+  team_name: Team label as shown on the card (the display team code).
+  team_statnet_id: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.
+  time: Seconds into the period.
+ha_players:
+  birth_date: Birth date, YYYY-MM-DD.
+  country: Nationality, IOC/ISO alpha-3 code (SWE, NOR).
+  family_name: Family name of the player.
+  first_name: First name of the player.
+  headshots_large: Headshot URL (large rendition).
+  headshots_medium: Headshot URL (medium rendition).
+  headshots_small: Headshot URL (small rendition).
+  headshots_thumb: Headshot URL (thumb rendition).
+  height: Player height in centimetres.
+  is_rookie: True when the CMS directory flags the player as a rookie.
+  jersey_number: Jersey number of the player.
+  player_cms_id: CMS (Strapi) record id of the player (not the StatNet id).
+  player_document_id: CMS (Strapi) document id of the player.
+  position_code: Playing position code (CE centre, LW left wing, ...); positionName
+    spells it out in English.
+  position_name: Playing position, English label (Center, Left Wing, ...).
+  shoots: 'Shoots / catches: L or R.'
+  slug: Player slug; joins ha_leaders.
+  team_cms_id: CMS (Strapi) record id of the team (81 = AIK).
+  team_code: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
+    id.
+  team_document_id: CMS (Strapi) document id of the team.
+  team_logo_url: Logo URL of the team.
+  team_main_color_hex: Primary colour of the team (hex).
+  team_name: Team label as shown on the card (the display team code).
+  team_player: Card label 'TEAM \| POS JERSEY \| Family name'.
+  weight: Player weight in kilograms.
+  youth_team: Youth (development) club.
+ha_schedule:
+  attendance: Attendance; null for an unplayed game (0 for a played one means unknown).
+  away_ot_score: Away overtime goals; null when the game had no overtime.
+  away_score: Away goals, final.
+  away_score_p1: Away goals in period 1.
+  away_score_p2: Away goals in period 2.
+  away_score_p3: Away goals in period 3.
+  away_so_score: Away shootout goals; null when the game had no shootout.
+  away_statnet_id: StatNet team id of the away team.
+  away_team_alternate_color_hex: 'Away team: secondary colour (hex).'
+  away_team_arena_address: 'Away team: postal address of the arena (multi-line, newline-separated).'
+  away_team_arena_latitude: 'Away team: arena latitude, decimal degrees.'
+  away_team_arena_longitude: 'Away team: arena longitude, decimal degrees.'
+  away_team_arena_telephone: 'Away team: arena telephone contact.'
+  away_team_club_mate_lottery_url: 'Away team: club lottery URL.'
+  away_team_cms_id: CMS (Strapi) record id of the away team.
+  away_team_code: Display code of the away team, not the StatNet id.
+  away_team_created_at: 'Away team: CMS creation time of the record (ISO 8601 UTC).'
+  away_team_document_id: 'Away team: CMS (Strapi) document id (string; stable across
+    drafts and locales).'
+  away_team_logo_url: Logo URL of the away team.
+  away_team_main_color_hex: 'Away team: primary colour (hex).'
+  away_team_name: 'Away team: short club name (the teams list''s name).'
+  away_team_published_at: 'Away team: CMS publish time of the record (ISO 8601 UTC).'
+  away_team_team_arena: 'Away team: home arena.'
+  away_team_tickets_provider_url: 'Away team: ticket shop URL.'
+  away_team_updated_at: 'Away team: CMS update time of the record (ISO 8601 UTC).'
+  cms_season: 'CMS season key as sent (season_2026 = 2026/27: a START year).'
+  created_at: CMS creation time of the record (ISO 8601 UTC).
+  current_period: Live period while the game runs; empty string '' before and after.
+  current_period_start: Start time of the live period; null outside a live game.
+  decided_in: How the game was decided (FT, OT, SO); empty for a game not yet played.
+  ended_date_time: End time (ISO 8601 UTC).
+  game_cms_id: CMS (Strapi) record id of the game.
+  game_document_id: CMS (Strapi) document id of the game.
+  game_type: 'Game type (phase): HA regular season, HAPlayoff playoffs, HAkval playout.'
+  home_ot_score: Home overtime goals; null when the game had no overtime.
+  home_score: Home goals, final.
+  home_score_p1: Home goals in period 1.
+  home_score_p2: Home goals in period 2.
+  home_score_p3: Home goals in period 3.
+  home_so_score: Home shootout goals; null when the game had no shootout.
+  home_statnet_id: StatNet team id of the home team (AIK, MODO, MIK).
+  home_team_alternate_color_hex: 'Home team: secondary colour (hex).'
+  home_team_arena_address: 'Home team: postal address of the arena (multi-line, newline-separated).'
+  home_team_arena_latitude: 'Home team: arena latitude, decimal degrees.'
+  home_team_arena_longitude: 'Home team: arena longitude, decimal degrees.'
+  home_team_arena_telephone: 'Home team: arena telephone contact.'
+  home_team_club_mate_lottery_url: 'Home team: club lottery URL.'
+  home_team_cms_id: CMS (Strapi) record id of the home team (81 = AIK).
+  home_team_code: Display code of the home team (AIK, MoDo, MORA, NVIF, ÖIK), not
+    the StatNet id.
+  home_team_created_at: 'Home team: CMS creation time of the record (ISO 8601 UTC).'
+  home_team_document_id: 'Home team: CMS (Strapi) document id (string; stable across
+    drafts and locales).'
+  home_team_logo_url: Logo URL of the home team.
+  home_team_main_color_hex: 'Home team: primary colour (hex).'
+  home_team_name: 'Home team: short club name (the teams list''s name).'
+  home_team_published_at: 'Home team: CMS publish time of the record (ISO 8601 UTC).'
+  home_team_team_arena: 'Home team: home arena.'
+  home_team_tickets_provider_url: 'Home team: ticket shop URL.'
+  home_team_updated_at: 'Home team: CMS update time of the record (ISO 8601 UTC).'
+  is_completed: true once the game is final.
+  play_off_game: Game of the playoff series (1, 2, ...); null outside the playoffs.
+  play_off_game_level: Playoff round label.
+  played_date_time: Actual start time (ISO 8601 UTC).
+  published_at: CMS publish time of the record (ISO 8601 UTC).
+  round: Round number of the game in the season schedule.
+  scheduled_date_time: Scheduled face-off time (ISO 8601 UTC).
+  season: Season END year (2026 = 2025/26).
+  slug: Game slug yyyymmdd-home-away (lower-case CMS short names); the /api/game?slug=
+    key.
+  statnet_game_number: StatNet game number (23401 = 2026/27 game 1); the play-by-play
+    request key.
+  updated_at: CMS update time of the record (ISO 8601 UTC).
+  venue: Arena name on the CMS game record.
+ha_skater_stats:
+  a: Assists credited to the skater.
+  bks: Blocked shots (0 in seasons before tracking).
+  g: Goals scored by the skater.
+  gp: Games played in the season and phase.
+  gwg: Game-winning goals.
+  hits: Hits (0 in seasons before tracking).
+  minus: Goals against while on ice (minus count).
+  pim: Penalty minutes.
+  player_name: Player name (the table carries no player id).
+  plus: Even-strength / short-handed goals for while on ice (plus count).
+  plus_minus: 'Plus/minus: the Plus count less the Minus count.'
+  ppg: Power-play goals.
+  rank: Rank in the table.
+  season: Season END year (2026 = 2025/26).
+  sog: Shots on goal by the skater.
+  team_statnet_id: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.
+  toi_gp: Average time on ice per game, mm:ss string ('0:00' = not tracked, e.g. 2010).
+  tp: Points (goals + assists).
+  tppg: Points per game.
+ha_standings:
+  games_played: Games played in the season and phase.
+  goal_difference: Goal difference.
+  goals: Goals scored by the team (goals for).
+  goals_against: Goals conceded by the team.
+  overtime_and_shootout_losses: Overtime losses, shootout losses included.
+  overtime_and_shootout_wins: Overtime wins, shootout wins included.
+  penalty_kill_perc: Penalty-kill percentage; empty-string placeholder '' in every
+    sample.
+  power_play_perc: Power-play percentage; empty-string placeholder '' in every sample.
+  rank: Rank in the table.
+  regulation_losses: Regulation losses only.
+  regulation_wins: Regulation wins only (the team table's wins_total also counts OT
+    and shootout wins).
+  season: Season END year (2026 = 2025/26).
+  shootouts_losses: Shootout losses as sent (0 in every sampled row).
+  shootouts_wins: 'Shootout wins as sent (0 in every sampled row: they are counted
+    in overtime_and_shootout_wins).'
+  team_code: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
+    id.
+  team_code_mixed: 'Upstream standings teamCode: the StatNet id for some clubs (MODO),
+    the display code for others (MORA, NVIF, ÖIK). Join on team_code instead.'
+  ties: Ties (0 in the overtime era).
+  total_points: Standings points of the team.
+ha_team_stats:
+  g: Goals scored by the team.
+  ga: 'Goals against: goals allowed in the season and phase.'
+  gapg: Goals against per game (number).
+  gfg: Games in which the team scored the first goal (inferred from the label; unverified).
+  gp: Games played in the season and phase.
+  gpg: Goals for per game (number).
+  leading: Games or situations leading (StatNet 'Leading'; meaning unverified).
+  losses_total: Losses in total, overtime and shootout losses included (otl and sol
+    are subsets).
+  otl: Overtime losses.
+  otw: Overtime wins (a subset of wins_total).
+  p_gp: Points per game.
+  points: 'Standings points: 3 per regulation win, 2 per overtime/shootout win, 1
+    per overtime/shootout loss (2025 IFB: 102 + 14 + 3 = 119).'
+  rank: Rank in the table.
+  season: Season END year (2026 = 2025/26).
+  sol: Shootout losses.
+  sow: Shootout wins (a subset of wins_total).
+  team_code: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
+    id.
+  trailing: Games or situations trailing (StatNet 'Trailing'; meaning unverified).
+  wins_total: Wins in total, overtime and shootout wins included (otw and sow are
+    subsets).
+ha_teams:
+  full_name: Full club name (the teams list's fullName).
+  logos_icon: 'Logo: icon-size logo URL.'
+  logos_large: 'Logo: large logo URL.'
+  logos_medium: 'Logo: medium logo URL.'
+  logos_small: 'Logo: small logo rendition (500 px).'
+  logos_xlarge: 'Logo: extra-large logo URL.'
+  name: Short club name (the teams list's name).
+  season: Season END year (2026 = 2025/26).
+  team_code: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
+    id.
+  team_statnet_id: StatNet team id (AIK, MODO, MIK, NYB, OSIK), not the display code.

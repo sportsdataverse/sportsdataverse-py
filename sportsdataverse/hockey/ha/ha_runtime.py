@@ -65,7 +65,7 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple
 from urllib.parse import urlsplit
 
 from sportsdataverse import _codegen_runtime as _rt
-from sportsdataverse.dl_utils import _SHARED_SESSION
+from sportsdataverse.dl_utils import _MAX_RETRY_AFTER, _SHARED_SESSION, _parse_retry_after
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.hockey import euro_hockey_runtime
 
@@ -247,7 +247,7 @@ def extract_game_list(page: str) -> Dict[str, Any]:
 
 
 def _get_page(url: str, **kwargs: Any) -> Dict[str, Any]:
-    euro_hockey_runtime._polite_wait(url)
+    kwargs.setdefault("session", euro_hockey_runtime.SESSION)  # waits per request, retries included
     with _rt._transport_errors(url):
         resp = _rt.download(url=url, **kwargs)
     text = _rt._text_body(resp, url)
@@ -263,11 +263,14 @@ def _get_page(url: str, **kwargs: Any) -> Dict[str, Any]:
 def _post(url: str, json: Any = None, timeout: float = 30, attempts: int = 3, **_: Any) -> Any:
     """POST ``json`` with retries (2 s, 4 s) on :data:`RETRY_STATUSES` and transport errors.
 
-    Each attempt waits on the shared throttle. Any other status returns at once (the caller
-    decodes it under the error vocabulary); the last transport error is re-raised.
+    Each attempt waits on the shared throttle. A ``Retry-After`` header on a retried status
+    (429 and 503 alike) lengthens the wait to what the server asks, capped at
+    ``dl_utils._MAX_RETRY_AFTER``. Any other status returns at once (the caller decodes it
+    under the error vocabulary); the last transport error is re-raised.
     """
     for i in range(attempts):
         euro_hockey_runtime._polite_wait(url)
+        retry_after = None
         try:
             resp = _SESSION.post(url, json=json, headers=_HEADERS, timeout=timeout)
         except OSError:  # requests.RequestException
@@ -276,7 +279,9 @@ def _post(url: str, json: Any = None, timeout: float = 30, attempts: int = 3, **
         else:
             if resp.status_code not in RETRY_STATUSES or i == attempts - 1:
                 return resp
-        time.sleep(2.0 * 2**i)
+            header = (getattr(resp, "headers", None) or {}).get("Retry-After")
+            retry_after = _parse_retry_after(str(header)) if header else None
+        time.sleep(max(2.0 * 2**i, min(retry_after or 0.0, _MAX_RETRY_AFTER)))
     raise AssertionError("unreachable")  # pragma: no cover
 
 

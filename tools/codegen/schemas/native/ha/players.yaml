@@ -1,82 +1,80 @@
 columns:
-- description: Family name of the player.
+- description: ''
   name: family_name
   type: character
-- description: First name of the player.
+- description: ''
   name: first_name
   type: character
-- description: CMS (Strapi) record id of the player (not the StatNet id).
+- description: ''
   name: player_cms_id
   type: integer
-- description: CMS (Strapi) document id of the player.
+- description: ''
   name: player_document_id
   type: character
-- description: Headshot URL (large rendition).
+- description: ''
   name: headshots_large
   type: character
-- description: Headshot URL (small rendition).
+- description: ''
   name: headshots_small
   type: character
-- description: Headshot URL (thumb rendition).
+- description: ''
   name: headshots_thumb
   type: character
-- description: Headshot URL (medium rendition).
+- description: ''
   name: headshots_medium
   type: character
-- description: Playing position code (CE centre, LW left wing, ...); positionName
-    spells it out in English.
+- description: ''
   name: position_code
   type: character
-- description: Jersey number of the player.
+- description: ''
   name: jersey_number
   type: integer
-- description: Birth date, YYYY-MM-DD.
+- description: ''
   name: birth_date
   type: character
-- description: Nationality, IOC/ISO alpha-3 code (SWE, NOR).
+- description: ''
   name: country
   type: character
-- description: Height in cm.
+- description: ''
   name: height
   type: integer
-- description: Weight in kg.
+- description: ''
   name: weight
   type: integer
-- description: 'Shoots / catches: L or R.'
+- description: ''
   name: shoots
   type: character
-- description: Youth (development) club.
+- description: ''
   name: youth_team
   type: character
-- description: Rookie flag.
+- description: ''
   name: is_rookie
   type: logical
-- description: Card label 'TEAM \| POS JERSEY \| Family name'.
+- description: ''
   name: team_player
   type: character
-- description: Player slug; joins ha_leaders.
+- description: ''
   name: slug
   type: character
-- description: Playing position, English label (Center, Left Wing, ...).
+- description: ''
   name: position_name
   type: character
-- description: CMS (Strapi) record id of the team (81 = AIK).
+- description: ''
   name: team_cms_id
   type: integer
-- description: CMS (Strapi) document id of the team.
+- description: ''
   name: team_document_id
   type: character
-- description: Display code of the team (AIK, MoDo, MORA, NVIF, ÖIK), not the StatNet
-    id.
+- description: ''
   name: team_code
   type: character
-- description: Primary colour of the team (hex).
+- description: ''
   name: team_main_color_hex
   type: character
-- description: Team label as shown on the card (the display team code).
+- description: ''
   name: team_name
   type: character
-- description: Logo URL of the team.
+- description: ''
   name: team_logo_url
   type: character
 kind: dataframe
