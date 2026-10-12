@@ -69,17 +69,18 @@ _Last validated n/a._
 
 ## sihf_standings
 
-League table of a season: rank, games, points, regulation / overtime / shootout wins and losses, goals, streak.
+League table of a season (every game, or home / away games only): rank, games, points, regulation / overtime / shootout wins and losses, goals, streak.
 
 **Endpoint URL:** `GET https://data.sihf.ch/statistic/api/cms/table`
 
-**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&language=en](https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&language=en)
+**Valid URL:** [https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&ContentType=All&language=en](https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&ContentType=All&language=en)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `Season` | `season` |  | `Y` |  | Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one). |
 | `League` | `league_id` |  |  | `Y` | SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError. |
-| `Phase` | `phase_id` |  |  | `Y` | SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase (player / goalie tables), every game (results), the regular-season table (standings). |
+| `Phase` | `phase_id` |  |  | `Y` | SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the regular-season table. |
+| `ContentType` | `venue` |  |  | `Y` | Which games the table counts: All (the full table), Home or Away. Always sent: without it SIHF answers the away-games table (26 of the 52 National League games). |
 | `language` | `language` |  |  | `Y` | Response language. Only part of the body is translated: status, position and penalty names stay German. |
 
 ### Returns {#sihf_standings-returns}

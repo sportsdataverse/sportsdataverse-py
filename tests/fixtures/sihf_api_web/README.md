@@ -9,7 +9,8 @@
 # SIHF fixtures
 
 Real responses from the keyless Swiss Ice Hockey Federation statistics API
-`https://data.sihf.ch/statistic/api/cms`, captured 2026-10-08 with `language=en`. Each table
+`https://data.sihf.ch/statistic/api/cms`, captured 2026-10-08 with `language=en` (the two
+standings tables were re-captured 2026-10-12, see below). Each table
 route below is the exact request `sihf_runtime._get` builds. The table bodies are cut to their
 first rows (count below), and each `filters[].entries` list to its first 8 entries. The two
 game bodies are whole. Nothing else is edited.
@@ -20,8 +21,8 @@ on the capture date; league `1` is the National League.
 |---|---|---|
 | `table__results__2026__1.json` | `/table?alias=results&searchQuery=1//1&language=en&filterBy=Season,Date&filterQuery=2026/01.07.2025-30.06.2026` | 3 of 414 |
 | `table__results__2027__1.json` | `/table?alias=results&searchQuery=1//1&language=en&filterBy=Season,Date&filterQuery=2027/01.07.2026-30.06.2027` | 3 of 364 (current season) |
-| `table__standing__2026__1.json` | `/table?alias=standing&searchQuery=1//1&language=en&filterBy=Season&filterQuery=2026` | 14 of 14 |
-| `table__standing__2025__1.json` | `/table?alias=standing&searchQuery=1//1&language=en&filterBy=Season&filterQuery=2025` | 4 of 14 |
+| `table__standing__2026__1.json` | `/table?alias=standing&searchQuery=1//1&language=en&filterBy=Season,ContentType&filterQuery=2026/All` (captured 2026-10-12) | 14 of 14 |
+| `table__standing__2025__1.json` | `/table?alias=standing&searchQuery=1//1&language=en&filterBy=Season,ContentType&filterQuery=2025/All` (captured 2026-10-12) | 4 of 14 |
 | `table__player__2026__1.json` | `/table?alias=player&searchQuery=1//1&language=en&filterBy=Season&filterQuery=2026` | 3 of 427 |
 | `table__goalkeeper__2026__1.json` | `/table?alias=goalkeeper&searchQuery=1//1&language=en&filterBy=Season&filterQuery=2026` | 8 of 35 (row 7 is the league-average row) |
 | `gameoverview__20261105000325.json` | `/gameoverview?alias=gameDetail&searchQuery=20261105000325` | whole (has a goaltender change and a revoked goal) |
@@ -41,6 +42,13 @@ full contract):
   answered with ONE phase by `standing` (regular season) and by `player` / `goalkeeper`
   (Playoff Overall), and with every game by `results`. No Phase filter gives the whole-season
   summary.
+- `standing` without a `ContentType` filter answers the AWAY-games table and does not echo the
+  filter: every 2025-26 National League team shows 26 GP, and HC Davos 50 points, which is exactly
+  the away-games table recomputed from that season's 364 regular-season `results` (measured
+  2026-10-12). `ContentType=All` (echoed back) answers the full table, 52 GP and HC Davos on 117,
+  equal to the table recomputed from every result; `Home` / `Away` answer the split tables. The
+  standings fixtures were re-captured with `ContentType=All` on that date (the 2026-10-08 captures
+  were the away table).
 - `/table` without `searchQuery`, or with an unknown `alias`, answers an empty HTTP 501.
 - `/gameoverview` with an unknown game answers 404 `{"error":"GameNotFound"}`, and without
   `searchQuery` it answers 400 `{"error":"MissingSearchQuery"}`.

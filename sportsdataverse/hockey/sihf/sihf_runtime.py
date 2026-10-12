@@ -10,13 +10,19 @@ top of the shared getter, all measured live (2026-10-08):
   other parameter; :func:`_get` moves it into ``searchQuery``.
 * **The other filters are one composite pair.** ``filterBy=Season,Phase,Date`` +
   ``filterQuery=2026/4940/<range>`` (names and values in the same order). :func:`_get`
-  folds the ``Season`` / ``Phase`` parameters that are set into the pair. Never send
+  folds the ``Season`` / ``Phase`` / ``Date`` / ``ContentType`` parameters that are set
+  into the pair. Never send
   ``Phase=all``: ``standing`` answers it with the regular season and ``player`` /
   ``goalkeeper`` with Playoff Overall (one phase each), while ``results`` answers every
   game. No Phase filter is the documented way to get the whole season.
 * **Results need a season-wide date range.** Without a ``Date`` filter the current
   season's ``results`` table answers only today's game day (one row). ``results``
   therefore always sends ``Date=01.07.<season-1>-30.06.<season>``.
+* **The standings need ``ContentType``.** ``standing`` without a ``ContentType`` filter
+  answers the AWAY-games table (26 of the 52 National League games in 2025-26, measured
+  2026-10-12 against the season's ``results``) and does not echo the filter. ``ContentType=All``
+  answers the full table and echoes ``All``; ``Home`` / ``Away`` give the split tables. The
+  ``sihf_standings`` wrapper always sends it.
 * **An unknown value is never an error upstream.** An unknown ``Season`` / ``Phase`` is
   answered with another one (``Season=1890`` serves the current season) and only the
   body's ``filters[].selected`` echo shows it; an unknown league answers a single
@@ -44,7 +50,7 @@ from sportsdataverse.errors import AssetFetchError, NoDataError
 __all__: List[str] = []
 
 #: The filters folded into ``filterBy`` / ``filterQuery``, in this order.
-FILTER_KEYS: Tuple[str, ...] = ("Season", "Phase", "Date")
+FILTER_KEYS: Tuple[str, ...] = ("Season", "Phase", "Date", "ContentType")
 
 
 def season_date_range(season: Any) -> str:

@@ -105,20 +105,22 @@ def sihf_standings(
     league_id: Optional[int] = 1,
     phase_id: Optional[int] = None,
     *,
+    venue: Optional[str] = "All",
     language: Optional[str] = "en",
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """League table of a season: rank, games, points, regulation / overtime / shootout wins and losses, goals, streak.
+    """League table of a season (every game, or home / away games only): rank, games, points, regulation / overtime / shootout wins and losses, goals, streak.
 
     Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
-    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&language=en
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=standing&searchQuery=1%2F%2F&Season=2026&League=1&ContentType=All&language=en
 
     Args:
         season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
         league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
-        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase (player / goalie tables), every game (results), the regular-season table (standings).
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the regular-season table.
+        venue: Which games the table counts: All (the full table), Home or Away. Always sent: without it SIHF answers the away-games table (26 of the 52 National League games).
         language: Response language. Only part of the body is translated: status, position and penalty names stay German.
         return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -143,6 +145,8 @@ def sihf_standings(
 
         .. _SIHF: https://www.sihf.ch/
     """
+    if venue not in ("All", "Home", "Away"):
+        raise ValueError(f"venue must be one of ('All', 'Home', 'Away'); got {venue!r}")
     if language not in ("en", "de", "fr", "it"):
         raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
     _caller_params = kwargs.pop("params", None) or {}
@@ -152,6 +156,7 @@ def sihf_standings(
         "Season": season,
         "League": league_id,
         "Phase": phase_id,
+        "ContentType": venue,
         "language": language,
     }
     _params.update(_caller_params)

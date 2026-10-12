@@ -90,6 +90,20 @@ def test_standings_types_and_order():
     assert set(df["row_type"]) == {"data"}  # the "line" highlights are separators, not summary rows
 
 
+def test_standings_are_the_full_regular_season_table():
+    # Captured with ContentType=All. Without it SIHF serves the away-games table: 26 GP each, and
+    # HC Davos on 50 points instead of 117 (measured 2026-10-12 against the season's results).
+    df = parse_sihf_table(_load(TABLES["standings"]))
+    assert set(df["games_played"]) == {52}  # 14 teams x 4 meetings
+    assert df["games_played"].sum() == 2 * 364  # every one of the 364 regular-season games, twice
+    top = df.row(0, named=True)
+    assert (top["team_acronym"], top["points"]) == ("HCD", 117)
+    wins = ["games_won_in_time", "games_won_extra_time", "games_won_penalty"]
+    losses = ["games_lost_in_time", "games_lost_extra_time", "games_lost_penalty"]
+    assert (df.select(pl.sum_horizontal(wins + losses)).to_series() == df["games_played"]).all()
+    assert set(parse_sihf_table(_load("table__standing__2025__1.json"))["games_played"]) == {52}
+
+
 def test_goalie_table_tags_the_league_average_row():
     df = parse_sihf_table(_load(TABLES["goalie_stats"]))
     avg = df.filter(pl.col("row_type") == "average")
@@ -102,7 +116,7 @@ def test_goalie_table_tags_the_league_average_row():
 def test_second_season_fixture_echoes_its_season():
     df = parse_sihf_table(_load("table__standing__2025__1.json"))
     assert set(df["season"]) == {2025}
-    assert "Fribourg-Gottéron" in df["team_name"].to_list()  # UTF-8 intact
+    assert "Fribourg-Gottéron" in parse_sihf_table(_load(TABLES["standings"]))["team_name"].to_list()  # UTF-8 intact
 
 
 def test_table_pandas():
@@ -247,6 +261,8 @@ def test_table_wrappers_send_alias_and_filters(monkeypatch, fn, alias):
     p = calls[0]["params"]
     # the runtime moves League into searchQuery; the wrapper hands it over as a parameter
     assert (p["alias"], p["searchQuery"], p["Season"], p["League"], p["language"]) == (alias, "1//", 2026, 2, "en")
+    # only standings take ContentType, and always send it (without it SIHF answers the away table)
+    assert p.get("ContentType") == ("All" if alias == "standing" else None)
 
 
 def test_game_wrapper_sends_game_id(monkeypatch):
@@ -273,6 +289,7 @@ def test_live_standings_and_game():
 
     df = sihf_api_web.sihf_standings(season=2026, league_id=1)
     assert df.height == 14 and set(df["season"]) == {2026}
+    assert set(df["games_played"]) == {52}  # the full table, not the away table SIHF serves by default
     pbp = sihf_api_web.sihf_pbp(game_id=20261105000421)
     assert pbp.filter(pl.col("event_type") == "goal").height == 5
     with pytest.raises(NoDataError):

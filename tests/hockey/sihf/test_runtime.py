@@ -57,6 +57,19 @@ def test_phase_folds_after_season(monkeypatch):
     assert (calls[0]["filterBy"], calls[0]["filterQuery"]) == ("Season,Phase", "2026/4940")
 
 
+def test_standings_content_type_folds_last(monkeypatch):
+    # Without ContentType, standing answers the away-games table and does not echo it (measured 2026-10-12).
+    calls = _patch(monkeypatch, _body(Season="2026", Phase="4940", ContentType="All"))
+    rt._get(URL, {"alias": "standing", "searchQuery": "1//", "Season": 2026, "Phase": 4940, "ContentType": "All"})
+    assert (calls[0]["filterBy"], calls[0]["filterQuery"]) == ("Season,Phase,ContentType", "2026/4940/All")
+
+
+def test_a_dropped_content_type_raises_no_data(monkeypatch):
+    _patch(monkeypatch, _body(Season="2026"))
+    with pytest.raises(NoDataError, match="dropped the ContentType filter"):
+        rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026, "ContentType": "All"})
+
+
 def test_results_always_send_the_season_date_range(monkeypatch):
     calls = _patch(monkeypatch, _body(Season="2027", Date="01.07.2026-30.06.2027"))
     rt._get(URL, {"alias": "results", "searchQuery": "1//", "Season": 2027, "League": 1})

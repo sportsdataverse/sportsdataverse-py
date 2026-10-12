@@ -60,8 +60,8 @@ endpoints:
   parser: parse_sihf_table
   returns_schema: native/sihf_api_web/results
 - short: standings
-  summary: 'League table of a season: rank, games, points, regulation / overtime / shootout wins and losses,
-    goals, streak.'
+  summary: 'League table of a season (every game, or home / away games only): rank, games, points, regulation
+    / overtime / shootout wins and losses, goals, streak.'
   path: /table
   fixed_params:
     alias: standing
@@ -84,8 +84,18 @@ endpoints:
     query_key: Phase
     type: int
     description: 'SIHF phase id (regular season, a playoff round, ...; the body''s Phase filter lists
-      them). None = no phase filter: the season summary over every phase (player / goalie tables), every
-      game (results), the regular-season table (standings).'
+      them). None = no phase filter: the regular-season table.'
+  - name: venue
+    query_key: ContentType
+    type: str
+    default: All
+    choices:
+    - All
+    - Home
+    - Away
+    kw_only: true
+    description: 'Which games the table counts: All (the full table), Home or Away. Always sent: without
+      it SIHF answers the away-games table (26 of the 52 National League games).'
   - name: language
     query_key: language
     type: str
