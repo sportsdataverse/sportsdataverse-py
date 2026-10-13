@@ -1,7 +1,7 @@
 ---
 title: "PWHL — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 4
+sidebar_position: 5
 description: "PWHL — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # PWHL — additional Python functions — Analytics

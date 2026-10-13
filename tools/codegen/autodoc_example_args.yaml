@@ -437,7 +437,6 @@ nhl:
 
 # --- HockeyTech / PWHL (hand-written API wrappers) ---
 # game_id=2 is a completed 2025 PWHL regular-season game with shifts/TOI/Corsi/PBP data.
-# pwhl_game_info and pwhl_player_box return 0 cols for older game IDs (endpoint limitation).
 # pwhl_transactions and pwhl_playoff_bracket have upstream parse errors; captured what works.
 pwhl:
   pwhl_schedule: {season: 2025}
@@ -454,8 +453,9 @@ pwhl:
   pwhl_player_toi: {game_id: 2}
   pwhl_game_corsi: {game_id: 2}
   pwhl_player_search: {name: "Poulin"}
-  # pwhl_game_info: returns 0-col frame for completed games (endpoint limitation)
-  # pwhl_player_info: returns 0-col frame (endpoint limitation)
+  pwhl_game_info: {game_id: 164}
+  pwhl_player_info: {player_id: 12}
+  # pwhl_player_box: returns dict of frames (skaters, goalies) -- excluded
   # pwhl_player_game_log: upstream parse error (non-dict items)
   # pwhl_streaks: returns 0-row frame (off-season)
   # pwhl_transactions: upstream parse error (non-dict items)

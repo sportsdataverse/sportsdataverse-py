@@ -1,7 +1,7 @@
 ---
 title: "PWHL — additional Python functions — Models and calculators"
 sidebar_label: "Models and calculators"
-sidebar_position: 3
+sidebar_position: 4
 description: "PWHL — additional Python functions — Models and calculators — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # PWHL — additional Python functions — Models and calculators

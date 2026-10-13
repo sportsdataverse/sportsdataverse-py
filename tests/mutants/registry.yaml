@@ -875,6 +875,108 @@
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
 
+# --- B-M9 / B-GB-17: PWHL statviewfeed gameSummary / player (task 2.14) ----------------------------
+# Killers: tests/pwhl/test_pwhl_api.py on the live captures pwhl_svf_gamesummary_164.json and
+# pwhl_svf_player_12.json, and tests/hockeytech/test_client.py for the JSONP `);` strip.
+- id: pwhl-game-info-sitekit-envelope
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'details = _obj(payload, "details")'
+  mutant: 'details = _obj(payload, "SiteKit", "details")'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_game_info_rows_on_statviewfeed_capture
+  expected: kill
+  note: The gate MUTATION -- reading the reply as a SiteKit envelope again gives the (0, 0) frame.
+- id: pwhl-game-info-away-side-from-home
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'for side, team in (("home", home), ("away", away)):'
+  mutant: 'for side, team in (("home", home), ("away", home)):'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_game_info_rows_on_statviewfeed_capture
+  expected: kill
+  note: The visiting team's id, abbreviation and score come from visitingTeam, not homeTeam.
+- id: pwhl-player-box-sitekit-envelope
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'team = _obj(payload, side)'
+  mutant: 'team = _obj(payload, "SiteKit", side)'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: The gate MUTATION for the box -- both frames go back to zero rows.
+- id: pwhl-player-box-team-id-per-side
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'team_id = _as_int(_obj(team, "info").get("id"))'
+  mutant: 'team_id = _as_int(_obj(payload, "homeTeam", "info").get("id"))'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: Each side's players carry their own team id; the per-team totals reconcile only then.
+- id: pwhl-player-box-goals-against-key
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '("goals_against", "goalsAgainst"),'
+  mutant: '("goals_against", "goals"),'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: Stats are read by key; a starter's goals_against equals the other team's score.
+- id: pwhl-player-box-faceoff-losses
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '"faceoff_losses": attempts - wins if'
+  mutant: '"faceoff_losses": wins - attempts if'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: fastRhockey faceoff_losses = attempts - wins.
+- id: pwhl-player-box-toi-minutes
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'return round((int(parts[0]) * 60 + int(parts[1])) / 60, 1)'
+  mutant: 'return round((int(parts[0]) * 60 + int(parts[1])), 1)'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: time_on_ice is minutes ("21:54" -> 21.9), as in fastRhockey.
+- id: pwhl-player-info-sitekit-envelope
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'info = _obj(payload, "info")'
+  mutant: 'info = _obj(payload, "SiteKit", "info")'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_info_rows_on_statviewfeed_capture
+  expected: kill
+  note: The gate MUTATION for player info.
+- id: hockeytech-jsonp-trailing-semicolon
+  group: pwhl-statviewfeed
+  finding: B-GB-17
+  file: sportsdataverse/hockeytech/_client.py
+  snippet: 'text = text.strip().rstrip(";").rstrip()'
+  mutant: 'text = text.strip()'
+  test: tests/hockeytech/test_client.py::test_strip_jsonp_trailing_semicolon
+  expected: kill
+  note: A JSONP body ending `);` must still unwrap.
+- id: pwhl-statviewfeed-non-scalar-cell
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'rows = [{c: _cell(r.get(c), t) for c, t in schema.items()} for r in rows]'
+  mutant: 'rows = [{c: r.get(c) for c in schema} for r in rows]'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_game_info_non_scalar_fields_become_null
+  expected: kill
+  note: A list / dict where the feed ships a scalar becomes null instead of raising in pl.from_dicts (review PRRT_kwDOGNKCHc6rtBLY).
+- id: pwhl-player-box-requires-game-id
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'for side in ("homeTeam", "visitingTeam") if game_id is not None else ():'
+  mutant: 'for side in ("homeTeam", "visitingTeam"):'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_without_game_id_is_empty
+  expected: kill
+  note: No details.id -> empty frames, never box rows with a null game_id (review PRRT_kwDOGNKCHc6rtBLb).
 # --- C-NF-5 / B-GB-01 / supp-001: PWHL player impact on HockeyTech pbp + ratings/props routing (2.13) ----
 # Killers: tests/pwhl/test_pwhl_player_impact_real.py (five real 2025 games from fastRhockey-pwhl-data)
 # and the `routing` tests in tests/pwhl/test_pwhl_prediction_model_shims.py (sockets closed, NHL

@@ -1,7 +1,7 @@
 ---
 title: "PWHL — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 5
+sidebar_position: 6
 description: "PWHL — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # PWHL — additional Python functions — Dates and seasons
@@ -18,6 +18,17 @@ preseason the feed lists before its regular season is not a default.
 **Returns**
 
 The newest regular season's END year (2026 = the 2025-26 season).
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import most_recent_pwhl_season
+season = most_recent_pwhl_season()
+
+# Next step
+
+print(season)
+```
 
 ### pwhl_season_id {#pwhl_season_id}
 
@@ -46,3 +57,15 @@ One row per season: `season_id` (Int64), `season_name`, `season_short`, `career`
 | `end_date` | character | Season end date. |
 | `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
 | `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_season_id
+df = pwhl_season_id()
+
+# Next step
+
+import polars as pl
+df.filter(pl.col("game_type_label") == "regular")
+```

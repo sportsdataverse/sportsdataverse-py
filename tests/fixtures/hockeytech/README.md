@@ -25,6 +25,8 @@ Captured JSON payloads from `lscluster.hockeytech.com` / `cluster.leaguestat.com
 | pwhl_player_stats_27 | pwhl | modulekit/player seasonstats | player 27 |
 | pwhl_leaders_5 | pwhl | statviewfeed/leadersExtended | season_id 5 |
 | pwhl_game_summary_42 | pwhl | gc/gamesummary | game_id 42 |
+| pwhl_svf_gamesummary_164 | pwhl | statviewfeed/gameSummary | game_id 164 (TOR 2, NY 1, 2025-03-19), live 2026-10-12 via `hockeytech_api` (JSONP stripped, untrimmed, no key in the body); drives `pwhl_game_info` / `pwhl_player_box` |
+| pwhl_svf_player_12 | pwhl | statviewfeed/player | player_id 12 (Megan Keller), live 2026-10-12 via `hockeytech_api` (JSONP stripped, untrimmed, no key in the body); drives `pwhl_player_info` |
 | pwhl_transactions | pwhl | modulekit/transactions | newest page (20 of 171); sdv-internal-refs `hockeytech/captures/samples/pwhl/transactions.json` (b78eb2c, live 2026-07-12), key redacted |
 | pwhl_brackets_9 | pwhl | modulekit/brackets | season_id 9 (2 rounds, 3 series); sdv-internal-refs `samples/pwhl/brackets.json` (b78eb2c), key redacted |
 | pwhl_player_gamebygame | pwhl | modulekit/player gamebygame | player 12 season 10, a real reply with `games: []`; sdv-internal-refs `samples/pwhl/player_gamebygame.json` (b78eb2c), key redacted |
