@@ -1,0 +1,240 @@
+{
+  "data": {
+    "id": 46,
+    "game_time": "2021-10-09 19:30:00",
+    "status": "finished",
+    "video_url": null,
+    "competitors": [
+      {
+        "side": 1,
+        "finalScore": 67,
+        "competition_team": {
+          "id": 7,
+          "name": "Donar Groningen",
+          "short_name": "GRO",
+          "ticket_url": "https://www.donar.nl/tickets",
+          "club": {
+            "id": 2,
+            "name": "Netherlands"
+          },
+          "team_logo": {
+            "name": "Donar Groningen",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+            }
+          },
+          "created_at": "2022-08-10"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 17
+          },
+          {
+            "period_id": 2,
+            "score": 9
+          },
+          {
+            "period_id": 3,
+            "score": 25
+          }
+        ]
+      },
+      {
+        "side": 2,
+        "finalScore": 69,
+        "competition_team": {
+          "id": 9,
+          "name": "Landstede Hammers",
+          "short_name": "ZWO",
+          "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+          "club": {
+            "id": 2,
+            "name": "Netherlands"
+          },
+          "team_logo": {
+            "name": "Landstede Hammers",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/7/i/7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/7/i/small-7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+              "medium": "https://bnxt.sportpress.info/storage/7/i/medium-7iHg8tHuHog4w1gOIigHdERQ51663601291.png"
+            }
+          },
+          "created_at": "2022-08-10"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 24
+          },
+          {
+            "period_id": 2,
+            "score": 6
+          },
+          {
+            "period_id": 3,
+            "score": 22
+          }
+        ]
+      }
+    ],
+    "period": {
+      "name": "Extra1"
+    },
+    "round": {
+      "name": "",
+      "priority": 20
+    },
+    "phase": {
+      "id": 5,
+      "name": "Domestic Netherlands",
+      "standings_visible": true
+    },
+    "competition": {
+      "id": 1,
+      "season": 2022,
+      "visible": true,
+      "standings_visible": true,
+      "simple_team_view": false,
+      "summer_season": false,
+      "name": "BNXT League 2021-2022",
+      "logo": null,
+      "ticket_url": null,
+      "video_url": null,
+      "created_at": "2022-08-10"
+    },
+    "arena": {
+      "name": "MartiniPlaza"
+    },
+    "referees": [],
+    "last_game": {
+      "id": 76,
+      "game_time": "2021-10-31 14:00:00",
+      "status": "finished",
+      "video_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 63,
+          "competition_team": {
+            "id": 9,
+            "name": "Landstede Hammers",
+            "short_name": "ZWO",
+            "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Landstede Hammers",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/7/i/7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/7/i/small-7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+                "medium": "https://bnxt.sportpress.info/storage/7/i/medium-7iHg8tHuHog4w1gOIigHdERQ51663601291.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 16
+            },
+            {
+              "period_id": 2,
+              "score": 14
+            },
+            {
+              "period_id": 3,
+              "score": 16
+            }
+          ]
+        },
+        {
+          "side": 2,
+          "finalScore": 75,
+          "competition_team": {
+            "id": 7,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 12
+            },
+            {
+              "period_id": 2,
+              "score": 12
+            },
+            {
+              "period_id": 3,
+              "score": 27
+            }
+          ]
+        }
+      ],
+      "period": {
+        "name": "Q4"
+      },
+      "round": {
+        "name": "",
+        "priority": 20
+      },
+      "phase": {
+        "id": 5,
+        "name": "Domestic Netherlands",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      },
+      "arena": {
+        "name": "Landstede Sportcentrum"
+      },
+      "referees": [],
+      "created_at": "2022-08-25"
+    },
+    "next_game": null,
+    "last10": null,
+    "created_at": "2022-08-25"
+  }
+}

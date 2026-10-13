@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: staff_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: title_id
+  type: integer
+- description: ''
+  name: title_name
+  type: character
+kind: dataframe
+schema: sportpress_referees

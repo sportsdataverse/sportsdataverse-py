@@ -1,0 +1,26 @@
+{
+  "data": [
+    {
+      "competition": {
+        "id": 25,
+        "season": 2027,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2026-2027",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2026-07-24"
+      },
+      "phases": [
+        {
+          "id": 183,
+          "name": "Regular season 2026-27",
+          "standings_visible": true
+        }
+      ]
+    }
+  ]
+}

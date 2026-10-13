@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: uu_team_id
+  type: integer
+- description: ''
+  name: competition_team_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: team_short_name
+  type: character
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: club_name
+  type: character
+kind: dataframe
+schema: sportpress_competition_teams

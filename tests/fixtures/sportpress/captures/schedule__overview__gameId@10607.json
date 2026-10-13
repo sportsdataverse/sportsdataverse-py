@@ -1,0 +1,1814 @@
+{
+  "data": {
+    "team_totals": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 91,
+          "competition_team": {
+            "id": 530,
+            "name": "AB InBev Leuven Bears",
+            "short_name": "LEU",
+            "ticket_url": "https://leuvenbears.ordering.be/o/2",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Stella Artois Leuven Bears",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/e/0/e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/e/0/small-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+                "medium": "https://bnxt.sportpress.info/storage/e/0/medium-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 22
+            },
+            {
+              "period_id": 2,
+              "score": 23
+            },
+            {
+              "period_id": 3,
+              "score": 14
+            }
+          ]
+        },
+        "is_home": true,
+        "total": {
+          "minute": 225,
+          "starter": true,
+          "foul": 24,
+          "defensive_foul": 31,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 29,
+          "two_point_all": 53,
+          "two_point_percent": 54.72,
+          "three_point_made": 6,
+          "three_point_all": 28,
+          "three_point_percent": 21.43,
+          "throw_made": 35,
+          "throw_all": 81,
+          "throw_percent": 43.21,
+          "free_throw_made": 15,
+          "free_throw_all": 28,
+          "free_throw_percent": 53.57,
+          "offensive_rebound": 20,
+          "defensive_rebound": 17,
+          "total_rebound": 37,
+          "block": 3,
+          "block_against": 2,
+          "turnover": 15,
+          "steal": 7,
+          "assist": 18,
+          "points": 91,
+          "value": 113,
+          "plusminus": -1
+        }
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 95,
+          "competition_team": {
+            "id": 502,
+            "name": "Val-Dieu Spirou Basket Playoff",
+            "short_name": "CHA",
+            "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Val-Dieu Spirou Basket",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/w/V/wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/w/V/small-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+                "medium": "https://bnxt.sportpress.info/storage/w/V/medium-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 27
+            },
+            {
+              "period_id": 2,
+              "score": 19
+            },
+            {
+              "period_id": 3,
+              "score": 16
+            }
+          ]
+        },
+        "is_home": false,
+        "total": {
+          "minute": 225,
+          "starter": true,
+          "foul": 31,
+          "defensive_foul": 23,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 27,
+          "two_point_all": 45,
+          "two_point_percent": 60,
+          "three_point_made": 9,
+          "three_point_all": 26,
+          "three_point_percent": 34.62,
+          "throw_made": 36,
+          "throw_all": 71,
+          "throw_percent": 50.7,
+          "free_throw_made": 14,
+          "free_throw_all": 25,
+          "free_throw_percent": 56,
+          "offensive_rebound": 14,
+          "defensive_rebound": 27,
+          "total_rebound": 41,
+          "block": 2,
+          "block_against": 3,
+          "turnover": 21,
+          "steal": 7,
+          "assist": 12,
+          "points": 95,
+          "value": 113,
+          "plusminus": -7
+        }
+      }
+    ],
+    "top_performer": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 91,
+          "competition_team": {
+            "id": 530,
+            "name": "AB InBev Leuven Bears",
+            "short_name": "LEU",
+            "ticket_url": "https://leuvenbears.ordering.be/o/2",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Stella Artois Leuven Bears",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/e/0/e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/e/0/small-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+                "medium": "https://bnxt.sportpress.info/storage/e/0/medium-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 22
+            },
+            {
+              "period_id": 2,
+              "score": 23
+            },
+            {
+              "period_id": 3,
+              "score": 14
+            }
+          ]
+        },
+        "is_home": true,
+        "player": {
+          "player": {
+            "id": 5391,
+            "birthdate": null,
+            "facebook": null,
+            "twitter": null,
+            "instagram": null,
+            "first_name": "Tytan",
+            "last_name": "Anderson",
+            "nationality_code": "USA",
+            "profile_image": {
+              "name": "Anderson - OOS",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+              }
+            },
+            "created_at": "2025-08-28"
+          },
+          "starter": true,
+          "minute": 39,
+          "foul": 2,
+          "defensive_foul": 10,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 9,
+          "two_point_all": 14,
+          "two_point_percent": 64.3,
+          "three_point_made": 1,
+          "three_point_all": 2,
+          "three_point_percent": 50,
+          "throw_made": 10,
+          "throw_all": 16,
+          "throw_percent": 62.5,
+          "free_throw_made": 5,
+          "free_throw_all": 9,
+          "free_throw_percent": 55.6,
+          "offensive_rebound": 5,
+          "defensive_rebound": 6,
+          "total_rebound": 11,
+          "block": 2,
+          "block_against": 0,
+          "turnover": 3,
+          "steal": 1,
+          "assist": 7,
+          "points": 26,
+          "value": 44,
+          "jersey": 32
+        }
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 95,
+          "competition_team": {
+            "id": 502,
+            "name": "Val-Dieu Spirou Basket Playoff",
+            "short_name": "CHA",
+            "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Val-Dieu Spirou Basket",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/w/V/wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/w/V/small-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+                "medium": "https://bnxt.sportpress.info/storage/w/V/medium-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 27
+            },
+            {
+              "period_id": 2,
+              "score": 19
+            },
+            {
+              "period_id": 3,
+              "score": 16
+            }
+          ]
+        },
+        "is_home": false,
+        "player": {
+          "player": {
+            "id": 4871,
+            "birthdate": "1999-04-11",
+            "facebook": null,
+            "twitter": null,
+            "instagram": null,
+            "first_name": "Njegos",
+            "last_name": "Sikiras",
+            "nationality_code": "BIH",
+            "profile_image": {
+              "name": "CHA - Sikiras",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/6/f/6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/6/f/small-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                "medium": "https://bnxt.sportpress.info/storage/6/f/medium-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png"
+              }
+            },
+            "created_at": "2024-12-01"
+          },
+          "starter": true,
+          "minute": 33,
+          "foul": 5,
+          "defensive_foul": 6,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 10,
+          "two_point_all": 14,
+          "two_point_percent": 71.4,
+          "three_point_made": 0,
+          "three_point_all": 1,
+          "three_point_percent": 0,
+          "throw_made": 10,
+          "throw_all": 15,
+          "throw_percent": 66.67,
+          "free_throw_made": 5,
+          "free_throw_all": 7,
+          "free_throw_percent": 71.4,
+          "offensive_rebound": 2,
+          "defensive_rebound": 6,
+          "total_rebound": 8,
+          "block": 1,
+          "block_against": 1,
+          "turnover": 7,
+          "steal": 1,
+          "assist": 0,
+          "points": 25,
+          "value": 27,
+          "jersey": 16
+        }
+      }
+    ],
+    "game_leaders": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 91,
+          "competition_team": {
+            "id": 530,
+            "name": "AB InBev Leuven Bears",
+            "short_name": "LEU",
+            "ticket_url": "https://leuvenbears.ordering.be/o/2",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Stella Artois Leuven Bears",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/e/0/e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/e/0/small-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+                "medium": "https://bnxt.sportpress.info/storage/e/0/medium-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 22
+            },
+            {
+              "period_id": 2,
+              "score": 23
+            },
+            {
+              "period_id": 3,
+              "score": 14
+            }
+          ]
+        },
+        "is_home": true,
+        "leaders": {
+          "minute": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 39
+          },
+          "foul": {
+            "player": {
+              "id": 226,
+              "birthdate": "1997-06-14",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Roby",
+              "last_name": "Rogiers",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "LEU - ROGIERS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/X/bXAVBVKF1nBUC6tNyVEfFs7Oy1757588059.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/X/small-bXAVBVKF1nBUC6tNyVEfFs7Oy1757588059.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/X/medium-bXAVBVKF1nBUC6tNyVEfFs7Oy1757588059.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 4
+          },
+          "defensive_foul": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 10
+          },
+          "dunk_made": {
+            "player": {
+              "id": 5171,
+              "birthdate": "2009-05-26",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Arnaud",
+              "last_name": "Mertens",
+              "nationality_code": "BEL",
+              "profile_image": null,
+              "created_at": "2025-03-14"
+            },
+            "value": 0
+          },
+          "dunk_all": {
+            "player": {
+              "id": 5171,
+              "birthdate": "2009-05-26",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Arnaud",
+              "last_name": "Mertens",
+              "nationality_code": "BEL",
+              "profile_image": null,
+              "created_at": "2025-03-14"
+            },
+            "value": 0
+          },
+          "dunk_percent": {
+            "player": {
+              "id": 5171,
+              "birthdate": "2009-05-26",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Arnaud",
+              "last_name": "Mertens",
+              "nationality_code": "BEL",
+              "profile_image": null,
+              "created_at": "2025-03-14"
+            },
+            "value": 0
+          },
+          "two_point_made": {
+            "player": {
+              "id": 5387,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Kelton",
+              "last_name": "Talford",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "LEU - TALFORD",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/P/c/PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/P/c/small-PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png",
+                  "medium": "https://bnxt.sportpress.info/storage/P/c/medium-PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 9
+          },
+          "two_point_all": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 14
+          },
+          "two_point_percent": {
+            "player": {
+              "id": 5387,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Kelton",
+              "last_name": "Talford",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "LEU - TALFORD",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/P/c/PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/P/c/small-PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png",
+                  "medium": "https://bnxt.sportpress.info/storage/P/c/medium-PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 90
+          },
+          "three_point_made": {
+            "player": {
+              "id": 205,
+              "birthdate": "2003-11-08",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Roel",
+              "last_name": "Bucumi",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "Bucumi",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/D/S/DSScHatCzQCdCDRDTL2U0xJlv1789152423.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/D/S/small-DSScHatCzQCdCDRDTL2U0xJlv1789152423.png",
+                  "medium": "https://bnxt.sportpress.info/storage/D/S/medium-DSScHatCzQCdCDRDTL2U0xJlv1789152423.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 3
+          },
+          "three_point_all": {
+            "player": {
+              "id": 5395,
+              "birthdate": "1995-04-22",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "James",
+              "last_name": "Blackmon",
+              "nationality_code": "usa",
+              "profile_image": {
+                "name": "LEU - BLACKMON",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/c/bcvX8WNyE8YBKnDlKSZiI233n1757587865.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/c/small-bcvX8WNyE8YBKnDlKSZiI233n1757587865.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/c/medium-bcvX8WNyE8YBKnDlKSZiI233n1757587865.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 10
+          },
+          "three_point_percent": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 50
+          },
+          "throw_all": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 16
+          },
+          "throw_made": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 10
+          },
+          "throw_percent": {
+            "player": {
+              "id": 5387,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Kelton",
+              "last_name": "Talford",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "LEU - TALFORD",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/P/c/PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/P/c/small-PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png",
+                  "medium": "https://bnxt.sportpress.info/storage/P/c/medium-PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 90
+          },
+          "free_throw_made": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 5
+          },
+          "free_throw_all": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 9
+          },
+          "free_throw_percent": {
+            "player": {
+              "id": 4592,
+              "birthdate": "2006-08-18",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Guillaume",
+              "last_name": "De Mol",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "De Mol",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/Q/3/Q3U5vepDeYzHFrkv4TLffegVe1789152490.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/Q/3/small-Q3U5vepDeYzHFrkv4TLffegVe1789152490.png",
+                  "medium": "https://bnxt.sportpress.info/storage/Q/3/medium-Q3U5vepDeYzHFrkv4TLffegVe1789152490.png"
+                }
+              },
+              "created_at": "2024-08-29"
+            },
+            "value": 100
+          },
+          "offensive_rebound": {
+            "player": {
+              "id": 5387,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Kelton",
+              "last_name": "Talford",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "LEU - TALFORD",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/P/c/PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/P/c/small-PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png",
+                  "medium": "https://bnxt.sportpress.info/storage/P/c/medium-PcjUqPf2s5gWcIhD1cW9IV2ht1757587890.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 5
+          },
+          "defensive_rebound": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 6
+          },
+          "total_rebound": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 11
+          },
+          "block": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 2
+          },
+          "block_against": {
+            "player": {
+              "id": 5389,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Wilson",
+              "last_name": "Pruitt",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "LEU - PRUITT",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/0/9/09d71JNwknNOI5MYpfxwNY0si1757587877.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/0/9/small-09d71JNwknNOI5MYpfxwNY0si1757587877.png",
+                  "medium": "https://bnxt.sportpress.info/storage/0/9/medium-09d71JNwknNOI5MYpfxwNY0si1757587877.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 1
+          },
+          "turnover": {
+            "player": {
+              "id": 3,
+              "birthdate": "2002-09-19",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Stef",
+              "last_name": "Schauvlieger",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "Schauvlieger",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/k/J/kJi4katJj4qHghaJFnUa6afKk1789152512.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/k/J/small-kJi4katJj4qHghaJFnUa6afKk1789152512.png",
+                  "medium": "https://bnxt.sportpress.info/storage/k/J/medium-kJi4katJj4qHghaJFnUa6afKk1789152512.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 4
+          },
+          "steal": {
+            "player": {
+              "id": 234,
+              "birthdate": "1983-08-03",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Wen",
+              "last_name": "Mukubu",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "LEU - MUKUBU",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/I/N/INxwIQvrjMBAD9Ggxg6adv5BB1757587902.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/I/N/small-INxwIQvrjMBAD9Ggxg6adv5BB1757587902.png",
+                  "medium": "https://bnxt.sportpress.info/storage/I/N/medium-INxwIQvrjMBAD9Ggxg6adv5BB1757587902.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 2
+          },
+          "assist": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 7
+          },
+          "points": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 26
+          },
+          "value": {
+            "player": {
+              "id": 5391,
+              "birthdate": null,
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Tytan",
+              "last_name": "Anderson",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Anderson - OOS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/5/x50a4FZYupVCByA32KRPofE301777901850.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/5/small-x50a4FZYupVCByA32KRPofE301777901850.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/5/medium-x50a4FZYupVCByA32KRPofE301777901850.png"
+                }
+              },
+              "created_at": "2025-08-28"
+            },
+            "value": 44
+          }
+        }
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 95,
+          "competition_team": {
+            "id": 502,
+            "name": "Val-Dieu Spirou Basket Playoff",
+            "short_name": "CHA",
+            "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Val-Dieu Spirou Basket",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/w/V/wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/w/V/small-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+                "medium": "https://bnxt.sportpress.info/storage/w/V/medium-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 27
+            },
+            {
+              "period_id": 2,
+              "score": 19
+            },
+            {
+              "period_id": 3,
+              "score": 16
+            }
+          ]
+        },
+        "is_home": false,
+        "leaders": {
+          "minute": {
+            "player": {
+              "id": 4952,
+              "birthdate": "1998-07-22",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Christopher",
+              "last_name": "Lykes",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Lykes",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/g/0/g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/g/0/small-g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png",
+                  "medium": "https://bnxt.sportpress.info/storage/g/0/medium-g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png"
+                }
+              },
+              "created_at": "2025-01-19"
+            },
+            "value": 33
+          },
+          "foul": {
+            "player": {
+              "id": 1562,
+              "birthdate": "2002-09-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Lionel",
+              "last_name": "Colson",
+              "nationality_code": "FRA",
+              "profile_image": {
+                "name": "CHA - Colson",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/Q/h/Qhq43xqAuOmae5R5e2W1J1DyG1756897389.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/Q/h/small-Qhq43xqAuOmae5R5e2W1J1DyG1756897389.png",
+                  "medium": "https://bnxt.sportpress.info/storage/Q/h/medium-Qhq43xqAuOmae5R5e2W1J1DyG1756897389.png"
+                }
+              },
+              "created_at": "2023-08-24"
+            },
+            "value": 5
+          },
+          "defensive_foul": {
+            "player": {
+              "id": 4952,
+              "birthdate": "1998-07-22",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Christopher",
+              "last_name": "Lykes",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Lykes",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/g/0/g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/g/0/small-g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png",
+                  "medium": "https://bnxt.sportpress.info/storage/g/0/medium-g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png"
+                }
+              },
+              "created_at": "2025-01-19"
+            },
+            "value": 7
+          },
+          "dunk_made": {
+            "player": {
+              "id": 2542,
+              "birthdate": "2004-05-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Maxime",
+              "last_name": "Bilolo Katuala",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "CHA - Bilolo",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/f/hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/f/small-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/f/medium-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png"
+                }
+              },
+              "created_at": "2023-08-31"
+            },
+            "value": 0
+          },
+          "dunk_all": {
+            "player": {
+              "id": 2542,
+              "birthdate": "2004-05-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Maxime",
+              "last_name": "Bilolo Katuala",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "CHA - Bilolo",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/f/hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/f/small-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/f/medium-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png"
+                }
+              },
+              "created_at": "2023-08-31"
+            },
+            "value": 0
+          },
+          "dunk_percent": {
+            "player": {
+              "id": 2542,
+              "birthdate": "2004-05-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Maxime",
+              "last_name": "Bilolo Katuala",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "CHA - Bilolo",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/f/hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/f/small-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/f/medium-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png"
+                }
+              },
+              "created_at": "2023-08-31"
+            },
+            "value": 0
+          },
+          "two_point_made": {
+            "player": {
+              "id": 4871,
+              "birthdate": "1999-04-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Njegos",
+              "last_name": "Sikiras",
+              "nationality_code": "BIH",
+              "profile_image": {
+                "name": "CHA - Sikiras",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/6/f/6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/6/f/small-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                  "medium": "https://bnxt.sportpress.info/storage/6/f/medium-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png"
+                }
+              },
+              "created_at": "2024-12-01"
+            },
+            "value": 10
+          },
+          "two_point_all": {
+            "player": {
+              "id": 4871,
+              "birthdate": "1999-04-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Njegos",
+              "last_name": "Sikiras",
+              "nationality_code": "BIH",
+              "profile_image": {
+                "name": "CHA - Sikiras",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/6/f/6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/6/f/small-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                  "medium": "https://bnxt.sportpress.info/storage/6/f/medium-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png"
+                }
+              },
+              "created_at": "2024-12-01"
+            },
+            "value": 14
+          },
+          "two_point_percent": {
+            "player": {
+              "id": 2542,
+              "birthdate": "2004-05-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Maxime",
+              "last_name": "Bilolo Katuala",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "CHA - Bilolo",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/f/hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/f/small-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/f/medium-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png"
+                }
+              },
+              "created_at": "2023-08-31"
+            },
+            "value": 100
+          },
+          "three_point_made": {
+            "player": {
+              "id": 231,
+              "birthdate": "2002-02-15",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Quinten",
+              "last_name": "Smout",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "CHA - Smout",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/G/P/GPAjUWHwFkRn3vThfPLpyHDq61756897402.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/G/P/small-GPAjUWHwFkRn3vThfPLpyHDq61756897402.png",
+                  "medium": "https://bnxt.sportpress.info/storage/G/P/medium-GPAjUWHwFkRn3vThfPLpyHDq61756897402.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 3
+          },
+          "three_point_all": {
+            "player": {
+              "id": 5245,
+              "birthdate": "2002-06-26",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Dontrez",
+              "last_name": "Styles",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Styles",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/7/x77oHbeUKJkb590EpR31OfSzJ1756897295.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/7/small-x77oHbeUKJkb590EpR31OfSzJ1756897295.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/7/medium-x77oHbeUKJkb590EpR31OfSzJ1756897295.png"
+                }
+              },
+              "created_at": "2025-08-21"
+            },
+            "value": 6
+          },
+          "three_point_percent": {
+            "player": {
+              "id": 5247,
+              "birthdate": "2006-01-03",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Malcolm",
+              "last_name": "Makwa",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "Makwa",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/C/M/CM3Vx4ORC7Y24CyWBQ5Zp2Yop1788858294.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/C/M/small-CM3Vx4ORC7Y24CyWBQ5Zp2Yop1788858294.png",
+                  "medium": "https://bnxt.sportpress.info/storage/C/M/medium-CM3Vx4ORC7Y24CyWBQ5Zp2Yop1788858294.png"
+                }
+              },
+              "created_at": "2025-08-21"
+            },
+            "value": 100
+          },
+          "throw_all": {
+            "player": {
+              "id": 4871,
+              "birthdate": "1999-04-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Njegos",
+              "last_name": "Sikiras",
+              "nationality_code": "BIH",
+              "profile_image": {
+                "name": "CHA - Sikiras",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/6/f/6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/6/f/small-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                  "medium": "https://bnxt.sportpress.info/storage/6/f/medium-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png"
+                }
+              },
+              "created_at": "2024-12-01"
+            },
+            "value": 15
+          },
+          "throw_made": {
+            "player": {
+              "id": 4871,
+              "birthdate": "1999-04-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Njegos",
+              "last_name": "Sikiras",
+              "nationality_code": "BIH",
+              "profile_image": {
+                "name": "CHA - Sikiras",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/6/f/6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/6/f/small-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                  "medium": "https://bnxt.sportpress.info/storage/6/f/medium-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png"
+                }
+              },
+              "created_at": "2024-12-01"
+            },
+            "value": 10
+          },
+          "throw_percent": {
+            "player": {
+              "id": 2542,
+              "birthdate": "2004-05-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Maxime",
+              "last_name": "Bilolo Katuala",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "CHA - Bilolo",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/f/hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/f/small-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/f/medium-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png"
+                }
+              },
+              "created_at": "2023-08-31"
+            },
+            "value": 100
+          },
+          "free_throw_made": {
+            "player": {
+              "id": 4871,
+              "birthdate": "1999-04-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Njegos",
+              "last_name": "Sikiras",
+              "nationality_code": "BIH",
+              "profile_image": {
+                "name": "CHA - Sikiras",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/6/f/6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/6/f/small-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                  "medium": "https://bnxt.sportpress.info/storage/6/f/medium-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png"
+                }
+              },
+              "created_at": "2024-12-01"
+            },
+            "value": 5
+          },
+          "free_throw_all": {
+            "player": {
+              "id": 2472,
+              "birthdate": "2005-07-01",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Adedayo",
+              "last_name": "Polet",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "Polet",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/Y/T/YTDqSf1aAeO20Wuy7UdOHboDE1788858359.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/Y/T/small-YTDqSf1aAeO20Wuy7UdOHboDE1788858359.png",
+                  "medium": "https://bnxt.sportpress.info/storage/Y/T/medium-YTDqSf1aAeO20Wuy7UdOHboDE1788858359.png"
+                }
+              },
+              "created_at": "2023-08-31"
+            },
+            "value": 7
+          },
+          "free_throw_percent": {
+            "player": {
+              "id": 2542,
+              "birthdate": "2004-05-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Maxime",
+              "last_name": "Bilolo Katuala",
+              "nationality_code": "BEL",
+              "profile_image": {
+                "name": "CHA - Bilolo",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/f/hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/f/small-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/f/medium-hfoVsmQFo7LpMPqkYuMY3oIPA1756897338.png"
+                }
+              },
+              "created_at": "2023-08-31"
+            },
+            "value": 100
+          },
+          "offensive_rebound": {
+            "player": {
+              "id": 5241,
+              "birthdate": "2001-02-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Juwan",
+              "last_name": "Gary",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Juwan",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/u/Q/uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/u/Q/small-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                  "medium": "https://bnxt.sportpress.info/storage/u/Q/medium-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png"
+                }
+              },
+              "created_at": "2025-08-21"
+            },
+            "value": 6
+          },
+          "defensive_rebound": {
+            "player": {
+              "id": 5241,
+              "birthdate": "2001-02-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Juwan",
+              "last_name": "Gary",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Juwan",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/u/Q/uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/u/Q/small-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                  "medium": "https://bnxt.sportpress.info/storage/u/Q/medium-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png"
+                }
+              },
+              "created_at": "2025-08-21"
+            },
+            "value": 6
+          },
+          "total_rebound": {
+            "player": {
+              "id": 5241,
+              "birthdate": "2001-02-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Juwan",
+              "last_name": "Gary",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Juwan",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/u/Q/uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/u/Q/small-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                  "medium": "https://bnxt.sportpress.info/storage/u/Q/medium-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png"
+                }
+              },
+              "created_at": "2025-08-21"
+            },
+            "value": 12
+          },
+          "block": {
+            "player": {
+              "id": 5241,
+              "birthdate": "2001-02-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Juwan",
+              "last_name": "Gary",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Juwan",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/u/Q/uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/u/Q/small-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                  "medium": "https://bnxt.sportpress.info/storage/u/Q/medium-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png"
+                }
+              },
+              "created_at": "2025-08-21"
+            },
+            "value": 1
+          },
+          "block_against": {
+            "player": {
+              "id": 5241,
+              "birthdate": "2001-02-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Juwan",
+              "last_name": "Gary",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Juwan",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/u/Q/uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/u/Q/small-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png",
+                  "medium": "https://bnxt.sportpress.info/storage/u/Q/medium-uQTW6FsnlKz0JGhRRnC9f5vfo1756897309.png"
+                }
+              },
+              "created_at": "2025-08-21"
+            },
+            "value": 1
+          },
+          "turnover": {
+            "player": {
+              "id": 4871,
+              "birthdate": "1999-04-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Njegos",
+              "last_name": "Sikiras",
+              "nationality_code": "BIH",
+              "profile_image": {
+                "name": "CHA - Sikiras",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/6/f/6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/6/f/small-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                  "medium": "https://bnxt.sportpress.info/storage/6/f/medium-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png"
+                }
+              },
+              "created_at": "2024-12-01"
+            },
+            "value": 7
+          },
+          "steal": {
+            "player": {
+              "id": 4952,
+              "birthdate": "1998-07-22",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Christopher",
+              "last_name": "Lykes",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Lykes",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/g/0/g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/g/0/small-g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png",
+                  "medium": "https://bnxt.sportpress.info/storage/g/0/medium-g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png"
+                }
+              },
+              "created_at": "2025-01-19"
+            },
+            "value": 2
+          },
+          "assist": {
+            "player": {
+              "id": 4952,
+              "birthdate": "1998-07-22",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Christopher",
+              "last_name": "Lykes",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "CHA - Lykes",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/g/0/g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/g/0/small-g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png",
+                  "medium": "https://bnxt.sportpress.info/storage/g/0/medium-g04oH2k0CIsZ2dRxdL4yUHMrY1756897741.png"
+                }
+              },
+              "created_at": "2025-01-19"
+            },
+            "value": 9
+          },
+          "points": {
+            "player": {
+              "id": 4871,
+              "birthdate": "1999-04-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Njegos",
+              "last_name": "Sikiras",
+              "nationality_code": "BIH",
+              "profile_image": {
+                "name": "CHA - Sikiras",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/6/f/6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/6/f/small-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                  "medium": "https://bnxt.sportpress.info/storage/6/f/medium-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png"
+                }
+              },
+              "created_at": "2024-12-01"
+            },
+            "value": 25
+          },
+          "value": {
+            "player": {
+              "id": 4871,
+              "birthdate": "1999-04-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Njegos",
+              "last_name": "Sikiras",
+              "nationality_code": "BIH",
+              "profile_image": {
+                "name": "CHA - Sikiras",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/6/f/6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/6/f/small-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png",
+                  "medium": "https://bnxt.sportpress.info/storage/6/f/medium-6fbjIijU2t33qWtzNUaDnnF8d1756897375.png"
+                }
+              },
+              "created_at": "2024-12-01"
+            },
+            "value": 27
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,1544 @@
+{
+  "data": {
+    "team_totals": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 67,
+          "competition_team": {
+            "id": 7,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 17
+            },
+            {
+              "period_id": 2,
+              "score": 9
+            },
+            {
+              "period_id": 3,
+              "score": 25
+            }
+          ]
+        },
+        "is_home": true,
+        "total": {
+          "minute": 225,
+          "starter": true,
+          "foul": 18,
+          "defensive_foul": 16,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 23,
+          "two_point_all": 55,
+          "two_point_percent": 41.82,
+          "three_point_made": 5,
+          "three_point_all": 21,
+          "three_point_percent": 23.81,
+          "throw_made": 28,
+          "throw_all": 76,
+          "throw_percent": 36.84,
+          "free_throw_made": 6,
+          "free_throw_all": 9,
+          "free_throw_percent": 66.67,
+          "offensive_rebound": 9,
+          "defensive_rebound": 40,
+          "total_rebound": 49,
+          "block": 4,
+          "block_against": 1,
+          "turnover": 9,
+          "steal": 5,
+          "assist": 12,
+          "points": 67,
+          "value": 93,
+          "plusminus": -4
+        }
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 69,
+          "competition_team": {
+            "id": 9,
+            "name": "Landstede Hammers",
+            "short_name": "ZWO",
+            "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Landstede Hammers",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/7/i/7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/7/i/small-7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+                "medium": "https://bnxt.sportpress.info/storage/7/i/medium-7iHg8tHuHog4w1gOIigHdERQ51663601291.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 24
+            },
+            {
+              "period_id": 2,
+              "score": 6
+            },
+            {
+              "period_id": 3,
+              "score": 22
+            }
+          ]
+        },
+        "is_home": false,
+        "total": {
+          "minute": 225,
+          "starter": true,
+          "foul": 16,
+          "defensive_foul": 18,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 12,
+          "two_point_all": 34,
+          "two_point_percent": 35.29,
+          "three_point_made": 11,
+          "three_point_all": 33,
+          "three_point_percent": 33.33,
+          "throw_made": 23,
+          "throw_all": 67,
+          "throw_percent": 34.33,
+          "free_throw_made": 12,
+          "free_throw_all": 16,
+          "free_throw_percent": 75,
+          "offensive_rebound": 4,
+          "defensive_rebound": 33,
+          "total_rebound": 37,
+          "block": 1,
+          "block_against": 4,
+          "turnover": 8,
+          "steal": 5,
+          "assist": 14,
+          "points": 69,
+          "value": 88,
+          "plusminus": -1
+        }
+      }
+    ],
+    "top_performer": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 67,
+          "competition_team": {
+            "id": 7,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 17
+            },
+            {
+              "period_id": 2,
+              "score": 9
+            },
+            {
+              "period_id": 3,
+              "score": 25
+            }
+          ]
+        },
+        "is_home": true,
+        "player": {
+          "player": {
+            "id": 93,
+            "birthdate": "1991-07-25",
+            "facebook": null,
+            "twitter": null,
+            "instagram": null,
+            "first_name": "Leon",
+            "last_name": "Williams",
+            "nationality_code": "NED",
+            "profile_image": {
+              "name": "ZWO - Williams",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "starter": true,
+          "minute": 42,
+          "foul": 0,
+          "defensive_foul": 4,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 3,
+          "two_point_all": 6,
+          "two_point_percent": 50,
+          "three_point_made": 4,
+          "three_point_all": 5,
+          "three_point_percent": 80,
+          "throw_made": 7,
+          "throw_all": 11,
+          "throw_percent": 63.64,
+          "free_throw_made": 5,
+          "free_throw_all": 6,
+          "free_throw_percent": 83.3,
+          "offensive_rebound": 1,
+          "defensive_rebound": 6,
+          "total_rebound": 7,
+          "block": 0,
+          "block_against": 0,
+          "turnover": 2,
+          "steal": 0,
+          "assist": 7,
+          "points": 23,
+          "value": 34,
+          "jersey": 5
+        }
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 69,
+          "competition_team": {
+            "id": 9,
+            "name": "Landstede Hammers",
+            "short_name": "ZWO",
+            "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Landstede Hammers",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/7/i/7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/7/i/small-7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+                "medium": "https://bnxt.sportpress.info/storage/7/i/medium-7iHg8tHuHog4w1gOIigHdERQ51663601291.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 24
+            },
+            {
+              "period_id": 2,
+              "score": 6
+            },
+            {
+              "period_id": 3,
+              "score": 22
+            }
+          ]
+        },
+        "is_home": false,
+        "player": {
+          "player": {
+            "id": 136,
+            "birthdate": "1989-04-04",
+            "facebook": null,
+            "twitter": null,
+            "instagram": null,
+            "first_name": "Noah",
+            "last_name": "Dahlman",
+            "nationality_code": "USA",
+            "profile_image": {
+              "name": "noah",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "starter": true,
+          "minute": 36,
+          "foul": 2,
+          "defensive_foul": 5,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 5,
+          "two_point_all": 9,
+          "two_point_percent": 55.6,
+          "three_point_made": 1,
+          "three_point_all": 4,
+          "three_point_percent": 25,
+          "throw_made": 6,
+          "throw_all": 13,
+          "throw_percent": 46.15,
+          "free_throw_made": 7,
+          "free_throw_all": 7,
+          "free_throw_percent": 100,
+          "offensive_rebound": 3,
+          "defensive_rebound": 8,
+          "total_rebound": 11,
+          "block": 0,
+          "block_against": 1,
+          "turnover": 0,
+          "steal": 1,
+          "assist": 1,
+          "points": 20,
+          "value": 31,
+          "jersey": 42
+        }
+      }
+    ],
+    "game_leaders": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 67,
+          "competition_team": {
+            "id": 7,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 17
+            },
+            {
+              "period_id": 2,
+              "score": 9
+            },
+            {
+              "period_id": 3,
+              "score": 25
+            }
+          ]
+        },
+        "is_home": true,
+        "leaders": {
+          "minute": {
+            "player": {
+              "id": 91,
+              "birthdate": "1996-08-15",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Donte",
+              "last_name": "Ingram",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 43
+          },
+          "foul": {
+            "player": {
+              "id": 89,
+              "birthdate": "1995-12-03",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Amanze",
+              "last_name": "Egekeze",
+              "nationality_code": "USA/NGR",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 5
+          },
+          "defensive_foul": {
+            "player": {
+              "id": 93,
+              "birthdate": "1991-07-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Leon",
+              "last_name": "Williams",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "ZWO - Williams",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 4
+          },
+          "dunk_made": {
+            "player": {
+              "id": 88,
+              "birthdate": "1995-07-01",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Henry",
+              "last_name": "Caruso",
+              "nationality_code": "USA/ITA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 0
+          },
+          "dunk_all": {
+            "player": {
+              "id": 88,
+              "birthdate": "1995-07-01",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Henry",
+              "last_name": "Caruso",
+              "nationality_code": "USA/ITA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 0
+          },
+          "dunk_percent": {
+            "player": {
+              "id": 88,
+              "birthdate": "1995-07-01",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Henry",
+              "last_name": "Caruso",
+              "nationality_code": "USA/ITA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 0
+          },
+          "two_point_made": {
+            "player": {
+              "id": 91,
+              "birthdate": "1996-08-15",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Donte",
+              "last_name": "Ingram",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 8
+          },
+          "two_point_all": {
+            "player": {
+              "id": 97,
+              "birthdate": "1991-12-16",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Marquis",
+              "last_name": "Adddison",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 18
+          },
+          "two_point_percent": {
+            "player": {
+              "id": 87,
+              "birthdate": "1989-12-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Thomas",
+              "last_name": "Koenis",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 100
+          },
+          "three_point_made": {
+            "player": {
+              "id": 93,
+              "birthdate": "1991-07-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Leon",
+              "last_name": "Williams",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "ZWO - Williams",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 4
+          },
+          "three_point_all": {
+            "player": {
+              "id": 91,
+              "birthdate": "1996-08-15",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Donte",
+              "last_name": "Ingram",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 10
+          },
+          "three_point_percent": {
+            "player": {
+              "id": 93,
+              "birthdate": "1991-07-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Leon",
+              "last_name": "Williams",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "ZWO - Williams",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 80
+          },
+          "throw_all": {
+            "player": {
+              "id": 91,
+              "birthdate": "1996-08-15",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Donte",
+              "last_name": "Ingram",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 23
+          },
+          "throw_made": {
+            "player": {
+              "id": 91,
+              "birthdate": "1996-08-15",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Donte",
+              "last_name": "Ingram",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 9
+          },
+          "throw_percent": {
+            "player": {
+              "id": 87,
+              "birthdate": "1989-12-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Thomas",
+              "last_name": "Koenis",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 66.67
+          },
+          "free_throw_made": {
+            "player": {
+              "id": 93,
+              "birthdate": "1991-07-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Leon",
+              "last_name": "Williams",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "ZWO - Williams",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 5
+          },
+          "free_throw_all": {
+            "player": {
+              "id": 93,
+              "birthdate": "1991-07-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Leon",
+              "last_name": "Williams",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "ZWO - Williams",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 6
+          },
+          "free_throw_percent": {
+            "player": {
+              "id": 91,
+              "birthdate": "1996-08-15",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Donte",
+              "last_name": "Ingram",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 100
+          },
+          "offensive_rebound": {
+            "player": {
+              "id": 97,
+              "birthdate": "1991-12-16",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Marquis",
+              "last_name": "Adddison",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 3
+          },
+          "defensive_rebound": {
+            "player": {
+              "id": 86,
+              "birthdate": "1993-05-30",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Lotanna",
+              "last_name": "Nwogbo",
+              "nationality_code": "USA/NGR",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 9
+          },
+          "total_rebound": {
+            "player": {
+              "id": 86,
+              "birthdate": "1993-05-30",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Lotanna",
+              "last_name": "Nwogbo",
+              "nationality_code": "USA/NGR",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 11
+          },
+          "block": {
+            "player": {
+              "id": 94,
+              "birthdate": "1995-07-31",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Willem",
+              "last_name": "Brandwijk",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "19 BRANDWIJK Willem",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/t/c/tc3QP6VtNGbOsWnOdJKWPJv8u1741957965.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/t/c/small-tc3QP6VtNGbOsWnOdJKWPJv8u1741957965.png",
+                  "medium": "https://bnxt.sportpress.info/storage/t/c/medium-tc3QP6VtNGbOsWnOdJKWPJv8u1741957965.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 2
+          },
+          "block_against": {
+            "player": {
+              "id": 86,
+              "birthdate": "1993-05-30",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Lotanna",
+              "last_name": "Nwogbo",
+              "nationality_code": "USA/NGR",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 1
+          },
+          "turnover": {
+            "player": {
+              "id": 86,
+              "birthdate": "1993-05-30",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Lotanna",
+              "last_name": "Nwogbo",
+              "nationality_code": "USA/NGR",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 4
+          },
+          "steal": {
+            "player": {
+              "id": 87,
+              "birthdate": "1989-12-11",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Thomas",
+              "last_name": "Koenis",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 2
+          },
+          "assist": {
+            "player": {
+              "id": 93,
+              "birthdate": "1991-07-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Leon",
+              "last_name": "Williams",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "ZWO - Williams",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 7
+          },
+          "points": {
+            "player": {
+              "id": 93,
+              "birthdate": "1991-07-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Leon",
+              "last_name": "Williams",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "ZWO - Williams",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 23
+          },
+          "value": {
+            "player": {
+              "id": 93,
+              "birthdate": "1991-07-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Leon",
+              "last_name": "Williams",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "ZWO - Williams",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+                  "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 34
+          }
+        }
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 69,
+          "competition_team": {
+            "id": 9,
+            "name": "Landstede Hammers",
+            "short_name": "ZWO",
+            "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Landstede Hammers",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/7/i/7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/7/i/small-7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+                "medium": "https://bnxt.sportpress.info/storage/7/i/medium-7iHg8tHuHog4w1gOIigHdERQ51663601291.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 24
+            },
+            {
+              "period_id": 2,
+              "score": 6
+            },
+            {
+              "period_id": 3,
+              "score": 22
+            }
+          ]
+        },
+        "is_home": false,
+        "leaders": {
+          "minute": {
+            "player": {
+              "id": 131,
+              "birthdate": "1999-08-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Dragos",
+              "last_name": "Diculescu",
+              "nationality_code": "ROU",
+              "profile_image": {
+                "name": "Dragos",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/T/p/TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/T/p/small-TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png",
+                  "medium": "https://bnxt.sportpress.info/storage/T/p/medium-TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 41
+          },
+          "foul": {
+            "player": {
+              "id": 139,
+              "birthdate": "1996-12-23",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Naba Terek",
+              "last_name": "ECHOLS",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 3
+          },
+          "defensive_foul": {
+            "player": {
+              "id": 136,
+              "birthdate": "1989-04-04",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Noah",
+              "last_name": "Dahlman",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "noah",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 5
+          },
+          "dunk_made": {
+            "player": {
+              "id": 140,
+              "birthdate": "2003-07-14",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Dion",
+              "last_name": "Turpijn",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "D Turpijn",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/k/xklvvbLS5jqkgDfAuvs8y6VIN1729608124.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/k/small-xklvvbLS5jqkgDfAuvs8y6VIN1729608124.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/k/medium-xklvvbLS5jqkgDfAuvs8y6VIN1729608124.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 0
+          },
+          "dunk_all": {
+            "player": {
+              "id": 140,
+              "birthdate": "2003-07-14",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Dion",
+              "last_name": "Turpijn",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "D Turpijn",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/k/xklvvbLS5jqkgDfAuvs8y6VIN1729608124.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/k/small-xklvvbLS5jqkgDfAuvs8y6VIN1729608124.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/k/medium-xklvvbLS5jqkgDfAuvs8y6VIN1729608124.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 0
+          },
+          "dunk_percent": {
+            "player": {
+              "id": 140,
+              "birthdate": "2003-07-14",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Dion",
+              "last_name": "Turpijn",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "D Turpijn",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/x/k/xklvvbLS5jqkgDfAuvs8y6VIN1729608124.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/x/k/small-xklvvbLS5jqkgDfAuvs8y6VIN1729608124.png",
+                  "medium": "https://bnxt.sportpress.info/storage/x/k/medium-xklvvbLS5jqkgDfAuvs8y6VIN1729608124.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 0
+          },
+          "two_point_made": {
+            "player": {
+              "id": 136,
+              "birthdate": "1989-04-04",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Noah",
+              "last_name": "Dahlman",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "noah",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 5
+          },
+          "two_point_all": {
+            "player": {
+              "id": 136,
+              "birthdate": "1989-04-04",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Noah",
+              "last_name": "Dahlman",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "noah",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 9
+          },
+          "two_point_percent": {
+            "player": {
+              "id": 137,
+              "birthdate": "2000-05-18",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Jerom",
+              "last_name": "Oude Aarninkhof",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 100
+          },
+          "three_point_made": {
+            "player": {
+              "id": 139,
+              "birthdate": "1996-12-23",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Naba Terek",
+              "last_name": "ECHOLS",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 4
+          },
+          "three_point_all": {
+            "player": {
+              "id": 139,
+              "birthdate": "1996-12-23",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Naba Terek",
+              "last_name": "ECHOLS",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 9
+          },
+          "three_point_percent": {
+            "player": {
+              "id": 137,
+              "birthdate": "2000-05-18",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Jerom",
+              "last_name": "Oude Aarninkhof",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 50
+          },
+          "throw_all": {
+            "player": {
+              "id": 131,
+              "birthdate": "1999-08-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Dragos",
+              "last_name": "Diculescu",
+              "nationality_code": "ROU",
+              "profile_image": {
+                "name": "Dragos",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/T/p/TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/T/p/small-TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png",
+                  "medium": "https://bnxt.sportpress.info/storage/T/p/medium-TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 18
+          },
+          "throw_made": {
+            "player": {
+              "id": 139,
+              "birthdate": "1996-12-23",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Naba Terek",
+              "last_name": "ECHOLS",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 6
+          },
+          "throw_percent": {
+            "player": {
+              "id": 137,
+              "birthdate": "2000-05-18",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Jerom",
+              "last_name": "Oude Aarninkhof",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 66.67
+          },
+          "free_throw_made": {
+            "player": {
+              "id": 136,
+              "birthdate": "1989-04-04",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Noah",
+              "last_name": "Dahlman",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "noah",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 7
+          },
+          "free_throw_all": {
+            "player": {
+              "id": 136,
+              "birthdate": "1989-04-04",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Noah",
+              "last_name": "Dahlman",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "noah",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 7
+          },
+          "free_throw_percent": {
+            "player": {
+              "id": 139,
+              "birthdate": "1996-12-23",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Naba Terek",
+              "last_name": "ECHOLS",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 100
+          },
+          "offensive_rebound": {
+            "player": {
+              "id": 136,
+              "birthdate": "1989-04-04",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Noah",
+              "last_name": "Dahlman",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "noah",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 3
+          },
+          "defensive_rebound": {
+            "player": {
+              "id": 131,
+              "birthdate": "1999-08-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Dragos",
+              "last_name": "Diculescu",
+              "nationality_code": "ROU",
+              "profile_image": {
+                "name": "Dragos",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/T/p/TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/T/p/small-TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png",
+                  "medium": "https://bnxt.sportpress.info/storage/T/p/medium-TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 9
+          },
+          "total_rebound": {
+            "player": {
+              "id": 136,
+              "birthdate": "1989-04-04",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Noah",
+              "last_name": "Dahlman",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "noah",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 11
+          },
+          "block": {
+            "player": {
+              "id": 135,
+              "birthdate": "1993-05-10",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Kevin",
+              "last_name": "Bleeker",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "Kevin Bleeker",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/6/N/6NDCTbDksDWqb0MGhrvH7Em9u1681045365.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/6/N/small-6NDCTbDksDWqb0MGhrvH7Em9u1681045365.png",
+                  "medium": "https://bnxt.sportpress.info/storage/6/N/medium-6NDCTbDksDWqb0MGhrvH7Em9u1681045365.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 1
+          },
+          "block_against": {
+            "player": {
+              "id": 132,
+              "birthdate": "1990-09-19",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Nigel",
+              "last_name": "Oostrum Van",
+              "nationality_code": "USA/GBR",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 1
+          },
+          "turnover": {
+            "player": {
+              "id": 131,
+              "birthdate": "1999-08-25",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Dragos",
+              "last_name": "Diculescu",
+              "nationality_code": "ROU",
+              "profile_image": {
+                "name": "Dragos",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/T/p/TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/T/p/small-TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png",
+                  "medium": "https://bnxt.sportpress.info/storage/T/p/medium-TpfKH5tZuNrH4ENNPy8KlRcnO1665824215.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 3
+          },
+          "steal": {
+            "player": {
+              "id": 137,
+              "birthdate": "2000-05-18",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Jerom",
+              "last_name": "Oude Aarninkhof",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 1
+          },
+          "assist": {
+            "player": {
+              "id": 139,
+              "birthdate": "1996-12-23",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Naba Terek",
+              "last_name": "ECHOLS",
+              "nationality_code": "USA",
+              "profile_image": null,
+              "created_at": "2022-08-10"
+            },
+            "value": 6
+          },
+          "points": {
+            "player": {
+              "id": 136,
+              "birthdate": "1989-04-04",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Noah",
+              "last_name": "Dahlman",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "noah",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 20
+          },
+          "value": {
+            "player": {
+              "id": 136,
+              "birthdate": "1989-04-04",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Noah",
+              "last_name": "Dahlman",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "noah",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/b/t/btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/b/t/small-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png",
+                  "medium": "https://bnxt.sportpress.info/storage/b/t/medium-btDK4Gp81EcFTkS9DXHsSSWEE1663742666.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 31
+          }
+        }
+      }
+    ]
+  }
+}

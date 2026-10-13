@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: competition_name
+  type: character
+- description: ''
+  name: phase_id
+  type: integer
+- description: ''
+  name: phase_name
+  type: character
+- description: ''
+  name: standings_visible
+  type: logical
+kind: dataframe
+schema: sportpress_phases

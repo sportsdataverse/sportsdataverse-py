@@ -1,0 +1,143 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "competition_id": 1,
+      "uu_team_id": 1,
+      "name": "Spirou Basket",
+      "short_name": "CHA",
+      "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+      "club": {
+        "id": 1,
+        "name": "Belgium"
+      },
+      "team_logo": {
+        "name": "Spirou Basket",
+        "description": null,
+        "alt": null,
+        "keywords": null,
+        "public_url": "https://bnxt.sportpress.info/storage/0/I/0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+        "thumbnails": {
+          "small": "https://bnxt.sportpress.info/storage/0/I/small-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+          "medium": "https://bnxt.sportpress.info/storage/0/I/medium-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png"
+        }
+      },
+      "team_image": null,
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      },
+      "staffs": [
+        {
+          "id": 1,
+          "competition_team_id": 1,
+          "staff": {
+            "id": 1,
+            "profile_image": null,
+            "name": "Fulvio Bastianini",
+            "title": null,
+            "created_at": "2022-08-31"
+          },
+          "title": {
+            "id": 1,
+            "priority": 1,
+            "name": "Head coach",
+            "created_at": "2022-08-31"
+          },
+          "created_at": "2022-08-31"
+        }
+      ],
+      "statistics": [],
+      "created_at": "2022-08-10"
+    },
+    {
+      "id": 2,
+      "competition_id": 1,
+      "uu_team_id": 2,
+      "name": "Filou Oostende",
+      "short_name": "OOS",
+      "ticket_url": "https://bcoostende.be/tickets/",
+      "club": {
+        "id": 1,
+        "name": "Belgium"
+      },
+      "team_logo": {
+        "name": "Filou Oostende",
+        "description": null,
+        "alt": null,
+        "keywords": null,
+        "public_url": "https://bnxt.sportpress.info/storage/j/Q/jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+        "thumbnails": {
+          "small": "https://bnxt.sportpress.info/storage/j/Q/small-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+          "medium": "https://bnxt.sportpress.info/storage/j/Q/medium-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png"
+        }
+      },
+      "team_image": null,
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      },
+      "staffs": [],
+      "statistics": [],
+      "created_at": "2022-08-10"
+    },
+    {
+      "id": 3,
+      "competition_id": 1,
+      "uu_team_id": 3,
+      "name": "Telenet Giants Antwerp",
+      "short_name": "ANT",
+      "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+      "club": {
+        "id": 1,
+        "name": "Belgium"
+      },
+      "team_logo": {
+        "name": "Telenet Giants Antwerp",
+        "description": null,
+        "alt": null,
+        "keywords": null,
+        "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+        "thumbnails": {
+          "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+          "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+        }
+      },
+      "team_image": null,
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      },
+      "staffs": [],
+      "statistics": [],
+      "created_at": "2022-08-10"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "data": {
+    "id": 3,
+    "competition_id": 1,
+    "uu_team_id": 3,
+    "name": "Telenet Giants Antwerp",
+    "short_name": "ANT",
+    "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+    "club": {
+      "id": 1,
+      "name": "Belgium"
+    },
+    "team_logo": {
+      "name": "Telenet Giants Antwerp",
+      "description": null,
+      "alt": null,
+      "keywords": null,
+      "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+      "thumbnails": {
+        "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+        "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+      }
+    },
+    "team_image": null,
+    "competition": {
+      "id": 1,
+      "season": 2022,
+      "visible": true,
+      "standings_visible": true,
+      "simple_team_view": false,
+      "summer_season": false,
+      "name": "BNXT League 2021-2022",
+      "logo": null,
+      "ticket_url": null,
+      "video_url": null,
+      "created_at": "2022-08-10"
+    },
+    "staffs": [],
+    "statistics": {
+      "average_score_for": 85.65,
+      "average_score_against": 78.16,
+      "field_goal_percent": 48.22
+    },
+    "created_at": "2022-08-10"
+  }
+}

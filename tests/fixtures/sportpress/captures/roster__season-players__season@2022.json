@@ -1,0 +1,109 @@
+{
+  "data": [
+    {
+      "id": 3,
+      "competition_team_id": 19,
+      "jersey": "7",
+      "weight": 70,
+      "height": 188,
+      "active": true,
+      "player_position": {
+        "id": 1,
+        "name": "point_guard"
+      },
+      "player": {
+        "id": 3,
+        "birthdate": "2002-09-19",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Stef",
+        "last_name": "Schauvlieger",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Schauvlieger",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/k/J/kJi4katJj4qHghaJFnUa6afKk1789152512.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/k/J/small-kJi4katJj4qHghaJFnUa6afKk1789152512.png",
+            "medium": "https://bnxt.sportpress.info/storage/k/J/medium-kJi4katJj4qHghaJFnUa6afKk1789152512.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "created_at": "2022-08-10"
+    },
+    {
+      "id": 5,
+      "competition_team_id": 19,
+      "jersey": "10",
+      "weight": 78,
+      "height": 198,
+      "active": true,
+      "player_position": {
+        "id": 3,
+        "name": "small_forward"
+      },
+      "player": {
+        "id": 5,
+        "birthdate": "2003-01-06",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Siebe",
+        "last_name": "Ledegen",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "AAL - LEDEGEN",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/c/c/ccVbsc6SyVXQMZZ53XFq51ZZz1757578522.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/c/c/small-ccVbsc6SyVXQMZZ53XFq51ZZz1757578522.png",
+            "medium": "https://bnxt.sportpress.info/storage/c/c/medium-ccVbsc6SyVXQMZZ53XFq51ZZz1757578522.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "created_at": "2022-08-10"
+    },
+    {
+      "id": 6,
+      "competition_team_id": 19,
+      "jersey": "3",
+      "weight": 93,
+      "height": 207,
+      "active": true,
+      "player_position": {
+        "id": 5,
+        "name": "center"
+      },
+      "player": {
+        "id": 6,
+        "birthdate": "1986-04-20",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Ivan",
+        "last_name": "Maras",
+        "nationality_code": "MLT",
+        "profile_image": {
+          "name": "AAL - MARAS",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/q/w/qw5fF89D4Ch6pCwCNXjShyuUH1757578409.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/q/w/small-qw5fF89D4Ch6pCwCNXjShyuUH1757578409.png",
+            "medium": "https://bnxt.sportpress.info/storage/q/w/medium-qw5fF89D4Ch6pCwCNXjShyuUH1757578409.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "created_at": "2022-08-10"
+    }
+  ]
+}

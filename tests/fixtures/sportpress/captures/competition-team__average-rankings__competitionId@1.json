@@ -1,0 +1,560 @@
+{
+  "efficiency": [
+    {
+      "team": {
+        "id": 2,
+        "name": "Filou Oostende",
+        "short_name": "OOS",
+        "ticket_url": "https://bcoostende.be/tickets/",
+        "team_logo": {
+          "name": "Filou Oostende",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/j/Q/jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/j/Q/small-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+            "medium": "https://bnxt.sportpress.info/storage/j/Q/medium-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png"
+          }
+        }
+      },
+      "value": 126.97
+    },
+    {
+      "team": {
+        "id": 12,
+        "name": "ZZ Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "team_logo": {
+          "name": "ZZ Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+          }
+        }
+      },
+      "value": 117.11
+    },
+    {
+      "team": {
+        "id": 3,
+        "name": "Telenet Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Telenet Giants Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+            "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+          }
+        }
+      },
+      "value": 117.03
+    }
+  ],
+  "points": [
+    {
+      "team": {
+        "id": 2,
+        "name": "Filou Oostende",
+        "short_name": "OOS",
+        "ticket_url": "https://bcoostende.be/tickets/",
+        "team_logo": {
+          "name": "Filou Oostende",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/j/Q/jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/j/Q/small-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+            "medium": "https://bnxt.sportpress.info/storage/j/Q/medium-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png"
+          }
+        }
+      },
+      "value": 87.19
+    },
+    {
+      "team": {
+        "id": 3,
+        "name": "Telenet Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Telenet Giants Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+            "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+          }
+        }
+      },
+      "value": 85.65
+    },
+    {
+      "team": {
+        "id": 5,
+        "name": "Hubo Limburg United",
+        "short_name": "LIM",
+        "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+        "team_logo": {
+          "name": "Hubo Limburg United",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/j/q/jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/j/q/small-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+            "medium": "https://bnxt.sportpress.info/storage/j/q/medium-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png"
+          }
+        }
+      },
+      "value": 83.82
+    }
+  ],
+  "total_rebound": [
+    {
+      "team": {
+        "id": 1,
+        "name": "Spirou Basket",
+        "short_name": "CHA",
+        "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+        "team_logo": {
+          "name": "Spirou Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/I/0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/I/small-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/I/medium-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png"
+          }
+        }
+      },
+      "value": 35.7
+    },
+    {
+      "team": {
+        "id": 12,
+        "name": "ZZ Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "team_logo": {
+          "name": "ZZ Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+          }
+        }
+      },
+      "value": 35.48
+    },
+    {
+      "team": {
+        "id": 7,
+        "name": "Donar Groningen",
+        "short_name": "GRO",
+        "ticket_url": "https://www.donar.nl/tickets",
+        "team_logo": {
+          "name": "Donar Groningen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+            "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+          }
+        }
+      },
+      "value": 35.3
+    }
+  ],
+  "block": [
+    {
+      "team": {
+        "id": 12,
+        "name": "ZZ Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "team_logo": {
+          "name": "ZZ Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+          }
+        }
+      },
+      "value": 3.39
+    },
+    {
+      "team": {
+        "id": 1,
+        "name": "Spirou Basket",
+        "short_name": "CHA",
+        "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+        "team_logo": {
+          "name": "Spirou Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/I/0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/I/small-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/I/medium-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png"
+          }
+        }
+      },
+      "value": 3.24
+    },
+    {
+      "team": {
+        "id": 17,
+        "name": "Yoast United",
+        "short_name": "YOA",
+        "ticket_url": "https://www.qstaunited.nl/tickets",
+        "team_logo": {
+          "name": "Yoast United",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/O/U/OULMKhZRhA2sTP50JgEeCan941663601563.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/O/U/small-OULMKhZRhA2sTP50JgEeCan941663601563.png",
+            "medium": "https://bnxt.sportpress.info/storage/O/U/medium-OULMKhZRhA2sTP50JgEeCan941663601563.png"
+          }
+        }
+      },
+      "value": 3.19
+    }
+  ],
+  "assist": [
+    {
+      "team": {
+        "id": 2,
+        "name": "Filou Oostende",
+        "short_name": "OOS",
+        "ticket_url": "https://bcoostende.be/tickets/",
+        "team_logo": {
+          "name": "Filou Oostende",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/j/Q/jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/j/Q/small-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+            "medium": "https://bnxt.sportpress.info/storage/j/Q/medium-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png"
+          }
+        }
+      },
+      "value": 20.38
+    },
+    {
+      "team": {
+        "id": 3,
+        "name": "Telenet Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Telenet Giants Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+            "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+          }
+        }
+      },
+      "value": 19.97
+    },
+    {
+      "team": {
+        "id": 12,
+        "name": "ZZ Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "team_logo": {
+          "name": "ZZ Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+          }
+        }
+      },
+      "value": 19.91
+    }
+  ],
+  "steal": [
+    {
+      "team": {
+        "id": 14,
+        "name": "Den Helder Suns",
+        "short_name": "DHE",
+        "ticket_url": "https://denheldersuns.weticket.io",
+        "team_logo": {
+          "name": "Den Helder Suns",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/s/Y/sYo5SbmlPMGDSNBrzPYjYoXaf1663601537.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/s/Y/small-sYo5SbmlPMGDSNBrzPYjYoXaf1663601537.png",
+            "medium": "https://bnxt.sportpress.info/storage/s/Y/medium-sYo5SbmlPMGDSNBrzPYjYoXaf1663601537.png"
+          }
+        }
+      },
+      "value": 8.84
+    },
+    {
+      "team": {
+        "id": 18,
+        "name": "Heroes Den Bosch",
+        "short_name": "DBO",
+        "ticket_url": "https://heroes.shop.eventgoose.com",
+        "team_logo": {
+          "name": "Heroes Den Bosch",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/U/T/UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/U/T/small-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+            "medium": "https://bnxt.sportpress.info/storage/U/T/medium-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png"
+          }
+        }
+      },
+      "value": 8.7
+    },
+    {
+      "team": {
+        "id": 12,
+        "name": "ZZ Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "team_logo": {
+          "name": "ZZ Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+          }
+        }
+      },
+      "value": 8.68
+    }
+  ],
+  "two_point_percent": [
+    {
+      "team": {
+        "id": 2,
+        "name": "Filou Oostende",
+        "short_name": "OOS",
+        "ticket_url": "https://bcoostende.be/tickets/",
+        "team_logo": {
+          "name": "Filou Oostende",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/j/Q/jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/j/Q/small-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+            "medium": "https://bnxt.sportpress.info/storage/j/Q/medium-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png"
+          }
+        }
+      },
+      "value": 59.01
+    },
+    {
+      "team": {
+        "id": 22,
+        "name": "Kangeroes Basket Mechelen",
+        "short_name": "MEC",
+        "ticket_url": "https://kangoeroes-mannen.ordering.be/o/7%C2%A0%C2%A0%C2%A0",
+        "team_logo": {
+          "name": "Kangoeroes Basket Mechelen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/S/9/S9IcAQsMXDvoyktZn7S1jqvaU1663600894.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/S/9/small-S9IcAQsMXDvoyktZn7S1jqvaU1663600894.png",
+            "medium": "https://bnxt.sportpress.info/storage/S/9/medium-S9IcAQsMXDvoyktZn7S1jqvaU1663600894.png"
+          }
+        }
+      },
+      "value": 56.28
+    },
+    {
+      "team": {
+        "id": 3,
+        "name": "Telenet Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Telenet Giants Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+            "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+          }
+        }
+      },
+      "value": 56.06
+    }
+  ],
+  "three_point_percent": [
+    {
+      "team": {
+        "id": 2,
+        "name": "Filou Oostende",
+        "short_name": "OOS",
+        "ticket_url": "https://bcoostende.be/tickets/",
+        "team_logo": {
+          "name": "Filou Oostende",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/j/Q/jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/j/Q/small-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+            "medium": "https://bnxt.sportpress.info/storage/j/Q/medium-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png"
+          }
+        }
+      },
+      "value": 38.76
+    },
+    {
+      "team": {
+        "id": 18,
+        "name": "Heroes Den Bosch",
+        "short_name": "DBO",
+        "ticket_url": "https://heroes.shop.eventgoose.com",
+        "team_logo": {
+          "name": "Heroes Den Bosch",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/U/T/UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/U/T/small-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+            "medium": "https://bnxt.sportpress.info/storage/U/T/medium-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png"
+          }
+        }
+      },
+      "value": 38.37
+    },
+    {
+      "team": {
+        "id": 22,
+        "name": "Kangeroes Basket Mechelen",
+        "short_name": "MEC",
+        "ticket_url": "https://kangoeroes-mannen.ordering.be/o/7%C2%A0%C2%A0%C2%A0",
+        "team_logo": {
+          "name": "Kangoeroes Basket Mechelen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/S/9/S9IcAQsMXDvoyktZn7S1jqvaU1663600894.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/S/9/small-S9IcAQsMXDvoyktZn7S1jqvaU1663600894.png",
+            "medium": "https://bnxt.sportpress.info/storage/S/9/medium-S9IcAQsMXDvoyktZn7S1jqvaU1663600894.png"
+          }
+        }
+      },
+      "value": 36.81
+    }
+  ],
+  "free_throw_percent": [
+    {
+      "team": {
+        "id": 10,
+        "name": "Zeeuw & Zeeuw Feyenoord",
+        "short_name": "FEY",
+        "ticket_url": "https://www.feyenoordbasketball.nl/tickets/",
+        "team_logo": {
+          "name": "Zeeuw & Zeeuw Feyenoord Basketball",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/T/s/TsT7KB329u83nKk9rRUyQfjel1663601382.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/T/s/small-TsT7KB329u83nKk9rRUyQfjel1663601382.png",
+            "medium": "https://bnxt.sportpress.info/storage/T/s/medium-TsT7KB329u83nKk9rRUyQfjel1663601382.png"
+          }
+        }
+      },
+      "value": 77.89
+    },
+    {
+      "team": {
+        "id": 20,
+        "name": "Stella Artois Leuven Bears",
+        "short_name": "LEU",
+        "ticket_url": "https://leuvenbears.ordering.be/o/2",
+        "team_logo": {
+          "name": "Stella Artois Leuven Bears",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/e/0/e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/e/0/small-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+            "medium": "https://bnxt.sportpress.info/storage/e/0/medium-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png"
+          }
+        }
+      },
+      "value": 77.6
+    },
+    {
+      "team": {
+        "id": 9,
+        "name": "Landstede Hammers",
+        "short_name": "ZWO",
+        "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+        "team_logo": {
+          "name": "Landstede Hammers",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/7/i/7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/7/i/small-7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+            "medium": "https://bnxt.sportpress.info/storage/7/i/medium-7iHg8tHuHog4w1gOIigHdERQ51663601291.png"
+          }
+        }
+      },
+      "value": 76.65
+    }
+  ]
+}

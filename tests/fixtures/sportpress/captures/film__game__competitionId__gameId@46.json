@@ -1,0 +1,199 @@
+{
+  "data": [
+    {
+      "team": {
+        "id": 7,
+        "name": "Donar Groningen",
+        "short_name": "GRO",
+        "ticket_url": "https://www.donar.nl/tickets",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "Donar Groningen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+            "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "is_home": true,
+      "event_code": 1006,
+      "event_subcode": 0,
+      "period": 1,
+      "minute": 0,
+      "second": 10,
+      "x": 0,
+      "y": 0,
+      "order": 1,
+      "current_home_score": 0,
+      "current_away_score": 0,
+      "player": {
+        "id": 93,
+        "birthdate": "1991-07-25",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Leon",
+        "last_name": "Williams",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "ZWO - Williams",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+            "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "player2": null
+    },
+    {
+      "team": {
+        "id": 7,
+        "name": "Donar Groningen",
+        "short_name": "GRO",
+        "ticket_url": "https://www.donar.nl/tickets",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "Donar Groningen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+            "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "is_home": true,
+      "event_code": 1000,
+      "event_subcode": 4,
+      "period": 1,
+      "minute": 0,
+      "second": 10,
+      "x": 0,
+      "y": 0,
+      "order": 2,
+      "current_home_score": 1,
+      "current_away_score": 0,
+      "player": {
+        "id": 93,
+        "birthdate": "1991-07-25",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Leon",
+        "last_name": "Williams",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "ZWO - Williams",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+            "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "player2": null
+    },
+    {
+      "team": {
+        "id": 9,
+        "name": "Landstede Hammers",
+        "short_name": "ZWO",
+        "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "Landstede Hammers",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/7/i/7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/7/i/small-7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+            "medium": "https://bnxt.sportpress.info/storage/7/i/medium-7iHg8tHuHog4w1gOIigHdERQ51663601291.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "is_home": false,
+      "event_code": 1011,
+      "event_subcode": 0,
+      "period": 1,
+      "minute": 4,
+      "second": 8,
+      "x": 0,
+      "y": 0,
+      "order": 39,
+      "current_home_score": 9,
+      "current_away_score": 9,
+      "player": {
+        "id": 135,
+        "birthdate": "1993-05-10",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Kevin",
+        "last_name": "Bleeker",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "Kevin Bleeker",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/6/N/6NDCTbDksDWqb0MGhrvH7Em9u1681045365.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/6/N/small-6NDCTbDksDWqb0MGhrvH7Em9u1681045365.png",
+            "medium": "https://bnxt.sportpress.info/storage/6/N/medium-6NDCTbDksDWqb0MGhrvH7Em9u1681045365.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "player2": {
+        "id": 133,
+        "birthdate": "1989-07-22",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Ralf",
+        "last_name": "De Pagter",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "Ralf",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/A/f/Af8tIGZnPIJxROp2rLWWxFF3f1665824412.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/A/f/small-Af8tIGZnPIJxROp2rLWWxFF3f1665824412.png",
+            "medium": "https://bnxt.sportpress.info/storage/A/f/medium-Af8tIGZnPIJxROp2rLWWxFF3f1665824412.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      }
+    }
+  ]
+}

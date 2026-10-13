@@ -1,0 +1,166 @@
+{
+  "data": [
+    {
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        },
+        "created_at": "2026-07-24"
+      },
+      "win": 2,
+      "loss": 0,
+      "even": 0,
+      "score": 213,
+      "against": 169,
+      "percent": 100,
+      "score_difference": 44,
+      "point": 4,
+      "position": 1,
+      "played": 2,
+      "point_percent": 1,
+      "win_loss": {
+        "home": {
+          "win": 1,
+          "loss": 0
+        },
+        "away": {
+          "win": 1,
+          "loss": 0
+        }
+      },
+      "last5": {
+        "win": 2,
+        "loss": 0
+      },
+      "streak": {
+        "is_win": true,
+        "count": 2
+      },
+      "group": null
+    },
+    {
+      "team": {
+        "id": 561,
+        "name": "Brussels Basketball",
+        "short_name": "BRU",
+        "ticket_url": "https://www.brusselsbasketball.be/tickets",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Brussels",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/y/n/ynqjUETIfJkJMUbOllRCow4rX1785845117.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/y/n/small-ynqjUETIfJkJMUbOllRCow4rX1785845117.png",
+            "medium": "https://bnxt.sportpress.info/storage/y/n/medium-ynqjUETIfJkJMUbOllRCow4rX1785845117.png"
+          }
+        },
+        "created_at": "2026-07-24"
+      },
+      "win": 2,
+      "loss": 0,
+      "even": 0,
+      "score": 171,
+      "against": 131,
+      "percent": 100,
+      "score_difference": 40,
+      "point": 4,
+      "position": 2,
+      "played": 2,
+      "point_percent": 1,
+      "win_loss": {
+        "home": {
+          "win": 1,
+          "loss": 0
+        },
+        "away": {
+          "win": 1,
+          "loss": 0
+        }
+      },
+      "last5": {
+        "win": 2,
+        "loss": 0
+      },
+      "streak": {
+        "is_win": true,
+        "count": 2
+      },
+      "group": null
+    },
+    {
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        },
+        "created_at": "2026-07-24"
+      },
+      "win": 2,
+      "loss": 0,
+      "even": 0,
+      "score": 189,
+      "against": 166,
+      "percent": 100,
+      "score_difference": 23,
+      "point": 4,
+      "position": 3,
+      "played": 2,
+      "point_percent": 1,
+      "win_loss": {
+        "home": {
+          "win": 1,
+          "loss": 0
+        },
+        "away": {
+          "win": 1,
+          "loss": 0
+        }
+      },
+      "last5": {
+        "win": 2,
+        "loss": 0
+      },
+      "streak": {
+        "is_win": true,
+        "count": 2
+      },
+      "group": null
+    }
+  ]
+}

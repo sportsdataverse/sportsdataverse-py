@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: roster_id
+  type: integer
+- description: ''
+  name: competition_team_id
+  type: integer
+- description: ''
+  name: jersey
+  type: character
+- description: ''
+  name: weight
+  type: integer
+- description: ''
+  name: height
+  type: integer
+- description: ''
+  name: active
+  type: logical
+- description: ''
+  name: position_id
+  type: integer
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: nationality_code
+  type: character
+- description: ''
+  name: birth_date
+  type: character
+kind: dataframe
+schema: sportpress_team_roster

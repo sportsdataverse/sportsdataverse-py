@@ -1,0 +1,560 @@
+{
+  "efficiency": [
+    {
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        }
+      },
+      "value": 148
+    },
+    {
+      "team": {
+        "id": 545,
+        "name": "Hubo Limburg United",
+        "short_name": "LIM",
+        "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+        "team_logo": {
+          "name": "Limburg",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/I/p/IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/I/p/small-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+            "medium": "https://bnxt.sportpress.info/storage/I/p/medium-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png"
+          }
+        }
+      },
+      "value": 135
+    },
+    {
+      "team": {
+        "id": 539,
+        "name": "Coretec Oostende",
+        "short_name": "OOS",
+        "ticket_url": "https://www.bcoostende.be/tickets/tickets",
+        "team_logo": {
+          "name": "Oostende",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/W/e/WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/W/e/small-WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png",
+            "medium": "https://bnxt.sportpress.info/storage/W/e/medium-WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png"
+          }
+        }
+      },
+      "value": 128.5
+    }
+  ],
+  "points": [
+    {
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        }
+      },
+      "value": 106.5
+    },
+    {
+      "team": {
+        "id": 545,
+        "name": "Hubo Limburg United",
+        "short_name": "LIM",
+        "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+        "team_logo": {
+          "name": "Limburg",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/I/p/IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/I/p/small-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+            "medium": "https://bnxt.sportpress.info/storage/I/p/medium-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png"
+          }
+        }
+      },
+      "value": 100.5
+    },
+    {
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        }
+      },
+      "value": 94.5
+    }
+  ],
+  "total_rebound": [
+    {
+      "team": {
+        "id": 537,
+        "name": "Val-Dieu Spirou Basket",
+        "short_name": "CHA",
+        "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+        "team_logo": {
+          "name": "Spirou Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/3/G/3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/3/G/small-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+            "medium": "https://bnxt.sportpress.info/storage/3/G/medium-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png"
+          }
+        }
+      },
+      "value": 40.5
+    },
+    {
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        }
+      },
+      "value": 39.5
+    },
+    {
+      "team": {
+        "id": 555,
+        "name": "Heroes Den Bosch",
+        "short_name": "DBO",
+        "ticket_url": "https://heroes.shop.eventgoose.com",
+        "team_logo": {
+          "name": "Den Bosch",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/u/i/uigcaAinqi5d3dn2POyaMZAiK1785845220.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/u/i/small-uigcaAinqi5d3dn2POyaMZAiK1785845220.png",
+            "medium": "https://bnxt.sportpress.info/storage/u/i/medium-uigcaAinqi5d3dn2POyaMZAiK1785845220.png"
+          }
+        }
+      },
+      "value": 39
+    }
+  ],
+  "block": [
+    {
+      "team": {
+        "id": 537,
+        "name": "Val-Dieu Spirou Basket",
+        "short_name": "CHA",
+        "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+        "team_logo": {
+          "name": "Spirou Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/3/G/3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/3/G/small-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+            "medium": "https://bnxt.sportpress.info/storage/3/G/medium-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png"
+          }
+        }
+      },
+      "value": 6
+    },
+    {
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        }
+      },
+      "value": 6
+    },
+    {
+      "team": {
+        "id": 567,
+        "name": "CB Liège",
+        "short_name": "LIE",
+        "ticket_url": "https://www.cb-liege.be/division1/calendrier",
+        "team_logo": {
+          "name": "CB Liege",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/D/f/DfcFx9PZMrLfpGplwmyGc8GTM1785844306.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/D/f/small-DfcFx9PZMrLfpGplwmyGc8GTM1785844306.png",
+            "medium": "https://bnxt.sportpress.info/storage/D/f/medium-DfcFx9PZMrLfpGplwmyGc8GTM1785844306.png"
+          }
+        }
+      },
+      "value": 5
+    }
+  ],
+  "assist": [
+    {
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        }
+      },
+      "value": 24
+    },
+    {
+      "team": {
+        "id": 545,
+        "name": "Hubo Limburg United",
+        "short_name": "LIM",
+        "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+        "team_logo": {
+          "name": "Limburg",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/I/p/IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/I/p/small-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+            "medium": "https://bnxt.sportpress.info/storage/I/p/medium-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png"
+          }
+        }
+      },
+      "value": 23.5
+    },
+    {
+      "team": {
+        "id": 537,
+        "name": "Val-Dieu Spirou Basket",
+        "short_name": "CHA",
+        "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+        "team_logo": {
+          "name": "Spirou Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/3/G/3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/3/G/small-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+            "medium": "https://bnxt.sportpress.info/storage/3/G/medium-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png"
+          }
+        }
+      },
+      "value": 21
+    }
+  ],
+  "steal": [
+    {
+      "team": {
+        "id": 543,
+        "name": "CityX Mons",
+        "short_name": "MON",
+        "ticket_url": "https://shop.monshainaut.be",
+        "team_logo": {
+          "name": "Mons",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/b/t/bt3TLIdQmf3JGqHKQP6cJHii81786374757.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/b/t/small-bt3TLIdQmf3JGqHKQP6cJHii81786374757.png",
+            "medium": "https://bnxt.sportpress.info/storage/b/t/medium-bt3TLIdQmf3JGqHKQP6cJHii81786374757.png"
+          }
+        }
+      },
+      "value": 12
+    },
+    {
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        }
+      },
+      "value": 12
+    },
+    {
+      "team": {
+        "id": 561,
+        "name": "Brussels Basketball",
+        "short_name": "BRU",
+        "ticket_url": "https://www.brusselsbasketball.be/tickets",
+        "team_logo": {
+          "name": "Brussels",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/y/n/ynqjUETIfJkJMUbOllRCow4rX1785845117.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/y/n/small-ynqjUETIfJkJMUbOllRCow4rX1785845117.png",
+            "medium": "https://bnxt.sportpress.info/storage/y/n/medium-ynqjUETIfJkJMUbOllRCow4rX1785845117.png"
+          }
+        }
+      },
+      "value": 11.5
+    }
+  ],
+  "two_point_percent": [
+    {
+      "team": {
+        "id": 561,
+        "name": "Brussels Basketball",
+        "short_name": "BRU",
+        "ticket_url": "https://www.brusselsbasketball.be/tickets",
+        "team_logo": {
+          "name": "Brussels",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/y/n/ynqjUETIfJkJMUbOllRCow4rX1785845117.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/y/n/small-ynqjUETIfJkJMUbOllRCow4rX1785845117.png",
+            "medium": "https://bnxt.sportpress.info/storage/y/n/medium-ynqjUETIfJkJMUbOllRCow4rX1785845117.png"
+          }
+        }
+      },
+      "value": 63.29
+    },
+    {
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        }
+      },
+      "value": 61.04
+    },
+    {
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        }
+      },
+      "value": 60.23
+    }
+  ],
+  "three_point_percent": [
+    {
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        }
+      },
+      "value": 42
+    },
+    {
+      "team": {
+        "id": 563,
+        "name": "Kangoeroes Basket Mechelen",
+        "short_name": "MEC",
+        "ticket_url": "https://kangoeroes-mannen.ordering.be/o/7%C2%A0%C2%A0%C2%A0",
+        "team_logo": {
+          "name": "Mechelen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/P/1/P1CAfeaMcbepHMFRHSXcktt6k1785845272.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/P/1/small-P1CAfeaMcbepHMFRHSXcktt6k1785845272.png",
+            "medium": "https://bnxt.sportpress.info/storage/P/1/medium-P1CAfeaMcbepHMFRHSXcktt6k1785845272.png"
+          }
+        }
+      },
+      "value": 41.67
+    },
+    {
+      "team": {
+        "id": 547,
+        "name": "Donar Groningen",
+        "short_name": "GRO",
+        "ticket_url": "https://www.donar.nl/tickets",
+        "team_logo": {
+          "name": "Groningen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/5/b/5bYE12yxtfijCQAKU2RhtMieX1785845195.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/5/b/small-5bYE12yxtfijCQAKU2RhtMieX1785845195.png",
+            "medium": "https://bnxt.sportpress.info/storage/5/b/medium-5bYE12yxtfijCQAKU2RhtMieX1785845195.png"
+          }
+        }
+      },
+      "value": 36.76
+    }
+  ],
+  "free_throw_percent": [
+    {
+      "team": {
+        "id": 539,
+        "name": "Coretec Oostende",
+        "short_name": "OOS",
+        "ticket_url": "https://www.bcoostende.be/tickets/tickets",
+        "team_logo": {
+          "name": "Oostende",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/W/e/WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/W/e/small-WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png",
+            "medium": "https://bnxt.sportpress.info/storage/W/e/medium-WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png"
+          }
+        }
+      },
+      "value": 84.85
+    },
+    {
+      "team": {
+        "id": 545,
+        "name": "Hubo Limburg United",
+        "short_name": "LIM",
+        "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+        "team_logo": {
+          "name": "Limburg",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/I/p/IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/I/p/small-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+            "medium": "https://bnxt.sportpress.info/storage/I/p/medium-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png"
+          }
+        }
+      },
+      "value": 84.62
+    },
+    {
+      "team": {
+        "id": 553,
+        "name": "Zorg en Zekerheid Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "team_logo": {
+          "name": "Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/y/z/yzL6PScJRcREGP6UsfXz6sIPb1785845435.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/y/z/small-yzL6PScJRcREGP6UsfXz6sIPb1785845435.png",
+            "medium": "https://bnxt.sportpress.info/storage/y/z/medium-yzL6PScJRcREGP6UsfXz6sIPb1785845435.png"
+          }
+        }
+      },
+      "value": 78.43
+    }
+  ]
+}

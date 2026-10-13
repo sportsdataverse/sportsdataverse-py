@@ -1,0 +1,240 @@
+{
+  "data": {
+    "id": 10607,
+    "game_time": "2025-10-04 20:30:00",
+    "status": "finished",
+    "video_url": null,
+    "competitors": [
+      {
+        "side": 1,
+        "finalScore": 91,
+        "competition_team": {
+          "id": 530,
+          "name": "AB InBev Leuven Bears",
+          "short_name": "LEU",
+          "ticket_url": "https://leuvenbears.ordering.be/o/2",
+          "club": {
+            "id": 1,
+            "name": "Belgium"
+          },
+          "team_logo": {
+            "name": "Stella Artois Leuven Bears",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/e/0/e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/e/0/small-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+              "medium": "https://bnxt.sportpress.info/storage/e/0/medium-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png"
+            }
+          },
+          "created_at": "2025-06-25"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 22
+          },
+          {
+            "period_id": 2,
+            "score": 23
+          },
+          {
+            "period_id": 3,
+            "score": 14
+          }
+        ]
+      },
+      {
+        "side": 2,
+        "finalScore": 95,
+        "competition_team": {
+          "id": 502,
+          "name": "Val-Dieu Spirou Basket Playoff",
+          "short_name": "CHA",
+          "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+          "club": {
+            "id": 1,
+            "name": "Belgium"
+          },
+          "team_logo": {
+            "name": "Val-Dieu Spirou Basket",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/w/V/wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/w/V/small-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+              "medium": "https://bnxt.sportpress.info/storage/w/V/medium-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png"
+            }
+          },
+          "created_at": "2025-06-25"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 27
+          },
+          {
+            "period_id": 2,
+            "score": 19
+          },
+          {
+            "period_id": 3,
+            "score": 16
+          }
+        ]
+      }
+    ],
+    "period": {
+      "name": "Extra1"
+    },
+    "round": {
+      "name": "",
+      "priority": 20
+    },
+    "phase": {
+      "id": 169,
+      "name": "Regular Season 2025-26",
+      "standings_visible": true
+    },
+    "competition": {
+      "id": 24,
+      "season": 2026,
+      "visible": true,
+      "standings_visible": true,
+      "simple_team_view": false,
+      "summer_season": false,
+      "name": "BNXT League 2025-2026",
+      "logo": null,
+      "ticket_url": null,
+      "video_url": null,
+      "created_at": "2025-06-25"
+    },
+    "arena": {
+      "name": "SportOase"
+    },
+    "referees": [],
+    "last_game": {
+      "id": 11109,
+      "game_time": "2026-04-23 20:30:00",
+      "status": "finished",
+      "video_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 73,
+          "competition_team": {
+            "id": 502,
+            "name": "Val-Dieu Spirou Basket Playoff",
+            "short_name": "CHA",
+            "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Val-Dieu Spirou Basket",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/w/V/wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/w/V/small-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+                "medium": "https://bnxt.sportpress.info/storage/w/V/medium-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 15
+            },
+            {
+              "period_id": 2,
+              "score": 16
+            },
+            {
+              "period_id": 3,
+              "score": 16
+            }
+          ]
+        },
+        {
+          "side": 2,
+          "finalScore": 69,
+          "competition_team": {
+            "id": 530,
+            "name": "AB InBev Leuven Bears",
+            "short_name": "LEU",
+            "ticket_url": "https://leuvenbears.ordering.be/o/2",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Stella Artois Leuven Bears",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/e/0/e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/e/0/small-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+                "medium": "https://bnxt.sportpress.info/storage/e/0/medium-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 22
+            },
+            {
+              "period_id": 2,
+              "score": 11
+            },
+            {
+              "period_id": 3,
+              "score": 19
+            }
+          ]
+        }
+      ],
+      "period": {
+        "name": "Q4"
+      },
+      "round": {
+        "name": "",
+        "priority": 20
+      },
+      "phase": {
+        "id": 169,
+        "name": "Regular Season 2025-26",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 24,
+        "season": 2026,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2025-2026",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2025-06-25"
+      },
+      "arena": {
+        "name": "Dôme"
+      },
+      "referees": [],
+      "created_at": "2025-07-28"
+    },
+    "next_game": null,
+    "last10": null,
+    "created_at": "2025-07-28"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "data": [
+    {
+      "id": 221,
+      "competition_team_id": 3,
+      "jersey": "29",
+      "weight": 100,
+      "height": 196,
+      "active": true,
+      "player_position": {
+        "id": 3,
+        "name": "small_forward"
+      },
+      "player": {
+        "id": 220,
+        "birthdate": "1989-12-05",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Jean-Marc",
+        "last_name": "Mwema",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "JEAN-MARC MWEMA",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/M/n/MnWbGBEHHGRkxlwpWyW8Xhku81694168975.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/M/n/small-MnWbGBEHHGRkxlwpWyW8Xhku81694168975.png",
+            "medium": "https://bnxt.sportpress.info/storage/M/n/medium-MnWbGBEHHGRkxlwpWyW8Xhku81694168975.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "created_at": "2022-08-10"
+    },
+    {
+      "id": 228,
+      "competition_team_id": 3,
+      "jersey": "10",
+      "weight": 81,
+      "height": 197,
+      "active": true,
+      "player_position": {
+        "id": 2,
+        "name": "shooting_guard"
+      },
+      "player": {
+        "id": 227,
+        "birthdate": "1999-03-27",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Seppe",
+        "last_name": "D'Espallier",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "SEPPE",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/z/k/zkAH67VF0rNevljGOReOj5bSl1696323186.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/z/k/small-zkAH67VF0rNevljGOReOj5bSl1696323186.png",
+            "medium": "https://bnxt.sportpress.info/storage/z/k/medium-zkAH67VF0rNevljGOReOj5bSl1696323186.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "created_at": "2022-08-10"
+    },
+    {
+      "id": 232,
+      "competition_team_id": 3,
+      "jersey": "3",
+      "weight": 87,
+      "height": 195,
+      "active": true,
+      "player_position": {
+        "id": 2,
+        "name": "shooting_guard"
+      },
+      "player": {
+        "id": 231,
+        "birthdate": "2002-02-15",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Quinten",
+        "last_name": "Smout",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "CHA - Smout",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/G/P/GPAjUWHwFkRn3vThfPLpyHDq61756897402.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/G/P/small-GPAjUWHwFkRn3vThfPLpyHDq61756897402.png",
+            "medium": "https://bnxt.sportpress.info/storage/G/P/medium-GPAjUWHwFkRn3vThfPLpyHDq61756897402.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "created_at": "2022-08-10"
+    }
+  ]
+}

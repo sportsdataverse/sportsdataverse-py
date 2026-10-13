@@ -1,0 +1,205 @@
+{
+  "data": [
+    {
+      "competition": {
+        "id": 22,
+        "season": 2025,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2024-2025",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2024-06-27"
+      },
+      "team": {
+        "id": 351,
+        "name": "LWD Basket playoff",
+        "short_name": "LWD",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "LWD Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/6/w/6w99KT3SWdJrVJsqNGsbUzGIT1692868049.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/6/w/small-6w99KT3SWdJrVJsqNGsbUzGIT1692868049.png",
+            "medium": "https://bnxt.sportpress.info/storage/6/w/medium-6w99KT3SWdJrVJsqNGsbUzGIT1692868049.png"
+          }
+        }
+      },
+      "position": null,
+      "starter": 5,
+      "played_games": 32,
+      "minute": 25.97,
+      "foul": 2.03,
+      "defensive_foul": 5.19,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 4.41,
+      "two_point_all": 7.56,
+      "two_point_percent": 58.26,
+      "three_point_made": 0.75,
+      "three_point_all": 2.09,
+      "three_point_percent": 35.82,
+      "throw_made": 5.16,
+      "throw_all": 9.66,
+      "throw_percent": 53.39,
+      "free_throw_made": 4.06,
+      "free_throw_all": 5.09,
+      "free_throw_percent": 79.76,
+      "offensive_rebound": 0.41,
+      "defensive_rebound": 2.31,
+      "total_rebound": 2.72,
+      "block": 0,
+      "block_against": 0.56,
+      "turnover": 2.16,
+      "steal": 1.13,
+      "assist": 5.34,
+      "points": 15.13,
+      "value": 21.81,
+      "jersey": "11"
+    },
+    {
+      "competition": {
+        "id": 24,
+        "season": 2026,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2025-2026",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2025-06-25"
+      },
+      "team": {
+        "id": 506,
+        "name": "Windrose Giants Antwerp playoff",
+        "short_name": "ANT",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "WINDROSE_ANTWERPGIANTS_2024",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/t/U/tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/t/U/small-tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png",
+            "medium": "https://bnxt.sportpress.info/storage/t/U/medium-tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png"
+          }
+        }
+      },
+      "position": null,
+      "starter": 13,
+      "played_games": 32,
+      "minute": 20.69,
+      "foul": 2.25,
+      "defensive_foul": 4.19,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 2.63,
+      "two_point_all": 5.25,
+      "two_point_percent": 50,
+      "three_point_made": 0.81,
+      "three_point_all": 2.44,
+      "three_point_percent": 33.35,
+      "throw_made": 3.44,
+      "throw_all": 7.69,
+      "throw_percent": 44.72,
+      "free_throw_made": 2.69,
+      "free_throw_all": 3.72,
+      "free_throw_percent": 72.28,
+      "offensive_rebound": 0.41,
+      "defensive_rebound": 1.16,
+      "total_rebound": 1.56,
+      "block": 0.03,
+      "block_against": 0.41,
+      "turnover": 1.72,
+      "steal": 0.78,
+      "assist": 4.13,
+      "points": 10.38,
+      "value": 14.06,
+      "jersey": "11"
+    },
+    {
+      "competition": {
+        "id": 25,
+        "season": 2027,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2026-2027",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2026-07-24"
+      },
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        }
+      },
+      "position": null,
+      "starter": 2,
+      "played_games": 2,
+      "minute": 22,
+      "foul": 3,
+      "defensive_foul": 5.5,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 2.5,
+      "two_point_all": 5.5,
+      "two_point_percent": 45.45,
+      "three_point_made": 1,
+      "three_point_all": 3.5,
+      "three_point_percent": 28.57,
+      "throw_made": 3.5,
+      "throw_all": 9,
+      "throw_percent": 38.89,
+      "free_throw_made": 3,
+      "free_throw_all": 3.5,
+      "free_throw_percent": 85.71,
+      "offensive_rebound": 0,
+      "defensive_rebound": 0.5,
+      "total_rebound": 0.5,
+      "block": 0,
+      "block_against": 0.5,
+      "turnover": 2,
+      "steal": 1.5,
+      "assist": 4,
+      "points": 11,
+      "value": 14.5,
+      "jersey": "13"
+    }
+  ]
+}

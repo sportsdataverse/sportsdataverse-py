@@ -1,0 +1,240 @@
+{
+  "data": {
+    "id": 10569,
+    "game_time": "2026-04-28 20:00:00",
+    "status": "finished",
+    "video_url": null,
+    "competitors": [
+      {
+        "side": 1,
+        "finalScore": 99,
+        "competition_team": {
+          "id": 506,
+          "name": "Windrose Giants Antwerp playoff",
+          "short_name": "ANT",
+          "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+          "club": {
+            "id": 1,
+            "name": "Belgium"
+          },
+          "team_logo": {
+            "name": "WINDROSE_ANTWERPGIANTS_2024",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/t/U/tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/t/U/small-tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png",
+              "medium": "https://bnxt.sportpress.info/storage/t/U/medium-tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png"
+            }
+          },
+          "created_at": "2025-06-25"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 23
+          },
+          {
+            "period_id": 2,
+            "score": 23
+          },
+          {
+            "period_id": 3,
+            "score": 29
+          }
+        ]
+      },
+      {
+        "side": 2,
+        "finalScore": 65,
+        "competition_team": {
+          "id": 502,
+          "name": "Val-Dieu Spirou Basket Playoff",
+          "short_name": "CHA",
+          "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+          "club": {
+            "id": 1,
+            "name": "Belgium"
+          },
+          "team_logo": {
+            "name": "Val-Dieu Spirou Basket",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/w/V/wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/w/V/small-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+              "medium": "https://bnxt.sportpress.info/storage/w/V/medium-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png"
+            }
+          },
+          "created_at": "2025-06-25"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 17
+          },
+          {
+            "period_id": 2,
+            "score": 20
+          },
+          {
+            "period_id": 3,
+            "score": 12
+          }
+        ]
+      }
+    ],
+    "period": {
+      "name": "Q4"
+    },
+    "round": {
+      "name": "",
+      "priority": 20
+    },
+    "phase": {
+      "id": 169,
+      "name": "Regular Season 2025-26",
+      "standings_visible": true
+    },
+    "competition": {
+      "id": 24,
+      "season": 2026,
+      "visible": true,
+      "standings_visible": true,
+      "simple_team_view": false,
+      "summer_season": false,
+      "name": "BNXT League 2025-2026",
+      "logo": null,
+      "ticket_url": null,
+      "video_url": null,
+      "created_at": "2025-06-25"
+    },
+    "arena": {
+      "name": "Lotto Arena"
+    },
+    "referees": [],
+    "last_game": {
+      "id": 11197,
+      "game_time": "2026-05-17 17:00:00",
+      "status": "finished",
+      "video_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 77,
+          "competition_team": {
+            "id": 502,
+            "name": "Val-Dieu Spirou Basket Playoff",
+            "short_name": "CHA",
+            "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Val-Dieu Spirou Basket",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/w/V/wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/w/V/small-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png",
+                "medium": "https://bnxt.sportpress.info/storage/w/V/medium-wVhmW1wWu0PLWEnmEyqZ4man31765964029.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 22
+            },
+            {
+              "period_id": 2,
+              "score": 25
+            },
+            {
+              "period_id": 3,
+              "score": 11
+            }
+          ]
+        },
+        {
+          "side": 2,
+          "finalScore": 93,
+          "competition_team": {
+            "id": 506,
+            "name": "Windrose Giants Antwerp playoff",
+            "short_name": "ANT",
+            "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "WINDROSE_ANTWERPGIANTS_2024",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/t/U/tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/t/U/small-tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png",
+                "medium": "https://bnxt.sportpress.info/storage/t/U/medium-tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 25
+            },
+            {
+              "period_id": 2,
+              "score": 21
+            },
+            {
+              "period_id": 3,
+              "score": 23
+            }
+          ]
+        }
+      ],
+      "period": {
+        "name": "Q4"
+      },
+      "round": {
+        "name": "",
+        "priority": 20
+      },
+      "phase": {
+        "id": 179,
+        "name": "Playoffs Belgium",
+        "standings_visible": false
+      },
+      "competition": {
+        "id": 24,
+        "season": 2026,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2025-2026",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2025-06-25"
+      },
+      "arena": {
+        "name": "Dôme"
+      },
+      "referees": [],
+      "created_at": "2026-05-11"
+    },
+    "next_game": null,
+    "last10": null,
+    "created_at": "2025-07-28"
+  }
+}

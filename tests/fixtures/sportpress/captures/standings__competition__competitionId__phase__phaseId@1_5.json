@@ -1,0 +1,166 @@
+{
+  "data": [
+    {
+      "team": {
+        "id": 18,
+        "name": "Heroes Den Bosch",
+        "short_name": "DBO",
+        "ticket_url": "https://heroes.shop.eventgoose.com",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "Heroes Den Bosch",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/U/T/UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/U/T/small-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+            "medium": "https://bnxt.sportpress.info/storage/U/T/medium-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "win": 18,
+      "loss": 2,
+      "even": 0,
+      "score": 1764,
+      "against": 1399,
+      "percent": 90,
+      "score_difference": 365,
+      "point": 38,
+      "position": 1,
+      "played": 20,
+      "point_percent": 0.95,
+      "win_loss": {
+        "home": {
+          "win": 10,
+          "loss": 0
+        },
+        "away": {
+          "win": 8,
+          "loss": 2
+        }
+      },
+      "last5": {
+        "win": 4,
+        "loss": 1
+      },
+      "streak": {
+        "is_win": true,
+        "count": 3
+      },
+      "group": null
+    },
+    {
+      "team": {
+        "id": 12,
+        "name": "ZZ Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "ZZ Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "win": 17,
+      "loss": 3,
+      "even": 0,
+      "score": 1749,
+      "against": 1331,
+      "percent": 85,
+      "score_difference": 418,
+      "point": 37,
+      "position": 2,
+      "played": 20,
+      "point_percent": 0.93,
+      "win_loss": {
+        "home": {
+          "win": 8,
+          "loss": 2
+        },
+        "away": {
+          "win": 9,
+          "loss": 1
+        }
+      },
+      "last5": {
+        "win": 4,
+        "loss": 1
+      },
+      "streak": {
+        "is_win": true,
+        "count": 3
+      },
+      "group": null
+    },
+    {
+      "team": {
+        "id": 7,
+        "name": "Donar Groningen",
+        "short_name": "GRO",
+        "ticket_url": "https://www.donar.nl/tickets",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "Donar Groningen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+            "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "win": 14,
+      "loss": 6,
+      "even": 0,
+      "score": 1510,
+      "against": 1271,
+      "percent": 70,
+      "score_difference": 239,
+      "point": 34,
+      "position": 3,
+      "played": 20,
+      "point_percent": 0.85,
+      "win_loss": {
+        "home": {
+          "win": 6,
+          "loss": 4
+        },
+        "away": {
+          "win": 8,
+          "loss": 2
+        }
+      },
+      "last5": {
+        "win": 4,
+        "loss": 1
+      },
+      "streak": {
+        "is_win": true,
+        "count": 2
+      },
+      "group": null
+    }
+  ]
+}

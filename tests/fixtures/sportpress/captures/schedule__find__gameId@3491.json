@@ -1,0 +1,240 @@
+{
+  "data": {
+    "id": 3491,
+    "game_time": "2023-05-29 14:00:00",
+    "status": "finished",
+    "video_url": null,
+    "competitors": [
+      {
+        "side": 1,
+        "finalScore": 82,
+        "competition_team": {
+          "id": 44,
+          "name": "ZZ Leiden",
+          "short_name": "LEI",
+          "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+          "club": {
+            "id": 2,
+            "name": "Netherlands"
+          },
+          "team_logo": {
+            "name": "ZZ Leiden",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+              "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+            }
+          },
+          "created_at": "2022-09-14"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 14
+          },
+          {
+            "period_id": 2,
+            "score": 14
+          },
+          {
+            "period_id": 3,
+            "score": 22
+          }
+        ]
+      },
+      {
+        "side": 2,
+        "finalScore": 81,
+        "competition_team": {
+          "id": 39,
+          "name": "Donar Groningen",
+          "short_name": "GRO",
+          "ticket_url": "https://www.donar.nl/tickets",
+          "club": {
+            "id": 2,
+            "name": "Netherlands"
+          },
+          "team_logo": {
+            "name": "Donar Groningen",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+            }
+          },
+          "created_at": "2022-09-14"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 20
+          },
+          {
+            "period_id": 2,
+            "score": 16
+          },
+          {
+            "period_id": 3,
+            "score": 24
+          }
+        ]
+      }
+    ],
+    "period": {
+      "name": "Q4"
+    },
+    "round": {
+      "name": "",
+      "priority": 20
+    },
+    "phase": {
+      "id": 61,
+      "name": "Dutch Playoffs",
+      "standings_visible": false
+    },
+    "competition": {
+      "id": 3,
+      "season": 2023,
+      "visible": true,
+      "standings_visible": true,
+      "simple_team_view": false,
+      "summer_season": false,
+      "name": "BNXT League 2022-2023",
+      "logo": null,
+      "ticket_url": null,
+      "video_url": "https://www.bnxt.tv/browse",
+      "created_at": "2022-09-14"
+    },
+    "arena": {
+      "name": "Sportcomplex 1574"
+    },
+    "referees": [],
+    "last_game": {
+      "id": 3481,
+      "game_time": "2023-05-27 19:30:00",
+      "status": "finished",
+      "video_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 45,
+          "competition_team": {
+            "id": 39,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 8
+            },
+            {
+              "period_id": 2,
+              "score": 14
+            },
+            {
+              "period_id": 3,
+              "score": 13
+            }
+          ]
+        },
+        {
+          "side": 2,
+          "finalScore": 68,
+          "competition_team": {
+            "id": 44,
+            "name": "ZZ Leiden",
+            "short_name": "LEI",
+            "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "ZZ Leiden",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+                "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 23
+            },
+            {
+              "period_id": 2,
+              "score": 11
+            },
+            {
+              "period_id": 3,
+              "score": 17
+            }
+          ]
+        }
+      ],
+      "period": {
+        "name": "Q4"
+      },
+      "round": {
+        "name": "",
+        "priority": 20
+      },
+      "phase": {
+        "id": 61,
+        "name": "Dutch Playoffs",
+        "standings_visible": false
+      },
+      "competition": {
+        "id": 3,
+        "season": 2023,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2022-2023",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": "https://www.bnxt.tv/browse",
+        "created_at": "2022-09-14"
+      },
+      "arena": {
+        "name": "MartiniPlaza"
+      },
+      "referees": [],
+      "created_at": "2023-05-24"
+    },
+    "next_game": null,
+    "last10": null,
+    "created_at": "2023-05-28"
+  }
+}

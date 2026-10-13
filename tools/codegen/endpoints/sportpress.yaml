@@ -1,0 +1,486 @@
+api: sportpress
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial and unsupported: the Sportpress API is the JSON backend of bnxtleague.com,
+    not a documented public API. Every route needs a header key; it is public (hard-coded
+    in the site bundle), ``bnxt_runtime`` reads it from the bundle at run time, falls
+    back to a documented value when the bundle cannot be read, and never prints or
+    logs it. A 401 raises AssetFetchError (``key rotated?``). robots.txt allows everything;
+    requests are spaced at least 1 s apart. Payloads are not redistributed as release
+    assets.'
+  - 'Season key: the END year (``season=2026`` is 2025-26), the API''s own key on
+    the season routes. Every other route is keyed by the competition id (one per season:
+    1 = 2021-22, 2 = 2020-21, 3 = 2022-23, 12 = 2023-24, 22 = 2024-25, 24 = 2025-26,
+    25 = 2026-27), the competition-team id (new every season; ``uu_team_id`` is the
+    stable club), the roster id (player x team x season) or the game id (unique across
+    seasons). ``sportpress_phases(season)`` maps a season to its competition id.'
+  - 'Coverage: schedule and rosters from 2021-22 (2020-21 is empty); box scores for
+    2021-22, 2024-25, 2025-26 and 2026-27 (2022-23 and 2023-24 answer empty); standings
+    and averages for 2021-22 and 2024-25 on; play-by-play (''film'', with court x/y)
+    for 2021-22 and 2026-27 only: for 2022-23 to 2025-26 use Genius play-by-play through
+    ``genius_id`` (``sportpress_game_slider``, organisation BNXT). The game routes
+    (box score, film, overview) refuse a game that is not finished (AssetFetchError).'
+  - 'Data notes: a team''s box total can differ from the schedule final score on about
+    18 of 1,246 sampled team boxes (mostly 2024-25, by 2-21 points); the frames report
+    what the API serves. ``nationality_code`` is dirty (lower case, ``USA/BEL`` pairs,
+    empty, ``HOL``). Names differ by language and sponsor: join on ids. Contact and
+    social fields are dropped; only a player''s public birth date is kept. The sibling
+    tenants sopron.sportpress.info and beac.sportpress.info are not wrapped.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP
+    404, an empty ``data`` list: an unknown id or a season without data, an empty
+    ranking).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (a rejected key: ''key rotated?'', an error or changed envelope,
+    a game that is not finished, a body for another season, competition, team or game).'
+  raw_doc: 'the raw body (``dict``): ``{''data'': ...}`` (the settings object for
+    the site config, the nine-category object for the rankings) with contact fields
+    dropped, plus ``_request`` (the season, competition, team, roster or game ids
+    asked for)'
+  see_also:
+  - name: BNXT League
+    note: the site whose Sportpress backend these wrappers read
+    url: https://bnxtleague.com
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args: {}
+  parser: parse_sportpress_ui_strings
+  path: /server-config
+  returns_schema: native/sportpress/ui_strings
+  short: ui_strings
+  summary: UI string tables of the site in English, French and Dutch (one row per
+    language and key).
+- example_args: {}
+  fixed_params:
+    clubs[0]: 1
+    clubs[1]: 2
+  parser: parse_sportpress_club_seasons
+  path: /competition-team/club/seasons
+  returns_schema: native/sportpress/club_seasons
+  short: club_seasons
+  summary: Seasons (END years) in which Belgian and Dutch clubs have teams.
+- example_args: {}
+  fixed_params:
+    title_id: 2
+  parser: parse_sportpress_referees
+  path: /staff/list
+  returns_schema: native/sportpress/referees
+  short: referees
+  summary: Referees of the league (staff title 2).
+- example_args:
+    season: 2026
+  parser: parse_sportpress_phases
+  path: /phase/season/{season}
+  path_params:
+  - description: Required. Season END year (2026 = 2025-26), the API's own key; no
+      mapping is applied.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/sportpress/phases
+  short: phases
+  summary: The competition of a season with its phases (regular season, playoffs,
+    supercup).
+- example_args:
+    competition_id: 24
+  extra_params:
+  - description: 'Required. Competition id (integer), ONE per season of the league:
+      24 = 2025-26, 25 = 2026-27 (``sportpress_phases`` maps a season to it).'
+    name: competition_id
+    query_key: competition_id
+    required: true
+    type: int
+  parser: parse_sportpress_competition_teams
+  path: /competition-team/all
+  returns_schema: native/sportpress/competition_teams
+  short: competition_teams
+  summary: 'Every competition team of one competition: ids, names and country.'
+- example_args:
+    competition_id: 24
+  extra_params:
+  - description: 'Required. Competition id (integer), ONE per season of the league:
+      24 = 2025-26, 25 = 2026-27 (``sportpress_phases`` maps a season to it).'
+    name: competition_id
+    query_key: competition_id
+    required: true
+    type: int
+  parser: parse_sportpress_competition_staff
+  path: /competition-team/all
+  returns_schema: native/sportpress/competition_staff
+  short: competition_staff
+  summary: Coaching staff (head coach, assistants) of every competition team of one
+    competition.
+- example_args:
+    competition_id: 24
+    phase_id: 169
+  parser: parse_sportpress_standings
+  path: /standings/competition/{competition_id}/phase/{phase_id}
+  path_params:
+  - description: 'Required. Competition id (integer), ONE per season of the league:
+      24 = 2025-26, 25 = 2026-27 (``sportpress_phases`` maps a season to it).'
+    name: competition_id
+    required: true
+    type: int
+  - description: Required. Phase id (integer) of the competition, from ``sportpress_phases``
+      (``phase_id``).
+    name: phase_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/standings
+  short: standings
+  summary: 'Standings of one phase of a competition: record, points, home/away split,
+    last five and streak.'
+- example_args:
+    season: 2026
+  extra_params:
+  - default: -1
+    description: Calendar month filter; -1 (default) = the whole season in one body.
+    name: month
+    query_key: month
+    type: int
+  - description: Restrict to one phase (integer), from ``sportpress_phases``. Omitted
+      = every phase.
+    name: phase_id
+    query_key: phase_id
+    type: int
+  fixed_params:
+    clubs[0]: 1
+    clubs[1]: 2
+  parser: parse_sportpress_schedule
+  path: /schedule/club/{season}
+  path_params:
+  - description: Required. Season END year (2026 = 2025-26), the API's own key; no
+      mapping is applied.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/sportpress/schedule
+  short: schedule
+  summary: Every game of a season for Belgian and Dutch clubs, with teams, scores,
+    phase and venue.
+- example_args:
+    competition_id: 25
+  parser: parse_sportpress_game_slider
+  path: /schedule/game-slider/{competition_id}
+  path_params:
+  - description: 'Required. Competition id (integer), ONE per season of the league:
+      24 = 2025-26, 25 = 2026-27 (``sportpress_phases`` maps a season to it).'
+    name: competition_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/game_slider
+  short: game_slider
+  summary: The latest 14 finished games of a competition plus every upcoming game,
+    with the Genius match id.
+- example_args:
+    competition_id: 24
+  extra_params:
+  - description: Restrict to one phase (integer), from ``sportpress_phases``. Omitted
+      = every phase.
+    name: phase_id
+    query_key: phase_id
+    type: int
+  - description: Cap each ranking list at this many rows. Omitted = the complete lists.
+    name: limit
+    query_key: limit
+    type: int
+  parser: parse_sportpress_team_rankings
+  path: /competition-team/average-rankings/{competition_id}
+  path_params:
+  - description: 'Required. Competition id (integer), ONE per season of the league:
+      24 = 2025-26, 25 = 2026-27 (``sportpress_phases`` maps a season to it).'
+    name: competition_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/team_rankings
+  short: team_rankings
+  summary: Team per-game leaders in nine categories (one row per team and category).
+- example_args:
+    competition_id: 24
+  extra_params:
+  - description: Restrict to one phase (integer), from ``sportpress_phases``. Omitted
+      = every phase.
+    name: phase_id
+    query_key: phase_id
+    type: int
+  - description: Cap each ranking list at this many rows. Omitted = the complete lists.
+    name: limit
+    query_key: limit
+    type: int
+  - description: Return one ranking category only (e.g. ``points``); ``all`` or omitted
+      = the nine categories.
+    name: type
+    query_key: type
+    type: str
+  parser: parse_sportpress_player_rankings
+  path: /player/average-rankings/{competition_id}
+  path_params:
+  - description: 'Required. Competition id (integer), ONE per season of the league:
+      24 = 2025-26, 25 = 2026-27 (``sportpress_phases`` maps a season to it).'
+    name: competition_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/player_rankings
+  short: player_rankings
+  summary: Qualified-player per-game leaders in nine categories (one row per player
+    and category).
+- example_args:
+    season: 2026
+  parser: parse_sportpress_season_roster
+  path: /roster/season-players/{season}
+  path_params:
+  - description: Required. Season END year (2026 = 2025-26), the API's own key; no
+      mapping is applied.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/sportpress/season_roster
+  short: season_roster
+  summary: 'Every roster entry of a season: player, team, jersey, height, weight and
+    position.'
+- example_args:
+    season: 2026
+  parser: parse_sportpress_nationality_codes
+  path: /roster/season-nationality-codes/{season}
+  path_params:
+  - description: Required. Season END year (2026 = 2025-26), the API's own key; no
+      mapping is applied.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/sportpress/nationality_codes
+  short: nationality_codes
+  summary: 'Distinct player nationality codes of a season (dirty: lower case, pairs,
+    empty).'
+- example_args:
+    competition_team_id: 541
+  parser: parse_sportpress_team_roster
+  path: /roster/team-players/{competition_team_id}
+  path_params:
+  - description: 'Required. Competition-team id (integer): a team in ONE competition,
+      so new every season (e.g. 541 = Antwerp in 2026-27); from ``sportpress_competition_teams``.'
+    name: competition_team_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/team_roster
+  short: team_roster
+  summary: Roster of one competition team (current entries only).
+- example_args:
+    competition_team_id: 541
+  parser: parse_sportpress_team_find
+  path: /competition-team/find/{competition_team_id}
+  path_params:
+  - description: 'Required. Competition-team id (integer): a team in ONE competition,
+      so new every season (e.g. 541 = Antwerp in 2026-27); from ``sportpress_competition_teams``.'
+    name: competition_team_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/team_find
+  short: team_find
+  summary: One competition team with its season scoring averages.
+- example_args:
+    competition_team_id: 541
+  parser: parse_sportpress_team_player_averages
+  path: /competition-team/player-averages/{competition_team_id}
+  path_params:
+  - description: 'Required. Competition-team id (integer): a team in ONE competition,
+      so new every season (e.g. 541 = Antwerp in 2026-27); from ``sportpress_competition_teams``.'
+    name: competition_team_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/team_player_averages
+  short: team_player_averages
+  summary: Per-game averages of each player of a competition team.
+- example_args:
+    competition_team_id: 541
+  parser: parse_sportpress_team_games
+  path: /competition-team/statistics-by-game/total/{competition_team_id}
+  path_params:
+  - description: 'Required. Competition-team id (integer): a team in ONE competition,
+      so new every season (e.g. 541 = Antwerp in 2026-27); from ``sportpress_competition_teams``.'
+    name: competition_team_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/team_games
+  short: team_games
+  summary: Every finished game of a competition team with that team's totals.
+- example_args:
+    roster_id: 11193
+  parser: parse_sportpress_roster_find
+  path: /roster/find/{roster_id}
+  path_params:
+  - description: 'Required. Roster id (integer): one player on one team in one season;
+      from the roster frames.'
+    name: roster_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/roster_find
+  short: roster_find
+  summary: One roster entry with its player, team and season.
+- example_args:
+    roster_id: 11193
+  parser: parse_sportpress_player_career
+  path: /player/career-averages/{roster_id}
+  path_params:
+  - description: 'Required. Roster id (integer): one player on one team in one season;
+      from the roster frames.'
+    name: roster_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/player_career
+  short: player_career
+  summary: Season-by-season per-game averages of the player of a roster entry.
+- example_args:
+    roster_id: 11193
+  parser: parse_sportpress_player_games
+  path: /boxscore/player/season-games/{roster_id}
+  path_params:
+  - description: 'Required. Roster id (integer): one player on one team in one season;
+      from the roster frames.'
+    name: roster_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/player_games
+  short: player_games
+  summary: Game-by-game box lines of a roster entry (including games with 0 minutes).
+- example_args:
+    game_id: 11295
+  parser: parse_sportpress_game_find
+  path: /schedule/find/{game_id}
+  path_params:
+  - description: Required. Game id (integer), unique across seasons; from ``sportpress_schedule``
+      (``game_id``).
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/game_find
+  short: game_find
+  summary: 'One game: teams, scores, phase, venue and the neighbouring game ids.'
+- example_args:
+    game_id: 11295
+  parser: parse_sportpress_game_periods
+  path: /schedule/find/{game_id}
+  path_params:
+  - description: Required. Game id (integer), unique across seasons; from ``sportpress_schedule``
+      (``game_id``).
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/game_periods
+  short: game_periods
+  summary: Points each side scored in each period of a game (periods 5 and up are
+    overtimes).
+- example_args:
+    game_id: 11295
+  parser: parse_sportpress_game_overview
+  path: /schedule/overview/{game_id}
+  path_params:
+  - description: Required. Game id (integer), unique across seasons; from ``sportpress_schedule``
+      (``game_id``).
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/game_overview
+  short: game_overview
+  summary: Team totals of both sides of a finished game.
+- example_args:
+    game_id: 11295
+  parser: parse_sportpress_game_top_performers
+  path: /schedule/overview/{game_id}
+  path_params:
+  - description: Required. Game id (integer), unique across seasons; from ``sportpress_schedule``
+      (``game_id``).
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/game_top_performers
+  short: game_top_performers
+  summary: The top performer of each side of a finished game, with his full line.
+- example_args:
+    game_id: 11295
+  parser: parse_sportpress_game_leaders
+  path: /schedule/overview/{game_id}
+  path_params:
+  - description: Required. Game id (integer), unique across seasons; from ``sportpress_schedule``
+      (``game_id``).
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/game_leaders
+  short: game_leaders
+  summary: The game leader of each side in every statistic (one row per side and statistic).
+- example_args:
+    competition_id: 25
+    game_id: 11295
+  parser: parse_sportpress_game_box
+  path: /boxscore/game/{competition_id}/{game_id}
+  path_params:
+  - description: 'Required. Competition id (integer), ONE per season of the league:
+      24 = 2025-26, 25 = 2026-27 (``sportpress_phases`` maps a season to it).'
+    name: competition_id
+    required: true
+    type: int
+  - description: Required. Game id (integer), unique across seasons; from ``sportpress_schedule``
+      (``game_id``).
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/game_box
+  short: game_box
+  summary: Per-player box score of a finished game (one row per player line).
+- example_args:
+    competition_id: 25
+    game_id: 11295
+  parser: parse_sportpress_game_team_box
+  path: /boxscore/game/{competition_id}/{game_id}
+  path_params:
+  - description: 'Required. Competition id (integer), ONE per season of the league:
+      24 = 2025-26, 25 = 2026-27 (``sportpress_phases`` maps a season to it).'
+    name: competition_id
+    required: true
+    type: int
+  - description: Required. Game id (integer), unique across seasons; from ``sportpress_schedule``
+      (``game_id``).
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/game_team_box
+  short: game_team_box
+  summary: Team totals of both sides from the box score of a finished game.
+- example_args:
+    competition_id: 25
+    game_id: 11295
+  parser: parse_sportpress_game_film
+  path: /film/game/{competition_id}/{game_id}
+  path_params:
+  - description: 'Required. Competition id (integer), ONE per season of the league:
+      24 = 2025-26, 25 = 2026-27 (``sportpress_phases`` maps a season to it).'
+    name: competition_id
+    required: true
+    type: int
+  - description: Required. Game id (integer), unique across seasons; from ``sportpress_schedule``
+      (``game_id``).
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/sportpress/game_film
+  short: game_film
+  summary: Play-by-play ('film') of a finished game with court x/y (2021-22 and 2026-27
+    only).
+getter_module: sportsdataverse.basketball.bnxt.bnxt_runtime
+host: https://bnxt.sportpress.info/api/v1
+module: sportpress
+name_pattern: sportpress_{short}
+parser_columns: true
+parser_module: basketball.bnxt.bnxt_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: sportpress_

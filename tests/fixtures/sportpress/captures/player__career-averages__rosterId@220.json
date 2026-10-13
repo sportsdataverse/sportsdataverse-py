@@ -1,0 +1,205 @@
+{
+  "data": [
+    {
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 3,
+        "name": "Telenet Giants Antwerp",
+        "short_name": "ANT",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Telenet Giants Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+            "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+          }
+        }
+      },
+      "position": null,
+      "starter": 11,
+      "played_games": 31,
+      "minute": 16.16,
+      "foul": 1.42,
+      "defensive_foul": 2.19,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 2,
+      "two_point_all": 3.48,
+      "two_point_percent": 57.41,
+      "three_point_made": 0.55,
+      "three_point_all": 1.9,
+      "three_point_percent": 28.8,
+      "throw_made": 2.55,
+      "throw_all": 5.39,
+      "throw_percent": 47.3,
+      "free_throw_made": 1.58,
+      "free_throw_all": 2.26,
+      "free_throw_percent": 70.02,
+      "offensive_rebound": 0.13,
+      "defensive_rebound": 1.13,
+      "total_rebound": 1.26,
+      "block": 0.03,
+      "block_against": 0.16,
+      "turnover": 1.61,
+      "steal": 0.77,
+      "assist": 2.94,
+      "points": 7.23,
+      "value": 9.29,
+      "jersey": "9"
+    },
+    {
+      "competition": {
+        "id": 22,
+        "season": 2025,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2024-2025",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2024-06-27"
+      },
+      "team": {
+        "id": 401,
+        "name": "Okapi Aalst",
+        "short_name": "AAL",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Okapi Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/r/L/rLWAVw7qlmFkY6hVEerEdhISH1680087886.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/r/L/small-rLWAVw7qlmFkY6hVEerEdhISH1680087886.png",
+            "medium": "https://bnxt.sportpress.info/storage/r/L/medium-rLWAVw7qlmFkY6hVEerEdhISH1680087886.png"
+          }
+        }
+      },
+      "position": null,
+      "starter": 25,
+      "played_games": 36,
+      "minute": 34,
+      "foul": 2.56,
+      "defensive_foul": 4.89,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 3.22,
+      "two_point_all": 5.94,
+      "two_point_percent": 54.21,
+      "three_point_made": 1.72,
+      "three_point_all": 4.72,
+      "three_point_percent": 36.47,
+      "throw_made": 4.94,
+      "throw_all": 10.67,
+      "throw_percent": 46.35,
+      "free_throw_made": 3.19,
+      "free_throw_all": 4.33,
+      "free_throw_percent": 73.71,
+      "offensive_rebound": 0.11,
+      "defensive_rebound": 2.89,
+      "total_rebound": 3,
+      "block": 0.14,
+      "block_against": 0.56,
+      "turnover": 3.47,
+      "steal": 1.14,
+      "assist": 5.17,
+      "points": 14.8,
+      "value": 18.81,
+      "jersey": ""
+    },
+    {
+      "competition": {
+        "id": 24,
+        "season": 2026,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2025-2026",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2025-06-25"
+      },
+      "team": {
+        "id": 528,
+        "name": "Partena Professional Okapi Aalst Playoff",
+        "short_name": "AAL",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Partena Professional Okapi Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/N/a/NalmGWSNiMhQ7zE7vmYebDaZa1783514677.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/N/a/small-NalmGWSNiMhQ7zE7vmYebDaZa1783514677.png",
+            "medium": "https://bnxt.sportpress.info/storage/N/a/medium-NalmGWSNiMhQ7zE7vmYebDaZa1783514677.png"
+          }
+        }
+      },
+      "position": null,
+      "starter": 40,
+      "played_games": 40,
+      "minute": 32.75,
+      "foul": 2.38,
+      "defensive_foul": 4.18,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 3.65,
+      "two_point_all": 6.2,
+      "two_point_percent": 58.87,
+      "three_point_made": 1.53,
+      "three_point_all": 4.28,
+      "three_point_percent": 35.67,
+      "throw_made": 5.18,
+      "throw_all": 10.48,
+      "throw_percent": 49.4,
+      "free_throw_made": 2.88,
+      "free_throw_all": 3.6,
+      "free_throw_percent": 79.86,
+      "offensive_rebound": 0.4,
+      "defensive_rebound": 2,
+      "total_rebound": 2.4,
+      "block": 0.05,
+      "block_against": 0.58,
+      "turnover": 2.9,
+      "steal": 1.33,
+      "assist": 7.63,
+      "points": 14.75,
+      "value": 21.4,
+      "jersey": "9"
+    }
+  ]
+}

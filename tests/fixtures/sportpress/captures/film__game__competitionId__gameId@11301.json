@@ -1,0 +1,178 @@
+{
+  "data": [
+    {
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        },
+        "created_at": "2026-07-24"
+      },
+      "is_home": false,
+      "event_code": 1000,
+      "event_subcode": 3,
+      "period": 1,
+      "minute": 1,
+      "second": 46,
+      "x": 16,
+      "y": 5,
+      "order": 15,
+      "current_home_score": 0,
+      "current_away_score": 5,
+      "player": {
+        "id": 5545,
+        "birthdate": "1999-02-04",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Grant",
+        "last_name": "Anticevich",
+        "nationality_code": "AUS",
+        "profile_image": {
+          "name": "Anticevich",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/w/9/w9dbzwbJxCsULbdfn584TMm0J1788807145.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/w/9/small-w9dbzwbJxCsULbdfn584TMm0J1788807145.png",
+            "medium": "https://bnxt.sportpress.info/storage/w/9/medium-w9dbzwbJxCsULbdfn584TMm0J1788807145.png"
+          }
+        },
+        "created_at": "2026-09-02"
+      },
+      "player2": null
+    },
+    {
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        },
+        "created_at": "2026-07-24"
+      },
+      "is_home": false,
+      "event_code": 1011,
+      "event_subcode": 0,
+      "period": 1,
+      "minute": 3,
+      "second": 29,
+      "x": 0,
+      "y": 0,
+      "order": 34,
+      "current_home_score": 5,
+      "current_away_score": 10,
+      "player": {
+        "id": 3952,
+        "birthdate": "1992-01-09",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Elias",
+        "last_name": "Lasisi",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Lasisi",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/W/X/WX2DNTKs3we7gWx9oPo56ImOI1788806686.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/W/X/small-WX2DNTKs3we7gWx9oPo56ImOI1788806686.png",
+            "medium": "https://bnxt.sportpress.info/storage/W/X/medium-WX2DNTKs3we7gWx9oPo56ImOI1788806686.png"
+          }
+        },
+        "created_at": "2024-08-28"
+      },
+      "player2": {
+        "id": 194,
+        "birthdate": "1990-01-25",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Alexandre",
+        "last_name": "Libert",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Libert",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/T/s/TsroLKNu1cxLtYLsL88Ht74CT1788807223.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/T/s/small-TsroLKNu1cxLtYLsL88Ht74CT1788807223.png",
+            "medium": "https://bnxt.sportpress.info/storage/T/s/medium-TsroLKNu1cxLtYLsL88Ht74CT1788807223.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      }
+    },
+    {
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "club": {
+          "id": 1,
+          "name": "Belgium"
+        },
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        },
+        "created_at": "2026-07-24"
+      },
+      "is_home": false,
+      "event_code": 2005,
+      "event_subcode": 27,
+      "period": 2,
+      "minute": 9,
+      "second": 35,
+      "x": 8,
+      "y": 63,
+      "order": 231,
+      "current_home_score": 46,
+      "current_away_score": 40,
+      "player": null,
+      "player2": null
+    }
+  ]
+}
