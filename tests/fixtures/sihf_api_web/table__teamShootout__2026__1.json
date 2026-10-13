@@ -1,0 +1,239 @@
+{
+  "title": "Team Stats",
+  "description": "Team Stats - Shootouts",
+  "pages": 0,
+  "selectedPage": 0,
+  "orderBy": "penShotsPercent",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:10:26.3188228+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Goals",
+      "rowIdentifierKey": "goalsFor",
+      "isOrderDescending": true,
+      "alias": "teamGoal"
+    },
+    {
+      "name": "Goals Pos/Nation",
+      "rowIdentifierKey": "goalsForFw",
+      "isOrderDescending": true,
+      "alias": "teamGoalPosNation"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogSog",
+      "isOrderDescending": true,
+      "alias": "teamShotDetail"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": [
+    {
+      "name": null,
+      "style": "average",
+      "rows": [
+        7
+      ]
+    }
+  ],
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "rank"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "SOW",
+      "description": "Siege nach Penaltyschiessen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesWonPenalty"
+    },
+    {
+      "name": "SOL",
+      "description": "Niederlagen nach Penaltyschiessen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesLostPenalty"
+    },
+    {
+      "name": "PS",
+      "description": "Anzahl Penalties",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShots"
+    },
+    {
+      "name": "PSG",
+      "description": "Anzahl Penalty Tore",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotGoals"
+    },
+    {
+      "name": "PSM",
+      "description": "Anzahl Penalties verfehlt",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotsMissed"
+    },
+    {
+      "name": "PS%",
+      "description": "Penalty Trefferquote",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotsPercent"
+    },
+    {
+      "name": "PSAG",
+      "description": "Anzahl Penaltys gegen Torhüter",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotsAgainst"
+    },
+    {
+      "name": "PSGA",
+      "description": "Erhaltene Penaltytore",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotGoalsAgainst"
+    },
+    {
+      "name": "PS SVS",
+      "description": "Anzahl Penaltys abgewehrt",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotSaves"
+    },
+    {
+      "name": "PS SVS%",
+      "description": "Penalty Abwehrquote",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotSavesPercent"
+    }
+  ],
+  "data": [
+    [
+      "14",
+      {
+        "id": 101149,
+        "name": "EHC Kloten",
+        "acronym": "EHCK",
+        "signed": false,
+        "type": "team"
+      },
+      "52",
+      "0",
+      "4",
+      "18",
+      "1",
+      "17",
+      "5.56",
+      "17",
+      "7",
+      "10",
+      "58.82"
+    ],
+    [
+      "13",
+      {
+        "id": 103140,
+        "name": "Genève-Servette HC",
+        "acronym": "GSHC",
+        "signed": false,
+        "type": "team"
+      },
+      "76",
+      "1",
+      "2",
+      "12",
+      "2",
+      "10",
+      "16.67",
+      "13",
+      "5",
+      "8",
+      "61.54"
+    ],
+    [
+      "12",
+      {
+        "id": 101144,
+        "name": "EV Zug",
+        "acronym": "EVZ",
+        "signed": false,
+        "type": "team"
+      },
+      "66",
+      "2",
+      "5",
+      "41",
+      "7",
+      "34",
+      "17.07",
+      "42",
+      "11",
+      "31",
+      "73.81"
+    ]
+  ],
+  "alias": "teamShootout"
+}

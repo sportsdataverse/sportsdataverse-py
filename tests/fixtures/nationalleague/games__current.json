@@ -1,0 +1,35 @@
+[
+  {
+    "gameId": "20271105000138",
+    "homeTeamShortName": "LHC",
+    "homeTeamName": "Lausanne HC",
+    "awayTeamShortName": "HCA",
+    "awayTeamName": "HC Ajoie",
+    "homeTeamId": "103141",
+    "awayTeamId": "103144",
+    "vimeoVideoId": null,
+    "date": "2026-10-14T17:45:00+00:00",
+    "status": "beforeStartOfPlay",
+    "baseStatus": "beforeStartOfPlay",
+    "homeTeamResult": 0,
+    "awayTeamResult": 0,
+    "isOvertime": false,
+    "isShootout": false,
+    "highlightVimeoVideoId": null,
+    "hasHighlight": false,
+    "isCurrent": true,
+    "isCurrentForTeam": false,
+    "tvPartner": [
+      "http://app-nationalleague-prod-001.azurewebsites.net/media/io1gx2jx/sunrise_vert_logo_neg_rgb_2026.png"
+    ],
+    "spectators": null,
+    "hasMySports": true,
+    "referees": [],
+    "isExhibition": false,
+    "homeTeamCoach": null,
+    "awayTeamCoach": null,
+    "gameTime": 0,
+    "showGameTime": false,
+    "arena": "Vaudoise Aréna"
+  }
+]

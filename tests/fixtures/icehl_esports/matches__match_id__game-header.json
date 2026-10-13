@@ -1,0 +1,508 @@
+{
+  "gameInfo": {
+    "actualTimeName": "end",
+    "actualTimeAlias": "K",
+    "status": "AFTER_MATCH",
+    "stadium": "Tüskecsarnok",
+    "numberOfViewers": 1268,
+    "referees": {
+      "headReferee1": "Gergely Peter",
+      "headReferee2": "Ladislav Smetana",
+      "lineReferee1": "Norbert Muzsik",
+      "lineReferee2": "Balázs Sábián",
+      "headReferee1number": null,
+      "headReferee2number": null,
+      "lineReferee1number": null,
+      "lineReferee2number": null
+    },
+    "teamInfo": {
+      "home": {
+        "id": 4,
+        "name": "FTC-Telekom",
+        "shortcut": "FTC"
+      },
+      "visitor": {
+        "id": 10,
+        "name": "Olimpija Ljubljana",
+        "shortcut": "OLL"
+      }
+    },
+    "trainers": {
+      "visitorHeadCoach": "Ben Cooper",
+      "homeHeadCoach": "Timo Saarikoski"
+    },
+    "teamBilance": {
+      "homeWin": 4,
+      "visitorWin": 4
+    },
+    "results": {
+      "extra_time": false,
+      "shooting": false,
+      "contumacy": false,
+      "score": {
+        "final": {
+          "score_home": 3,
+          "score_guest": 5
+        },
+        "first_period": {
+          "score_home": 1,
+          "score_guest": 2
+        },
+        "second_period": {
+          "score_home": 1,
+          "score_guest": 2
+        },
+        "third_period": {
+          "score_home": 1,
+          "score_guest": 1
+        }
+      }
+    }
+  },
+  "roster": {
+    "home": {
+      "101": {
+        "playerId": 1094,
+        "matchPlayerId": 318599,
+        "name": "Bence",
+        "surname": "Balizs",
+        "jersey": 1,
+        "startingSix": true,
+        "position": "GK",
+        "roster": "101"
+      },
+      "102": {
+        "playerId": 4101,
+        "matchPlayerId": 318584,
+        "name": "Kristóf",
+        "surname": "Nagy",
+        "jersey": 30,
+        "startingSix": false,
+        "position": "GK",
+        "roster": "102"
+      },
+      "211": {
+        "playerId": 4119,
+        "matchPlayerId": 318587,
+        "name": "Rasmus",
+        "surname": "Bengtsson",
+        "jersey": 13,
+        "startingSix": true,
+        "position": "DE",
+        "roster": "211"
+      },
+      "212": {
+        "playerId": 1046,
+        "matchPlayerId": 318591,
+        "name": "Milan",
+        "surname": "Horvath",
+        "jersey": 22,
+        "startingSix": true,
+        "position": "DE",
+        "roster": "212"
+      },
+      "221": {
+        "playerId": 4110,
+        "matchPlayerId": 318594,
+        "name": "Paavo",
+        "surname": "Tyni",
+        "jersey": 44,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "221"
+      },
+      "222": {
+        "playerId": 4111,
+        "matchPlayerId": 318585,
+        "name": "Jesper",
+        "surname": "Lindgren",
+        "jersey": 7,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "222"
+      },
+      "231": {
+        "playerId": 4113,
+        "matchPlayerId": 318592,
+        "name": "Zétény",
+        "surname": "Hadobás",
+        "jersey": 23,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "231"
+      },
+      "232": {
+        "playerId": 4704,
+        "matchPlayerId": 318604,
+        "name": "Tamás",
+        "surname": "Ortenszky",
+        "jersey": 55,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "232"
+      },
+      "241": {
+        "playerId": 4702,
+        "matchPlayerId": 318602,
+        "name": "Olivér",
+        "surname": "Farkas",
+        "jersey": 29,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "241"
+      },
+      "242": {
+        "playerId": 4117,
+        "matchPlayerId": 318590,
+        "name": "Gergely",
+        "surname": "Mattyasovszky",
+        "jersey": 18,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "242"
+      },
+      "311": {
+        "playerId": 4700,
+        "matchPlayerId": 318600,
+        "name": "Carter",
+        "surname": "Savoie",
+        "jersey": 8,
+        "startingSix": true,
+        "position": "FW",
+        "roster": "311"
+      },
+      "312": {
+        "playerId": 4701,
+        "matchPlayerId": 318601,
+        "name": "David",
+        "surname": "Silye",
+        "jersey": 62,
+        "startingSix": true,
+        "position": "FW",
+        "roster": "312"
+      },
+      "313": {
+        "playerId": 4121,
+        "matchPlayerId": 318596,
+        "name": "Ferenc",
+        "surname": "Laskawy",
+        "jersey": 93,
+        "startingSix": true,
+        "position": "FW",
+        "roster": "313"
+      },
+      "321": {
+        "playerId": 4703,
+        "matchPlayerId": 318603,
+        "name": "Bendegúz",
+        "surname": "Dobos",
+        "jersey": 41,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "321"
+      },
+      "322": {
+        "playerId": 4108,
+        "matchPlayerId": 318586,
+        "name": "Topi",
+        "surname": "Rönni",
+        "jersey": 11,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "322"
+      },
+      "323": {
+        "playerId": 4112,
+        "matchPlayerId": 318583,
+        "name": "Jussi",
+        "surname": "Tammela",
+        "jersey": 92,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "323"
+      },
+      "331": {
+        "playerId": 4116,
+        "matchPlayerId": 318589,
+        "name": "András",
+        "surname": "Mihalik",
+        "jersey": 17,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "331"
+      },
+      "332": {
+        "playerId": 4109,
+        "matchPlayerId": 318582,
+        "name": "Aku",
+        "surname": "Kestila",
+        "jersey": 25,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "332"
+      },
+      "333": {
+        "playerId": 4705,
+        "matchPlayerId": 318605,
+        "name": "Rasmus",
+        "surname": "Heljanko",
+        "jersey": 61,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "333"
+      },
+      "341": {
+        "playerId": 4118,
+        "matchPlayerId": 318597,
+        "name": "Zsombor",
+        "surname": "Galajda",
+        "jersey": 94,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "341"
+      },
+      "342": {
+        "playerId": 4115,
+        "matchPlayerId": 318595,
+        "name": "Gergely",
+        "surname": "Tóth",
+        "jersey": 77,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "342"
+      },
+      "343": {
+        "playerId": 4675,
+        "matchPlayerId": 318598,
+        "name": "Márk",
+        "surname": "Schlekmann",
+        "jersey": 97,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "343"
+      }
+    },
+    "visitor": {
+      "101": {
+        "playerId": 3268,
+        "matchPlayerId": 318607,
+        "name": "Lukáš",
+        "surname": "Horák",
+        "jersey": 61,
+        "startingSix": true,
+        "position": "GK",
+        "roster": "101"
+      },
+      "102": {
+        "playerId": 749,
+        "matchPlayerId": 318608,
+        "name": "Zan",
+        "surname": "Us",
+        "jersey": 33,
+        "startingSix": false,
+        "position": "GK",
+        "roster": "102"
+      },
+      "211": {
+        "playerId": 4944,
+        "matchPlayerId": 318616,
+        "name": "Colin Reid",
+        "surname": "McNeill",
+        "jersey": 4,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "211"
+      },
+      "212": {
+        "playerId": 2848,
+        "matchPlayerId": 318610,
+        "name": "Terrence James",
+        "surname": "Brennan",
+        "jersey": 43,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "212"
+      },
+      "221": {
+        "playerId": 3278,
+        "matchPlayerId": 318613,
+        "name": "Nathanael",
+        "surname": "Halbert",
+        "jersey": 74,
+        "startingSix": true,
+        "position": "DE",
+        "roster": "221"
+      },
+      "222": {
+        "playerId": 2938,
+        "matchPlayerId": 318614,
+        "name": "Clayton",
+        "surname": "Kirichenko",
+        "jersey": 60,
+        "startingSix": true,
+        "position": "DE",
+        "roster": "222"
+      },
+      "231": {
+        "playerId": 2698,
+        "matchPlayerId": 318612,
+        "name": "Blaz",
+        "surname": "Gregorc",
+        "jersey": 15,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "231"
+      },
+      "232": {
+        "playerId": 387,
+        "matchPlayerId": 318632,
+        "name": "Aljosa",
+        "surname": "Crnovic",
+        "jersey": 44,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "232"
+      },
+      "241": {
+        "playerId": 2922,
+        "matchPlayerId": 318609,
+        "name": "Rozle",
+        "surname": "Bohinc",
+        "jersey": 86,
+        "startingSix": false,
+        "position": "DE",
+        "roster": "241"
+      },
+      "242": {
+        "playerId": 2597,
+        "matchPlayerId": 318625,
+        "name": "Žiga",
+        "surname": "Mehle",
+        "jersey": 71,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "242"
+      },
+      "311": {
+        "playerId": 1078,
+        "matchPlayerId": 318631,
+        "name": "Jan",
+        "surname": "Urbas",
+        "jersey": 9,
+        "startingSix": true,
+        "position": "FW",
+        "roster": "311"
+      },
+      "312": {
+        "playerId": 1075,
+        "matchPlayerId": 318622,
+        "name": "Žiga",
+        "surname": "Jeglič",
+        "jersey": 14,
+        "startingSix": true,
+        "position": "FW",
+        "roster": "312"
+      },
+      "313": {
+        "playerId": 3270,
+        "matchPlayerId": 318624,
+        "name": "Marcel",
+        "surname": "Mahkovec",
+        "jersey": 8,
+        "startingSix": true,
+        "position": "FW",
+        "roster": "313"
+      },
+      "321": {
+        "playerId": 2861,
+        "matchPlayerId": 318626,
+        "name": "Nicolai",
+        "surname": "Meyer",
+        "jersey": 93,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "321"
+      },
+      "322": {
+        "playerId": 3534,
+        "matchPlayerId": 318618,
+        "name": "Zach",
+        "surname": "Boychuk",
+        "jersey": 89,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "322"
+      },
+      "323": {
+        "playerId": 4948,
+        "matchPlayerId": 318620,
+        "name": "Christopher Russell",
+        "surname": "Douglas",
+        "jersey": 37,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "323"
+      },
+      "331": {
+        "playerId": 2225,
+        "matchPlayerId": 318629,
+        "name": "Nik",
+        "surname": "Simšič",
+        "jersey": 12,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "331"
+      },
+      "332": {
+        "playerId": 3531,
+        "matchPlayerId": 318628,
+        "name": "Marly",
+        "surname": "Quince",
+        "jersey": 11,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "332"
+      },
+      "333": {
+        "playerId": 4795,
+        "matchPlayerId": 318623,
+        "name": "Joshua Darren",
+        "surname": "Lawrence",
+        "jersey": 92,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "333"
+      },
+      "341": {
+        "playerId": 525,
+        "matchPlayerId": 318627,
+        "name": "Ziga",
+        "surname": "Pance",
+        "jersey": 13,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "341"
+      },
+      "342": {
+        "playerId": 2984,
+        "matchPlayerId": 318617,
+        "name": "Miha",
+        "surname": "Bericic",
+        "jersey": 10,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "342"
+      },
+      "343": {
+        "playerId": 386,
+        "matchPlayerId": 318630,
+        "name": "Jaka",
+        "surname": "Sodja",
+        "jersey": 23,
+        "startingSix": false,
+        "position": "FW",
+        "roster": "343"
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "gameUuid": "bdhvuc5tex",
+  "homeTeam": {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "place": "home",
+    "score": 0,
+    "teamId": "FHC",
+    "teamName": "Frölunda HC",
+    "teamCode": "FHC",
+    "gameUuid": "bdhvuc5tex"
+  },
+  "awayTeam": {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "place": "away",
+    "score": 0,
+    "teamId": "LHC",
+    "teamName": "Linköpings HC",
+    "teamCode": "LHC",
+    "gameUuid": "bdhvuc5tex"
+  },
+  "homeGoals": 2,
+  "awayGoals": 1,
+  "state": "GameEnded",
+  "time": {
+    "period": 3,
+    "periodTime": "20:00"
+  }
+}

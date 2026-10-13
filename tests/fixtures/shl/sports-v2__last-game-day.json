@@ -1,0 +1,164 @@
+{
+  "date": "2026-10-10",
+  "games": [
+    {
+      "uuid": "f0qxq2l2lo",
+      "startDateTime": "2026-10-10T13:15:00.000Z",
+      "state": "post-game",
+      "overtime": false,
+      "shootout": false,
+      "ssgtUuid": "qa98unlbd6",
+      "homeTeamInfo": {
+        "status": "WIN",
+        "uuid": "3db0-3db09jXTE",
+        "ownerInstanceId": "hv711_hv71",
+        "code": "HV71",
+        "names": {
+          "code": "HV71",
+          "short": "HV71",
+          "long": "HV71",
+          "full": "HV71",
+          "codeSite": "HV71",
+          "shortSite": "HV71",
+          "fullSite": "HV71",
+          "longSite": "HV71"
+        },
+        "score": 3,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/hv711_hv71.svg"
+      },
+      "awayTeamInfo": {
+        "status": "LOSE",
+        "uuid": "1ab8-1ab8bfj7N",
+        "ownerInstanceId": "bif1_bif",
+        "code": "BIF",
+        "names": {
+          "code": "BIF",
+          "short": "Brynäs",
+          "long": "Brynäs IF",
+          "full": "Brynäs Idrottsförening",
+          "codeSite": "BIF",
+          "shortSite": "Brynäs",
+          "fullSite": "Brynäs Idrottsförening",
+          "longSite": "Brynäs IF"
+        },
+        "score": 2,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/bif1_bif.svg"
+      },
+      "venueInfo": {
+        "uuid": "qQ9-d64cI7adL",
+        "name": "Husqvarna Garden"
+      },
+      "seriesInfo": {
+        "uuid": "qQ9-bb0bzEWUk",
+        "code": "SHL",
+        "displayName": "SHL"
+      }
+    },
+    {
+      "uuid": "ris2j0oqtk",
+      "startDateTime": "2026-10-10T13:15:00.000Z",
+      "state": "post-game",
+      "overtime": false,
+      "shootout": false,
+      "ssgtUuid": "qa98unlbd6",
+      "homeTeamInfo": {
+        "status": "WIN",
+        "uuid": "752c-752c12zB7Z",
+        "ownerInstanceId": "fbk1_fbk",
+        "code": "FBK",
+        "names": {
+          "code": "FBK",
+          "short": "Färjestad",
+          "long": "Färjestad BK",
+          "full": "Färjestad Bollklubb",
+          "codeSite": "FBK",
+          "shortSite": "Färjestad Herr",
+          "fullSite": "Färjestad Bollklubb Herr",
+          "longSite": "Färjestad BK"
+        },
+        "score": 6,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/fbk1_fbk.svg"
+      },
+      "awayTeamInfo": {
+        "status": "LOSE",
+        "uuid": "8e6f-8e6fUXJvi",
+        "ownerInstanceId": "mif1_mif",
+        "code": "MIF",
+        "names": {
+          "code": "MIF",
+          "short": "Malmö",
+          "long": "Malmö Redhawks",
+          "full": "Malmö Redhawks",
+          "codeSite": "MIF",
+          "shortSite": "Redhawks",
+          "fullSite": "Malmö Redhawks",
+          "longSite": "Malmö Redhawks"
+        },
+        "score": 2,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/mif1_mif.svg"
+      },
+      "venueInfo": {
+        "uuid": "qQ9-97ffgOWlh",
+        "name": "Löfbergs Arena"
+      },
+      "seriesInfo": {
+        "uuid": "qQ9-bb0bzEWUk",
+        "code": "SHL",
+        "displayName": "SHL"
+      }
+    },
+    {
+      "uuid": "x4aluhmxwe",
+      "startDateTime": "2026-10-10T13:15:00.000Z",
+      "state": "post-game",
+      "overtime": true,
+      "shootout": false,
+      "ssgtUuid": "qa98unlbd6",
+      "homeTeamInfo": {
+        "status": "LOSE",
+        "uuid": "1a71-1a71gTHKh",
+        "ownerInstanceId": "lhf1_lhf",
+        "code": "LHF",
+        "names": {
+          "code": "LHF",
+          "short": "Luleå",
+          "long": "Luleå Hockey",
+          "full": "Luleå Hockey",
+          "codeSite": "LHF",
+          "shortSite": "Luleå",
+          "fullSite": "Luleå Hockey",
+          "longSite": "Luleå Hockey"
+        },
+        "score": 2,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/lhf1_lhf.svg"
+      },
+      "awayTeamInfo": {
+        "status": "WIN",
+        "uuid": "31d1-31d1NbSlR",
+        "ownerInstanceId": "tik1_tik",
+        "code": "TIK",
+        "names": {
+          "code": "TIK",
+          "short": "Timrå",
+          "long": "Timrå IK",
+          "full": "Timrå Idrottsklubb",
+          "codeSite": "TIK",
+          "shortSite": "Timrå",
+          "fullSite": "Timrå Idrottsklubb",
+          "longSite": "Timrå IK"
+        },
+        "score": 3,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/tik1_tik.svg"
+      },
+      "venueInfo": {
+        "uuid": "qQ9-97daaHSS6",
+        "name": "Coop Norrbotten Arena"
+      },
+      "seriesInfo": {
+        "uuid": "qQ9-bb0bzEWUk",
+        "code": "SHL",
+        "displayName": "SHL"
+      }
+    }
+  ]
+}

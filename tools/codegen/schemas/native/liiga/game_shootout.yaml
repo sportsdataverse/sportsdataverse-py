@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: shooting_player_id
+  type: integer
+- description: ''
+  name: blocking_player_id
+  type: integer
+- description: ''
+  name: shot_number
+  type: integer
+- description: ''
+  name: shooting_team_id
+  type: integer
+- description: ''
+  name: shooting_team_slug
+  type: character
+- description: ''
+  name: blocking_team_id
+  type: integer
+- description: ''
+  name: blocking_team_slug
+  type: character
+- description: ''
+  name: goal_scored
+  type: logical
+- description: ''
+  name: winning_goal
+  type: logical
+kind: dataframe
+schema: liiga_game_shootout

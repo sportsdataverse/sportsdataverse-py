@@ -1,0 +1,407 @@
+{
+  "last_event_time": 3600,
+  "periods": {
+    "1": {
+      "start": "2026-10-11 13:56:47",
+      "end": "2026-10-11 14:32:54"
+    },
+    "2": {
+      "start": "2026-10-11 14:51:10",
+      "end": "2026-10-11 15:23:40"
+    },
+    "3": {
+      "start": "2026-10-11 15:41:20",
+      "end": "2026-10-11 16:18:33"
+    },
+    "overtime": {
+      "start": null,
+      "end": null
+    }
+  },
+  "1": [
+    {
+      "time": 0,
+      "type": "goalkeeperChange",
+      "data": {
+        "id": 2673,
+        "team": "visitor",
+        "time": 0,
+        "player": {
+          "playerId": 412,
+          "matchPlayerId": 20005,
+          "jersey": 1,
+          "name": "Kristers",
+          "surname": "Steinbergs"
+        },
+        "outgoingGoalkeeper": null
+      }
+    },
+    {
+      "time": 268,
+      "type": "penalty",
+      "data": {
+        "id": 2613,
+        "team": "home",
+        "createTime": 268,
+        "disciplinedPlayer": {
+          "playerId": 107,
+          "matchPlayerId": 19970,
+          "jersey": 55,
+          "name": "Lasse",
+          "surname": "Carlsen"
+        },
+        "replacedPlayer": null,
+        "fouledPlayer": null,
+        "time": {
+          "from": {
+            "realTime": "2026-10-11 12:05:11",
+            "scoreboardTime": 268
+          },
+          "to": {
+            "realTime": "2026-10-11 14:08:30",
+            "scoreboardTime": 326
+          }
+        },
+        "duration": 120,
+        "shooting": false,
+        "disciplined_functionary": false,
+        "disciplined_bm": false,
+        "codename": "BOARD"
+      }
+    },
+    {
+      "time": 326,
+      "type": "goal",
+      "data": {
+        "id": 2221,
+        "team": "visitor",
+        "currentScore": "0:1",
+        "realTime": "2026-10-11 14:07:09",
+        "scoreboardTime": 326,
+        "balance": "PP1",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 419,
+          "matchPlayerId": 20011,
+          "jersey": 20,
+          "name": "Tyler",
+          "surname": "Welsh"
+        },
+        "assistants": [
+          {
+            "playerId": 90,
+            "matchPlayerId": 19995,
+            "jersey": 21,
+            "name": "Jeppe Jul",
+            "surname": "Korsgaard"
+          },
+          {
+            "playerId": 415,
+            "matchPlayerId": 20008,
+            "jersey": 66,
+            "name": "Alexander",
+            "surname": "Lindelöf"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 412,
+              "matchPlayerId": 20005,
+              "jersey": 1,
+              "name": "Kristers",
+              "surname": "Steinbergs"
+            },
+            {
+              "playerId": 419,
+              "matchPlayerId": 20011,
+              "jersey": 20,
+              "name": "Tyler",
+              "surname": "Welsh"
+            },
+            {
+              "playerId": 90,
+              "matchPlayerId": 19995,
+              "jersey": 21,
+              "name": "Jeppe Jul",
+              "surname": "Korsgaard"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 400,
+              "matchPlayerId": 19971,
+              "jersey": 62,
+              "name": "Mathieu",
+              "surname": "Caron"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "2": [
+    {
+      "time": 1285,
+      "type": "penalty",
+      "data": {
+        "id": 2616,
+        "team": "home",
+        "createTime": 1285,
+        "disciplinedPlayer": {
+          "playerId": 320,
+          "matchPlayerId": 19980,
+          "jersey": 14,
+          "name": "Joonas",
+          "surname": "Niemelä"
+        },
+        "replacedPlayer": null,
+        "fouledPlayer": null,
+        "time": {
+          "from": {
+            "realTime": "2026-10-11 12:52:50",
+            "scoreboardTime": 1285
+          },
+          "to": {
+            "realTime": "2026-10-11 14:55:26",
+            "scoreboardTime": 1317
+          }
+        },
+        "duration": 120,
+        "shooting": false,
+        "disciplined_functionary": false,
+        "disciplined_bm": false,
+        "codename": "SLASH"
+      }
+    },
+    {
+      "time": 1317,
+      "type": "goal",
+      "data": {
+        "id": 2223,
+        "team": "visitor",
+        "currentScore": "0:3",
+        "realTime": "2026-10-11 14:53:55",
+        "scoreboardTime": 1317,
+        "balance": "PP1",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 30,
+          "matchPlayerId": 19996,
+          "jersey": 22,
+          "name": "Andreas",
+          "surname": "Grundtvig"
+        },
+        "assistants": [
+          {
+            "playerId": 419,
+            "matchPlayerId": 20011,
+            "jersey": 20,
+            "name": "Tyler",
+            "surname": "Welsh"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 412,
+              "matchPlayerId": 20005,
+              "jersey": 1,
+              "name": "Kristers",
+              "surname": "Steinbergs"
+            },
+            {
+              "playerId": 30,
+              "matchPlayerId": 19996,
+              "jersey": 22,
+              "name": "Andreas",
+              "surname": "Grundtvig"
+            },
+            {
+              "playerId": 419,
+              "matchPlayerId": 20011,
+              "jersey": 20,
+              "name": "Tyler",
+              "surname": "Welsh"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 400,
+              "matchPlayerId": 19971,
+              "jersey": 62,
+              "name": "Mathieu",
+              "surname": "Caron"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 1349,
+      "type": "penalty",
+      "data": {
+        "id": 2617,
+        "team": "home",
+        "createTime": 1349,
+        "disciplinedPlayer": {
+          "playerId": 73,
+          "matchPlayerId": 19973,
+          "jersey": 20,
+          "name": "Victor",
+          "surname": "Gade"
+        },
+        "replacedPlayer": null,
+        "fouledPlayer": null,
+        "time": {
+          "from": {
+            "realTime": "2026-10-11 14:56:45",
+            "scoreboardTime": 1349
+          },
+          "to": {
+            "realTime": "2026-10-11 14:58:45",
+            "scoreboardTime": 1469
+          }
+        },
+        "duration": 120,
+        "shooting": false,
+        "disciplined_functionary": false,
+        "disciplined_bm": false,
+        "codename": "ROUGH"
+      }
+    }
+  ],
+  "3": [
+    {
+      "time": 2588,
+      "type": "penalty",
+      "data": {
+        "id": 2621,
+        "team": "visitor",
+        "createTime": 2588,
+        "disciplinedPlayer": {
+          "playerId": 33,
+          "matchPlayerId": 19998,
+          "jersey": 61,
+          "name": "Julian",
+          "surname": "Jakobsen"
+        },
+        "replacedPlayer": null,
+        "fouledPlayer": null,
+        "time": {
+          "from": {
+            "realTime": "2026-10-11 13:45:57",
+            "scoreboardTime": 2588
+          },
+          "to": {
+            "realTime": "2026-10-11 15:53:40",
+            "scoreboardTime": 2690
+          }
+        },
+        "duration": 120,
+        "shooting": false,
+        "disciplined_functionary": false,
+        "disciplined_bm": false,
+        "codename": "BOARD"
+      }
+    },
+    {
+      "time": 2690,
+      "type": "goal",
+      "data": {
+        "id": 2224,
+        "team": "home",
+        "currentScore": "1:3",
+        "realTime": "2026-10-11 15:52:24",
+        "scoreboardTime": 2690,
+        "balance": "PP1",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 124,
+          "matchPlayerId": 19977,
+          "jersey": 11,
+          "name": "Nikolaj",
+          "surname": "Krag Christensen"
+        },
+        "assistants": [
+          {
+            "playerId": 220,
+            "matchPlayerId": 19984,
+            "jersey": 94,
+            "name": "Miku",
+            "surname": "Ronkainen"
+          },
+          {
+            "playerId": 405,
+            "matchPlayerId": 19983,
+            "jersey": 44,
+            "name": "Jerkko",
+            "surname": "Rämö"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 400,
+              "matchPlayerId": 19971,
+              "jersey": 62,
+              "name": "Mathieu",
+              "surname": "Caron"
+            },
+            {
+              "playerId": 124,
+              "matchPlayerId": 19977,
+              "jersey": 11,
+              "name": "Nikolaj",
+              "surname": "Krag Christensen"
+            },
+            {
+              "playerId": 220,
+              "matchPlayerId": 19984,
+              "jersey": 94,
+              "name": "Miku",
+              "surname": "Ronkainen"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 412,
+              "matchPlayerId": 20005,
+              "jersey": 1,
+              "name": "Kristers",
+              "surname": "Steinbergs"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 3505,
+      "type": "goalkeeperChange",
+      "data": {
+        "id": 2678,
+        "team": "home",
+        "time": 3505,
+        "player": null,
+        "outgoingGoalkeeper": {
+          "playerId": 400,
+          "matchPlayerId": 19971,
+          "jersey": 62,
+          "name": "Mathieu",
+          "surname": "Caron"
+        }
+      }
+    }
+  ],
+  "overtime": [],
+  "shootout": []
+}

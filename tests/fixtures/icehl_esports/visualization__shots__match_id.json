@@ -1,0 +1,257 @@
+{
+  "match": {
+    "id": "8161",
+    "date": "2026-09-18",
+    "home_id": 4,
+    "home_name": "FTC-Telekom",
+    "home_shortcut": "FTC",
+    "visitor_id": 10,
+    "visitor_name": "Olimpija Ljubljana",
+    "visitor_shortcut": "OLL",
+    "status": "AFTER_MATCH",
+    "shots": [
+      {
+        "id": 37854,
+        "player_id": 3278,
+        "jersey": 74,
+        "first_name": "Nathanael",
+        "last_name": "Halbert",
+        "team_id": 10,
+        "match_shot_resutl_id": 1,
+        "time": 20,
+        "coordinate_x": -71.0,
+        "coordinate_y": 14.0,
+        "real_date": "2026-09-18 18:31:04",
+        "xG": 0.076832840841199,
+        "xG_type": "MD"
+      },
+      {
+        "id": 37855,
+        "player_id": 2938,
+        "jersey": 60,
+        "first_name": "Clayton",
+        "last_name": "Kirichenko",
+        "team_id": 10,
+        "match_shot_resutl_id": 3,
+        "time": 145,
+        "coordinate_x": -43.0,
+        "coordinate_y": 50.0,
+        "real_date": "2026-09-18 18:34:10",
+        "xG": 0.013774841338789,
+        "xG_type": "LD"
+      },
+      {
+        "id": 37861,
+        "player_id": 2938,
+        "jersey": 60,
+        "first_name": "Clayton",
+        "last_name": "Kirichenko",
+        "team_id": 10,
+        "match_shot_resutl_id": 4,
+        "time": 426,
+        "coordinate_x": -56.0,
+        "coordinate_y": 24.0,
+        "real_date": "2026-09-18 18:39:46",
+        "xG": 0.04537800198895,
+        "xG_type": "MD"
+      }
+    ],
+    "faceoffs_count": {
+      "BULY_HOME_DEFENSE_RIGHT": {
+        "home": 6,
+        "visitor": 5
+      },
+      "BULY_HOME_DEFENSE_LEFT": {
+        "home": 7,
+        "visitor": 4
+      },
+      "BULY_HOME_BLUE_RIGHT": {
+        "home": 1,
+        "visitor": 0
+      },
+      "BULY_HOME_BLUE_LEFT": {
+        "home": 2,
+        "visitor": 0
+      },
+      "BULY_CENTRAL": {
+        "home": 6,
+        "visitor": 5
+      },
+      "BULY_AWAY_DEFENSE_RIGHT": {
+        "home": 7,
+        "visitor": 9
+      },
+      "BULY_AWAY_DEFENSE_LEFT": {
+        "home": 4,
+        "visitor": 3
+      },
+      "BULY_AWAY_BLUE_RIGHT": {
+        "home": 1,
+        "visitor": 0
+      },
+      "BULY_AWAY_BLUE_LEFT": {
+        "home": 1,
+        "visitor": 1
+      }
+    },
+    "faceoffs_percent": {
+      "BULY_HOME_DEFENSE_RIGHT": {
+        "home": 54.55,
+        "visitor": 45.45
+      },
+      "BULY_HOME_DEFENSE_LEFT": {
+        "home": 63.64,
+        "visitor": 36.36
+      },
+      "BULY_HOME_BLUE_RIGHT": {
+        "home": 100.0,
+        "visitor": 0.0
+      },
+      "BULY_HOME_BLUE_LEFT": {
+        "home": 100.0,
+        "visitor": 0.0
+      },
+      "BULY_CENTRAL": {
+        "home": 54.55,
+        "visitor": 45.45
+      },
+      "BULY_AWAY_DEFENSE_RIGHT": {
+        "home": 43.75,
+        "visitor": 56.25
+      },
+      "BULY_AWAY_DEFENSE_LEFT": {
+        "home": 57.14,
+        "visitor": 42.86
+      },
+      "BULY_AWAY_BLUE_RIGHT": {
+        "home": 100.0,
+        "visitor": 0.0
+      },
+      "BULY_AWAY_BLUE_LEFT": {
+        "home": 50.0,
+        "visitor": 50.0
+      }
+    },
+    "faceoffs": {
+      "home": [
+        59.09,
+        64.71,
+        47.83
+      ],
+      "visitor": [
+        40.91,
+        35.29,
+        52.17
+      ]
+    },
+    "deserve2win": {
+      "score": "3:5",
+      "homeD2W": 54.0,
+      "awayD2W": 46.0,
+      "homeExGoals": 1.7748418877138046,
+      "visitorExGoals": 1.5034685322706443,
+      "homeStats": [
+        {
+          "playerName": "Aku Kestila",
+          "value": 0.363858439413598
+        },
+        {
+          "playerName": "Ferenc Laskawy",
+          "value": 0.256740596752279
+        },
+        {
+          "playerName": "Rasmus Heljanko",
+          "value": 0.248796952989705
+        }
+      ],
+      "visitorStats": [
+        {
+          "playerName": "Marly Quince",
+          "value": 0.22875650510702342
+        },
+        {
+          "playerName": "Terrence James Brennan",
+          "value": 0.2148862196110202
+        },
+        {
+          "playerName": "Joshua Darren Lawrence",
+          "value": 0.207712750680964
+        }
+      ]
+    },
+    "xGStory": {
+      "xGPeriod": {
+        "1": {
+          "home": 0.37804991483061673,
+          "visitor": 0.6451427646202637
+        },
+        "2": {
+          "home": 0.4256816408304893,
+          "visitor": 0.5352542970685847
+        },
+        "3": {
+          "home": 0.9711103320526987,
+          "visitor": 0.323071470581796
+        }
+      },
+      "xGDataHome": [
+        {
+          "time": 388,
+          "value": 0.037991614576719
+        },
+        {
+          "time": 464,
+          "value": 0.051876445231727
+        },
+        {
+          "time": 465,
+          "value": 0.064933793578785
+        }
+      ],
+      "xGDataVisitor": [
+        {
+          "time": 20,
+          "value": 0.076832840841199
+        },
+        {
+          "time": 145,
+          "value": 0.09060768217998799
+        },
+        {
+          "time": 169,
+          "value": 0.101488248116082
+        }
+      ],
+      "goalsHome": [
+        {
+          "time": 534,
+          "xG": 0.119856837069326
+        },
+        {
+          "time": 1997,
+          "xG": 0.5951252349836469
+        },
+        {
+          "time": 2710,
+          "xG": 0.955040696322607
+        }
+      ],
+      "goalsVisitor": [
+        {
+          "time": 434,
+          "xG": 0.2309381489096452
+        },
+        {
+          "time": 599,
+          "xG": 0.2309381489096452
+        },
+        {
+          "time": 1756,
+          "xG": 1.0938016451700514
+        }
+      ],
+      "xWHome": 0.5476379677239391,
+      "xWVisitor": 0.45236203227606087
+    }
+  }
+}

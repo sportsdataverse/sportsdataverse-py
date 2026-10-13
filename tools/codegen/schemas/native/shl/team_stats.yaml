@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: game_source_id
+  type: character
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: place
+  type: character
+- description: ''
+  name: score
+  type: integer
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_code
+  type: character
+- description: ''
+  name: game_uuid
+  type: character
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: g
+  type: numeric
+- description: ''
+  name: pim
+  type: numeric
+- description: ''
+  name: fow
+  type: numeric
+kind: dataframe
+schema: shl_team_stats

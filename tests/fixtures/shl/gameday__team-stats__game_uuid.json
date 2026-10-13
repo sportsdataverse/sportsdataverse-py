@@ -1,0 +1,129 @@
+{
+  "home": {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "place": "home",
+    "score": 0,
+    "teamId": "FHC",
+    "teamName": "Frölunda HC",
+    "teamCode": "FHC",
+    "statistics": [
+      {
+        "period": 0,
+        "parsedTotalStatistics": [
+          {
+            "key": "G",
+            "value": 2
+          },
+          {
+            "key": "PIM",
+            "value": 4
+          },
+          {
+            "key": "FOW",
+            "value": 29
+          }
+        ]
+      },
+      {
+        "period": 1,
+        "parsedTotalStatistics": [
+          {
+            "key": "G",
+            "value": 1
+          },
+          {
+            "key": "PIM",
+            "value": 2
+          },
+          {
+            "key": "FOW",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "period": 2,
+        "parsedTotalStatistics": [
+          {
+            "key": "G",
+            "value": 0
+          },
+          {
+            "key": "PIM",
+            "value": 0
+          },
+          {
+            "key": "FOW",
+            "value": 10
+          }
+        ]
+      }
+    ],
+    "gameUuid": "bdhvuc5tex"
+  },
+  "away": {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "place": "away",
+    "score": 0,
+    "teamId": "LHC",
+    "teamName": "Linköpings HC",
+    "teamCode": "LHC",
+    "statistics": [
+      {
+        "period": 0,
+        "parsedTotalStatistics": [
+          {
+            "key": "G",
+            "value": 1
+          },
+          {
+            "key": "PIM",
+            "value": 6
+          },
+          {
+            "key": "FOW",
+            "value": 25
+          }
+        ]
+      },
+      {
+        "period": 1,
+        "parsedTotalStatistics": [
+          {
+            "key": "G",
+            "value": 0
+          },
+          {
+            "key": "PIM",
+            "value": 2
+          },
+          {
+            "key": "FOW",
+            "value": 6
+          }
+        ]
+      },
+      {
+        "period": 2,
+        "parsedTotalStatistics": [
+          {
+            "key": "G",
+            "value": 1
+          },
+          {
+            "key": "PIM",
+            "value": 2
+          },
+          {
+            "key": "FOW",
+            "value": 9
+          }
+        ]
+      }
+    ],
+    "gameUuid": "bdhvuc5tex"
+  },
+  "provider": "statnet"
+}

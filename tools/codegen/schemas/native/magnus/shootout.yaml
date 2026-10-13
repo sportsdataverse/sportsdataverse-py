@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: attempt_id
+  type: integer
+- description: ''
+  name: shootout_round
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_abbreviation
+  type: character
+- description: ''
+  name: shooter_player_id
+  type: integer
+- description: ''
+  name: shooter_name
+  type: character
+- description: ''
+  name: goalie_player_id
+  type: integer
+- description: ''
+  name: goalie_name
+  type: character
+- description: ''
+  name: scored
+  type: logical
+kind: dataframe
+schema: magnus_shootout

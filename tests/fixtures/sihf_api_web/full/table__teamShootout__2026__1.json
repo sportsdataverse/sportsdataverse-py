@@ -1,0 +1,607 @@
+{
+ "title": "Team Stats",
+ "description": "Team Stats - Shootouts",
+ "pages": 0,
+ "selectedPage": 0,
+ "orderBy": "penShotsPercent",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2026-05-01T13:10:26.3188228+02:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    },
+    {
+     "name": "2018/19",
+     "alias": "2019"
+    },
+    {
+     "name": "2017/18",
+     "alias": "2018"
+    },
+    {
+     "name": "2016/17",
+     "alias": "2017"
+    },
+    {
+     "name": "2015/16",
+     "alias": "2016"
+    },
+    {
+     "name": "2014/15",
+     "alias": "2015"
+    },
+    {
+     "name": "2013/14",
+     "alias": "2014"
+    },
+    {
+     "name": "2012/13",
+     "alias": "2013"
+    },
+    {
+     "name": "2011/12",
+     "alias": "2012"
+    },
+    {
+     "name": "2010/11",
+     "alias": "2011"
+    },
+    {
+     "name": "2009/10",
+     "alias": "2010"
+    },
+    {
+     "name": "2008/09",
+     "alias": "2009"
+    },
+    {
+     "name": "1046/47",
+     "alias": "1047"
+    }
+   ],
+   "selected": "2026",
+   "type": "Dropdown",
+   "alias": "Season"
+  }
+ ],
+ "secondaryMenu": [
+  {
+   "name": "Goals",
+   "rowIdentifierKey": "goalsFor",
+   "isOrderDescending": true,
+   "alias": "teamGoal"
+  },
+  {
+   "name": "Goals Pos/Nation",
+   "rowIdentifierKey": "goalsForFw",
+   "isOrderDescending": true,
+   "alias": "teamGoalPosNation"
+  },
+  {
+   "name": "Shots",
+   "rowIdentifierKey": "sogSog",
+   "isOrderDescending": true,
+   "alias": "teamShotDetail"
+  },
+  {
+   "name": "PP",
+   "rowIdentifierKey": "ppPercent",
+   "isOrderDescending": true,
+   "alias": "teamPp"
+  },
+  {
+   "name": "PK",
+   "rowIdentifierKey": "pkPercent",
+   "isOrderDescending": true,
+   "alias": "teamPk"
+  },
+  {
+   "name": "Penalties",
+   "rowIdentifierKey": "pimTotal",
+   "isOrderDescending": true,
+   "alias": "teamFoul"
+  },
+  {
+   "name": "Shootouts",
+   "rowIdentifierKey": "penShotsPercent",
+   "isOrderDescending": true,
+   "alias": "teamShootout"
+  },
+  {
+   "name": "Faceoffs Summary",
+   "rowIdentifierKey": "faceoffsPercent",
+   "isOrderDescending": true,
+   "alias": "teamFaceoff"
+  },
+  {
+   "name": "Faceoffs/Zone",
+   "rowIdentifierKey": "faceoffsOffensive",
+   "isOrderDescending": true,
+   "alias": "teamFaceoffZone"
+  },
+  {
+   "name": "Faceoffs/Spiel",
+   "rowIdentifierKey": "faceoffsOffensivePerGame",
+   "isOrderDescending": true,
+   "alias": "teamFaceoffZoneGame"
+  },
+  {
+   "name": "Attendance",
+   "rowIdentifierKey": "spectatorsQuotient",
+   "isOrderDescending": true,
+   "alias": "teamSpectator"
+  }
+ ],
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [
+  {
+   "name": null,
+   "style": "average",
+   "rows": [
+    7
+   ]
+  }
+ ],
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "rank"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "GP",
+   "description": "Gespielte Spiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesPlayed"
+  },
+  {
+   "name": "SOW",
+   "description": "Siege nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonPenalty"
+  },
+  {
+   "name": "SOL",
+   "description": "Niederlagen nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostPenalty"
+  },
+  {
+   "name": "PS",
+   "description": "Anzahl Penalties",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "penShots"
+  },
+  {
+   "name": "PSG",
+   "description": "Anzahl Penalty Tore",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "penShotGoals"
+  },
+  {
+   "name": "PSM",
+   "description": "Anzahl Penalties verfehlt",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "penShotsMissed"
+  },
+  {
+   "name": "PS%",
+   "description": "Penalty Trefferquote",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "penShotsPercent"
+  },
+  {
+   "name": "PSAG",
+   "description": "Anzahl Penaltys gegen Torhüter",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "penShotsAgainst"
+  },
+  {
+   "name": "PSGA",
+   "description": "Erhaltene Penaltytore",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "penShotGoalsAgainst"
+  },
+  {
+   "name": "PS SVS",
+   "description": "Anzahl Penaltys abgewehrt",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "penShotSaves"
+  },
+  {
+   "name": "PS SVS%",
+   "description": "Penalty Abwehrquote",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "penShotSavesPercent"
+  }
+ ],
+ "data": [
+  [
+   "14",
+   {
+    "id": 101149,
+    "name": "EHC Kloten",
+    "acronym": "EHCK",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "0",
+   "4",
+   "18",
+   "1",
+   "17",
+   "5.56",
+   "17",
+   "7",
+   "10",
+   "58.82"
+  ],
+  [
+   "13",
+   {
+    "id": 103140,
+    "name": "Genève-Servette HC",
+    "acronym": "GSHC",
+    "signed": false,
+    "type": "team"
+   },
+   "76",
+   "1",
+   "2",
+   "12",
+   "2",
+   "10",
+   "16.67",
+   "13",
+   "5",
+   "8",
+   "61.54"
+  ],
+  [
+   "12",
+   {
+    "id": 101144,
+    "name": "EV Zug",
+    "acronym": "EVZ",
+    "signed": false,
+    "type": "team"
+   },
+   "66",
+   "2",
+   "5",
+   "41",
+   "7",
+   "34",
+   "17.07",
+   "42",
+   "11",
+   "31",
+   "73.81"
+  ],
+  [
+   "11",
+   {
+    "id": 101139,
+    "name": "ZSC Lions",
+    "acronym": "ZSC",
+    "signed": false,
+    "type": "team"
+   },
+   "70",
+   "2",
+   "4",
+   "31",
+   "6",
+   "25",
+   "19.35",
+   "29",
+   "7",
+   "22",
+   "75.86"
+  ],
+  [
+   "10",
+   {
+    "id": 102127,
+    "name": "SCL Tigers",
+    "acronym": "SCL",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "1",
+   "5",
+   "31",
+   "7",
+   "24",
+   "22.58",
+   "33",
+   "12",
+   "21",
+   "63.64"
+  ],
+  [
+   "9",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "90",
+   "8",
+   "2",
+   "54",
+   "13",
+   "41",
+   "24.07",
+   "52",
+   "5",
+   "47",
+   "90.38"
+  ],
+  [
+   "",
+   {
+    "id": 100000,
+    "name": "Durchschnitt",
+    "acronym": "Durchschnitt",
+    "signed": false,
+    "type": "team"
+   },
+   "65",
+   "2",
+   "2",
+   "30",
+   "9",
+   "20",
+   "30.00",
+   "30",
+   "9",
+   "20",
+   "66.67"
+  ],
+  [
+   "8",
+   {
+    "id": 103141,
+    "name": "Lausanne HC",
+    "acronym": "LHC",
+    "signed": false,
+    "type": "team"
+   },
+   "66",
+   "2",
+   "2",
+   "19",
+   "6",
+   "13",
+   "31.58",
+   "18",
+   "7",
+   "11",
+   "61.11"
+  ],
+  [
+   "7",
+   {
+    "id": 101150,
+    "name": "HC Lugano",
+    "acronym": "HCL",
+    "signed": false,
+    "type": "team"
+   },
+   "60",
+   "2",
+   "3",
+   "25",
+   "8",
+   "17",
+   "32.00",
+   "25",
+   "10",
+   "15",
+   "60.00"
+  ],
+  [
+   "6",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": false,
+    "type": "team"
+   },
+   "86",
+   "3",
+   "4",
+   "40",
+   "14",
+   "26",
+   "35.00",
+   "40",
+   "13",
+   "27",
+   "67.50"
+  ],
+  [
+   "5",
+   {
+    "id": 101152,
+    "name": "HC Ambri-Piotta",
+    "acronym": "HCAP",
+    "signed": false,
+    "type": "team"
+   },
+   "56",
+   "3",
+   "1",
+   "20",
+   "7",
+   "13",
+   "35.00",
+   "19",
+   "4",
+   "15",
+   "78.95"
+  ],
+  [
+   "4",
+   {
+    "id": 101060,
+    "name": "SC Rapperswil-Jona Lakers",
+    "acronym": "SCRJ",
+    "signed": false,
+    "type": "team"
+   },
+   "74",
+   "2",
+   "4",
+   "30",
+   "11",
+   "19",
+   "36.67",
+   "31",
+   "14",
+   "17",
+   "54.84"
+  ],
+  [
+   "3",
+   {
+    "id": 103144,
+    "name": "HC Ajoie",
+    "acronym": "HCA",
+    "signed": false,
+    "type": "team"
+   },
+   "56",
+   "3",
+   "2",
+   "26",
+   "11",
+   "15",
+   "42.31",
+   "27",
+   "9",
+   "18",
+   "66.67"
+  ],
+  [
+   "2",
+   {
+    "id": 102126,
+    "name": "SC Bern",
+    "acronym": "SCB",
+    "signed": false,
+    "type": "team"
+   },
+   "60",
+   "5",
+   "1",
+   "29",
+   "13",
+   "16",
+   "44.83",
+   "26",
+   "6",
+   "20",
+   "76.92"
+  ],
+  [
+   "1",
+   {
+    "id": 102128,
+    "name": "EHC Biel-Bienne",
+    "acronym": "EHCB",
+    "signed": false,
+    "type": "team"
+   },
+   "56",
+   "7",
+   "2",
+   "44",
+   "21",
+   "23",
+   "47.73",
+   "48",
+   "17",
+   "31",
+   "64.58"
+  ]
+ ],
+ "alias": "teamShootout"
+}

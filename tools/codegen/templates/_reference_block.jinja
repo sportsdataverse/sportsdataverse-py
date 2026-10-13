@@ -6,7 +6,7 @@
 
 {{ ep.summary or "ESPN endpoint." }}
 
-**Endpoint URL:** `GET {{ ep.endpoint_url }}`
+**Endpoint URL:** `{{ ep.http_method }} {{ ep.endpoint_url }}`
 {% if ep.valid_url %}
 
 **Valid URL:** [{{ ep.valid_url }}]({{ ep.valid_url }})

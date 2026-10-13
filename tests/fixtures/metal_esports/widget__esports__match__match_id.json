@@ -1,0 +1,984 @@
+{
+  "statusId": 1,
+  "statusMsg": "Ok",
+  "data": {
+    "gameData": {
+      "id": 575,
+      "divisionId": 7,
+      "divisionLongname": "Metal Ligaen 2026/27",
+      "divisionShortname": "Metal Ligaen 2026/27",
+      "scheduledDate": {
+        "formattedShort": "11.10.26",
+        "formattedLong": "11.October. 2026",
+        "timestamp": 1791669600000,
+        "value": "2026-10-11",
+        "diffToNow": 0
+      },
+      "scheduledTime": "14:00",
+      "startTime": "14:00",
+      "endTime": "20:18",
+      "isOvertime": 0,
+      "isShootOut": 0,
+      "homeTeamId": 8,
+      "homeTeamLongname": "Rødovre Mighty Bulls",
+      "homeTeamShortname": "ROD",
+      "homeTeamFlavourname": "Rødovre Mighty Bulls",
+      "homeTeamScore": 1,
+      "awayTeamId": 4,
+      "awayTeamLongname": "Aalborg Pirates",
+      "awayTeamShortname": "AAL",
+      "awayTeamFlavourname": "Aalborg Pirates",
+      "awayTeamScore": 3,
+      "gameStatus": 4,
+      "gameExtendedStatus": 0,
+      "gameExtendedStatusInfoText": "",
+      "gameName": "66",
+      "gameDay": null,
+      "gameRound": 0,
+      "location": {
+        "longname": "",
+        "shortname": "",
+        "coordinates": {
+          "lat": 0,
+          "lng": 0
+        }
+      },
+      "attendance": 916,
+      "liveTime": 3600,
+      "liveTimeFormatted": "END-GAME",
+      "liveTimePeriod": 4,
+      "liveTimeString": "END-GAME",
+      "liveTimeGamePhase": "END OF GAME",
+      "periodStats": [
+        {
+          "period": "1",
+          "startTime": "",
+          "endTime": "",
+          "homeScore": 0,
+          "awayScore": 2,
+          "homeShotsOnGoal": 0,
+          "awayShotsOnGoal": 2
+        },
+        {
+          "period": "2",
+          "startTime": "",
+          "endTime": "",
+          "homeScore": 0,
+          "awayScore": 1,
+          "homeShotsOnGoal": 0,
+          "awayShotsOnGoal": 1
+        },
+        {
+          "period": "3",
+          "startTime": "",
+          "endTime": "",
+          "homeScore": 1,
+          "awayScore": 0,
+          "homeShotsOnGoal": 1,
+          "awayShotsOnGoal": 0
+        }
+      ],
+      "gameOfficials": {
+        "ref1": {
+          "lastname": "Toppel",
+          "firstname": "Rasmus"
+        },
+        "ref2": {
+          "lastname": "Bøjle",
+          "firstname": "Daniel"
+        },
+        "linesman1": {
+          "lastname": "L. Christiansen",
+          "firstname": "Magnus"
+        },
+        "linesman2": {
+          "lastname": "Nielsen",
+          "firstname": "Frederik"
+        }
+      },
+      "teamOfficials": {
+        "headcoachhome": {
+          "lastname": "Ville Hämäläinen",
+          "firstname": ""
+        },
+        "headcoachaway": {
+          "lastname": "Daniel Johansson",
+          "firstname": ""
+        }
+      },
+      "liveTimePeriodBar": null,
+      "youTubeLink": null,
+      "numberOfPeriods": 3,
+      "lengthOfPeriod": 1200,
+      "numberOfOvertimes": 2,
+      "lengthOfOvertime": 1200,
+      "shootoutShots": 0,
+      "images": {
+        "homeTeamLogo": null,
+        "awayTeamLogo": null
+      },
+      "streams": [],
+      "homeTeamLogoUrl": null,
+      "awayTeamLogoUrl": null
+    },
+    "homeGoals": [
+      {
+        "guid": "575-2224",
+        "gameTime": 2690,
+        "gameTimeFormatted": "44:50",
+        "gameTimePeriod": 3,
+        "scoredBy": {
+          "id": 124,
+          "playerLastname": "Krag Christensen",
+          "playerFirstname": "Nikolaj",
+          "playerMiddlename": "",
+          "playerJerseyNr": 11
+        },
+        "assistBy": {
+          "id": 220,
+          "playerLastname": "Ronkainen",
+          "playerFirstname": "Miku",
+          "playerMiddlename": "",
+          "playerJerseyNr": 94
+        },
+        "assist2By": {
+          "id": 405,
+          "playerLastname": "Rämö",
+          "playerFirstname": "Jerkko",
+          "playerMiddlename": "",
+          "playerJerseyNr": 44
+        },
+        "newScore": "1:3",
+        "goalNr": 4,
+        "gameStrength": "PP1",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 400,
+            "playerLastname": "Caron",
+            "playerFirstname": "Mathieu",
+            "playerMiddlename": "",
+            "playerJerseyNr": 62
+          },
+          {
+            "id": 124,
+            "playerLastname": "Krag Christensen",
+            "playerFirstname": "Nikolaj",
+            "playerMiddlename": "",
+            "playerJerseyNr": 11
+          },
+          {
+            "id": 220,
+            "playerLastname": "Ronkainen",
+            "playerFirstname": "Miku",
+            "playerMiddlename": "",
+            "playerJerseyNr": 94
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 412,
+            "playerLastname": "Steinbergs",
+            "playerFirstname": "Kristers",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          }
+        ],
+        "youTubeLink": null
+      }
+    ],
+    "homePenalties": [
+      {
+        "guid": "575-2613",
+        "gameTime": 268,
+        "gameTimeFormatted": "4:28",
+        "gameTimePeriod": 1,
+        "startTime": 268,
+        "startTimeFormatted": "4:28",
+        "startTimePeriod": 1,
+        "endTime": 326,
+        "endTimeFormatted": "5:26",
+        "endTimePeriod": 1,
+        "offender": {
+          "id": 107,
+          "playerLastname": "Carlsen",
+          "playerFirstname": "Lasse",
+          "playerMiddlename": "",
+          "playerJerseyNr": 55
+        },
+        "servedBy": null,
+        "offence": "BOARD",
+        "offenceReason": null,
+        "penaltyLength": 120
+      },
+      {
+        "guid": "575-2614",
+        "gameTime": 1017,
+        "gameTimeFormatted": "16:57",
+        "gameTimePeriod": 1,
+        "startTime": 1017,
+        "startTimeFormatted": "16:57",
+        "startTimePeriod": 1,
+        "endTime": 1137,
+        "endTimeFormatted": "18:57",
+        "endTimePeriod": 1,
+        "offender": null,
+        "servedBy": {
+          "id": 108,
+          "playerLastname": "Strømstad",
+          "playerFirstname": "Sebastian",
+          "playerMiddlename": "",
+          "playerJerseyNr": 10
+        },
+        "offence": "DELAY",
+        "offenceReason": null,
+        "penaltyLength": 120
+      },
+      {
+        "guid": "575-2616",
+        "gameTime": 1285,
+        "gameTimeFormatted": "21:25",
+        "gameTimePeriod": 2,
+        "startTime": 1285,
+        "startTimeFormatted": "21:25",
+        "startTimePeriod": 2,
+        "endTime": 1317,
+        "endTimeFormatted": "21:57",
+        "endTimePeriod": 2,
+        "offender": {
+          "id": 320,
+          "playerLastname": "Niemelä",
+          "playerFirstname": "Joonas",
+          "playerMiddlename": "",
+          "playerJerseyNr": 14
+        },
+        "servedBy": null,
+        "offence": "SLASH",
+        "offenceReason": null,
+        "penaltyLength": 120
+      }
+    ],
+    "homeFieldPlayers": [
+      {
+        "id": 420,
+        "playerLastname": "Casey",
+        "playerFirstname": "Joshua Silverman",
+        "playerMiddlename": "",
+        "playerJerseyNr": 2,
+        "playerBirthdate": {
+          "formattedShort": "18.01.08",
+          "formattedLong": "18.January. 2008",
+          "timestamp": 1200610800000,
+          "value": "2008-01-18",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "LD",
+        "lineupLine": 4,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 0,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 0,
+        "isStartingPlayer": false,
+        "timeOnIce": 0,
+        "shifts": 0,
+        "nation": "DEN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 101,
+        "playerLastname": "Lukas",
+        "playerFirstname": "Nielsen",
+        "playerMiddlename": "",
+        "playerJerseyNr": 4,
+        "playerBirthdate": {
+          "formattedShort": "30.05.07",
+          "formattedLong": "30.May. 2007",
+          "timestamp": 1180476000000,
+          "value": "2007-05-30",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "RD",
+        "lineupLine": 3,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 0,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 0,
+        "isStartingPlayer": false,
+        "timeOnIce": 0,
+        "shifts": 0,
+        "nation": "DEN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 401,
+        "playerLastname": "Lukas",
+        "playerFirstname": "Scheffmann",
+        "playerMiddlename": "",
+        "playerJerseyNr": 6,
+        "playerBirthdate": {
+          "formattedShort": "04.08.05",
+          "formattedLong": "04.August. 2005",
+          "timestamp": 1123106400000,
+          "value": "2005-08-04",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "C",
+        "lineupLine": 4,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 0,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 0,
+        "isStartingPlayer": false,
+        "timeOnIce": 0,
+        "shifts": 0,
+        "nation": "DEN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      }
+    ],
+    "homeGoalKeepers": [
+      {
+        "id": 400,
+        "playerLastname": "Mathieu",
+        "playerFirstname": "Caron",
+        "playerMiddlename": "",
+        "playerJerseyNr": 62,
+        "playerBirthdate": {
+          "formattedShort": "29.03.00",
+          "formattedLong": "29.March. 2000",
+          "timestamp": 954280800000,
+          "value": "2000-03-29",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "G",
+        "goalsAgainstAverage": 0,
+        "playingTime": 3532,
+        "goalsAgainst": 3,
+        "shotsAgainst": 3,
+        "savePercentage": 0.0,
+        "saves": 0,
+        "isStartingPlayer": 1,
+        "nation": "CAN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 322,
+        "playerLastname": "Bertram",
+        "playerFirstname": "Witomski",
+        "playerMiddlename": "",
+        "playerJerseyNr": 72,
+        "playerBirthdate": {
+          "formattedShort": "11.08.06",
+          "formattedLong": "11.August. 2006",
+          "timestamp": 1155247200000,
+          "value": "2006-08-11",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "G",
+        "goalsAgainstAverage": 0,
+        "playingTime": 0,
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "savePercentage": 0,
+        "saves": 0,
+        "isStartingPlayer": 1,
+        "nation": "DEN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      }
+    ],
+    "homeTeamStats": {
+      "faceoffsWon": 0,
+      "faceoffsTotal": 0,
+      "shotsOnGoal": 0,
+      "shotsBlocked": 0,
+      "penaltyMinutes": 16,
+      "powerplayGoals": 1,
+      "powerplayOpportunities": 6,
+      "penaltykillSuccesses": 2,
+      "penaltykillSituations": 9,
+      "timeValues": {
+        "leading": 0,
+        "tied": 326,
+        "trailing": 3274,
+        "timeGameStrengthEven": 2408,
+        "timeGameStrengthPlusOne": 482,
+        "timeGameStrengthPlusTwo": 0,
+        "timeGameStrengthMinusOne": 710,
+        "timeGameStrengthMinusTwo": 0,
+        "timeOnPowerplay": 482,
+        "timeWhileShorthanded": 710
+      }
+    },
+    "awayGoals": [
+      {
+        "guid": "575-2221",
+        "gameTime": 326,
+        "gameTimeFormatted": "5:26",
+        "gameTimePeriod": 1,
+        "scoredBy": {
+          "id": 419,
+          "playerLastname": "Welsh",
+          "playerFirstname": "Tyler",
+          "playerMiddlename": "",
+          "playerJerseyNr": 20
+        },
+        "assistBy": {
+          "id": 90,
+          "playerLastname": "Korsgaard",
+          "playerFirstname": "Jeppe Jul",
+          "playerMiddlename": "",
+          "playerJerseyNr": 21
+        },
+        "assist2By": {
+          "id": 415,
+          "playerLastname": "Lindelöf",
+          "playerFirstname": "Alexander",
+          "playerMiddlename": "",
+          "playerJerseyNr": 66
+        },
+        "newScore": "0:1",
+        "goalNr": 1,
+        "gameStrength": "PP1",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 400,
+            "playerLastname": "Caron",
+            "playerFirstname": "Mathieu",
+            "playerMiddlename": "",
+            "playerJerseyNr": 62
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 412,
+            "playerLastname": "Steinbergs",
+            "playerFirstname": "Kristers",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          },
+          {
+            "id": 419,
+            "playerLastname": "Welsh",
+            "playerFirstname": "Tyler",
+            "playerMiddlename": "",
+            "playerJerseyNr": 20
+          },
+          {
+            "id": 90,
+            "playerLastname": "Korsgaard",
+            "playerFirstname": "Jeppe Jul",
+            "playerMiddlename": "",
+            "playerJerseyNr": 21
+          }
+        ],
+        "youTubeLink": null
+      },
+      {
+        "guid": "575-2222",
+        "gameTime": 1017,
+        "gameTimeFormatted": "16:57",
+        "gameTimePeriod": 1,
+        "scoredBy": {
+          "id": 30,
+          "playerLastname": "Grundtvig",
+          "playerFirstname": "Andreas",
+          "playerMiddlename": "",
+          "playerJerseyNr": 22
+        },
+        "assistBy": {
+          "id": 419,
+          "playerLastname": "Welsh",
+          "playerFirstname": "Tyler",
+          "playerMiddlename": "",
+          "playerJerseyNr": 20
+        },
+        "assist2By": {
+          "id": 33,
+          "playerLastname": "Jakobsen",
+          "playerFirstname": "Julian",
+          "playerMiddlename": "",
+          "playerJerseyNr": 61
+        },
+        "newScore": "0:2",
+        "goalNr": 2,
+        "gameStrength": "EQ",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 400,
+            "playerLastname": "Caron",
+            "playerFirstname": "Mathieu",
+            "playerMiddlename": "",
+            "playerJerseyNr": 62
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 412,
+            "playerLastname": "Steinbergs",
+            "playerFirstname": "Kristers",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          },
+          {
+            "id": 30,
+            "playerLastname": "Grundtvig",
+            "playerFirstname": "Andreas",
+            "playerMiddlename": "",
+            "playerJerseyNr": 22
+          },
+          {
+            "id": 419,
+            "playerLastname": "Welsh",
+            "playerFirstname": "Tyler",
+            "playerMiddlename": "",
+            "playerJerseyNr": 20
+          }
+        ],
+        "youTubeLink": null
+      },
+      {
+        "guid": "575-2223",
+        "gameTime": 1317,
+        "gameTimeFormatted": "21:57",
+        "gameTimePeriod": 2,
+        "scoredBy": {
+          "id": 30,
+          "playerLastname": "Grundtvig",
+          "playerFirstname": "Andreas",
+          "playerMiddlename": "",
+          "playerJerseyNr": 22
+        },
+        "assistBy": {
+          "id": 419,
+          "playerLastname": "Welsh",
+          "playerFirstname": "Tyler",
+          "playerMiddlename": "",
+          "playerJerseyNr": 20
+        },
+        "assist2By": null,
+        "newScore": "0:3",
+        "goalNr": 3,
+        "gameStrength": "PP1",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 400,
+            "playerLastname": "Caron",
+            "playerFirstname": "Mathieu",
+            "playerMiddlename": "",
+            "playerJerseyNr": 62
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 412,
+            "playerLastname": "Steinbergs",
+            "playerFirstname": "Kristers",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          },
+          {
+            "id": 30,
+            "playerLastname": "Grundtvig",
+            "playerFirstname": "Andreas",
+            "playerMiddlename": "",
+            "playerJerseyNr": 22
+          },
+          {
+            "id": 419,
+            "playerLastname": "Welsh",
+            "playerFirstname": "Tyler",
+            "playerMiddlename": "",
+            "playerJerseyNr": 20
+          }
+        ],
+        "youTubeLink": null
+      }
+    ],
+    "awayPenalties": [
+      {
+        "guid": "575-2615",
+        "gameTime": 1037,
+        "gameTimeFormatted": "17:17",
+        "gameTimePeriod": 1,
+        "startTime": 1037,
+        "startTimeFormatted": "17:17",
+        "startTimePeriod": 1,
+        "endTime": 1157,
+        "endTimeFormatted": "19:17",
+        "endTimePeriod": 1,
+        "offender": {
+          "id": 216,
+          "playerLastname": "Andersen",
+          "playerFirstname": "Lucas",
+          "playerMiddlename": "",
+          "playerJerseyNr": 71
+        },
+        "servedBy": null,
+        "offence": "HOOK",
+        "offenceReason": null,
+        "penaltyLength": 120
+      },
+      {
+        "guid": "575-2618",
+        "gameTime": 1569,
+        "gameTimeFormatted": "26:09",
+        "gameTimePeriod": 2,
+        "startTime": 1569,
+        "startTimeFormatted": "26:09",
+        "startTimePeriod": 2,
+        "endTime": 1689,
+        "endTimeFormatted": "28:09",
+        "endTimePeriod": 2,
+        "offender": {
+          "id": 415,
+          "playerLastname": "Lindelöf",
+          "playerFirstname": "Alexander",
+          "playerMiddlename": "",
+          "playerJerseyNr": 66
+        },
+        "servedBy": null,
+        "offence": "SLASH",
+        "offenceReason": null,
+        "penaltyLength": 120
+      },
+      {
+        "guid": "575-2620",
+        "gameTime": 2249,
+        "gameTimeFormatted": "37:29",
+        "gameTimePeriod": 2,
+        "startTime": 2249,
+        "startTimeFormatted": "37:29",
+        "startTimePeriod": 2,
+        "endTime": 2369,
+        "endTimeFormatted": "39:29",
+        "endTimePeriod": 2,
+        "offender": {
+          "id": 419,
+          "playerLastname": "Welsh",
+          "playerFirstname": "Tyler",
+          "playerMiddlename": "",
+          "playerJerseyNr": 20
+        },
+        "servedBy": null,
+        "offence": "TRIP",
+        "offenceReason": null,
+        "penaltyLength": 120
+      }
+    ],
+    "awayFieldPlayers": [
+      {
+        "id": 26,
+        "playerLastname": "Sebastian",
+        "playerFirstname": "Brinkman",
+        "playerMiddlename": "",
+        "playerJerseyNr": 2,
+        "playerBirthdate": {
+          "formattedShort": "03.06.97",
+          "formattedLong": "03.June. 1997",
+          "timestamp": 865288800000,
+          "value": "1997-06-03",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "LF",
+        "lineupLine": 4,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 0,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 0,
+        "isStartingPlayer": false,
+        "timeOnIce": 0,
+        "shifts": 0,
+        "nation": "DEN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 432,
+        "playerLastname": "Niklas",
+        "playerFirstname": "Folin",
+        "playerMiddlename": "",
+        "playerJerseyNr": 4,
+        "playerBirthdate": {
+          "formattedShort": "21.01.94",
+          "formattedLong": "21.January. 1994",
+          "timestamp": 759106800000,
+          "value": "1994-01-21",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "LD",
+        "lineupLine": 3,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 0,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 0,
+        "isStartingPlayer": false,
+        "timeOnIce": 0,
+        "shifts": 0,
+        "nation": "SWE",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 417,
+        "playerLastname": "Casey",
+        "playerFirstname": "Dornbach",
+        "playerMiddlename": "",
+        "playerJerseyNr": 9,
+        "playerBirthdate": {
+          "formattedShort": "07.07.97",
+          "formattedLong": "07.July. 1997",
+          "timestamp": 868226400000,
+          "value": "1997-07-07",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "C",
+        "lineupLine": 3,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 0,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 0,
+        "isStartingPlayer": false,
+        "timeOnIce": 0,
+        "shifts": 0,
+        "nation": "USA",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      }
+    ],
+    "awayGoalKeepers": [
+      {
+        "id": 412,
+        "playerLastname": "Kristers",
+        "playerFirstname": "Steinbergs",
+        "playerMiddlename": "",
+        "playerJerseyNr": 1,
+        "playerBirthdate": {
+          "formattedShort": "23.05.05",
+          "formattedLong": "23.May. 2005",
+          "timestamp": 1116799200000,
+          "value": "2005-05-23",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "G",
+        "goalsAgainstAverage": 0,
+        "playingTime": 3600,
+        "goalsAgainst": 1,
+        "shotsAgainst": 1,
+        "savePercentage": 0.0,
+        "saves": 0,
+        "isStartingPlayer": 1,
+        "nation": "DEN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 413,
+        "playerLastname": "Edvin",
+        "playerFirstname": "Olofsson",
+        "playerMiddlename": "",
+        "playerJerseyNr": 92,
+        "playerBirthdate": {
+          "formattedShort": "17.06.98",
+          "formattedLong": "17.June. 1998",
+          "timestamp": 898034400000,
+          "value": "1998-06-17",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "G",
+        "goalsAgainstAverage": 0,
+        "playingTime": 0,
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "savePercentage": 0,
+        "saves": 0,
+        "isStartingPlayer": 1,
+        "nation": "SWE",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      }
+    ],
+    "awayTeamStats": {
+      "faceoffsWon": 0,
+      "faceoffsTotal": 0,
+      "shotsOnGoal": 0,
+      "shotsBlocked": 0,
+      "penaltyMinutes": 10,
+      "powerplayGoals": 2,
+      "powerplayOpportunities": 9,
+      "penaltykillSuccesses": 1,
+      "penaltykillSituations": 6,
+      "timeValues": {
+        "leading": 3274,
+        "tied": 326,
+        "trailing": 0,
+        "timeGameStrengthEven": 2408,
+        "timeGameStrengthPlusOne": 710,
+        "timeGameStrengthPlusTwo": 0,
+        "timeGameStrengthMinusOne": 482,
+        "timeGameStrengthMinusTwo": 0,
+        "timeOnPowerplay": 710,
+        "timeWhileShorthanded": 482
+      }
+    },
+    "homeGoalKeeperChanges": [
+      {
+        "gametime": 0,
+        "gameTimeFormatted": "0:00",
+        "gameTimePeriod": 1,
+        "player": {
+          "id": 400,
+          "playerLastname": "Caron",
+          "playerFirstname": "Mathieu",
+          "playerMiddlename": "",
+          "playerJerseyNr": 62
+        },
+        "action": "on"
+      },
+      {
+        "gametime": 3505,
+        "gameTimeFormatted": "58:25",
+        "gameTimePeriod": 3,
+        "player": {
+          "id": 400,
+          "playerLastname": "Caron",
+          "playerFirstname": "Mathieu",
+          "playerMiddlename": "",
+          "playerJerseyNr": 62
+        },
+        "action": "off"
+      },
+      {
+        "gametime": 3515,
+        "gameTimeFormatted": "58:35",
+        "gameTimePeriod": 3,
+        "player": {
+          "id": 400,
+          "playerLastname": "Caron",
+          "playerFirstname": "Mathieu",
+          "playerMiddlename": "",
+          "playerJerseyNr": 62
+        },
+        "action": "on"
+      }
+    ],
+    "awayGoalKeeperChanges": [
+      {
+        "gametime": 0,
+        "gameTimeFormatted": "0:00",
+        "gameTimePeriod": 1,
+        "player": {
+          "id": 412,
+          "playerLastname": "Steinbergs",
+          "playerFirstname": "Kristers",
+          "playerMiddlename": "",
+          "playerJerseyNr": 1
+        },
+        "action": "on"
+      },
+      {
+        "gametime": 3600,
+        "gameTimeFormatted": "60:00",
+        "gameTimePeriod": 3,
+        "player": {
+          "id": 412,
+          "playerLastname": "Steinbergs",
+          "playerFirstname": "Kristers",
+          "playerMiddlename": "",
+          "playerJerseyNr": 1
+        },
+        "action": "off"
+      }
+    ],
+    "gameActions": [],
+    "faceoffsHeadToHead": [],
+    "faceoffsIndividual": [],
+    "gameSituations": []
+  },
+  "calcTime": 0,
+  "lastUpdate": {
+    "formattedShort": "11.10.26 16:22",
+    "formattedLong": "11.October. 2026 16:22",
+    "timestamp": 1791728534000,
+    "value": "2026-10-11 16:22"
+  },
+  "servedByServer": "den.hokejovyzapis.cz"
+}

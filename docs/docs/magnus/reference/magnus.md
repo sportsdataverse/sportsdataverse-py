@@ -1,0 +1,506 @@
+---
+title: MAGNUS — Ligue Magnus (liguemagnus.com admin-ajax JSON + game sheets, France)
+sidebar_label: Ligue Magnus (liguemagnus.com admin-ajax JSON + game sheets, France)
+description: "MAGNUS — Ligue Magnus (liguemagnus.com admin-ajax JSON + game sheets, France) — endpoint reference in sdv-py, the SportsDataverse Python package."
+sidebar_position: 10
+toc_max_heading_level: 2
+---
+# MAGNUS — Ligue Magnus (liguemagnus.com admin-ajax JSON + game sheets, France)
+
+`sportsdataverse.hockey.magnus` — 11 endpoints.
+
+## magnus_competitions
+
+Competitions (one per season) of a competition type.
+
+**Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
+
+**Valid URL:** [https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_competition_by_type&id_type=1](https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_competition_by_type&id_type=1)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `id_type` | `competition_type` |  |  | `Y` | Competition type: 1 = Ligue Magnus, 2 = Division 1. Omitted: success=false 'Aucune donnée disponible' (probed 2026-10-12). |
+
+### Returns {#magnus_competitions-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `competition_id` | integer | Ligue Magnus competition id (Int64); one per season, the key get_phases and get_rencontres take (1 = 2020-21 ... 240 = 2026-27). |
+| `season` | integer | Season by its END year (2027 = 2026-27), the federation's saison field. |
+| `competition` | character | Competition name as published (sponsor name included, e.g., "Synerglace Ligue Magnus"). |
+| `competition_type_id` | integer | Competition type id: 1 = Ligue Magnus, 2 = Division 1. |
+| `competition_type_code` | character | Competition type code (NA for the Ligue Magnus). |
+| `competition_type` | character | Competition type label (e.g., "Ligue Magnus"). |
+| `external_url` | character | External site linked from the competition (streaming partner). |
+| `published` | logical | Whether the competition is published on the league site. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#magnus_competitions-example}
+
+```python
+magnus_competitions()
+```
+
+_Last validated n/a._
+
+## magnus_game
+
+Game header from the game sheet: teams, score, start time, status, attendance and rink (one row).
+
+**Endpoint URL:** `GET https://liguemagnus.com/rencontre/{game_id}/`
+
+**Valid URL:** [https://liguemagnus.com/rencontre/77779/](https://liguemagnus.com/rencontre/77779/)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | Game id (get_rencontres data.data[].id). Example 77779 (2026-27, shootout + MVPs); also sampled: 68838, 865. |
+
+### Returns {#magnus_game-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Game id (Int64 join key). |
+| `competition` | character | Competition name as published. |
+| `phase` | character | Phase name in French. |
+| `round` | integer | Round (journée) number. |
+| `game_datetime` | datetime | Start time, Europe/Paris. |
+| `status` | character | Game state: final, in_progress or scheduled. |
+| `home_team_id` | integer | Team id of the home team (Int64). |
+| `home_team` | character | Display name of the home team. |
+| `home_team_abbreviation` | character | Abbreviation of the home team. |
+| `away_team_id` | integer | Team id of the away team (Int64). |
+| `away_team` | character | Display name of the away team. |
+| `away_team_abbreviation` | character | Abbreviation of the away team. |
+| `home_score` | integer | Goals of the home team (the final score, shootout included). |
+| `away_score` | integer | Goals of the away team (the final score, shootout included). |
+| `home_team_participant_id` | integer | Team participant id of the home team in this phase (Int64; joins the standings). |
+| `away_team_participant_id` | integer | Team participant id of the away team in this phase (Int64; joins the standings). |
+| `has_shootout` | logical | Whether the game went to a shootout. |
+| `n_periods` | integer | Number of regulation periods. |
+| `period_minutes` | integer | Length of a regulation period in minutes. |
+| `attendance` | integer | Number of spectators (attendance). |
+| `venue` | character | Name of the rink (arena). |
+
+**`return_parsed=False`** — the game sheet `Dict` extracted from the page's embedded JSON (staff birth dates removed).
+
+### Example {#magnus_game-example}
+
+```python
+magnus_game(game_id=77779)
+```
+
+_Last validated n/a._
+
+## magnus_lineups
+
+Game roster from the game sheet: one row per dressed player, with the person id, the per-game participant id, jersey, licence number, position, captaincy and MVP flag.
+
+**Endpoint URL:** `GET https://liguemagnus.com/rencontre/{game_id}/`
+
+**Valid URL:** [https://liguemagnus.com/rencontre/77779/](https://liguemagnus.com/rencontre/77779/)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | Game id (get_rencontres data.data[].id). Example 77779 (2026-27, shootout + MVPs); also sampled: 68838, 865. |
+
+### Returns {#magnus_lineups-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Game id (Int64 join key). |
+| `team_id` | integer | Team id (Int64). |
+| `home_away` | character | The team's side: home or away. |
+| `player_id` | integer | Person id (Int64; joueurs[].id = personne.id), stable across games; the player key of every Magnus frame. |
+| `player_participant_id` | integer | The player's roster entry in THIS game (Int64; changes every game), the key the sheet's on-ice lists and MVPs use; never join across games on it. |
+| `player_name` | character | Player name (SURNAME First). |
+| `jersey_number` | character | Jersey number worn in this game (string as published). |
+| `registered_jersey_number` | character | Registered jersey number of the person; can differ from the one worn. |
+| `licence_number` | character | FFHG licence number (string; keeps leading zeros). |
+| `position_code` | character | Position code: A (attaquant), D (défenseur), GB (gardien de but). |
+| `position` | character | Position in English: forward, defence or goalie. |
+| `captaincy` | character | C (captain) or A (alternate captain); null otherwise. |
+| `is_mvp` | logical | Whether the player was named his team's MVP of the game. |
+| `photo_url` | character | Photo thumbnail URL of the player. |
+
+**`return_parsed=False`** — the game sheet `Dict` extracted from the page's embedded JSON (staff birth dates removed).
+
+### Example {#magnus_lineups-example}
+
+```python
+magnus_lineups(game_id=77779)
+```
+
+_Last validated n/a._
+
+## magnus_pbp
+
+Play-by-play from the game sheet: goals, penalties, shots, faceoffs, goalie changes and timeouts in game order, with English event types and derived periods. No shot coordinates.
+
+**Endpoint URL:** `GET https://liguemagnus.com/rencontre/{game_id}/`
+
+**Valid URL:** [https://liguemagnus.com/rencontre/77779/](https://liguemagnus.com/rencontre/77779/)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | Game id (get_rencontres data.data[].id). Example 77779 (2026-27, shootout + MVPs); also sampled: 68838, 865. |
+
+### Returns {#magnus_pbp-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Game id (Int64 join key). |
+| `event_id` | character | Event id as published, the raw type plus a number (e.g., "BUT99238"); unique within a game. |
+| `event_type` | character | Event type in English: goal, penalty, shot, faceoff, goalie_change or timeout. |
+| `event_type_raw` | character | Event type as published: BUT, SANCTION, TIR, ENGA, REMPLACANT or TEMPS_MORT. |
+| `period` | integer | Period derived from the elapsed seconds (4 = overtime). A faceoff at 1200 / 2400 / 3600 opens the next period; any other event at a boundary belongs to the period ending there. |
+| `period_seconds` | integer | Elapsed seconds within the period. |
+| `game_seconds` | integer | Elapsed game seconds (the sheet's temps). |
+| `team_id` | integer | Team id of the event's team (Int64; for a faceoff, the winning team). |
+| `team_abbreviation` | character | Abbreviation of the event's team. |
+| `player_id` | integer | Person id (Int64, stable across games) of the acting player; the scorer, the shooter, the penalised player or the faceoff winner. Null on goalie changes, timeouts and bench penalties. |
+| `player_name` | character | Name of the acting player (SURNAME First). |
+| `assist1_player_id` | integer | Person id of the first assist on a goal (Int64). |
+| `assist1_player_name` | character | Name of the first assist on a goal. |
+| `assist2_player_id` | integer | Person id of the second assist on a goal (Int64). |
+| `assist2_player_name` | character | Name of the second assist on a goal. |
+| `goalie_player_id` | integer | Person id of the goalie the goal or shot was against (Int64). |
+| `goalie_player_name` | character | Name of the goalie the goal or shot was against. |
+| `faceoff_home_player_id` | integer | Person id of the home faceoff taker (Int64). |
+| `faceoff_away_player_id` | integer | Person id of the away faceoff taker (Int64). |
+| `strength_code` | character | Strength when a goal was scored: EG (even strength), SUP1 (power play, one man up); other codes unobserved. |
+| `penalty_code` | character | Infraction code (e.g., CIN = slashing). |
+| `penalty` | character | Infraction label in French (e.g., "Cinglage (coup de crosse)"). |
+| `penalty_minutes` | integer | Penalty length in minutes. |
+| `penalty_start_seconds` | integer | Elapsed game seconds when the penalty starts. |
+| `penalty_end_seconds` | integer | Elapsed game seconds when the penalty ends. |
+| `goalie_in_player_id` | integer | Person id of the goalie entering on a goalie change (Int64; never observed populated). |
+| `goalie_out_player_id` | integer | Person id of the goalie leaving on a goalie change (Int64). |
+| `on_ice_plus_player_ids` | list | Person ids of the scoring team's players on ice at a goal, goalie included (list of Int64). |
+| `on_ice_minus_player_ids` | list | Person ids of the conceding team's players on ice at a goal (list of Int64). |
+
+**`return_parsed=False`** — the game sheet `Dict` extracted from the page's embedded JSON (staff birth dates removed).
+
+### Example {#magnus_pbp-example}
+
+```python
+magnus_pbp(game_id=77779)
+```
+
+_Last validated n/a._
+
+## magnus_phases
+
+Phases of a competition (regular season, playoffs, relegation).
+
+**Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
+
+**Valid URL:** [https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_phases&competition_id=240](https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_phases&competition_id=240)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `competition_id` | `season` |  | `Y` |  | Required. Season by its END year (2027 = 2026-27), sent as the season's competition_id. Coverage starts in 2020-21 (2021); an earlier season, or one the federation does not list, raises NoDataError. |
+
+### Returns {#magnus_phases-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `phase_id` | integer | Phase id (Int64), the value the phase_id argument of magnus_teams, magnus_rounds, magnus_round_games, magnus_standings and magnus_schedule takes. Ids change every season. |
+| `phase` | character | Phase name in French (e.g., "Saison régulière" = regular season). |
+| `phase_type_code` | character | Phase type code: C (championnat, round robin) or T (tableau, playoff bracket). |
+| `visible` | logical | Whether the phase is shown on the public site. |
+| `competition` | character | Name of the competition (season) the phase belongs to. |
+| `n_teams` | integer | Number of teams in the phase. |
+| `overtime` | logical | Whether tied games go to overtime in the phase. |
+| `games_per_matchup` | integer | Games each pair of teams plays in the phase. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#magnus_phases-example}
+
+```python
+magnus_phases(season=2027)
+```
+
+_Last validated n/a._
+
+## magnus_round_games
+
+One round of a phase with its games.
+
+**Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
+
+**Valid URL:** [https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_rencontrestours&phase_id=714&journee=1](https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_rencontrestours&phase_id=714&journee=1)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `phase_id` | `phase_id` |  | `Y` |  | Required. Phase id from get_phases. Omitted: data='' (probed 2026-10-12). |
+| `journee` | `round` |  | `Y` |  | Required. Round number (tour), 1-based. Omitted: data='' (probed 2026-10-12). |
+
+### Returns {#magnus_round_games-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Game id (Int64 join key), the game_id argument of magnus_game, magnus_pbp, magnus_lineups and magnus_shootout. |
+| `season` | integer | Season by its END year (2027 = 2026-27). |
+| `competition_id` | integer | Competition (season) id (Int64). |
+| `phase_id` | integer | Phase id (Int64; regular season, playoffs, relegation). |
+| `phase` | character | Phase name in French (e.g., "Saison régulière"). |
+| `round` | integer | Round (journée) number within the phase. |
+| `game_datetime` | datetime | Scheduled start, Europe/Paris time (get_rencontres publishes local time, a round body UTC; both are converted). |
+| `status` | character | Game state: final, in_progress or scheduled. |
+| `decision` | character | How a final game was decided: regulation, overtime or shootout; null until the game is final (round bodies carry no decision, so null there too). |
+| `home_team_id` | integer | Team id of the home team (Int64). |
+| `home_team` | character | Display name of the home team. |
+| `home_team_abbreviation` | character | Abbreviation of the home team. |
+| `away_team_id` | integer | Team id of the away team (Int64). |
+| `away_team` | character | Display name of the away team. |
+| `away_team_abbreviation` | character | Abbreviation of the away team. |
+| `home_score` | integer | Goals of the home team (shootout winner included in the final score); null until the game starts (unplayed games publish a 0-0 placeholder). |
+| `away_score` | integer | Goals of the away team; null until the game starts. |
+| `home_team_participant_id` | integer | Team participant id of the home team in this phase (Int64; its own key space, joins team_participant_id of the standings; not a team id). |
+| `away_team_participant_id` | integer | Team participant id of the away team in this phase (Int64; joins team_participant_id of the standings). |
+| `venue_id` | integer | Rink id (Int64). |
+| `venue` | character | Name of the rink (arena). |
+| `game_label` | character | Game label as published ("HOME / AWAY"). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#magnus_round_games-example}
+
+```python
+magnus_round_games(phase_id=714, round=1)
+```
+
+_Last validated n/a._
+
+## magnus_rounds
+
+Rounds (journees) of a phase with their dates (games via get_rencontrestours).
+
+**Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
+
+**Valid URL:** [https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_liste_tours&phase_id=714](https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_liste_tours&phase_id=714)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `phase_id` | `phase_id` |  | `Y` |  | Required. Phase id from get_phases. Omitted: data='' (probed 2026-10-12). |
+
+### Returns {#magnus_rounds-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `round_id` | integer | Round id (Int64). |
+| `round` | integer | Round (journée) number within the phase, the round argument of magnus_round_games and magnus_schedule. |
+| `round_label` | character | Round label; null in every observed body. |
+| `phase_id` | integer | Phase id (Int64). |
+| `phase` | character | Phase name in French. |
+| `competition_id` | integer | Competition (season) id (Int64). |
+| `season` | integer | Season by its END year (2027 = 2026-27). |
+| `start_date` | date | First date of the round. |
+| `end_date` | date | Last date of the round. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#magnus_rounds-example}
+
+```python
+magnus_rounds(phase_id=714)
+```
+
+_Last validated n/a._
+
+## magnus_schedule
+
+Games (schedule and results); Laravel-paginated, par_page=700 returns a full season.
+
+**Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
+
+**Valid URL:** [https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_rencontres&par_page=700&competition_id=240](https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_rencontres&par_page=700&competition_id=240)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `competition_id` | `season` |  | `Y` |  | Required. Season by its END year (2027 = 2026-27), sent as the season's competition_id. Coverage starts in 2020-21 (2021); an earlier season, or one the federation does not list, raises NoDataError. |
+| `phase_id` | `phase_id` |  |  | `Y` | Phase id. Omitted: every phase of the competition (314 games for 2025-26 vs 264 for its regular season, probed 2026-10-12). |
+| `equipe_id` | `team_id` |  |  | `Y` | Team id (get_equipes data[].id): that team's games only (44 for 2025-26, probed 2026-10-12). Non-numeric: a validation error. |
+| `date_min` | `start_date` |  |  | `Y` | Earliest game date, YYYY-MM-DD (verified: 2025-10-01..2025-10-31 gave 44 games, probed 2026-10-12). |
+| `date_max` | `end_date` |  |  | `Y` | Latest game date, YYYY-MM-DD. |
+| `journee` | `round` |  |  | `Y` | Round number (tour): that round's games only (6 per round, probed 2026-10-12). |
+
+### Returns {#magnus_schedule-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Game id (Int64 join key), the game_id argument of magnus_game, magnus_pbp, magnus_lineups and magnus_shootout. |
+| `season` | integer | Season by its END year (2027 = 2026-27). |
+| `competition_id` | integer | Competition (season) id (Int64). |
+| `phase_id` | integer | Phase id (Int64; regular season, playoffs, relegation). |
+| `phase` | character | Phase name in French (e.g., "Saison régulière"). |
+| `round` | integer | Round (journée) number within the phase. |
+| `game_datetime` | datetime | Scheduled start, Europe/Paris time (get_rencontres publishes local time, a round body UTC; both are converted). |
+| `status` | character | Game state: final, in_progress or scheduled. |
+| `decision` | character | How a final game was decided: regulation, overtime or shootout; null until the game is final (round bodies carry no decision, so null there too). |
+| `home_team_id` | integer | Team id of the home team (Int64). |
+| `home_team` | character | Display name of the home team. |
+| `home_team_abbreviation` | character | Abbreviation of the home team. |
+| `away_team_id` | integer | Team id of the away team (Int64). |
+| `away_team` | character | Display name of the away team. |
+| `away_team_abbreviation` | character | Abbreviation of the away team. |
+| `home_score` | integer | Goals of the home team (shootout winner included in the final score); null until the game starts (unplayed games publish a 0-0 placeholder). |
+| `away_score` | integer | Goals of the away team; null until the game starts. |
+| `home_team_participant_id` | integer | Team participant id of the home team in this phase (Int64; its own key space, joins team_participant_id of the standings; not a team id). |
+| `away_team_participant_id` | integer | Team participant id of the away team in this phase (Int64; joins team_participant_id of the standings). |
+| `venue_id` | integer | Rink id (Int64). |
+| `venue` | character | Name of the rink (arena). |
+| `game_label` | character | Game label as published ("HOME / AWAY"). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#magnus_schedule-example}
+
+```python
+magnus_schedule(season=2027)
+```
+
+_Last validated n/a._
+
+## magnus_shootout
+
+Shootout attempts from the game sheet: round, shooter, goalie and result (zero rows when the game had no shootout).
+
+**Endpoint URL:** `GET https://liguemagnus.com/rencontre/{game_id}/`
+
+**Valid URL:** [https://liguemagnus.com/rencontre/77779/](https://liguemagnus.com/rencontre/77779/)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | Game id (get_rencontres data.data[].id). Example 77779 (2026-27, shootout + MVPs); also sampled: 68838, 865. |
+
+### Returns {#magnus_shootout-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Game id (Int64 join key). |
+| `attempt_id` | integer | Shootout attempt id (Int64). |
+| `shootout_round` | integer | Shootout round of the attempt (one attempt per team per round); not a jersey number. |
+| `team_id` | integer | Team id of the shooting team (Int64). |
+| `team_abbreviation` | character | Abbreviation of the shooting team. |
+| `shooter_player_id` | integer | Person id of the shooter (Int64); null on rounds not needed. |
+| `shooter_name` | character | Name of the shooter. |
+| `goalie_player_id` | integer | Person id of the goalie facing the attempt (Int64). |
+| `goalie_name` | character | Name of the goalie facing the attempt. |
+| `scored` | logical | Whether the attempt scored; null on rounds not needed. |
+
+**`return_parsed=False`** — the game sheet `Dict` extracted from the page's embedded JSON (staff birth dates removed).
+
+### Example {#magnus_shootout-example}
+
+```python
+magnus_shootout(game_id=77779)
+```
+
+_Last validated n/a._
+
+## magnus_standings
+
+Standings of a phase.
+
+**Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
+
+**Valid URL:** [https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_classementsphase&phase_id=714](https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_classementsphase&phase_id=714)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `phase_id` | `phase_id` |  | `Y` |  | Required. Phase id from get_phases. Omitted: data='' (probed 2026-10-12). |
+
+### Returns {#magnus_standings-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Rank in the standings table. |
+| `team_id` | integer | Team id (Int64 join key). |
+| `team` | character | Short team name as the table publishes it (e.g., "MARSEILLE"). |
+| `team_abbreviation` | character | Team abbreviation. |
+| `team_participant_id` | integer | Team participant id in this phase (Int64; joins home_team_participant_id / away_team_participant_id of the schedule). |
+| `games_played` | integer | Games played in the table's scope. |
+| `wins` | integer | Wins in regulation. |
+| `ot_wins` | integer | Wins in overtime or a shootout. |
+| `ot_losses` | integer | Losses in overtime or a shootout. |
+| `losses` | integer | Losses in regulation. |
+| `ties` | integer | Number of tied games. |
+| `points` | integer | Points in the standings table. |
+| `goals_for` | integer | Goals scored (total). |
+| `goals_against` | integer | Goals allowed (goals against). |
+| `penalty_minutes` | integer | Penalty minutes. |
+| `last_results` | character | Form guide: the last results as W (win), L (loss) or T (tie) letters, in the order the table lists them. |
+| `standings_id` | integer | Standings table id (Int64). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#magnus_standings-example}
+
+```python
+magnus_standings(phase_id=714)
+```
+
+_Last validated n/a._
+
+## magnus_teams
+
+Teams of a phase.
+
+**Endpoint URL:** `GET https://liguemagnus.com/wp-admin/admin-ajax.php`
+
+**Valid URL:** [https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_equipes&phase_id=714](https://liguemagnus.com/wp-admin/admin-ajax.php?action=get_equipes&phase_id=714)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `phase_id` | `phase_id` |  | `Y` |  | Required. Phase id from get_phases. Omitted: every team of every competition in the federation database (~680 KB) (probed 2026-10-12). |
+
+### Returns {#magnus_teams-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Team id (Int64 join key), stable across seasons; joins home_team_id / away_team_id of the schedule and team_id of the standings. |
+| `team` | character | Team display name (e.g., "Rapaces de Gap"). |
+| `team_abbreviation` | character | Team abbreviation (e.g., "GAP"). |
+| `team_short_name` | character | Short team label (e.g., "GAP", "ANGLET"). |
+| `team_label` | character | Back-office label, "<club code> - <NAME> <level>"; use team for display. |
+| `gender` | character | Gender of the team: M (men; the only value observed). |
+| `logo_url` | character | URL of the team logo image. |
+| `club_id` | integer | Id of the club (legal entity) behind the team (Int64). |
+| `club` | character | Name of the club (legal entity). |
+| `club_code` | character | Federation club code (e.g., "93006S"). |
+| `competition_ids` | list | Competition ids the team has entered, all seasons and levels (list of Int64). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#magnus_teams-example}
+
+```python
+magnus_teams(phase_id=714)
+```
+
+_Last validated n/a._

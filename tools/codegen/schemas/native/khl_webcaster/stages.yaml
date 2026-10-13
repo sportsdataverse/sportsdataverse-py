@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: type
+  type: character
+- description: ''
+  name: tournament_id
+  type: integer
+- description: ''
+  name: stage_id
+  type: integer
+- description: ''
+  name: season_label
+  type: character
+- description: ''
+  name: title
+  type: character
+- description: ''
+  name: display_rule
+  type: character
+- description: ''
+  name: percent_points_scored
+  type: logical
+kind: dataframe
+schema: khl_webcaster_stages

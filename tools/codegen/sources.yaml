@@ -156,6 +156,84 @@ providers:
     modules:
       - sportsdataverse.hockey.sihf.sihf_runtime
 
+  # European hockey leagues. Each family's own runtime (if any) is
+  # sportsdataverse.hockey.<home>.<stem>_runtime; the shared throttle
+  # sportsdataverse.hockey.euro_hockey_runtime has no public names.
+  esports_hokejovyzapis:
+    label: eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen)
+    home: https://s3.eu-west-1.amazonaws.com
+    auth: none
+    flat_apis: [del_esports, icehl_esports, eihl_esports, metal_esports]
+    modules:
+      - sportsdataverse.hockey.del_.*_runtime
+      - sportsdataverse.hockey.icehl.*_runtime
+      - sportsdataverse.hockey.eihl.*_runtime
+      - sportsdataverse.hockey.metal.*_runtime
+
+  hokej_cz:
+    label: hokej.cz (Czech Extraliga)
+    home: https://www.hokej.cz
+    auth: none
+    flat_apis: [elh]
+    modules:
+      - sportsdataverse.hockey.elh.*_runtime
+
+  liiga:
+    label: Liiga API
+    home: https://liiga.fi
+    auth: none
+    flat_apis: [liiga]
+    modules:
+      - sportsdataverse.hockey.liiga.*_runtime
+
+  shl:
+    label: SHL site API
+    home: https://www.shl.se
+    auth: none
+    flat_apis: [shl]
+    modules:
+      - sportsdataverse.hockey.shl.*_runtime
+
+  hockeyallsvenskan:
+    label: HockeyAllsvenskan site API
+    home: https://hockeyallsvenskan.se
+    auth: none
+    flat_apis: [ha]
+    modules:
+      - sportsdataverse.hockey.ha.*_runtime
+
+  nationalleague:
+    label: National League app API
+    home: https://www.nationalleague.ch
+    auth: none
+    flat_apis: [nationalleague]
+    modules:
+      - sportsdataverse.hockey.nl.*_runtime
+
+  ligue_magnus:
+    label: Ligue Magnus
+    home: https://liguemagnus.com
+    auth: none
+    flat_apis: [magnus]
+    modules:
+      - sportsdataverse.hockey.magnus.*_runtime
+
+  khl:
+    label: KHL (site REST + webcaster API)
+    home: https://www.khl.ru
+    auth: none  # keyless; the runtime primes a session cookie (sessid) itself
+    flat_apis: [khl_rest, khl_webcaster]
+    modules:
+      - sportsdataverse.hockey.khl.*_runtime
+
+  vhl:
+    label: VHL
+    home: https://www.vhlru.ru
+    auth: none
+    flat_apis: [vhl]
+    modules:
+      - sportsdataverse.hockey.vhl.*_runtime
+
   ncaa_stats:
     label: stats.ncaa.org
     home: https://stats.ncaa.org

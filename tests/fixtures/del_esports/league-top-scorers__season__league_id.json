@@ -1,0 +1,47 @@
+[
+  {
+    "playerId": 3410,
+    "name": "Liam",
+    "surname": "Kirk",
+    "teamId": 3,
+    "teamName": "Eisbären Berlin",
+    "teamShortcut": "EBB",
+    "goals": 5,
+    "assists": 11,
+    "points": 16,
+    "shots": 39,
+    "games": 8,
+    "penaltyMinutes": 0,
+    "timeOnIce": 0
+  },
+  {
+    "playerId": 2209,
+    "name": "Ty",
+    "surname": "Ronning",
+    "teamId": 3,
+    "teamName": "Eisbären Berlin",
+    "teamShortcut": "EBB",
+    "goals": 7,
+    "assists": 7,
+    "points": 14,
+    "shots": 35,
+    "games": 8,
+    "penaltyMinutes": 2,
+    "timeOnIce": 0
+  },
+  {
+    "playerId": 3950,
+    "name": "Mathew",
+    "surname": "Santos",
+    "teamId": 5,
+    "teamName": "Krefeld Pinguine",
+    "teamShortcut": "KEV",
+    "goals": 7,
+    "assists": 6,
+    "points": 13,
+    "shots": 50,
+    "games": 7,
+    "penaltyMinutes": 27,
+    "timeOnIce": 0
+  }
+]

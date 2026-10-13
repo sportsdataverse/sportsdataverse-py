@@ -1,0 +1,146 @@
+{
+  "series": [
+    {
+      "uuid": "qQ9-9397drVEh",
+      "code": "CHL",
+      "createdAt": null,
+      "createdBy": null,
+      "deleted": false,
+      "lastModified": "2024-01-02T09:33:30.000Z",
+      "names": [
+        {
+          "language": "en",
+          "translation": "CHL"
+        },
+        {
+          "language": "sv",
+          "translation": "CHL"
+        }
+      ]
+    },
+    {
+      "uuid": "qQ9-bb0bzEWUk",
+      "code": "SHL",
+      "createdAt": null,
+      "createdBy": null,
+      "deleted": false,
+      "lastModified": "2023-03-01T13:47:40.000Z",
+      "names": [
+        {
+          "language": "sv",
+          "translation": "SHL"
+        },
+        {
+          "language": "en",
+          "translation": "SHL"
+        }
+      ]
+    }
+  ],
+  "season": [
+    {
+      "uuid": "ndcf81nlb3",
+      "code": "2026",
+      "createdAt": "2026-05-07T13:55:00.000Z",
+      "createdBy": "shl1_shl",
+      "deleted": false,
+      "lastModified": "2026-05-07T14:05:00.000Z",
+      "names": [
+        {
+          "language": "sv",
+          "translation": "2026/2027"
+        }
+      ]
+    },
+    {
+      "uuid": "xs4m9qupsi",
+      "code": "2025",
+      "createdAt": "2025-05-15T15:00:00.000Z",
+      "createdBy": "shl1_shl",
+      "deleted": false,
+      "lastModified": "2025-05-15T15:00:00.000Z",
+      "names": [
+        {
+          "language": "sv",
+          "translation": "2025/2026"
+        }
+      ]
+    },
+    {
+      "uuid": "qeb-73bZkIm9A",
+      "code": "2024",
+      "createdAt": "2024-05-20T11:15:57.000Z",
+      "createdBy": "Sportality G2",
+      "deleted": false,
+      "lastModified": "2024-05-20T11:16:57.000Z",
+      "names": [
+        {
+          "language": "sv",
+          "translation": "2024/2025"
+        }
+      ]
+    }
+  ],
+  "gameType": [
+    {
+      "uuid": "qQ9-af37Ti40B",
+      "code": "regular",
+      "createdAt": null,
+      "createdBy": null,
+      "deleted": false,
+      "lastModified": null,
+      "names": [
+        {
+          "language": "sv",
+          "translation": "Grundserie"
+        },
+        {
+          "language": "en",
+          "translation": "Regular season"
+        }
+      ]
+    },
+    {
+      "uuid": "qRf-347BaDIOc",
+      "code": "qualdown",
+      "createdAt": null,
+      "createdBy": null,
+      "deleted": false,
+      "lastModified": "2016-03-09T11:00:05.000Z",
+      "names": [
+        {
+          "language": "sv",
+          "translation": "Kvalspel nedflyttning"
+        },
+        {
+          "language": "en",
+          "translation": "Qualification relegation"
+        }
+      ]
+    },
+    {
+      "uuid": "qQ9-7debq38kX",
+      "code": "playoff",
+      "createdAt": null,
+      "createdBy": null,
+      "deleted": false,
+      "lastModified": null,
+      "names": [
+        {
+          "language": "sv",
+          "translation": "Slutspel"
+        },
+        {
+          "language": "en",
+          "translation": "Playoff"
+        }
+      ]
+    }
+  ],
+  "defaultSsgtFilter": {
+    "season": "ndcf81nlb3",
+    "series": "qQ9-bb0bzEWUk",
+    "gameType": "qQ9-af37Ti40B"
+  },
+  "ssgtUuid": "qa98unlbd6"
+}

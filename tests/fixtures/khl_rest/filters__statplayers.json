@@ -1,0 +1,95 @@
+{
+  "status": "success",
+  "data": {
+    "LIST": {
+      "season": {
+        "NAME": "Сезон",
+        "CODE": "season",
+        "TYPE": "r",
+        "VALUE": [
+          {
+            "name": "Все сезоны",
+            "i": "all"
+          },
+          {
+            "name": "2026-2027",
+            "i": "s19",
+            "def": 1436
+          },
+          {
+            "name": "2025-2026",
+            "i": "s18",
+            "def": 1370,
+            "active": 1
+          }
+        ]
+      },
+      "tournament": {
+        "NAME": "Турниры",
+        "CODE": "tournament",
+        "TYPE": "r",
+        "VALUE": [
+          {
+            "name": "Все турниры",
+            "i": "s18"
+          },
+          {
+            "name": "Регулярный чемпионат",
+            "i": "1369",
+            "active": 1
+          },
+          {
+            "name": "Плей-офф",
+            "i": "1370"
+          }
+        ]
+      },
+      "amplua_full": {
+        "NAME": "Амплуа",
+        "CODE": "amplua_full",
+        "TYPE": "r",
+        "VALUE": [
+          {
+            "name": "Все амплуа",
+            "i": "all",
+            "active": 1
+          },
+          {
+            "i": "goalies",
+            "name": "Вратари"
+          },
+          {
+            "i": "defenses",
+            "name": "Защитники"
+          }
+        ]
+      },
+      "clubs_full": {
+        "NAME": "Клубы",
+        "CODE": "clubs_full",
+        "TYPE": "r",
+        "VALUE": [
+          {
+            "name": "Все клубы",
+            "i": "all",
+            "active": 1
+          },
+          {
+            "name": "Авангард",
+            "i": "avangard"
+          },
+          {
+            "name": "Автомобилист",
+            "i": "avtomobilist"
+          }
+        ]
+      }
+    },
+    "TEXT": {
+      "apply": "Применить",
+      "filters": "Фильтры",
+      "title": "Таблица"
+    }
+  },
+  "errors": []
+}

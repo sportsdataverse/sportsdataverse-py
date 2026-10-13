@@ -1,0 +1,188 @@
+[
+  {
+    "id": 4701,
+    "name": "David Silye",
+    "firstname": "David",
+    "surname": "Silye",
+    "photo": "https://esports.ice.hockey/upload/player/photo/4701_6a75c1b5cfcb7_1786102197_David Silye.png",
+    "birthdate": "1999-03-02",
+    "active": true,
+    "position": "FW",
+    "stick": "right",
+    "weight": 86,
+    "height": 180,
+    "jersey": 62,
+    "birthCountry": "",
+    "nationality": "Canada",
+    "nationalityShort": "CAN",
+    "onRoster": 1,
+    "statistics": {
+      "teamShortcut": "FTC",
+      "games": 1,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 2,
+        "away": 0
+      },
+      "points": {
+        "home": 2,
+        "away": 0
+      },
+      "penaltyMinutes": 4,
+      "positive": 1,
+      "negative": 0,
+      "pointsPerGame": 2.0,
+      "shotEfficiency": 0.0,
+      "penaltyMinutesPerGame": 4.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 5,
+      "shotsOnGoal": {
+        "home": 5,
+        "away": 0
+      },
+      "shotsMissed": 0,
+      "shotsBlocked": 0,
+      "blockedShotsByPlayer": 0,
+      "faceoffsWin": 10,
+      "faceoffsLosses": 4,
+      "faceoffsCount": 14,
+      "timeonice": 1284.44,
+      "timeoniceEQ": 856.576,
+      "timeonicePP": 372.202,
+      "timeoniceSH": 55.667,
+      "hits": 0,
+      "xG": 0.19,
+      "top5": true,
+      "rank": 1
+    }
+  },
+  {
+    "id": 4700,
+    "name": "Carter Savoie",
+    "firstname": "Carter",
+    "surname": "Savoie",
+    "photo": "https://esports.ice.hockey/upload/player/photo/4700_6a75c14698c06_1786102086_Carter Savoie.png",
+    "birthdate": "2002-01-23",
+    "active": true,
+    "position": "FW",
+    "stick": "left",
+    "weight": 86,
+    "height": 178,
+    "jersey": 8,
+    "birthCountry": "",
+    "nationality": "Canada",
+    "nationalityShort": "CAN",
+    "onRoster": 1,
+    "statistics": {
+      "teamShortcut": "FTC",
+      "games": 1,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 2,
+        "away": 0
+      },
+      "points": {
+        "home": 2,
+        "away": 0
+      },
+      "penaltyMinutes": 4,
+      "positive": 1,
+      "negative": 0,
+      "pointsPerGame": 2.0,
+      "shotEfficiency": 0.0,
+      "penaltyMinutesPerGame": 4.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 2,
+      "shotsOnGoal": {
+        "home": 2,
+        "away": 0
+      },
+      "shotsMissed": 0,
+      "shotsBlocked": 0,
+      "blockedShotsByPlayer": 0,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeonice": 1191.77,
+      "timeoniceEQ": 808.437,
+      "timeonicePP": 383.331,
+      "timeoniceSH": 0.0,
+      "hits": 0,
+      "xG": 0.04,
+      "top5": true,
+      "rank": 2
+    }
+  },
+  {
+    "id": 4109,
+    "name": "Aku Kestila",
+    "firstname": "Aku",
+    "surname": "Kestila",
+    "photo": "https://esports.ice.hockey/upload/player/photo/4109_1760108314_KESTILAE_AKU.png",
+    "birthdate": "1994-06-09",
+    "active": true,
+    "position": "FW",
+    "stick": "left",
+    "weight": 84,
+    "height": 181,
+    "jersey": 25,
+    "birthCountry": "",
+    "nationality": "Finland",
+    "nationalityShort": "FIN",
+    "onRoster": 1,
+    "statistics": {
+      "teamShortcut": "FTC",
+      "games": 1,
+      "goals": {
+        "home": 1,
+        "away": 0
+      },
+      "assists": {
+        "home": 0,
+        "away": 0
+      },
+      "points": {
+        "home": 1,
+        "away": 0
+      },
+      "penaltyMinutes": 0,
+      "positive": 0,
+      "negative": 0,
+      "pointsPerGame": 1.0,
+      "shotEfficiency": 33.33,
+      "penaltyMinutesPerGame": 0.0,
+      "ppGoals": 1,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 3,
+      "shotsOnGoal": {
+        "home": 3,
+        "away": 0
+      },
+      "shotsMissed": 0,
+      "shotsBlocked": 0,
+      "blockedShotsByPlayer": 1,
+      "faceoffsWin": 13,
+      "faceoffsLosses": 11,
+      "faceoffsCount": 24,
+      "timeonice": 1190.69,
+      "timeoniceEQ": 735.148,
+      "timeonicePP": 343.159,
+      "timeoniceSH": 112.384,
+      "hits": 0,
+      "xG": 0.36,
+      "top5": false,
+      "rank": 3
+    }
+  }
+]

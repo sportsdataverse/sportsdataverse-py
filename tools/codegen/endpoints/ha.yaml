@@ -1,0 +1,590 @@
+api: ha
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the site has nothing for the request (a season
+    before 2005/06, an unknown or pre-2025/26 game, a phase not played).'
+  - 'ValueError: a value outside its enumerated set, or a field the site requires
+    is missing.'
+  see_also:
+  - name: HockeyAllsvenskan
+    note: the site whose own API routes these wrappers read
+    url: https://hockeyallsvenskan.se/
+  - name: fastRhockey
+    note: SportsDataverse hockey package (R)
+    url: https://fastRhockey.sportsdataverse.org
+endpoints:
+- parser: parse_ha_schedule
+  path: /pages/matcher
+  returns_schema: native/ha/schedule
+  short: schedule
+  summary: 'The current season''s games (CMS records, decoded from the schedule page):
+    slug, StatNet game number and team ids, start time, score.'
+- example_args:
+    slug: 20260918-aik-modo
+  extra_params:
+  - description: Game slug yyyymmdd-home-away (slug in ha_schedule), e.g. 20260918-aik-modo.
+    name: slug
+    query_key: slug
+    required: true
+    type: str
+  parser: parse_ha_schedule
+  path: /api/game
+  returns_schema: native/ha/game
+  short: game
+  summary: 'One game''s CMS record by slug (2025/26 onward): StatNet game number and
+    team ids, scores by period, venue, attendance.'
+- example_args:
+    away_statnet_id: MODO
+    home_statnet_id: AIK
+    scheduled_date_time: '2026-09-18T17:00:00.000Z'
+    statnet_game_number: 23401
+  extra_params:
+  - description: StatNet game number (statnet_game_number in ha_schedule / ha_game),
+      e.g. 23401.
+    name: statnet_game_number
+    query_key: statNetGameNumber
+    required: true
+    type: int|str
+  - description: StatNet team id of the home team, e.g. AIK.
+    name: home_statnet_id
+    query_key: homeStatNetId
+    required: true
+    type: str
+  - description: StatNet team id of the away team, e.g. MODO.
+    name: away_statnet_id
+    query_key: awayStatNetId
+    required: true
+    type: str
+  - description: Scheduled start (scheduled_date_time in ha_schedule), ISO 8601 UTC.
+      Required by the site.
+    name: scheduled_date_time
+    query_key: scheduledDateTime
+    required: true
+    type: str
+  - description: Actual start (played_date_time), ISO 8601 UTC. Optional.
+    name: played_date_time
+    query_key: playedDateTime
+    type: str
+  method: post
+  parser: parse_ha_pbp
+  path: /api/play-by-play
+  returns_schema: native/ha/pbp
+  short: pbp
+  summary: 'One game''s events (2025/26 onward): shots with outcome, goals with assists
+    and strength, penalties, goalkeeper changes, timeouts. No coordinates, no on-ice
+    players.'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025/26); the site's START-year key is sent
+      as season - 1. Omitted = the season in progress. Stats and standings start in
+      2005/06 (2006).
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - HA
+    - HAPlayoff
+    - HAkval
+    default: HA
+    description: 'Game type: HA regular season, HAPlayoff playoffs, HAkval playout
+      (relegation series).'
+    name: phase
+    query_key: phase
+    type: str
+  - choices:
+    - all
+    - home
+    - away
+    default: all
+    description: Home / away split.
+    name: team_side
+    query_key: team_side
+    type: str
+  - default: all
+    description: 'Team filter: all, or one team of the site''s filter list (values
+      not probed).'
+    name: team
+    query_key: team
+    type: str
+  - default: all
+    description: 'Opponent filter: all, or one team (values not probed).'
+    name: against_team
+    query_key: against_team
+    type: str
+  - choices:
+    - all
+    - W
+    - T
+    - L
+    default: all
+    description: 'Result filter: W win, T tie, L loss.'
+    name: all_results
+    query_key: all_results
+    type: str
+  - choices:
+    - all
+    - played
+    default: all
+    description: 'Game status filter: played drops the season''s unplayed games.'
+    name: game_status
+    query_key: game_status
+    type: str
+  - choices:
+    - all
+    - ft
+    - ot
+    - so
+    - wo
+    default: all
+    description: 'How the game was decided: ft full time, ot overtime, so shootout,
+      wo walkover.'
+    name: decided_in
+    query_key: decided_in
+    type: str
+  method: post
+  parser: parse_ha_games
+  path: /api/all-time-games-stats
+  returns_schema: native/ha/games
+  short: games
+  summary: 'Every game of a season, played or scheduled (is_played): date, display
+    team codes, score, periods, arena, attendance, shots and power play. No game id.'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025/26); the site's START-year key is sent
+      as season - 1. Omitted = the season in progress. Stats and standings start in
+      2005/06 (2006).
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - HA
+    - HAPlayoff
+    - HAkval
+    default: HA
+    description: 'Game type: HA regular season, HAPlayoff playoffs, HAkval playout
+      (relegation series).'
+    name: phase
+    query_key: phase
+    type: str
+  - choices:
+    - all
+    - home
+    - away
+    default: all
+    description: Home / away standings split.
+    name: location
+    query_key: location
+    type: str
+  method: post
+  parser: parse_ha_standings
+  path: /api/league-standings-all-time
+  returns_schema: native/ha/standings
+  short: standings
+  summary: Standings of a season. Wins and losses are REGULATION only; overtime counts
+    include shootouts.
+- example_args:
+    category: summary
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025/26); the site's START-year key is sent
+      as season - 1. Omitted = the season in progress. Stats and standings start in
+      2005/06 (2006).
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - HA
+    - HAPlayoff
+    - HAkval
+    default: HA
+    description: 'Game type: HA regular season, HAPlayoff playoffs, HAkval playout
+      (relegation series).'
+    name: phase
+    query_key: phase
+    type: str
+  - choices:
+    - summary
+    - points
+    - goals
+    - time_on_ice
+    - power_play
+    - penalty_kill
+    - equal_strength
+    - penalties
+    - plus_minus
+    - faceoffs
+    - offensive
+    - defensive
+    - shootouts
+    - corsi_fenwick_pdo
+    default: summary
+    description: Stats category (column set), one of summary, points, goals, time_on_ice,
+      power_play, penalty_kill, equal_strength, penalties, plus_minus, faceoffs, offensive,
+      defensive, shootouts, corsi_fenwick_pdo. Anything else answers zero rows.
+    name: category
+    query_key: categories
+    type: str
+  - choices:
+    - all
+    - forward
+    - back
+    - goalkeeper
+    default: all
+    description: Position filter (back = defence).
+    name: position
+    query_key: position
+    type: str
+  - choices:
+    - all
+    - junior
+    - rookie
+    default: all
+    description: Age-group filter.
+    name: ages
+    query_key: ages
+    type: str
+  - choices:
+    - all
+    - home
+    - away
+    default: all
+    description: Home / away split.
+    name: team_side
+    query_key: team_side
+    type: str
+  - default: all
+    description: 'Team filter: all, or one team of the site''s filter list (values
+      not probed).'
+    name: team
+    query_key: team
+    type: str
+  - default: all
+    description: 'Opponent filter: all, or one team (values not probed).'
+    name: against_team
+    query_key: against_team
+    type: str
+  - choices:
+    - all
+    - W
+    - T
+    - L
+    default: all
+    description: 'Result filter: W win, T tie, L loss.'
+    name: all_results
+    query_key: all_results
+    type: str
+  - choices:
+    - all
+    - played
+    default: all
+    description: 'Game status filter: played drops the season''s unplayed games.'
+    name: game_status
+    query_key: game_status
+    type: str
+  - choices:
+    - all
+    - ft
+    - ot
+    - so
+    - wo
+    default: all
+    description: 'How the game was decided: ft full time, ot overtime, so shootout,
+      wo walkover.'
+    name: decided_in
+    query_key: decided_in
+    type: str
+  method: post
+  parser: parse_ha
+  path: /api/all-time-skaters-stats
+  returns_schema: native/ha/skater_stats
+  short: skater_stats
+  summary: Skater stats of a season, one category (column set) per call. Names and
+    StatNet team ids, no player ids.
+- example_args:
+    category: summary
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025/26); the site's START-year key is sent
+      as season - 1. Omitted = the season in progress. Stats and standings start in
+      2005/06 (2006).
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - HA
+    - HAPlayoff
+    - HAkval
+    default: HA
+    description: 'Game type: HA regular season, HAPlayoff playoffs, HAkval playout
+      (relegation series).'
+    name: phase
+    query_key: phase
+    type: str
+  - choices:
+    - summary
+    - results
+    - game_strength
+    - defensive
+    - shootouts
+    default: summary
+    description: Stats category (column set), one of summary, results, game_strength,
+      defensive, shootouts. Anything else answers zero rows.
+    name: category
+    query_key: categories
+    type: str
+  - choices:
+    - all
+    - home
+    - away
+    default: all
+    description: Home / away split.
+    name: team_side
+    query_key: team_side
+    type: str
+  - default: all
+    description: 'Team filter: all, or one team of the site''s filter list (values
+      not probed).'
+    name: team
+    query_key: team
+    type: str
+  - default: all
+    description: 'Opponent filter: all, or one team (values not probed).'
+    name: against_team
+    query_key: against_team
+    type: str
+  - choices:
+    - all
+    - W
+    - T
+    - L
+    default: all
+    description: 'Result filter: W win, T tie, L loss.'
+    name: all_results
+    query_key: all_results
+    type: str
+  - choices:
+    - all
+    - played
+    default: all
+    description: 'Game status filter: played drops the season''s unplayed games.'
+    name: game_status
+    query_key: game_status
+    type: str
+  - choices:
+    - all
+    - ft
+    - ot
+    - so
+    - wo
+    default: all
+    description: 'How the game was decided: ft full time, ot overtime, so shootout,
+      wo walkover.'
+    name: decided_in
+    query_key: decided_in
+    type: str
+  method: post
+  parser: parse_ha
+  path: /api/all-time-goalkeepers-stats
+  returns_schema: native/ha/goalie_stats
+  short: goalie_stats
+  summary: Goalkeeper stats of a season, one category per call. Names and StatNet
+    team ids, no player ids.
+- example_args:
+    category: results
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025/26); the site's START-year key is sent
+      as season - 1. Omitted = the season in progress. Stats and standings start in
+      2005/06 (2006).
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - HA
+    - HAPlayoff
+    - HAkval
+    default: HA
+    description: 'Game type: HA regular season, HAPlayoff playoffs, HAkval playout
+      (relegation series).'
+    name: phase
+    query_key: phase
+    type: str
+  - choices:
+    - results
+    - goals
+    - power_play
+    - penalty_kill
+    - penalties
+    - offensive
+    - defensive
+    - faceoffs
+    - shootouts
+    - corsi_fenwick_pdo
+    - stoppage_reasons
+    - attendance
+    default: results
+    description: Stats category (column set), one of results, goals, power_play, penalty_kill,
+      penalties, offensive, defensive, faceoffs, shootouts, corsi_fenwick_pdo, stoppage_reasons,
+      attendance. Anything else answers zero rows.
+    name: category
+    query_key: categories
+    type: str
+  - choices:
+    - all
+    - home
+    - away
+    default: all
+    description: Home / away split.
+    name: team_side
+    query_key: team_side
+    type: str
+  - default: all
+    description: 'Team filter: all, or one team of the site''s filter list (values
+      not probed).'
+    name: team
+    query_key: team
+    type: str
+  - default: all
+    description: 'Opponent filter: all, or one team (values not probed).'
+    name: against_team
+    query_key: against_team
+    type: str
+  - choices:
+    - all
+    - W
+    - T
+    - L
+    default: all
+    description: 'Result filter: W win, T tie, L loss.'
+    name: all_results
+    query_key: all_results
+    type: str
+  - choices:
+    - all
+    - played
+    default: all
+    description: 'Game status filter: played drops the season''s unplayed games.'
+    name: game_status
+    query_key: game_status
+    type: str
+  - choices:
+    - all
+    - ft
+    - ot
+    - so
+    - wo
+    default: all
+    description: 'How the game was decided: ft full time, ot overtime, so shootout,
+      wo walkover.'
+    name: decided_in
+    query_key: decided_in
+    type: str
+  method: post
+  parser: parse_ha_team_stats
+  path: /api/all-time-teams-stats
+  returns_schema: native/ha/team_stats
+  short: team_stats
+  summary: Team stats of a season, one category per call. W / L are totals including
+    overtime and shootout (wins_total / losses_total).
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025/26); the site's START-year key is sent
+      as season - 1. Omitted = the season in progress. Stats and standings start in
+      2005/06 (2006).
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - HA
+    - HAPlayoff
+    - HAkval
+    default: HA
+    description: 'Game type: HA regular season, HAPlayoff playoffs, HAkval playout
+      (relegation series).'
+    name: phase
+    query_key: phase
+    type: str
+  method: post
+  parser: parse_ha_teams
+  path: /api/all-time-goalkeepers-stats
+  returns_schema: native/ha/teams
+  short: teams
+  summary: 'Teams of a season with both team keys: StatNet team id <-> display code
+    (from the stats tables'' teams list).'
+- example_args:
+    metric: TP
+  extra_params:
+  - description: 'Leaderboard metric. Seen on the site: TP, G, A, PlusMinus, Hits,
+      FOPerc, TOI/GP (skaters).'
+    name: metric
+    query_key: metric
+    required: true
+    type: str
+  - choices:
+    - HA
+    - HAPlayoff
+    - HAkval
+    default: HA
+    description: 'Game type: HA regular season, HAPlayoff playoffs, HAkval playout
+      (relegation series).'
+    name: phase
+    query_key: phase
+    type: str
+  - description: Team filter; omitted = the whole league (values not probed).
+    name: team
+    query_key: team
+    type: str
+  - description: True for a goalkeeper metric.
+    name: is_goalkeeper
+    query_key: isGoalkeeper
+    type: bool
+  method: post
+  parser: parse_ha_leaders
+  path: /api/player-leaderboard
+  returns_schema: native/ha/leaders
+  short: leaders
+  summary: Current-season top 25 of one metric, with the StatNet player id (the only
+    stats route that has one).
+- example_args:
+    team: AIK
+  extra_params:
+  - description: 'Team display code (CMS short name: AIK, MORA, ÖIK, ...). Required:
+      the directory pages unreliably league-wide.'
+    name: team
+    query_key: teamShortName
+    required: true
+    type: str
+  - choices:
+    - familyName
+    - firstName
+    default: familyName
+    description: 'Sort: familyName or firstName.'
+    name: order_by
+    query_key: orderBy
+    type: str
+  - description: Free-text name search; omitted = everyone.
+    name: search_query
+    query_key: searchQuery
+    type: str
+  method: post
+  parser: parse_ha_players
+  path: /api/all-players
+  returns_schema: native/ha/players
+  short: players
+  summary: 'One team''s players from the CMS directory: CMS ids, position, jersey,
+    birth date, size, headshots. One team per call (league-wide paging is unreliable).'
+getter_module: sportsdataverse.hockey.ha.ha_runtime
+host: https://hockeyallsvenskan.se
+module: ha
+name_pattern: ha_{short}
+parser_columns: true
+parser_module: hockey.ha.ha_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: ha_

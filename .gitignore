@@ -64,3 +64,6 @@ agent/
 # Stray local debug output (actively appended by local tooling)
 debug.log
 tests/fixtures/socceraction/_8658_full/
+
+# gen_<stem>.py description output; merged into tools/codegen/manual_column_descriptions.yaml by hand
+tools/codegen/*_column_descriptions.snippet.yaml

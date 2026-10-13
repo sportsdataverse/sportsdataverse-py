@@ -109,6 +109,26 @@ BASKETBALL_GAME_LEGS: Dict[str, Tuple[str, Optional[str], Optional[str]]] = {
     "fox": ("fox_game_id", "fox_home_team_id", "fox_away_team_id"),
 }
 
+
+def known_teams(provider: str, league: str) -> Optional[pl.DataFrame]:
+    """Fixed ESPN -> provider team pairs for :func:`match_season`, where sdv-py holds a map.
+
+    Only CBS college football has one today (the ``cfb.cbs_pbp`` resolver's static map);
+    every other (provider, league) returns ``None`` and pairs by co-occurrence alone.
+    """
+    if (provider, league) != ("cbs", "cfb"):
+        return None
+    from sportsdataverse.cfb.cbs_pbp.teams import _CBS_TEAM_BY_ESPN
+
+    return pl.DataFrame(
+        {
+            "espn_team_id": [int(k) for k in _CBS_TEAM_BY_ESPN],
+            "team_id": [str(v[0]) for v in _CBS_TEAM_BY_ESPN.values()],
+        },
+        schema={"espn_team_id": pl.Int32, "team_id": pl.Utf8},
+    )
+
+
 #: Raw endpoint directory per provider, under ``{provider}/{league}/``.
 _BOX_ENDPOINT = {"fox": "event_data", "yahoo": "playbook_boxscore", "cbs": "game_boxscore"}
 
@@ -220,7 +240,10 @@ def _cbs_players(payload: Any, season: int, gid: str) -> List[Dict[str, Any]]:
     out: Dict[tuple, Dict[str, Any]] = {}
     for box in (payload or {}).get("boxScores") or []:
         team_id = _text(box.get("teamId"))
-        for entries in ((box or {}).get("playerStats") or {}).values():
+        stats = (box or {}).get("playerStats")
+        if not isinstance(stats, dict):  # CBS answers a few football ids with a basketball box (a list)
+            continue
+        for entries in stats.values():
             for entry in entries if isinstance(entries, list) else []:
                 p = (entry or {}).get("player") or {}
                 pid = _text(p.get("playerId"))
@@ -335,6 +358,7 @@ def match_season(
     espn_rosters: pl.DataFrame,
     alt: Mapping[str, pl.DataFrame],
     min_confidence: float = 0.92,
+    known_teams: Optional[pl.DataFrame] = None,
 ) -> Dict[str, Any]:
     """Match one provider season to ESPN: teams, then games, then players (no I/O).
 
@@ -344,6 +368,12 @@ def match_season(
             (NBA/WNBA game rosters, or the box-score athletes where that is all ESPN has).
         alt: :func:`read_season` / :func:`parse_season` output.
         min_confidence: Jaro-Winkler floor for a fuzzy player match.
+        known_teams: Optional fixed pairs (``espn_team_id`` Int32, ``team_id`` Utf8), e.g.
+            :func:`known_teams`. They are taken as given (``match_confidence`` 1.0);
+            co-occurrence pairs only the teams they leave out, and a co-occurrence pair that
+            contradicts one is dropped (counted in ``stats["teams_contradicting_known"]``).
+            Co-occurrence alone cannot tell apart teams that share every game date, such as
+            an FCS team with one FBS opponent or any team early in a season.
 
     Returns:
         ``{"teams", "games", "players", "stats"}``: ``teams`` (``espn_team_id``,
@@ -368,6 +398,18 @@ def match_season(
         ),
         "alt",
     ).rename({"alt_team_id": "team_id"})
+    contradicting = 0
+    if known_teams is not None:
+        known = known_teams.select(
+            pl.col("espn_team_id").cast(pl.Int32),
+            pl.col("team_id").cast(pl.Utf8),
+            pl.lit(1.0).alias("match_confidence"),
+        ).unique("espn_team_id", keep="first")
+        clash = pl.col("espn_team_id").is_in(known["espn_team_id"].implode()) | pl.col("team_id").is_in(
+            known["team_id"].implode()
+        )
+        contradicting = pairs.filter(clash).join(known, on=["espn_team_id", "team_id"], how="anti").height
+        pairs = pl.concat([known, pairs.filter(~clash)])
     to_espn = pairs.select("team_id", "espn_team_id")
 
     def keyed(df: pl.DataFrame, home: str, away: str) -> pl.DataFrame:
@@ -424,6 +466,7 @@ def match_season(
         "alt_games": alt_games.height,
         "espn_games": espn_games.height,
         "teams_paired": pairs.height,
+        "teams_contradicting_known": contradicting,
         "games_matched": games.height,
         "espn_athletes": espn_rosters.join(games.select("espn_game_id"), on="espn_game_id")
         .select("espn_team_id", "espn_athlete_id")
