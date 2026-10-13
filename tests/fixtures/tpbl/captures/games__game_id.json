@@ -1,0 +1,74 @@
+{
+ "id": 69,
+ "gohoops_id": 1305,
+ "division_id": 2,
+ "gohoops_division_id": 65,
+ "code": "42",
+ "home_team": {
+  "id": 7,
+  "gohoops_id": 945,
+  "gohoops_squad_id": 8214,
+  "gohoops_event_id": 319,
+  "gohoops_season_id": 101,
+  "name": "新北國王",
+  "status": "ACTIVE",
+  "meta": {
+   "logo": "https://assets.tpbl.basketball/logos/kings.webp",
+   "alt_name": "kings"
+  },
+  "is_league": false,
+  "won_score": 111,
+  "lost_score": 108
+ },
+ "away_team": {
+  "id": 2,
+  "gohoops_id": 940,
+  "gohoops_squad_id": 8209,
+  "gohoops_event_id": 319,
+  "gohoops_season_id": 101,
+  "name": "高雄全家海神",
+  "status": "ACTIVE",
+  "meta": {
+   "logo": "https://assets.tpbl.basketball/logos/aquas.webp",
+   "alt_name": "aquas"
+  },
+  "is_league": false,
+  "won_score": 108,
+  "lost_score": 111
+ },
+ "referees": [
+  {
+   "id": 22,
+   "gohoops_id": 139,
+   "name": "于容",
+   "type": "BASKETBALL_CHIEF_REFEREE"
+  },
+  {
+   "id": 19,
+   "gohoops_id": 136,
+   "name": "謝上謙",
+   "type": "BASKETBALL_FIRST_ASSISTANT_REFEREE"
+  },
+  {
+   "id": 2,
+   "gohoops_id": 119,
+   "name": "吳芳善",
+   "type": "BASKETBALL_SECOND_ASSISTANT_REFEREE"
+  }
+ ],
+ "venue": "新莊體育館",
+ "status": "COMPLETED",
+ "is_live": false,
+ "round": 6,
+ "meta": {
+  "recap": "https://youtu.be/cjx1hQL21XM?si=JrUKURQW--srVwxr",
+  "visitors": "5659",
+  "live_stream_url": "https://www.youtube.com/live/UqVxjEL3bOc?si=__vuryou55ZShLwL",
+  "judgement_report": "https://drive.google.com/file/d/10eyet5Y4VZw3Etgioa3hV9NU3mjGJBa9/view?usp=drive_link",
+  "ticket_url": null
+ },
+ "game_date": "2024-12-28",
+ "game_day_of_week": "(六)",
+ "game_time": "17:00:00",
+ "gamed_at": "2024-12-28 17:00:00"
+}

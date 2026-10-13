@@ -1,0 +1,164 @@
+[
+ {
+  "id": 1371,
+  "gohoops_id": 8062,
+  "division_id": 9,
+  "gohoops_division_id": 358,
+  "code": "1",
+  "home_team": {
+   "id": 7,
+   "gohoops_id": 945,
+   "gohoops_squad_id": 11932,
+   "gohoops_event_id": 490,
+   "gohoops_season_id": 213,
+   "name": "新北國王",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/kings.webp",
+    "alt_name": "kings"
+   },
+   "is_league": false,
+   "won_score": 110,
+   "lost_score": 100
+  },
+  "away_team": {
+   "id": 2,
+   "gohoops_id": 940,
+   "gohoops_squad_id": 11937,
+   "gohoops_event_id": 490,
+   "gohoops_season_id": 213,
+   "name": "高雄全家海神",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/aquas.webp",
+    "alt_name": "aquas"
+   },
+   "is_league": false,
+   "won_score": 100,
+   "lost_score": 110
+  },
+  "venue": "新莊體育館",
+  "status": "COMPLETED",
+  "is_live": false,
+  "round": 4,
+  "meta": {
+   "recap": "https://youtu.be/KJ21V2zMSRw",
+   "visitors": "4568",
+   "live_stream_url": "https://www.youtube.com/live/yU_q40g5r78?si=Tf2sx1BNJm0vxPPl",
+   "judgement_report": "https://drive.google.com/file/d/1wQ373_5QLi92-nDjJiyMmjUFrBmP8hZc/view?usp=drive_link",
+   "ticket_url": null
+  },
+  "game_date": "2025-10-11",
+  "game_day_of_week": "(六)",
+  "game_time": "17:00:00",
+  "gamed_at": "2025-10-11 17:00:00"
+ },
+ {
+  "id": 1372,
+  "gohoops_id": 8063,
+  "division_id": 9,
+  "gohoops_division_id": 358,
+  "code": "2",
+  "home_team": {
+   "id": 7,
+   "gohoops_id": 945,
+   "gohoops_squad_id": 11932,
+   "gohoops_event_id": 490,
+   "gohoops_season_id": 213,
+   "name": "新北國王",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/kings.webp",
+    "alt_name": "kings"
+   },
+   "is_league": false,
+   "won_score": 112,
+   "lost_score": 93
+  },
+  "away_team": {
+   "id": 3,
+   "gohoops_id": 941,
+   "gohoops_squad_id": 11936,
+   "gohoops_event_id": 490,
+   "gohoops_season_id": 213,
+   "name": "福爾摩沙夢想家",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/dreamers.webp",
+    "alt_name": "dreamers"
+   },
+   "is_league": false,
+   "won_score": 93,
+   "lost_score": 112
+  },
+  "venue": "新莊體育館",
+  "status": "COMPLETED",
+  "is_live": false,
+  "round": 4,
+  "meta": {
+   "recap": "https://youtu.be/8VHIRUG22U8",
+   "visitors": "4047",
+   "live_stream_url": "https://www.youtube.com/live/NOx21Zu5mes?si=HETHT7ZEFXFG_xEh",
+   "judgement_report": "https://drive.google.com/file/d/1A_T6e1ix6pJVzbDZCboZz5kkMg1Y7MLj/view?usp=drive_link",
+   "ticket_url": null
+  },
+  "game_date": "2025-10-12",
+  "game_day_of_week": "(日)",
+  "game_time": "17:00:00",
+  "gamed_at": "2025-10-12 17:00:00"
+ },
+ {
+  "id": 1373,
+  "gohoops_id": 8064,
+  "division_id": 9,
+  "gohoops_division_id": 358,
+  "code": "3",
+  "home_team": {
+   "id": 3,
+   "gohoops_id": 941,
+   "gohoops_squad_id": 11936,
+   "gohoops_event_id": 490,
+   "gohoops_season_id": 213,
+   "name": "福爾摩沙夢想家",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/dreamers.webp",
+    "alt_name": "dreamers"
+   },
+   "is_league": false,
+   "won_score": 101,
+   "lost_score": 106
+  },
+  "away_team": {
+   "id": 2,
+   "gohoops_id": 940,
+   "gohoops_squad_id": 11937,
+   "gohoops_event_id": 490,
+   "gohoops_season_id": 213,
+   "name": "高雄全家海神",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/aquas.webp",
+    "alt_name": "aquas"
+   },
+   "is_league": false,
+   "won_score": 106,
+   "lost_score": 101
+  },
+  "venue": "臺中洲際迷你蛋",
+  "status": "COMPLETED",
+  "is_live": false,
+  "round": 4,
+  "meta": {
+   "recap": "https://youtu.be/indqDqr3P_4",
+   "visitors": "2616",
+   "live_stream_url": "https://youtube.com/live/n8AEMw098D8?feature=share",
+   "judgement_report": "https://drive.google.com/file/d/1GnZT-G0H1D6ZM_ubiSvwj3JwPF4SpENm/view?usp=drive_link",
+   "ticket_url": null
+  },
+  "game_date": "2025-10-18",
+  "game_day_of_week": "(六)",
+  "game_time": "14:30:00",
+  "gamed_at": "2025-10-18 14:30:00"
+ }
+]

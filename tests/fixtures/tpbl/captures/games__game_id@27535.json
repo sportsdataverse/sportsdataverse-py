@@ -1,0 +1,73 @@
+{
+ "id": 27535,
+ "gohoops_id": 17013,
+ "division_id": 655,
+ "gohoops_division_id": 909,
+ "code": "1",
+ "home_team": {
+  "id": 6,
+  "gohoops_id": 944,
+  "gohoops_squad_id": 15538,
+  "gohoops_event_id": 613,
+  "gohoops_season_id": 275,
+  "name": "新北中信特攻",
+  "status": "ACTIVE",
+  "meta": {
+   "logo": "https://assets.tpbl.basketball/logos/dea.webp",
+   "alt_name": "dea"
+  },
+  "is_league": false,
+  "won_score": 136,
+  "lost_score": 133
+ },
+ "away_team": {
+  "id": 2,
+  "gohoops_id": 940,
+  "gohoops_squad_id": 15542,
+  "gohoops_event_id": 613,
+  "gohoops_season_id": 275,
+  "name": "高雄全家海神",
+  "status": "ACTIVE",
+  "meta": {
+   "logo": "https://assets.tpbl.basketball/logos/aquas.webp",
+   "alt_name": "aquas"
+  },
+  "is_league": false,
+  "won_score": 133,
+  "lost_score": 136
+ },
+ "referees": [
+  {
+   "id": 9,
+   "gohoops_id": 126,
+   "name": "陳朝宏",
+   "type": "BASKETBALL_CHIEF_REFEREE"
+  },
+  {
+   "id": 1,
+   "gohoops_id": 118,
+   "name": "賴建豪",
+   "type": "BASKETBALL_FIRST_ASSISTANT_REFEREE"
+  },
+  {
+   "id": 2,
+   "gohoops_id": 119,
+   "name": "吳芳善",
+   "type": "BASKETBALL_SECOND_ASSISTANT_REFEREE"
+  }
+ ],
+ "venue": "和平籃球館",
+ "status": "COMPLETED",
+ "is_live": false,
+ "round": 5,
+ "meta": {
+  "recap": "https://youtu.be/3zPNfcK7950",
+  "visitors": null,
+  "ticket_url": "https://tpbl.kktix.cc/events/a15rfbr",
+  "live_stream_url": "https://youtube.com/live/K5GxjwGiwd8?feature=share"
+ },
+ "game_date": "2026-10-09",
+ "game_day_of_week": "(五)",
+ "game_time": "14:30:00",
+ "gamed_at": "2026-10-09 14:30:00"
+}

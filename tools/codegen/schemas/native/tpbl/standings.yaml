@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: division_id
+  type: integer
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: gohoops_team_id
+  type: integer
+- description: ''
+  name: gohoops_squad_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: alt_name
+  type: character
+- description: ''
+  name: won
+  type: integer
+- description: ''
+  name: lost
+  type: integer
+- description: ''
+  name: drawn
+  type: integer
+- description: ''
+  name: games_behind
+  type: numeric
+- description: ''
+  name: streak
+  type: character
+kind: dataframe
+schema: tpbl_standings
