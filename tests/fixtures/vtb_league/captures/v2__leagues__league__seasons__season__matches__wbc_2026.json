@@ -1,0 +1,407 @@
+{
+  "meta": {
+    "version": 2,
+    "code": 200,
+    "status": "success",
+    "request": "http://api.vtb-league.com/v2/leagues/wbc/seasons/2026/matches?limit=1000",
+    "time": 1791835509,
+    "count": 28,
+    "limit": 1000,
+    "page": 1
+  },
+  "data": [
+    {
+      "matchId": 949062,
+      "attendance": 3757,
+      "competition": "wbc",
+      "competitors": [
+        {
+          "teamId": 1390,
+          "scoreString": 63,
+          "isHomeCompetitor": true,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/D_IIMFttv_xe27RjKmKKs5MMkUY=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40428.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/B8rHWwJK12-1dF3HikJ4Q4duvbs=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40428.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/q_8b3zxzNBOfArdK52lUBVK5t9s=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40428.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Екатеринбург",
+            "en": "Yekaterinburg"
+          },
+          "teamCode": {
+            "ru": "Уралмаш",
+            "en": "Uralmash"
+          },
+          "teamName": {
+            "ru": "Уралмаш",
+            "en": "Uralmash"
+          }
+        },
+        {
+          "teamId": 2994,
+          "scoreString": 92,
+          "isHomeCompetitor": false,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/-4BK_k2l104NtoDSzA-CUq4Bfwk=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40426.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/s26O1hJq0_avjwHq_xHHMICuNe4=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40426.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/5cdMA5p_gSVddAZ8EJxpMYRfqkM=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40426.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Санкт-Петербург",
+            "en": "Saint Petersburg"
+          },
+          "teamCode": {
+            "ru": "Зенит",
+            "en": "Zenit"
+          },
+          "teamName": {
+            "ru": "Зенит",
+            "en": "Zenit"
+          }
+        }
+      ],
+      "duration": 0,
+      "extraPeriodsUsed": false,
+      "hostingTeamId": 1390,
+      "isTimeSet": true,
+      "league": "wbc",
+      "matchNumber": "WBC-GS-1",
+      "matchStatus": "COMPLETE",
+      "matchTime": "2025-10-08T19:00:00+05:00",
+      "matchTimeMSK": "2025-10-08T17:00:00+03:00",
+      "matchTimeUTC": "2025-10-08T14:00:00+00:00",
+      "matchType": "REGULAR",
+      "periods": 4,
+      "phaseId": 1226729,
+      "phaseName": {
+        "ru": "Группа Б",
+        "en": "Group B"
+      },
+      "pointsByQuarters": [
+        [
+          17,
+          28
+        ],
+        [
+          18,
+          19
+        ],
+        [
+          13,
+          25
+        ]
+      ],
+      "season": 2026,
+      "timeActual": null,
+      "timeEndActual": null,
+      "venue": {
+        "venueId": 11742,
+        "venueName": {
+          "ru": "ГАУСО \"Дворец Игровых Видов Спорта\"",
+          "en": "GAUSO \"Dvorets Igrovykh Vidov Sporta\""
+        },
+        "regionName": {
+          "ru": "Екатеринбург",
+          "en": "Yekaterinburg"
+        }
+      },
+      "venueId": 11742
+    },
+    {
+      "matchId": 949063,
+      "attendance": 3845,
+      "competition": "wbc",
+      "competitors": [
+        {
+          "teamId": 3059,
+          "scoreString": 91,
+          "isHomeCompetitor": true,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/HYl21ko0Itj2ds0TR_7ROdJwX7w=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40425.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/qwnDsMaQbUucbyHOp3LgtRbU5rk=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40425.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/OyR0_QGEkK5kXrOSegUCgF_FQJ4=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40425.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Пермский край",
+            "en": "Perm Region"
+          },
+          "teamCode": {
+            "ru": "ПАРМА",
+            "en": "PARMA"
+          },
+          "teamName": {
+            "ru": "ПАРМА",
+            "en": "PARMA"
+          }
+        },
+        {
+          "teamId": 2650,
+          "scoreString": 84,
+          "isHomeCompetitor": false,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/m1NXw2a5C4h7PtXN9icAaWEITuQ=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40424.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/79uk2S21x4YT9US3aSE3f4VwuSM=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40424.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/Q_XsquDFzljUK5T4Nx5-fKlsuEU=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40424.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Краснодар",
+            "en": "Krasnodar"
+          },
+          "teamCode": {
+            "ru": "Локомотив-Кубань",
+            "en": "Lokomotiv Kuban"
+          },
+          "teamName": {
+            "ru": "Локомотив-Кубань",
+            "en": "Lokomotiv Kuban"
+          }
+        }
+      ],
+      "duration": 0,
+      "extraPeriodsUsed": false,
+      "hostingTeamId": 3059,
+      "isTimeSet": true,
+      "league": "wbc",
+      "matchNumber": "WBC-GS-2",
+      "matchStatus": "COMPLETE",
+      "matchTime": "2025-10-15T19:30:00+05:00",
+      "matchTimeMSK": "2025-10-15T17:30:00+03:00",
+      "matchTimeUTC": "2025-10-15T14:30:00+00:00",
+      "matchType": "REGULAR",
+      "periods": 4,
+      "phaseId": 1226728,
+      "phaseName": {
+        "ru": "Группа А",
+        "en": "Group A"
+      },
+      "pointsByQuarters": [
+        [
+          17,
+          27
+        ],
+        [
+          27,
+          20
+        ],
+        [
+          31,
+          18
+        ]
+      ],
+      "season": 2026,
+      "timeActual": null,
+      "timeEndActual": null,
+      "venue": {
+        "venueId": 11906,
+        "venueName": {
+          "ru": "УДС \"Молот\"",
+          "en": "UDS \"Molot\""
+        },
+        "regionName": {
+          "ru": "Пермь",
+          "en": "Perm"
+        }
+      },
+      "venueId": 11906
+    },
+    {
+      "matchId": 949064,
+      "attendance": 9182,
+      "competition": "wbc",
+      "competitors": [
+        {
+          "teamId": 15,
+          "scoreString": 72,
+          "isHomeCompetitor": true,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/Y3gEANICcNOeliyRJqODi_Ys_KM=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40423.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/wETIVz7oIcxKu7Pl1jfZd2Q_Ev8=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40423.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/gwIpR4GgCIIRHDcRthxAQEdK3B8=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40423.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Москва",
+            "en": "Moscow"
+          },
+          "teamCode": {
+            "ru": "ЦСКА",
+            "en": "CSKA"
+          },
+          "teamName": {
+            "ru": "ЦСКА",
+            "en": "CSKA"
+          }
+        },
+        {
+          "teamId": 29934,
+          "scoreString": 81,
+          "isHomeCompetitor": false,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/DuJwliHCTtmPFEiWMlTFrDy1z7A=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40455.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/rphiFJaT2rNKOU6MAylryZ9sxjs=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40455.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/QGGBK6KkvAf4M-IkCCcgBIA9BEk=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40455.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Белград",
+            "en": "Belgrade"
+          },
+          "teamCode": {
+            "ru": "Мега Супербет",
+            "en": "Mega Superbet"
+          },
+          "teamName": {
+            "ru": "Мега Супербет",
+            "en": "Mega Superbet"
+          }
+        }
+      ],
+      "duration": 0,
+      "extraPeriodsUsed": false,
+      "hostingTeamId": 15,
+      "isTimeSet": true,
+      "league": "wbc",
+      "matchNumber": "WBC-GS-3",
+      "matchStatus": "COMPLETE",
+      "matchTime": "2025-10-22T19:30:00+03:00",
+      "matchTimeMSK": "2025-10-22T19:30:00+03:00",
+      "matchTimeUTC": "2025-10-22T16:30:00+00:00",
+      "matchType": "REGULAR",
+      "periods": 4,
+      "phaseId": 1226728,
+      "phaseName": {
+        "ru": "Группа А",
+        "en": "Group A"
+      },
+      "pointsByQuarters": [
+        [
+          20,
+          25
+        ],
+        [
+          22,
+          14
+        ],
+        [
+          17,
+          20
+        ]
+      ],
+      "season": 2026,
+      "timeActual": null,
+      "timeEndActual": null,
+      "venue": {
+        "venueId": 16006,
+        "venueName": {
+          "ru": "ЦСКА Арена",
+          "en": "CSKA Arena"
+        },
+        "regionName": {
+          "ru": "Москва",
+          "en": "Moscow"
+        }
+      },
+      "venueId": 16006
+    }
+  ]
+}

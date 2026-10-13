@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "version": 2,
+    "code": 200,
+    "status": "success",
+    "request": "http://api.vtb-league.com/v2/leagues/wbc/seasons",
+    "time": 1791835507,
+    "count": 2,
+    "limit": 20,
+    "page": 1
+  },
+  "data": [
+    {
+      "season": 2027,
+      "league": "wbc",
+      "isCurrent": true,
+      "seasonName": "Season 2026/2027",
+      "seasonAbbrev": "26/27"
+    },
+    {
+      "season": 2026,
+      "league": "wbc",
+      "isCurrent": false,
+      "seasonName": "Season 2025/2026",
+      "seasonAbbrev": "25/26"
+    }
+  ]
+}

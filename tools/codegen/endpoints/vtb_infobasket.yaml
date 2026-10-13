@@ -1,0 +1,945 @@
+api: vtb_infobasket
+docstring:
+  example_import: true
+  notes:
+  - 'Owner flag (sdv-internal-refs/vtb/README.md): the VTB United League is run from
+    Russia and several clubs are owned or sponsored by sanctioned state companies
+    (the KHL precedent); Infobasket is the Russian basketball federation''s stats
+    platform. Fetching on your own machine is fine; any published data release, hosted
+    mirror or redistribution needs owner (sanctions / legal) sign-off first. No accounts
+    or payments are involved.'
+  - 'Unofficial and unsupported: both hosts are keyless public JSON backends of vtb-league.com.
+    No terms of use are published; robots.txt is a 404 on api.vtb-league.com and org.infobasket.su
+    (no rules; vtb-league.com disallows only /wp/wp-admin/). The runtime waits at
+    least 1 s before every request, retries included, and honours Retry-After on 429
+    / 503. No key, cookie or proxy is used (live-verified direct from the droplet
+    2026-10-12).'
+  - 'Seasons are END years (2026 = 2025-26) on both backends. Infobasket keys everything
+    by competition id: vtb_infobasket_seasons maps the END year to the season-level
+    CompID, and the season-keyed wrappers do that mapping for you. CompID means three
+    things: a season (50714), a stage below it (50720 regular season, 54281 playoff;
+    stage-level wrappers take the stage id from vtb_infobasket_comp_issue) and, in
+    the player season stats, an END year.'
+  - 'Ids: the v2 matchId is the Infobasket GameID, the v2 teamId the Infobasket TeamID
+    and the v2 venueId the Infobasket ArenaId. team_id is the key on every team route;
+    comp_team_id (a registration in one stage) and the club-record id of the team
+    page are other key spaces. person_id is one person across clubs and seasons.'
+  - 'Errors are HTTP 200: an unknown id answers {MessageType, Message}, an unknown
+    game the string ''BadRequest''; both are AssetFetchError (a failed fetch), never
+    an empty frame. A body for another game, person, team, competition or season than
+    the one asked for is AssetFetchError too, as is a game that is not final (box
+    score, plays and header need GameStatus 1) and a partial GetTeamStats page. An
+    empty list is NoDataError.'
+  - 'Coverage: calendars and box scores from 2009-10; play-by-play and shot x/y from
+    2022-23 only (earlier games give an empty pbp frame), officials in the line-ups
+    from 2022-23. Shot x/y are decimetres from the basket centre (orientation unverified).
+    Counting statistics are null instead of 0 on the wire (the parsers fill 0), percentages
+    and averages are comma-decimal strings (the parsers return floats), the paint
+    statistics are broken and dropped, and dates come in three encodings (the parsers
+    return ISO strings; .NET instants as Moscow time with its +03:00 offset).'
+  - 'Personal data: the runtime removes licence numbers, contact and operator-account
+    fields for everyone and the birth dates, birth years and ages of coaches, referees
+    and other officials from every body (also with return_parsed=False). Players''
+    public bio (birth date, height, weight, nationality) is kept.'
+  - 'Stage CompIDs: the team routes (TeamRoster, TeamStats, TeamGames) also accept
+    a stage CompID; pass it as params={''compId'': 50720} instead of season. Other
+    tags (vtbyouth, wbc, wpremier, rfb) answer through the tag argument; only vtb
+    was captured.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the host has nothing for the request (an
+    empty list, a league the API does not know, a season with no rows).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown
+    or partial: an error envelope or string (HTTP 200), a game that is not final,
+    a partial or possibly truncated page, or a body for another game, person, team,
+    competition, league or season than the one asked for.'
+  - 'ValueError: a season the competition tag does not have, or an argument that is
+    not an integer id.'
+  see_also:
+  - name: VTB United League
+    note: the league site whose backends these wrappers read
+    url: https://www.vtb-league.com/
+  - name: hoopR
+    note: SportsDataverse men's basketball package (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args: {}
+  extra_params:
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_seasons
+  path: /Comp/GetSeasonsForTag
+  returns_schema: native/vtb_infobasket/seasons
+  short: seasons
+  summary: Season END year -> season-level CompID for a competition tag (the table
+    every season-keyed wrapper maps with).
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Required.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_calendar
+  path: /Comp/GetCalendar/
+  returns_schema: native/vtb_infobasket/calendar
+  short: calendar
+  summary: 'Every game of a season (finished, live and planned): teams, scores, date,
+    venue, attendance.'
+- example_args:
+    season: 2026
+  extra_params:
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    page: 0
+  parser: parse_vtb_infobasket_team_stats
+  path: /Comp/GetTeamStats/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_stats
+  short: team_stats
+  summary: Season totals of every team of a season (all stages).
+- example_args:
+    season: 2026
+  extra_params:
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    page: 0
+  parser: parse_vtb_infobasket_team_stats_players
+  path: /Comp/GetTeamStats/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_stats_players
+  short: team_stats_players
+  summary: Season totals of every player of every team of a season.
+- example_args:
+    season: 2026
+  extra_params:
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    page: 0
+  parser: parse_vtb_infobasket_team_stats_coaches
+  path: /Comp/GetTeamStats/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_stats_coaches
+  short: team_stats_coaches
+  summary: Technical fouls and games of every coach of every team of a season.
+- example_args:
+    season: 2026
+  extra_params:
+  - default: 5
+    description: Leader categories to return (the site's widget asks 5).
+    name: count
+    query_key: count
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  parser: parse_vtb_infobasket_best_players
+  path: /Comp/GetBestPlayers/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/best_players
+  short: best_players
+  summary: Player leaders of a season for the first `count` leader categories.
+- example_args:
+    season: 2026
+  extra_params:
+  - default: 5
+    description: Leader categories to return (the site's widget asks 5).
+    name: count
+    query_key: count
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  parser: parse_vtb_infobasket_best_teams
+  path: /Comp/GetBestTeams/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/best_teams
+  short: best_teams
+  summary: Team leaders of a season for the first `count` leader categories.
+- example_args:
+    game_id: 921391
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Optional (the host accepts the call without it).
+    name: season
+    query_key: season
+    type: int
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  parser: parse_vtb_infobasket_team_preview
+  path: /Comp/GetTeamStatsForPreview/{game_id}
+  path_params:
+  - description: Infobasket GameID (game_id in vtb_infobasket_calendar; the v2 matches'
+      match_id), e.g. 921391. Global across seasons.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_preview
+  short: team_preview
+  summary: Season totals of a game's two teams (the pre-game preview).
+- example_args:
+    game_id: 921391
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_game
+  path: /Widget/GetOnline/{game_id}
+  path_params:
+  - description: Infobasket GameID (game_id in vtb_infobasket_calendar; the v2 matches'
+      match_id), e.g. 921391. Global across seasons.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/game
+  short: game
+  summary: 'Header of a finished game: stage, venue, rules, the two teams and their
+    scores.'
+- example_args:
+    game_id: 921391
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_box_score
+  path: /Widget/GetOnline/{game_id}
+  path_params:
+  - description: Infobasket GameID (game_id in vtb_infobasket_calendar; the v2 matches'
+      match_id), e.g. 921391. Global across seasons.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/box_score
+  short: box_score
+  summary: Player box score of a finished game (one row per player of each team, DNPs
+    included).
+- example_args:
+    game_id: 921391
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_team_box_score
+  path: /Widget/GetOnline/{game_id}
+  path_params:
+  - description: Infobasket GameID (game_id in vtb_infobasket_calendar; the v2 matches'
+      match_id), e.g. 921391. Global across seasons.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_box_score
+  short: team_box_score
+  summary: Team box score of a finished game, with the head coach's technical fouls.
+- example_args:
+    game_id: 921391
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_pbp
+  path: /Widget/GetOnline/{game_id}
+  path_params:
+  - description: Infobasket GameID (game_id in vtb_infobasket_calendar; the v2 matches'
+      match_id), e.g. 921391. Global across seasons.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/pbp
+  short: pbp
+  summary: Play-by-play of a finished game with shot x/y (2022-23 onwards; earlier
+    games have no plays).
+- example_args:
+    game_id: 921391
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_game_staff
+  path: /Widget/GetOnline/{game_id}
+  path_params:
+  - description: Infobasket GameID (game_id in vtb_infobasket_calendar; the v2 matches'
+      match_id), e.g. 921391. Global across seasons.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/game_staff
+  short: game_staff
+  summary: The coaches and officials of a finished game (names and roles only).
+- example_args:
+    game_id: 921391
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_game_page
+  path: /Widget/GamePage/{game_id}
+  path_params:
+  - description: Infobasket GameID (game_id in vtb_infobasket_calendar; the v2 matches'
+      match_id), e.g. 921391. Global across seasons.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/game_page
+  short: game_page
+  summary: Thin header of a finished game (use vtb_infobasket_game for teams, box
+    score and plays).
+- example_args:
+    season: 2026
+  extra_params:
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_comp_issue
+  path: /Widget/CompIssue/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/comp_issue
+  short: comp_issue
+  summary: 'Stage tree of a season (regular season, playoff, series): the stage ids
+    the standings wrappers take.'
+- example_args:
+    comp_id: 50720
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_standings
+  path: /Widget/CompTeamResults/{comp_id}
+  path_params:
+  - description: Stage CompID (comp_id in vtb_infobasket_comp_issue), not a season
+      id and not an END year, e.g. 50720 (Regular Season 2025-26) or 54281 (Playoff
+      2025-26).
+    name: comp_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/standings
+  short: standings
+  summary: Standings of one stage (a round-robin stage such as the regular season),
+    one row per team.
+- example_args:
+    comp_id: 50720
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_cross_table
+  path: /Widget/CrossTable/{comp_id}
+  path_params:
+  - description: Stage CompID (comp_id in vtb_infobasket_comp_issue), not a season
+      id and not an END year, e.g. 50720 (Regular Season 2025-26) or 54281 (Playoff
+      2025-26).
+    name: comp_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/cross_table
+  short: cross_table
+  summary: Head-to-head results grid of a round-robin stage (every game twice, once
+    from each side).
+- example_args:
+    comp_id: 54281
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_playoff
+  path: /Widget/PlayOff/{comp_id}
+  path_params:
+  - description: Stage CompID (comp_id in vtb_infobasket_comp_issue), not a season
+      id and not an END year, e.g. 50720 (Regular Season 2025-26) or 54281 (Playoff
+      2025-26).
+    name: comp_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/playoff
+  short: playoff
+  summary: Playoff bracket of a playoff stage, one row per series.
+- example_args:
+    comp_id: 54281
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_playoff_games
+  path: /Widget/PlayOff/{comp_id}
+  path_params:
+  - description: Stage CompID (comp_id in vtb_infobasket_comp_issue), not a season
+      id and not an END year, e.g. 50720 (Regular Season 2025-26) or 54281 (Playoff
+      2025-26).
+    name: comp_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/playoff_games
+  short: playoff_games
+  summary: The games of every series of a playoff stage.
+- example_args: {}
+  extra_params:
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_best_player_parameters
+  path: /Widget/GetBestPlayerParameters/
+  returns_schema: native/vtb_infobasket/best_player_parameters
+  short: best_player_parameters
+  summary: Player leader categories (a code table).
+- example_args: {}
+  extra_params:
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_best_team_parameters
+  path: /Widget/GetBestTeamParameters/
+  returns_schema: native/vtb_infobasket/best_team_parameters
+  short: best_team_parameters
+  summary: Team leader categories (a code table).
+- example_args:
+    person_id: 423011
+  extra_params:
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_player
+  path: /Widget/PlayerPage/{person_id}
+  path_params:
+  - description: 'Infobasket PersonID (person_id in a box score or roster): one person
+      across clubs and seasons, e.g. 423011.'
+    name: person_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/player
+  short: player
+  summary: 'Player profile: names, birth date, height, weight, position.'
+- example_args:
+    person_id: 423011
+  extra_params:
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_player_season_stats
+  path: /Widget/PlayerSeasonStats/{person_id}
+  path_params:
+  - description: 'Infobasket PersonID (person_id in a box score or roster): one person
+      across clubs and seasons, e.g. 423011.'
+    name: person_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/player_season_stats
+  short: player_season_stats
+  summary: A player's season-by-season totals in the competition tag.
+- example_args:
+    person_id: 423011
+  extra_params:
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_player_career_stats
+  path: /Widget/PlayerSeasonStats/{person_id}
+  path_params:
+  - description: 'Infobasket PersonID (person_id in a box score or roster): one person
+      across clubs and seasons, e.g. 423011.'
+    name: person_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/player_career_stats
+  short: player_career_stats
+  summary: A player's career totals in the competition tag.
+- example_args:
+    person_id: 423011
+    season: 2026
+    team: 2650
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Required.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: 'Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban). Required: the body is the player''s games
+      for that club.'
+    name: team
+    query_key: team
+    required: true
+    type: int
+  - default: 1
+    description: Site filter code; the widget always sends 1 (meaning unverified).
+    name: filter
+    query_key: filter
+    type: int
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_player_game_log
+  path: /Widget/PlayerStats/{person_id}
+  path_params:
+  - description: 'Infobasket PersonID (person_id in a box score or roster): one person
+      across clubs and seasons, e.g. 423011.'
+    name: person_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/player_game_log
+  short: player_game_log
+  summary: A player's game log for one season and one team, one row per game.
+- example_args:
+    person_id: 131047
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_coach
+  path: /Widget/CoachPage/{person_id}
+  path_params:
+  - description: 'Infobasket PersonID (person_id in a box score or roster): one person
+      across clubs and seasons, e.g. 423011.'
+    name: person_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/coach
+  short: coach
+  summary: 'Coach profile: names, height, weight (no birth data).'
+- example_args:
+    team_id: 2650
+  extra_params:
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_team
+  path: /Widget/TeamPage/{team_id}
+  path_params:
+  - description: Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban).
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team
+  short: team
+  summary: 'Club profile: names, region, country, status.'
+- example_args:
+    team_id: 2650
+  extra_params:
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_team_seasons
+  path: /Widget/GetTeamSeasons/{team_id}
+  path_params:
+  - description: Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban).
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_seasons
+  short: team_seasons
+  summary: The seasons a club has data for (END year and the club's competition id).
+- example_args:
+    season: 2026
+    team_id: 2650
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Required.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_team_comps
+  path: /Widget/GetTeamComps/{team_id}
+  path_params:
+  - description: Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban).
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_comps
+  short: team_comps
+  summary: The competitions a club played in one season.
+- example_args:
+    season: 2026
+    team_id: 2650
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Required.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_roster
+  path: /Widget/TeamRoster/{team_id}
+  path_params:
+  - description: Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban).
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/roster
+  short: roster
+  summary: A club's player roster in one season.
+- example_args:
+    season: 2026
+    team_id: 2650
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Required.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_roster_coaches
+  path: /Widget/TeamRoster/{team_id}
+  path_params:
+  - description: Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban).
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/roster_coaches
+  short: roster_coaches
+  summary: A club's coaches in one season (no birth data).
+- example_args:
+    season: 2026
+    team_id: 2650
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Required.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_team_games
+  path: /Widget/TeamGames/{team_id}
+  path_params:
+  - description: Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban).
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_games
+  short: team_games
+  summary: A club's games in one season (the calendar's row shape).
+- example_args:
+    season: 2026
+    team_id: 2650
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Required.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_team_season_stats
+  path: /Widget/TeamStats/{team_id}
+  path_params:
+  - description: Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban).
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_season_stats
+  short: team_season_stats
+  summary: A club's season totals in one season.
+- example_args:
+    season: 2026
+    team_id: 2650
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Required.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_team_player_stats
+  path: /Widget/TeamStats/{team_id}
+  path_params:
+  - description: Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban).
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_player_stats
+  short: team_player_stats
+  summary: Season totals of every player of a club in one season.
+- example_args:
+    season: 2026
+    team_id: 2650
+  extra_params:
+  - description: Season END year (2026 = 2025-26); the wrapper maps it to the season-level
+      Infobasket CompID with vtb_infobasket_seasons (one extra request per tag, cached).
+      Required.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - en
+    - ru
+    default: en
+    description: Label language (en or ru). Most bodies carry both languages whatever
+      is asked; the leader categories' labels follow it.
+    name: lang
+    query_key: lang
+    type: str
+  - default: vtb
+    description: 'Competition tag scoping the profile: vtb (VTB United League, default),
+      vtbyouth, wbc, wpremier or rfb. The season table is read for this tag.'
+    name: tag
+    query_key: tag
+    type: str
+  fixed_params:
+    format: json
+  parser: parse_vtb_infobasket_team_coach_stats
+  path: /Widget/TeamStats/{team_id}
+  path_params:
+  - description: Infobasket TeamID (team_id in the calendar, a box score or the v2
+      matches), e.g. 2650 (Lokomotiv Kuban).
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/vtb_infobasket/team_coach_stats
+  short: team_coach_stats
+  summary: Technical fouls and games of every coach of a club in one season.
+getter_module: sportsdataverse.basketball.vtb.vtb_infobasket_runtime
+host: https://org.infobasket.su
+module: vtb_infobasket
+name_pattern: vtb_infobasket_{short}
+parser_columns: true
+parser_module: basketball.vtb.vtb_infobasket_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: vtb_infobasket_

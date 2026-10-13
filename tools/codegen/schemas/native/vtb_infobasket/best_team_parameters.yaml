@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: param
+  type: integer
+- description: ''
+  name: name
+  type: character
+kind: dataframe
+schema: vtb_infobasket_best_team_parameters

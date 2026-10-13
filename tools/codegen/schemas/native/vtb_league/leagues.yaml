@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: league_id
+  type: integer
+- description: ''
+  name: league
+  type: character
+- description: ''
+  name: league_name_en
+  type: character
+- description: ''
+  name: league_name_ru
+  type: character
+- description: ''
+  name: league_abbrev_en
+  type: character
+- description: ''
+  name: league_abbrev_ru
+  type: character
+kind: dataframe
+schema: vtb_league_leagues

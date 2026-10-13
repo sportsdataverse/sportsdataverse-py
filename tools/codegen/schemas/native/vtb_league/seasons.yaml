@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: league
+  type: character
+- description: ''
+  name: is_current
+  type: logical
+- description: ''
+  name: season_name
+  type: character
+- description: ''
+  name: season_abbrev
+  type: character
+kind: dataframe
+schema: vtb_league_seasons

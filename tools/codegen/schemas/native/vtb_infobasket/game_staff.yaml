@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: team_number
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: start_id
+  type: integer
+- description: ''
+  name: start_type
+  type: integer
+- description: ''
+  name: role
+  type: character
+- description: ''
+  name: pos_id
+  type: integer
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: person_name_en
+  type: character
+- description: ''
+  name: person_name_ru
+  type: character
+- description: ''
+  name: country_code_ioc
+  type: character
+kind: dataframe
+schema: vtb_infobasket_game_staff
