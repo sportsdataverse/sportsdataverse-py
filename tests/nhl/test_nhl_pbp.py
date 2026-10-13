@@ -97,3 +97,33 @@ def test_clock_remaining_matches_nhl_api_goals(monkeypatch: pytest.MonkeyPatch) 
     )
     got = [(int(p), int(s)) for p, s in goals.select("period.number", "start.period_seconds_remaining").rows()]
     assert want == got == [(1, 933), (1, 796), (2, 289)]
+
+
+# ESPN capture -> (NHL API play-by-play of the same game, floor of plays matched on (period, elapsed)).
+NHL_API = {
+    401675111: (FIXTURES / "nhl_api_web" / "pbp_2024_scf_g7.json", 329),
+    401672983: (FIXTURES / "nhl_espn_pbp" / "nhl_api_pbp_2023030321.json", 437),
+    401688272: (FIXTURES / "nhl_espn_pbp" / "nhl_api_pbp_2024020673.json", 357),
+}
+
+
+@pytest.mark.parametrize("game_id", sorted(NHL_API))
+def test_clock_remaining_matches_nhl_api_time_remaining(game_id: int, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Every NHL API play's (period, timeInPeriod) found in ESPN has ESPN's remaining == its timeRemaining."""
+    path, floor = NHL_API[game_id]
+    api = json.loads(path.read_text(encoding="utf-8"))
+
+    def secs(s: str) -> int:
+        m, x = s.split(":")
+        return 60 * int(m) + int(x)
+
+    df = _plays(game_id, monkeypatch)
+    mm = df["clock.displayValue"].str.split(":").list
+    elapsed = (mm.get(0).cast(pl.Int64) * 60 + mm.get(1).cast(pl.Int64)).to_list()
+    espn = dict(zip(zip(df["period.number"].to_list(), elapsed), df["start.period_seconds_remaining"].to_list()))
+    pairs = [
+        ((p["periodDescriptor"]["number"], secs(p["timeInPeriod"])), secs(p["timeRemaining"])) for p in api["plays"]
+    ]
+    matched = [(k, r) for k, r in pairs if k in espn]
+    assert len(matched) >= floor
+    assert [(k, r) for k, r in matched if espn[k] != r] == []

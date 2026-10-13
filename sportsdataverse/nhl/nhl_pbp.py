@@ -338,7 +338,8 @@ def helper_nhl_pbp_features(game_id, pbp_txt, init):
         # 20:00 at the horn), not time remaining as in basketball. A regulation period is
         # 1200 s; a playoff (season type 3) overtime is 1200 s, a regular-season overtime
         # 300 s, and the regular-season shootout (period 5, every clock 0:00) has no clock.
-        # Overtime seconds are not added to a game offset (the game total counts regulation).
+        # In overtime game_seconds_remaining is the OT period clock (fastRhockey nhl_game_feed.R
+        # convention, no regulation offset), so it rises again at each OT period start.
         .with_columns(
             pl.when((pl.col("period.number") <= 3) | (pl.col("seasonType").cast(pl.Int64, strict=False) == 3))
             .then(pl.lit(1200.0))
