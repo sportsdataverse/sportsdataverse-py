@@ -193,6 +193,8 @@ sportsdataverse/
   hockeytech/ # HockeyTech core (_client/_leagues/_family/_parsers/_analytics)
   hockey/     # 20 HockeyTech league families + college hockey (mch/wch, ESPN) + SIHF (sihf, Swiss)
               #   + European leagues (del_, icehl, eihl, metal, elh, liiga, shl, ha, nl, magnus, khl, vhl)
+  basketball/ # international basketball families (fiba, genius, atrium, nbl, feb, scb, lba, acb, ibba, wjbl, vtb, kbl,
+              #   bleague, kzs, lkl, tbf, cebl, aba, easl, bnxt, tpbl, plg, cba, dbl) + the shared basketball_runtime
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
@@ -782,6 +784,14 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
   Python keyword, so `import sportsdataverse.hockey.del` would not parse. Every runtime spaces
   requests at least 1 s apart through `hockey/euro_hockey_runtime.py`, and takes the season as the
   END year, mapping it to the provider's key at the boundary.
+- **The international basketball families nest the same way** (`generate._BASKETBALL_HOMES` ->
+  `_NESTED_HOMES`): `sportsdataverse.basketball.<home>`. `basketball/` is a generated container (like
+  `hockey/`), so its `__init__.py` is never hand-edited. A home is a short provider-family name, not
+  always a league: `genius` and `atrium` serve many competitions, `scb` serves BBL and DBBL, `bnxt` is the
+  Sportpress family, `dbl` the Sportality one, `plg` the P. LEAGUE+ pair. Requests are spaced at least 1 s
+  through `basketball/basketball_runtime.py` (a throttled `SESSION`, plus an optional proxy read from a named
+  environment variable, `GENIUS_PROXY` / `CBA_PROXY`, never logged); the season is the END year at the
+  public API and each runtime maps it to the provider's key.
 
 ### MBB / WBB / CFB / college baseball — stats.ncaa.org families (0.0.72+)
 
@@ -1318,7 +1328,12 @@ TheSportsDB (`thesportsdb`), `euroleague`, SIHF (`sihf`), Jolpica (`f1`), `cbs_n
 `yahoo_shangrila`, `fox_api`, HockeyTech, the European hockey leagues (the eSports
 hokejovyzapis S3 feeds `del_esports` / `icehl_esports` / `eihl_esports` / `metal_esports`,
 hokej.cz (`elh`), Liiga (`liiga`), SHL (`shl`), HockeyAllsvenskan (`ha`), National League
-(`nationalleague`), Ligue Magnus (`magnus`), KHL (`khl_rest`, `khl_webcaster`) and VHL (`vhl`)), stats.ncaa.org, The Odds API, and the
+(`nationalleague`), Ligue Magnus (`magnus`), KHL (`khl_rest`, `khl_webcaster`) and VHL (`vhl`)), the international
+basketball leagues (FIBA `fiba_gdap` / `fiba_gamepage`, Genius Sports LiveStats (`genius`), Sportradar Atrium (`atrium`),
+NBL Australia (`nbl_rosetta`), FEB (`feb`), BBL and DBBL (`scb`), Lega Basket (`legabasket`), ACB (`acb`), IBBA (`ibba`,
+`ibba_segev`), W League (`wjbl`), VTB (`vtb_infobasket`, `vtb_league`), KBL (`kbl`), B.LEAGUE (`bleague`), KZS (`kzs`),
+LKL (`lkl`), TBF (`tbf`), CEBL (`cebl`), ABA League (`aba`), EASL (`easl`), BNXT (`sportpress`), TPBL (`tpbl`), P. LEAGUE+
+(`pleague`, `pleague_preciser`), CBA (`cba`) and Basketligaen (`sportality`)), stats.ncaa.org, The Odds API, and the
 prediction markets Polymarket (`polymarket`) and Kalshi (`kalshi`). ESPN's content API
 (`espn_content`) files under ESPN.
 
@@ -1354,7 +1369,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 50 families**, not three.
+- **`FLAT_APIS` has 78 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in
