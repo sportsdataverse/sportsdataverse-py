@@ -124,3 +124,46 @@ def test_pwhl_game_info_player_box_player_info_empty_payloads_keep_schema(payloa
     assert dict(box["goalies"].schema) == P.GOALIE_BOX_SCHEMA
     info = P.parse_player_info(payload)
     assert info.height == 0 and dict(info.schema) == P.PLAYER_INFO_SCHEMA
+
+
+def test_pwhl_game_info_non_scalar_fields_become_null():
+    """A list / dict where the feed normally ships a scalar never reaches pl.from_dicts (review)."""
+    raw = _load("pwhl_svf_gamesummary_164.json")
+    raw["details"]["venue"] = ["Coca-Cola Coliseum"]
+    raw["details"]["attendance"] = {"n": 8351}
+    raw["homeTeam"]["info"]["name"] = {"en": "Toronto Sceptres"}
+    row = P.parse_game_info(raw).row(0, named=True)
+    assert (row["game_id"], row["game_venue"], row["attendance"], row["home_team"]) == (164, None, None, None)
+    assert row["away_team"] == "New York Sirens"
+
+
+def test_pwhl_player_box_non_scalar_fields_become_null():
+    raw = _load("pwhl_svf_gamesummary_164.json")
+    raw["homeTeam"]["skaters"][0]["info"]["firstName"] = ["Kali"]
+    raw["homeTeam"]["skaters"][0]["stats"]["toi"] = ["21:54"]
+    sk = P.parse_player_box(raw)["skaters"]
+    first = sk.filter(pl.col("player_id") == 68).row(0, named=True)
+    assert (first["first_name"], first["toi"], first["time_on_ice"], first["last_name"]) == (
+        None,
+        None,
+        None,
+        "Flanagan",
+    )
+    assert sk.height == 38
+
+
+def test_pwhl_player_box_without_game_id_is_empty():
+    """No details.id -> both frames empty, never rows with a null game_id (review)."""
+    raw = _load("pwhl_svf_gamesummary_164.json")
+    del raw["details"]["id"]
+    box = P.parse_player_box(raw)
+    assert {k: v.height for k, v in box.items()} == {"skaters": 0, "goalies": 0}
+    assert dict(box["skaters"].schema) == P.SKATER_BOX_SCHEMA
+
+
+def test_pwhl_player_info_non_scalar_fields_become_null():
+    raw = _load("pwhl_svf_player_12.json")
+    raw["info"]["firstName"] = ["Megan"]
+    raw["info"]["jerseyNumber"] = 5
+    row = P.parse_player_info(raw).row(0, named=True)
+    assert (row["player_id"], row["first_name"], row["jersey_number"], row["last_name"]) == (12, None, "5", "Keller")

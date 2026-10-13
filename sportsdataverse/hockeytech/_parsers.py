@@ -964,7 +964,19 @@ def _toi_minutes(toi: Any) -> Optional[float]:
     return round((int(parts[0]) * 60 + int(parts[1])) / 60, 1)
 
 
+def _cell(v: Any, dtype: Any) -> Any:
+    """``v`` coerced to the column ``dtype``; a value that cannot fit (a list, dict, ...) becomes null."""
+    if isinstance(v, bool) or not isinstance(v, (str, int, float)):
+        return None
+    if dtype == pl.String:
+        return v if isinstance(v, str) else str(v)
+    if dtype == pl.Int64:
+        return v if isinstance(v, int) else None
+    return float(v) if not isinstance(v, str) else None
+
+
 def _frame(rows: List[Dict[str, Any]], schema: Dict[str, Any], return_as_pandas: bool) -> Any:
+    rows = [{c: _cell(r.get(c), t) for c, t in schema.items()} for r in rows]
     df = pl.from_dicts(rows, schema=schema) if rows else pl.DataFrame(schema=schema)
     return df.to_pandas() if return_as_pandas else df
 
@@ -1084,7 +1096,7 @@ def parse_player_box(payload: Any, return_as_pandas: bool = False, league: str =
     """
     game_id = _as_int(_obj(payload, "details").get("id"))
     rows: Dict[str, List[Dict[str, Any]]] = {"skaters": [], "goalies": []}
-    for side in ("homeTeam", "visitingTeam"):
+    for side in ("homeTeam", "visitingTeam") if game_id is not None else ():
         team = _obj(payload, side)
         team_id = _as_int(_obj(team, "info").get("id"))
         for kind in rows:

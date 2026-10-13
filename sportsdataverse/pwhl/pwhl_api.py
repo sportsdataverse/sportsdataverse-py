@@ -70,7 +70,7 @@ def pwhl_season_id(return_as_pandas: bool = False) -> Any:
         Next step::
 
             import polars as pl
-            df.filter(pl.col("game_type_label") == "Regular Season")
+            df.filter(pl.col("game_type_label") == "regular")
 
         See Also:
             * `fastRhockey`_ -- the R package these wrappers mirror

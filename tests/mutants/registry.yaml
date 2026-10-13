@@ -959,3 +959,21 @@
   test: tests/hockeytech/test_client.py::test_strip_jsonp_trailing_semicolon
   expected: kill
   note: A JSONP body ending `);` must still unwrap.
+- id: pwhl-statviewfeed-non-scalar-cell
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'rows = [{c: _cell(r.get(c), t) for c, t in schema.items()} for r in rows]'
+  mutant: 'rows = [{c: r.get(c) for c in schema} for r in rows]'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_game_info_non_scalar_fields_become_null
+  expected: kill
+  note: A list / dict where the feed ships a scalar becomes null instead of raising in pl.from_dicts (review PRRT_kwDOGNKCHc6rtBLY).
+- id: pwhl-player-box-requires-game-id
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'for side in ("homeTeam", "visitingTeam") if game_id is not None else ():'
+  mutant: 'for side in ("homeTeam", "visitingTeam"):'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_without_game_id_is_empty
+  expected: kill
+  note: No details.id -> empty frames, never box rows with a null game_id (review PRRT_kwDOGNKCHc6rtBLb).

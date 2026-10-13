@@ -67,5 +67,5 @@ df = pwhl_season_id()
 # Next step
 
 import polars as pl
-df.filter(pl.col("game_type_label") == "Regular Season")
+df.filter(pl.col("game_type_label") == "regular")
 ```
