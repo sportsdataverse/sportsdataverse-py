@@ -7244,33 +7244,32 @@ class CFBPlayProcess(object):
                 highlight_run=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
                 .then(True)
                 .otherwise(False),
-                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
-                .then(8)
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 8))
+                # The standard per-yard adjusted-line-yards band (losses 120%, yards 0-4 100%, yards
+                # 5-10 50%, beyond 10 0%; cap 7), the NFL processor's twin: the line takes half of
+                # yards 5-10, the carrier (second level) the other half, open field everything past
+                # 10, so the three parts sum to the carry. It was a 0-3 / 4-8 / cap 5.5 band (C-NF-3).
+                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                .then(10)
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 10))
                 .then(pl.col("yds_rushed"))
                 .otherwise(None),
             )
             .with_columns(
                 line_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") < 0))
                 .then(1.2 * pl.col("adj_rush_yardage"))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 0).and_(pl.col("yds_rushed") <= 3))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 4))
                 .then(pl.col("adj_rush_yardage"))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4).and_(pl.col("yds_rushed") <= 8))
-                .then(3 + 0.5 * (pl.col("adj_rush_yardage") - 3))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
-                .then(5.5)
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 10))
+                .then(4 + 0.5 * (pl.col("adj_rush_yardage") - 4))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                .then(7.0)
                 .otherwise(None),
-                # The runner's half of the shared band starts where the line's full credit stops, and
-                # line_yards above gives the line 100% only through 3 yards. Subtracting 4 here instead
-                # of 3 lost exactly half a yard on every carry of 4+, so line + second level + open
-                # field came to yds_rushed - 0.5 rather than yds_rushed: 29 of the 55 rushes in
-                # ESPN 401864570 were short by 0.5 and the rest (runs under 4) were exact.
                 second_level_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4))
-                .then(0.5 * (pl.col("adj_rush_yardage") - 3))
+                .then(0.5 * (pl.col("adj_rush_yardage") - 4))
                 .when(pl.col("rush") == True)
                 .then(0)
                 .otherwise(None),
-                open_field_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
+                open_field_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
                 .then(pl.col("yds_rushed") - pl.col("adj_rush_yardage"))
                 .when(pl.col("rush") == True)
                 .then(0)
