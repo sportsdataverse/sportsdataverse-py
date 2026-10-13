@@ -1,0 +1,20 @@
+[
+ "/match/outcomes/for/{org}/teams/in/season/{year}/{type}",
+ "/match/{match_id}",
+ "/match/{match_id}/live/all",
+ "/next/match/for/team/{team_code}/{org}/{year}",
+ "/next/match/for/{org}/{year}",
+ "/next/matches/for/teams/in/{org}/{year}",
+ "/{org}/matches/in/season/{year}/{type}",
+ "/{org}/player_boxscores/for/{player_id}/in/season/{year}/regular",
+ "/{org}/players/for/team/{team_id}/in/season/{year}",
+ "/{org}/players/in/season/{year}",
+ "/{org}/seasons",
+ "/{org}/seasons/current",
+ "/{org}/standings/{year}/regular",
+ "/{org}/statistics/for/player/{player_id}",
+ "/{org}/stats/leaders/for/season/id/{season_id}",
+ "/{org}/stats/leaders/for/season/id/{season_id}/team/{team_code}",
+ "/{org}/team/stats/for/season/{year}/regular",
+ "/{org}/teams"
+]

@@ -1,0 +1,669 @@
+api: nbl_rosetta
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial: the JSON proxy behind nbl.com.au (not an API the NBL documents or
+    supports). The terms of use were not reviewed; payloads are not redistributed
+    as release assets.'
+  - 'Gated by a referer, not a key: every request carries Origin / Referer set to
+    nbl.com.au (the runtime sends them); without them the host answers 403 MISSING_API_KEY,
+    which is raised as AssetFetchError.'
+  - 'Fills a hole in ESPN: ESPN''s nbl feed has box scores but no plays for the 2025-26
+    NBL season (the stats provider changed from Genius Sports to Sportradar DataCore
+    that year). nbl_rosetta_match_pbp has the full event log with shot x/y for 2025-26
+    and, in the same shape, back to 2011-12 (WNBL about 2014-15). Matches from 1979
+    have box scores only.'
+  - One host serves three organisations; pass org='nbl' (default), 'wnbl' or 'nbl1'.
+    NBL1 is the second tier (men's and women's conferences, calendar-year seasons).
+  - Season = the END year (2026 = 2025-26) everywhere. Rosetta's own year is the START
+    year for the NBL and WNBL from 1998-99 and a calendar year for NBL1 and the 1979-1997
+    winter seasons; the runtime maps it. Year 1998 holds two seasons (calendar 1998
+    and 1998-99).
+  - 'Ids: <entity>_id columns are DataCore ids (UUID v1; join on them), rosetta_<entity>_id
+    Rosetta''s own. match_id is the DataCore fixture id every match route is keyed
+    on.'
+  - Unknown ids, orgs and types answer 200 with no rows (NoDataError). Rosetta caches
+    a body per path and serves it whatever the query string, so a page cut by someone
+    else's limit is refused (AssetFetchError); retry after the cache entry expires.
+  raises:
+  - 'sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown
+    match, team, player or season id, an org or season type with nothing, or no season
+    in progress).'
+  - 'sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope,
+    a page cut by Rosetta''s path cache, or a body for another org, season or entity
+    than the one asked for.'
+  see_also:
+  - name: NBL
+    note: the site whose JSON proxy these wrappers read
+    url: https://www.nbl.com.au/
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+endpoints:
+- example_args:
+    org: nbl
+  extra_params:
+  - description: Rows to return. Omitted = a page large enough for the whole list
+      (a short page cut by Rosetta's path cache is refused).
+    name: limit
+    query_key: limit
+    type: int
+  parser: parse_nbl_rosetta_seasons
+  path: /{org}/seasons
+  path_params:
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/seasons
+  short: seasons
+  summary: 'Every season of an organisation: regular, preseason, in-season cups and
+    test seasons, with dates.'
+- example_args:
+    org: nbl
+  parser: parse_nbl_rosetta_seasons
+  path: /{org}/seasons/current
+  path_params:
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/seasons_current
+  short: seasons_current
+  summary: 'The season in progress (empty between seasons: NoDataError).'
+- example_args:
+    org: nbl
+    season: 2026
+    season_type: regular
+  extra_params:
+  - description: Rows to return. Omitted = a page large enough for the whole list
+      (a short page cut by Rosetta's path cache is refused).
+    name: limit
+    query_key: limit
+    type: int
+  - description: Rows to skip. Pages can overlap, so prefer one large limit.
+    name: offset
+    query_key: offset
+    type: int
+  parser: parse_nbl_rosetta_matches
+  path: /{org}/matches/in/season/{season}/{season_type}
+  path_params:
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  - choices:
+    - all
+    - regular
+    - preseason
+    - in_season
+    - test
+    default: all
+    description: 'Season type: all (every type of the year), regular (includes finals),
+      preseason, in_season (cups, Blitz, NBAxNBL, All-Star) or test.'
+    name: season_type
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/matches
+  short: matches
+  summary: 'Matches of a season: ids, teams, venue, status, scores and start time
+    (UTC).'
+- example_args:
+    org: nbl
+  extra_params:
+  - description: Rows to return. Omitted = a page large enough for the whole list
+      (a short page cut by Rosetta's path cache is refused).
+    name: limit
+    query_key: limit
+    type: int
+  parser: parse_nbl_rosetta_teams
+  path: /{org}/teams
+  path_params:
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/teams
+  short: teams
+  summary: 'Every team record of an organisation: current, defunct, exhibition and
+    development sides.'
+- example_args:
+    match_id: b217a699-4bef-11f0-bc08-933162362355
+  parser: parse_nbl_rosetta_match
+  path: /match/{match_id}
+  path_params:
+  - description: DataCore fixture id of the match (match_id of nbl_rosetta_matches),
+      a UUID, e.g. b217a699-4bef-11f0-bc08-933162362355.
+    name: match_id
+    required: true
+    type: str
+  returns_schema: native/nbl_rosetta/match_by_id
+  short: match_by_id
+  summary: 'One match''s header (the same body as nbl_rosetta_match): status, scores,
+    venue, season and teams.'
+- example_args:
+    match_id: b217a699-4bef-11f0-bc08-933162362355
+  parser: parse_nbl_rosetta_match
+  path: /match/{match_id}/live/all
+  path_params:
+  - description: DataCore fixture id of the match (match_id of nbl_rosetta_matches),
+      a UUID, e.g. b217a699-4bef-11f0-bc08-933162362355.
+    name: match_id
+    required: true
+    type: str
+  returns_schema: native/nbl_rosetta/match
+  short: match
+  summary: 'One match''s header: status, scores, clock, venue, season and teams. Box
+    score and play-by-play: the match_* frames.'
+- example_args:
+    match_id: b217a699-4bef-11f0-bc08-933162362355
+  parser: parse_nbl_rosetta_match_player_box
+  path: /match/{match_id}/live/all
+  path_params:
+  - description: DataCore fixture id of the match (match_id of nbl_rosetta_matches),
+      a UUID, e.g. b217a699-4bef-11f0-bc08-933162362355.
+    name: match_id
+    required: true
+    type: str
+  returns_schema: native/nbl_rosetta/match_player_box
+  short: match_player_box
+  summary: One match's official player box score, one row per player line (period
+    0 = whole game).
+- example_args:
+    match_id: b217a699-4bef-11f0-bc08-933162362355
+  parser: parse_nbl_rosetta_match_team_box
+  path: /match/{match_id}/live/all
+  path_params:
+  - description: DataCore fixture id of the match (match_id of nbl_rosetta_matches),
+      a UUID, e.g. b217a699-4bef-11f0-bc08-933162362355.
+    name: match_id
+    required: true
+    type: str
+  returns_schema: native/nbl_rosetta/match_team_box
+  short: match_team_box
+  summary: One match's team box score by period, one row per team and period (0 =
+    whole game).
+- example_args:
+    match_id: b217a699-4bef-11f0-bc08-933162362355
+  parser: parse_nbl_rosetta_match_player_period_box
+  path: /match/{match_id}/live/all
+  path_params:
+  - description: DataCore fixture id of the match (match_id of nbl_rosetta_matches),
+      a UUID, e.g. b217a699-4bef-11f0-bc08-933162362355.
+    name: match_id
+    required: true
+    type: str
+  returns_schema: native/nbl_rosetta/match_player_period_box
+  short: match_player_period_box
+  summary: One match's player box score by period (Rosetta-computed from the event
+    log), one row per player and period.
+- example_args:
+    match_id: b217a699-4bef-11f0-bc08-933162362355
+  parser: parse_nbl_rosetta_match_pbp
+  path: /match/{match_id}/live/all
+  path_params:
+  - description: DataCore fixture id of the match (match_id of nbl_rosetta_matches),
+      a UUID, e.g. b217a699-4bef-11f0-bc08-933162362355.
+    name: match_id
+    required: true
+    type: str
+  returns_schema: native/nbl_rosetta/match_pbp
+  short: match_pbp
+  summary: One match's play-by-play with shot x/y, oldest first (NBL 2025-26 included,
+    which ESPN's nbl feed lacks).
+- example_args:
+    org: nbl
+    season: 2026
+  extra_params:
+  - description: Rows to return. Omitted = a page large enough for the whole list
+      (a short page cut by Rosetta's path cache is refused).
+    name: limit
+    query_key: limit
+    type: int
+  parser: parse_nbl_rosetta_standings
+  path: /{org}/standings/{season}/regular
+  path_params:
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/standings
+  short: standings
+  summary: 'Regular-season ladder: position, record, points for and against, home
+    and away splits and form.'
+- example_args:
+    org: nbl
+    season: 2026
+  extra_params:
+  - description: Rows to return. Omitted = a page large enough for the whole list
+      (a short page cut by Rosetta's path cache is refused).
+    name: limit
+    query_key: limit
+    type: int
+  - description: Rows to skip. Pages can overlap, so prefer one large limit.
+    name: offset
+    query_key: offset
+    type: int
+  parser: parse_nbl_rosetta_players
+  path: /{org}/players/in/season/{season}
+  path_params:
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/players
+  short: players
+  summary: 'Roster rows of every team in a season: player bio, jersey, position and
+    team.'
+- example_args:
+    org: nbl
+    season: 2026
+    team_id: befee10a-410c-11f0-b3f4-1b3c55488bbb
+  parser: parse_nbl_rosetta_players
+  path: /{org}/players/for/team/{team_id}/in/season/{season}
+  path_params:
+  - description: 'Team id: the DataCore id (team_id of nbl_rosetta_teams) or Rosetta''s
+      own id; either is accepted.'
+    name: team_id
+    required: true
+    type: str
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/team_players
+  short: team_players
+  summary: 'Roster of one team in a season: player bio, jersey and position.'
+- example_args:
+    org: nbl
+    season: 2026
+    season_type: regular
+  parser: parse_nbl_rosetta_outcomes
+  path: /match/outcomes/for/{org}/teams/in/season/{season}/{season_type}
+  path_params:
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  - choices:
+    - all
+    - regular
+    - preseason
+    - in_season
+    - test
+    default: regular
+    description: 'Season type: all (every type of the year), regular (includes finals),
+      preseason, in_season (cups, Blitz, NBAxNBL, All-Star) or test.'
+    name: season_type
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/outcomes
+  short: outcomes
+  summary: Win-loss record and last 10, 5 and 3 results per team, keyed by team name.
+- example_args:
+    org: nbl
+    participated: 1
+    player_id: 7619d3ea-410d-11f0-9235-2902fc2f936f
+    season: 2026
+  extra_params:
+  - description: 1 = only games the player played in (without it, games on the roster
+      that he sat out too).
+    name: participated
+    query_key: filter[participated]
+    type: int
+  parser: parse_nbl_rosetta_player_game_log
+  path: /{org}/player_boxscores/for/{player_id}/in/season/{season}/regular
+  path_params:
+  - description: 'Player id: the DataCore person id (player_id of nbl_rosetta_players)
+      or Rosetta''s own id; either is accepted.'
+    name: player_id
+    required: true
+    type: str
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/player_game_log
+  short: player_game_log
+  summary: 'A player''s game log for a season: the box-score line of each game (period
+    0 = whole game) and the game.'
+- example_args:
+    org: nbl
+    player_id: 7619d3ea-410d-11f0-9235-2902fc2f936f
+  parser: parse_nbl_rosetta_player_season_stats
+  path: /{org}/statistics/for/player/{player_id}
+  path_params:
+  - description: 'Player id: the DataCore person id (player_id of nbl_rosetta_players)
+      or Rosetta''s own id; either is accepted.'
+    name: player_id
+    required: true
+    type: str
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/player_stats
+  short: player_stats
+  summary: A player's season totals and averages for every season, by period.
+- example_args:
+    org: nbl
+    season_id: 1f8e4a79-e98b-457b-85a5-e4b898c6c0bd
+  extra_params:
+  - description: Rows to return. Omitted = a page large enough for the whole list
+      (a short page cut by Rosetta's path cache is refused).
+    name: limit
+    query_key: limit
+    type: int
+  parser: parse_nbl_rosetta_player_season_stats
+  path: /{org}/stats/leaders/for/season/id/{season_id}
+  path_params:
+  - description: 'Season id: the DataCore season id (season_id of nbl_rosetta_seasons)
+      or Rosetta''s own id (rosetta_season_id); either is accepted. Not the year.'
+    name: season_id
+    required: true
+    type: str
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/stats_leaders
+  short: stats_leaders
+  summary: Player season totals and averages of a season (the leaderboard), one row
+    per player and period.
+- example_args:
+    org: nbl
+    period: 0
+    season_id: 1f8e4a79-e98b-457b-85a5-e4b898c6c0bd
+    sort: -points
+    team_code: PER
+  extra_params:
+  - description: Rows to return. Omitted = a page large enough for the whole list
+      (a short page cut by Rosetta's path cache is refused).
+    name: limit
+    query_key: limit
+    type: int
+  - description: 'Period to keep: 0 = whole game, 1-4 quarters, 5 and up overtime.'
+    name: period
+    query_key: filter[period]
+    type: int
+  - description: Sort key; a leading minus sorts descending, e.g. -points.
+    name: sort
+    query_key: sort
+    type: str
+  parser: parse_nbl_rosetta_player_season_stats
+  path: /{org}/stats/leaders/for/season/id/{season_id}/team/{team_code}
+  path_params:
+  - description: 'Season id: the DataCore season id (season_id of nbl_rosetta_seasons)
+      or Rosetta''s own id (rosetta_season_id); either is accepted. Not the year.'
+    name: season_id
+    required: true
+    type: str
+  - description: Team code (team_code of nbl_rosetta_teams), e.g. PER for the Perth
+      Wildcats.
+    name: team_code
+    required: true
+    type: str
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/team_stats_leaders
+  short: team_stats_leaders
+  summary: Player season totals of one team in a season, optionally one period and
+    sorted.
+- example_args:
+    org: nbl
+    season: 2026
+  extra_params:
+  - description: Rows to return. Omitted = a page large enough for the whole list
+      (a short page cut by Rosetta's path cache is refused).
+    name: limit
+    query_key: limit
+    type: int
+  parser: parse_nbl_rosetta_team_season_stats
+  path: /{org}/team/stats/for/season/{season}/regular
+  path_params:
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  returns_schema: native/nbl_rosetta/team_stats
+  short: team_stats
+  summary: Team season totals and averages by period (0 = whole game, 1-4 quarters,
+    5 and up overtime).
+- example_args:
+    org: nbl
+    season: 2027
+  parser: parse_nbl_rosetta_next_match
+  path: /next/match/for/{org}/{season}
+  path_params:
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/nbl_rosetta/next_match
+  short: next_match
+  summary: The organisation's next scheduled match (empty between seasons).
+- example_args:
+    org: nbl
+    season: 2027
+    team_code: PER
+  parser: parse_nbl_rosetta_next_match
+  path: /next/match/for/team/{team_code}/{org}/{season}
+  path_params:
+  - description: Team code (team_code of nbl_rosetta_teams), e.g. PER for the Perth
+      Wildcats.
+    name: team_code
+    required: true
+    type: str
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/nbl_rosetta/next_match_team
+  short: next_match_team
+  summary: Next match; the team segment is ignored by Rosetta (the body is the organisation's
+    next match).
+- example_args:
+    org: nbl
+    season: 2027
+  parser: parse_nbl_rosetta_next_matches
+  path: /next/matches/for/teams/in/{org}/{season}
+  path_params:
+  - choices:
+    - nbl
+    - wnbl
+    - nbl1
+    default: nbl
+    description: 'Organisation: nbl (men''s NBL), wnbl (women''s) or nbl1 (the second
+      tier, men''s and women''s conferences).'
+    name: org
+    required: false
+    type: str
+  - description: 'Season END year (2026 = 2025-26). The runtime maps it to Rosetta''s
+      year: the START year for the NBL and WNBL from 1998-99, the calendar year for
+      NBL1 and the NBL / WNBL winter seasons up to 1998. END 1998 and 1999 both read
+      Rosetta year 1998, which holds two seasons; the matches frame keeps the one
+      asked for.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/nbl_rosetta/next_matches
+  short: next_matches
+  summary: 'Each team''s next matches: opponent, venue and start time.'
+getter_module: sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime
+host: https://prod.rosetta.nbl.com.au/get
+module: nbl_rosetta
+name_pattern: nbl_rosetta_{short}
+parser_columns: true
+parser_module: basketball.nbl_au.nbl_rosetta_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: nbl_rosetta_

@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: org
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: wins
+  type: integer
+- description: ''
+  name: losses
+  type: integer
+- description: ''
+  name: last10
+  type: character
+- description: ''
+  name: last5
+  type: character
+- description: ''
+  name: last3
+  type: character
+- description: ''
+  name: season_end_year
+  type: integer
+kind: dataframe
+schema: nbl_rosetta_outcomes
