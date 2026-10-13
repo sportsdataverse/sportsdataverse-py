@@ -6041,10 +6041,11 @@ class CFBPlayProcess(object):
             # ESPN "for N yds loss" (0.36-live port) -- ahead of "rush for", which reads it as a gain.
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(_FOR_N_YARDS_LOSS_RE)))
             .then(-1 * _rush_loss_yards)
-            # Each guard below names the number its reader extracts, so a text the reader cannot
-            # parse falls through instead of stopping on a null (EX-1.2-a): "1 Yd Run (X Run for
-            # Two-Point Conversion)" is not a "run for N", and "Joseph Banyard rush ..." is not a
-            # "N Yard Rush".
+            # The five guards below (run for / rush for / Yd Run / Yd Rush / Yard Rush) name the number
+            # their reader extracts, so a text the reader cannot parse falls through instead of stopping
+            # on a null (EX-1.2-a): "1 Yd Run (X Run for Two-Point Conversion)" is not a "run for N", and
+            # "Joseph Banyard rush ..." is not a "N Yard Rush". The "rushed" and kneel branches are not
+            # guarded that way, and the guards read cleaned_text while the readers stop at the turnover.
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)run for -?\d")))
             .then(_gain_text.str.extract(r"(?i)run for (-?\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)rush for -?\d")))
