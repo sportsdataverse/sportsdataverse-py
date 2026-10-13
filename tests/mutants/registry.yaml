@@ -874,3 +874,60 @@
   note: >-
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
+
+# --- A-M21 / A-M22 / A-M23: the generator documents what runs (task 3.9 PR 1) ---------------------
+- id: codegen-sport-parser-override-before-view
+  group: codegen-runtime
+  finding: A-M21
+  file: tools/codegen/generate.py
+  snippet: '            ep = dataclasses.replace(ep, parser=overrides[ep.short])'
+  mutant: '            pass'
+  test: tests/codegen/test_league_param_mode.py::test_headline_soccer_league_documents_the_parser_it_calls
+  expected: kill
+  note: >-
+    Without the override on the endpoint the view is built from, 68 soccer/cricket wrappers name
+    parse_scoreboard (and its siblings) in their docstrings while calling parse_soccer_* / parse_cricket_*.
+
+- id: codegen-sport-override-uses-sport-schema
+  group: codegen-runtime
+  finding: A-M21
+  file: tools/codegen/generate.py
+  snippet: '            schema_league = league.sport'
+  mutant: '            schema_league = None'
+  test: tests/codegen/test_league_param_mode.py::test_headline_soccer_league_documents_the_parser_it_calls
+  expected: kill
+  note: >-
+    The 12 headline soccer leagues have no per-prefix schema, so keyed by prefix they publish the
+    generic cross-league returns tables (boxscore_player, plays, ...) instead of the soccer parser's.
+
+- id: codegen-espn-wrapper-frame-union-annotation
+  group: codegen-runtime
+  finding: A-M22
+  file: tools/codegen/templates/espn_league_module.py.jinja
+  snippet: ') -> Union[pl.DataFrame, pd.DataFrame, {{ ep.raw_hint }}]:'
+  mutant: ') -> Dict:'
+  test: tests/codegen/test_league_param_mode.py::test_every_parsed_espn_wrapper_is_annotated_with_the_frame_union
+  expected: kill
+  note: All 3,446 ESPN wrappers return a frame by default; `-> Dict` was the annotation before 3.9.
+
+- id: codegen-query-params-required-flag
+  group: codegen-runtime
+  finding: A-M23
+  file: tools/codegen/gen_soccer_common.py
+  snippet: '        if is_required and required in ("flag", "both"):'
+  mutant: '        if is_required and required in ("both",):'
+  test: tests/codegen/test_query_params.py::test_required_policies
+  expected: kill
+  note: >-
+    The one _query_params carries the spec's required flag by an explicit policy; Euroleague's live
+    host passes "both" (its codes must be positional). Yahoo/NWSL stay "ignore" pending the owner (A-M23).
+
+- id: codegen-query-params-path-clash-prefix
+  group: codegen-runtime
+  finding: A-M23
+  file: tools/codegen/gen_soccer_common.py
+  snippet: '            name = f"filter_{name}"'
+  mutant: '            pass'
+  test: tests/codegen/test_query_params.py::test_names_types_skip_and_clash
+  expected: kill
+  note: MLS and NWSL rename a query param that clashes with a path token to filter_<name>; CBS/On3 drop it.
