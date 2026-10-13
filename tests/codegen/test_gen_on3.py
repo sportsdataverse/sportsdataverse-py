@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import sys
 from pathlib import Path
 
 import pytest
@@ -17,6 +18,10 @@ _GEN = Path(__file__).resolve().parents[2] / "tools" / "codegen" / "gen_on3.py"
 
 
 def _load_gen():
+    # gen_on3 imports its sibling ``gen_soccer_common`` (the shared ``_query_params``), as it
+    # does when run as a script from tools/codegen/.
+    if str(_GEN.parent) not in sys.path:
+        sys.path.insert(0, str(_GEN.parent))
     spec = importlib.util.spec_from_file_location("gen_on3", _GEN)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

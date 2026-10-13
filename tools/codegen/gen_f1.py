@@ -37,6 +37,7 @@ from typing import Any, Dict, List
 import polars as pl
 from gen_soccer_common import (
     ROOT,
+    _query_params,
     columns_from_frame,
     get_ops,
     load_spec,
@@ -152,19 +153,6 @@ def _path_params(op: dict) -> List[Dict[str, Any]]:
     ]
 
 
-def _query_params(op: dict) -> List[Dict[str, Any]]:
-    return [
-        {
-            "name": underscore(prm["name"]),
-            "query_key": prm["name"],
-            "type": "str",
-            "description": str(prm.get("description") or "").strip(),
-        }
-        for prm in op.get("parameters", [])
-        if prm.get("in") == "query"
-    ]
-
-
 def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     short = _short(path)
     pps = _path_params(op)
@@ -184,7 +172,7 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     }
     if pps:
         entry["path_params"] = pps
-    qps = _query_params(op)
+    qps = _query_params(op, keep_empty_description=True)
     if qps:
         entry["extra_params"] = qps
     return entry
