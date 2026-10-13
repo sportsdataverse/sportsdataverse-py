@@ -219,6 +219,8 @@ from sportsdataverse.nba import fox_nba_team_header as fox_nba_team_header  # no
 from sportsdataverse.nba import fox_nba_teamnav as fox_nba_teamnav  # noqa: F401
 from sportsdataverse.nba import game_minutes as game_minutes  # noqa: F401
 from sportsdataverse.nba import game_page_frames as game_page_frames  # noqa: F401
+from sportsdataverse.nba import game_page_tables as game_page_tables  # noqa: F401
+from sportsdataverse.nba import game_regulation_periods as game_regulation_periods  # noqa: F401
 from sportsdataverse.nba import get_constants as get_constants  # noqa: F401
 from sportsdataverse.nba import get_shrinkage_k as get_shrinkage_k  # noqa: F401
 from sportsdataverse.nba import helper_nba_athlete_items as helper_nba_athlete_items  # noqa: F401
@@ -244,6 +246,7 @@ from sportsdataverse.nba import helper_nba_team_season_stats as helper_nba_team_
 from sportsdataverse.nba import home_prior as home_prior  # noqa: F401
 from sportsdataverse.nba import hoopshype_salaries as hoopshype_salaries  # noqa: F401
 from sportsdataverse.nba import in_game_features as in_game_features  # noqa: F401
+from sportsdataverse.nba import league_pbp_functions as league_pbp_functions  # noqa: F401
 from sportsdataverse.nba import lineup_play_context as lineup_play_context  # noqa: F401
 from sportsdataverse.nba import load_darko_dpm as load_darko_dpm  # noqa: F401
 from sportsdataverse.nba import load_dunks_threes_stats as load_dunks_threes_stats  # noqa: F401
@@ -618,6 +621,8 @@ __all__ = [
     "fox_nba_teams",
     "game_minutes",
     "game_page_frames",
+    "game_page_tables",
+    "game_regulation_periods",
     "get_constants",
     "get_shrinkage_k",
     "helper_nba_athlete_items",
@@ -643,6 +648,7 @@ __all__ = [
     "home_prior",
     "hoopshype_salaries",
     "in_game_features",
+    "league_pbp_functions",
     "lineup_play_context",
     "load_darko_dpm",
     "load_dunks_threes_stats",
