@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: organisation_id
+  type: integer
+- description: ''
+  name: period
+  type: character
+- description: ''
+  name: period_number
+  type: integer
+- description: ''
+  name: points
+  type: integer
+- description: ''
+  name: points_first_five_min
+  type: integer
+kind: dataframe
+schema: fiba_gamepage_period_scores

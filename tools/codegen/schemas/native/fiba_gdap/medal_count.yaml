@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: organisation_id
+  type: integer
+- description: ''
+  name: fiba_code
+  type: character
+- description: ''
+  name: team_zone_code
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: total_first_rank
+  type: integer
+- description: ''
+  name: total_second_rank
+  type: integer
+- description: ''
+  name: total_third_rank
+  type: integer
+- description: ''
+  name: total_participations
+  type: integer
+kind: dataframe
+schema: fiba_gdap_medal_count

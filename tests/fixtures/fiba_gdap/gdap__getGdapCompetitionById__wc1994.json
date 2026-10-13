@@ -1,0 +1,52 @@
+{
+  "hosts": [
+    {
+      "countryCode": "CAN",
+      "countryName": "Canada",
+      "cities": [
+        "Hamilton"
+      ]
+    },
+    {
+      "countryCode": "CAN",
+      "countryName": "Canada",
+      "cities": [
+        "Toronto"
+      ]
+    }
+  ],
+  "competitionId": 2509,
+  "competitionCode": "WMM",
+  "season": 1994,
+  "officialName": "World Championship for Men",
+  "start": "1994-08-04",
+  "end": "1994-08-14",
+  "status": "Closed",
+  "ageCategory": "Senior",
+  "gender": "Men",
+  "fibaZone": "World",
+  "zoneInformation": {
+    "zoneId": 1,
+    "zoneOfficialName": "World",
+    "zoneCode": "W",
+    "topZoneId": null,
+    "topZoneOfficialName": null,
+    "topZoneCode": null
+  },
+  "competitionType": "National Teams",
+  "competitionCategory": {
+    "isLeague": false,
+    "ageType": "S",
+    "code": "WC",
+    "name": "World Cup"
+  },
+  "officialFlagItemCode": "O",
+  "officialFlagItemName": "Official",
+  "official": "Official",
+  "discipline": "Basketball",
+  "competitionMarketingName": {
+    "competitionMarketingNameId": 201,
+    "marketingName": "FIBA Basketball World Cup",
+    "code": null
+  }
+}

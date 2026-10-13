@@ -1,0 +1,376 @@
+{
+ "gamepage": {
+  "box_players": {
+   "fixtures": [
+    "page__bcl__bcl2027-current.json",
+    "page__events__elw2025.json",
+    "page__events__paris2024-final.json",
+    "page__history__bcl2025.json",
+    "page__history__wc2023-final.json",
+    "page__history__wwc2022-final.json",
+    "full/page__wc2023-final.json",
+    "full/page__elw2025.json"
+   ]
+  },
+  "box_teams": {
+   "fixtures": [
+    "page__bcl__bcl2027-current.json",
+    "page__events__elw2025.json",
+    "page__events__paris2024-final.json",
+    "page__history__bcl2025.json",
+    "page__history__wc2023-final.json",
+    "page__history__wwc2022-final.json",
+    "full/page__wc2023-final.json",
+    "full/page__elw2025.json"
+   ]
+  },
+  "lineup": {
+   "fixtures": [
+    "page__bcl__bcl2027-current.json",
+    "page__events__elw2025.json",
+    "page__events__paris2024-final.json",
+    "page__history__bcl2025.json",
+    "page__history__wc2023-final.json",
+    "page__history__wwc2022-final.json",
+    "full/page__wc2023-final.json",
+    "full/page__elw2025.json"
+   ]
+  },
+  "pbp": {
+   "fixtures": [
+    "page__bcl__bcl2027-current.json",
+    "page__events__elw2025.json",
+    "page__events__paris2024-final.json",
+    "page__history__bcl2025.json",
+    "page__history__wc2023-final.json",
+    "page__history__wwc2022-final.json",
+    "full/page__wc2023-final.json",
+    "full/page__elw2025.json"
+   ]
+  },
+  "period_scores": {
+   "fixtures": [
+    "page__bcl__bcl2027-current.json",
+    "page__events__elw2025.json",
+    "page__events__paris2024-final.json",
+    "page__history__bcl2025.json",
+    "page__history__wc2023-final.json",
+    "page__history__wwc2022-final.json",
+    "full/page__wc2023-final.json",
+    "full/page__elw2025.json"
+   ]
+  },
+  "shots": {
+   "fixtures": [
+    "page__bcl__bcl2027-current.json",
+    "page__events__elw2025.json",
+    "page__events__paris2024-final.json",
+    "page__history__bcl2025.json",
+    "page__history__wc2023-final.json",
+    "page__history__wwc2022-final.json",
+    "full/page__wc2023-final.json",
+    "full/page__elw2025.json"
+   ]
+  }
+ },
+ "gdap": {
+  "awards": {
+   "fixtures": [
+    "gdap__getgdapcompetitionawardsbyid__wc2023.json"
+   ],
+   "method": "getgdapcompetitionawardsbyid"
+  },
+  "competition": {
+   "fixtures": [
+    "gdap__getGdapCompetitionById__wc1994.json",
+    "gdap__getGdapCompetitionById__wc2023.json"
+   ],
+   "method": "getGdapCompetitionById"
+  },
+  "editions": {
+   "fixtures": [
+    "gdap__getgdapcompetitionsbyseasonsandcompetitionmarketingname__bcl-2025.json",
+    "gdap__getgdapcompetitionsbyseasonsandcompetitionmarketingname__world-cup-1950-2027.json"
+   ],
+   "method": "getgdapcompetitionsbyseasonsandcompetitionmarketingname"
+  },
+  "federation_games": {
+   "fixtures": [
+    "gdap__getgdapfederationgamesbyfederationid__ger.json"
+   ],
+   "method": "getgdapfederationgamesbyfederationid"
+  },
+  "federation_ranking": {
+   "fixtures": [
+    "gdap__getgdapfederationsranking__men-world-2025-09-15.json"
+   ],
+   "method": "getgdapfederationsranking"
+  },
+  "final_standings": {
+   "fixtures": [
+    "gdap__getgdapcompetitionfinalstandingbycompetitionid__wc2023.json"
+   ],
+   "method": "getgdapcompetitionfinalstandingbycompetitionid"
+  },
+  "game": {
+   "fixtures": [
+    "gdap__getgdapgamebyid__bcl2025.json",
+    "gdap__getgdapgamebyid__elw2025.json",
+    "gdap__getgdapgamebyid__paris2024-final.json",
+    "gdap__getgdapgamebyid__wc2023-final.json",
+    "gdap__getgdapgamebyid__wwc2022-final.json"
+   ],
+   "method": "getgdapgamebyid"
+  },
+  "game_officials": {
+   "fixtures": [
+    "gdap__getgdapgamebyid__bcl2025.json",
+    "gdap__getgdapgamebyid__elw2025.json",
+    "gdap__getgdapgamebyid__paris2024-final.json",
+    "gdap__getgdapgamebyid__wc2023-final.json",
+    "gdap__getgdapgamebyid__wwc2022-final.json"
+   ],
+   "method": "getgdapgamebyid"
+  },
+  "game_periods": {
+   "fixtures": [
+    "gdap__getgdapgamebyid__bcl2025.json",
+    "gdap__getgdapgamebyid__elw2025.json",
+    "gdap__getgdapgamebyid__paris2024-final.json",
+    "gdap__getgdapgamebyid__wc2023-final.json",
+    "gdap__getgdapgamebyid__wwc2022-final.json"
+   ],
+   "method": "getgdapgamebyid"
+  },
+  "games_between": {
+   "fixtures": [
+    "gdap__getgdapgamesbetweentwodates__wc2023-final-weekend.json"
+   ],
+   "method": "getgdapgamesbetweentwodates"
+  },
+  "gateway_competition_ids": {
+   "fixtures": [
+    "gdap__getcustomgateway__competitionIdsBetweenTwoDates-2025-01-14.json"
+   ],
+   "method": "getcustomgateway"
+  },
+  "gateway_federation_ranking": {
+   "fixtures": [
+    "gdap__getcustomgateway__federationRanking-men-world.json"
+   ],
+   "method": "getcustomgateway"
+  },
+  "medal_count": {
+   "fixtures": [
+    "gdap__getgdapmedalcount__world-cup.json"
+   ],
+   "method": "getgdapmedalcount"
+  },
+  "national_teams": {
+   "fixtures": [
+    "gdap__getgdapnationalteams__all.json"
+   ],
+   "method": "getgdapnationalteams"
+  },
+  "nominations": {
+   "fixtures": [
+    "gdap__getgdapcompetitionnominationsbyid__wc2023.json"
+   ],
+   "method": "getgdapcompetitionnominationsbyid"
+  },
+  "player_game_stats": {
+   "fixtures": [
+    "gdap__getgdapplayergamestatisticsbyplayerid__wc2023-bonga.json",
+    "full/getgdapplayergamestatisticsbyplayerid__wc2023-bonga.json"
+   ],
+   "method": "getgdapplayergamestatisticsbyplayerid"
+  },
+  "player_info": {
+   "fixtures": [
+    "gdap__getgdapplayerinfobycompetitionid__wc2023-bonga.json"
+   ],
+   "method": "getgdapplayerinfobycompetitionid"
+  },
+  "player_stats": {
+   "fixtures": [
+    "gdap__getgdapplayercompetitionstatisticsbyplayerid__wc2023-bonga.json"
+   ],
+   "method": "getgdapplayercompetitionstatisticsbyplayerid"
+  },
+  "ranking_zones": {
+   "fixtures": [
+    "gdap__getgdaprankingzones__all.json"
+   ],
+   "method": "getgdaprankingzones"
+  },
+  "roster": {
+   "fixtures": [
+    "gdap__getgdapcompetitionteamrosterbyteamid__wc2023-ger.json",
+    "full/getgdapcompetitionteamrosterbyteamid__wc2023-ger.json"
+   ],
+   "method": "getgdapcompetitionteamrosterbyteamid"
+  },
+  "roster_coaches": {
+   "fixtures": [
+    "gdap__getgdapcompetitionteamrosterbyteamid__wc2023-ger.json",
+    "full/getgdapcompetitionteamrosterbyteamid__wc2023-ger.json"
+   ],
+   "method": "getgdapcompetitionteamrosterbyteamid"
+  },
+  "roster_latest": {
+   "fixtures": [
+    "gdap__getgdapcompetitionteamlatestrosterbyteamid__bcl2025-oostende.json"
+   ],
+   "method": "getgdapcompetitionteamlatestrosterbyteamid"
+  },
+  "round_gamedays": {
+   "fixtures": [
+    "gdap__getgdapcompetitionroundgamedaysbyid__wc2023.json"
+   ],
+   "method": "getgdapcompetitionroundgamedaysbyid"
+  },
+  "round_standings": {
+   "fixtures": [
+    "gdap__getgdaproundsbycompetitionid__bcl2025.json",
+    "gdap__getgdaproundsbycompetitionid__wc2023.json",
+    "full/getgdaproundsbycompetitionid__wc2023.json"
+   ],
+   "method": "getgdaproundsbycompetitionid"
+  },
+  "rounds": {
+   "fixtures": [
+    "gdap__getgdaproundsbycompetitionid__bcl2025.json",
+    "gdap__getgdaproundsbycompetitionid__wc2023.json",
+    "full/getgdaproundsbycompetitionid__wc2023.json"
+   ],
+   "method": "getgdaproundsbycompetitionid"
+  },
+  "schedule": {
+   "fixtures": [
+    "gdap__getgdapgamesbycompetitionid__bcl2025.json",
+    "gdap__getgdapgamesbycompetitionid__elw2025.json",
+    "gdap__getgdapgamesbycompetitionid__paris2024-men.json",
+    "gdap__getgdapgamesbycompetitionid__wc1994.json",
+    "gdap__getgdapgamesbycompetitionid__wc2023.json",
+    "gdap__getgdapgamesbycompetitionid__wwc2022.json",
+    "full/getgdapgamesbycompetitionid__paris2024-men.json"
+   ],
+   "method": "getgdapgamesbycompetitionid"
+  },
+  "team_games": {
+   "fixtures": [
+    "gdap__getgdapgameswithleaderdetailsbyteamid__wc2023-ger.json"
+   ],
+   "method": "getgdapgameswithleaderdetailsbyteamid"
+  },
+  "team_player_stats": {
+   "fixtures": [
+    "gdap__getgdapcompetitionteamstatisticsbyteamid__wc2023-ger.json",
+    "full/getgdapcompetitionteamstatisticsbyteamid__wc2023-ger.json"
+   ],
+   "method": "getgdapcompetitionteamstatisticsbyteamid"
+  },
+  "team_staff": {
+   "fixtures": [
+    "gdap__getgdapteamstaffbycompetitionid__wc2023.json"
+   ],
+   "method": "getgdapteamstaffbycompetitionid"
+  },
+  "team_stats": {
+   "fixtures": [
+    "gdap__getgdapcompetitionteamstatisticsbyteamid__wc2023-ger.json",
+    "full/getgdapcompetitionteamstatisticsbyteamid__wc2023-ger.json"
+   ],
+   "method": "getgdapcompetitionteamstatisticsbyteamid"
+  },
+  "teams": {
+   "fixtures": [
+    "gdap__getgdapcompetitionteamsbycompetitionid__wc2023.json"
+   ],
+   "method": "getgdapcompetitionteamsbycompetitionid"
+  }
+ },
+ "page_templates": [
+  "/en/events/{eventSlug}/games/{gameId}-{teamACode}-{teamBCode}",
+  "/en/games/{gameId}-{teamACode}-{teamBCode}",
+  "/en/history/{histId}-{histSlug}/{competitionId}/games/{gameId}-{teamACode}-{teamBCode}"
+ ],
+ "spec_methods": {
+  "getGdapCompetitionById": [
+   "gdapCompetitionId"
+  ],
+  "getcustomgateway": [
+   "fibaFunction"
+  ],
+  "getgdapcompetitionawardsbyid": [
+   "gdapCompetitionId"
+  ],
+  "getgdapcompetitionfinalstandingbycompetitionid": [
+   "gdapCompetitionId",
+   "profile"
+  ],
+  "getgdapcompetitionnominationsbyid": [
+   "gdapCompetitionId"
+  ],
+  "getgdapcompetitionroundgamedaysbyid": [
+   "gdapCompetitionId"
+  ],
+  "getgdapcompetitionsbyseasonsandcompetitionmarketingname": [
+   "competitionMarketingNameId"
+  ],
+  "getgdapcompetitionteamlatestrosterbyteamid": [
+   "gdapTeamId"
+  ],
+  "getgdapcompetitionteamrosterbyteamid": [
+   "gdapTeamId"
+  ],
+  "getgdapcompetitionteamsbycompetitionid": [
+   "gdapCompetitionId",
+   "profile"
+  ],
+  "getgdapcompetitionteamstatisticsbyteamid": [
+   "gdapTeamId"
+  ],
+  "getgdapfederationgamesbyfederationid": [
+   "gdapFederationId"
+  ],
+  "getgdapfederationsranking": [],
+  "getgdapgamebyid": [
+   "gdapGameId"
+  ],
+  "getgdapgamesbetweentwodates": [
+   "dateFrom",
+   "dateTo"
+  ],
+  "getgdapgamesbycompetitionid": [
+   "gdapCompetitionId"
+  ],
+  "getgdapgameswithleaderdetailsbyteamid": [
+   "gdapTeamId"
+  ],
+  "getgdapmedalcount": [
+   "competitionMarketingNameId"
+  ],
+  "getgdapnationalteams": [],
+  "getgdapplayercompetitionstatisticsbyplayerid": [
+   "gdapCompetitionId",
+   "gdapPlayerId"
+  ],
+  "getgdapplayergamestatisticsbyplayerid": [
+   "gdapCompetitionId",
+   "gdapPlayerId"
+  ],
+  "getgdapplayerinfobycompetitionid": [
+   "gdapCompetitionId",
+   "gdapPlayerId"
+  ],
+  "getgdaprankingzones": [],
+  "getgdaproundsbycompetitionid": [
+   "gdapCompetitionId"
+  ],
+  "getgdapteamstaffbycompetitionid": [
+   "gdapCompetitionId"
+  ]
+ },
+ "unwrapped": []
+}
