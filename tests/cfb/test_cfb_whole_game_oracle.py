@@ -523,6 +523,7 @@ def _half_closers(df: pl.DataFrame) -> list[tuple[str, dict]]:
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES, _NF12))
 def test_end_of_half_timeout_ending_lands_on_the_last_real_play(game_id):
+    """C-NF-12: named for gates/cfb.md's ``-k timeout_ending``; checks every capture's half-closing rows."""
     for which, row in _half_closers(_frame(game_id)):
         assert row["end_of_half"] is True, f"{which}: row {row['row']} ({row['type.text']}) is not end_of_half"
         scoring = row["scoring_play"] is True or bool(_TRY_OR_KICK_OR_SCORE.search(row["type.text"] or ""))
@@ -705,6 +706,11 @@ _M18 = {
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES, _M18))
 def test_period_never_decreases_along_the_rows(game_id):
+    """C-M18: kept as the deliberate strict-xfail marker for ESPN's 401628439 period-label error.
+
+    test_period_monotonic_or_the_step_back_warns implies it (its exact-pair assert); this one keeps the
+    provider defect visible as an open xfail.
+    """
     steps_back = _period_steps_back(_frame(game_id))
     assert steps_back == [], f"period decreases at rows {steps_back}"
 
