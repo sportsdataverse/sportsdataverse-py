@@ -1,0 +1,44 @@
+{
+  "/data/competition/{compId}.json": {
+    "operation": "genius_competition",
+    "servers": [
+      "https://fibalivestats.dcd.shared.geniussports.com"
+    ]
+  },
+  "/data/{matchId}/data.json": {
+    "operation": "genius_data",
+    "servers": [
+      "https://fibalivestats.dcd.shared.geniussports.com"
+    ]
+  },
+  "/embednf/{org}/en/competition/{compId}/schedule": {
+    "operation": "genius_embednf_competition_schedule",
+    "servers": [
+      "https://hosted.dcd.shared.geniussports.com"
+    ]
+  },
+  "/u/{org}/{matchId}/": {
+    "operation": "genius_u",
+    "servers": [
+      "https://fibalivestats.dcd.shared.geniussports.com"
+    ]
+  },
+  "/widget/": {
+    "operation": "genius_widget",
+    "servers": [
+      "https://widget.wh.geniussports.com"
+    ]
+  },
+  "/{org}/en/competition/{compId}/schedule": {
+    "operation": "genius_hosted_competition_schedule",
+    "servers": [
+      "https://hosted.dcd.shared.geniussports.com"
+    ]
+  },
+  "/{org}/en/schedule": {
+    "operation": "genius_hosted_schedule",
+    "servers": [
+      "https://hosted.dcd.shared.geniussports.com"
+    ]
+  }
+}

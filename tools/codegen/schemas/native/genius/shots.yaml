@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: tno
+  type: integer
+- description: ''
+  name: pno
+  type: integer
+- description: ''
+  name: action_number
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: period_type
+  type: character
+- description: ''
+  name: action_type
+  type: character
+- description: ''
+  name: sub_type
+  type: character
+- description: ''
+  name: result
+  type: integer
+- description: ''
+  name: x
+  type: numeric
+- description: ''
+  name: y
+  type: numeric
+- description: ''
+  name: player
+  type: character
+- description: ''
+  name: shirt_number
+  type: character
+kind: dataframe
+schema: genius_shots
