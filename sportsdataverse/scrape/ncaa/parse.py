@@ -68,27 +68,16 @@ from sportsdataverse.mbb.mbb_ncaa_stats_agg import (
     ncaa_mbb_team_stats,
 )
 from sportsdataverse.mbb.mbb_shots_adapter import shot_events_to_frame
+from sportsdataverse.scrape.ncaa._rules import (
+    WBB_FIRST_QUARTERS_SEASON,
+    WBB_HALVES_MODEL,
+    WBB_QUARTERS_MODEL,
+)
 
 logger = logging.getLogger(__name__)
 
 __all__ = ["parse_bundle", "write_parsed", "parse_and_write", "wbb_period_model"]
 
-#: NCAA women's basketball moved from two 20-minute halves to four 10-minute
-#: quarters for the **2015-16** season. Seasons are ending-year, so 2016 is the
-#: first quarters season and 2015 the last halves season. Men's basketball never
-#: switched, which is why only the women's side needs an era split.
-#:
-#: Applying the wrong model does NOT fail loudly -- it silently yields a frame
-#: with no rows. The quarters model was applied to every WBB season until
-#: 2026-08-18, so every pre-2016 game parsed to an EMPTY record while the parse
-#: stage reported success (it counted files written, not rows extracted), and
-#: seasons 2010-2015 were published as ~0.6%-populated datasets. Measured on
-#: real bundles: 2015 quarters=0 rows / halves=520; 2012 quarters=0 / halves=566;
-#: 2010 quarters=0 / halves=527. The reverse also degrades -- 2016 quarters=550
-#: / halves=262 -- so this is a real discriminator, not a fallback.
-_WBB_QUARTERS_MODEL: "tuple[int, int, int]" = (4, 600, 300)
-_WBB_HALVES_MODEL: "tuple[int, int, int]" = (2, 1200, 300)
-_WBB_FIRST_QUARTERS_SEASON = 2016
 _SEASON_RE = re.compile(r"^(\d{4})-(\d{2})$")
 
 
@@ -108,7 +97,8 @@ def wbb_period_model(season: Optional[str]) -> "tuple[int, int, int]":
 
     Returns:
         ``(periods, regulation_period_seconds, overtime_seconds)`` --
-        ``(2, 1200, 300)`` for seasons before 2016, ``(4, 600, 300)`` otherwise.
+        ``(2, 1200, 300)`` for seasons before 2016, four 600-second quarters otherwise
+        (the tuples live in :mod:`sportsdataverse.scrape.ncaa._rules`).
         Never raises: an unrecognised season falls back to quarters, since the
         raw bundles always carry ``season`` and guessing modern is the smaller
         error for new data.
@@ -135,9 +125,9 @@ def wbb_period_model(season: Optional[str]) -> "tuple[int, int, int]":
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
     year = _ending_year(season)
-    if year and year < _WBB_FIRST_QUARTERS_SEASON:
-        return _WBB_HALVES_MODEL
-    return _WBB_QUARTERS_MODEL
+    if year and year < WBB_FIRST_QUARTERS_SEASON:
+        return WBB_HALVES_MODEL
+    return WBB_QUARTERS_MODEL
 
 
 #: The six per-game families, i.e. every key of the parsed record that is a list

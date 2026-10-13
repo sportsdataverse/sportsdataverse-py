@@ -34,6 +34,7 @@ Divergences from R (documented):
 
 from __future__ import annotations
 
+import logging
 import math
 import re
 from fractions import Fraction
@@ -44,11 +45,14 @@ from bs4 import Tag
 
 from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 from sportsdataverse.mbb.mbb_ncaa_html import parse_html
+from sportsdataverse.scrape.ncaa.identity import _utf8_id
 
 if TYPE_CHECKING:
     import pandas as pd
 
 __all__ = ["ncaa_mbb_box_scores", "parse_ncaa_bb_box"]
+
+logger = logging.getLogger(__name__)
 
 # R: gsub("[^[:alnum:] ]", "", x) under a UTF-8 locale keeps unicode letters;
 # \w (unicode) minus underscore is the Python equivalent.
@@ -370,10 +374,10 @@ def _scrape_many(game_ids: "list[str]", fetcher: _SupportsFetchIndividualStats) 
         try:
             frames.append(parse_ncaa_bb_box(fetcher.fetch_game_individual_stats(gid), gid))
         except Exception as exc:  # noqa: BLE001 -- R tryCatch: report and continue
-            print(f"Error with game id: {gid} // {exc}")
+            logger.warning("Error with game id: %s // %s", gid, exc)
             removed.append(gid)
     if removed:
-        print(f"{','.join(removed)} removed")
+        logger.warning("%s removed", ",".join(removed))
     return frames
 
 
@@ -458,9 +462,9 @@ def ncaa_mbb_box_scores(
     """
     if isinstance(game_ids, (str, int)):
         game_ids = [game_ids]
-    # g == g drops float("nan") ids (they would stringify to "nan" and hit the
+    # NaN and non-integral floats map to None (never "nan" or "6470186.0" in a
     # fetch path); matches the ncaa_mbb_game_pbp / _shots driver guard.
-    ids = [str(g) for g in game_ids if g is not None and g == g]
+    ids = [g for g in map(_utf8_id, game_ids) if g is not None]
 
     if fetcher is None:
         with NcaaFetcher.with_browser() as browser_fetcher:

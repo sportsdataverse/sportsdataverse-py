@@ -4,7 +4,7 @@ Thin shims over :mod:`sportsdataverse.mbb.mbb_ncaa_game_pbp` that bind the
 **right WBB period model for the game's era**:
 
 * ``(2, 1200, 300)`` -- two 20-minute halves, seasons through 2014-15;
-* ``(4, 600, 300)`` -- four 10-minute quarters, 2015-16 onward
+* four 10-minute quarters with 5-minute overtimes, 2015-16 onward
   (``rules/wbb.yaml#wbb-2016-four-quarters`` in sdv-internal-refs).
 
 Feeding the wrong model to the parser does not raise -- it silently yields a
@@ -37,6 +37,7 @@ from sportsdataverse.mbb.mbb_ncaa_game_pbp import (
     _SupportsFetchGamePbp,
     _time_in_seconds,
 )
+from sportsdataverse.scrape.ncaa._rules import WBB_HALVES_MODEL, WBB_QUARTERS_MODEL
 from sportsdataverse.scrape.ncaa.parse import wbb_period_model
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -47,11 +48,6 @@ __all__ = [
     "ncaa_wbb_game_pbp",
     "ncaa_wbb_play_by_play",
 ]
-
-#: WBB quarters model (2015-16+): 4 regulation quarters x 600s, 300s overtimes.
-_WBB_PERIOD_MODEL: "tuple[int, int, int]" = (4, 600, 300)
-#: WBB halves model (through 2014-15): 2 regulation halves x 1200s, 300s overtimes.
-_WBB_HALVES_MODEL: "tuple[int, int, int]" = (2, 1200, 300)
 
 
 def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
@@ -68,7 +64,7 @@ def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
 
     Returns:
         ``(2, 1200, 300)`` when a first-period clock above 10:00 is present,
-        otherwise ``(4, 600, 300)`` (an unreadable page falls through to the
+        otherwise the quarters model (an unreadable page falls through to the
         modern model, matching :func:`~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
 
     Example:
@@ -79,12 +75,12 @@ def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
     """
     tables = _extract_tables(html)
     if len(tables) < 4:
-        return _WBB_PERIOD_MODEL
+        return WBB_QUARTERS_MODEL
     for row in tables[3][1:]:
         secs = _time_in_seconds((row[0] or "")[:5]) if row else None
         if secs is not None and secs > 600:
-            return _WBB_HALVES_MODEL
-    return _WBB_PERIOD_MODEL
+            return WBB_HALVES_MODEL
+    return WBB_QUARTERS_MODEL
 
 
 def _period_model_for(season: Optional[object]) -> PeriodModel:

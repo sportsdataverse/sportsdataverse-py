@@ -1135,3 +1135,68 @@
   test: tests/nba/test_nba_availability.py -k scored_seasons_own_gp
   expected: kill
   note: Imputation medians taken from the scored seasons' own GP (the label) again.
+
+# --- 3.6: NCAA era leftovers (B-L26, B-L29, B-GB-27, B-L38) --------------------------------------
+- id: ncaa-wbb-period-tuple-second-copy
+  group: ncaa-era
+  finding: B-L26
+  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  snippet: "logger = logging.getLogger(__name__)\n"
+  mutant: "logger = logging.getLogger(__name__)\n_WBB_PERIOD_MODEL = (4, 600, 300)\n"
+  test: tests/scrape/test_scrape_ncaa_league.py -k one_owner
+  expected: kill
+  note: The pre-3.6 second copy of the quarters tuple in wbb_ncaa_shots.py.
+- id: ncaa-league-config-no-deprecation
+  group: ncaa-era
+  finding: B-L29
+  file: sportsdataverse/scrape/ncaa/league_config.py
+  snippet: "        warn_deprecated(\n"
+  mutant: "        (lambda *a, **k: None)(\n"
+  test: tests/test_deprecations.py -k league_config
+  expected: kill
+  note: league_config.WBB (periods=4, wrong before 2015-16) resolves without a DeprecationWarning.
+- id: ncaa-pbp-format-guard-silent
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "        warnings.warn(\n            f\"parse_ncaa_bb_game_pbp: game"
+  mutant: "        (lambda *a, **k: None)(\n            f\"parse_ncaa_bb_game_pbp: game"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k format_guard
+  expected: kill
+  note: The real 2018-format page parses to (0, 35) with nothing said.
+- id: ncaa-schedule-format-guard-removed
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_schedule.py
+  snippet: "    if data_rows and not any("
+  mutant: "    if False and not any("
+  test: tests/mbb/test_mbb_ncaa_schedule.py -k format_guard
+  expected: kill
+  note: The 2016 team page mis-pairs (36 of 73 games, shifted ids) instead of warning.
+- id: ncaa-schedule-str-team-id
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_schedule.py
+  snippet: 'crosswalk.filter(pl.col("id") == int(team_id))'
+  mutant: 'crosswalk.filter(pl.col("id") == team_id)'
+  test: tests/mbb/test_mbb_ncaa_schedule.py -k format_guard
+  expected: kill
+  note: A str team id raises ComputeError (string vs i64) on a supported page.
+- id: ncaa-pbp-float-contest-id
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "    out = _utf8_id(game_id)\n"
+  mutant: "    out = str(game_id)\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k contest_id
+  expected: kill
+  note: A float id builds contests/6470186.0/ and a "6470186.0" game_id cell.
+- id: ncaa-pbp-driver-float-contest-ids
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
+  mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k contest_id
+  expected: kill
+  note: The multi-game driver passes 6470186.0 through to the fetcher and the game_id column.
