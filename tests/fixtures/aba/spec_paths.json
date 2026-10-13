@@ -1,0 +1,9 @@
+[
+ "/calendar/{sez}/{lea}/",
+ "/live-match/rezultati-1718/create_json.php",
+ "/live-match/rezultati-1718/create_scoredifference.php",
+ "/live-match/rezultati-1718/create_shooting_chart.php",
+ "/match/{gameNo}/{sez}/{lea}/Overview",
+ "/player/{playerId}/{sez}/{lea}/",
+ "/standings/{sez}/{lea}/"
+]
