@@ -1,0 +1,109 @@
+{
+  "game": {
+    "gmkey": "S2G01N1",
+    "glkey": "S2G01",
+    "seasonCode": 2,
+    "seasonGrade": 1,
+    "seasonCategoryName": "정규시즌",
+    "gameCode": "01",
+    "gameNo": 1,
+    "gameDate": "19971108",
+    "tcodeH": "10",
+    "tcodeA": "40",
+    "tnameH": "부산기아",
+    "tnameA": "안양SBS",
+    "tnameFH": "부산 기아 엔터프라이즈",
+    "tnameFA": "안양 SBS 스타즈",
+    "seasonName": "1997-1998",
+    "gameStart": "1624",
+    "gameEnd": "1759",
+    "gameTime": 135,
+    "isStarted": 1,
+    "isEnded": 0,
+    "playingQuarter": "X",
+    "weekDay": "토",
+    "tv": "SBS",
+    "tvCode": "T01",
+    "stadiumname": "잠실실내",
+    "stadiumnameF": "잠실실내체육관",
+    "stadiumnameEn": "잠실실내",
+    "crowds": 10500,
+    "judges": {
+      "main": {
+        "name": "신현수"
+      },
+      "sub": [
+        {
+          "name": "조영기"
+        },
+        {
+          "name": "황현우"
+        }
+      ]
+    },
+    "tlogoH": "hd1997",
+    "tlogoA": "kgc1997",
+    "detailUrl": "/game/record/S2G01N1",
+    "highlightUrl": "https://m.sports.naver.com/game/1997110810402011"
+  },
+  "teams": {
+    "home": {
+      "tcode": "10",
+      "tname": "부산기아",
+      "tnameF": "부산 기아 엔터프라이즈",
+      "staffs": {
+        "manager": {
+          "name": "최인선"
+        },
+        "coaches": [
+          {
+            "name": "정상일"
+          },
+          {
+            "name": "Tom McCraken"
+          },
+          {
+            "name": "박인규"
+          }
+        ]
+      }
+    },
+    "away": {
+      "tcode": "40",
+      "tname": "안양SBS",
+      "tnameF": "안양 SBS 스타즈",
+      "staffs": {
+        "manager": {
+          "name": "김동광"
+        },
+        "coaches": [
+          {
+            "name": "강정수"
+          },
+          {
+            "name": "Rick Ross"
+          },
+          {
+            "name": "장일"
+          }
+        ]
+      }
+    }
+  },
+  "teamrecords": {
+    "home": {
+      "scoreq1": 24,
+      "scoreq2": 27,
+      "scoreq3": 30,
+      "scoreq4": 22,
+      "scoreeq": []
+    },
+    "away": {
+      "scoreq1": 21,
+      "scoreq2": 27,
+      "scoreq3": 20,
+      "scoreq4": 26,
+      "scoreeq": []
+    }
+  }
+}
