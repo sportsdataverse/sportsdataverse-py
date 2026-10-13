@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: sequence
+  type: integer
+- description: ''
+  name: referee_id
+  type: integer
+- description: ''
+  name: gohoops_referee_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: role
+  type: character
+kind: dataframe
+schema: tpbl_referees
