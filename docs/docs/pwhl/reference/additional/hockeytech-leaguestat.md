@@ -657,8 +657,8 @@ too thin.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
-| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
+| `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
 | `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
 
 **Returns**
@@ -670,8 +670,9 @@ No returns table is published for this function: no capture: it expects NHL-styl
 **Example**
 
 ```python
+from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
 from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_rapm
-rapm = pwhl_skater_rapm(pbp, shifts)
+rapm = pwhl_skater_rapm(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 ```
 
 ### pwhl_skater_war {#pwhl_skater_war}
@@ -686,8 +687,8 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
-| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
+| `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
 | `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
 
 **Returns**
@@ -699,8 +700,9 @@ No returns table is published for this function: no capture: it expects NHL-styl
 **Example**
 
 ```python
+from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
 from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_war
-war = pwhl_skater_war(pbp, shifts)
+war = pwhl_skater_war(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 ```
 
 ### pwhl_special_teams_value {#pwhl_special_teams_value}
@@ -715,8 +717,8 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
-| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
+| `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
 | `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
 
 **Returns**
@@ -728,8 +730,9 @@ No returns table is published for this function: no capture: it expects NHL-styl
 **Example**
 
 ```python
+from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
 from sportsdataverse.pwhl.pwhl_player_impact import pwhl_special_teams_value
-st = pwhl_special_teams_value(pbp, shifts)
+st = pwhl_special_teams_value(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 ```
 
 ### pwhl_standings {#pwhl_standings}
@@ -1018,8 +1021,8 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
-| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
+| `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
 | `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
 
 **Returns**
@@ -1031,6 +1034,7 @@ No returns table is published for this function: no capture: it expects NHL-styl
 **Example**
 
 ```python
+from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
 from sportsdataverse.pwhl.pwhl_player_impact import pwhl_unit_ratings
-units = pwhl_unit_ratings(pbp, shifts)
+units = pwhl_unit_ratings(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 ```

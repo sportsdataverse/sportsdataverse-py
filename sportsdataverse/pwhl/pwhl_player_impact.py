@@ -11,13 +11,12 @@ Coverage caveats (see the design spec's Decision D6 + Open Items):
   PWHL shots with the same published ``nhl_xg_models`` boosters as the NHL (documented
   approximation -- ``LEAGUE_CONSTANTS["pwhl"].xg_booster_league == "nhl"``).
 - **~2 seasons of PWHL history** as of 2026 -- thin sample for any rate-based constant.
-- **Thin/absent PWHL shift-chart coverage.** ``sportsdataverse.pwhl`` currently ships
-  only per-game live shift/TOI/corsi scrapers (``pwhl_game_shifts`` et al. in
-  ``pwhl_analytics.py``), not a season-scale ``load_pwhl_shifts``-equivalent dataset
-  loader. The four stint-dependent models (RAPM, line/pair, special teams, GAR/WAR)
-  therefore guard on ``shifts.height`` and return a documented empty frame (with a
-  ``cli_warn``) rather than fitting a degenerate ridge on insufficient personnel data --
-  wiring in a real PWHL shift dataset is the tracked follow-up.
+- **HockeyTech input is adapted, not assumed NHL-shaped.** The four stint models accept
+  ``load_pwhl_pbp`` + ``load_pwhl_shifts`` frames as published and map them onto the NHL column
+  contract through :mod:`sportsdataverse.pwhl._impact_contract` (no missed shots; faceoffs name
+  only the home taker; penalty drawers are absent -- see that module). NHL-shaped frames pass
+  through unchanged. They still guard on ``shifts.height`` and return a documented empty frame
+  (with a ``cli_warn``) rather than fitting a degenerate ridge on a near-empty shift chart.
 """
 
 from __future__ import annotations
@@ -34,6 +33,7 @@ from sportsdataverse.nhl.nhl_special_teams import nhl_special_teams_value
 from sportsdataverse.nhl.nhl_unit_ratings import nhl_unit_ratings
 from sportsdataverse.nhl.nhl_war import nhl_skater_war
 from sportsdataverse.nhl.nhl_xg import nhl_xg
+from sportsdataverse.pwhl._impact_contract import adapt_pwhl_impact_inputs
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -47,9 +47,7 @@ __all__ = [
     "pwhl_skater_war",
 ]
 
-# Placeholder minimum shift-chart row count before a stint-dependent model is considered
-# to have "sufficient" PWHL personnel coverage. Revisit once a real PWHL season-scale
-# shift dataset is wired in (see the module docstring); until then this just distinguishes
+# Minimum shift-chart row count before a stint-dependent model is fit; it distinguishes
 # "empty/near-empty" from "some coverage exists" rather than encoding a fitted threshold.
 _MIN_PWHL_SHIFTS_ROWS = 10
 
@@ -124,8 +122,9 @@ def pwhl_skater_rapm(
     too thin.
 
     Args:
-        pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full``.
-        shifts: a PWHL shift-chart frame shaped like ``load_nhl_shifts``.
+        pbp: a ``load_pwhl_pbp`` frame (adapted, see the module docstring) or a frame
+            already shaped like ``load_nhl_pbp_full``.
+        shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
         model_dir: booster directory passed through to the borrowed NHL xG boosters.
         **kwargs: forwarded to :func:`nhl_skater_rapm` (e.g. ``lam``, ``as_of``,
             ``strength_states``, ``return_as_pandas``).
@@ -136,14 +135,19 @@ def pwhl_skater_rapm(
         toi_minutes:Float64``. A zero-row frame with this schema (+ a ``cli_warn``) when
         PWHL shift coverage is insufficient.
 
+    Raises:
+        ValueError: a HockeyTech pbp/shift column the NHL contract needs is missing.
+
     Example:
         Quick start::
 
+            from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
             from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_rapm
-            rapm = pwhl_skater_rapm(pbp, shifts)
+            rapm = pwhl_skater_rapm(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
     """
     if _insufficient_pwhl_shifts(shifts, fn_name="pwhl_skater_rapm"):
         return nhl_skater_rapm(pl.DataFrame(), pl.DataFrame())
+    pbp, shifts = adapt_pwhl_impact_inputs(pbp, shifts)
     return nhl_skater_rapm(pbp, shifts, model_dir=model_dir, league="pwhl", **kwargs)
 
 
@@ -155,8 +159,9 @@ def pwhl_unit_ratings(
     Guards on PWHL shift-chart coverage (see the module docstring).
 
     Args:
-        pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full``.
-        shifts: a PWHL shift-chart frame shaped like ``load_nhl_shifts``.
+        pbp: a ``load_pwhl_pbp`` frame (adapted, see the module docstring) or a frame
+            already shaped like ``load_nhl_pbp_full``.
+        shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
         model_dir: booster directory passed through to the borrowed NHL xG boosters.
         **kwargs: forwarded to :func:`nhl_unit_ratings` (e.g. ``unit_type``,
             ``min_toi``, ``return_as_pandas``).
@@ -168,14 +173,19 @@ def pwhl_unit_ratings(
         frame with this schema (+ a ``cli_warn``) when PWHL shift coverage is
         insufficient.
 
+    Raises:
+        ValueError: a HockeyTech pbp/shift column the NHL contract needs is missing.
+
     Example:
         Quick start::
 
+            from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
             from sportsdataverse.pwhl.pwhl_player_impact import pwhl_unit_ratings
-            units = pwhl_unit_ratings(pbp, shifts)
+            units = pwhl_unit_ratings(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
     """
     if _insufficient_pwhl_shifts(shifts, fn_name="pwhl_unit_ratings"):
         return nhl_unit_ratings(pl.DataFrame(), pl.DataFrame())
+    pbp, shifts = adapt_pwhl_impact_inputs(pbp, shifts)
     return nhl_unit_ratings(pbp, shifts, model_dir=model_dir, league="pwhl", **kwargs)
 
 
@@ -187,8 +197,9 @@ def pwhl_special_teams_value(
     Guards on PWHL shift-chart coverage (see the module docstring).
 
     Args:
-        pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full``.
-        shifts: a PWHL shift-chart frame shaped like ``load_nhl_shifts``.
+        pbp: a ``load_pwhl_pbp`` frame (adapted, see the module docstring) or a frame
+            already shaped like ``load_nhl_pbp_full``.
+        shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
         model_dir: booster directory passed through to the borrowed NHL xG boosters.
         **kwargs: forwarded to :func:`nhl_special_teams_value` (e.g.
             ``return_as_pandas``).
@@ -199,14 +210,19 @@ def pwhl_special_teams_value(
         pk_value:Float64``. A zero-row frame with this schema (+ a ``cli_warn``) when
         PWHL shift coverage is insufficient.
 
+    Raises:
+        ValueError: a HockeyTech pbp/shift column the NHL contract needs is missing.
+
     Example:
         Quick start::
 
+            from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
             from sportsdataverse.pwhl.pwhl_player_impact import pwhl_special_teams_value
-            st = pwhl_special_teams_value(pbp, shifts)
+            st = pwhl_special_teams_value(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
     """
     if _insufficient_pwhl_shifts(shifts, fn_name="pwhl_special_teams_value"):
         return nhl_special_teams_value(pl.DataFrame(), pl.DataFrame())
+    pbp, shifts = adapt_pwhl_impact_inputs(pbp, shifts)
     return nhl_special_teams_value(pbp, shifts, model_dir=model_dir, league="pwhl", **kwargs)
 
 
@@ -218,8 +234,9 @@ def pwhl_skater_war(
     Guards on PWHL shift-chart coverage (see the module docstring).
 
     Args:
-        pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full``.
-        shifts: a PWHL shift-chart frame shaped like ``load_nhl_shifts``.
+        pbp: a ``load_pwhl_pbp`` frame (adapted, see the module docstring) or a frame
+            already shaped like ``load_nhl_pbp_full``.
+        shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
         model_dir: booster directory passed through to the borrowed NHL xG boosters.
         **kwargs: forwarded to :func:`nhl_skater_war` (e.g. ``return_as_pandas``).
 
@@ -229,12 +246,17 @@ def pwhl_skater_war(
         gar:Float64, war:Float64``. A zero-row frame with this schema (+ a
         ``cli_warn``) when PWHL shift coverage is insufficient.
 
+    Raises:
+        ValueError: a HockeyTech pbp/shift column the NHL contract needs is missing.
+
     Example:
         Quick start::
 
+            from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
             from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_war
-            war = pwhl_skater_war(pbp, shifts)
+            war = pwhl_skater_war(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
     """
     if _insufficient_pwhl_shifts(shifts, fn_name="pwhl_skater_war"):
         return nhl_skater_war(pl.DataFrame(), pl.DataFrame())
+    pbp, shifts = adapt_pwhl_impact_inputs(pbp, shifts)
     return nhl_skater_war(pbp, shifts, model_dir=model_dir, league="pwhl", **kwargs)

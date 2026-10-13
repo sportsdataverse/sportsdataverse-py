@@ -385,7 +385,7 @@ events' `home_goalie_id`/`away_goalie_id` (the modal value in the interval).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
+| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. A `team_abbr` column, when present, names each row's team directly (the PWHL adapter supplies it). |
 | `scored` | `DataFrame` |  | an `nhl_xg`-scored frame (for the game's `home_abbr`/`away_abbr` and each interval's on-ice xG-for and goalie). |
 | `as_of` | `int \| None` | `None` | an optional per-game `game_seconds` cutoff -- intervals starting at or after `as_of` are dropped. This is the leakage boundary for any forward-looking use: features for a game/date must use only stints strictly before that game's cutoff. |
 

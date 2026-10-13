@@ -80,7 +80,8 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     events' ``home_goalie_id``/``away_goalie_id`` (the modal value in the interval).
 
     Args:
-        shifts: a ``load_nhl_shifts``-shaped frame.
+        shifts: a ``load_nhl_shifts``-shaped frame. A ``team_abbr`` column, when present,
+            names each row's team directly (the PWHL adapter supplies it).
         scored: an ``nhl_xg``-scored frame (for the game's ``home_abbr``/``away_abbr``
             and each interval's on-ice xG-for and goalie).
         as_of: an optional per-game ``game_seconds`` cutoff -- intervals starting at or
@@ -130,9 +131,14 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     # Vectorized dict lookup over the static crosswalk -- avoids a per-row Python UDF
     # call for what is otherwise a pure static-dict remap. (replace_strict, not replace:
     # the `default=` kwarg moved off .replace at polars 1.0.)
-    shifts_work = shifts.with_columns(
-        team_abbr=pl.col("event_team").replace_strict(NHL_TEAM_FULLNAME_TO_ABBR, default=None)
-    ).sort("game_id", "game_seconds")
+    # A shift chart that already names each row's team (the PWHL adapter's `team_abbr`) skips the
+    # NHL full-name crosswalk, which knows no other league's teams.
+    team_abbr = (
+        pl.col("team_abbr")
+        if "team_abbr" in shifts.columns
+        else pl.col("event_team").replace_strict(NHL_TEAM_FULLNAME_TO_ABBR, default=None)
+    )
+    shifts_work = shifts.with_columns(team_abbr=team_abbr).sort("game_id", "game_seconds", maintain_order=True)
 
     rows: list[dict] = []
     for game_id, sub in shifts_work.group_by("game_id", maintain_order=True):

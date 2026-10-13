@@ -77,7 +77,9 @@ def _faceoff_penalty_components(pbp: pl.DataFrame, *, league: str = "nhl") -> pl
     lost = (
         fo.group_by("event_player_2_id").agg(fo_lost=pl.len().cast(pl.Int64)).rename({"event_player_2_id": "player_id"})
     )
-    fo_tab = won.join(lost, on="player_id", how="full", coalesce=True).fill_null(0)
+    # A faceoff/penalty side with no named player groups under a null id; fill_null would turn
+    # that group into a phantom player 0, so drop it before filling.
+    fo_tab = won.join(lost, on="player_id", how="full", coalesce=True).drop_nulls("player_id").fill_null(0)
     fo_tab = fo_tab.with_columns(fo_total=(pl.col("fo_won") + pl.col("fo_lost")))
     fo_tab = fo_tab.with_columns(
         faceoffs_goals=((pl.col("fo_won") - 0.5 * pl.col("fo_total")) * cfg.faceoff_goal_weight)
@@ -94,7 +96,7 @@ def _faceoff_penalty_components(pbp: pl.DataFrame, *, league: str = "nhl") -> pl
         .agg(pens_drawn=pl.len().cast(pl.Int64))
         .rename({"event_player_2_id": "player_id"})
     )
-    pen_tab = taken.join(drawn, on="player_id", how="full", coalesce=True).fill_null(0)
+    pen_tab = taken.join(drawn, on="player_id", how="full", coalesce=True).drop_nulls("player_id").fill_null(0)
     pen_tab = pen_tab.with_columns(
         pens_goals=((pl.col("pens_drawn") - pl.col("pens_taken")) * cfg.penalty_goal_weight)
     ).select("player_id", "pens_goals")
