@@ -738,7 +738,8 @@ VENDOR_BY: Dict[str, Dict[str, str]] = {
         "100 - x_pbp in the halves where the home team attacks x < 50 (pleague_pbp.x is the physical frame). Court "
         "28.75 m long: distance = hypot((x - 5) x 0.2875, (y - 50) x 0.1525) m (mean error 0.010 m on 1,893 shots).",
         "y": "Shot y: PERCENT (0-100) of the court WIDTH in the vendor frame (baskets at y = 50); y_vendor = 100 - y_pbp "
-        "in the halves where the home team attacks x < 50. Which sideline is y = 0 is unverified. Court 15.25 m wide.",
+        "in the halves where the home team attacks x < 50 (held for 166 of the 168 shots of gid 197 matched to the "
+        "play-by-play; one shot differs in y only). Which sideline is y = 0 is unverified. Court 15.25 m wide.",
         "message_zh": "Play text in Traditional Chinese, '{player}(未)投(進){distance}公尺遠的{shot}' = '{player} made / "
         "missed a {distance} m {shot}'; the distance is in metres and matches x / y.",
         "has_video": "True when the shot has a clip. The clip url is never kept: it carries a vendor access key.",

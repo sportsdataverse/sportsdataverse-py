@@ -524,8 +524,9 @@ def _schedule_record(html: str, stage: str, season: str) -> Dict[str, Any]:
     if len(set(gids)) != len(gids):
         raise _NotParsed("duplicate game ids on the schedule page")
     shown = {b.attrs.get("data-val") for b in root.findall("button", "month-btn")} - {"all", None}
+    shown_sorted = sorted(str(x) for x in shown)
     if shown != months:  # every month the page offers has its rows: the list is whole
-        raise _NotParsed(f"month buttons {sorted(shown)} vs months with games {sorted(months)}")
+        raise _NotParsed(f"month buttons {shown_sorted} vs months with games {sorted(months)}")
     games.sort(key=lambda g: g["gid"])
     return {
         "season": season,
@@ -637,12 +638,13 @@ def _split_text(text: str, has_xy: bool) -> Tuple[Optional[str], Optional[str], 
     if best is None:
         if has_xy and re.fullmatch(r"#\S+ \S+|\S+", t):  # a player and coordinates but no action text
             if t.startswith("#"):
-                jersey, _, player = t[1:].partition(" ")
-                return jersey, player, ""
+                num, _, name = t[1:].partition(" ")
+                return num, name, ""
             return None, t, ""
         raise _NotParsed(f"unknown play-by-play phrase: {text!r}")
     who = t[: len(t) - len(best)].strip()
-    jersey = player = None
+    jersey: Optional[str] = None
+    player: Optional[str] = None
     if who:
         mm = re.fullmatch(r"#(\S+)\s+(.+)", who)
         jersey, player = (mm.group(1), mm.group(2)) if mm else (None, who)
@@ -1016,7 +1018,7 @@ def _player_record(html: str, pid: str) -> Dict[str, Any]:
         elif (
             n.tag == "table"
             and n.find("thead") is not None
-            and [th.text() for th in n.find("thead").findall("th")] == _PLAYER_HEAD
+            and [th.text() for th in _need(n.find("thead"), "thead").findall("th")] == _PLAYER_HEAD
         ):
             if cur is None:
                 raise _NotParsed("layout drift: a season table before any game-log block")
@@ -1239,6 +1241,11 @@ def _seconds(v: Any) -> Optional[int]:
     """``"08:34"`` -> 514 (also ``"240:00"``); None for anything that is not ``mm:ss``."""
     m = re.fullmatch(r"\s*(\d+):(\d{2})\s*", v) if isinstance(v, str) else None
     return int(m.group(1)) * 60 + int(m.group(2)) if m else None
+
+
+def _obj(v: Any) -> Dict[str, Any]:
+    """``v`` when it is a dict, else an empty dict (so chained ``.get`` never meets ``None``)."""
+    return v if isinstance(v, dict) else {}
 
 
 def _dicts(v: Any) -> List[Dict[str, Any]]:

@@ -102,8 +102,8 @@ def _period_label(v: Any) -> Optional[str]:
 
 def _sides(d: Dict[str, Any]) -> Dict[str, Optional[str]]:
     return {
-        "home": SITE._s((d.get("home_team") or {}).get("id")),
-        "away": SITE._s((d.get("away_team") or {}).get("id")),
+        "home": SITE._s(SITE._obj(d.get("home_team")).get("id")),
+        "away": SITE._s(SITE._obj(d.get("away_team")).get("id")),
     }
 
 
@@ -279,16 +279,11 @@ def parse_pleague_preciser_summary_teams(
     """
     d, uuid = _data(raw)
     rows = []
-    if d:
-        lead = d.get("leadStats") if isinstance(d.get("leadStats"), dict) else {}
+    if isinstance(d.get("home_team"), dict) or isinstance(d.get("away_team"), dict):
+        lead = SITE._obj(d.get("leadStats"))
         for side in ("home", "away"):
-            team = d.get(f"{side}_team") if isinstance(d.get(f"{side}_team"), dict) else {}
-            top = (
-                (d.get("top_performers") or {}).get(f"{side}_player")
-                if isinstance(d.get("top_performers"), dict)
-                else None
-            )
-            top = top if isinstance(top, dict) else {}
+            team = SITE._obj(d.get(f"{side}_team"))
+            top = SITE._obj(SITE._obj(d.get("top_performers")).get(f"{side}_player"))
             row: Dict[str, Any] = {
                 "game_uuid": uuid or SITE._s(d.get("game_id")),
                 "side": side,
@@ -296,12 +291,12 @@ def parse_pleague_preciser_summary_teams(
                 "team_name_zh": SITE._s(team.get("name")),
                 "color": SITE._s(team.get("color")),
                 "logo_url": SITE._s(team.get("logo_url")),
-                "fast_break_points": SITE._f((d.get("fast_break_points") or {}).get(f"{side}_value")),
-                "paint_points": SITE._f((d.get("paint_points") or {}).get(f"{side}_value")),
-                "second_chance_points": SITE._f((d.get("second_chance_points") or {}).get(f"{side}_value")),
-                "biggest_lead": SITE._i((lead.get("biggestLead") or {}).get(side)),
-                "biggest_scoring_run": SITE._i((lead.get("biggestScoringRun") or {}).get(side)),
-                "time_leading_seconds": SITE._i((lead.get("timeLeadingSeconds") or {}).get(side)),
+                "fast_break_points": SITE._f(SITE._obj(d.get("fast_break_points")).get(f"{side}_value")),
+                "paint_points": SITE._f(SITE._obj(d.get("paint_points")).get(f"{side}_value")),
+                "second_chance_points": SITE._f(SITE._obj(d.get("second_chance_points")).get(f"{side}_value")),
+                "biggest_lead": SITE._i(SITE._obj(lead.get("biggestLead")).get(side)),
+                "biggest_scoring_run": SITE._i(SITE._obj(lead.get("biggestScoringRun")).get(side)),
+                "time_leading_seconds": SITE._i(SITE._obj(lead.get("timeLeadingSeconds")).get(side)),
                 "lead_changes": SITE._i(lead.get("leadChanges")),
                 "top_player_name": SITE._s(top.get("name")),
                 "top_player_jersey": SITE._s(top.get("jersey_number")),
@@ -309,9 +304,9 @@ def parse_pleague_preciser_summary_teams(
                 "top_player_rebounds": SITE._i(top.get("rebound")),
                 "top_player_assists": SITE._i(top.get("assists")),
             }
-            cmp_ = d.get("team_comparison") if isinstance(d.get("team_comparison"), dict) else {}
+            cmp_ = SITE._obj(d.get("team_comparison"))
             for key, col in _COMPARE.items():
-                v = (cmp_.get(key) or {}).get(f"{side}_value") if isinstance(cmp_.get(key), dict) else None
+                v = SITE._obj(cmp_.get(key)).get(f"{side}_value")
                 row[col] = SITE._f(v) if _SUMMARY_TEAM_SPEC[col] == F else SITE._i(v)
             rows.append(row)
     return _frame(rows, _SUMMARY_TEAM_SPEC, columns, return_as_pandas)
@@ -412,7 +407,7 @@ def parse_pleague_preciser_lead_flow(
             flow = parse_pleague_preciser_lead_flow(raw)
     """
     d, uuid = _data(raw)
-    lead = d.get("leadStats") if isinstance(d.get("leadStats"), dict) else {}
+    lead = SITE._obj(d.get("leadStats"))
     return _frame(_score_rows(d, uuid, lead.get("leadPerMinutes")), _LEAD_FLOW_SPEC, columns, return_as_pandas)
 
 
@@ -570,10 +565,10 @@ def parse_pleague_preciser_injury(
     """
     d, uuid = _data(raw)
     rows = []
-    if d:
-        report = d.get("injury_report") if isinstance(d.get("injury_report"), dict) else {}
+    if isinstance(d.get("home_team"), dict) or isinstance(d.get("away_team"), dict):
+        report = SITE._obj(d.get("injury_report"))
         for side in ("home", "away"):
-            team = d.get(f"{side}_team") if isinstance(d.get(f"{side}_team"), dict) else {}
+            team = SITE._obj(d.get(f"{side}_team"))
             got = report.get(side)
             rows.append(
                 {
@@ -630,7 +625,7 @@ def vendor_error(kind: str, body: Any, uuid: str, ctx: Dict[str, Any]) -> Option
     if kind in ("summary", "injury"):
         if not SITE._same(b.get("game_id"), uuid):
             return f"{kind}: game_id {b.get('game_id')!r}, asked for {uuid!r}"
-        ids = tuple((b.get(n) or {}).get("id") for n in ("home_team", "away_team"))
+        ids = tuple(SITE._obj(b.get(n)).get("id") for n in ("home_team", "away_team"))
         if not all(ids):
             return f"{kind}: a team id is missing"
         if kind == "summary":
