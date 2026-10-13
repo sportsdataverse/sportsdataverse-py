@@ -1,0 +1,159 @@
+{
+  "HEADER": {
+    "CompID": "210",
+    "competition": "LF ENDESA",
+    "round": "Único               ",
+    "quarter": 4,
+    "time": "FINAL",
+    "logo": null,
+    "duration": null,
+    "starttime": "07-10-2020 - 20:00",
+    "place": "CAMI RAL DE CERDANYA,  31, Lleida (Seu d´Urgell, La)",
+    "field": "PALAU MUNICIPAL D´ESPORTS",
+    "referee1": "MUNAR BAÑON, PERE",
+    "referee2": "ZAMORA RODRIGUEZ, ANTONIO MANUEL",
+    "referee3": "GARVIN DOMINGO, RODRIGO",
+    "status": null,
+    "statusText": null,
+    "TEAM": [
+      {
+        "pts": "60",
+        "fouls": null,
+        "id": "848633",
+        "name": "CADI LA SEU",
+        "logo": "http://competiciones.feb.es/estadisticas/Imagen.aspx?i=848633&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "pts": "57",
+        "fouls": null,
+        "id": "848810",
+        "name": "CASADEMONT ZARAGOZA",
+        "logo": "http://competiciones.feb.es/estadisticas/Imagen.aspx?i=848810&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ],
+    "QUARTERS": {
+      "QUARTER": [
+        {
+          "n": "1",
+          "scoreA": "15",
+          "scoreB": "10"
+        },
+        {
+          "n": "2",
+          "scoreA": "18",
+          "scoreB": "22"
+        },
+        {
+          "n": "3",
+          "scoreA": "15",
+          "scoreB": "9"
+        }
+      ]
+    }
+  },
+  "SCOREBOARD": null,
+  "TEAMSTATS": {
+    "duration": null,
+    "TEAM": [
+      {
+        "p1m": "8",
+        "p1a": "16",
+        "p1p": "50,0",
+        "p2m": "20",
+        "p2a": "48",
+        "p2p": "41,7",
+        "p3m": "4",
+        "p3a": "12",
+        "p3p": "33,3",
+        "fgm": "24",
+        "fga": "60",
+        "fgp": "40,0",
+        "assist": "12",
+        "bs": "2",
+        "tc": null,
+        "mt": null,
+        "ro": "8",
+        "rd": "20",
+        "rt": "28",
+        "pf": "16",
+        "rf": "19",
+        "to": "13",
+        "st": "13",
+        "fastb": null,
+        "ptsto": null,
+        "secpts": null,
+        "bench": null,
+        "paint": null,
+        "min": null,
+        "minFormatted": "0:00",
+        "val": null,
+        "pts": "60",
+        "fouls": "16",
+        "id": "848633",
+        "name": "CADI LA SEU",
+        "logo": null,
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "p1m": "11",
+        "p1a": "15",
+        "p1p": "73,3",
+        "p2m": "17",
+        "p2a": "40",
+        "p2p": "42,5",
+        "p3m": "4",
+        "p3a": "15",
+        "p3p": "26,7",
+        "fgm": "21",
+        "fga": "55",
+        "fgp": "38,2",
+        "assist": "15",
+        "bs": "1",
+        "tc": null,
+        "mt": null,
+        "ro": "10",
+        "rd": "30",
+        "rt": "40",
+        "pf": "22",
+        "rf": "14",
+        "to": "25",
+        "st": "7",
+        "fastb": null,
+        "ptsto": null,
+        "secpts": null,
+        "bench": null,
+        "paint": null,
+        "min": null,
+        "minFormatted": "0:00",
+        "val": null,
+        "pts": "57",
+        "fouls": "22",
+        "id": "848810",
+        "name": "CASADEMONT ZARAGOZA",
+        "logo": null,
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ]
+  },
+  "TICKER": {
+    "text": null,
+    "duration": null,
+    "ITEM": null
+  },
+  "OVERVIEW": null,
+  "PLAYBYPLAY": null,
+  "BANNER": null,
+  "BOXSCORE": null,
+  "SHOTCHART": null,
+  "RANKING": null
+}

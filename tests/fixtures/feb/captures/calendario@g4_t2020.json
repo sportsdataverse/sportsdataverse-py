@@ -1,0 +1,85 @@
+{
+  "group": 4,
+  "season_start": 2020,
+  "season_label": "2020/2021",
+  "competition": "LF ENDESA",
+  "seasons": [
+    {
+      "season_start": 2026,
+      "label": "2026/2027"
+    },
+    {
+      "season_start": 2025,
+      "label": "2025/2026"
+    },
+    {
+      "season_start": 2024,
+      "label": "2024/2025"
+    }
+  ],
+  "phases": [
+    {
+      "phase_id": 74810,
+      "label": "Liga Regular Único",
+      "selected": true
+    }
+  ],
+  "playoff_series_ids": [
+    37245,
+    37246,
+    37248
+  ],
+  "games": [
+    {
+      "round": 1,
+      "round_label": "Jornada 1 19/09/2020",
+      "round_date": "2020-09-19",
+      "game_id": 2171130,
+      "home_team_id": 848633,
+      "home_team": "CADI LA SEU",
+      "away_team_id": 848810,
+      "away_team": "CASADEMONT ZARAGOZA",
+      "result_text": "60-57",
+      "home_score": 60,
+      "away_score": 57,
+      "status": "played",
+      "weekday": null,
+      "date": null,
+      "time": null
+    },
+    {
+      "round": 1,
+      "round_label": "Jornada 1 19/09/2020",
+      "round_date": "2020-09-19",
+      "game_id": 2171131,
+      "home_team_id": 848342,
+      "home_team": "CIUDAD DE LA LAGUNA TENERIFE",
+      "away_team_id": 848797,
+      "away_team": "SPAR GRAN CANARIA",
+      "result_text": "103-102",
+      "home_score": 103,
+      "away_score": 102,
+      "status": "played",
+      "weekday": null,
+      "date": null,
+      "time": null
+    },
+    {
+      "round": 1,
+      "round_label": "Jornada 1 19/09/2020",
+      "round_date": "2020-09-19",
+      "game_id": 2171132,
+      "home_team_id": 848714,
+      "home_team": "VALENCIA B.C.",
+      "away_team_id": 848501,
+      "away_team": "LOINTEK GERNIKA BIZKAIA",
+      "result_text": "64-52",
+      "home_score": 64,
+      "away_score": 52,
+      "status": "played",
+      "weekday": null,
+      "date": null,
+      "time": null
+    }
+  ]
+}
