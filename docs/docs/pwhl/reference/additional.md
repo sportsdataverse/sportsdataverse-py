@@ -25,14 +25,14 @@ not covered by the generated API-endpoint reference above.
 | Function | Summary |
 |---|---|
 | [pwhl_game_corsi](additional/hockeytech-leaguestat.md#pwhl_game_corsi) | Player-level on-ice Corsi and Fenwick for a single PWHL game. |
-| [pwhl_game_info](additional/hockeytech-leaguestat.md#pwhl_game_info) | PWHL single-game metadata. |
+| [pwhl_game_info](additional/hockeytech-leaguestat.md#pwhl_game_info) | PWHL single-game metadata from the `statviewfeed` `gameSummary` view. |
 | [pwhl_game_shifts](additional/hockeytech-leaguestat.md#pwhl_game_shifts) | Parsed shift stints for a single PWHL game. |
 | [pwhl_game_summary](additional/hockeytech-leaguestat.md#pwhl_game_summary) | PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars). |
 | [pwhl_leaders](additional/hockeytech-leaguestat.md#pwhl_leaders) | PWHL statistical leaders for a given season. |
 | [pwhl_pbp](additional/hockeytech-leaguestat.md#pwhl_pbp) | PWHL play-by-play — one row per event, fully enriched. |
-| [pwhl_player_box](additional/hockeytech-leaguestat.md#pwhl_player_box) | PWHL player box score for a single game. |
+| [pwhl_player_box](additional/hockeytech-leaguestat.md#pwhl_player_box) | PWHL player box score for a single game, skaters and goalies (fastRhockey `pwhl_player_box`). |
 | [pwhl_player_game_log](additional/hockeytech-leaguestat.md#pwhl_player_game_log) | PWHL player game-by-game log. |
-| [pwhl_player_info](additional/hockeytech-leaguestat.md#pwhl_player_info) | PWHL player biographical info. |
+| [pwhl_player_info](additional/hockeytech-leaguestat.md#pwhl_player_info) | PWHL player biographical info from the `statviewfeed` `player` view. |
 | [pwhl_player_search](additional/hockeytech-leaguestat.md#pwhl_player_search) | Search for PWHL players by name. |
 | [pwhl_player_stats](additional/hockeytech-leaguestat.md#pwhl_player_stats) | PWHL player season stats across all seasons. |
 | [pwhl_player_toi](additional/hockeytech-leaguestat.md#pwhl_player_toi) | Per-player time-on-ice totals for a single PWHL game. |

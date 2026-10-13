@@ -48,10 +48,7 @@ One row per on-ice player with columns: - `player_id` (Utf8) - `corsi_for`, `cor
 
 `pwhl_game_info(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
-PWHL single-game metadata.
-
-NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
-(A1.8 follow-up); not yet functional.
+PWHL single-game metadata from the `statviewfeed` `gameSummary` view.
 
 **Parameters**
 
@@ -62,7 +59,46 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 
 **Returns**
 
-A zero-row frame today -- the `statviewfeed` reply is not a `SiteKit` envelope, so there is nothing to parse (see the note above). A pandas DataFrame when `return_as_pandas` is True.
+One row: `game_id`, `game_number`, `game_date` / `game_date_iso`, `start_time` / `end_time` / `game_duration`, `game_venue`, `attendance`, `game_status`, `game_season_id`, `started` / `final` flags, `home_team_id` / `home_team` / `home_team_abbr` / `home_score`, the same `away_*` columns, `has_shootout` and the official report / text box score URLs (ids, scores and flags Int64): the published `load_pwhl_game_info` schema. A zero-row frame of that schema when the reply carries no game. A pandas DataFrame when `return_as_pandas` is True.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | HockeyTech game id (the game_id pwhl_game_info was called with). |
+| `game_number` | character | Game number within the season as the feed labels it, as text (e.g. '72'). |
+| `game_date` | character | Game date as a long display string (e.g. 'Wednesday, March 19, 2025'). |
+| `game_date_iso` | character | Scheduled start as an ISO 8601 date-time with UTC offset (e.g. '2025-03-19T19:00:00-04:00'). |
+| `start_time` | character | Actual puck-drop time as a local display string with time zone (e.g. '7:08 pm EDT'). |
+| `end_time` | character | Time the game ended as a local display string with time zone (e.g. '9:47 pm EDT'). |
+| `game_duration` | character | Elapsed real time from start to end as 'h:mm' (e.g. '2:39'). |
+| `game_venue` | character | Arena and city as one display string (e.g. 'Coca-Cola Coliseum \| Toronto'). |
+| `attendance` | integer | Announced attendance. |
+| `game_status` | character | Game status label (e.g. 'Final'). |
+| `game_season_id` | integer | HockeyTech season id the game belongs to (resolve to a season with pwhl_season_id). |
+| `started` | integer | 1 when the game has started, 0 otherwise. |
+| `final` | integer | 1 when the game is final, 0 otherwise. |
+| `home_team_id` | integer | HockeyTech team id of the home team. |
+| `home_team` | character | Full name of the home team (e.g. 'Toronto Sceptres'). |
+| `home_team_abbr` | character | Abbreviation of the home team (e.g. 'TOR'). |
+| `home_score` | integer | Goals scored by the home team. |
+| `away_team_id` | integer | HockeyTech team id of the visiting team. |
+| `away_team` | character | Full name of the visiting team (e.g. 'New York Sirens'). |
+| `away_team_abbr` | character | Abbreviation of the visiting team (e.g. 'NY'). |
+| `away_score` | integer | Goals scored by the visiting team. |
+| `has_shootout` | integer | 1 when the game went to a shootout, 0 otherwise. |
+| `game_report_url` | character | URL of the official HockeyTech game report. |
+| `boxscore_url` | character | URL of the HockeyTech text box score. |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_game_info
+df = pwhl_game_info(game_id=164)
+print(df.select("game_id", "home_team", "home_score", "away_team", "away_score"))
+
+# As pandas
+
+pdf = pwhl_game_info(game_id=164, return_as_pandas=True)
+```
 
 ### pwhl_game_shifts {#pwhl_game_shifts}
 
@@ -117,6 +153,17 @@ PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 
 `game` (one row: `game_id`, `date`, `status`, `venue`, `attendance`, both teams and scores), `goals` (one row per goal with the scorer, both assists and the plus / minus skaters), `penalties` (one row per penalty), `shots_by_period` (`side`, `period`, `shots`) and `three_stars`.
 
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_game_summary
+out = pwhl_game_summary(game_id=164)
+
+# Next step
+
+out["goals"].head()
+```
+
 ### pwhl_leaders {#pwhl_leaders}
 
 `pwhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -156,6 +203,18 @@ One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id
 | `photo_small` | character | URL of the small-format headshot image for the PWHL leader-board player. |
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_leaders
+df = pwhl_leaders(season=2025)
+
+# Next step
+
+import polars as pl
+df.filter(pl.col("type_formatted") == "Goals").head()
+```
 
 ### pwhl_pbp {#pwhl_pbp}
 
@@ -301,25 +360,50 @@ One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_
 | `on_ice_home` | character | Comma-joined sorted player_ids on ice for the home team. |
 | `on_ice_away` | character | Comma-joined sorted player_ids on ice for the away team. |
 
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_pbp
+df = pwhl_pbp(game_id=164)
+
+# Next step
+
+import polars as pl
+df.filter(pl.col("event") == "goal").head()
+```
+
 ### pwhl_player_box {#pwhl_player_box}
 
-`pwhl_player_box(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
+`pwhl_player_box(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Dict[str, Any]'`
 
-PWHL player box score for a single game.
+PWHL player box score for a single game, skaters and goalies (fastRhockey `pwhl_player_box`).
 
-NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
-(A1.8 follow-up); not yet functional.
+Reads the `statviewfeed` `gameSummary` view. The return is a dict, as in fastRhockey and as
+the `fastRhockey-pwhl-raw` producer reads it (`box["skaters"]` / `box["goalies"]`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | The HockeyTech game id. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `return_as_pandas` | `bool` | `False` | Return pandas DataFrames instead of polars. |
 
 **Returns**
 
-A zero-row frame today -- the `statviewfeed` reply is not a `SiteKit` envelope, so there is nothing to parse (see the note above). A pandas DataFrame when `return_as_pandas` is True.
+`skaters` -- one row per dressed skater, home team first: `player_id`, `first_name`, `last_name`, `position`, `team_id`, `game_id`, `league`, `toi` ("mm:ss"), `time_on_ice` (Float64 minutes), `goals`, `assists`, `points`, `shots`, `hits`, `blocked_shots`, `penalty_minutes`, `plus_minus`, `faceoff_attempts` / `faceoff_wins` / `faceoff_losses`, `faceoff_pct` (Float64, null on no attempts) and `starting` (1 = starting lineup). `goalies` -- one row per dressed goalie with the same id / name / time columns, `saves`, `goals_against`, `shots_against`, the scoring, penalty and faceoff columns and `starting`; a goalie who did not play has null `toi` / `time_on_ice`. Ids and counts are Int64. Both frames are zero-row with these columns when the reply carries no players. pandas DataFrames when `return_as_pandas` is True.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_player_box
+box = pwhl_player_box(game_id=164)
+print(box["skaters"].shape, box["goalies"].shape)
+
+# Goalies who played
+
+import polars as pl
+box["goalies"].filter(pl.col("time_on_ice").is_not_null())
+```
 
 ### pwhl_player_game_log {#pwhl_player_game_log}
 
@@ -338,14 +422,22 @@ PWHL player game-by-game log.
 
 One row per game played: `id` (the game id), `date_played`, `home_team_code` / `visiting_team_code` and names, `player_team`, `goals`, `assists`, `points`, `plus_minus`, `shots`, `hits`, `penalty_minutes`, `ice_time_minutes_seconds`, faceoff, power-play, short-handed and shootout counts. Counts arrive as strings except `points` and the percentages (Int64). A pandas DataFrame when `return_as_pandas` is True; a zero-row frame for a player with no games.
 
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_player_game_log
+df = pwhl_player_game_log(player_id=27)
+
+# Next step
+
+print(df.shape)
+```
+
 ### pwhl_player_info {#pwhl_player_info}
 
 `pwhl_player_info(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
-PWHL player biographical info.
-
-NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
-(A1.8 follow-up); not yet functional.
+PWHL player biographical info from the `statviewfeed` `player` view.
 
 **Parameters**
 
@@ -356,7 +448,41 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 
 **Returns**
 
-A zero-row frame today -- the `statviewfeed` reply is not a `SiteKit` envelope, so there is nothing to parse (see the note above). A pandas DataFrame when `return_as_pandas` is True.
+One row: `player_id` and `person_id` (Int64), `first_name`, `last_name`, `name`, `jersey_number`, `position`, `shoots`, `catches`, `height`, `weight`, `birthdate`, `birth_place`, `nationality`, `player_type` ("skater" or "goalie"), `team_name` / `team_nickname` (most recent team), `image_url` and `current_season_id` (Int64). A zero-row frame of these columns when the reply carries no player. A pandas DataFrame when `return_as_pandas` is True.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | HockeyTech player id (the player_id pwhl_player_info was called with). |
+| `person_id` | integer | HockeyTech person id; one person keeps it across player and staff records. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `name` | character | First and last name joined by a space. |
+| `jersey_number` | character | Jersey number as text, on the player's most recent team. |
+| `position` | character | Position code (e.g. 'LD', 'C', 'G'). |
+| `shoots` | character | Shooting hand, 'L' or 'R'. |
+| `catches` | character | Catching hand, 'L' or 'R' (the feed fills it for skaters too). |
+| `height` | character | Height as feet'inches text (e.g. "5'11"). |
+| `weight` | character | Weight in pounds as text; '0' when the feed has none. |
+| `birthdate` | character | Date of birth as YYYY-MM-DD. |
+| `birth_place` | character | Birthplace as 'city, region, country' text. |
+| `nationality` | character | Nationality label (e.g. 'American'). |
+| `player_type` | character | Player kind, 'skater' or 'goalie'. |
+| `team_name` | character | Full name of the player's most recent team (e.g. 'Boston Fleet'). |
+| `team_nickname` | character | Nickname of the player's most recent team (e.g. 'Fleet'). |
+| `image_url` | character | URL of the player's 240x240 profile image. |
+| `current_season_id` | integer | HockeyTech season id the feed treats as current when answering (not a season the player played). |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_player_info
+df = pwhl_player_info(player_id=12)
+print(df.select("player_id", "name", "position", "team_name"))
+
+# As pandas
+
+pdf = pwhl_player_info(player_id=12, return_as_pandas=True)
+```
 
 ### pwhl_player_search {#pwhl_player_search}
 
@@ -405,6 +531,17 @@ One row per matching player (String): `person_id`, `player_id`, `first_name` / `
 | `profile_image` | character | File name of the player's profile photo, not a URL (e.g. '7dea378a91cedc9d5d14b1222802322c.jpg'). |
 | `score` | character | Search relevance score of the match as a decimal string (e.g. '5.911529541015625'), not a game score. |
 | `last_active_date` | character | Date (YYYY-MM-DD) the feed reports the person as last active; for the active players captured it equals the capture date, so it is not the date of the player's last game. |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_player_search
+df = pwhl_player_search(name="Poulin")
+
+# Next step
+
+df.select("player_id", "first_name", "last_name")
+```
 
 ### pwhl_player_stats {#pwhl_player_stats}
 
@@ -476,6 +613,17 @@ One row per season (and team) the player played: `season_id`, `season_name`, `pl
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
 | `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_player_stats
+df = pwhl_player_stats(player_id=27)
+
+# Next step
+
+df.select("season_name", "games_played", "points")
+```
+
 ### pwhl_player_toi {#pwhl_player_toi}
 
 `pwhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -526,6 +674,17 @@ the newest season overall is usually still before its playoffs, with no bracket.
 
 One row per playoff series: `round` / `round_name` / `round_type_name`, `series_letter` / `series_name`, `team1` / `team2` (team ids), `team1_wins` / `team2_wins` (Int64), `winner` (the winning team id, but the feed often leaves it empty even after a series ends, so read the result from the win counts), `feeder_series1` / `feeder_series2`, and `games` (a list of structs, one per game: ids, both teams, goal counts, status, date). A pandas DataFrame when `return_as_pandas` is True.
 
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_playoff_bracket
+df = pwhl_playoff_bracket(season=2025)
+
+# Next step
+
+print(df.shape)
+```
+
 ### pwhl_schedule {#pwhl_schedule}
 
 `pwhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -558,6 +717,18 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 | `venue` | character | Venue where the game was played. |
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_schedule
+df = pwhl_schedule(season=2025)
+
+# Next step
+
+import polars as pl
+df.filter(pl.col("game_status") == "Final").head()
+```
 
 ### pwhl_scorebar {#pwhl_scorebar}
 
@@ -642,6 +813,17 @@ One row per game in the window, as the feed ships it (String): `id`, `season_id`
 | `visitor_logo` | character | URL of the logo image for the visiting team. |
 | `flo_hockey_url` | character | URL to the FloHockey streaming page for this PWHL game. |
 | `combined_client_code` | character | Combined league-and-client identifier string used by the HockeyTech feed to distinguish multi-tenant deployments. |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_scorebar
+df = pwhl_scorebar()
+
+# Next step
+
+print(df.shape)
+```
 
 ### pwhl_skater_rapm {#pwhl_skater_rapm}
 
@@ -769,6 +951,17 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 | `team` | character | Team name. |
 | `wins` | integer | Wins. |
 
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_standings
+df = pwhl_standings(season=2025)
+
+# Next step
+
+df.sort("team_rank").head()
+```
+
 ### pwhl_stats {#pwhl_stats}
 
 `pwhl_stats(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, position: 'str' = 'skaters', return_as_pandas: 'bool' = False) -> 'Any'`
@@ -879,6 +1072,17 @@ One row per player for that season and position, as the feed ships it (String, ~
 | `team_breakdown` | integer | Per-team statistical breakdown. |
 | `is_total` | double | Whether the row is a season total. |
 
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_stats
+df = pwhl_stats(season=2025)
+
+# Next step
+
+print(df.shape)
+```
+
 ### pwhl_streaks {#pwhl_streaks}
 
 `pwhl_streaks(return_as_pandas: 'bool' = False) -> 'Any'`
@@ -894,6 +1098,17 @@ Current PWHL player/team streaks — **non-functional: no such upstream view**.
 **Returns**
 
 An empty frame (the upstream view does not exist).
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_streaks
+df = pwhl_streaks()
+
+# Next step
+
+print(df.shape)
+```
 
 ### pwhl_team_roster {#pwhl_team_roster}
 
@@ -962,6 +1177,18 @@ One row per rostered player: `player_id`, `person_id`, names (`first_name`, `las
 | `player_image` | character | URL of the player's official roster photograph from the PWHL HockeyTech feed. |
 | `catches` | character | Catching hand (goalies). |
 
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_team_roster
+df = pwhl_team_roster(team_id=1, season=2025)
+
+# Next step
+
+import polars as pl
+df.filter(pl.col("position") == "G")
+```
+
 ### pwhl_teams {#pwhl_teams}
 
 `pwhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -990,6 +1217,17 @@ One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_la
 | `division` | character | Division identifier. |
 | `team_logo` | character | URL to the team logo image. |
 
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_teams
+df = pwhl_teams(season=2025)
+
+# Next step
+
+df.select("team_id", "team_name", "team_code")
+```
+
 ### pwhl_transactions {#pwhl_transactions}
 
 `pwhl_transactions(return_as_pandas: 'bool' = False) -> 'Any'`
@@ -1005,6 +1243,17 @@ PWHL roster transactions.
 **Returns**
 
 One row per transaction on the feed's current page (the newest 20): `transaction_date` / `transaction_time`, `transaction_type` / `ttype_text`, `title`, `detail`, `player_id` / `player_name` / `position`, and `team_id` / `team_name` / `team_code` / `team_city` (String). A pandas DataFrame when `return_as_pandas` is True.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_transactions
+df = pwhl_transactions()
+
+# Next step
+
+df.head()
+```
 
 ### pwhl_unit_ratings {#pwhl_unit_ratings}
 
