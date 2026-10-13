@@ -7743,12 +7743,12 @@ class CFBPlayProcess(object):
                 # ball was kept (change_of_pos_team, right at the source since EX-3.4-b; owner ruling
                 # R834-7: possession, not the fumble attribution, which calls 401856674165, the
                 # retained-fumble companion row of 401856674175, lost) and the same team snaps next,
-                # that snap's start IS this play's end (yardLine and yard too). The next snap must be
-                # by the same team (401778310's interception
-                # return that fumbles is next snapped by the other side), in the same period or the
-                # same half of regulation (an overtime period hands the ball back to the team that
-                # just had it). Fumble plays only: the same end block on other play types is
-                # EX-3.4-c. Reach over all 20,719 cfb-raw games: 19 rows in 17 games.
+                # that snap's start IS this play's end (yardLine and yard too). The same-team check is
+                # a defence if change_of_pos_team is wrong at source; no corpus row decides it today
+                # (registry: retired cfb-supp002-no-same-team-check). The next snap must be in the same
+                # period or the same half of regulation (an overtime period hands the ball back to the
+                # team that just had it). Fumble plays only: the same end block on other play types is
+                # EX-3.4-c. Reach over all 20,719 cfb-raw games: 20 rows in 18 games.
                 _supp_002=(pl.col("end.yardLine") == 0)
                 .and_(pl.col("end.yardsToEndzone") == 0)
                 .and_(pl.col("fumble_vec") == True)

@@ -1381,3 +1381,12 @@
   test: tests/cfb/test_cfb_timeout_possession.py::test_wp_after_reads_the_next_real_board_across_a_timeout
   expected: kill
   note: the board is stated for the timeout's team (the caller, OU) and taken unflipped (0.63)
+- id: cfb-ex34b-lead-wp2-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_next(_next(pl.col(wb), pl.col("type.text") == "Timeout"), pl.col("type.text") == "Timeout").alias(lwb2),'
+  mutant: 'pl.col(wb).shift(-2).alias(lwb2),'
+  test: tests/cfb/test_cfb_timeout_possession.py::test_wp_after_reads_the_next_real_board_across_a_timeout
+  expected: kill
+  note: R834-15, the published lead_wp_before2 reads shift(-2) (the snap after the timeout) again

@@ -115,3 +115,9 @@ def test_wp_after_reads_the_next_real_board_across_a_timeout():
     assert pick["start.pos_team.id"] != snap["start.pos_team.id"]
     board = 1 - snap["wp_before"]  # Michigan's board, stated for OU
     assert abs(pick["wp_after"] - board) <= 1e-6, (pick["wp_after"], board)  # was 0.41 / 0.52 vs 0.37
+    # lead_wp_before2 is the second real row after it, skipping the timeout (shift(-2) read 605 itself)
+    frame = _frame(401856679)
+    real = frame.filter(pl.col("type.text") != "Timeout")
+    i = real["id"].to_list().index(401856679595)
+    second = real.row(i + 2, named=True)
+    assert pick["lead_wp_before2"] == second["wp_before"], (pick["lead_wp_before2"], second["id"], second["wp_before"])
