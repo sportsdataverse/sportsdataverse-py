@@ -15,8 +15,11 @@ oracle validation.
 from __future__ import annotations
 
 import importlib
+import socket
+from pathlib import Path
 
 import polars as pl
+import pytest
 
 # The nhl package __init__ exports functions (nhl_player_props,
 # nhl_team_ratings) whose names shadow their submodules, so
@@ -24,25 +27,81 @@ import polars as pl
 # the module -- and monkeypatch.setattr would patch the wrong object.
 # importlib.import_module reads sys.modules and returns the same real module
 # the shims delegate through.
+nhl_loaders = importlib.import_module("sportsdataverse.nhl.nhl_loaders")
 nhl_market = importlib.import_module("sportsdataverse.nhl.nhl_market")
 nhl_props = importlib.import_module("sportsdataverse.nhl.nhl_player_props")
 nhl_ratings = importlib.import_module("sportsdataverse.nhl.nhl_team_ratings")
+pwhl_loaders = importlib.import_module("sportsdataverse.pwhl.pwhl_loaders")
 pwhl_market = importlib.import_module("sportsdataverse.pwhl.pwhl_market")
 pwhl_props = importlib.import_module("sportsdataverse.pwhl.pwhl_player_props")
 pwhl_ratings = importlib.import_module("sportsdataverse.pwhl.pwhl_team_ratings")
 
 
-def test_pwhl_team_ratings_defaults_league_pwhl(monkeypatch):
-    captured = {}
+FIX = Path(__file__).parent.parent / "fixtures" / "pwhl_player_impact"
+_PWHL_SLICES = {
+    "load_pwhl_pbp": "play_by_play_2025_slice.parquet",
+    "load_pwhl_schedules": "pwhl_schedule_2025_slice.parquet",
+    "load_pwhl_game_info": "game_info_2025_slice.parquet",
+    "load_pwhl_skater_boxscores": "skater_box_2025_slice.parquet",
+}
+_NHL_LOADERS = ("load_nhl_pbp_full", "load_nhl_schedules", "load_nhl_skater_boxscores")
 
-    def fake_nhl_team_ratings(seasons, *, league="nhl", **kwargs):
-        captured["league"] = league
-        return pl.DataFrame({"season": [2024], "team": ["MTL"], "adj_xg_net": [0.1]})
 
-    monkeypatch.setattr(nhl_ratings, "nhl_team_ratings", fake_nhl_team_ratings)
-    out = pwhl_ratings.pwhl_team_ratings(2024)
-    assert captured["league"] == "pwhl"
-    assert out.height == 1
+@pytest.fixture
+def loader_calls(monkeypatch):
+    """Sockets closed, every NHL loader refusing, every PWHL loader serving a real 2025 slice."""
+    calls: list[str] = []
+
+    def no_network(*args, **kwargs):
+        raise OSError("offline test: no sockets")
+
+    monkeypatch.setattr(socket, "create_connection", no_network)
+    monkeypatch.setattr(socket.socket, "connect", no_network)
+
+    def refuse(name):
+        def _loader(*args, **kwargs):
+            calls.append(name)
+            raise AssertionError(f"PWHL call reached the NHL loader {name}{args}")
+
+        return _loader
+
+    for name in _NHL_LOADERS:
+        monkeypatch.setattr(nhl_loaders, name, refuse(name))
+    monkeypatch.setattr(nhl_props, "load_nhl_skater_boxscores", refuse("load_nhl_skater_boxscores"))
+
+    def serve(name, fname):
+        def _loader(seasons, *args, **kwargs):
+            calls.append(name)
+            return pl.read_parquet(FIX / fname)
+
+        return _loader
+
+    for name, fname in _PWHL_SLICES.items():
+        monkeypatch.setattr(pwhl_loaders, name, serve(name, fname))
+    return calls
+
+
+def test_pwhl_team_ratings_routing_reads_pwhl_loaders_only(loader_calls):
+    out = pwhl_ratings.pwhl_team_ratings(2025)
+
+    assert set(loader_calls) == {"load_pwhl_pbp", "load_pwhl_schedules", "load_pwhl_game_info"}
+    teams = set(pl.read_parquet(FIX / "pwhl_schedule_2025_slice.parquet")["home_team"].to_list())
+    assert out.height > 0
+    assert set(out["team"].to_list()) <= teams | set(
+        pl.read_parquet(FIX / "pwhl_schedule_2025_slice.parquet")["away_team"].to_list()
+    )
+
+
+def test_pwhl_player_props_routing_reads_pwhl_loaders_only(loader_calls):
+    out = pwhl_props.pwhl_player_props(2025, stats=("shots",))
+
+    assert set(loader_calls) == set(_PWHL_SLICES)
+    box = pl.read_parquet(FIX / "skater_box_2025_slice.parquet")
+    skaters = set(box.filter(pl.col("position") != "G")["player_id"].to_list())
+    assert out.height > 0
+    assert set(out["player_id"].to_list()) <= skaters
+    # every opponent resolved, so the PWHL ratings fed the matchup multiplier
+    assert out["opp_team"].null_count() == 0
 
 
 def test_pwhl_predict_games_defaults_league_pwhl(monkeypatch):
