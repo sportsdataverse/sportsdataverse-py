@@ -46,7 +46,8 @@ from __future__ import annotations
 
 import datetime as _dt
 import math
-from typing import Any, Callable, Literal, Union, overload
+from collections.abc import Callable
+from typing import Any, Literal, Union, overload
 
 import numpy as np
 import pandas as pd

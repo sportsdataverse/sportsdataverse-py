@@ -240,7 +240,7 @@ def adapt_pwhl_shifts(shifts: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
             ids_on=pl.col("on").drop_nulls().str.join(", "),
             ids_off=pl.col("off").drop_nulls().str.join(", "),
         )
-        .select(keys + ["ids_on", "ids_off"])
+        .select(*keys, "ids_on", "ids_off")
         .sort("game_id", "game_seconds", maintain_order=True)
     )
     return _check_contract(out, IMPACT_SHIFTS_CONTRACT, "adapted PWHL shifts")
