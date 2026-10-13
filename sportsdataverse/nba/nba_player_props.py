@@ -257,7 +257,7 @@ def _load_ratings(
 
 def _load_game_date(season: int, league_id: str, game_id: str) -> Union[dt.date, None]:  # pragma: no cover - live
     """The game's date from the season schedule (the one ``nba_team_ratings`` reads); ``None`` if absent."""
-    from sportsdataverse.nba.nba_team_ratings import _league_loaders, _normalize_schedule  # noqa: PLC0415
+    from sportsdataverse.nba.nba_team_ratings import _league_loaders, _normalize_schedule
 
     load_schedule, _ = _league_loaders(league_id)
     sched = _normalize_schedule(load_schedule([season]))
@@ -330,7 +330,8 @@ def nba_player_props(
         league_id: ``"00"`` NBA / ``"10"`` WNBA / ``"20"`` G-League.
         as_of_date: Only box lines and ratings games with ``game_date <
             as_of_date`` (strict) are used. ``None`` = the target game's date
-            from the box logs, else from the schedule; a game in neither gets
+            from the box logs, else from the schedule (one extra schedule read,
+            only when the game is missing from the logs); a game in neither gets
             no cut and an :class:`~sportsdataverse.errors.AsOfCutWarning`.
         return_as_pandas: Return a pandas frame instead of polars.
 

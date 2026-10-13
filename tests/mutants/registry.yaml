@@ -1082,7 +1082,7 @@
   group: nba-props-asof
   finding: C-M10
   file: sportsdataverse/nba/nba_player_props.py
-  snippet: '        as_of_date = own.min() if own.len() else None'
+  snippet: '        as_of_date = own.min() if own.len() else _load_game_date(season, league_id, game_id)'
   mutant: '        as_of_date = None'
   test: tests/nba/test_nba_player_props_asof.py
   expected: kill
