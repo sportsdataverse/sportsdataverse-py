@@ -15,8 +15,8 @@ covers the whole corpus reach.
 Candidates (``BASE``): the 20 rule rows; every published ``cfbfastR-cfb-data`` 2019-2026 "Fumble Recovery
 (Own)" row with ``end.yardsToEndzone >= 95`` and ``EPA < -2.5`` (the auditor's signature: 23 rows on
 2026-10-12, 4 of them rule rows); and 401778310647, an interception-return fumble with a degenerate end
-whose next snap is the other team's (R834-3: only the same-team guard keeps it from being scored from the
-wrong side). 401856674165, the retained-fumble companion record of 401856674175 that the recovery
+whose next snap is the other team's (R834-3; since R834-7 both its change_of_pos_team and the same-team
+guard keep it from being scored from the wrong side). 401856674165, the retained-fumble companion record of 401856674175 that the recovery
 attribution calls lost, moves only under the possession predicate (R834-7). Fixtures:
 ``fixtures/supp002/`` (see its README) plus ``fixtures/summary_401856682.json``; every game runs with
 the one closing line ``ODDS``.

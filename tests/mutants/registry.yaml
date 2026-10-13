@@ -1315,6 +1315,12 @@
 # attribution and the row swapped in change_of_pos_team). Owner ruling R834-7 made change_of_pos_team
 # the rule's own predicate once EX-3.4-b made it right at the source, so the mutant is the code; as
 # with EX-2.3-c, an equivalent row is deleted with the reason recorded, not kept as a survivor.
+# Retired: cfb-supp002-no-same-team-check (the same-team guard replaced by pl.lit(True)). Its killer
+# 401778310647 (an interception return that fumbles; the other team snaps next) carries
+# change_of_pos_team True, so under R834-7 the possession predicate already excludes it: measured, the
+# mutant survives on all 41 candidates (every degenerate-end fumble row of the 43 corpus reach games
+# whose next snap is the other team's has change_of_pos_team True). The guard stays as a defence for
+# rows the two lookaheads read differently (End of Game / official rows, more than two admin rows).
 - id: cfb-supp002-no-degenerate-check
   group: cfb-supp002
   finding: supp-002
@@ -1326,19 +1332,6 @@
   note: >-
     without the yardLine 0 / yardsToEndzone 0 test every play that kept the ball takes the next
     snap's start; 401856797637 (a mirrored end, a different defect) moves and the count breaks
-- id: cfb-supp002-no-same-team-check
-  group: cfb-supp002
-  finding: supp-002
-  file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '.and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))'
-  mutant: ".and_(pl.lit(True))"
-  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_rule_rows_move
-  expected: kill
-  note: >-
-    R834-3: 401778310647 (an interception return that fumbles, degenerate end) is next snapped by the
-    other team; without the guard it takes that snap's start and is scored from the wrong side (EPA
-    5.10 -> 1.59)
-
 # --- EX-3.4-b (3.4(a), PR #834): a Timeout row is no change of possession ------------------------
 # Killers: tests/cfb/test_cfb_timeout_possession.py on committed captures (401752753, 401754571,
 # 401756960, 401761656 penalty rows; 401628559 punt -> receiver's timeout -> snap; 401643775 score ->
