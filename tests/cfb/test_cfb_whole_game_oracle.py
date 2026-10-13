@@ -54,7 +54,8 @@ Oracle per column
     The standard per-yard adjusted-line-yards band (the ruling for plan task 2.1 in
     ``audit/EXECUTION-FINDINGS.md``; Action Network's ALY definition, Football Study Hall): a loss
     counts 120%, yards 0-4 100%, yards 5-10 50%, yards beyond 10 nothing, so a gain is capped at 7. Not
-    the summary producers' formula. Green on every carry since task 2.1 (C-NF-3: the processor credited
+    the summary producers' formula; ``adj_rush_yardage`` is the carry capped at 10 and ``highlight_yards``
+    the carry less ``line_yards`` on a gain. Green on every carry since task 2.1 (C-NF-3: the processor credited
     100% through 3, 50% of 4-8, cap 5.5).
 ``yds_rushed``
     The feed's text states every rush's yardage (a number, "no gain", "loss of N"); a rush row without
@@ -272,6 +273,9 @@ _COLUMNS = (
     "line_yards",
     "second_level_yards",
     "open_field_yards",
+    "adj_rush_yardage",
+    "highlight_yards",
+    "opp_highlight_yards",
     "end.down",
     "end.yardsToEndzone",
     "wp_before",
@@ -677,8 +681,8 @@ def test_every_rush_carries_its_yardage(game_id):
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES))
-def test_line_yards_band_on_losses_and_gains_through_three(game_id):
-    short = _rushes(game_id).filter(pl.col("yds_rushed") <= 3)
+def test_line_yards_band_on_losses_and_gains_through_four(game_id):
+    short = _rushes(game_id).filter(pl.col("yds_rushed") <= 4)
     bad = short.filter(_off("line_yards", pl.col("oracle")))
     assert bad.height == 0, bad.select("yds_rushed", "line_yards", "oracle").rows()
 
@@ -697,6 +701,25 @@ def test_rush_decomposition_sums_to_the_gain(game_id):
     total = pl.col("line_yards") + pl.col("second_level_yards") + pl.col("open_field_yards")
     bad = gains.filter(_off("yds_rushed", total))
     assert bad.height == 0, bad.select("yds_rushed", "line_yards", "second_level_yards", "open_field_yards").rows()
+
+
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
+def test_rush_adj_and_highlight_yards_follow_the_band(game_id):
+    """adj_rush_yardage is the carry capped at 10; highlight yards are the carry less the line's credit."""
+    r = _rushes(game_id).with_columns(
+        pl.col("adj_rush_yardage").cast(pl.Float64),
+        pl.col("highlight_yards").cast(pl.Float64),
+        pl.col("opp_highlight_yards").cast(pl.Float64),
+    )
+    y = pl.col("yds_rushed")
+    bad = r.filter(_off("adj_rush_yardage", pl.min_horizontal(y, pl.lit(10.0))))
+    assert bad.height == 0, bad.select("yds_rushed", "adj_rush_yardage").rows()
+    gains = r.filter(y >= 0)
+    bad = gains.filter(_off("highlight_yards", y - pl.col("line_yards")))
+    assert bad.height == 0, bad.select("yds_rushed", "line_yards", "highlight_yards").rows()
+    # opportunity_run is a carry of 4+ (cfbfastR-cfb-data espn_cfb_15 :610): highlight yards there, 0 below
+    bad = r.filter(_off("opp_highlight_yards", pl.when(y >= 4).then(pl.col("highlight_yards")).otherwise(0.0)))
+    assert bad.height == 0, bad.select("yds_rushed", "highlight_yards", "opp_highlight_yards").rows()
 
 
 # --- C-M18 / C-L1: row order ------------------------------------------------------------------------
