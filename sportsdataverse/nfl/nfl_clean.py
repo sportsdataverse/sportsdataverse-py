@@ -624,7 +624,8 @@ def clean_nfl_pbp(
             .otherwise(pass_expr)
         )
         pass_expr = pl.when(pl.col("kickoff_attempt") == 1).then(0).otherwise(pass_expr)
-        combined_id = pl.concat_str(["game_id", pl.col("play_id").cast(pl.Utf8)], separator="_")
+        # nflverse ships play_id as Float64: through Int64 so the key reads "..._1611", not "..._1611.0" (C-NF-8).
+        combined_id = pl.concat_str(["game_id", pl.col("play_id").cast(pl.Int64).cast(pl.Utf8)], separator="_")
         pass_expr = pl.when(combined_id.is_in(_FIX_WEIRD_PASS_PLAYS)).then(0).otherwise(pass_expr)
 
     df = df.with_columns(pass_expr.alias("pass"))

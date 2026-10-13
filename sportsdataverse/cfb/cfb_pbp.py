@@ -2627,6 +2627,12 @@ class CFBPlayProcess(object):
         Reads ``{path_to_json}/{gameId}.json`` where ``path_to_json`` was passed
         to the :class:`CFBPlayProcess` constructor.
 
+        Reading from disk does not make the pipeline offline (C-L3): with the defaults,
+        ``run_processing_pipeline()`` still requests ESPN participants for every play, and a summary
+        with fewer than two pickcenter providers still requests ESPN's odds endpoint. For a rebuild
+        that makes no request, pass ``join_participants=False`` and the persisted ``odds_override``
+        to the constructor, or hand the file to ``espn_cfb_pbp(summary=...)``, which sets both.
+
         Returns:
             dict: Parsed JSON contents, also stored on ``self.json``.
 
@@ -2637,6 +2643,14 @@ class CFBPlayProcess(object):
                 game = CFBPlayProcess(gameId=401628334, path_to_json="./cache")
                 pbp = game.cfb_pbp_disk()
                 print(list(pbp.keys()))
+
+            Offline rebuild (no network)::
+
+                odds = {"gameSpread": -4.0, "overUnder": 58.5, "homeFavorite": True, "gameSpreadAvailable": True}
+                game = CFBPlayProcess(gameId=401628334, path_to_json="./cache", join_participants=False,
+                                      odds_override=odds)
+                game.cfb_pbp_disk()
+                out = game.run_processing_pipeline()
         """
         with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:
             pbp_txt = json.load(json_file)
