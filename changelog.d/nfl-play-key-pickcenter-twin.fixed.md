@@ -5,4 +5,4 @@
   payload's odds round-trip through `odds_override`, and an all-null pickcenter spread takes the
   default path instead of raising IndexError (the CFB C-M19 / C-NF-10(b) twin; play frames unchanged
   on 84 nfl-raw games). `CFBPlayProcess.cfb_pbp_disk()` documents that an offline rebuild needs
-  `join_participants=False` and `odds_override` (C-L3).
+  `join_participants=False` and `odds_override` (C-L3). (#852)
