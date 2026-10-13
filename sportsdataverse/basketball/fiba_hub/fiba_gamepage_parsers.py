@@ -141,7 +141,8 @@ class _Game:
         return {"game_id": self.game_id, "competition_id": self.competition_id}
 
     def side(self, org: Any) -> Optional[str]:
-        return self.side_of.get(_id(org))
+        key = _id(org)
+        return self.side_of.get(key) if key is not None else None
 
 
 def _people(page: Dict[str, Any]) -> Dict[int, Dict[str, Any]]:
@@ -194,7 +195,7 @@ def _pbp_rows(page: Any) -> List[Dict[str, Any]]:
                     "sub_direction": a.get("in"),
                     "made": a.get("made"),
                     "points_attempted": a.get("pts"),
-                    "shot_type": _SHOT_CODES.get(code),
+                    "shot_type": _SHOT_CODES.get(code) if isinstance(code, str) else None,
                     "shot_x": a.get("x"),
                     "shot_y": a.get("y"),
                     "has_location": ("x" in a and code != "FT") if code in _SHOT_CODES else None,

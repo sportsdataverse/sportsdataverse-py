@@ -245,7 +245,8 @@ def _method(url: str) -> str:
 def _scope_error(method: str, body: Any, params: Mapping[str, Any]) -> Optional[str]:
     """Why ``body`` is not about what was asked, or ``None``."""
     rows = body if isinstance(body, list) else [body]
-    for alts in [_SCOPES.get(method)] if method in _SCOPES else []:
+    alts = _SCOPES.get(method)
+    if alts:
         for row in rows:
             ok = any(all(_strict(_dig(row, path), params.get(name)) for path, name in alt) for alt in alts)
             if not ok:

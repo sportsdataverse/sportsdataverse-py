@@ -19,6 +19,10 @@ frames carry ``player_id``. Unofficial use of a public source: payloads are not 
 
 from __future__ import annotations
 
-# Nested from its first release (generate._BASKETBALL_HOMES). The generated module's import is added by the
-# integration codegen run; the parser module is re-exported here.
+# Nested from its first release (generate._BASKETBALL_HOMES): the generated wrappers plus the parsers.
+from sportsdataverse.basketball.lkl import lkl as _api
+from sportsdataverse.basketball.lkl import lkl_parsers as _parsers
+from sportsdataverse.basketball.lkl.lkl import *  # noqa: F401,F403
 from sportsdataverse.basketball.lkl.lkl_parsers import *  # noqa: F401,F403
+
+__all__ = [*_api.__all__, *_parsers.__all__]

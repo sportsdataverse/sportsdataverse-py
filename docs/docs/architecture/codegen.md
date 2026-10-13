@@ -77,7 +77,7 @@ are hand-authored and preserved.
   family slug, and `docs/src/clientModules/anchorForward.ts` forwards a stale deep
   link at runtime.
 - **League registry.** `render_leagues_json()` writes `docs/src/data/leagues.json`
-  — 81 leagues across six sports — which drives the sidebar's
+  — 105 leagues across six sports — which drives the sidebar's
   `sidebarItemsGenerator`, the home page's league grid and the per-league search
   contexts in `docusaurus.config.ts`.
 - **Autodoc pages.** The *coverage gap*: in-scope public names not documented by

@@ -23,21 +23,10 @@ Unofficial use of a public source: payloads are not redistributed as release ass
 
 from __future__ import annotations
 
-import importlib
-
+# Nested from its first release (generate._BASKETBALL_HOMES): the generated wrappers plus the parsers.
+from sportsdataverse.basketball.genius import genius as _api
 from sportsdataverse.basketball.genius import genius_parsers as _parsers
+from sportsdataverse.basketball.genius.genius import *  # noqa: F401,F403
 from sportsdataverse.basketball.genius.genius_parsers import *  # noqa: F401,F403
 
-__all__ = [*_parsers.__all__]
-
-# The wrappers module is generated (tools/codegen/generate.py, or its build_flat_live bootstrap); it lands with
-# integration, so this package imports cleanly before and after. After integration this block is the plain
-# ``from sportsdataverse.basketball.genius.genius import *`` of the sibling families.
-try:
-    _api = importlib.import_module(f"{__name__}.genius")
-except ModuleNotFoundError as _exc:  # pragma: no cover - exercised only before the module is generated
-    if _exc.name != f"{__name__}.genius":
-        raise
-else:  # pragma: no cover - exercised only after the module is generated
-    globals().update({_n: getattr(_api, _n) for _n in _api.__all__})
-    __all__ = [*_api.__all__, *_parsers.__all__]
+__all__ = [*_api.__all__, *_parsers.__all__]

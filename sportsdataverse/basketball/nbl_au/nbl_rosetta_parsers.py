@@ -281,7 +281,7 @@ def _rows(raw: Any) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
         return [r for r in raw if isinstance(r, dict)], {}
     if not isinstance(raw, dict):
         return [], {}
-    req = raw.get(REQUEST_KEY) if isinstance(raw.get(REQUEST_KEY), dict) else {}
+    req = _dict(raw.get(REQUEST_KEY))
     data = raw.get("data")
     if isinstance(data, list):
         return [r for r in data if isinstance(r, dict)], dict(req)
@@ -714,6 +714,11 @@ def _match_of(raw: Any) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     return (rows[0] if rows else {}), req
 
 
+def _dict(value: Any) -> Dict[str, Any]:
+    """``value`` when it is a dict, else an empty one."""
+    return value if isinstance(value, dict) else {}
+
+
 def _match_id(match: Mapping[str, Any]) -> Optional[str]:
     mid = match.get("external_id") or match.get("id")
     return mid if isinstance(mid, str) else None
@@ -915,9 +920,9 @@ def _sub_type_key(value: Any) -> Optional[str]:
 
 
 def _event(e: Dict[str, Any], match: Mapping[str, Any]) -> Dict[str, Any]:
-    player = e.get("player") if isinstance(e.get("player"), dict) else {}
-    team = e.get("team") if isinstance(e.get("team"), dict) else {}
-    coords = e.get("coordinates") if isinstance(e.get("coordinates"), dict) else {}
+    player = _dict(e.get("player"))
+    team = _dict(e.get("team"))
+    coords = _dict(e.get("coordinates"))
     home = (match.get("home_team") or {}).get("external_id") or (match.get("home_team") or {}).get("id")
     team_id = team.get("external_id") or team.get("id") or None
     person = e.get("personId") or player.get("external_id") or None

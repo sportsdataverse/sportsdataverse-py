@@ -15,6 +15,7 @@ from __future__ import annotations
 import base64
 import binascii
 import json
+from typing import Any, List, Tuple
 
 
 class Undecryptable(ValueError):
@@ -26,7 +27,7 @@ def _xtime(a: int) -> int:
     return (a ^ 0x11B) & 0xFF if a & 0x100 else a
 
 
-def _build_tables():
+def _build_tables() -> Tuple[List[int], List[int], List[int], List[int]]:
     # GF(2^8) log/antilog over generator 3, then the S-box from the multiplicative inverse + affine map.
     exp, log = [0] * 256, [0] * 256
     x = 1
@@ -133,13 +134,13 @@ def decrypt_ecb(cipher: bytes, key: bytes) -> bytes:
     return plain[:-pad]
 
 
-def encrypt_body(obj, key: bytes) -> str:
+def encrypt_body(obj: Any, key: bytes) -> str:
     """The wire form of a response: a JSON string literal holding base64 of the ciphertext (tests / fixtures only)."""
     raw = json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     return json.dumps(base64.b64encode(encrypt_ecb(raw, key)).decode("ascii"))
 
 
-def decrypt_body(text: str, key: bytes):
+def decrypt_body(text: str, key: bytes) -> Any:
     """Wire text -> parsed JSON. Accepts the JSON-string-literal form the API sends (and bare base64). Raises Undecryptable
     for anything else: a plain-JSON body (the API's 500 envelope is not encrypted), non-base64 text, a wrong key, a
     non-UTF-8 or non-JSON plaintext."""

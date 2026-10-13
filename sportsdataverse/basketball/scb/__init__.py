@@ -19,6 +19,10 @@ storing its content without written permission; see the ``Notes`` of any wrapper
 
 from __future__ import annotations
 
-# Nested from its first release (generate._BASKETBALL_HOMES). The generated module's import is added by the
-# integration codegen run; the parser module is re-exported here.
+# Nested from its first release (generate._BASKETBALL_HOMES): the generated wrappers plus the parsers.
+from sportsdataverse.basketball.scb import scb as _api
+from sportsdataverse.basketball.scb import scb_parsers as _parsers
+from sportsdataverse.basketball.scb.scb import *  # noqa: F401,F403
 from sportsdataverse.basketball.scb.scb_parsers import *  # noqa: F401,F403
+
+__all__ = [*_api.__all__, *_parsers.__all__]
