@@ -313,7 +313,7 @@ def _verify_games(url: str, season_row: Dict[str, Any], games: List[Dict[str, An
     by_div: Dict[Any, List[Dict[str, Any]]] = {}
     for g in games:
         by_div.setdefault(g.get("division_id"), []).append(g)
-    for div_id, rows in by_div.items():
+    for div_id, rows in sorted(by_div.items(), key=lambda kv: str(kv[0])):
         d = divs.get(div_id)
         if d is None or not _same(d.get("gohoops_id"), rows[0].get("gohoops_division_id")):
             _refuse(url, f"games name division {div_id!r}, which is not a division of season {season_row['id']}")
@@ -338,6 +338,13 @@ def _verify_games(url: str, season_row: Dict[str, Any], games: List[Dict[str, An
 
 
 def _season_route(season: int, kind: str, params: Dict[str, Any]) -> Dict[str, Any]:
+    verify = params.get("verify")
+    team_id = None if params.get("team_id") is None else _int_arg(params["team_id"], "team_id")
+    if kind == "games":  # validated before any request, the season mapping included
+        if verify not in (None, True, False):
+            raise ValueError(f"verify must be a bool; got {verify!r}")
+        if verify and team_id is not None:
+            raise ValueError("verify=True checks the whole season: it cannot be combined with team_id")
     row = _season_row(season)
     sid = int(row["id"])
     if kind == "divisions":
@@ -349,12 +356,6 @@ def _season_route(season: int, kind: str, params: Dict[str, Any]) -> Dict[str, A
         body = _list_body(url)
         _refuse(url, _teams_error(body))
     else:
-        verify = params.get("verify")
-        if verify not in (None, True, False):
-            raise ValueError(f"verify must be a bool; got {verify!r}")
-        team_id = None if params.get("team_id") is None else _int_arg(params["team_id"], "team_id")
-        if verify and team_id is not None:
-            raise ValueError("verify=True checks the whole season: it cannot be combined with team_id")
         url = f"{API}/seasons/{sid}/games"
         body = _list_body(url, {"team_id": team_id} if team_id is not None else None)
         _refuse(url, _games_error(body, row, team_id))
