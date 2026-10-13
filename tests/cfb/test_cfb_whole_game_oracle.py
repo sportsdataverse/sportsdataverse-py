@@ -66,9 +66,11 @@ Oracle per column
     of 4+ (the processor credits 100% through 3, 50% of 4-8, cap 5.5).
 ``yds_rushed``
     The feed's text states every rush's yardage (a number, "no gain", "loss of N"); a rush row without
-    it is a parse gap. XFAIL EX-1.2-a (a finding surfaced by this suite's null-aware review) on the 15
-    captures where it still happens (#768 closed 27 of the original 42); the line-yards checks below read
-    only the rows that carry a yardage.
+    it is a parse gap. XFAIL EX-1.2-a (a finding surfaced by this suite's null-aware review) on the 6
+    captures where a rush's text states no carry (#768 closed 27 of the original 42, task 3.4(f) 9 more:
+    "for 1 yard", "loss of N" without "a", a name ending "yard" before "rush", directional gains on
+    fumbled or flagged rushes, a "1 Yd Run" with a two-point try); the line-yards checks below read only
+    the rows that carry a yardage.
 ``line_yards + second_level_yards + open_field_yards`` on gains
     The decomposition identity: the three pieces sum to ``yds_rushed``. Green (C-H1's CFB twin).
 ``period``
@@ -627,30 +629,47 @@ def _rushes(game_id: int) -> pl.DataFrame:
 
 
 # 27 captures left this table when main's #768 (6c5a48e44f, "kneel-down and yardless vendor rush yardage")
-# reached this branch: they now assert plainly. With #768's cfb_pbp.py hunk reverted every count below and
-# every removed capture returns to its pre-#768 value (303102638 48, 313090025 47, 401644749 7).
+# reached this branch, 9 more with task 3.4(f) (the stated forms in test_stated_rush_yardage_is_read). The
+# 7 rows left are rushes whose text states no carry: a fumble named with no yardage clause (only where the
+# ball was RECOVERED, which the NCAA rule does not credit; statYardage disagrees with that spot on 2 of 4)
+# and a vendor rush whose only number is the penalty. Null is the honest value there, as for a sack that
+# states no loss; the xfails stay until a source states the carry.
 _EX_1_2_A = {
-    gid: f"EX-1.2-a: {n} rush row(s) lose yds_rushed (and so line_yards) because the text pattern is unmatched "
-    "('rushed up the middle for 1 yard', fumbled rushes with no yardage clause, a '1 Yd Run' with a "
-    "two-point try; cfb_pbp.py yds_rushed chain)"
+    gid: f"EX-1.2-a: {n} rush row(s) state no carry ('X rush, fumbled, recovered by ... at the Y 28', "
+    "'X rush (tackler), PENALTY ...'), so yds_rushed stays null (cfb_pbp.py yds_rushed chain)"
     for gid, n in {
-        242972641: 14,
-        243040130: 9,
-        243040265: 5,
-        243042579: 5,
-        243110264: 6,
-        243392572: 5,
-        252532751: 6,
+        252532751: 1,
         282430151: 1,
         282570328: 1,
-        303102638: 3,
-        313090025: 2,
+        313090025: 1,
         322802005: 1,
-        400756970: 1,
-        400953391: 1,
         401644749: 2,
     }.items()
 }
+
+#: (game, play id, yards, oracle): one row per text form task 3.4(f) reads; each was null before it
+_STATED_RUSH_FORMS = [
+    (242972641, 2429726410102, 1, "'rushed up the middle for 1 yard'; statYardage 1"),
+    (252532751, 252532751133, -8, "'rush for loss of 8 yards'; next snap 55 -> 63 yards to go (statYardage 0)"),
+    (303102638, 303102638101, 7, "'Joseph Banyard rush over ... for 7 yards' is no 'N Yard Rush'; statYardage 7"),
+    (303102638, 303102638009, 3, "'rush over left tackle for 3 yards', SMU penalty after; statYardage 3"),
+    (313090025, 313090025162, 11, "'rush over right guard for 11 yards, fumbled', own recovery; statYardage 11"),
+    (400756970, 400756970104999301, 1, "'1 Yd Run (X Run for Two-Point Conversion)'; statYardage 1"),
+]
+
+
+@pytest.mark.parametrize(
+    ("game_id", "play_id", "yards", "oracle"),
+    [
+        pytest.param(*row, marks=pytest.mark.xdist_group(f"cfb-oracle-{row[0]}"), id=f"{row[0]}-{row[1]}")
+        for row in _STATED_RUSH_FORMS
+    ],
+)
+def test_stated_rush_yardage_is_read(game_id, play_id, yards, oracle):
+    """EX-1.2-a: each text form that states a carry yields it (the feed's statYardage or next snap)."""
+    row = _frame(game_id).filter(pl.col("id").cast(pl.Int64) == play_id)
+    assert row.height == 1
+    assert row["yds_rushed"].item() == yards, oracle
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES, _EX_1_2_A))

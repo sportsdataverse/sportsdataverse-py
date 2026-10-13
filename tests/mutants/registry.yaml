@@ -1431,3 +1431,56 @@
   test: tests/cfb/test_cfb_wp_endgame.py -k "tied_late_holdout"
   expected: kill
   note: the 2022-25 endgame rows are a holdout for wp_ot_reach only; wp_before is scored in-sample
+
+# --- EX-1.2-a: rush yardage text forms (task 3.4(f)) ---------------------------------------------
+# Killer: test_stated_rush_yardage_is_read, one row per form, each pinned to the feed's statYardage
+# (or, on the 2005 feed whose statYardage is 0, the next snap's yards to go).
+- id: cfb-rushed-for-one-yard-singular
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(_gain_text.str.extract(r"(?i)for (-?\d+) yards?\b").cast(pl.Int32))'
+  mutant: '.then(_gain_text.str.extract(r"(?i)for (-?\d+) yards\b").cast(pl.Int32))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 242972641"
+  expected: kill
+  note: 2004-05 "rushed up the middle for 1 yard." (44 capture rows) needs the singular
+
+- id: cfb-rush-for-loss-without-a
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'str.contains("(?i)rush for (?:a )?loss of")'
+  mutant: 'str.contains("(?i)rush for a loss of")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 252532751"
+  expected: kill
+  note: 2005 "rush for loss of 8 yards to the LaMon37"; without the optional "a" it falls to the null
+
+- id: cfb-yard-rush-needs-its-number
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'str.contains(r"(?i)\d+ Yard Rush")'
+  mutant: 'str.contains(r"(?i)Yard Rush")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 303102638101"
+  expected: kill
+  note: case-folded "Yard Rush" matches the surname in "Joseph Banyard rush", whose reader then finds no number
+
+- id: cfb-run-for-needs-its-number
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'str.contains(r"(?i)run for -?\d")'
+  mutant: 'str.contains(r"(?i)run for")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 400756970"
+  expected: kill
+  note: '"1 Yd Run (X Run for Two-Point Conversion)" stopped on "run for" with no number'
+
+- id: cfb-directional-rush-gain-on-flagged-or-fumbled
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_gain_text.str.contains(r"(?i)\b(?:rush|run)\b[^,]*? for -?\d+ yards?\b")'
+  mutant: '_gain_text.str.contains(r"(?i)\bNEVER_A_RUSH\b")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and (303102638009 or 313090025162)"
+  expected: kill
+  note: '"rush over left tackle for 3 yards, ... penalty" / "for 11 yards, fumbled": the statYardage stand-in skips flags and fumbles'
