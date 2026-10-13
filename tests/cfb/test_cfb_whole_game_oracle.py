@@ -66,9 +66,11 @@ Oracle per column
     of 4+ (the processor credits 100% through 3, 50% of 4-8, cap 5.5).
 ``yds_rushed``
     The feed's text states every rush's yardage (a number, "no gain", "loss of N"); a rush row without
-    it is a parse gap. XFAIL EX-1.2-a (a finding surfaced by this suite's null-aware review) on the 15
-    captures where it still happens (#768 closed 27 of the original 42); the line-yards checks below read
-    only the rows that carry a yardage.
+    it is a parse gap. XFAIL EX-1.2-a (a finding surfaced by this suite's null-aware review) on the 6
+    captures where a rush's text states no carry (#768 closed 27 of the original 42, task 3.4(f) 9 more:
+    "for 1 yard", "loss of N" without "a", a name ending "yard" before "rush", directional gains on
+    fumbled or flagged rushes, a "1 Yd Run" with a two-point try); the line-yards checks below read only
+    the rows that carry a yardage.
 ``line_yards + second_level_yards + open_field_yards`` on gains
     The decomposition identity: the three pieces sum to ``yds_rushed``. Green (C-H1's CFB twin).
 ``period``
@@ -325,6 +327,10 @@ _COLUMNS = (
     "start.yardsToEndzone.touchback",
     "rush",
     "yds_rushed",
+    "statYardage",
+    "fumble_vec",
+    "penalty_flag",
+    "penalty_detail",
     "line_yards",
     "second_level_yards",
     "open_field_yards",
@@ -339,11 +345,16 @@ class Run:
     schema: dict[str, str]
 
 
+#: real captures outside the ``summary_*`` set (so not whole-game oracle captures), read by one test each;
+#: provenance in tests/cfb/fixtures/README.md
+_FORM_FIXTURES = {282782655: FIX / "rush_forms" / "282782655_trimmed.json.gz"}
+
+
 @functools.lru_cache(maxsize=None)
 def _run(game_id: int) -> Run:
     """Process one capture offline, once per process; keep the columns the oracles read."""
     proc = CFBPlayProcess(gameId=game_id, join_participants=False)
-    proc.espn_cfb_pbp(summary=_load(PATHS[game_id]))
+    proc.espn_cfb_pbp(summary=_load(PATHS.get(game_id) or _FORM_FIXTURES[game_id]))
     proc.run_processing_pipeline()
     plays = proc.plays_frame
     return Run(frame=plays.select(_COLUMNS), schema={c: str(t) for c, t in plays.schema.items()})
@@ -627,30 +638,56 @@ def _rushes(game_id: int) -> pl.DataFrame:
 
 
 # 27 captures left this table when main's #768 (6c5a48e44f, "kneel-down and yardless vendor rush yardage")
-# reached this branch: they now assert plainly. With #768's cfb_pbp.py hunk reverted every count below and
-# every removed capture returns to its pre-#768 value (303102638 48, 313090025 47, 401644749 7).
-_EX_1_2_A = {
-    gid: f"EX-1.2-a: {n} rush row(s) lose yds_rushed (and so line_yards) because the text pattern is unmatched "
-    "('rushed up the middle for 1 yard', fumbled rushes with no yardage clause, a '1 Yd Run' with a "
-    "two-point try; cfb_pbp.py yds_rushed chain)"
-    for gid, n in {
-        242972641: 14,
-        243040130: 9,
-        243040265: 5,
-        243042579: 5,
-        243110264: 6,
-        243392572: 5,
-        252532751: 6,
-        282430151: 1,
-        282570328: 1,
-        303102638: 3,
-        313090025: 2,
-        322802005: 1,
-        400756970: 1,
-        400953391: 1,
-        401644749: 2,
-    }.items()
+# reached this branch, 9 more with task 3.4(f) (the stated forms in test_stated_rush_yardage_is_read). The
+# 7 rows left are rushes whose text states no carry: a fumble named with no yardage clause (only where the
+# ball was RECOVERED, which the NCAA rule does not credit; statYardage disagrees with that spot on 2 of 4)
+# and a vendor rush whose only number is the penalty. Null is the honest value there, as for a sack that
+# states no loss; the xfails stay until a source states the carry.
+#: rush rows per capture whose text states no carry; pinned so a new null on these captures still fails
+_EX_1_2_A_COUNTS = {
+    252532751: 1,
+    282430151: 1,
+    282570328: 1,
+    313090025: 1,
+    322802005: 1,
+    401644749: 2,
 }
+_EX_1_2_A = {
+    gid: f"EX-1.2-a: {n} rush row(s) state no carry ('X rush, fumbled, recovered by ... at the Y 28', "
+    "'X rush (tackler), PENALTY ...'), so yds_rushed stays null (cfb_pbp.py yds_rushed chain)"
+    for gid, n in _EX_1_2_A_COUNTS.items()
+}
+
+#: (game, play id, yards, oracle): one row per text form task 3.4(f) reads; each was null before it
+_STATED_RUSH_FORMS = [
+    (242972641, 2429726410102, 1, "'rushed up the middle for 1 yard'; statYardage 1"),
+    (252532751, 252532751133, -8, "'rush for loss of 8 yards'; next snap 55 -> 63 yards to go (statYardage 0)"),
+    (303102638, 303102638101, 7, "statYardage stand-in (fall-through): 'Joseph Banyard rush' is no 'N Yard Rush'"),
+    (303102638, 303102638009, 3, "'rush over left tackle for 3 yards', SMU penalty after; statYardage 3"),
+    (313090025, 313090025162, 11, "'rush over right guard for 11 yards, fumbled', own recovery; statYardage 11"),
+    (400756970, 400756970104999301, 1, "'1 Yd Run (X Run for Two-Point Conversion)'; statYardage 1"),
+    # rush_forms/ fixture: a directional loss on a flagged rush (penalty declined)
+    (
+        282782655,
+        282782655087,
+        -5,
+        "'rush over right end for a loss of 5 yards', penalty declined; statYardage -5, next snap 52 -> 57 yards to go",
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    ("game_id", "play_id", "yards", "oracle"),
+    [
+        pytest.param(*row, marks=pytest.mark.xdist_group(f"cfb-oracle-{row[0]}"), id=f"{row[0]}-{row[1]}")
+        for row in _STATED_RUSH_FORMS
+    ],
+)
+def test_stated_rush_yardage_is_read(game_id, play_id, yards, oracle):
+    """EX-1.2-a: each text form that states a carry yields it (the feed's statYardage or next snap)."""
+    row = _frame(game_id).filter(pl.col("id").cast(pl.Int64) == play_id)
+    assert row.height == 1
+    assert row["yds_rushed"].item() == yards, oracle
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES, _EX_1_2_A))
@@ -659,6 +696,34 @@ def test_every_rush_carries_its_yardage(game_id):
     rushes = _frame(game_id).filter(pl.col("rush") == True)
     lost = rushes.filter(pl.col("yds_rushed").is_null())
     assert lost.height == 0, f"{lost.height} of {rushes.height} rushes: {lost['text'].head(3).to_list()}"
+
+
+@pytest.mark.parametrize("game_id", _params(sorted(_EX_1_2_A_COUNTS)))
+def test_rushes_without_a_stated_carry_stay_counted(game_id):
+    """EX-1.2-a: the xfailed captures keep exactly their counted no-carry rows (growth fails here)."""
+    lost = _frame(game_id).filter((pl.col("rush") == True) & pl.col("yds_rushed").is_null())
+    assert lost.height == _EX_1_2_A_COUNTS[game_id], lost["text"].to_list()
+
+
+#: a feed whose three yardages disagree: no reader can match statYardage without dropping the text
+_PLAIN_RUSH_PROVIDER = {
+    401012682: "provider defect: play 401012682104884901 reads 'run for 4 yds to the OrgSt 29' (yds_rushed 4) "
+    "with statYardage 8 and a 41 -> 29 spot (12 yards); two runners' texts merged in one record",
+}
+
+
+@pytest.mark.parametrize("game_id", _params(CAPTURES, _PLAIN_RUSH_PROVIDER))
+def test_plain_rush_yardage_equals_stat_yardage(game_id):
+    """A rush with no fumble and no flag gains what ESPN's statYardage says (where it is not the 0 blank)."""
+    plain = _frame(game_id).filter(
+        (pl.col("rush") == True)
+        & (pl.col("fumble_vec").fill_null(False) == False)
+        & (pl.col("penalty_flag").fill_null(False) == False)
+        & pl.col("penalty_detail").is_null()
+        & (pl.col("statYardage").cast(pl.Float64) != 0)
+    )
+    bad = plain.filter(~pl.col("yds_rushed").cast(pl.Float64).eq_missing(pl.col("statYardage").cast(pl.Float64)))
+    assert bad.height == 0, bad.select("id", "statYardage", "yds_rushed", "text").rows()[:5]
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES))
