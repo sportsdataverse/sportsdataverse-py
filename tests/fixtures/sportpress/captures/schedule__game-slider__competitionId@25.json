@@ -1,0 +1,241 @@
+{
+  "data": [
+    {
+      "id": 11275,
+      "game_time": "2026-10-02 20:30:00",
+      "status": "finished",
+      "genius_id": 2873862,
+      "video_stream_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 100,
+          "competition_team": {
+            "id": 545,
+            "name": "Hubo Limburg United",
+            "short_name": "LIM",
+            "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Limburg",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/I/p/IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/I/p/small-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+                "medium": "https://bnxt.sportpress.info/storage/I/p/medium-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          }
+        },
+        {
+          "side": 2,
+          "finalScore": 109,
+          "competition_team": {
+            "id": 563,
+            "name": "Kangoeroes Basket Mechelen",
+            "short_name": "MEC",
+            "ticket_url": "https://kangoeroes-mannen.ordering.be/o/7%C2%A0%C2%A0%C2%A0",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Mechelen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/P/1/P1CAfeaMcbepHMFRHSXcktt6k1785845272.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/P/1/small-P1CAfeaMcbepHMFRHSXcktt6k1785845272.png",
+                "medium": "https://bnxt.sportpress.info/storage/P/1/medium-P1CAfeaMcbepHMFRHSXcktt6k1785845272.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          }
+        }
+      ],
+      "phase": {
+        "id": 183,
+        "name": "Regular season 2026-27",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 25,
+        "season": 2027,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2026-2027",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2026-07-24"
+      }
+    },
+    {
+      "id": 11277,
+      "game_time": "2026-10-03 20:30:00",
+      "status": "finished",
+      "genius_id": 2873608,
+      "video_stream_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 63,
+          "competition_team": {
+            "id": 543,
+            "name": "CityX Mons",
+            "short_name": "MON",
+            "ticket_url": "https://shop.monshainaut.be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Mons",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/b/t/bt3TLIdQmf3JGqHKQP6cJHii81786374757.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/b/t/small-bt3TLIdQmf3JGqHKQP6cJHii81786374757.png",
+                "medium": "https://bnxt.sportpress.info/storage/b/t/medium-bt3TLIdQmf3JGqHKQP6cJHii81786374757.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          }
+        },
+        {
+          "side": 2,
+          "finalScore": 100,
+          "competition_team": {
+            "id": 541,
+            "name": "Windrose Giants Antwerp",
+            "short_name": "ANT",
+            "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Antwerp",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+                "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          }
+        }
+      ],
+      "phase": {
+        "id": 183,
+        "name": "Regular season 2026-27",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 25,
+        "season": 2027,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2026-2027",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2026-07-24"
+      }
+    },
+    {
+      "id": 11303,
+      "game_time": "2026-10-14 19:30:00",
+      "status": "ready",
+      "genius_id": 2873613,
+      "video_stream_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 0,
+          "competition_team": {
+            "id": 547,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/5/b/5bYE12yxtfijCQAKU2RhtMieX1785845195.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/5/b/small-5bYE12yxtfijCQAKU2RhtMieX1785845195.png",
+                "medium": "https://bnxt.sportpress.info/storage/5/b/medium-5bYE12yxtfijCQAKU2RhtMieX1785845195.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          }
+        },
+        {
+          "side": 2,
+          "finalScore": 0,
+          "competition_team": {
+            "id": 537,
+            "name": "Val-Dieu Spirou Basket",
+            "short_name": "CHA",
+            "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Spirou Basket",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/3/G/3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/3/G/small-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+                "medium": "https://bnxt.sportpress.info/storage/3/G/medium-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          }
+        }
+      ],
+      "phase": {
+        "id": 183,
+        "name": "Regular season 2026-27",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 25,
+        "season": 2027,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2026-2027",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2026-07-24"
+      }
+    }
+  ]
+}

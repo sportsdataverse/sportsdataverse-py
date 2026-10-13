@@ -1,0 +1,46 @@
+{
+  "data": {
+    "id": 541,
+    "competition_id": 25,
+    "uu_team_id": 3,
+    "name": "Windrose Giants Antwerp",
+    "short_name": "ANT",
+    "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+    "club": {
+      "id": 1,
+      "name": "Belgium"
+    },
+    "team_logo": {
+      "name": "Antwerp",
+      "description": null,
+      "alt": null,
+      "keywords": null,
+      "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+      "thumbnails": {
+        "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+        "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+      }
+    },
+    "team_image": null,
+    "competition": {
+      "id": 25,
+      "season": 2027,
+      "visible": true,
+      "standings_visible": true,
+      "simple_team_view": false,
+      "summer_season": false,
+      "name": "BNXT League 2026-2027",
+      "logo": null,
+      "ticket_url": null,
+      "video_url": null,
+      "created_at": "2026-07-24"
+    },
+    "staffs": [],
+    "statistics": {
+      "average_score_for": 106.5,
+      "average_score_against": 84.5,
+      "field_goal_percent": 50
+    },
+    "created_at": "2026-07-24"
+  }
+}
