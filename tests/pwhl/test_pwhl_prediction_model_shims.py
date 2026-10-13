@@ -161,3 +161,11 @@ def test_pwhl_team_ratings_league_keyword_is_deprecated_and_ignored(loader_calls
         out = pwhl_ratings.pwhl_team_ratings(2025, league="nhl")
     assert out.equals(pwhl_ratings.pwhl_team_ratings(2025))
     assert "load_pwhl_pbp" in loader_calls
+
+
+def test_pwhl_player_props_skips_a_season_without_game_info(loader_calls, monkeypatch):
+    # an unpublished release season: the loader warns and returns a column-less frame
+    monkeypatch.setattr(pwhl_loaders, "load_pwhl_game_info", lambda seasons, *a, **k: pl.DataFrame())
+    out = pwhl_props.pwhl_player_props(2025, stats=("shots",))
+    assert out.height == 0
+    assert "player_id" in out.columns

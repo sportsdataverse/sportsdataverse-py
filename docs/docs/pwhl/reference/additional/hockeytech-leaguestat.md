@@ -666,7 +666,7 @@ too thin.
 
 Same schema as `nhl_skater_rapm`: `player_id:Int64, xg_rapm_off:Float64, xg_rapm_def:Float64, xg_rapm:Float64, toi_minutes:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
 
-No returns table is published for this function: no capture: it expects NHL-style play-by-play columns (secondary_type, x_fixed, strength_state) that no PWHL loader provides, so it raises ColumnNotFoundError on real PWHL games.
+No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
 **Example**
 
@@ -697,7 +697,7 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 
 Same schema as `nhl_skater_war`: `player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
 
-No returns table is published for this function: no capture: it expects NHL-style play-by-play columns (secondary_type, x_fixed, strength_state) that no PWHL loader provides, so it raises ColumnNotFoundError on real PWHL games.
+No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
 **Example**
 
@@ -728,7 +728,7 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 
 Same schema as `nhl_special_teams_value`: `player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
 
-No returns table is published for this function: no capture: it expects NHL-style play-by-play columns (secondary_type, x_fixed, strength_state) that no PWHL loader provides, so it raises ColumnNotFoundError on real PWHL games.
+No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
 **Example**
 
@@ -1033,7 +1033,7 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 
 Same schema as `nhl_unit_ratings`: `team:Utf8, unit_ids:Utf8, unit_players:Utf8, toi_minutes:Float64, on_ice_xgf:Float64, on_ice_xga:Float64, on_ice_xgf_pct:Float64, summed_rapm:Float64, unit_value:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
 
-No returns table is published for this function: no capture: it expects NHL-style play-by-play columns (secondary_type, x_fixed, strength_state) that no PWHL loader provides, so it raises ColumnNotFoundError on real PWHL games.
+No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
 **Example**
 

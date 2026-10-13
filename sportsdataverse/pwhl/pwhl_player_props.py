@@ -67,7 +67,10 @@ def _pwhl_props_box(seasons: Any) -> pl.DataFrame:
     for season in _as_season_list(seasons):
         box = load_pwhl_skater_boxscores(season)
         sched = load_pwhl_schedules(season)
-        if box.is_empty() or sched.is_empty():
+        info = load_pwhl_game_info(season)
+        # a season with no published asset comes back as a column-less pl.DataFrame() (the
+        # loaders warn and skip it); without dates the strictly-prior projection has no order.
+        if box.is_empty() or sched.is_empty() or info.is_empty():
             continue
         teams = pl.concat(
             [
@@ -79,7 +82,7 @@ def _pwhl_props_box(seasons: Any) -> pl.DataFrame:
                 for side in ("home", "away")
             ]
         )
-        dates = load_pwhl_game_info(season).select(
+        dates = info.select(
             pl.col("game_id").cast(pl.Int64), pl.col("game_date_iso").str.slice(0, 10).alias("game_date")
         )
         box = box.with_columns(pl.col("game_id").cast(pl.Int64), pl.col("team_id").cast(pl.Int64))

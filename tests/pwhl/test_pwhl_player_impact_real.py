@@ -84,8 +84,10 @@ def test_unit_ratings_label_units_with_pwhl_teams(pbp, shifts):
     assert set(units["team"].to_list()) <= teams
     assert (units["on_ice_xgf"] + units["on_ice_xga"]).sum() > 0
     # the engine keeps the adapter's (PWHL) xG: measured 24.725 on-ice xGF over all units vs 24.998
-    # adapter shot xG (a stint shared by several unit combos splits its xG between them); the NHL
-    # boosters re-scoring the adapted frame gave 68.162 (review R846-9). Never lower the gate.
+    # adapter shot xG, ratio 0.989 (a stint shared by several unit combos splits its xG between
+    # them); the floor 0.95 is set from that observation, the ceiling 1.0 holds by construction
+    # (units only split the stints' xG). The NHL boosters re-scoring the adapted frame gave
+    # 68.162 (review R846-9). Never lower the gate.
     events, chart = adapt_pwhl_impact_inputs(pbp, shifts)
     shot_xg = events.filter(pl.col("event_type").is_in(["SHOT", "GOAL"]))["xg"].sum()
     assert 0.95 <= units["on_ice_xgf"].sum() / shot_xg <= 1.0 + 1e-9

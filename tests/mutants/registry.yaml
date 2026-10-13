@@ -1078,3 +1078,15 @@
   note: >-
     Review R846-9: with the unconditional re-score, on-ice xGF over all units moves 24.725 -> 68.162
     on the fixture while every other test stays green; the level band kills it.
+
+- id: pwhl-props-skips-season-without-game-info
+  group: pwhl-impact-routing
+  finding: supp-001
+  file: sportsdataverse/pwhl/pwhl_player_props.py
+  snippet: '        if box.is_empty() or sched.is_empty() or info.is_empty():'
+  mutant: '        if box.is_empty() or sched.is_empty():'
+  test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_player_props_skips_a_season_without_game_info
+  expected: kill
+  note: >-
+    CodeRabbit thread on #846: an unpublished game_info season is a column-less pl.DataFrame(), and
+    selecting game_id from it raised ColumnNotFoundError instead of skipping the season.
