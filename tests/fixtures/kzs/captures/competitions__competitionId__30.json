@@ -1,0 +1,50 @@
+{
+  "status": "OK",
+  "data": {
+    "id": 30,
+    "name": "1. SKL za ženske",
+    "season": {
+      "id": 21,
+      "name": "2020/2021",
+      "isActive": false,
+      "active": false
+    },
+    "gender": "FEMALE",
+    "category": "ABSOLUTE",
+    "rank": "FIRST",
+    "phases": [
+      {
+        "id": 5200,
+        "name": "1. del",
+        "startDate": "2020-09-01T00:00:00Z",
+        "endDate": "2021-08-31T00:00:00Z",
+        "groups": []
+      },
+      {
+        "id": 5209,
+        "name": "2. del",
+        "startDate": "2020-09-01T00:00:00Z",
+        "endDate": "2021-08-31T00:00:00Z",
+        "groups": []
+      },
+      {
+        "id": 5214,
+        "name": "3. del",
+        "startDate": "2020-09-01T00:00:00Z",
+        "endDate": "2021-08-31T00:00:00Z",
+        "groups": [
+          {
+            "id": 4010,
+            "name": "Finale"
+          },
+          {
+            "id": 4009,
+            "name": "Polfinale"
+          }
+        ]
+      }
+    ],
+    "type": "LEAGUE",
+    "socialMedias": []
+  }
+}

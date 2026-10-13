@@ -1,0 +1,226 @@
+{
+  "status": "OK",
+  "data": {
+    "items": [
+      {
+        "id": 62586,
+        "competitions": [
+          {
+            "id": 56596,
+            "competitionId": 30,
+            "competitionName": "1. SKL za ženske",
+            "competitionType": "LEAGUE",
+            "competitionPhaseId": 5200,
+            "competitionPhaseName": "1. del",
+            "transferred": false,
+            "seasonId": 21
+          }
+        ],
+        "round": 1,
+        "fibaLiveStatsUrl": "https://fibalivestats.dcd.shared.geniussports.com/u/KZS/1725343/",
+        "dateTime": "2020-09-25T17:30:00Z",
+        "attendance": 0,
+        "sportHallName": "Dvorana Tabor",
+        "sportHallAddress": "Koresova 7, 2000 Maribor, Slovenija",
+        "sportHallId": 10,
+        "firstTeamId": 125159,
+        "firstTeamTeamId": 41,
+        "isFirstTeamPlaceholder": false,
+        "secondTeamId": 125160,
+        "secondTeamTeamId": 8827,
+        "isSecondTeamPlaceholder": false,
+        "firstTeamName": "VBO Maribor",
+        "firstTeamShortName": "VBO Maribor",
+        "secondTeamName": "Pro-Bit Konjice",
+        "secondTeamShortName": "Pro-Bit Konjice",
+        "firstTeamScore": 61,
+        "secondTeamScore": 71,
+        "scoreInsertedManually": false,
+        "firstTeamLogoUuid": "7c528e85-22fc-41b2-a54c-0448ad80642b",
+        "secondTeamLogoUuid": "e29e80a7-0adf-4ce8-a740-f1249857b9cf",
+        "firstTeamCode": "MAR",
+        "secondTeamCode": "KON",
+        "liveStreams": [],
+        "streams": [],
+        "status": "FINISHED",
+        "conclusions": [],
+        "delegated": true,
+        "delegationChanges": [],
+        "moveRequests": [],
+        "referee1": {
+          "id": 227,
+          "person": {
+            "id": 96037,
+            "firstName": "Grega",
+            "lastName": "Oprčkal",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "referee2": {
+          "id": 137,
+          "person": {
+            "id": 95972,
+            "firstName": "David",
+            "lastName": "Maguša",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        }
+      },
+      {
+        "id": 62587,
+        "competitions": [
+          {
+            "id": 56597,
+            "competitionId": 30,
+            "competitionName": "1. SKL za ženske",
+            "competitionType": "LEAGUE",
+            "competitionPhaseId": 5200,
+            "competitionPhaseName": "1. del",
+            "transferred": false,
+            "seasonId": 21
+          }
+        ],
+        "round": 1,
+        "fibaLiveStatsUrl": "https://fibalivestats.dcd.shared.geniussports.com/u/KZS/1725339/",
+        "dateTime": "2020-09-25T18:15:00Z",
+        "attendance": 70,
+        "sportHallName": "ŠD Planina",
+        "sportHallAddress": "Ulica Tončka Dežmana 1, 4000 Kranj, Slovenija",
+        "sportHallId": 183,
+        "firstTeamId": 125161,
+        "firstTeamTeamId": 83,
+        "isFirstTeamPlaceholder": false,
+        "secondTeamId": 125162,
+        "secondTeamTeamId": 167,
+        "isSecondTeamPlaceholder": false,
+        "firstTeamName": "Triglav",
+        "firstTeamShortName": "Triglav",
+        "secondTeamName": "Grosuplje",
+        "secondTeamShortName": "Grosuplje",
+        "firstTeamScore": 53,
+        "secondTeamScore": 37,
+        "scoreInsertedManually": false,
+        "firstTeamLogoUuid": "06336d43-1ab2-4ba8-ac1c-02b29c859434",
+        "secondTeamLogoUuid": "7033fb91-0cc8-4448-a0ad-2bea51e31880",
+        "firstTeamCode": "TRI",
+        "secondTeamCode": "GRO",
+        "liveStreams": [],
+        "streams": [],
+        "status": "FINISHED",
+        "conclusions": [],
+        "delegated": true,
+        "delegationChanges": [],
+        "moveRequests": [],
+        "referee1": {
+          "id": 183,
+          "person": {
+            "id": 96009,
+            "firstName": "Elvir",
+            "lastName": "Begić",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "referee2": {
+          "id": 418,
+          "person": {
+            "id": 96155,
+            "firstName": "Marko",
+            "lastName": "SAVIĆ",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        }
+      },
+      {
+        "id": 62673,
+        "competitions": [
+          {
+            "id": 56683,
+            "competitionId": 30,
+            "competitionName": "1. SKL za ženske",
+            "competitionType": "LEAGUE",
+            "competitionPhaseId": 5200,
+            "competitionPhaseName": "1. del",
+            "transferred": false,
+            "seasonId": 21
+          }
+        ],
+        "round": 1,
+        "fibaLiveStatsUrl": "https://fibalivestats.dcd.shared.geniussports.com/u/KZS/1725338/",
+        "dateTime": "2020-09-26T15:00:00Z",
+        "attendance": 0,
+        "sportHallName": "Ježica",
+        "sportHallAddress": "Savlje 6, 1000 Ljubljana, Slovenija",
+        "sportHallId": 21,
+        "firstTeamId": 125333,
+        "firstTeamTeamId": 118,
+        "isFirstTeamPlaceholder": false,
+        "secondTeamId": 125334,
+        "secondTeamTeamId": 11638,
+        "isSecondTeamPlaceholder": false,
+        "firstTeamName": "Derby Ježica",
+        "firstTeamShortName": "Derby Ježica",
+        "secondTeamName": "Tosama Ledita",
+        "secondTeamShortName": "Tosama Ledita",
+        "firstTeamScore": 77,
+        "secondTeamScore": 60,
+        "scoreInsertedManually": false,
+        "firstTeamLogoUuid": "4fb8f750-d9a0-4643-8243-00ab9cb4efd4",
+        "secondTeamLogoUuid": "2483e96c-1813-4e09-8350-35bd39d5af7c",
+        "firstTeamCode": "JEŽ",
+        "secondTeamCode": "LED",
+        "liveStreams": [],
+        "streams": [],
+        "status": "FINISHED",
+        "conclusions": [],
+        "delegated": true,
+        "delegationChanges": [],
+        "moveRequests": [],
+        "referee1": {
+          "id": 702,
+          "person": {
+            "id": 96366,
+            "firstName": "Tine",
+            "lastName": "Škrbec",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "referee2": {
+          "id": 516,
+          "person": {
+            "id": 96235,
+            "firstName": "Milanko",
+            "lastName": "Milanović",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        }
+      }
+    ],
+    "count": 0,
+    "offset": 0,
+    "limit": 0
+  }
+}

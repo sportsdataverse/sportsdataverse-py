@@ -1,0 +1,50 @@
+{
+  "status": "OK",
+  "data": {
+    "id": 9,
+    "name": "Liga NovaKBM",
+    "season": {
+      "id": 16,
+      "name": "2015/2016",
+      "isActive": false,
+      "active": false
+    },
+    "gender": "MALE",
+    "category": "ABSOLUTE",
+    "rank": "FIRST",
+    "phases": [
+      {
+        "id": 4265,
+        "name": "1. del",
+        "startDate": "2015-09-01T00:00:00Z",
+        "endDate": "2016-08-31T00:00:00Z",
+        "groups": []
+      },
+      {
+        "id": 4323,
+        "name": "2. del",
+        "startDate": "2015-09-01T00:00:00Z",
+        "endDate": "2016-08-31T00:00:00Z",
+        "groups": [
+          {
+            "id": 1460,
+            "name": "Liga za obstanek"
+          },
+          {
+            "id": 1459,
+            "name": "Liga za prvaka"
+          }
+        ]
+      },
+      {
+        "id": 4342,
+        "name": "Liga za obstanek/napredovanje",
+        "startDate": "2015-09-01T00:00:00Z",
+        "endDate": "2016-08-31T00:00:00Z",
+        "groups": []
+      }
+    ],
+    "type": "LEAGUE",
+    "socialMedias": []
+  }
+}

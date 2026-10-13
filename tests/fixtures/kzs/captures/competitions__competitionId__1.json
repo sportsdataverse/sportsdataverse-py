@@ -1,0 +1,55 @@
+{
+  "status": "OK",
+  "data": {
+    "id": 1,
+    "name": "Liga Telemach",
+    "season": {
+      "id": 8,
+      "name": "2007/2008",
+      "isActive": false,
+      "active": false
+    },
+    "gender": "MALE",
+    "category": "ABSOLUTE",
+    "rank": "FIRST",
+    "phases": [
+      {
+        "id": 3653,
+        "name": "1. del",
+        "startDate": "2007-09-01T00:00:00Z",
+        "endDate": "2008-08-31T00:00:00Z",
+        "groups": []
+      },
+      {
+        "id": 3654,
+        "name": "2. del",
+        "startDate": "2007-09-01T00:00:00Z",
+        "endDate": "2008-08-31T00:00:00Z",
+        "groups": [
+          {
+            "id": 2,
+            "name": "Liga za obstanek"
+          },
+          {
+            "id": 1,
+            "name": "Liga za prvaka"
+          }
+        ]
+      },
+      {
+        "id": 3655,
+        "name": "Razigravanje",
+        "startDate": "2007-09-01T00:00:00Z",
+        "endDate": "2008-08-31T00:00:00Z",
+        "groups": [
+          {
+            "id": 3,
+            "name": "Polfinale-finale"
+          }
+        ]
+      }
+    ],
+    "type": "LEAGUE",
+    "socialMedias": []
+  }
+}

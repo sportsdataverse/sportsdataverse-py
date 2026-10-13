@@ -1,0 +1,534 @@
+api: kzs
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial and unsupported: these wrappers read the public read API (Java/Spring,
+    built by OnixWeb) that the kzs.si site itself calls. No terms of use were located
+    (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404,
+    so no policy or Crawl-delay is published. The runtime waits at least 1 s before
+    every request, retries included. Payloads are not redistributed as release assets.'
+  - 'Personal data: the API serves officials'' and coaches'' emails, phones and home
+    towns, and clubs'' bank accounts and addresses, publicly. The parsers never output
+    them (officials appear by name only; club addresses, personnel and the commissioner
+    report are dropped). Do not add them back.'
+  - 'Seasons are END years (2027 = 2026/2027); KZS'' own season ids are opaque (27
+    = 2026/2027) and the runtime maps them. Competition ids are per season. Three
+    team keys are never interchangeable: the match-team id (per match and side), team_id
+    (one club team in one season) and club_id (across seasons). player_id is the registry
+    id, person_id the person behind it.'
+  - 'Errors are HTTP 400 for everything (an unknown id and a bad parameter alike),
+    so the runtime raises AssetFetchError for it, never ValueError or an empty frame.
+    List routes default to 150 rows with no truncation signal: every list wrapper
+    asks for a large limit and refuses a full page. The play-by-play and box-score
+    wrappers, the leaderboards, teams, rounds and playing days each make one extra,
+    cached request (the match header or the competition) to prove the answer is the
+    one asked for and the game is final.'
+  - 'Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some
+    2020/21 men''s games have a box score but no play-by-play (NoDataError): the Genius
+    data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius
+    court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at
+    half time, so normalise with side before stacking shots. Advanced box-score fields
+    are 0 in every observed game.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty
+    list, a competition without standings, a final game with no play-by-play or box
+    score).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown
+    or partial: HTTP 400 (the API''s only error status: an unknown id or a bad parameter),
+    a full list page, a game that is not final, an envelope whose status is not OK,
+    or a body for another competition, match, team, player or season than the one
+    asked for.'
+  see_also:
+  - name: Košarkarska zveza Slovenije
+    note: the federation site whose API these wrappers read
+    url: https://www.kzs.si/
+  - name: hoopR
+    note: SportsDataverse men's basketball package (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args: {}
+  fixed_params:
+    limit: 1000
+  parser: parse_kzs_seasons
+  path: /seasons/
+  returns_schema: native/kzs/seasons
+  short: seasons
+  summary: 'Every season (39: 1991/1992 to 2029/2030) with its opaque id and the sdv
+    END year.'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season END year (2027 = 2026/2027); the wrapper maps it to KZS' opaque
+      season id. Omitted = every season (627 competitions).
+    name: season
+    query_key: season
+    type: int
+  fixed_params:
+    limit: 10000
+  parser: parse_kzs_competitions
+  path: /competitions/
+  returns_schema: native/kzs/competitions
+  short: competitions
+  summary: Competitions of a season (leagues, cups, youth, 3x3, national teams), or
+    of every season.
+- example_args:
+    competition_id: 579
+  parser: parse_kzs_competition
+  path: /competitions/{competition_id}
+  path_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    required: true
+    type: int
+  returns_schema: native/kzs/competition
+  short: competition
+  summary: 'One competition: season, gender, category, rank and type (its phases are
+    kzs_phases).'
+- example_args:
+    competition_id: 579
+  parser: parse_kzs_phases
+  path: /competitions/{competition_id}
+  path_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    required: true
+    type: int
+  returns_schema: native/kzs/phases
+  short: phases
+  summary: The phases of a competition (regular season, play-offs, finals) with dates
+    and type.
+- example_args:
+    competition_id: 579
+  parser: parse_kzs_rounds
+  path: /competitions/{competition_id}/rounds
+  path_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    required: true
+    type: int
+  returns_schema: native/kzs/rounds
+  short: rounds
+  summary: Number of rounds of each phase of a competition.
+- example_args:
+    competition_id: 579
+  extra_params:
+  - choices:
+    - PTS
+    - M_2
+    - A_2
+    - PERC_2
+    - M_3
+    - A_3
+    - PERC_3
+    - M_FG
+    - A_FG
+    - PERC_FG
+    - M_FT
+    - A_FT
+    - PERC_FT
+    - R
+    - R_D
+    - R_O
+    - ASS
+    - ST
+    - TOV
+    - PF_CM
+    - PF_RV
+    - ASS_TOV
+    - ST_TOV
+    default: PTS
+    description: 'Stat category (the site''s statsCategory): PTS points, M_2/A_2/PERC_2
+      two-pointers, M_3/A_3/PERC_3 three-pointers, M_FG/A_FG/PERC_FG field goals,
+      M_FT/A_FT/PERC_FT free throws, R rebounds (R_D defensive, R_O offensive), ASS
+      assists, ST steals, TOV turnovers, PF_CM/PF_RV fouls committed/received, ASS_TOV
+      and ST_TOV ratios. Competitions without live stats offer only PTS, M_2, M_3,
+      M_FT, A_FT, PERC_FT.'
+    name: stats_category
+    query_key: statsCategory
+    type: str
+  - choices:
+    - AVERAGE
+    - SUM
+    - BEST_PERFORMANCE
+    default: AVERAGE
+    description: 'Figure the leaderboard is built on: AVERAGE (per game), SUM (season
+      total) or BEST_PERFORMANCE.'
+    name: order_type
+    query_key: orderType
+    type: str
+  - choices:
+    - avg
+    - sum
+    - max
+    default: avg
+    description: 'Row column the board is ordered by: avg (average), sum or max. The
+      runtime checks the order.'
+    name: sort_by
+    query_key: sortBy
+    type: str
+  - choices:
+    - ASC
+    - DESC
+    default: DESC
+    description: Sort direction.
+    name: sort
+    query_key: sort
+    type: str
+  fixed_params:
+    limit: 1000
+  parser: parse_kzs_player_leaderboard
+  path: /competitions/{competition_id}/playerStats
+  path_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    required: true
+    type: int
+  returns_schema: native/kzs/player_leaderboard
+  short: player_leaderboard
+  summary: Player leaderboard of a competition for one stat category (total, per-game
+    average and single-game best).
+- example_args:
+    competition_id: 579
+  extra_params:
+  - choices:
+    - PTS
+    - M_2
+    - A_2
+    - PERC_2
+    - M_3
+    - A_3
+    - PERC_3
+    - M_FG
+    - A_FG
+    - PERC_FG
+    - M_FT
+    - A_FT
+    - PERC_FT
+    - R
+    - R_D
+    - R_O
+    - ASS
+    - ST
+    - TOV
+    - PF_CM
+    - PF_RV
+    - ASS_TOV
+    - ST_TOV
+    default: PTS
+    description: 'Stat category (the site''s statsCategory): PTS points, M_2/A_2/PERC_2
+      two-pointers, M_3/A_3/PERC_3 three-pointers, M_FG/A_FG/PERC_FG field goals,
+      M_FT/A_FT/PERC_FT free throws, R rebounds (R_D defensive, R_O offensive), ASS
+      assists, ST steals, TOV turnovers, PF_CM/PF_RV fouls committed/received, ASS_TOV
+      and ST_TOV ratios. Competitions without live stats offer only PTS, M_2, M_3,
+      M_FT, A_FT, PERC_FT.'
+    name: stats_category
+    query_key: statsCategory
+    type: str
+  - choices:
+    - AVERAGE
+    - SUM
+    - BEST_PERFORMANCE
+    default: AVERAGE
+    description: 'Figure the leaderboard is built on: AVERAGE (per game), SUM (season
+      total) or BEST_PERFORMANCE.'
+    name: order_type
+    query_key: orderType
+    type: str
+  - choices:
+    - avg
+    - sum
+    - max
+    default: avg
+    description: 'Row column the board is ordered by: avg (average), sum or max. The
+      runtime checks the order.'
+    name: sort_by
+    query_key: sortBy
+    type: str
+  - choices:
+    - ASC
+    - DESC
+    default: DESC
+    description: Sort direction.
+    name: sort
+    query_key: sort
+    type: str
+  fixed_params:
+    limit: 1000
+  parser: parse_kzs_team_leaderboard
+  path: /competitions/{competition_id}/teamStats
+  path_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    required: true
+    type: int
+  returns_schema: native/kzs/team_leaderboard
+  short: team_leaderboard
+  summary: Team leaderboard of a competition for one stat category (total, per-game
+    average and single-game best).
+- example_args:
+    competition_id: 579
+    date_from: '2025-10-01T00:00:00.000Z'
+    date_to: '2025-10-31T23:59:59.000Z'
+  extra_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    query_key: competitionId
+    required: true
+    type: int
+  - description: Earliest tip-off, an ISO instant such as 2025-10-01T00:00:00.000Z
+      (a bare date is a 400). Omitted = the whole competition.
+    name: date_from
+    query_key: from
+    type: str
+  - description: Latest tip-off, an ISO instant such as 2025-10-31T23:59:59.000Z.
+      Omitted = the whole competition.
+    name: date_to
+    query_key: to
+    type: str
+  fixed_params:
+    limit: 1000
+  parser: parse_kzs_matches
+  path: /matches/
+  returns_schema: native/kzs/matches
+  short: matches
+  summary: Matches of a competition (optionally inside a from/to window) with the
+    Genius LiveStats id.
+- example_args:
+    match_id: 101839
+  parser: parse_kzs_match
+  path: /matches/{match_id}
+  path_params:
+  - description: Match id (match_id in kzs_matches), e.g. 101839. Global across seasons.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/kzs/match
+  short: match
+  summary: 'Match header: teams, scores, venue, officials'' names, best performers
+    and status.'
+- example_args:
+    match_id: 101839
+  parser: parse_kzs_period_scores
+  path: /matches/{match_id}
+  path_params:
+  - description: Match id (match_id in kzs_matches), e.g. 101839. Global across seasons.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/kzs/period_scores
+  short: period_scores
+  summary: Points by match part (quarters and overtimes) from the match header.
+- example_args:
+    match_id: 101839
+  parser: parse_kzs_pbp
+  path: /matches/{match_id}/playByPlay
+  path_params:
+  - description: Match id (match_id in kzs_matches), e.g. 101839. Global across seasons.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/kzs/pbp
+  short: pbp
+  summary: Play-by-play of a final game (2015/16 on, with gaps), one row per action
+    with shot x/y.
+- example_args:
+    match_id: 101839
+  parser: parse_kzs_pbp_players
+  path: /matches/{match_id}/playByPlay
+  path_params:
+  - description: Match id (match_id in kzs_matches), e.g. 101839. Global across seasons.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/kzs/pbp_players
+  short: pbp_players
+  summary: The players the play-by-play feed lists for each side of a final game.
+- example_args:
+    match_id: 101839
+  parser: parse_kzs_box_score
+  path: /matches/{match_id}/stats
+  path_params:
+  - description: Match id (match_id in kzs_matches), e.g. 101839. Global across seasons.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/kzs/box_score
+  short: box_score
+  summary: 'Box score of a final game (2015/16 on): one row per player of both teams.'
+- example_args:
+    match_id: 101839
+  parser: parse_kzs_team_box_score
+  path: /matches/{match_id}/stats
+  path_params:
+  - description: Match id (match_id in kzs_matches), e.g. 101839. Global across seasons.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/kzs/team_box_score
+  short: team_box_score
+  summary: Team totals of a final game's box score, one row per side.
+- example_args:
+    match_id: 101839
+  parser: parse_kzs_score_changes
+  path: /matches/{match_id}/stats
+  path_params:
+  - description: Match id (match_id in kzs_matches), e.g. 101839. Global across seasons.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/kzs/score_changes
+  short: score_changes
+  summary: The score at the end of each minute of a final game.
+- example_args:
+    competition_id: 579
+  extra_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    query_key: competitionId
+    required: true
+    type: int
+  parser: parse_kzs_standings
+  path: /matches/standings
+  returns_schema: native/kzs/standings
+  short: standings
+  summary: Standings of a competition, one row per team in each phase (and group).
+- example_args:
+    competition_id: 579
+  parser: parse_kzs_playing_days
+  path: /matches/{competition_id}/playingDays
+  path_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    required: true
+    type: int
+  returns_schema: native/kzs/playing_days
+  short: playing_days
+  summary: Match days of a competition and the number of games on each.
+- example_args:
+    competition_id: 579
+  extra_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    query_key: competitionId
+    required: true
+    type: int
+  fixed_params:
+    limit: 1000
+  parser: parse_kzs_teams
+  path: /teams/
+  returns_schema: native/kzs/teams
+  short: teams
+  summary: Teams entered in a competition.
+- example_args:
+    team_id: 17551
+  parser: parse_kzs_team
+  path: /teams/{team_id}
+  path_params:
+  - description: 'Team id (team_id in kzs_teams): one club team in one season, e.g.
+      17551. Not the match-team id nor the club id.'
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/kzs/team
+  short: team
+  summary: 'Team profile: club, home hall, colours and the competitions the team entered.'
+- example_args:
+    competition_id: 579
+    team_id: 17551
+  extra_params:
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    query_key: competitionId
+    required: true
+    type: int
+  parser: parse_kzs_team_general
+  path: /teams/{team_id}/general
+  path_params:
+  - description: 'Team id (team_id in kzs_teams): one club team in one season, e.g.
+      17551. Not the match-team id nor the club id.'
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/kzs/team_general
+  short: team_general
+  summary: A team's record, form and best players in one competition (the body echoes
+    neither id).
+- example_args:
+    competition_id: 579
+    team_id: 17551
+  extra_params:
+  - description: 'Team id (team_id in kzs_teams): one club team in one season, e.g.
+      17551. Not the match-team id nor the club id.'
+    name: team_id
+    query_key: teamId
+    required: true
+    type: int
+  - description: 'Competition id (competition_id in kzs_competitions): one per competition
+      per season, e.g. 579 (men''s first league 2025/26).'
+    name: competition_id
+    query_key: competitionId
+    required: true
+    type: int
+  fixed_params:
+    limit: 1000
+  parser: parse_kzs_roster
+  path: /teamPlayers/
+  returns_schema: native/kzs/roster
+  short: roster
+  summary: A team's roster in one competition (the rows carry no team or competition
+    id).
+- example_args:
+    player_id: 106285
+  parser: parse_kzs_player
+  path: /players/{player_id}
+  path_params:
+  - description: Player registry id (player_id in a box score or roster), e.g. 106285.
+      Not the person id.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/kzs/player
+  short: player
+  summary: 'Player profile: names, year of birth, nationality and positions.'
+- example_args:
+    player_id: 106285
+    season: 2026
+  extra_params:
+  - description: Season END year (2027 = 2026/2027); the wrapper maps it to KZS' opaque
+      season id.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  parser: parse_kzs_player_stats
+  path: /players/{player_id}/stats
+  path_params:
+  - description: Player registry id (player_id in a box score or roster), e.g. 106285.
+      Not the person id.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/kzs/player_stats
+  short: player_stats
+  summary: A player's totals and per-game averages in each competition of one season.
+getter_module: sportsdataverse.basketball.kzs.kzs_runtime
+host: https://api.kzs.si/api/v1/public
+module: kzs
+name_pattern: kzs_{short}
+parser_columns: true
+parser_module: basketball.kzs.kzs_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: kzs_

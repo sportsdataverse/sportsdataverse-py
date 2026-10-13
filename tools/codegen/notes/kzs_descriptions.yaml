@@ -1,0 +1,910 @@
+kzs_box_score:
+  assists: The player's assists.
+  assists_turnover_ratio: 'The player''s assist-to-turnover ratio (0 in every sample:
+    not computed).'
+  blocks_against: The player's own shots that were blocked.
+  blocks_in_favor: The player's shots blocked (blocks made).
+  captain: Games as captain.
+  defensive_rating: 'The player''s defensive rating (0 in every sample: not computed).'
+  defensive_rebounds: The player's defensive rebounds.
+  efficiency: The player's efficiency as the feed computes it (equal to `pIR` on 2025-26
+    team lines).
+  efficiency_custom: The player's custom efficiency as the federation computes it
+    (equal to `efficiency` on player rows; 0 on team lines).
+  efficiency_game_score: 'The player''s game score (0 in every sample: not computed).'
+  f_t_perc: The player's free-throw percentage, 0-100.
+  f_ta: The player's free throws attempted.
+  f_tm: The player's free throws made.
+  fast_break_points_attempted: 'The player''s fast-break attempts (0 in every sample:
+    not computed).'
+  fast_break_points_made: 'The player''s fast-break makes (0 in every sample: not
+    computed).'
+  fg_a: The player's field goals attempted.
+  fg_m: The player's field goals made.
+  fg_perc: The player's field-goal percentage, 0-100.
+  foul_commited: The player's fouls committed.
+  foul_received: The player's fouls drawn.
+  jersey_number: Shirt number worn, sent as a string ('1', '55').
+  m_vp_votes: The player's MVP votes (0 in every sample).
+  match_id: 'Match id: the federation key of a game, global across seasons (joins
+    kzs_matches and kzs_match).'
+  match_team_player_firstname: The player's given name, as entered for this match
+    (lower-case n in this route).
+  match_team_player_lastname: The player's family name, as entered for this match
+    (lower-case n in this route).
+  match_team_player_year_of_birth: Birth year from the match entry, sent as a string
+    ('2002'); the profile `person.yearOfBirth` is an integer.
+  minus: 'The player''s points allowed on court (0 in every sample: not computed).'
+  minutes: The player's minutes played, decimal minutes (39.67 = 39 min 40 s); the
+    team line sums its players (225.0 = 5 x 45 with overtime).
+  offensive_rating: 'The player''s offensive rating (0 in every sample: not computed).'
+  offensive_rebounds: The player's offensive rebounds.
+  p_er: 'The player''s PER (0 in every sample: not computed).'
+  p_ir: The player's PIR, performance index rating ((points + rebounds + assists +
+    steals + blocks + fouls drawn) - (missed field goals + missed free throws + turnovers
+    + shots blocked + fouls committed)).
+  photo_uuid: 'Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  played: True when the player got on court.
+  player_id: Player id (KZS player registry). Joins to /players/{playerId}, box-score
+    and play-by-play `playerId`.
+  plus: 'The player''s points scored on court (0 in every sample: not computed).'
+  plus_minus: 'The player''s plus-minus: points scored minus allowed while on court
+    (team line: the final margin).'
+  points: The player's points.
+  points_fast_break: The player's fast-break points.
+  points_in_the_paint: The player's points in the paint.
+  points_in_the_paint_attempted: 'The player''s paint attempts (0 in every sample:
+    not computed).'
+  points_in_the_paint_made: 'The player''s paint makes (0 in every sample: not computed).'
+  points_second_chance: The player's second-chance points.
+  second_chance_points_attempted: 'The player''s second-chance attempts (0 in every
+    sample: not computed).'
+  second_chance_points_made: 'The player''s second-chance makes (0 in every sample:
+    not computed).'
+  starting_lineup: True when the player started.
+  steals: The player's steals.
+  team_id: 'Team id: one club team in one season (joins kzs_teams); not the match-team
+    id and not the club id.'
+  team_name: Name of the team for the season, sponsor included.
+  team_side: 'Which side of the match the row belongs to: home (the organiser, firstTeam
+    on the wire) or away.'
+  three_p_perc: The player's three-point percentage, 0-100.
+  three_pa: The player's three-point field goals attempted.
+  three_pm: The player's three-point field goals made.
+  total_rebounds: The player's total rebounds.
+  true_shooting_attempts: 'The player''s true-shooting attempts (0 in every sample:
+    not computed).'
+  true_shooting_percentage: 'The player''s true-shooting percentage (0 in every sample:
+    not computed).'
+  turnovers: The player's turnovers.
+  two_p_perc: The player's two-point percentage, 0-100.
+  two_pa: The player's two-point field goals attempted.
+  two_pm: The player's two-point field goals made.
+  usage_percentage: 'The player''s usage percentage (0 in every sample: not computed).'
+kzs_competition:
+  category: 'Age category: ABSOLUTE (senior) or U8-U23 / ANY (code table in kzs-returns.md).'
+  competition_id: 'Competition id: one per competition per season (men''s top league
+    2025-26 = 579, 2026-27 = 608). Joins to /competitions/{competitionId} and the
+    `competitionId` query params.'
+  gender: MALE or FEMALE.
+  name: Competition name, Slovenian (glossary in kzs-returns.md).
+  rank: 'Tier: FIRST-FOURTH or TOURNAMENT (code table).'
+  season: 'Season of the record: opaque id and ''START/END'' name.'
+  season_active: Same as `isActive`.
+  season_id: 'Season id: OPAQUE, not a year (1 = 2000/2001 ... 27 = 2026/2027, 31
+    = 1991/1992). The season `name` is ''START/END''; the sdv season is the END year
+    (the second half of `name`).'
+  season_is_active: True for the current season only (2026/2027 on 2026-10-12).
+  season_name: Season, 'START/END' (2025/2026); sdv season = the END year.
+  social_medias: 'Unobserved: null, or an empty array, in every sample, so its type
+    and meaning are unconfirmed.'
+  type: Competition type (code table).
+kzs_competitions:
+  category: 'Age category: ABSOLUTE (senior) or U8-U23 / ANY (code table in kzs-returns.md).'
+  competition_id: 'Competition id: one per competition per season (men''s top league
+    2025-26 = 579, 2026-27 = 608). Joins to /competitions/{competitionId} and the
+    `competitionId` query params.'
+  gender: MALE or FEMALE.
+  name: Competition name, Slovenian; the sponsor name changes over the years (glossary
+    in kzs-returns.md).
+  rank: 'Tier: FIRST-FOURTH or TOURNAMENT (code table).'
+  season: The competition's season.
+  season_active: Same as `isActive`.
+  season_id: 'Season id: OPAQUE, not a year (1 = 2000/2001 ... 27 = 2026/2027, 31
+    = 1991/1992). The season `name` is ''START/END''; the sdv season is the END year
+    (the second half of `name`).'
+  season_is_active: True for the current season only (2026/2027 on 2026-10-12).
+  season_name: Season, 'START/END' (2025/2026); sdv season = the END year.
+  type: Competition type (code table); absent on 2 competitions.
+kzs_match:
+  attendance: Spectators (0 when not recorded).
+  bests: Each team's top player per stat.
+  commissioner_id: Official id (referee/commissioner registry); a different key space
+    from `person.id`. /referees/ and /commissioners/ are in the site bundle but not
+    captured.
+  commissioner_person_first_name: The official's given name.
+  commissioner_person_gender: MALE or FEMALE.
+  commissioner_person_id: 'Person id: the federation''s person record behind a player,
+    coach or official; a different key space from player, coach and official ids.'
+  commissioner_person_last_name: The official's family name.
+  commissioner_ranks: 'Unobserved: null, or an empty array, in every sample, so its
+    type and meaning are unconfirmed.'
+  competition_id: 'Competition id: one per competition per season (men''s top league
+    2025-26 = 579, 2026-27 = 608). Joins to /competitions/{competitionId} and the
+    `competitionId` query params.'
+  competition_name: 'Competition name (Slovenian; the sponsor name changes: Liga Telemach
+    2007-15, NovaKBM 2015-24, OTP banka 2024-).'
+  competition_phase_id: Competition-phase id. Joins to `competitions[].competitionPhaseId`
+    on matches and `/competitions/{competitionId}` `phases[].id`.
+  competition_phase_name: Phase name, Slovenian (see `phases[].name`).
+  competition_type: Competition type (code table).
+  date_time: Tip-off, UTC (ISO 8601 'Z').
+  delegated: True once officials are assigned to the match.
+  fiba_live_stats_url: Genius Sports LiveStats URL 'https://fibalivestats.dcd.shared.geniussports.com/u/KZS/{geniusMatchId}/';
+    the number is the Genius match id that keys genius-livestats/ data.json. Absent
+    before 2015-16 (no live stats).
+  first_team_best_performer_assists: Assists in the match.
+  first_team_best_performer_blocks: Blocks in the match.
+  first_team_best_performer_efficiency: Efficiency (PIR) in the match.
+  first_team_best_performer_player_first_name: The player's given name as registered
+    with KZS.
+  first_team_best_performer_player_id: Player id (KZS player registry). Joins to /players/{playerId},
+    box-score and play-by-play `playerId`.
+  first_team_best_performer_player_last_name: The player's family name as registered
+    with KZS.
+  first_team_best_performer_player_photo_uuid: 'Player photo: image file id, served
+    at https://api.kzs.si/public/images/{uuid}.'
+  first_team_best_performer_points: Points in the match.
+  first_team_best_performer_rebounds: Rebounds in the match.
+  first_team_best_performer_steals: Steals in the match.
+  first_team_code: First team 3-letter code.
+  first_team_forfeited: True when this team forfeited.
+  first_team_guest_jersey_color: First team away colour, hex.
+  first_team_home_jersey_color: First team home colour, hex.
+  first_team_id: 'Match-team id: this team''s entry in this one match (unique per
+    match and side). Joins to play-by-play `matchTeamId`; NOT a team id. First (home)
+    side.'
+  first_team_is_placeholder: True when the slot is a bracket placeholder.
+  first_team_logo_uuid: 'First (home) team logo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  first_team_name: First (home) team name; absent on 2007-08 headers.
+  first_team_score: First (home) team final score.
+  first_team_team_id: 'Team id: one club team in one season (Ilirija 2025-26 = 17551).
+    Joins to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId`
+    query params.'
+  game_index: Game number within the round (fixture order).
+  gender: MALE or FEMALE.
+  genius_match_id: Genius LiveStats match id parsed from fiba_live_stats_url (org
+    KZS); null before 2015/16.
+  guest_jersey_color: Away jersey colour, hex.
+  home_jersey_color: Home jersey colour, hex '#RRGGBB'.
+  live_stats: True when the match has live stats (box score and play-by-play).
+  match_evaluation_id: Id of the officials' evaluation record (internal; no public
+    route).
+  match_id: KZS match id. Joins to /matches/{matchId} (and its /playByPlay, /stats)
+    and stats `matchId`.
+  organiser_team_id: 'Team id: one club team in one season (Ilirija 2025-26 = 17551).
+    Joins to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId`
+    query params. The organising (home) team.'
+  referee1_id: Official id (referee/commissioner registry); a different key space
+    from `person.id`. /referees/ and /commissioners/ are in the site bundle but not
+    captured.
+  referee1_person_first_name: The official's given name.
+  referee1_person_gender: MALE or FEMALE.
+  referee1_person_id: 'Person id: the federation''s person record behind a player,
+    coach or official; a different key space from player, coach and official ids.'
+  referee1_person_last_name: The official's family name.
+  referee1_ranks: 'Unobserved: null, or an empty array, in every sample, so its type
+    and meaning are unconfirmed.'
+  referee2_id: Official id (referee/commissioner registry); a different key space
+    from `person.id`. /referees/ and /commissioners/ are in the site bundle but not
+    captured.
+  referee2_person_first_name: The official's given name.
+  referee2_person_gender: MALE or FEMALE.
+  referee2_person_id: 'Person id: the federation''s person record behind a player,
+    coach or official; a different key space from player, coach and official ids.'
+  referee2_person_last_name: The official's family name.
+  referee2_ranks: 'Unobserved: null, or an empty array, in every sample, so its type
+    and meaning are unconfirmed.'
+  referee3_id: Official id (referee/commissioner registry); a different key space
+    from `person.id`. /referees/ and /commissioners/ are in the site bundle but not
+    captured.
+  referee3_person_first_name: The official's given name.
+  referee3_person_gender: MALE or FEMALE.
+  referee3_person_id: 'Person id: the federation''s person record behind a player,
+    coach or official; a different key space from player, coach and official ids.'
+  referee3_person_last_name: The official's family name.
+  referee3_ranks: 'Unobserved: null, or an empty array, in every sample, so its type
+    and meaning are unconfirmed.'
+  referee_controller_id: Official id (referee/commissioner registry); a different
+    key space from `person.id`. /referees/ and /commissioners/ are in the site bundle
+    but not captured.
+  referee_controller_person_first_name: The official's given name.
+  referee_controller_person_gender: MALE or FEMALE.
+  referee_controller_person_id: 'Person id: the federation''s person record behind
+    a player, coach or official; a different key space from player, coach and official
+    ids.'
+  referee_controller_person_last_name: The official's family name.
+  referee_controller_ranks: 'Unobserved: null, or an empty array, in every sample,
+    so its type and meaning are unconfirmed.'
+  round: Round (matchday) number within the phase.
+  score_inserted_manually: True when the score was typed in by the federation rather
+    than taken from the live-stats feed.
+  season: Season END year (2026/2027 = 2027), from the row's own season name or id,
+    else from the request.
+  season_id: Opaque KZS season id (27 = 2026/2027); the sdv season is the END year
+    in season.
+  second_team_best_performer_assists: Assists in the match.
+  second_team_best_performer_blocks: Blocks in the match.
+  second_team_best_performer_efficiency: Efficiency (PIR) in the match.
+  second_team_best_performer_player_first_name: The player's given name as registered
+    with KZS.
+  second_team_best_performer_player_id: Player id (KZS player registry). Joins to
+    /players/{playerId}, box-score and play-by-play `playerId`.
+  second_team_best_performer_player_last_name: The player's family name as registered
+    with KZS.
+  second_team_best_performer_player_photo_uuid: 'Player photo: image file id, served
+    at https://api.kzs.si/public/images/{uuid}.'
+  second_team_best_performer_points: Points in the match.
+  second_team_best_performer_rebounds: Rebounds in the match.
+  second_team_best_performer_steals: Steals in the match.
+  second_team_code: Second team 3-letter code.
+  second_team_forfeited: True when this team forfeited.
+  second_team_guest_jersey_color: Second team away colour, hex.
+  second_team_home_jersey_color: Second team home colour, hex.
+  second_team_id: 'Match-team id: this team''s entry in this one match (unique per
+    match and side). Joins to play-by-play `matchTeamId`; NOT a team id. Second (away)
+    side.'
+  second_team_is_placeholder: True when the slot is a bracket placeholder.
+  second_team_logo_uuid: 'Second (away) team logo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  second_team_name: Second (away) team name; absent on 2007-08 headers.
+  second_team_score: Second (away) team final score.
+  second_team_team_id: 'Team id: one club team in one season (Ilirija 2025-26 = 17551).
+    Joins to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId`
+    query params.'
+  sport_hall_id: Sport hall (venue) id. /sportHalls/{id} is in the site bundle, not
+    captured.
+  sport_hall_name: Name of the venue (sports hall) where the game is played or the
+    team is based.
+  status: 'Match status: FINISHED in every sample (the capture banks final games only);
+    the site also filters POSTPONED matches.'
+  transferred: True when the match was carried over from an earlier phase (results
+    transferred).
+  without_stats: True when the match keeps no statistics.
+kzs_matches:
+  attendance: Spectators (0 when not recorded).
+  commissioner_id: Official id (referee/commissioner registry); a different key space
+    from `person.id`. /referees/ and /commissioners/ are in the site bundle but not
+    captured.
+  commissioner_person_first_name: The official's given name.
+  commissioner_person_gender: MALE or FEMALE.
+  commissioner_person_id: 'Person id: the federation''s person record behind a player,
+    coach or official; a different key space from player, coach and official ids.'
+  commissioner_person_last_name: The official's family name.
+  commissioner_ranks: 'Unobserved: null, or an empty array, in every sample, so its
+    type and meaning are unconfirmed.'
+  competition_id: 'Competition id: one per competition per season (men''s top league
+    2025-26 = 579, 2026-27 = 608). Joins to /competitions/{competitionId} and the
+    `competitionId` query params.'
+  competition_name: 'Competition name (Slovenian; the sponsor name changes: Liga Telemach
+    2007-15, NovaKBM 2015-24, OTP banka 2024-).'
+  competition_phase_id: Competition-phase id. Joins to `competitions[].competitionPhaseId`
+    on matches and `/competitions/{competitionId}` `phases[].id`.
+  competition_phase_name: Phase name, Slovenian ('Redni del' = regular season, '1.
+    del' = first stage).
+  competition_type: Competition type (code table).
+  date_time: Tip-off, UTC (ISO 8601 'Z').
+  delegated: True once officials are assigned to the match.
+  fiba_live_stats_url: Genius Sports LiveStats URL 'https://fibalivestats.dcd.shared.geniussports.com/u/KZS/{geniusMatchId}/';
+    the number is the Genius match id that keys genius-livestats/ data.json. Absent
+    before 2015-16 (no live stats).
+  first_team_code: First team 3-letter code (club code).
+  first_team_id: 'Match-team id: this team''s entry in this one match (unique per
+    match and side). Joins to play-by-play `matchTeamId`; NOT a team id. First (home)
+    side.'
+  first_team_logo_uuid: 'First (home) team logo: image file id, served at https://api.kzs.si/public/images/{uuid}
+    (PNG).'
+  first_team_name: First (home) team name.
+  first_team_score: First (home) team final score.
+  first_team_short_name: First team short name ('' when none).
+  first_team_team_id: 'Team id: one club team in one season (Ilirija 2025-26 = 17551).
+    Joins to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId`
+    query params. First (home) team.'
+  game_index: Game number within the round (fixture order).
+  genius_match_id: Genius LiveStats match id parsed from fiba_live_stats_url (org
+    KZS); null before 2015/16.
+  is_first_team_placeholder: True when the first (home) slot is a bracket placeholder,
+    not yet a team.
+  is_second_team_placeholder: True when the second (away) slot is a placeholder.
+  match_evaluation_id: Id of the officials' evaluation record (internal; no public
+    route).
+  match_id: KZS match id. Joins to /matches/{matchId} (and its /playByPlay, /stats)
+    and stats `matchId`.
+  organiser_team_id: Team id of the organiser (home) side; null in older headers,
+    which send an empty organiser.
+  referee1_id: Official id (referee/commissioner registry); a different key space
+    from `person.id`. /referees/ and /commissioners/ are in the site bundle but not
+    captured.
+  referee1_person_first_name: The official's given name.
+  referee1_person_gender: MALE or FEMALE.
+  referee1_person_id: 'Person id: the federation''s person record behind a player,
+    coach or official; a different key space from player, coach and official ids.'
+  referee1_person_last_name: The official's family name.
+  referee1_ranks: 'Unobserved: null, or an empty array, in every sample, so its type
+    and meaning are unconfirmed.'
+  referee2_id: Official id (referee/commissioner registry); a different key space
+    from `person.id`. /referees/ and /commissioners/ are in the site bundle but not
+    captured.
+  referee2_person_first_name: The official's given name.
+  referee2_person_gender: MALE or FEMALE.
+  referee2_person_id: 'Person id: the federation''s person record behind a player,
+    coach or official; a different key space from player, coach and official ids.'
+  referee2_person_last_name: The official's family name.
+  referee2_ranks: 'Unobserved: null, or an empty array, in every sample, so its type
+    and meaning are unconfirmed.'
+  referee3_id: Official id (referee/commissioner registry); a different key space
+    from `person.id`. /referees/ and /commissioners/ are in the site bundle but not
+    captured.
+  referee3_person_first_name: The official's given name.
+  referee3_person_gender: MALE or FEMALE.
+  referee3_person_id: 'Person id: the federation''s person record behind a player,
+    coach or official; a different key space from player, coach and official ids.'
+  referee3_person_last_name: The official's family name.
+  referee3_ranks: 'Unobserved: null, or an empty array, in every sample, so its type
+    and meaning are unconfirmed.'
+  referee_controller_id: Official id (referee/commissioner registry); a different
+    key space from `person.id`. /referees/ and /commissioners/ are in the site bundle
+    but not captured.
+  referee_controller_person_first_name: The official's given name.
+  referee_controller_person_gender: MALE or FEMALE.
+  referee_controller_person_id: 'Person id: the federation''s person record behind
+    a player, coach or official; a different key space from player, coach and official
+    ids.'
+  referee_controller_person_last_name: The official's family name.
+  referee_controller_ranks: 'Unobserved: null, or an empty array, in every sample,
+    so its type and meaning are unconfirmed.'
+  round: Round (matchday) number within the phase.
+  score_inserted_manually: True when the score was typed in by the federation rather
+    than taken from the live-stats feed.
+  season: Season END year (2026/2027 = 2027), from the row's own season name or id,
+    else from the request.
+  season_id: 'Season id: OPAQUE, not a year (1 = 2000/2001 ... 27 = 2026/2027, 31
+    = 1991/1992). The season `name` is ''START/END''; the sdv season is the END year
+    (the second half of `name`).'
+  second_team_code: Second team 3-letter code.
+  second_team_id: 'Match-team id: this team''s entry in this one match (unique per
+    match and side). Joins to play-by-play `matchTeamId`; NOT a team id. Second (away)
+    side.'
+  second_team_logo_uuid: 'Second (away) team logo: image file id, served at https://api.kzs.si/public/images/{uuid}
+    (PNG).'
+  second_team_name: Second (away) team name.
+  second_team_score: Second (away) team final score.
+  second_team_short_name: Second team short name ('' when none).
+  second_team_team_id: 'Team id: one club team in one season (Ilirija 2025-26 = 17551).
+    Joins to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId`
+    query params. Second (away) team.'
+  sport_hall_address: Venue address, one line.
+  sport_hall_id: Sport hall (venue) id. /sportHalls/{id} is in the site bundle, not
+    captured.
+  sport_hall_name: Name of the venue (sports hall) where the game is played or the
+    team is based.
+  status: 'Match status: FINISHED in every sample (POSTPONED filtered by the site
+    on other lists).'
+  transferred: True when the match was carried over from an earlier phase (results
+    transferred).
+kzs_pbp:
+  action_number: 1-based position of the action in the feed, which is in game order.
+  action_type: Action type (code table).
+  area: 'Court zone of the action (code table): set on shots, and from 2020-21 on
+    located fouls and turnovers; '''' on rows without a location and on every shot
+    of early 2015-16 games.'
+  clock: 'Time remaining in the period, ''MM:SS:CC'' (minutes, seconds, hundredths):
+    ''09:56:00'' = 9:56 left.'
+  match_id: 'Match id: the federation key of a game, global across seasons (joins
+    kzs_matches and kzs_match).'
+  match_team_id: 'Match-team id: this team''s entry in this one match (unique per
+    match and side). Joins to play-by-play `matchTeamId`; NOT a team id.'
+  match_team_player_first_name: The acting player's given name, as entered for this
+    match.
+  match_team_player_id: 'Match-player id: the player''s entry in this one match; NOT
+    the player id. No captured route is keyed by it: join on `playerId` on the same
+    row.'
+  match_team_player_last_name: The acting player's family name, as entered for this
+    match.
+  part: 'Period label: QUARTER1-QUARTER4, then OT1 (OT2 and on by the same pattern,
+    unobserved).'
+  period: Period number; overtime restarts at 1 with periodType OVERTIME.
+  period_type: REGULAR or OVERTIME.
+  player_id: Player id (KZS player registry). Joins to /players/{playerId}, box-score
+    and play-by-play `playerId`.
+  player_photo_uuid: 'Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  qualifiers: Semicolon-separated qualifiers ('' when none; code table).
+  score1: First (home) team score after the action, a numeric STRING.
+  score2: Second (away) team score after the action, a numeric STRING.
+  shirt_number: Shirt number worn by the acting player, sent as a string.
+  side: 'Basket end: LEFT (x≈0) or RIGHT (x≈100). Absent on non-shot rows before 2020-21
+    and on some 2020-21 rows (read absent on a shot as LEFT).'
+  source: 'Feed the action came from: GENIUS_SPORTS in every sample.'
+  sub_type: Action subtype ('' when none; code table).
+  success: True when the shot / free throw was made (true on non-shot rows).
+  team_application_id: 'Team-application id: the team''s registration (entry) for
+    the season; play-by-play `teamApplicationId` is the same key space.'
+  team_name: Team name for the season, sponsor included (e.g. 'Perspektiva Ilirija').
+  team_side: 'Which side of the match the row belongs to: home (the organiser, firstTeam
+    on the wire) or away.'
+  x: 'Location along the court length, 0-100 percent (see the coordinate section):
+    shots, and from 2020-21 fouls and turnovers; 0.0 when the row has no location.'
+  y: Location across the court width, 0-100 percent (see the coordinate section);
+    0.0 when the row has no location.
+kzs_pbp_players:
+  first_name: The home player's (as in the feed) given name.
+  last_name: The home player's (as in the feed) family name.
+  match_id: 'Match id: the federation key of a game, global across seasons (joins
+    kzs_matches and kzs_match).'
+  player_id: Player id (KZS player registry). Joins to /players/{playerId}, box-score
+    and play-by-play `playerId`. Players listed here are the first (home) team.
+  team_side: 'Which side of the match the row belongs to: home (the organiser, firstTeam
+    on the wire) or away.'
+kzs_period_scores:
+  first_team_score: First (home) team points in the period.
+  match_id: 'Match id: the federation key of a game, global across seasons (joins
+    kzs_matches and kzs_match).'
+  match_part: 'Period: QUARTER1-QUARTER4, then OT1 for the first overtime (OT2 and
+    on by the same pattern, unobserved).'
+  score_id: Period-score row id.
+  second_team_score: Second (away) team points in the period.
+kzs_phases:
+  competition_id: 'Competition id: one per competition per season (men''s first league
+    2025/26 = 579, 2026/27 = 608).'
+  end_date: Phase end date (UTC midnight).
+  groups: Groups of the phase (empty when the phase has one table).
+  name: 'Phase name, Slovenian: ''Redni del'' = regular season, ''Četrtfinale'' =
+    quarterfinal, ''Polfinale'' = semifinal, ''Finale'' = final, ''1. del'' / ''2.
+    del'' = first / second stage.'
+  phase_id: Competition-phase id. Joins to `competitions[].competitionPhaseId` on
+    matches and `/competitions/{competitionId}` `phases[].id`.
+  season: Season END year (2026/2027 = 2027), from the row's own season name or id,
+    else from the request.
+  start_date: Phase start date (UTC midnight).
+  type: Phase format (code table).
+  wins_needed: Wins needed to take a best-of series.
+kzs_player:
+  first_name: The player's given name.
+  homegrown: True when the player counts as homegrown (domači igralec) for roster
+    limits.
+  identification_number: Player's KZS registration (licence) number; a different key
+    space from the player id, used by no captured route.
+  last_name: The player's family name.
+  nationality_alpha2_code: ISO 3166-1 alpha-2 country code.
+  nationality_alpha3_code: ISO 3166-1 alpha-3 country code.
+  nationality_eng_name: Country name in English.
+  nationality_id: Country id (FMS internal; use the ISO codes).
+  nationality_name: Country name in Slovenian (e.g. 'Združene države' = United States);
+    use `engName` or the ISO codes.
+  person_id: 'Person id: the federation''s person record behind a player, coach or
+    official; a different key space from player, coach and official ids.'
+  photo_uuid: 'Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  player_id: 'Person id: the federation''s person record behind a player, coach or
+    official; a different key space from player, coach and official ids.'
+  positions: 'Unobserved: null, or an empty array, in every sample, so its type and
+    meaning are unconfirmed.'
+  year_of_birth: 'Year of birth (players: public bio).'
+kzs_player_leaderboard:
+  average: Per-game average of the statsCategory.
+  club_code: Club 3-letter code.
+  club_fullname: Club's full legal name.
+  club_id: 'Club id: the club across seasons and categories (Ilirija = 16). No captured
+    route is keyed by it.'
+  club_logo_uuid: 'Club logo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  competition_id: 'Competition id: one per competition per season (men''s first league
+    2025/26 = 579, 2026/27 = 608).'
+  games_played: Games the player played in the competition.
+  max: Single-game best of the statsCategory.
+  photo_uuid: 'Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  player_firstname: The player's given name as registered with KZS (lower-case n in
+    this route).
+  player_id: Player id (KZS player registry). Joins to /players/{playerId}, box-score
+    and play-by-play `playerId`.
+  player_lastname: The player's family name as registered with KZS (lower-case n in
+    this route).
+  stats_category: 'Stat category of the board (PTS points, R rebounds, ASS assists
+    ...): the request''s, the rows do not echo it.'
+  sum: Season total of the requested statsCategory.
+  team_id: 'Team id: one club team in one season (Ilirija 2025-26 = 17551). Joins
+    to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId` query
+    params.'
+  team_name: Team name for the season, sponsor included.
+kzs_player_stats:
+  a1: 'Season total: free throws attempted.'
+  a2: 'Season total: two-pointers attempted.'
+  a3: 'Season total: three-pointers attempted.'
+  ass: 'Season total: assists.'
+  avga1: 'Per game: free throws attempted.'
+  avga2: 'Per game: two-pointers attempted.'
+  avga3: 'Per game: three-pointers attempted.'
+  avgass: 'Per game: assists.'
+  avgblag: 'Per game: own shots blocked (blocks against).'
+  avgblfv: 'Per game: blocks made (blocks in favour).'
+  avgefficiency: 'Per game: efficiency (PIR).'
+  avgm1: 'Per game: free throws made.'
+  avgm2: 'Per game: two-pointers made.'
+  avgm3: 'Per game: three-pointers made.'
+  avgmins: 'Per game: minutes played (decimal minutes).'
+  avgpfcm: 'Per game: fouls committed.'
+  avgpfrv: 'Per game: fouls received.'
+  avgplus_minus: 'Per game: the team''s point difference while the player was on court.'
+  avgpts: 'Per game: points.'
+  avgrd: 'Per game: defensive rebounds.'
+  avgro: 'Per game: offensive rebounds.'
+  avgsecs: 'Per game: seconds (0 in every sample: unused).'
+  avgst: 'Per game: steals.'
+  avgtov: 'Per game: turnovers.'
+  blag: 'Season total: own shots blocked (blocks against).'
+  blfv: 'Season total: blocks made (blocks in favour).'
+  captain: Games as captain.
+  competition_category: Category of the competition (code table).
+  competition_gender: MALE or FEMALE competition.
+  competition_id: 'Competition id: one per competition per season (men''s top league
+    2025-26 = 579, 2026-27 = 608). Joins to /competitions/{competitionId} and the
+    `competitionId` query params.'
+  competition_name: Competition name, Slovenian (e.g. 'Liga OTP banka', 'Pokal Spar').
+  competition_rank: Tier of the competition (code table).
+  efficiency: 'Season total: efficiency (PIR).'
+  live_stats: True when the competition has live stats.
+  m1: 'Season total: free throws made.'
+  m2: 'Season total: two-pointers made.'
+  m3: 'Season total: three-pointers made.'
+  mins: 'Season total: minutes played (decimal minutes).'
+  pfcm: 'Season total: fouls committed.'
+  pfrv: 'Season total: fouls received.'
+  played: Games the player played in the competition.
+  player_id: Player registry id of the request (the body does not echo it).
+  plus_minus: 'Season total: the team''s point difference while the player was on
+    court.'
+  pts: 'Season total: points.'
+  rd: 'Season total: defensive rebounds.'
+  ro: 'Season total: offensive rebounds.'
+  season: Season END year (2026/2027 = 2027), from the row's own season name or id,
+    else from the request.
+  season_id: Opaque KZS season id (27 = 2026/2027); the sdv season is the END year
+    in season.
+  st: 'Season total: steals.'
+  startinglineup: Games the player started in the competition.
+  tov: 'Season total: turnovers.'
+kzs_playing_days:
+  competition_id: 'Competition id: one per competition per season (men''s first league
+    2025/26 = 579, 2026/27 = 608).'
+  date: Calendar date of the match day, 'YYYY-MM-DD'.
+  no_of_games: Matches on that day.
+kzs_roster:
+  competition_id: 'Competition id: one per competition per season (men''s first league
+    2025/26 = 579, 2026/27 = 608).'
+  first_name: The player's given name.
+  homegrown: True when the player counts as homegrown (domači igralec) for roster
+    limits.
+  identification_number: Player's KZS registration (licence) number; a different key
+    space from the player id, used by no captured route.
+  jersey_number: Shirt number worn, sent as a string ('1', '55').
+  last_name: The player's family name.
+  nationality_alpha2_code: ISO 3166-1 alpha-2 country code.
+  nationality_alpha3_code: ISO 3166-1 alpha-3 country code.
+  nationality_eng_name: Country name in English.
+  nationality_id: Country id (FMS internal; use the ISO codes).
+  nationality_name: Country name in Slovenian (e.g. 'Združene države' = United States);
+    use `engName` or the ISO codes.
+  person_id: 'Person id: the federation''s person record behind a player, coach or
+    official; a different key space from player, coach and official ids.'
+  photo_uuid: 'Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  player_id: Player id (KZS player registry). Joins to /players/{playerId}, box-score
+    and play-by-play `playerId`.
+  positions: 'Unobserved: null, or an empty array, in every sample, so its type and
+    meaning are unconfirmed.'
+  roster_entry_id: 'Person id: the federation''s person record behind a player, coach
+    or official; a different key space from player, coach and official ids.'
+  team_id: 'Team id: one club team in one season (joins kzs_teams); not the match-team
+    id and not the club id.'
+  year_of_birth: 'Year of birth (players: public bio).'
+kzs_rounds:
+  competition_id: 'Competition id: one per competition per season (men''s first league
+    2025/26 = 579, 2026/27 = 608).'
+  phase_id: Competition-phase id. Joins to `competitions[].competitionPhaseId` on
+    matches and `/competitions/{competitionId}` `phases[].id`.
+  rounds: Number of rounds in the phase.
+kzs_score_changes:
+  match_id: KZS match id. Joins to /matches/{matchId} (and its /playByPlay, /stats)
+    and stats `matchId`.
+  minute: Game minute (1-40, then overtime minutes).
+  score1: First (home) team score at the end of the minute, an integer.
+  score2: Second (away) team score at the end of the minute, an integer.
+  total_minutes: Game length in minutes (40, 45 with one overtime).
+kzs_seasons:
+  active: Same as `isActive`.
+  is_active: True for the current season only (2026/2027 on 2026-10-12).
+  name: Season, 'START/END' (2025/2026); the sdv season is the END year.
+  season: Season END year (2026/2027 = 2027), from the row's own season name or id,
+    else from the request.
+  season_id: 'Season id: OPAQUE, not a year (1 = 2000/2001 ... 27 = 2026/2027, 31
+    = 1991/1992). The season `name` is ''START/END''; the sdv season is the END year
+    (the second half of `name`).'
+kzs_standings:
+  away_lost: Away games the team has lost.
+  away_won: Away games the team has won.
+  club_code: Club 3-letter code.
+  competition_id: 'Competition id: one per competition per season (men''s first league
+    2025/26 = 579, 2026/27 = 608).'
+  draws: 'Draws (0: basketball has none).'
+  games_played: Games played in the phase.
+  group_id: Group id inside the phase (null when the table is the phase's own).
+  group_name: Group name inside the phase (null when the table is the phase's own).
+  home_lost: Home games the team has lost.
+  home_won: Home games the team has won.
+  logo_uuid: 'Team logo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  lost: Losses in the phase.
+  lost_points: Table points deducted (0 in every sample).
+  phase_id: Competition-phase id. Joins to `competitions[].competitionPhaseId` on
+    matches and `/competitions/{competitionId}` `phases[].id`.
+  phase_name: Phase name, Slovenian (see `phases[].name`).
+  phase_type: Phase format (code table).
+  points: 'Table points: 2 per win, 1 per loss (Krka 26-1 = 53).'
+  position: 1-based position of the row in its table, in the order the API lists it
+    (the wire has no rank column).
+  pts_difference: Point differential (scored - allowed).
+  pts_minus: Points allowed.
+  pts_plus: Points scored by the team through its games played.
+  team_id: 'Team id: one club team in one season (Ilirija 2025-26 = 17551). Joins
+    to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId` query
+    params.'
+  team_name: Team name for the season, sponsor included.
+  tie_break_position: Final position after tie-breaks (absent on playoff-phase rows).
+  won: Wins in the phase.
+kzs_team:
+  category: 'Age category: ABSOLUTE (senior) or U8-U23 / ANY (code table in kzs-returns.md).'
+  club_id: 'Club id: the club across seasons and categories (Ilirija = 16). No captured
+    route is keyed by it.'
+  club_member: True when the club is a KZS member (false on nested copies that omit
+    it).
+  code: Team 3-letter code.
+  competitions: Competitions of the team this season (id, name, rule, phases).
+  gender: MALE or FEMALE.
+  guest_jersey_color: Away jersey colour, hex.
+  home_jersey_color: Home jersey colour, hex '#RRGGBB'.
+  logo_uuid: 'Logo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  name: Team name for the season (sponsor name included).
+  rank: 'Tier: FIRST-FOURTH or TOURNAMENT (code table).'
+  season: Season of the registration.
+  season_active: Same as `isActive`.
+  season_id: 'Season id: OPAQUE, not a year (1 = 2000/2001 ... 27 = 2026/2027, 31
+    = 1991/1992). The season `name` is ''START/END''; the sdv season is the END year
+    (the second half of `name`).'
+  season_is_active: True for the current season only (2026/2027 on 2026-10-12).
+  season_name: Season, 'START/END' (2025/2026); sdv season = the END year.
+  short_name: Team short name ('' when none).
+  sport_hall_address_house_number: Venue house number, a string ('6 A').
+  sport_hall_address_id: Id of the venue's address record.
+  sport_hall_address_post_office_country: Country, ISO 3166-1 alpha-2 (SI).
+  sport_hall_address_post_office_id: Post-office id (FMS internal).
+  sport_hall_address_post_office_municipality: Municipality, upper case.
+  sport_hall_address_post_office_name: Post-office town.
+  sport_hall_address_post_office_zip_code: Postal code (REDACTED under a club `addresses[]`
+    row; kept for venues).
+  sport_hall_address_street: Venue street (a public sports hall).
+  sport_hall_id: Sport hall (venue) id. /sportHalls/{id} is in the site bundle, not
+    captured.
+  sport_hall_name: Name of the venue (sports hall) where the game is played or the
+    team is based.
+  team_application_id: 'Team-application id: the team''s registration (entry) for
+    the season; play-by-play `teamApplicationId` is the same key space.'
+  team_id: 'Team-application id: the team''s registration (entry) for the season;
+    play-by-play `teamApplicationId` is the same key space.'
+kzs_team_box_score:
+  assists: The team's assists.
+  assists_turnover_ratio: 'The team''s assist-to-turnover ratio (0 in every sample:
+    not computed).'
+  bench_points: Points by players who did not start.
+  biggest_lead: Biggest lead, points.
+  biggest_scoring_run: Biggest unanswered scoring run, points.
+  blocks_against: The team's own shots that were blocked.
+  blocks_in_favor: The team's shots blocked (blocks made).
+  defensive_rating: 'The team''s defensive rating (0 in every sample: not computed).'
+  defensive_rebounds: The team's defensive rebounds.
+  efficiency: Team efficiency (PIR); -1 on 2015-16 team lines (not computed).
+  efficiency_custom: The team's custom efficiency as the federation computes it (equal
+    to `efficiency` on player rows; 0 on team lines).
+  efficiency_game_score: 'The team''s game score (0 in every sample: not computed).'
+  f_t_perc: The team's free-throw percentage, 0-100.
+  f_ta: The team's free throws attempted.
+  f_tm: The team's free throws made.
+  fast_break_points_attempted: 'The team''s fast-break attempts (0 in every sample:
+    not computed).'
+  fast_break_points_made: 'The team''s fast-break makes (0 in every sample: not computed).'
+  fg_a: The team's field goals attempted.
+  fg_m: The team's field goals made.
+  fg_perc: The team's field-goal percentage, 0-100.
+  foul_commited: The team's fouls committed.
+  foul_received: The team's fouls drawn.
+  fouled_out: Players fouled out (0 in every sample).
+  fouls_bench_technical: Technical fouls charged to the bench (not the coach).
+  fouls_coach_disqualifying: Disqualifying fouls charged to the head coach.
+  fouls_coach_technical: Technical fouls charged to the head coach.
+  fouls_disqualifying: Disqualifying fouls by players (ejections).
+  fouls_offensive: Offensive (charging) fouls by players.
+  fouls_on: Fouls drawn by the team.
+  fouls_personal: Personal fouls by players, all kinds that count toward fouling out.
+  fouls_team: Team fouls (0 in every sample).
+  fouls_technical: Technical fouls by players.
+  fouls_technical_other: Other technical fouls (0 in every sample).
+  fouls_throw_in: Throw-in fouls (0 in every sample).
+  fouls_total: All fouls committed.
+  fouls_unsportsmanlike: Unsportsmanlike (flagrant) fouls by players.
+  lead_changes: Lead changes in the game.
+  m_vp_votes: The team's MVP votes (0 in every sample).
+  match_id: 'Match id: the federation key of a game, global across seasons (joins
+    kzs_matches and kzs_match).'
+  minus: 'The team''s points allowed on court (0 in every sample: not computed).'
+  minutes: 'Team minutes: the sum of its players (200.0 = 5 x 40; 0.0 on 2015-16 team
+    lines).'
+  offensive_rating: 'The team''s offensive rating (0 in every sample: not computed).'
+  offensive_rebounds: The team's offensive rebounds.
+  p_er: 'The team''s PER (0 in every sample: not computed).'
+  p_ir: The team's PIR, performance index rating ((points + rebounds + assists + steals
+    + blocks + fouls drawn) - (missed field goals + missed free throws + turnovers
+    + shots blocked + fouls committed)).
+  plus: 'The team''s points scored on court (0 in every sample: not computed).'
+  plus_minus: 'The team''s plus-minus: points scored minus allowed while on court
+    (team line: the final margin).'
+  points: The team's points.
+  points_fast_break: The team's fast-break points.
+  points_from_turnovers: Points off opponent turnovers.
+  points_in_the_paint: The team's points in the paint.
+  points_in_the_paint_attempted: 'The team''s paint attempts (0 in every sample: not
+    computed).'
+  points_in_the_paint_made: 'The team''s paint makes (0 in every sample: not computed).'
+  points_second_chance: The team's second-chance points.
+  rebounds_team: Team rebounds (not credited to a player).
+  rebounds_team_defensive: Defensive rebounds credited to the team, not a player.
+  rebounds_team_offensive: Offensive rebounds credited to the team, not a player.
+  second_chance_points_attempted: 'The team''s second-chance attempts (0 in every
+    sample: not computed).'
+  second_chance_points_made: 'The team''s second-chance makes (0 in every sample:
+    not computed).'
+  steals: The team's steals.
+  team_id: 'Team id: one club team in one season (joins kzs_teams); not the match-team
+    id and not the club id.'
+  team_name: Name of the team for the season, sponsor included.
+  team_side: 'Which side of the match the row belongs to: home (the organiser, firstTeam
+    on the wire) or away.'
+  three_p_perc: The team's three-point percentage, 0-100.
+  three_pa: The team's three-point field goals attempted.
+  three_pm: The team's three-point field goals made.
+  time_leading: Time the team led, decimal minutes.
+  times_scores_level: Times the score was tied.
+  total_rebounds: The team's total rebounds.
+  true_shooting_attempts: 'The team''s true-shooting attempts (0 in every sample:
+    not computed).'
+  true_shooting_percentage: 'The team''s true-shooting percentage (0 in every sample:
+    not computed).'
+  turnovers: The team's turnovers.
+  turnovers_team: Team turnovers (not credited to a player).
+  two_p_perc: The team's two-point percentage, 0-100.
+  two_pa: The team's two-point field goals attempted.
+  two_pm: The team's two-point field goals made.
+  usage_percentage: 'The team''s usage percentage (0 in every sample: not computed).'
+kzs_team_general:
+  best_assists_player_homegrown: True when the player counts as homegrown (domači
+    igralec) for roster limits.
+  best_assists_player_id: Player id (KZS player registry). Joins to /players/{playerId},
+    box-score and play-by-play `playerId`.
+  best_assists_player_identification_number: Player's KZS registration (licence) number;
+    a different key space from the player id, used by no captured route.
+  best_assists_player_nationality_alpha2_code: ISO 3166-1 alpha-2 country code.
+  best_assists_player_nationality_alpha3_code: ISO 3166-1 alpha-3 country code.
+  best_assists_player_nationality_eng_name: Country name in English.
+  best_assists_player_nationality_id: Country id (FMS internal; use the ISO codes).
+  best_assists_player_nationality_name: Country name in Slovenian (e.g. 'Združene
+    države' = United States); use `engName` or the ISO codes.
+  best_assists_player_person_first_name: The player's given name.
+  best_assists_player_person_id: 'Person id: the federation''s person record behind
+    a player, coach or official; a different key space from player, coach and official
+    ids.'
+  best_assists_player_person_last_name: The player's family name.
+  best_assists_player_person_year_of_birth: 'Year of birth (players: public bio).'
+  best_assists_player_photo_uuid: 'Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  best_assists_player_positions: 'Unobserved: null, or an empty array, in every sample,
+    so its type and meaning are unconfirmed.'
+  best_average_assists: That player's assists per game.
+  best_average_points: That player's points per game.
+  best_average_rebounds: That player's rebounds per game.
+  best_points_player_homegrown: True when the player counts as homegrown (domači igralec)
+    for roster limits.
+  best_points_player_id: Player id (KZS player registry). Joins to /players/{playerId},
+    box-score and play-by-play `playerId`.
+  best_points_player_identification_number: Player's KZS registration (licence) number;
+    a different key space from the player id, used by no captured route.
+  best_points_player_nationality_alpha2_code: ISO 3166-1 alpha-2 country code.
+  best_points_player_nationality_alpha3_code: ISO 3166-1 alpha-3 country code.
+  best_points_player_nationality_eng_name: Country name in English.
+  best_points_player_nationality_id: Country id (FMS internal; use the ISO codes).
+  best_points_player_nationality_name: Country name in Slovenian (e.g. 'Združene države'
+    = United States); use `engName` or the ISO codes.
+  best_points_player_person_first_name: The player's given name.
+  best_points_player_person_id: 'Person id: the federation''s person record behind
+    a player, coach or official; a different key space from player, coach and official
+    ids.'
+  best_points_player_person_last_name: The player's family name.
+  best_points_player_person_year_of_birth: 'Year of birth (players: public bio).'
+  best_points_player_photo_uuid: 'Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  best_points_player_positions: 'Unobserved: null, or an empty array, in every sample,
+    so its type and meaning are unconfirmed.'
+  best_rebounds_player_homegrown: True when the player counts as homegrown (domači
+    igralec) for roster limits.
+  best_rebounds_player_id: Player id (KZS player registry). Joins to /players/{playerId},
+    box-score and play-by-play `playerId`.
+  best_rebounds_player_identification_number: Player's KZS registration (licence)
+    number; a different key space from the player id, used by no captured route.
+  best_rebounds_player_nationality_alpha2_code: ISO 3166-1 alpha-2 country code.
+  best_rebounds_player_nationality_alpha3_code: ISO 3166-1 alpha-3 country code.
+  best_rebounds_player_nationality_eng_name: Country name in English.
+  best_rebounds_player_nationality_id: Country id (FMS internal; use the ISO codes).
+  best_rebounds_player_nationality_name: Country name in Slovenian (e.g. 'Združene
+    države' = United States); use `engName` or the ISO codes.
+  best_rebounds_player_person_first_name: The player's given name.
+  best_rebounds_player_person_id: 'Person id: the federation''s person record behind
+    a player, coach or official; a different key space from player, coach and official
+    ids.'
+  best_rebounds_player_person_last_name: The player's family name.
+  best_rebounds_player_person_year_of_birth: 'Year of birth (players: public bio).'
+  best_rebounds_player_photo_uuid: 'Player photo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  best_rebounds_player_positions: 'Unobserved: null, or an empty array, in every sample,
+    so its type and meaning are unconfirmed.'
+  competition_id: 'Competition id: one per competition per season (men''s first league
+    2025/26 = 579, 2026/27 = 608).'
+  last_games: Recent results, 'W' or 'L' per game (order unverified).
+  lost: Losses in the competition.
+  team_id: 'Team id: one club team in one season (joins kzs_teams); not the match-team
+    id and not the club id.'
+  won: Wins in the competition (all phases).
+kzs_team_leaderboard:
+  average: Per-game average of the statsCategory.
+  club_code: Club 3-letter code.
+  club_fullname: Club's full legal name.
+  club_id: 'Club id: the club across seasons and categories (Ilirija = 16). No captured
+    route is keyed by it.'
+  club_logo_uuid: 'Club logo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  competition_id: 'Competition id: one per competition per season (men''s first league
+    2025/26 = 579, 2026/27 = 608).'
+  games_played: Games the team played in the competition.
+  max: Single-game best of the statsCategory.
+  stats_category: 'Stat category of the board (PTS points, R rebounds, ASS assists
+    ...): the request''s, the rows do not echo it.'
+  sum: Season total of the requested statsCategory.
+  team_id: 'Team id: one club team in one season (Ilirija 2025-26 = 17551). Joins
+    to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId` query
+    params.'
+  team_name: Team name for the season, sponsor included.
+kzs_teams:
+  category: 'Age category: ABSOLUTE (senior) or U8-U23 / ANY (code table in kzs-returns.md).'
+  club_id: 'Club id: the club across seasons and categories (Ilirija = 16). No captured
+    route is keyed by it.'
+  club_member: True when the club is a KZS member (false on nested copies that omit
+    it).
+  code: Team 3-letter code.
+  competition_id: 'Competition id: one per competition per season (men''s first league
+    2025/26 = 579, 2026/27 = 608).'
+  gender: MALE or FEMALE.
+  guest_jersey_color: Away jersey colour, hex.
+  guest_team_color: Away colour, hex.
+  home_jersey_color: Home jersey colour, hex '#RRGGBB'.
+  home_team_color: Home colour, hex.
+  logo_uuid: 'Team logo: image file id, served at https://api.kzs.si/public/images/{uuid}.'
+  name: Team name for the season (sponsor name included).
+  rank: 'Tier: FIRST-FOURTH or TOURNAMENT (code table).'
+  short_name: Team short name ('' when none).
+  sport_hall_id: Sport hall (venue) id. /sportHalls/{id} is in the site bundle, not
+    captured.
+  sport_hall_name: Name of the venue (sports hall) where the game is played or the
+    team is based.
+  team_application_id: 'Team-application id: the team''s registration (entry) for
+    the season; play-by-play `teamApplicationId` is the same key space.'
+  team_id: 'Team-application id: the team''s registration (entry) for the season;
+    play-by-play `teamApplicationId` is the same key space.'
+  team_internal_ranking: The club's internal team letter for the category (A = first
+    team, B = second team).

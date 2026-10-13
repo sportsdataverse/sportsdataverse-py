@@ -1,0 +1,115 @@
+{
+  "status": "OK",
+  "data": {
+    "firstTeamPlayers": [
+      {
+        "id": 84606,
+        "firstName": "Lovro",
+        "lastName": "Strnad"
+      },
+      {
+        "id": 48170,
+        "firstName": "Edo",
+        "lastName": "Murić"
+      },
+      {
+        "id": 51727,
+        "firstName": "Luka",
+        "lastName": "Kureš"
+      }
+    ],
+    "secondTeamPlayers": [
+      {
+        "id": 84148,
+        "firstName": "Filip",
+        "lastName": "Petić"
+      },
+      {
+        "id": 84119,
+        "firstName": "Lan",
+        "lastName": "Hotko"
+      },
+      {
+        "id": 85670,
+        "firstName": "Luka",
+        "lastName": "Kitak"
+      }
+    ],
+    "matchParts": [
+      "QUARTER1",
+      "QUARTER2",
+      "QUARTER3"
+    ],
+    "actions": [
+      {
+        "source": "GENIUS_SPORTS",
+        "clock": "10:00:00",
+        "actionType": "game",
+        "subType": "start",
+        "qualifiers": "",
+        "x": 0.0,
+        "y": 0.0,
+        "area": "",
+        "side": "LEFT",
+        "success": true,
+        "score1": "0",
+        "score2": "0",
+        "period": 1,
+        "periodType": "REGULAR",
+        "part": "QUARTER1"
+      },
+      {
+        "source": "GENIUS_SPORTS",
+        "matchTeamPlayerId": 1516525,
+        "playerId": 54183,
+        "matchTeamPlayerFirstName": "Luka",
+        "matchTeamPlayerLastName": "Tekavčič",
+        "teamApplicationId": 45018,
+        "teamName": "Terme Olimia Podčetrtek",
+        "matchTeamId": 203666,
+        "clock": "09:59:00",
+        "actionType": "jumpball",
+        "subType": "won",
+        "qualifiers": "",
+        "x": 0.0,
+        "y": 0.0,
+        "area": "",
+        "side": "LEFT",
+        "success": true,
+        "score1": "0",
+        "score2": "0",
+        "period": 1,
+        "periodType": "REGULAR",
+        "part": "QUARTER1",
+        "playerPhotoUuid": "5f51317c-f774-4f05-8772-d6eb82eaadd0",
+        "shirtNumber": "3"
+      },
+      {
+        "source": "GENIUS_SPORTS",
+        "matchTeamPlayerId": 1516527,
+        "playerId": 51652,
+        "matchTeamPlayerFirstName": "Žiga",
+        "matchTeamPlayerLastName": "Švigelj",
+        "teamApplicationId": 45018,
+        "teamName": "Terme Olimia Podčetrtek",
+        "matchTeamId": 203666,
+        "clock": "09:56:00",
+        "actionType": "2pt",
+        "subType": "drivinglayup",
+        "qualifiers": "pointsinthepaint;fastbreak",
+        "x": 7.0,
+        "y": 44.0,
+        "area": "underbasket",
+        "side": "LEFT",
+        "success": true,
+        "score1": "0",
+        "score2": "2",
+        "period": 1,
+        "periodType": "REGULAR",
+        "part": "QUARTER1",
+        "playerPhotoUuid": "e68c70ff-de65-438c-9a61-1d1ace83c656",
+        "shirtNumber": "7"
+      }
+    ]
+  }
+}

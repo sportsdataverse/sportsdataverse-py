@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: date
+  type: character
+- description: ''
+  name: no_of_games
+  type: integer
+kind: dataframe
+schema: kzs_playing_days

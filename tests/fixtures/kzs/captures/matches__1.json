@@ -1,0 +1,153 @@
+{
+  "status": "OK",
+  "data": {
+    "items": [
+      {
+        "id": 5787,
+        "competitions": [
+          {
+            "id": 5,
+            "competitionId": 1,
+            "competitionName": "Liga Telemach",
+            "competitionType": "LEAGUE",
+            "competitionPhaseId": 3653,
+            "competitionPhaseName": "1. del",
+            "transferred": false,
+            "seasonId": 8
+          }
+        ],
+        "round": 1,
+        "dateTime": "2007-10-13T17:00:00Z",
+        "attendance": 150,
+        "sportHallName": "ŠD Šoštanj",
+        "sportHallAddress": "Kajuhova cesta 8, 3325 Šoštanj, Slovenija",
+        "sportHallId": 197,
+        "firstTeamId": 11561,
+        "isFirstTeamPlaceholder": false,
+        "secondTeamId": 11562,
+        "isSecondTeamPlaceholder": false,
+        "firstTeamName": "Elektra Esotech",
+        "firstTeamShortName": "Elektra Esotech",
+        "secondTeamName": "TCG Mercator",
+        "secondTeamShortName": "TCG Mercator",
+        "firstTeamScore": 61,
+        "secondTeamScore": 67,
+        "scoreInsertedManually": false,
+        "liveStreams": [],
+        "streams": [],
+        "status": "FINISHED",
+        "conclusions": [],
+        "delegated": false,
+        "delegationChanges": [],
+        "moveRequests": []
+      },
+      {
+        "id": 5788,
+        "competitions": [
+          {
+            "id": 6,
+            "competitionId": 1,
+            "competitionName": "Liga Telemach",
+            "competitionType": "LEAGUE",
+            "competitionPhaseId": 3653,
+            "competitionPhaseName": "1. del",
+            "transferred": false,
+            "seasonId": 8
+          }
+        ],
+        "round": 1,
+        "dateTime": "2007-10-13T17:00:00Z",
+        "attendance": 300,
+        "sportHallName": "OŠ Koper",
+        "sportHallAddress": "Cesta Zore Perello-Godina 1, 6000 Koper, Slovenija",
+        "sportHallId": 63,
+        "firstTeamId": 11563,
+        "isFirstTeamPlaceholder": false,
+        "secondTeamId": 11564,
+        "isSecondTeamPlaceholder": false,
+        "firstTeamName": "Luka Koper",
+        "firstTeamShortName": "Luka Koper",
+        "secondTeamName": "Zlatorog Lasko",
+        "secondTeamShortName": "Zlatorog Lasko",
+        "firstTeamScore": 69,
+        "secondTeamScore": 72,
+        "scoreInsertedManually": false,
+        "liveStreams": [],
+        "streams": [],
+        "status": "FINISHED",
+        "conclusions": [],
+        "delegated": true,
+        "delegationChanges": [],
+        "moveRequests": [],
+        "commissioner": {
+          "id": 47,
+          "person": {
+            "id": 95816,
+            "firstName": "Janez",
+            "lastName": "Hafner",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        }
+      },
+      {
+        "id": 5789,
+        "competitions": [
+          {
+            "id": 7,
+            "competitionId": 1,
+            "competitionName": "Liga Telemach",
+            "competitionType": "LEAGUE",
+            "competitionPhaseId": 3653,
+            "competitionPhaseName": "1. del",
+            "transferred": false,
+            "seasonId": 8
+          }
+        ],
+        "round": 1,
+        "dateTime": "2007-10-13T17:00:00Z",
+        "attendance": 200,
+        "sportHallName": "Športna dvorana Zreče",
+        "sportHallAddress": "Šolska cesta 3, 3214 Zreče, Slovenija",
+        "sportHallId": 220,
+        "firstTeamId": 11565,
+        "isFirstTeamPlaceholder": false,
+        "secondTeamId": 11566,
+        "isSecondTeamPlaceholder": false,
+        "firstTeamName": "Rogla Zrece",
+        "firstTeamShortName": "Rogla Zrece",
+        "secondTeamName": "Zagorje KD FT",
+        "secondTeamShortName": "Zagorje KD FT",
+        "firstTeamScore": 90,
+        "secondTeamScore": 84,
+        "scoreInsertedManually": false,
+        "liveStreams": [],
+        "streams": [],
+        "status": "FINISHED",
+        "conclusions": [],
+        "delegated": true,
+        "delegationChanges": [],
+        "moveRequests": [],
+        "referee2": {
+          "id": 235,
+          "person": {
+            "id": 67793,
+            "firstName": "Gregor",
+            "lastName": "Mlakar",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        }
+      }
+    ],
+    "count": 0,
+    "offset": 0,
+    "limit": 0
+  }
+}

@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+kind: dataframe
+schema: kzs_pbp_players

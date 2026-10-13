@@ -1,0 +1,150 @@
+{
+  "status": "OK",
+  "data": {
+    "id": 29150,
+    "round": 1,
+    "fibaLiveStatsUrl": "https://fibalivestats.dcd.shared.geniussports.com/u/KZS/215251/",
+    "dateTime": "2015-10-17T17:00:00Z",
+    "attendance": 550,
+    "organiserTeam": {},
+    "firstTeam": {
+      "id": 58287,
+      "teamId": 4225,
+      "name": "Rogaška",
+      "homeJerseyColor": "#003764",
+      "guestJerseyColor": "#FF5100",
+      "logoUuid": "60e0340d-b00f-4db3-ad77-95cc74370ab3",
+      "code": "ROG",
+      "forfeited": false,
+      "isPlaceholder": false
+    },
+    "secondTeam": {
+      "id": 58288,
+      "teamId": 5157,
+      "name": "Sixt Primorska",
+      "code": "XXX",
+      "forfeited": false,
+      "isPlaceholder": false
+    },
+    "sportHall": {
+      "id": 189,
+      "name": "ŠD Rogaška Slatina"
+    },
+    "firstTeamScore": 83,
+    "secondTeamScore": 68,
+    "scoreInsertedManually": false,
+    "status": "FINISHED",
+    "scores": [
+      {
+        "id": 93933,
+        "matchPart": "QUARTER1",
+        "firstTeamScore": 22,
+        "secondTeamScore": 9
+      },
+      {
+        "id": 93934,
+        "matchPart": "QUARTER2",
+        "firstTeamScore": 18,
+        "secondTeamScore": 14
+      },
+      {
+        "id": 93935,
+        "matchPart": "QUARTER3",
+        "firstTeamScore": 19,
+        "secondTeamScore": 23
+      }
+    ],
+    "referee1": {
+      "id": 399,
+      "person": {
+        "id": 58007,
+        "firstName": "Mario",
+        "lastName": "Majkić",
+        "addressesPostOfficeName": [
+          "<redacted>"
+        ],
+        "gender": "MALE"
+      },
+      "ranks": []
+    },
+    "referee2": {
+      "id": 452,
+      "person": {
+        "id": 96188,
+        "firstName": "Matej",
+        "lastName": "Špendl",
+        "addressesPostOfficeName": [
+          "<redacted>"
+        ],
+        "gender": "MALE"
+      },
+      "ranks": []
+    },
+    "referee3": {
+      "id": 101,
+      "person": {
+        "id": 57297,
+        "firstName": "Blaž",
+        "lastName": "Zupančič",
+        "addressesPostOfficeName": [
+          "<redacted>"
+        ],
+        "gender": "MALE"
+      },
+      "ranks": []
+    },
+    "commissioner": {
+      "id": 4,
+      "person": {
+        "id": 95777,
+        "firstName": "Aleš",
+        "lastName": "Rom",
+        "addressesPostOfficeName": [
+          "<redacted>"
+        ],
+        "gender": "MALE"
+      },
+      "ranks": []
+    },
+    "competitions": [
+      {
+        "competitionId": 9,
+        "competitionName": "Liga NovaKBM",
+        "competitionType": "LEAGUE",
+        "competitionPhase": {
+          "id": 4265,
+          "name": "1. del"
+        },
+        "transferred": false
+      }
+    ],
+    "liveStreams": [],
+    "streams": [],
+    "gender": "MALE",
+    "liveStats": false,
+    "withoutStats": false,
+    "commissionerReportHtml": "​Spletni prenos.<br><br><b>Registracija tekme odložena, ker KK Lastovka do tekme 1. kroga ni posredovala Zagotovila o zdravniški primernosti igralcev.<br><br><b>Tehnična napaka dosojena igralcu MLAKAR D. (KK Lastovka) zaradi nešportnega vedenja – nespoštljiva komunikacija s sodnikom (UKPI, 36.3.1/c).<br><b>Izključujoča napaka dosojena igralcu RIZVIČ E. (KK Lastovka) zaradi nešportnega vedenja - dosojeni dve nešportni osebni napaki (UKPI 37.2.3).<br><br>Dobra organizacija tekme.<br><br>Dobro opravljeno delo pomožnih sodnikov.<br><br>Uradna predstavnika obeh ekip v poročilo o tekmi nista zapisala pripomb na organizacijo in izvedbo tekme ter opravljeno delo uradnih oseb.<br><br><b>Sklepa:<br>1. KK LASTOVKA&nbsp; se ZADOLŽI, da do 19. 10. 2015 do 12 ure posreduje na naslov komisarja lige Zagotovilo o zdravniški primernosti igralcev.<br><b>2. KK LASTOVKA&nbsp; se zaradi dosojene tehnične napake igralcu Mlakar D. zaradi nešportnega vedenja igralcu&nbsp; kaznuje s kaznijo 100,00 EUR.<br>",
+    "conclusions": [],
+    "delegated": true,
+    "delegationChanges": [],
+    "moveRequests": [],
+    "homeJerseyColor": "#003764",
+    "bests": [
+      {
+        "statCategory": "POINTS",
+        "firstTeamPlayer": {
+          "playerId": 48401,
+          "playerFirstName": "Miha",
+          "playerLastName": "Fon",
+          "value": 20
+        },
+        "secondTeamPlayer": {
+          "playerId": 84763,
+          "playerFirstName": "Ivan",
+          "playerLastName": "Mišković",
+          "value": 20
+        }
+      }
+    ]
+  }
+}

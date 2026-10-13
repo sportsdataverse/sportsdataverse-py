@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: score_id
+  type: integer
+- description: ''
+  name: match_part
+  type: character
+- description: ''
+  name: first_team_score
+  type: integer
+- description: ''
+  name: second_team_score
+  type: integer
+kind: dataframe
+schema: kzs_period_scores
