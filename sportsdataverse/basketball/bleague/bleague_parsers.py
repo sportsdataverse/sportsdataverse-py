@@ -993,7 +993,8 @@ class _Node:
     __slots__ = ("tag", "attrs", "children", "parent")
 
     def __init__(self, tag: str, attrs: Any, parent: Optional["_Node"]) -> None:
-        self.tag, self.attrs, self.children, self.parent = tag, dict(attrs), [], parent
+        children: List[Any] = []
+        self.tag, self.attrs, self.children, self.parent = tag, dict(attrs), children, parent
 
     def iter(self) -> Iterator["_Node"]:
         """Descendants in document order (explicit stack: deep pages cannot recurse)."""
