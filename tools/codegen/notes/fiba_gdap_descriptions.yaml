@@ -9,7 +9,8 @@ fiba_gdap_awards:
   competition_end_date: Last day of the competition, YYYY-MM-DD.
   competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
     Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
-  competition_official_name: Competition name.
+  competition_official_name: Official name of the competition edition the award was
+    given in.
   competition_season: 'Season key, three rules: the END year for club competitions
     (BCL 2024-25 = 2025) and the event year for national-team events (World Cup 2023
     = 2023), both equal to the sdv season key; qualifiers carry the TARGET tournament
@@ -216,7 +217,8 @@ fiba_gdap_federation_games:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_a_score: Final score of team A.
-  team_a_short_name: Short team name.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
   team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -231,7 +233,8 @@ fiba_gdap_federation_games:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_b_score: Final score of team B.
-  team_b_short_name: Short team name.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
   team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -264,7 +267,8 @@ fiba_gdap_final_standings:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_profile: Team profile; null in this route.
-  team_short_name: Short team name.
+  team_short_name: 'Short team name: the country code for a national team, the club''s
+    short name for a club.'
   team_status_code: Team entry status; always null in the samples, values unverified.
   team_status_name: Team entry status label; always null in the samples, values unverified.
   team_team_code: Team abbreviation (FIBA country code or club abbreviation).
@@ -321,7 +325,8 @@ fiba_gdap_game:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_a_score: Final score of team A.
-  team_a_short_name: Short team name.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
   team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -338,7 +343,8 @@ fiba_gdap_game:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_b_score: Final score of team B.
-  team_b_short_name: Short team name.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
   team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -477,7 +483,8 @@ fiba_gdap_games_between:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_a_score: Final score of team A.
-  team_a_short_name: Short team name.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
   team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -492,7 +499,8 @@ fiba_gdap_games_between:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_b_score: Final score of team B.
-  team_b_short_name: Short team name.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
   team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -543,7 +551,8 @@ fiba_gdap_national_teams:
   country_fiba_code: FIBA code of the federation's country.
   country_id: FIBA country id (country table key space; not an organisationId).
   country_name: Country name in English.
-  display_name: Federation display name.
+  display_name: English display name of the federation (the country), as the FIBA
+    site shows it.
   membership_status_code: 'FIBA membership status: ACT active.'
   national_federation_id: 'Federation organisation id (organisationId key space: 64
     = Germany).'
@@ -762,7 +771,7 @@ fiba_gdap_player_stats:
     full float precision in averages).
 fiba_gdap_ranking_zones:
   code: Ranking zone code (W, AF, AM, AS, EU).
-  official_name: Ranking zone name.
+  official_name: Official name of the ranking zone (World, FIBA Europe, FIBA Americas...).
   zone_ranking_id: 'Ranking zone id (getgdaprankingzones key space: 1 = World ...
     5 = Europe).'
 fiba_gdap_roster:
@@ -915,7 +924,8 @@ fiba_gdap_round_standings:
     the national federation for a national team (64 = Germany), the club for a club
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
-  team_short_name: Short team name.
+  team_short_name: 'Short team name: the country code for a national team, the club''s
+    short name for a club.'
   team_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -1052,7 +1062,8 @@ fiba_gdap_schedule:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_a_score: Final score of team A.
-  team_a_short_name: Short team name.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
   team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -1067,7 +1078,8 @@ fiba_gdap_schedule:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_b_score: Final score of team B.
-  team_b_short_name: Short team name.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
   team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -1167,7 +1179,8 @@ fiba_gdap_team_games:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_a_score: Team A points in the period.
-  team_a_short_name: Short team name.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
   team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -1181,7 +1194,8 @@ fiba_gdap_team_games:
     team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
     oId and the game page''s T_<id>.'
   team_b_score: Team B points in the period.
-  team_b_short_name: Short team name.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
   team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
@@ -1458,7 +1472,8 @@ fiba_gdap_teams:
   profile_twitter: X/Twitter handle; always null in the samples, values unverified.
   profile_website: The team's website address.
   profile_you_tube: YouTube handle; always null in the samples, values unverified.
-  short_name: Short team name.
+  short_name: 'Short team name: the country code for a national team, the club''s
+    short name for a club.'
   status_code: 'Team entry status: APPR approved.'
   status_name: Team entry status label (Approved).
   team_code: Team abbreviation (FIBA country code or club abbreviation).

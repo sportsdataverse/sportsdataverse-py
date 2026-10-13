@@ -491,6 +491,8 @@ def test_a_token_the_api_keeps_rejecting_is_a_fetch_failure(site):
         _home(_jwt(scope=("other.api",))),
         _home(_jwt(exp=time.time() - 10)),
     ],
+    # the token embeds a wall-clock ``exp``: fixed ids keep xdist workers collecting the same tests
+    ids=["no-token", "not-a-jwt", "other-client", "other-scope", "expired"],
 )
 def test_a_bad_token_page_is_refused(site, page):
     site(lambda req: (200, HTML, page))

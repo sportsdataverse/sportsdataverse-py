@@ -59,6 +59,15 @@ GDAP_SECTIONS: Dict[str, Tuple[str, Optional[str], Tuple[str, ...], Dict[str, st
 
 #: descriptions of columns a shaper adds or renames, by short then column
 GDAP_EXTRA: Dict[str, Dict[str, str]] = {
+    "awards": {
+        "competition_official_name": "Official name of the competition edition the award was given in.",
+    },
+    "national_teams": {
+        "display_name": "English display name of the federation (the country), as the FIBA site shows it.",
+    },
+    "ranking_zones": {
+        "official_name": "Official name of the ranking zone (World, FIBA Europe, FIBA Americas...).",
+    },
     "game_periods": {
         "game_id": "FIBA game id (Int64) of the game the period belongs to.",
     },
@@ -109,6 +118,10 @@ GDAP_EXTRA: Dict[str, Dict[str, str]] = {
 
 #: replaces a refs description shorter than 15 characters (or missing), by column name
 COMMON: Dict[str, str] = {
+    "short_name": "Short team name: the country code for a national team, the club's short name for a club.",
+    "team_short_name": "Short team name: the country code for a national team, the club's short name for a club.",
+    "team_a_short_name": "Short name of team A: the country code for a national team, the club's short name for a club.",
+    "team_b_short_name": "Short name of team B: the country code for a national team, the club's short name for a club.",
     "competition_category_name": "Name of the competition's category (FIBA Basketball World Cup, Olympic Basketball Tournament...).",
     "competition_competition_category_name": "Name of the competition's category (FIBA Basketball World Cup, Olympic Basketball Tournament...).",
     "category_name": "Name of the category (FIBA Basketball World Cup, Olympic Basketball Tournament...).",
@@ -181,7 +194,7 @@ def gdap_notes(
                     text = text.rstrip(".") + ". Stored as a JSON string."
             else:
                 text = head_maps.get(col) or ""
-            if len(text) < 15:
+            if len(text) < 15 or col.endswith("short_name"):
                 text = COMMON.get(col, text)
             notes[col] = " ".join(text.split())
         out[short] = notes

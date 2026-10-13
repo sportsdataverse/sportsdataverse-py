@@ -109,12 +109,12 @@ Games of EVERY FIBA competition in a local-time window (how competitions and gam
 | `team_a_organisation_id` | integer | Organisation id, stable across competitions and seasons: the national federation for a national team (64 = Germany), the club for a club team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play oId and the game page's T_<id>. |
 | `team_a_code` | character | Team code (national: FIBA country code; club: a club abbreviation such as OOST). |
 | `team_a_official_name` | character | Official name of team A: the country for a national team, the club for a club team. |
-| `team_a_short_name` | character | Short team name. |
+| `team_a_short_name` | character | Short name of team A: the country code for a national team, the club's short name for a club. |
 | `team_b_team_id` | integer | Competition team id: one per team per competition (Germany = 279569 at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId. |
 | `team_b_organisation_id` | integer | Organisation id, stable across competitions and seasons: the national federation for a national team (64 = Germany), the club for a club team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play oId and the game page's T_<id>. |
 | `team_b_code` | character | Team code (national: FIBA country code; club: a club abbreviation such as NANT). |
 | `team_b_official_name` | character | Official name of team B: the country for a national team, the club for a club team. |
-| `team_b_short_name` | character | Short team name. |
+| `team_b_short_name` | character | Short name of team B: the country code for a national team, the club's short name for a club. |
 | `team_a_score` | integer | Final score of team A. |
 | `team_b_score` | integer | Final score of team B. |
 | `is_live` | logical | True while the game is being played. |
