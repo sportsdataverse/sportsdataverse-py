@@ -1,0 +1,1797 @@
+easl_game:
+  attendance: Announced attendance of the game; null when not recorded.
+  away_code_latin: 'Away team: three-letter club code (for example BRE); null or empty
+    for some clubs.'
+  away_code_local: 'Away team: alternative three-letter club code (for example TPP);
+    null for most clubs. A club may have only one of codeLatin / codeLocal.'
+  away_draw: 'Away team: true when the game has no winner YET or ever: true on every
+    unplayed competitor, false on every finished one (a tie has never happened).'
+  away_name: 'Away team: display name. Despite the field name this is the English
+    / Latin-script name used on the league site.'
+  away_name_native: 'Away team: alternative name: the native-script name of some Japanese
+    clubs (for example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players
+    it usually equals nameFullLocal. Despite the field name it is not always Latin
+    script. Null on some rows.'
+  away_result_place: 'Away team: result place: 1 = winner, 2 = loser. The /matches
+    list holds null here for fixtures not yet played; /matches/{fixtureId} is sampled
+    for finished games only.'
+  away_score: Away team final points (the wire sends a numeric string; cast to Int64);
+    null before the game is played.
+  away_team_id: 'Away team: teamId: DataCore team (entity) UUID v1 (key space: EASL
+    teams, the same id as `entityId`; joins /teams, /standings team.id, fixture competitors,
+    box and play-by-play teams). Not a player id.'
+  fixture_id: 'fixtureId: DataCore fixture (game) UUID v1 (key space: EASL games;
+    the {fixtureId} of every /matches route).'
+  fixture_name: Fixture name for special games ('EASL Championship', 'Semifinals 2',
+    'EASL Tip-Off 2026 Cebu'); null for ordinary group games.
+  fixture_number: 'Fixture number YYSSNNN: two-digit start year, two-digit end year,
+    three-digit sequence (2627001 = first game of 2026-27, 2526003 = third of 2025-26).
+    Null on every 2023-24 fixture.'
+  fixture_type: REGULAR (group stage), PLAYOFF (quarter- and semifinals) or FINAL
+    (championship and third-place games). Missing from the DRAFT placeholders.
+  home_code_latin: 'Home team: three-letter club code (for example BRE); null or empty
+    for some clubs.'
+  home_code_local: 'Home team: alternative three-letter club code (for example TPP);
+    null for most clubs. A club may have only one of codeLatin / codeLocal.'
+  home_draw: 'Home team: true when the game has no winner YET or ever: true on every
+    unplayed competitor, false on every finished one (a tie has never happened).'
+  home_name: 'Home team: display name. Despite the field name this is the English
+    / Latin-script name used on the league site.'
+  home_name_native: 'Home team: alternative name: the native-script name of some Japanese
+    clubs (for example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players
+    it usually equals nameFullLocal. Despite the field name it is not always Latin
+    script. Null on some rows.'
+  home_result_place: 'Home team: result place: 1 = winner, 2 = loser. The /matches
+    list holds null here for fixtures not yet played; /matches/{fixtureId} is sampled
+    for finished games only.'
+  home_score: Home team final points (the wire sends a numeric string; cast to Int64);
+    null before the game is played.
+  home_team_id: 'Home team: teamId: DataCore team (entity) UUID v1 (key space: EASL
+    teams, the same id as `entityId`; joins /teams, /standings team.id, fixture competitors,
+    box and play-by-play teams). Not a player id.'
+  live_data_available: Whether live stats were collected for the game (present on
+    a minority of fixtures; meaning unverified). Absent on some rows.
+  live_video_available: Whether live video was available (false on all 146 fixtures
+    of the four seasons).
+  pool_abb: Pool abbreviation (A, B, C). Playoff and DRAFT fixtures of the /matches
+    list carry the placeholder pool, whose abb is empty or 'N/A'.
+  pool_code: 'Pool (group) id: a 30-character hex string, equal to pool.id; null on
+    playoff and DRAFT fixtures.'
+  pool_id: 'Pool id: a 30-character hex string; null for playoff games (''Unknown
+    Pool'').'
+  pool_name: 'Pool name: ''Group A'', ''Group B'', ''Group C'' or the placeholder
+    ''Unknown Pool''.'
+  season: 'Always null here: the game route carries no season; join season_id to easl_seasons.'
+  season_id: 'Always null here: the game route carries no season.'
+  stage_code: 'Stage id: a 30-character hex string. Absent on some rows.'
+  stage_id: Stage reference '<season UUID>:<stage code>' on team-fixture rows only
+    (its first half scopes the fixture to a season); null on the other fixture routes,
+    which send the stage_code, stage_name and stage_order trio.
+  stage_name: 'Stage name: ''Group Stage'', ''Final Four'' or ''EASL Playoffs''. Absent
+    on some rows.'
+  stage_order: Ordinal of the stage within the season (1 = Group Stage, 2 = EASL Playoffs).
+    Absent on some rows.
+  start_time_local: Scheduled tip-off in the venue's local time, 'YYYY-MM-DDTHH:MM:SS'
+    with no zone (19:10 local = 10:10 UTC in Tokyo). DRAFT fixtures carry a date at
+    00:00:00.
+  start_time_utc: Scheduled tip-off in UTC, 'YYYY-MM-DDTHH:MM:SS' with no zone marker.
+    The /matches list holds null here on DRAFT fixtures; the single-fixture sample
+    is a finished game.
+  status: CONFIRMED = finished with a final box score; SCHEDULED = future; DRAFT =
+    a placeholder with no teams or time.
+  venue_abbreviation_latin: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (String).'
+  venue_abbreviation_local: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (String).'
+  venue_alternate_name_latin: 'Not yet populated upstream: null in every full body
+    observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies start
+    filling some of these columns, so it is typed from its family (String).'
+  venue_city: City of the arena.
+  venue_country_code: 'ISO 3166-1 alpha-3 country code of the arena: JPN, TWN, PHL,
+    KOR, MAC, HKG, MNG, CHN. The /matches list holds null here on DRAFT fixtures (empty
+    venue).'
+  venue_name: Arena name. Absent on some rows.
+  venue_name_latin: Venue name in Latin script; null on most rows.
+  venue_state: State or province of the arena (Philippine games, for example Cebu).
+easl_health:
+  message: Human-readable status text ('EASL Basketball API is running').
+  status: 'Server status: ''OK''.'
+  timestamp: Server time, ISO 8601 with milliseconds and Z (UTC).
+easl_leaders:
+  category: 'Leader category, the wire key of the group: pointsPerGame, reboundsPerGame,
+    assistsPerGame, stealsPerGame, blocksPerGame, pointsThreeMade, pointsThreePercentage,
+    fieldGoalsPercentage or freeThrowsPercentage.'
+  jersey_number: Jersey number as a string ('00', '0' and '75' are distinct).
+  player_id: 'playerId: DataCore person UUID v1 (key space: EASL persons, the same
+    id as the box score''s `personId`; joins /players, leaders and play-by-play players).
+    Not a team id.'
+  player_name: Player display name in 'FAMILY Given' form with the family name upper-cased
+    (OSAKABE Taiki), in Latin script.
+  player_name_latin: 'Alternative name: equal to nameFullLocal for 257 of 552 players,
+    otherwise null; never non-Latin in the observed data.'
+  player_status: 'Registration state of the player in the database: ACTIVE, INACTIVE
+    or UNREGISTERED.'
+  position: 'Playing position: G, F, C, PG, SG, SF, PF or GF (guard-forward).'
+  rank: Rank inside the category, 1 = best, in the delivered order (the server lists
+    the top 5).
+  season: 'Season END year (2026 = EASL 25-26): stamped by easl_runtime from the request,
+    null when the body is parsed bare.'
+  season_id: DataCore season UUID v1 of the leader row.
+  team_code_latin: Three-letter club code (for example BRE); null or empty for some
+    clubs.
+  team_code_local: Alternative three-letter club code (for example TPP); null for
+    most clubs. A club may have only one of codeLatin / codeLocal.
+  team_id: 'teamId: DataCore team (entity) UUID v1 (key space: EASL teams, the same
+    id as `entityId`; joins /teams, /standings team.id, fixture competitors, box and
+    play-by-play teams). Not a player id.'
+  team_name: Display name. Despite the field name this is the English / Latin-script
+    name used on the league site.
+  team_name_native: 'Alternative name: the native-script name of some Japanese clubs
+    (for example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players
+    it usually equals nameFullLocal. Despite the field name it is not always Latin
+    script. Null on some rows.'
+  value: 'The leader''s value in the category: a per-game average, a count (pointsThreeMade)
+    or a percentage (0-100). Float64.'
+easl_pbp:
+  description: 'Event text. Shots read ''<2pt|3pt> <shot type> missed[ (modifier)]''
+    for EVERY field-goal attempt, made or not: the word ''missed'' is always there
+    and the result is the change of `scores` (see the divergence notes). Shot types:
+    Jump shot, Layup, Driving layup, Pull-up jump shot, Floating jump shot, Tip-in,
+    Fadeaway, Step-back jump shot, Turnaround jump shot, Hook shot, Dunk, Reverse
+    layup, Alley-oop, Alley-oop dunk, Euro step (none on 23 rows: ''3pt missed'').
+    Modifiers: in the paint, second chance, from turnover, fast break, blocked. Free
+    throws read ''Free throw K of M made'' (M = 1, 2 or 3) for every attempt, also
+    always ''made''. Other events (complete list): Assist; Block; Steal; Substitution
+    in; Substitution out; Defensive rebound; Defensive rebound (team); Offensive rebound;
+    Offensive rebound (team); Foul; Foul (N FT); Foul drawn; Foul drawn (N FT); Personal
+    foul; Personal foul (N FT); Personal foul (shooting); Personal foul (shooting)
+    (N FT); Offensive foul; Offensive foul (charge); Technical foul; Technical foul
+    (N FT); Bench technical foul; Bench technical foul (N FT); Coach technical foul;
+    Coach technical foul (N FT); Unsportsmanlike foul; Unsportsmanlike foul (N FT);
+    Disqualifying foul (N FT); Jump ball won; Jump ball won (held ball); Jump ball
+    lost; Full timeout; Short timeout; Media timeout; Commercial timeout; Officials
+    timeout; Officials timeout (mandatory); Coach''s challenge (pending); Coach''s
+    challenge (complete) - upheld; Coach''s challenge (complete) - overturned; Instant
+    replay review (complete) - upheld; Instant replay review (complete) - overturned;
+    Turnover - Bad pass; Ball handling; Traveling; Out of bounds; Offensive; Backcourt
+    violation; Double dribble; Carrying; Offensive goaltending; 3 second violation;
+    5 second violation; 5 second violation (team); 8 second violation (team); Shot
+    clock violation (team); Other; Other (team). N FT = free throws awarded.'
+  event_number: 1-based position of the event in the delivered array, which is the
+    only usable order (sequence is not monotonic).
+  event_time: When the event was logged, wall-clock 'YYYY-MM-DDTHH:MM:SS.mmm' in UTC
+    with no zone marker. There is NO game clock (time remaining) in this feed.
+  fixture_id: DataCore fixture (game) UUID v1 from the request.
+  jersey_number: Jersey number as a string; null on one event. Absent on some rows.
+  opponent_score: The other team's running score as of this event; null on events
+    with no team.
+  period_id: 'Period: 1-4 regulation, 11 = first overtime (12 = second overtime appears
+    in team totals).'
+  period_label: Q1-Q4 for periods 1-4; OT1, OT2 ... for overtimes (the server numbers
+    the first overtime 11 in team totals; periods 5-10 are read as OT{n-4}, unverified).
+  player_id: DataCore person UUID v1 of the acting player; null for team events (team
+    rebounds, timeouts).
+  player_name: Player display name in 'FAMILY Given' form with the family name upper-cased
+    (OSAKABE Taiki), in Latin script. Absent on some rows.
+  player_name_latin: 'Alternative name: equal to nameFullLocal for 257 of 552 players,
+    otherwise null; never non-Latin in the observed data. Absent on some rows.'
+  points_scored: 'Points the event team gained since the previous event (change of
+    its running score): the made shot''s value. The description always says ''missed'',
+    so count points here, not strings; the running score lags on some games, which
+    shifts points to a later event.'
+  received_time: 'When the event was received upstream, Unix epoch MILLISECONDS (UTC):
+    a median 1.6 s after eventTime (5th to 95th percentile -0.6 s to +55 s over 30,874
+    events); meaning unverified.'
+  sequence: 'Event sequence number from the scorer''s system: NOT in game order (the
+    delivered array order is), and not always unique within a game (35 of 106 games
+    repeat values).'
+  team1_id: First team of the body's teams array (the fixture's competitors order,
+    arbitrary home/away); team1_score belongs to it.
+  team1_score: Running score of team1_id as of this event.
+  team2_id: Second team of the body's teams array; team2_score belongs to it.
+  team2_score: Running score of team2_id as of this event.
+  team_id: DataCore team UUID v1 of the acting team; null on events with no team.
+  team_score: The event team's running score as of this event (the running score lags
+    the true score on a minority of events); null on events with no team.
+easl_player:
+  created_at: When the sync server inserted the row, 'YYYY-MM-DD HH:MM:SS' (a different
+    format from updatedAt; zone unstated, UTC assumed).
+  dob: Date of birth, 'YYYY-MM-DD' (a public biography field; 1980-10-05 to 2023-10-16
+    in the data, so the latest values are implausible); 5 players have none.
+  gender: MALE on all 552 rows.
+  height_cm: Height in centimetres; 43 of 552 players have none.
+  height_feet: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (String).'
+  jersey_number: Jersey number as a string. Present ONLY in the roster variant of
+    /players (seasonId + teamId) and on /players/{playerId}; missing from the unfiltered
+    list. Absent on some rows.
+  name: Player display name in 'FAMILY Given' form with the family name upper-cased
+    (OSAKABE Taiki), in Latin script.
+  name_abbreviated: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (String).'
+  name_latin: 'Alternative name: equal to nameFullLocal for 257 of 552 players, otherwise
+    null; never non-Latin in the observed data.'
+  nationality: ISO 3166-1 alpha-3 code of the player's nationality; 36 codes occur,
+    KOR 119, USA 102, JPN 81, PHL 80, TWN 61, CHN 22, MNG 16, HKG 15, MAC 13 ('PHI'
+    also appears once, a non-ISO spelling of PHL).
+  organization_id: 'DataCore organisation id: b1e0z (EASL).'
+  player_id: 'playerId: DataCore person UUID v1 (key space: EASL persons, the same
+    id as the box score''s `personId`; joins /players, leaders and play-by-play players).
+    Not a team id.'
+  player_row_id: The sync server's own integer row id of the player (not a DataCore
+    id).
+  position: Playing position (G, F, C, PG, SG, SF, PF, GF). Present ONLY in the roster
+    variant of /players (seasonId + teamId) and on /players/{playerId}; missing from
+    the unfiltered list. Absent on some rows.
+  status: 'Registration state of the player in the database: ACTIVE, INACTIVE or UNREGISTERED.'
+  updated_at: When the sync server last synced the row, ISO 8601 with milliseconds
+    and Z (UTC).
+  weight_kg: Weight in kilograms; many players have none.
+  weight_lbs: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (Int64).'
+easl_player_box:
+  assists: 'Assists: passes that directly lead to a made field goal. Null on some
+    rows.'
+  assists_defensive: Defensive assists (DataCore column; meaning unverified). Null
+    on some rows.
+  assists_turnover_ratio: Assists divided by turnovers (a ratio, not a percentage).
+    Null on some rows.
+  bib: Jersey number as a string ('00' and '0' are distinct).
+  blocks: Shots blocked (made by this player or team). Null on some rows.
+  blocks_received: The team's or player's own shots that were blocked by an opponent.
+    Null on some rows.
+  double_double: 'Double-double flag: 1 when exactly two of points, rebounds, assists,
+    steals, blocks reached 10 in the game, else 0 (a triple-double is counted in tripleDouble
+    instead). In a season line it is a count of such games.'
+  dunks: Dunks made. Null on some rows.
+  efficiency: 'NBA-style efficiency: points + rebounds + assists + steals + blocks
+    - missed field goals - missed free throws - turnovers (verified on all 2,143 played
+    player-games).'
+  efficiency_custom: Custom efficiency slot (DataCore column; meaning unverified).
+    Null on some rows.
+  field_goals_attempted: Field goals attempted (2- and 3-point shots; free throws
+    excluded). Null on some rows.
+  field_goals_effective_percentage: 'Effective field-goal percentage on a 0-100 scale:
+    (FGM + 0.5 x 3PM) / FGA x 100; can exceed 100 on small samples. Null on some rows.'
+  field_goals_made: Field goals made (2- and 3-point shots). Null on some rows.
+  field_goals_percentage: Field-goal percentage on a 0-100 scale (made / attempted
+    x 100). Null on some rows.
+  fixture_id: DataCore fixture (game) UUID v1 of the box row.
+  fouls_coach_disqualifying: Disqualifying fouls on the coach. Null on some rows.
+  fouls_coach_technical: Technical fouls on the coach. Null on some rows.
+  fouls_disqualifying: Disqualifying fouls. Null on some rows.
+  fouls_disruptive: Disruptive fouls (DataCore column; filled from 2026-27). Null
+    on some rows.
+  fouls_drawn: Fouls drawn (committed against this player or team by an opponent).
+    Null on some rows.
+  fouls_flagrant: Flagrant fouls (DataCore column; filled from 2026-27). Null on some
+    rows.
+  fouls_offensive: Offensive fouls committed. Counted separately from foulsPersonal.
+    Null on some rows.
+  fouls_personal: Personal fouls committed (offensive, technical and unsportsmanlike
+    fouls are separate columns). Null on some rows.
+  fouls_technical: Technical fouls committed by the player or team. Null on some rows.
+  fouls_technical_cat1: Technical fouls of category 1 (DataCore column; filled from
+    2026-27). Null on some rows.
+  fouls_technical_cat2: Technical fouls of category 2 (DataCore column; filled from
+    2026-27). Null on some rows.
+  fouls_total: 'Fouls charged in total: personal + technical + unsportsmanlike + offensive
+    (matches 2,142 of 2,143 played player-games; the exception is unexplained).'
+  fouls_unsportsmanlike: Unsportsmanlike fouls committed. Null on some rows.
+  free_throws_attempted: Free throws attempted. Null on some rows.
+  free_throws_made: 'Free throws made: a game count on the box-score and team-total
+    routes, a season total on the season statistics routes.'
+  free_throws_percentage: Free-throw percentage on a 0-100 scale. Null on some rows.
+  index_of_success: 'Index of success: efficiency + fouls drawn - personal fouls -
+    technical fouls - blocks received (verified on all 2,143 played player-games).
+    It differs from pir only in which fouls it subtracts.'
+  is_player: True on every row (team officials are never listed).
+  is_team_official: False on every row.
+  max_assists: 'Highest assists in a single game: in a game row it equals assists;
+    in a season line it is the best game. Null on some rows.'
+  max_free_throws_made: Highest free throws made in a single game (equals freeThrowsMade
+    in a game row).
+  max_points: Highest points in a single game (equals points in a game row).
+  max_points_four_made: Highest 4-point shots made in a game (DataCore column; EASL
+    has no 4-point line; filled from 2026-27). Null on some rows.
+  max_points_three_made: Highest 3-pointers made in a single game. Null on some rows.
+  max_points_two_made: Highest 2-pointers made in a single game. Null on some rows.
+  max_rebounds: Highest rebounds in a single game. Null on some rows.
+  max_rebounds_defensive: Highest defensive rebounds in a single game. Null on some
+    rows.
+  max_rebounds_offensive: Highest offensive rebounds in a single game. Null on some
+    rows.
+  max_steals: Highest steals in a single game. Null on some rows.
+  minus: Points the opponents scored while the player was on the court. Null on some
+    rows.
+  minutes: Playing time as an ISO 8601 duration PT{m}M{s}S with the minutes NOT wrapped
+    at 60 (PT27M53S; a team's is the sum of its players', PT200M for a 40-minute game,
+    PT250M with one overtime). Null on some rows.
+  minutes_played: Playing time in minutes (decimal), parsed from the ISO 8601 minutes
+    statistic (PT35M11S = 35.1833).
+  pir: 'Performance index rating: efficiency + fouls drawn - total fouls - blocks
+    received (verified on all 2,143 played player-games).'
+  played: True when the player has playing time (minutes present); False for the rostered
+    players who did not play (their counting stats are null).
+  player_id: 'playerId: DataCore person UUID v1 (key space: EASL persons, the same
+    id as the box score''s `personId`; joins /players, leaders and play-by-play players).
+    Not a team id.'
+  player_name: Player display name in 'FAMILY Given' form with the family name upper-cased
+    (OSAKABE Taiki), in Latin script. Absent on some rows.
+  player_name_latin: 'Alternative name: equal to nameFullLocal for 257 of 552 players,
+    otherwise null; never non-Latin in the observed data. Absent on some rows.'
+  plus: Points the player's team scored while he was on the court. Null on some rows.
+  plus_minus: 'plus - minus: the team''s point margin while the player was on the
+    court. Null on some rows.'
+  points: 'Points scored: a game count on the box-score and team-total routes, a season
+    total on the season statistics routes.'
+  points_fast_break: Points scored on fast breaks. Null on some rows.
+  points_fast_break_attempted: Fast-break field goals attempted. Null on some rows.
+  points_fast_break_made: Fast-break field goals made. Null on some rows.
+  points_four_attempted: 4-point shots attempted (DataCore column; EASL has no 4-point
+    line; filled from 2026-27). Null on some rows.
+  points_four_made: 4-point shots made (see pointsFourAttempted). Null on some rows.
+  points_four_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  points_from_turnover: Points scored off opponent turnovers. Null on some rows.
+  points_in_the_paint: Points scored in the paint. Null on some rows.
+  points_in_the_paint_attempted: Field goals attempted in the paint. Null on some
+    rows.
+  points_in_the_paint_made: Field goals made in the paint. Null on some rows.
+  points_second_chance: Points scored on second-chance possessions (after an offensive
+    rebound). Null on some rows.
+  points_second_chance_attempted: Second-chance field goals attempted. Null on some
+    rows.
+  points_second_chance_made: Second-chance field goals made. Null on some rows.
+  points_three_attempted: 3-point field goals attempted. Null on some rows.
+  points_three_made: 3-point field goals made. Null on some rows.
+  points_three_percentage: 3-point percentage on a 0-100 scale. Null on some rows.
+  points_two_attempted: 2-point field goals attempted. Null on some rows.
+  points_two_made: 2-point field goals made. Null on some rows.
+  points_two_percentage: 2-point percentage on a 0-100 scale. Null on some rows.
+  position: 'Playing position: G, F, C, PG, SG, SF, PF or GF; null on some rows.'
+  power_play_points: Power-play points (an ice-hockey column; meaning in basketball
+    unverified). Null on some rows.
+  power_play_points_awarded: Power-play points awarded (an ice-hockey column; meaning
+    in basketball unverified). Null on some rows.
+  rebounds: 'Total rebounds: offensive + defensive. Team''s totals include team rebounds.
+    Null on some rows.'
+  rebounds_defensive: Defensive rebounds. Null on some rows.
+  rebounds_defensive_percentage: Share of available defensive rebounds taken while
+    on the court, on a 0-100 scale; values above 100 (up to 108.9) occur, so the definition
+    is unverified. Null on some rows.
+  rebounds_offensive: Offensive rebounds. Null on some rows.
+  rebounds_offensive_percentage: Share of available offensive rebounds taken while
+    on the court, 0-100 scale (up to 91.4 observed); definition unverified. Null on
+    some rows.
+  rebounds_percentage: Share of all available rebounds taken while on the court, 0-100
+    scale; definition unverified. Null on some rows.
+  starter: True for a starter (five per team).
+  steals: Steals. Null on some rows.
+  team_id: 'The player''s team: DataCore team (entity) UUID v1 (the wire''s entityId).'
+  team_name: The player's team display name, joined from the body's teams array.
+  team_name_native: The player's team name in native script, joined from the body's
+    teams array; blank for most clubs.
+  triple_double: 'Triple-double flag: 1 when three or more of points, rebounds, assists,
+    steals, blocks reached 10, else 0.'
+  true_shooting_attempts: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  true_shooting_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  turnovers: Turnovers committed by players. Null on some rows.
+  turnovers_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  usage_rate: 'Usage rate on a 0-100 scale: share of the team''s possessions used
+    while on the court (up to 136 observed); definition unverified. Null on some rows.'
+easl_player_stats:
+  assists: 'Assists: passes that directly lead to a made field goal. Total over the
+    player''s games.'
+  assists_defensive: Defensive assists (DataCore column; meaning unverified). Total
+    over the player's games.
+  assists_per_game: 'Assists: passes that directly lead to a made field goal. Per-game
+    average: the total divided by `games`.'
+  assists_turnover_ratio: Assists divided by turnovers (a ratio, not a percentage).
+    Total over the player's games.
+  blocks: Shots blocked (made by this player or team). Total over the player's games.
+  blocks_per_game: 'Shots blocked (made by this player or team). Per-game average:
+    the total divided by `games`.'
+  blocks_received: The team's or player's own shots that were blocked by an opponent.
+    Total over the player's games.
+  blocks_received_per_game: 'The team''s or player''s own shots that were blocked
+    by an opponent. Per-game average: the total divided by `games`.'
+  double_double: 'Double-double flag: 1 when exactly two of points, rebounds, assists,
+    steals, blocks reached 10 in the game, else 0 (a triple-double is counted in tripleDouble
+    instead). In a season line it is a count of such games. Total over the player''s
+    games.'
+  draws: Drawn games (basketball has none). Total over the player's games.
+  dunks: Dunks made. Total over the player's games.
+  dunks_per_game: 'Dunks made. Per-game average: the total divided by `games`.'
+  efficiency: 'NBA-style efficiency: points + rebounds + assists + steals + blocks
+    - missed field goals - missed free throws - turnovers (verified on all 2,143 played
+    player-games). Total over the player''s games.'
+  efficiency_custom: Custom efficiency slot (DataCore column; meaning unverified).
+    Total over the player's games.
+  field_goals_attempted: Field goals attempted (2- and 3-point shots; free throws
+    excluded). Total over the player's games.
+  field_goals_effective_percentage: 'Effective field-goal percentage on a 0-100 scale:
+    (FGM + 0.5 x 3PM) / FGA x 100; can exceed 100 on small samples. Total over the
+    player''s games.'
+  field_goals_made: Field goals made (2- and 3-point shots). Total over the player's
+    games.
+  field_goals_percentage: Field-goal percentage on a 0-100 scale (made / attempted
+    x 100). Total over the player's games.
+  fouls_coach_disqualifying: Disqualifying fouls on the coach. Total over the player's
+    games.
+  fouls_coach_technical: Technical fouls on the coach. Total over the player's games.
+  fouls_disqualifying: Disqualifying fouls. Total over the player's games.
+  fouls_disruptive: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  fouls_drawn: Fouls drawn (committed against this player or team by an opponent).
+    Total over the player's games.
+  fouls_drawn_per_game: 'Fouls drawn (committed against this player or team by an
+    opponent). Per-game average: the total divided by `games`.'
+  fouls_flagrant: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (Int64).'
+  fouls_offensive: Offensive fouls committed. Counted separately from foulsPersonal.
+    Total over the player's games.
+  fouls_personal: Personal fouls committed (offensive, technical and unsportsmanlike
+    fouls are separate columns). Total over the player's games.
+  fouls_personal_per_game: 'Personal fouls committed (offensive, technical and unsportsmanlike
+    fouls are separate columns). Per-game average: the total divided by `games`.'
+  fouls_technical: Technical fouls committed by the player or team. Total over the
+    player's games.
+  fouls_technical_cat1: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  fouls_technical_cat2: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  fouls_total: 'Fouls charged in total: personal + technical + unsportsmanlike + offensive
+    (matches 2,142 of 2,143 played player-games; the exception is unexplained). Total
+    over the player''s games.'
+  fouls_unsportsmanlike: Unsportsmanlike fouls committed. Total over the player's
+    games.
+  free_throws_attempted: Free throws attempted. Total over the player's games.
+  free_throws_attempted_per_game: 'Free throws attempted. Per-game average: the total
+    divided by `games`.'
+  free_throws_made: Free throws made. Total over the player's games.
+  free_throws_made_per_game: 'Free throws made. Per-game average: the total divided
+    by `games`.'
+  free_throws_percentage: Free-throw percentage on a 0-100 scale. Total over the player's
+    games.
+  games: Finished games counted in this line. Total over the player's games.
+  games_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  games_started: Games the player started. Total over the player's games.
+  index_of_success: 'Index of success: efficiency + fouls drawn - personal fouls -
+    technical fouls - blocks received (verified on all 2,143 played player-games).
+    It differs from pir only in which fouls it subtracts. Total over the player''s
+    games.'
+  losses: 'Games lost (for a player: by his team while he is in the line). Total over
+    the player''s games.'
+  max_assists: 'Highest assists in a single game: in a game row it equals assists;
+    in a season line it is the best game. Total over the player''s games.'
+  max_free_throws_made: Highest free throws made in a single game (equals freeThrowsMade
+    in a game row). Total over the player's games.
+  max_points: Highest points in a single game (equals points in a game row). Total
+    over the player's games.
+  max_points_four_made: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  max_points_three_made: Highest 3-pointers made in a single game. Total over the
+    player's games.
+  max_points_two_made: Highest 2-pointers made in a single game. Total over the player's
+    games.
+  max_rebounds: Highest rebounds in a single game. Total over the player's games.
+  max_rebounds_defensive: Highest defensive rebounds in a single game. Total over
+    the player's games.
+  max_rebounds_offensive: Highest offensive rebounds in a single game. Total over
+    the player's games.
+  max_steals: Highest steals in a single game. Total over the player's games.
+  minus: Points the opponents scored while the player was on the court. Total over
+    the player's games.
+  minutes: Playing time as an ISO 8601 duration PT{m}M{s}S with the minutes NOT wrapped
+    at 60 (PT27M53S; a team's is the sum of its players', PT200M for a 40-minute game,
+    PT250M with one overtime). Total over the player's games.
+  minutes_per_game: 'Playing time as an ISO 8601 duration PT{m}M{s}S with the minutes
+    NOT wrapped at 60 (PT27M53S; a team''s is the sum of its players'', PT200M for
+    a 40-minute game, PT250M with one overtime). Per-game average: the total divided
+    by `games`.'
+  pir: 'Performance index rating: efficiency + fouls drawn - total fouls - blocks
+    received (verified on all 2,143 played player-games). Total over the player''s
+    games.'
+  player_id: DataCore person UUID v1, from the request (the body carries none).
+  plus: Points the player's team scored while he was on the court. Total over the
+    player's games.
+  plus_minus: 'plus - minus: the team''s point margin while the player was on the
+    court. Total over the player''s games.'
+  points: Points scored. Total over the player's games.
+  points_fast_break: Points scored on fast breaks. Total over the player's games.
+  points_fast_break_attempted: Fast-break field goals attempted. Total over the player's
+    games.
+  points_fast_break_made: Fast-break field goals made. Total over the player's games.
+  points_four_attempted: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  points_four_attempted_per_game: 'Not yet populated upstream: null in every full
+    body observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies start
+    filling some of these columns, so it is typed from its family (Float64).'
+  points_four_made: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  points_four_made_per_game: 'Not yet populated upstream: null in every full body
+    observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies start
+    filling some of these columns, so it is typed from its family (Float64).'
+  points_four_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  points_from_turnover: Points scored off opponent turnovers. Total over the player's
+    games.
+  points_in_the_paint: Points scored in the paint. Total over the player's games.
+  points_in_the_paint_attempted: Field goals attempted in the paint. Total over the
+    player's games.
+  points_in_the_paint_made: Field goals made in the paint. Total over the player's
+    games.
+  points_per_game: 'Points scored. Per-game average: the total divided by `games`.'
+  points_second_chance: Points scored on second-chance possessions (after an offensive
+    rebound). Total over the player's games.
+  points_second_chance_attempted: Second-chance field goals attempted. Total over
+    the player's games.
+  points_second_chance_made: Second-chance field goals made. Total over the player's
+    games.
+  points_three_attempted: 3-point field goals attempted. Total over the player's games.
+  points_three_attempted_per_game: '3-point field goals attempted. Per-game average:
+    the total divided by `games`.'
+  points_three_made: 3-point field goals made. Total over the player's games.
+  points_three_made_per_game: '3-point field goals made. Per-game average: the total
+    divided by `games`.'
+  points_three_percentage: 3-point percentage on a 0-100 scale. Total over the player's
+    games.
+  points_two_attempted: 2-point field goals attempted. Total over the player's games.
+  points_two_attempted_per_game: '2-point field goals attempted. Per-game average:
+    the total divided by `games`.'
+  points_two_made: 2-point field goals made. Total over the player's games.
+  points_two_made_per_game: '2-point field goals made. Per-game average: the total
+    divided by `games`.'
+  points_two_percentage: 2-point percentage on a 0-100 scale. Total over the player's
+    games.
+  power_play_points: Power-play points (an ice-hockey column; meaning in basketball
+    unverified). Total over the player's games.
+  power_play_points_awarded: Power-play points awarded (an ice-hockey column; meaning
+    in basketball unverified). Total over the player's games.
+  rebounds: 'Total rebounds: offensive + defensive. Team''s totals include team rebounds.
+    Total over the player''s games.'
+  rebounds_defensive: Defensive rebounds. Total over the player's games.
+  rebounds_defensive_per_game: 'Defensive rebounds. Per-game average: the total divided
+    by `games`.'
+  rebounds_offensive: Offensive rebounds. Total over the player's games.
+  rebounds_offensive_per_game: 'Offensive rebounds. Per-game average: the total divided
+    by `games`.'
+  rebounds_per_game: 'Total rebounds: offensive + defensive. Team''s totals include
+    team rebounds. Per-game average: the total divided by `games`.'
+  steals: Steals. Total over the player's games.
+  steals_per_game: 'Steals. Per-game average: the total divided by `games`.'
+  triple_double: 'Triple-double flag: 1 when three or more of points, rebounds, assists,
+    steals, blocks reached 10, else 0. Total over the player''s games.'
+  true_shooting_attempts: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  true_shooting_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  turnovers: Turnovers committed by players. Total over the player's games.
+  turnovers_per_game: 'Turnovers committed by players. Per-game average: the total
+    divided by `games`.'
+  turnovers_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  wins: 'Games won (for a player: by his team while he is in the line). Total over
+    the player''s games.'
+easl_players:
+  created_at: When the sync server inserted the row, 'YYYY-MM-DD HH:MM:SS' (a different
+    format from updatedAt; zone unstated, UTC assumed).
+  dob: Date of birth, 'YYYY-MM-DD' (a public biography field; 1980-10-05 to 2023-10-16
+    in the data, so the latest values are implausible); 5 players have none. Null
+    on some rows.
+  gender: MALE on all 552 rows.
+  height_cm: Height in centimetres; 43 of 552 players have none. Null on some rows.
+  height_feet: Height in feet and inches as a string (6'9); null for most players.
+  jersey_number: Jersey number as a string. Present ONLY in the roster variant of
+    /players (seasonId + teamId) and on /players/{playerId}; missing from the unfiltered
+    list. Absent on some rows.
+  name: Player display name in 'FAMILY Given' form with the family name upper-cased
+    (OSAKABE Taiki), in Latin script.
+  name_abbreviated: Abbreviated name; null for 551 of 552 players (one empty string).
+  name_latin: 'Alternative name: equal to nameFullLocal for 257 of 552 players, otherwise
+    null; never non-Latin in the observed data.'
+  nationality: ISO 3166-1 alpha-3 code of the player's nationality; 36 codes occur,
+    KOR 119, USA 102, JPN 81, PHL 80, TWN 61, CHN 22, MNG 16, HKG 15, MAC 13 ('PHI'
+    also appears once, a non-ISO spelling of PHL).
+  organization_id: 'DataCore organisation id: b1e0z (EASL).'
+  player_id: 'playerId: DataCore person UUID v1 (key space: EASL persons, the same
+    id as the box score''s `personId`; joins /players, leaders and play-by-play players).
+    Not a team id.'
+  player_row_id: The sync server's own integer row id of the player (not a DataCore
+    id).
+  position: Playing position (G, F, C, PG, SG, SF, PF, GF). Present ONLY in the roster
+    variant of /players (seasonId + teamId) and on /players/{playerId}; missing from
+    the unfiltered list. Absent on some rows.
+  season: Season END year of the filter, from the request; null when no season was
+    passed.
+  season_id: DataCore season UUID v1 of the filter; null when no season was passed.
+  status: 'Registration state of the player in the database: ACTIVE, INACTIVE or UNREGISTERED.'
+  updated_at: When the sync server last synced the row, ISO 8601 with milliseconds
+    and Z (UTC).
+  weight_kg: Weight in kilograms; many players have none. Null on some rows.
+  weight_lbs: Weight in pounds; null for many players.
+easl_schedule:
+  attendance: Announced attendance of the game; null when not recorded.
+  away_code_latin: 'Away team: three-letter club code (for example BRE); null or empty
+    for some clubs.'
+  away_code_local: 'Away team: alternative three-letter club code (for example TPP);
+    null for most clubs. A club may have only one of codeLatin / codeLocal.'
+  away_draw: 'Away team: true when the game has no winner YET or ever: true on every
+    unplayed competitor, false on every finished one (a tie has never happened).'
+  away_name: 'Away team: display name. Despite the field name this is the English
+    / Latin-script name used on the league site.'
+  away_name_native: 'Away team: alternative name: the native-script name of some Japanese
+    clubs (for example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players
+    it usually equals nameFullLocal. Despite the field name it is not always Latin
+    script. Null on some rows.'
+  away_result_place: 'Away team: result place: 1 = winner, 2 = loser. The /matches
+    list holds null here for fixtures not yet played; /matches/{fixtureId} is sampled
+    for finished games only.'
+  away_score: Away team final points (the wire sends a numeric string; cast to Int64);
+    null before the game is played.
+  away_team_id: 'Away team: teamId: DataCore team (entity) UUID v1 (key space: EASL
+    teams, the same id as `entityId`; joins /teams, /standings team.id, fixture competitors,
+    box and play-by-play teams). Not a player id.'
+  fixture_id: 'fixtureId: DataCore fixture (game) UUID v1 (key space: EASL games;
+    the {fixtureId} of every /matches route).'
+  fixture_name: Fixture name for special games ('EASL Championship', 'Semifinals 2',
+    'EASL Tip-Off 2026 Cebu'); null for ordinary group games.
+  fixture_number: 'Fixture number YYSSNNN: two-digit start year, two-digit end year,
+    three-digit sequence (2627001 = first game of 2026-27, 2526003 = third of 2025-26).
+    Null on every 2023-24 fixture.'
+  fixture_type: REGULAR (group stage), PLAYOFF (quarter- and semifinals) or FINAL
+    (championship and third-place games). Missing from the DRAFT placeholders. Absent
+    on some rows.
+  home_code_latin: 'Home team: three-letter club code (for example BRE); null or empty
+    for some clubs.'
+  home_code_local: 'Home team: alternative three-letter club code (for example TPP);
+    null for most clubs. A club may have only one of codeLatin / codeLocal.'
+  home_draw: 'Home team: true when the game has no winner YET or ever: true on every
+    unplayed competitor, false on every finished one (a tie has never happened).'
+  home_name: 'Home team: display name. Despite the field name this is the English
+    / Latin-script name used on the league site.'
+  home_name_native: 'Home team: alternative name: the native-script name of some Japanese
+    clubs (for example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players
+    it usually equals nameFullLocal. Despite the field name it is not always Latin
+    script. Null on some rows.'
+  home_result_place: 'Home team: result place: 1 = winner, 2 = loser. The /matches
+    list holds null here for fixtures not yet played; /matches/{fixtureId} is sampled
+    for finished games only.'
+  home_score: Home team final points (the wire sends a numeric string; cast to Int64);
+    null before the game is played.
+  home_team_id: 'Home team: teamId: DataCore team (entity) UUID v1 (key space: EASL
+    teams, the same id as `entityId`; joins /teams, /standings team.id, fixture competitors,
+    box and play-by-play teams). Not a player id.'
+  live_data_available: Whether live stats were collected for the game (present on
+    a minority of fixtures; meaning unverified). Absent on some rows.
+  live_video_available: Whether live video was available (false on all 146 fixtures
+    of the four seasons).
+  pool_abb: Pool abbreviation (A, B, C). Playoff and DRAFT fixtures of the /matches
+    list carry the placeholder pool, whose abb is empty or 'N/A'. Null on some rows.
+  pool_code: 'Pool (group) id: a 30-character hex string, equal to pool.id; null on
+    playoff and DRAFT fixtures.'
+  pool_id: 'Pool id: a 30-character hex string; null for playoff games (''Unknown
+    Pool'').'
+  pool_name: 'Pool name: ''Group A'', ''Group B'', ''Group C'' or the placeholder
+    ''Unknown Pool''.'
+  season: 'Season END year (2026 = EASL 25-26): stamped by easl_runtime from the request,
+    null when parsed bare.'
+  season_id: DataCore season UUID v1 of the fixture (the row's own seasonId).
+  stage_code: 'Stage id: a 30-character hex string. Absent on some rows.'
+  stage_id: Stage reference '<season UUID>:<stage code>' on team-fixture rows only
+    (its first half scopes the fixture to a season); null on the other fixture routes,
+    which send the stage_code, stage_name and stage_order trio.
+  stage_name: 'Stage name: ''Group Stage'', ''Final Four'' or ''EASL Playoffs''. Absent
+    on some rows.'
+  stage_order: Ordinal of the stage within the season (1 = Group Stage, 2 = EASL Playoffs).
+    Absent on some rows.
+  start_time_local: Scheduled tip-off in the venue's local time, 'YYYY-MM-DDTHH:MM:SS'
+    with no zone (19:10 local = 10:10 UTC in Tokyo). DRAFT fixtures carry a date at
+    00:00:00.
+  start_time_utc: Scheduled tip-off in UTC, 'YYYY-MM-DDTHH:MM:SS' with no zone marker.
+    The /matches list holds null here on DRAFT fixtures; the single-fixture sample
+    is a finished game.
+  status: CONFIRMED for a finished game, SCHEDULED for a future one, DRAFT for an
+    unscheduled placeholder.
+  venue_abbreviation_latin: Venue abbreviation in the Latin field; null except the
+    native-script name 沖縄アリーナ (Okinawa Arena) on 12 fixtures. Absent on some rows.
+  venue_abbreviation_local: Venue abbreviation in the local field; null except 'F-PICO'
+    on 2 fixtures. Absent on some rows.
+  venue_alternate_name_latin: Alternative venue name; null on most rows. Absent on
+    some rows.
+  venue_city: City of the arena. Absent on some rows.
+  venue_country_code: 'ISO 3166-1 alpha-3 country code of the arena: JPN, TWN, PHL,
+    KOR, MAC, HKG, MNG, CHN. The /matches list holds null here on DRAFT fixtures (empty
+    venue). Absent on some rows.'
+  venue_name: Arena name. Absent on some rows.
+  venue_name_latin: Venue name in Latin script; null on most rows. Absent on some
+    rows.
+  venue_state: State or province of the arena (Philippine games, for example Cebu).
+    Absent on some rows.
+easl_seasons:
+  age_group: 'Age group of the competition: SENIOR.'
+  competition_id: 'DataCore competition UUID v1 (key space: competitions); the same
+    77a790d8-ad01-11ed-8355-01b87a3904c0 on all four seasons: EASL is one competition
+    with one season per edition.'
+  created_at: When the sync server inserted the row, 'YYYY-MM-DD HH:MM:SS' (a different
+    format from updatedAt; zone unstated, UTC assumed).
+  end_date: Last scheduled day of the season, local date YYYY-MM-DD.
+  event_type: 'DataCore event type: FIXTURE (a game schedule).'
+  gender: MALE (EASL is a men's competition).
+  name: Season label ('EASL 24-25' = 2024-25).
+  name_latin: Season label in Latin script; null on some seasons.
+  organization_id: 'DataCore organisation id of the league: b1e0z (EASL) on every
+    row.'
+  profile_id: DataCore profile UUID v1 of the competition (joins nothing in this API).
+  representation: CLUB (club teams, not national teams).
+  season: Season END year (2026 = EASL 25-26), derived as year + 1.
+  season_id: 'seasonId: DataCore season UUID v1 (key space: EASL seasons; one per
+    edition: 57cefc32... is 2024-25). Joins the `seasonId` query parameter of /matches,
+    /standings, /leaders, /players and the /teams/{teamId} routes, the `seasonId`
+    of every fixture and leader row, and the season half of a team-fixture `stage.id`.'
+  season_row_id: 'The sync server''s own integer row id (1 = 2024-25, 2 = 2025-26,
+    3 = 2023-24, 4 = 2026-27: insertion order, not chronological). Not a DataCore
+    id.'
+  season_type: 'DataCore season type: SEASON.'
+  standard: 'Competition standard: ELITE.'
+  start_date: First day of the season, local date YYYY-MM-DD.
+  status: COMPLETE for a finished season, ACTIVE for the current one (the default
+    of every season route).
+  updated_at: When the sync server last synced the row, ISO 8601 with milliseconds
+    and Z (UTC).
+  year: START year of the season (2024 = EASL 24-25, which runs 2024-10 to 2025-03).
+    sdv season (END year) = year + 1.
+easl_standings:
+  draws: 'Draws (0: basketball has none).'
+  draws_away: Away draws (0).
+  draws_home: Home draws (0).
+  game_played: 'Games played (group stage only: playoff games are not counted, although
+    lastFiveMatches includes them).'
+  game_played_away: Games played away.
+  game_played_home: Games played at home.
+  last_five: Results of the team's last five games as a comma-separated string, most
+    recent first (W win, L loss).
+  latest: True on the newest standings snapshot (false on all six snapshots checked,
+    including the active season's).
+  live: True while the standing is recomputed live during games (false on all six
+    snapshots checked).
+  losses: 'Losses: all group-stage games on the standings route, all games on the
+    season statistics routes.'
+  losses_away: Losses in the team's away games.
+  losses_home: Losses in the team's home games.
+  point_difference: Points for minus points against.
+  point_difference_away: Point difference in away games.
+  point_difference_home: Point difference in home games.
+  points_against: Points allowed.
+  points_for: Points the team scored over its group-stage games (points_against is
+    the points it conceded).
+  pool_abb: 'Pool abbreviation: A, B or C. Null on some rows.'
+  pool_id: 'Pool id: a 30-character hex string (equals a fixture''s poolCode).'
+  pool_name: 'Pool name: ''Group A'', ''Group B'' or ''Group C''.'
+  position: Rank within the pool, 1-4.
+  season: Season END year (2026 = EASL 25-26), from the request.
+  season_id: DataCore season UUID v1, from the request (the standings rows carry none).
+  standing_id: 'Standings row id: a DataCore UUID v1 for the (season, pool, team)
+    row (joins nothing else).'
+  steak: 'Current winning streak in games (the key is misspelled ''steak''); 0 after
+    a loss. Never negative: losing streaks are not tracked.'
+  streak_away: Current winning streak in away games; 0 after a loss.
+  streak_home: Current winning streak in home games; 0 after a loss.
+  team_code: Three-letter club code; null for some clubs.
+  team_id: 'teamId: DataCore team (entity) UUID v1 (key space: EASL teams, the same
+    id as `entityId`; joins /teams, /standings team.id, fixture competitors, box and
+    play-by-play teams). Not a player id.'
+  team_name: Display name. Despite the field name this is the English / Latin-script
+    name used on the league site.
+  win_percentage: Winning share as a 0-1 ratio rounded to 2 decimals (0.83 = 5-1),
+    NOT a percentage.
+  win_percentage_away: Away winning share, 0-1 ratio.
+  win_percentage_home: Home winning share, 0-1 ratio.
+  wins: 'Wins: all group-stage games on the standings route, all games on the season
+    statistics routes.'
+  wins_away: Wins in the team's away games.
+  wins_home: Wins in the team's home games.
+easl_team:
+  age_group: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (String).'
+  code_latin: Three-letter club code (for example BRE); null or empty for some clubs.
+  code_local: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (String).'
+  created_at: When the sync server inserted the row, 'YYYY-MM-DD HH:MM:SS' (a different
+    format from updatedAt; zone unstated, UTC assumed).
+  facebook_username: Club Facebook handle; most clubs have none.
+  gender: 'Competition gender of the team: MALE (the EASL is a men''s competition).'
+  instagram_username: Club Instagram handle; some clubs have none.
+  logo: Club logo URL on the Sportradar DataCore asset CDN (images.dc.connect.sportradar.com/b1e0z/...).
+  name: Display name. Despite the field name this is the English / Latin-script name
+    used on the league site.
+  name_native: 'Alternative name: the native-script name of some Japanese clubs (for
+    example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players it usually
+    equals nameFullLocal. Despite the field name it is not always Latin script.'
+  organization_id: 'DataCore organisation id: b1e0z (EASL).'
+  primary_color: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (String).'
+  secondary_color: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (String).'
+  standard: 'Competition standard: ELITE.'
+  status: ACTIVE for teams in the current season (the only ones /teams lists), INACTIVE
+    for historical teams (only via /teams/{teamId}).
+  team_id: 'teamId: DataCore team (entity) UUID v1 (key space: EASL teams, the same
+    id as `entityId`; joins /teams, /standings team.id, fixture competitors, box and
+    play-by-play teams). Not a player id.'
+  team_row_id: The sync server's own integer row id of the team (not a DataCore id;
+    inactive teams interleave, so ids of /teams rows have gaps).
+  tertiary_color: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (String).'
+  twitter_username: Club X / Twitter handle; most clubs have none.
+  updated_at: When the sync server last synced the row, ISO 8601 with milliseconds
+    and Z (UTC).
+  website: Club website URL; most clubs have none.
+  wikipedia_url: Club Wikipedia URL (DataCore column); empty for every ACTIVE team.
+easl_team_box:
+  assists: 'Assists: passes that directly lead to a made field goal. Team total for
+    the game.'
+  assists_against: 'Opponent''s figure in the same games: assists: passes that directly
+    lead to a made field goal. Team total for the game. Absent on some rows.'
+  assists_defensive: Defensive assists (DataCore column; meaning unverified). Team
+    total for the game.
+  assists_turnover_ratio: Assists divided by turnovers (a ratio, not a percentage).
+    Team total for the game.
+  biggest_lead: Largest lead the team held during the game, in points. A season total
+    sums the per-game maxima. Team total for the game.
+  biggest_scoring_run: Longest unanswered scoring run of the team, in points. A season
+    total sums the per-game maxima. Team total for the game.
+  blocks: Shots blocked (made by this player or team). Team total for the game.
+  blocks_received: The team's or player's own shots that were blocked by an opponent.
+    Team total for the game.
+  dunks: Dunks made. Team total for the game.
+  efficiency: 'NBA-style efficiency: points + rebounds + assists + steals + blocks
+    - missed field goals - missed free throws - turnovers (verified on all 2,143 played
+    player-games). Team total for the game.'
+  efficiency_custom: Custom efficiency slot (DataCore column; meaning unverified).
+    Team total for the game.
+  field_goals_attempted: Field goals attempted (2- and 3-point shots; free throws
+    excluded). Team total for the game.
+  field_goals_attempted_against: 'Opponent''s figure in the same games: field goals
+    attempted (2- and 3-point shots; free throws excluded). Team total for the game.
+    Absent on some rows.'
+  field_goals_effective_percentage: 'Effective field-goal percentage on a 0-100 scale:
+    (FGM + 0.5 x 3PM) / FGA x 100; can exceed 100 on small samples. Team total for
+    the game.'
+  field_goals_made: Field goals made (2- and 3-point shots). Team total for the game.
+  field_goals_made_against: 'Opponent''s figure in the same games: field goals made
+    (2- and 3-point shots). Team total for the game. Absent on some rows.'
+  field_goals_percentage: Field-goal percentage on a 0-100 scale (made / attempted
+    x 100). Team total for the game.
+  field_goals_percentage_against: 'Opponent''s figure in the same games: field-goal
+    percentage on a 0-100 scale (made / attempted x 100). Team total for the game.
+    Absent on some rows.'
+  fixture_id: 'fixtureId: DataCore fixture (game) UUID v1 (key space: EASL games;
+    the {fixtureId} of every /matches route).'
+  fouls_bench_technical: Technical fouls called on the bench (not a player). Team
+    total for the game.
+  fouls_coach_disqualifying: Disqualifying fouls on the coach. Team total for the
+    game.
+  fouls_coach_technical: Technical fouls on the coach. Team total for the game.
+  fouls_disqualifying: Disqualifying fouls. Team total for the game.
+  fouls_disruptive: Disruptive fouls (DataCore column; filled from 2026-27). Team
+    total for the game. Absent on some rows.
+  fouls_drawn: Fouls drawn (committed against this player or team by an opponent).
+    Team total for the game.
+  fouls_flagrant: Flagrant fouls (DataCore column; filled from 2026-27). Team total
+    for the game. Absent on some rows.
+  fouls_offensive: Offensive fouls committed. Counted separately from foulsPersonal.
+    Team total for the game.
+  fouls_personal: Personal fouls committed (offensive, technical and unsportsmanlike
+    fouls are separate columns). Team total for the game.
+  fouls_personal_against: 'Opponent''s figure in the same games: personal fouls committed
+    (offensive, technical and unsportsmanlike fouls are separate columns). Team total
+    for the game. Absent on some rows.'
+  fouls_technical: Technical fouls committed by the player or team. Team total for
+    the game.
+  fouls_technical_against: 'Opponent''s figure in the same games: technical fouls
+    committed by the player or team. Team total for the game. Absent on some rows.'
+  fouls_technical_cat1: Technical fouls of category 1 (DataCore column; filled from
+    2026-27). Team total for the game. Absent on some rows.
+  fouls_technical_cat2: Technical fouls of category 2 (DataCore column; filled from
+    2026-27). Team total for the game. Absent on some rows.
+  fouls_total: 'Fouls charged in total: personal + technical + unsportsmanlike + offensive
+    (matches 2,142 of 2,143 played player-games; the exception is unexplained). Team
+    total for the game.'
+  fouls_unsportsmanlike: Unsportsmanlike fouls committed. Team total for the game.
+  free_throws_attempted: Free throws attempted. Team total for the game.
+  free_throws_attempted_against: 'Opponent''s figure in the same games: free throws
+    attempted. Team total for the game. Absent on some rows.'
+  free_throws_made: Free throws made. Team total for the game.
+  free_throws_made_against: 'Opponent''s figure in the same games: free throws made.
+    Team total for the game. Absent on some rows.'
+  free_throws_percentage: Free-throw percentage on a 0-100 scale. Team total for the
+    game.
+  free_throws_percentage_against: 'Opponent''s figure in the same games: free-throw
+    percentage on a 0-100 scale. Team total for the game. Absent on some rows.'
+  index_of_success: 'Index of success: efficiency + fouls drawn - personal fouls -
+    technical fouls - blocks received (verified on all 2,143 played player-games).
+    It differs from pir only in which fouls it subtracts. Team total for the game.'
+  lead_changes: Times the lead changed hands during the game (a season total sums
+    the games). Team total for the game.
+  minutes: Playing time as an ISO 8601 duration PT{m}M{s}S with the minutes NOT wrapped
+    at 60 (PT27M53S; a team's is the sum of its players', PT200M for a 40-minute game,
+    PT250M with one overtime). Team total for the game.
+  pir: 'Performance index rating: efficiency + fouls drawn - total fouls - blocks
+    received (verified on all 2,143 played player-games). Team total for the game.'
+  points: Points scored. Team total for the game.
+  points_against: 'Opponent''s figure in the same games: points scored. Team total
+    for the game.'
+  points_fast_break: Points scored on fast breaks. Team total for the game.
+  points_fast_break_against: 'Opponent''s figure in the same games: points scored
+    on fast breaks. Team total for the game. Absent on some rows.'
+  points_fast_break_attempted: Fast-break field goals attempted. Team total for the
+    game.
+  points_fast_break_made: Fast-break field goals made. Team total for the game.
+  points_four_attempted: 4-point shots attempted (DataCore column; EASL has no 4-point
+    line; filled from 2026-27). Team total for the game. Absent on some rows.
+  points_four_attempted_against: 'Opponent''s figure in the same games: 4-point shots
+    attempted (DataCore column; EASL has no 4-point line; filled from 2026-27). Team
+    total for the game. Absent on some rows.'
+  points_four_made: 4-point shots made (see pointsFourAttempted). Team total for the
+    game. Absent on some rows.
+  points_four_made_against: 'Opponent''s figure in the same games: 4-point shots made
+    (see pointsFourAttempted). Team total for the game. Absent on some rows.'
+  points_from_bench: Points scored by players who did not start (a team figure). Team
+    total for the game.
+  points_from_bench_against: 'Opponent''s figure in the same games: points scored
+    by players who did not start (a team figure). Team total for the game. Absent
+    on some rows.'
+  points_from_turnover: Points scored off opponent turnovers. Team total for the game.
+  points_from_turnover_against: 'Opponent''s figure in the same games: points scored
+    off opponent turnovers. Team total for the game. Absent on some rows.'
+  points_in_the_paint: Points scored in the paint. Team total for the game.
+  points_in_the_paint_against: 'Opponent''s figure in the same games: points scored
+    in the paint. Team total for the game. Absent on some rows.'
+  points_in_the_paint_attempted: Field goals attempted in the paint. Team total for
+    the game.
+  points_in_the_paint_made: Field goals made in the paint. Team total for the game.
+  points_second_chance: Points scored on second-chance possessions (after an offensive
+    rebound). Team total for the game.
+  points_second_chance_against: 'Opponent''s figure in the same games: points scored
+    on second-chance possessions (after an offensive rebound). Team total for the
+    game. Absent on some rows.'
+  points_second_chance_attempted: Second-chance field goals attempted. Team total
+    for the game.
+  points_second_chance_made: Second-chance field goals made. Team total for the game.
+  points_three_attempted: 3-point field goals attempted. Team total for the game.
+  points_three_attempted_against: 'Opponent''s figure in the same games: 3-point field
+    goals attempted. Team total for the game. Absent on some rows.'
+  points_three_made: 3-point field goals made. Team total for the game.
+  points_three_made_against: 'Opponent''s figure in the same games: 3-point field
+    goals made. Team total for the game. Absent on some rows.'
+  points_three_percentage: 3-point percentage on a 0-100 scale. Team total for the
+    game.
+  points_three_percentage_against: 'Opponent''s figure in the same games: 3-point
+    percentage on a 0-100 scale. Team total for the game. Absent on some rows.'
+  points_two_attempted: 2-point field goals attempted. Team total for the game.
+  points_two_attempted_against: 'Opponent''s figure in the same games: 2-point field
+    goals attempted. Team total for the game. Absent on some rows.'
+  points_two_made: 2-point field goals made. Team total for the game.
+  points_two_made_against: 'Opponent''s figure in the same games: 2-point field goals
+    made. Team total for the game. Absent on some rows.'
+  points_two_percentage: 2-point percentage on a 0-100 scale. Team total for the game.
+  points_two_percentage_against: 'Opponent''s figure in the same games: 2-point percentage
+    on a 0-100 scale. Team total for the game. Absent on some rows.'
+  power_play_points: Power-play points (an ice-hockey column; meaning in basketball
+    unverified). Team total for the game.
+  power_play_points_awarded: Power-play points awarded (an ice-hockey column; meaning
+    in basketball unverified). Team total for the game.
+  rebounds: 'Total rebounds: offensive + defensive. Team''s totals include team rebounds.
+    Team total for the game.'
+  rebounds_against: 'Opponent''s figure in the same games: total rebounds: offensive
+    + defensive. Team''s totals include team rebounds. Team total for the game. Absent
+    on some rows.'
+  rebounds_defensive: Defensive rebounds. Team total for the game.
+  rebounds_defensive_against: 'Opponent''s figure in the same games: defensive rebounds.
+    Team total for the game. Absent on some rows.'
+  rebounds_offensive: Offensive rebounds. Team total for the game.
+  rebounds_offensive_against: 'Opponent''s figure in the same games: offensive rebounds.
+    Team total for the game. Absent on some rows.'
+  rebounds_team_defensive: Defensive rebounds credited to the team as a whole (not
+    to a player). Team total for the game.
+  rebounds_team_defensive_against: 'Opponent''s figure in the same games: defensive
+    rebounds credited to the team as a whole (not to a player). Team total for the
+    game. Absent on some rows.'
+  rebounds_team_offensive: Offensive rebounds credited to the team as a whole. Team
+    total for the game.
+  rebounds_team_offensive_against: 'Opponent''s figure in the same games: offensive
+    rebounds credited to the team as a whole. Team total for the game. Absent on some
+    rows.'
+  rebounds_team_total: Team rebounds credited to the team as a whole (offensive +
+    defensive). Team total for the game.
+  rebounds_team_total_against: 'Opponent''s figure in the same games: team rebounds
+    credited to the team as a whole (offensive + defensive). Team total for the game.
+    Absent on some rows.'
+  steals: Steals. Team total for the game.
+  steals_against: 'Opponent''s figure in the same games: steals. Team total for the
+    game. Absent on some rows.'
+  team_id: DataCore team (entity) UUID v1 (the wire's entityId).
+  team_name: Display name. Despite the field name this is the English / Latin-script
+    name used on the league site.
+  team_name_native: 'Alternative name: the native-script name of some Japanese clubs
+    (for example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players
+    it usually equals nameFullLocal. Despite the field name it is not always Latin
+    script. Null on some rows.'
+  time_in_lead: Time the team led, as an ISO 8601 duration PT{m}M{s}S (unwrapped minutes).
+    Team total for the game.
+  timeouts_used: Timeouts taken by the team (present from 2025-26). Team total for
+    the game. Absent on some rows.
+  times_score_level: Times the score was tied during the game. Team total for the
+    game.
+  turnovers: Turnovers committed by players. Team total for the game.
+  turnovers_against: 'Opponent''s figure in the same games: turnovers committed by
+    players. Team total for the game. Absent on some rows.'
+  turnovers_team: Team turnovers not charged to a player (shot-clock and similar violations).
+    Team total for the game.
+  turnovers_team_against: 'Opponent''s figure in the same games: team turnovers not
+    charged to a player (shot-clock and similar violations). Team total for the game.
+    Absent on some rows.'
+easl_team_box_by_period:
+  assists: 'Assists: passes that directly lead to a made field goal. Team total for
+    the period.'
+  assists_against: 'Opponent''s figure in the same games: assists: passes that directly
+    lead to a made field goal. Team total for the period. Absent on some rows.'
+  assists_defensive: Defensive assists (DataCore column; meaning unverified). Team
+    total for the period.
+  assists_turnover_ratio: Assists divided by turnovers (a ratio, not a percentage).
+    Team total for the period. Absent on some rows.
+  biggest_lead: Largest lead the team held during the game, in points. A season total
+    sums the per-game maxima. Team total for the period.
+  biggest_scoring_run: Longest unanswered scoring run of the team, in points. A season
+    total sums the per-game maxima. Team total for the period.
+  blocks: Shots blocked (made by this player or team). Team total for the period.
+  blocks_received: The team's or player's own shots that were blocked by an opponent.
+    Team total for the period.
+  dunks: Dunks made. Team total for the period.
+  efficiency: 'NBA-style efficiency: points + rebounds + assists + steals + blocks
+    - missed field goals - missed free throws - turnovers (verified on all 2,143 played
+    player-games). Team total for the period.'
+  efficiency_custom: Custom efficiency slot (DataCore column; meaning unverified).
+    Team total for the period.
+  field_goals_attempted: Field goals attempted (2- and 3-point shots; free throws
+    excluded). Team total for the period.
+  field_goals_attempted_against: 'Opponent''s figure in the same games: field goals
+    attempted (2- and 3-point shots; free throws excluded). Team total for the period.
+    Absent on some rows.'
+  field_goals_effective_percentage: 'Effective field-goal percentage on a 0-100 scale:
+    (FGM + 0.5 x 3PM) / FGA x 100; can exceed 100 on small samples. Team total for
+    the period.'
+  field_goals_made: Field goals made (2- and 3-point shots). Team total for the period.
+  field_goals_made_against: 'Opponent''s figure in the same games: field goals made
+    (2- and 3-point shots). Team total for the period. Absent on some rows.'
+  field_goals_percentage: Field-goal percentage on a 0-100 scale (made / attempted
+    x 100). Team total for the period.
+  field_goals_percentage_against: 'Opponent''s figure in the same games: field-goal
+    percentage on a 0-100 scale (made / attempted x 100). Team total for the period.
+    Absent on some rows.'
+  fixture_id: DataCore fixture (game) UUID v1 from the request.
+  fouls_bench_technical: Technical fouls called on the bench (not a player). Team
+    total for the period.
+  fouls_coach_disqualifying: Disqualifying fouls on the coach. Team total for the
+    period.
+  fouls_coach_technical: Technical fouls on the coach. Team total for the period.
+  fouls_disqualifying: Disqualifying fouls. Team total for the period.
+  fouls_disruptive: Disruptive fouls (DataCore column; filled from 2026-27). Team
+    total for the period. Absent on some rows.
+  fouls_drawn: Fouls drawn (committed against this player or team by an opponent).
+    Team total for the period.
+  fouls_flagrant: Flagrant fouls (DataCore column; filled from 2026-27). Team total
+    for the period. Absent on some rows.
+  fouls_offensive: Offensive fouls committed. Counted separately from foulsPersonal.
+    Team total for the period.
+  fouls_personal: Personal fouls committed (offensive, technical and unsportsmanlike
+    fouls are separate columns). Team total for the period.
+  fouls_personal_against: 'Opponent''s figure in the same games: personal fouls committed
+    (offensive, technical and unsportsmanlike fouls are separate columns). Team total
+    for the period. Absent on some rows.'
+  fouls_technical: Technical fouls committed by the player or team. Team total for
+    the period.
+  fouls_technical_against: 'Opponent''s figure in the same games: technical fouls
+    committed by the player or team. Team total for the period. Absent on some rows.'
+  fouls_technical_cat1: Technical fouls of category 1 (DataCore column; filled from
+    2026-27). Team total for the period. Absent on some rows.
+  fouls_technical_cat2: Technical fouls of category 2 (DataCore column; filled from
+    2026-27). Team total for the period. Absent on some rows.
+  fouls_total: 'Fouls charged in total: personal + technical + unsportsmanlike + offensive
+    (matches 2,142 of 2,143 played player-games; the exception is unexplained). Team
+    total for the period.'
+  fouls_unsportsmanlike: Unsportsmanlike fouls committed. Team total for the period.
+  free_throws_attempted: Free throws attempted. Team total for the period.
+  free_throws_attempted_against: 'Opponent''s figure in the same games: free throws
+    attempted. Team total for the period. Absent on some rows.'
+  free_throws_made: Free throws made. Team total for the period.
+  free_throws_made_against: 'Opponent''s figure in the same games: free throws made.
+    Team total for the period. Absent on some rows.'
+  free_throws_percentage: Free-throw percentage on a 0-100 scale. Team total for the
+    period. Absent on some rows.
+  free_throws_percentage_against: 'Opponent''s figure in the same games: free-throw
+    percentage on a 0-100 scale. Team total for the period. Absent on some rows.'
+  index_of_success: 'Index of success: efficiency + fouls drawn - personal fouls -
+    technical fouls - blocks received (verified on all 2,143 played player-games).
+    It differs from pir only in which fouls it subtracts. Team total for the period.'
+  lead_changes: Times the lead changed hands during the game (a season total sums
+    the games). Team total for the period.
+  minutes: Playing time as an ISO 8601 duration PT{m}M{s}S with the minutes NOT wrapped
+    at 60 (PT27M53S; a team's is the sum of its players', PT200M for a 40-minute game,
+    PT250M with one overtime). Team total for the period.
+  period: 'Period number: 1-4 for regulation, overtimes after (the wire''s period_{n}
+    key).'
+  period_label: Q1-Q4 for periods 1-4; OT1, OT2 ... for overtimes (the server numbers
+    the first overtime 11 in team totals; periods 5-10 are read as OT{n-4}, unverified).
+  pir: 'Performance index rating: efficiency + fouls drawn - total fouls - blocks
+    received (verified on all 2,143 played player-games). Team total for the period.'
+  points: Points scored. Team total for the period.
+  points_against: 'Opponent''s figure in the same games: points scored. Team total
+    for the period.'
+  points_fast_break: Points scored on fast breaks. Team total for the period.
+  points_fast_break_against: 'Opponent''s figure in the same games: points scored
+    on fast breaks. Team total for the period. Absent on some rows.'
+  points_fast_break_attempted: Fast-break field goals attempted. Team total for the
+    period.
+  points_fast_break_made: Fast-break field goals made. Team total for the period.
+  points_four_attempted: 4-point shots attempted (DataCore column; EASL has no 4-point
+    line; filled from 2026-27). Team total for the period. Absent on some rows.
+  points_four_attempted_against: 'Opponent''s figure in the same games: 4-point shots
+    attempted (DataCore column; EASL has no 4-point line; filled from 2026-27). Team
+    total for the period. Absent on some rows.'
+  points_four_made: 4-point shots made (see pointsFourAttempted). Team total for the
+    period. Absent on some rows.
+  points_four_made_against: 'Opponent''s figure in the same games: 4-point shots made
+    (see pointsFourAttempted). Team total for the period. Absent on some rows.'
+  points_from_bench: Points scored by players who did not start (a team figure). Team
+    total for the period.
+  points_from_bench_against: 'Opponent''s figure in the same games: points scored
+    by players who did not start (a team figure). Team total for the period. Absent
+    on some rows.'
+  points_from_turnover: Points scored off opponent turnovers. Team total for the period.
+  points_from_turnover_against: 'Opponent''s figure in the same games: points scored
+    off opponent turnovers. Team total for the period. Absent on some rows.'
+  points_in_the_paint: Points scored in the paint. Team total for the period.
+  points_in_the_paint_against: 'Opponent''s figure in the same games: points scored
+    in the paint. Team total for the period. Absent on some rows.'
+  points_in_the_paint_attempted: Field goals attempted in the paint. Team total for
+    the period.
+  points_in_the_paint_made: Field goals made in the paint. Team total for the period.
+  points_second_chance: Points scored on second-chance possessions (after an offensive
+    rebound). Team total for the period.
+  points_second_chance_against: 'Opponent''s figure in the same games: points scored
+    on second-chance possessions (after an offensive rebound). Team total for the
+    period. Absent on some rows.'
+  points_second_chance_attempted: Second-chance field goals attempted. Team total
+    for the period.
+  points_second_chance_made: Second-chance field goals made. Team total for the period.
+  points_three_attempted: 3-point field goals attempted. Team total for the period.
+  points_three_attempted_against: 'Opponent''s figure in the same games: 3-point field
+    goals attempted. Team total for the period. Absent on some rows.'
+  points_three_made: 3-point field goals made. Team total for the period.
+  points_three_made_against: 'Opponent''s figure in the same games: 3-point field
+    goals made. Team total for the period. Absent on some rows.'
+  points_three_percentage: 3-point percentage on a 0-100 scale. Team total for the
+    period.
+  points_three_percentage_against: 'Opponent''s figure in the same games: 3-point
+    percentage on a 0-100 scale. Team total for the period. Absent on some rows.'
+  points_two_attempted: 2-point field goals attempted. Team total for the period.
+  points_two_attempted_against: 'Opponent''s figure in the same games: 2-point field
+    goals attempted. Team total for the period. Absent on some rows.'
+  points_two_made: 2-point field goals made. Team total for the period.
+  points_two_made_against: 'Opponent''s figure in the same games: 2-point field goals
+    made. Team total for the period. Absent on some rows.'
+  points_two_percentage: 2-point percentage on a 0-100 scale. Team total for the period.
+  points_two_percentage_against: 'Opponent''s figure in the same games: 2-point percentage
+    on a 0-100 scale. Team total for the period. Absent on some rows.'
+  power_play_points: Power-play points (an ice-hockey column; meaning in basketball
+    unverified). Team total for the period.
+  power_play_points_awarded: Power-play points awarded (an ice-hockey column; meaning
+    in basketball unverified). Team total for the period.
+  rebounds: 'Total rebounds: offensive + defensive. Team''s totals include team rebounds.
+    Team total for the period.'
+  rebounds_against: 'Opponent''s figure in the same games: total rebounds: offensive
+    + defensive. Team''s totals include team rebounds. Team total for the period.
+    Absent on some rows.'
+  rebounds_defensive: Defensive rebounds. Team total for the period.
+  rebounds_defensive_against: 'Opponent''s figure in the same games: defensive rebounds.
+    Team total for the period. Absent on some rows.'
+  rebounds_offensive: Offensive rebounds. Team total for the period.
+  rebounds_offensive_against: 'Opponent''s figure in the same games: offensive rebounds.
+    Team total for the period. Absent on some rows.'
+  rebounds_team_defensive: Defensive rebounds credited to the team as a whole (not
+    to a player). Team total for the period.
+  rebounds_team_defensive_against: 'Opponent''s figure in the same games: defensive
+    rebounds credited to the team as a whole (not to a player). Team total for the
+    period. Absent on some rows.'
+  rebounds_team_offensive: Offensive rebounds credited to the team as a whole. Team
+    total for the period.
+  rebounds_team_offensive_against: 'Opponent''s figure in the same games: offensive
+    rebounds credited to the team as a whole. Team total for the period. Absent on
+    some rows.'
+  rebounds_team_total: Team rebounds credited to the team as a whole (offensive +
+    defensive). Team total for the period.
+  rebounds_team_total_against: 'Opponent''s figure in the same games: team rebounds
+    credited to the team as a whole (offensive + defensive). Team total for the period.
+    Absent on some rows.'
+  steals: Steals. Team total for the period.
+  steals_against: 'Opponent''s figure in the same games: steals. Team total for the
+    period. Absent on some rows.'
+  team_id: DataCore team UUID v1 (the wire's team.teamId).
+  team_name: Team display name (English / Latin script, the wire's nameFullLocal).
+  team_name_native: Team name in native script (the wire's nameFullLatin; blank for
+    most clubs).
+  time_in_lead: Time the team led, as an ISO 8601 duration PT{m}M{s}S (unwrapped minutes).
+    Team total for the period.
+  timeouts_used: Timeouts taken by the team (present from 2025-26). Team total for
+    the period. Absent on some rows.
+  times_score_level: Times the score was tied during the game. Team total for the
+    period.
+  turnovers: Turnovers committed by players. Team total for the period.
+  turnovers_against: 'Opponent''s figure in the same games: turnovers committed by
+    players. Team total for the period. Absent on some rows.'
+  turnovers_team: Team turnovers not charged to a player (shot-clock and similar violations).
+    Team total for the period.
+  turnovers_team_against: 'Opponent''s figure in the same games: team turnovers not
+    charged to a player (shot-clock and similar violations). Team total for the period.
+    Absent on some rows.'
+easl_team_leaders:
+  category: 'Leader category, the wire key of the group: pointsPerGame, reboundsPerGame,
+    assistsPerGame, stealsPerGame, blocksPerGame, pointsThreeMade, pointsThreePercentage,
+    fieldGoalsPercentage or freeThrowsPercentage.'
+  jersey_number: Jersey number as a string ('00', '0' and '75' are distinct).
+  player_id: 'playerId: DataCore person UUID v1 (key space: EASL persons, the same
+    id as the box score''s `personId`; joins /players, leaders and play-by-play players).
+    Not a team id.'
+  player_name: Player display name in 'FAMILY Given' form with the family name upper-cased
+    (OSAKABE Taiki), in Latin script.
+  player_name_latin: 'Alternative name: equal to nameFullLocal for 257 of 552 players,
+    otherwise null; never non-Latin in the observed data.'
+  player_status: 'Registration state of the player in the database: ACTIVE, INACTIVE
+    or UNREGISTERED.'
+  position: 'Playing position: G, F, C, PG, SG, SF, PF or GF (guard-forward).'
+  rank: Rank inside the category, 1 = best, in the delivered order (the server lists
+    the top 5).
+  season: 'Season END year (2026 = EASL 25-26): stamped by easl_runtime from the request,
+    null when the body is parsed bare.'
+  season_id: DataCore season UUID v1 of the leader row.
+  team_code_latin: Three-letter club code (for example BRE); null or empty for some
+    clubs.
+  team_code_local: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (String).'
+  team_id: 'teamId: DataCore team (entity) UUID v1 (key space: EASL teams, the same
+    id as `entityId`; joins /teams, /standings team.id, fixture competitors, box and
+    play-by-play teams). Not a player id.'
+  team_name: Display name. Despite the field name this is the English / Latin-script
+    name used on the league site.
+  team_name_native: 'Alternative name: the native-script name of some Japanese clubs
+    (for example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players
+    it usually equals nameFullLocal. Despite the field name it is not always Latin
+    script.'
+  value: 'The leader''s value in the category: a per-game average, a count (pointsThreeMade)
+    or a percentage (0-100). Float64.'
+easl_team_schedule:
+  attendance: Announced attendance of the game; null when not recorded.
+  away_code_latin: 'Away team: three-letter club code (for example BRE); null or empty
+    for some clubs.'
+  away_code_local: 'Away team: alternative three-letter club code (for example TPP);
+    null for most clubs. A club may have only one of codeLatin / codeLocal.'
+  away_draw: 'Away team: true when the game has no winner YET or ever: true on every
+    unplayed competitor, false on every finished one (a tie has never happened).'
+  away_name: 'Away team: display name. Despite the field name this is the English
+    / Latin-script name used on the league site.'
+  away_name_native: 'Away team: alternative name: the native-script name of some Japanese
+    clubs (for example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players
+    it usually equals nameFullLocal. Despite the field name it is not always Latin
+    script. Null on some rows.'
+  away_result_place: 'Away team: result place: 1 = winner, 2 = loser. The /matches
+    list holds null here for fixtures not yet played; /matches/{fixtureId} is sampled
+    for finished games only.'
+  away_score: Away team final points (the wire sends a numeric string; cast to Int64);
+    null before the game is played.
+  away_team_id: 'Away team: teamId: DataCore team (entity) UUID v1 (key space: EASL
+    teams, the same id as `entityId`; joins /teams, /standings team.id, fixture competitors,
+    box and play-by-play teams). Not a player id.'
+  fixture_id: 'fixtureId: DataCore fixture (game) UUID v1 (key space: EASL games;
+    the {fixtureId} of every /matches route).'
+  fixture_name: Fixture name for special games ('EASL Championship', 'Semifinals 2',
+    'EASL Tip-Off 2026 Cebu'); null for ordinary group games.
+  fixture_number: 'Fixture number YYSSNNN: two-digit start year, two-digit end year,
+    three-digit sequence (2627001 = first game of 2026-27, 2526003 = third of 2025-26).
+    Null on every 2023-24 fixture.'
+  fixture_type: REGULAR (group stage), PLAYOFF (quarter- and semifinals) or FINAL
+    (championship and third-place games). Missing from the DRAFT placeholders.
+  home_code_latin: 'Home team: three-letter club code (for example BRE); null or empty
+    for some clubs.'
+  home_code_local: 'Home team: alternative three-letter club code (for example TPP);
+    null for most clubs. A club may have only one of codeLatin / codeLocal.'
+  home_draw: 'Home team: true when the game has no winner YET or ever: true on every
+    unplayed competitor, false on every finished one (a tie has never happened).'
+  home_name: 'Home team: display name. Despite the field name this is the English
+    / Latin-script name used on the league site.'
+  home_name_native: 'Home team: alternative name: the native-script name of some Japanese
+    clubs (for example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players
+    it usually equals nameFullLocal. Despite the field name it is not always Latin
+    script. Null on some rows.'
+  home_result_place: 'Home team: result place: 1 = winner, 2 = loser. The /matches
+    list holds null here for fixtures not yet played; /matches/{fixtureId} is sampled
+    for finished games only.'
+  home_score: Home team final points (the wire sends a numeric string; cast to Int64);
+    null before the game is played.
+  home_team_id: 'Home team: teamId: DataCore team (entity) UUID v1 (key space: EASL
+    teams, the same id as `entityId`; joins /teams, /standings team.id, fixture competitors,
+    box and play-by-play teams). Not a player id.'
+  live_data_available: Whether live stats were collected for the game (present on
+    a minority of fixtures; meaning unverified). Absent on some rows.
+  live_video_available: Whether live video was available (false on all 146 fixtures
+    of the four seasons).
+  pool_abb: Pool abbreviation (A, B, C). Playoff and DRAFT fixtures of the /matches
+    list carry the placeholder pool, whose abb is empty or 'N/A'.
+  pool_code: 'Pool (group) id: a 30-character hex string, equal to pool.id; null on
+    playoff and DRAFT fixtures.'
+  pool_id: 'Pool id: a 30-character hex string; null for playoff games (''Unknown
+    Pool'').'
+  pool_name: 'Pool name: ''Group A'', ''Group B'', ''Group C'' or the placeholder
+    ''Unknown Pool''.'
+  season: 'Season END year (2026 = EASL 25-26): stamped by easl_runtime from the request.'
+  season_id: 'Season UUID: the rows carry no seasonId (the season sits in the first
+    half of stage_id), so this is the request''s.'
+  stage_code: 'Stage id: a 30-character hex string. Absent on some rows.'
+  stage_id: 'Stage reference on /teams/{teamId}/matches rows only: ''<seasonId UUID>:<stage
+    code>'' (the season and stage the game belongs to; replaces the nameLocal / stageCode
+    / stageOrder trio of /matches rows).'
+  stage_name: 'Stage name: ''Group Stage'', ''Final Four'' or ''EASL Playoffs''. Absent
+    on some rows.'
+  stage_order: Ordinal of the stage within the season (1 = Group Stage, 2 = EASL Playoffs).
+    Absent on some rows.
+  start_time_local: Scheduled tip-off in the venue's local time, 'YYYY-MM-DDTHH:MM:SS'
+    with no zone (19:10 local = 10:10 UTC in Tokyo). DRAFT fixtures carry a date at
+    00:00:00.
+  start_time_utc: Scheduled tip-off in UTC, 'YYYY-MM-DDTHH:MM:SS' with no zone marker.
+    The /matches list holds null here on DRAFT fixtures; the single-fixture sample
+    is a finished game.
+  status: CONFIRMED = finished with a final box score; SCHEDULED = future; DRAFT =
+    a placeholder with no teams or time.
+  venue_abbreviation_latin: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (String).'
+  venue_abbreviation_local: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (String).'
+  venue_alternate_name_latin: 'Not yet populated upstream: null in every full body
+    observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies start
+    filling some of these columns, so it is typed from its family (String).'
+  venue_city: City of the arena. Absent on some rows.
+  venue_country_code: 'ISO 3166-1 alpha-3 country code of the arena: JPN, TWN, PHL,
+    KOR, MAC, HKG, MNG, CHN. The /matches list holds null here on DRAFT fixtures (empty
+    venue).'
+  venue_name: Arena name. Absent on some rows.
+  venue_name_latin: Venue name in Latin script; null on most rows.
+  venue_state: State or province of the arena (Philippine games, for example Cebu).
+    Absent on some rows.
+easl_team_stats:
+  assists: 'Assists: passes that directly lead to a made field goal. Season total
+    of the team''s finished games.'
+  assists_against: 'Opponent''s figure in the same games: assists: passes that directly
+    lead to a made field goal. Season total of the team''s finished games.'
+  assists_against_per_game: 'Opponent''s figure in the same games: assists: passes
+    that directly lead to a made field goal. Per-game average: the total divided by
+    `games`.'
+  assists_defensive: Defensive assists (DataCore column; meaning unverified). Season
+    total of the team's finished games.
+  assists_per_game: 'Assists: passes that directly lead to a made field goal. Per-game
+    average: the total divided by `games`.'
+  assists_turnover_ratio: Assists divided by turnovers (a ratio, not a percentage).
+    Season total of the team's finished games.
+  biggest_lead: Largest lead the team held during the game, in points. A season total
+    sums the per-game maxima. Season total of the team's finished games.
+  biggest_scoring_run: Longest unanswered scoring run of the team, in points. A season
+    total sums the per-game maxima. Season total of the team's finished games.
+  blocks: Shots blocked (made by this player or team). Season total of the team's
+    finished games.
+  blocks_per_game: 'Shots blocked (made by this player or team). Per-game average:
+    the total divided by `games`.'
+  blocks_received: The team's or player's own shots that were blocked by an opponent.
+    Season total of the team's finished games.
+  blocks_received_per_game: 'The team''s or player''s own shots that were blocked
+    by an opponent. Per-game average: the total divided by `games`.'
+  draws: Drawn games (basketball has none). Season total of the team's finished games.
+  dunks: Dunks made. Season total of the team's finished games.
+  dunks_per_game: 'Dunks made. Per-game average: the total divided by `games`.'
+  efficiency: 'NBA-style efficiency: points + rebounds + assists + steals + blocks
+    - missed field goals - missed free throws - turnovers (verified on all 2,143 played
+    player-games). Season total of the team''s finished games.'
+  efficiency_custom: Custom efficiency slot (DataCore column; meaning unverified).
+    Season total of the team's finished games.
+  field_goals_against_percentage: Field-goal percentage allowed to opponents over
+    the season (0-100 scale). Season total of the team's finished games.
+  field_goals_attempted: Field goals attempted (2- and 3-point shots; free throws
+    excluded). Season total of the team's finished games.
+  field_goals_attempted_against: 'Opponent''s figure in the same games: field goals
+    attempted (2- and 3-point shots; free throws excluded). Season total of the team''s
+    finished games.'
+  field_goals_attempted_against_per_game: 'Opponent''s figure in the same games: field
+    goals attempted (2- and 3-point shots; free throws excluded). Per-game average:
+    the total divided by `games`.'
+  field_goals_effective_percentage: 'Effective field-goal percentage on a 0-100 scale:
+    (FGM + 0.5 x 3PM) / FGA x 100; can exceed 100 on small samples. Season total of
+    the team''s finished games.'
+  field_goals_made: Field goals made (2- and 3-point shots). Season total of the team's
+    finished games.
+  field_goals_made_against: 'Opponent''s figure in the same games: field goals made
+    (2- and 3-point shots). Season total of the team''s finished games.'
+  field_goals_made_against_per_game: 'Opponent''s figure in the same games: field
+    goals made (2- and 3-point shots). Per-game average: the total divided by `games`.'
+  field_goals_percentage: Field-goal percentage on a 0-100 scale (made / attempted
+    x 100). Season total of the team's finished games.
+  fouls_bench_technical: Technical fouls called on the bench (not a player). Season
+    total of the team's finished games.
+  fouls_coach_disqualifying: Disqualifying fouls on the coach. Season total of the
+    team's finished games.
+  fouls_coach_technical: Technical fouls on the coach. Season total of the team's
+    finished games.
+  fouls_disqualifying: Disqualifying fouls. Season total of the team's finished games.
+  fouls_disruptive: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  fouls_drawn: Fouls drawn (committed against this player or team by an opponent).
+    Season total of the team's finished games.
+  fouls_drawn_per_game: 'Fouls drawn (committed against this player or team by an
+    opponent). Per-game average: the total divided by `games`.'
+  fouls_flagrant: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (Int64).'
+  fouls_offensive: Offensive fouls committed. Counted separately from foulsPersonal.
+    Season total of the team's finished games.
+  fouls_personal: Personal fouls committed (offensive, technical and unsportsmanlike
+    fouls are separate columns). Season total of the team's finished games.
+  fouls_personal_against: 'Opponent''s figure in the same games: personal fouls committed
+    (offensive, technical and unsportsmanlike fouls are separate columns). Season
+    total of the team''s finished games.'
+  fouls_personal_against_per_game: 'Opponent''s figure in the same games: personal
+    fouls committed (offensive, technical and unsportsmanlike fouls are separate columns).
+    Per-game average: the total divided by `games`.'
+  fouls_personal_per_game: 'Personal fouls committed (offensive, technical and unsportsmanlike
+    fouls are separate columns). Per-game average: the total divided by `games`.'
+  fouls_technical: Technical fouls committed by the player or team. Season total of
+    the team's finished games.
+  fouls_technical_against: 'Opponent''s figure in the same games: technical fouls
+    committed by the player or team. Season total of the team''s finished games.'
+  fouls_technical_against_per_game: 'Opponent''s figure in the same games: technical
+    fouls committed by the player or team. Per-game average: the total divided by
+    `games`.'
+  fouls_technical_cat1: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  fouls_technical_cat2: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  fouls_total: 'Fouls charged in total: personal + technical + unsportsmanlike + offensive
+    (matches 2,142 of 2,143 played player-games; the exception is unexplained). Season
+    total of the team''s finished games.'
+  fouls_unsportsmanlike: Unsportsmanlike fouls committed. Season total of the team's
+    finished games.
+  free_throws_against_percentage: Free-throw percentage allowed to opponents over
+    the season (0-100 scale). Season total of the team's finished games.
+  free_throws_attempted: Free throws attempted. Season total of the team's finished
+    games.
+  free_throws_attempted_against: 'Opponent''s figure in the same games: free throws
+    attempted. Season total of the team''s finished games.'
+  free_throws_attempted_against_per_game: 'Opponent''s figure in the same games: free
+    throws attempted. Per-game average: the total divided by `games`.'
+  free_throws_attempted_per_game: 'Free throws attempted. Per-game average: the total
+    divided by `games`.'
+  free_throws_made: Free throws made. Season total of the team's finished games.
+  free_throws_made_against: 'Opponent''s figure in the same games: free throws made.
+    Season total of the team''s finished games.'
+  free_throws_made_against_per_game: 'Opponent''s figure in the same games: free throws
+    made. Per-game average: the total divided by `games`.'
+  free_throws_made_per_game: 'Free throws made. Per-game average: the total divided
+    by `games`.'
+  free_throws_percentage: Free-throw percentage on a 0-100 scale. Season total of
+    the team's finished games.
+  games: Finished games counted in this line. Season total of the team's finished
+    games.
+  index_of_success: 'Index of success: efficiency + fouls drawn - personal fouls -
+    technical fouls - blocks received (verified on all 2,143 played player-games).
+    It differs from pir only in which fouls it subtracts. Season total of the team''s
+    finished games.'
+  losses: 'Games lost (for a player: by his team while he is in the line). Season
+    total of the team''s finished games.'
+  minutes: Playing time as an ISO 8601 duration PT{m}M{s}S with the minutes NOT wrapped
+    at 60 (PT27M53S; a team's is the sum of its players', PT200M for a 40-minute game,
+    PT250M with one overtime). Season total of the team's finished games.
+  offensive_rating: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  pir: 'Performance index rating: efficiency + fouls drawn - total fouls - blocks
+    received (verified on all 2,143 played player-games). Season total of the team''s
+    finished games.'
+  points: Points scored. Season total of the team's finished games.
+  points_against: 'Opponent''s figure in the same games: points scored. Season total
+    of the team''s finished games.'
+  points_against_per_game: 'Opponent''s figure in the same games: points scored. Per-game
+    average: the total divided by `games`.'
+  points_fast_break: Points scored on fast breaks. Season total of the team's finished
+    games.
+  points_fast_break_against: 'Opponent''s figure in the same games: points scored
+    on fast breaks. Season total of the team''s finished games.'
+  points_fast_break_against_per_game: 'Opponent''s figure in the same games: points
+    scored on fast breaks. Per-game average: the total divided by `games`.'
+  points_fast_break_attempted: Fast-break field goals attempted. Season total of the
+    team's finished games.
+  points_fast_break_made: Fast-break field goals made. Season total of the team's
+    finished games.
+  points_fast_break_per_game: 'Points scored on fast breaks. Per-game average: the
+    total divided by `games`.'
+  points_four_attempted: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  points_four_attempted_against: 'Not yet populated upstream: null in every full body
+    observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies start
+    filling some of these columns, so it is typed from its family (Int64).'
+  points_four_attempted_against_per_game: 'Not yet populated upstream: null in every
+    full body observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies
+    start filling some of these columns, so it is typed from its family (Float64).'
+  points_four_attempted_per_game: 'Not yet populated upstream: null in every full
+    body observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies start
+    filling some of these columns, so it is typed from its family (Float64).'
+  points_four_made: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  points_four_made_against: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Int64).'
+  points_four_made_against_per_game: 'Not yet populated upstream: null in every full
+    body observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies start
+    filling some of these columns, so it is typed from its family (Float64).'
+  points_four_made_per_game: 'Not yet populated upstream: null in every full body
+    observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies start
+    filling some of these columns, so it is typed from its family (Float64).'
+  points_four_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  points_four_percentage_against: 'Not yet populated upstream: null in every full
+    body observed (2026-10-12), so its meaning is unverified; the 2026-27 bodies start
+    filling some of these columns, so it is typed from its family (Int64).'
+  points_from_bench: Points scored by players who did not start (a team figure). Season
+    total of the team's finished games.
+  points_from_bench_against: 'Opponent''s figure in the same games: points scored
+    by players who did not start (a team figure). Season total of the team''s finished
+    games.'
+  points_from_bench_against_per_game: 'Opponent''s figure in the same games: points
+    scored by players who did not start (a team figure). Per-game average: the total
+    divided by `games`.'
+  points_from_bench_per_game: 'Points scored by players who did not start (a team
+    figure). Per-game average: the total divided by `games`.'
+  points_from_turnover: Points scored off opponent turnovers. Season total of the
+    team's finished games.
+  points_from_turnover_against: 'Opponent''s figure in the same games: points scored
+    off opponent turnovers. Season total of the team''s finished games.'
+  points_from_turnover_against_per_game: 'Opponent''s figure in the same games: points
+    scored off opponent turnovers. Per-game average: the total divided by `games`.'
+  points_in_the_paint: Points scored in the paint. Season total of the team's finished
+    games.
+  points_in_the_paint_against: 'Opponent''s figure in the same games: points scored
+    in the paint. Season total of the team''s finished games.'
+  points_in_the_paint_against_per_game: 'Opponent''s figure in the same games: points
+    scored in the paint. Per-game average: the total divided by `games`.'
+  points_in_the_paint_attempted: Field goals attempted in the paint. Season total
+    of the team's finished games.
+  points_in_the_paint_made: Field goals made in the paint. Season total of the team's
+    finished games.
+  points_in_the_paint_per_game: 'Points scored in the paint. Per-game average: the
+    total divided by `games`.'
+  points_per_game: 'Points scored. Per-game average: the total divided by `games`.'
+  points_second_chance: Points scored on second-chance possessions (after an offensive
+    rebound). Season total of the team's finished games.
+  points_second_chance_against: 'Opponent''s figure in the same games: points scored
+    on second-chance possessions (after an offensive rebound). Season total of the
+    team''s finished games.'
+  points_second_chance_against_per_game: 'Opponent''s figure in the same games: points
+    scored on second-chance possessions (after an offensive rebound). Per-game average:
+    the total divided by `games`.'
+  points_second_chance_attempted: Second-chance field goals attempted. Season total
+    of the team's finished games.
+  points_second_chance_made: Second-chance field goals made. Season total of the team's
+    finished games.
+  points_second_chance_per_game: 'Points scored on second-chance possessions (after
+    an offensive rebound). Per-game average: the total divided by `games`.'
+  points_three_attempted: 3-point field goals attempted. Season total of the team's
+    finished games.
+  points_three_attempted_against: 'Opponent''s figure in the same games: 3-point field
+    goals attempted. Season total of the team''s finished games.'
+  points_three_attempted_against_per_game: 'Opponent''s figure in the same games:
+    3-point field goals attempted. Per-game average: the total divided by `games`.'
+  points_three_attempted_per_game: '3-point field goals attempted. Per-game average:
+    the total divided by `games`.'
+  points_three_made: 3-point field goals made. Season total of the team's finished
+    games.
+  points_three_made_against: 'Opponent''s figure in the same games: 3-point field
+    goals made. Season total of the team''s finished games.'
+  points_three_made_against_per_game: 'Opponent''s figure in the same games: 3-point
+    field goals made. Per-game average: the total divided by `games`.'
+  points_three_made_per_game: '3-point field goals made. Per-game average: the total
+    divided by `games`.'
+  points_three_percentage: 3-point percentage on a 0-100 scale. Season total of the
+    team's finished games.
+  points_three_percentage_against: 'Opponent''s figure in the same games: 3-point
+    percentage on a 0-100 scale. Season total of the team''s finished games.'
+  points_two_attempted: 2-point field goals attempted. Season total of the team's
+    finished games.
+  points_two_attempted_against: 'Opponent''s figure in the same games: 2-point field
+    goals attempted. Season total of the team''s finished games.'
+  points_two_attempted_against_per_game: 'Opponent''s figure in the same games: 2-point
+    field goals attempted. Per-game average: the total divided by `games`.'
+  points_two_attempted_per_game: '2-point field goals attempted. Per-game average:
+    the total divided by `games`.'
+  points_two_made: 2-point field goals made. Season total of the team's finished games.
+  points_two_made_against: 'Opponent''s figure in the same games: 2-point field goals
+    made. Season total of the team''s finished games.'
+  points_two_made_against_per_game: 'Opponent''s figure in the same games: 2-point
+    field goals made. Per-game average: the total divided by `games`.'
+  points_two_made_per_game: '2-point field goals made. Per-game average: the total
+    divided by `games`.'
+  points_two_percentage: 2-point percentage on a 0-100 scale. Season total of the
+    team's finished games.
+  points_two_percentage_against: 'Opponent''s figure in the same games: 2-point percentage
+    on a 0-100 scale. Season total of the team''s finished games.'
+  power_play_points: Power-play points (an ice-hockey column; meaning in basketball
+    unverified). Season total of the team's finished games.
+  power_play_points_awarded: Power-play points awarded (an ice-hockey column; meaning
+    in basketball unverified). Season total of the team's finished games.
+  rebounds: 'Total rebounds: offensive + defensive. Team''s totals include team rebounds.
+    Season total of the team''s finished games.'
+  rebounds_against: 'Opponent''s figure in the same games: total rebounds: offensive
+    + defensive. Team''s totals include team rebounds. Season total of the team''s
+    finished games.'
+  rebounds_against_per_game: 'Opponent''s figure in the same games: total rebounds:
+    offensive + defensive. Team''s totals include team rebounds. Per-game average:
+    the total divided by `games`.'
+  rebounds_defensive: Defensive rebounds. Season total of the team's finished games.
+  rebounds_defensive_against: 'Opponent''s figure in the same games: defensive rebounds.
+    Season total of the team''s finished games.'
+  rebounds_defensive_against_per_game: 'Opponent''s figure in the same games: defensive
+    rebounds. Per-game average: the total divided by `games`.'
+  rebounds_defensive_per_game: 'Defensive rebounds. Per-game average: the total divided
+    by `games`.'
+  rebounds_offensive: Offensive rebounds. Season total of the team's finished games.
+  rebounds_offensive_against: 'Opponent''s figure in the same games: offensive rebounds.
+    Season total of the team''s finished games.'
+  rebounds_offensive_against_per_game: 'Opponent''s figure in the same games: offensive
+    rebounds. Per-game average: the total divided by `games`.'
+  rebounds_offensive_per_game: 'Offensive rebounds. Per-game average: the total divided
+    by `games`.'
+  rebounds_per_game: 'Total rebounds: offensive + defensive. Team''s totals include
+    team rebounds. Per-game average: the total divided by `games`.'
+  rebounds_team_defensive: Defensive rebounds credited to the team as a whole (not
+    to a player). Season total of the team's finished games.
+  rebounds_team_defensive_against: 'Opponent''s figure in the same games: defensive
+    rebounds credited to the team as a whole (not to a player). Season total of the
+    team''s finished games.'
+  rebounds_team_defensive_against_per_game: 'Opponent''s figure in the same games:
+    defensive rebounds credited to the team as a whole (not to a player). Per-game
+    average: the total divided by `games`.'
+  rebounds_team_offensive: Offensive rebounds credited to the team as a whole. Season
+    total of the team's finished games.
+  rebounds_team_offensive_against: 'Opponent''s figure in the same games: offensive
+    rebounds credited to the team as a whole. Season total of the team''s finished
+    games.'
+  rebounds_team_offensive_against_per_game: 'Opponent''s figure in the same games:
+    offensive rebounds credited to the team as a whole. Per-game average: the total
+    divided by `games`.'
+  rebounds_team_total: Team rebounds credited to the team as a whole (offensive +
+    defensive). Season total of the team's finished games.
+  rebounds_team_total_against: 'Opponent''s figure in the same games: team rebounds
+    credited to the team as a whole (offensive + defensive). Season total of the team''s
+    finished games.'
+  rebounds_team_total_against_per_game: 'Opponent''s figure in the same games: team
+    rebounds credited to the team as a whole (offensive + defensive). Per-game average:
+    the total divided by `games`.'
+  season: Season END year (2026 = EASL 25-26), from the request.
+  season_id: DataCore season UUID v1, from the request.
+  steals: Steals. Season total of the team's finished games.
+  steals_against: 'Opponent''s figure in the same games: steals. Season total of the
+    team''s finished games.'
+  steals_against_per_game: 'Opponent''s figure in the same games: steals. Per-game
+    average: the total divided by `games`.'
+  steals_per_game: 'Steals. Per-game average: the total divided by `games`.'
+  team_id: DataCore team UUID v1, from the request (the body carries none).
+  true_shooting_attempts: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  true_shooting_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  turnovers: Turnovers committed by players. Season total of the team's finished games.
+  turnovers_against: 'Opponent''s figure in the same games: turnovers committed by
+    players. Season total of the team''s finished games.'
+  turnovers_against_per_game: 'Opponent''s figure in the same games: turnovers committed
+    by players. Per-game average: the total divided by `games`.'
+  turnovers_per_game: 'Turnovers committed by players. Per-game average: the total
+    divided by `games`.'
+  turnovers_percentage: 'Not yet populated upstream: null in every full body observed
+    (2026-10-12), so its meaning is unverified; the 2026-27 bodies start filling some
+    of these columns, so it is typed from its family (Float64).'
+  turnovers_team: Team turnovers not charged to a player (shot-clock and similar violations).
+    Season total of the team's finished games.
+  turnovers_team_against: 'Opponent''s figure in the same games: team turnovers not
+    charged to a player (shot-clock and similar violations). Season total of the team''s
+    finished games.'
+  turnovers_team_against_per_game: 'Opponent''s figure in the same games: team turnovers
+    not charged to a player (shot-clock and similar violations). Per-game average:
+    the total divided by `games`.'
+  wins: 'Games won (for a player: by his team while he is in the line). Season total
+    of the team''s finished games.'
+easl_teams:
+  age_group: 'Age group: SENIOR; null on some inactive teams.'
+  code_latin: Three-letter club code (for example BRE); null or empty for some clubs.
+  code_local: Alternative three-letter club code (for example TPP); null for most
+    clubs. A club may have only one of codeLatin / codeLocal.
+  created_at: When the sync server inserted the row, 'YYYY-MM-DD HH:MM:SS' (a different
+    format from updatedAt; zone unstated, UTC assumed).
+  facebook_username: Club Facebook handle; most clubs have none. Null on some rows.
+  gender: 'Competition gender of the team: MALE (the EASL is a men''s competition).'
+  instagram_username: Club Instagram handle; some clubs have none. Null on some rows.
+  logo: Club logo URL on the Sportradar DataCore asset CDN (images.dc.connect.sportradar.com/b1e0z/...).
+  name: Display name. Despite the field name this is the English / Latin-script name
+    used on the league site.
+  name_native: 'Alternative name: the native-script name of some Japanese clubs (for
+    example 宇都宮ブレックス for Utsunomiya Brex), blank for most clubs; for players it usually
+    equals nameFullLocal. Despite the field name it is not always Latin script. Null
+    on some rows.'
+  organization_id: 'DataCore organisation id: b1e0z (EASL).'
+  primary_color: Club colour as a 6-digit hex string without '#'; '000000' is a placeholder
+    on several clubs.
+  secondary_color: Club colour as a 6-digit hex string without '#'; '000000' is a
+    placeholder on several clubs.
+  standard: 'Competition standard: ELITE.'
+  status: ACTIVE for teams in the current season (the only ones /teams lists), INACTIVE
+    for historical teams (only via /teams/{teamId}).
+  team_id: 'teamId: DataCore team (entity) UUID v1 (key space: EASL teams, the same
+    id as `entityId`; joins /teams, /standings team.id, fixture competitors, box and
+    play-by-play teams). Not a player id.'
+  team_row_id: The sync server's own integer row id of the team (not a DataCore id;
+    inactive teams interleave, so ids of /teams rows have gaps).
+  tertiary_color: Club colour as a 6-digit hex string without '#'; '000000' is a placeholder
+    on several clubs.
+  twitter_username: Club X / Twitter handle; most clubs have none. Null on some rows.
+  updated_at: When the sync server last synced the row, ISO 8601 with milliseconds
+    and Z (UTC).
+  website: Club website URL; most clubs have none. Null on some rows.
+  wikipedia_url: 'Not yet populated upstream: null in every full body observed (2026-10-12),
+    so its meaning is unverified; the 2026-27 bodies start filling some of these columns,
+    so it is typed from its family (String).'

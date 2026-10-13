@@ -1,0 +1,260 @@
+[
+  {
+    "id": "534a35fc-d077-11ee-aba1-6b444d8de6b4",
+    "position": 1,
+    "team": {
+      "id": "99d719e1-64c1-11ee-b1bd-27129dd6c255",
+      "name": "Chiba Jets",
+      "code": "JET",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/c3ff21f178864c6bb75875ce15d9b90c?size=RAW"
+    },
+    "pool": {
+      "id": "513f319ffff6459b8e16d3984082da",
+      "name": "Group A",
+      "abb": null
+    },
+    "live": false,
+    "latest": false,
+    "stats": {
+      "gamePlayed": 6,
+      "gamePlayedHome": 3,
+      "gamePlayedAway": 3,
+      "wins": 6,
+      "winsHome": 3,
+      "winsAway": 3,
+      "losses": 0,
+      "lossesHome": 0,
+      "lossesAway": 0,
+      "draws": 0,
+      "drawsHome": 0,
+      "drawsAway": 0,
+      "winPercentage": 1,
+      "winPercentageHome": 1,
+      "winPercentageAway": 1,
+      "pointDifference": 96,
+      "pointDifferenceHome": 51,
+      "pointDifferenceAway": 45,
+      "pointsFor": 546,
+      "pointsAgainst": 450,
+      "steak": 6,
+      "streakAway": 3,
+      "streakHome": 3
+    },
+    "lastFiveMatches": [
+      {
+        "result": "W",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "72",
+        "scoreAgainst": "69",
+        "startTimeUTC": "2024-03-10T11:00:00",
+        "opponent": {
+          "id": "864e1998-b0f5-11ed-bb08-c199a9dea184",
+          "name": "Seoul SK Knights",
+          "code": "SK",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/0a1ffcdce4274cb2aac79bf152a35557?size=RAW"
+        }
+      },
+      {
+        "result": "W",
+        "isHome": true,
+        "isNeutralVenue": false,
+        "scoreFor": "92",
+        "scoreAgainst": "84",
+        "startTimeUTC": "2024-03-08T12:00:00",
+        "opponent": {
+          "id": "b18c0d83-64c1-11ee-94b6-3b1d78292126",
+          "name": "New Taipei Kings",
+          "code": "NTK",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/0187cc9d82c04ebf8dc15852744a2951?size=RAW"
+        }
+      },
+      {
+        "result": "W",
+        "isHome": true,
+        "isNeutralVenue": false,
+        "scoreFor": "115",
+        "scoreAgainst": "98",
+        "startTimeUTC": "2024-01-10T10:00:00",
+        "opponent": {
+          "id": "864a6064-b0f5-11ed-971f-c199a9dea184",
+          "name": "Anyang Jung Kwan Jang Red Boosters",
+          "code": "JKJ",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/1b7dc080868a403f92d75f65166b4ef2?size=RAW"
+        }
+      }
+    ]
+  },
+  {
+    "id": "534db8e5-d077-11ee-81a1-6b444d8de6b4",
+    "position": 2,
+    "team": {
+      "id": "864a6064-b0f5-11ed-971f-c199a9dea184",
+      "name": "Anyang Jung Kwan Jang Red Boosters",
+      "code": "JKJ",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/1b7dc080868a403f92d75f65166b4ef2?size=RAW"
+    },
+    "pool": {
+      "id": "513f319ffff6459b8e16d3984082da",
+      "name": "Group A",
+      "abb": null
+    },
+    "live": false,
+    "latest": false,
+    "stats": {
+      "gamePlayed": 6,
+      "gamePlayedHome": 3,
+      "gamePlayedAway": 3,
+      "wins": 4,
+      "winsHome": 2,
+      "winsAway": 2,
+      "losses": 2,
+      "lossesHome": 1,
+      "lossesAway": 1,
+      "draws": 0,
+      "drawsHome": 0,
+      "drawsAway": 0,
+      "winPercentage": 0.6667,
+      "winPercentageHome": 0.6667,
+      "winPercentageAway": 0.6667,
+      "pointDifference": 5,
+      "pointDifferenceHome": -4,
+      "pointDifferenceAway": 9,
+      "pointsFor": 542,
+      "pointsAgainst": 537,
+      "steak": 2,
+      "streakAway": 2,
+      "streakHome": 0
+    },
+    "lastFiveMatches": [
+      {
+        "result": "W",
+        "isHome": true,
+        "isNeutralVenue": false,
+        "scoreFor": "78",
+        "scoreAgainst": "76",
+        "startTimeUTC": "2024-03-10T08:00:00",
+        "opponent": {
+          "id": "b18c0d83-64c1-11ee-94b6-3b1d78292126",
+          "name": "New Taipei Kings",
+          "code": "NTK",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/0187cc9d82c04ebf8dc15852744a2951?size=RAW"
+        }
+      },
+      {
+        "result": "L",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "79",
+        "scoreAgainst": "94",
+        "startTimeUTC": "2024-03-08T09:00:00",
+        "opponent": {
+          "id": "864e1998-b0f5-11ed-bb08-c199a9dea184",
+          "name": "Seoul SK Knights",
+          "code": "SK",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/0a1ffcdce4274cb2aac79bf152a35557?size=RAW"
+        }
+      },
+      {
+        "result": "W",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "84",
+        "scoreAgainst": "70",
+        "startTimeUTC": "2024-02-07T11:00:00",
+        "opponent": {
+          "id": "86515908-b0f5-11ed-ac6b-c199a9dea184",
+          "name": "Taipei Fubon Braves",
+          "code": "TFB",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/5a015b28e60544af8c882fb3b78fe7d6?size=RAW"
+        }
+      }
+    ]
+  },
+  {
+    "id": "534f36a4-d077-11ee-b89f-6b444d8de6b4",
+    "position": 3,
+    "team": {
+      "id": "8665f8fb-b0f5-11ed-86e1-c199a9dea184",
+      "name": "TNT Tropang Giga",
+      "code": "TNT",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/6419fa08bebc4556a2170581fd95c8fd?size=RAW"
+    },
+    "pool": {
+      "id": "513f319ffff6459b8e16d3984082da",
+      "name": "Group A",
+      "abb": null
+    },
+    "live": false,
+    "latest": false,
+    "stats": {
+      "gamePlayed": 6,
+      "gamePlayedHome": 3,
+      "gamePlayedAway": 3,
+      "wins": 1,
+      "winsHome": 1,
+      "winsAway": 0,
+      "losses": 5,
+      "lossesHome": 2,
+      "lossesAway": 3,
+      "draws": 0,
+      "drawsHome": 0,
+      "drawsAway": 0,
+      "winPercentage": 0.1667,
+      "winPercentageHome": 0.3333,
+      "winPercentageAway": 0,
+      "pointDifference": -45,
+      "pointDifferenceHome": -10,
+      "pointDifferenceAway": -35,
+      "pointsFor": 491,
+      "pointsAgainst": 536,
+      "steak": 0,
+      "streakAway": 0,
+      "streakHome": 0
+    },
+    "lastFiveMatches": [
+      {
+        "result": "L",
+        "isHome": true,
+        "isNeutralVenue": false,
+        "scoreFor": "76",
+        "scoreAgainst": "88",
+        "startTimeUTC": "2024-01-24T11:00:00",
+        "opponent": {
+          "id": "864a6064-b0f5-11ed-971f-c199a9dea184",
+          "name": "Anyang Jung Kwan Jang Red Boosters",
+          "code": "JKJ",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/1b7dc080868a403f92d75f65166b4ef2?size=RAW"
+        }
+      },
+      {
+        "result": "W",
+        "isHome": true,
+        "isNeutralVenue": false,
+        "scoreFor": "80",
+        "scoreAgainst": "69",
+        "startTimeUTC": "2023-12-20T11:00:00",
+        "opponent": {
+          "id": "86515908-b0f5-11ed-ac6b-c199a9dea184",
+          "name": "Taipei Fubon Braves",
+          "code": "TFB",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/5a015b28e60544af8c882fb3b78fe7d6?size=RAW"
+        }
+      },
+      {
+        "result": "L",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "97",
+        "scoreAgainst": "105",
+        "startTimeUTC": "2023-12-06T10:00:00",
+        "opponent": {
+          "id": "864a6064-b0f5-11ed-971f-c199a9dea184",
+          "name": "Anyang Jung Kwan Jang Red Boosters",
+          "code": "JKJ",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/1b7dc080868a403f92d75f65166b4ef2?size=RAW"
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,72 @@
+{
+  "playbyplay": [
+    {
+      "periodId": 1,
+      "sequence": 5,
+      "description": "Jump ball lost",
+      "receivedTime": 1710068432073,
+      "eventTime": "2024-03-10T11:00:31.558",
+      "teamId": "864e1998-b0f5-11ed-bb08-c199a9dea184",
+      "player": {
+        "nameFullLatin": "Jameel WARNEY",
+        "nameFullLocal": "Jameel WARNEY",
+        "playerId": "8824aa50-b0f5-11ed-bbc7-c199a9dea184",
+        "jerseyNumber": "34"
+      },
+      "scores": {
+        "864e1998-b0f5-11ed-bb08-c199a9dea184": 0,
+        "99d719e1-64c1-11ee-b1bd-27129dd6c255": 0
+      }
+    },
+    {
+      "periodId": 1,
+      "sequence": 14,
+      "description": "2pt Jump shot missed",
+      "receivedTime": 1710068469034,
+      "eventTime": "2024-03-10T11:01:06.323",
+      "teamId": "864e1998-b0f5-11ed-bb08-c199a9dea184",
+      "player": {
+        "nameFullLatin": "OH Jaehyun",
+        "nameFullLocal": "OH Jaehyun",
+        "playerId": "881f6180-b0f5-11ed-a8a2-c199a9dea184",
+        "jerseyNumber": "22"
+      },
+      "scores": {
+        "864e1998-b0f5-11ed-bb08-c199a9dea184": 0,
+        "99d719e1-64c1-11ee-b1bd-27129dd6c255": 2
+      }
+    },
+    {
+      "periodId": 1,
+      "sequence": 22,
+      "description": "3pt Jump shot missed",
+      "receivedTime": 1710068508841,
+      "eventTime": "2024-03-10T11:01:46.965",
+      "teamId": "864e1998-b0f5-11ed-bb08-c199a9dea184",
+      "player": {
+        "nameFullLatin": "Jameel WARNEY",
+        "nameFullLocal": "Jameel WARNEY",
+        "playerId": "8824aa50-b0f5-11ed-bbc7-c199a9dea184",
+        "jerseyNumber": "34"
+      },
+      "scores": {
+        "864e1998-b0f5-11ed-bb08-c199a9dea184": 0,
+        "99d719e1-64c1-11ee-b1bd-27129dd6c255": 4
+      }
+    }
+  ],
+  "teams": [
+    {
+      "nameFullLatin": null,
+      "nameFullLocal": "Seoul SK Knights",
+      "teamId": "864e1998-b0f5-11ed-bb08-c199a9dea184",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/0a1ffcdce4274cb2aac79bf152a35557?size=RAW"
+    },
+    {
+      "nameFullLatin": null,
+      "nameFullLocal": "Chiba Jets",
+      "teamId": "99d719e1-64c1-11ee-b1bd-27129dd6c255",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/c3ff21f178864c6bb75875ce15d9b90c?size=RAW"
+    }
+  ]
+}

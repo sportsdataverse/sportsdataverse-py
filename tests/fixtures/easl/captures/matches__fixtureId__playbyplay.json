@@ -1,0 +1,72 @@
+{
+  "playbyplay": [
+    {
+      "periodId": 1,
+      "sequence": 5,
+      "description": "Jump ball won",
+      "receivedTime": 1791025901230,
+      "eventTime": "2026-10-03T11:11:41.071",
+      "teamId": "9f419ff5-a6be-11f1-a9d1-335289d35d91",
+      "player": {
+        "nameFullLatin": "Micheal ERIC",
+        "nameFullLocal": "Micheal ERIC",
+        "playerId": "e114baf3-9f51-11f0-8b15-01eff25e3c4f",
+        "jerseyNumber": "50"
+      },
+      "scores": {
+        "27492b3f-5ada-11ef-86eb-61fb7e764dd2": 0,
+        "9f419ff5-a6be-11f1-a9d1-335289d35d91": 0
+      }
+    },
+    {
+      "periodId": 1,
+      "sequence": 14,
+      "description": "Assist",
+      "receivedTime": 1791025924454,
+      "eventTime": "2026-10-03T11:12:04.297",
+      "teamId": "9f419ff5-a6be-11f1-a9d1-335289d35d91",
+      "player": {
+        "nameFullLatin": "Micheal ERIC",
+        "nameFullLocal": "Micheal ERIC",
+        "playerId": "e114baf3-9f51-11f0-8b15-01eff25e3c4f",
+        "jerseyNumber": "50"
+      },
+      "scores": {
+        "27492b3f-5ada-11ef-86eb-61fb7e764dd2": 0,
+        "9f419ff5-a6be-11f1-a9d1-335289d35d91": 2
+      }
+    },
+    {
+      "periodId": 1,
+      "sequence": 22,
+      "description": "Turnover - Traveling",
+      "receivedTime": 1791025944351,
+      "eventTime": "2026-10-03T11:12:21.232",
+      "teamId": "9f419ff5-a6be-11f1-a9d1-335289d35d91",
+      "player": {
+        "nameFullLatin": "Micheal ERIC",
+        "nameFullLocal": "Micheal ERIC",
+        "playerId": "e114baf3-9f51-11f0-8b15-01eff25e3c4f",
+        "jerseyNumber": "50"
+      },
+      "scores": {
+        "27492b3f-5ada-11ef-86eb-61fb7e764dd2": 0,
+        "9f419ff5-a6be-11f1-a9d1-335289d35d91": 2
+      }
+    }
+  ],
+  "teams": [
+    {
+      "nameFullLatin": "Hong Kong Eastern",
+      "nameFullLocal": "Hong Kong Eastern",
+      "teamId": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/adf60619aed949ffb17b68c344ba8302?size=RAW"
+    },
+    {
+      "nameFullLatin": "Abra Weavers",
+      "nameFullLocal": "Abra Weavers",
+      "teamId": "9f419ff5-a6be-11f1-a9d1-335289d35d91",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/f437b8fd6bb9420b802de18217b4b915?size=RAW"
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+[
+  {
+    "attendance": 641,
+    "broadcasts": null,
+    "competitors": [
+      {
+        "draw": false,
+        "entityId": "86625aaf-b0f5-11ed-8cb0-c199a9dea184",
+        "isHome": false,
+        "resultPlace": 2,
+        "score": "81",
+        "nameFullLatin": "San Miguel Beermen",
+        "nameFullLocal": "San Miguel Beermen",
+        "teamId": "86625aaf-b0f5-11ed-8cb0-c199a9dea184",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/8c2abae188de4881abb3fb6b1e07a3ed?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "SMB",
+        "primaryColor": "ff0000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      {
+        "draw": false,
+        "entityId": "a0d339ca-5ad9-11ef-9034-e57ee855c509",
+        "isHome": true,
+        "resultPlace": 1,
+        "score": "94",
+        "nameFullLatin": "Suwon KT Sonicboom",
+        "nameFullLocal": "Suwon KT Sonicboom",
+        "teamId": "a0d339ca-5ad9-11ef-9034-e57ee855c509",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/b2f914fe6a124b5a9681b808c008779a?size=RAW",
+        "codeLatin": "KT",
+        "codeLocal": "KT",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      }
+    ],
+    "endTimeActualUTC": null,
+    "fixtureId": "809a609e-5d86-11ef-bb85-ed92e2682f39",
+    "fixtureNumber": 2425029,
+    "fixtureType": "REGULAR",
+    "liveDataAvailable": false,
+    "liveVideoAvailable": false,
+    "nameLatin": null,
+    "nameLocal": null,
+    "poolCode": "6a5477234bcd4fd69dd3810052fd5a",
+    "roundNumber": null,
+    "stage": {
+      "nameLocal": "Group Stage",
+      "stageCode": "329254754b534e5d8dce1aead02647",
+      "stageOrder": 1
+    },
+    "startTimeActualUTC": null,
+    "startTimeLocal": "2025-02-12T19:10:00",
+    "startTimeUTC": "2025-02-12T10:10:00",
+    "status": "CONFIRMED",
+    "venue": {
+      "abbreviationLatin": null,
+      "abbreviationLocal": null,
+      "address": {
+        "city": "Suwon"
+      },
+      "alternateNameLatin": null,
+      "alternateNameLocal": null,
+      "countryCode": "KOR",
+      "nameLatin": "Suwon KT Sonicboom Arena",
+      "nameLocal": "Suwon KT Sonicboom Arena"
+    },
+    "pool": {
+      "id": "6a5477234bcd4fd69dd3810052fd5a",
+      "name": "Group A",
+      "abb": "A"
+    },
+    "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7"
+  },
+  {
+    "attendance": 1448,
+    "broadcasts": null,
+    "competitors": [
+      {
+        "draw": false,
+        "entityId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "isHome": true,
+        "resultPlace": 2,
+        "score": "87",
+        "nameFullLatin": "Busan KCC Egis",
+        "nameFullLocal": "Busan KCC Egis",
+        "teamId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/1ee08a84e1c04d96a3d19621477dccfe?size=RAW",
+        "codeLatin": "KCC",
+        "codeLocal": "KCC",
+        "primaryColor": "000080",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      {
+        "draw": false,
+        "entityId": "b18c0d83-64c1-11ee-94b6-3b1d78292126",
+        "isHome": false,
+        "resultPlace": 1,
+        "score": "104",
+        "nameFullLatin": null,
+        "nameFullLocal": "New Taipei Kings",
+        "teamId": "b18c0d83-64c1-11ee-94b6-3b1d78292126",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/0187cc9d82c04ebf8dc15852744a2951?size=RAW",
+        "codeLatin": "NTK",
+        "codeLocal": "NTK",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      }
+    ],
+    "endTimeActualUTC": null,
+    "fixtureId": "cfeff2fe-5d85-11ef-ab79-77788f965aed",
+    "fixtureNumber": 2425025,
+    "fixtureType": "REGULAR",
+    "liveVideoAvailable": false,
+    "nameLatin": null,
+    "nameLocal": null,
+    "poolCode": "8e7bc6f4fa624c67a46b61a426b389",
+    "roundNumber": null,
+    "stage": {
+      "nameLocal": "Group Stage",
+      "stageCode": "329254754b534e5d8dce1aead02647",
+      "stageOrder": 1
+    },
+    "startTimeActualUTC": null,
+    "startTimeLocal": "2025-01-21T19:10:00",
+    "startTimeUTC": "2025-01-21T10:10:00",
+    "status": "CONFIRMED",
+    "venue": {
+      "abbreviationLatin": null,
+      "abbreviationLocal": null,
+      "address": {
+        "city": "Busan"
+      },
+      "alternateNameLatin": null,
+      "alternateNameLocal": null,
+      "countryCode": "KOR",
+      "nameLatin": "Busan Sajik Gymnasium",
+      "nameLocal": "Busan Sajik Gymnasium"
+    },
+    "pool": {
+      "id": "8e7bc6f4fa624c67a46b61a426b389",
+      "name": "Group B",
+      "abb": "B"
+    },
+    "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7"
+  },
+  {
+    "attendance": 1644,
+    "broadcasts": null,
+    "competitors": [
+      {
+        "draw": false,
+        "entityId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "isHome": true,
+        "resultPlace": 1,
+        "score": "72",
+        "nameFullLatin": "Busan KCC Egis",
+        "nameFullLocal": "Busan KCC Egis",
+        "teamId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/1ee08a84e1c04d96a3d19621477dccfe?size=RAW",
+        "codeLatin": "KCC",
+        "codeLocal": "KCC",
+        "primaryColor": "000080",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      {
+        "draw": false,
+        "entityId": "c6b1277e-64c1-11ee-862b-3b1d78292126",
+        "isHome": false,
+        "resultPlace": 2,
+        "score": "68",
+        "nameFullLatin": null,
+        "nameFullLocal": "Meralco Bolts",
+        "teamId": "c6b1277e-64c1-11ee-862b-3b1d78292126",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/121e63062e194cfd84e381b0c7528dd3?size=RAW",
+        "codeLatin": "MRB",
+        "codeLocal": "MRB",
+        "primaryColor": "000080",
+        "secondaryColor": "ffa500",
+        "tertiaryColor": "000000"
+      }
+    ],
+    "endTimeActualUTC": null,
+    "fixtureId": "81940e0c-5d7d-11ef-b6c3-a3c945aef0ee",
+    "fixtureNumber": 2425016,
+    "fixtureType": "REGULAR",
+    "liveDataAvailable": false,
+    "liveVideoAvailable": false,
+    "nameLatin": null,
+    "nameLocal": null,
+    "poolCode": "8e7bc6f4fa624c67a46b61a426b389",
+    "roundNumber": null,
+    "stage": {
+      "nameLocal": "Group Stage",
+      "stageCode": "329254754b534e5d8dce1aead02647",
+      "stageOrder": 1
+    },
+    "startTimeActualUTC": null,
+    "startTimeLocal": "2024-12-18T19:10:00",
+    "startTimeUTC": "2024-12-18T10:10:00",
+    "status": "CONFIRMED",
+    "venue": {
+      "abbreviationLatin": null,
+      "abbreviationLocal": null,
+      "address": {
+        "city": "Busan"
+      },
+      "alternateNameLatin": null,
+      "alternateNameLocal": null,
+      "countryCode": "KOR",
+      "nameLatin": "Busan Sajik Gymnasium",
+      "nameLocal": "Busan Sajik Gymnasium"
+    },
+    "pool": {
+      "id": "8e7bc6f4fa624c67a46b61a426b389",
+      "name": "Group B",
+      "abb": "B"
+    },
+    "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7"
+  }
+]

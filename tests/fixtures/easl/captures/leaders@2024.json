@@ -1,0 +1,830 @@
+{
+  "assistsPerGame": [
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "assistsPerGame": 9,
+      "team": {
+        "nameFullLatin": "Macau Black Bears",
+        "nameFullLocal": "Macau Black Bears",
+        "teamId": "4458de27-5ada-11ef-b6c0-cb17b0baafad",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/04d03e5ab04944b5adeae152dfbab657?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "MBB",
+        "primaryColor": "000000",
+        "secondaryColor": "808080",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Damian CHONGQUI",
+        "nameFullLocal": "Damian CHONGQUI",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/6566c613795845298e90692c36657bbb?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "bafb18f6-7711-11ef-8781-3f8b466da8cd",
+        "jerseyNumber": "2",
+        "position": "PG",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "assistsPerGame": 6.33333,
+      "team": {
+        "nameFullLatin": "Busan KCC Egis",
+        "nameFullLocal": "Busan KCC Egis",
+        "teamId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/1ee08a84e1c04d96a3d19621477dccfe?size=RAW",
+        "codeLatin": "KCC",
+        "codeLocal": "KCC",
+        "primaryColor": "000080",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Deonte BURTON",
+        "nameFullLocal": "Deonte BURTON",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/05663515d2734b03bc562a238ee7e135?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "d3bc809d-6f36-11ef-9aa3-39669bd3928c",
+        "jerseyNumber": "15",
+        "position": "PF",
+        "status": "OUT",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "assistsPerGame": 5.14286,
+      "team": {
+        "nameFullLatin": "Hiroshima Dragonflies",
+        "nameFullLocal": "Hiroshima Dragonflies",
+        "teamId": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/34be0fafbe3a4049bd3c3eb4e4bcfce7?size=RAW",
+        "codeLatin": null,
+        "codeLocal": "HDF",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Kerry BLACKSHEAR JR",
+        "nameFullLocal": "Kerry BLACKSHEAR JR",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/e8bdd854fc87435b92cf2aa201525226?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "36143ea1-6f4b-11ef-a6ee-93877919ba02",
+        "jerseyNumber": "8",
+        "position": "PF",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    }
+  ],
+  "blocksPerGame": [
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "blocksPerGame": 3,
+      "team": {
+        "nameFullLatin": "Busan KCC Egis",
+        "nameFullLocal": "Busan KCC Egis",
+        "teamId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/1ee08a84e1c04d96a3d19621477dccfe?size=RAW",
+        "codeLatin": "KCC",
+        "codeLocal": "KCC",
+        "primaryColor": "000080",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Cody LaLANNE",
+        "nameFullLocal": "Cody LaLANNE",
+        "headshot": null,
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "9639a642-d2e5-11ef-9f7a-b35924518272",
+        "jerseyNumber": "92",
+        "position": "C",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "blocksPerGame": 1.75,
+      "team": {
+        "nameFullLatin": "Taoyuan Pauian Pilots",
+        "nameFullLocal": "Taoyuan Pauian Pilots",
+        "teamId": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/613ec1e996cc4dde9890b18646d74339?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "TPP",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Alec BROWN",
+        "nameFullLocal": "Alec BROWN",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/d9620b7790d44d3ebe18f22e3a6c29c7?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "689dc46e-719c-11ef-9dd7-d56734dcce18",
+        "jerseyNumber": "21",
+        "position": "C",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "blocksPerGame": 1.75,
+      "team": {
+        "nameFullLatin": "Hiroshima Dragonflies",
+        "nameFullLocal": "Hiroshima Dragonflies",
+        "teamId": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/34be0fafbe3a4049bd3c3eb4e4bcfce7?size=RAW",
+        "codeLatin": null,
+        "codeLocal": "HDF",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Dwayne EVANS",
+        "nameFullLocal": "Dwayne EVANS",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/95be9446311a445793afd9614f88040c?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "ed328852-6f4b-11ef-9707-83eba0f46b5f",
+        "jerseyNumber": "13",
+        "position": "SF",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    }
+  ],
+  "fieldGoalsPercentage": [
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "fieldGoalsPercentage": 100,
+      "team": {
+        "nameFullLatin": "Macau Black Bears",
+        "nameFullLocal": "Macau Black Bears",
+        "teamId": "4458de27-5ada-11ef-b6c0-cb17b0baafad",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/04d03e5ab04944b5adeae152dfbab657?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "MBB",
+        "primaryColor": "000000",
+        "secondaryColor": "808080",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "ZENG Pucheng",
+        "nameFullLocal": "ZENG Pucheng",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/e45b5e4d60e84d14bb20fb469e1edd25?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "5ecb48b4-7c06-11ef-92e9-bbacbb86cbda",
+        "jerseyNumber": "10",
+        "position": "SG",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "fieldGoalsPercentage": 100,
+      "team": {
+        "nameFullLatin": null,
+        "nameFullLocal": "New Taipei Kings",
+        "teamId": "b18c0d83-64c1-11ee-94b6-3b1d78292126",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/0187cc9d82c04ebf8dc15852744a2951?size=RAW",
+        "codeLatin": "NTK",
+        "codeLocal": "NTK",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "LIN Li-Jen",
+        "nameFullLocal": "LIN Li-Jen",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/42e0585cf1bf4ed4a27ff719884c24c6?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "5f50de52-66ad-11ee-94f2-6fdedf110211",
+        "jerseyNumber": "72",
+        "position": "G",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "fieldGoalsPercentage": 100,
+      "team": {
+        "nameFullLatin": "Hong Kong Eastern",
+        "nameFullLocal": "Hong Kong Eastern",
+        "teamId": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/adf60619aed949ffb17b68c344ba8302?size=RAW",
+        "codeLatin": "HKE",
+        "codeLocal": "HKE",
+        "primaryColor": "0000ff",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "POK Yuet Yeung",
+        "nameFullLocal": "POK Yuet Yeung",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/18348baf5f204813967557d8bef1bf31?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "c75ad45f-770c-11ef-8b7a-a512c22315d1",
+        "jerseyNumber": "13",
+        "position": "C",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    }
+  ],
+  "freeThrowsPercentage": [
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "freeThrowsPercentage": 100,
+      "team": {
+        "nameFullLatin": "San Miguel Beermen",
+        "nameFullLocal": "San Miguel Beermen",
+        "teamId": "86625aaf-b0f5-11ed-8cb0-c199a9dea184",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/8c2abae188de4881abb3fb6b1e07a3ed?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "SMB",
+        "primaryColor": "ff0000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Avan NAVA",
+        "nameFullLocal": "Avan NAVA",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/c44a324d68a54b529ec57c428dde53ff?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "021ef83a-6f4e-11ef-b75a-294209b282cc",
+        "jerseyNumber": "27",
+        "position": "G",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "freeThrowsPercentage": 100,
+      "team": {
+        "nameFullLatin": "Hong Kong Eastern",
+        "nameFullLocal": "Hong Kong Eastern",
+        "teamId": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/adf60619aed949ffb17b68c344ba8302?size=RAW",
+        "codeLatin": "HKE",
+        "codeLocal": "HKE",
+        "primaryColor": "0000ff",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Adam XU",
+        "nameFullLocal": "Adam XU",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/230998471d074f5e928b30d373d4311e?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "0d092a90-770d-11ef-9a79-bf9e04d2f062",
+        "jerseyNumber": "16",
+        "position": "SF",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "freeThrowsPercentage": 100,
+      "team": {
+        "nameFullLatin": "Hong Kong Eastern",
+        "nameFullLocal": "Hong Kong Eastern",
+        "teamId": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/adf60619aed949ffb17b68c344ba8302?size=RAW",
+        "codeLatin": "HKE",
+        "codeLocal": "HKE",
+        "primaryColor": "0000ff",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "CHAN Siu Wing",
+        "nameFullLocal": "CHAN Siu Wing",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/d491d877e5f947c693f4957f8f546084?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "183fc9c2-770c-11ef-9b59-275ecc8abfdc",
+        "jerseyNumber": "8",
+        "position": "PG",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    }
+  ],
+  "pointsPerGame": [
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "pointsPerGame": 33,
+      "team": {
+        "nameFullLatin": "Busan KCC Egis",
+        "nameFullLocal": "Busan KCC Egis",
+        "teamId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/1ee08a84e1c04d96a3d19621477dccfe?size=RAW",
+        "codeLatin": "KCC",
+        "codeLocal": "KCC",
+        "primaryColor": "000080",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Deonte BURTON",
+        "nameFullLocal": "Deonte BURTON",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/05663515d2734b03bc562a238ee7e135?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "d3bc809d-6f36-11ef-9aa3-39669bd3928c",
+        "jerseyNumber": "15",
+        "position": "PF",
+        "status": "OUT",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "pointsPerGame": 29,
+      "team": {
+        "nameFullLatin": "Busan KCC Egis",
+        "nameFullLocal": "Busan KCC Egis",
+        "teamId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/1ee08a84e1c04d96a3d19621477dccfe?size=RAW",
+        "codeLatin": "KCC",
+        "codeLocal": "KCC",
+        "primaryColor": "000080",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Cody LaLANNE",
+        "nameFullLocal": "Cody LaLANNE",
+        "headshot": null,
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "9639a642-d2e5-11ef-9f7a-b35924518272",
+        "jerseyNumber": "92",
+        "position": "C",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "pointsPerGame": 26.25,
+      "team": {
+        "nameFullLatin": "Macau Black Bears",
+        "nameFullLocal": "Macau Black Bears",
+        "teamId": "4458de27-5ada-11ef-b6c0-cb17b0baafad",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/04d03e5ab04944b5adeae152dfbab657?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "MBB",
+        "primaryColor": "000000",
+        "secondaryColor": "808080",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Jeantal CYLLA",
+        "nameFullLocal": "Jeantal CYLLA",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/dca0401496e549e1b2967beb7d8fbdc6?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "a26ffdce-7c07-11ef-b3c4-ab836472cb11",
+        "jerseyNumber": "7",
+        "position": "F",
+        "status": "OUT",
+        "seasonId": 1
+      }
+    }
+  ],
+  "pointsThreeMade": [
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "pointsThreeMade": 22,
+      "team": {
+        "nameFullLatin": "Taoyuan Pauian Pilots",
+        "nameFullLocal": "Taoyuan Pauian Pilots",
+        "teamId": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/613ec1e996cc4dde9890b18646d74339?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "TPP",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Alec BROWN",
+        "nameFullLocal": "Alec BROWN",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/d9620b7790d44d3ebe18f22e3a6c29c7?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "689dc46e-719c-11ef-9dd7-d56734dcce18",
+        "jerseyNumber": "21",
+        "position": "C",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "pointsThreeMade": 22,
+      "team": {
+        "nameFullLatin": "琉球ゴールデンキングス",
+        "nameFullLocal": "Ryukyu Golden Kings",
+        "teamId": "865db37a-b0f5-11ed-b344-c199a9dea184",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/52ff4d6fc57c42c4bdbde948f1f19c55?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "RGK",
+        "primaryColor": "e8d6b3",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "KISHIMOTO Ryuichi",
+        "nameFullLocal": "KISHIMOTO Ryuichi",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/16036f6346254e5a97332465fcba2775?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "8aa0d224-b0f5-11ed-83ad-4d213e1c069d",
+        "jerseyNumber": "14",
+        "position": "PG",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "pointsThreeMade": 19,
+      "team": {
+        "nameFullLatin": "Suwon KT Sonicboom",
+        "nameFullLocal": "Suwon KT Sonicboom",
+        "teamId": "a0d339ca-5ad9-11ef-9034-e57ee855c509",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/b2f914fe6a124b5a9681b808c008779a?size=RAW",
+        "codeLatin": "KT",
+        "codeLocal": "KT",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "HAN Huiwon",
+        "nameFullLocal": "HAN Huiwon",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/298bfc00a74844c9aed692ab2cf2610a?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "66408f79-6f37-11ef-8dce-7d27c815f5d7",
+        "jerseyNumber": "1",
+        "position": "G",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    }
+  ],
+  "pointsThreePercentage": [
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "pointsThreePercentage": 100,
+      "team": {
+        "nameFullLatin": null,
+        "nameFullLocal": "New Taipei Kings",
+        "teamId": "b18c0d83-64c1-11ee-94b6-3b1d78292126",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/0187cc9d82c04ebf8dc15852744a2951?size=RAW",
+        "codeLatin": "NTK",
+        "codeLocal": "NTK",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "LIN Li-Jen",
+        "nameFullLocal": "LIN Li-Jen",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/42e0585cf1bf4ed4a27ff719884c24c6?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "5f50de52-66ad-11ee-94f2-6fdedf110211",
+        "jerseyNumber": "72",
+        "position": "G",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "pointsThreePercentage": 100,
+      "team": {
+        "nameFullLatin": "Busan KCC Egis",
+        "nameFullLocal": "Busan KCC Egis",
+        "teamId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/1ee08a84e1c04d96a3d19621477dccfe?size=RAW",
+        "codeLatin": "KCC",
+        "codeLocal": "KCC",
+        "primaryColor": "000080",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "LEE Seounghyun",
+        "nameFullLocal": "LEE Seounghyun",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/15d650bdb8b8426c8d3946908c079369?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "6300ddcb-6f33-11ef-bdda-036498bf1bd2",
+        "jerseyNumber": "33",
+        "position": "F",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "pointsThreePercentage": 66.66667,
+      "team": {
+        "nameFullLatin": "Busan KCC Egis",
+        "nameFullLocal": "Busan KCC Egis",
+        "teamId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/1ee08a84e1c04d96a3d19621477dccfe?size=RAW",
+        "codeLatin": "KCC",
+        "codeLocal": "KCC",
+        "primaryColor": "000080",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Leon  WILLIAMS",
+        "nameFullLocal": "Leon  WILLIAMS",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/7d3916ab8380486bb333b5a2c99d7a9c?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "8827d558-b0f5-11ed-9f6d-c199a9dea184",
+        "jerseyNumber": "44",
+        "position": "C",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    }
+  ],
+  "reboundsPerGame": [
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "reboundsPerGame": 14.25,
+      "team": {
+        "nameFullLatin": "Macau Black Bears",
+        "nameFullLocal": "Macau Black Bears",
+        "teamId": "4458de27-5ada-11ef-b6c0-cb17b0baafad",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/04d03e5ab04944b5adeae152dfbab657?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "MBB",
+        "primaryColor": "000000",
+        "secondaryColor": "808080",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "William ARTINO",
+        "nameFullLocal": "William ARTINO",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/abf55977db664c6faf16c17487c26daa?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "5d009383-7712-11ef-a76f-51e2be968d7b",
+        "jerseyNumber": "31",
+        "position": "C",
+        "status": "OTHER_NOT_PARTICIPATING",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "reboundsPerGame": 13.66667,
+      "team": {
+        "nameFullLatin": "Hong Kong Eastern",
+        "nameFullLocal": "Hong Kong Eastern",
+        "teamId": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/adf60619aed949ffb17b68c344ba8302?size=RAW",
+        "codeLatin": "HKE",
+        "codeLocal": "HKE",
+        "primaryColor": "0000ff",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Christopher McLAUGHLIN",
+        "nameFullLocal": "Christopher McLAUGHLIN",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/644e368f9d094dca81b307a597ce750f?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "c00f0585-770d-11ef-a951-f716428ab89a",
+        "jerseyNumber": "19",
+        "position": "C",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "reboundsPerGame": 13,
+      "team": {
+        "nameFullLatin": "Taoyuan Pauian Pilots",
+        "nameFullLocal": "Taoyuan Pauian Pilots",
+        "teamId": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/613ec1e996cc4dde9890b18646d74339?size=RAW",
+        "codeLatin": "",
+        "codeLocal": "TPP",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Jarrod JONES",
+        "nameFullLocal": "Jarrod JONES",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/8e485b5dcb52477990b0a824f0200aac?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "031eee11-719d-11ef-8430-c798ea2fe12a",
+        "jerseyNumber": "45",
+        "position": "F",
+        "status": "OTHER_NOT_PARTICIPATING",
+        "seasonId": 1
+      }
+    }
+  ],
+  "stealsPerGame": [
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "stealsPerGame": 3.875,
+      "team": {
+        "nameFullLatin": null,
+        "nameFullLocal": "New Taipei Kings",
+        "teamId": "b18c0d83-64c1-11ee-94b6-3b1d78292126",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/0187cc9d82c04ebf8dc15852744a2951?size=RAW",
+        "codeLatin": "NTK",
+        "codeLocal": "NTK",
+        "primaryColor": "000000",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Kenneth MANIGAULT JR",
+        "nameFullLocal": "Kenneth MANIGAULT JR",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/e5102430f1024332a0a65d1dce3226a5?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "a18d34e3-66ae-11ee-b57c-a7da4bddf07f",
+        "jerseyNumber": "55",
+        "position": "G",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "stealsPerGame": 3.33333,
+      "team": {
+        "nameFullLatin": "Busan KCC Egis",
+        "nameFullLocal": "Busan KCC Egis",
+        "teamId": "71f8b351-5acf-11ef-bb6d-61c6d18c4379",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/1ee08a84e1c04d96a3d19621477dccfe?size=RAW",
+        "codeLatin": "KCC",
+        "codeLocal": "KCC",
+        "primaryColor": "000080",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Deonte BURTON",
+        "nameFullLocal": "Deonte BURTON",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/05663515d2734b03bc562a238ee7e135?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "d3bc809d-6f36-11ef-9aa3-39669bd3928c",
+        "jerseyNumber": "15",
+        "position": "PF",
+        "status": "OUT",
+        "seasonId": 1
+      }
+    },
+    {
+      "seasonId": "57cefc32-5ace-11ef-81a0-3d1f6018efb7",
+      "stealsPerGame": 2.33333,
+      "team": {
+        "nameFullLatin": "Hong Kong Eastern",
+        "nameFullLocal": "Hong Kong Eastern",
+        "teamId": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+        "logo": "https://images.dc.connect.sportradar.com/b1e0z/adf60619aed949ffb17b68c344ba8302?size=RAW",
+        "codeLatin": "HKE",
+        "codeLocal": "HKE",
+        "primaryColor": "0000ff",
+        "secondaryColor": "000000",
+        "tertiaryColor": "000000"
+      },
+      "player": {
+        "nameFullLatin": "Christopher McLAUGHLIN",
+        "nameFullLocal": "Christopher McLAUGHLIN",
+        "headshot": "https://images.dc.connect.sportradar.com/b1e0z/644e368f9d094dca81b307a597ce750f?size=800",
+        "nameAbbreviated": null,
+        "nameFamilyLatin": null,
+        "nameFamilyLocal": null,
+        "nameGivenLatin": null,
+        "nameGivenLocal": null,
+        "playerId": "c00f0585-770d-11ef-a951-f716428ab89a",
+        "jerseyNumber": "19",
+        "position": "C",
+        "status": "ACTIVE",
+        "seasonId": 1
+      }
+    }
+  ]
+}

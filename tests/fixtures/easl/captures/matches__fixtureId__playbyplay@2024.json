@@ -1,0 +1,72 @@
+{
+  "playbyplay": [
+    {
+      "periodId": 1,
+      "sequence": 8,
+      "description": "Jump ball lost",
+      "receivedTime": 1741518610633,
+      "eventTime": "2025-03-09T11:10:09.893",
+      "teamId": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+      "player": {
+        "nameFullLatin": "Alec BROWN",
+        "nameFullLocal": "Alec BROWN",
+        "playerId": "689dc46e-719c-11ef-9dd7-d56734dcce18",
+        "jerseyNumber": "21"
+      },
+      "scores": {
+        "d042f639-5ad9-11ef-9305-6523ca47a22e": 0,
+        "f170040e-5ad9-11ef-b4d4-070129f618c6": 0
+      }
+    },
+    {
+      "periodId": 1,
+      "sequence": 6,
+      "description": "Jump ball won",
+      "receivedTime": 1741518610634,
+      "eventTime": "2025-03-09T11:10:09.893",
+      "teamId": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+      "player": {
+        "nameFullLatin": "Kerry BLACKSHEAR JR",
+        "nameFullLocal": "Kerry BLACKSHEAR JR",
+        "playerId": "36143ea1-6f4b-11ef-a6ee-93877919ba02",
+        "jerseyNumber": "8"
+      },
+      "scores": {
+        "d042f639-5ad9-11ef-9305-6523ca47a22e": 0,
+        "f170040e-5ad9-11ef-b4d4-070129f618c6": 0
+      }
+    },
+    {
+      "periodId": 1,
+      "sequence": 46,
+      "description": "3pt Pull-up jump shot missed",
+      "receivedTime": 1741518721237,
+      "eventTime": "2025-03-09T11:10:22.870",
+      "teamId": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+      "player": {
+        "nameFullLatin": "Takuto NAKAMURA",
+        "nameFullLocal": "Takuto NAKAMURA",
+        "playerId": "c8aa2ad1-6f4b-11ef-b959-91c78e32b905",
+        "jerseyNumber": "12"
+      },
+      "scores": {
+        "d042f639-5ad9-11ef-9305-6523ca47a22e": 3,
+        "f170040e-5ad9-11ef-b4d4-070129f618c6": 0
+      }
+    }
+  ],
+  "teams": [
+    {
+      "nameFullLatin": "Hiroshima Dragonflies",
+      "nameFullLocal": "Hiroshima Dragonflies",
+      "teamId": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/34be0fafbe3a4049bd3c3eb4e4bcfce7?size=RAW"
+    },
+    {
+      "nameFullLatin": "Taoyuan Pauian Pilots",
+      "nameFullLocal": "Taoyuan Pauian Pilots",
+      "teamId": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/613ec1e996cc4dde9890b18646d74339?size=RAW"
+    }
+  ]
+}

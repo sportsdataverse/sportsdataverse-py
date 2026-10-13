@@ -1,0 +1,42 @@
+{
+ "paths": [
+  "/health",
+  "/leaders",
+  "/matches",
+  "/matches/{fixtureId}",
+  "/matches/{fixtureId}/boxscore",
+  "/matches/{fixtureId}/playbyplay",
+  "/matches/{fixtureId}/teamstats",
+  "/matches/{fixtureId}/teamstats/by/period",
+  "/metadata/seasons",
+  "/players",
+  "/players/{playerId}",
+  "/players/{playerId}/stats",
+  "/standings",
+  "/teams",
+  "/teams/{teamId}",
+  "/teams/{teamId}/leaders",
+  "/teams/{teamId}/matches",
+  "/teams/{teamId}/stats"
+ ],
+ "wrappers": {
+  "health": "/health",
+  "seasons": "/metadata/seasons",
+  "schedule": "/matches",
+  "game": "/matches/{fixture_id}",
+  "player_box": "/matches/{fixture_id}/boxscore",
+  "pbp": "/matches/{fixture_id}/playbyplay",
+  "team_box": "/matches/{fixture_id}/teamstats",
+  "team_box_by_period": "/matches/{fixture_id}/teamstats/by/period",
+  "standings": "/standings",
+  "leaders": "/leaders",
+  "teams": "/teams",
+  "team": "/teams/{team_id}",
+  "team_schedule": "/teams/{team_id}/matches",
+  "team_stats": "/teams/{team_id}/stats",
+  "team_leaders": "/teams/{team_id}/leaders",
+  "players": "/players",
+  "player": "/players/{player_id}",
+  "player_stats": "/players/{player_id}/stats"
+ }
+}

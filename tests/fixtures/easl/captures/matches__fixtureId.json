@@ -1,0 +1,71 @@
+{
+  "attendance": null,
+  "broadcasts": null,
+  "competitors": [
+    {
+      "draw": false,
+      "entityId": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+      "isHome": false,
+      "resultPlace": 2,
+      "score": "72",
+      "nameFullLatin": "Hong Kong Eastern",
+      "nameFullLocal": "Hong Kong Eastern",
+      "teamId": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/adf60619aed949ffb17b68c344ba8302?size=RAW",
+      "codeLatin": "HKE",
+      "codeLocal": "HKE",
+      "primaryColor": "0000ff",
+      "secondaryColor": "000000",
+      "tertiaryColor": "000000"
+    },
+    {
+      "draw": false,
+      "entityId": "9f419ff5-a6be-11f1-a9d1-335289d35d91",
+      "isHome": true,
+      "resultPlace": 1,
+      "score": "79",
+      "nameFullLatin": "Abra Weavers",
+      "nameFullLocal": "Abra Weavers",
+      "teamId": "9f419ff5-a6be-11f1-a9d1-335289d35d91",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/f437b8fd6bb9420b802de18217b4b915?size=RAW",
+      "codeLatin": "ABR",
+      "codeLocal": "ABR",
+      "primaryColor": "0053fd",
+      "secondaryColor": "000000",
+      "tertiaryColor": "000000"
+    }
+  ],
+  "endTimeActualUTC": null,
+  "fixtureId": "e123336e-a6d0-11f1-9d9e-dd8ab99a2c59",
+  "fixtureNumber": 2627002,
+  "fixtureType": "REGULAR",
+  "liveDataAvailable": false,
+  "liveVideoAvailable": false,
+  "nameLatin": null,
+  "nameLocal": "EASL Tip-Off 2026 Cebu",
+  "poolCode": "de11e30994d744448d3c08af864c60",
+  "roundNumber": null,
+  "stage": {},
+  "startTimeActualUTC": null,
+  "startTimeLocal": "2026-10-03T19:10:00",
+  "startTimeUTC": "2026-10-03T11:10:00",
+  "status": "CONFIRMED",
+  "venue": {
+    "abbreviationLatin": null,
+    "abbreviationLocal": null,
+    "address": {
+      "city": "Cebu City",
+      "state": "Cebu"
+    },
+    "alternateNameLatin": null,
+    "alternateNameLocal": null,
+    "countryCode": "PHL",
+    "nameLatin": "SM Seaside Cebu Arena",
+    "nameLocal": "SM Seaside Cebu Arena"
+  },
+  "pool": {
+    "id": "de11e30994d744448d3c08af864c60",
+    "name": "Group A",
+    "abb": "A"
+  }
+}

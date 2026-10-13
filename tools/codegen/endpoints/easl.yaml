@@ -1,0 +1,343 @@
+api: easl
+docstring:
+  example_import: true
+  notes:
+  - 'WARNING: UNOFFICIAL THIRD-PARTY INTERMEDIARY. These wrappers read easl.joshricha.com/api/v1,
+    an Express server run by an individual. It is not EASL''s and not Sportradar''s:
+    it mirrors Sportradar DataCore (organisation b1e0z) into SQLite and serves it
+    keyless, and it can change or vanish without notice. Its routes, field names (steak,
+    facebook_username) and sync freshness are the proxy author''s. A first-party DataCore
+    feed needs credentials this package does not have. The host serves no robots.txt
+    (404) and states no terms; the runtime waits at least 1 s before every request,
+    retries included, and honours Retry-After. Payloads are not redistributed as release
+    assets.'
+  - 'Seasons are END years (2026 = EASL 25-26). The server''s season key is the START
+    year; easl_runtime reads the season list, maps the END year to the DataCore seasonId
+    and defaults to the ACTIVE season. Four editions exist (2023-24 to 2026-27). The
+    server defaults to the active season on /matches, /standings and /leaders; the
+    runtime always sends the resolved seasonId. A season is two calendar years: group
+    by season_id, not by the year of the tip-off.'
+  - 'Finished games only: the game routes first read the fixture and refuse (AssetFetchError)
+    one that is not CONFIRMED with two scores, a box score whose player points do
+    not add up to the score (the server serves one-team, four-row boxes for some games),
+    a play-by-play that does not end on the final score in its highest period (4 or
+    more, and the last period of the period table), and team totals that disagree
+    with the score. For the ACTIVE season''s fixture lists the runtime reads /health:
+    a server clock more than a day from yours, or a game still SCHEDULED more than
+    a day after its tip-off, means the mirror has stalled (AssetFetchError). That
+    proves the mirror kept up with the games played, not that a game is final upstream.'
+  - 'Ids: every DataCore id is a UUID v1 string. team_id = entityId, player_id = personId;
+    fixture_number (YYSSNNN) is null on every 2023-24 fixture; *_row_id columns are
+    the sync server''s own integers, not DataCore ids. The fixture''s competitors
+    come in arbitrary order: read home_* / away_*, which the parsers take from isHome.'
+  - 'No shot x/y, no game clock and no lineups exist on this server. The play-by-play
+    text always says ''missed'' for field goals and ''Free throw K of M made'' for
+    free throws, made or not: use points_scored (the change of the event team''s running
+    score), which lags on a minority of events. 301 of 2,444 sampled box rows are
+    players who did not play (null minutes and counting stats; points are 0); player_box.played
+    tells them apart. easl_player_stats ignores a season filter: it is the career
+    line over every season. Names: nameFullLocal is the English display name and nameFullLatin
+    the native-script name, so the columns are name and name_native.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the server has nothing for the request (an
+    empty list or leaders object, a team or player without games, a 404).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown
+    or partial: any non-2xx (an unknown fixture is the server''s HTTP 500), an error
+    envelope, a game that is not finished or whose box score or play-by-play is incomplete,
+    a stalled sync on the active season, or a body for another game, season, team
+    or player than the one asked for.'
+  - 'ValueError: a malformed id or a season that is not one of the server''s END years
+    (raised before the request that would use it).'
+  see_also:
+  - name: East Asia Super League
+    note: the league whose data these wrappers read through an unofficial proxy
+    url: https://www.easl.basketball
+  - name: hoopR
+    note: SportsDataverse men's basketball package (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args: {}
+  parser: parse_easl_health
+  path: /health
+  returns_schema: native/easl/health
+  short: health
+  summary: 'Liveness probe of the unofficial sync server: status, message and the
+    server''s own timestamp.'
+- example_args: {}
+  parser: parse_easl_seasons
+  path: /metadata/seasons
+  returns_schema: native/easl/seasons
+  short: seasons
+  summary: Every configured EASL season (the four editions 2023-24 to 2026-27) with
+    its DataCore season id and END year.
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'Season END year (2026 = EASL 25-26; the four editions are 2024 to
+      2027). easl_runtime reads easl_seasons and maps it to the DataCore seasonId.
+      Default: the ACTIVE season.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_easl_schedule
+  path: /matches
+  returns_schema: native/easl/schedule
+  short: schedule
+  summary: 'Every fixture of one season: status, tip-off, stage, pool, venue and both
+    teams with their scores.'
+- example_args:
+    fixture_id: 10af8fd4-106e-11f1-960b-5798087c7aa3
+  parser: parse_easl_game
+  path: /matches/{fixture_id}
+  path_params:
+  - description: 'DataCore fixture (game) UUID v1, e.g. ''10af8fd4-106e-11f1-960b-5798087c7aa3''
+      (the 2025-26 EASL Championship): the ''id'' of easl_schedule rows. Only finished
+      (CONFIRMED) games are served; a malformed id is a ValueError.'
+    name: fixture_id
+    required: true
+    type: str
+  returns_schema: native/easl/game
+  short: game
+  summary: 'Header of one finished fixture: teams, final score, status, stage, pool,
+    venue and attendance.'
+- example_args:
+    fixture_id: 10af8fd4-106e-11f1-960b-5798087c7aa3
+  parser: parse_easl_player_box
+  path: /matches/{fixture_id}/boxscore
+  path_params:
+  - description: 'DataCore fixture (game) UUID v1, e.g. ''10af8fd4-106e-11f1-960b-5798087c7aa3''
+      (the 2025-26 EASL Championship): the ''id'' of easl_schedule rows. Only finished
+      (CONFIRMED) games are served; a malformed id is a ValueError.'
+    name: fixture_id
+    required: true
+    type: str
+  returns_schema: native/easl/player_box
+  short: player_box
+  summary: Player box score of a finished game, one row per rostered player (non-players
+    have null counting stats).
+- example_args:
+    fixture_id: 10af8fd4-106e-11f1-960b-5798087c7aa3
+  parser: parse_easl_pbp
+  path: /matches/{fixture_id}/playbyplay
+  path_params:
+  - description: 'DataCore fixture (game) UUID v1, e.g. ''10af8fd4-106e-11f1-960b-5798087c7aa3''
+      (the 2025-26 EASL Championship): the ''id'' of easl_schedule rows. Only finished
+      (CONFIRMED) games are served; a malformed id is a ValueError.'
+    name: fixture_id
+    required: true
+    type: str
+  returns_schema: native/easl/pbp
+  short: pbp
+  summary: Play-by-play of a finished game in delivered order, with the running score
+    and the points each event scored.
+- example_args:
+    fixture_id: 10af8fd4-106e-11f1-960b-5798087c7aa3
+  parser: parse_easl_team_box
+  path: /matches/{fixture_id}/teamstats
+  path_params:
+  - description: 'DataCore fixture (game) UUID v1, e.g. ''10af8fd4-106e-11f1-960b-5798087c7aa3''
+      (the 2025-26 EASL Championship): the ''id'' of easl_schedule rows. Only finished
+      (CONFIRMED) games are served; a malformed id is a ValueError.'
+    name: fixture_id
+    required: true
+    type: str
+  returns_schema: native/easl/team_box
+  short: team_box
+  summary: Team totals of a finished game, one row per team, with the opponent's totals
+    as *_against columns.
+- example_args:
+    fixture_id: 10af8fd4-106e-11f1-960b-5798087c7aa3
+  parser: parse_easl_team_box_by_period
+  path: /matches/{fixture_id}/teamstats/by/period
+  path_params:
+  - description: 'DataCore fixture (game) UUID v1, e.g. ''10af8fd4-106e-11f1-960b-5798087c7aa3''
+      (the 2025-26 EASL Championship): the ''id'' of easl_schedule rows. Only finished
+      (CONFIRMED) games are served; a malformed id is a ValueError.'
+    name: fixture_id
+    required: true
+    type: str
+  returns_schema: native/easl/team_box_by_period
+  short: team_box_by_period
+  summary: Team totals of a finished game by period, one row per team and period (overtimes
+    after the fourth).
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'Season END year (2026 = EASL 25-26; the four editions are 2024 to
+      2027). easl_runtime reads easl_seasons and maps it to the DataCore seasonId.
+      Default: the ACTIVE season.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_easl_standings
+  path: /standings
+  returns_schema: native/easl/standings
+  short: standings
+  summary: 'Group-stage standings of one season: rank within the pool, record, splits,
+    points and the last five results.'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'Season END year (2026 = EASL 25-26; the four editions are 2024 to
+      2027). easl_runtime reads easl_seasons and maps it to the DataCore seasonId.
+      Default: the ACTIVE season.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_easl_leaders
+  path: /leaders
+  returns_schema: native/easl/leaders
+  short: leaders
+  summary: Tournament top-5 player leaders in nine categories (points, rebounds, assists,
+    steals, blocks, shooting).
+- example_args: {}
+  parser: parse_easl_teams
+  path: /teams
+  returns_schema: native/easl/teams
+  short: teams
+  summary: The 12 ACTIVE EASL teams (historical teams resolve only through easl_team).
+- example_args:
+    team_id: 865489e8-b0f5-11ed-8b3f-c199a9dea184
+  parser: parse_easl_team
+  path: /teams/{team_id}
+  path_params:
+  - description: 'DataCore team (entity) UUID v1, e.g. ''865489e8-b0f5-11ed-8b3f-c199a9dea184''
+      (Utsunomiya Brex): the team_id of easl_teams, easl_standings and the box scores.
+      easl_team resolves the 12 historical teams easl_teams does not list.'
+    name: team_id
+    required: true
+    type: str
+  returns_schema: native/easl/team
+  short: team
+  summary: One team's directory entry; resolves the historical teams easl_teams does
+    not list.
+- example_args:
+    season: 2026
+    team_id: 865489e8-b0f5-11ed-8b3f-c199a9dea184
+  extra_params:
+  - description: 'Season END year (2026 = EASL 25-26; the four editions are 2024 to
+      2027). easl_runtime reads easl_seasons and maps it to the DataCore seasonId.
+      Default: the ACTIVE season.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_easl_team_schedule
+  path: /teams/{team_id}/matches
+  path_params:
+  - description: 'DataCore team (entity) UUID v1, e.g. ''865489e8-b0f5-11ed-8b3f-c199a9dea184''
+      (Utsunomiya Brex): the team_id of easl_teams, easl_standings and the box scores.
+      easl_team resolves the 12 historical teams easl_teams does not list.'
+    name: team_id
+    required: true
+    type: str
+  returns_schema: native/easl/team_schedule
+  short: team_schedule
+  summary: A team's fixtures in one season, shaped like easl_schedule.
+- example_args:
+    season: 2026
+    team_id: 865489e8-b0f5-11ed-8b3f-c199a9dea184
+  extra_params:
+  - description: 'Season END year (2026 = EASL 25-26; the four editions are 2024 to
+      2027). easl_runtime reads easl_seasons and maps it to the DataCore seasonId.
+      Default: the ACTIVE season.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_easl_team_stats
+  path: /teams/{team_id}/stats
+  path_params:
+  - description: 'DataCore team (entity) UUID v1, e.g. ''865489e8-b0f5-11ed-8b3f-c199a9dea184''
+      (Utsunomiya Brex): the team_id of easl_teams, easl_standings and the box scores.
+      easl_team resolves the 12 historical teams easl_teams does not list.'
+    name: team_id
+    required: true
+    type: str
+  returns_schema: native/easl/team_stats
+  short: team_stats
+  summary: 'A team''s cumulative season statistics: totals, per-game rates and the
+    opponent''s totals (*_against).'
+- example_args:
+    season: 2026
+    team_id: 865489e8-b0f5-11ed-8b3f-c199a9dea184
+  extra_params:
+  - description: 'Season END year (2026 = EASL 25-26; the four editions are 2024 to
+      2027). easl_runtime reads easl_seasons and maps it to the DataCore seasonId.
+      Default: the ACTIVE season.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_easl_team_leaders
+  path: /teams/{team_id}/leaders
+  path_params:
+  - description: 'DataCore team (entity) UUID v1, e.g. ''865489e8-b0f5-11ed-8b3f-c199a9dea184''
+      (Utsunomiya Brex): the team_id of easl_teams, easl_standings and the box scores.
+      easl_team resolves the 12 historical teams easl_teams does not list.'
+    name: team_id
+    required: true
+    type: str
+  returns_schema: native/easl/team_leaders
+  short: team_leaders
+  summary: A team's top-5 player leaders per category in one season, shaped like easl_leaders.
+- example_args:
+    season: 2026
+    team_id: 865489e8-b0f5-11ed-8b3f-c199a9dea184
+  extra_params:
+  - description: 'Season END year (2026 = EASL 25-26; the four editions are 2024 to
+      2027). easl_runtime reads easl_seasons and maps it to the DataCore seasonId.
+      Default: no season filter.'
+    name: season
+    query_key: season
+    type: int
+  - description: 'DataCore team (entity) UUID v1, e.g. ''865489e8-b0f5-11ed-8b3f-c199a9dea184''
+      (Utsunomiya Brex): the team_id of easl_teams, easl_standings and the box scores.
+      easl_team resolves the 12 historical teams easl_teams does not list. Needs season
+      for a roster (jersey number and position).'
+    name: team_id
+    query_key: teamId
+    type: str
+  parser: parse_easl_players
+  path: /players
+  returns_schema: native/easl/players
+  short: players
+  summary: Every EASL player of all seasons; with season and team_id a roster that
+    adds jersey number and position.
+- example_args:
+    player_id: 85c99dab-9f67-11f0-8780-a731edb5aad5
+  parser: parse_easl_player
+  path: /players/{player_id}
+  path_params:
+  - description: 'DataCore person UUID v1, e.g. ''85c99dab-9f67-11f0-8780-a731edb5aad5'':
+      the player_id of easl_players, the box scores, leaders and play-by-play. A malformed
+      id is a ValueError.'
+    name: player_id
+    required: true
+    type: str
+  returns_schema: native/easl/player
+  short: player
+  summary: 'One player''s biography: names, nationality, birth date, height, weight.'
+- example_args:
+    player_id: 85c99dab-9f67-11f0-8780-a731edb5aad5
+  parser: parse_easl_player_stats
+  path: /players/{player_id}/stats
+  path_params:
+  - description: 'DataCore person UUID v1, e.g. ''85c99dab-9f67-11f0-8780-a731edb5aad5'':
+      the player_id of easl_players, the box scores, leaders and play-by-play. A malformed
+      id is a ValueError.'
+    name: player_id
+    required: true
+    type: str
+  returns_schema: native/easl/player_stats
+  short: player_stats
+  summary: A player's cumulative statistics over ALL seasons (the server ignores a
+    season filter).
+getter_module: sportsdataverse.basketball.easl.easl_runtime
+host: https://easl.joshricha.com/api/v1
+module: easl
+name_pattern: easl_{short}
+parser_columns: false
+parser_module: basketball.easl.easl_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: easl_
