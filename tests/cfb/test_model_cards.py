@@ -135,3 +135,25 @@ def test_the_importance_artifact_is_the_bundled_boosters_own(model):
     for c, f in zip(committed["features"], fresh["features"]):
         for key in ("gain", "total_gain", "weight", "cover", "share_total_gain"):
             assert c[key] == pytest.approx(f[key], rel=1e-9, abs=1e-12), (c["feature"], key)
+
+
+@pytest.mark.parametrize("model", _BOOSTERS)
+def test_week_and_label_spans_are_ordered_pairs_that_agree_with_the_card(model):
+    """``holdout_weeks`` / ``label_seasons`` are [lo, hi] pairs; the weeks match ``holdout_scope``, and
+    ``label_seasons`` sits inside the training span and matches ``label_rows_by_season`` (review R847-7/8)."""
+    card = model_cards.load_model_card(model)
+    for key in ("holdout_weeks", "label_seasons"):
+        if key in card:
+            lo, hi = card[key]
+            assert lo <= hi, (model, key)
+    if "holdout_weeks" in card:
+        lo, hi = card["holdout_weeks"]
+        assert f"weeks {lo}-{hi}" in card["holdout_scope"], model
+    if "label_seasons" in card:
+        lo, hi = card["label_seasons"]
+        t_lo, t_hi = card["training_seasons"]
+        assert t_lo <= lo and hi <= t_hi, model
+        by_season = {int(s): n for s, n in card["label_rows_by_season"].items()}
+        assert (min(by_season), max(by_season)) == (lo, hi), model
+        assert sum(by_season.values()) == card["n_training_rows"], model
+        assert "extrapolation" in card["in_sample_reason"], model
