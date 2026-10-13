@@ -442,8 +442,9 @@ TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minut
 (MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in `team_game_rates`
 (`total_turnovers`, repaired where ESPN doubled or omitted it) and team
 minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, MBB and WBB, 5 per overtime). For MBB and
-WBB team TOV follows the college rule of `team_game_rates` (null in WBB before 2009, so usage
-is null there). A player with no shots, no minutes, or `did_not_play` gets `null`.
+WBB team TOV follows the college rule of `team_game_rates` (null in WBB before 2009 and in a
+WBB game where both teams show 0, so usage is null there). A player with no shots, no minutes,
+or `did_not_play` gets `null`.
 
 **Parameters**
 
@@ -466,7 +467,7 @@ One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
 | `athlete_id` | integer | ESPN athlete id, the join key to the player box score. |
 | `team_id` | integer | ESPN team id, the join key to the team box score. |
 | `ts_pct` | double | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
-| `usg_pct` | double | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009). |
+| `usg_pct` | double | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009, or a WBB game where both teams show 0). |
 
 **Example**
 
@@ -724,9 +725,10 @@ has duplicated the team turnover (`team_turnovers == turnovers` and `total_turno
 turnovers`, measured on every 2002-2012 game, e.g. 17/17/34) it is `turnovers`. Without the
 `turnovers` / `team_turnovers` columns it is `total_turnovers` as given. For MBB and WBB
 `TOV` is `turnovers` (`team_turnovers` in WBB 2009-2012, where the other two are 0), and a 0
-is a real 0, except in WBB before 2009, whose box records none: there (and for a WBB box with no
-`season`) TOV%, possessions, ratings and pace are null, never computed from zero turnovers. A
-zero denominator gives `null`.
+is a real 0, except where the WBB box recorded none: in WBB before 2009 (and for a WBB box with
+no `season`) and in a WBB game of any season whose two teams both show 0, TOV%, possessions,
+ratings and pace are null, never computed from zero turnovers. A single team's 0 beside an
+opponent's recorded count stays 0. A zero denominator gives `null`.
 
 **Parameters**
 
@@ -747,14 +749,14 @@ One row per `(game_id, team_id)` with `efg_pct, tov_pct, orb_pct, ft_rate, posse
 | `game_id` | integer | ESPN game id, the join key to the play-by-play and box-score frames. |
 | `team_id` | integer | ESPN team id, the join key to the team box score. |
 | `efg_pct` | double | Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts. |
-| `tov_pct` | double | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive or the box records no turnovers (WBB before 2009). |
+| `tov_pct` | double | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive or the box records no turnovers (WBB before 2009, or a WBB game where both teams show 0). |
 | `orb_pct` | double | Offensive rebound rate, own ORB / (own ORB + opponent DRB); null when the denominator is not positive. |
 | `ft_rate` | double | Free-throw rate, FTA / FGA; null with no attempts. |
-| `possessions` | double | Oliver's possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams; null when the box records no turnovers (WBB before 2009). |
+| `possessions` | double | Oliver's possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams; null when the box records no turnovers (WBB before 2009, or a WBB game where both teams show 0). |
 | `off_rtg` | double | Points scored per 100 possessions; null when possessions are not positive. |
 | `def_rtg` | double | Points allowed per 100 possessions; null when possessions are not positive. |
 | `pace` | double | Possessions per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB), overtime minutes included in the denominator; null when the box records no turnovers. |
-| `total_turnovers` | integer | The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 NBA total is repaired to the player count; college: the box turnovers (team_turnovers in WBB 2009-2012), null when not recorded (WBB before 2009). |
+| `total_turnovers` | integer | The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 NBA total is repaired to the player count; college: the box turnovers (team_turnovers in WBB 2009-2012), null when not recorded (WBB before 2009, or a WBB game where both teams show 0). |
 | `game_minutes` | integer | Minutes played in the game: regulation (48 NBA, 40 WNBA and college) plus five per overtime. |
 
 **Example**

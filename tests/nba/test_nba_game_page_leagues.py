@@ -65,6 +65,8 @@ def _frames(
         ("wnba_250603003.json.gz", 2005, 2, False, 3, 459),
         ("wbb_293170052.json.gz", 2010, 2, False, 2, 351),
         ("wbb_273130043.json.gz", 2008, 2, False, 2, 358),
+        ("wbb_283430164.json.gz", 2009, 2, False, 2, 187),
+        ("wbb_290232368.json.gz", 2009, 2, False, 3, 273),
         ("mbb_401812161.json.gz", 2026, 2, False, 2, 425),
         ("mbb_401830342.json.gz", 2026, 2, True, 4, 426),
         ("summary_mbb.json", 2024, 2, True, 2, 294),
@@ -302,16 +304,52 @@ def test_genuine_zero_college_turnovers_stay_zero_after_2009(monkeypatch: pytest
     assert out["tov_pct"][0] == 0.0 and out["possessions"].null_count() == 0 and out["pace"].null_count() == 0
 
 
-def test_wbb_zero_turnovers_are_null_only_before_2009(monkeypatch: pytest.MonkeyPatch) -> None:
-    # The 2008 box (every turnover key 0) is "not recorded"; the same real box with its season set to
-    # 2010 in-test (a mutation of the real capture, not a synthetic frame) keeps 0, and a box whose
-    # season is unknown is never read as 2009+.
+def test_wbb_zero_turnovers_before_2009_or_without_a_season_are_null(monkeypatch: pytest.MonkeyPatch) -> None:
+    # The 2008 box (every turnover key 0) is "not recorded", and a box whose season is unknown is never
+    # read as 2009+. The same real box with its season set to 2010 in-test (a mutation of the real
+    # capture, not a synthetic frame) is still null: both teams show 0, the game-level rule.
     _, _, tb, _ = _frames(monkeypatch, "wbb", "wbb_273130043.json.gz")
     assert tb["season"].unique().to_list() == [2008]
-    as_2010 = tb.with_columns(pl.lit(2010).cast(tb.schema["season"]).alias("season"))
-    assert gp.team_game_rates(as_2010, league="wbb", regulation_periods=2)["total_turnovers"].to_list() == [0, 0]
     unknown = gp.team_game_rates(tb.drop("season"), league="wbb", regulation_periods=2)
     assert unknown["total_turnovers"].to_list() == [None, None]
+    as_2010 = tb.with_columns(pl.lit(2010).cast(tb.schema["season"]).alias("season"))
+    assert gp.team_game_rates(as_2010, league="wbb", regulation_periods=2)["total_turnovers"].to_list() == [None, None]
+
+
+def test_wbb_2009_game_where_both_teams_show_zero_turnovers_is_null(monkeypatch: pytest.MonkeyPatch) -> None:
+    # F2: WBB 283430164 (2008-12-09 UGA @ RUTG, season 2009) records no turnover under any box key for
+    # either team, yet its plays log 13 RUTG and 10 UGA turnovers: the 0s are "not recorded".
+    final, pbp, tb, pb = _frames(monkeypatch, "wbb", "wbb_283430164.json.gz")
+    assert tb["season"].unique().to_list() == [2009]
+    assert sorted(zip(tb["team_id"], tb["turnovers"], tb["team_turnovers"], tb["total_turnovers"])) == [
+        (61, 0, 0, 0),
+        (164, 0, 0, 0),
+    ]
+    tos = pbp.filter(pl.col("type_text").str.contains("(?i)turnover")).group_by("team_id").agg(pl.len())
+    assert dict(tos.rows()) == {164: 13, 61: 10}
+    out = gp.team_game_rates(tb, league="wbb")
+    for col in ("total_turnovers", "tov_pct", "possessions", "off_rtg", "def_rtg", "pace"):
+        assert out[col].to_list() == [None, None], col
+    for col in ("efg_pct", "orb_pct", "ft_rate"):
+        assert out[col].null_count() == 0, col
+    assert gp.player_game_rates(pb, tb, league="wbb")["usg_pct"].null_count() == pb.height
+    live = gp.game_page_frames(final, league="wbb")
+    assert live["team_game_rates"]["tov_pct"].to_list() == [None, None]
+
+
+def test_wbb_2009_single_team_zero_keeps_its_zero(monkeypatch: pytest.MonkeyPatch) -> None:
+    # F2 ruling: only a game whose two teams both show 0 is "not recorded". WBB 290232368 (2009-01-23
+    # FAIR @ MRST, season 2009): FAIR (2217) shows 0 under every key, MRST (2368) 1 under teamTurnovers,
+    # so FAIR keeps its 0 (TOV% 0.0). Its plays log 12 FAIR / 16 MRST turnovers (see the fix-wave report).
+    _, pbp, tb, _ = _frames(monkeypatch, "wbb", "wbb_290232368.json.gz")
+    assert tb["season"].unique().to_list() == [2009]
+    assert sorted(zip(tb["team_id"], tb["turnovers"], tb["team_turnovers"], tb["total_turnovers"])) == [
+        (2217, 0, 0, 0),
+        (2368, 0, 1, 0),
+    ]
+    out = gp.team_game_rates(tb, league="wbb", periods=3).sort("team_id")
+    assert out["total_turnovers"].to_list() == [0, 1]
+    assert out["tov_pct"][0] == 0.0 and out["possessions"].null_count() == 0 and out["pace"].null_count() == 0
 
 
 def test_halves_overtime_pace_and_usage_use_the_games_minutes(monkeypatch: pytest.MonkeyPatch) -> None:

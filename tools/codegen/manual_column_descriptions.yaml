@@ -27219,21 +27219,21 @@ team_game_rates:
   game_id: ESPN game id, the join key to the play-by-play and box-score frames.
   team_id: ESPN team id, the join key to the team box score.
   efg_pct: Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts.
-  tov_pct: Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive or the box records no turnovers (WBB before 2009).
+  tov_pct: Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive or the box records no turnovers (WBB before 2009, or a WBB game where both teams show 0).
   orb_pct: Offensive rebound rate, own ORB / (own ORB + opponent DRB); null when the denominator is not positive.
   ft_rate: Free-throw rate, FTA / FGA; null with no attempts.
-  possessions: 'Oliver''s possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams; null when the box records no turnovers (WBB before 2009).'
+  possessions: 'Oliver''s possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams; null when the box records no turnovers (WBB before 2009, or a WBB game where both teams show 0).'
   off_rtg: Points scored per 100 possessions; null when possessions are not positive.
   def_rtg: Points allowed per 100 possessions; null when possessions are not positive.
   pace: Possessions per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB), overtime minutes included in the denominator; null when the box records no turnovers.
-  total_turnovers: 'The team turnover count every rate above uses, player plus team turnovers; ESPN''s doubled pre-2013 NBA total is repaired to the player count; college: the box turnovers (team_turnovers in WBB 2009-2012), null when not recorded (WBB before 2009).'
+  total_turnovers: 'The team turnover count every rate above uses, player plus team turnovers; ESPN''s doubled pre-2013 NBA total is repaired to the player count; college: the box turnovers (team_turnovers in WBB 2009-2012), null when not recorded (WBB before 2009, or a WBB game where both teams show 0).'
   game_minutes: 'Minutes played in the game: regulation (48 NBA, 40 WNBA and college) plus five per overtime.'
 player_game_rates:
   game_id: ESPN game id, the join key to the play-by-play and box-score frames.
   athlete_id: ESPN athlete id, the join key to the player box score.
   team_id: ESPN team id, the join key to the team box score.
   ts_pct: True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP.
-  usg_pct: 'Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009).'
+  usg_pct: 'Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009, or a WBB game where both teams show 0).'
 nba_l2m_games:
   game_id: 10-digit NBA game id (zero-padded), parsed from the season listing page's report link.
   label: Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)".
