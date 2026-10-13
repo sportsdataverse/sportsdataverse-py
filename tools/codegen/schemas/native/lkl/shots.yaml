@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: shot_id
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: period_type
+  type: character
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player_slug
+  type: character
+- description: ''
+  name: type
+  type: character
+- description: ''
+  name: made
+  type: logical
+- description: ''
+  name: x
+  type: numeric
+- description: ''
+  name: y
+  type: numeric
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: area
+  type: character
+kind: dataframe
+schema: lkl_shots

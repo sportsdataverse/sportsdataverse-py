@@ -1,0 +1,102 @@
+{
+  "game_id": 2000,
+  "game_status": "Pasibaigė",
+  "referees": "Nepaskelbta",
+  "has_actions": false,
+  "is_streaming": false,
+  "teams_info": {
+    "home": {
+      "id": 6,
+      "name": "Lietuvos Rytas",
+      "short_name": "RYT",
+      "slug": "rytas",
+      "logo": "http://lkl.lt/media/teams/historical_logos/rytas_3090.png",
+      "winner": true,
+      "coach": "Nedas Pacevičius",
+      "assistant_coach": "Mindaugas Brazys"
+    },
+    "away": {
+      "id": 10,
+      "name": "Techasas",
+      "short_name": "LIE",
+      "slug": "lietkabelis",
+      "logo": "http://lkl.lt/media/teams/historical_logos/lietkabelis_3090.jpg",
+      "winner": false,
+      "coach": "Nenad Čanak",
+      "assistant_coach": "Tautvydas Šležas"
+    }
+  },
+  "main_videos": [],
+  "game_info": {
+    "time": "2007  m. Spalio 12 d., 19:00",
+    "arena": "Jeep arena",
+    "attendance": "950 žiūrovai"
+  },
+  "players": {
+    "home": [
+      {
+        "id": 619,
+        "name": "Andrius Šležas",
+        "jersey": "5",
+        "slug": "andrius-slezas"
+      },
+      {
+        "id": 97,
+        "name": "Mindaugas Lukauskis",
+        "jersey": "8",
+        "slug": "mindaugas-lukauskis"
+      },
+      {
+        "id": 44,
+        "name": "Artūras Jomantas",
+        "jersey": "21",
+        "slug": "arturas-jomantas"
+      }
+    ],
+    "away": [
+      {
+        "id": 462,
+        "name": "Žydrūnas Urbonas",
+        "jersey": "9",
+        "slug": "zydrunas-urbonas"
+      },
+      {
+        "id": 538,
+        "name": "Tadas Buinauskas",
+        "jersey": "23",
+        "slug": "tadas-buinauskas"
+      },
+      {
+        "id": 582,
+        "name": "Paulius Dėgenis",
+        "jersey": "11",
+        "slug": "paulius-degenis"
+      }
+    ]
+  },
+  "players_ids": {
+    "home": [
+      619,
+      97,
+      44
+    ],
+    "away": [
+      462,
+      538,
+      582
+    ],
+    "all": [
+      619,
+      97,
+      44
+    ]
+  },
+  "quarters": [
+    1,
+    2,
+    3
+  ],
+  "start_date": "2007-10-12",
+  "start_time": "19:00",
+  "attendance_count": 950
+}

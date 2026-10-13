@@ -1,0 +1,88 @@
+{
+  "season_id": 39252,
+  "season_label": "2024-2025 m. sezonas",
+  "season_end_year": 2025,
+  "pages": 21,
+  "game_count": 205,
+  "games": [
+    {
+      "game_id": 11369,
+      "date": "2025-06-21",
+      "weekday": "Saturday",
+      "time": "16:30",
+      "arena": "Žalgirio arena",
+      "city": "Kaunas",
+      "home_slug": "zalgiris",
+      "home_code": "ŽAL",
+      "home_name": "Žalgiris",
+      "home_score": 76,
+      "away_slug": "rytas",
+      "away_code": "RYT",
+      "away_name": "Rytas",
+      "away_score": 69,
+      "winner_highlighted": "home"
+    },
+    {
+      "game_id": 11366,
+      "date": "2025-06-18",
+      "weekday": "Wednesday",
+      "time": "18:30",
+      "arena": "Jonavos sporto arena",
+      "city": "Jonava",
+      "home_slug": "hipocredit",
+      "home_code": "HIP",
+      "home_name": "Hipocredit",
+      "home_score": 73,
+      "away_slug": "lietkabelis",
+      "away_code": "LIE",
+      "away_name": "Lietkabelis",
+      "away_score": 81,
+      "winner_highlighted": "away"
+    },
+    {
+      "game_id": 11365,
+      "date": "2025-06-17",
+      "weekday": "Tuesday",
+      "time": "18:30",
+      "arena": "Žalgirio arena",
+      "city": "Kaunas",
+      "home_slug": "zalgiris",
+      "home_code": "ŽAL",
+      "home_name": "Žalgiris",
+      "home_score": 80,
+      "away_slug": "rytas",
+      "away_code": "RYT",
+      "away_name": "Rytas",
+      "away_score": 86,
+      "winner_highlighted": "away"
+    }
+  ],
+  "seasons": [
+    {
+      "season_id": 49436,
+      "label": "2026-2027 m. sezonas"
+    },
+    {
+      "season_id": 41936,
+      "label": "2025-2026 m. sezonas"
+    },
+    {
+      "season_id": 39252,
+      "label": "2024-2025 m. sezonas"
+    }
+  ],
+  "kmt_seasons": [
+    {
+      "season_id": 49437,
+      "label": "KMT 2026-2027 m."
+    },
+    {
+      "season_id": 41937,
+      "label": "KMT 2025-2026 m."
+    },
+    {
+      "season_id": 39371,
+      "label": "KMT 2024-2025 m."
+    }
+  ]
+}

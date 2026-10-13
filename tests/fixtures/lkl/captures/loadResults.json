@@ -1,0 +1,88 @@
+{
+  "season_id": 49436,
+  "season_label": "2026-2027 m. sezonas",
+  "season_end_year": 2027,
+  "pages": 3,
+  "game_count": 22,
+  "games": [
+    {
+      "game_id": 11599,
+      "date": "2026-10-11",
+      "weekday": "Sunday",
+      "time": "19:00",
+      "arena": "Šiaulių arena",
+      "city": "Šiauliai",
+      "home_slug": "siauliai",
+      "home_code": "ŠIA",
+      "home_name": "Šiauliai",
+      "home_score": 83,
+      "away_slug": "juventus",
+      "away_code": "JUV",
+      "away_name": "Juventus",
+      "away_score": 71,
+      "winner_highlighted": "home"
+    },
+    {
+      "game_id": 11597,
+      "date": "2026-10-11",
+      "weekday": "Sunday",
+      "time": "17:00",
+      "arena": "Kėdainių arena",
+      "city": "Kėdainiai",
+      "home_slug": "nevezis-paskolu-klubas",
+      "home_code": "NEV",
+      "home_name": "Nevėžis-Paskolų klubas",
+      "home_score": 76,
+      "away_slug": "zalgiris",
+      "away_code": "ŽAL",
+      "away_name": "Žalgiris",
+      "away_score": 80,
+      "winner_highlighted": "away"
+    },
+    {
+      "game_id": 11596,
+      "date": "2026-10-11",
+      "weekday": "Sunday",
+      "time": "16:30",
+      "arena": "Tauragės Arena",
+      "city": "Tauragė",
+      "home_slug": "taurage",
+      "home_code": "TAU",
+      "home_name": "Tauragė",
+      "home_score": 82,
+      "away_slug": "gargzdai",
+      "away_code": "GAR",
+      "away_name": "Gargždai",
+      "away_score": 102,
+      "winner_highlighted": "away"
+    }
+  ],
+  "seasons": [
+    {
+      "season_id": 49436,
+      "label": "2026-2027 m. sezonas"
+    },
+    {
+      "season_id": 41936,
+      "label": "2025-2026 m. sezonas"
+    },
+    {
+      "season_id": 39252,
+      "label": "2024-2025 m. sezonas"
+    }
+  ],
+  "kmt_seasons": [
+    {
+      "season_id": 49437,
+      "label": "KMT 2026-2027 m."
+    },
+    {
+      "season_id": 41937,
+      "label": "KMT 2025-2026 m."
+    },
+    {
+      "season_id": 39371,
+      "label": "KMT 2024-2025 m."
+    }
+  ]
+}

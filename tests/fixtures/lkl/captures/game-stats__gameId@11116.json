@@ -1,0 +1,266 @@
+{
+  "comparison": {
+    "shooting": [
+      {
+        "label": "Dvitaškiai metimai",
+        "home": {
+          "value": "21/43",
+          "percentage": "48.8%",
+          "graph_length": "48.8",
+          "winning": true
+        },
+        "away": {
+          "value": "20/43",
+          "percentage": "46.5%",
+          "graph_length": "46.5",
+          "winning": false
+        }
+      },
+      {
+        "label": "Tritaškiai metimai",
+        "home": {
+          "value": "9/29",
+          "percentage": "31.0%",
+          "graph_length": "31.0",
+          "winning": false
+        },
+        "away": {
+          "value": "9/27",
+          "percentage": "33.3%",
+          "graph_length": "33.3",
+          "winning": true
+        }
+      },
+      {
+        "label": "Baudų metimai",
+        "home": {
+          "value": "15/25",
+          "percentage": "60.0%",
+          "graph_length": "60.0",
+          "winning": false
+        },
+        "away": {
+          "value": "23/27",
+          "percentage": "85.2%",
+          "graph_length": "85.2",
+          "winning": true
+        }
+      }
+    ],
+    "main": [
+      {
+        "label": "Atkovoti kamuoliai",
+        "home": {
+          "value": 48,
+          "graph_length": 54.55,
+          "winning": true
+        },
+        "away": {
+          "value": 40,
+          "graph_length": 45.45,
+          "winning": false
+        }
+      },
+      {
+        "label": "Rezultatyvūs perdavimai",
+        "home": {
+          "value": 17,
+          "graph_length": 62.96,
+          "winning": true
+        },
+        "away": {
+          "value": 10,
+          "graph_length": 37.04,
+          "winning": false
+        }
+      },
+      {
+        "label": "Perimti kamuoliai",
+        "home": {
+          "value": 3,
+          "graph_length": 20,
+          "winning": false
+        },
+        "away": {
+          "value": 12,
+          "graph_length": 80,
+          "winning": true
+        }
+      }
+    ],
+    "all": [
+      {
+        "label": "Metimai iš žaidimo",
+        "home": {
+          "value": "30/72",
+          "percentage": "41.7%",
+          "graph_length": "41.7",
+          "winning": true
+        },
+        "away": {
+          "value": "29/70",
+          "percentage": "41.4%",
+          "graph_length": "41.4",
+          "winning": false
+        }
+      },
+      {
+        "label": "Dvitaškiai metimai",
+        "home": {
+          "value": "21/43",
+          "percentage": "48.8%",
+          "graph_length": "48.8",
+          "winning": true
+        },
+        "away": {
+          "value": "20/43",
+          "percentage": "46.5%",
+          "graph_length": "46.5",
+          "winning": false
+        }
+      },
+      {
+        "label": "Tritaškiai metimai",
+        "home": {
+          "value": "9/29",
+          "percentage": "31.0%",
+          "graph_length": "31.0",
+          "winning": false
+        },
+        "away": {
+          "value": "9/27",
+          "percentage": "33.3%",
+          "graph_length": "33.3",
+          "winning": true
+        }
+      }
+    ],
+    "biggest_leads": {
+      "home": 10,
+      "away": 10
+    },
+    "leads_stats": [
+      {
+        "label": "Rezultato pasikeitimai",
+        "value": 2
+      },
+      {
+        "label": "Rezultato lyginimas",
+        "value": 3
+      },
+      {
+        "label": "Ilgiausia atkarpa",
+        "value": 16
+      }
+    ]
+  },
+  "leads": {
+    "1": [
+      {
+        "diff": 0,
+        "clock": "10:00:00",
+        "score_1": "0",
+        "score_2": "0",
+        "column_height": 0
+      },
+      {
+        "diff": -1,
+        "clock": "09:07:00",
+        "score_1": "1",
+        "score_2": "2",
+        "column_height": 3.3333333333333335
+      },
+      {
+        "diff": -4,
+        "clock": "08:05:00",
+        "score_1": "1",
+        "score_2": "5",
+        "column_height": 13.333333333333334
+      }
+    ],
+    "2": [
+      {
+        "diff": -7,
+        "clock": "10:00:00",
+        "score_1": "12",
+        "score_2": "19",
+        "column_height": 23.333333333333332
+      },
+      {
+        "diff": -9,
+        "clock": "09:00:00",
+        "score_1": "12",
+        "score_2": "21",
+        "column_height": 30
+      },
+      {
+        "diff": -9,
+        "clock": "08:04:00",
+        "score_1": "12",
+        "score_2": "21",
+        "column_height": 30
+      }
+    ],
+    "3": [
+      {
+        "diff": -3,
+        "clock": "10:00:00",
+        "score_1": "33",
+        "score_2": "36",
+        "column_height": 10
+      },
+      {
+        "diff": -5,
+        "clock": "09:11:00",
+        "score_1": "33",
+        "score_2": "38",
+        "column_height": 16.666666666666664
+      },
+      {
+        "diff": -7,
+        "clock": "08:06:00",
+        "score_1": "35",
+        "score_2": "42",
+        "column_height": 23.333333333333332
+      }
+    ],
+    "4": [
+      {
+        "diff": -2,
+        "clock": "10:00:00",
+        "score_1": "57",
+        "score_2": "59",
+        "column_height": 6.666666666666667
+      },
+      {
+        "diff": -6,
+        "clock": "09:06:00",
+        "score_1": "57",
+        "score_2": "63",
+        "column_height": 20
+      },
+      {
+        "diff": 1,
+        "clock": "08:09:00",
+        "score_1": "64",
+        "score_2": "63",
+        "column_height": 3.3333333333333335
+      }
+    ]
+  },
+  "maxDiff": 15,
+  "steps": [
+    {
+      "value": 15,
+      "label": 15
+    },
+    {
+      "value": 10,
+      "label": 10
+    },
+    {
+      "value": 5,
+      "label": 5
+    }
+  ]
+}

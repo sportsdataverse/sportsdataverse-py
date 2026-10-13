@@ -1,0 +1,211 @@
+{
+  "quarters": {
+    "regular": {
+      "1": [
+        {
+          "id": 1376355,
+          "player_id": 1762,
+          "type": "2pt",
+          "period": 1,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "93.00",
+          "y": "38.00",
+          "side": "RIGHT",
+          "area": "inthepaint",
+          "is_home": true
+        },
+        {
+          "id": 1376368,
+          "player_id": 1527,
+          "type": "2pt",
+          "period": 1,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "94.00",
+          "y": "47.00",
+          "side": "RIGHT",
+          "area": "underbasket",
+          "is_home": true
+        },
+        {
+          "id": 1376403,
+          "player_id": 2033,
+          "type": "3pt",
+          "period": 1,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "22.00",
+          "y": "89.00",
+          "side": "LEFT",
+          "area": "outsideright",
+          "is_home": false
+        }
+      ],
+      "2": [
+        {
+          "id": 1376540,
+          "player_id": 2013,
+          "type": "2pt",
+          "period": 2,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "94.00",
+          "y": "45.00",
+          "side": "RIGHT",
+          "area": "underbasket",
+          "is_home": true
+        },
+        {
+          "id": 1376542,
+          "player_id": 2027,
+          "type": "2pt",
+          "period": 2,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "17.00",
+          "y": "23.00",
+          "side": "LEFT",
+          "area": "insideleft",
+          "is_home": false
+        },
+        {
+          "id": 1376551,
+          "player_id": 2033,
+          "type": "3pt",
+          "period": 2,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "16.00",
+          "y": "6.00",
+          "side": "LEFT",
+          "area": "outsideleft",
+          "is_home": false
+        }
+      ],
+      "3": [
+        {
+          "id": 1376734,
+          "player_id": 2017,
+          "type": "2pt",
+          "period": 3,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "6.00",
+          "y": "47.00",
+          "side": "LEFT",
+          "area": "underbasket",
+          "is_home": true
+        },
+        {
+          "id": 1376744,
+          "player_id": 2019,
+          "type": "2pt",
+          "period": 3,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "6.00",
+          "y": "51.00",
+          "side": "LEFT",
+          "area": "underbasket",
+          "is_home": true
+        },
+        {
+          "id": 1376745,
+          "player_id": 1530,
+          "type": "3pt",
+          "period": 3,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "70.00",
+          "y": "70.00",
+          "side": "RIGHT",
+          "area": "outsideleft",
+          "is_home": false
+        }
+      ],
+      "4": [
+        {
+          "id": 1376973,
+          "player_id": 2019,
+          "type": "3pt",
+          "period": 4,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "24.00",
+          "y": "82.00",
+          "side": "LEFT",
+          "area": "outsideright",
+          "is_home": true
+        },
+        {
+          "id": 1376974,
+          "player_id": 2045,
+          "type": "2pt",
+          "period": 4,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "94.00",
+          "y": "48.00",
+          "side": "RIGHT",
+          "area": "underbasket",
+          "is_home": false
+        },
+        {
+          "id": 1377002,
+          "player_id": 1527,
+          "type": "2pt",
+          "period": 4,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "5.00",
+          "y": "49.00",
+          "side": "LEFT",
+          "area": "underbasket",
+          "is_home": true
+        }
+      ]
+    },
+    "overtime": [
+      {
+        "id": 1377247,
+        "player_id": 2045,
+        "type": "3pt",
+        "period": 5,
+        "period_type": "OVERTIME",
+        "success": false,
+        "x": "72.00",
+        "y": "79.00",
+        "side": "RIGHT",
+        "area": "outsideleft",
+        "is_home": false
+      },
+      {
+        "id": 1377249,
+        "player_id": 2021,
+        "type": "3pt",
+        "period": 5,
+        "period_type": "OVERTIME",
+        "success": false,
+        "x": "24.00",
+        "y": "14.00",
+        "side": "LEFT",
+        "area": "outsideleft",
+        "is_home": true
+      },
+      {
+        "id": 1377253,
+        "player_id": 2039,
+        "type": "2pt",
+        "period": 5,
+        "period_type": "OVERTIME",
+        "success": true,
+        "x": "9.00",
+        "y": "53.00",
+        "side": "LEFT",
+        "area": "underbasket",
+        "is_home": true
+      }
+    ]
+  }
+}

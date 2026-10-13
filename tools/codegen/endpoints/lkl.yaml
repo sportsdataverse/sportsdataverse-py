@@ -1,0 +1,253 @@
+api: lkl
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial and unsupported: these are the routes lkl.lt''s own game page calls
+    (found in its front-end bundle) and its server-rendered pages. The site''s robots.txt
+    allows everything and sets no crawl-delay; ``lkl_runtime`` still spaces requests
+    at least 1 s apart. SportsDataverse has not ruled on the site''s terms, so payloads
+    are not redistributed as release assets.'
+  - 'Coverage: game wrappers serve FINISHED games only (an unfinished game raises
+    AssetFetchError). The box score, summary, score line, statistics and leaders answer
+    for every season from 1993-94 (before 2024-25 the scoring splits and lead statistics
+    are 0). Play-by-play and shots exist from 2024-25 only; an earlier finished game
+    raises NoDataError. From 2016-17 the results season id is also the Genius LiveStats
+    competition id (see the ``genius`` family) which holds play-by-play for older
+    games; lkl.lt game, team and player ids are lkl.lt''s own and do not join Genius
+    ids. The King Mindaugas Cup shares the routes but is not wrapped. Text fields
+    are Lithuanian.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown
+    game or standings season, a season the site''s selects do not list, a finished
+    game before 2024-25 asked for play-by-play or shots).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (an unfinished game, a body or page for another game or season,
+    an error or changed body, a truncated results list).'
+  raw_doc: 'the raw body (``dict``): the JSON of a game route, the game page record,
+    or the merged results / standings record, plus ``_request`` (the game id, team
+    ids and slug -> player id map, or the season asked for)'
+  see_also:
+  - name: LKL
+    note: the Lietuvos krepšinio lyga site whose pages and livestream API these wrappers
+      read
+    url: https://lkl.lt
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args:
+    game_id: 11446
+  host: https://lkl.lt
+  parser: parse_lkl_game_info
+  path: /rungtynes/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/game_info
+  short: game_info
+  summary: 'Game header from the game page: status, tip-off, venue, attendance, officials
+    and both teams.'
+- example_args:
+    game_id: 11446
+  host: https://lkl.lt
+  parser: parse_lkl_game_players
+  path: /rungtynes/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/game_players
+  short: game_players
+  summary: 'Game roster from the game page: every player on either team sheet with
+    the lkl.lt player id and slug.'
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_player_box
+  path: /boxscore/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/player_box
+  short: player_box
+  summary: 'Per-player box score of a finished game: minutes, points, shooting splits,
+    rebounds, assists and plus/minus.'
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_team_box
+  path: /boxscore/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/team_box
+  short: team_box
+  summary: 'Team game totals of both teams: shooting, rebounds, assists, turnovers,
+    fouls, paint, bench and fast-break points.'
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_period_scores
+  path: /boxscore/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/period_scores
+  short: period_scores
+  summary: Points each team scored in each period of a game, overtime included.
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_summary
+  path: /summary/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/summary
+  short: summary
+  summary: 'Summary tab: the head-to-head comparison of both teams (shooting, rebounds,
+    assists, bench points...).'
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_game_score
+  path: /game-score/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/game_score
+  short: game_score
+  summary: 'Score line of a game: both scores and the clock text.'
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_game_stats
+  path: /game-stats/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/game_stats
+  short: game_stats
+  summary: 'Statistics tab: the head-to-head comparison of both teams, one row per
+    statistic.'
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_lead_chart
+  path: /game-stats/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/lead_chart
+  short: lead_chart
+  summary: 'Lead chart of a game: the score margin at each chart point of each period.'
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_leaders
+  path: /leaders/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/leaders
+  short: leaders
+  summary: 'Leaders tab: each team''s top players in points, rebounds, assists, efficiency,
+    steals and blocks.'
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_pbp
+  path: /play-by-play/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/pbp
+  short: pbp
+  summary: Play-by-play of a finished game (2024-25 onward), oldest first, with the
+    running score and the lkl.lt player id.
+- example_args:
+    game_id: 11446
+  parser: parse_lkl_shots
+  path: /shot-chart/{game_id}
+  path_params:
+  - description: Required. lkl.lt game id (integer), e.g. 11446; ``game_id`` in lkl_results.
+      Not sequential by season before 2018-19. Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/lkl/shots
+  short: shots
+  summary: Every field-goal attempt of a finished game (2024-25 onward) with its court
+    position (Genius LiveStats data).
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Required. Season END year (2026 = the 2025-26 season). The site keys
+      a season by two opaque ids (a results id and a standings id, neither a year);
+      ``lkl_runtime`` reads them from the site's season selects by the label ``YYYY-YYYY
+      m. sezonas``. A year the selects do not list raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  host: https://lkl.lt
+  parser: parse_lkl_results
+  path: /loadResults
+  returns_schema: native/lkl/results
+  short: results
+  summary: Every played game of one LKL season (all pages of the site's results list,
+    merged), newest first.
+- example_args:
+    season: 2026
+  host: https://lkl.lt
+  parser: parse_lkl_standings
+  path: /loadStandings/{season}
+  path_params:
+  - description: Required. Season END year (2026 = the 2025-26 season). The site keys
+      a season by two opaque ids (a results id and a standings id, neither a year);
+      ``lkl_runtime`` reads them from the site's season selects by the label ``YYYY-YYYY
+      m. sezonas``. A year the selects do not list raises NoDataError.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/lkl/standings
+  short: standings
+  summary: 'League table of one LKL season: overall, home and away records, and the
+    final ranking once it is set.'
+getter_module: sportsdataverse.basketball.lkl.lkl_runtime
+host: https://lkl.lt/api/livestream
+module: lkl
+name_pattern: lkl_{short}
+parser_columns: true
+parser_module: basketball.lkl.lkl_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: lkl_

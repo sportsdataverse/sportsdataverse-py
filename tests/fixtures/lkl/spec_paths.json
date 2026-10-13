@@ -1,0 +1,12 @@
+[
+ "/boxscore/{gameId}",
+ "/game-score/{gameId}",
+ "/game-stats/{gameId}",
+ "/leaders/{gameId}",
+ "/loadResults",
+ "/loadStandings/{seasonId}",
+ "/play-by-play/{gameId}",
+ "/rungtynes/{gameId}",
+ "/shot-chart/{gameId}",
+ "/summary/{gameId}"
+]

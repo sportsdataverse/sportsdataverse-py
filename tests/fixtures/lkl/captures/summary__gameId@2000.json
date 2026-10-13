@@ -1,0 +1,218 @@
+{
+  "gameStatistics": {
+    "6": {
+      "id": 7746,
+      "team_id": 6,
+      "game_id": 2000,
+      "quarter_scores": {
+        "1": 24,
+        "2": 16,
+        "3": 31,
+        "4": 19
+      },
+      "seconds_played": 0,
+      "points": 90,
+      "field_goals_made_total": 29,
+      "field_goals_attempted_total": 70,
+      "field_goals_percentage": "41.00",
+      "field_goals_made_2pt": 19,
+      "field_goals_attempted_2pt": 42,
+      "field_goals_2pt_percentage": "45.00",
+      "field_goals_made_3pt": 10,
+      "field_goals_attempted_3pt": 28,
+      "field_goals_3pt_percentage": "36.00",
+      "free_throws_made": 22,
+      "free_throws_attempted": 30,
+      "free_throws_percentage": "73.00",
+      "offensive_rebounds": 9,
+      "defensive_rebounds": 30,
+      "total_rebounds": 44,
+      "assists": 22,
+      "steals": 9,
+      "blocks": 2,
+      "blocks_received": 4,
+      "turnovers": 8,
+      "fouls": 17,
+      "fouls_on": 24,
+      "efficiency": 113,
+      "points_off_turnovers": 0,
+      "fast_break_points": 0,
+      "second_chance_points": 0,
+      "points_in_paint": 0,
+      "bench_points": 0,
+      "biggest_lead": 0,
+      "biggest_scoring_run": 0,
+      "lead_changes": 0,
+      "tie_results": 0,
+      "time_leading": "0",
+      "created_at": "2025-09-20T11:05:44.000000Z",
+      "updated_at": "2026-01-07T08:57:49.000000Z"
+    },
+    "10": {
+      "id": 7747,
+      "team_id": 10,
+      "game_id": 2000,
+      "quarter_scores": {
+        "1": 12,
+        "2": 15,
+        "3": 14,
+        "4": 20
+      },
+      "seconds_played": 0,
+      "points": 61,
+      "field_goals_made_total": 23,
+      "field_goals_attempted_total": 65,
+      "field_goals_percentage": "35.00",
+      "field_goals_made_2pt": 17,
+      "field_goals_attempted_2pt": 42,
+      "field_goals_2pt_percentage": "40.00",
+      "field_goals_made_3pt": 6,
+      "field_goals_attempted_3pt": 23,
+      "field_goals_3pt_percentage": "26.00",
+      "free_throws_made": 9,
+      "free_throws_attempted": 13,
+      "free_throws_percentage": "69.00",
+      "offensive_rebounds": 11,
+      "defensive_rebounds": 30,
+      "total_rebounds": 46,
+      "assists": 7,
+      "steals": 5,
+      "blocks": 4,
+      "blocks_received": 2,
+      "turnovers": 21,
+      "fouls": 24,
+      "fouls_on": 17,
+      "efficiency": 47,
+      "points_off_turnovers": 0,
+      "fast_break_points": 0,
+      "second_chance_points": 0,
+      "points_in_paint": 0,
+      "bench_points": 0,
+      "biggest_lead": 0,
+      "biggest_scoring_run": 0,
+      "lead_changes": 0,
+      "tie_results": 0,
+      "time_leading": "0",
+      "created_at": "2025-09-20T11:05:44.000000Z",
+      "updated_at": "2026-01-07T08:57:49.000000Z"
+    }
+  },
+  "comparison": [
+    {
+      "label": "Metimai iš žaidimo",
+      "home": {
+        "value": "29/70",
+        "percentage": "41.0%",
+        "graph_length": "41.0",
+        "winning": true
+      },
+      "away": {
+        "value": "23/65",
+        "percentage": "35.0%",
+        "graph_length": "35.0",
+        "winning": false
+      }
+    },
+    {
+      "label": "Dvitaškiai metimai",
+      "home": {
+        "value": "19/42",
+        "percentage": "45.0%",
+        "graph_length": "45.0",
+        "winning": true
+      },
+      "away": {
+        "value": "17/42",
+        "percentage": "40.0%",
+        "graph_length": "40.0",
+        "winning": false
+      }
+    },
+    {
+      "label": "Tritaškiai metimai",
+      "home": {
+        "value": "10/28",
+        "percentage": "36.0%",
+        "graph_length": "36.0",
+        "winning": true
+      },
+      "away": {
+        "value": "6/23",
+        "percentage": "26.0%",
+        "graph_length": "26.0",
+        "winning": false
+      }
+    }
+  ],
+  "leaders": {
+    "points": {
+      "label": "Pelnomi taškai",
+      "home": {
+        "value": 16,
+        "name": "Artūras Jomantas",
+        "slug": "arturas-jomantas",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/91e8c9d41fb24a0e7f8cba49712795a0.png",
+        "others": []
+      },
+      "away": {
+        "value": 13,
+        "name": "Žydrūnas Urbonas",
+        "slug": "zydrunas-urbonas",
+        "photo": "http://lkl.lt/media/players/75x75/f3f13c1417d320e5089af9ca95bcb8e1.jpg",
+        "others": []
+      }
+    },
+    "total_rebounds": {
+      "label": "Atkovoti kamuoliai",
+      "home": {
+        "value": 9,
+        "name": "Michail Anisimov",
+        "slug": "michail-anisimov",
+        "photo": "http://lkl.lt/media/players/75x75/273aa2753804e6455ac066245d42c05c.jpg",
+        "others": []
+      },
+      "away": {
+        "value": 7,
+        "name": "Žydrūnas Urbonas",
+        "slug": "zydrunas-urbonas",
+        "photo": "http://lkl.lt/media/players/75x75/f3f13c1417d320e5089af9ca95bcb8e1.jpg",
+        "others": []
+      }
+    },
+    "assists": {
+      "label": "Rezultatyvūs perdavimai",
+      "home": {
+        "value": 6,
+        "name": "Darrel Mitchell",
+        "slug": "darrel-mitchell",
+        "photo": "http://lkl.lt/media/players/75x75/fd0ab579cc148bf239dd2043b9781d70.jpg",
+        "others": []
+      },
+      "away": {
+        "value": 3,
+        "name": "Vytautas Tatarūnas",
+        "slug": "vytautas-tatarunas",
+        "photo": "http://lkl.lt/media/players/75x75/05cf1c53141649a937a0e6c87560e694.jpg",
+        "others": []
+      }
+    },
+    "efficiency": {
+      "label": "Naudingumas",
+      "home": {
+        "value": 21,
+        "name": "Artūras Jomantas",
+        "slug": "arturas-jomantas",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/91e8c9d41fb24a0e7f8cba49712795a0.png",
+        "others": []
+      },
+      "away": {
+        "value": 14,
+        "name": "Žydrūnas Urbonas",
+        "slug": "zydrunas-urbonas",
+        "photo": "http://lkl.lt/media/players/75x75/f3f13c1417d320e5089af9ca95bcb8e1.jpg",
+        "others": []
+      }
+    }
+  },
+  "broadcasts": "<div class='flex items-center gap-x-3'><a class='broadcast-item' href='https://play.telia.lt/'  target='_blank'><img class='h-8 w-auto' src='/images/telia-play.png' alt='Telia Play'/></a></div>"
+}

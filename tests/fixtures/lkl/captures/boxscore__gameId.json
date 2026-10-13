@@ -1,0 +1,650 @@
+{
+  "gameStatistics": {
+    "6": {
+      "id": 25152,
+      "team_id": 6,
+      "game_id": 11590,
+      "quarter_scores": {
+        "1": 25,
+        "2": 23,
+        "3": 32,
+        "4": 22
+      },
+      "seconds_played": 12000,
+      "points": 102,
+      "field_goals_made_total": 35,
+      "field_goals_attempted_total": 68,
+      "field_goals_percentage": "51.47",
+      "field_goals_made_2pt": 25,
+      "field_goals_attempted_2pt": 35,
+      "field_goals_2pt_percentage": "71.43",
+      "field_goals_made_3pt": 10,
+      "field_goals_attempted_3pt": 33,
+      "field_goals_3pt_percentage": "30.30",
+      "free_throws_made": 22,
+      "free_throws_attempted": 32,
+      "free_throws_percentage": "68.75",
+      "offensive_rebounds": 15,
+      "defensive_rebounds": 28,
+      "total_rebounds": 43,
+      "assists": 21,
+      "steals": 2,
+      "blocks": 3,
+      "blocks_received": 1,
+      "turnovers": 10,
+      "fouls": 19,
+      "fouls_on": 24,
+      "efficiency": 121,
+      "points_off_turnovers": 11,
+      "fast_break_points": 16,
+      "second_chance_points": 19,
+      "points_in_paint": 46,
+      "bench_points": 20,
+      "biggest_lead": 5,
+      "biggest_scoring_run": 8,
+      "lead_changes": 13,
+      "tie_results": 4,
+      "time_leading": "393",
+      "created_at": "2026-08-11T13:00:26.000000Z",
+      "updated_at": "2026-10-03T16:00:33.000000Z"
+    },
+    "60": {
+      "id": 25153,
+      "team_id": 60,
+      "game_id": 11590,
+      "quarter_scores": {
+        "1": 31,
+        "2": 20,
+        "3": 27,
+        "4": 27
+      },
+      "seconds_played": 12000,
+      "points": 105,
+      "field_goals_made_total": 40,
+      "field_goals_attempted_total": 79,
+      "field_goals_percentage": "50.63",
+      "field_goals_made_2pt": 26,
+      "field_goals_attempted_2pt": 47,
+      "field_goals_2pt_percentage": "55.32",
+      "field_goals_made_3pt": 14,
+      "field_goals_attempted_3pt": 32,
+      "field_goals_3pt_percentage": "43.75",
+      "free_throws_made": 11,
+      "free_throws_attempted": 15,
+      "free_throws_percentage": "73.33",
+      "offensive_rebounds": 14,
+      "defensive_rebounds": 23,
+      "total_rebounds": 37,
+      "assists": 22,
+      "steals": 5,
+      "blocks": 1,
+      "blocks_received": 3,
+      "turnovers": 6,
+      "fouls": 24,
+      "fouls_on": 18,
+      "efficiency": 112,
+      "points_off_turnovers": 14,
+      "fast_break_points": 12,
+      "second_chance_points": 18,
+      "points_in_paint": 36,
+      "bench_points": 46,
+      "biggest_lead": 11,
+      "biggest_scoring_run": 10,
+      "lead_changes": 13,
+      "tie_results": 4,
+      "time_leading": "1892",
+      "created_at": "2026-08-11T13:00:26.000000Z",
+      "updated_at": "2026-10-03T16:00:33.000000Z"
+    }
+  },
+  "boxscore": {
+    "home": {
+      "players": [
+        {
+          "jersey": {
+            "value": "77"
+          },
+          "name": {
+            "value": "M. Paliukėnas"
+          },
+          "time": {
+            "value": "18:31"
+          },
+          "points": {
+            "value": 8
+          },
+          "fg": {
+            "value": "3/6",
+            "percentage": "50.0"
+          },
+          "fg2": {
+            "value": "1/1",
+            "percentage": "100.0"
+          },
+          "fg3": {
+            "value": "2/5",
+            "percentage": "40.0"
+          },
+          "ft": {
+            "value": "0/0",
+            "percentage": "0.0"
+          },
+          "total_rebounds": {
+            "value": 0
+          },
+          "offensive_rebounds": {
+            "value": 0
+          },
+          "defensive_rebounds": {
+            "value": 0
+          },
+          "assists": {
+            "value": 2
+          },
+          "steals": {
+            "value": 0
+          },
+          "turnovers": {
+            "value": 1
+          },
+          "blocks": {
+            "value": 0
+          },
+          "blocks_received": {
+            "value": 0
+          },
+          "fouls": {
+            "value": 4
+          },
+          "fouls_on": {
+            "value": 0
+          },
+          "plus_minus": {
+            "value": -10
+          },
+          "efficiency": {
+            "value": 2
+          },
+          "is_captain": false,
+          "is_active": false,
+          "is_starter": false,
+          "slug": "martynas-paliukenas"
+        },
+        {
+          "jersey": {
+            "value": "8"
+          },
+          "name": {
+            "value": "A. Gudaitis"
+          },
+          "time": {
+            "value": "23:13"
+          },
+          "points": {
+            "value": 20
+          },
+          "fg": {
+            "value": "6/10",
+            "percentage": "60.0"
+          },
+          "fg2": {
+            "value": "6/10",
+            "percentage": "60.0"
+          },
+          "fg3": {
+            "value": "0/0",
+            "percentage": "0.0"
+          },
+          "ft": {
+            "value": "8/13",
+            "percentage": "61.5"
+          },
+          "total_rebounds": {
+            "value": 5
+          },
+          "offensive_rebounds": {
+            "value": 5
+          },
+          "defensive_rebounds": {
+            "value": 0
+          },
+          "assists": {
+            "value": 1
+          },
+          "steals": {
+            "value": 0
+          },
+          "turnovers": {
+            "value": 0
+          },
+          "blocks": {
+            "value": 2
+          },
+          "blocks_received": {
+            "value": 1
+          },
+          "fouls": {
+            "value": 0
+          },
+          "fouls_on": {
+            "value": 7
+          },
+          "plus_minus": {
+            "value": 8
+          },
+          "efficiency": {
+            "value": 25
+          },
+          "is_captain": true,
+          "is_active": false,
+          "is_starter": true,
+          "slug": "arturas-gudaitis"
+        },
+        {
+          "jersey": {
+            "value": "21"
+          },
+          "name": {
+            "value": "G. Masiulis"
+          },
+          "time": {
+            "value": "15:57"
+          },
+          "points": {
+            "value": 2
+          },
+          "fg": {
+            "value": "1/3",
+            "percentage": "33.3"
+          },
+          "fg2": {
+            "value": "1/2",
+            "percentage": "50.0"
+          },
+          "fg3": {
+            "value": "0/1",
+            "percentage": "0.0"
+          },
+          "ft": {
+            "value": "0/0",
+            "percentage": "0.0"
+          },
+          "total_rebounds": {
+            "value": 3
+          },
+          "offensive_rebounds": {
+            "value": 1
+          },
+          "defensive_rebounds": {
+            "value": 2
+          },
+          "assists": {
+            "value": 0
+          },
+          "steals": {
+            "value": 0
+          },
+          "turnovers": {
+            "value": 1
+          },
+          "blocks": {
+            "value": 1
+          },
+          "blocks_received": {
+            "value": 0
+          },
+          "fouls": {
+            "value": 2
+          },
+          "fouls_on": {
+            "value": 0
+          },
+          "plus_minus": {
+            "value": -13
+          },
+          "efficiency": {
+            "value": 1
+          },
+          "is_captain": false,
+          "is_active": false,
+          "is_starter": false,
+          "slug": "gytis-masiulis"
+        }
+      ],
+      "team": {
+        "time": {
+          "value": "200:00"
+        },
+        "points": {
+          "value": 102
+        },
+        "fg": {
+          "value": "35/68",
+          "percentage": "51.5"
+        },
+        "fg2": {
+          "value": "25/35",
+          "percentage": "71.4"
+        },
+        "fg3": {
+          "value": "10/33",
+          "percentage": "30.3"
+        },
+        "ft": {
+          "value": "22/32",
+          "percentage": "68.8"
+        },
+        "total_rebounds": {
+          "value": 43
+        },
+        "offensive_rebounds": {
+          "value": 15
+        },
+        "defensive_rebounds": {
+          "value": 28
+        },
+        "assists": {
+          "value": 21
+        },
+        "steals": {
+          "value": 2
+        },
+        "turnovers": {
+          "value": 10
+        },
+        "blocks": {
+          "value": 3
+        },
+        "blocks_received": {
+          "value": 1
+        },
+        "fouls": {
+          "value": 19
+        },
+        "fouls_on": {
+          "value": 24
+        },
+        "plus_minus": {
+          "value": null
+        },
+        "efficiency": {
+          "value": 121
+        }
+      }
+    },
+    "away": {
+      "players": [
+        {
+          "jersey": {
+            "value": "5"
+          },
+          "name": {
+            "value": "E. Šaulys"
+          },
+          "time": {
+            "value": "18:34"
+          },
+          "points": {
+            "value": 2
+          },
+          "fg": {
+            "value": "1/3",
+            "percentage": "33.3"
+          },
+          "fg2": {
+            "value": "1/1",
+            "percentage": "100.0"
+          },
+          "fg3": {
+            "value": "0/2",
+            "percentage": "0.0"
+          },
+          "ft": {
+            "value": "0/0",
+            "percentage": "0.0"
+          },
+          "total_rebounds": {
+            "value": 3
+          },
+          "offensive_rebounds": {
+            "value": 0
+          },
+          "defensive_rebounds": {
+            "value": 3
+          },
+          "assists": {
+            "value": 3
+          },
+          "steals": {
+            "value": 1
+          },
+          "turnovers": {
+            "value": 1
+          },
+          "blocks": {
+            "value": 0
+          },
+          "blocks_received": {
+            "value": 0
+          },
+          "fouls": {
+            "value": 4
+          },
+          "fouls_on": {
+            "value": 1
+          },
+          "plus_minus": {
+            "value": 9
+          },
+          "efficiency": {
+            "value": 3
+          },
+          "is_captain": true,
+          "is_active": false,
+          "is_starter": true,
+          "slug": "evaldas-saulys"
+        },
+        {
+          "jersey": {
+            "value": "0"
+          },
+          "name": {
+            "value": "A. Mikalauskas"
+          },
+          "time": {
+            "value": "24:32"
+          },
+          "points": {
+            "value": 3
+          },
+          "fg": {
+            "value": "0/2",
+            "percentage": "0.0"
+          },
+          "fg2": {
+            "value": "0/1",
+            "percentage": "0.0"
+          },
+          "fg3": {
+            "value": "0/1",
+            "percentage": "0.0"
+          },
+          "ft": {
+            "value": "3/3",
+            "percentage": "100.0"
+          },
+          "total_rebounds": {
+            "value": 7
+          },
+          "offensive_rebounds": {
+            "value": 2
+          },
+          "defensive_rebounds": {
+            "value": 5
+          },
+          "assists": {
+            "value": 2
+          },
+          "steals": {
+            "value": 1
+          },
+          "turnovers": {
+            "value": 1
+          },
+          "blocks": {
+            "value": 0
+          },
+          "blocks_received": {
+            "value": 1
+          },
+          "fouls": {
+            "value": 3
+          },
+          "fouls_on": {
+            "value": 5
+          },
+          "plus_minus": {
+            "value": -7
+          },
+          "efficiency": {
+            "value": 11
+          },
+          "is_captain": false,
+          "is_active": false,
+          "is_starter": false,
+          "slug": "arunas-mikalauskas"
+        },
+        {
+          "jersey": {
+            "value": "22"
+          },
+          "name": {
+            "value": "L. Vaištaras"
+          },
+          "time": {
+            "value": "16:51"
+          },
+          "points": {
+            "value": 2
+          },
+          "fg": {
+            "value": "1/4",
+            "percentage": "25.0"
+          },
+          "fg2": {
+            "value": "1/2",
+            "percentage": "50.0"
+          },
+          "fg3": {
+            "value": "0/2",
+            "percentage": "0.0"
+          },
+          "ft": {
+            "value": "0/0",
+            "percentage": "0.0"
+          },
+          "total_rebounds": {
+            "value": 4
+          },
+          "offensive_rebounds": {
+            "value": 1
+          },
+          "defensive_rebounds": {
+            "value": 3
+          },
+          "assists": {
+            "value": 1
+          },
+          "steals": {
+            "value": 0
+          },
+          "turnovers": {
+            "value": 1
+          },
+          "blocks": {
+            "value": 0
+          },
+          "blocks_received": {
+            "value": 0
+          },
+          "fouls": {
+            "value": 2
+          },
+          "fouls_on": {
+            "value": 0
+          },
+          "plus_minus": {
+            "value": 2
+          },
+          "efficiency": {
+            "value": 1
+          },
+          "is_captain": false,
+          "is_active": false,
+          "is_starter": true,
+          "slug": "laurynas-vaistaras"
+        }
+      ],
+      "team": {
+        "time": {
+          "value": "200:00"
+        },
+        "points": {
+          "value": 105
+        },
+        "fg": {
+          "value": "40/79",
+          "percentage": "50.6"
+        },
+        "fg2": {
+          "value": "26/47",
+          "percentage": "55.3"
+        },
+        "fg3": {
+          "value": "14/32",
+          "percentage": "43.8"
+        },
+        "ft": {
+          "value": "11/15",
+          "percentage": "73.3"
+        },
+        "total_rebounds": {
+          "value": 37
+        },
+        "offensive_rebounds": {
+          "value": 14
+        },
+        "defensive_rebounds": {
+          "value": 23
+        },
+        "assists": {
+          "value": 22
+        },
+        "steals": {
+          "value": 5
+        },
+        "turnovers": {
+          "value": 6
+        },
+        "blocks": {
+          "value": 1
+        },
+        "blocks_received": {
+          "value": 3
+        },
+        "fouls": {
+          "value": 24
+        },
+        "fouls_on": {
+          "value": 18
+        },
+        "plus_minus": {
+          "value": null
+        },
+        "efficiency": {
+          "value": 112
+        }
+      }
+    }
+  }
+}

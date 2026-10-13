@@ -1,0 +1,178 @@
+{
+  "comparison": {
+    "shooting": [
+      {
+        "label": "Dvitaškiai metimai",
+        "home": {
+          "value": "19/42",
+          "percentage": "45.0%",
+          "graph_length": "45.0",
+          "winning": true
+        },
+        "away": {
+          "value": "17/42",
+          "percentage": "40.0%",
+          "graph_length": "40.0",
+          "winning": false
+        }
+      },
+      {
+        "label": "Tritaškiai metimai",
+        "home": {
+          "value": "10/28",
+          "percentage": "36.0%",
+          "graph_length": "36.0",
+          "winning": true
+        },
+        "away": {
+          "value": "6/23",
+          "percentage": "26.0%",
+          "graph_length": "26.0",
+          "winning": false
+        }
+      },
+      {
+        "label": "Baudų metimai",
+        "home": {
+          "value": "22/30",
+          "percentage": "73.0%",
+          "graph_length": "73.0",
+          "winning": true
+        },
+        "away": {
+          "value": "9/13",
+          "percentage": "69.0%",
+          "graph_length": "69.0",
+          "winning": false
+        }
+      }
+    ],
+    "main": [
+      {
+        "label": "Atkovoti kamuoliai",
+        "home": {
+          "value": 44,
+          "graph_length": 48.89,
+          "winning": false
+        },
+        "away": {
+          "value": 46,
+          "graph_length": 51.11,
+          "winning": true
+        }
+      },
+      {
+        "label": "Rezultatyvūs perdavimai",
+        "home": {
+          "value": 22,
+          "graph_length": 75.86,
+          "winning": true
+        },
+        "away": {
+          "value": 7,
+          "graph_length": 24.14,
+          "winning": false
+        }
+      },
+      {
+        "label": "Perimti kamuoliai",
+        "home": {
+          "value": 9,
+          "graph_length": 64.29,
+          "winning": true
+        },
+        "away": {
+          "value": 5,
+          "graph_length": 35.71,
+          "winning": false
+        }
+      }
+    ],
+    "all": [
+      {
+        "label": "Metimai iš žaidimo",
+        "home": {
+          "value": "29/70",
+          "percentage": "41.0%",
+          "graph_length": "41.0",
+          "winning": true
+        },
+        "away": {
+          "value": "23/65",
+          "percentage": "35.0%",
+          "graph_length": "35.0",
+          "winning": false
+        }
+      },
+      {
+        "label": "Dvitaškiai metimai",
+        "home": {
+          "value": "19/42",
+          "percentage": "45.0%",
+          "graph_length": "45.0",
+          "winning": true
+        },
+        "away": {
+          "value": "17/42",
+          "percentage": "40.0%",
+          "graph_length": "40.0",
+          "winning": false
+        }
+      },
+      {
+        "label": "Tritaškiai metimai",
+        "home": {
+          "value": "10/28",
+          "percentage": "36.0%",
+          "graph_length": "36.0",
+          "winning": true
+        },
+        "away": {
+          "value": "6/23",
+          "percentage": "26.0%",
+          "graph_length": "26.0",
+          "winning": false
+        }
+      }
+    ],
+    "biggest_leads": {
+      "home": 0,
+      "away": 0
+    },
+    "leads_stats": [
+      {
+        "label": "Rezultato pasikeitimai",
+        "value": 0
+      },
+      {
+        "label": "Rezultato lyginimas",
+        "value": 0
+      },
+      {
+        "label": "Ilgiausia atkarpa",
+        "value": 0
+      }
+    ]
+  },
+  "leads": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": []
+  },
+  "maxDiff": 15,
+  "steps": [
+    {
+      "value": 15,
+      "label": 15
+    },
+    {
+      "value": 10,
+      "label": 10
+    },
+    {
+      "value": 5,
+      "label": 5
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: diff
+  type: integer
+- description: ''
+  name: clock
+  type: character
+- description: ''
+  name: score_home
+  type: integer
+- description: ''
+  name: score_away
+  type: integer
+- description: ''
+  name: column_height
+  type: numeric
+kind: dataframe
+schema: lkl_lead_chart

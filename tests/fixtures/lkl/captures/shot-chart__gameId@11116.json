@@ -1,0 +1,171 @@
+{
+  "quarters": {
+    "regular": {
+      "1": [
+        {
+          "id": 162398,
+          "player_id": 56,
+          "type": "2pt",
+          "period": 1,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "89.00",
+          "y": "48.00",
+          "side": "RIGHT",
+          "area": "inthepaint",
+          "is_home": false
+        },
+        {
+          "id": 162406,
+          "player_id": 1915,
+          "type": "2pt",
+          "period": 1,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "85.00",
+          "y": "57.00",
+          "side": "RIGHT",
+          "area": "inthepaint",
+          "is_home": false
+        },
+        {
+          "id": 162408,
+          "player_id": 1345,
+          "type": "3pt",
+          "period": 1,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "32.00",
+          "y": "76.00",
+          "side": "LEFT",
+          "area": "outsideright",
+          "is_home": true
+        }
+      ],
+      "2": [
+        {
+          "id": 162569,
+          "player_id": 98,
+          "type": "2pt",
+          "period": 2,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "91.00",
+          "y": "55.00",
+          "side": "RIGHT",
+          "area": "underbasket",
+          "is_home": false
+        },
+        {
+          "id": 162571,
+          "player_id": 1846,
+          "type": "2pt",
+          "period": 2,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "94.00",
+          "y": "50.00",
+          "side": "RIGHT",
+          "area": "underbasket",
+          "is_home": false
+        },
+        {
+          "id": 162604,
+          "player_id": 702,
+          "type": "3pt",
+          "period": 2,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "31.00",
+          "y": "23.00",
+          "side": "LEFT",
+          "area": "outsideleft",
+          "is_home": true
+        }
+      ],
+      "3": [
+        {
+          "id": 162784,
+          "player_id": 1923,
+          "type": "2pt",
+          "period": 3,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "80.00",
+          "y": "52.00",
+          "side": "RIGHT",
+          "area": "insidecenter",
+          "is_home": true
+        },
+        {
+          "id": 162788,
+          "player_id": 1916,
+          "type": "3pt",
+          "period": 3,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "21.00",
+          "y": "89.00",
+          "side": "LEFT",
+          "area": "outsideright",
+          "is_home": false
+        },
+        {
+          "id": 162790,
+          "player_id": 1854,
+          "type": "2pt",
+          "period": 3,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "9.00",
+          "y": "52.00",
+          "side": "LEFT",
+          "area": "underbasket",
+          "is_home": false
+        }
+      ],
+      "4": [
+        {
+          "id": 162980,
+          "player_id": 98,
+          "type": "2pt",
+          "period": 4,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "6.00",
+          "y": "42.00",
+          "side": "LEFT",
+          "area": "underbasket",
+          "is_home": false
+        },
+        {
+          "id": 162985,
+          "player_id": 45,
+          "type": "3pt",
+          "period": 4,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "18.00",
+          "y": "7.00",
+          "side": "LEFT",
+          "area": "outsideleft",
+          "is_home": false
+        },
+        {
+          "id": 162990,
+          "player_id": 1922,
+          "type": "2pt",
+          "period": 4,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "94.00",
+          "y": "43.00",
+          "side": "RIGHT",
+          "area": "underbasket",
+          "is_home": true
+        }
+      ]
+    },
+    "overtime": []
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "season_id": 33,
+  "season_label": "2024-2025 m. sezonas",
+  "season_end_year": 2025,
+  "seasons": [
+    {
+      "season_id": 35,
+      "label": "2026-2027 m. sezonas"
+    },
+    {
+      "season_id": 34,
+      "label": "2025-2026 m. sezonas"
+    },
+    {
+      "season_id": 33,
+      "label": "2024-2025 m. sezonas"
+    }
+  ],
+  "full": [
+    {
+      "position": 1,
+      "team_slug": "zalgiris",
+      "team_name": "Žalgiris",
+      "played": 36,
+      "won": 34,
+      "lost": 2,
+      "win_pct": 94.4,
+      "streak": 30,
+      "points_for_avg": 91.3,
+      "points_against_avg": 73.4,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 2,
+      "team_slug": "rytas",
+      "team_name": "Rytas",
+      "played": 36,
+      "won": 29,
+      "lost": 7,
+      "win_pct": 80.6,
+      "streak": 1,
+      "points_for_avg": 93.1,
+      "points_against_avg": 84.3,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 3,
+      "team_slug": "lietkabelis",
+      "team_name": "Lietkabelis",
+      "played": 36,
+      "won": 20,
+      "lost": 16,
+      "win_pct": 55.6,
+      "streak": 3,
+      "points_for_avg": 83.5,
+      "points_against_avg": 81.1,
+      "last5": [
+        "W",
+        "L",
+        "W"
+      ]
+    }
+  ],
+  "home": [
+    {
+      "position": 1,
+      "team_slug": "zalgiris",
+      "team_name": "Žalgiris",
+      "played": 18,
+      "won": 18,
+      "lost": 0,
+      "points_for_avg": 92.3,
+      "points_against_avg": 70.4,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 2,
+      "team_slug": "rytas",
+      "team_name": "Rytas",
+      "played": 18,
+      "won": 15,
+      "lost": 3,
+      "points_for_avg": 94.1,
+      "points_against_avg": 84.3,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 3,
+      "team_slug": "lietkabelis",
+      "team_name": "Lietkabelis",
+      "played": 18,
+      "won": 11,
+      "lost": 7,
+      "points_for_avg": 83.3,
+      "points_against_avg": 80.5,
+      "last5": [
+        "L",
+        "W",
+        "L"
+      ]
+    }
+  ],
+  "away": [
+    {
+      "position": 1,
+      "team_slug": "zalgiris",
+      "team_name": "Žalgiris",
+      "played": 18,
+      "won": 16,
+      "lost": 2,
+      "points_for_avg": 90.2,
+      "points_against_avg": 76.4,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 2,
+      "team_slug": "rytas",
+      "team_name": "Rytas",
+      "played": 18,
+      "won": 14,
+      "lost": 4,
+      "points_for_avg": 92.1,
+      "points_against_avg": 84.2,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 3,
+      "team_slug": "lietkabelis",
+      "team_name": "Lietkabelis",
+      "played": 18,
+      "won": 9,
+      "lost": 9,
+      "points_for_avg": 83.7,
+      "points_against_avg": 81.8,
+      "last5": [
+        "L",
+        "W",
+        "W"
+      ]
+    }
+  ],
+  "final": [
+    {
+      "position": 1,
+      "team_slug": "zalgiris",
+      "team_name": "Žalgiris"
+    },
+    {
+      "position": 2,
+      "team_slug": "rytas",
+      "team_name": "Rytas"
+    },
+    {
+      "position": 3,
+      "team_slug": "lietkabelis",
+      "team_name": "Lietkabelis"
+    }
+  ]
+}

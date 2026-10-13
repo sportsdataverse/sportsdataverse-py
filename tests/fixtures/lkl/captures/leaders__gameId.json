@@ -1,0 +1,334 @@
+{
+  "leaders": {
+    "points": {
+      "label": "Pelnomi taškai",
+      "home": {
+        "value": 20,
+        "name": "Artūras Gudaitis",
+        "slug": "arturas-gudaitis",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/a166f8a477757802b9026bdea1734e41.png",
+        "others": [
+          {
+            "value": 20,
+            "name": "Matas Jogėla",
+            "slug": "matas-jogela",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/0ba550214e19dbd49771c1487c96f929.png"
+          },
+          {
+            "value": 20,
+            "name": "Augustas Marčiulionis",
+            "slug": "augustas-marciulionis",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/b050e7162cc69bb4e043620bb612e8e9.png"
+          },
+          {
+            "value": 12,
+            "name": "Kay Bruhnke",
+            "slug": "kay-bruhnke",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/bcf1e58f59f274a6a1c7fd2ac3edd992.png"
+          }
+        ]
+      },
+      "away": {
+        "value": 31,
+        "name": "Jaquan Carlos",
+        "slug": "jaquan-carlos",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/1cef4471026b656a4b24345f534eb0cc.png",
+        "others": [
+          {
+            "value": 21,
+            "name": "Benjamin Krikke",
+            "slug": "benjamin-krikke",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/58bbe6aa1bc848b13d577757e6110d72.png"
+          },
+          {
+            "value": 19,
+            "name": "Stanley Davis",
+            "slug": "stanley-davis",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/15ad755fffc73db96a70a0549d090c2f.png"
+          },
+          {
+            "value": 16,
+            "name": "Langston Wilson",
+            "slug": "langston-wilson",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/e9636d18d29d8e9c283e34685a9951a1.png"
+          }
+        ]
+      }
+    },
+    "total_rebounds": {
+      "label": "Atkovoti kamuoliai",
+      "home": {
+        "value": 6,
+        "name": "Gytis Radzevičius",
+        "slug": "gytis-radzevicius",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/2e4388d5d5e524f4bee3072b849b49df.png",
+        "others": [
+          {
+            "value": 5,
+            "name": "Artūras Gudaitis",
+            "slug": "arturas-gudaitis",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/a166f8a477757802b9026bdea1734e41.png"
+          },
+          {
+            "value": 5,
+            "name": "Matas Jogėla",
+            "slug": "matas-jogela",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/0ba550214e19dbd49771c1487c96f929.png"
+          },
+          {
+            "value": 5,
+            "name": "Michael Devoe",
+            "slug": "michael-devoe",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/5cc22413a2f70e1c6c7faecd621a82d6.png"
+          }
+        ]
+      },
+      "away": {
+        "value": 7,
+        "name": "Arūnas Mikalauskas",
+        "slug": "arunas-mikalauskas",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/dfc6c0271397c72e35ef482a6fca5fc3.png",
+        "others": [
+          {
+            "value": 5,
+            "name": "Benjamin Krikke",
+            "slug": "benjamin-krikke",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/58bbe6aa1bc848b13d577757e6110d72.png"
+          },
+          {
+            "value": 5,
+            "name": "Jaquan Carlos",
+            "slug": "jaquan-carlos",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/1cef4471026b656a4b24345f534eb0cc.png"
+          },
+          {
+            "value": 5,
+            "name": "Langston Wilson",
+            "slug": "langston-wilson",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/e9636d18d29d8e9c283e34685a9951a1.png"
+          }
+        ]
+      }
+    },
+    "assists": {
+      "label": "Rezultatyvūs perdavimai",
+      "home": {
+        "value": 5,
+        "name": "Kay Bruhnke",
+        "slug": "kay-bruhnke",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/bcf1e58f59f274a6a1c7fd2ac3edd992.png",
+        "others": [
+          {
+            "value": 4,
+            "name": "Augustas Marčiulionis",
+            "slug": "augustas-marciulionis",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/b050e7162cc69bb4e043620bb612e8e9.png"
+          },
+          {
+            "value": 4,
+            "name": "Michael Devoe",
+            "slug": "michael-devoe",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/5cc22413a2f70e1c6c7faecd621a82d6.png"
+          },
+          {
+            "value": 3,
+            "name": "Gytis Radzevičius",
+            "slug": "gytis-radzevicius",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/2e4388d5d5e524f4bee3072b849b49df.png"
+          }
+        ]
+      },
+      "away": {
+        "value": 9,
+        "name": "Jaquan Carlos",
+        "slug": "jaquan-carlos",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/1cef4471026b656a4b24345f534eb0cc.png",
+        "others": [
+          {
+            "value": 3,
+            "name": "Evaldas Šaulys",
+            "slug": "evaldas-saulys",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/84899af23cc4102d394b9cf19b820542.png"
+          },
+          {
+            "value": 3,
+            "name": "Stanley Davis",
+            "slug": "stanley-davis",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/15ad755fffc73db96a70a0549d090c2f.png"
+          },
+          {
+            "value": 2,
+            "name": "Arūnas Mikalauskas",
+            "slug": "arunas-mikalauskas",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/dfc6c0271397c72e35ef482a6fca5fc3.png"
+          }
+        ]
+      }
+    },
+    "efficiency": {
+      "label": "Naudingumas",
+      "home": {
+        "value": 25,
+        "name": "Artūras Gudaitis",
+        "slug": "arturas-gudaitis",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/a166f8a477757802b9026bdea1734e41.png",
+        "others": [
+          {
+            "value": 23,
+            "name": "Augustas Marčiulionis",
+            "slug": "augustas-marciulionis",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/b050e7162cc69bb4e043620bb612e8e9.png"
+          },
+          {
+            "value": 20,
+            "name": "Matas Jogėla",
+            "slug": "matas-jogela",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/0ba550214e19dbd49771c1487c96f929.png"
+          },
+          {
+            "value": 18,
+            "name": "Gytis Radzevičius",
+            "slug": "gytis-radzevicius",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/2e4388d5d5e524f4bee3072b849b49df.png"
+          }
+        ]
+      },
+      "away": {
+        "value": 36,
+        "name": "Jaquan Carlos",
+        "slug": "jaquan-carlos",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/1cef4471026b656a4b24345f534eb0cc.png",
+        "others": [
+          {
+            "value": 23,
+            "name": "Benjamin Krikke",
+            "slug": "benjamin-krikke",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/58bbe6aa1bc848b13d577757e6110d72.png"
+          },
+          {
+            "value": 15,
+            "name": "Langston Wilson",
+            "slug": "langston-wilson",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/e9636d18d29d8e9c283e34685a9951a1.png"
+          },
+          {
+            "value": 11,
+            "name": "Arūnas Mikalauskas",
+            "slug": "arunas-mikalauskas",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/dfc6c0271397c72e35ef482a6fca5fc3.png"
+          }
+        ]
+      }
+    },
+    "steals": {
+      "label": "Perimti kamuoliai",
+      "home": {
+        "value": 1,
+        "name": "Matas Jogėla",
+        "slug": "matas-jogela",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/0ba550214e19dbd49771c1487c96f929.png",
+        "others": [
+          {
+            "value": 1,
+            "name": "Gytis Radzevičius",
+            "slug": "gytis-radzevicius",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/2e4388d5d5e524f4bee3072b849b49df.png"
+          },
+          {
+            "value": 0,
+            "name": "Martynas Paliukėnas",
+            "slug": "martynas-paliukenas",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/334de13f38cd75572ebbd4a53918dd60.png"
+          },
+          {
+            "value": 0,
+            "name": "Artūras Gudaitis",
+            "slug": "arturas-gudaitis",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/a166f8a477757802b9026bdea1734e41.png"
+          }
+        ]
+      },
+      "away": {
+        "value": 1,
+        "name": "Evaldas Šaulys",
+        "slug": "evaldas-saulys",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/84899af23cc4102d394b9cf19b820542.png",
+        "others": [
+          {
+            "value": 1,
+            "name": "Arūnas Mikalauskas",
+            "slug": "arunas-mikalauskas",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/dfc6c0271397c72e35ef482a6fca5fc3.png"
+          },
+          {
+            "value": 1,
+            "name": "Adomas Sidarevičius",
+            "slug": "adomas-sidarevicius",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/e3cbaa8c8594353745000def736d434a.png"
+          },
+          {
+            "value": 1,
+            "name": "Benjamin Krikke",
+            "slug": "benjamin-krikke",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/58bbe6aa1bc848b13d577757e6110d72.png"
+          }
+        ]
+      }
+    },
+    "blocks": {
+      "label": "Blokai",
+      "home": {
+        "value": 2,
+        "name": "Artūras Gudaitis",
+        "slug": "arturas-gudaitis",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/a166f8a477757802b9026bdea1734e41.png",
+        "others": [
+          {
+            "value": 1,
+            "name": "Gytis Masiulis",
+            "slug": "gytis-masiulis",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/2d45d846424125bccdc1da1f6a7cb64d.png"
+          },
+          {
+            "value": 0,
+            "name": "Martynas Paliukėnas",
+            "slug": "martynas-paliukenas",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/334de13f38cd75572ebbd4a53918dd60.png"
+          },
+          {
+            "value": 0,
+            "name": "Matas Jogėla",
+            "slug": "matas-jogela",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/0ba550214e19dbd49771c1487c96f929.png"
+          }
+        ]
+      },
+      "away": {
+        "value": 1,
+        "name": "Langston Wilson",
+        "slug": "langston-wilson",
+        "photo": "http://lkl.lt/media/players/responsive_width_600px/e9636d18d29d8e9c283e34685a9951a1.png",
+        "others": [
+          {
+            "value": 0,
+            "name": "Evaldas Šaulys",
+            "slug": "evaldas-saulys",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/84899af23cc4102d394b9cf19b820542.png"
+          },
+          {
+            "value": 0,
+            "name": "Arūnas Mikalauskas",
+            "slug": "arunas-mikalauskas",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/dfc6c0271397c72e35ef482a6fca5fc3.png"
+          },
+          {
+            "value": 0,
+            "name": "Laurynas Vaištaras",
+            "slug": "laurynas-vaistaras",
+            "photo": "http://lkl.lt/media/players/responsive_width_600px/22539ee33fe6816d90e6760c8e701511.png"
+          }
+        ]
+      }
+    }
+  }
+}

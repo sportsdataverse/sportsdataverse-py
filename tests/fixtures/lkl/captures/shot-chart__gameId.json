@@ -1,0 +1,171 @@
+{
+  "quarters": {
+    "regular": {
+      "1": [
+        {
+          "id": 1556794,
+          "player_id": 2089,
+          "type": "2pt",
+          "period": 1,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "16.00",
+          "y": "28.00",
+          "side": "LEFT",
+          "area": "insideleft",
+          "is_home": false
+        },
+        {
+          "id": 1556804,
+          "player_id": 2091,
+          "type": "2pt",
+          "period": 1,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "23.00",
+          "y": "34.00",
+          "side": "LEFT",
+          "area": "insidecenter",
+          "is_home": false
+        },
+        {
+          "id": 1556835,
+          "player_id": 702,
+          "type": "3pt",
+          "period": 1,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "72.00",
+          "y": "79.00",
+          "side": "RIGHT",
+          "area": "outsideleft",
+          "is_home": true
+        }
+      ],
+      "2": [
+        {
+          "id": 1556993,
+          "player_id": 2089,
+          "type": "2pt",
+          "period": 2,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "21.00",
+          "y": "27.00",
+          "side": "LEFT",
+          "area": "insideleft",
+          "is_home": false
+        },
+        {
+          "id": 1556997,
+          "player_id": 2027,
+          "type": "2pt",
+          "period": 2,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "8.00",
+          "y": "44.00",
+          "side": "LEFT",
+          "area": "underbasket",
+          "is_home": false
+        },
+        {
+          "id": 1557007,
+          "player_id": 2091,
+          "type": "3pt",
+          "period": 2,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "30.00",
+          "y": "32.00",
+          "side": "LEFT",
+          "area": "outsideleft",
+          "is_home": false
+        }
+      ],
+      "3": [
+        {
+          "id": 1557198,
+          "player_id": 50,
+          "type": "2pt",
+          "period": 3,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "6.00",
+          "y": "47.00",
+          "side": "LEFT",
+          "area": "underbasket",
+          "is_home": true
+        },
+        {
+          "id": 1557200,
+          "player_id": 2092,
+          "type": "3pt",
+          "period": 3,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "73.00",
+          "y": "87.00",
+          "side": "RIGHT",
+          "area": "outsideleft",
+          "is_home": false
+        },
+        {
+          "id": 1557203,
+          "player_id": 50,
+          "type": "2pt",
+          "period": 3,
+          "period_type": "REGULAR",
+          "success": true,
+          "x": "9.00",
+          "y": "50.00",
+          "side": "LEFT",
+          "area": "underbasket",
+          "is_home": true
+        }
+      ],
+      "4": [
+        {
+          "id": 1557386,
+          "player_id": 2089,
+          "type": "2pt",
+          "period": 4,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "94.00",
+          "y": "45.00",
+          "side": "RIGHT",
+          "area": "underbasket",
+          "is_home": false
+        },
+        {
+          "id": 1557388,
+          "player_id": 2027,
+          "type": "3pt",
+          "period": 4,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "76.00",
+          "y": "82.00",
+          "side": "RIGHT",
+          "area": "outsideleft",
+          "is_home": false
+        },
+        {
+          "id": 1557407,
+          "player_id": 9,
+          "type": "3pt",
+          "period": 4,
+          "period_type": "REGULAR",
+          "success": false,
+          "x": "30.00",
+          "y": "33.00",
+          "side": "LEFT",
+          "area": "outsideleft",
+          "is_home": true
+        }
+      ]
+    },
+    "overtime": []
+  }
+}
