@@ -9,8 +9,9 @@ kicking the extra point and going for two".
 The logic, per play, enumerates the three possible point outcomes of the
 try -- ``pts in {0, 1, 2}`` -- growing the scoring team's lead by ``pts``
 (``pos_score_diff_start += pts``), flips to the OPPONENT's ensuing drive (the
-scoring team kicks off, the opponent receives a touchback at the 25 -> 1st-&-10,
-``yards_to_goal = 75``), scores EP -> WP, and flips the WP back to the scoring
+scoring team kicks off, the opponent receives a touchback at the season's touchback spot
+(``TOUCHBACK_YARDLINE_BY_SEASON``: 80 to go through 2011, 75 from 2012; a null season takes 80)
+-> 1st-&-10), scores EP -> WP, and flips the WP back to the scoring
 team's perspective. (cfb4th writes ``-= pts`` because it adjusts the
 already-flipped opponent frame; here we adjust the scoring-team frame pre-flip,
 so the sign is ``+= pts`` -- see ``_wp_after_pts``.) The two option values are then::
@@ -36,7 +37,8 @@ The opponent-ensuing-drive frame after the score reuses the reviewed 4th-down
 state machinery in :mod:`sportsdataverse.cfb.cfb_fourth_down`
 (``_to_pandas`` / ``_predict_ep`` / ``_predict_wp`` / ``_flip_team_state`` /
 ``_PBP_COLS``) -- exactly the made-field-goal kickoff frame
-(``yards_to_goal = 75``, ``down = 1``, ``distance = 10``).
+(``yards_to_goal`` = the season's touchback spot, ``TOUCHBACK_YARDLINE_BY_SEASON``;
+``down = 1``, ``distance = 10``).
 """
 
 from __future__ import annotations
@@ -66,6 +68,7 @@ from sportsdataverse.cfb.cfb_wp_overtime import (
     ot_possession_over_wp as _ot_possession_over_wp,
     tie_value as _tie_value,
 )
+from sportsdataverse.cfb.model_vars import _cfb_touchback_yardline_np
 
 __all__ = [
     "get_2pt_probs",
@@ -137,8 +140,9 @@ def _wp_after_pts(st: pd.DataFrame, pts: int) -> np.ndarray:
     """WP (scoring team's perspective) of the opponent's ensuing drive after ``pts``.
 
     The scoring team has just made the try worth ``pts`` (so their lead grows by
-    ``pts``); the ball goes to the opponent at the 25 after a touchback
-    (``yards_to_goal = 75``, ``down = 1``, ``distance = 10``), EP -> WP is scored,
+    ``pts``); the ball goes to the opponent after a touchback at the season's touchback
+    spot (``model_vars.TOUCHBACK_YARDLINE_BY_SEASON``: 80 to go through 2011, 75 from 2012;
+    a null season takes 80), ``down = 1``, ``distance = 10``; EP -> WP is scored,
     and the WP is flipped back to the scoring team.
 
     NOTE on the sign: ``st`` here is the SCORING team's frame, and
@@ -151,7 +155,7 @@ def _wp_after_pts(st: pd.DataFrame, pts: int) -> np.ndarray:
     s = st.copy()
     s["pos_score_diff_start"] = s["pos_score_diff_start"].to_numpy().astype(float) + float(pts)
     flipped = _flip_team_state(s[list(_PBP_COLS.keys())])
-    flipped["yards_to_goal"] = 75
+    flipped["yards_to_goal"] = _cfb_touchback_yardline_np(flipped["season"])
     flipped["distance"] = 10
     ep = _predict_ep(flipped)
     wp = _predict_wp(flipped, ep)

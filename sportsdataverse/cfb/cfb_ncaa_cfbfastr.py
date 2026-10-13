@@ -1143,6 +1143,8 @@ def to_cfbfastr(
             # the row already sits with the receiving team, so a returned kickoff's end
             # spot needs no flip; only a touchback leaves no spot in the text
             if pen_end is None and "touchback" in (cur["play_text"] or "").lower():
+                # 75 is right for every season this serves: stats.ncaa.org football starts 2013, after
+                # the 2012 rule (cfb/model_vars.py TOUCHBACK_YARDLINE_BY_SEASON: 80 through 2011)
                 cur["yards_to_goal_end"] = 75
             elif cur["yards_to_goal_end"] is None and nxt is not None and nxt["half"] == cur["half"]:
                 cur["yards_to_goal_end"] = nxt["yards_to_goal"]

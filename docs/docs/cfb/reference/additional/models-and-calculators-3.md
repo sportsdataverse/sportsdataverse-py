@@ -552,7 +552,10 @@ print(out[["two_pt_wp", "xp_wp", "two_pt_recommendation"]].head())
 Full 4th-down decision surface (cfb4th `add_4th_probs`) + recommendation.
 
 Runs `get_go_wp`, `get_fg_wp`, `get_punt_wp` on the
-fourth-down rows and adds the combined option columns plus:
+fourth-down rows and adds the combined option columns plus the ones below. A
+post-score kickoff (go touchdown, punt return touchdown, made field goal) is a
+touchback at the season's spot (`model_vars.TOUCHBACK_YARDLINE_BY_SEASON`: 80 to go
+through 2011, 75 from 2012); a null season takes the pre-2012 spot (80).
 
 * `fourth_down_recommendation` -- the max-WP choice among `{go, punt,
   field_goal}` (NaN options are excluded; when the FG model isn't bundled,
