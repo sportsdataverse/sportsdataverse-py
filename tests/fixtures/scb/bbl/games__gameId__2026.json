@@ -8,7 +8,7 @@
   "statstatus": "E",
   "gameProgress": "E",
   "homeTeam": {
-    "ticketPhone": "01806 - 570011",
+    "ticketPhone": "REDACTED",
     "ticketUrl": "https://www.albaberlin.de/tickets",
     "isForeign": false,
     "foreignLink": "",
@@ -31,7 +31,7 @@
     "magentaSportId": "TODO_MAGENTASPORTID"
   },
   "guestTeam": {
-    "ticketPhone": "+49 (0) 351 850 337 12",
+    "ticketPhone": "REDACTED",
     "ticketUrl": "https://www.chemnitz99.de/tickets",
     "isForeign": false,
     "foreignLink": "",

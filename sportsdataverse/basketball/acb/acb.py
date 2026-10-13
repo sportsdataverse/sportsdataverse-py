@@ -776,8 +776,6 @@ _PARSER_COLUMNS = {
         "stadium_capacity",
         "president",
         "foundation_year",
-        "phone",
-        "email",
         "web_url",
         "ticketing_url",
         "merchandising_url",

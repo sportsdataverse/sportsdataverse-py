@@ -723,6 +723,7 @@ def sportpress_ui_strings(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -782,6 +783,7 @@ def sportpress_club_seasons(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -844,6 +846,7 @@ def sportpress_referees(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -905,6 +908,7 @@ def sportpress_phases(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -964,6 +968,7 @@ def sportpress_competition_teams(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1027,6 +1032,7 @@ def sportpress_competition_staff(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1092,6 +1098,7 @@ def sportpress_standings(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1155,6 +1162,7 @@ def sportpress_schedule(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1219,6 +1227,7 @@ def sportpress_game_slider(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1284,6 +1293,7 @@ def sportpress_team_rankings(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1354,6 +1364,7 @@ def sportpress_player_rankings(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1419,6 +1430,7 @@ def sportpress_season_roster(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1480,6 +1492,7 @@ def sportpress_nationality_codes(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1541,6 +1554,7 @@ def sportpress_team_roster(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1602,6 +1616,7 @@ def sportpress_team_find(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1661,6 +1676,7 @@ def sportpress_team_player_averages(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1722,6 +1738,7 @@ def sportpress_team_games(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1783,6 +1800,7 @@ def sportpress_roster_find(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1844,6 +1862,7 @@ def sportpress_player_career(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1905,6 +1924,7 @@ def sportpress_player_games(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1966,6 +1986,7 @@ def sportpress_game_find(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2025,6 +2046,7 @@ def sportpress_game_periods(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2086,6 +2108,7 @@ def sportpress_game_overview(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2147,6 +2170,7 @@ def sportpress_game_top_performers(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2208,6 +2232,7 @@ def sportpress_game_leaders(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2271,6 +2296,7 @@ def sportpress_game_box(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2332,6 +2358,7 @@ def sportpress_game_team_box(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2395,6 +2422,7 @@ def sportpress_game_film(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

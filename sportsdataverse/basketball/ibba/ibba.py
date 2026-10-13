@@ -389,6 +389,7 @@ def ibba_configuration(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -451,6 +452,7 @@ def ibba_boards(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -513,6 +515,7 @@ def ibba_boards_ex(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -576,6 +579,7 @@ def ibba_teams(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -641,6 +645,7 @@ def ibba_team(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -707,6 +712,7 @@ def ibba_players(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -771,6 +777,7 @@ def ibba_player(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -836,6 +843,7 @@ def ibba_coaches(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -900,6 +908,7 @@ def ibba_box_score(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -967,6 +976,7 @@ def ibba_player_stats(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1028,6 +1038,7 @@ def ibba_stats_types(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1090,6 +1101,7 @@ def ibba_leaders(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1158,6 +1170,7 @@ def ibba_team_stats(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1231,6 +1244,7 @@ def ibba_games(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1300,6 +1314,7 @@ def ibba_games_ex(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1364,6 +1379,7 @@ def ibba_games_by_team(
     Raises:
         sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

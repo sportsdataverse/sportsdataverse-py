@@ -332,6 +332,7 @@ def aba_game(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -399,6 +400,7 @@ def aba_periods(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -466,6 +468,7 @@ def aba_box_players(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -533,6 +536,7 @@ def aba_box_teams(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -600,6 +604,7 @@ def aba_pbp(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -667,6 +672,7 @@ def aba_shots(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -736,6 +742,7 @@ def aba_score_flow(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -805,6 +812,7 @@ def aba_score_difference(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -874,6 +882,7 @@ def aba_calendar(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -939,6 +948,7 @@ def aba_standings(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1006,6 +1016,7 @@ def aba_player(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1073,6 +1084,7 @@ def aba_player_games(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

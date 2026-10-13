@@ -1108,8 +1108,6 @@ LOCAL_BY: Dict[str, Dict[str, str]] = {
         "stadium_capacity": "Arena capacity.",
         "president": "Club president's name; null for most clubs.",
         "foundation_year": "Year the club was founded.",
-        "phone": "Club contact phone.",
-        "email": "Club contact e-mail.",
         "web_url": "Club website URL.",
         "ticketing_url": "Club ticket shop URL.",
         "merchandising_url": "Club merchandise shop URL (the API's merchanUrl).",

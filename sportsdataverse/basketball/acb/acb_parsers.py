@@ -727,8 +727,6 @@ FIELDS: Dict[str, List[Field]] = {
         ("stadium_capacity", "i", "stadiumCapacity"),
         ("president", "s", "presidentName"),
         ("foundation_year", "i", "foundationYear"),
-        ("phone", "s", "contactPhone"),
-        ("email", "s", "contactEmail"),
         ("web_url", "s", "webUrl"),
         ("ticketing_url", "s", "ticketingUrl"),
         ("merchandising_url", "s", "merchanUrl"),

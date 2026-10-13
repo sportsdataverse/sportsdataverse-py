@@ -640,6 +640,7 @@ def tbf_seasons(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -697,6 +698,7 @@ def tbf_leagues(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -756,6 +758,7 @@ def tbf_league_seasons(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -821,6 +824,7 @@ def tbf_weeks(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -887,6 +891,7 @@ def tbf_standings(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -954,6 +959,7 @@ def tbf_schedule(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1021,6 +1027,7 @@ def tbf_daily_matches(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1084,6 +1091,7 @@ def tbf_game_header(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1143,6 +1151,7 @@ def tbf_game_players(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1202,6 +1211,7 @@ def tbf_player_box(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1261,6 +1271,7 @@ def tbf_team_box(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1320,6 +1331,7 @@ def tbf_pbp(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1379,6 +1391,7 @@ def tbf_shots(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1438,6 +1451,7 @@ def tbf_period_scores(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1497,6 +1511,7 @@ def tbf_highlights(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1556,6 +1571,7 @@ def tbf_game_leaders(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1617,6 +1633,7 @@ def tbf_players(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1679,6 +1696,7 @@ def tbf_player_career(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1738,6 +1756,7 @@ def tbf_teams(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1804,6 +1823,7 @@ def tbf_team_player_stats(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1873,6 +1893,7 @@ def tbf_team_games(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1940,6 +1961,7 @@ def tbf_team_roster(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2007,6 +2029,7 @@ def tbf_team_staff(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2072,6 +2095,7 @@ def tbf_leaders_points(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2136,6 +2160,7 @@ def tbf_leaders_assists(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2200,6 +2225,7 @@ def tbf_leaders_blocks(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2264,6 +2290,7 @@ def tbf_leaders_rebounds(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2328,6 +2355,7 @@ def tbf_leaders_steals(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2392,6 +2420,7 @@ def tbf_leaders_minutes(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2456,6 +2485,7 @@ def tbf_leaders_threes(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2520,6 +2550,7 @@ def tbf_leaders_turnovers(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2584,6 +2615,7 @@ def tbf_leaders_efficiency(
     Raises:
         sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

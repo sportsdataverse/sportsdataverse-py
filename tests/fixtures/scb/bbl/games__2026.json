@@ -8,7 +8,7 @@
       "competition": "BBL_CUP",
       "status": "OFFICIAL",
       "homeTeam": {
-        "ticketPhone": "+49795129118,https://ticket.hakro-merlins.com/",
+        "ticketPhone": "REDACTED",
         "ticketUrl": null,
         "isForeign": true,
         "foreignLink": "https://www.2basketballbundesliga.de/teams/kader/446",
@@ -29,7 +29,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "02331/9811081,https://phoenix-hagen.reservix.de/events",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "https://phoenix-hagen.reservix.de/",
         "isForeign": false,
         "foreignLink": "",
@@ -233,7 +233,7 @@
       "competition": "BBL_CUP",
       "status": "OFFICIAL",
       "homeTeam": {
-        "ticketPhone": "0471 - 483829-0,https://tickets.dieeisbaeren.de/",
+        "ticketPhone": "REDACTED",
         "ticketUrl": null,
         "isForeign": true,
         "foreignLink": "https://www.2basketballbundesliga.de/teams/kader/439",
@@ -254,7 +254,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "040 319 747 69 52",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "https://www.eventimsports.de/ols/basketball-braunschweig/",
         "isForeign": false,
         "foreignLink": "",
@@ -465,7 +465,7 @@
       "competition": "BBL_CUP",
       "status": "OFFICIAL",
       "homeTeam": {
-        "ticketPhone": "",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "https://tickets.hamburgtowers.de/",
         "isForeign": false,
         "foreignLink": "",
@@ -486,7 +486,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "+49 (0) 180 6050400",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "http://tickets.seawolves.de",
         "isForeign": false,
         "foreignLink": "",

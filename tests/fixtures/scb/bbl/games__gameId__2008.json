@@ -8,7 +8,7 @@
   "statstatus": "1",
   "gameProgress": null,
   "homeTeam": {
-    "ticketPhone": "040 319 747 69 52",
+    "ticketPhone": "REDACTED",
     "ticketUrl": "https://www.eventimsports.de/ols/basketball-braunschweig/",
     "isForeign": false,
     "foreignLink": "",
@@ -31,7 +31,7 @@
     "magentaSportId": "TODO_MAGENTASPORTID"
   },
   "guestTeam": {
-    "ticketPhone": "01805-644332",
+    "ticketPhone": "REDACTED",
     "ticketUrl": "",
     "isForeign": false,
     "foreignLink": "",

@@ -323,6 +323,7 @@ def feb_game_info(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -381,6 +382,7 @@ def feb_period_scores(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -439,6 +441,7 @@ def feb_team_stats(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -497,6 +500,7 @@ def feb_player_box(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -555,6 +559,7 @@ def feb_pbp(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -613,6 +618,7 @@ def feb_shots(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -671,6 +677,7 @@ def feb_leaders(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -727,6 +734,7 @@ def feb_overview(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -787,6 +795,7 @@ def feb_schedule(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -850,6 +859,7 @@ def feb_results(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -913,6 +923,7 @@ def feb_standings(
     Raises:
         sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

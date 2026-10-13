@@ -216,6 +216,7 @@ def ibba_segev_game_info(
     Raises:
         sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -277,6 +278,7 @@ def ibba_segev_rosters(
     Raises:
         sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -338,6 +340,7 @@ def ibba_segev_player_box(
     Raises:
         sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -401,6 +404,7 @@ def ibba_segev_team_box(
     Raises:
         sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -462,6 +466,7 @@ def ibba_segev_period_scores(
     Raises:
         sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -525,6 +530,7 @@ def ibba_segev_pbp(
     Raises:
         sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

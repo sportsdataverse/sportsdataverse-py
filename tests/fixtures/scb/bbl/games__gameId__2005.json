@@ -8,7 +8,7 @@
   "statstatus": "1",
   "gameProgress": null,
   "homeTeam": {
-    "ticketPhone": "0180 - 5040300",
+    "ticketPhone": "REDACTED",
     "ticketUrl": "https://www.ewe-baskets.de/tickets",
     "isForeign": false,
     "foreignLink": "",
@@ -31,7 +31,7 @@
     "magentaSportId": "TODO_MAGENTASPORTID"
   },
   "guestTeam": {
-    "ticketPhone": "0651/4628760",
+    "ticketPhone": "REDACTED",
     "ticketUrl": "https://vetconceptgladiators.de/ticketshop/",
     "isForeign": false,
     "foreignLink": "",

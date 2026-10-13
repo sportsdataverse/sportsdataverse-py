@@ -8,7 +8,7 @@
       "competition": "DBBL_CUP",
       "status": "OFFICIAL",
       "homeTeam": {
-        "ticketPhone": "",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "",
         "isForeign": true,
         "foreignLink": "https://www.2basketballbundesliga.de/teams/kader/168",
@@ -222,7 +222,7 @@
       "competition": "DBBL_CUP",
       "status": "OFFICIAL",
       "homeTeam": {
-        "ticketPhone": "",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "",
         "isForeign": true,
         "foreignLink": "https://www.2basketballbundesliga.de/teams/kader/167",

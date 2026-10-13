@@ -19036,12 +19036,10 @@ acb_club_data:
   competition_id: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa (x-competitions)'
   edition_id: Season id (`editionId`) = season START year - 1935 (91 = 2026-27, 81 = 2016-17, 70 = 2005-06, 48 = 1983-84,
     the first). The sdv season (END year) is editionId + 1936. Season lists also carry `seasonStartYear` / `seasonEndYear`
-  email: Club contact e-mail.
   facebook_url: Club Facebook URL.
   foundation_year: Year the club was founded.
   instagram_url: Club Instagram URL.
   merchandising_url: Club merchandise shop URL (the API's merchanUrl).
-  phone: Club contact phone.
   president: Club president's name; null for most clubs.
   season: 'Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take.'
   stadium_address: Arena street address.

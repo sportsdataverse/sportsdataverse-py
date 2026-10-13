@@ -165,6 +165,30 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [Ligue Magnus](magnus/) | `sportsdataverse.hockey.magnus` | Ligue Magnus (11) |
 | [KHL](khl/) | `sportsdataverse.hockey.khl` | KHL (site REST + webcaster API) (23) |
 | [VHL](vhl/) | `sportsdataverse.hockey.vhl` | VHL (13) |
+| [FIBA (digital API and game pages)](fiba_hub/) | `sportsdataverse.basketball.fiba_hub` | FIBA digital API and game pages (37) |
+| [Genius Sports LiveStats](genius/) | `sportsdataverse.basketball.genius` | Genius Sports LiveStats (11) |
+| [Sportradar Atrium](atrium/) | `sportsdataverse.basketball.atrium` | Sportradar Atrium embed API (22) |
+| [NBL Australia (Rosetta)](nbl_au/) | `sportsdataverse.basketball.nbl_au` | NBL Rosetta proxy (NBL, WNBL, NBL1) (22) |
+| [Spanish FEB](feb/) | `sportsdataverse.basketball.feb` | Spanish FEB LiveStats + baloncestoenvivo (11) |
+| [BBL / DBBL (SCB)](scb/) | `sportsdataverse.basketball.scb` | SCB basketball API (BBL, DBBL) (23) |
+| [Lega Basket Serie A](lba/) | `sportsdataverse.basketball.lba` | Lega Basket Serie A (19) |
+| [ACB](acb/) | `sportsdataverse.basketball.acb` | ACB (Liga Endesa) (45) |
+| [Israeli Premier League](ibba/) | `sportsdataverse.basketball.ibba` | IBBA (Israeli Premier League) and Segev Stats (22) |
+| [W League (Japan)](wjbl/) | `sportsdataverse.basketball.wjbl` | W League (Japan) (19) |
+| [VTB](vtb/) | `sportsdataverse.basketball.vtb` | VTB United League (38) |
+| [KBL](kbl/) | `sportsdataverse.basketball.kbl` | KBL (Korea) (22) |
+| [B.LEAGUE](bleague/) | `sportsdataverse.basketball.bleague` | B.LEAGUE (Japan) (14) |
+| [KZS](kzs/) | `sportsdataverse.basketball.kzs` | KZS (Basketball Federation of Slovenia) (23) |
+| [LKL](lkl/) | `sportsdataverse.basketball.lkl` | LKL (Lithuania) (14) |
+| [TBF](tbf/) | `sportsdataverse.basketball.tbf` | TBF app API (BSL, TBL, KBSL) (32) |
+| [CEBL](cebl/) | `sportsdataverse.basketball.cebl` | CEBL stats API (12) |
+| [ABA League](aba/) | `sportsdataverse.basketball.aba` | ABA League (12) |
+| [EASL](easl/) | `sportsdataverse.basketball.easl` | EASL (third-party sync server over Sportradar DataCore) (18) |
+| [BNXT League](bnxt/) | `sportsdataverse.basketball.bnxt` | BNXT League (Sportpress) (28) |
+| [TPBL](tpbl/) | `sportsdataverse.basketball.tpbl` | TPBL (Taiwan) (16) |
+| [P. LEAGUE+](plg/) | `sportsdataverse.basketball.plg` | P. LEAGUE+ (Taiwan) and Preciser (18) |
+| [CBA](cba/) | `sportsdataverse.basketball.cba` | CBA data API (China) (27) |
+| [Basketligaen](dbl/) | `sportsdataverse.basketball.dbl` | Basketligaen (Denmark, Sportality) (27) |
 <!-- END generated: leagues-and-sources -->
 
 ## Errors (0.1.5)

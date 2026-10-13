@@ -31,7 +31,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "0176-14628132",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "http://bc-marburg.de",
         "isForeign": false,
         "foreignLink": "",
@@ -165,7 +165,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "ticket@usc-eisvoegel.de",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "http://usc-eisvoegel.de",
         "isForeign": false,
         "foreignLink": "",
@@ -276,7 +276,7 @@
       "competition": "DBBL",
       "status": "OFFICIAL",
       "homeTeam": {
-        "ticketPhone": "01806  570011",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "https://www.albaberlin.de/tickets/einzeltickets-frauen",
         "isForeign": false,
         "foreignLink": "",

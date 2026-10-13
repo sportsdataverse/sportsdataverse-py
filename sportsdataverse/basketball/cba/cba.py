@@ -798,6 +798,7 @@ def cba_seasons(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -857,6 +858,7 @@ def cba_match_types(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -918,6 +920,7 @@ def cba_team_options(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -980,6 +983,7 @@ def cba_teams(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1043,6 +1047,7 @@ def cba_schedule_month(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1109,6 +1114,7 @@ def cba_schedule_day(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1173,6 +1179,7 @@ def cba_game_info(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1234,6 +1241,7 @@ def cba_player_box(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1297,6 +1305,7 @@ def cba_period_scores(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1360,6 +1369,7 @@ def cba_game_team_shots(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1425,6 +1435,7 @@ def cba_player_advanced(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1490,6 +1501,7 @@ def cba_player_extras(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1553,6 +1565,7 @@ def cba_game_team_four(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1618,6 +1631,7 @@ def cba_best_player(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1679,6 +1693,7 @@ def cba_best_stats(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1740,6 +1755,7 @@ def cba_rosters(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1801,6 +1817,7 @@ def cba_report_status(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1864,6 +1881,7 @@ def cba_pbp(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1929,6 +1947,7 @@ def cba_team_counts(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1998,6 +2017,7 @@ def cba_team_basic(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2066,6 +2086,7 @@ def cba_team_four(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2136,6 +2157,7 @@ def cba_team_overview(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2208,6 +2230,7 @@ def cba_team_shots(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2286,6 +2309,7 @@ def cba_player_base(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2371,6 +2395,7 @@ def cba_player_offensive(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2460,6 +2485,7 @@ def cba_player_defensive(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2549,6 +2575,7 @@ def cba_player_shots(
     Raises:
         sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

@@ -1055,6 +1055,7 @@ def nbl_rosetta_seasons(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1121,6 +1122,7 @@ def nbl_rosetta_seasons_current(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1195,6 +1197,7 @@ def nbl_rosetta_matches(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1268,6 +1271,7 @@ def nbl_rosetta_teams(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1334,6 +1338,7 @@ def nbl_rosetta_match_by_id(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1396,6 +1401,7 @@ def nbl_rosetta_match(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1458,6 +1464,7 @@ def nbl_rosetta_match_player_box(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1522,6 +1529,7 @@ def nbl_rosetta_match_team_box(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1586,6 +1594,7 @@ def nbl_rosetta_match_player_period_box(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1650,6 +1659,7 @@ def nbl_rosetta_match_pbp(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1716,6 +1726,7 @@ def nbl_rosetta_standings(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1788,6 +1799,7 @@ def nbl_rosetta_players(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1859,6 +1871,7 @@ def nbl_rosetta_team_players(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1929,6 +1942,7 @@ def nbl_rosetta_outcomes(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2003,6 +2017,7 @@ def nbl_rosetta_player_game_log(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2073,6 +2088,7 @@ def nbl_rosetta_player_stats(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2143,6 +2159,7 @@ def nbl_rosetta_stats_leaders(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2221,6 +2238,7 @@ def nbl_rosetta_team_stats_leaders(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2295,6 +2313,7 @@ def nbl_rosetta_team_stats(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2365,6 +2384,7 @@ def nbl_rosetta_next_match(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2435,6 +2455,7 @@ def nbl_rosetta_next_match_team(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2503,6 +2524,7 @@ def nbl_rosetta_next_matches(
     Raises:
         sportsdataverse.errors.NoDataError: Rosetta answered 404 or no rows (an unknown match, team, player or season id, an org or season type with nothing, or no season in progress).
         sportsdataverse.errors.AssetFetchError: the 403 gate body, a stub or error envelope, a page cut by Rosetta's path cache, or a body for another org, season or entity than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

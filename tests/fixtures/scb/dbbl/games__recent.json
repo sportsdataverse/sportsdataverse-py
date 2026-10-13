@@ -201,7 +201,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "ticket@usc-eisvoegel.de",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "http://usc-eisvoegel.de",
         "isForeign": true,
         "foreignLink": null,
@@ -295,7 +295,7 @@
       "statstatus": null,
       "gameProgress": null,
       "homeTeam": {
-        "ticketPhone": "buero@bc-sls.de",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "",
         "isForeign": true,
         "foreignLink": null,
@@ -378,7 +378,7 @@
       "statstatus": null,
       "gameProgress": null,
       "homeTeam": {
-        "ticketPhone": "0176-14628132",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "http://bc-marburg.de",
         "isForeign": true,
         "foreignLink": null,
@@ -400,7 +400,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "ticket@usc-eisvoegel.de",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "http://usc-eisvoegel.de",
         "isForeign": true,
         "foreignLink": null,
@@ -546,7 +546,7 @@
       "statstatus": "",
       "gameProgress": "",
       "homeTeam": {
-        "ticketPhone": "",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "",
         "isForeign": true,
         "foreignLink": null,
@@ -567,7 +567,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "basketballinjena.de",
         "isForeign": true,
         "foreignLink": null,
@@ -799,7 +799,7 @@
       "statstatus": "E",
       "gameProgress": "E",
       "homeTeam": {
-        "ticketPhone": "Tickets@stuttgart-basketball.de",
+        "ticketPhone": "REDACTED",
         "ticketUrl": null,
         "isForeign": true,
         "foreignLink": null,

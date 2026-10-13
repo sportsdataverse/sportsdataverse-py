@@ -165,6 +165,7 @@ def pleague_preciser_shots(
     Raises:
         sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -230,6 +231,7 @@ def pleague_preciser_summary_teams(
     Raises:
         sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -297,6 +299,7 @@ def pleague_preciser_score_log(
     Raises:
         sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -364,6 +367,7 @@ def pleague_preciser_lead_flow(
     Raises:
         sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -431,6 +435,7 @@ def pleague_preciser_win_probability(
     Raises:
         sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -498,6 +503,7 @@ def pleague_preciser_rotation(
     Raises:
         sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -565,6 +571,7 @@ def pleague_preciser_injury(
     Raises:
         sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

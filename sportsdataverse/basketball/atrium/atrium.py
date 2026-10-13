@@ -96,6 +96,7 @@ def atrium_fixtures(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -164,6 +165,7 @@ def atrium_seasons(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -234,6 +236,7 @@ def atrium_fixtures_ribbon(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -302,6 +305,7 @@ def atrium_fixture(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -368,6 +372,7 @@ def atrium_fixture_periods(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -434,6 +439,7 @@ def atrium_box_score(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -500,6 +506,7 @@ def atrium_team_box_score(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -566,6 +573,7 @@ def atrium_pbp(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -632,6 +640,7 @@ def atrium_shots(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -704,6 +713,7 @@ def atrium_standings(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -776,6 +786,7 @@ def atrium_standings_summary(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -847,6 +858,7 @@ def atrium_teams(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -920,6 +932,7 @@ def atrium_team(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -994,6 +1007,7 @@ def atrium_players(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1068,6 +1082,7 @@ def atrium_player(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1142,6 +1157,7 @@ def atrium_player_seasons(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1216,6 +1232,7 @@ def atrium_player_game_log(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1291,6 +1308,7 @@ def atrium_leaders(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1363,6 +1381,7 @@ def atrium_player_stats(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1434,6 +1453,7 @@ def atrium_team_stats(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1501,6 +1521,7 @@ def atrium_competition_player_stats(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1566,6 +1587,7 @@ def atrium_competition_team_stats(
     Raises:
         sportsdataverse.errors.NoDataError: the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404).
         AssetFetchError: also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

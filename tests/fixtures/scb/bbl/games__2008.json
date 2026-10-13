@@ -8,7 +8,7 @@
       "competition": "BBL",
       "status": "OFFICIAL",
       "homeTeam": {
-        "ticketPhone": "01805-644332",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "",
         "isForeign": false,
         "foreignLink": "",
@@ -31,7 +31,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "0221-8888288",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "",
         "isForeign": false,
         "foreignLink": "",
@@ -142,7 +142,7 @@
       "competition": "BBL",
       "status": "OFFICIAL",
       "homeTeam": {
-        "ticketPhone": "040 319 747 69 52",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "https://www.eventimsports.de/ols/basketball-braunschweig/",
         "isForeign": false,
         "foreignLink": "",
@@ -165,7 +165,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "0471 - 483829-0,https://tickets.dieeisbaeren.de/",
+        "ticketPhone": "REDACTED",
         "ticketUrl": null,
         "isForeign": true,
         "foreignLink": "https://www.2basketballbundesliga.de/teams/kader/439",
@@ -286,7 +286,7 @@
       "competition": "BBL",
       "status": "OFFICIAL",
       "homeTeam": {
-        "ticketPhone": "09081 - 2505650",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "",
         "isForeign": false,
         "foreignLink": "",
@@ -309,7 +309,7 @@
         "magentaSportId": "TODO_MAGENTASPORTID"
       },
       "guestTeam": {
-        "ticketPhone": "01806 - 99 11 18",
+        "ticketPhone": "REDACTED",
         "ticketUrl": "https://www.ticket-onlineshop.com/ols/mhp-riesen/",
         "isForeign": false,
         "foreignLink": "",

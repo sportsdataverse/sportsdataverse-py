@@ -36,12 +36,6 @@ columns:
   name: foundation_year
   type: integer
 - description: ''
-  name: phone
-  type: character
-- description: ''
-  name: email
-  type: character
-- description: ''
   name: web_url
   type: character
 - description: ''

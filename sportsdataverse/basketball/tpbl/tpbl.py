@@ -755,6 +755,7 @@ def tpbl_seasons(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -814,6 +815,7 @@ def tpbl_divisions(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -873,6 +875,7 @@ def tpbl_teams(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -936,6 +939,7 @@ def tpbl_games(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -998,6 +1002,7 @@ def tpbl_standings(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1057,6 +1062,7 @@ def tpbl_standings_against(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1118,6 +1124,7 @@ def tpbl_game(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1177,6 +1184,7 @@ def tpbl_referees(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1236,6 +1244,7 @@ def tpbl_box_players(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1295,6 +1304,7 @@ def tpbl_box_player_periods(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1356,6 +1366,7 @@ def tpbl_box_teams(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1415,6 +1426,7 @@ def tpbl_box_team_periods(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1478,6 +1490,7 @@ def tpbl_roster(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1541,6 +1554,7 @@ def tpbl_team_shots(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1604,6 +1618,7 @@ def tpbl_player_shots(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1665,6 +1680,7 @@ def tpbl_player_games(
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
         sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
