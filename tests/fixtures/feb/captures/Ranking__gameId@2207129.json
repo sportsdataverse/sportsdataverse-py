@@ -1,0 +1,396 @@
+{
+  "HEADER": {
+    "CompID": "115",
+    "competition": "LIGA LEB ORO",
+    "round": "\"Oro-Clasif\"        ",
+    "quarter": 4,
+    "time": "FINAL",
+    "logo": null,
+    "duration": null,
+    "starttime": "10-04-2021 - 19:00",
+    "place": "C/ SAN JUAN, S/N, Albacete (Almansa)",
+    "field": "PABELLON POLIDEPORTIVO DE ALMANSA",
+    "referee1": "MORALES RUIZ, GERMAN FRANCISC0",
+    "referee2": "CARRERA ROSDEVALL, ERIC",
+    "referee3": "LOPEZ LECUONA, ALEJANDRO",
+    "status": null,
+    "statusText": null,
+    "TEAM": [
+      {
+        "pts": "68",
+        "fouls": null,
+        "id": "848761",
+        "name": "CB ALMANSA CON AFANION",
+        "logo": "http://competiciones.feb.es/estadisticas/Imagen.aspx?i=848761&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "pts": "81",
+        "fouls": null,
+        "id": "848569",
+        "name": "RÍO BREOGÁN",
+        "logo": "http://competiciones.feb.es/estadisticas/Imagen.aspx?i=848569&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ],
+    "QUARTERS": {
+      "QUARTER": [
+        {
+          "n": "1",
+          "scoreA": "18",
+          "scoreB": "21"
+        },
+        {
+          "n": "2",
+          "scoreA": "22",
+          "scoreB": "13"
+        },
+        {
+          "n": "3",
+          "scoreA": "13",
+          "scoreB": "24"
+        }
+      ]
+    }
+  },
+  "SCOREBOARD": null,
+  "TEAMSTATS": null,
+  "TICKER": {
+    "text": null,
+    "duration": null,
+    "ITEM": null
+  },
+  "OVERVIEW": null,
+  "PLAYBYPLAY": null,
+  "BANNER": null,
+  "BOXSCORE": null,
+  "SHOTCHART": null,
+  "RANKING": {
+    "TEAMS": [
+      {
+        "Puntos": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "14",
+            "inn": null,
+            "captain": null,
+            "id": "2048507",
+            "no": "13",
+            "name": "N. CVETINOVIC",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2048507"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "13",
+            "inn": null,
+            "captain": null,
+            "id": "2433312",
+            "no": "3",
+            "name": "F. DJURAN",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2433312"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "12",
+            "inn": null,
+            "captain": null,
+            "id": "1603635",
+            "no": "30",
+            "name": "J. GONZALEZ ALBADALEJO",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1603635"
+          }
+        ],
+        "Rebotes": [
+          {
+            "assist": null,
+            "reb": "6",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1677592",
+            "no": "16",
+            "name": "S. MENDIOLA DIEZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1677592"
+          },
+          {
+            "assist": null,
+            "reb": "4",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2433312",
+            "no": "3",
+            "name": "F. DJURAN",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2433312"
+          },
+          {
+            "assist": null,
+            "reb": "4",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2048507",
+            "no": "13",
+            "name": "N. CVETINOVIC",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2048507"
+          }
+        ],
+        "Asistencias": [
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1677592",
+            "no": "16",
+            "name": "S. MENDIOLA DIEZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1677592"
+          },
+          {
+            "assist": "2",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1408550",
+            "no": "5",
+            "name": "J. BIVIA MUÑOZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1408550"
+          },
+          {
+            "assist": "2",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2048507",
+            "no": "13",
+            "name": "N. CVETINOVIC",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2048507"
+          }
+        ],
+        "Faltas": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "5",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2433309",
+            "no": "21",
+            "name": "J. ADEKOYA",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2433309"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1408550",
+            "no": "5",
+            "name": "J. BIVIA MUÑOZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1408550"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "3",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2377719",
+            "no": "32",
+            "name": "S. MAXWELL",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2377719"
+          }
+        ],
+        "id": "848761",
+        "name": "CB ALMANSA CON AFANION",
+        "logo": null,
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "Puntos": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "15",
+            "inn": null,
+            "captain": null,
+            "id": "1382710",
+            "no": "33",
+            "name": "I. CRUZ UCEDA",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1382710"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "14",
+            "inn": null,
+            "captain": null,
+            "id": "2371546",
+            "no": "43",
+            "name": "A. SOLLAZZO",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2371546"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "12",
+            "inn": null,
+            "captain": null,
+            "id": "2433482",
+            "no": "13",
+            "name": "K. LARSEN",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2433482"
+          }
+        ],
+        "Rebotes": [
+          {
+            "assist": null,
+            "reb": "10",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2433482",
+            "no": "13",
+            "name": "K. LARSEN",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2433482"
+          },
+          {
+            "assist": null,
+            "reb": "6",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2439944",
+            "no": "25",
+            "name": "J. GUTIERREZ ZERMEÑO",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2439944"
+          },
+          {
+            "assist": null,
+            "reb": "6",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1382710",
+            "no": "33",
+            "name": "I. CRUZ UCEDA",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1382710"
+          }
+        ],
+        "Asistencias": [
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1382710",
+            "no": "33",
+            "name": "I. CRUZ UCEDA",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1382710"
+          },
+          {
+            "assist": "2",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432411",
+            "no": "4",
+            "name": "M. DIAZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432411"
+          },
+          {
+            "assist": "2",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2277758",
+            "no": "23",
+            "name": "E. QUINTELA SALVADOR",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2277758"
+          }
+        ],
+        "Faltas": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432411",
+            "no": "4",
+            "name": "M. DIAZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432411"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2220063",
+            "no": "42",
+            "name": "S. QUINTELA SALVADOR",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2220063"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "3",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2371546",
+            "no": "43",
+            "name": "A. SOLLAZZO",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2371546"
+          }
+        ],
+        "id": "848569",
+        "name": "RÍO BREOGÁN",
+        "logo": null,
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ]
+  }
+}

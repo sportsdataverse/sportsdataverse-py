@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: shirt_number
+  type: character
+- description: ''
+  name: player
+  type: character
+- description: ''
+  name: starter
+  type: logical
+- description: ''
+  name: captain
+  type: logical
+- description: ''
+  name: value
+  type: integer
+kind: dataframe
+schema: feb_leaders

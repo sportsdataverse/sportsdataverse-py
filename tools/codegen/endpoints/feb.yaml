@@ -1,0 +1,228 @@
+api: feb
+docstring:
+  example_import: true
+  notes:
+  - 'Legal notice (sdv-internal-refs/feb/README.md): the FEB''s aviso legal asserts
+    intellectual-property rights over the site''s content and databases (the EU database
+    right). It has no explicit scraping clause and robots.txt returns 404 on both
+    hosts, but SportsDataverse has not ruled on it: fetching on your own machine is
+    fine; a published data release or a hosted mirror needs a legal sign-off first.'
+  - 'Unofficial and unsupported: the LiveStats API is the federation''s own widget
+    backend, not a documented public API. It needs a bearer JWT, which is public:
+    ``feb_runtime`` reads it from the site''s home page at run time, keeps it in memory
+    for the process (24 h validity) and never prints, logs or writes it.'
+  - 'Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its
+    first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404,
+    as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages
+    go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB
+    groups share the same routes; ``group`` is the site''s menu group (1 Primera FEB,
+    2 Segunda FEB, 4 Liga Femenina Endesa).'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the FEB has nothing for the request (a game
+    the API does not serve, an unknown group, a schedule page with no games, an empty
+    overview window).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (a rejected bearer token, an error or changed envelope, a page
+    for another season or group).'
+  raw_doc: 'the raw body (``dict``): the LiveStats envelope (all ten blocks, only
+    the route''s filled) or the schedule page record, plus ``_request`` (the game
+    id, or group and season asked for)'
+  see_also:
+  - name: Baloncesto en vivo
+    note: the FEB site whose pages and widget API these wrappers read
+    url: https://baloncestoenvivo.feb.es
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args:
+    game_id: 2535725
+  parser: parse_feb_game_info
+  path: /TeamStats/{game_id}
+  path_params:
+  - description: Required. FEB game id (integer), e.g. 2535725; ``game_id`` in feb_schedule
+      / feb_results / feb_overview.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/feb/game_info
+  short: game_info
+  summary: 'Game header: competition, tip-off, venue, officials, status, both teams
+    and the score (every game route carries it; this wrapper reads the lightest, /TeamStats).'
+- example_args:
+    game_id: 2535725
+  parser: parse_feb_period_scores
+  path: /TeamStats/{game_id}
+  path_params:
+  - description: Required. FEB game id (integer), e.g. 2535725; ``game_id`` in feb_schedule
+      / feb_results / feb_overview.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/feb/period_scores
+  short: period_scores
+  summary: Points each team scored in each period of a game.
+- example_args:
+    game_id: 2535725
+  parser: parse_feb_team_stats
+  path: /TeamStats/{game_id}
+  path_params:
+  - description: Required. FEB game id (integer), e.g. 2535725; ``game_id`` in feb_schedule
+      / feb_results / feb_overview.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/feb/team_stats
+  short: team_stats
+  summary: 'Team totals of both teams in a game: shooting, rebounds, assists, turnovers,
+    fouls.'
+- example_args:
+    game_id: 2535725
+  parser: parse_feb_player_box
+  path: /BoxScore/{game_id}
+  path_params:
+  - description: Required. FEB game id (integer), e.g. 2535725; ``game_id`` in feb_schedule
+      / feb_results / feb_overview.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/feb/player_box
+  short: player_box
+  summary: 'Per-player box score of a game: minutes, points, shooting splits, rebounds,
+    assists, fouls and plus/minus.'
+- example_args:
+    game_id: 2535725
+  parser: parse_feb_pbp
+  path: /KeyFacts/{game_id}
+  path_params:
+  - description: Required. FEB game id (integer), e.g. 2535725; ``game_id`` in feb_schedule
+      / feb_results / feb_overview.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/feb/pbp
+  short: pbp
+  summary: 'Play-by-play of a game (KeyFacts): every shot, rebound, foul, substitution
+    and timeout, in Spanish text with coded actions from 2025-26.'
+- example_args:
+    game_id: 2535725
+  parser: parse_feb_shots
+  path: /ShotChart/{game_id}
+  path_params:
+  - description: Required. FEB game id (integer), e.g. 2535725; ``game_id`` in feb_schedule
+      / feb_results / feb_overview.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/feb/shots
+  short: shots
+  summary: Every field-goal attempt of a game with its court position (percent of
+    a full-court image).
+- example_args:
+    game_id: 2535725
+  parser: parse_feb_leaders
+  path: /Ranking/{game_id}
+  path_params:
+  - description: Required. FEB game id (integer), e.g. 2535725; ``game_id`` in feb_schedule
+      / feb_results / feb_overview.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/feb/leaders
+  short: leaders
+  summary: Each team's top players of a game by points, rebounds, assists and fouls.
+- example_args: {}
+  parser: parse_feb_overview
+  path: /overview
+  returns_schema: native/feb/overview
+  short: overview
+  summary: Today's (or the latest) games of every live FEB competition, with scores
+    and status.
+- example_args:
+    group: 1
+    season: 2027
+  extra_params:
+  - description: 'Required. The site''s menu group (integer): 1 Primera FEB, 2 Segunda
+      FEB, 4 Liga Femenina Endesa, 9 and 10 LF-2, 67 LF Challenge, 73 Copa de España,
+      74 Liga U. A group is not a competition id (see ``comp_id``); an unknown group
+      raises NoDataError.'
+    name: group
+    query_key: group
+    required: true
+    type: int
+  - description: Season END year (2027 = 2026-27). ``feb_runtime`` sends the site's
+      START-year key ``t = season - 1``.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  host: https://baloncestoenvivo.feb.es
+  parser: parse_feb_schedule
+  path: /calendario.aspx
+  returns_schema: native/feb/schedule
+  short: schedule
+  summary: 'Full schedule of one group (phase) of a competition season: every round,
+    game, result and team-season id.'
+- example_args:
+    group: 1
+    season: 2027
+  extra_params:
+  - description: 'Required. The site''s menu group (integer): 1 Primera FEB, 2 Segunda
+      FEB, 4 Liga Femenina Endesa, 9 and 10 LF-2, 67 LF Challenge, 73 Copa de España,
+      74 Liga U. A group is not a competition id (see ``comp_id``); an unknown group
+      raises NoDataError.'
+    name: group
+    query_key: group
+    required: true
+    type: int
+  - description: Season END year (2027 = 2026-27). ``feb_runtime`` sends the site's
+      START-year key ``t = season - 1``.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  host: https://baloncestoenvivo.feb.es
+  parser: parse_feb_results
+  path: /resultados.aspx
+  returns_schema: native/feb/results
+  short: results
+  summary: Latest round's results and the next round's fixtures of a competition season.
+- example_args:
+    group: 1
+    season: 2027
+  extra_params:
+  - description: 'Required. The site''s menu group (integer): 1 Primera FEB, 2 Segunda
+      FEB, 4 Liga Femenina Endesa, 9 and 10 LF-2, 67 LF Challenge, 73 Copa de España,
+      74 Liga U. A group is not a competition id (see ``comp_id``); an unknown group
+      raises NoDataError.'
+    name: group
+    query_key: group
+    required: true
+    type: int
+  - description: Season END year (2027 = 2026-27). ``feb_runtime`` sends the site's
+      START-year key ``t = season - 1``.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  host: https://baloncestoenvivo.feb.es
+  parser: parse_feb_standings
+  path: /resultados.aspx
+  returns_schema: native/feb/standings
+  short: standings
+  summary: League table of a competition season (live standings, or the final classification
+    once it is over).
+getter_module: sportsdataverse.basketball.feb.feb_runtime
+host: https://intrafeb.feb.es/LiveStats.API/api/v1
+module: feb
+name_pattern: feb_{short}
+parser_columns: true
+parser_module: basketball.feb.feb_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: feb_

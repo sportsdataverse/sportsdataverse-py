@@ -1,0 +1,81 @@
+{
+  "group": 1,
+  "season_start": 2026,
+  "season_label": "2026/2027",
+  "competition": "PRIMERA FEB",
+  "seasons": [
+    {
+      "season_start": 2026,
+      "label": "2026/2027"
+    },
+    {
+      "season_start": 2025,
+      "label": "2025/2026"
+    },
+    {
+      "season_start": 2024,
+      "label": "2024/2025"
+    }
+  ],
+  "phases": [
+    {
+      "phase_id": 89991,
+      "label": "Liga Regular Único",
+      "selected": true
+    }
+  ],
+  "playoff_series_ids": [],
+  "games": [
+    {
+      "round": 1,
+      "round_label": "Jornada 1 25/09/2026",
+      "round_date": "2026-09-25",
+      "game_id": 2535725,
+      "home_team_id": 1009716,
+      "home_team": "BUENO ARENAS ALBACETE BASKET",
+      "away_team_id": 1010207,
+      "away_team": "IBEROLEA PALENCIA",
+      "result_text": "69-95",
+      "home_score": 69,
+      "away_score": 95,
+      "status": "played",
+      "weekday": null,
+      "date": null,
+      "time": null
+    },
+    {
+      "round": 4,
+      "round_label": "Jornada 4 16/10/2026",
+      "round_date": "2026-10-16",
+      "game_id": 2535752,
+      "home_team_id": 1009929,
+      "home_team": "BÀSQUET MENORCA",
+      "away_team_id": 1009072,
+      "away_team": "FIBWI MALLORCA BASQUET PALMA",
+      "result_text": "SÁBADO 17/10/2026 19:30",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "weekday": "Saturday",
+      "date": "2026-10-17",
+      "time": "19:30"
+    },
+    {
+      "round": 4,
+      "round_label": "Jornada 4 16/10/2026",
+      "round_date": "2026-10-16",
+      "game_id": 2535753,
+      "home_team_id": 1008400,
+      "home_team": "GRUPO URETA TIZONA BURGOS",
+      "away_team_id": 1009837,
+      "away_team": "ALIMERKA OVIEDO BALONCESTO",
+      "result_text": "VIERNES 16/10/2026 20:45",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "weekday": "Friday",
+      "date": "2026-10-16",
+      "time": "20:45"
+    }
+  ]
+}

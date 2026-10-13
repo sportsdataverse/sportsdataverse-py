@@ -1,0 +1,396 @@
+{
+  "HEADER": {
+    "CompID": "210",
+    "competition": "LF ENDESA",
+    "round": "Único               ",
+    "quarter": 4,
+    "time": "FINAL",
+    "logo": null,
+    "duration": null,
+    "starttime": "07-10-2020 - 20:00",
+    "place": "CAMI RAL DE CERDANYA,  31, Lleida (Seu d´Urgell, La)",
+    "field": "PALAU MUNICIPAL D´ESPORTS",
+    "referee1": "MUNAR BAÑON, PERE",
+    "referee2": "ZAMORA RODRIGUEZ, ANTONIO MANUEL",
+    "referee3": "GARVIN DOMINGO, RODRIGO",
+    "status": null,
+    "statusText": null,
+    "TEAM": [
+      {
+        "pts": "60",
+        "fouls": null,
+        "id": "848633",
+        "name": "CADI LA SEU",
+        "logo": "http://competiciones.feb.es/estadisticas/Imagen.aspx?i=848633&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "pts": "57",
+        "fouls": null,
+        "id": "848810",
+        "name": "CASADEMONT ZARAGOZA",
+        "logo": "http://competiciones.feb.es/estadisticas/Imagen.aspx?i=848810&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ],
+    "QUARTERS": {
+      "QUARTER": [
+        {
+          "n": "1",
+          "scoreA": "15",
+          "scoreB": "10"
+        },
+        {
+          "n": "2",
+          "scoreA": "18",
+          "scoreB": "22"
+        },
+        {
+          "n": "3",
+          "scoreA": "15",
+          "scoreB": "9"
+        }
+      ]
+    }
+  },
+  "SCOREBOARD": null,
+  "TEAMSTATS": null,
+  "TICKER": {
+    "text": null,
+    "duration": null,
+    "ITEM": null
+  },
+  "OVERVIEW": null,
+  "PLAYBYPLAY": null,
+  "BANNER": null,
+  "BOXSCORE": null,
+  "SHOTCHART": null,
+  "RANKING": {
+    "TEAMS": [
+      {
+        "Puntos": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "15",
+            "inn": null,
+            "captain": null,
+            "id": "1735809",
+            "no": "11",
+            "name": "A. PUJOL LLUCH",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1735809"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "9",
+            "inn": null,
+            "captain": null,
+            "id": "72320",
+            "no": "14",
+            "name": "G. BAHI BLANQUERA",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=72320"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "8",
+            "inn": null,
+            "captain": null,
+            "id": "2432334",
+            "no": "3",
+            "name": "D. WILLIAMS",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432334"
+          }
+        ],
+        "Rebotes": [
+          {
+            "assist": null,
+            "reb": "7",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1591676",
+            "no": "8",
+            "name": "I. ETXARRI MUNARRIZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1591676"
+          },
+          {
+            "assist": null,
+            "reb": "5",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1735809",
+            "no": "11",
+            "name": "A. PUJOL LLUCH",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1735809"
+          },
+          {
+            "assist": null,
+            "reb": "4",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432334",
+            "no": "3",
+            "name": "D. WILLIAMS",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432334"
+          }
+        ],
+        "Asistencias": [
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1591676",
+            "no": "8",
+            "name": "I. ETXARRI MUNARRIZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1591676"
+          },
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2030119",
+            "no": "24",
+            "name": "G. MESTRES RICART",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2030119"
+          },
+          {
+            "assist": "2",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2325132",
+            "no": "12",
+            "name": "M. JESPERSEN",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2325132"
+          }
+        ],
+        "Faltas": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "72320",
+            "no": "14",
+            "name": "G. BAHI BLANQUERA",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=72320"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "2",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1763693",
+            "no": "4",
+            "name": "L. RAVENTOS ROIG",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1763693"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "2",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1562648",
+            "no": "9",
+            "name": "L. PEÑA JUBANY",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1562648"
+          }
+        ],
+        "id": "848633",
+        "name": "CADI LA SEU",
+        "logo": null,
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "Puntos": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "23",
+            "inn": null,
+            "captain": null,
+            "id": "2432302",
+            "no": "34",
+            "name": "M. GATLING",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432302"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "9",
+            "inn": null,
+            "captain": null,
+            "id": "1178174",
+            "no": "4",
+            "name": "L. NICHOLLS GONZALEZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1178174"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "9",
+            "inn": null,
+            "captain": null,
+            "id": "1911694",
+            "no": "10",
+            "name": "A. AYUSO BAGUR",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1911694"
+          }
+        ],
+        "Rebotes": [
+          {
+            "assist": null,
+            "reb": "14",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432302",
+            "no": "34",
+            "name": "M. GATLING",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432302"
+          },
+          {
+            "assist": null,
+            "reb": "7",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432305",
+            "no": "22",
+            "name": "C. HANDY",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432305"
+          },
+          {
+            "assist": null,
+            "reb": "5",
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432320",
+            "no": "7",
+            "name": "T. WURTZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432320"
+          }
+        ],
+        "Asistencias": [
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "1911694",
+            "no": "10",
+            "name": "A. AYUSO BAGUR",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=1911694"
+          },
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432305",
+            "no": "22",
+            "name": "C. HANDY",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432305"
+          },
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432303",
+            "no": "35",
+            "name": "J. VANLOO",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432303"
+          }
+        ],
+        "Faltas": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432304",
+            "no": "2",
+            "name": "H. GORECKI",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432304"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432320",
+            "no": "7",
+            "name": "T. WURTZ",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432320"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": null,
+            "captain": null,
+            "id": "2432302",
+            "no": "34",
+            "name": "M. GATLING",
+            "logo": "http://competiciones.feb.es/estadisticas/Foto.aspx?c=2432302"
+          }
+        ],
+        "id": "848810",
+        "name": "CASADEMONT ZARAGOZA",
+        "logo": null,
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ]
+  }
+}

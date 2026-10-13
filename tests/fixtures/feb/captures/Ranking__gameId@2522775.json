@@ -1,0 +1,396 @@
+{
+  "HEADER": {
+    "CompID": "210",
+    "competition": "LF ENDESA",
+    "round": "Único               ",
+    "quarter": 4,
+    "time": "FINAL",
+    "logo": null,
+    "duration": null,
+    "starttime": "03-10-2026 - 18:30",
+    "place": "CAMÍ DE LA VILETA, 40, Illes Balears (Palma de Mallorca)",
+    "field": "POLIESPORTIU SON MOIX",
+    "referee1": "CHECA NEBOT, DANIEL",
+    "referee2": "BAENA CRIADO, JORGE",
+    "referee3": "SANHERMELANDO GARCIA, HECTOR",
+    "status": "3",
+    "statusText": "FINISHED",
+    "TEAM": [
+      {
+        "pts": "88",
+        "fouls": null,
+        "id": "1008705",
+        "name": "AZULMARINO MALLORCA PALMA",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1008705&ti=1",
+        "teamCode": "07038300",
+        "clubCode": "070383",
+        "slug": null
+      },
+      {
+        "pts": "71",
+        "fouls": null,
+        "id": "1008686",
+        "name": "VALENCIA B.C.",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1008686&ti=1",
+        "teamCode": "46000221",
+        "clubCode": "460002",
+        "slug": null
+      }
+    ],
+    "QUARTERS": {
+      "QUARTER": [
+        {
+          "n": "1",
+          "scoreA": "29",
+          "scoreB": "20"
+        },
+        {
+          "n": "2",
+          "scoreA": "20",
+          "scoreB": "16"
+        },
+        {
+          "n": "3",
+          "scoreA": "19",
+          "scoreB": "14"
+        }
+      ]
+    }
+  },
+  "SCOREBOARD": null,
+  "TEAMSTATS": null,
+  "TICKER": {
+    "text": null,
+    "duration": null,
+    "ITEM": null
+  },
+  "OVERVIEW": null,
+  "PLAYBYPLAY": null,
+  "BANNER": null,
+  "BOXSCORE": null,
+  "SHOTCHART": null,
+  "RANKING": {
+    "TEAMS": [
+      {
+        "Puntos": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "22",
+            "inn": "1",
+            "captain": "0",
+            "id": "2740906",
+            "no": "40",
+            "name": "K. ALEXANDER",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2740906"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "20",
+            "inn": "1",
+            "captain": "0",
+            "id": "2819695",
+            "no": "1",
+            "name": "K. HOLM",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2819695"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "14",
+            "inn": "1",
+            "captain": "0",
+            "id": "975683",
+            "no": "7",
+            "name": "A. TORRENS SALOM",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=975683"
+          }
+        ],
+        "Rebotes": [
+          {
+            "assist": null,
+            "reb": "8",
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2819695",
+            "no": "1",
+            "name": "K. HOLM",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2819695"
+          },
+          {
+            "assist": null,
+            "reb": "8",
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "1538521",
+            "no": "11",
+            "name": "B. MILLAN MODIA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1538521"
+          },
+          {
+            "assist": null,
+            "reb": "8",
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2740906",
+            "no": "40",
+            "name": "K. ALEXANDER",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2740906"
+          }
+        ],
+        "Asistencias": [
+          {
+            "assist": "7",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2819695",
+            "no": "1",
+            "name": "K. HOLM",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2819695"
+          },
+          {
+            "assist": "5",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2432440",
+            "no": "17",
+            "name": "M. GREEN",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2432440"
+          },
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "1538521",
+            "no": "11",
+            "name": "B. MILLAN MODIA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1538521"
+          }
+        ],
+        "Faltas": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2740906",
+            "no": "40",
+            "name": "K. ALEXANDER",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2740906"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "3",
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2819695",
+            "no": "1",
+            "name": "K. HOLM",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2819695"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "3",
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "975683",
+            "no": "7",
+            "name": "A. TORRENS SALOM",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=975683"
+          }
+        ],
+        "id": "1008705",
+        "name": "AZULMARINO MALLORCA PALMA",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1008705&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "Puntos": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "13",
+            "inn": "1",
+            "captain": "0",
+            "id": "2880227",
+            "no": "11",
+            "name": "K. BORKOWSKA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2880227"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "9",
+            "inn": "1",
+            "captain": "0",
+            "id": "2733290",
+            "no": "7",
+            "name": "K. CHERY",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2733290"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "9",
+            "inn": "1",
+            "captain": "0",
+            "id": "2880228",
+            "no": "24",
+            "name": "A. JENKINS",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2880228"
+          }
+        ],
+        "Rebotes": [
+          {
+            "assist": null,
+            "reb": "8",
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "1481483",
+            "no": "8",
+            "name": "M. PEREZ ARAUJO",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1481483"
+          },
+          {
+            "assist": null,
+            "reb": "5",
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "1",
+            "id": "2046909",
+            "no": "6",
+            "name": "E. BUENAVIDA ESTEVEZ",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2046909"
+          },
+          {
+            "assist": null,
+            "reb": "4",
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "2864031",
+            "no": "2",
+            "name": "V. TAKACS-KISS",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2864031"
+          }
+        ],
+        "Asistencias": [
+          {
+            "assist": "5",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "1686642",
+            "no": "13",
+            "name": "H. PUEYO MELCHOR",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1686642"
+          },
+          {
+            "assist": "4",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "1",
+            "id": "2046909",
+            "no": "6",
+            "name": "E. BUENAVIDA ESTEVEZ",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2046909"
+          },
+          {
+            "assist": "2",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "1481483",
+            "no": "8",
+            "name": "M. PEREZ ARAUJO",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1481483"
+          }
+        ],
+        "Faltas": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "3",
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2879147",
+            "no": "1",
+            "name": "A. PETERSON",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2879147"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "3",
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "2880229",
+            "no": "4",
+            "name": "E. BALOGUN",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2880229"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "3",
+            "pts": null,
+            "inn": "0",
+            "captain": "1",
+            "id": "2046909",
+            "no": "6",
+            "name": "E. BUENAVIDA ESTEVEZ",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2046909"
+          }
+        ],
+        "id": "1008686",
+        "name": "VALENCIA B.C.",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1008686&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ]
+  }
+}

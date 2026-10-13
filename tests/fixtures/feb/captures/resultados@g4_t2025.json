@@ -1,0 +1,86 @@
+{
+  "group": 4,
+  "season_start": 2025,
+  "season_label": "2025/2026",
+  "competition": "LF ENDESA",
+  "seasons": [
+    {
+      "season_start": 2026,
+      "label": "2026/2027"
+    },
+    {
+      "season_start": 2025,
+      "label": "2025/2026"
+    },
+    {
+      "season_start": 2024,
+      "label": "2024/2025"
+    }
+  ],
+  "phases": [
+    {
+      "phase_id": 88860,
+      "label": "Play-Offs Final",
+      "selected": true
+    },
+    {
+      "phase_id": 88859,
+      "label": "Play-Offs 1/2 Final",
+      "selected": false
+    },
+    {
+      "phase_id": 88858,
+      "label": "Play-Offs 1/4 Final",
+      "selected": false
+    }
+  ],
+  "comp_id": "210",
+  "rounds": [
+    {
+      "round_id": 669261,
+      "label": "Jornada 1(14/05/2026)",
+      "selected": false
+    },
+    {
+      "round_id": 669262,
+      "label": "Jornada 2(17/05/2026)",
+      "selected": true
+    }
+  ],
+  "results_title": "Resultados Jornada 2(17/05/2026)",
+  "next_round_title": null,
+  "results": [
+    {
+      "game_id": 2513296,
+      "home_team_id": 980027,
+      "home_team": "VALENCIA B.C.",
+      "away_team_id": 979954,
+      "away_team": "CASADEMONT ZARAGOZA",
+      "result_text": "68-67",
+      "home_score": 68,
+      "away_score": 67,
+      "status": "played",
+      "date": "2026-05-17",
+      "time": "11:00"
+    }
+  ],
+  "next_round": [],
+  "standings": [],
+  "final_standings": [
+    {
+      "position": 1,
+      "team_id": 980027,
+      "team": "VALENCIA B.C."
+    },
+    {
+      "position": 2,
+      "team_id": 979954,
+      "team": "CASADEMONT ZARAGOZA"
+    },
+    {
+      "position": 3,
+      "team_id": 981359,
+      "team": "SPAR GIRONA"
+    }
+  ]
+}

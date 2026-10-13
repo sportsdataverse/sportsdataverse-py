@@ -1,0 +1,86 @@
+{
+  "group": 2,
+  "season_start": 2026,
+  "season_label": "2026/2027",
+  "competition": "SEGUNDA FEB",
+  "seasons": [
+    {
+      "season_start": 2026,
+      "label": "2026/2027"
+    },
+    {
+      "season_start": 2025,
+      "label": "2025/2026"
+    },
+    {
+      "season_start": 2024,
+      "label": "2024/2025"
+    }
+  ],
+  "phases": [
+    {
+      "phase_id": 89999,
+      "label": "Liga Regular \"A\"",
+      "selected": true
+    },
+    {
+      "phase_id": 90000,
+      "label": "Liga Regular \"B\"",
+      "selected": false
+    }
+  ],
+  "playoff_series_ids": [],
+  "games": [
+    {
+      "round": 1,
+      "round_label": "Jornada 1 03/10/2026",
+      "round_date": "2026-10-03",
+      "game_id": 2536115,
+      "home_team_id": 1010318,
+      "home_team": "CLUB BALONCESTO TOLEDO BASKET",
+      "away_team_id": 1010321,
+      "away_team": "CACERES PATRIMONIO DE LA HUMANIDAD",
+      "result_text": "66-82",
+      "home_score": 66,
+      "away_score": 82,
+      "status": "played",
+      "weekday": null,
+      "date": null,
+      "time": null
+    },
+    {
+      "round": 3,
+      "round_label": "Jornada 3 17/10/2026",
+      "round_date": "2026-10-17",
+      "game_id": 2536129,
+      "home_team_id": 1010318,
+      "home_team": "CLUB BALONCESTO TOLEDO BASKET",
+      "away_team_id": 1010192,
+      "away_team": "CB ALGECIRAS",
+      "result_text": "DOMINGO 18/10/2026 12:00",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "weekday": "Sunday",
+      "date": "2026-10-18",
+      "time": "12:00"
+    },
+    {
+      "round": 3,
+      "round_label": "Jornada 3 17/10/2026",
+      "round_date": "2026-10-17",
+      "game_id": 2536130,
+      "home_team_id": 1010194,
+      "home_team": "JAEN PARAISO INTERIOR FS",
+      "away_team_id": 1010321,
+      "away_team": "CACERES PATRIMONIO DE LA HUMANIDAD",
+      "result_text": "DOMINGO 18/10/2026 12:30",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "weekday": "Sunday",
+      "date": "2026-10-18",
+      "time": "12:30"
+    }
+  ]
+}

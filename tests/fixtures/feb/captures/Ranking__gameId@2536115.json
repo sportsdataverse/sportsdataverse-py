@@ -1,0 +1,396 @@
+{
+  "HEADER": {
+    "CompID": "118",
+    "competition": "SEGUNDA FEB",
+    "round": "\"A\"                 ",
+    "quarter": 4,
+    "time": "FINAL",
+    "logo": null,
+    "duration": null,
+    "starttime": "04-10-2026 - 12:00",
+    "place": "Avenida Castilla - La Mancha, 9 / Toledo, Toledo (Toledo)",
+    "field": "Pabellón Javier Lozano",
+    "referee1": "LANGA DE MARTIN, ASUNCION",
+    "referee2": "ARGUELLES DOMINGUEZ, RUBEN",
+    "referee3": null,
+    "status": "3",
+    "statusText": "FINISHED",
+    "TEAM": [
+      {
+        "pts": "66",
+        "fouls": null,
+        "id": "1010318",
+        "name": "CLUB BALONCESTO TOLEDO BASKET",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1010318&ti=1",
+        "teamCode": "45050701",
+        "clubCode": "450507",
+        "slug": null
+      },
+      {
+        "pts": "82",
+        "fouls": null,
+        "id": "1010321",
+        "name": "CACERES PATRIMONIO DE LA HUMANIDAD",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1010321&ti=1",
+        "teamCode": "10030910",
+        "clubCode": "100309",
+        "slug": null
+      }
+    ],
+    "QUARTERS": {
+      "QUARTER": [
+        {
+          "n": "1",
+          "scoreA": "17",
+          "scoreB": "20"
+        },
+        {
+          "n": "2",
+          "scoreA": "17",
+          "scoreB": "14"
+        },
+        {
+          "n": "3",
+          "scoreA": "18",
+          "scoreB": "29"
+        }
+      ]
+    }
+  },
+  "SCOREBOARD": null,
+  "TEAMSTATS": null,
+  "TICKER": {
+    "text": null,
+    "duration": null,
+    "ITEM": null
+  },
+  "OVERVIEW": null,
+  "PLAYBYPLAY": null,
+  "BANNER": null,
+  "BOXSCORE": null,
+  "SHOTCHART": null,
+  "RANKING": {
+    "TEAMS": [
+      {
+        "Puntos": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "12",
+            "inn": "1",
+            "captain": "0",
+            "id": "1997544",
+            "no": "17",
+            "name": "A. HARGUINDEY MANEIRO",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1997544"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "11",
+            "inn": "0",
+            "captain": "0",
+            "id": "1879281",
+            "no": "1",
+            "name": "M. SERRANO ALVAREZ",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1879281"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "11",
+            "inn": "0",
+            "captain": "1",
+            "id": "1426608",
+            "no": "9",
+            "name": "F. SIERRA GALA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1426608"
+          }
+        ],
+        "Rebotes": [
+          {
+            "assist": null,
+            "reb": "7",
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "2340126",
+            "no": "23",
+            "name": "E. A NONGO BERTHOLD",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2340126"
+          },
+          {
+            "assist": null,
+            "reb": "6",
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "1394852",
+            "no": "14",
+            "name": "G. BLAT BAEZA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1394852"
+          },
+          {
+            "assist": null,
+            "reb": "6",
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "1997544",
+            "no": "17",
+            "name": "A. HARGUINDEY MANEIRO",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1997544"
+          }
+        ],
+        "Asistencias": [
+          {
+            "assist": "4",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "1930720",
+            "no": "6",
+            "name": "A. GARRIDO RODRIGUEZ",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1930720"
+          },
+          {
+            "assist": "4",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "1394852",
+            "no": "14",
+            "name": "G. BLAT BAEZA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1394852"
+          },
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "1714402",
+            "no": "4",
+            "name": "L. GARCIA MUÑOZ",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1714402"
+          }
+        ],
+        "Faltas": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "5",
+            "pts": null,
+            "inn": "0",
+            "captain": "1",
+            "id": "1426608",
+            "no": "9",
+            "name": "F. SIERRA GALA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1426608"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "1930720",
+            "no": "6",
+            "name": "A. GARRIDO RODRIGUEZ",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1930720"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "2646201",
+            "no": "19",
+            "name": "H. SALOMON",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2646201"
+          }
+        ],
+        "id": "1010318",
+        "name": "CLUB BALONCESTO TOLEDO BASKET",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1010318&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "Puntos": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "21",
+            "inn": "1",
+            "captain": "0",
+            "id": "2042568",
+            "no": "27",
+            "name": "A. BURGOS CABALLERO",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2042568"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "14",
+            "inn": "0",
+            "captain": "0",
+            "id": "2790955",
+            "no": "14",
+            "name": "T. SAGNA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2790955"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": null,
+            "pts": "14",
+            "inn": "1",
+            "captain": "1",
+            "id": "1494619",
+            "no": "88",
+            "name": "A. LAFUENTE SISO",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1494619"
+          }
+        ],
+        "Rebotes": [
+          {
+            "assist": null,
+            "reb": "13",
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2816389",
+            "no": "15",
+            "name": "J. NVE MALEVA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2816389"
+          },
+          {
+            "assist": null,
+            "reb": "9",
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "2790955",
+            "no": "14",
+            "name": "T. SAGNA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2790955"
+          },
+          {
+            "assist": null,
+            "reb": "6",
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "1593195",
+            "no": "45",
+            "name": "V. ORLOV STURMAN MAURIN",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1593195"
+          }
+        ],
+        "Asistencias": [
+          {
+            "assist": "7",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "1",
+            "id": "1494619",
+            "no": "88",
+            "name": "A. LAFUENTE SISO",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1494619"
+          },
+          {
+            "assist": "3",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "2659126",
+            "no": "7",
+            "name": "J. POTIER",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2659126"
+          },
+          {
+            "assist": "1",
+            "reb": null,
+            "pf": null,
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2816738",
+            "no": "4",
+            "name": "K. NEWTON",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2816738"
+          }
+        ],
+        "Faltas": [
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "4",
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "2029483",
+            "no": "44",
+            "name": "E. KALINICENKO",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2029483"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "3",
+            "pts": null,
+            "inn": "0",
+            "captain": "0",
+            "id": "1902252",
+            "no": "9",
+            "name": "H. VAZQUEZ GARCIA",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=1902252"
+          },
+          {
+            "assist": null,
+            "reb": null,
+            "pf": "3",
+            "pts": null,
+            "inn": "1",
+            "captain": "0",
+            "id": "2072778",
+            "no": "13",
+            "name": "J. SANTOS RODRÍGUEZ",
+            "logo": "https://imagenes.feb.es/foto.aspx?c=2072778"
+          }
+        ],
+        "id": "1010321",
+        "name": "CACERES PATRIMONIO DE LA HUMANIDAD",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1010321&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ]
+  }
+}

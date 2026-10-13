@@ -1,0 +1,174 @@
+{
+  "group": 1,
+  "season_start": 2026,
+  "season_label": "2026/2027",
+  "competition": "PRIMERA FEB",
+  "seasons": [
+    {
+      "season_start": 2026,
+      "label": "2026/2027"
+    },
+    {
+      "season_start": 2025,
+      "label": "2025/2026"
+    },
+    {
+      "season_start": 2024,
+      "label": "2024/2025"
+    }
+  ],
+  "phases": [
+    {
+      "phase_id": 89991,
+      "label": "Liga Regular Único",
+      "selected": true
+    }
+  ],
+  "comp_id": "115",
+  "rounds": [
+    {
+      "round_id": 672419,
+      "label": "Jornada 1(25/09/2026)",
+      "selected": false
+    },
+    {
+      "round_id": 672420,
+      "label": "Jornada 2(02/10/2026)",
+      "selected": false
+    },
+    {
+      "round_id": 672421,
+      "label": "Jornada 3(09/10/2026)",
+      "selected": true
+    }
+  ],
+  "results_title": "Resultados Jornada 3(09/10/2026)",
+  "next_round_title": "Próxima Jornada 4 16/10/2026",
+  "results": [
+    {
+      "game_id": 2535750,
+      "home_team_id": 1010207,
+      "home_team": "IBEROLEA PALENCIA",
+      "away_team_id": 1009929,
+      "away_team": "BÀSQUET MENORCA",
+      "result_text": "91-76",
+      "home_score": 91,
+      "away_score": 76,
+      "status": "played",
+      "date": "2026-10-09",
+      "time": "21:00"
+    },
+    {
+      "game_id": 2535746,
+      "home_team_id": 1009109,
+      "home_team": "COVIRAN GRANADA",
+      "away_team_id": 1008400,
+      "away_team": "GRUPO URETA TIZONA BURGOS",
+      "result_text": "91-88",
+      "home_score": 91,
+      "away_score": 88,
+      "status": "played",
+      "date": "2026-10-10",
+      "time": "18:00"
+    },
+    {
+      "game_id": 2535744,
+      "home_team_id": 1008687,
+      "home_team": "HLA ALICANTE",
+      "away_team_id": 1008797,
+      "away_team": "CAJASIETE GRAN CANARIA",
+      "result_text": "84-74",
+      "home_score": 84,
+      "away_score": 74,
+      "status": "played",
+      "date": "2026-10-10",
+      "time": "18:30"
+    }
+  ],
+  "next_round": [
+    {
+      "game_id": 2535755,
+      "home_team_id": 1008378,
+      "home_team": "INVEREADY ASKATUAK GIPUZKOA",
+      "away_team_id": 1009713,
+      "away_team": "PALMER BASKET MALLORCA PALMA",
+      "result_text": "*-*",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "date": "2026-10-16",
+      "time": "20:00"
+    },
+    {
+      "game_id": 2535753,
+      "home_team_id": 1008400,
+      "home_team": "GRUPO URETA TIZONA BURGOS",
+      "away_team_id": 1009837,
+      "away_team": "ALIMERKA OVIEDO BALONCESTO",
+      "result_text": "*-*",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "date": "2026-10-16",
+      "time": "20:45"
+    },
+    {
+      "game_id": 2535757,
+      "home_team_id": 1009095,
+      "home_team": "CLUB OURENSE BALONCESTO",
+      "away_team_id": 1008687,
+      "away_team": "HLA ALICANTE",
+      "result_text": "*-*",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "date": "2026-10-16",
+      "time": "21:00"
+    }
+  ],
+  "standings": [
+    {
+      "position": 1,
+      "team_id": 1010493,
+      "team": "MOVISTAR ESTUDIANTES",
+      "played": 3,
+      "won": 3,
+      "lost": 0,
+      "points_for": 264,
+      "points_against": 214,
+      "point_diff": 50,
+      "win_pct": 100.0,
+      "streak": 3,
+      "streak_text": "+3"
+    },
+    {
+      "position": 2,
+      "team_id": 1010207,
+      "team": "IBEROLEA PALENCIA",
+      "played": 3,
+      "won": 3,
+      "lost": 0,
+      "points_for": 256,
+      "points_against": 212,
+      "point_diff": 44,
+      "win_pct": 100.0,
+      "streak": 3,
+      "streak_text": "+3"
+    },
+    {
+      "position": 3,
+      "team_id": 1008687,
+      "team": "HLA ALICANTE",
+      "played": 3,
+      "won": 3,
+      "lost": 0,
+      "points_for": 261,
+      "points_against": 220,
+      "point_diff": 41,
+      "win_pct": 100.0,
+      "streak": 3,
+      "streak_text": "+3"
+    }
+  ],
+  "final_standings": []
+}
