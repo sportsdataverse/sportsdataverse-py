@@ -12,6 +12,7 @@
   - [Overtime rule sets (C-M6)](#overtime-rule-sets-c-m6)
   - [Games that end on a try (`try_endings/`, task 2.2)](#games-that-end-on-a-try-try_endings-task-22)
   - [Touchdown-flag residuals (`td_flag_residuals/`, task 2.20)](#touchdown-flag-residuals-td_flag_residuals-task-220)
+  - [Era play order (`era_play_order/`, task 2.19)](#era-play-order-era_play_order-task-219)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -281,3 +282,19 @@ the task 2.5 touchdown rule got wrong (review PR-808, R808-2/3/4) or one task 2.
 | 401671715 (`2024_12_DAL_WAS`) | 4016717152262 (short of landing zone), 4016717154728 (onside kick) | `Kickoff Return Touchdown` / False | 0 / 0 / 0.926, 1.419 | R808-4 |
 | 291129016 (`2009_12_CHI_MIN`) | 2911290162862, C.Taylor 20-yard run, "TOUCHDOWN NULLIFIED by Penalty" (offensive holding); ESPN's score reads 27 the row before and 24 on it | `Rushing Touchdown` / True; next row a `Penalty`, no try | 0 / 0 / 0.474 | R840-2 |
 | 271209034 (`2007_14_TB_HOU`) | 2712090341856, A.Davis 97-yard kickoff return TD; ESPN's 2007 text is the bare "Kickoff" | `Kickoff Return Touchdown` / False | 1 / 0 / 6.057 (`return_touchdown` 1) | R840-1 (the 2009 floor) |
+
+## Era play order (`era_play_order/`, task 2.19)
+
+Six ESPN Site v2 summaries from `nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (source
+`https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`), trimmed to the same keys as
+the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The oracle is nflverse
+(`nflverse-dev/nfl-data` `python/.cache/nflverse_pbp/pbp_<season>.parquet`, joined on `game_id` + `play_id`).
+
+| game (nflverse) | nfl-raw commit | play | ESPN | nflverse | finding |
+|---|---|---|---|---|---|
+| 260910005 (`2006_01_NO_CLE`) | 704bd9ad | 2797 / 2819 / 2843 (Q3, 2:00-1:11) | period 4 / 3 / 4 | `qtr` 3 / 3 / 3 | R832-10 (lower only) |
+| 270930001 (`2007_04_HOU_ATL`) | a62f3dfb | 1000, punt at 14:37, next row Q1's late "End Period" | period 2 | `qtr` 2 | R832-10 (End-row guard) |
+| 271111013 (`2007_10_CHI_OAK`) | 4f540c18 | 1856, Q3 opening kickoff after "End of Half", before a Q2 timeout | period 3 | `qtr` 3 | R832-10 |
+| 281005009 (`2008_05_ATL_GB`) | 4b1d90b6 | 1872, Q3 opening kickoff between two Q2 timeouts | period 3 | `qtr` 3 | R832-10 (clock check) |
+| 401030749 (`2018_08_IND_OAK`) | d0480d17 | 906, a Q2 snap whose id sorts among Q1 rows | period 2 | `qtr` 2 | R832-10 (season floor) |
+| 301107009 (`2010_09_DAL_GB`) | 56da67ca | 1557, GB recovers DAL's kickoff fumble and scores | `Kickoff Return Touchdown` | `epa` -7.672 | R831-6 |

@@ -87,6 +87,7 @@ from sportsdataverse.nfl.ep_wp import (
 )
 from sportsdataverse.nfl.model_vars import (
     ESPN_FULL_KICK_TEXT_FROM,
+    ESPN_PERIOD_REPAIR_BEFORE,
     SPREAD_TIME_DECAY_EXPONENT,
     touchback_yardline_expr,
     defense_score_vec,
@@ -542,6 +543,38 @@ def _nfl_penalty_first_down() -> pl.Expr:
 def _end_of_game_row() -> pl.Expr:
     """ESPN's "End of the game." admin row by its text: the 2002-05 feeds ship it untyped (C-M2)."""
     return pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)
+
+
+def _repair_espn_period(plays: pl.DataFrame) -> pl.DataFrame:
+    """Sort one game's ESPN plays by id and undo ESPN's out-of-place ``period.number`` (R832-10).
+
+    Before ``ESPN_PERIOD_REPAIR_BEFORE`` ESPN sometimes files a play under a later period than the
+    plays on both sides of it while the clock keeps running down across all three (261022011's Q2
+    kickoff at 0:08 as period 3, so the half "ended" three times). Such a row takes its neighbours'
+    period. Only a later period is lowered, and never just before an "End ..." admin row: raising
+    a period, or lowering one ahead of a late quarter-end row, is what an out-of-order play id looks
+    like, and there ESPN's period is right (measured on nfl-raw against nflverse ``qtr``;
+    see the constant). ``clock.minutes`` / ``clock.seconds`` are the split clock strings.
+    """
+    secs = pl.col("clock.minutes").cast(pl.Int32, strict=False) * 60 + pl.col("clock.seconds").cast(
+        pl.Int32, strict=False
+    )
+    period = pl.col("period.number")
+    admin = pl.col("type.text").str.to_lowercase().str.starts_with("end ").fill_null(False)
+    out_of_place = (
+        (pl.col("season") < ESPN_PERIOD_REPAIR_BEFORE)
+        & (period.shift(1) == period.shift(-1))
+        & (period > period.shift(1))
+        & (pl.col("_secs").shift(1) >= pl.col("_secs"))
+        & (pl.col("_secs") >= pl.col("_secs").shift(-1))
+        & ~admin.shift(-1)
+    ).fill_null(False)
+    return (
+        plays.sort(pl.col("id").cast(pl.Int64), maintain_order=True)
+        .with_columns(_secs=secs)
+        .with_columns(pl.when(out_of_place).then(period.shift(1)).otherwise(period).alias("period.number"))
+        .drop("_secs")
+    )
 
 
 def _ends_a_half(half_play: pl.Expr) -> pl.Expr:
@@ -1082,6 +1115,7 @@ class NFLPlayProcess(object):
             )
             .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
             .unnest("clock.mm")
+            .pipe(_repair_espn_period)
             .with_columns(
                 pl.col("clock.minutes").cast(pl.Int32),
                 pl.col("clock.seconds").cast(pl.Int32),
