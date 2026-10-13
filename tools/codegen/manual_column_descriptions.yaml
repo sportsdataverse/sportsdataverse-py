@@ -9649,7 +9649,8 @@ load_cfb_pbp:
   scrimmage_play: True when the play is a play from scrimmage rather than a special-teams or administrative row.
   seasonType: ESPN season type for the game (2 = regular season, 3 = postseason).
   second_level_yards: 'The ball carrier''s half of yards 5-10 of a rush (the line takes the other half); 0 on carries of 4
-    yards or fewer. Assets published before the 2026-10 line-yards fix carry half of yards 4-8 here.'
+    yards or fewer. Assets published before the 2026-10 line-yards fix carry the old band here: half of yards 4-8 in college
+    football, half of yards 5-8 in the NFL (where the old parts came up half a yard short of the carry).'
   short_rush_attempt: True when the play is a rush in a short-yardage situation.
   short_rush_success: True when a short-yardage rush gained the yardage needed.
   standard_down: True when the offense is on schedule for the series -- first down, second down needing fewer than 8, or third/fourth

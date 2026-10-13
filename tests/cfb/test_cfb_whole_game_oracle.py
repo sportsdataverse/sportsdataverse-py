@@ -717,6 +717,8 @@ def test_rush_adj_and_highlight_yards_follow_the_band(game_id):
     gains = r.filter(y >= 0)
     bad = gains.filter(_off("highlight_yards", y - pl.col("line_yards")))
     assert bad.height == 0, bad.select("yds_rushed", "line_yards", "highlight_yards").rows()
+    bad = r.filter((y < 0) & _off("highlight_yards", pl.lit(0.0)))  # a loss is all the line's
+    assert bad.height == 0, bad.select("yds_rushed", "highlight_yards").rows()
     # opportunity_run is a carry of 4+ (cfbfastR-cfb-data espn_cfb_15 :610): highlight yards there, 0 below
     bad = r.filter(_off("opp_highlight_yards", pl.when(y >= 4).then(pl.col("highlight_yards")).otherwise(0.0)))
     assert bad.height == 0, bad.select("yds_rushed", "highlight_yards", "opp_highlight_yards").rows()

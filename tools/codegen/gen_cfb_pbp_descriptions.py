@@ -15,7 +15,8 @@ Verified while writing (see the module for line refs):
       second_level      >=4 -> 0.5*(adj-4) else 0
       open_field        >10 -> yards-adj  else 0
       highlight_yards   = second_level + open_field (= yards - line_yards on a gain)
-    Before the fix: adj capped at 8, line 0-3 / 4-8 at 3+0.5*(adj-3) / 5.5 cap, open field >8.
+    Before the fix: adj capped at 8, line 0-3 / 4-8 at 3+0.5*(adj-3) / 5.5 cap, open field >8,
+    second level 0.5*(adj-3) (CFB; NFL used adj-4, half a yard short of the carry).
   * opportunity_run WAS `rush AND yards <= 4` -- the inverse of the cfbfastR
     oracle. FIXED (2026-08) to `rush AND yards >= 4`; the column descriptions
     scope the old behaviour to assets published before that fix.
@@ -144,7 +145,9 @@ STATIC: dict[str, str] = {
     ),
     "second_level_yards": (
         "The ball carrier's half of yards 5-10 of a rush (the line takes the other half); 0 on carries "
-        "of 4 yards or fewer. Assets published before the 2026-10 line-yards fix carry half of yards 4-8 here."
+        "of 4 yards or fewer. Assets published before the 2026-10 line-yards fix carry the old band here: half "
+        "of yards 4-8 in college football, half of yards 5-8 in the NFL (where the old parts came up half a "
+        "yard short of the carry)."
     ),
     "short_rush_attempt": "True when the play is a rush in a short-yardage situation.",
     "short_rush_success": "True when a short-yardage rush gained the yardage needed.",
