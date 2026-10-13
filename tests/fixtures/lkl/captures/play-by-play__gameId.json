@@ -1,0 +1,231 @@
+{
+  "quarters": {
+    "regular": {
+      "4": [
+        {
+          "is_home": false,
+          "player": {
+            "name": null,
+            "slug": null,
+            "image": null
+          },
+          "description": "Rungtynės baigėsi",
+          "clock": "00:00",
+          "type": "game",
+          "subtype": "end",
+          "success": true,
+          "is_points_info": false,
+          "score": {
+            "home": 102,
+            "away": 105
+          }
+        },
+        {
+          "is_home": true,
+          "player": {
+            "name": "Matas Jogėla",
+            "slug": "matas-jogela",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/0ba550214e19dbd49771c1487c96f929.png"
+          },
+          "description": "3 taškų metimas nepataikytas",
+          "clock": "00:01",
+          "type": "3pt",
+          "subtype": "jumpshot",
+          "success": false,
+          "is_points_info": false,
+          "score": {
+            "home": 102,
+            "away": 105
+          }
+        },
+        {
+          "is_home": false,
+          "player": {
+            "name": "Stanley Davis",
+            "slug": "stanley-davis",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/15ad755fffc73db96a70a0549d090c2f.png"
+          },
+          "description": "Baudų metimas 2 iš 2 pataikytas",
+          "clock": "00:03",
+          "type": "freethrow",
+          "subtype": "2of2",
+          "success": true,
+          "is_points_info": true,
+          "score": {
+            "home": 102,
+            "away": 105
+          }
+        }
+      ],
+      "3": [
+        {
+          "is_home": false,
+          "player": {
+            "name": "Stanley Davis",
+            "slug": "stanley-davis",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/15ad755fffc73db96a70a0549d090c2f.png"
+          },
+          "description": "2 taškų metimas nepataikytas",
+          "clock": "00:01",
+          "type": "2pt",
+          "subtype": "pullupjumpshot",
+          "success": false,
+          "is_points_info": false,
+          "score": {
+            "home": 80,
+            "away": 78
+          }
+        },
+        {
+          "is_home": true,
+          "player": {
+            "name": "Matas Jogėla",
+            "slug": "matas-jogela",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/0ba550214e19dbd49771c1487c96f929.png"
+          },
+          "description": "3 taškų metimas pataikytas",
+          "clock": "00:21",
+          "type": "3pt",
+          "subtype": "pullupjumpshot",
+          "success": true,
+          "is_points_info": true,
+          "score": {
+            "home": 80,
+            "away": 78
+          }
+        },
+        {
+          "is_home": false,
+          "player": {
+            "name": "Arūnas Mikalauskas",
+            "slug": "arunas-mikalauskas",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/dfc6c0271397c72e35ef482a6fca5fc3.png"
+          },
+          "description": "Baudų metimas 1 iš 1 pataikytas",
+          "clock": "00:52",
+          "type": "freethrow",
+          "subtype": "1of1",
+          "success": true,
+          "is_points_info": true,
+          "score": {
+            "home": 77,
+            "away": 75
+          }
+        }
+      ],
+      "2": [
+        {
+          "is_home": true,
+          "player": {
+            "name": "Augustas Marčiulionis",
+            "slug": "augustas-marciulionis",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/b050e7162cc69bb4e043620bb612e8e9.png"
+          },
+          "description": "2 taškų metimas pataikytas",
+          "clock": "00:01",
+          "type": "2pt",
+          "subtype": "dunk",
+          "success": true,
+          "is_points_info": true,
+          "score": {
+            "home": 48,
+            "away": 51
+          }
+        },
+        {
+          "is_home": true,
+          "player": {
+            "name": "Matas Jogėla",
+            "slug": "matas-jogela",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/0ba550214e19dbd49771c1487c96f929.png"
+          },
+          "description": "3 taškų metimas pataikytas",
+          "clock": "00:26",
+          "type": "3pt",
+          "subtype": "jumpshot",
+          "success": true,
+          "is_points_info": true,
+          "score": {
+            "home": 46,
+            "away": 51
+          }
+        },
+        {
+          "is_home": true,
+          "player": {
+            "name": "Augustas Marčiulionis",
+            "slug": "augustas-marciulionis",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/b050e7162cc69bb4e043620bb612e8e9.png"
+          },
+          "description": "Baudų metimas 2 iš 2 pataikytas",
+          "clock": "01:32",
+          "type": "freethrow",
+          "subtype": "2of2",
+          "success": true,
+          "is_points_info": true,
+          "score": {
+            "home": 41,
+            "away": 49
+          }
+        }
+      ],
+      "1": [
+        {
+          "is_home": true,
+          "player": {
+            "name": "Augustas Marčiulionis",
+            "slug": "augustas-marciulionis",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/b050e7162cc69bb4e043620bb612e8e9.png"
+          },
+          "description": "3 taškų metimas nepataikytas",
+          "clock": "00:33",
+          "type": "3pt",
+          "subtype": "jumpshot",
+          "success": false,
+          "is_points_info": false,
+          "score": {
+            "home": 25,
+            "away": 29
+          }
+        },
+        {
+          "is_home": true,
+          "player": {
+            "name": "Matas Jogėla",
+            "slug": "matas-jogela",
+            "image": "http://lkl.lt/media/players/responsive_width_600px/0ba550214e19dbd49771c1487c96f929.png"
+          },
+          "description": "Baudų metimas 3 iš 3 pataikytas",
+          "clock": "01:27",
+          "type": "freethrow",
+          "subtype": "3of3",
+          "success": true,
+          "is_points_info": true,
+          "score": {
+            "home": 25,
+            "away": 27
+          }
+        },
+        {
+          "is_home": false,
+          "player": {
+            "name": null,
+            "slug": null,
+            "image": null
+          },
+          "description": "Rungtynės prasidėjo",
+          "clock": "10:00",
+          "type": "game",
+          "subtype": "start",
+          "success": true,
+          "is_points_info": false,
+          "score": {
+            "home": 0,
+            "away": 0
+          }
+        }
+      ]
+    },
+    "overtime": []
+  }
+}
