@@ -1,0 +1,385 @@
+{
+  "data": {
+    "broadcastsLabels": {
+      "allBroadcasters": "All Broadcasters",
+      "watch": "Watch"
+    },
+    "config": {
+      "currentPage": "fixtures",
+      "labelPage": "Calendario",
+      "navigation": {
+        "labels": {
+          "search": "Búsqueda",
+          "searchResults": "Resultados de la búsqueda"
+        },
+        "main": [
+          {
+            "label": "Calendario",
+            "link": "&~w=fl~eJyrVipWslJQSjKwME1KSzTTNUiytNA1NEwz1E20NEjSNbc0NUlJSjUyTzI2VtJRUMoBKU4t1nUNVqoFAMKBDvQ",
+            "value": "fixtures"
+          },
+          {
+            "label": "Posiciones",
+            "link": "&~w=stn~eJyrVipWslJQSjKwME1KSzTTNUiytNA1NEwz1E20NEjSNbc0NUlJSjUyTzI2VtJRUMoBKU4t1nUNVqoFAMKBDvQ",
+            "value": "standings"
+          },
+          {
+            "label": "Season Leaders",
+            "link": "&~w=l~eJyrVipWslJQSjKwME1KSzTTNUiytNA1NEwz1E20NEjSNbc0NUlJSjUyTzI2VtJRUMoBKU4t1nUNVqoFAMKBDvQ",
+            "value": "statistics_leaders"
+          }
+        ]
+      },
+      "showEntityLogo": true,
+      "sport": "basketball"
+    },
+    "entities": null,
+    "fixtures": [
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "AGS",
+            "colors": {
+              "primary": "000000",
+              "secondary": "000000",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "64735fe8-6f49-11ec-8270-bf19323c0103",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDsOAjEMANGrrFxjyYnzMz0n4ATxYldsQ0QBiLuDyyeN5gMLzhsojao-G5LKwJQ84RRS7FLLTS13ZYbTBveIbeHlGnqH1vM45uMVtnArnavbwOZF_ivbceROqJ6EM--UiOH7AyNFHfI"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gf3/330ff179362f4d2b86da97d87edfa4b1?size=100",
+            "name": "PANTERAS DE AGUASCALIENTES",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "125",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": "CHI",
+            "colors": {
+              "primary": "000000",
+              "secondary": "000000",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "08f12329-bf32-11ec-a7d3-f152c42bf62b",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOgzAMQNGrIM-1FNsJSbr3BJwghniChahDW3F36vFJX_8HA54TaChJrc0YtBYkMsJWg2KuKW7aOasIPCbYPe4DX4vr6xrv42jnx93doRixcEU14f-qr9jyJmiUeI2sNrPCdQMoDR6f"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gf3/a57ddebda99744d7bb96c2a04455fdf3?size=100",
+            "name": "ADELITAS DE CHIHUAHUA",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "88",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureId": "418fdf15-5a4d-11f1-8a18-af1a96c22628",
+        "fixtureType": "FINAL",
+        "link": "&~w=f~eJwly7sNgDAMANFVItdYivN16JmACWwSV3QpEbujiPJJdw9M2B2o56wmBb02RiIjlOYVa8up6whVY4TNwb3iMfE4l2wpEVs3ypgl9X9lIUYxklauEEpgeD9L2xnH",
+        "name": null,
+        "pool": "",
+        "round": "Ronda: 27",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2026-05-30T20:30:00",
+        "startTimeUTC": "2026-05-31T02:30:00",
+        "status": {
+          "label": "Final",
+          "value": "CONFIRMED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "America/Mexico_City",
+        "venue": null,
+        "venueId": "97064f12-fccc-11ea-bcb1-26e77789d4ce"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "CHI",
+            "colors": {
+              "primary": "000000",
+              "secondary": "000000",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "08f12329-bf32-11ec-a7d3-f152c42bf62b",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOgzAMQNGrIM-1FNsJSbr3BJwghniChahDW3F36vFJX_8HA54TaChJrc0YtBYkMsJWg2KuKW7aOasIPCbYPe4DX4vr6xrv42jnx93doRixcEU14f-qr9jyJmiUeI2sNrPCdQMoDR6f"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gf3/a57ddebda99744d7bb96c2a04455fdf3?size=100",
+            "name": "ADELITAS DE CHIHUAHUA",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "86",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": "AGS",
+            "colors": {
+              "primary": "000000",
+              "secondary": "000000",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "64735fe8-6f49-11ec-8270-bf19323c0103",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDsOAjEMANGrrFxjyYnzMz0n4ATxYldsQ0QBiLuDyyeN5gMLzhsojao-G5LKwJQ84RRS7FLLTS13ZYbTBveIbeHlGnqH1vM45uMVtnArnavbwOZF_ivbceROqJ6EM--UiOH7AyNFHfI"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gf3/330ff179362f4d2b86da97d87edfa4b1?size=100",
+            "name": "PANTERAS DE AGUASCALIENTES",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "82",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureId": "5d4c3ed9-572a-11f1-a2fd-c5eca4b445a1",
+        "fixtureType": "FINAL",
+        "link": "&~w=f~eJwty7kNgDAMQNFVItdYymGTmJ4JmMDOUdGlROyOIlE-6f8HJhwOzBe2oTt6k4IhjIAq3jALU7Mes6UEm4N7xX3ieS2NJW5UU2-CnKP-axwNK_eqZESsAd4PVd0afA",
+        "name": "",
+        "pool": "",
+        "round": "Ronda: 26",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2026-05-27T20:15:00",
+        "startTimeUTC": "2026-05-28T02:15:00",
+        "status": {
+          "label": "Final",
+          "value": "CONFIRMED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Mexico/General",
+        "venue": null,
+        "venueId": "976c7c10-fccc-11ea-bcb1-26e77789d4ce"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "CHI",
+            "colors": {
+              "primary": "000000",
+              "secondary": "000000",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "08f12329-bf32-11ec-a7d3-f152c42bf62b",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOgzAMQNGrIM-1FNsJSbr3BJwghniChahDW3F36vFJX_8HA54TaChJrc0YtBYkMsJWg2KuKW7aOasIPCbYPe4DX4vr6xrv42jnx93doRixcEU14f-qr9jyJmiUeI2sNrPCdQMoDR6f"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gf3/a57ddebda99744d7bb96c2a04455fdf3?size=100",
+            "name": "ADELITAS DE CHIHUAHUA",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "101",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": "AGS",
+            "colors": {
+              "primary": "000000",
+              "secondary": "000000",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "64735fe8-6f49-11ec-8270-bf19323c0103",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDsOAjEMANGrrFxjyYnzMz0n4ATxYldsQ0QBiLuDyyeN5gMLzhsojao-G5LKwJQ84RRS7FLLTS13ZYbTBveIbeHlGnqH1vM45uMVtnArnavbwOZF_ivbceROqJ6EM--UiOH7AyNFHfI"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gf3/330ff179362f4d2b86da97d87edfa4b1?size=100",
+            "name": "PANTERAS DE AGUASCALIENTES",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "103",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureId": "fdad4da0-5404-11f1-9717-1775c379fa44",
+        "fixtureType": "FINAL",
+        "link": "&~w=f~eJwly7ENgEAIQNFVDLUk4HEi9k7gBOBJZWdp3N1cLF_y_wM3rAMELTXSZ6SwBZmT0Y0C1aq0OCeNUmAc4OrxeeO2d2VXNm_SnLAKyb-asiKr1qOopYvA-wFNhBmb",
+        "name": null,
+        "pool": "",
+        "round": "Ronda: 25",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2026-05-26T20:15:00",
+        "startTimeUTC": "2026-05-27T02:15:00",
+        "status": {
+          "label": "Final",
+          "value": "CONFIRMED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Mexico/General",
+        "venue": null,
+        "venueId": "976c7c10-fccc-11ea-bcb1-26e77789d4ce"
+      }
+    ],
+    "labels": {
+      "toBeConfirmed": "Por confirmar",
+      "toBeConfirmedAbbreviation": "Pend."
+    },
+    "locale": "es-ES",
+    "noFixturesMessage": "No hay accesorios para mostrar",
+    "reverseTeamOrder": false,
+    "rounds": {
+      "id": "round-select",
+      "options": [
+        {
+          "label": "All Rounds",
+          "link": "&~w=fl~eJyrVipWslJQSjKwME1KSzTTNUiytNA1NEwz1E20NEjSNbc0NUlJSjUyTzI2VtJRUKoCKQ5yDQ71CQkG8XNA_NRiXddgpVoAzo4Szg",
+          "order": -1,
+          "value": "All"
+        },
+        {
+          "active": false,
+          "label": "Ronda: 1",
+          "link": "&~w=fl~eJyrVipWslJQSjKwME1KSzTTNUiytNA1NEwz1E20NEjSNbc0NUlJSjUyTzI2VtJRUKoCKQ5yDQ71CQkG8XNA_NRiXVcwrygPxDVUqgUAqJcVDQ",
+          "order": 1,
+          "value": "1"
+        },
+        {
+          "active": false,
+          "label": "Ronda: 2",
+          "link": "&~w=fl~eJyrVipWslJQSjKwME1KSzTTNUiytNA1NEwz1E20NEjSNbc0NUlJSjUyTzI2VtJRUKoCKQ5yDQ71CQkG8XNA_NRiXVcwrygPxDVSqgUAqJoVDg",
+          "order": 2,
+          "value": "2"
+        }
+      ],
+      "selected": "All"
+    },
+    "seasonId": "b085bfa6-0b98-11f1-a90b-7954dbe27b33",
+    "seasons": {
+      "competitions": {
+        "16be8396-24fb-11ef-9ab7-df6be196e88f": {
+          "name": "LIGA CALIENTE.MX LNBP"
+        },
+        "889eb2bb-5c7c-11ee-aaba-89136e10ae17": {
+          "name": "COPA VALUE LNBP"
+        },
+        "cbd9ecf6-fa02-11ee-8ab9-4510b60996c2": {
+          "name": "LIGA CALIENTE.MX"
+        }
+      },
+      "seasons": [
+        {
+          "abbreviationLocal": null,
+          "competitionId": "889eb2bb-5c7c-11ee-aaba-89136e10ae17",
+          "link": "&~w=fl~eJyrVipWslJQMk4ySk1OTDTVTTQzMdA1NEwz1E00MjbRNU-zSDaxTEw1SUszUtJRUMoBKU4t1nUNVqoFAMv3D0o",
+          "nameLocal": "COPA VALUE LNBP 2026",
+          "seasonId": "3b2ecaa5-a640-11f1-a234-7f8c49ae4ff2",
+          "year": 2026
+        },
+        {
+          "abbreviationLocal": null,
+          "competitionId": "16be8396-24fb-11ef-9ab7-df6be196e88f",
+          "link": "&~w=fl~eJyrVipWslJQSk42TzG3TDPWNTFOTdU1NEwz1E2ysDTWNbI0Tk41TklKNjQyUNJRUMoBKU4t1nUNVqoFAMtvDyg",
+          "nameLocal": "LIGA CALIENTE.MX LNBP",
+          "seasonId": "cc7d79f3-43ee-11f1-b893-293ce3dbc120",
+          "year": 2026
+        },
+        {
+          "abbreviationLocal": null,
+          "competitionId": "cbd9ecf6-fa02-11ee-8ab9-4510b60996c2",
+          "link": "&~w=fl~eJyrVipWslJQSjKwME1KSzTTNUiytNA1NEwz1E20NEjSNbc0NUlJSjUyTzI2VtJRUMoBKU4t1nUNVqoFAMKBDvQ",
+          "nameLocal": "LNBP FEMENIL 2026",
+          "seasonId": "b085bfa6-0b98-11f1-a90b-7954dbe27b33",
+          "year": 2026
+        }
+      ]
+    },
+    "series": null,
+    "showFixtureName": true,
+    "stageTabs": {
+      "id": "stages-select",
+      "options": [],
+      "selected": null
+    },
+    "sub": "RESULTS",
+    "subPageTabs": [
+      {
+        "label": "Calendario",
+        "link": "&~w=fl~eJyrVipWslJQSjKwME1KSzTTNUiytNA1NEwz1E20NEjSNbc0NUlJSjUyTzI2VtJRUKoCKXbzjAgJDXINBgnkgARSi3WBvFoA4jATFg",
+        "value": "FIXTURES"
+      },
+      {
+        "label": "Resultados",
+        "link": "&~w=fl~eJyrVipWslJQSjKwME1KSzTTNUiytNA1NEwz1E20NEjSNbc0NUlJSjUyTzI2VtJRUKoCKQ5yDQ71CQkG8XNA_NRiXddgpVoAzo4Szg",
+        "value": "RESULTS"
+      }
+    ]
+  },
+  "links": {
+    "self": "https://embed-api.eui.connect.sportradar.com/v1/embed/14/fixtures?seasonId=b085bfa6-0b98-11f1-a90b-7954dbe27b33&sub=RESULTS"
+  },
+  "meta": {
+    "code": 200,
+    "codeVersion": "d6cd1e2bd19e03a81132a23b2025920577f84e37",
+    "count": 16,
+    "fromCache": false,
+    "generated": "2026-10-12T18:24:22.829544+00:00Z",
+    "generationTime": 1.414109,
+    "limit": 0,
+    "offset": 0,
+    "time": "2026-10-12T18:24:22.829565+00:00Z",
+    "version": 1
+  }
+}

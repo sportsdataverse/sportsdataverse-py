@@ -1,0 +1,631 @@
+{
+  "data": {
+    "banner": {
+      "competition": {
+        "id": "ec2755ad-ad33-11f1-bdcf-c7121a89b558",
+        "name": "Memorial Tournament \"Ljubo Jovanović\""
+      },
+      "fixture": {
+        "attendance": null,
+        "attendanceLabel": "Attendance",
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": null,
+            "colors": {
+              "primary": "0032d7",
+              "secondary": "ffffff",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwlzDEOwjAMQNGrVJ6xVGPXSdi7cgfH2FPLQMUAiLujiPFJX_8DB1wm8KDikol2Y0GiJLTmgp211C5ipg6nCbYRxx3X69B76Hjuuz1ewzFsRFzqomhd479qyQsG29n7rE2ywvcHXBgfAw"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1st5/76398bd98fc741df9b3452affe9f6fa9?size=400",
+            "name": "Budućnost VOLI",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "94",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": null,
+            "colors": {
+              "primary": "00b3ff",
+              "secondary": "ffffff",
+              "tertiary": "0060c8"
+            },
+            "draw": false,
+            "entityId": "9f39588a-ad35-11f1-a372-4bcc6d47ffdf",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwtzDsOhDAMANGrINfrIsT50W_LHRwnrpYtQBSAuDuyRPmk0VywwTSAdJeEVJGbJ3ROHXIRwupjypWIOQp8BvhZ3P_4nU2naduXhdfD3M1FfQk5s63Cu_JpRKoisVFSbQr3A2GiH58"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1st5/2bf9f1b503d447b6b78f6f5e8012df5a?size=400",
+            "name": "Turk Telekom",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "84",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureProfile": {
+          "efficiencyType": "EFFICIENCY",
+          "foulsAllowedTechnical": 2,
+          "foulsBeforeBonus": 4,
+          "foulsBeforeBonusOvertime": 5,
+          "halfTimeDuration": 15,
+          "maxFoulsPersonal": 5,
+          "maximumPlayersOnCourt": 5,
+          "maximumRosterSize": 12,
+          "midGameJumpBallAllowed": false,
+          "numberOfPeriods": 4,
+          "overtimeAllowed": true,
+          "overtimeLength": 5,
+          "periodBreakDuration": 2,
+          "periodLength": 10,
+          "periodLengthCustomized": {},
+          "pointsFourAllowed": false,
+          "resetFoulsAfterPeriods": [
+            1,
+            2,
+            3
+          ],
+          "resetTimeoutsAfterPeriods": [
+            2,
+            4,
+            11
+          ],
+          "ruleSet": "FIBA",
+          "shotClock": 24,
+          "simpleTargetScoreEndingAllowed": false,
+          "switchPlayingDirection": [
+            2
+          ],
+          "usePeriodLengthCustomized": false
+        },
+        "id": "2b5223e5-ad3a-11f1-8ff6-d3e713a71a8f",
+        "labelShootout": null,
+        "leaderStats": {
+          "leaders": [
+            {
+              "data": [
+                {
+                  "entity": {
+                    "id": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8"
+                  },
+                  "person": {
+                    "bib": "83",
+                    "id": "59291bce-ae0c-11f1-862d-11068a58603a",
+                    "imageURL": null,
+                    "link": null,
+                    "name": "Axel Bouteille"
+                  },
+                  "value": 26
+                }
+              ],
+              "header": {
+                "code": "Efficiency",
+                "key": "efficiency",
+                "name": "Eff"
+              }
+            },
+            {
+              "data": [
+                {
+                  "entity": {
+                    "id": "9f39588a-ad35-11f1-a372-4bcc6d47ffdf"
+                  },
+                  "person": {
+                    "bib": "30",
+                    "id": "5a66af66-ae0b-11f1-8b0f-1ba706fd3592",
+                    "imageURL": null,
+                    "link": null,
+                    "name": "Kristeon Lamar Bankston"
+                  },
+                  "value": 20
+                }
+              ],
+              "header": {
+                "code": "Efficiency",
+                "key": "efficiency",
+                "name": "Eff"
+              }
+            },
+            {
+              "data": [
+                {
+                  "entity": {
+                    "id": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8"
+                  },
+                  "person": {
+                    "bib": "15",
+                    "id": "2a11ef77-ae0c-11f1-9099-b5dabc797d32",
+                    "imageURL": null,
+                    "link": null,
+                    "name": "Juwan Morgan"
+                  },
+                  "value": 20
+                }
+              ],
+              "header": {
+                "code": "Points",
+                "key": "points",
+                "name": "PTS"
+              }
+            }
+          ]
+        },
+        "leaderStatsLabel": "Statistical Leaders",
+        "name": "Final",
+        "pool": "",
+        "poolName": "",
+        "series": null,
+        "shootout": {},
+        "sport": "basketball",
+        "startDateTime": "2026-09-13T20:00:00",
+        "status": "CONFIRMED",
+        "timesUnconfirmed": false,
+        "venue": "SC Morača"
+      },
+      "isPeriodScoresVertical": true,
+      "season": {
+        "id": "ce17c4ff-ad34-11f1-a9c4-b3678b44aa6c",
+        "name": "Memorijalni turnir \"Ljubo Jovanović\""
+      },
+      "showFixtureName": true
+    },
+    "broadcastsLabels": {
+      "allBroadcasters": "All Broadcasters",
+      "watch": "Watch"
+    },
+    "captainLabel": "C",
+    "config": {
+      "currentPage": "fixture_detail",
+      "navigation": {
+        "main": []
+      },
+      "showEntityLogo": true,
+      "sport": "basketball"
+    },
+    "fixture": {
+      "ageGroup": "SENIOR",
+      "attendance": null,
+      "attendanceLabel": "Attendance",
+      "captains": {
+        "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": "3c4b7ab4-ae0b-11f1-8838-93fe4a62bb68",
+        "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": "23c5e4c2-ae0c-11f1-855b-1bf956a46807"
+      },
+      "competitionName": "Memorial Tournament \"Ljubo Jovanović\"",
+      "competitors": [
+        {
+          "code": null,
+          "colors": {
+            "primary": "0032d7",
+            "secondary": "ffffff",
+            "tertiary": "000000"
+          },
+          "draw": false,
+          "entityId": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8",
+          "isHome": true,
+          "link": {
+            "fragment": null,
+            "openInNewTab": false,
+            "origin": null,
+            "path": null,
+            "queryParams": {
+              "~w": "e~eJwlzDEOwjAMQNGrVJ6xVGPXSdi7cgfH2FPLQMUAiLujiPFJX_8DB1wm8KDikol2Y0GiJLTmgp211C5ipg6nCbYRxx3X69B76Hjuuz1ewzFsRFzqomhd479qyQsG29n7rE2ywvcHXBgfAw"
+            }
+          },
+          "logo": "https://images.dc.connect.sportradar.com/b1st5/76398bd98fc741df9b3452affe9f6fa9?size=400",
+          "name": "Budućnost VOLI",
+          "resultPlace": 1,
+          "resultStatus": "CONFIRMED",
+          "score": "94",
+          "secondaryScore": null,
+          "shootOutAttempts": ""
+        },
+        {
+          "code": null,
+          "colors": {
+            "primary": "00b3ff",
+            "secondary": "ffffff",
+            "tertiary": "0060c8"
+          },
+          "draw": false,
+          "entityId": "9f39588a-ad35-11f1-a372-4bcc6d47ffdf",
+          "isHome": false,
+          "link": {
+            "fragment": null,
+            "openInNewTab": false,
+            "origin": null,
+            "path": null,
+            "queryParams": {
+              "~w": "e~eJwtzDsOhDAMANGrINfrIsT50W_LHRwnrpYtQBSAuDuyRPmk0VywwTSAdJeEVJGbJ3ROHXIRwupjypWIOQp8BvhZ3P_4nU2naduXhdfD3M1FfQk5s63Cu_JpRKoisVFSbQr3A2GiH58"
+            }
+          },
+          "logo": "https://images.dc.connect.sportradar.com/b1st5/2bf9f1b503d447b6b78f6f5e8012df5a?size=400",
+          "name": "Turk Telekom",
+          "resultPlace": 2,
+          "resultStatus": "CONFIRMED",
+          "score": "84",
+          "secondaryScore": null,
+          "shootOutAttempts": ""
+        }
+      ],
+      "discipline": null,
+      "externalId": null,
+      "fixtureId": "2b5223e5-ad3a-11f1-8ff6-d3e713a71a8f",
+      "fixtureType": "FINAL",
+      "liveDataAvailable": false,
+      "liveVideoAvailable": false,
+      "name": "Final",
+      "profile": {
+        "efficiencyType": "EFFICIENCY",
+        "foulsAllowedTechnical": 2,
+        "foulsBeforeBonus": 4,
+        "foulsBeforeBonusOvertime": 5,
+        "halfTimeDuration": 15,
+        "maxFoulsPersonal": 5,
+        "maximumPlayersOnCourt": 5,
+        "maximumRosterSize": 12,
+        "midGameJumpBallAllowed": false,
+        "numberOfPeriods": 4,
+        "overtimeAllowed": true,
+        "overtimeLength": 5,
+        "periodBreakDuration": 2,
+        "periodLength": 10,
+        "periodLengthCustomized": {},
+        "pointsFourAllowed": false,
+        "resetFoulsAfterPeriods": [
+          1,
+          2,
+          3
+        ],
+        "resetTimeoutsAfterPeriods": [
+          2,
+          4,
+          11
+        ],
+        "ruleSet": "FIBA",
+        "shotClock": 24,
+        "simpleTargetScoreEndingAllowed": false,
+        "switchPlayingDirection": [
+          2
+        ],
+        "usePeriodLengthCustomized": false
+      },
+      "seasonId": "ce17c4ff-ad34-11f1-a9c4-b3678b44aa6c",
+      "series": null,
+      "startTimeLocal": "2026-09-13T20:00:00",
+      "startTimeUTC": "2026-09-13T18:00:00",
+      "status": "CONFIRMED",
+      "statusLabel": "Final",
+      "timesUnconfirmed": false,
+      "timezone": "Europe/Podgorica",
+      "updated": "2026-09-13T20:35:38",
+      "venue": "SC Morača",
+      "venueId": "04b6f820-ad3f-11f1-a9c5-65a2cae4537e"
+    },
+    "fixtureDetailText": {
+      "ended": "Ended",
+      "live": "Live",
+      "matchEvents": "Match Events",
+      "startingSoon": "Starting soon",
+      "timeUntilStart": "Time until start",
+      "time_score": "Time/Score"
+    },
+    "gameStageLabels": {
+      "all": "All",
+      "final": "Final"
+    },
+    "labels": {
+      "toBeConfirmed": "To Be Confirmed",
+      "toBeConfirmedAbbreviation": "TBC"
+    },
+    "locale": "en-EN",
+    "periodData": [
+      {
+        "bannerMatchEvents": [],
+        "bannerTimelineMatchEvents": [],
+        "durationMinutes": 10,
+        "elapsedMinutesBeforePeriod": 0,
+        "ended": true,
+        "events": [
+          {
+            "bib": "0",
+            "clock": "PT10M0S",
+            "desc": "Jumpball Won",
+            "entityId": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8",
+            "eventId": "d1303601-af9d-11f1-a856-5d260768dd81",
+            "eventSubType": "won",
+            "eventType": "jumpBall",
+            "name": "Justin Smith",
+            "periodId": 1,
+            "personId": "e3f597ac-ae0b-11f1-a3b2-8fb2bf4b0961",
+            "personImage": null,
+            "scores": {
+              "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 0,
+              "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 0
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "30",
+            "clock": "PT10M0S",
+            "desc": "Jumpball Lost",
+            "entityId": "9f39588a-ad35-11f1-a372-4bcc6d47ffdf",
+            "eventId": "d1303603-af9d-11f1-a856-5d260768dd81",
+            "eventSubType": "lost",
+            "eventType": "jumpBall",
+            "name": "Kristeon Lamar Bankston",
+            "periodId": 1,
+            "personId": "5a66af66-ae0b-11f1-8b0f-1ba706fd3592",
+            "personImage": null,
+            "scores": {
+              "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 0,
+              "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 0
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "10",
+            "clock": "PT9M40S",
+            "desc": "3pt Jump Shot",
+            "entityId": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8",
+            "eventId": "e2f7e861-af9d-11f1-a856-5d260768dd81",
+            "eventSubType": "jumpShot",
+            "eventType": "3pt",
+            "name": "Iverson Molinar",
+            "periodId": 1,
+            "personId": "0f22d15a-ae0c-11f1-afe0-552c26a3eda6",
+            "personImage": null,
+            "scores": {
+              "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 0,
+              "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 3
+            },
+            "success": true,
+            "successString": "made",
+            "x": 81.61,
+            "y": 91.03
+          }
+        ],
+        "isOvertime": false,
+        "isShootout": false,
+        "labels": {
+          "end": "Period 1: End",
+          "shortLabel": "P1",
+          "start": "Period 1: Start"
+        },
+        "periodId": 1,
+        "started": true,
+        "teamScore": {
+          "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 23,
+          "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 21
+        }
+      },
+      {
+        "bannerMatchEvents": [],
+        "bannerTimelineMatchEvents": [],
+        "durationMinutes": 10,
+        "elapsedMinutesBeforePeriod": 10,
+        "ended": true,
+        "events": [
+          {
+            "bib": "21",
+            "clock": "PT10M0S",
+            "desc": "Substitution Out",
+            "entityId": "9f39588a-ad35-11f1-a372-4bcc6d47ffdf",
+            "eventId": "bc9dc381-afa0-11f1-a856-5d260768dd81",
+            "eventSubType": "out",
+            "eventType": "substitution",
+            "name": "Tony Christopher Taylor",
+            "periodId": 2,
+            "personId": "42ff9e49-ae0b-11f1-aab0-6f63c95c1a3c",
+            "personImage": null,
+            "scores": {
+              "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 23,
+              "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 21
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "18",
+            "clock": "PT10M0S",
+            "desc": "Substitution In",
+            "entityId": "9f39588a-ad35-11f1-a372-4bcc6d47ffdf",
+            "eventId": "bc9dc380-afa0-11f1-a856-5d260768dd81",
+            "eventSubType": "in",
+            "eventType": "substitution",
+            "name": "Doğuş Özdemiroğlu",
+            "periodId": 2,
+            "personId": "3c4b7ab4-ae0b-11f1-8838-93fe4a62bb68",
+            "personImage": null,
+            "scores": {
+              "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 23,
+              "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 21
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "0",
+            "clock": "PT10M0S",
+            "desc": "Substitution In",
+            "entityId": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8",
+            "eventId": "bc9dea91-afa0-11f1-a856-5d260768dd81",
+            "eventSubType": "in",
+            "eventType": "substitution",
+            "name": "Justin Smith",
+            "periodId": 2,
+            "personId": "e3f597ac-ae0b-11f1-a3b2-8fb2bf4b0961",
+            "personImage": null,
+            "scores": {
+              "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 23,
+              "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 21
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          }
+        ],
+        "isOvertime": false,
+        "isShootout": false,
+        "labels": {
+          "end": "Period 2: End",
+          "shortLabel": "P2",
+          "start": "Period 2: Start"
+        },
+        "periodId": 2,
+        "started": true,
+        "teamScore": {
+          "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 30,
+          "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 26
+        }
+      },
+      {
+        "bannerMatchEvents": [],
+        "bannerTimelineMatchEvents": [],
+        "durationMinutes": 10,
+        "elapsedMinutesBeforePeriod": 20,
+        "ended": true,
+        "events": [
+          {
+            "bib": "0",
+            "clock": "PT10M0S",
+            "desc": "Substitution In",
+            "entityId": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8",
+            "eventId": "b8d5b041-afa6-11f1-a856-5d260768dd81",
+            "eventSubType": "in",
+            "eventType": "substitution",
+            "name": "Justin Smith",
+            "periodId": 3,
+            "personId": "e3f597ac-ae0b-11f1-a3b2-8fb2bf4b0961",
+            "personImage": null,
+            "scores": {
+              "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 53,
+              "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 47
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "15",
+            "clock": "PT10M0S",
+            "desc": "Substitution In",
+            "entityId": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8",
+            "eventId": "b8d5fe60-afa6-11f1-a856-5d260768dd81",
+            "eventSubType": "in",
+            "eventType": "substitution",
+            "name": "Juwan Morgan",
+            "periodId": 3,
+            "personId": "2a11ef77-ae0c-11f1-9099-b5dabc797d32",
+            "personImage": null,
+            "scores": {
+              "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 53,
+              "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 47
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "45",
+            "clock": "PT10M0S",
+            "desc": "Substitution Out",
+            "entityId": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8",
+            "eventId": "b8d5fe61-afa6-11f1-a856-5d260768dd81",
+            "eventSubType": "out",
+            "eventType": "substitution",
+            "name": "Stefan Đorđević",
+            "periodId": 3,
+            "personId": "4531b752-ae0c-11f1-9135-4d081c7595f6",
+            "personImage": null,
+            "scores": {
+              "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 53,
+              "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 47
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          }
+        ],
+        "isOvertime": false,
+        "isShootout": false,
+        "labels": {
+          "end": "Period 3: End",
+          "shortLabel": "P3",
+          "start": "Period 3: Start"
+        },
+        "periodId": 3,
+        "started": true,
+        "teamScore": {
+          "9f39588a-ad35-11f1-a372-4bcc6d47ffdf": 17,
+          "a1137856-ab6e-11f1-9f35-e3a2cb0694f8": 20
+        }
+      }
+    ],
+    "reverseTeamOrder": false,
+    "seasonId": "ce17c4ff-ad34-11f1-a9c4-b3678b44aa6c",
+    "showCompetitionName": true,
+    "sub": "pbp",
+    "summary": {},
+    "tabs": [
+      {
+        "label": "Box Score",
+        "link": "&~w=f~eJwljDEKwzAMAL8SNEeDLMV2u2fNH2TFgkDpYk8t_XsRGe847gsDngtYp2LijnqyIJET6sMEG-dSm4hqNlgXeEXc37gfQZ-gMXVeY142Qnmo1LaUuG9x0_tW3TOe3AuxFtLq8PsD2kYglw",
+        "sub": "statistics"
+      },
+      {
+        "active": true,
+        "label": "Play By Play",
+        "link": "&~w=f~eJwljLsKgDAMAH9FMpshTfrQ3dV_SGsziQhuiv8uwe0OjnvggnmA1ik3MUPdWJDICHVqgpVTLlVENTUYB9g97gcuq9vtdtbT2ZxDjSFwj77Rf1PMEm7cM7Fm0mLwfsLVHY4",
+        "sub": "pbp"
+      },
+      {
+        "label": "Shot Chart",
+        "link": "&~w=f~eJwljDEKwzAMAL8SNFeDLMV2unfNF4qsWGQoDSSZWvL3IjrecdwXDrgPYJ2KiTvqwoJETqiTCTbOpTYR1WxwG-AVcX_jYw76BB3rdj5t1f0M5aFSG1PiPsZN_7fqnnHhXoi1kFaH6wfUcSB7",
+        "sub": "shot_chart"
+      }
+    ]
+  },
+  "links": {
+    "self": "https://embed-api.eui.connect.sportradar.com/v1/embed/326/fixture_detail?fixtureId=2b5223e5-ad3a-11f1-8ff6-d3e713a71a8f&sub=pbp"
+  },
+  "meta": {
+    "code": 200,
+    "codeVersion": "d6cd1e2bd19e03a81132a23b2025920577f84e37",
+    "count": 16,
+    "fromCache": false,
+    "generated": "2026-10-12T18:17:26.332014+00:00Z",
+    "generationTime": 0.296914,
+    "limit": 0,
+    "offset": 0,
+    "time": "2026-10-12T18:24:45.927752+00:00Z",
+    "version": 1
+  }
+}

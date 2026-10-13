@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: website_id
+  type: integer
+- description: ''
+  name: season_id
+  type: character
+- description: ''
+  name: stat_key
+  type: character
+- description: ''
+  name: stat_name
+  type: character
+- description: ''
+  name: stat_label
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: entity_id
+  type: character
+- description: ''
+  name: entity_name
+  type: character
+- description: ''
+  name: person_id
+  type: character
+- description: ''
+  name: person_name
+  type: character
+- description: ''
+  name: value
+  type: numeric
+- description: ''
+  name: value_text
+  type: character
+kind: dataframe
+schema: atrium_leaders

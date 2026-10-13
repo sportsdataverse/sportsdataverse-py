@@ -1,0 +1,381 @@
+{
+  "data": {
+    "broadcastsLabels": {
+      "allBroadcasters": "All Broadcasters",
+      "watch": "Watch"
+    },
+    "config": {
+      "currentPage": "fixtures",
+      "labelPage": "Calendario",
+      "navigation": {
+        "labels": {
+          "search": "Búsqueda",
+          "searchResults": "Resultados de la búsqueda"
+        },
+        "main": [
+          {
+            "label": "Calendario",
+            "link": "&~w=fl~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNVqoFAMvLD1A",
+            "value": "fixtures"
+          },
+          {
+            "label": "Posiciones",
+            "link": "&~w=stn~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNVqoFAMvLD1A",
+            "value": "standings"
+          },
+          {
+            "label": "Season Leaders",
+            "link": "&~w=l~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNVqoFAMvLD1A",
+            "value": "statistics_leaders"
+          }
+        ]
+      },
+      "showEntityLogo": true,
+      "sport": "basketball"
+    },
+    "entities": null,
+    "fixtures": [
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "BRU",
+            "colors": {
+              "primary": "fafaf8",
+              "secondary": "1b0ff1",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "30cccdc5-6005-11ef-b120-ad072d62479d",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwdzD0OgzAMQOGrIM-1ZMdASHdO0BPEP0xlacRAq96dpuMnPb0PNLgPIGo6WilYSRyZN8ZFCqOqRPbMbhJwG-DZ42i4PrreXe3Y9_o6u-O_IjNzm3Ammn6r2FA5EVannHxOYy4O3wtQyB70"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gak/720f4794a4b84f989e58d86ec8e80210?size=100",
+            "name": "BRUJOS DE IZALCO",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          },
+          {
+            "code": "MET",
+            "colors": {
+              "primary": "000000",
+              "secondary": "000000",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "0750e432-4ec3-11ef-89d9-f3438722af5a",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDsOAjEMRdGtjFxjKc7LKDE9K2AF-TgV0xBRAGLvg8sjXd0vLbpuhNZb6qpcAwaLTOECFW4NlkeW0WF02ejhsS2-3V0f13odR32-3eYOeQ-WEDlZx39lk4sO5YmEkmOsc6_0OwFB5h6x"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gak/d93a627d73144d2c9171b8cde5f13e65?size=100",
+            "name": "METAPÁN",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          }
+        ],
+        "fixtureId": "bb387e47-bf5c-11f1-add1-6be48f3a5fdb",
+        "fixtureType": "REGULAR",
+        "link": "&~w=f~eJwlyzEOgCAMQNGrkM42sSkIuHsCT0BpO7kxGu-uxPEn798wYA_A0iX2WrGtrEjkhIUroQhb1kza2WAJcE1sA49zls_6SMkWM4qn_q9NlXATi8W5JVeB5wV0QxtF",
+        "name": null,
+        "pool": "",
+        "round": "Ronda: 69",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2026-10-12T19:15:00",
+        "startTimeUTC": "2026-10-13T01:15:00",
+        "status": {
+          "label": "Scheduled",
+          "value": "SCHEDULED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "America/El_Salvador",
+        "venue": "ESTADIO \"SALVADOR MARIONA\" IZALCO",
+        "venueId": "780375a6-87df-11eb-82af-862fe3ef7a94"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "SNM",
+            "colors": {
+              "primary": "000000",
+              "secondary": "000000",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "69124a29-638e-11ec-b890-35c9a9c06d35",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOgzAMQNGrIM-1FGMIcfeegBPEjplgIWJoK-7eenzS1_9Ch-cArKaTiWBN3JBoIywshKrsS1uoGTs8Btgj9o6vNfQJ9es46vkOezgLjVMdBTMX_6_cUIsk5NmkiqXceIb7Bz7RHoU"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gak/290fca86470c480fb602eaaaac379658?size=100",
+            "name": "SAN MIGUEL",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          },
+          {
+            "code": "SSA",
+            "colors": {
+              "primary": "fdfdfa",
+              "secondary": "0f0fe4",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "adbdcc94-6005-11ef-aadf-5b2b2ff965c8",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzD0OwjAMQOGrVJ6xFNdN27BzAk7g34kuRAyAuHvJ-ElP7wsdrhOwmi7WGkphR6Ik3LkRqnJsvpEbB1wmeIw4Ot7uQ5-h_joOeb6HY1hc3awtuJZS_6tIFPHEqrPOmW2ttsPvBGT2H_c"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gak/cd1c62aecd554f1ba3e908428f442d62?size=100",
+            "name": "SAN SALVADOR",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          }
+        ],
+        "fixtureId": "e31d2245-bf5c-11f1-a5b1-ad5a44abd582",
+        "fixtureType": "REGULAR",
+        "link": "&~w=f~eJwlizEOgCAMAL9COtvEUhrA3Rf4AkphcmM0_l3R5ZJL7i4YsDlgrRpqzlhWNiTqhIkzoSq3aJGscoPFwTnjNnA_pvXPmMz7IKhd6r8W0RcmJYSiJsnD_QBpUBqd",
+        "name": null,
+        "pool": "",
+        "round": "Ronda: 70",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2026-10-12T19:15:00",
+        "startTimeUTC": "2026-10-13T01:15:00",
+        "status": {
+          "label": "Scheduled",
+          "value": "SCHEDULED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "America/El_Salvador",
+        "venue": "CANCHA \"ALVAREZ\" SAN MIGUEL",
+        "venueId": "780aac04-87df-11eb-82af-862fe3ef7a94"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "COJ",
+            "colors": {
+              "primary": "fafaf8",
+              "secondary": "eda303",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "5d6a6a68-6005-11ef-a33d-e1035386a3db",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOwjAMheGrVJ6xFMskTdg5ASewY3dql0YMgLh7Y73pk57-Hwx4LMDa9d5bQ0lsSLQRVm6EquyrrWSdHW4L7HH2gc9X6Bsa7-OQ8xP2cLYicxVLSnmmfEPhGXVKnLkWYVP4X0dmHs4"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gak/deb9d2a9b1254c38b1ce2f642dc27f5e?size=100",
+            "name": "COJUTE",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          },
+          {
+            "code": "SAL",
+            "colors": {
+              "primary": "fdfdfa",
+              "secondary": "0f0fe4",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOwjAMQNGrVJ6xFOM0rtl7Ak4QJ87ULkQMgLg7eHzS1__AhNsCbM1yU8WauCPRINxYCc3YpQv1xg6XBY6IfeJ-D71D83me9fEKe9i0XFnSwJLS-l_5QM21oMlWxPMoTAbfHz-XHoU"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1gak/1514dc8a8a914f6c96c5e2bf9ed670de?size=100",
+            "name": "SALVADOREÑOS",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          }
+        ],
+        "fixtureId": "fba06196-bf5c-11f1-b433-f398a5734f10",
+        "fixtureType": "REGULAR",
+        "link": "&~w=f~eJwlyzEOgCAMRuGrmM42oflRqLsn8AQU6OTGaLy7IY5f8t5Dg46FYNViVeUS0FjEhTNU2Aw9tSStotO60D3jPvi8pnzKrYRddGfzrf6rRYAdmsuWEF0CvR9pKBoh",
+        "name": null,
+        "pool": "",
+        "round": "Ronda: 71",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2026-10-13T19:15:00",
+        "startTimeUTC": "2026-10-14T01:15:00",
+        "status": {
+          "label": "Scheduled",
+          "value": "SCHEDULED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "America/El_Salvador",
+        "venue": "GIMNASIO ALCALDIA DE COJUTEPEQUE",
+        "venueId": "77ff6d12-87df-11eb-82af-862fe3ef7a94"
+      }
+    ],
+    "labels": {
+      "toBeConfirmed": "Por confirmar",
+      "toBeConfirmedAbbreviation": "Pend."
+    },
+    "locale": "es-ES",
+    "noFixturesMessage": "No hay accesorios para mostrar",
+    "reverseTeamOrder": false,
+    "rounds": {
+      "id": "round-select",
+      "options": [
+        {
+          "label": "All Rounds",
+          "link": "&~w=fl~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNVqoFAMvLD1A",
+          "order": -1,
+          "value": "All"
+        },
+        {
+          "active": false,
+          "label": "Ronda: 69",
+          "link": "&~w=fl~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNBvGqQDw3z4iQ0CCIQFEeSMTMUqkWAOVHFe8",
+          "order": 69,
+          "value": "69"
+        },
+        {
+          "active": false,
+          "label": "Ronda: 70",
+          "link": "&~w=fl~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNBvGqQDw3z4iQ0CCIQFEeSMTcQKkWAOUwFec",
+          "order": 70,
+          "value": "70"
+        }
+      ],
+      "selected": "All"
+    },
+    "seasonId": "3bcb4c99-a03d-11f1-8391-bb3e7d71dc3e",
+    "seasons": {
+      "competitions": {
+        "00054680-87dd-11eb-8726-4e4c219061a6": {
+          "name": "LIGA MAYOR DE BALONCESTO"
+        },
+        "03da8549-35f0-11f1-8b13-077680625bdb": {
+          "name": "LIGA DE DESARROLLO U-18 FEM"
+        },
+        "25f85e27-fdf1-11ef-834e-5f4e68ee4903": {
+          "name": "LIGA DE DESARROLLO U-14 FEM"
+        }
+      },
+      "seasons": [
+        {
+          "abbreviationLocal": null,
+          "competitionId": "00054680-87dd-11eb-8726-4e4c219061a6",
+          "link": "&~w=fl~eJyrVipWslJQsjC1TEtKtjTUNTQ3T9E1NEwz1LUwT0zVtUxKM04xSEwxSrZMVtJRUMoBKU4t1nUNVqoFAMhTD2M",
+          "nameLocal": "APERTURA 2026",
+          "seasonId": "859fbc91-177d-11f1-87ae-9bf3d0ad2c9c",
+          "year": 2026
+        },
+        {
+          "abbreviationLocal": null,
+          "competitionId": "00054680-87dd-11eb-8726-4e4c219061a6",
+          "link": "&~w=fl~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNVqoFAMvLD1A",
+          "nameLocal": "CLAUSURA 2026",
+          "seasonId": "3bcb4c99-a03d-11f1-8391-bb3e7d71dc3e",
+          "year": 2026
+        },
+        {
+          "abbreviationLocal": null,
+          "competitionId": "7bb396d9-48a5-11f0-9477-69b636c5fc42",
+          "link": "&~w=fl~eJyrVipWslJQSkozTDNJMUnRTbJIS9M1NEwz1E1KSbbUTU5JSU01t7AwTU1OVtJRUMoBKU4t1nUNVqoFAPVzEIU",
+          "nameLocal": "JR NBA FEM 2026",
+          "seasonId": "bf1f4d4d-b8ff-11f1-bdc9-cddee7885ecc",
+          "year": 2026
+        }
+      ]
+    },
+    "series": null,
+    "showFixtureName": true,
+    "stageTabs": {},
+    "sub": "FIXTURES",
+    "subPageTabs": [
+      {
+        "label": "Calendario",
+        "link": "&~w=fl~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNBvGqQDw3z4iQ0CCgQC0A7mETcg",
+        "value": "FIXTURES"
+      },
+      {
+        "label": "Resultados",
+        "link": "&~w=fl~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNBvGqQLwg1-BQn5BgpVoA2xwTKg",
+        "value": "RESULTS"
+      }
+    ]
+  },
+  "links": {
+    "self": "https://embed-api.eui.connect.sportradar.com/v1/embed/13/fixtures"
+  },
+  "meta": {
+    "code": 200,
+    "codeVersion": "d6cd1e2bd19e03a81132a23b2025920577f84e37",
+    "count": 16,
+    "fromCache": false,
+    "generated": "2026-10-12T18:34:46.931474+00:00Z",
+    "generationTime": 0.804719,
+    "limit": 0,
+    "offset": 0,
+    "time": "2026-10-12T18:34:46.931498+00:00Z",
+    "version": 1
+  }
+}

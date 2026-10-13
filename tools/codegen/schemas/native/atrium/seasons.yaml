@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: website_id
+  type: integer
+- description: ''
+  name: season_id
+  type: character
+- description: ''
+  name: competition_id
+  type: character
+- description: ''
+  name: competition_name
+  type: character
+- description: ''
+  name: season_name
+  type: character
+- description: ''
+  name: abbreviation_local
+  type: character
+- description: ''
+  name: year
+  type: integer
+- description: ''
+  name: season_end_year
+  type: integer
+- description: ''
+  name: is_default_season
+  type: logical
+kind: dataframe
+schema: atrium_seasons

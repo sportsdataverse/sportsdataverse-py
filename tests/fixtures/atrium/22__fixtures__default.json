@@ -1,0 +1,276 @@
+{
+  "data": {
+    "broadcastsLabels": {
+      "allBroadcasters": "All Broadcasters",
+      "watch": "Watch"
+    },
+    "config": {
+      "currentPage": "fixtures",
+      "labelPage": "Calendario",
+      "navigation": {
+        "labels": {
+          "search": "Búsqueda",
+          "searchResults": "Resultados de la búsqueda"
+        },
+        "main": [
+          {
+            "label": "Calendario",
+            "link": "&~w=fl~eJyrVipWslJQSjM3Mk5JM0nVtTAxNtE1NExN000yNrfQNTZMMjUyTEszS0wzVtJRUMoBKU4t1nUNVqoFAMBpDvw",
+            "value": "fixtures"
+          },
+          {
+            "label": "Mesa",
+            "link": "&~w=stn~eJyrVipWslJQSjM3Mk5JM0nVtTAxNtE1NExN000yNrfQNTZMMjUyTEszS0wzVtJRUMoBKU4t1nUNVqoFAMBpDvw",
+            "value": "standings"
+          },
+          {
+            "label": "Season Leaders",
+            "link": "&~w=l~eJyrVipWslJQSjM3Mk5JM0nVtTAxNtE1NExN000yNrfQNTZMMjUyTEszS0wzVtJRUMoBKU4t1nUNVqoFAMBpDvw",
+            "value": "statistics_leaders"
+          }
+        ]
+      },
+      "showEntityLogo": true,
+      "sport": "basketball"
+    },
+    "entities": null,
+    "fixtures": [
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "COR",
+            "colors": {
+              "primary": "f1f307",
+              "secondary": "225492",
+              "tertiary": null
+            },
+            "draw": false,
+            "entityId": "465644a8-f15b-11eb-b72e-fa8975d0d16f",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzD0KwzAMQOGrBM0VRJb8k-45QU9gYWlqlpgOTendg8YPHu8HE54LeE08XAybsCCROSrXhkyaE7mX7gyPBd4R28T9FbpC83Mc_fyGLSwlF5He0ClrrBS1JkPvbat5rIOKw_8GKQEevw"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1r79/30b5712ea9b1423096ecfdcd564442df?size=100",
+            "name": "CORRECAMINOS DE COLON",
+            "resultPlace": null,
+            "resultStatus": "IN_PROGRESS",
+            "score": "42",
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          },
+          {
+            "code": "DRG",
+            "colors": {
+              "primary": "050487",
+              "secondary": "e40606",
+              "tertiary": null
+            },
+            "draw": false,
+            "entityId": "46758f02-f15b-11eb-b72e-fa8975d0d16f",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDsOAjEMRdGtjFxjaRznBz0rYAWx4lcxDREFIPY-cnmkq_ujRbeN0JJOZOeeNbOIg01bZxUrSYA6oHTZ6BmxL74_Qt_Qeh_HeH3CHs61lY49MaRYrIytJWeMfm1l7lMq6H8CKUYevw"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1r79/06874ed7168f4957ae7bae8d273363bd?size=100",
+            "name": "DRAGONES DE DON BOSCO",
+            "resultPlace": null,
+            "resultStatus": "IN_PROGRESS",
+            "score": "14",
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          }
+        ],
+        "fixtureId": "9620a0cf-b2bb-11ef-b467-75e7b28b4f96",
+        "fixtureType": "PLAYOFF",
+        "link": "&~w=f~eJwtyzEOgCAMQNGrmM42gbZQdPcEnoAqndwYjXdXEseX_H9Dh3UCV-LTpWERFoyxORprQY6WKLrn6gzzBNeIW8dtH_KhJVOo4fgGMvtXyYqamhoVE18yPC9Qqxo2",
+        "name": "PLAYOFF LPB",
+        "pool": "",
+        "round": null,
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2024-12-06T21:00:00",
+        "startTimeUTC": "2024-12-07T02:00:00",
+        "status": {
+          "label": "En vivo",
+          "value": "IN_PROGRESS"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "America/Panama",
+        "venue": "ARENA PANAMA AL BROWN",
+        "venueId": "208110aa-f15b-11eb-9bfa-0a4daa500b81"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "COR",
+            "colors": {
+              "primary": "f1f307",
+              "secondary": "225492",
+              "tertiary": null
+            },
+            "draw": false,
+            "entityId": "465644a8-f15b-11eb-b72e-fa8975d0d16f",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzD0KwzAMQOGrBM0VRJb8k-45QU9gYWlqlpgOTendg8YPHu8HE54LeE08XAybsCCROSrXhkyaE7mX7gyPBd4R28T9FbpC83Mc_fyGLSwlF5He0ClrrBS1JkPvbat5rIOKw_8GKQEevw"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1r79/30b5712ea9b1423096ecfdcd564442df?size=100",
+            "name": "CORRECAMINOS DE COLON",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          },
+          {
+            "code": "TOR",
+            "colors": {
+              "primary": "05924e",
+              "secondary": "f50505",
+              "tertiary": null
+            },
+            "draw": false,
+            "entityId": "46684dec-f15b-11eb-b72e-fa8975d0d16f",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzD0OwjAMQOGrVJ6xhGPnB_aeoCeIiT21SyMGQNy98vhJT-8HE54LeE08XAybsCCROSrXhkyaE7mX7gy3BfaIbeK6hb6h-T6Ofn7CFpZSmgx7oVPWWClqTYbe26PmcR9UHP4XNVAfIQ"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1r79/9c67c397a7744a518c965e5c8ba6d018?size=100",
+            "name": "TOROS DE CHIRIQUI",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          }
+        ],
+        "fixtureId": "c2de1661-b655-11ef-a741-ddb764e4feb9",
+        "fixtureType": "FINAL",
+        "link": "&~w=f~eJwlyzEOgDAIQNGrGGYZKJRWd0_gCYqFya2j8e6mcXzJ_w8M2BeIkriHOFZhQSIPNC4VmSwnitAWDOsC94x94HFOxdSVupMqoWnO_9qKEPZuRcUl3DZ4P06-GmY",
+        "name": "FINALES LPB",
+        "pool": "",
+        "round": "Ronda: 4",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2024-12-13T21:30:00",
+        "startTimeUTC": "2024-12-14T02:30:00",
+        "status": {
+          "label": null,
+          "value": "IF_NEEDED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "America/Panama",
+        "venue": "ARENA ROBERTO DURAN",
+        "venueId": "207ef220-f15b-11eb-9bfa-0a4daa500b81"
+      }
+    ],
+    "labels": {
+      "toBeConfirmed": "Por confirmar",
+      "toBeConfirmedAbbreviation": "Pend."
+    },
+    "locale": "es-ES",
+    "noFixturesMessage": "No hay accesorios para mostrar",
+    "reverseTeamOrder": false,
+    "seasonId": "f723df4e-8434-11ef-b378-31b521ff6af3",
+    "seasons": {
+      "competitions": {
+        "06e1d925-8a72-11ef-b1ee-b3321378b782": {
+          "name": "LPBF 2024"
+        },
+        "283db19a-bbda-11ed-8477-dfdc07a931a0": {
+          "name": "LBN U23"
+        },
+        "809df7f9-5b10-11ef-ba6c-0d07530223ab": {
+          "name": "Nacional de Baloncesto U23"
+        }
+      },
+      "seasons": [
+        {
+          "abbreviationLocal": null,
+          "competitionId": "cf8724fa-8354-11ef-a9d8-595e115298f6",
+          "link": "&~w=fl~eJyrVipWslJQSjM3Mk5JM0nVtTAxNtE1NExN000yNrfQNTZMMjUyTEszS0wzVtJRUMoBKU4t1nUNVqoFAMBpDvw",
+          "nameLocal": "LPB 2024",
+          "seasonId": "f723df4e-8434-11ef-b378-31b521ff6af3",
+          "year": 2024
+        },
+        {
+          "abbreviationLocal": null,
+          "competitionId": "06e1d925-8a72-11ef-b1ee-b3321378b782",
+          "link": "&~w=fl~eJyrVipWslJQSjRNNbYwMjDQtUg0N9I1NExN07VITUnUTbU0NzI2MEhMSkpNUtJRUMoBKU4t1nUNVqoFAMMYD0g",
+          "nameLocal": "LPBF 2024",
+          "seasonId": "a5e38200-8a72-11ef-8eda-e972300abbeb",
+          "year": 2024
+        },
+        {
+          "abbreviationLocal": null,
+          "competitionId": "809df7f9-5b10-11ef-ba6c-0d07530223ab",
+          "link": "&~w=fl~eJyrVipWslJQSjVINkyxMDTRNU0yNNA1NExN07W0MLXQNUlJMzMwMUs0Skk2V9JRUMoBKy7WdQ1WqgUAuRoOxQ",
+          "nameLocal": "Nacional de Baloncesto U23 - 2024",
+          "seasonId": "e0c1d814-5b10-11ef-9858-4df6046a2dc7",
+          "year": 2024
+        }
+      ]
+    },
+    "series": null,
+    "showFixtureName": true,
+    "stageTabs": {},
+    "sub": "FIXTURES",
+    "subPageTabs": [
+      {
+        "label": "Calendario",
+        "link": "&~w=fl~eJyrVipWslJQSjM3Mk5JM0nVtTAxNtE1NExN000yNrfQNTZMMjUyTEszS0wzVtJRUMoBKU4t1nUNBvGqQDw3z4iQ0CCgQC0A3WsTHg",
+        "value": "FIXTURES"
+      },
+      {
+        "label": "Resultados",
+        "link": "&~w=fl~eJyrVipWslJQSjM3Mk5JM0nVtTAxNtE1NExN000yNrfQNTZMMjUyTEszS0wzVtJRUMoBKU4t1nUNBvGqQLwg1-BQn5BgpVoAynoS1g",
+        "value": "RESULTS"
+      }
+    ]
+  },
+  "links": {
+    "self": "https://embed-api.eui.connect.sportradar.com/v1/embed/22/fixtures"
+  },
+  "meta": {
+    "code": 200,
+    "codeVersion": "d6cd1e2bd19e03a81132a23b2025920577f84e37",
+    "count": 15,
+    "fromCache": false,
+    "generated": "2026-10-12T18:34:53.460899+00:00Z",
+    "generationTime": 0.669437,
+    "limit": 0,
+    "offset": 0,
+    "time": "2026-10-12T18:34:53.460917+00:00Z",
+    "version": 1
+  }
+}

@@ -1,0 +1,363 @@
+{
+  "data": {
+    "broadcastsLabels": {
+      "allBroadcasters": "Alle Übertragungen",
+      "watch": "Livestream"
+    },
+    "config": {
+      "currentPage": "fixtures",
+      "labelPage": "Spielplan",
+      "navigation": {
+        "main": []
+      },
+      "showEntityLogo": true,
+      "sport": "basketball"
+    },
+    "entities": {
+      "id": "entities-select",
+      "options": [
+        {
+          "label": "Alle Mannschaften",
+          "link": "&~w=fl~eJyrVipWslJQSjO1TEtJMkjVNbdIMtc1NEwz1E20tDTSNUhJSUtONDZNTbIwUNJRUMoBKU5J1XUMAfGqQDw3z4iQ0CDXYKVaAPseE50",
+          "value": "All"
+        },
+        {
+          "label": "BC Vienna",
+          "link": "&~w=fl~eJwVjLEOwjAMBX-l8owlJ6FJH1sHkFihSKwJtic2NhD_Dh7vdLoPvegwkc9wHWLcltE4JU_cgcyi6o9eZhuL0G6iZ8RqvG5B76DT-b7dLsdrCAvRxYqgVtai-L8MDOyFpXuubWRAEn1_TAsd6Q",
+          "value": "a0e30966-d3d9-11e9-9940-0af267b29901"
+        },
+        {
+          "label": "BK Karbon-X Dukes",
+          "link": "&~w=fl~eJwVjLEOwkAMxX6lykyk5NpyfWwMILFCkVjvmmRiYwPx75DRluUPvegwUMwI6-Jcl15ZNZQbUFjMYmvj7H0R2g30zNicj2vSO-l8eaz36-mWwlM0MdcNE9to-L8cDEzC0qLsay-AKH1_WGseRg",
+          "value": "a0de1c94-d3d9-11e9-9940-0af267b29901"
+        }
+      ],
+      "selected": "All"
+    },
+    "fixtures": [
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "SKN",
+            "colors": {
+              "primary": "0b0b0b",
+              "secondary": "0b0b0b",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "a0e63320-d3d9-11e9-9940-0af267b29901",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOwjAMRuGrVJ6x5CS06c_WO3ABB9sTXagYAHF38PhJT-9DB10mihlhQ5z7OjqXEoUVqCxmcdM2-1iFThPdMzbn7Zp6p47nvuvjlfa0ii-tVWFrhv_KwcBZWDTq0kcFpND3B1awHnM"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1da1/429183d7a12644d5ae7903120d18608f?size=100",
+            "name": "SKN St. Pölten Basketball",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          },
+          {
+            "code": "GMU",
+            "colors": {
+              "primary": "0b0b0b",
+              "secondary": "0b0b0b",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "a0dc53aa-d3d9-11e9-9940-0af267b29901",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOgzAMQNGrIM-15CRNg7txh17AwfYEC4iBVtydenzS1__BDu8BvLJrJ8M29oYpeUJhzkiqPkup1keCxwBLxGo4fULf0H6sq2xn2MJCOtciglqU_ytjZH4Sknh-tZ6ZKcF1A2jGHwE"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1da1/aa8d210374ab472d8ea37a3ee99a5964?size=100",
+            "name": "Raiffeisen Swans Gmunden",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          }
+        ],
+        "fixtureId": "31318ca4-78bc-11f1-a380-49866cc6d703",
+        "fixtureType": "REGULAR",
+        "link": "&~w=f~eJwtyzEKgDAMQNGrSGYDidE2dfMOXqBNmsnNUby7FBwf_P_ADfsEsZXwRh2ztozMwVhLWZDcw6psvSnBPME1Yu94nEMxJCysVtex2r-KEq5FUzJLnkng_QBq_Bnv",
+        "name": "BSL-GD - 054",
+        "pool": "",
+        "round": "Spieltag: 5",
+        "roundCode": null,
+        "series": null,
+        "stageCode": "2f4db898c5774bb9a5f4eae4fa2d1f",
+        "startTimeLocal": "2026-10-16T19:00:00",
+        "startTimeUTC": "2026-10-16T17:00:00",
+        "status": {
+          "label": "Scheduled",
+          "value": "SCHEDULED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Europe/Vienna",
+        "venue": "Sportzentrum NÖ",
+        "venueId": "9f4155c2-d3d9-11e9-9940-0af267b29901"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "TRA",
+            "colors": {
+              "primary": "0b0b0b",
+              "secondary": "0b0b0b",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "a0e00e3c-d3d9-11e9-9940-0af267b29901",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOwjAMRuGrVJ6x9CehpGbrHbiAU9sTXagYAHF38PhJT-9DB10nilnCBpz7MjqXEoVVpDLMYtM2-1hAp4nuGZvzeku9U8dz3_XxSnta4YC3ja2Z_FcuLHIGQ6Ne-qgiKPT9AWI3HtA"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1da1/88304f4859bc40c7893eba27c7d1984f?size=100",
+            "name": "druck.at Traiskirchen Lions",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          },
+          {
+            "code": "KUF",
+            "colors": {
+              "primary": "b1edfa",
+              "secondary": "b1edfa",
+              "tertiary": "b1edfa"
+            },
+            "draw": false,
+            "entityId": "32741014-1622-11ec-b8aa-fed574f62585",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOwjAMQNGrVJ6xFLtxk7Bxh17AaeypXagYAHH34vFJX_8LJ9wncGk-ejIstRckckJtjTGN4ZvOYr0muE2wRzwMH2voEzpfx6HPd9jCM5dMiTLSwvxf2Ya9qqLbkJJ9YakCvwtNcB6e"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1da1/a6059e086b834d498c52b9364c9d5536?size=100",
+            "name": "Pirlo Kufstein Towers",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          }
+        ],
+        "fixtureId": "1622a804-78bc-11f1-a472-653613fe4818",
+        "fixtureType": "REGULAR",
+        "link": "&~w=f~eJwty7kNgDAMQNFVItdYip3LoWMHFshhV3SUiN1RJMon_f_ADbsDS9Vm94pFekEiI2y1Mvo5bbSQtIuHzcG14ql4nEu2RJm5iY9rHf8aC2NOIVMwjUIC7wdjcxmO",
+        "name": "BSL-GD - 053",
+        "pool": "",
+        "round": "Spieltag: 5",
+        "roundCode": null,
+        "series": null,
+        "stageCode": "2f4db898c5774bb9a5f4eae4fa2d1f",
+        "startTimeLocal": "2026-10-17T18:00:00",
+        "startTimeUTC": "2026-10-17T16:00:00",
+        "status": {
+          "label": "Scheduled",
+          "value": "SCHEDULED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Europe/Vienna",
+        "venue": "druck.at Lions Dome, Traiskirchen",
+        "venueId": "9f3ca5c2-d3d9-11e9-9940-0af267b29901"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "KAP",
+            "colors": {
+              "primary": "0b0b0b",
+              "secondary": "0b0b0b",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "a0e4cdd2-d3d9-11e9-9940-0af267b29901",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOwkAMBdGrRK6x5N0kbD4dd-AC3tiukiYRBSDuDi6fNJoPnXQbKGaEdXFuS29cShRWoLKYxarj7H0Rugy0ZWzO90fqnTqf-67HK-1pFZ9Ws8o2Gv4rBwOTsGjUa-sVkELfH2mZHwY"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1da1/dcfeb514112147ac8331539560b21572?size=100",
+            "name": "Hefte Helfen Bulls Kapfenberg",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          },
+          {
+            "code": "KLB",
+            "colors": {
+              "primary": "0b0b0b",
+              "secondary": "0b0b0b",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "a0de1c94-d3d9-11e9-9940-0af267b29901",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOwkAMBdGrRK6x5N0kbD4dd-AC3tiukiYRBSDuDi6fNJoPnXQbKGaEdXFuS29cShRWoLKYxarj7H0Rugy0ZWzO90fqnTqf-67HK-1pFfOyYmIbDf-Vg4FJWDTqtfUKSKHvD2RBHto"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1da1/2a344324a4ea4832bd4f86b98157031e?size=100",
+            "name": "BK Karbon-X Dukes",
+            "resultPlace": null,
+            "resultStatus": "SCHEDULED",
+            "score": null,
+            "secondaryScore": null,
+            "shootOutAttempts": null
+          }
+        ],
+        "fixtureId": "e9ab6cf1-78bb-11f1-97c5-d7517f89d51d",
+        "fixtureType": "REGULAR",
+        "link": "&~w=f~eJwlyzEOgDAIQNGrGGZJigYpbt7BC5RSJjdH491t4_iT_x64YZ8gWMMtNZRsgkRBWFQXTO5Ry8rNcoJ5gmvM3vA4R8WopsW22kGn9lOVyujCJJHVmRzeD4K1GsU",
+        "name": "BSL-GD - 051",
+        "pool": "",
+        "round": "Spieltag: 5",
+        "roundCode": null,
+        "series": null,
+        "stageCode": "2f4db898c5774bb9a5f4eae4fa2d1f",
+        "startTimeLocal": "2026-10-17T19:00:00",
+        "startTimeUTC": "2026-10-17T17:00:00",
+        "status": {
+          "label": "Scheduled",
+          "value": "SCHEDULED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Europe/Vienna",
+        "venue": "SPH Walfersam, Kapfenberg",
+        "venueId": "9f3b8430-d3d9-11e9-9940-0af267b29901"
+      }
+    ],
+    "labels": {
+      "toBeConfirmed": "To Be Confirmed",
+      "toBeConfirmedAbbreviation": "TBC"
+    },
+    "locale": "de-AT",
+    "noFixturesMessage": "Kein Spieltag zum Anzeigen",
+    "reverseTeamOrder": false,
+    "rounds": {
+      "id": "round-select",
+      "options": [
+        {
+          "label": "Alle Runden",
+          "link": "&~w=fl~eJyrVipWslJQSjO1TEtJMkjVNbdIMtc1NEwz1E20tDTSNUhJSUtONDZNTbIwUNJRUMoBKU5J1XUMUaoFANWtD3s",
+          "order": -1,
+          "value": "All"
+        },
+        {
+          "active": false,
+          "label": "Spieltag: 5",
+          "link": "&~w=fl~eJyrVipWslJQSjO1TEtJMkjVNbdIMtc1NEwz1E20tDTSNUhJSUtONDZNTbIwUNJRUMoBKU5J1XUMAfGqQDw3z4iQ0CDXYJBAUR5IxFSpFgDeGBXg",
+          "order": 5,
+          "value": "5"
+        },
+        {
+          "active": false,
+          "label": "Spieltag: 6",
+          "link": "&~w=fl~eJyrVipWslJQSjO1TEtJMkjVNbdIMtc1NEwz1E20tDTSNUhJSUtONDZNTbIwUNJRUMoBKU5J1XUMAfGqQDw3z4iQ0CDXYJBAUR5IxEypFgDeGxXh",
+          "order": 6,
+          "value": "6"
+        }
+      ],
+      "selected": "All"
+    },
+    "seasonId": "f59fdb0e-78b7-11f1-a992-0ddfca35eb80",
+    "series": {
+      "id": "series-select",
+      "options": [],
+      "selected": null
+    },
+    "showFixtureName": true,
+    "stageTabs": {
+      "id": "stages-select",
+      "options": [
+        {
+          "label": "Alle Phasen",
+          "link": "&~w=fl~eJyrVipWslJQSjO1TEtJMkjVNbdIMtc1NEwz1E20tDTSNUhJSUtONDZNTbIwUNJRUMoBKU5J1XUMUaoFANWtD3s",
+          "orderNumber": -1,
+          "value": "All"
+        },
+        {
+          "label": "Grunddurchgang",
+          "link": "&~w=fl~eJwVyjEOgCAMAMCvmM42AYTQuvkHP9DSdnJjNP7dMF5yL0w4N4jGYZocO2nHnCOjMBdMZjHkaK6UYN_gWdkcr3tpjsUS1ZSYRuu9qrK0qC5eQ4rlgO8HDAAadA",
+          "orderNumber": 1,
+          "value": "2f4db898c5774bb9a5f4eae4fa2d1f"
+        }
+      ],
+      "selected": "All"
+    },
+    "sub": "FIXTURES",
+    "subPageTabs": [
+      {
+        "label": "Spielplan",
+        "link": "&~w=fl~eJyrVipWslJQSjO1TEtJMkjVNbdIMtc1NEwz1E20tDTSNUhJSUtONDZNTbIwUNJRUMoBKU5J1XUMAfGqQDw3z4iQ0CDXYKVaAPseE50",
+        "value": "FIXTURES"
+      },
+      {
+        "label": "Ergebnisse",
+        "link": "&~w=fl~eJyrVipWslJQSjO1TEtJMkjVNbdIMtc1NEwz1E20tDTSNUhJSUtONDZNTbIwUNJRUMoBKU5J1XUMAfGqQLwg1-BQn5BgpVoA564TVQ",
+        "value": "RESULTS"
+      }
+    ]
+  },
+  "links": {
+    "self": "https://embed-api.eui.connect.sportradar.com/v1/embed/236/fixtures"
+  },
+  "meta": {
+    "code": 200,
+    "codeVersion": "d6cd1e2bd19e03a81132a23b2025920577f84e37",
+    "count": 15,
+    "fromCache": false,
+    "generated": "2026-10-12T18:34:55.708180+00:00Z",
+    "generationTime": 1.024815,
+    "limit": 0,
+    "offset": 0,
+    "time": "2026-10-12T18:34:55.708204+00:00Z",
+    "version": 1
+  }
+}
