@@ -12,7 +12,8 @@ from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess, _drop_espn_play_copies
 from sportsdataverse.errors import DefaultOddsWarning, PlayOrderWarning
 
 # the default-odds captures processed here warn incidentally; test_default_odds_warn asserts it;
-# 401628439 warns PlayOrderWarning, asserted by test_period_order_warning_on_a_mislabelled_period
+# 401628439 warns PlayOrderWarning, asserted by
+# test_cfb_whole_game_oracle.py::test_period_monotonic_or_the_step_back_warns
 pytestmark = [
     pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
     pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning"),
@@ -198,12 +199,6 @@ def test_the_pass_flag_literals_fold_case():
     assert row["type.text"].to_list() == ["Fumble Recovery (Own)"]
     assert "SACKED" in row["text"].item()
     assert row.select("pass", "sack").rows() == [(True, True)]
-
-
-def test_period_order_warning_on_a_mislabelled_period():
-    """C-M18: 401628439 files an overtime touchdown as period 2, so the period steps back; the warning names it."""
-    with pytest.warns(PlayOrderWarning, match=r"401628439.*\(401628439104999901, 401628439106260230\)"):
-        _process_capture(401628439)
 
 
 def test_an_out_of_scheme_play_id_is_placed_by_its_clock():

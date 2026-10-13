@@ -276,8 +276,8 @@
   note: the two-point try the re-sort moves ahead of its kickoff keeps its larger number (row 117)
 
 # --- C-M18: row order rests on the play id and the period label ------------------------------------
-# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py, on 401425418 (out-of-scheme id placed by its
-# clock, PlayOrderWarning as error) and 401628439 (a wrong period label warns).
+# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py on 401425418 (out-of-scheme id placed by its
+# clock, PlayOrderWarning as error); test_cfb_whole_game_oracle.py on 401628439 (a wrong period label warns).
 - id: cfb-out-of-scheme-id-placed-by-clock
   group: cfb-row-order
   finding: C-M18
@@ -294,7 +294,7 @@
   file: sportsdataverse/cfb/cfb_pbp.py
   snippet: '    if back.height:'
   mutant: '    if False:'
-  test: tests/cfb/test_cfb_pbp_offline.py -k "period_order_warning_on_a_mislabelled_period"
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "period_monotonic and 401628439"
   expected: kill
   note: the overtime touchdown ESPN labels period 2 would go unreported
 

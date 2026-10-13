@@ -119,6 +119,7 @@ import pytest
 import yaml
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+from sportsdataverse.errors import PlayOrderWarning
 
 FIX = Path(__file__).parent / "fixtures"
 _CAPTURE = re.compile(r"^summary_(\d+)(?:_trimmed)?\.json(?:\.gz)?$")
@@ -146,7 +147,7 @@ SCHEMA_ALLOWLIST_MAX_ROWS = 93
 
 # Processing a default-odds capture warns DefaultOddsWarning incidentally;
 # tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
-# 401628439 warns PlayOrderWarning; test_cfb_pbp_offline.py::test_period_order_warning_on_a_mislabelled_period asserts it.
+# 401628439 warns PlayOrderWarning; test_period_monotonic_or_the_step_back_warns asserts it.
 pytestmark = [
     pytest.mark.whole_game,
     pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
@@ -524,7 +525,8 @@ def _half_closers(df: pl.DataFrame) -> list[tuple[str, dict]]:
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES, _NF12))
-def test_end_of_half_lands_on_the_last_real_play(game_id):
+def test_end_of_half_timeout_ending_lands_on_the_last_real_play(game_id):
+    """C-NF-12: named for gates/cfb.md's ``-k timeout_ending``; checks every capture's half-closing rows."""
     for which, row in _half_closers(_frame(game_id)):
         assert row["end_of_half"] is True, f"{which}: row {row['row']} ({row['type.text']}) is not end_of_half"
         scoring = row["scoring_play"] is True or bool(_TRY_OR_KICK_OR_SCORE.search(row["type.text"] or ""))
@@ -692,7 +694,7 @@ def test_rush_decomposition_sums_to_the_gain(game_id):
 
 # 401425418's third-quarter kickoff under an out-of-scheme id is placed by its clock since 3.4(b2).
 # 401628439's is a provider label defect, not a sort one: ESPN files an overtime touchdown (id period
-# digit 6) as period 2; PlayOrderWarning names it (test_cfb_pbp_offline.py asserts the warning).
+# digit 6) as period 2; PlayOrderWarning names it (test_period_monotonic_or_the_step_back_warns).
 _M18 = {
     401628439: "C-M18: an overtime touchdown ESPN labels period 2 sorts to the end of regulation",
 }
@@ -700,14 +702,41 @@ _M18 = {
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES, _M18))
 def test_period_never_decreases_along_the_rows(game_id):
-    period = _frame(game_id)["period"].cast(pl.Int64)
-    assert period.null_count() == 0
-    steps_back = [i for i, d in enumerate(period.diff().to_list()) if d is not None and d < 0]
+    """C-M18: kept as the deliberate strict-xfail marker for ESPN's 401628439 period-label error.
+
+    test_period_monotonic_or_the_step_back_warns implies it (its exact-pair assert); this one keeps the
+    provider defect visible as an open xfail.
+    """
+    steps_back = _period_steps_back(_frame(game_id))
     assert steps_back == [], f"period decreases at rows {steps_back}"
 
 
+def _period_steps_back(df: pl.DataFrame) -> list[int]:
+    period = df["period"].cast(pl.Int64)
+    assert period.null_count() == 0
+    return [i for i, d in enumerate(period.diff().to_list()) if d is not None and d < 0]
+
+
+#: the (before, after) play ids PlayOrderWarning names where a capture's period label steps back
+_M18_WARNED = {401628439: (401628439104999901, 401628439106260230)}
+
+
 @pytest.mark.parametrize("game_id", _params(CAPTURES))
-def test_game_play_number_and_lag_half_follow_the_rows(game_id):
+def test_period_monotonic_or_the_step_back_warns(game_id):
+    """C-M18: the period never decreases along the rows, or the processor warns naming the step."""
+    if game_id not in _M18_WARNED:
+        assert _period_steps_back(_frame(game_id)) == []
+        return
+    before, after = _M18_WARNED[game_id]
+    # a fresh run: the cached one warned once, under the module's ignore filter
+    with pytest.warns(PlayOrderWarning, match=rf"{game_id}.*\({before}, {after}\)"):
+        frame = _run.__wrapped__(game_id).frame
+    ids = frame["id"].cast(pl.Int64).to_list()
+    assert [(ids[i - 1], ids[i]) for i in _period_steps_back(frame)] == [(before, after)]
+
+
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
+def test_game_play_number_and_lag_half_after_sort_follow_the_rows(game_id):
     df = _frame(game_id)
     gpn = df["game_play_number"].cast(pl.Int64)
     assert gpn.null_count() == 0
