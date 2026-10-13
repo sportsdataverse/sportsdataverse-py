@@ -9,6 +9,7 @@ from sportsdataverse.mbb.mbb_schedule import (
     espn_mbb_schedule,
     most_recent_mbb_season,
 )
+from sportsdataverse.errors import AssetFetchError
 from tests.codegen.test_runtime_errors import _route
 from tests.conftest import skip_if_no_live
 
@@ -19,34 +20,62 @@ def _capture(name: str) -> str:
     return (ESPN / name).read_text(encoding="utf-8")
 
 
-def test_mbb_schedule_bare_year_sweeps_both_calendar_years(monkeypatch):
-    """B-M13: ``dates=2024`` is the 2023-24 season, not calendar 2024 (hoopR ``espn_mbb_scoreboard``).
-
-    Real captures (2026-10-13): ESPN answers ``dates=2024`` with Jan 1-13 2024 only and
-    ``dates=2023`` with Jan 2023 (season 2023, filtered out); the season's November games come
-    from the per-day backfill (``dates=20231106``). Other fall days answer an empty slate.
-    """
-    answers = {
-        "dates=2024&": _capture("scoreboard_mbb_dates_2024.json"),
-        "dates=2023&": _capture("scoreboard_mbb_dates_2023.json"),
-        "dates=20231106&": _capture("scoreboard_mbb_20231106.json"),
-    }
+def _season_route(monkeypatch, fail_day: str = "", fail=(500, "")):
+    """Serve the 2023-24 season: the calendar request (``dates=2024``) gets the real season
+    scoreboard (its ``leagues[0].calendar`` lists 148 game days), each captured day its real
+    events, ``fail_day`` the ``fail`` answer, every other calendar day an empty slate."""
+    calendar = _capture("scoreboard_mbb_dates_2024.json")
+    days = json.loads(_capture("scoreboard_mbb_2024_season_days.json"))
 
     def answer(url: str):
-        body = next((b for k, b in answers.items() if k in url), json.dumps({"events": []}))
-        return 200, body, "application/json"
+        day = url.split("dates=")[1].split("&")[0]
+        if day == fail_day:
+            return (*fail, "application/json")
+        if day == "2024":
+            return 200, calendar, "application/json"
+        return 200, json.dumps(days.get(day, {"events": []})), "application/json"
 
-    calls = _route(monkeypatch, answer)
+    return _route(monkeypatch, answer), json.loads(calendar), days
+
+
+def test_mbb_schedule_bare_year_sweeps_the_season_calendar(monkeypatch):
+    """B-M13 / R855-1: ``dates=2024`` is the 2023-24 season, opening night to the title game.
+
+    Real captures (2026-10-13): a whole-year ``dates=2024`` request stops at 500 events on Jan 13,
+    and the hoopR-style two-year sweep missed ~3,110 of 6,249 games (all 120 postseason). The
+    port reads the season calendar and requests each of its 148 days in order.
+    """
+    calls, calendar, days = _season_route(monkeypatch)
     df = espn_mbb_schedule(dates=2024)
-    dates = [c.split("dates=")[1].split("&")[0] for c in calls]
-    assert dates[:2] == ["2023", "2024"]
-    assert dates[2:] == [f"2023{m}{d:02d}" for m, n in (("11", 30), ("12", 31)) for d in range(1, n + 1)]
+    requested = [c.split("dates=")[1].split("&")[0] for c in calls]
+    cal_days = [d[:10].replace("-", "") for d in calendar["leagues"][0]["calendar"]]
+    assert len(cal_days) == 148 and cal_days[0] == "20231106" and cal_days[-1] == "20240408"
+    assert requested == ["2024", *cal_days]  # one calendar request, then one per game day, in order
     assert all("groups=50" in c for c in calls)
-    jan = [int(e["id"]) for e in json.loads(answers["dates=2024&"])["events"]]
-    nov = [int(e["id"]) for e in json.loads(answers["dates=20231106&"])["events"]]
-    assert df["game_id"].to_list() == jan + nov  # the 2023 (calendar) games are season 2023: dropped
+    want = sorted(
+        {e["id"]: e for d in days.values() for e in d["events"] if e["season"]["year"] == 2024}.values(),
+        key=lambda e: e["date"],
+    )
+    assert df["game_id"].to_list() == [int(e["id"]) for e in want]
+    assert df["date"].to_list() == sorted(df["date"].to_list())
+    assert df["date"].str.slice(0, 7).unique().sort().to_list() == [
+        "2023-11",
+        "2023-12",
+        "2024-01",
+        "2024-02",
+        "2024-03",
+        "2024-04",
+    ]
     assert set(df["season"].to_list()) == {2024}
-    assert df["date"].str.slice(0, 7).unique().sort().to_list() == ["2023-11", "2024-01"]
+    assert df.filter(pl.col("season_type") == 3).height == 3  # NCAA tournament + title game
+
+
+@pytest.mark.parametrize("fail", [(500, ""), (200, "{}")], ids=["http_500", "no_events_key"])
+def test_mbb_season_sweep_failed_day_raises(monkeypatch, fail):
+    """R855-1: a day that fails is an error, never a silent hole in the season."""
+    _season_route(monkeypatch, fail_day="20240210", fail=fail)
+    with pytest.raises(AssetFetchError):
+        espn_mbb_schedule(dates=2024)
 
 
 def test_mbb_calendar_season_is_an_int(monkeypatch):

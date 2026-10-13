@@ -173,12 +173,11 @@ One request each, from a residential IP on 2026-10-11 (`requests.get`, no creden
 
 ## MBB bare-year season captures (2026-10-13, task 2.9)
 
-`curl -s` from a residential IP on 2026-10-13, no credentials; each trimmed to its first N `events`
-plus `eventsDate` (`leagues`, `groups`, `provider` dropped), events byte-for-byte. They drive
-`tests/mbb/test_mbb_schedule.py::test_mbb_schedule_bare_year_sweeps_both_calendar_years` (B-M13).
+`curl -s` from a residential IP on 2026-10-13, no credentials, events byte-for-byte. They drive
+`tests/mbb/test_mbb_schedule.py` (B-M13, review R855-1): the season sweep reads the calendar,
+then requests each game day.
 
 | file | request | contents |
 |---|---|---|
-| `scoreboard_mbb_dates_2024.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=2024&groups=50&limit=500` (HTTP 200, 8.8 MB, 500 events) | First 3 events. The full answer spans 2024-01-01 .. 2024-01-13 only, all season 2024: ESPN reads a bare year as the calendar year and stops at `limit`. |
-| `scoreboard_mbb_dates_2023.json` | same, `dates=2023` (HTTP 200, 7.2 MB, 500 events) | First 2 events. The full answer spans 2023-01-01 .. 2023-01-13, all season 2023: the prior calendar year's request carries no November-December games of season 2024. |
-| `scoreboard_mbb_20231106.json` | same, `dates=20231106` (HTTP 200, 2.6 MB, 184 events) | First 3 events, 2023-11-06/07 (opening night), season 2024: what the per-day November-December backfill returns. |
+| `scoreboard_mbb_dates_2024.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=2024&groups=50&limit=500` (HTTP 200, 8.8 MB, 500 events) | `leagues` whole (its `calendar` lists the 2023-24 season's 148 game days, 2023-11-06 .. 2024-04-08), the first 3 `events`, `eventsDate`. The full answer's events span 2024-01-01 .. 2024-01-13 only: ESPN reads a bare year as the calendar year and stops at `limit` (the B-M13 live TP). |
+| `scoreboard_mbb_2024_season_days.json` | the same URL with `dates=` 20231106, 20231220, 20240120, 20240210, 20240309, 20240321, 20240408 (HTTP 200 each: 184, 43, 145, 155, 102, 16, 1 events) | One object keyed by the requested day; each value is that answer's first 2 `events` (1 on 20240408) plus `eventsDate`. Season 2024 throughout; season type 3 (NCAA tournament) on 20240321 and 20240408. |

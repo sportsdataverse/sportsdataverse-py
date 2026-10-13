@@ -337,7 +337,7 @@ espn_mbb_schedule - look up the men's college basketball scheduler for a given s
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `dates` | `int` | `None` | A date (`YYYYMMDD`) or a season (`YYYY`, 2002 or later). A season asks ESPN for both calendar years plus one request per day of November-December (63 requests, as hoopR does) and keeps the games ESPN files under that season. |
+| `dates` | `int` | `None` | A date (`YYYYMMDD`) or a season (`YYYY`, 2002 or later). A season reads that season's game days from ESPN's scoreboard calendar and requests each day in turn (one calendar request plus ~150 day requests), keeping the games ESPN files under the season, sorted by date. A day that fails raises `AssetFetchError`. |
 | `groups` | `int` | `50` | Used to define different divisions. 50 is Division I, 51 is Division II/Division III. |
 | `season_type` | `int` | `None` | 2 for regular season, 3 for post-season, 4 for off-season. |
 | `limit` | `int` | `500` | number of records to return, default: 500. |

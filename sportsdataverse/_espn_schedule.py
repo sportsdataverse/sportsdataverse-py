@@ -275,7 +275,7 @@ def _schedule_frame(
     schema = _schedule_schema(league)
     fixed = []
     for name, dtype in schema.items():
-        if name not in df.columns or df.schema[name] == pl.Null:
+        if name not in df.columns or df[name].null_count() == df.height:  # all-null: documented dtype
             fixed.append(pl.lit(None, dtype=dtype).alias(name))
         elif dtype == pl.Int64 and df.schema[name].is_float():
             # a documented integer that a missing value turned Float64 on the pandas hop

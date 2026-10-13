@@ -221,10 +221,12 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
         assert body == _payload(f"scoreboard_{league}.json")
     elif case == "rank_not_default":
         df, _ = _call(league, "schedule", monkeypatch, body, **kwargs)
-        # NFL competitors carry no curatedRank (0 of 15 in the capture): the columns must be absent or null
+        # NFL competitors carry no curatedRank (0 of 15 in the capture): the columns are all null, and
+        # with the documented dtype (integer), not the String an all-null column takes on the pandas hop (R855-3)
         assert not any(c.get("curatedRank") for e in events for c in e["competitions"][0]["competitors"])
         for col in ("home_current_rank", "away_current_rank"):
-            assert col not in df.columns or df[col].null_count() == df.height, df[col].unique().to_list()
+            assert df[col].null_count() == df.height, df[col].unique().to_list()
+            assert df.schema[col] == pl.Int64, df.schema[col]
     elif case == "placeholder_event_2014":
         real = _payload("scoreboard_cfb_2014_placeholder.json")
         assert any(not e for e in real["events"])  # the capture carries ESPN's `{}` placeholder

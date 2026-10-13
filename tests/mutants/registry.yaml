@@ -960,8 +960,8 @@
   group: espn-schedule
   finding: B-M25
   file: sportsdataverse/nfl/nfl_schedule.py
-  snippet: '.get("curatedRank", {}).get("current")  # NFL has no poll: null, not the CFB 99'
-  mutant: '.get("curatedRank", {}).get("current", 99)'
+  snippet: '.get("current")  # NFL has no poll: null, not the CFB 99'
+  mutant: '.get("current", 99)'
   test: tests/nfl/test_nfl_schedule_teams_offline.py -k rank_not_default
   expected: kill
   note: 'NFL ranks are null, not the CFB unranked default 99'
@@ -984,7 +984,7 @@
   mutant: 'if True:'
   test: tests/mbb/test_mbb_schedule.py -k bare_year
   expected: kill
-  note: 'ledger gate bare-year-calendar-sweep MUTATION: one dates=2024 request yields the Jan 1-13 slice'
+  note: 'ledger gate bare-year-calendar-sweep MUTATION: one dates=2024 request yields the Jan 1-13 slice (R855-1: the sweep is now the season calendar, day by day)'
 
 - id: mbb-calendar-season-int
   group: espn-schedule
@@ -995,3 +995,23 @@
   test: tests/mbb/test_mbb_schedule.py -k calendar_season_is_an_int
   expected: kill
   note: 'season=None raised TypeError and 2024.0 reached the URL'
+
+- id: schedule-all-null-column-typed
+  group: espn-schedule
+  finding: R855-3
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'if name not in df.columns or df[name].null_count() == df.height:  # all-null: documented dtype'
+  mutant: 'if name not in df.columns:'
+  test: tests/nfl/test_nfl_schedule_teams_offline.py -k rank_not_default
+  expected: kill
+  note: 'an all-null column comes back String after the pandas hop; it takes its documented dtype (NFL ranks Int64)'
+
+- id: mbb-season-sweep-failed-day-raises
+  group: espn-schedule
+  finding: R855-1
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: 'raise _AssetFetchError(f"ESPN scoreboard for {day} answered without an events list")'
+  mutant: 'pass'
+  test: tests/mbb/test_mbb_schedule.py -k failed_day_raises
+  expected: kill
+  note: 'a failed day raises instead of becoming a silent gap (HTTP 500 path is _download_json; this row guards the 200-without-events path)'

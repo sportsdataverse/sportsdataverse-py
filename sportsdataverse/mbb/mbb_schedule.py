@@ -7,6 +7,7 @@ import polars as pl
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse._espn_schedule import _schedule_frame
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError as _AssetFetchError
 from sportsdataverse.errors import SeasonNotFoundError
 
 
@@ -21,9 +22,10 @@ def espn_mbb_schedule(
     """espn_mbb_schedule - look up the men's college basketball scheduler for a given season
 
     Args:
-        dates (int): A date (``YYYYMMDD``) or a season (``YYYY``, 2002 or later). A season asks ESPN for
-            both calendar years plus one request per day of November-December (63 requests, as hoopR
-            does) and keeps the games ESPN files under that season.
+        dates (int): A date (``YYYYMMDD``) or a season (``YYYY``, 2002 or later). A season reads that
+            season's game days from ESPN's scoreboard calendar and requests each day in turn
+            (one calendar request plus ~150 day requests), keeping the games ESPN files under the
+            season, sorted by date. A day that fails raises ``AssetFetchError``.
         groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
         season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
         limit (int): number of records to return, default: 500.
@@ -80,24 +82,29 @@ def espn_mbb_schedule(
 
 
 def _season_events(season: int, url: str, params: dict, **kwargs) -> list:
-    """Every event ESPN assigns to ``season`` (hoopR ``espn_mbb_scoreboard``, B-M13).
+    """Every event ESPN assigns to ``season``, one request per game day (B-M13, R855-1).
 
-    ESPN reads a bare ``dates=YYYY`` as the calendar year and stops at ``limit`` (mid-January), so
-    a season pull asks for both calendar years, backfills November-December of ``season - 1`` one
-    day at a time, keeps the events ESPN files under ``season`` and drops the repeats.
+    ESPN reads a bare ``dates=YYYY`` as the calendar year and caps ``limit`` (500 events reach only
+    January 13), so a whole-year request returns a fraction of the season. The day list comes from
+    the season's own scoreboard calendar (:func:`espn_mbb_calendar`, ~150 days from opening night
+    to the title game); the days are fetched one at a time, in order. Events ESPN files under
+    another season are dropped, a game listed on two days is kept once, and the result is sorted
+    by date. A day that fails raises (``AssetFetchError``), so a gap is never silent.
     """
-    fall = datetime.date(season - 1, 11, 1)
-    days = [(fall + datetime.timedelta(days=i)).strftime("%Y%m%d") for i in range(61)]  # Nov 1 - Dec 31
+    days = espn_mbb_calendar(season, **kwargs)["dateURL"].unique(maintain_order=True).to_list()
     events: list = []
-    for d in [season - 1, season, *days]:
-        events += _download_json(download, url, params={**params, "dates": d}, **kwargs).get("events") or []
+    for day in days:  # ponytail: sequential on purpose; ESPN 403s under parallel load
+        payload = _download_json(download, url, params={**params, "dates": day}, **kwargs)
+        if not isinstance(payload, dict) or not isinstance(payload.get("events"), list):
+            raise _AssetFetchError(f"ESPN scoreboard for {day} answered without an events list")
+        events += payload["events"]
     seen: set = set()
     keep = []
     for e in events:
         if isinstance(e, dict) and (e.get("season") or {}).get("year") == season and e.get("id") not in seen:
             seen.add(e.get("id"))
             keep.append(e)
-    return keep
+    return sorted(keep, key=lambda e: e.get("date") or "")
 
 
 def scoreboard_event_parsing(event):
