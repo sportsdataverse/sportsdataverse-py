@@ -1,0 +1,339 @@
+{
+  "data": {
+    "broadcastsLabels": {
+      "allBroadcasters": "All Broadcasters",
+      "watch": "Watch"
+    },
+    "config": {
+      "currentPage": "fixtures",
+      "labelPage": "Schedule",
+      "navigation": {
+        "main": []
+      },
+      "showEntityLogo": true,
+      "sport": "basketball"
+    },
+    "entities": null,
+    "fixtures": [
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "FOR",
+            "colors": {
+              "primary": "2e2d75",
+              "secondary": "f4d42d",
+              "tertiary": "ffffff"
+            },
+            "draw": false,
+            "entityId": "dec6333c-7b55-11eb-9e56-8205bb8987e9",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOwjAMQNGrVJ6xhOs4dthZuUOdmqllaNUBKu4OHp_09U_Y4TaASomuNqNxMBI9CV07Y2lTUSFjGitcBlgyjhfeH6lPaj_Wddre6UjP0Sszd1QX-a_CsYVUtPEq7tZMo8H3B_IcHdk"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1n81/5b92a3c780454241a92e8938972af588?size=100",
+            "name": "Forestville",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "67",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": "GCR",
+            "colors": {
+              "primary": "0039a6",
+              "secondary": "007934",
+              "tertiary": "ffffff"
+            },
+            "draw": false,
+            "entityId": "ded115f4-7b55-11eb-9e56-8205bb8987e9",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOgzAMQNGrIM9YqkmMHXbW3iEmZioMRR2g4u6txyd9_S8cMHUgnH0RbajJExKthCZLwlxqFiZNNIzQd_CK2Hecn6ErdHy2rb7PsIebNyJeM4ox_1duWJxH1OHBZlpUvMD9A_I-Hdk"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1n81/cd9d0dc4d0a44104bf7f443d044563f3?size=100",
+            "name": "Gold Coast",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "70",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureId": "a541adc5-83e7-11f1-9127-15b828f83402",
+        "fixtureType": "FINAL",
+        "link": "&~w=f~eJwlizEOgCAMAL9COtvE0tYWd1f_gAiTcXE0_l2J211yd8MFcwBTqcV8R-fKSNQINyuMkrKYkjPFCYYAR4_ricvarXXLKpT3on21f00UP9LNozdnGSM8LxEeGHw",
+        "name": "CHAMPIONSHIP",
+        "pool": "",
+        "round": "CHAMPIONSHIP",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2026-08-23T13:30:00",
+        "startTimeUTC": "2026-08-23T04:00:00",
+        "status": {
+          "label": "Final",
+          "value": "CONFIRMED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Australia/Adelaide",
+        "venue": "State Basketball Centre (Wayville)",
+        "venueId": "db597344-7b55-11eb-815c-de81c44d5767"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "CAN",
+            "colors": {
+              "primary": null,
+              "secondary": null,
+              "tertiary": null
+            },
+            "draw": false,
+            "entityId": "8066a97e-2ccc-11ec-94c7-6acb2725556d",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOgzAMQNGrIM-1hJPYTrp37R2CMVPpAGKAqndvPT7p639gh_sAysVN64w1e0aihXBSy1haL8pUMyWB2wCviP2Nj2foCu3HuvbtDHu4jiK9qWMys__KDVsxRek2JU3MLDN8f_CdHfs"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1n81/b7b7a4588be7426e84f489d73e62091a?size=100",
+            "name": "Canberra",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "90",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": "GCR",
+            "colors": {
+              "primary": "0039a6",
+              "secondary": "007934",
+              "tertiary": "ffffff"
+            },
+            "draw": false,
+            "entityId": "ded115f4-7b55-11eb-9e56-8205bb8987e9",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOgzAMQNGrIM9YqkmMHXbW3iEmZioMRR2g4u6txyd9_S8cMHUgnH0RbajJExKthCZLwlxqFiZNNIzQd_CK2Hecn6ErdHy2rb7PsIebNyJeM4ox_1duWJxH1OHBZlpUvMD9A_I-Hdk"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1n81/cd9d0dc4d0a44104bf7f443d044563f3?size=100",
+            "name": "Gold Coast",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "98",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureId": "8866462d-83e7-11f1-975d-b1bb882dbd75",
+        "fixtureType": "FINAL",
+        "link": "&~w=f~eJwlyzEOgCAMQNGrmM52KFBa3F29g6UwGRdH490NOr7k_xsuWCYQTq2KOmpsEYk6oUmNmMqehEkjhQzzBMeI24nrNtSHVHNOOXyr_GsRdjQyUw1uLgzPCwnNGPQ",
+        "name": "Semi Final",
+        "pool": "",
+        "round": "SF",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2026-08-22T18:30:00",
+        "startTimeUTC": "2026-08-22T09:00:00",
+        "status": {
+          "label": "Final",
+          "value": "CONFIRMED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Australia/Adelaide",
+        "venue": "State Basketball Centre (Wayville)",
+        "venueId": "db597344-7b55-11eb-815c-de81c44d5767"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "NOR",
+            "colors": {
+              "primary": "141414",
+              "secondary": "fe0c0b",
+              "tertiary": null
+            },
+            "draw": false,
+            "entityId": "3591c69e-2ccd-11ec-99c9-7aa4bb4097d9",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOwjAMQNGrVJ6xVNdOHbOzcofEcSfKQMUAiLuDxyd9_Q8ccJ5Ai4RrHVg5GIk2wq7OKNZEC1WmZYXTBLeM446Xa-qdOp773h6vdKS5GPlqgYv7-K_C0cwNtTXpXWbTYfD9AfKvHjQ"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1n81/fe0de0fcfbbd4fad8a9387e5cc655e53?size=100",
+            "name": "Norths Bears",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "96",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": "ROF",
+            "colors": {
+              "primary": "c6202e",
+              "secondary": "000000",
+              "tertiary": "ffffff"
+            },
+            "draw": false,
+            "entityId": "df15bc04-7b55-11eb-9e56-8205bb8987e9",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwVzDEOgzAMQNGrIM9YwiTGDjtr7xAHMxWGog5txd2pxyd9_R-cMHcgnL2JrqjJExJthCYtYS41C5MmGifoO3hG7Acuj9A3dL73vb4-YQ-vG7G1IaMY83_lhsV5Qh0HNtOi4gWuG_FzHdQ"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1n81/9650681a9ca840ebb8d8265244f1f4c8?size=100",
+            "name": "Rockingham",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "84",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureId": "732b8cda-83e7-11f1-9178-cfee62af506e",
+        "fixtureType": "FINAL",
+        "link": "&~w=f~eJwlyz0KgDAMQOGrSGYDpmmb1N3VO_QnncTFUby7VMcH77vhgnUCCd6qaENlYyTqhEUqo0_ZSyBlchHmCY4x24nbPqp_lF3R2vKg8tNEoli7WXS5hyUaPC8aShl5",
+        "name": null,
+        "pool": "",
+        "round": "5v6",
+        "roundCode": null,
+        "series": null,
+        "stageCode": null,
+        "startTimeLocal": "2026-08-22T18:00:00",
+        "startTimeUTC": "2026-08-22T08:30:00",
+        "status": {
+          "label": "Final",
+          "value": "CONFIRMED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Australia/Adelaide",
+        "venue": "State Basketball Centre (Wayville)",
+        "venueId": "db597344-7b55-11eb-815c-de81c44d5767"
+      }
+    ],
+    "labels": {
+      "toBeConfirmed": "To Be Confirmed",
+      "toBeConfirmedAbbreviation": "TBC"
+    },
+    "locale": "en-EN",
+    "noFixturesMessage": "No Fixtures to display",
+    "reverseTeamOrder": false,
+    "seasonId": "754ec78d-83e3-11f1-b7c3-49a475183126",
+    "seasons": {
+      "competitions": {
+        "2585800c-c980-11eb-9685-12422656af2b": {
+          "name": "NBL1 Finals Men"
+        },
+        "3b5500d8-c980-11eb-b8e8-b607839e0a28": {
+          "name": "NBL1 Finals Women"
+        },
+        "5d127b81-5b9d-11ec-ac66-4593c9ec2a1e": {
+          "name": "NBL1 Wildcard Men"
+        }
+      },
+      "seasons": [
+        {
+          "abbreviationLocal": null,
+          "competitionId": "e1be4a98-7b55-11eb-9e56-8205bb8987e9",
+          "link": "&~w=fl~eJyrVipWslJQSjQxNE0yNUzRTTEzMtQ1NEwz0LUwNEjWNbZMTTVONDU0NzJIVtJRUMoBKU7N03X1U6oFALDDDnM",
+          "nameLocal": "2026 Central Men",
+          "seasonId": "a415b51d-d621-11f0-810c-39ee3a51720c",
+          "year": 2026
+        },
+        {
+          "abbreviationLocal": null,
+          "competitionId": "e1bb825e-7b55-11eb-9e56-8205bb8987e9",
+          "link": "&~w=fl~eJyrVipWslJQskg0Mk1NNTLWTTEzMtQ1NEwz0E00MjfXNUsyMTQ2tzRJsjRNU9JRUMoBKU7N03X1U6oFAK97Dl4",
+          "nameLocal": "2026 Central Women",
+          "seasonId": "8a25ee23-d621-11f0-a277-6b413794b95f",
+          "year": 2026
+        },
+        {
+          "abbreviationLocal": null,
+          "competitionId": "a9909f44-168d-11ec-b50f-1a6efa0e668e",
+          "link": "&~w=fl~eJyrVipWslJQMjI0S0tNMzPVTTEzMtY1NEwz0LWwTDTTNTE1NU9KMrc0TUlMVtJRUMoBKU7N03X1U6oFALfJDsk",
+          "nameLocal": "2026 East Men",
+          "seasonId": "216fef65-d623-11f0-89a6-4557bb795dac",
+          "year": 2026
+        }
+      ]
+    },
+    "series": null,
+    "showFixtureName": true,
+    "stageTabs": {
+      "id": "stages-select",
+      "options": [],
+      "selected": null
+    },
+    "sub": "RESULTS",
+    "subPageTabs": [
+      {
+        "label": "Schedule",
+        "link": "&~w=fl~eJyrVipWslJQMjc1SU02t0jRtTBONdY1NEwz1E0yTzbWNbFMNDE3NbQwNjQyU9JRUMoBKU7N03X1A_GqQDw3z4iQ0CDXYKVaAL_LElo",
+        "value": "FIXTURES"
+      },
+      {
+        "label": "Results",
+        "link": "&~w=fl~eJyrVipWslJQMjc1SU02t0jRtTBONdY1NEwz1E0yTzbWNbFMNDE3NbQwNjQyU9JRUMoBKU7N03X1A_GqQLwg1-BQn5BgpVoArZ4SEg",
+        "value": "RESULTS"
+      }
+    ]
+  },
+  "links": {
+    "self": "https://embed-api.eui.connect.sportradar.com/v1/embed/3/fixtures"
+  },
+  "meta": {
+    "code": 200,
+    "codeVersion": "d6cd1e2bd19e03a81132a23b2025920577f84e37",
+    "count": 15,
+    "fromCache": false,
+    "generated": "2026-10-12T18:34:50.383782+00:00Z",
+    "generationTime": 0.915579,
+    "limit": 0,
+    "offset": 0,
+    "time": "2026-10-12T18:34:50.383809+00:00Z",
+    "version": 1
+  }
+}
