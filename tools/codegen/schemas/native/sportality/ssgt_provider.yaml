@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: provider
+  type: character
+kind: dataframe
+schema: sportality_ssgt_provider

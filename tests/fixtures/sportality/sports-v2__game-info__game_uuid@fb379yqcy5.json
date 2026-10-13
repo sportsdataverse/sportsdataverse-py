@@ -1,0 +1,61 @@
+{
+  "instanceContext": {
+    "siteTeamIsInGame": true,
+    "siteTeamIsHomeTeam": true,
+    "siteTeamIsAwayTeam": true
+  },
+  "gameInfo": {
+    "gameUuid": "fb379yqcy5",
+    "extId": "2683784",
+    "startDateTime": "2025-12-18T17:45:00.000Z",
+    "arenaName": "Amagerhallen",
+    "state": "post_game",
+    "overtime": true,
+    "shootout": null,
+    "seriesCode": "DBL",
+    "seriesName": "Basketligaen",
+    "roundNumber": 0,
+    "roundLabel": "",
+    "seriesDisplayName": "Basketligaen"
+  },
+  "homeTeam": {
+    "names": {
+      "code": "BKA",
+      "short": "BK Amager",
+      "long": "BK Amager",
+      "full": "BK Amager",
+      "codeSite": "BKA",
+      "shortSite": "BK Amager",
+      "fullSite": "BK Amager",
+      "longSite": "BK Amager"
+    },
+    "uuid": "sjbo8mmzi5",
+    "instanceId": "bka1_bka",
+    "foundedOn": "",
+    "address": "",
+    "email": "",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/bka1_bka.svg",
+    "score": 96
+  },
+  "awayTeam": {
+    "names": {
+      "code": "HOL",
+      "short": "Holbæk-Stenhus",
+      "long": "Holbæk-Stenhus",
+      "full": "Holbæk-Stenhus",
+      "codeSite": "HOL",
+      "shortSite": "Holbæk-Stenhus",
+      "fullSite": "Holbæk-Stenhus",
+      "longSite": "Holbæk-Stenhus"
+    },
+    "uuid": "rfo82vr830",
+    "instanceId": "hol2_hol",
+    "foundedOn": "",
+    "address": "",
+    "email": "",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg",
+    "score": 90
+  },
+  "ssgtUuid": "qzw34da6jg",
+  "seriesUuid": "m1ay3mpa4t"
+}

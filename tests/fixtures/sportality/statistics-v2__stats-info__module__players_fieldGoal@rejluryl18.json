@@ -1,0 +1,470 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Player",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "string",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "FGPerc",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "FGM": 1,
+        "FGA": 1,
+        "FGPerc": "100.00",
+        "FGEPerc": "100.00",
+        "3PM": 0,
+        "3PA": 0,
+        "3PPerc": 0,
+        "2PM": 1,
+        "2PA": 1,
+        "2PPerc": "100.00",
+        "info": {
+          "uuid": "tkd24s13vh",
+          "fullName": "Andreas Jørgensen",
+          "firstName": "Andreas",
+          "lastName": "Jørgensen",
+          "birthDate": "<redacted>",
+          "nationality": "",
+          "shoots": null,
+          "gender": "",
+          "weight": {
+            "value": 90,
+            "format": "kg"
+          },
+          "height": {
+            "value": 190,
+            "format": "cm"
+          },
+          "playerMedia": {},
+          "team": {
+            "uuid": "vmtzyhjale",
+            "name": "Aabyhøj IF",
+            "code": "AAB",
+            "media": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+            "ownerInstanceId": "dbl1_dbl",
+            "siteDisplayName": "Aabyhøj IF"
+          },
+          "teamCode": 67369,
+          "teamId": "vmtzyhjale"
+        }
+      },
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "FGM": 1,
+        "FGA": 1,
+        "FGPerc": "100.00",
+        "FGEPerc": "100.00",
+        "3PM": 0,
+        "3PA": 0,
+        "3PPerc": 0,
+        "2PM": 1,
+        "2PA": 1,
+        "2PPerc": "100.00",
+        "info": {
+          "uuid": "spswzv1ult",
+          "fullName": "Simon Boye",
+          "firstName": "Simon",
+          "lastName": "Boye",
+          "birthDate": "<redacted>",
+          "nationality": "",
+          "shoots": null,
+          "gender": "",
+          "weight": {
+            "value": 70,
+            "format": "kg"
+          },
+          "height": {
+            "value": 165,
+            "format": "cm"
+          },
+          "playerMedia": {},
+          "team": {
+            "uuid": "qu9cd2v02y",
+            "name": "Hørsholm 79ers",
+            "code": "HØR",
+            "media": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+            "ownerInstanceId": "dbl1_dbl",
+            "siteDisplayName": "Hørsholm 79ers"
+          },
+          "teamCode": 22254,
+          "teamId": "qu9cd2v02y"
+        }
+      },
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "FGM": 50,
+        "FGA": 123,
+        "FGPerc": "40.65",
+        "FGEPerc": "42.68",
+        "3PM": 5,
+        "3PA": 28,
+        "3PPerc": "17.86",
+        "2PM": 45,
+        "2PA": 95,
+        "2PPerc": "47.37",
+        "info": {
+          "uuid": "th318c12lk",
+          "fullName": "Adama Darboe",
+          "firstName": "Adama",
+          "lastName": "Darboe",
+          "birthDate": "<redacted>",
+          "nationality": "DK",
+          "number": 44,
+          "position": "PG",
+          "shoots": null,
+          "gender": "male",
+          "weight": {
+            "value": 87,
+            "format": "kg"
+          },
+          "height": {
+            "value": 187,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 2440,
+            "mediaString": "image|ramses_sports|player_portrait_612ca0de-ccde-4a02-a530-51854e9fca9744 Adama Darboe Portrt.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "qu9cd2v02y",
+            "name": "Hørsholm 79ers",
+            "code": "HØR",
+            "media": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+            "ownerInstanceId": "dbl1_dbl",
+            "siteDisplayName": "Hørsholm 79ers"
+          },
+          "teamCode": 22254,
+          "teamId": "qu9cd2v02y"
+        }
+      }
+    ],
+    "provider": "genius-basketball",
+    "teams": {
+      "vmtzyhjale": {
+        "type": "team",
+        "id": 67369,
+        "teamCode": "AAB",
+        "siteDisplayName": "Aabyhøj IF",
+        "name": "Aabyhøj IF",
+        "uuid": "vmtzyhjale",
+        "createdAt": "2026-06-18T03:41:23.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": null,
+        "graphicsLibrary": null,
+        "lastModified": "2026-06-18T04:03:50.000Z",
+        "nationality": null,
+        "ownerInstanceId": "dbl1_dbl",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "teamNames": {
+          "code": "AAB",
+          "short": "Aaby",
+          "long": "Aabyhøj IF",
+          "full": "Aabyhøj IF"
+        },
+        "clubName": {},
+        "teamInfo": null,
+        "teamExtIds": [
+          {
+            "id": 892,
+            "extId": "67369",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 892,
+            "extId": "67369",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "qu9cd2v02y": {
+        "type": "team",
+        "id": 22254,
+        "teamCode": "HØR",
+        "siteDisplayName": "Hørsholm 79ers",
+        "name": "Hørsholm 79ers",
+        "uuid": "qu9cd2v02y",
+        "createdAt": "2026-06-18T03:04:40.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": null,
+        "graphicsLibrary": null,
+        "lastModified": null,
+        "nationality": null,
+        "ownerInstanceId": "dbl1_dbl",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "teamNames": {
+          "code": "HØR",
+          "short": "79ers",
+          "long": "Hørsholm 79ers",
+          "full": "Hørsholm 79ers"
+        },
+        "clubName": {},
+        "teamInfo": null,
+        "teamExtIds": [
+          {
+            "id": 880,
+            "extId": "22254",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          },
+          {
+            "id": 885,
+            "extId": "22247",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 880,
+            "extId": "22254",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          },
+          {
+            "id": 885,
+            "extId": "22247",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "ojrrq8x5i8": {
+        "type": "team",
+        "id": 22253,
+        "teamCode": "SIS",
+        "siteDisplayName": "SISU",
+        "name": "SISU",
+        "uuid": "ojrrq8x5i8",
+        "createdAt": "2026-06-18T03:09:55.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": null,
+        "graphicsLibrary": null,
+        "lastModified": null,
+        "nationality": null,
+        "ownerInstanceId": "dbl1_dbl",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "teamNames": {
+          "code": "SIS",
+          "short": "SISU",
+          "long": "SISU",
+          "full": "SISU"
+        },
+        "clubName": {},
+        "teamInfo": null,
+        "teamExtIds": [
+          {
+            "id": 881,
+            "extId": "22253",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          },
+          {
+            "id": 886,
+            "extId": "22245",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 881,
+            "extId": "22253",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          },
+          {
+            "id": 886,
+            "extId": "22245",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "socialMedia": [],
+        "displayName": ""
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "athlete",
+    "totalCount": 154,
+    "players": {
+      "171986": {
+        "type": "athlete",
+        "id": 171986,
+        "firstName": "Martin",
+        "lastName": "Hermansen"
+      },
+      "171989": {
+        "type": "athlete",
+        "id": 171989,
+        "firstName": "Christian",
+        "lastName": "Lindberg",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "g2z6gzon49",
+        "fullName": "Christian Lindberg",
+        "dateOfBirth": "<redacted>",
+        "nationality": "DK",
+        "gender": "",
+        "weight": 90,
+        "height": 195,
+        "playerMedia": {}
+      },
+      "171990": {
+        "type": "athlete",
+        "id": 171990,
+        "firstName": "Jesper",
+        "lastName": "Krone",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "kumpb6lite",
+        "fullName": "Jesper Krone",
+        "nationality": "DK",
+        "gender": "",
+        "weight": 85,
+        "height": 188,
+        "playerMedia": {}
+      }
+    }
+  }
+]

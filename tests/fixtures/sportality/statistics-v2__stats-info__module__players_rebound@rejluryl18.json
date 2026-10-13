@@ -1,0 +1,395 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Player",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "Reb",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "DR": 105,
+        "OR": 50,
+        "Reb": 155,
+        "ORPerc": 0,
+        "DRPerc": 0,
+        "info": {
+          "uuid": "y54qckg6l7",
+          "fullName": "Marek Ondera",
+          "firstName": "Marek",
+          "lastName": "Ondera",
+          "birthDate": "<redacted>",
+          "nationality": "",
+          "shoots": null,
+          "gender": "",
+          "weight": {
+            "value": 98,
+            "format": "kg"
+          },
+          "height": {
+            "value": 200,
+            "format": "cm"
+          },
+          "playerMedia": {},
+          "team": {
+            "uuid": "ktcu9aaala",
+            "name": "Bakken Bears",
+            "code": "BAK",
+            "media": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg",
+            "ownerInstanceId": "bak1_bak",
+            "siteDisplayName": "Bakken Bears"
+          },
+          "teamCode": 22248,
+          "teamId": "ktcu9aaala"
+        }
+      },
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "DR": 96,
+        "OR": 43,
+        "Reb": 139,
+        "ORPerc": 0,
+        "DRPerc": 0,
+        "info": {
+          "uuid": "h9p2tucu3a",
+          "fullName": "Jimmy Moore",
+          "firstName": "Jimmy",
+          "lastName": "Moore",
+          "birthDate": "<redacted>",
+          "nationality": "US",
+          "shoots": null,
+          "gender": "",
+          "weight": {
+            "value": 102,
+            "format": "kg"
+          },
+          "height": {
+            "value": 202,
+            "format": "cm"
+          },
+          "playerMedia": {},
+          "team": {
+            "uuid": "ps0d254nhc",
+            "name": "BF Copenhagen",
+            "code": "BFC",
+            "media": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+            "ownerInstanceId": "dbl1_dbl",
+            "siteDisplayName": "BF Copenhagen"
+          },
+          "teamCode": 67376,
+          "teamId": "ps0d254nhc"
+        }
+      },
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "DR": 40,
+        "OR": 15,
+        "Reb": 55,
+        "ORPerc": 0,
+        "DRPerc": 0,
+        "info": {
+          "uuid": "th318c12lk",
+          "fullName": "Adama Darboe",
+          "firstName": "Adama",
+          "lastName": "Darboe",
+          "birthDate": "<redacted>",
+          "nationality": "DK",
+          "number": 44,
+          "position": "PG",
+          "shoots": null,
+          "gender": "male",
+          "weight": {
+            "value": 87,
+            "format": "kg"
+          },
+          "height": {
+            "value": 187,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 2440,
+            "mediaString": "image|ramses_sports|player_portrait_612ca0de-ccde-4a02-a530-51854e9fca9744 Adama Darboe Portrt.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "qu9cd2v02y",
+            "name": "Hørsholm 79ers",
+            "code": "HØR",
+            "media": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+            "ownerInstanceId": "dbl1_dbl",
+            "siteDisplayName": "Hørsholm 79ers"
+          },
+          "teamCode": 22254,
+          "teamId": "qu9cd2v02y"
+        }
+      }
+    ],
+    "provider": "genius-basketball",
+    "teams": {
+      "bux7u6fnkc": {
+        "type": "team",
+        "id": 67375,
+        "teamCode": "SKJ",
+        "siteDisplayName": "Skjold Stevnsgade",
+        "name": "Skjold Stevnsgade",
+        "uuid": "bux7u6fnkc",
+        "createdAt": "2026-06-18T04:16:27.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": null,
+        "graphicsLibrary": null,
+        "lastModified": null,
+        "nationality": null,
+        "ownerInstanceId": "dbl1_dbl",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "teamNames": {
+          "code": "SKJ",
+          "short": "Skjold Stevnsgade",
+          "long": "Skjold Stevnsgade",
+          "full": "Skjold Stevnsgade"
+        },
+        "clubName": {},
+        "teamInfo": null,
+        "teamExtIds": [
+          {
+            "id": 899,
+            "extId": "67375",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 899,
+            "extId": "67375",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "stq1ch9z7f": {
+        "type": "team",
+        "id": 67372,
+        "teamCode": "SJÆ",
+        "siteDisplayName": "Team Sjælland",
+        "name": "Team Sjælland",
+        "uuid": "stq1ch9z7f",
+        "createdAt": "2026-06-18T03:59:10.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": null,
+        "graphicsLibrary": null,
+        "lastModified": null,
+        "nationality": null,
+        "ownerInstanceId": "dbl1_dbl",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "teamNames": {
+          "code": "SJÆ",
+          "short": "Team Sjælland",
+          "long": "Team Sjælland",
+          "full": "Team Sjælland"
+        },
+        "clubName": {},
+        "teamInfo": null,
+        "teamExtIds": [
+          {
+            "id": 896,
+            "extId": "67372",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 896,
+            "extId": "67372",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "bv4y7irawu": {
+        "type": "team",
+        "id": 22252,
+        "teamCode": "",
+        "siteDisplayName": "Svendborg Rabbits",
+        "name": "Svendborg Rabbits",
+        "uuid": "bv4y7irawu",
+        "createdAt": "2026-06-18T03:51:13.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": null,
+        "graphicsLibrary": null,
+        "lastModified": null,
+        "nationality": null,
+        "ownerInstanceId": "dbl1_dbl",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "teamNames": {
+          "code": "",
+          "short": "Rabbits",
+          "long": "Svendborg Rabbits",
+          "full": "Svendborg Rabbits"
+        },
+        "clubName": {},
+        "teamInfo": null,
+        "teamExtIds": [
+          {
+            "id": 893,
+            "extId": "22252",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 893,
+            "extId": "22252",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/dbl1_dbl.svg",
+        "socialMedia": [],
+        "displayName": ""
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "athlete",
+    "totalCount": 154,
+    "players": {
+      "171986": {
+        "type": "athlete",
+        "id": 171986,
+        "firstName": "Martin",
+        "lastName": "Hermansen"
+      },
+      "171989": {
+        "type": "athlete",
+        "id": 171989,
+        "firstName": "Christian",
+        "lastName": "Lindberg",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "g2z6gzon49",
+        "fullName": "Christian Lindberg",
+        "dateOfBirth": "<redacted>",
+        "nationality": "DK",
+        "gender": "",
+        "weight": 90,
+        "height": 195,
+        "playerMedia": {}
+      },
+      "171990": {
+        "type": "athlete",
+        "id": 171990,
+        "firstName": "Jesper",
+        "lastName": "Krone",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "kumpb6lite",
+        "fullName": "Jesper Krone",
+        "nationality": "DK",
+        "gender": "",
+        "weight": 85,
+        "height": 188,
+        "playerMedia": {}
+      }
+    }
+  }
+]

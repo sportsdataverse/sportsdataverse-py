@@ -1,0 +1,148 @@
+[
+  {
+    "gameSourceId": "2289328",
+    "gameId": "2289328",
+    "eventId": 660,
+    "type": "foul",
+    "eventUuid": "e6d07928-5d43-5dd7-b1c0-aa7f3eff0f6c",
+    "period": 4,
+    "periodType": "REGULAR",
+    "time": "00:06:30",
+    "realWorldTime": "2023-09-14T19:03:14.000Z",
+    "updatedTime": "2026-09-16T02:09:05.951Z",
+    "homeTeam": {
+      "gameSourceId": 2289328,
+      "gameId": 2289328,
+      "teamId": "22256",
+      "teamName": "Svendborg Rabbits",
+      "teamCode": "SVE",
+      "teamNumber": 1,
+      "place": "home",
+      "source": "genius-basketball-stream-reader",
+      "score": 78
+    },
+    "awayTeam": {
+      "gameSourceId": 2289328,
+      "gameId": 2289328,
+      "teamId": "22249",
+      "teamName": "Horsens IC",
+      "teamCode": "HIC",
+      "teamNumber": 2,
+      "place": "away",
+      "source": "genius-basketball-stream-reader",
+      "score": 77
+    },
+    "revision": 1,
+    "gameState": "ongoing",
+    "gameType": "",
+    "round": 0,
+    "startDateAndTime": "",
+    "eventTeam": {
+      "gameSourceId": 2289328,
+      "gameId": 2289328,
+      "teamId": "22249",
+      "teamName": "Horsens IC",
+      "teamCode": "HIC",
+      "teamNumber": 2,
+      "place": "away",
+      "source": "genius-basketball-stream-reader"
+    },
+    "player": {
+      "playerId": 1567447,
+      "pno": 1567447,
+      "teamNumber": 2,
+      "firstName": "Gage",
+      "familyName": "Davis"
+    },
+    "coordinates": {
+      "x": 65,
+      "y": 83
+    },
+    "subType": "personal",
+    "qualifiers": "2freethrow",
+    "isSuccessful": 1,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "j3nfc1b8og",
+    "liveState": "decided"
+  },
+  {
+    "gameSourceId": "2289328",
+    "gameId": "2289328",
+    "eventId": 651,
+    "type": "3pt",
+    "eventUuid": "a142b67c-0779-5a9e-9428-f1e1b9c8858a",
+    "period": 4,
+    "periodType": "REGULAR",
+    "time": "00:08:20",
+    "realWorldTime": "2023-09-14T19:01:07.000Z",
+    "updatedTime": "2026-09-16T02:09:05.951Z",
+    "homeTeam": {
+      "gameSourceId": 2289328,
+      "gameId": 2289328,
+      "teamId": "22256",
+      "teamName": "Svendborg Rabbits",
+      "teamCode": "SVE",
+      "teamNumber": 1,
+      "place": "home",
+      "source": "genius-basketball-stream-reader",
+      "score": 78
+    },
+    "awayTeam": {
+      "gameSourceId": 2289328,
+      "gameId": 2289328,
+      "teamId": "22249",
+      "teamName": "Horsens IC",
+      "teamCode": "HIC",
+      "teamNumber": 2,
+      "place": "away",
+      "source": "genius-basketball-stream-reader",
+      "score": 77
+    },
+    "revision": 1,
+    "gameState": "ongoing",
+    "gameType": "",
+    "round": 0,
+    "startDateAndTime": "",
+    "eventTeam": {
+      "gameSourceId": 2289328,
+      "gameId": 2289328,
+      "teamId": "22249",
+      "teamName": "Horsens IC",
+      "teamCode": "HIC",
+      "teamNumber": 2,
+      "place": "away",
+      "source": "genius-basketball-stream-reader"
+    },
+    "player": {
+      "playerId": 337485,
+      "pno": 337485,
+      "teamNumber": 2,
+      "firstName": "Marius Kirkholt",
+      "familyName": "Sørensen"
+    },
+    "coordinates": {
+      "x": 26,
+      "y": 84
+    },
+    "subType": "jumpshot",
+    "qualifiers": "fastbreak",
+    "isSuccessful": 1,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "j3nfc1b8og",
+    "liveState": "decided"
+  },
+  {
+    "gameSourceId": 2289328,
+    "gameId": 2289328,
+    "period": 1,
+    "type": "period",
+    "started": true,
+    "finished": true,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "j3nfc1b8og",
+    "liveState": "decided"
+  }
+]

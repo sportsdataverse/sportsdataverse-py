@@ -1,0 +1,146 @@
+{
+  "teamHead2Head": [
+    {
+      "homeTeam": {
+        "sideTranslateKey": "s_2P",
+        "left": {
+          "type": "2PM",
+          "value": 3
+        },
+        "right": {
+          "type": "2PA",
+          "value": 8
+        },
+        "center": {
+          "type": "2PPerc",
+          "value": 38
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "s_2P",
+        "left": {
+          "type": "2PM",
+          "value": 22
+        },
+        "right": {
+          "type": "2PA",
+          "value": 46
+        },
+        "center": {
+          "type": "2PPerc",
+          "value": 48
+        }
+      }
+    },
+    {
+      "homeTeam": {
+        "sideTranslateKey": "s_3P",
+        "left": {
+          "type": "3PM",
+          "value": 5
+        },
+        "right": {
+          "type": "3PA",
+          "value": 13
+        },
+        "center": {
+          "type": "3PPerc",
+          "value": 38
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "s_3P",
+        "left": {
+          "type": "3PM",
+          "value": 10
+        },
+        "right": {
+          "type": "3PA",
+          "value": 34
+        },
+        "center": {
+          "type": "3PPerc",
+          "value": 29
+        }
+      }
+    },
+    {
+      "homeTeam": {
+        "sideTranslateKey": "s_FT",
+        "left": {
+          "type": "FTM",
+          "value": 3
+        },
+        "right": {
+          "type": "FTA",
+          "value": 3
+        },
+        "center": {
+          "type": "FTPerc",
+          "value": 100
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "s_FT",
+        "left": {
+          "type": "FTM",
+          "value": 16
+        },
+        "right": {
+          "type": "FTA",
+          "value": 19
+        },
+        "center": {
+          "type": "FTPerc",
+          "value": 84
+        }
+      }
+    }
+  ],
+  "teamPeriod": {
+    "caption": "G",
+    "overtime": true,
+    "shootout": false,
+    "stats": [
+      {
+        "periodName": 1,
+        "homeTeamValue": 45,
+        "awayTeamValue": 31
+      },
+      {
+        "periodName": 2,
+        "homeTeamValue": 19,
+        "awayTeamValue": 28
+      },
+      {
+        "periodName": 3,
+        "homeTeamValue": 14,
+        "awayTeamValue": 15
+      }
+    ]
+  },
+  "bestScorers": [
+    {
+      "uuid": "ypim6ted04",
+      "fullName": "Isaiah Thomas Burnett",
+      "teamCode": "BKA",
+      "media": "https://sportality.cdn.s8y.se/team-logos/bka1_bka.svg",
+      "totalPoints": 33
+    },
+    {
+      "uuid": "vh065rv1j9",
+      "fullName": "Michael Drame",
+      "teamCode": "HOL",
+      "media": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg",
+      "totalPoints": 29
+    },
+    {
+      "uuid": "j9t9y8yp59",
+      "fullName": "Forte Prater",
+      "teamCode": "HOL",
+      "media": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg",
+      "totalPoints": 22
+    }
+  ],
+  "statisticsProvider": "genius-basketball"
+}

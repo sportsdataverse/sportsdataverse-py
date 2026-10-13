@@ -1,0 +1,139 @@
+{
+  "home": {
+    "gameSourceId": 2868126,
+    "gameId": 2868126,
+    "teamId": "153747",
+    "teamName": "Holbæk-Stenhus",
+    "teamCode": "Hol",
+    "teamNumber": 1,
+    "place": "home",
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "c4hh5nig6t",
+    "statistics": [
+      {
+        "period": 1,
+        "periodType": "REGULAR",
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 22
+          },
+          {
+            "key": "FGM",
+            "value": 7
+          },
+          {
+            "key": "A",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "period": 2,
+        "periodType": "REGULAR",
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 32
+          },
+          {
+            "key": "FGM",
+            "value": 13
+          },
+          {
+            "key": "A",
+            "value": 4
+          }
+        ]
+      },
+      {
+        "period": 3,
+        "periodType": "REGULAR",
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 12
+          },
+          {
+            "key": "FGM",
+            "value": 5
+          },
+          {
+            "key": "A",
+            "value": 1
+          }
+        ]
+      }
+    ]
+  },
+  "away": {
+    "gameSourceId": 2868126,
+    "gameId": 2868126,
+    "teamId": "22250",
+    "teamName": "Randers Cimbria",
+    "teamCode": "RAN",
+    "teamNumber": 2,
+    "place": "away",
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "c4hh5nig6t",
+    "statistics": [
+      {
+        "period": 1,
+        "periodType": "REGULAR",
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 21
+          },
+          {
+            "key": "FGM",
+            "value": 7
+          },
+          {
+            "key": "A",
+            "value": 5
+          }
+        ]
+      },
+      {
+        "period": 2,
+        "periodType": "REGULAR",
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 33
+          },
+          {
+            "key": "FGM",
+            "value": 12
+          },
+          {
+            "key": "A",
+            "value": 6
+          }
+        ]
+      },
+      {
+        "period": 3,
+        "periodType": "REGULAR",
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 26
+          },
+          {
+            "key": "FGM",
+            "value": 7
+          },
+          {
+            "key": "A",
+            "value": 5
+          }
+        ]
+      }
+    ]
+  },
+  "provider": "genius-basketball"
+}

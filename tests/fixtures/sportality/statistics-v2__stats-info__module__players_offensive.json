@@ -1,0 +1,464 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Player",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "string",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "ORat",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "ORat": "5512.3",
+        "TSA": 23,
+        "TSPerc": "49.57",
+        "A": 9,
+        "ATR": "3.00",
+        "UPerc": "66.86",
+        "EGS": "23.3",
+        "EFF": "6.8",
+        "info": {
+          "uuid": "df5nu5pie3",
+          "fullName": "Lau Christoffersen",
+          "firstName": "Lau",
+          "lastName": "Christoffersen",
+          "birthDate": "<redacted>",
+          "nationality": "DK",
+          "number": 2,
+          "position": "G",
+          "shoots": "R",
+          "gender": "male",
+          "weight": {
+            "value": 87,
+            "format": "kg"
+          },
+          "height": {
+            "value": 188,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 2385,
+            "mediaString": "image|ramses_sports|player_portrait_31177707-a55c-48ce-9e7b-6d7b9bc3f457NS 2  Christoffersen.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "iutrlqp3ef",
+            "name": "Team FOG Næstved",
+            "code": "TFN",
+            "media": "https://sportality.cdn.s8y.se/team-logos/tfn1_tfn.svg",
+            "ownerInstanceId": "tfn1_tfn",
+            "siteDisplayName": "Team FOG Næstved"
+          },
+          "teamCode": 22255,
+          "teamId": "iutrlqp3ef"
+        }
+      },
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "ORat": "3698.6",
+        "TSA": 34,
+        "TSPerc": "48.82",
+        "A": 6,
+        "ATR": "1.00",
+        "UPerc": "93.94",
+        "EGS": "26.4",
+        "EFF": "9.8",
+        "info": {
+          "uuid": "eludbijesx",
+          "fullName": "David Fischer Hockerup",
+          "firstName": "David",
+          "lastName": "Fischer Hockerup",
+          "birthDate": "<redacted>",
+          "nationality": "DK",
+          "number": 9,
+          "position": "C",
+          "shoots": "R",
+          "gender": "male",
+          "weight": {
+            "value": 108,
+            "format": "kg"
+          },
+          "height": {
+            "value": 207,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 2332,
+            "mediaString": "image|ramses_sports|player_portrait_94f74af5-e7c7-4cc0-a99d-521d3f8856a009DavidFischer.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "kgmhwo9l5d",
+            "name": "Svendborg Rabbits",
+            "code": "SVE",
+            "media": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+            "ownerInstanceId": "sve1_sve",
+            "siteDisplayName": "Svendborg Rabbits"
+          },
+          "teamCode": 22256,
+          "teamId": "kgmhwo9l5d"
+        }
+      },
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "ORat": "680.2",
+        "TSA": 47,
+        "TSPerc": "46.97",
+        "A": 18,
+        "ATR": "1.50",
+        "UPerc": "99.00",
+        "EGS": "25.1",
+        "EFF": "8.0",
+        "info": {
+          "uuid": "djoqmpkudx",
+          "fullName": "Balsa Veljic",
+          "firstName": "Balsa",
+          "lastName": "Veljic",
+          "birthDate": "<redacted>",
+          "nationality": "DK",
+          "number": 18,
+          "position": "SG",
+          "shoots": null,
+          "gender": "",
+          "weight": {
+            "value": 82,
+            "format": "kg"
+          },
+          "height": {
+            "value": 185,
+            "format": "cm"
+          },
+          "playerMedia": {},
+          "team": {
+            "uuid": "kgmhwo9l5d",
+            "name": "Svendborg Rabbits",
+            "code": "SVE",
+            "media": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+            "ownerInstanceId": "sve1_sve",
+            "siteDisplayName": "Svendborg Rabbits"
+          },
+          "teamCode": 22256,
+          "teamId": "kgmhwo9l5d"
+        }
+      }
+    ],
+    "provider": "genius-basketball",
+    "teams": {
+      "iutrlqp3ef": {
+        "type": "team",
+        "id": 22255,
+        "teamCode": "TFN",
+        "siteDisplayName": "Team FOG Næstved",
+        "name": "Team FOG Næstved",
+        "uuid": "iutrlqp3ef",
+        "createdAt": "2026-06-17T11:18:29.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": null,
+        "lastModified": "2026-09-14T19:05:34.000Z",
+        "nationality": "DK",
+        "ownerInstanceId": "tfn1_tfn",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/tfn1_tfn.svg",
+        "teamNames": {
+          "code": "TFN",
+          "short": "Team FOG Næstved",
+          "long": "Team FOG Næstved",
+          "full": "Team FOG Næstved",
+          "codeSite": "TFN",
+          "shortSite": "Team FOG Næstved",
+          "fullSite": "Team FOG Næstved",
+          "longSite": "Team FOG Næstved"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "facebook": "https://www.facebook.com/teamfog",
+          "instagram": "https://www.instagram.com/officialteamfog/?hl=da"
+        },
+        "teamExtIds": [
+          {
+            "id": 869,
+            "extId": "22255",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 869,
+            "extId": "22255",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/tfn1_tfn.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "kgmhwo9l5d": {
+        "type": "team",
+        "id": 22256,
+        "teamCode": "SVE",
+        "siteDisplayName": "Svendborg Rabbits",
+        "name": "Svendborg Rabbits",
+        "uuid": "kgmhwo9l5d",
+        "createdAt": "2026-06-17T11:18:29.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": null,
+        "lastModified": "2026-09-14T19:09:01.000Z",
+        "nationality": "DK",
+        "ownerInstanceId": "sve1_sve",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+        "teamNames": {
+          "code": "SVE",
+          "short": "Svendborg Rabbits",
+          "long": "Svendborg Rabbits",
+          "full": "Svendborg Rabbits",
+          "codeSite": "SVE",
+          "shortSite": "Svendborg Rabbits",
+          "fullSite": "Svendborg Rabbits",
+          "longSite": "Svendborg Rabbits"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "2006",
+          "facebook": "https://www.facebook.com/rabbits.dk",
+          "instagram": "https://www.instagram.com/svendborgrabbitsofficial/"
+        },
+        "teamExtIds": [
+          {
+            "id": 863,
+            "extId": "22256",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 863,
+            "extId": "22256",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "rfo82vr830": {
+        "type": "team",
+        "id": 153747,
+        "teamCode": "HOL",
+        "siteDisplayName": "Holbæk-Stenhus",
+        "name": "Holbæk-Stenhus",
+        "uuid": "rfo82vr830",
+        "createdAt": "2026-06-17T11:18:29.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": null,
+        "lastModified": "2026-08-18T06:45:16.000Z",
+        "nationality": "DK",
+        "ownerInstanceId": "hol2_hol",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg",
+        "teamNames": {
+          "code": "HOL",
+          "short": "Holbæk-Stenhus",
+          "long": "Holbæk-Stenhus",
+          "full": "Holbæk-Stenhus",
+          "codeSite": "HOL",
+          "shortSite": "Holbæk-Stenhus",
+          "fullSite": "Holbæk-Stenhus",
+          "longSite": "Holbæk-Stenhus"
+        },
+        "clubName": {},
+        "teamInfo": {},
+        "teamExtIds": [
+          {
+            "id": 862,
+            "extId": "153747",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 862,
+            "extId": "153747",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg",
+        "socialMedia": [],
+        "displayName": ""
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "athlete",
+    "totalCount": 164,
+    "players": {
+      "172165": {
+        "type": "athlete",
+        "id": 172165,
+        "firstName": "Sylvester",
+        "lastName": "Berg",
+        "jerseyNumber": 13,
+        "position": "SF",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "p75z5zigsk",
+        "fullName": "Sylvester Berg",
+        "dateOfBirth": "<redacted>",
+        "nationality": "DK",
+        "gender": "male",
+        "weight": 98,
+        "height": 200,
+        "playerMedia": {
+          "id": 2415,
+          "mediaString": "image|ramses_sports|player_portrait_b40d91fd-5cc2-4763-abbe-ce21059d290013 Sylvester Berg.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      },
+      "172234": {
+        "type": "athlete",
+        "id": 172234,
+        "firstName": "Oscar",
+        "lastName": "Jørgensen",
+        "jerseyNumber": 10,
+        "position": "SG",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "qoytfuny8d",
+        "fullName": "Oscar Jørgensen",
+        "dateOfBirth": "<redacted>",
+        "nationality": "DK",
+        "gender": "male",
+        "weight": 78,
+        "height": 187,
+        "playerMedia": {
+          "id": 2420,
+          "mediaString": "image|ramses_sports|player_portrait_bf24c37d-1dce-49fe-865b-dc253749682c10 Oscar Jrgensen.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      },
+      "175351": {
+        "type": "athlete",
+        "id": 175351,
+        "firstName": "Anton",
+        "lastName": "Lønstrup Hansen",
+        "jerseyNumber": 8,
+        "position": "PG",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "t988zab17n",
+        "fullName": "Anton Lønstrup Hansen",
+        "dateOfBirth": "<redacted>",
+        "nationality": "DK",
+        "gender": "male",
+        "weight": 82,
+        "height": 190,
+        "playerMedia": {
+          "id": 2432,
+          "mediaString": "image|ramses_sports|player_portrait_401db048-61c7-4743-aa75-761a3eafa8a908 Anton Hansen Portrt.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      }
+    }
+  }
+]

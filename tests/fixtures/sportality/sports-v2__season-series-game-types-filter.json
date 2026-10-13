@@ -1,0 +1,96 @@
+{
+  "series": [
+    {
+      "uuid": "m1ay3mpa4t",
+      "code": "DBL",
+      "createdAt": null,
+      "createdBy": "dbl1_dbl",
+      "deleted": false,
+      "lastModified": "2026-07-01T07:38:11.000Z",
+      "names": [
+        {
+          "language": "da",
+          "translation": "Basketligaen"
+        },
+        {
+          "language": "sv",
+          "translation": "Basketligaen"
+        },
+        {
+          "language": "display",
+          "translation": "Basketligaen"
+        }
+      ]
+    }
+  ],
+  "season": [
+    {
+      "uuid": "fg7gxxmm0w",
+      "code": "2026",
+      "createdAt": null,
+      "createdBy": "dbl1_dbl",
+      "deleted": false,
+      "lastModified": "2026-07-23T04:08:57.000Z",
+      "names": [
+        {
+          "language": "sv",
+          "translation": "2026/2027"
+        }
+      ]
+    },
+    {
+      "uuid": "ggp2aapun2",
+      "code": "2025",
+      "createdAt": null,
+      "createdBy": "dbl1_dbl",
+      "deleted": false,
+      "lastModified": null,
+      "names": [
+        {
+          "language": "sv",
+          "translation": "2025/2026"
+        }
+      ]
+    },
+    {
+      "uuid": "df8tvo9vtv",
+      "code": "2024",
+      "createdAt": null,
+      "createdBy": "dbl1_dbl",
+      "deleted": false,
+      "lastModified": null,
+      "names": [
+        {
+          "language": "sv",
+          "translation": "2024/2025"
+        }
+      ]
+    }
+  ],
+  "gameType": [
+    {
+      "uuid": "aprlbjgxlp",
+      "code": "regular",
+      "createdAt": null,
+      "createdBy": "dbl1_dbl",
+      "deleted": false,
+      "lastModified": null,
+      "names": [
+        {
+          "language": "da",
+          "translation": "Grundspil"
+        },
+        {
+          "language": "sv",
+          "translation": "Seriematch"
+        }
+      ]
+    }
+  ],
+  "defaultSsgtFilter": {
+    "season": "fg7gxxmm0w",
+    "series": "m1ay3mpa4t",
+    "gameType": "aprlbjgxlp"
+  },
+  "ssgtUuid": "xs07bd3fmp"
+}

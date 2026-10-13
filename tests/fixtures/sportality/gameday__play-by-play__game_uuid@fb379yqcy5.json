@@ -1,0 +1,148 @@
+[
+  {
+    "gameSourceId": "2683784",
+    "gameId": "2683784",
+    "eventId": 858,
+    "type": "freethrow",
+    "eventUuid": "bd2749de-2244-58c1-b353-291baa8938dd",
+    "period": 1,
+    "periodType": "OVERTIME",
+    "time": "00:02:60",
+    "realWorldTime": "2025-12-18T19:53:35.000Z",
+    "updatedTime": "2026-09-15T06:04:33.129Z",
+    "homeTeam": {
+      "gameSourceId": 2683784,
+      "gameId": 2683784,
+      "teamId": "67370",
+      "teamName": "BK Amager",
+      "teamCode": "BKA",
+      "teamNumber": 1,
+      "place": "home",
+      "source": "genius-basketball-stream-reader",
+      "score": 96
+    },
+    "awayTeam": {
+      "gameSourceId": 2683784,
+      "gameId": 2683784,
+      "teamId": "153747",
+      "teamName": "Holbæk-Stenhus",
+      "teamCode": "Hol",
+      "teamNumber": 2,
+      "place": "away",
+      "source": "genius-basketball-stream-reader",
+      "score": 90
+    },
+    "revision": 1,
+    "gameState": "ongoing",
+    "gameType": "",
+    "round": 0,
+    "startDateAndTime": "",
+    "eventTeam": {
+      "gameSourceId": 2683784,
+      "gameId": 2683784,
+      "teamId": "67370",
+      "teamName": "BK Amager",
+      "teamCode": "BKA",
+      "teamNumber": 1,
+      "place": "home",
+      "source": "genius-basketball-stream-reader"
+    },
+    "player": {
+      "playerId": 1293227,
+      "pno": 1293227,
+      "teamNumber": 1,
+      "firstName": "Oscar",
+      "familyName": "Quackenbush"
+    },
+    "coordinates": {
+      "x": 0,
+      "y": 0
+    },
+    "subType": "2of2",
+    "qualifiers": "fastbreak",
+    "isSuccessful": 1,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "fb379yqcy5",
+    "liveState": "decided"
+  },
+  {
+    "gameSourceId": "2683784",
+    "gameId": "2683784",
+    "eventId": 857,
+    "type": "freethrow",
+    "eventUuid": "72452b06-f839-5555-9ad1-a48432393119",
+    "period": 1,
+    "periodType": "OVERTIME",
+    "time": "00:02:60",
+    "realWorldTime": "2025-12-18T19:53:23.000Z",
+    "updatedTime": "2026-09-15T06:04:33.129Z",
+    "homeTeam": {
+      "gameSourceId": 2683784,
+      "gameId": 2683784,
+      "teamId": "67370",
+      "teamName": "BK Amager",
+      "teamCode": "BKA",
+      "teamNumber": 1,
+      "place": "home",
+      "source": "genius-basketball-stream-reader",
+      "score": 95
+    },
+    "awayTeam": {
+      "gameSourceId": 2683784,
+      "gameId": 2683784,
+      "teamId": "153747",
+      "teamName": "Holbæk-Stenhus",
+      "teamCode": "Hol",
+      "teamNumber": 2,
+      "place": "away",
+      "source": "genius-basketball-stream-reader",
+      "score": 90
+    },
+    "revision": 1,
+    "gameState": "ongoing",
+    "gameType": "",
+    "round": 0,
+    "startDateAndTime": "",
+    "eventTeam": {
+      "gameSourceId": 2683784,
+      "gameId": 2683784,
+      "teamId": "67370",
+      "teamName": "BK Amager",
+      "teamCode": "BKA",
+      "teamNumber": 1,
+      "place": "home",
+      "source": "genius-basketball-stream-reader"
+    },
+    "player": {
+      "playerId": 1293227,
+      "pno": 1293227,
+      "teamNumber": 1,
+      "firstName": "Oscar",
+      "familyName": "Quackenbush"
+    },
+    "coordinates": {
+      "x": 0,
+      "y": 0
+    },
+    "subType": "1of2",
+    "qualifiers": "fastbreak",
+    "isSuccessful": 1,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "fb379yqcy5",
+    "liveState": "decided"
+  },
+  {
+    "gameSourceId": 2683784,
+    "gameId": 2683784,
+    "period": 1,
+    "type": "period",
+    "started": true,
+    "finished": true,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "fb379yqcy5",
+    "liveState": "decided"
+  }
+]

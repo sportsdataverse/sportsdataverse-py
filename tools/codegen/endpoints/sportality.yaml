@@ -1,0 +1,487 @@
+api: sportality
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial: the JSON API behind www.basketligaen.dk, the Danish men''s basketball
+    league (Basketligaen, series code DBL). The site runs on the Sportality platform
+    (the vendor behind the SHL and HockeyAllsvenskan wrappers). The terms page was
+    not read; payloads are not redistributed as release assets.'
+  - 'Stats provider: genius-basketball, a relay of Genius Sports LiveStats. The Genius
+    match, team and person ids in play-by-play, box scores and stats tables (game_id,
+    team_id, player_id, all Int64) join the genius family; the platform uuids (game,
+    team, athlete, ssgt) are not Genius ids and exist only on this site. The Genius
+    ORG code of Denmark is not exposed.'
+  - Season = the END year (2026 = 2025/26) everywhere; the runtime maps it, with game_type
+    ('regular' or 'finals', the playoffs), to the site's ssgt (season + series + game
+    type) through layout-info. Schedules, standings and season tables start in 2002/03;
+    game-level data (play-by-play with shot x/y, box scores, team stats) starts in
+    2023/24.
+  - 'Source defects the runtime refuses (AssetFetchError): an unfinished game or a
+    truncated play-by-play feed, a box score or feed that names another game, a cut
+    stats table. The 2002/03 regular-season schedule lists 109 finished games where
+    its own standings count 110: a source gap.'
+  - 'Personal data is removed from every body: birth dates, e-mail addresses, phone
+    numbers, addresses and contact blocks.'
+  - 'No women''s league: Dameligaen has its own domain (dameligaen.dk), which answers
+    401 to anonymous requests.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the site answered 404, an empty body (gameday
+    routes before 2023/24, or an unknown game), a table with no rows, or the season
+    and game type are not in layout-info.'
+  - 'sportsdataverse.errors.AssetFetchError: an error envelope or non-JSON 200, another
+    game / team / athlete / ssgt than the one asked for, an unfinished game or truncated
+    play-by-play, a cut stats table, or any other failed fetch (a 500 is the site''s
+    answer for an unknown uuid and is not retried).'
+  see_also:
+  - name: Basketligaen
+    note: the Danish men's basketball league site whose API this is
+    url: https://www.basketligaen.dk/
+  - name: hoopR
+    note: the SportsDataverse men's basketball package for R
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args:
+    athlete_uuid: dpu0901c0t
+    master_site_instance_id: dbl1_dbl
+  extra_params:
+  - description: Required. Athlete uuid.
+    name: athlete_uuid
+    query_key: playerUuid
+    required: true
+    type: str
+  - description: Site instance (dbl1_dbl). No effect in the drop-one probe.
+    name: master_site_instance_id
+    query_key: masterSiteInstanceId
+    type: str
+  parser: parse_sportality_stats_info
+  path: /statistics-v2/athlete/playerProfile_gameLog
+  returns_schema: native/sportality/athlete_career
+  short: athlete_career
+  summary: Player career totals, one row per ssgt.
+- example_args:
+    athlete_uuid: dpu0901c0t
+  parser: parse_sportality_athlete
+  path: /sports-v2/athlete-details/{athlete_uuid}
+  path_params:
+  - description: 'Athlete uuid: roster `players[].uuid` or stats-info `stats[].info.uuid`.
+      Key space: platform athlete uuids (not the Genius person id).'
+    name: athlete_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/athlete_details
+  short: athlete_details
+  summary: Player bio plus playerExtIds (the Genius person id).
+- example_args:
+    athlete_uuid: dpu0901c0t
+    master_site_instance_id: dbl1_dbl
+  extra_params:
+  - description: Required. Athlete uuid.
+    name: athlete_uuid
+    query_key: playerUuid
+    required: true
+    type: str
+  - description: Site instance (dbl1_dbl). No effect in the drop-one probe.
+    name: master_site_instance_id
+    query_key: masterSiteInstanceId
+    type: str
+  parser: parse_sportality_page
+  path: /statistics-v2/athlete/profile-page
+  returns_schema: native/sportality/athlete_profile
+  short: athlete_profile
+  summary: 'Player profile: age, height, position, season and career totals.'
+- example_args:
+    game_uuid: c4hh5nig6t
+  parser: parse_sportality_player_box
+  path: /gameday/boxscore/{game_uuid}
+  path_params:
+  - description: 'Game uuid: `gameInfo[].uuid` of the schedule (10 lowercase letters
+      and digits). Key space: platform game uuids; the Genius match id is `extId`
+      / `gameSourceId` in the body.'
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/boxscore
+  short: boxscore
+  summary: Player box score and team rows of both sides (2023/24 on).
+- example_args:
+    game_uuid: c4hh5nig6t
+  parser: parse_sportality_page
+  path: /sports-v2/game-info/{game_uuid}
+  path_params:
+  - description: 'Game uuid: `gameInfo[].uuid` of the schedule (10 lowercase letters
+      and digits). Key space: platform game uuids; the Genius match id is `extId`
+      / `gameSourceId` in the body.'
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/game_header
+  short: game_header
+  summary: 'Game header: Genius match id (extId), arena, state, teams, scores.'
+- example_args:
+    game_uuid: c4hh5nig6t
+  parser: parse_sportality_page
+  path: /gameday/game-overview/{game_uuid}
+  path_params:
+  - description: 'Game uuid: `gameInfo[].uuid` of the schedule (10 lowercase letters
+      and digits). Key space: platform game uuids; the Genius match id is `extId`
+      / `gameSourceId` in the body.'
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/game_overview
+  short: game_overview
+  summary: Score, state, clock and the Genius ids of one game (2023/24 on).
+- example_args:
+    game_uuid: c4hh5nig6t
+  parser: parse_sportality_page
+  path: /gameday/game-info/{game_uuid}
+  path_params:
+  - description: 'Game uuid: `gameInfo[].uuid` of the schedule (10 lowercase letters
+      and digits). Key space: platform game uuids; the Genius match id is `extId`
+      / `gameSourceId` in the body.'
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/game_summary
+  short: game_summary
+  summary: Points per period, team comparison and best scorers (2023/24 on).
+- example_args: {}
+  extra_params:
+  - description: Season END year (2026 = 2025/26), mapped to its ssgt through layout-info.
+      None = the active ssgt (these match-day views follow the current season).
+    name: season
+    query_key: season
+    type: int
+  - choices: &id001
+    - regular
+    - finals
+    default: regular
+    description: 'Game type: regular (the league season) or finals (the playoffs,
+      Slutspil).'
+    name: game_type
+    query_key: gameType
+    type: str
+  parser: parse_sportality_schedule
+  path: /sports-v2/last-game-day
+  returns_schema: native/sportality/last_game_day
+  short: last_game_day
+  summary: Games of the last played match day of an ssgt.
+- example_args: {}
+  parser: parse_sportality_layout
+  path: /statistics-v2/layout-info
+  returns_schema: native/sportality/layout_info
+  short: layout_info
+  summary: Directory of every ssgt (season + series + game type) with its teams, and
+    the stats modules.
+- example_args: {}
+  extra_params:
+  - description: Season END year (2026 = 2025/26), mapped to its ssgt through layout-info.
+      None = the active ssgt (these match-day views follow the current season).
+    name: season
+    query_key: season
+    type: int
+  - choices: *id001
+    default: regular
+    description: 'Game type: regular (the league season) or finals (the playoffs,
+      Slutspil).'
+    name: game_type
+    query_key: gameType
+    type: str
+  parser: parse_sportality_schedule
+  path: /sports-v2/next-game-day
+  returns_schema: native/sportality/next_game_day
+  short: next_game_day
+  summary: Games of the next match day of an ssgt.
+- example_args:
+    game_uuid: c4hh5nig6t
+  parser: parse_sportality_pbp
+  path: /gameday/play-by-play/{game_uuid}
+  path_params:
+  - description: 'Game uuid: `gameInfo[].uuid` of the schedule (10 lowercase letters
+      and digits). Key space: platform game uuids; the Genius match id is `extId`
+      / `gameSourceId` in the body.'
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/pbp
+  short: pbp
+  summary: Play-by-play events with shot coordinates and the Genius ids (2023/24 on).
+- example_args:
+    game_uuid: c4hh5nig6t
+  parser: parse_sportality_player_box
+  path: /gameday/player-stats/{game_uuid}
+  path_params:
+  - description: 'Game uuid: `gameInfo[].uuid` of the schedule (10 lowercase letters
+      and digits). Key space: platform game uuids; the Genius match id is `extId`
+      / `gameSourceId` in the body.'
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/player_box
+  short: player_box
+  summary: Box score with jersey and Genius shirt numbers (2023/24 on).
+- example_args:
+    away_team_uuid: gvvuxe9ysw
+    game_uuid: c4hh5nig6t
+    home_team_uuid: rfo82vr830
+    ssgt_uuid: xs07bd3fmp
+  extra_params:
+  - description: Game uuid; selects the game whose box-score lines the head-to-head
+      carries.
+    name: game_uuid
+    query_key: gameUuid
+    type: str
+  parser: parse_sportality_h2h
+  path: /statistics-v2/player-h2h-v2/{ssgt_uuid}/{home_team_uuid}/{away_team_uuid}
+  path_params:
+  - description: 'ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027
+      regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`.'
+    name: ssgt_uuid
+    required: true
+    type: str
+  - description: Home team uuid of the game.
+    name: home_team_uuid
+    required: true
+    type: str
+  - description: Away team uuid of the game.
+    name: away_team_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/player_h2h
+  short: player_h2h
+  summary: Player head-to-head of a matchup with per-game and season lines.
+- example_args:
+    away_team_uuid: gvvuxe9ysw
+    game_uuid: c4hh5nig6t
+    home_team_uuid: rfo82vr830
+    ssgt_uuid: xs07bd3fmp
+  extra_params:
+  - description: Required. ssgt uuid. Without it the answer is an empty 200 body.
+    name: ssgt_uuid
+    query_key: ssgtUuid
+    required: true
+    type: str
+  - description: Required. Home team uuid; without it the home side comes back blank.
+    name: home_team_uuid
+    query_key: homeTeamUuid
+    required: true
+    type: str
+  - description: Required. Away team uuid; without it the away side comes back blank.
+    name: away_team_uuid
+    query_key: awayTeamUuid
+    required: true
+    type: str
+  parser: parse_sportality
+  path: /gameday/post-game-data/team-stats/{game_uuid}
+  path_params:
+  - description: 'Game uuid: `gameInfo[].uuid` of the schedule (10 lowercase letters
+      and digits). Key space: platform game uuids; the Genius match id is `extId`
+      / `gameSourceId` in the body.'
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/post_game_team_stats
+  short: post_game_team_stats
+  summary: Post-game team comparison (2023/24 on).
+- example_args:
+    team_uuid: rfo82vr830
+  parser: parse_sportality_roster
+  path: /sports-v2/athletes/by-team-uuid/{team_uuid}
+  path_params:
+  - description: 'Team uuid: `homeTeamInfo.uuid` / `awayTeamInfo.uuid` in the schedule
+      or `teamList[].uuid`. Key space: platform team uuids (not the numeric Genius
+      team id).'
+    name: team_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/roster
+  short: roster
+  summary: Current roster of a team, grouped by position.
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Required. Season END year (2026 = 2025/26). Mapped to the provider's
+      ssgt through /statistics-v2/layout-info (Basketligaen 2002/03 on); a season
+      it does not list raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices: *id001
+    default: regular
+    description: 'Game type: regular (the league season) or finals (the playoffs,
+      Slutspil).'
+    name: game_type
+    query_key: gameType
+    type: str
+  parser: parse_sportality_schedule
+  path: /sports-v2/game-schedule
+  returns_schema: native/sportality/schedule
+  short: schedule
+  summary: Schedule and results of one season + series + game type.
+- example_args: {}
+  parser: parse_sportality_filter
+  path: /sports-v2/season-series-game-types-filter
+  returns_schema: native/sportality/season_filter
+  short: season_filter
+  summary: Series, the 25 seasons (2002/03 on), game types and the default ssgt.
+- example_args:
+    ssgt_uuid: xs07bd3fmp
+  parser: parse_sportality
+  path: /sports-v2/all-sites/{ssgt_uuid}
+  path_params:
+  - description: 'ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027
+      regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`.'
+    name: ssgt_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/sites
+  short: sites
+  summary: Clubs (sites) taking part in an ssgt.
+- example_args:
+    ssgt_uuid: xs07bd3fmp
+  parser: parse_sportality
+  path: /sports-v2/ssgt/{ssgt_uuid}/provider
+  path_params:
+  - description: 'ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027
+      regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`.'
+    name: ssgt_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/ssgt_provider
+  short: ssgt_provider
+  summary: Stats provider of an ssgt, a bare word (genius-basketball).
+- example_args:
+    ssgt_uuid: xs07bd3fmp
+  parser: parse_sportality_standings
+  path: /gameday/team-standings/{ssgt_uuid}
+  path_params:
+  - description: 'ssgt uuid: one season + series + game type, e.g. xs07bd3fmp = 2026/2027
+      regular season. Directory: `/statistics-v2/layout-info` `seasonSeriesGameTypeTeams[].ssgtUuid`.'
+    name: ssgt_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/standings
+  short: standings
+  summary: Standings of an ssgt (gameday widget).
+- example_args:
+    module: players_summary
+    season: 2026
+  extra_params:
+  - description: Required. Season END year (2026 = 2025/26). Mapped to the provider's
+      ssgt through /statistics-v2/layout-info (Basketligaen 2002/03 on); a season
+      it does not list raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices: *id001
+    default: regular
+    description: 'Game type: regular (the league season) or finals (the playoffs,
+      Slutspil).'
+    name: game_type
+    query_key: gameType
+    type: str
+  fixed_params:
+    count: 1000
+  parser: parse_sportality_stats_info
+  path: /statistics-v2/stats-info/{module}
+  path_params:
+  - choices:
+    - games_games
+    - players_defensive
+    - players_fieldGoal
+    - players_foul
+    - players_offensive
+    - players_point
+    - players_rebound
+    - players_summary
+    - standings_standings
+    - teams_attendance
+    - teams_defensive
+    - teams_fieldGoal
+    - teams_foul
+    - teams_offensive
+    - teams_point
+    - teams_possession
+    - teams_rebound
+    - teams_summary
+    description: 'Stats table: players_* (summary, fieldGoal, rebound, point, offensive,
+      defensive, foul), teams_* (summary, attendance, possession, fieldGoal, point,
+      rebound, offensive, defensive, foul), games_games or standings_standings.'
+    name: module
+    required: true
+    type: str
+  returns_schema: native/sportality/stats_info
+  short: stats_info
+  summary: Stats table of one module for a season (players, teams, games, standings).
+- example_args:
+    team_uuid: rfo82vr830
+  parser: parse_sportality_page
+  path: /sports-v2/teams/{team_uuid}
+  path_params:
+  - description: 'Team uuid: `homeTeamInfo.uuid` / `awayTeamInfo.uuid` in the schedule
+      or `teamList[].uuid`. Key space: platform team uuids (not the numeric Genius
+      team id).'
+    name: team_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/team
+  short: team
+  summary: One team.
+- example_args:
+    team_uuid: rfo82vr830
+  parser: parse_sportality_schedule
+  path: /sports-v2/played-games/{team_uuid}
+  path_params:
+  - description: 'Team uuid: `homeTeamInfo.uuid` / `awayTeamInfo.uuid` in the schedule
+      or `teamList[].uuid`. Key space: platform team uuids (not the numeric Genius
+      team id).'
+    name: team_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/team_played_games
+  short: team_played_games
+  summary: A team's recent games (current season view).
+- example_args:
+    game_uuid: c4hh5nig6t
+  parser: parse_sportality_team_stats
+  path: /gameday/team-stats/{game_uuid}
+  path_params:
+  - description: 'Game uuid: `gameInfo[].uuid` of the schedule (10 lowercase letters
+      and digits). Key space: platform game uuids; the Genius match id is `extId`
+      / `gameSourceId` in the body.'
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/team_stats
+  short: team_stats
+  summary: Team totals per period (2023/24 on).
+- example_args:
+    team_uuid: rfo82vr830
+  parser: parse_sportality_schedule
+  path: /sports-v2/upcoming-games/{team_uuid}
+  path_params:
+  - description: 'Team uuid: `homeTeamInfo.uuid` / `awayTeamInfo.uuid` in the schedule
+      or `teamList[].uuid`. Key space: platform team uuids (not the numeric Genius
+      team id).'
+    name: team_uuid
+    required: true
+    type: str
+  returns_schema: native/sportality/team_upcoming_games
+  short: team_upcoming_games
+  summary: A team's next games (current season view).
+getter_module: sportsdataverse.basketball.dbl.sportality_runtime
+host: https://www.basketligaen.dk/api
+module: sportality
+name_pattern: sportality_{short}
+parser_columns: true
+parser_module: basketball.dbl.sportality_parsers
+passthrough_query: false
+qualifier: ''
+raw_types:
+- Dict
+- str
+runtime_imports:
+- _get
+schema_prefix: sportality_

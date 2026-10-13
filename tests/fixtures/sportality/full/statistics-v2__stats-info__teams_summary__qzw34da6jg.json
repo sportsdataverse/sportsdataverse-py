@@ -1,0 +1,2035 @@
+[
+ {
+  "dataColumns": [
+   {
+    "name": "Rank",
+    "type": "integer",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "Team",
+    "type": "string",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "GP",
+    "type": "integer",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "W",
+    "type": "integer",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "PAvg",
+    "type": "float_one",
+    "highlighted": true,
+    "group": ""
+   },
+   {
+    "name": "RAvg",
+    "type": "float_one",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "AAvg",
+    "type": "float_one",
+    "highlighted": true,
+    "group": ""
+   },
+   {
+    "name": "SAvg",
+    "type": "float_one",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "BAvg",
+    "type": "float_one",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "FAvg",
+    "type": "float_one",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "2PPerc",
+    "type": "percentage_two",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "3PPerc",
+    "type": "percentage_two",
+    "highlighted": false,
+    "group": ""
+   },
+   {
+    "name": "FTPerc",
+    "type": "percentage_two",
+    "highlighted": false,
+    "group": ""
+   }
+  ],
+  "defaultSortKey": {
+   "name": "W",
+   "order": "DESC"
+  },
+  "stats": [
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 26,
+    "PAvg": "99.8",
+    "RAvg": "41.0",
+    "AAvg": "23.5",
+    "SAvg": "9.8",
+    "BAvg": "3.2",
+    "FAvg": "21.4",
+    "2PPerc": "67.13",
+    "3PPerc": "33.01",
+    "FTPerc": "67.73",
+    "info": {
+     "type": "team",
+     "id": 22248,
+     "name": "Bakken Bears",
+     "uuid": "ktcu9aaala",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-09-14T19:12:01.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "bak1_bak",
+     "ownersite": null,
+     "teamCode": "BAK",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg",
+     "teamNames": {
+      "code": "BAK",
+      "short": "Bakken Bears",
+      "long": "Bakken Bears",
+      "full": "Bakken Bears",
+      "codeSite": "BAK",
+      "shortSite": "Bakken Bears",
+      "fullSite": "Bakken Bears",
+      "longSite": "Bakken Bears"
+     },
+     "clubName": {},
+     "teamInfo": {
+      "founded": "1954",
+      "facebook": "https://www.facebook.com/bakkenbears",
+      "instagram": "https://www.instagram.com/bakkenbears_official"
+     },
+     "teamExtIds": [
+      {
+       "id": 872,
+       "extId": "22248",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 872,
+       "extId": "22248",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "BAK",
+     "siteDisplayName": "Bakken Bears"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 25,
+    "PAvg": "102.8",
+    "RAvg": "39.2",
+    "AAvg": "23.1",
+    "SAvg": "7.7",
+    "BAvg": "2.4",
+    "FAvg": "18.6",
+    "2PPerc": "63.62",
+    "3PPerc": "37.35",
+    "FTPerc": "75.41",
+    "info": {
+     "type": "team",
+     "id": 22255,
+     "name": "Team FOG Næstved",
+     "uuid": "iutrlqp3ef",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-09-14T19:05:34.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "tfn1_tfn",
+     "ownersite": null,
+     "teamCode": "TFN",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/tfn1_tfn.svg",
+     "teamNames": {
+      "code": "TFN",
+      "short": "Team FOG Næstved",
+      "long": "Team FOG Næstved",
+      "full": "Team FOG Næstved",
+      "codeSite": "TFN",
+      "shortSite": "Team FOG Næstved",
+      "fullSite": "Team FOG Næstved",
+      "longSite": "Team FOG Næstved"
+     },
+     "clubName": {},
+     "teamInfo": {
+      "facebook": "https://www.facebook.com/teamfog",
+      "instagram": "https://www.instagram.com/officialteamfog/?hl=da"
+     },
+     "teamExtIds": [
+      {
+       "id": 869,
+       "extId": "22255",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 869,
+       "extId": "22255",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/tfn1_tfn.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "TFN",
+     "siteDisplayName": "Team FOG Næstved"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 23,
+    "PAvg": "91.5",
+    "RAvg": "36.5",
+    "AAvg": "19.3",
+    "SAvg": "9.0",
+    "BAvg": "5.2",
+    "FAvg": "19.8",
+    "2PPerc": "57.80",
+    "3PPerc": "34.23",
+    "FTPerc": "75.91",
+    "info": {
+     "type": "team",
+     "id": 22256,
+     "name": "Svendborg Rabbits",
+     "uuid": "kgmhwo9l5d",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-09-14T19:09:01.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "sve1_sve",
+     "ownersite": null,
+     "teamCode": "SVE",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+     "teamNames": {
+      "code": "SVE",
+      "short": "Svendborg Rabbits",
+      "long": "Svendborg Rabbits",
+      "full": "Svendborg Rabbits",
+      "codeSite": "SVE",
+      "shortSite": "Svendborg Rabbits",
+      "fullSite": "Svendborg Rabbits",
+      "longSite": "Svendborg Rabbits"
+     },
+     "clubName": {},
+     "teamInfo": {
+      "founded": "2006",
+      "facebook": "https://www.facebook.com/rabbits.dk",
+      "instagram": "https://www.instagram.com/svendborgrabbitsofficial/"
+     },
+     "teamExtIds": [
+      {
+       "id": 863,
+       "extId": "22256",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 863,
+       "extId": "22256",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "SVE",
+     "siteDisplayName": "Svendborg Rabbits"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 22,
+    "PAvg": "86.9",
+    "RAvg": "36.5",
+    "AAvg": "17.4",
+    "SAvg": "9.0",
+    "BAvg": "2.4",
+    "FAvg": "19.8",
+    "2PPerc": "55.56",
+    "3PPerc": "32.18",
+    "FTPerc": "65.08",
+    "info": {
+     "type": "team",
+     "id": 22249,
+     "name": "Horsens IC",
+     "uuid": "hip2m60a45",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-08-18T06:44:27.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "hic1_hic",
+     "ownersite": null,
+     "teamCode": "HIC",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/hic1_hic.svg",
+     "teamNames": {
+      "code": "HIC",
+      "short": "Horsens IC",
+      "long": "Horsens IC",
+      "full": "Horsens IC",
+      "codeSite": "HIC",
+      "shortSite": "Horsens IC",
+      "fullSite": "Horsens IC",
+      "longSite": "Horsens IC"
+     },
+     "clubName": {},
+     "teamInfo": {},
+     "teamExtIds": [
+      {
+       "id": 865,
+       "extId": "22249",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 865,
+       "extId": "22249",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/hic1_hic.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "HIC",
+     "siteDisplayName": "Horsens IC"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 21,
+    "PAvg": "93.6",
+    "RAvg": "35.8",
+    "AAvg": "22.0",
+    "SAvg": "6.5",
+    "BAvg": "2.9",
+    "FAvg": "21.5",
+    "2PPerc": "57.41",
+    "3PPerc": "36.61",
+    "FTPerc": "78.24",
+    "info": {
+     "type": "team",
+     "id": 22250,
+     "name": "Randers Cimbria",
+     "uuid": "gvvuxe9ysw",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-08-18T06:45:44.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "ran1_ran",
+     "ownersite": null,
+     "teamCode": "RAN",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/ran1_ran.svg",
+     "teamNames": {
+      "code": "RAN",
+      "short": "Randers Cimbria",
+      "long": "Randers Cimbria",
+      "full": "Randers Cimbria",
+      "codeSite": "RAN",
+      "shortSite": "Randers Cimbria",
+      "fullSite": "Randers Cimbria",
+      "longSite": "Randers Cimbria"
+     },
+     "clubName": {},
+     "teamInfo": {},
+     "teamExtIds": [
+      {
+       "id": 864,
+       "extId": "22250",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 864,
+       "extId": "22250",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/ran1_ran.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "RAN",
+     "siteDisplayName": "Randers Cimbria"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 17,
+    "PAvg": "80.1",
+    "RAvg": "31.6",
+    "AAvg": "17.0",
+    "SAvg": "8.5",
+    "BAvg": "3.5",
+    "FAvg": "20.8",
+    "2PPerc": "54.13",
+    "3PPerc": "31.75",
+    "FTPerc": "69.11",
+    "info": {
+     "type": "team",
+     "id": 114932,
+     "name": "Værløse Blue Hawks",
+     "uuid": "ozojzoejir",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-09-14T19:10:13.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "vbh1_vbh",
+     "ownersite": null,
+     "teamCode": "VBH",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/vbh1_vbh.svg",
+     "teamNames": {
+      "code": "VBH",
+      "short": "Værløse Blue Hawks",
+      "long": "Værløse Blue Hawks",
+      "full": "Værløse Blue Hawks",
+      "codeSite": "VBH",
+      "shortSite": "Værløse Blue Hawks",
+      "fullSite": "Værløse Blue Hawks",
+      "longSite": "Værløse Blue Hawks"
+     },
+     "clubName": {},
+     "teamInfo": {
+      "founded": "1972",
+      "facebook": "https://www.facebook.com/vbbk.dk",
+      "instagram": "https://www.instagram.com/vaerloesebasketballklub/"
+     },
+     "teamExtIds": [
+      {
+       "id": 868,
+       "extId": "114932",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 868,
+       "extId": "114932",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/vbh1_vbh.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "VBH",
+     "siteDisplayName": "Værløse Blue Hawks"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 14,
+    "PAvg": "86.3",
+    "RAvg": "32.6",
+    "AAvg": "20.3",
+    "SAvg": "9.4",
+    "BAvg": "2.1",
+    "FAvg": "23.8",
+    "2PPerc": "54.60",
+    "3PPerc": "32.92",
+    "FTPerc": "67.70",
+    "info": {
+     "type": "team",
+     "id": 156486,
+     "name": "BC Copenhagen",
+     "uuid": "ka7lusvmtn",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-08-18T06:42:06.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "bcc1_bcc",
+     "ownersite": null,
+     "teamCode": "BCC",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bcc1_bcc.svg",
+     "teamNames": {
+      "code": "BCC",
+      "short": "BC Copenhagen",
+      "long": "BC Copenhagen",
+      "full": "BC Copenhagen",
+      "codeSite": "BCC",
+      "shortSite": "BC Copenhagen",
+      "fullSite": "BC Copenhagen",
+      "longSite": "BC Copenhagen"
+     },
+     "clubName": {},
+     "teamInfo": {},
+     "teamExtIds": [
+      {
+       "id": 871,
+       "extId": "156486",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 871,
+       "extId": "156486",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/bcc1_bcc.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "BCC",
+     "siteDisplayName": "BC Copenhagen"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 13,
+    "PAvg": "83.4",
+    "RAvg": "34.5",
+    "AAvg": "18.8",
+    "SAvg": "8.7",
+    "BAvg": "2.5",
+    "FAvg": "18.9",
+    "2PPerc": "52.03",
+    "3PPerc": "31.81",
+    "FTPerc": "70.43",
+    "info": {
+     "type": "team",
+     "id": 130088,
+     "name": "Bears Academy",
+     "uuid": "swr1d65lew",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-08-18T06:41:05.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "bac1_bac",
+     "ownersite": null,
+     "teamCode": "BAC",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg",
+     "teamNames": {
+      "code": "BAC",
+      "short": "Bears Academy",
+      "long": "Bears Academy",
+      "full": "Bears Academy",
+      "codeSite": "BAC",
+      "shortSite": "Bears Academy",
+      "fullSite": "Bears Academy",
+      "longSite": "Bears Academy"
+     },
+     "clubName": {},
+     "teamInfo": {},
+     "teamExtIds": [
+      {
+       "id": 867,
+       "extId": "130088",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 867,
+       "extId": "130088",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "BAC",
+     "siteDisplayName": "Bears Academy"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 10,
+    "PAvg": "79.9",
+    "RAvg": "30.3",
+    "AAvg": "18.3",
+    "SAvg": "8.5",
+    "BAvg": "2.9",
+    "FAvg": "19.7",
+    "2PPerc": "51.61",
+    "3PPerc": "32.94",
+    "FTPerc": "65.12",
+    "info": {
+     "type": "team",
+     "id": 187013,
+     "name": "BK Vejen",
+     "uuid": "wv1lcxg0u2",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-08-18T06:43:04.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "bkv1_bkv",
+     "ownersite": null,
+     "teamCode": "BKV",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bkv1_bkv.svg",
+     "teamNames": {
+      "code": "BKV",
+      "short": "BK Vejen",
+      "long": "BK Vejen",
+      "full": "BK Vejen",
+      "codeSite": "BKV",
+      "shortSite": "BK Vejen",
+      "fullSite": "BK Vejen",
+      "longSite": "BK Vejen"
+     },
+     "clubName": {},
+     "teamInfo": {},
+     "teamExtIds": [
+      {
+       "id": 870,
+       "extId": "187013",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 870,
+       "extId": "187013",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/bkv1_bkv.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "BKV",
+     "siteDisplayName": "BK Vejen"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 8,
+    "PAvg": "77.7",
+    "RAvg": "32.3",
+    "AAvg": "16.0",
+    "SAvg": "9.0",
+    "BAvg": "1.1",
+    "FAvg": "20.6",
+    "2PPerc": "49.59",
+    "3PPerc": "28.64",
+    "FTPerc": "68.82",
+    "info": {
+     "type": "team",
+     "id": 140898,
+     "name": "BMS Herlev",
+     "uuid": "kgejfzwwbd",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-08-18T06:43:31.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "bms1_bms",
+     "ownersite": null,
+     "teamCode": "BMS",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bms1_bms.svg",
+     "teamNames": {
+      "code": "BMS",
+      "short": "BMS Herlev",
+      "long": "BMS Herlev",
+      "full": "BMS Herlev",
+      "codeSite": "BMS",
+      "shortSite": "BMS Herlev",
+      "fullSite": "BMS Herlev",
+      "longSite": "BMS Herlev"
+     },
+     "clubName": {},
+     "teamInfo": {},
+     "teamExtIds": [
+      {
+       "id": 866,
+       "extId": "140898",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 866,
+       "extId": "140898",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/bms1_bms.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "BMS",
+     "siteDisplayName": "BMS Herlev"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 7,
+    "PAvg": "81.5",
+    "RAvg": "36.3",
+    "AAvg": "14.8",
+    "SAvg": "7.1",
+    "BAvg": "2.8",
+    "FAvg": "21.7",
+    "2PPerc": "48.76",
+    "3PPerc": "29.46",
+    "FTPerc": "69.28",
+    "info": {
+     "type": "team",
+     "id": 153747,
+     "name": "Holbæk-Stenhus",
+     "uuid": "rfo82vr830",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-08-18T06:45:16.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "hol2_hol",
+     "ownersite": null,
+     "teamCode": "HOL",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg",
+     "teamNames": {
+      "code": "HOL",
+      "short": "Holbæk-Stenhus",
+      "long": "Holbæk-Stenhus",
+      "full": "Holbæk-Stenhus",
+      "codeSite": "HOL",
+      "shortSite": "Holbæk-Stenhus",
+      "fullSite": "Holbæk-Stenhus",
+      "longSite": "Holbæk-Stenhus"
+     },
+     "clubName": {},
+     "teamInfo": {},
+     "teamExtIds": [
+      {
+       "id": 862,
+       "extId": "153747",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 862,
+       "extId": "153747",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "HOL",
+     "siteDisplayName": "Holbæk-Stenhus"
+    }
+   },
+   {
+    "Rank": null,
+    "Team": 0,
+    "GP": 32,
+    "W": 6,
+    "PAvg": "82.3",
+    "RAvg": "31.7",
+    "AAvg": "15.9",
+    "SAvg": "7.2",
+    "BAvg": "2.6",
+    "FAvg": "19.1",
+    "2PPerc": "49.92",
+    "3PPerc": "33.30",
+    "FTPerc": "72.42",
+    "info": {
+     "type": "team",
+     "id": 67370,
+     "name": "BK Amager",
+     "uuid": "sjbo8mmzi5",
+     "createdAt": "2026-06-17T11:18:29.000Z",
+     "createdBy": null,
+     "deleted": false,
+     "gender": "male",
+     "graphicsLibrary": null,
+     "lastModified": "2026-08-18T06:42:38.000Z",
+     "nationality": "DK",
+     "ownerInstanceId": "bka1_bka",
+     "ownersite": null,
+     "teamCode": "BKA",
+     "series": [],
+     "sport": [],
+     "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bka1_bka.svg",
+     "teamNames": {
+      "code": "BKA",
+      "short": "BK Amager",
+      "long": "BK Amager",
+      "full": "BK Amager",
+      "codeSite": "BKA",
+      "shortSite": "BK Amager",
+      "fullSite": "BK Amager",
+      "longSite": "BK Amager"
+     },
+     "clubName": {},
+     "teamInfo": {},
+     "teamExtIds": [
+      {
+       "id": 873,
+       "extId": "67370",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      },
+      {
+       "id": 888,
+       "extId": "22243",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "extIds": [
+      {
+       "id": 873,
+       "extId": "67370",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      },
+      {
+       "id": 888,
+       "extId": "22243",
+       "locked": false,
+       "extIdType": {
+        "uuid": "552a-c2beuydsj",
+        "code": "genius-basketball",
+        "createdAt": null,
+        "createdBy": "dbl1_dbl",
+        "deleted": false,
+        "lastModified": null,
+        "visible": true,
+        "name": "Genius Sports Basketball"
+       }
+      }
+     ],
+     "logo": "https://sportality.cdn.s8y.se/team-logos/bka1_bka.svg",
+     "socialMedia": [],
+     "displayName": "",
+     "code": "BKA",
+     "siteDisplayName": "BK Amager"
+    }
+   }
+  ],
+  "provider": "genius-basketball",
+  "teams": {
+   "22248": {
+    "type": "team",
+    "id": 22248,
+    "name": "Bakken Bears",
+    "uuid": "ktcu9aaala",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-09-14T19:12:01.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "bak1_bak",
+    "ownersite": null,
+    "teamCode": "BAK",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg",
+    "teamNames": {
+     "code": "BAK",
+     "short": "Bakken Bears",
+     "long": "Bakken Bears",
+     "full": "Bakken Bears",
+     "codeSite": "BAK",
+     "shortSite": "Bakken Bears",
+     "fullSite": "Bakken Bears",
+     "longSite": "Bakken Bears"
+    },
+    "clubName": {},
+    "teamInfo": {
+     "founded": "1954",
+     "facebook": "https://www.facebook.com/bakkenbears",
+     "instagram": "https://www.instagram.com/bakkenbears_official"
+    },
+    "teamExtIds": [
+     {
+      "id": 872,
+      "extId": "22248",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 872,
+      "extId": "22248",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "Bakken Bears"
+   },
+   "22249": {
+    "type": "team",
+    "id": 22249,
+    "name": "Horsens IC",
+    "uuid": "hip2m60a45",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-08-18T06:44:27.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "hic1_hic",
+    "ownersite": null,
+    "teamCode": "HIC",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/hic1_hic.svg",
+    "teamNames": {
+     "code": "HIC",
+     "short": "Horsens IC",
+     "long": "Horsens IC",
+     "full": "Horsens IC",
+     "codeSite": "HIC",
+     "shortSite": "Horsens IC",
+     "fullSite": "Horsens IC",
+     "longSite": "Horsens IC"
+    },
+    "clubName": {},
+    "teamInfo": {},
+    "teamExtIds": [
+     {
+      "id": 865,
+      "extId": "22249",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 865,
+      "extId": "22249",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/hic1_hic.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "Horsens IC"
+   },
+   "22250": {
+    "type": "team",
+    "id": 22250,
+    "name": "Randers Cimbria",
+    "uuid": "gvvuxe9ysw",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-08-18T06:45:44.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "ran1_ran",
+    "ownersite": null,
+    "teamCode": "RAN",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/ran1_ran.svg",
+    "teamNames": {
+     "code": "RAN",
+     "short": "Randers Cimbria",
+     "long": "Randers Cimbria",
+     "full": "Randers Cimbria",
+     "codeSite": "RAN",
+     "shortSite": "Randers Cimbria",
+     "fullSite": "Randers Cimbria",
+     "longSite": "Randers Cimbria"
+    },
+    "clubName": {},
+    "teamInfo": {},
+    "teamExtIds": [
+     {
+      "id": 864,
+      "extId": "22250",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 864,
+      "extId": "22250",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/ran1_ran.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "Randers Cimbria"
+   },
+   "22255": {
+    "type": "team",
+    "id": 22255,
+    "name": "Team FOG Næstved",
+    "uuid": "iutrlqp3ef",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-09-14T19:05:34.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "tfn1_tfn",
+    "ownersite": null,
+    "teamCode": "TFN",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/tfn1_tfn.svg",
+    "teamNames": {
+     "code": "TFN",
+     "short": "Team FOG Næstved",
+     "long": "Team FOG Næstved",
+     "full": "Team FOG Næstved",
+     "codeSite": "TFN",
+     "shortSite": "Team FOG Næstved",
+     "fullSite": "Team FOG Næstved",
+     "longSite": "Team FOG Næstved"
+    },
+    "clubName": {},
+    "teamInfo": {
+     "facebook": "https://www.facebook.com/teamfog",
+     "instagram": "https://www.instagram.com/officialteamfog/?hl=da"
+    },
+    "teamExtIds": [
+     {
+      "id": 869,
+      "extId": "22255",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 869,
+      "extId": "22255",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/tfn1_tfn.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "Team FOG Næstved"
+   },
+   "22256": {
+    "type": "team",
+    "id": 22256,
+    "name": "Svendborg Rabbits",
+    "uuid": "kgmhwo9l5d",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-09-14T19:09:01.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "sve1_sve",
+    "ownersite": null,
+    "teamCode": "SVE",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+    "teamNames": {
+     "code": "SVE",
+     "short": "Svendborg Rabbits",
+     "long": "Svendborg Rabbits",
+     "full": "Svendborg Rabbits",
+     "codeSite": "SVE",
+     "shortSite": "Svendborg Rabbits",
+     "fullSite": "Svendborg Rabbits",
+     "longSite": "Svendborg Rabbits"
+    },
+    "clubName": {},
+    "teamInfo": {
+     "founded": "2006",
+     "facebook": "https://www.facebook.com/rabbits.dk",
+     "instagram": "https://www.instagram.com/svendborgrabbitsofficial/"
+    },
+    "teamExtIds": [
+     {
+      "id": 863,
+      "extId": "22256",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 863,
+      "extId": "22256",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "Svendborg Rabbits"
+   },
+   "67370": {
+    "type": "team",
+    "id": 67370,
+    "name": "BK Amager",
+    "uuid": "sjbo8mmzi5",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-08-18T06:42:38.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "bka1_bka",
+    "ownersite": null,
+    "teamCode": "BKA",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bka1_bka.svg",
+    "teamNames": {
+     "code": "BKA",
+     "short": "BK Amager",
+     "long": "BK Amager",
+     "full": "BK Amager",
+     "codeSite": "BKA",
+     "shortSite": "BK Amager",
+     "fullSite": "BK Amager",
+     "longSite": "BK Amager"
+    },
+    "clubName": {},
+    "teamInfo": {},
+    "teamExtIds": [
+     {
+      "id": 873,
+      "extId": "67370",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     },
+     {
+      "id": 888,
+      "extId": "22243",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 873,
+      "extId": "67370",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     },
+     {
+      "id": 888,
+      "extId": "22243",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/bka1_bka.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "BK Amager"
+   },
+   "114932": {
+    "type": "team",
+    "id": 114932,
+    "name": "Værløse Blue Hawks",
+    "uuid": "ozojzoejir",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-09-14T19:10:13.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "vbh1_vbh",
+    "ownersite": null,
+    "teamCode": "VBH",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/vbh1_vbh.svg",
+    "teamNames": {
+     "code": "VBH",
+     "short": "Værløse Blue Hawks",
+     "long": "Værløse Blue Hawks",
+     "full": "Værløse Blue Hawks",
+     "codeSite": "VBH",
+     "shortSite": "Værløse Blue Hawks",
+     "fullSite": "Værløse Blue Hawks",
+     "longSite": "Værløse Blue Hawks"
+    },
+    "clubName": {},
+    "teamInfo": {
+     "founded": "1972",
+     "facebook": "https://www.facebook.com/vbbk.dk",
+     "instagram": "https://www.instagram.com/vaerloesebasketballklub/"
+    },
+    "teamExtIds": [
+     {
+      "id": 868,
+      "extId": "114932",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 868,
+      "extId": "114932",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/vbh1_vbh.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "Værløse Blue Hawks"
+   },
+   "130088": {
+    "type": "team",
+    "id": 130088,
+    "name": "Bears Academy",
+    "uuid": "swr1d65lew",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-08-18T06:41:05.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "bac1_bac",
+    "ownersite": null,
+    "teamCode": "BAC",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg",
+    "teamNames": {
+     "code": "BAC",
+     "short": "Bears Academy",
+     "long": "Bears Academy",
+     "full": "Bears Academy",
+     "codeSite": "BAC",
+     "shortSite": "Bears Academy",
+     "fullSite": "Bears Academy",
+     "longSite": "Bears Academy"
+    },
+    "clubName": {},
+    "teamInfo": {},
+    "teamExtIds": [
+     {
+      "id": 867,
+      "extId": "130088",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 867,
+      "extId": "130088",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "Bears Academy"
+   },
+   "140898": {
+    "type": "team",
+    "id": 140898,
+    "name": "BMS Herlev",
+    "uuid": "kgejfzwwbd",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-08-18T06:43:31.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "bms1_bms",
+    "ownersite": null,
+    "teamCode": "BMS",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bms1_bms.svg",
+    "teamNames": {
+     "code": "BMS",
+     "short": "BMS Herlev",
+     "long": "BMS Herlev",
+     "full": "BMS Herlev",
+     "codeSite": "BMS",
+     "shortSite": "BMS Herlev",
+     "fullSite": "BMS Herlev",
+     "longSite": "BMS Herlev"
+    },
+    "clubName": {},
+    "teamInfo": {},
+    "teamExtIds": [
+     {
+      "id": 866,
+      "extId": "140898",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 866,
+      "extId": "140898",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/bms1_bms.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "BMS Herlev"
+   },
+   "153747": {
+    "type": "team",
+    "id": 153747,
+    "name": "Holbæk-Stenhus",
+    "uuid": "rfo82vr830",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-08-18T06:45:16.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "hol2_hol",
+    "ownersite": null,
+    "teamCode": "HOL",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg",
+    "teamNames": {
+     "code": "HOL",
+     "short": "Holbæk-Stenhus",
+     "long": "Holbæk-Stenhus",
+     "full": "Holbæk-Stenhus",
+     "codeSite": "HOL",
+     "shortSite": "Holbæk-Stenhus",
+     "fullSite": "Holbæk-Stenhus",
+     "longSite": "Holbæk-Stenhus"
+    },
+    "clubName": {},
+    "teamInfo": {},
+    "teamExtIds": [
+     {
+      "id": 862,
+      "extId": "153747",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 862,
+      "extId": "153747",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "Holbæk-Stenhus"
+   },
+   "156486": {
+    "type": "team",
+    "id": 156486,
+    "name": "BC Copenhagen",
+    "uuid": "ka7lusvmtn",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-08-18T06:42:06.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "bcc1_bcc",
+    "ownersite": null,
+    "teamCode": "BCC",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bcc1_bcc.svg",
+    "teamNames": {
+     "code": "BCC",
+     "short": "BC Copenhagen",
+     "long": "BC Copenhagen",
+     "full": "BC Copenhagen",
+     "codeSite": "BCC",
+     "shortSite": "BC Copenhagen",
+     "fullSite": "BC Copenhagen",
+     "longSite": "BC Copenhagen"
+    },
+    "clubName": {},
+    "teamInfo": {},
+    "teamExtIds": [
+     {
+      "id": 871,
+      "extId": "156486",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 871,
+      "extId": "156486",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/bcc1_bcc.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "BC Copenhagen"
+   },
+   "187013": {
+    "type": "team",
+    "id": 187013,
+    "name": "BK Vejen",
+    "uuid": "wv1lcxg0u2",
+    "createdAt": "2026-06-17T11:18:29.000Z",
+    "createdBy": null,
+    "deleted": false,
+    "gender": "male",
+    "graphicsLibrary": null,
+    "lastModified": "2026-08-18T06:43:04.000Z",
+    "nationality": "DK",
+    "ownerInstanceId": "bkv1_bkv",
+    "ownersite": null,
+    "teamCode": "BKV",
+    "series": [],
+    "sport": [],
+    "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bkv1_bkv.svg",
+    "teamNames": {
+     "code": "BKV",
+     "short": "BK Vejen",
+     "long": "BK Vejen",
+     "full": "BK Vejen",
+     "codeSite": "BKV",
+     "shortSite": "BK Vejen",
+     "fullSite": "BK Vejen",
+     "longSite": "BK Vejen"
+    },
+    "clubName": {},
+    "teamInfo": {},
+    "teamExtIds": [
+     {
+      "id": 870,
+      "extId": "187013",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "extIds": [
+     {
+      "id": 870,
+      "extId": "187013",
+      "locked": false,
+      "extIdType": {
+       "uuid": "552a-c2beuydsj",
+       "code": "genius-basketball",
+       "createdAt": null,
+       "createdBy": "dbl1_dbl",
+       "deleted": false,
+       "lastModified": null,
+       "visible": true,
+       "name": "Genius Sports Basketball"
+      }
+     }
+    ],
+    "logo": "https://sportality.cdn.s8y.se/team-logos/bkv1_bkv.svg",
+    "socialMedia": [],
+    "displayName": "",
+    "siteDisplayName": "BK Vejen"
+   }
+  },
+  "games": {},
+  "seasonSeriesGameTypes": {},
+  "type": "team",
+  "totalCount": null
+ }
+]

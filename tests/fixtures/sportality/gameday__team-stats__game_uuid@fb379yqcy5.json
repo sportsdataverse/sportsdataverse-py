@@ -1,0 +1,135 @@
+{
+  "home": {
+    "gameSourceId": 2683784,
+    "gameId": 2683784,
+    "teamId": "67370",
+    "teamName": "BK Amager",
+    "teamCode": "BKA",
+    "teamNumber": 1,
+    "place": "home",
+    "source": "genius-basketball-stream-reader",
+    "statistics": [
+      {
+        "period": 0,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 96
+          },
+          {
+            "key": "FGM",
+            "value": 31
+          },
+          {
+            "key": "A",
+            "value": 19
+          }
+        ]
+      },
+      {
+        "period": 1,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 21
+          },
+          {
+            "key": "FGM",
+            "value": 4
+          },
+          {
+            "key": "A",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "period": 1,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 24
+          },
+          {
+            "key": "FGM",
+            "value": 8
+          },
+          {
+            "key": "A",
+            "value": 6
+          }
+        ]
+      }
+    ],
+    "instanceId": "dbl1_dbl",
+    "gameUuid": "fb379yqcy5",
+    "liveState": "decided"
+  },
+  "away": {
+    "gameSourceId": 2683784,
+    "gameId": 2683784,
+    "teamId": "153747",
+    "teamName": "Holbæk-Stenhus",
+    "teamCode": "Hol",
+    "teamNumber": 2,
+    "place": "away",
+    "source": "genius-basketball-stream-reader",
+    "statistics": [
+      {
+        "period": 0,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 90
+          },
+          {
+            "key": "FGM",
+            "value": 32
+          },
+          {
+            "key": "A",
+            "value": 11
+          }
+        ]
+      },
+      {
+        "period": 1,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 15
+          },
+          {
+            "key": "FGM",
+            "value": 4
+          },
+          {
+            "key": "A",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "period": 1,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 16
+          },
+          {
+            "key": "FGM",
+            "value": 5
+          },
+          {
+            "key": "A",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "instanceId": "dbl1_dbl",
+    "gameUuid": "fb379yqcy5",
+    "liveState": "decided"
+  },
+  "provider": "genius-basketball"
+}

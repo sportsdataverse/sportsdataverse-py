@@ -1,0 +1,324 @@
+[
+  {
+    "position": "Guards",
+    "positionCode": "G",
+    "players": [
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "cj81dc09w3",
+        "firstName": "Malthe",
+        "lastName": "Aabling",
+        "fullName": "Malthe Aabling",
+        "nationality": "DK",
+        "jerseyNumber": 13,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_81bc2f13-1172-435f-9deb-b916824c4657Malthe Aabling.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&s=4b28e0c68b061b3a3bea9f4553483727",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=160&s=ac8d7978ac0ba5bc6def8ab079b7ff02 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=320&s=3c3cae861a276a9b30964f3764e3de24 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=480&s=62411c6daded5a61cf108e51f371ca85 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=640&s=c706e9f99a78cd10f875fb84ac058891 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=960&s=64c12443bef20adeb4c975239e0f1eda 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=1280&s=012a6b567bab9f1c322fd714932e4f3d 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=1600&s=217ff827ea8618a005e7d7f0e36b24b0 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=1920&s=c88a4a6a8e5569eec4f1e8fd278973d2 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=2560&s=c1140d152a936439628316ca783aa472 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=2880&s=596b0204991750b6e35c79ea8fb31e2d 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&s=4b28e0c68b061b3a3bea9f4553483727",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&s=4b28e0c68b061b3a3bea9f4553483727",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=160&s=ac8d7978ac0ba5bc6def8ab079b7ff02 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=320&s=3c3cae861a276a9b30964f3764e3de24 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=480&s=62411c6daded5a61cf108e51f371ca85 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=640&s=c706e9f99a78cd10f875fb84ac058891 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=960&s=64c12443bef20adeb4c975239e0f1eda 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=1280&s=012a6b567bab9f1c322fd714932e4f3d 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=1600&s=217ff827ea8618a005e7d7f0e36b24b0 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=1920&s=c88a4a6a8e5569eec4f1e8fd278973d2 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=2560&s=c1140d152a936439628316ca783aa472 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&w=2880&s=596b0204991750b6e35c79ea8fb31e2d 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F81bc2f13-1172-435f-9deb-b916824c4657Malthe%20Aabling.png?ixlib=js-3.8.0&s=4b28e0c68b061b3a3bea9f4553483727",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "cjcrt5hlho",
+        "firstName": "Bryceson",
+        "lastName": "Burns",
+        "fullName": "Bryceson Burns",
+        "nationality": "US",
+        "jerseyNumber": 2,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson Burns.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&s=c8e85d5e8adebe019f570f244c011701",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=160&s=dea12792218984758765870a963577ca 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=320&s=d5f51b03d9dd7e13527c7e114bf8d02c 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=480&s=6754781e90424db0cee9cf3724f3df6c 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=640&s=1ab13cb3839cdeab678703f63e5ec1ef 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=960&s=7609df35a0c6957eefb43f4c8a09b880 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=1280&s=2fbb0d57b461b71e3d134ab7d994d66b 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=1600&s=b698d705a777fa8610d72eb991091356 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=1920&s=6fbc5dedbab6bb871d6d409cf7e37817 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=2560&s=e51e9e8d94ab0196a6c61500bf9a204d 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=2880&s=ff1501359dc5da34181b205d2a0cc832 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&s=c8e85d5e8adebe019f570f244c011701",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&s=c8e85d5e8adebe019f570f244c011701",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=160&s=dea12792218984758765870a963577ca 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=320&s=d5f51b03d9dd7e13527c7e114bf8d02c 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=480&s=6754781e90424db0cee9cf3724f3df6c 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=640&s=1ab13cb3839cdeab678703f63e5ec1ef 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=960&s=7609df35a0c6957eefb43f4c8a09b880 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=1280&s=2fbb0d57b461b71e3d134ab7d994d66b 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=1600&s=b698d705a777fa8610d72eb991091356 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=1920&s=6fbc5dedbab6bb871d6d409cf7e37817 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=2560&s=e51e9e8d94ab0196a6c61500bf9a204d 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&w=2880&s=ff1501359dc5da34181b205d2a0cc832 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F63feefe8-4ef1-499c-9483-ff52fdb8f739Bryceson%20Burns.png?ixlib=js-3.8.0&s=c8e85d5e8adebe019f570f244c011701",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "dmon8irp4j",
+        "firstName": "Maxim",
+        "lastName": "Shinkarev",
+        "fullName": "Maxim Shinkarev",
+        "nationality": "RU",
+        "jerseyNumber": 21,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_d545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim Shinkarev.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&s=7f4f3653008556a0ba9ddc3c5674dd43",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=160&s=e068ce88d92c9ad2da13e3977b1750bf 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=320&s=49bd75ac2289c1567ce2108910fe0b52 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=480&s=c42ba010f3e5af0837525b671cabafcd 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=640&s=598639d4673c219004901013395598ad 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=960&s=1de8eef688b12cc4c04975ec315aef6e 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=1280&s=60d521c014cbb6fda29acefefcfbe964 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=1600&s=47b59a3cc89cd3d906fa6f4f19fd2a65 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=1920&s=01792fdd2eb96ac59ab2f509e6449fc1 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=2560&s=5227e902f992736e35e94aa3adff23dd 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=2880&s=f18888f942eec137a150858634046e0d 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&s=7f4f3653008556a0ba9ddc3c5674dd43",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&s=7f4f3653008556a0ba9ddc3c5674dd43",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=160&s=e068ce88d92c9ad2da13e3977b1750bf 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=320&s=49bd75ac2289c1567ce2108910fe0b52 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=480&s=c42ba010f3e5af0837525b671cabafcd 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=640&s=598639d4673c219004901013395598ad 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=960&s=1de8eef688b12cc4c04975ec315aef6e 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=1280&s=60d521c014cbb6fda29acefefcfbe964 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=1600&s=47b59a3cc89cd3d906fa6f4f19fd2a65 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=1920&s=01792fdd2eb96ac59ab2f509e6449fc1 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=2560&s=5227e902f992736e35e94aa3adff23dd 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&w=2880&s=f18888f942eec137a150858634046e0d 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd545c58f-b65e-4fd5-8e8d-012f2d3f885bMaxim%20Shinkarev.png?ixlib=js-3.8.0&s=7f4f3653008556a0ba9ddc3c5674dd43",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      }
+    ]
+  },
+  {
+    "position": "Forwards",
+    "positionCode": "F",
+    "players": [
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "fjn17iovmg",
+        "firstName": "August",
+        "lastName": "Heming",
+        "fullName": "August Heming",
+        "nationality": "DK",
+        "jerseyNumber": 8,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust Heming.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&s=182e0bf2067ded3a40319a2e7fe02d6d",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=160&s=bdbc6cd16fca099dea25174f32e988c3 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=320&s=cdae36205e7e7961a1baee2067414933 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=480&s=3827a85cb40bcb3c0032822ffdb48895 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=640&s=a66db7345d53b248f7ae97a690e62512 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=960&s=cd6f6af734d886b4ca04fa15e7af6390 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=1280&s=cda2692aef1f743fc0dffab2228d60c5 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=1600&s=0db79774c08033fe2433125499e04836 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=1920&s=ba7856227f42522c8930c2ba1f711354 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=2560&s=22680ed6aa46bebec292f2ddfe9ab3e1 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=2880&s=f0b1cefdc83aa8e53ee29dd0764e6a37 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&s=182e0bf2067ded3a40319a2e7fe02d6d",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&s=182e0bf2067ded3a40319a2e7fe02d6d",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=160&s=bdbc6cd16fca099dea25174f32e988c3 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=320&s=cdae36205e7e7961a1baee2067414933 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=480&s=3827a85cb40bcb3c0032822ffdb48895 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=640&s=a66db7345d53b248f7ae97a690e62512 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=960&s=cd6f6af734d886b4ca04fa15e7af6390 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=1280&s=cda2692aef1f743fc0dffab2228d60c5 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=1600&s=0db79774c08033fe2433125499e04836 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=1920&s=ba7856227f42522c8930c2ba1f711354 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=2560&s=22680ed6aa46bebec292f2ddfe9ab3e1 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&w=2880&s=f0b1cefdc83aa8e53ee29dd0764e6a37 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F94761403-a5b5-4dbd-aa5d-8b16a89853fdAugust%20Heming.png?ixlib=js-3.8.0&s=182e0bf2067ded3a40319a2e7fe02d6d",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "m8ajfnag3m",
+        "firstName": "Caden",
+        "lastName": "Fry",
+        "fullName": "Caden Fry",
+        "nationality": "US",
+        "jerseyNumber": 23,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_b0a07b7c-09d6-4593-b9e1-b3121e6011beCaden Fry.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&s=3e9c271cf1e1c2eee8c77ee2f6e4a7ed",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=160&s=5f947d01bbdf0d05ad43cb806b01c437 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=320&s=ce2eb37c9c5d288d10519c9276c2aa35 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=480&s=6ca486f8545938e85a707121c950be5c 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=640&s=d671aea0a3db4847456e78becf6f5fe8 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=960&s=04603453282e8ed86f340eb99d0b0dfa 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=1280&s=6d1830bbde60e5789f55254160a00aa9 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=1600&s=a56208c5fda0d1ca0d62075bafdce9b9 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=1920&s=1548450bde84e4d08bb6c5a276437324 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=2560&s=1ef13ec815dc63ccaa15a5f16bee29fb 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=2880&s=bce1fb91c333ece3627ddc77bab7d2ad 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&s=3e9c271cf1e1c2eee8c77ee2f6e4a7ed",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&s=3e9c271cf1e1c2eee8c77ee2f6e4a7ed",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=160&s=5f947d01bbdf0d05ad43cb806b01c437 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=320&s=ce2eb37c9c5d288d10519c9276c2aa35 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=480&s=6ca486f8545938e85a707121c950be5c 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=640&s=d671aea0a3db4847456e78becf6f5fe8 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=960&s=04603453282e8ed86f340eb99d0b0dfa 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=1280&s=6d1830bbde60e5789f55254160a00aa9 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=1600&s=a56208c5fda0d1ca0d62075bafdce9b9 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=1920&s=1548450bde84e4d08bb6c5a276437324 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=2560&s=1ef13ec815dc63ccaa15a5f16bee29fb 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&w=2880&s=bce1fb91c333ece3627ddc77bab7d2ad 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fb0a07b7c-09d6-4593-b9e1-b3121e6011beCaden%20Fry.png?ixlib=js-3.8.0&s=3e9c271cf1e1c2eee8c77ee2f6e4a7ed",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      }
+    ]
+  },
+  {
+    "position": "Centers",
+    "positionCode": "C",
+    "players": [
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "fyeh5w7iar",
+        "firstName": "Oskar Fløng",
+        "lastName": "Vanner",
+        "fullName": "Oskar Fløng Vanner",
+        "nationality": "DK",
+        "jerseyNumber": 1,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar Vanner.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&s=0e762062bada68fb40149dd33ff6e094",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=160&s=676b41a2c543f4b608c0275e3f5d72ca 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=320&s=258384f0200040ea664ad8452f064a21 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=480&s=f9481e02ddefb4aa3cc7ae2e3f48443b 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=640&s=59b8aacee885a2560b398bb48b22befa 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=960&s=3d1454e0eb0e04ae119fa706b36bee60 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=1280&s=e6ae3086b78812cb4e25e4a2446ebc67 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=1600&s=9a87395eeac091df9a81905738baed8e 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=1920&s=11d25e27761f17b28d65fe357b9b156f 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=2560&s=816fe171198180055ad8696e18a41942 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=2880&s=663d1062e4316eca5e2b2b9af7760297 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&s=0e762062bada68fb40149dd33ff6e094",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&s=0e762062bada68fb40149dd33ff6e094",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=160&s=676b41a2c543f4b608c0275e3f5d72ca 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=320&s=258384f0200040ea664ad8452f064a21 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=480&s=f9481e02ddefb4aa3cc7ae2e3f48443b 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=640&s=59b8aacee885a2560b398bb48b22befa 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=960&s=3d1454e0eb0e04ae119fa706b36bee60 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=1280&s=e6ae3086b78812cb4e25e4a2446ebc67 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=1600&s=9a87395eeac091df9a81905738baed8e 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=1920&s=11d25e27761f17b28d65fe357b9b156f 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=2560&s=816fe171198180055ad8696e18a41942 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&w=2880&s=663d1062e4316eca5e2b2b9af7760297 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F3d8bc50b-572c-4f40-ad08-55cd26a12c04Oskar%20Vanner.png?ixlib=js-3.8.0&s=0e762062bada68fb40149dd33ff6e094",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "mqers10jtj",
+        "firstName": "Daniel",
+        "lastName": "Stubkjær",
+        "fullName": "Daniel Stubkjær",
+        "nationality": "DK",
+        "jerseyNumber": 12,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_d2156241-11dc-4255-841c-db1e69d18768Daniel Stubkjr.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&s=f989c3b1757c10fb7373159a10dcf2c3",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=160&s=99c4aad24c0dc5200e45c7c390aa7f16 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=320&s=fd5a7967bbaaa6c44cb716c8397dc18c 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=480&s=87caf91d08d895a8413c15eaa3931ab9 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=640&s=5ff64f3d9f3246e4b6ed4aac91762e75 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=960&s=f88ca864b6de7d692db2e6f09a7f4030 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=1280&s=49d031268d58c6391ffd9019abe28c5d 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=1600&s=b9721126a0a4d6e849bf51d2524ecf6c 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=1920&s=11fa0712f427b9882c8484e6918ebd37 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=2560&s=a46320225b96c16c87d332a156088e77 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=2880&s=a9512e86641f69df522cd55d4f6b3583 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&s=f989c3b1757c10fb7373159a10dcf2c3",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&s=f989c3b1757c10fb7373159a10dcf2c3",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=160&s=99c4aad24c0dc5200e45c7c390aa7f16 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=320&s=fd5a7967bbaaa6c44cb716c8397dc18c 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=480&s=87caf91d08d895a8413c15eaa3931ab9 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=640&s=5ff64f3d9f3246e4b6ed4aac91762e75 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=960&s=f88ca864b6de7d692db2e6f09a7f4030 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=1280&s=49d031268d58c6391ffd9019abe28c5d 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=1600&s=b9721126a0a4d6e849bf51d2524ecf6c 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=1920&s=11fa0712f427b9882c8484e6918ebd37 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=2560&s=a46320225b96c16c87d332a156088e77 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&w=2880&s=a9512e86641f69df522cd55d4f6b3583 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd2156241-11dc-4255-841c-db1e69d18768Daniel%20Stubkjr.png?ixlib=js-3.8.0&s=f989c3b1757c10fb7373159a10dcf2c3",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "wz2bk7trd4",
+        "firstName": "Visti",
+        "lastName": "Thomsen",
+        "fullName": "Visti Thomsen",
+        "nationality": "DK",
+        "jerseyNumber": 31,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_366588c2-3ba6-4d6d-97b2-c25357cda139Visti Thomase.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&s=bcb757d09ab64b7038a05b5f4a049fad",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=160&s=5f3e7f047203b8a6a06515f6fc55a489 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=320&s=bf48b01a3f4df29877eb3cfafe7ffcca 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=480&s=fdd5d8a9f5dad6205b3e7e9bcfe899b8 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=640&s=e8f0a66531648161cc46415c5f9577ed 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=960&s=585fee8dfffe76052e6ada693691e34a 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=1280&s=fa8b5f66c7adb498005b6cf8e412f0f2 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=1600&s=9973428886b01a1341b532865cb14040 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=1920&s=c8b83c64eaf30af91b06d005330db61c 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=2560&s=79e6eec890c7067ef7778e13092af2b2 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=2880&s=c6f4b2567b89d5276e25d32040d35079 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&s=bcb757d09ab64b7038a05b5f4a049fad",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&s=bcb757d09ab64b7038a05b5f4a049fad",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=160&s=5f3e7f047203b8a6a06515f6fc55a489 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=320&s=bf48b01a3f4df29877eb3cfafe7ffcca 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=480&s=fdd5d8a9f5dad6205b3e7e9bcfe899b8 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=640&s=e8f0a66531648161cc46415c5f9577ed 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=960&s=585fee8dfffe76052e6ada693691e34a 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=1280&s=fa8b5f66c7adb498005b6cf8e412f0f2 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=1600&s=9973428886b01a1341b532865cb14040 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=1920&s=c8b83c64eaf30af91b06d005330db61c 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=2560&s=79e6eec890c7067ef7778e13092af2b2 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&w=2880&s=c6f4b2567b89d5276e25d32040d35079 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-basketballdk-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F366588c2-3ba6-4d6d-97b2-c25357cda139Visti%20Thomase.png?ixlib=js-3.8.0&s=bcb757d09ab64b7038a05b5f4a049fad",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      }
+    ]
+  }
+]

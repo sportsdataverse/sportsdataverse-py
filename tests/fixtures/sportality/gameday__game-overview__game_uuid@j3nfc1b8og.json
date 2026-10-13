@@ -1,0 +1,42 @@
+{
+  "gameUuid": "j3nfc1b8og",
+  "homeTeam": {
+    "gameSourceId": 2289328,
+    "gameId": 2289328,
+    "teamId": "22256",
+    "teamName": "Svendborg Rabbits",
+    "teamCode": "SVE",
+    "teamNumber": 1,
+    "place": "home",
+    "source": "genius-basketball-stream-reader",
+    "instanceId": "dbl1_dbl",
+    "gameUuid": "j3nfc1b8og",
+    "liveState": "decided"
+  },
+  "awayTeam": {
+    "gameSourceId": 2289328,
+    "gameId": 2289328,
+    "teamId": "22249",
+    "teamName": "Horsens IC",
+    "teamCode": "HIC",
+    "teamNumber": 2,
+    "place": "away",
+    "source": "genius-basketball-stream-reader",
+    "instanceId": "dbl1_dbl",
+    "gameUuid": "j3nfc1b8og",
+    "liveState": "decided"
+  },
+  "homeGoals": 80,
+  "awayGoals": 77,
+  "state": "GameEnded",
+  "time": {
+    "0": {
+      "period": 4,
+      "periodTime": "00:00:00"
+    },
+    "gameId": 2289328,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "liveState": "decided"
+  }
+}

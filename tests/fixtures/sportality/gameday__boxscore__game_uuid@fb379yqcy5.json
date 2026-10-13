@@ -1,0 +1,289 @@
+{
+  "dataColumns": [
+    {
+      "name": "MINS",
+      "type": "string",
+      "highlighted": false,
+      "group": ""
+    },
+    {
+      "name": "PTS",
+      "type": "string",
+      "highlighted": false,
+      "group": ""
+    },
+    {
+      "name": "FG",
+      "type": "string",
+      "highlighted": false,
+      "group": ""
+    }
+  ],
+  "players": {
+    "homeTeamValue": {
+      "1293223": {
+        "fullName": "Linus Grøn",
+        "firstName": "Linus",
+        "lastName": "Grøn",
+        "extIds": [
+          {
+            "extId": 1293223
+          }
+        ]
+      },
+      "1293227": {
+        "fullName": "Oscar Quackenbush",
+        "firstName": "Oscar",
+        "lastName": "Quackenbush",
+        "extIds": [
+          {
+            "extId": 1293227
+          }
+        ]
+      },
+      "1311466": {
+        "fullName": "Elias Frode Møllbach",
+        "firstName": "Elias Frode",
+        "lastName": "Møllbach",
+        "extIds": [
+          {
+            "extId": 1311466
+          }
+        ]
+      }
+    },
+    "awayTeamValue": {
+      "1878561": {
+        "fullName": "Sebastian Spang Dyhrberg Nielsen",
+        "firstName": "Sebastian Spang Dyhrberg",
+        "lastName": "Nielsen",
+        "extIds": [
+          {
+            "extId": 1878561
+          }
+        ]
+      },
+      "1887576": {
+        "fullName": "Oskar Fløng Vanner",
+        "firstName": "Oskar Fløng",
+        "lastName": "Vanner",
+        "extIds": [
+          {
+            "extId": 1887576
+          }
+        ]
+      },
+      "1943485": {
+        "fullName": "Mathias Stubkjær",
+        "firstName": "Mathias",
+        "lastName": "Stubkjær",
+        "extIds": [
+          {
+            "extId": 1943485
+          }
+        ]
+      }
+    }
+  },
+  "stats": {
+    "homeTeamValue": [
+      {
+        "NR": 1,
+        "POS": "PG",
+        "MINS": "07:21",
+        "PTS": 0,
+        "FG": "0-2",
+        "FG%": 0,
+        "2P": "0-1",
+        "2P%": 0,
+        "3P": "0-1",
+        "3P%": 0,
+        "FT": "0-0",
+        "FT%": 0,
+        "OFF": 0,
+        "DEF": 2,
+        "REB": 2,
+        "AST": 0,
+        "TO": 0,
+        "STL": 0,
+        "BLK": 0,
+        "BLKR": 0,
+        "PF": 1,
+        "FOn": 0,
+        "+/-": 9,
+        "info": {
+          "period": 0,
+          "playerId": 2404639,
+          "teamId": "153747",
+          "team": "BK Amager"
+        }
+      },
+      {
+        "NR": "",
+        "POS": "",
+        "MINS": "",
+        "PTS": "",
+        "FG": "",
+        "FG%": "",
+        "2P": "",
+        "2P%": "",
+        "3P": "",
+        "3P%": "",
+        "FT": "",
+        "FT%": "",
+        "OFF": 2,
+        "DEF": 3,
+        "REB": 5,
+        "AST": "",
+        "TO": 1,
+        "STL": "",
+        "BLK": "",
+        "BLKR": "",
+        "PF": 0,
+        "FOn": "",
+        "+/-": "",
+        "info": {
+          "period": 0,
+          "playerId": "",
+          "teamId": "67370",
+          "teamSummary": true,
+          "label": "sports.stats.team_coach",
+          "side": "home"
+        }
+      },
+      {
+        "NR": "",
+        "POS": "",
+        "MINS": "",
+        "PTS": 96,
+        "FG": "31-84",
+        "FG%": 36.9,
+        "2P": "20-42",
+        "2P%": 47.6,
+        "3P": "11-42",
+        "3P%": 26.2,
+        "FT": "23-31",
+        "FT%": 74.2,
+        "OFF": 15,
+        "DEF": 31,
+        "REB": 46,
+        "AST": 19,
+        "TO": 11,
+        "STL": 11,
+        "BLK": 4,
+        "BLKR": 3,
+        "PF": 20,
+        "FOn": 24,
+        "+/-": "",
+        "info": {
+          "period": 0,
+          "playerId": "",
+          "teamId": "67370",
+          "teamSummary": true,
+          "label": "sports.stats.team_totals",
+          "side": "home"
+        }
+      }
+    ],
+    "awayTeamValue": [
+      {
+        "NR": 1,
+        "POS": "C",
+        "MINS": "03:10",
+        "PTS": 0,
+        "FG": "0-0",
+        "FG%": 0,
+        "2P": "0-0",
+        "2P%": 0,
+        "3P": "0-0",
+        "3P%": 0,
+        "FT": "0-0",
+        "FT%": 0,
+        "OFF": 0,
+        "DEF": 0,
+        "REB": 0,
+        "AST": 0,
+        "TO": 0,
+        "STL": 0,
+        "BLK": 0,
+        "BLKR": 0,
+        "PF": 1,
+        "FOn": 0,
+        "+/-": -3,
+        "info": {
+          "period": 0,
+          "playerId": 1887576,
+          "teamId": "153747",
+          "team": "Holbæk-Stenhus"
+        }
+      },
+      {
+        "NR": "",
+        "POS": "",
+        "MINS": "",
+        "PTS": "",
+        "FG": "",
+        "FG%": "",
+        "2P": "",
+        "2P%": "",
+        "3P": "",
+        "3P%": "",
+        "FT": "",
+        "FT%": "",
+        "OFF": 2,
+        "DEF": 1,
+        "REB": 3,
+        "AST": "",
+        "TO": 1,
+        "STL": "",
+        "BLK": "",
+        "BLKR": "",
+        "PF": 0,
+        "FOn": "",
+        "+/-": "",
+        "info": {
+          "period": 0,
+          "playerId": "",
+          "teamId": "153747",
+          "teamSummary": true,
+          "label": "sports.stats.team_coach",
+          "side": "away"
+        }
+      },
+      {
+        "NR": "",
+        "POS": "",
+        "MINS": "",
+        "PTS": 90,
+        "FG": "32-80",
+        "FG%": 40,
+        "2P": "22-46",
+        "2P%": 47.8,
+        "3P": "10-34",
+        "3P%": 29.4,
+        "FT": "16-19",
+        "FT%": 84.2,
+        "OFF": 17,
+        "DEF": 40,
+        "REB": 57,
+        "AST": 11,
+        "TO": 20,
+        "STL": 10,
+        "BLK": 3,
+        "BLKR": 4,
+        "PF": 26,
+        "FOn": 20,
+        "+/-": "",
+        "info": {
+          "period": 0,
+          "playerId": "",
+          "teamId": "153747",
+          "teamSummary": true,
+          "label": "sports.stats.team_totals",
+          "side": "away"
+        }
+      }
+    ]
+  },
+  "provider": "genius-basketball"
+}

@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: team_head2_head
+  type: character
+- description: ''
+  name: team_period_caption
+  type: character
+- description: ''
+  name: team_period_overtime
+  type: logical
+- description: ''
+  name: team_period_shootout
+  type: logical
+- description: ''
+  name: team_period_stats
+  type: character
+- description: ''
+  name: best_scorers
+  type: character
+- description: ''
+  name: statistics_provider
+  type: character
+kind: dataframe
+schema: sportality_game_summary

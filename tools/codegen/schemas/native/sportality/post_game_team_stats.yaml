@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: home_team_side_translate_key
+  type: character
+- description: ''
+  name: home_team_left_type
+  type: character
+- description: ''
+  name: home_team_left_value
+  type: integer
+- description: ''
+  name: home_team_right_type
+  type: character
+- description: ''
+  name: home_team_right_value
+  type: integer
+- description: ''
+  name: home_team_center_type
+  type: character
+- description: ''
+  name: home_team_center_value
+  type: integer
+- description: ''
+  name: away_team_side_translate_key
+  type: character
+- description: ''
+  name: away_team_left_type
+  type: character
+- description: ''
+  name: away_team_left_value
+  type: integer
+- description: ''
+  name: away_team_right_type
+  type: character
+- description: ''
+  name: away_team_right_value
+  type: integer
+- description: ''
+  name: away_team_center_type
+  type: character
+- description: ''
+  name: away_team_center_value
+  type: integer
+kind: dataframe
+schema: sportality_post_game_team_stats
