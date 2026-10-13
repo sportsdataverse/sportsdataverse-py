@@ -83,15 +83,15 @@ def game_regulation_periods(
     2015-16 season (``season`` 2016, ESPN's end year). With neither, WNBA and WBB default to quarters.
 
     Args:
-        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``.
-        season: ESPN ``season.year`` of the game (the end year for college).
+        league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``; ``None`` means NBA.
+        season: ESPN ``season.year`` of the game (the end year for college); null or NaN counts as unknown.
         format_regulation_periods: The game's own regulation period count, if known.
 
     Returns:
         ``2`` or ``4``.
 
     Raises:
-        ValueError: If ``league`` is not one of the four.
+        ValueError: If ``league`` is a string other than the four.
 
     Example:
         Quick start::
@@ -114,13 +114,13 @@ def game_regulation_periods(
     lg = _resolve_league(league, None)
     try:
         own = int(format_regulation_periods) if format_regulation_periods is not None else None
-    except (TypeError, ValueError):  # NaN from a null schedule cell
+    except (TypeError, ValueError, OverflowError):  # NaN / inf from a null or broken schedule cell
         own = None
     if own in (2, 4):
         return int(own)
     if lg == "mbb":
         return 2
-    if lg == "nba" or season is None:
+    if lg == "nba" or season is None or season != season:  # NaN != NaN
         return 4
     return 2 if int(season) < _QUARTERS_FROM[lg] else 4
 
@@ -205,7 +205,7 @@ def _hfa(lg: str) -> float:
 def _is_neutral(neutral_site: object) -> bool:
     """A neutral-site flag; ``None``, NaN and pandas' ``pd.NA`` (a null schedule cell) are not neutral."""
     try:
-        return bool(neutral_site) and neutral_site == neutral_site  # NaN != NaN
+        return bool(bool(neutral_site) and neutral_site == neutral_site)  # NaN != NaN; numpy gives np.bool_
     except TypeError:  # bool(pd.NA) raises
         return False
 
@@ -411,7 +411,7 @@ def score_win_prob(
             pl.lit(None, dtype=pl.Float64).alias("home_win_prob"),
             pl.lit(None, dtype=pl.Float64).alias("wp_delta"),
         )
-    season = pbp["season"][0] if "season" in pbp.columns else None
+    season = _box_season(pbp)  # the first non-null, non-NaN season, or None
     reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
     # a null score on a play means the score did not change; a null before the first score is 0-0.
     # Only the model input is filled: the returned score columns stay as given.
@@ -867,7 +867,7 @@ def game_page_tables(
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
     lg = _resolve_league(league, league_id)
-    season = _box_season(pbp)  # the first non-null, non-NaN season, or None
+    season = _box_season(pbp) or _box_season(team_box)  # before tip-off the pbp is empty
     reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
     periods = int(pbp["period_number"].max() or reg) if pbp.height else reg
     if pbp.height:  # a game with 10 or fewer plays parses to a zero-column frame; nothing to score yet

@@ -912,8 +912,8 @@ always halves, the WNBA halves before 2006 and women's college basketball halves
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`. |
-| `season` | `Optional[int]` | `None` | ESPN `season.year` of the game (the end year for college). |
+| `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`; `None` means NBA. |
+| `season` | `Optional[int]` | `None` | ESPN `season.year` of the game (the end year for college); null or NaN counts as unknown. |
 | `format_regulation_periods` | `Optional[float]` | `None` | The game's own regulation period count, if known. |
 
 **Returns**

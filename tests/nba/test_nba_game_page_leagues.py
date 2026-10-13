@@ -96,6 +96,9 @@ def test_league_id_callers_keep_their_meaning() -> None:
         gp.game_minutes(4, league="mbb", league_id="00")
     with pytest.raises(ValueError, match="'nba', 'wnba', 'mbb', 'wbb'"):
         gp.game_minutes(4, league="nhl")
+    # league and league_id may both be given when they agree
+    assert gp.game_minutes(5, league="wnba", league_id="10") == 45
+    assert gp.game_minutes(5, league="nba", league_id="00") == 53
 
 
 @pytest.mark.parametrize(
@@ -112,9 +115,12 @@ def test_league_id_callers_keep_their_meaning() -> None:
         ("wbb", 2016, 2.0, 2),  # the game's own format wins over the season cutoff
         ("wnba", 2005, float("nan"), 2),  # a null schedule cell falls back to the cutoff
         ("mbb", 2026, 3.0, 2),  # only 2 or 4 is believed
+        ("wnba", 2005, float("inf"), 2),  # a broken cell (inf) falls back too
+        ("wnba", float("nan"), None, 4),  # a NaN season is an unknown season
+        (None, 2005, None, 4),  # no league means NBA
     ],
 )
-def test_game_regulation_periods(league: str, season: int | None, fmt: float | None, want: int) -> None:
+def test_game_regulation_periods(league: str | None, season: float | None, fmt: float | None, want: int) -> None:
     assert gp.game_regulation_periods(league, season=season, format_regulation_periods=fmt) == want
 
 
@@ -459,6 +465,28 @@ def test_game_page_tables_before_tip_off(monkeypatch: pytest.MonkeyPatch) -> Non
     assert (out["periods"], out["regulation_periods"], out["period_kind"]) == (2, 2, "half")
     assert out["prior"]["source"] == "neutral" and out["prior"]["home_win_prob"] == pytest.approx(0.5)
     assert out["team_game_rates"].height == 0 and "efg_pct" in out["team_game_rates"].columns
+
+
+def test_pre_tip_off_regulation_reads_the_team_box_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    # no plays yet, but the real WBB 2010 team box carries its season: halves, not the season-less quarters
+    _, _, tb, pb = _frames(monkeypatch, "wbb", "wbb_293170052.json.gz")
+    out = gp.game_page_tables(pl.DataFrame(), tb, pb, league="wbb")
+    assert (out["periods"], out["regulation_periods"], out["period_kind"]) == (2, 2, "half")
+
+
+def test_score_win_prob_reads_a_warehouse_season_with_a_nan_first_cell(monkeypatch: pytest.MonkeyPatch) -> None:
+    # a float season column whose first cell is NaN (a warehouse frame) still reads 2005 (halves)
+    _, pbp, _, _ = _frames(monkeypatch, "wnba", "wnba_250603003.json.gz")
+    seasons = [float("nan")] + [2005.0] * (pbp.height - 1)
+    nan_first = pbp.with_columns(pl.Series("season", seasons))
+    got = gp.score_win_prob(nan_first, league="wnba")
+    assert got["home_win_prob"].equals(gp.score_win_prob(pbp, league="wnba", regulation_periods=2)["home_win_prob"])
+
+
+def test_neutral_flag_is_a_python_bool() -> None:
+    import numpy as np
+
+    assert gp._is_neutral(np.bool_(True)) is True and gp._is_neutral(np.bool_(False)) is False
 
 
 @pytest.mark.parametrize("cell", [None, float("nan"), "pd.NA"])
