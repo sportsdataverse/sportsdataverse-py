@@ -1,0 +1,386 @@
+api: legabasket
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial and unsupported: these wrappers read the JSON API that the Next.js
+    site www.legabasket.it itself calls. The site''s terms say "Non è consentito copiare
+    … dati e informazioni senza autorizzazione scritta" (copying data and information
+    without written authorisation is not allowed), except for personal, non-commercial
+    use. The owner accepted the restriction for this intake on 2026-10-12. Payloads
+    are not redistributed as release assets, and any published data release of this
+    source needs separate sign-off.'
+  - 'robots.txt allows /api and sets Crawl-delay: 2. The runtime waits 2 s before
+    every request, retries included. Crawl incrementally: fetch a final game once
+    (keyed by game_id), find new games with one lba_calendar call per round, and do
+    not backfill a history in a burst.'
+  - Seasons are END years (2027 = 2026-27); the site sends START years and the runtime
+    maps them. Game and player ids are global; team ids are re-issued every season
+    (join lba_teams for the stable club_id); a championship id is one season AND one
+    phase (Regular Season and Play Off differ).
+  - Play-by-play starts in 2017-18 and changes shape in 2019-20 (pixel frame to court
+    percent) and 2021-22; see lba_pbp. Box scores reach back to 1995-96, where the
+    period scores were not recorded (0 means missing).
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the site has nothing for the request (an
+    unknown season, a play-by-play before 2017-18, standings of a finished championship
+    without a round, no rows).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown
+    or partial: an unknown id (the site answers HTTP 500), a game that is not final,
+    a truncated page, or a body for another season, championship, game, team or player
+    than the one asked for.'
+  see_also:
+  - name: Lega Basket Serie A
+    note: the site whose API these wrappers read
+    url: https://www.legabasket.it/
+  - name: hoopR
+    note: SportsDataverse men's basketball package (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args:
+    season: 2027
+  extra_params:
+  - description: Season END year (2027 = 2026-27). Omitted = every season (310 championships).
+    name: season
+    query_key: s
+    type: int
+  fixed_params:
+    cs_id: 1
+    items: 1000
+  parser: parse_lba_championships
+  path: /championships/get-championships
+  returns_schema: native/legabasket/championships
+  short: championships
+  summary: Championships of a season, one per phase (Regular Season, Play Off); every
+    season when none is given.
+- example_args:
+    championship_id: 602
+    round: 1
+  extra_params:
+  - description: 'Championship id (championship_id in lba_championships): one season
+      AND one phase.'
+    name: championship_id
+    query_key: id
+    required: true
+    type: int
+  - description: Round number (day_serial, 1, 2, ...). Omitted = the current round
+      (the last played for a finished championship).
+    name: round
+    query_key: d
+    type: int
+  parser: parse_lba_calendar
+  path: /championships/get-championships-calendar-by-id
+  returns_schema: native/legabasket/calendar
+  short: calendar
+  summary: 'Games of one round of a championship: teams, score, venue, referees and
+    broadcasters.'
+- example_args:
+    game_id: 25602
+  extra_params:
+  - description: Game id (game_id in lba_calendar), e.g. 25602. Global across seasons.
+    name: game_id
+    query_key: id
+    required: true
+    type: int
+  fixed_params:
+    sc: 1
+  parser: parse_lba_game
+  path: /championships/get-championships-matches-by-id
+  returns_schema: native/legabasket/game
+  short: game
+  summary: 'Game header: teams, venue, quarter scores, coaches, referees and broadcasters.'
+- example_args:
+    game_id: 25602
+  extra_params:
+  - description: Game id (game_id in lba_calendar), e.g. 25602. Global across seasons.
+    name: game_id
+    query_key: id
+    required: true
+    type: int
+  fixed_params:
+    info: 'true'
+  parser: parse_lba_box_score
+  path: /championships/get-championships-matches-scores-by-id
+  returns_schema: native/legabasket/box_score
+  short: box_score
+  summary: 'Box score of a final game: one row per player of both teams (Italian-named
+    stat columns).'
+- example_args:
+    game_id: 25602
+  extra_params:
+  - description: Game id (game_id in lba_calendar), e.g. 25602. Global across seasons.
+    name: game_id
+    query_key: id
+    required: true
+    type: int
+  fixed_params:
+    info: 'true'
+  parser: parse_lba_team_box_score
+  path: /championships/get-championships-matches-scores-by-id
+  returns_schema: native/legabasket/team_box_score
+  short: team_box_score
+  summary: 'Team lines of a final game''s box score: the team-booked stats and the
+    totals of each side.'
+- example_args:
+    game_id: 25602
+  extra_params:
+  - description: Game id (game_id in lba_calendar), e.g. 25602. Global across seasons.
+    name: game_id
+    query_key: id
+    required: true
+    type: int
+  fixed_params:
+    info: 'true'
+    sort: asc
+  parser: parse_lba_pbp
+  path: /championships/get-championships-matches-play-by-play
+  returns_schema: native/legabasket/pbp
+  short: pbp
+  summary: Play-by-play of a final game (2017-18 on), one row per action with x/y;
+    coordinate frame by era.
+- example_args:
+    game_id: 25602
+  extra_params:
+  - description: Game id (game_id in lba_calendar), e.g. 25602. Global across seasons.
+    name: game_id
+    query_key: id
+    required: true
+    type: int
+  fixed_params:
+    info: 'true'
+    sort: asc
+  parser: parse_lba_pbp_legend
+  path: /championships/get-championships-matches-play-by-play
+  returns_schema: native/legabasket/pbp_legend
+  short: pbp_legend
+  summary: The play-by-play qualifier code table (59 codes) with its Italian labels.
+- example_args:
+    game_id: 25602
+  extra_params:
+  - description: Game id (game_id in lba_calendar), e.g. 25602. Global across seasons.
+    name: game_id
+    query_key: id
+    required: true
+    type: int
+  fixed_params:
+    info: 1
+  parser: parse_lba_shots
+  path: /matches/get-championship-matches-shots-by-id
+  returns_schema: native/legabasket/shots
+  short: shots
+  summary: Shooting by court zone per team for a final game (made / attempted aggregates;
+    zone 7 includes free throws).
+- example_args:
+    championship_id: 602
+    round: 3
+  extra_params:
+  - description: Championship id (championship_id in lba_championships; a Regular
+      Season id carries standings).
+    name: championship_id
+    query_key: id
+    required: true
+    type: int
+  - description: 'Standings after this round. Required in practice for a finished
+      championship: without it the site sends none (NoDataError).'
+    name: round
+    query_key: d
+    type: int
+  parser: parse_lba_standings
+  path: /championships/get-championship-ranking
+  returns_schema: native/legabasket/standings
+  short: standings
+  summary: Standings of a championship after a round, one row per team.
+- example_args:
+    season: 2027
+  extra_params:
+  - description: Season END year (2027 = 2026-27). Omitted = the site's default season
+      (unverified).
+    name: season
+    query_key: year
+    type: int
+  fixed_params:
+    items: 50
+  parser: parse_lba_teams
+  path: /teams/get-teams
+  returns_schema: native/legabasket/teams
+  short: teams
+  summary: Teams of a season, one row per team-season with the stable club id.
+- example_args:
+    team_id: 1764
+  extra_params:
+  - description: 'Team id (team_id in lba_teams), e.g. 1764. One team-season: ids
+      are re-issued every season.'
+    name: team_id
+    query_key: id
+    required: true
+    type: int
+  parser: parse_lba_roster
+  path: /teams/get-team-roster
+  returns_schema: native/legabasket/roster
+  short: roster
+  summary: Players of one team-season with bio, number and role.
+- example_args:
+    team_id: 1764
+  extra_params:
+  - description: 'Team id (team_id in lba_teams), e.g. 1764. One team-season: ids
+      are re-issued every season.'
+    name: team_id
+    query_key: id
+    required: true
+    type: int
+  parser: parse_lba_roster_coach
+  path: /teams/get-team-roster
+  returns_schema: native/legabasket/roster_coach
+  short: roster_coach
+  summary: Head coach of one team-season.
+- example_args:
+    season: 2027
+    team_id: 1764
+  extra_params:
+  - description: 'Team id (team_id in lba_teams), e.g. 1764. One team-season: ids
+      are re-issued every season.'
+    name: team_id
+    query_key: id
+    required: true
+    type: int
+  - description: Season END year (2027 = 2026-27) of the team id. Omitted = the site's
+      default (unverified).
+    name: season
+    query_key: s
+    type: int
+  fixed_params:
+    cs_id: 1
+  parser: parse_lba_team_players_stats
+  path: /teams/get-team-players-stats
+  returns_schema: native/legabasket/team_players_stats
+  short: team_players_stats
+  summary: Season totals of each player of a team-season.
+- example_args:
+    season: 2027
+  extra_params:
+  - description: Season END year (2027 = 2026-27). Omitted = the site's default season
+      (unverified).
+    name: season
+    query_key: year
+    type: int
+  - description: Page number, 1-based. Omitted = the first page.
+    name: page
+    query_key: page
+    type: int
+  fixed_params:
+    items: 50
+  parser: parse_lba_players
+  path: /players/get-players
+  returns_schema: native/legabasket/players
+  short: players
+  summary: Players of a season, 50 per page (walk the pages with page).
+- example_args:
+    player_id: 969
+  extra_params:
+  - description: 'Player id (player_id in lba_players or a box score), e.g. 969. Global:
+      one id for a whole career.'
+    name: player_id
+    query_key: id
+    required: true
+    type: int
+  fixed_params:
+    stats: 1
+  parser: parse_lba_player
+  path: /players/get-player-by-id
+  returns_schema: native/legabasket/player
+  short: player
+  summary: Player bio with current-season totals, highs and averages (one row).
+- example_args:
+    player_id: 969
+  extra_params:
+  - description: 'Player id (player_id in lba_players or a box score), e.g. 969. Global:
+      one id for a whole career.'
+    name: player_id
+    query_key: id
+    required: true
+    type: int
+  parser: parse_lba_player_stats
+  path: /players/get-player-stats
+  returns_schema: native/legabasket/player_stats
+  short: player_stats
+  summary: 'A player''s career by championship: per-game averages, single-game highs
+    and totals.'
+- example_args:
+    player_id: 969
+    season: 2027
+  extra_params:
+  - description: 'Player id (player_id in lba_players or a box score), e.g. 969. Global:
+      one id for a whole career.'
+    name: player_id
+    query_key: id
+    required: true
+    type: int
+  - description: Season END year (2027 = 2026-27). Omitted = the site's default season
+      (unverified).
+    name: season
+    query_key: s
+    type: int
+  fixed_params:
+    cs_id: 1
+  parser: parse_lba_game_log
+  path: /players/get-player-matches
+  returns_schema: native/legabasket/game_log
+  short: game_log
+  summary: A player's game log for one season, one row per game.
+- example_args:
+    category: points
+    season: 2027
+  extra_params:
+  - description: Season END year (2027 = 2026-27). Omitted = the site's default season
+      (unverified).
+    name: season
+    query_key: s
+    type: int
+  - default: points
+    description: 'Category: points, rating_lega, total_rebound, assists, shots_3p_perc,
+      ... (the site''s filters.categories).'
+    name: category
+    query_key: cat
+    type: str
+  fixed_params:
+    cs_id: 1
+  parser: parse_lba_players_leaderboard
+  path: /statistics/get-players-statistics
+  returns_schema: native/legabasket/players_leaderboard
+  short: players_leaderboard
+  summary: Season player leaderboard for one category (per-game average).
+- example_args:
+    board: teams_offensive
+    season: 2027
+  extra_params:
+  - choices:
+    - teams_offensive
+    - teams_defensive
+    description: 'Board: teams_offensive or teams_defensive.'
+    name: board
+    query_key: type
+    required: true
+    type: str
+  - description: Season END year (2027 = 2026-27). Omitted = the site's default season
+      (unverified).
+    name: season
+    query_key: s
+    type: int
+  fixed_params:
+    cs_id: 1
+  parser: parse_lba_teams_leaderboard
+  path: /statistics/get-teams-statistics-by-type
+  returns_schema: native/legabasket/teams_leaderboard
+  short: teams_leaderboard
+  summary: Season team leaderboards, offensive or defensive, one row per team and
+    category.
+getter_module: sportsdataverse.basketball.lba.lba_runtime
+host: https://www.legabasket.it/api
+module: legabasket
+name_pattern: lba_{short}
+parser_columns: true
+parser_module: basketball.lba.lba_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: lba_

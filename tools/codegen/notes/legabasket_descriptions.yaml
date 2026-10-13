@@ -1,0 +1,863 @@
+lba_box_score:
+  ass: Assists credited to the player in the game.
+  falli_c: Fouls committed (`falli commessi`).
+  falli_fla: Unsportsmanlike / flagrant fouls (`falli antisportivi`).
+  falli_sf: Fouls drawn (`falli subiti`).
+  falli_tc1: Technical fouls (`falli tecnici`; reading `tc1` as category-1 technicals
+    is inferred).
+  game_id: Game id (global across seasons); joins lba_calendar and lba_game.
+  min: Minutes played, whole minutes (`minuti`); 200 in `totals` = 5 × 40.
+  palle_p: Turnovers (`palle perse`).
+  palle_r: Steals (`palle recuperate`).
+  player_code: Player code `SURNAME3-NAME3-YY`.
+  player_id: Player id (global).
+  player_name: Player's given name.
+  player_num: Jersey number the player wore in the game.
+  player_p_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  player_surname: Family name, upper case.
+  plus_minus: 'Plus-minus: point margin while on court.'
+  pun: Points (`punti`).
+  rimbalzi_d: Defensive rebounds (`rimbalzi difensivi`).
+  rimbalzi_o: Offensive rebounds (`rimbalzi offensivi`).
+  rimbalzi_t: Total rebounds (`rimbalzi totali`).
+  sc: Dunks (`schiacciate`).
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  sec: Seconds played (`secondi`) = `min` × 60 in every sample.
+  sf: 'Starter flag (`starting five`), number sent as a string: `1` = started.'
+  side: 'Which team of the game the row belongs to: home or visitor.'
+  stoppate_dat: Blocks (`stoppate date`).
+  stoppate_sub: Own shots blocked (`stoppate subite`).
+  t2_perc: 2-point field-goal percentage, 0-100 (number; 0 when no attempt).
+  t2_r: 2-point field goals made (`tiri da 2 realizzati`).
+  t2_t: 2-point field goals attempted (`tiri da 2 tentati`).
+  t3_perc: 3-point field-goal percentage, 0-100.
+  t3_r: 3-point field goals made.
+  t3_t: 3-point field goals attempted.
+  team_id: Team-season id (re-issued every season); join lba_teams for the stable
+    club_id.
+  tl_perc: Free-throw percentage, 0-100.
+  tl_r: Free throws made (`tiri liberi realizzati`).
+  tl_t: Free throws attempted (`tiri liberi tentati`).
+  val_lega: LBA efficiency rating (`valutazione Lega`).
+  val_oer: OER = points / (FGA + turnovers + FTA / 2); verified on every 2026-27 sample
+    row.
+lba_calendar:
+  additional_time: Overtime periods played (0 in every sample; reading inferred).
+  broadcasters: JSON list of the game's broadcasters (name, logo key); null when the
+    site lists none.
+  championship_id: Championship id (season + phase) of the game.
+  championships_day_id: 'Round id (`championships_day_id` key space: one round of
+    one championship; joins `filters.days[].id` and standings `championships_day_id`;
+    not the `d` param).'
+  day_code: Round code (`1`, `2`, ...; string in game rows, integer in standings).
+  day_name: 'Round name, Italian: `1° Giornata` = matchday 1.'
+  day_serial: Round number (`event_serial`, the `d` param).
+  game_id: Game id (global across seasons); joins lba_calendar and lba_game.
+  game_status: 'Game status, number sent as a string: `0` scheduled, `1` live, `2`
+    final (per the OSS client; only `2` sampled).'
+  h_club_code: Home club code, e.g. `TVB`; null on the 2017-18 and 1995-96 calendar
+    rows.
+  h_team_enabled: Home team page enabled on the site.
+  h_team_id: Home team id (team-season).
+  h_team_name: Home team name (sponsor name of that season).
+  has_streaming: 1 when a stream exists, else 0.
+  home_final_score: Final points of the home team.
+  home_logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  match_datetime: 'Tip-off, ISO-8601 with the Italian offset (1995-96: midnight, no
+    time kept).'
+  match_hh: Tip-off hour, local time.
+  match_mm: Tip-off minute, local time.
+  match_serie_key: The two team ids joined low_high (`1761_1764`).
+  number: Round number of the game, equal to `day_serial` (the `d` echo the capture
+    checks).
+  plant_id: Arena id (arena key space; joins nothing specced).
+  plant_name: Name of the arena where the game is played.
+  referees: JSON list of the game's referees (id, name, surname); null when the site
+    lists none.
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  target_score: Null in every sample (meaning unverified).
+  ticketing_url: Ticket shop URL (null for old games).
+  town_id: Town id of the arena (town key space; joins nothing specced).
+  town_name: Town of the arena.
+  updated_at: Timestamp, ISO-8601 with the Italian offset. Last update of the game
+    row.
+  v_club_code: Away club code (`BCR`); null on the 2017-18 and 1995-96 calendar rows.
+  v_logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  v_team_enabled: Away team page enabled on the site.
+  v_team_id: Away team id (team-season).
+  v_team_name: Visitor team name (the sponsor name of that season).
+  visitor_final_score: Final points of the away team.
+  websocket_match_id: Live-feed game id, number sent as a string; separate from the
+    game id.
+  year: Season START year (2026 = 2026-27); sdv END year = year + 1.
+lba_championships:
+  championship_id: Championship id (one season and phase).
+  championship_series_id: Series id, 1 = Serie A.
+  championship_type_id: 'Phase type id: 4 = Regular Season, 2 = Play Off.'
+  cserie_code: Series code, `A1` = Serie A.
+  cserie_name: Name of the championship series, e.g. Serie A.
+  ctype_code: 'Phase type code: `RS` / `PO`.'
+  ctype_name: 'Phase type name, as sent in English: `Regular Season`, `Play Off`.'
+  focus_on: Highlighted on the site.
+  full_name: Name with the season, e.g. `Regular Season A 2017`.
+  logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  name: Championship name, e.g. `Regular Season A`, `Play Off A1`.
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  status: 'Championship status: 1 = in progress, 2 = finished (inferred from the 2026-27
+    and past samples).'
+  year: Season START year (2026 = 2026-27); sdv END year = year + 1.
+lba_game:
+  additional_time: Overtime periods played (0 in every sample; reading inferred).
+  broadcasters: JSON list of the game's broadcasters (name, logo key); null when the
+    site lists none.
+  championship_id: Championship id (season + phase) of the game.
+  championships_day_id: 'Round id (`championships_day_id` key space: one round of
+    one championship; joins `filters.days[].id` and standings `championships_day_id`;
+    not the `d` param).'
+  competition_name: Championship full name, e.g. `Regular Season 2026/27`.
+  competition_serie: Series name, `Serie A`.
+  competition_serie_id: Series id, 1 = Serie A.
+  competition_type: 'Phase type name: `Regular Season` / `Play Off`.'
+  competition_type_code: 'Phase type code: `RS` / `PO`.'
+  competition_type_id: 'Phase type id: 4 = Regular Season, 2 = Play Off.'
+  day_code: Round code (`1`, `2`, ...; string in game rows, integer in standings).
+  day_name: 'Round name, Italian: `1° Giornata` = matchday 1.'
+  day_phase_id: 'Phase id: 1 = `Andata` (first half of the season), 2 = `Ritorno`
+    (second half).'
+  day_serial: Round number (`event_serial`, the `d` param).
+  game_id: Game id (global across seasons); joins lba_calendar and lba_game.
+  game_status: 'Game status, number sent as a string: `0` scheduled, `1` live, `2`
+    final (per the OSS client; only `2` sampled).'
+  h_team_enabled: Home team page enabled on the site.
+  h_team_id: Home team id (team-season).
+  h_team_name: Home team name (sponsor name of that season).
+  has_streaming: 1 when a stream exists, else 0.
+  home_coach_code: Home head coach code `SURNAME3-NAME3`.
+  home_coach_fullname: Home head coach, `Surname Name`.
+  home_coach_id: Home head coach id.
+  home_final_score: Final points of the home team.
+  home_logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  live_match_data: Null in every sample (meaning unverified).
+  match_datetime: 'Tip-off, ISO-8601 with the Italian offset (1995-96: midnight, no
+    time kept).'
+  match_hh: Tip-off hour, local time.
+  match_hw: All-time head-to-head wins of the home club (inferred).
+  match_mm: Tip-off minute, local time.
+  match_serie: All-time head-to-head as `home wins-away wins` (`6-18`; inferred from
+    `match_hw` / `match_vw`).
+  match_vw: All-time head-to-head wins of the away club (inferred).
+  number: Round number of the game, equal to `day_serial` (the `d` echo the capture
+    checks).
+  ot_hs: Home overtime points (0 without overtime).
+  ot_vs: Away overtime points.
+  plant_id: Arena id (arena key space; joins nothing specced).
+  plant_name: Name of the arena where the game is played.
+  q1_hs: 'Home points in the 1st quarter (null in the 1995-96 sample: no period scores
+    then).'
+  q1_vs: Away points in the 1st quarter.
+  q2_hs: Home points in the 2nd quarter.
+  q2_vs: Away points in the 2nd quarter.
+  q3_hs: 'Home points in the 3rd quarter (0 in the 1995-96 sample: a placeholder,
+    not a score).'
+  q3_vs: Away points in the 3rd quarter (0 placeholder in 1995-96).
+  q4_hs: Home points in the 4th quarter (0 placeholder in 1995-96).
+  q4_vs: Away points in the 4th quarter (0 placeholder in 1995-96).
+  quarter: Last period played, number sent as a string (`4`; `5` = overtime).
+  referees: JSON list of the game's referees (id, name, surname); null when the site
+    lists none.
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  spectators: 'Attendance: spectators at the game.'
+  target_score: Null in every sample (meaning unverified).
+  ticketing_url: Ticket shop URL (null for old games).
+  updated_at: Timestamp, ISO-8601 with the Italian offset. Last update of the game
+    row.
+  v_logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  v_team_enabled: Away team page enabled on the site.
+  v_team_id: Away team id (team-season).
+  v_team_name: Visitor team name (the sponsor name of that season).
+  visitor_coach_code: Away head coach code.
+  visitor_coach_fullname: Away head coach, `Surname Name`.
+  visitor_coach_id: Away head coach id.
+  visitor_final_score: Final points of the away team.
+  websocket_match_id: Live-feed game id, number sent as a string; separate from the
+    game id.
+  year: Season START year (2026 = 2026-27); sdv END year = year + 1.
+lba_game_log:
+  assists: Assists, in that game.
+  avg_points: The player's plus-minus in the game (the site's name is misleading).
+  ball_stop_given: Blocks, in that game.
+  ball_stop_received: Own shots blocked, in that game.
+  captain: Team captain in that game.
+  championship_day_name: Round code, number sent as a string.
+  championship_id: Championship id of the game.
+  championship_match_id: Game id (repeated).
+  championships_match_id: Game id (global across seasons); joins lba_calendar and
+    lba_game.
+  created_at: Timestamp, ISO-8601 with the Italian offset.
+  defensive_rebound: Defensive rebounds, in that game.
+  deleted_at: Null in every sample (meaning unverified).
+  done_fouls: Fouls committed, in that game.
+  ext_code: '`<websocket_match_id>\|<team code>\|<player code>` (`1674778\|TVU\|CAP-ALE-95`).'
+  fouls_first_category: Category-1 technical fouls (null in old seasons; reading inferred).
+  fouls_flagrant: Unsportsmanlike / flagrant fouls.
+  free_throws_perc: Free-throw percentage, 0-100, in that game.
+  free_throws_realized: Free throws made, in that game.
+  free_throws_total: Free throws attempted, in that game.
+  home_match_result: '`w` / `l` for the home team when the player was on it, else
+    null.'
+  home_score: Home points after the action, parsed from the score text (2021-22 on;
+    else null).
+  home_team_id: Home team-season id of the game (the play-by-play ht_id).
+  home_team_logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  home_team_name: Home team short name.
+  lost_balls: Turnovers, in that game.
+  match_adp: The player's plus-minus in the game (the site's name is misleading).
+  match_date: Tip-off in UTC, ISO-8601 `Z` (local time in `match_hh` / `match_mm`).
+  match_hh: Tip-off hour, local time.
+  match_mm: Tip-off minute, local time.
+  minute5_fouls: Minute of the fifth foul (0 = did not foul out; inferred, unverified).
+  number: Jersey number the player wore in the game.
+  offensive_rebound: Offensive rebounds, in that game.
+  order: Row order in the box score.
+  phase_description: 'Phase code: `And` (Andata, 1st half of the season) / `Rit` (Ritorno).'
+  played_minutes: Minutes played, in that game.
+  player_id: Player id (global, one per career).
+  player_role_id: 'Position id (position key space: the id behind `player_role`; joins
+    the `r_id` filter).'
+  player_team_code: '`<season>\|<team code>` (`1995\|BOF`).'
+  player_team_id: Team id (team-season) of the player (repeated).
+  player_team_name: Short name of the player's team in the game (without the season
+    sponsor).
+  points: Points, in that game.
+  quintet: Starts (in the starting five), in that game.
+  rating_lega: LBA efficiency rating (`valutazione`), in that game.
+  rating_oer: OER (points / (FGA + turnovers + FTA / 2)), in that game.
+  regain_balls: Steals, in that game.
+  restricted_area_p1: Null in every sample (meaning unverified).
+  restricted_area_p2: Null in every sample (meaning unverified).
+  restricted_area_p3: Null in every sample (meaning unverified).
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  shots_2p_perc: 2-point field-goal percentage, 0-100, in that game.
+  shots_2p_realized: 2-point field goals made, in that game.
+  shots_2p_total: 2-point field goals attempted, in that game.
+  shots_3p_perc: 3-point field-goal percentage, 0-100, in that game.
+  shots_3p_realized: 3-point field goals made, in that game.
+  shots_3p_total: 3-point field goals attempted, in that game.
+  slam_dunk: Dunks, in that game.
+  stat_line_id: Id of the player's stat line for the game (one per player and game).
+  suffered_fouls: Fouls drawn, in that game.
+  team_id: Team id (team-season) of the player.
+  technical_fouls: Technical fouls (null in old seasons).
+  time5_fouls: Game time of the fifth foul (0 = did not foul out; inferred, unverified).
+  total_rebound: Total rebounds, in that game.
+  updated_at: Timestamp, ISO-8601 with the Italian offset.
+  visitor_match_result: '`w` / `l` for the away team when the player was on it, else
+    null.'
+  visitor_score: Visitor points after the action, parsed from the score text (2021-22
+    on; else null).
+  visitor_team_id: Visitor team-season id of the game (the play-by-play vt_id).
+  visitor_team_logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies
+    `{cdn_url}/variants/{key}/thumb` or `/large` (the site''s getApiImageUrl).'
+  visitor_team_name: Away team short name.
+  wp_id: Null in every sample (meaning unverified).
+lba_pbp:
+  action_1_qualifier_code: First qualifier code, number sent as a string (shot type,
+    turnover type, foul type; see `legend`).
+  action_1_qualifier_description: '`legend` label of `action_1_qualifier_code`, Italian.'
+  action_2_qualifier_code: Second qualifier code (fast break `500`, blocked `1005`,
+    tip-ins `1001`-`1004`, ...).
+  action_2_qualifier_description: '`legend` label of `action_2_qualifier_code`, Italian.'
+  action_id: Action id within the game (ascending in time from 2021-22; not ordered
+    before).
+  coord_frame: 'Frame of x and y: half_court_px (2017-18 and 2018-19 image pixels)
+    or court_pct (2019-20 on, 0-100).'
+  description: Action type in Italian, e.g. `2 punti segnato` (2-pointer made); full
+    translation table in the Divergence notes.
+  dunk: 1 = dunk, 0 otherwise.
+  game_id: Game id (global across seasons); joins lba_calendar and lba_game.
+  home_club: 1 = the home team acted, 0 = the away team; null for clock actions, and
+    on every action in 2018-19 and 2019-20 (use `side` there).
+  home_score: Home points after the action, parsed from the score text (2021-22 on;
+    else null).
+  home_team_id: Home team-season id of the game (the play-by-play ht_id).
+  id: Always null (not a key).
+  in_area: True on shots from the paint (zone `3`).
+  linked_action_id: '`action_id` of the related action: the shot an assist or rebound
+    belongs to, the foul a drawn foul answers, the player swapped in a substitution.'
+  minute: 'Elapsed minute of the period (2019-20 on: 0-9, with `seconds`); 2017-18
+    / 2018-19: 1-10, the minute in progress, `seconds` 0.'
+  order: Sort key; `sort=asc` orders by it.
+  period: 'Period: 1-4, 5+ = overtime.'
+  player_id: Player id (null for team and clock actions).
+  player_name: Given name of the acting player.
+  player_number: Jersey number, number sent as a string.
+  player_surname: Family name of the acting player.
+  print_time: Game clock remaining, `MM:SS` (10:00 at a period start); null before
+    2021-22.
+  score: Score after the action, `home - away` string (`0 - 0`); 2020-21 on scoring
+    actions only, null before.
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  seconds: Elapsed seconds within `minute` (0-59); 0 before 2019-20. Elapsed = minute
+    × 60 + seconds; `print_time` = period length minus that.
+  side: 'Which team of the game the row belongs to: home or visitor.'
+  side_area_code: Court zone `1`-`10`, number sent as a string (see the coordinates
+    section; 2021-22 on).
+  side_area_zone: '`A` = in the actor''s attacking half, `D` = its defensive half
+    (2021-22 on).'
+  team_id: Team id (team-season) of the actor.
+  team_name: Team name in that season, with its sponsor (`Nutribullet Treviso Basket`);
+    changes with the sponsor.
+  team_side: Side of the acting team, home or visitor; null for a clock action without
+    a team.
+  visitor_score: Visitor points after the action, parsed from the score text (2021-22
+    on; else null).
+  visitor_team_id: Visitor team-season id of the game (the play-by-play vt_id).
+  x: 'Court x; frame by era (see the coordinates section): 2019-20 on, 0-100 % of
+    the 28 m length; 2017-18 / 2018-19, half-court image pixels; null (2019-20 on)
+    or 0 (earlier) when unlocated.'
+  y: Court y; 2019-20 on, 0-100 % of the 15 m width; 2017-18 / 2018-19, image pixels
+    (see the coordinates section).
+lba_pbp_legend:
+  code: Qualifier code, the value of action_1_qualifier_code / action_2_qualifier_code
+    on the actions.
+  label: Italian label of the qualifier code, as sent (translated in sdv-internal-refs
+    legabasket-returns.md).
+lba_player:
+  birth_date: Birth date, Date `YYYY-MM-DD`.
+  code: Player code `SURNAME3-NAME3-YY`.
+  end_date: Contract end with the team, Date `YYYY-MM-DD`.
+  ext_code: External (data feed) player code; equals `code` in the samples.
+  fullbody_picture_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies
+    `{cdn_url}/variants/{key}/thumb` or `/large` (the site''s getApiImageUrl). Null
+    in every sample.'
+  height: Player's height in centimetres.
+  name: Player's given name.
+  photo_picture_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  place_of_birth: Birthplace (Italian spelling).
+  player_alpha3: Nationality, ISO alpha-3.
+  player_country: Continent, Italian name (`Europa` = Europe; the other values are
+    presumably `Africa`, `America`, `Asia`, `Oceania`, unobserved).
+  player_country_name: Nationality, Italian country name (`Italia` = Italy); map to
+    English through `player_alpha3` (ISO 3166 alpha-3), not by translating the name.
+  player_id: Player id (global).
+  player_number: Jersey number, number sent as a string.
+  player_role_description: Position, Italian (see `players[].player_role` of the roster
+    route).
+  seo_meta_description: SEO description (null in the samples).
+  seo_meta_title: SEO title (null in the samples).
+  start_date: Contract start with the team, Date `YYYY-MM-DD`.
+  stats_avg_rs_assists_avg: Current regular-season per-game average of assists, number
+    sent as a string.
+  stats_avg_rs_avg_points_avg: Current regular-season per-game average of plus-minus,
+    despite the name (see the game-log row, where it equals the box score `plus_minus`),
+    number sent as a string.
+  stats_avg_rs_ball_stop_given_avg: Current regular-season per-game average of blocks,
+    number sent as a string.
+  stats_avg_rs_ball_stop_received_avg: Current regular-season per-game average of
+    own shots blocked, number sent as a string.
+  stats_avg_rs_championship_serie_code: Series code, `A1` = Serie A.
+  stats_avg_rs_defensive_rebound_avg: Current regular-season per-game average of defensive
+    rebounds, number sent as a string.
+  stats_avg_rs_done_fouls_avg: Current regular-season per-game average of fouls committed,
+    number sent as a string.
+  stats_avg_rs_free_throws_realized_avg: Current regular-season per-game average of
+    free throws made, number sent as a string.
+  stats_avg_rs_free_throws_total_avg: Current regular-season per-game average of free
+    throws attempted, number sent as a string.
+  stats_avg_rs_id: Always null (not a key).
+  stats_avg_rs_lost_balls_avg: Current regular-season per-game average of turnovers,
+    number sent as a string.
+  stats_avg_rs_offensive_rebound_avg: Current regular-season per-game average of offensive
+    rebounds, number sent as a string.
+  stats_avg_rs_played_matches_avg: Always `1.0` (games divided by games), number sent
+    as a string.
+  stats_avg_rs_played_minutes_avg: Current regular-season per-game average of minutes
+    played, number sent as a string.
+  stats_avg_rs_player_id: Player id (global, one per career).
+  stats_avg_rs_points_avg: Current regular-season per-game average of points, number
+    sent as a string.
+  stats_avg_rs_quintet_avg: Current regular-season per-game average of starts (in
+    the starting five), number sent as a string.
+  stats_avg_rs_rating_lega_avg: Current regular-season per-game average of LBA efficiency
+    rating (`valutazione`), number sent as a string.
+  stats_avg_rs_rating_oer_avg: Per-game average OER (a number, unlike the other `_avg`
+    values).
+  stats_avg_rs_regain_balls_avg: Current regular-season per-game average of steals,
+    number sent as a string.
+  stats_avg_rs_shots_2p_realized_avg: Current regular-season per-game average of 2-point
+    field goals made, number sent as a string.
+  stats_avg_rs_shots_2p_total_avg: Current regular-season per-game average of 2-point
+    field goals attempted, number sent as a string.
+  stats_avg_rs_shots_3p_realized_avg: Current regular-season per-game average of 3-point
+    field goals made, number sent as a string.
+  stats_avg_rs_shots_3p_total_avg: Current regular-season per-game average of 3-point
+    field goals attempted, number sent as a string.
+  stats_avg_rs_slam_dunk_avg: Current regular-season per-game average of dunks, number
+    sent as a string.
+  stats_avg_rs_suffered_fouls_avg: Current regular-season per-game average of fouls
+    drawn, number sent as a string.
+  stats_avg_rs_total_matches_avg: Always `1.0`, number sent as a string.
+  stats_played_matches: Games played this regular season.
+  stats_totals_highs_rs_adp_max: Current regular-season single-game high of plus-minus
+    (as `match_adp`).
+  stats_totals_highs_rs_assists_max: Current regular-season single-game high of assists.
+  stats_totals_highs_rs_assists_sum: Current regular-season total of assists.
+  stats_totals_highs_rs_avg_points_max: Current regular-season single-game high of
+    plus-minus, despite the name (see the game-log row, where it equals the box score
+    `plus_minus`).
+  stats_totals_highs_rs_avg_points_sum: Current regular-season total of plus-minus,
+    despite the name (see the game-log row, where it equals the box score `plus_minus`).
+  stats_totals_highs_rs_ball_stop_given_max: Current regular-season single-game high
+    of blocks.
+  stats_totals_highs_rs_ball_stop_given_sum: Current regular-season total of blocks.
+  stats_totals_highs_rs_ball_stop_received_max: Current regular-season single-game
+    high of own shots blocked.
+  stats_totals_highs_rs_ball_stop_received_sum: Current regular-season total of own
+    shots blocked.
+  stats_totals_highs_rs_championship_serie_code: Series code, `A1` = Serie A.
+  stats_totals_highs_rs_defensive_rebound_max: Current regular-season single-game
+    high of defensive rebounds.
+  stats_totals_highs_rs_defensive_rebound_sum: Current regular-season total of defensive
+    rebounds.
+  stats_totals_highs_rs_done_fouls_max: Current regular-season single-game high of
+    fouls committed.
+  stats_totals_highs_rs_done_fouls_sum: Current regular-season total of fouls committed.
+  stats_totals_highs_rs_free_throws_perc_max: Current regular-season single-game high
+    of free-throw percentage, 0-100.
+  stats_totals_highs_rs_free_throws_realized_max: Current regular-season single-game
+    high of free throws made.
+  stats_totals_highs_rs_free_throws_realized_sum: Current regular-season total of
+    free throws made.
+  stats_totals_highs_rs_free_throws_total_max: Current regular-season single-game
+    high of free throws attempted.
+  stats_totals_highs_rs_free_throws_total_sum: Current regular-season total of free
+    throws attempted.
+  stats_totals_highs_rs_id: Always null (not a key).
+  stats_totals_highs_rs_lost_balls_max: Current regular-season single-game high of
+    turnovers.
+  stats_totals_highs_rs_lost_balls_sum: Current regular-season total of turnovers.
+  stats_totals_highs_rs_offensive_rebound_max: Current regular-season single-game
+    high of offensive rebounds.
+  stats_totals_highs_rs_offensive_rebound_sum: Current regular-season total of offensive
+    rebounds.
+  stats_totals_highs_rs_played_matches_sum: Current regular-season total of games
+    played.
+  stats_totals_highs_rs_played_minutes_max: Current regular-season single-game high
+    of minutes played.
+  stats_totals_highs_rs_played_minutes_sum: Current regular-season total of minutes
+    played.
+  stats_totals_highs_rs_player_id: Player id (global, one per career).
+  stats_totals_highs_rs_points_max: Current regular-season single-game high of points.
+  stats_totals_highs_rs_points_sum: Current regular-season total of points.
+  stats_totals_highs_rs_quintet_max: Current regular-season single-game high of starts
+    (in the starting five).
+  stats_totals_highs_rs_quintet_sum: Current regular-season total of starts (in the
+    starting five).
+  stats_totals_highs_rs_rating_lega_max: Current regular-season single-game high of
+    LBA efficiency rating (`valutazione`).
+  stats_totals_highs_rs_rating_lega_sum: Current regular-season total of LBA efficiency
+    rating (`valutazione`).
+  stats_totals_highs_rs_rating_oer_max: Current regular-season single-game high of
+    OER (points / (FGA + turnovers + FTA / 2)).
+  stats_totals_highs_rs_rating_oer_sum: 'OER over the regular season (1.04 for 3 games:
+    an average despite `_sum`; inferred).'
+  stats_totals_highs_rs_regain_balls_max: Current regular-season single-game high
+    of steals.
+  stats_totals_highs_rs_regain_balls_sum: Current regular-season total of steals.
+  stats_totals_highs_rs_shots_2p_perc_max: Current regular-season single-game high
+    of 2-point field-goal percentage, 0-100.
+  stats_totals_highs_rs_shots_2p_realized_max: Current regular-season single-game
+    high of 2-point field goals made.
+  stats_totals_highs_rs_shots_2p_realized_sum: Current regular-season total of 2-point
+    field goals made.
+  stats_totals_highs_rs_shots_2p_total_max: Current regular-season single-game high
+    of 2-point field goals attempted.
+  stats_totals_highs_rs_shots_2p_total_sum: Current regular-season total of 2-point
+    field goals attempted.
+  stats_totals_highs_rs_shots_3p_perc_max: Current regular-season single-game high
+    of 3-point field-goal percentage, 0-100.
+  stats_totals_highs_rs_shots_3p_realized_max: Current regular-season single-game
+    high of 3-point field goals made.
+  stats_totals_highs_rs_shots_3p_realized_sum: Current regular-season total of 3-point
+    field goals made.
+  stats_totals_highs_rs_shots_3p_total_max: Current regular-season single-game high
+    of 3-point field goals attempted.
+  stats_totals_highs_rs_shots_3p_total_sum: Current regular-season total of 3-point
+    field goals attempted.
+  stats_totals_highs_rs_slam_dunk_max: Current regular-season single-game high of
+    dunks.
+  stats_totals_highs_rs_slam_dunk_sum: Current regular-season total of dunks.
+  stats_totals_highs_rs_suffered_fouls_max: Current regular-season single-game high
+    of fouls drawn.
+  stats_totals_highs_rs_suffered_fouls_sum: Current regular-season total of fouls
+    drawn.
+  stats_totals_highs_rs_total_matches_sum: Current regular-season total of team games
+    while the player was listed (a player with 3 of 21 shows 21; inferred).
+  stats_totals_highs_rs_total_rebounds_max: Current regular-season single-game high
+    of total rebounds.
+  surname: Player's family name.
+  team_code: '`<season>\|<team code>` of his current team (`2026\|TVU`).'
+  team_id: Team id (team-season) of his current team.
+  team_logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  team_name: Team name in that season, with its sponsor (`Nutribullet Treviso Basket`);
+    changes with the sponsor.
+  uefa_ratio: 'Eligibility class for the foreign-player quota: `I`, `E` or `C` (7
+    / 6 / 1 on the Treviso roster; reading as Italian / EU / non-EU is inferred).'
+  updated_at: Timestamp, ISO-8601 with the Italian offset.
+  weight: Player's weight in kilograms.
+  year: Season START year (2026 = 2026-27); sdv END year = year + 1. The season of
+    the team the row places the player on.
+lba_player_stats:
+  aplus_dp: 'Per-game average of `aplus_dp`, an unverified metric (not plus-minus
+    or assists: Macura 2026-27 has 9 against plus-minus 8 and 3 assists) in that season,
+    competition and team.'
+  assists: Per-game average of assists in that season, competition and team.
+  avg_points: Per-game average of plus-minus, despite the name (see the game-log row,
+    where it equals the box score `plus_minus`) in that season, competition and team.
+  ball_stop_given: Per-game average of blocks in that season, competition and team.
+  ball_stop_received: Per-game average of own shots blocked in that season, competition
+    and team.
+  championship_name: Competition name (`Regular Season`, `Play Off`, `Coppa Italia`,
+    ...).
+  championship_position: Display order of the competition within the season (1 = Regular
+    Season; inferred).
+  championship_year: Season START year (2026 = 2026-27); sdv END year = year + 1.
+  defensive_rebound: Per-game average of defensive rebounds in that season, competition
+    and team.
+  done_fouls: Per-game average of fouls committed in that season, competition and
+    team.
+  free_throws_realized: Per-game average of free throws made in that season, competition
+    and team.
+  free_throws_total: Per-game average of free throws attempted in that season, competition
+    and team.
+  lost_balls: Per-game average of turnovers in that season, competition and team.
+  offensive_rebound: Per-game average of offensive rebounds in that season, competition
+    and team.
+  played_matches: 'Games played in that season, competition and team: a count, the
+    same in the avg, max and sum rows.'
+  played_minutes: Per-game average of minutes played in that season, competition and
+    team.
+  player_id: 'Player id (global: one id for a whole career); the request''s player.'
+  points: Per-game average of points in that season, competition and team.
+  quintet: Per-game average of starts (in the starting five) in that season, competition
+    and team.
+  rating_lega: Per-game average of LBA efficiency rating (`valutazione`) in that season,
+    competition and team.
+  rating_oer: Per-game average of OER (points / (FGA + turnovers + FTA / 2)) in that
+    season, competition and team.
+  regain_balls: Per-game average of steals in that season, competition and team.
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  shots_2p_realized: Per-game average of 2-point field goals made in that season,
+    competition and team.
+  shots_2p_total: Per-game average of 2-point field goals attempted in that season,
+    competition and team.
+  shots_3p_realized: Per-game average of 3-point field goals made in that season,
+    competition and team.
+  shots_3p_total: Per-game average of 3-point field goals attempted in that season,
+    competition and team.
+  slam_dunk: Per-game average of dunks in that season, competition and team.
+  stat_type: 'Statistic of the row: avg (per game), max (single-game high) or sum
+    (total).'
+  suffered_fouls: Per-game average of fouls drawn in that season, competition and
+    team.
+  team_name: Team name in that season, with its sponsor (`Nutribullet Treviso Basket`);
+    changes with the sponsor.
+  total_matches: 'Team games while the player was listed (a player with 3 of 21 shows
+    21; inferred) in that season, competition and team: a count, the same in the avg,
+    max and sum rows.'
+  total_rebound: Per-game average of total rebounds in that season, competition and
+    team.
+lba_players:
+  code: Player code `SURNAME3-NAME3-YY`.
+  name: Player's given name.
+  player_id: Player id (global).
+  player_picture_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  surname: Player's family name.
+  team_name: Team name in that season, with its sponsor (`Nutribullet Treviso Basket`);
+    changes with the sponsor.
+  year: Season START year (2026 = 2026-27); sdv END year = year + 1. The season of
+    the team the row places the player on.
+lba_players_leaderboard:
+  attempts: Shots attempted in the zone, parsed from num.
+  category: Category of this row (the `cat` param, e.g. `points`).
+  category_filter_total: Season total in the category.
+  minutes: 'Minutes per game (players: decimal string `28.67`) / total minutes (teams:
+    integer).'
+  name: Given name (players) / team name (teams).
+  player_id: Player id (global, one per career).
+  player_photo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  presences: Games the player appeared in, counted for the leaderboard.
+  score: Value in the category under the `ob` order (default `avg` = per game); players
+    send a decimal string, teams a number.
+  score_40_min: Value per 40 minutes.
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  surname: Player's family name.
+  team_id: Team id (team-season).
+  team_name: Team name in that season, with its sponsor (`Nutribullet Treviso Basket`);
+    changes with the sponsor.
+  tv_name: Short team name for TV graphics.
+  year: Season START year (2026 = 2026-27); sdv END year = year + 1.
+lba_roster:
+  birth_date: Birth date, Date `YYYY-MM-DD`.
+  club_code: Club code (`TVB`, `TS`); whether it is stable across seasons is unverified.
+  club_id: 'Club id: the cross-season join key for team ids (only here and in the
+    `team` headers); stability across seasons is unverified.'
+  code: Player code `SURNAME3-NAME3-YY`.
+  country: Nationality, ISO alpha-3.
+  end_date: Contract end with the team, Date `YYYY-MM-DD`.
+  height: Player's height in centimetres.
+  name: Player's given name.
+  place_of_birth: Birthplace (Italian spelling).
+  player_id: Player id (global).
+  player_number: Jersey number, number sent as a string.
+  player_picture_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  player_role: 'Position, Italian: `Playmaker` (point guard), `Guardia` (guard), `Ala`
+    (forward), `Centro` (center), `-` unknown.'
+  player_role_id: 'Position id (position key space: the id behind `player_role`; joins
+    the `r_id` filter).'
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  start_date: Contract start with the team, Date `YYYY-MM-DD`.
+  surname: Player's family name.
+  team_id: Team-season id (re-issued every season); join lba_teams for the stable
+    club_id.
+  team_logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  team_name: Team name in that season, with its sponsor (`Nutribullet Treviso Basket`);
+    changes with the sponsor.
+  uefa_ratio: 'Eligibility class for the foreign-player quota: `I`, `E` or `C` (7
+    / 6 / 1 on the Treviso roster; reading as Italian / EU / non-EU is inferred).'
+  weight: Player's weight in kilograms.
+  year: Season START year of the player entry (2026 = 2026-27).
+lba_roster_coach:
+  birth_date: Birth date, Date `YYYY-MM-DD`.
+  club_code: Club code (`TVB`, `TS`); whether it is stable across seasons is unverified.
+  club_id: 'Club id: the cross-season join key for team ids (only here and in the
+    `team` headers); stability across seasons is unverified.'
+  coach_id: Coach id (global coach key space; joins the game header `home_coach_id`
+    / `visitor_coach_id`).
+  coach_picture_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  coach_type_code: Coach role code, number sent as a string.
+  coach_type_description: 'Coach role, Italian: `Allenatore` = head coach.'
+  coach_type_id: Coach role id (1 = head coach).
+  name: Coach's given name.
+  place_of_birth: Birthplace (Italian spelling, e.g. `Londra`).
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  surname: Coach's family name.
+  team_id: Team-season id (re-issued every season); join lba_teams for the stable
+    club_id.
+  team_logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  team_name: Team, short name.
+lba_shots:
+  attempts: Shots attempted in the zone, parsed from num.
+  game_id: Game id (global across seasons); joins lba_calendar and lba_game.
+  made: Shots made in the zone, parsed from num.
+  num: Made/attempted as a string (`17/21`); zone `7` also counts free throws.
+  opacity: 'Heat-map shading for the site: `perc` floored, minimum 5.'
+  perc: Made / attempted × 100.
+  precision: Decimal places the site shows (1).
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  side: 'Which team of the game the row belongs to: home or visitor.'
+  team_id: Team-season id (re-issued every season); join lba_teams for the stable
+    club_id.
+  zone: Court zone 1-10 (the play-by-play side_area_code); zone 7 also holds the free
+    throws.
+lba_standings:
+  avg_points_made: Points scored per game.
+  avg_points_suffered: Points allowed per game.
+  away_avg_points_made: Points scored per away game.
+  away_avg_points_suffered: Points allowed per away game.
+  away_defeats: Away games the team has lost through the round.
+  away_game_played: Away games played.
+  away_max_points_made: Most points scored in an away game.
+  away_points_made: Points scored away.
+  away_points_suffered: Points allowed away.
+  away_ties: Away ties (null).
+  away_wins: Away games won.
+  away_wins_percent: Away win percentage, string with `%`.
+  championships_day_id: Round id the standings are after.
+  club_code: Club code (`TVB`, `TS`); whether it is stable across seasons is unverified.
+  ctp: Classification marker; 0 or null in the samples (unverified).
+  ctp_description: Null in every sample (meaning unverified).
+  ctp_symbol: Null in every sample (meaning unverified).
+  day_code: Round code the standings are after (integer).
+  day_name: Round name, Italian (`4ª Giornata - 2° fase` = matchday 4 of the 2nd phase).
+  defeats: Games the team has lost through the round.
+  game_played: Games the team has played through the round.
+  home_avg_points_made: Points scored per home game.
+  home_avg_points_suffered: Points allowed per home game.
+  home_defeats: Home games the team has lost through the round.
+  home_game_played: Home games played.
+  home_max_points_made: Most points scored in a home game.
+  home_points_made: Points scored at home.
+  home_points_suffered: Points allowed at home.
+  home_ties: Home ties (null).
+  home_wins: Home games won.
+  home_wins_percent: Home win percentage, string with `%`.
+  logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  lp: Null in every sample (meaning unverified).
+  lpf: Null in every sample (meaning unverified).
+  lps: Null in every sample (meaning unverified).
+  lqp: Null in every sample (meaning unverified).
+  lv: Null in every sample (meaning unverified).
+  max_points_made: Most points scored in a game.
+  movement: Position change since the previous round, signed string (`+2`, `-1`; null
+    for finished seasons).
+  penalty_points: Points deducted (0 or null).
+  play_off_qualified: Clinched a play-off place (null in old seasons).
+  points: Standings points (2 per win).
+  points_made: Points the team has scored through the round.
+  points_suffered: Points allowed.
+  position: Rank in the standings.
+  qp: Tie-break quotient (`quoziente punti`?); 1 in the samples (unverified).
+  relegation: Relegated (null in old seasons).
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  season_start_year: 'The wire season field: the season START year (2026 = 2026-27),
+    same as year.'
+  standing_id: Standings row id (one team after one round; joins nothing else).
+  team_id: Team id (team-season).
+  team_name: Team name in that season, with its sponsor (`Nutribullet Treviso Basket`);
+    changes with the sponsor.
+  ties: Ties (0 or null; basketball has none).
+  updated_at: Timestamp, ISO-8601 with the Italian offset.
+  wins: Games the team has won through the round.
+  wins_percent: Win percentage as a string with `%` (`100%`).
+  year: Season START year (2026 = 2026-27); sdv END year = year + 1.
+lba_team_box_score:
+  ass: Assists. (team totals (players + team row))
+  falli_c: Fouls committed (`falli commessi`). (team totals (players + team row))
+  falli_fla: Unsportsmanlike / flagrant fouls (`falli antisportivi`). (team totals
+    (players + team row))
+  falli_sf: Fouls drawn (`falli subiti`). (team totals (players + team row))
+  falli_tc1: Technical fouls (`falli tecnici`; reading `tc1` as category-1 technicals
+    is inferred). (team totals (players + team row))
+  game_id: Game id (global across seasons); joins lba_calendar and lba_game.
+  min: Minutes played, whole minutes (`minuti`); 200 in `totals` = 5 × 40. (team totals
+    (players + team row))
+  palle_p: Turnovers (`palle perse`). (team totals (players + team row))
+  palle_r: Steals (`palle recuperate`). (team totals (players + team row))
+  pun: Points (`punti`). (team totals (players + team row))
+  rimbalzi_d: Defensive rebounds (`rimbalzi difensivi`). (team totals (players + team
+    row))
+  rimbalzi_o: Offensive rebounds (`rimbalzi offensivi`). (team totals (players + team
+    row))
+  rimbalzi_t: Total rebounds (`rimbalzi totali`). (team totals (players + team row))
+  row_type: team = stats booked to the team itself (team rebounds, team turnovers);
+    totals = the whole side.
+  sc: Dunks (`schiacciate`). (team totals (players + team row))
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  sec: Seconds played (`secondi`) = `min` × 60 in every sample. (team totals (players
+    + team row))
+  side: 'Which team of the game the row belongs to: home or visitor.'
+  stoppate_dat: Blocks (`stoppate date`). (team totals (players + team row))
+  stoppate_sub: Own shots blocked (`stoppate subite`). (team totals (players + team
+    row))
+  t2_perc: 2-point field-goal percentage, 0-100 (number; 0 when no attempt). (team
+    totals (players + team row))
+  t2_r: 2-point field goals made (`tiri da 2 realizzati`). (team totals (players +
+    team row))
+  t2_t: 2-point field goals attempted (`tiri da 2 tentati`). (team totals (players
+    + team row))
+  t3_perc: 3-point field-goal percentage, 0-100. (team totals (players + team row))
+  t3_r: 3-point field goals made. (team totals (players + team row))
+  t3_t: 3-point field goals attempted. (team totals (players + team row))
+  team_id: Team-season id (re-issued every season); join lba_teams for the stable
+    club_id.
+  tl_perc: Free-throw percentage, 0-100. (team totals (players + team row))
+  tl_r: Free throws made (`tiri liberi realizzati`). (team totals (players + team
+    row))
+  tl_t: Free throws attempted (`tiri liberi tentati`). (team totals (players + team
+    row))
+  val_lega: LBA efficiency rating (`valutazione Lega`). (team totals (players + team
+    row))
+  val_oer: OER = points / (FGA + turnovers + FTA / 2); verified on every 2026-27 sample
+    row. (team totals (players + team row))
+lba_team_players_stats:
+  aplus_dp_sum: 'Season total of `aplus_dp`, an unverified metric (not plus-minus
+    or assists: Macura 2026-27 has 9 against plus-minus 8 and 3 assists).'
+  assists_sum: Season total of assists.
+  ball_stop_given_sum: Season total of blocks.
+  ball_stop_received_sum: Season total of own shots blocked.
+  club_code: Club code (`TVB`, `TS`); whether it is stable across seasons is unverified.
+  club_id: 'Club id: the cross-season join key for team ids (only here and in the
+    `team` headers); stability across seasons is unverified.'
+  defensive_rebound_sum: Season total of defensive rebounds.
+  done_fouls_sum: Season total of fouls committed.
+  free_throws_perc_sum: Season free-throw percentage, 0-100 (a rate despite `_sum`).
+  free_throws_realized_sum: Season total of free throws made.
+  free_throws_total_sum: Season total of free throws attempted.
+  lost_balls_sum: Season total of turnovers.
+  offensive_rebound_sum: Season total of offensive rebounds.
+  played_matches: Games the player appeared in, in the request's championship series.
+  played_minutes_sum: Season total of minutes played.
+  player_id: Player id (global, one per career).
+  player_name: Player's given name.
+  player_photo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  player_season: Season START year (2026 = 2026-27); sdv END year = year + 1.
+  player_surname: Player's family name.
+  plus_minus_sum: Season total of plus-minus.
+  points_sum: Season total of points.
+  rating_lega_sum: Season total of LBA efficiency rating (`valutazione`).
+  rating_oer_sum: Sum of the per-game OER values (3.34 over 3 games), not a season
+    OER.
+  regain_balls_sum: Season total of steals.
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  shots_2p_perc_sum: Season 2-point percentage, 0-100 (a rate despite `_sum`).
+  shots_2p_realized_sum: Season total of 2-point field goals made.
+  shots_2p_total_sum: Season total of 2-point field goals attempted.
+  shots_3p_perc_sum: Season 3-point percentage, 0-100 (a rate despite `_sum`).
+  shots_3p_realized_sum: Season total of 3-point field goals made.
+  shots_3p_total_sum: Season total of 3-point field goals attempted.
+  slam_dunk_sum: Season total of dunks.
+  start_formation: Games the player started, in the request's championship series.
+  suffered_fouls_sum: Season total of fouls drawn.
+  team_id: Team-season id (re-issued every season); join lba_teams for the stable
+    club_id.
+  total_matches: Team games while the player was listed (inferred).
+  total_rebound_sum: Season total of total rebounds.
+lba_teams:
+  club_code: Club code (`TVB`, `TS`); whether it is stable across seasons is unverified.
+  club_id: 'Club id: the cross-season join key for team ids (only here and in the
+    `team` headers); stability across seasons is unverified.'
+  logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  name: Team name of that season (sponsor name).
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  team_id: Team id (one team-season).
+  updated_at: Timestamp, ISO-8601 with the Italian offset.
+  year: Season START year (2026 = 2026-27); sdv END year = year + 1.
+lba_teams_leaderboard:
+  attempts: Shots attempted in the zone, parsed from num.
+  category: Category of this row (the `cat` param, e.g. `points`).
+  logo_key: 'Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb`
+    or `/large` (the site''s getApiImageUrl).'
+  minutes: 'Minutes per game (players: decimal string `28.67`) / total minutes (teams:
+    integer).'
+  name: Given name (players) / team name (teams).
+  score: Value in the category under the `ob` order (default `avg` = per game); players
+    send a decimal string, teams a number.
+  score_40_min: Value per 40 minutes.
+  season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
+  short_name: Short name of the team, e.g. BC Roma.
+  sponsor_name: Sponsor name (empty or null in the samples).
+  team_id: Team id (team-season).
+  total_played_matches: Games the team has played, counted for the leaderboard.
+  total_points: Points scored (offensive) or allowed (defensive) in the season.
+  tv_name: Short team name for TV graphics.
+  year: Season START year (2026 = 2026-27); sdv END year = year + 1.

@@ -1,0 +1,84 @@
+{
+  "stats": [
+    {
+      "category": "points",
+      "name": "Cagiva Varese",
+      "sponsor_name": null,
+      "short_name": "Cagiva Varese",
+      "tv_name": "Cagiva VA",
+      "year": 1995,
+      "logo_key": null,
+      "attempts": 0,
+      "total_played_matches": 34,
+      "total_points": 2965,
+      "minutes": 6875,
+      "score_40_min": 86.25454545454545,
+      "score": 87.20588235294117,
+      "team_id": 269
+    },
+    {
+      "category": "points",
+      "name": "Buckler Bologna",
+      "sponsor_name": null,
+      "short_name": "Buckler Bologna",
+      "tv_name": "Buckler BO",
+      "year": 1995,
+      "logo_key": null,
+      "attempts": 0,
+      "total_played_matches": 38,
+      "total_points": 3313,
+      "minutes": 7650,
+      "score_40_min": 86.61437908496733,
+      "score": 87.1842105263158,
+      "team_id": 258
+    },
+    {
+      "category": "points",
+      "name": "Scavolini Pesaro",
+      "sponsor_name": null,
+      "short_name": "Scavolini Pesaro",
+      "tv_name": "Scavolini PS",
+      "year": 1995,
+      "logo_key": null,
+      "attempts": 0,
+      "total_played_matches": 37,
+      "total_points": 3180,
+      "minutes": 7500,
+      "score_40_min": 84.8,
+      "score": 85.94594594594595,
+      "team_id": 262
+    }
+  ],
+  "filters": {
+    "order_by": [
+      {
+        "code": "sum",
+        "description": "Totale"
+      },
+      {
+        "code": "avg",
+        "description": "Media"
+      },
+      {
+        "code": "40_perc",
+        "description": "40 min/%"
+      }
+    ],
+    "categories": [
+      {
+        "code": "points",
+        "description": "Punti"
+      },
+      {
+        "code": "rating_lega",
+        "description": "Valutazione"
+      },
+      {
+        "code": "total_rebound",
+        "description": "Rimbalzi"
+      }
+    ]
+  },
+  "cache_key": "_cmtCK:1791747613_season_range:off|year:1995|championship_series_id:1|advanced:false|order_by:avg",
+  "cdn_url": "https://lba-media.s3.eu-south-1.amazonaws.com"
+}

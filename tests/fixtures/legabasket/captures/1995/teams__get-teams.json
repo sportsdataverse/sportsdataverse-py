@@ -1,0 +1,50 @@
+{
+  "teams": [
+    {
+      "id": 268,
+      "name": "Benetton Treviso",
+      "year": 1995,
+      "club_id": 56,
+      "club_code": "TV",
+      "updated_at": "2021-07-21T12:12:31.515+02:00",
+      "logo_key": null
+    },
+    {
+      "id": 258,
+      "name": "Buckler Bologna",
+      "year": 1995,
+      "club_id": 6,
+      "club_code": "BOV",
+      "updated_at": "2021-07-21T12:12:31.207+02:00",
+      "logo_key": null
+    },
+    {
+      "id": 269,
+      "name": "Cagiva Varese",
+      "year": 1995,
+      "club_id": 60,
+      "club_code": "VA",
+      "updated_at": "2021-07-21T12:12:31.528+02:00",
+      "logo_key": null
+    }
+  ],
+  "pagination": {
+    "first_url": "/api/v1/teams?year=1995&items=50&page=1",
+    "prev_url": "/api/v1/teams?year=1995&items=50&page=",
+    "page_url": "/api/v1/teams?year=1995&items=50&page=1",
+    "next_url": "/api/v1/teams?year=1995&items=50&page=",
+    "last_url": "/api/v1/teams?year=1995&items=50&page=1",
+    "count": 14,
+    "page": 1,
+    "items": 50,
+    "pages": 1,
+    "last": 1,
+    "in": 14,
+    "from": 1,
+    "to": 14,
+    "prev": null,
+    "next": null
+  },
+  "cache_key": "_tCK:1790250236_mlCK:1791828530_cCK:1791375998_cRS:374_y:1995_p:1_i:50",
+  "cdn_url": "https://lba-media.s3.eu-south-1.amazonaws.com"
+}

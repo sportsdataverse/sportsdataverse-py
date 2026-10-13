@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: surname
+  type: character
+- description: ''
+  name: code
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: year
+  type: integer
+- description: ''
+  name: player_picture_key
+  type: character
+kind: dataframe
+schema: lba_players

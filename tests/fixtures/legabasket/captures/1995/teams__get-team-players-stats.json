@@ -1,0 +1,199 @@
+{
+  "team": {
+    "id": 267,
+    "name": "Illycaffe' Trieste",
+    "year": 1995,
+    "club_id": 55,
+    "club_code": "TS",
+    "updated_at": "2021-07-21T12:12:31.502+02:00",
+    "logo_key": null
+  },
+  "ranking": [
+    {
+      "id": 1471,
+      "year": 1995,
+      "team_id": 267,
+      "result": "13ª Posizione (su 14) con 12 punti",
+      "team_name": "Illycaffe' Trieste",
+      "championship_type_name": "Regular Season",
+      "championship_series_name": "Serie A",
+      "championships_name": "Regular Season A1"
+    }
+  ],
+  "rnk_sum": {
+    "cat": {
+      "points": {
+        "pos": 11,
+        "avg": 79.90625
+      },
+      "total_rebound": {
+        "pos": 8,
+        "avg": 31.6875
+      },
+      "assists": {
+        "pos": 8,
+        "avg": 7.1875
+      }
+    },
+    "r_s": {
+      "pos": 13,
+      "points": 12,
+      "mw": 6,
+      "ml": 26
+    }
+  },
+  "players": [
+    {
+      "player_id": 5965,
+      "player_name": "Michael",
+      "player_surname": "Williams",
+      "player_season": 1995,
+      "player_photo_key": null,
+      "played_matches": 14,
+      "total_matches": 20,
+      "start_formation": 20,
+      "points_sum": 362,
+      "played_minutes_sum": 483,
+      "rating_lega_sum": 336,
+      "rating_oer_sum": 14.667459999999998,
+      "offensive_rebound_sum": 24,
+      "defensive_rebound_sum": 42,
+      "total_rebound_sum": 66,
+      "assists_sum": 20,
+      "regain_balls_sum": 36,
+      "lost_balls_sum": 37,
+      "ball_stop_given_sum": 1,
+      "ball_stop_received_sum": 6,
+      "done_fouls_sum": 45,
+      "suffered_fouls_sum": 95,
+      "plus_minus_sum": 0,
+      "aplus_dp_sum": 19,
+      "slam_dunk_sum": 8,
+      "shots_2p_realized_sum": 122,
+      "shots_2p_total_sum": 221,
+      "shots_2p_perc_sum": 55.203619909502265,
+      "shots_3p_realized_sum": 15,
+      "shots_3p_total_sum": 47,
+      "shots_3p_perc_sum": 31.914893617021278,
+      "free_throws_realized_sum": 73,
+      "free_throws_total_sum": 98,
+      "free_throws_perc_sum": 74.48979591836735
+    },
+    {
+      "player_id": 2584,
+      "player_name": "Massimo",
+      "player_surname": "Guerra",
+      "player_season": 1995,
+      "player_photo_key": null,
+      "played_matches": 27,
+      "total_matches": 32,
+      "start_formation": 22,
+      "points_sum": 334,
+      "played_minutes_sum": 775,
+      "rating_lega_sum": 148,
+      "rating_oer_sum": 23.543902999999997,
+      "offensive_rebound_sum": 9,
+      "defensive_rebound_sum": 32,
+      "total_rebound_sum": 41,
+      "assists_sum": 29,
+      "regain_balls_sum": 27,
+      "lost_balls_sum": 47,
+      "ball_stop_given_sum": 1,
+      "ball_stop_received_sum": 4,
+      "done_fouls_sum": 95,
+      "suffered_fouls_sum": 38,
+      "plus_minus_sum": 0,
+      "aplus_dp_sum": 9,
+      "slam_dunk_sum": 1,
+      "shots_2p_realized_sum": 104,
+      "shots_2p_total_sum": 208,
+      "shots_2p_perc_sum": 50,
+      "shots_3p_realized_sum": 32,
+      "shots_3p_total_sum": 94,
+      "shots_3p_perc_sum": 34.04255319148936,
+      "free_throws_realized_sum": 30,
+      "free_throws_total_sum": 40,
+      "free_throws_perc_sum": 75
+    },
+    {
+      "player_id": 1443,
+      "player_name": "Jevon",
+      "player_surname": "Crudup",
+      "player_season": 1995,
+      "player_photo_key": null,
+      "played_matches": 25,
+      "total_matches": 31,
+      "start_formation": 30,
+      "points_sum": 264,
+      "played_minutes_sum": 749,
+      "rating_lega_sum": 379,
+      "rating_oer_sum": 21.9210609,
+      "offensive_rebound_sum": 81,
+      "defensive_rebound_sum": 155,
+      "total_rebound_sum": 236,
+      "assists_sum": 16,
+      "regain_balls_sum": 30,
+      "lost_balls_sum": 60,
+      "ball_stop_given_sum": 18,
+      "ball_stop_received_sum": 12,
+      "done_fouls_sum": 83,
+      "suffered_fouls_sum": 81,
+      "plus_minus_sum": 0,
+      "aplus_dp_sum": -14,
+      "slam_dunk_sum": 7,
+      "shots_2p_realized_sum": 109,
+      "shots_2p_total_sum": 180,
+      "shots_2p_perc_sum": 60.55555555555555,
+      "shots_3p_realized_sum": 0,
+      "shots_3p_total_sum": 0,
+      "shots_3p_perc_sum": 0,
+      "free_throws_realized_sum": 46,
+      "free_throws_total_sum": 86,
+      "free_throws_perc_sum": 53.48837209302325
+    }
+  ],
+  "filters": {
+    "seasons": [
+      1974,
+      1975,
+      1976
+    ],
+    "competitions": [
+      {
+        "id": 1,
+        "code": "A1",
+        "name": "Serie A"
+      }
+    ],
+    "stats_orby": [
+      {
+        "val": "",
+        "label": "Punti"
+      },
+      {
+        "val": "tm",
+        "label": "Presenze"
+      },
+      {
+        "val": "pm",
+        "label": "Partite giocate"
+      }
+    ],
+    "stats_types": [
+      {
+        "code": "sum",
+        "description": "Totali"
+      },
+      {
+        "code": "avg",
+        "description": "Medie"
+      },
+      {
+        "code": "max",
+        "description": "Highs"
+      }
+    ]
+  },
+  "cdn_url": "https://lba-media.s3.eu-south-1.amazonaws.com",
+  "cache_key": "tCK:_tCK:1790250236_mlCK:_mlCK:1791828530_ctmtsCK:1791747613_sCK:1995_cCK:374_373_stCK:sum"
+}

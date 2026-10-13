@@ -1,0 +1,53 @@
+{
+  "competitions": [
+    {
+      "id": 216,
+      "year": 2017,
+      "name": "Play Off A",
+      "status": 2,
+      "championship_type_id": 2,
+      "championship_series_id": 1,
+      "full_name": "Play Off A 2017",
+      "focus_on": false,
+      "ctype_code": "PO",
+      "ctype_name": "Play Off",
+      "cserie_code": "A1",
+      "cserie_name": "Serie A",
+      "logo_key": null
+    },
+    {
+      "id": 215,
+      "year": 2017,
+      "name": "Regular Season A",
+      "status": 2,
+      "championship_type_id": 4,
+      "championship_series_id": 1,
+      "full_name": "Regular Season A 2017",
+      "focus_on": false,
+      "ctype_code": "RS",
+      "ctype_name": "Regular Season",
+      "cserie_code": "A1",
+      "cserie_name": "Serie A",
+      "logo_key": null
+    }
+  ],
+  "pagination": {
+    "first_url": "/api/v1/championships?s=2017&cs_id=1&items=1000&page=1",
+    "prev_url": "/api/v1/championships?s=2017&cs_id=1&items=1000&page=",
+    "page_url": "/api/v1/championships?s=2017&cs_id=1&items=1000&page=1",
+    "next_url": "/api/v1/championships?s=2017&cs_id=1&items=1000&page=",
+    "last_url": "/api/v1/championships?s=2017&cs_id=1&items=1000&page=1",
+    "count": 2,
+    "page": 1,
+    "items": 1000,
+    "pages": 1,
+    "last": 1,
+    "in": 2,
+    "from": 1,
+    "to": 2,
+    "prev": null,
+    "next": null
+  },
+  "cache_key": "cCK:1791375998_pg:1/1000",
+  "cdn_url": "https://lba-media.s3.eu-south-1.amazonaws.com"
+}

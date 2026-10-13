@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: year
+  type: integer
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: club_code
+  type: character
+- description: ''
+  name: updated_at
+  type: character
+- description: ''
+  name: logo_key
+  type: character
+kind: dataframe
+schema: lba_teams

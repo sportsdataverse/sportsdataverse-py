@@ -1,0 +1,18 @@
+[
+ "/championships/get-championship-ranking",
+ "/championships/get-championships",
+ "/championships/get-championships-calendar-by-id",
+ "/championships/get-championships-matches-by-id",
+ "/championships/get-championships-matches-play-by-play",
+ "/championships/get-championships-matches-scores-by-id",
+ "/matches/get-championship-matches-shots-by-id",
+ "/players/get-player-by-id",
+ "/players/get-player-matches",
+ "/players/get-player-stats",
+ "/players/get-players",
+ "/statistics/get-players-statistics",
+ "/statistics/get-teams-statistics-by-type",
+ "/teams/get-team-players-stats",
+ "/teams/get-team-roster",
+ "/teams/get-teams"
+]
