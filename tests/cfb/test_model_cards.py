@@ -74,3 +74,12 @@ def test_the_card_is_read_once_and_cached(monkeypatch):
     model_cards.card_features("ep_model")
     model_cards.card_features("ep_model")
     assert len(calls) == 1, "card re-read; every calculator call would hit disk"
+
+
+@pytest.mark.parametrize("model", ["fd_model", "fg_model", "qbr_model", "two_pt_model", "xpass_model"])
+def test_the_catalogued_era_cuts_are_the_bundled_cards_cuts(model):
+    """The QBR / fourth-down / two-point era dummies read cfb/model_vars.py CFB_MODEL_ERA_CUTS (task 3.11);
+    each era-aware model was trained on its card's ``era.cuts``, so the two must agree."""
+    from sportsdataverse.cfb.model_vars import CFB_MODEL_ERA_CUTS
+
+    assert tuple(model_cards.card_era_contract(model)["cuts"]) == CFB_MODEL_ERA_CUTS

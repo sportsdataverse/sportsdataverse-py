@@ -381,3 +381,13 @@ def test_pat_make_prob_scored_at_3_before_2015_and_15_after(monkeypatch) -> None
     # A 21-yard kick converts more often than a 33-yard one: the pre-2015 PAT is the surer point.
     conv = out.set_index("go_index").loc[np.arange(len(td)), "conv_1pt"].to_numpy()
     assert conv[season < 2015].min() > conv[season >= 2015].max()
+
+
+def test_prepare_era_one_hots_break_at_the_catalogued_cuts() -> None:
+    """``_prepare`` reads model_vars.ERA_SEASON_CUTS (plan task 3.11): each cut season closes its era."""
+    from sportsdataverse.nfl.nfl_fourth_down import _prepare
+
+    seasons = [2001, 2002, 2005, 2006, 2013, 2014, 2017, 2018]
+    d = _prepare(pl.DataFrame([_row(season=s) for s in seasons]).to_pandas())
+    era = d[["era0", "era1", "era2", "era3", "era4"]].to_numpy().argmax(axis=1).tolist()
+    assert era == [0, 1, 1, 2, 2, 3, 3, 4]
