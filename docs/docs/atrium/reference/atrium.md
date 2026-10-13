@@ -11,7 +11,7 @@ toc_max_heading_level: 2
 
 > **Note:** Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental.
 
-> **Note:** `website_id` picks the league site (12 LNB France, 14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro); one site carries many competitions. Seasons are END years (`season=2026`): the site's own year is the START year on LNB and the calendar year elsewhere, and a year can hold several competitions, so pair `season` with `competition_id` (see `atrium_seasons`) or pass `season_id` directly.
+> **Note:** `website_id` picks the league site (12 LNB France, 14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro); one site carries many competitions. Seasons are END years (`season=2026`): the site's own year is the START year on LNB and the calendar year elsewhere, and a year can hold several competitions, so pair `season` with `competition_id` (see `atrium_seasons`) or pass `season_id` directly. `atrium_end_year(website_id, year)` maps a site's own year to that END year.
 
 > **Note:** Columns are configured per site: a statistic one site omits is null. The player and team ids are shared across sites; the player stat tables carry names only, so `person_id` there is decoded from the widget link beside each name.
 

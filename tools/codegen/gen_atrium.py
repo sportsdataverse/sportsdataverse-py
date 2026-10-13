@@ -768,7 +768,8 @@ def main() -> None:
                 "22 Panama, 236 Austria, 326 Montenegro); one site carries many competitions. Seasons are END years "
                 "(``season=2026``): the site's own year is the START year on LNB and the calendar year elsewhere, "
                 "and a year can hold several competitions, so pair ``season`` with ``competition_id`` (see "
-                "``atrium_seasons``) or pass ``season_id`` directly.",
+                "``atrium_seasons``) or pass ``season_id`` directly. ``atrium_end_year(website_id, year)`` maps a site's "
+                "own year to that END year.",
                 "Columns are configured per site: a statistic one site omits is null. The player and team ids are "
                 "shared across sites; the player stat tables carry names only, so ``person_id`` there is decoded "
                 "from the widget link beside each name.",

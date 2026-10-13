@@ -268,6 +268,7 @@ providers:
     flat_apis: [atrium]
     modules:
       - sportsdataverse.basketball.atrium.*_runtime
+      - sportsdataverse.basketball.atrium.atrium_parsers
 
   nbl_rosetta:
     label: NBL Rosetta proxy (NBL, WNBL, NBL1)
