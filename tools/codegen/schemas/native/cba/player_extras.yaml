@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: schedule_id
+  type: integer
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: cn_alias
+  type: character
+- description: ''
+  name: dunks_points
+  type: integer
+- description: ''
+  name: fast_break_points
+  type: integer
+- description: ''
+  name: field_goals_at_rim_made
+  type: integer
+- description: ''
+  name: game_start
+  type: integer
+- description: ''
+  name: number
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: up_time
+  type: integer
+kind: dataframe
+schema: cba_player_extras
