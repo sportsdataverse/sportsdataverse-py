@@ -1,0 +1,1045 @@
+# CRICKET — ESPN site API (v2)
+
+> CRICKET — ESPN site API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package.
+
+`sportsdataverse.cricket` — 24 endpoints.
+
+## espn_cricket_scoreboard
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/scoreboard`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/scoreboard?dates=20240115&limit=500](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/scoreboard?dates=20240115&limit=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
+| `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `groups` | `groups` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_cricket_scoreboard-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character | ESPN event id for the match. |
+| `date` | character | Match start timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
+| `home_team` | character | Home team display name. |
+| `home_team_id` | character | Home team ESPN id. |
+| `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
+| `away_team` | character | Away team display name. |
+| `away_team_id` | character | Away team ESPN id. |
+| `away_score` | character | Away team's score. For cricket, the innings string. |
+| `status` | character | Status type name (e.g. STATUS_FINAL, STATUS_SCHEDULED, STATUS_IN_PROGRESS). |
+| `status_detail` | character | Human-readable status detail (e.g. 'Final', the over/innings summary). |
+| `venue` | character | Full name of the venue where the match was played. |
+| `neutral_site` | logical | Whether the match is played at a neutral venue. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_scoreboard-example}
+
+```python
+espn_cricket_scoreboard(league='eng.1', dates='20240115')
+```
+
+_Last validated n/a._
+
+## espn_cricket_summary
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/summary`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/summary](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/summary)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event` | `event_id` |  |  | `Y` | event query parameter. |
+
+### Returns {#espn_cricket_summary-returns}
+
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
+**header**
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `uid` | character |  |
+| `time_valid` | logical |  |
+| `season_year` | integer |  |
+| `season_type` | integer | ESPN season-phase numeric code (1=pre-season, 2=regular season, 3=postseason, 4=off-season). |
+| `season_slug` | character |  |
+| `league_id` | character | ESPN numeric identifier for the league or competition. |
+| `league_name` | character |  |
+| `league_abbreviation` | character | Abbreviation for the league or competition the game belongs to. |
+| `competition_id` | character | ESPN numeric identifier for the primary competition (game) in the header. |
+| `competition_date` | character | Date and time of the competition as recorded in the game header. |
+| `neutral_site` | logical |  |
+| `status_name` | character |  |
+| `status_description` | character |  |
+| `is_final` | character | Boolean flag indicating whether the game has reached a final or completed status. |
+
+**matchcards_batting**
+
+| col_name | type | description |
+|---|---|---|
+| `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
+| `team_name` | character | Full display name of the team. |
+| `total` | character |  |
+| `runs_total` | character | Total runs scored by the team or batting side in this innings. |
+| `extras` | character | Additional runs awarded to the batting side from wides, no-balls, byes, or leg byes in this innings. |
+| `player_id` | character |  |
+| `player_name` | character |  |
+| `dismissal` | character | Method by which the batter was dismissed in this innings (e.g., caught, bowled, run out). |
+| `runs` | character |  |
+| `balls_faced` | character | Total number of balls faced by the batter during their innings. |
+| `fours` | character | Number of boundaries hit for four runs by the batter in this innings. |
+| `sixes` | character | Number of boundaries hit for six runs by the batter in this innings. |
+
+**matchcards_bowling**
+
+| col_name | type | description |
+|---|---|---|
+| `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
+| `team_name` | character | Full display name of the team. |
+| `player_id` | character |  |
+| `player_name` | character |  |
+| `overs` | character | Number of overs bowled by the bowler in this innings. |
+| `maidens` | character | Number of maiden overs bowled by the bowler in this innings, in which no runs were conceded. |
+| `conceded` | character | Total runs conceded by the bowler during their spell in this innings. |
+| `wickets` | character | Number of wickets taken by the bowler in this innings. |
+| `economy_rate` | character | Average runs conceded per over by the bowler in this innings. |
+| `nbw` | character | Combined no-balls and wides bowled by the bowler in this innings. |
+
+**matchcards_partnerships**
+
+| col_name | type | description |
+|---|---|---|
+| `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
+| `team_name` | character | Full display name of the team. |
+| `partnership_runs` | character | Total runs scored during the batting partnership for this fall-of-wicket record. |
+| `partnership_overs` | character | Number of overs faced during the batting partnership for this fall-of-wicket record. |
+| `wicket_name` | character | Name or label identifying the wicket at which this batting partnership ended. |
+| `fow_type` | character | Type classification for this fall-of-wicket entry (e.g., caught, bowled, run out). |
+| `player1_name` | character | Name of the first batter in the batting partnership for this fall-of-wicket entry. |
+| `player1_runs` | character | Runs contributed by the first player in the batting partnership. |
+| `player2_name` | character | Name of the second batter in the batting partnership for this fall-of-wicket entry. |
+| `player2_runs` | character | Runs contributed by the second player in the batting partnership. |
+
+**rosters**
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `home_away` | character |  |
+| `winner` | logical |  |
+| `athlete_id` | character |  |
+| `athlete` | character | Reference or identifier string for the athlete associated with this row in the box score. |
+| `jersey` | character |  |
+| `starter` | logical |  |
+| `position` | character |  |
+| `captain` | logical | Indicates whether the player was designated as a team captain for this game. |
+
+**game_info**
+
+| col_name | type | description |
+|---|---|---|
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_short_name` | character | Abbreviated or shortened display name for the venue where the game was played. |
+| `venue_city` | character |  |
+| `venue_country` | character | Country name for the venue where the game was played. |
+| `attendance` | integer |  |
+| `officials` | character |  |
+
+**standings**
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character |  |
+| `team` | character |  |
+| `team_id` | character |  |
+| `rank` | integer |  |
+| `matches_played` | integer | Total number of matches played by the team in the current stage or competition group. |
+| `matches_won` | integer | Total number of matches won by the team in the current stage or competition group. |
+| `matches_lost` | integer | Total number of matches lost by the team in the current stage or competition group. |
+| `noresult` | integer | Number of matches that ended without a result (e.g., rain-affected or abandoned) for the team. |
+| `match_points` | integer | Total competition points accumulated by the team based on match outcomes in the group or stage. |
+| `qualified` | integer | Boolean qualification flag indicating whether the team has secured advancement from the current group or stage. |
+| `netrr` | double | Net Run Rate for the team, a tiebreaker metric used in cricket group standings. |
+| `for` | double | Total runs or score accumulated by the team across all matches in the group or stage. |
+| `against` | double | Total runs or score conceded by the team across all matches in the group or stage. |
+| `total` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_summary-example}
+
+```python
+espn_cricket_summary(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_cricket_calendar
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/calendar`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/calendar](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/calendar)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_cricket_calendar-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_calendar-example}
+
+```python
+espn_cricket_calendar(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_cricket_news
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/news`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/news?limit=50](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/news?limit=50)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_cricket_news-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `byline` | character | Author byline string as published by ESPN. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_news-example}
+
+```python
+espn_cricket_news(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_cricket_injuries
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/injuries`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/injuries](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/injuries)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_cricket_injuries-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_injuries-example}
+
+```python
+espn_cricket_injuries(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_cricket_transactions
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/transactions`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/transactions?limit=500](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/transactions?limit=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_cricket_transactions-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `date` | character |  |
+| `description` | character |  |
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_id` | character |  |
+| `team_links` | character |  |
+| `team_location` | character |  |
+| `team_logos` | character |  |
+| `team_name` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_transactions-example}
+
+```python
+espn_cricket_transactions(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_cricket_conferences
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/groups`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/groups](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/groups)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_cricket_conferences-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_id` | character |  |
+| `name` | character |  |
+| `abbreviation` | character |  |
+| `short_name` | character |  |
+| `is_conference` | logical |  |
+| `parent_group_id` | character |  |
+| `depth` | integer |  |
+| `children_count` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_conferences-example}
+
+```python
+espn_cricket_conferences(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_cricket_statistics_league
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/statistics`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/statistics](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/statistics)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_cricket_statistics_league-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb, 2026-10-07); its rows sit under keys it does not read (top level: league, season, status, timestamp).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_statistics_league-example}
+
+```python
+espn_cricket_statistics_league(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_cricket_draft
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/draft`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/draft](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/draft)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_cricket_draft-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, nhl, wnba, 2026-10-07); its rows sit under keys it does not read (top level: breakingNews, broadcasts, displayName, picks, positions, rounds, shortDisplayName, status).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_draft-example}
+
+```python
+espn_cricket_draft(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_cricket_teams_site
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams?limit=1000](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams?limit=1000)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_cricket_teams_site-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character | Short team abbreviation (e.g. "BOS"). |
+| `team_alternate_color` | character | Secondary team color as a hex string (no leading '#'). |
+| `team_color` | character | Primary team color as a hex string (no leading '#'). |
+| `team_display_name` | character | Full team display name (location + nickname). |
+| `team_id` | character | ESPN team id (stable join key across ESPN endpoints). |
+| `team_is_active` | logical | Whether the team is currently active. |
+| `team_is_all_star` | logical | Whether the entry is an all-star squad rather than a franchise. |
+| `team_location` | character | Team location / city (e.g. "Boston"). |
+| `team_logos` | character | Pipe-delimited logo image URLs. |
+| `team_name` | character | Team nickname/mascot (e.g. "Celtics"). |
+| `team_nickname` | character | Team nickname as ESPN labels it (often equals team_name). |
+| `team_short_display_name` | character | Abbreviated display name for compact UIs. |
+| `team_slug` | character | URL slug used in ESPN web paths. |
+| `team_uid` | character | ESPN global UID (encodes sport/league/team). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_teams_site-example}
+
+```python
+espn_cricket_teams_site(league='eng.1')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_cricket_team-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_franchise_$ref` | character |  |
+| `team_franchise_abbreviation` | character |  |
+| `team_franchise_color` | character |  |
+| `team_franchise_display_name` | character |  |
+| `team_franchise_id` | character |  |
+| `team_franchise_is_active` | logical |  |
+| `team_franchise_location` | character |  |
+| `team_franchise_name` | character |  |
+| `team_franchise_short_display_name` | character |  |
+| `team_franchise_slug` | character |  |
+| `team_franchise_team_$ref` | character |  |
+| `team_franchise_uid` | character |  |
+| `team_franchise_venue_$ref` | character |  |
+| `team_franchise_venue_address_city` | character |  |
+| `team_franchise_venue_address_state` | character |  |
+| `team_franchise_venue_full_name` | character |  |
+| `team_franchise_venue_grass` | logical |  |
+| `team_franchise_venue_guid` | character |  |
+| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_images` | character |  |
+| `team_franchise_venue_indoor` | logical |  |
+| `team_franchise_venue_short_name` | character |  |
+| `team_groups_id` | character |  |
+| `team_groups_is_conference` | logical |  |
+| `team_groups_parent_id` | character |  |
+| `team_id` | character |  |
+| `team_is_active` | logical |  |
+| `team_links` | character |  |
+| `team_location` | character |  |
+| `team_logos` | character |  |
+| `team_name` | character |  |
+| `team_next_event` | character |  |
+| `team_record_items` | character |  |
+| `team_short_display_name` | character |  |
+| `team_slug` | character |  |
+| `team_standing_summary` | character |  |
+| `team_uid` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team-example}
+
+```python
+espn_cricket_team(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team_roster
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/roster`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/roster?limit=500](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/roster?limit=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_cricket_team_roster-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | Id. |
+| `uid` | character | Uid. |
+| `guid` | character | Guid. |
+| `first_name` | character | First name. |
+| `last_name` | character | Last name. |
+| `full_name` | character | Full name. |
+| `display_name` | character | Display name. |
+| `short_name` | character | Short name. |
+| `weight` | double | Weight. |
+| `display_weight` | character | Display weight. |
+| `height` | double | Height. |
+| `display_height` | character | Display height. |
+| `age` | integer | Age. |
+| `date_of_birth` | character | Date of birth. |
+| `debut_year` | double | Debut year. |
+| `links` | character | Links. |
+| `slug` | character | Slug. |
+| `jersey` | character | Jersey. |
+| `injuries` | character | Injuries. |
+| `teams` | character | Teams. |
+| `contracts` | character | Contracts. |
+| `alternate_ids_sdr` | character | Alternate ids sdr. |
+| `birth_place_city` | character | Birth place city. |
+| `birth_place_country` | character | Birth place country. |
+| `college_id` | character | College id. |
+| `college_guid` | character | College guid. |
+| `college_mascot` | character | College mascot. |
+| `college_name` | character | College name. |
+| `college_short_name` | character | College short name. |
+| `college_abbrev` | character | College abbrev. |
+| `college_logos` | character | College logos. |
+| `headshot_href` | character | Headshot href. |
+| `headshot_alt` | character | Headshot alt. |
+| `position_id` | character | Position id. |
+| `position_name` | character | Position name. |
+| `position_display_name` | character | Position display name. |
+| `position_abbreviation` | character | Position abbreviation. |
+| `position_leaf` | logical | Position leaf. |
+| `experience_years` | integer | Experience years. |
+| `contract_bird_status` | integer | Contract bird status. |
+| `contract_base_year_compensation_active` | logical | Contract base year compensation active. |
+| `contract_poison_pill_provision_active` | logical | Contract poison pill provision active. |
+| `contract_incoming_trade_value` | integer | Contract incoming trade value. |
+| `contract_outgoing_trade_value` | integer | Contract outgoing trade value. |
+| `contract_minimum_salary_exception` | logical | Contract minimum salary exception. |
+| `contract_option_type` | integer | Contract option type. |
+| `contract_salary` | integer | Contract salary. |
+| `contract_salary_remaining` | integer | Contract salary remaining. |
+| `contract_years_remaining` | integer | Contract years remaining. |
+| `contract_season_year` | integer | Contract season year. |
+| `contract_season_start_date` | character | Contract season start date. |
+| `contract_season_end_date` | character | Contract season end date. |
+| `contract_trade_kicker_active` | logical | Contract trade kicker active. |
+| `contract_trade_kicker_percentage` | double | Contract trade kicker percentage. |
+| `contract_trade_kicker_value` | integer | Contract trade kicker value. |
+| `contract_trade_kicker_trade_value` | integer | Contract trade kicker trade value. |
+| `contract_trade_restriction` | logical | Contract trade restriction. |
+| `contract_unsigned_foreign_pick` | logical | Contract unsigned foreign pick. |
+| `contract_active` | logical | Contract active. |
+| `status_id` | character | Status id. |
+| `status_name` | character | Status name. |
+| `status_type` | character | Status type. |
+| `status_abbreviation` | character | Status abbreviation. |
+| `citizenship` | character | Citizenship. |
+| `birth_place_state` | character | Birth place state. |
+| `hand_type` | character | Hand type. |
+| `hand_abbreviation` | character | Hand abbreviation. |
+| `hand_display_value` | character | Hand display value. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team_roster-example}
+
+```python
+espn_cricket_team_roster(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team_schedule
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/schedule`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/schedule](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/schedule)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+
+### Returns {#espn_cricket_team_schedule-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric event identifier. |
+| `date` | character | Event timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
+| `time_valid` | logical | Whether the event time is confirmed. |
+| `competitions` | character | Competition detail (list of dicts, stringified): competitors, venue, status. |
+| `links` | character | Related links (list, stringified). |
+| `season_year` | integer | Four-digit season year. |
+| `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
+| `season_type_id` | character | ESPN numeric identifier for the season type. |
+| `season_type_type` | integer | Season type numeric code. |
+| `season_type_name` | character | Season type name (e.g. Regular Season). |
+| `season_type_abbreviation` | character | Season type abbreviation. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team_schedule-example}
+
+```python
+espn_cricket_team_schedule(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team_record
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/record`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/record](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/record)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_cricket_team_record-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team_record-example}
+
+```python
+espn_cricket_team_record(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team_depthcharts
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/depthcharts`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/depthcharts](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/depthcharts)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_cricket_team_depthcharts-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb, 2026-10-07); its rows sit under keys it does not read (top level: depthchart, season, status, team, timestamp).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team_depthcharts-example}
+
+```python
+espn_cricket_team_depthcharts(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team_injuries
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/injuries`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/injuries](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/injuries)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_cricket_team_injuries-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team_injuries-example}
+
+```python
+espn_cricket_team_injuries(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team_transactions
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/transactions`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/transactions](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/transactions)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_cricket_team_transactions-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team_transactions-example}
+
+```python
+espn_cricket_team_transactions(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team_history
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/history`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/history](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/history)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_cricket_team_history-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, mbb, wbb; 400 in cfb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team_history-example}
+
+```python
+espn_cricket_team_history(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team_news
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/news`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/news?limit=50](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/news?limit=50)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_cricket_team_news-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `byline` | character | Author byline string as published by ESPN. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team_news-example}
+
+```python
+espn_cricket_team_news(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_team_leaders
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/leaders`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/leaders](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/leaders)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_cricket_team_leaders-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_team_leaders-example}
+
+```python
+espn_cricket_team_leaders(league='eng.1', team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_cricket_player_info
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/athletes/{athlete_id}`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/athletes/4239](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/athletes/4239)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+
+### Returns {#espn_cricket_player_info-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_single_entity`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_player_info-example}
+
+```python
+espn_cricket_player_info(league='eng.1', athlete_id='4239')
+```
+
+_Last validated n/a._
+
+## espn_cricket_player_bio
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/athletes/{athlete_id}/bio`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/athletes/4239/bio](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/athletes/4239/bio)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+
+### Returns {#espn_cricket_player_bio-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_single_entity`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_player_bio-example}
+
+```python
+espn_cricket_player_bio(league='eng.1', athlete_id='4239')
+```
+
+_Last validated n/a._
+
+## espn_cricket_player_news
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/athletes/{athlete_id}/news`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/athletes/4239/news](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/athletes/4239/news)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+
+### Returns {#espn_cricket_player_news-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `byline` | character | Author byline string as published by ESPN. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_player_news-example}
+
+```python
+espn_cricket_player_news(league='eng.1', athlete_id='4239')
+```
+
+_Last validated n/a._
+
+## espn_cricket_standings
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/v2/sports/cricket/eng.1/standings`
+
+**Valid URL:** [https://site.api.espn.com/apis/v2/sports/cricket/eng.1/standings](https://site.api.espn.com/apis/v2/sports/cricket/eng.1/standings)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
+| `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
+
+### Returns {#espn_cricket_standings-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
+| `team` | character | Display name of the team in this standings row. |
+| `team_id` | character | ESPN numeric identifier for the team. |
+| `team_abbreviation` | character | Team abbreviation. |
+| `rank` | integer | Position within the group/table. |
+| `matches_played` | integer | Matches played (cricket). |
+| `matches_won` | integer | Matches won (cricket). |
+| `matches_lost` | integer | Matches lost (cricket). |
+| `noresult` | integer | Matches with no result (cricket). |
+| `match_points` | integer | Competition points (cricket). |
+| `qualified` | integer | Qualification flag (cricket). |
+| `netrr` | double | Net run rate (cricket). |
+| `for` | double | Runs/goals for. |
+| `against` | double | Runs/goals against. |
+| `total` | character | Aggregate/summary value as published by ESPN. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_cricket_standings-example}
+
+```python
+espn_cricket_standings(league='eng.1')
+```
+
+_Last validated n/a._
