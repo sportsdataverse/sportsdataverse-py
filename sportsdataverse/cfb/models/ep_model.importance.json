@@ -1,0 +1,71 @@
+{
+  "model": "ep_model",
+  "sha256": "44516f5618363c1d3d935eec74784a46f22010a2b0fde95e4cf2c2b6ed51da6e",
+  "method": "xgboost Booster.get_score: gain and cover are means per split, total_gain sums them, weight counts splits; a multiclass booster pools all its class trees",
+  "features": [
+    {
+      "feature": "TimeSecsRem",
+      "gain": 321.6885376,
+      "total_gain": 8884716.0,
+      "weight": 27619.0,
+      "cover": 46484.46484,
+      "share_total_gain": 0.5268049939
+    },
+    {
+      "feature": "yards_to_goal",
+      "gain": 227.7068939,
+      "total_gain": 4752470.5,
+      "weight": 20871.0,
+      "cover": 65464.46484,
+      "share_total_gain": 0.2817901206
+    },
+    {
+      "feature": "distance",
+      "gain": 37.85631943,
+      "total_gain": 414867.4062,
+      "weight": 10959.0,
+      "cover": 50328.125,
+      "share_total_gain": 0.02459889786
+    },
+    {
+      "feature": "down_1",
+      "gain": 82.12592316,
+      "total_gain": 242271.4844,
+      "weight": 2950.0,
+      "cover": 81657.46875,
+      "share_total_gain": 0.01436509933
+    },
+    {
+      "feature": "down_2",
+      "gain": 72.23696899,
+      "total_gain": 83578.17188,
+      "weight": 1157.0,
+      "cover": 52063.65234,
+      "share_total_gain": 0.004955633734
+    },
+    {
+      "feature": "down_3",
+      "gain": 97.46658325,
+      "total_gain": 152047.875,
+      "weight": 1560.0,
+      "cover": 106963.0391,
+      "share_total_gain": 0.009015435031
+    },
+    {
+      "feature": "down_4",
+      "gain": 151.1895905,
+      "total_gain": 700159.0,
+      "weight": 4631.0,
+      "cover": 67188.41406,
+      "share_total_gain": 0.04151480562
+    },
+    {
+      "feature": "pos_score_diff_start",
+      "gain": 51.64631271,
+      "total_gain": 1635173.875,
+      "weight": 31661.0,
+      "cover": 47734.05859,
+      "share_total_gain": 0.0969550139
+    }
+  ]
+}

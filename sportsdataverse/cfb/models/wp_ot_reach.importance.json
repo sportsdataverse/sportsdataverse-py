@@ -1,0 +1,71 @@
+{
+  "model": "wp_ot_reach",
+  "sha256": "a6cc8d25af1871150cf1bc35af685f8b3ffe842b6ead69e5e64d5e81cba198b7",
+  "method": "xgboost Booster.get_score: gain and cover are means per split, total_gain sums them, weight counts splits; a multiclass booster pools all its class trees",
+  "features": [
+    {
+      "feature": "adj_TimeSecsRem",
+      "gain": 67.70310211,
+      "total_gain": 160862.5625,
+      "weight": 2376.0,
+      "cover": 12086.91016,
+      "share_total_gain": 0.1731684486
+    },
+    {
+      "feature": "pos_score_diff_start",
+      "gain": 278.2904053,
+      "total_gain": 682924.625,
+      "weight": 2454.0,
+      "cover": 30436.45898,
+      "share_total_gain": 0.7351679345
+    },
+    {
+      "feature": "down",
+      "gain": 17.67721939,
+      "total_gain": 4684.462891,
+      "weight": 265.0,
+      "cover": 10254.6543,
+      "share_total_gain": 0.005042821391
+    },
+    {
+      "feature": "distance",
+      "gain": 8.468292236,
+      "total_gain": 2896.156006,
+      "weight": 342.0,
+      "cover": 19669.17383,
+      "share_total_gain": 0.003117710141
+    },
+    {
+      "feature": "yards_to_goal",
+      "gain": 27.39296722,
+      "total_gain": 32542.8457,
+      "weight": 1188.0,
+      "cover": 8826.660156,
+      "share_total_gain": 0.03503235318
+    },
+    {
+      "feature": "pos_team_timeouts_rem_before",
+      "gain": 21.50310898,
+      "total_gain": 8773.268555,
+      "weight": 408.0,
+      "cover": 7914.914062,
+      "share_total_gain": 0.009444418148
+    },
+    {
+      "feature": "def_pos_team_timeouts_rem_before",
+      "gain": 19.76091957,
+      "total_gain": 8477.43457,
+      "weight": 429.0,
+      "cover": 10581.46777,
+      "share_total_gain": 0.009125953047
+    },
+    {
+      "feature": "period",
+      "gain": 148.5323486,
+      "total_gain": 27775.54883,
+      "weight": 187.0,
+      "cover": 4868.894531,
+      "share_total_gain": 0.02990036105
+    }
+  ]
+}

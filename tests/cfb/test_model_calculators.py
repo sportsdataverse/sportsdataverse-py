@@ -214,7 +214,7 @@ def test_win_probability_picks_the_spread_model_when_a_spread_is_present(monkeyp
 
 
 def test_win_probability_scores_the_2h_flag_as_the_boosters_were_trained():
-    """C-NF-2 shim, removed by the task 3.8 retrain: wp_naive / wp_spread learned
+    """C-NF-2 shim, removed by a retrain on the corrected flag (owner decision): wp_naive / wp_spread learned
     pos_team_receives_2H_kickoff as 1 - is_home, so the calculator scores that whatever the
     caller's (corrected) flag says, and hands the caller's column back unchanged."""
     state = {

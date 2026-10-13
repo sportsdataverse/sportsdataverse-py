@@ -1,0 +1,103 @@
+{
+  "model": "wp_naive",
+  "sha256": "624ee14943302ed7f982e27257832e51e98a694da28bed007bcef389c2ceb897",
+  "method": "xgboost Booster.get_score: gain and cover are means per split, total_gain sums them, weight counts splits; a multiclass booster pools all its class trees",
+  "features": [
+    {
+      "feature": "pos_team_receives_2H_kickoff",
+      "gain": 519.6950073,
+      "total_gain": 36898.34375,
+      "weight": 71.0,
+      "cover": 41833.93359,
+      "share_total_gain": 0.01279235404
+    },
+    {
+      "feature": "TimeSecsRem",
+      "gain": 24.90870285,
+      "total_gain": 1668.883057,
+      "weight": 67.0,
+      "cover": 15078.25781,
+      "share_total_gain": 0.0005785881083
+    },
+    {
+      "feature": "adj_TimeSecsRem",
+      "gain": 225.2059631,
+      "total_gain": 17791.27148,
+      "weight": 79.0,
+      "cover": 34463.01562,
+      "share_total_gain": 0.006168088334
+    },
+    {
+      "feature": "ExpScoreDiff_Time_Ratio",
+      "gain": 3805.731689,
+      "total_gain": 879124.0,
+      "weight": 231.0,
+      "cover": 74568.98438,
+      "share_total_gain": 0.3047851017
+    },
+    {
+      "feature": "pos_score_diff_start",
+      "gain": 7890.464355,
+      "total_gain": 1877930.5,
+      "weight": 238.0,
+      "cover": 97432.375,
+      "share_total_gain": 0.6510631474
+    },
+    {
+      "feature": "down",
+      "gain": 131.6418457,
+      "total_gain": 5134.032227,
+      "weight": 39.0,
+      "cover": 116937.0859,
+      "share_total_gain": 0.001779926989
+    },
+    {
+      "feature": "distance",
+      "gain": 72.38291168,
+      "total_gain": 1809.572754,
+      "weight": 25.0,
+      "cover": 97870.25,
+      "share_total_gain": 0.0006273640758
+    },
+    {
+      "feature": "yards_to_goal",
+      "gain": 297.9196167,
+      "total_gain": 23833.57031,
+      "weight": 80.0,
+      "cover": 72655.36719,
+      "share_total_gain": 0.008262903926
+    },
+    {
+      "feature": "is_home",
+      "gain": 1706.422119,
+      "total_gain": 34128.44141,
+      "weight": 20.0,
+      "cover": 46495.91406,
+      "share_total_gain": 0.01183205155
+    },
+    {
+      "feature": "pos_team_timeouts_rem_before",
+      "gain": 77.35935974,
+      "total_gain": 3249.093018,
+      "weight": 42.0,
+      "cover": 83702.64844,
+      "share_total_gain": 0.001126433979
+    },
+    {
+      "feature": "def_pos_team_timeouts_rem_before",
+      "gain": 59.70418549,
+      "total_gain": 2567.280029,
+      "weight": 43.0,
+      "cover": 102498.0234,
+      "share_total_gain": 0.000890054992
+    },
+    {
+      "feature": "period",
+      "gain": 45.18177795,
+      "total_gain": 271.0906677,
+      "weight": 6.0,
+      "cover": 3815.115479,
+      "share_total_gain": 9.398491763e-05
+    }
+  ]
+}

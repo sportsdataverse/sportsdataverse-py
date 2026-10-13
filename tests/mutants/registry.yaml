@@ -439,7 +439,7 @@
     kickoff, so this branch went unchecked. The period-3 oracle (the opening kicker takes the first
     second-half snap) covers 34 of them; the mutant (the first snap's offense) is red there.
 
-# --- C-NF-2 booster-input shim (review R781-1; removed by the task 3.8 retrain) ------------------
+# --- C-NF-2 booster-input shim (review R781-1; removed by a retrain on the corrected flag (owner decision)) ------------------
 - id: cfb-wp-shim-pipeline
   finding: C-NF-2
   file: sportsdataverse/cfb/cfb_pbp.py
@@ -1390,3 +1390,44 @@
   test: tests/cfb/test_cfb_timeout_possession.py::test_wp_after_reads_the_next_real_board_across_a_timeout
   expected: kill
   note: R834-15, the published lead_wp_before2 reads shift(-2) (the snap after the timeout) again
+
+# --- C-M11 / C-L28: CFB model cards carry holdout status + importance artifacts (task 3.8) --------
+- id: cfb-card-in-sample-dropped
+  group: cfb-model-cards
+  finding: C-M11
+  file: sportsdataverse/cfb/models/ep_model.card.json
+  snippet: '"in_sample": true,'
+  mutant: '"in_sample_dropped": true,'
+  test: tests/cfb/test_model_cards.py -k "holdout_status"
+  expected: kill
+  note: the gate cfb-model-cards-holdout-status MUTATION (a card with neither holdout_seasons nor in_sample)
+
+- id: cfb-card-holdout-overlaps-training
+  group: cfb-model-cards
+  finding: C-M11
+  file: sportsdataverse/cfb/models/qbr_model.card.json
+  snippet: "  \"holdout_seasons\": [\n    2026,"
+  mutant: "  \"holdout_seasons\": [\n    2025,"
+  test: tests/cfb/test_model_cards.py -k "holdout_status"
+  expected: kill
+  note: a holdout inside the training span is an in-sample score labelled as validation
+
+- id: cfb-importance-hand-edited
+  group: cfb-model-cards
+  finding: C-L28
+  file: sportsdataverse/cfb/models/ep_model.importance.json
+  snippet: '"total_gain": 8884716.0,'
+  mutant: '"total_gain": 8884717.0,'
+  test: tests/cfb/test_model_cards.py -k "boosters_own"
+  expected: kill
+  note: every importance number is recomputed from the shipped booster by tools/cfb_model_importance.py
+
+- id: cfb-endgame-base-wp-marked-out-of-sample
+  group: cfb-model-cards
+  finding: C-M11
+  file: sportsdataverse/cfb/models/wp_spread.card.json
+  snippet: '"in_sample": true,'
+  mutant: '"in_sample": false,'
+  test: tests/cfb/test_cfb_wp_endgame.py -k "tied_late_holdout"
+  expected: kill
+  note: the 2022-25 endgame rows are a holdout for wp_ot_reach only; wp_before is scored in-sample

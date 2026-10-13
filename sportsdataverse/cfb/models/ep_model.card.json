@@ -18,6 +18,8 @@
     2004,
     2025
   ],
+  "in_sample": true,
+  "in_sample_reason": "Fit by cfbfastR-cfb-data python/cfb_model_build/model_training/cli.py train-ep on the whole training_frame (artifacts/pbp_full_v2.parquet: 22 seasons, 2004-2025, 2,219,971 rows); no season was withheld, so every 2004-2025 score this booster produces is in-sample. Out-of-season error is measured by leave-one-season-out CV (model_training/validate.py loso_cv), not by a holdout of this artifact.",
   "n_training_rows": 2219971,
   "hyperparameters": {
     "booster": "gbtree",

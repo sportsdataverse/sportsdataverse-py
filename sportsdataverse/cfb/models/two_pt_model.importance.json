@@ -1,0 +1,39 @@
+{
+  "model": "two_pt_model",
+  "sha256": "4a3e31f982f43379d49959a74e2bc0eead31b313c780c64742e89707fa9276db",
+  "method": "xgboost Booster.get_score: gain and cover are means per split, total_gain sums them, weight counts splits; a multiclass booster pools all its class trees",
+  "features": [
+    {
+      "feature": "posteam_spread",
+      "gain": 1.887149811,
+      "total_gain": 37.74299622,
+      "weight": 20.0,
+      "cover": 227.0736084,
+      "share_total_gain": 0.09881113055
+    },
+    {
+      "feature": "posteam_total",
+      "gain": 3.377516508,
+      "total_gain": 182.3858948,
+      "weight": 54.0,
+      "cover": 272.4304504,
+      "share_total_gain": 0.4774861105
+    },
+    {
+      "feature": "pos_score_diff",
+      "gain": 5.057569027,
+      "total_gain": 161.8422089,
+      "weight": 32.0,
+      "cover": 287.2320557,
+      "share_total_gain": 0.423702759
+    },
+    {
+      "feature": "era",
+      "gain": 0.0,
+      "total_gain": 0.0,
+      "weight": 0.0,
+      "cover": 0.0,
+      "share_total_gain": 0.0
+    }
+  ]
+}
