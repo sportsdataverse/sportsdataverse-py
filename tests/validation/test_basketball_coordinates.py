@@ -79,7 +79,8 @@ def test_free_throws_pinned_and_home_plays_flipped(monkeypatch, lg: str, name: s
 
 
 # R844-3 partition: rows where the library departs from the published file, per game. Only
-# MBB / WBB free throws ("MadeFreeThrow" / "MissedFreeThrow") move; every other row is equal.
+# MBB / WBB free throws move (2014-2026 ESPN types made and missed ones alike "MadeFreeThrow");
+# every other row is equal.
 PUBLISHED_FT_DIFFS = {
     401830342: 39,
     401856600: 44,

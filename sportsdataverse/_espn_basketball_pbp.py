@@ -117,9 +117,10 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
     is not flipped (R's ``case_when`` reads ``NA == id`` as false).
 
     One deliberate divergence from R: a free throw is any ``type.text`` matching
-    ``(?i)free ?throw``. R's case-sensitive ``str_detect(., "Free Throw")`` never matches MBB /
-    WBB's "MadeFreeThrow" / "MissedFreeThrow", so their published free throws keep ESPN's
-    coordinates; here they sit on the line like NBA / WNBA's (owner ruling R844-3).
+    ``(?i)free ?throw``. From 2014 through 2026 ESPN types every MBB / WBB free throw, made or
+    missed, "MadeFreeThrow"; R's case-sensitive ``str_detect(., "Free Throw")`` never matches
+    it, so those published free throws keep ESPN's coordinates (the earlier "Free Throw 1 of 1"
+    types were pinned). Here they sit on the line like NBA / WNBA's (owner ruling R844-3).
 
     ESPN marks a play it did not locate with a large negative sentinel (about -2.1e8 in either
     raw column). The transform carries it through, so ``coordinate.x`` / ``coordinate.y`` read

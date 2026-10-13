@@ -89,6 +89,11 @@ def test_end_le_start_on_capture(monkeypatch, lg: str, name: str) -> None:
         for kind in ("end_not_after_start", "end_is_next_start", "period_last_row_ends_at_zero")
     }
     assert all(r.n_checked > 0 for r in rules)
+    # every period but the last is judged; the game's final row has a null end (the processor
+    # leaves it open), so it leaves the denominator rather than passing (R844-10)
+    periods = plays["period.number"].n_unique()
+    last_row = [r for r in rules if r.rule.endswith("_period_last_row_ends_at_zero")]
+    assert {r.n_checked for r in last_row} == {periods - 1}
     assert [(r.rule, r.n_violations, r.samples) for r in rules if r.n_violations] == []
 
 
