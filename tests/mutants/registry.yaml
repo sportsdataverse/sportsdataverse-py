@@ -1111,9 +1111,21 @@
   file: sportsdataverse/nba/nba_player_props.py
   snippet: '    if "game_date" not in logs.columns:'
   mutant: '    if False:'
-  test: tests/nba/test_nba_player_props_asof.py
+  test: tests/nba/test_nba_player_props_asof.py -k without_game_date
   expected: kill
-  note: Logs without game_date would silently skip the cut instead of raising.
+  note: >-
+    Logs without game_date would skip the cut. Killed by the error TYPE changing (the default-cut
+    lookup then raises polars ColumnNotFoundError, not the ValueError the test matches), not by a
+    silent leak: the guard only names the failure (R850-2).
+- id: nba-props-asof-no-schedule-fallback
+  group: nba-props-asof
+  finding: R850-1
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        as_of_date = own.min() if own.len() else _load_game_date(season, league_id, game_id)'
+  mutant: '        as_of_date = own.min() if own.len() else None'
+  test: tests/nba/test_nba_player_props_asof.py -k schedule_date
+  expected: kill
+  note: A played game missing from the box logs is projected with no cut (its later lines leak).
 - id: nba-availability-median-ref-from-scored-rows
   group: nba-props-asof
   finding: C-L35

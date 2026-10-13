@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import datetime as dt
 import math
+import warnings
 from typing import Any, Literal, Union, overload
 
 import numpy as np
@@ -30,6 +31,7 @@ import polars as pl
 import scipy.stats as st
 
 from sportsdataverse._temporal import as_date
+from sportsdataverse.errors import AsOfCutWarning
 from sportsdataverse.nba.nba_game_predict import expected_possessions
 from sportsdataverse.nba.nba_prediction_constants import get_constants
 
@@ -253,6 +255,16 @@ def _load_ratings(
     return nba_team_ratings(season, league_id=league_id, as_of_date=as_of_date)
 
 
+def _load_game_date(season: int, league_id: str, game_id: str) -> Union[dt.date, None]:  # pragma: no cover - live
+    """The game's date from the season schedule (the one ``nba_team_ratings`` reads); ``None`` if absent."""
+    from sportsdataverse.nba.nba_team_ratings import _league_loaders, _normalize_schedule  # noqa: PLC0415
+
+    load_schedule, _ = _league_loaders(league_id)
+    sched = _normalize_schedule(load_schedule([season]))
+    hit = sched.filter(pl.col("game_id").cast(pl.Int64, strict=False).cast(pl.Utf8) == str(game_id))
+    return hit.select(as_date(pl.col("date"))).to_series().min() if hit.height else None
+
+
 _PROPS_SCHEMA = {
     "player_id": pl.Utf8,
     "team_id": pl.Utf8,
@@ -311,15 +323,15 @@ def nba_player_props(
     Args:
         season: End year of the season (e.g. ``2024``).
         game_id: The game id. When ``as_of_date`` is ``None`` and this game is in
-            the season's box logs (already played), its date becomes the cut, so
-            the default call never sees the game's own or any later line.
+            the season's box logs or schedule, its date becomes the cut, so the
+            default call never sees the game's own or any later line.
         home_team_id: Home team id.
         away_team_id: Away team id.
         league_id: ``"00"`` NBA / ``"10"`` WNBA / ``"20"`` G-League.
         as_of_date: Only box lines and ratings games with ``game_date <
             as_of_date`` (strict) are used. ``None`` = the target game's date
-            when it is in the logs, else every logged game (an unplayed game:
-            everything logged is already in the past).
+            from the box logs, else from the schedule; a game in neither gets
+            no cut and an :class:`~sportsdataverse.errors.AsOfCutWarning`.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
@@ -329,6 +341,10 @@ def nba_player_props(
 
     Raises:
         ValueError: The box logs carry no ``game_date`` (the as-of cut cannot be applied).
+
+    Warns:
+        AsOfCutWarning: ``as_of_date`` is ``None`` and ``game_id`` is in neither
+            the box logs nor the schedule, so no cut was applied.
 
     Example:
         Quick start::
@@ -346,7 +362,15 @@ def nba_player_props(
         raise ValueError("nba_player_props: box logs need game_date for the as-of cut")
     if as_of_date is None:
         own = logs.filter(pl.col("game_id").cast(pl.Utf8) == str(game_id))["game_date"].drop_nulls()
-        as_of_date = own.min() if own.len() else None
+        # A played game can be missing from the box logs (ESPN gap, wrong season): fall back to the schedule.
+        as_of_date = own.min() if own.len() else _load_game_date(season, league_id, game_id)
+        if as_of_date is None:
+            warnings.warn(
+                f"nba_player_props: game {game_id} is in neither the box logs nor the schedule; "
+                "no as-of cut applied (pass as_of_date to cut)",
+                AsOfCutWarning,
+                stacklevel=2,
+            )
     if as_of_date is not None:
         # Strict `<`: the target game's own line (and every later one) never feeds its projection.
         logs = logs.filter(pl.col("game_date") < as_of_date)

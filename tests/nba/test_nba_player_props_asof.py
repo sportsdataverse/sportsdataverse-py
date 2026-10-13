@@ -20,6 +20,8 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse.errors import AsOfCutWarning
+
 mod = importlib.import_module("sportsdataverse.nba.nba_player_props")
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "nba_prediction"
@@ -48,8 +50,15 @@ def corpus():
     return logs, ratings, game, player
 
 
+def _schedule_date(game_id):
+    """The game's date from the committed real schedule (`results_2024.parquet`); None if absent."""
+    hit = pl.read_parquet(FIX / "results_2024.parquet").filter(pl.col("game_id") == str(game_id))
+    return hit["date"][0] if hit.height else None
+
+
 def _project(monkeypatch, logs, ratings, game, player_id, **kwargs):
     monkeypatch.setattr(mod, "_load_player_logs", lambda season, league_id: logs)
+    monkeypatch.setattr(mod, "_load_game_date", lambda season, league_id, game_id: _schedule_date(game_id))
     monkeypatch.setattr(mod, "_load_ratings", lambda season, league_id, as_of_date=None: ratings)
     out = mod.nba_player_props(2024, game["game_id"], game["home_team_id"], game["away_team_id"], **kwargs)
     row = out.filter(pl.col("player_id") == player_id)
@@ -143,3 +152,28 @@ def test_logs_without_game_date_raise(monkeypatch, corpus):
     logs, ratings, game, _ = corpus
     with pytest.raises(ValueError, match="game_date"):
         _project(monkeypatch, logs.drop("game_date"), ratings, game, "x")
+
+
+def test_played_game_missing_from_the_logs_is_cut_at_its_schedule_date(monkeypatch, corpus):
+    """R850-1: a played game absent from the box logs (an ESPN gap) still gets the as-of cut, from the
+    schedule; without it a later line would leak into the projection."""
+    logs, ratings, game, player = corpus
+    gap = logs.filter(pl.col("game_id") != game["game_id"])
+    later = (
+        gap.filter((pl.col("player_id") == player["player_id"]) & (pl.col("game_date") > game["date"]))
+        .sort("game_date")
+        .row(0, named=True)
+    )
+    base = _project(monkeypatch, gap, ratings, game, player["player_id"])
+    bumped = _project(
+        monkeypatch, _bump(gap, later["game_id"], player["player_id"]), ratings, game, player["player_id"]
+    )
+    assert bumped == pytest.approx(base, abs=1e-9)
+    assert base == pytest.approx(_project(monkeypatch, logs, ratings, game, player["player_id"]), abs=1e-9)
+
+
+def test_game_in_neither_logs_nor_schedule_warns(monkeypatch, corpus):
+    logs, ratings, game, player = corpus
+    ghost = dict(game, game_id="999999999")
+    with pytest.warns(AsOfCutWarning, match="game 999999999 .*no as-of cut"):
+        _project(monkeypatch, logs, ratings, ghost, player["player_id"])

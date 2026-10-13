@@ -151,6 +151,8 @@ def test_nba_player_props_orchestrator(monkeypatch) -> None:
     mod = importlib.import_module("sportsdataverse.nba.nba_player_props")
     monkeypatch.setattr(mod, "_load_player_logs", lambda season, league_id: logs)
     monkeypatch.setattr(mod, "_load_ratings", lambda season, league_id, as_of_date=None: ratings)
+    # G3 is scheduled after the logged games (unplayed): its schedule date is the cut.
+    monkeypatch.setattr(mod, "_load_game_date", lambda season, league_id, game_id: date(2024, 1, 5))
 
     out = nba_player_props(2024, "G3", "A", "B", league_id="00")
     assert set(out.columns) >= {
