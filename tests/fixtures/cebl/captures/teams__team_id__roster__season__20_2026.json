@@ -1,0 +1,29 @@
+[
+  {
+    "id": 411821,
+    "full_name": "Kobe Elvis",
+    "nationality": "CANADA",
+    "birth_date": "2001-03-16",
+    "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/974d68668549c19af28a7230ae9ca806M1.png",
+    "position": "G",
+    "jersey_number": "0"
+  },
+  {
+    "id": 570965,
+    "full_name": "Javonte Smart",
+    "nationality": "UNITED STATES",
+    "birth_date": "1999-06-03",
+    "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/e4e635fdd477bfcd31e2d4a00b0153f8M1.png",
+    "position": "G",
+    "jersey_number": "1"
+  },
+  {
+    "id": 938454,
+    "full_name": "Alex Fudge",
+    "nationality": "UNITED STATES",
+    "birth_date": "2003-05-06",
+    "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/4566c0a1844f0b1b23b998df77ed0f5dM1.png",
+    "position": "F",
+    "jersey_number": "3"
+  }
+]

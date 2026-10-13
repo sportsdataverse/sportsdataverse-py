@@ -1,0 +1,14 @@
+[
+ "/games/{season}/",
+ "/news/articles/{language}/",
+ "/players/statistics/aggregated/",
+ "/players/statistics/leaders/",
+ "/players/{player_id}/",
+ "/players/{player_id}/gamelog/",
+ "/players/{player_id}/statistics/",
+ "/seasons/",
+ "/teams/",
+ "/teams/statistics/aggregated/",
+ "/teams/{season}/",
+ "/teams/{team_id}/roster/{season}/"
+]

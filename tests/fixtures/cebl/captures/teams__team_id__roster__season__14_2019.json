@@ -1,0 +1,29 @@
+[
+  {
+    "id": 530,
+    "full_name": "Trae Bell-Haynes",
+    "nationality": "CANADA",
+    "birth_date": "1995-09-05",
+    "photo_url": "https://img.wh.sportingpulseinternational.com/efba2b2f3a2ba0655c23e4af1c301d02M1.jpg",
+    "position": "G",
+    "jersey_number": "2"
+  },
+  {
+    "id": 348,
+    "full_name": "Alex Johnson",
+    "nationality": "CANADA",
+    "birth_date": "1988-01-18",
+    "photo_url": "https://img.wh.sportingpulseinternational.com/e0403412a3379b8eb068097409963e4bM1.jpg",
+    "position": "G",
+    "jersey_number": "3"
+  },
+  {
+    "id": 531,
+    "full_name": "Dorian Pinson",
+    "nationality": "UNITED STATES",
+    "birth_date": "1996-06-30",
+    "photo_url": "https://img.wh.sportingpulseinternational.com/93445d51f0b20af72863c387c42a90e0M1.png",
+    "position": "F",
+    "jersey_number": "4"
+  }
+]

@@ -1,0 +1,178 @@
+{
+  "POINTS": [
+    {
+      "id": 549,
+      "full_name": "Ricky Tarrant Jr.",
+      "photo_url": "https://img.wh.sportingpulseinternational.com/3787a46ffb2d0fff2d7ba79e6624acecM1.png",
+      "team_id": 55,
+      "team_name_en": "Hamilton Honey Badgers",
+      "team_short_name_en": "Hamilton",
+      "team_abbreviated_name": "HAM",
+      "team_name_fr": "Honey Badgers de Hamilton",
+      "team_short_name_fr": "Hamilton",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/hamilton.png",
+      "value": "425.0",
+      "ranking": 1
+    },
+    {
+      "id": 550,
+      "full_name": "Demetrius Denzel-Dyson",
+      "photo_url": "https://img.wh.sportingpulseinternational.com/a2726d76c0f9fc8bafa9fc2c883ee0a2M1.png",
+      "team_id": 55,
+      "team_name_en": "Hamilton Honey Badgers",
+      "team_short_name_en": "Hamilton",
+      "team_abbreviated_name": "HAM",
+      "team_name_fr": "Honey Badgers de Hamilton",
+      "team_short_name_fr": "Hamilton",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/hamilton.png",
+      "value": "398.0",
+      "ranking": 2
+    },
+    {
+      "id": 444,
+      "full_name": "Guillaume Boucard",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/8a2825bec4b563161b587222f702fe3cM1.png",
+      "team_id": 14,
+      "team_name_en": "Niagara River Lions",
+      "team_short_name_en": "Niagara",
+      "team_abbreviated_name": "NRL",
+      "team_name_fr": "River Lions de Niagara",
+      "team_short_name_fr": "Niagara",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/niagara.png",
+      "value": "339.0",
+      "ranking": 3
+    }
+  ],
+  "REBOUNDS": [
+    {
+      "id": 362,
+      "full_name": "Ryan Ejim",
+      "photo_url": "https://img.wh.sportingpulseinternational.com/131a5f797f448d339dc2e1048c3e1adbM1.jpg",
+      "team_id": 15,
+      "team_name_en": "Saskatchewan Rattlers",
+      "team_short_name_en": "Saskatchewan",
+      "team_abbreviated_name": "SSK",
+      "team_name_fr": "Rattlers de la Saskatchewan",
+      "team_short_name_fr": "Saskatchewan",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/saskatchewan.png",
+      "value": "157.0",
+      "ranking": 1
+    },
+    {
+      "id": 531,
+      "full_name": "Dorian Pinson",
+      "photo_url": "https://img.wh.sportingpulseinternational.com/93445d51f0b20af72863c387c42a90e0M1.png",
+      "team_id": 14,
+      "team_name_en": "Niagara River Lions",
+      "team_short_name_en": "Niagara",
+      "team_abbreviated_name": "NRL",
+      "team_name_fr": "River Lions de Niagara",
+      "team_short_name_fr": "Niagara",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/niagara.png",
+      "value": "156.0",
+      "ranking": 2
+    },
+    {
+      "id": 444,
+      "full_name": "Guillaume Boucard",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/8a2825bec4b563161b587222f702fe3cM1.png",
+      "team_id": 14,
+      "team_name_en": "Niagara River Lions",
+      "team_short_name_en": "Niagara",
+      "team_abbreviated_name": "NRL",
+      "team_name_fr": "River Lions de Niagara",
+      "team_short_name_fr": "Niagara",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/niagara.png",
+      "value": "155.0",
+      "ranking": 3
+    }
+  ],
+  "ASSISTS": [
+    {
+      "id": 118,
+      "full_name": "Marek Klassen",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/d216a8a49e4457ecb1498b8d7976c6d5S1.png",
+      "team_id": 54,
+      "team_name_en": "Fraser Valley Bandits",
+      "team_short_name_en": "Fraser Valley",
+      "team_abbreviated_name": "FVB",
+      "team_name_fr": "Les Bandits de Fraser Valley",
+      "team_short_name_fr": "Fraser Valley",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/fraservalley.png",
+      "value": "108.0",
+      "ranking": 1
+    },
+    {
+      "id": 549,
+      "full_name": "Ricky Tarrant Jr.",
+      "photo_url": "https://img.wh.sportingpulseinternational.com/3787a46ffb2d0fff2d7ba79e6624acecM1.png",
+      "team_id": 55,
+      "team_name_en": "Hamilton Honey Badgers",
+      "team_short_name_en": "Hamilton",
+      "team_abbreviated_name": "HAM",
+      "team_name_fr": "Honey Badgers de Hamilton",
+      "team_short_name_fr": "Hamilton",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/hamilton.png",
+      "value": "95.0",
+      "ranking": 2
+    },
+    {
+      "id": 531,
+      "full_name": "Dorian Pinson",
+      "photo_url": "https://img.wh.sportingpulseinternational.com/93445d51f0b20af72863c387c42a90e0M1.png",
+      "team_id": 14,
+      "team_name_en": "Niagara River Lions",
+      "team_short_name_en": "Niagara",
+      "team_abbreviated_name": "NRL",
+      "team_name_fr": "River Lions de Niagara",
+      "team_short_name_fr": "Niagara",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/niagara.png",
+      "value": "87.0",
+      "ranking": 3
+    }
+  ],
+  "TARGET_SCORES": [
+    {
+      "id": 2,
+      "full_name": "Thomas Kennedy",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/d9f7a53840231cbc13e23dd1a23ec443M1.png",
+      "team_id": 55,
+      "team_name_en": "Hamilton Honey Badgers",
+      "team_short_name_en": "Hamilton",
+      "team_abbreviated_name": "HAM",
+      "team_name_fr": "Honey Badgers de Hamilton",
+      "team_short_name_fr": "Hamilton",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/hamilton.png",
+      "value": "0.0",
+      "ranking": 1
+    },
+    {
+      "id": 2119,
+      "full_name": "Emanual Shepherd",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/97b84c58c1073a82c3c3e7b1bb6f941bM1.png",
+      "team_id": 53,
+      "team_name_en": "Guelph Nighthawks",
+      "team_short_name_en": "Guelph",
+      "team_abbreviated_name": "GUE",
+      "team_name_fr": "Les Nighthawks de Guelph",
+      "team_short_name_fr": "Guelph",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/guelph.png",
+      "value": "0.0",
+      "ranking": 1
+    },
+    {
+      "id": 43686,
+      "full_name": "Drew Urquhart",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/20f998a2cf9576457779b421bef0feffM1.png",
+      "team_id": 54,
+      "team_name_en": "Fraser Valley Bandits",
+      "team_short_name_en": "Fraser Valley",
+      "team_abbreviated_name": "FVB",
+      "team_name_fr": "Les Bandits de Fraser Valley",
+      "team_short_name_fr": "Fraser Valley",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/fraservalley.png",
+      "value": "0.0",
+      "ranking": 1
+    }
+  ]
+}
