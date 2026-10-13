@@ -11,9 +11,9 @@ totals the summary and ratings producers consume diverge by ~4.6 points (TEX 8.9
   unpaired snap carries a non-null EPA;
 * the unpaired snaps' EPA sums are pinned at the observed gap (2026-10-11: ESPN 7.861 vs Yahoo 3.557,
   ESPN 4.519 vs CBS 4.725); never raised;
-* the whole-game team EPA totals agree within 1.0 per team: a strict xfail. The gap is the ESPN side's
-  degenerate end state on 401856682824 ("Fumble Recovery (Own)", EPA -5.906 vs -0.39 on both
-  alternates), supp-002 -> task 3.4.
+* the whole-game team EPA totals agree within 1.0 per team. Green since task 3.4(a) (supp-002): the ESPN
+  side's degenerate end state on 401856682824 ("Fumble Recovery (Own)") scored EPA -5.906 against -0.39
+  on both alternates and now scores -0.41.
 """
 
 from __future__ import annotations
@@ -78,11 +78,6 @@ def test_unpaired_and_admin_rows_are_scored(frames, source):
     print("UNPAIRED_SCORED_OK", source, ref_un.height, cand_un.height, round(gap, 3))
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="supp-002 -> task 3.4: ESPN's Fumble Recovery (Own) end state costs TEX ~5.5 EPA on 401856682",
-)
 @pytest.mark.parametrize("source", ["yahoo", "cbs"])
 def test_unpaired_rows_close_the_team_epa_totals(frames, source):
     ref, cand = _team_epa(frames["espn"]), _team_epa(frames[source])

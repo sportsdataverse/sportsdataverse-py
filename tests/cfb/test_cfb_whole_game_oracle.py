@@ -49,12 +49,15 @@ Oracle per column
 ``end.down`` / ``end.yardsToEndzone`` where ESPN's end block is ``{down 0, yardLine 0, yardsToEndzone 0}``
     The ESPN feed: when the same team snaps next, the play ended where that snap starts. Asserted on
     feeds that carry end blocks (a feed whose end blocks are mostly degenerate, e.g. 252532751 from
-    2005, has no end state to trust and is skipped), on the plays the processor emits. XFAIL supp-002.
+    2005, has no end state to trust and is skipped), on the plays the processor emits. Green on fumble
+    plays since task 3.4(a); XFAIL EX-3.4-c (the supp-002 class) on the 7 captures whose degenerate
+    end is on another play type (a separate finding: 3.4(a) moves fumble plays only).
 ``EPA`` of 401856682's Q4 Fumble Recovery (Own)
     EP at the next snap's start minus ``EP_start``, within 0.1 (the addendum's tolerance; the Yahoo and
     CBS adapters score -0.39, the next-snap state gives -0.41). The state comes from the feed; the EP
     values are the processor's own model evaluated at that state, so this pins the end STATE, not the
-    model. XFAIL supp-002.
+    model. Green since task 3.4(a) (supp-002; its 23-candidate count is
+    ``tests/cfb/test_cfb_supp002_degenerate_end.py``).
 ``line_yards``
     The standard per-yard adjusted-line-yards band (the ruling for plan task 2.1 in
     ``audit/EXECUTION-FINDINGS.md``; Action Network's ALY definition, Football Study Hall): a loss
@@ -539,7 +542,7 @@ def test_end_of_half_timeout_ending_lands_on_the_last_real_play(game_id):
 
 _DEGENERATE = tuple(gid for gid in CAPTURES if FEEDS[gid].degenerate_ends)
 _SUPP_002 = {
-    gid: f"supp-002: ESPN's {{down 0, yardLine 0, yardsToEndzone 0}} end block is kept ({note}) instead of the next snap's start"
+    gid: f"EX-3.4-c (the supp-002 class on a non-fumble play): ESPN's {{down 0, yardLine 0, yardsToEndzone 0}} end block is kept ({note}) instead of the next snap's start"
     for gid, note in {
         322590228: "end.down 0",
         400869270: "end.down 0 on a declined penalty",
@@ -547,7 +550,6 @@ _SUPP_002 = {
         401754585: "end.down 0, end.yardsToEndzone 99",
         401754598: "end.down 0, end.yardsToEndzone 99",
         401761622: "end.down 0, end.yardsToEndzone 79 where the next snap starts at 64",
-        401856682: "end.down 0, end.yardsToEndzone 99 on the Q4 Fumble Recovery (Own)",
         401858435: "end.down 0, end.yardsToEndzone 99",
     }.items()
 }
@@ -575,12 +577,6 @@ def test_degenerate_end_block_takes_the_next_snap_state(game_id):
 
 
 @pytest.mark.xdist_group("cfb-oracle-401856682")
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="supp-002: 401856682's Q4 'Fumble Recovery (Own)' scores EPA -5.91 from end.yardsToEndzone 99; "
-    "the next snap (3rd & 1 at the 1) gives -0.41",
-)
 def test_fumble_recovery_own_epa_from_the_next_snap_401856682():
     df = _frame(401856682).filter(pl.col("type.text").fill_null("") != "Timeout").with_row_index("row")
     hit = df.filter(pl.col("id").cast(pl.Int64) == 401856682824)
