@@ -1,0 +1,194 @@
+[
+  {
+    "awayTeam": [
+      {
+        "jerseyNumber": 12,
+        "name": "林志傑",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 508,
+            "endTime": "3:32",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 1072,
+            "startTime": "6:08"
+          },
+          {
+            "endQuarter": "Q3",
+            "endSeconds": 1810,
+            "endTime": "5:50",
+            "startQuarter": "Q3",
+            "startSeconds": 1440,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 55,
+        "name": "霍力飛",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 508,
+            "endTime": "3:32",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 693,
+            "startTime": "0:27"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1154,
+            "endTime": "4:46",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 33,
+        "name": "揚科維奇",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 693,
+            "endTime": "0:27",
+            "startQuarter": "Q1",
+            "startSeconds": 508,
+            "startTime": "3:32"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1028,
+            "endTime": "6:52",
+            "startQuarter": "Q2",
+            "startSeconds": 721,
+            "startTime": "11:59"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1352,
+            "endTime": "1:28",
+            "startQuarter": "Q2",
+            "startSeconds": 1154,
+            "startTime": "4:46"
+          }
+        ],
+        "started": false
+      }
+    ],
+    "homeTeam": [
+      {
+        "jerseyNumber": 12,
+        "name": "李家慷",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 508,
+            "endTime": "3:32",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 685,
+            "endTime": "0:35",
+            "startQuarter": "Q1",
+            "startSeconds": 643,
+            "startTime": "1:17"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1056,
+            "endTime": "6:24",
+            "startQuarter": "Q2",
+            "startSeconds": 889,
+            "startTime": "9:11"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 1,
+        "name": "丁恩迪",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 508,
+            "startTime": "3:32"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 889,
+            "endTime": "9:11",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1404,
+            "endTime": "0:36",
+            "startQuarter": "Q2",
+            "startSeconds": 1056,
+            "startTime": "6:24"
+          }
+        ],
+        "started": false
+      },
+      {
+        "jerseyNumber": 5,
+        "name": "陳將双",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 508,
+            "startTime": "3:32"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 823,
+            "endTime": "10:17",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 1317,
+            "startTime": "2:03"
+          }
+        ],
+        "started": false
+      }
+    ]
+  }
+]

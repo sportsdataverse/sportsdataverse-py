@@ -1,0 +1,12 @@
+[
+ "/api/boxscore.preciser.php",
+ "/api/playbyplay.php",
+ "/game/{gid}",
+ "/player/{player_page_id}",
+ "/schedule-finals/{season}",
+ "/schedule-playoffs/{season}",
+ "/schedule-pre-season/{season}",
+ "/schedule-regular-season/{season}",
+ "/standings/{season}",
+ "/stat-player/{season}/{stage_sn}"
+]

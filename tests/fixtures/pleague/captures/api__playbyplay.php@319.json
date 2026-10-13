@@ -1,0 +1,91 @@
+{
+  "period_count": 4,
+  "periods": [
+    "Q1",
+    "Q2",
+    "Q3"
+  ],
+  "final_score_away": 84,
+  "final_score_home": 103,
+  "event_count": 647,
+  "events": [
+    {
+      "seq": 11,
+      "period": "Q1",
+      "clock": "10:54",
+      "side": "home",
+      "jersey": "6",
+      "player_zh": "楊敬敏",
+      "action": "ft_made",
+      "action_zh": "得到兩次罰球 第一罰 罰進",
+      "text_zh": "#6 楊敬敏 得到兩次罰球 第一罰 罰進",
+      "ft_number": 1,
+      "ft_awarded": 2,
+      "points": 1,
+      "score_away": 0,
+      "score_home": 1,
+      "x": 16.49,
+      "y": 31.93,
+      "nice_play": false,
+      "video": {
+        "video_uuid": "1eda55c3-5f2e-4dea-8b2a-5cf933a650bf",
+        "synergy_play_id": "20571c00-f636-11ed-9231-1183bb450fd7",
+        "stat_category": "ft_made",
+        "tryspot_player_id": 57272,
+        "created_at": "2023-05-19T11:13:26.560Z"
+      }
+    },
+    {
+      "seq": 17,
+      "period": "Q1",
+      "clock": "10:35",
+      "side": "home",
+      "jersey": "55",
+      "player_zh": "曼尼高",
+      "action": "fg2_driving_layup_made",
+      "action_zh": "突破上籃得分",
+      "text_zh": "#55 曼尼高 突破上籃得分",
+      "ft_number": null,
+      "ft_awarded": null,
+      "points": 2,
+      "score_away": 0,
+      "score_home": 4,
+      "x": 6.36,
+      "y": 49.2,
+      "nice_play": false,
+      "video": {
+        "video_uuid": "17c75471-fb0f-4464-9138-e5cf4ee081b5",
+        "synergy_play_id": "4311a490-f636-11ed-9231-1183bb450fd7",
+        "stat_category": "two_made",
+        "tryspot_player_id": 152350,
+        "created_at": "2023-05-19T11:14:03.765Z"
+      }
+    },
+    {
+      "seq": 24,
+      "period": "Q1",
+      "clock": "10:14",
+      "side": "home",
+      "jersey": "6",
+      "player_zh": "楊敬敏",
+      "action": "fg3_made",
+      "action_zh": "三分球得分",
+      "text_zh": "#6 楊敬敏 三分球得分",
+      "ft_number": null,
+      "ft_awarded": null,
+      "points": 3,
+      "score_away": 0,
+      "score_home": 8,
+      "x": 8.08,
+      "y": 96.59,
+      "nice_play": false,
+      "video": {
+        "video_uuid": "bc08618d-e968-4d4e-9c69-f7a68cc8e7d6",
+        "synergy_play_id": "610926d0-f636-11ed-9231-1183bb450fd7",
+        "stat_category": "ast",
+        "tryspot_player_id": 57226,
+        "created_at": "2023-05-19T11:14:56.426Z"
+      }
+    }
+  ]
+}
