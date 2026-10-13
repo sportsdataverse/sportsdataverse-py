@@ -568,6 +568,10 @@ def _team_tov(cols: list[str]) -> pl.Expr:
 
 #: First WBB season whose box records turnovers (2009-2012 under ``team_turnovers``); before it every key is 0.
 _WBB_FIRST_TURNOVER_SEASON = 2009
+#: A WBB game whose known turnover total (both teams) is below this did not record turnovers. The lowest
+#: recorded total anywhere in WBB 2009-2026 is 7; totals of 1-4 occur only in two 2009 games whose plays log
+#: 12/16 and 21/16 turnovers against a box of 0/1, and one broken 2018 box (0 FGA). Below 5 means unrecorded.
+_WBB_MIN_RECORDED_GAME_TURNOVERS = 5
 
 
 def _box_season(team_box: pl.DataFrame) -> Optional[int]:
@@ -590,8 +594,9 @@ def _tov(team_box: pl.DataFrame, lg: str, season: Optional[int]) -> pl.Expr:
     turnovers: there a 0 means "not recorded" and becomes null, so every rate built on it is null
     rather than a number built on zero turnovers. That is every WBB 0 before 2009 (the box carries
     no turnovers at all; a box with no known season counts as before 2009), and, in any WBB
-    season, a game whose two teams both show 0 (a game-level rule over the two rows: 97 such
-    2008-09 games). A single team's 0 beside an opponent's recorded count stays 0.
+    season, a game whose two teams together show fewer than 5 turnovers (a game-level rule over
+    the two rows, ``_WBB_MIN_RECORDED_GAME_TURNOVERS``: 99 such 2008-09 games). A team's 0 in a
+    game whose total is 5 or more stays 0.
     """
     if lg not in _NCAA:
         return _team_tov(team_box.columns)
@@ -600,8 +605,8 @@ def _tov(team_box: pl.DataFrame, lg: str, season: Optional[int]) -> pl.Expr:
     tov = _turnovers(team_box)
     if lg == "wbb" and (season is None or season < _WBB_FIRST_TURNOVER_SEASON):
         return pl.when(tov > 0).then(tov).otherwise(pl.lit(None, dtype=pl.Float64)).cast(pl.Int32)
-    if lg == "wbb" and not team_box.select(tov.fill_null(0.0).sum()).item():
-        return pl.lit(None, dtype=pl.Int32)  # neither team's box recorded a turnover
+    if lg == "wbb" and team_box.select(tov.fill_null(0.0).sum()).item() < _WBB_MIN_RECORDED_GAME_TURNOVERS:
+        return pl.lit(None, dtype=pl.Int32)  # the game's box did not record its turnovers
     return tov.cast(pl.Int32)
 
 
@@ -632,9 +637,9 @@ def team_game_rates(
     ``turnovers`` / ``team_turnovers`` columns it is ``total_turnovers`` as given. For MBB and WBB
     ``TOV`` is ``turnovers`` (``team_turnovers`` in WBB 2009-2012, where the other two are 0), and a 0
     is a real 0, except where the WBB box recorded none: in WBB before 2009 (and for a WBB box with
-    no ``season``) and in a WBB game of any season whose two teams both show 0, TOV%, possessions,
-    ratings and pace are null, never computed from zero turnovers. A single team's 0 beside an
-    opponent's recorded count stays 0. A zero denominator gives ``null``.
+    no ``season``) and in a WBB game of any season whose two teams together show fewer than 5,
+    TOV%, possessions, ratings and pace are null, never computed from unrecorded turnovers. A
+    team's 0 in a game whose total is 5 or more stays 0. A zero denominator gives ``null``.
 
     Args:
         team_box: Exactly two rows (one per team) of one game in the ``load_nba_team_boxscore``
@@ -733,7 +738,7 @@ def player_game_rates(
     (``total_turnovers``, repaired where ESPN doubled or omitted it) and team
     minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, MBB and WBB, 5 per overtime). For MBB and
     WBB team TOV follows the college rule of :func:`team_game_rates` (null in WBB before 2009 and in a
-    WBB game where both teams show 0, so usage is null there). A player with no shots, no minutes,
+    WBB game whose two teams together show fewer than 5, so usage is null there). A player with no shots, no minutes,
     or ``did_not_play`` gets ``null``.
 
     Args:

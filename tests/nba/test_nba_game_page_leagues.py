@@ -67,6 +67,7 @@ def _frames(
         ("wbb_273130043.json.gz", 2008, 2, False, 2, 358),
         ("wbb_283430164.json.gz", 2009, 2, False, 2, 187),
         ("wbb_290232368.json.gz", 2009, 2, False, 3, 273),
+        ("wbb_401364640.json.gz", 2022, 4, False, 4, 298),
         ("mbb_401812161.json.gz", 2026, 2, False, 2, 425),
         ("mbb_401830342.json.gz", 2026, 2, True, 4, 426),
         ("summary_mbb.json", 2024, 2, True, 2, 294),
@@ -313,7 +314,7 @@ def test_genuine_zero_college_turnovers_stay_zero_after_2009(monkeypatch: pytest
 def test_wbb_zero_turnovers_before_2009_or_without_a_season_are_null(monkeypatch: pytest.MonkeyPatch) -> None:
     # The 2008 box (every turnover key 0) is "not recorded", and a box whose season is unknown is never
     # read as 2009+. The same real box with its season set to 2010 in-test (a mutation of the real
-    # capture, not a synthetic frame) is still null: both teams show 0, the game-level rule.
+    # capture, not a synthetic frame) is still null: the game's total (0) is below 5, the game-level rule.
     _, _, tb, _ = _frames(monkeypatch, "wbb", "wbb_273130043.json.gz")
     assert tb["season"].unique().to_list() == [2008]
     unknown = gp.team_game_rates(tb.drop("season"), league="wbb", regulation_periods=2)
@@ -343,19 +344,34 @@ def test_wbb_2009_game_where_both_teams_show_zero_turnovers_is_null(monkeypatch:
     assert live["team_game_rates"]["tov_pct"].to_list() == [None, None]
 
 
-def test_wbb_2009_single_team_zero_keeps_its_zero(monkeypatch: pytest.MonkeyPatch) -> None:
-    # F2 ruling: only a game whose two teams both show 0 is "not recorded". WBB 290232368 (2009-01-23
-    # FAIR @ MRST, season 2009): FAIR (2217) shows 0 under every key, MRST (2368) 1 under teamTurnovers,
-    # so FAIR keeps its 0 (TOV% 0.0). Its plays log 12 FAIR / 16 MRST turnovers (see the fix-wave report).
+def test_wbb_2009_game_total_below_five_is_unrecorded(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Re-ruling: a WBB game whose known total is < 5 did not record turnovers. WBB 290232368 (2009-01-23
+    # FAIR @ MRST, season 2009): FAIR (2217) 0 under every key, MRST (2368) 1 under teamTurnovers (total 1),
+    # while the plays log 12 FAIR / 16 MRST turnovers: both rows null.
     _, pbp, tb, _ = _frames(monkeypatch, "wbb", "wbb_290232368.json.gz")
     assert tb["season"].unique().to_list() == [2009]
     assert sorted(zip(tb["team_id"], tb["turnovers"], tb["team_turnovers"], tb["total_turnovers"])) == [
         (2217, 0, 0, 0),
         (2368, 0, 1, 0),
     ]
-    out = gp.team_game_rates(tb, league="wbb", periods=3).sort("team_id")
-    assert out["total_turnovers"].to_list() == [0, 1]
-    assert out["tov_pct"][0] == 0.0 and out["possessions"].null_count() == 0 and out["pace"].null_count() == 0
+    tos = pbp.filter(pl.col("type_text").str.contains("(?i)turnover")).group_by("team_id").agg(pl.len())
+    assert dict(tos.rows()) == {2217: 12, 2368: 16}
+    out = gp.team_game_rates(tb, league="wbb", periods=3)
+    for col in ("total_turnovers", "tov_pct", "possessions", "pace"):
+        assert out[col].to_list() == [None, None], col
+
+
+def test_wbb_genuine_low_turnover_game_keeps_its_counts(monkeypatch: pytest.MonkeyPatch) -> None:
+    # WBB 401364640 (2022-01-15 BOIS @ SDSU): a genuine low total of 8 (BOIS 2, SDSU 6, matching the
+    # plays) is at or above the threshold, so the counts and every rate stay.
+    _, pbp, tb, _ = _frames(monkeypatch, "wbb", "wbb_401364640.json.gz")
+    assert tb["season"].unique().to_list() == [2022]
+    tos = pbp.filter(pl.col("type_text").str.contains("(?i)turnover")).group_by("team_id").agg(pl.len())
+    assert dict(tos.rows()) == {68: 2, 21: 6}
+    out = gp.team_game_rates(tb, league="wbb").sort("team_id")
+    assert out["team_id"].to_list() == [21, 68]
+    assert out["total_turnovers"].to_list() == [6, 2]
+    assert out["tov_pct"].null_count() == 0 and out["possessions"].null_count() == 0 and out["pace"].null_count() == 0
 
 
 def test_halves_overtime_pace_and_usage_use_the_games_minutes(monkeypatch: pytest.MonkeyPatch) -> None:
