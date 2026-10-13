@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: is_default
+  type: integer
+- description: ''
+  name: key
+  type: character
+- description: ''
+  name: value
+  type: character
+kind: dataframe
+schema: cba_match_types

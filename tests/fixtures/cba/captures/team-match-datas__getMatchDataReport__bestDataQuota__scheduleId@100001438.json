@@ -1,0 +1,68 @@
+{
+  "hostTeamBestData": [
+    {
+      "playerId": "961089",
+      "playerName": "赵睿",
+      "playerNo": "0",
+      "ctype": "assists",
+      "cvalue": "7",
+      "type": 0,
+      "teamId": null,
+      "seconds": 1981
+    },
+    {
+      "playerId": "100002140",
+      "playerName": "尼克尔森",
+      "playerNo": "44",
+      "ctype": "points",
+      "cvalue": "34",
+      "type": 0,
+      "teamId": null,
+      "seconds": 2238
+    },
+    {
+      "playerId": "393433",
+      "playerName": "易建联",
+      "playerNo": "9",
+      "ctype": "rebounds",
+      "cvalue": "16",
+      "type": 0,
+      "teamId": null,
+      "seconds": 2313
+    }
+  ],
+  "guestTeamBestData": [
+    {
+      "playerId": "473976",
+      "playerName": "哈达迪",
+      "playerNo": "15",
+      "ctype": "assists",
+      "cvalue": "7",
+      "type": 2,
+      "teamId": null,
+      "seconds": 2169
+    },
+    {
+      "playerId": "561509",
+      "playerName": "富兰克林",
+      "playerNo": "29",
+      "ctype": "points",
+      "cvalue": "44",
+      "type": 2,
+      "teamId": null,
+      "seconds": 2151
+    },
+    {
+      "playerId": "561509",
+      "playerName": "富兰克林",
+      "playerNo": "29",
+      "ctype": "rebounds",
+      "cvalue": "13",
+      "type": 2,
+      "teamId": null,
+      "seconds": 2151
+    }
+  ],
+  "hostBestPlayer": null,
+  "guestBestPlayer": null
+}

@@ -1,0 +1,215 @@
+nationality:
+  中国: China
+  中国台湾: Chinese Taipei
+  伊朗: Iran
+  加拿大: Canada
+  尼日利亚: Nigeria
+  法国: France
+  约旦: Jordan
+  美国: United States
+play_by_play_phrases:
+  '{P}一罚命中': '{P} makes his single free throw'
+  '{P}三分跳投不中': '{P} three-point jump shot, misses'
+  '{P}三分跳投不中，{P}抢到进攻篮板': '{P} three-point jump shot, misses, {P} gets the offensive
+    rebound'
+  '{P}三分跳投不中，{P}获得防守篮板': '{P} three-point jump shot, misses, {P} gets the defensive
+    rebound'
+  '{P}三分跳投不中，{T}队抢到进攻篮板': '{P} three-point jump shot, misses, {T} team offensive rebound'
+  '{P}三分跳投不中，{T}队获得防守篮板': '{P} three-point jump shot, misses, {T} team defensive rebound'
+  '{P}三罚，第一罚不中': '{P} takes three free throws, free throw 1 missed'
+  '{P}三罚，第一罚命中，{P}的助攻': '{P} takes three free throws, free throw 1 made, assisted
+    by {P}'
+  '{P}三罚，第三罚不中，{P}获得防守篮板': '{P} takes three free throws, free throw 3 missed, {P}
+    gets the defensive rebound'
+  '{P}三罚，第三罚命中': '{P} takes three free throws, free throw 3 made'
+  '{P}三罚，第二罚命中': '{P} takes three free throws, free throw 2 made'
+  '{P}三罚，第二罚命中，{P}的助攻': '{P} takes three free throws, free throw 2 made, assisted
+    by {P}'
+  '{P}两罚，第一罚不中': '{P} takes two free throws, free throw 1 missed'
+  '{P}两罚，第一罚命中': '{P} takes two free throws, free throw 1 made'
+  '{P}两罚，第一罚命中，{P}的助攻': '{P} takes two free throws, free throw 1 made, assisted by
+    {P}'
+  '{P}两罚，第二罚不中，{P}抢到进攻篮板': '{P} takes two free throws, free throw 2 missed, {P} gets
+    the offensive rebound'
+  '{P}两罚，第二罚不中，{P}获得防守篮板': '{P} takes two free throws, free throw 2 missed, {P} gets
+    the defensive rebound'
+  '{P}两罚，第二罚命中': '{P} takes two free throws, free throw 2 made'
+  '{P}两罚，第二罚命中，{P}的助攻': '{P} takes two free throws, free throw 2 made, assisted by
+    {P}'
+  '{P}个人犯规': '{P} personal foul'
+  '{P}个人犯规 ({P}造成了犯规)': '{P} personal foul (drawn by {P})'
+  '{P}个人犯规 (造成了犯规)': '{P} personal foul (drawn by an unnamed player)'
+  '{P}传球失误': '{P} bad-pass turnover'
+  '{P}出现失误': '{P} commits a turnover'
+  '{P}助攻{P}灌篮得分': '{P} assists {P}''s dunk, scores'
+  '{P}勾手投篮不中，{P}抢到进攻篮板': '{P} hook shot, misses, {P} gets the offensive rebound'
+  '{P}勾手投篮不中，{P}获得防守篮板': '{P} hook shot, misses, {P} gets the defensive rebound'
+  '{P}勾手投篮，命中得分': '{P} hook shot, made, scores'
+  '{P}和{P}跳球，{T}队得到球权': '{P} and {P} jump ball, {T} gains possession'
+  '{P}和跳球，{T}队得到球权': '{P} (named twice, shown once) jump ball, {T} gains possession'
+  '{P}在对方投篮时犯规 ({P}造成了犯规)': '{P} shooting foul on the opponent''s shot (drawn by {P})'
+  '{P}在对方投篮时犯规 (造成了犯规)': '{P} shooting foul on the opponent''s shot (drawn by an unnamed
+    player)'
+  '{P}失误': '{P} turnover'
+  '{P}失误，被{P}断下': '{P} turnover, stolen by {P}'
+  '{P}失误，踩线': '{P} turnover, stepping on the line (out of bounds)'
+  '{P}带球上篮不中，{P}抢到进攻篮板': '{P} layup (driving), misses, {P} gets the offensive rebound'
+  '{P}带球上篮不中，{P}获得防守篮板': '{P} layup (driving), misses, {P} gets the defensive rebound'
+  '{P}带球上篮不中，{T}队抢到进攻篮板': '{P} layup (driving), misses, {T} team offensive rebound'
+  '{P}带球上篮不中，{T}队获得防守篮板': '{P} layup (driving), misses, {T} team defensive rebound'
+  '{P}带球上篮得分': '{P} layup (driving), scores'
+  '{P}带球上篮，被{P}盖掉，{P}抢到进攻篮板': '{P} layup (driving), blocked by {P}, {P} gets the offensive
+    rebound'
+  '{P}带球上篮，被{P}盖掉，{T}队抢到进攻篮板': '{P} layup (driving), blocked by {P}, {T} team offensive
+    rebound'
+  '{P}带球上篮，被{P}盖掉，{T}队获得防守篮板': '{P} layup (driving), blocked by {P}, {T} team defensive
+    rebound'
+  '{P}带球上篮，被盖掉，{P}抢到进攻篮板': '{P} layup (driving), blocked (blocker not named), {P}
+    gets the offensive rebound'
+  '{P}带球上篮，被盖掉，{P}获得防守篮板': '{P} layup (driving), blocked (blocker not named), {P}
+    gets the defensive rebound'
+  '{P}技术犯规': '{P} technical foul'
+  '{P}抛投不中，{P}获得防守篮板': '{P} floater, misses, {P} gets the defensive rebound'
+  '{P}抛投得分': '{P} floater, scores'
+  '{P}接到{P}的助攻，勾手投篮，命中得分': '{P} receives an assist from {P}, hook shot, made, scores'
+  '{P}接到{P}的助攻，带球上篮得分': '{P} receives an assist from {P}, layup (driving), scores'
+  '{P}接到{P}的助攻，抛投得分': '{P} receives an assist from {P}, floater, scores'
+  '{P}接到{P}的助攻，跳投，三分入网': '{P} receives an assist from {P}, jump shot, three-pointer
+    made'
+  '{P}接到{P}的助攻，跳投，命中得分': '{P} receives an assist from {P}, jump shot, made, scores'
+  '{P}灌篮得分': '{P} dunk, scores'
+  '{P}罚球不中，{P}获得防守篮板': '{P} misses the free throw, {P} gets the defensive rebound'
+  '{P}走步': '{P} travelling'
+  '{P}跳投不中，{P}抢到进攻篮板': '{P} jump shot, misses, {P} gets the offensive rebound'
+  '{P}跳投不中，{P}获得防守篮板': '{P} jump shot, misses, {P} gets the defensive rebound'
+  '{P}跳投不中，{T}队抢到进攻篮板': '{P} jump shot, misses, {T} team offensive rebound'
+  '{P}跳投不中，{T}队获得防守篮板': '{P} jump shot, misses, {T} team defensive rebound'
+  '{P}跳投，三分入网': '{P} jump shot, three-pointer made'
+  '{P}跳投，命中得分': '{P} jump shot, made, scores'
+  '{P}跳投，被{P}盖掉，{P}抢到进攻篮板': '{P} jump shot, blocked by {P}, {P} gets the offensive
+    rebound'
+  '{P}跳投，被{P}盖掉，{P}获得防守篮板': '{P} jump shot, blocked by {P}, {P} gets the defensive
+    rebound'
+  '{P}跳投，被{P}盖掉，{T}队抢到进攻篮板': '{P} jump shot, blocked by {P}, {T} team offensive rebound'
+  '{P}进攻犯规 ({P}造成了犯规)': '{P} offensive foul (drawn by {P})'
+  '{P}进攻犯规 (造成了犯规)': '{P} offensive foul (drawn by an unnamed player)'
+  '{P}违体犯规 ({P}造成了犯规)': '{P} unsportsmanlike foul (drawn by {P})'
+  '{P}违体犯规 (造成了犯规)': '{P} unsportsmanlike foul (drawn by an unnamed player)'
+  '{T}队24秒违例': '{T} shot-clock (24 s) violation'
+  '{T}队常规暂停': '{T} regular timeout'
+  '{T}队换人，{P}换下了{P}': '{T} substitution, {P} replaces {P}'
+  技术犯规罚球，{P}罚球不中: free throws after a technical foul, {P} misses the free throw
+  技术犯规罚球，{P}罚球命中: free throws after a technical foul, {P} makes the free throw
+  换人: substitution (no names)
+  违体犯规罚球，{P}两罚，第一罚不中: free throws after an unsportsmanlike foul, {P} takes two free
+    throws, free throw 1 missed
+  违体犯规罚球，{P}两罚，第一罚命中: free throws after an unsportsmanlike foul, {P} takes two free
+    throws, free throw 1 made
+  违体犯规罚球，{P}两罚，第二罚命中: free throws after an unsportsmanlike foul, {P} takes two free
+    throws, free throw 2 made
+position_labels:
+  C: 中锋
+  C/PF: 中锋/大前锋
+  F: 前锋
+  G: 后卫
+  PF: 大前锋
+  PF/C: 大前锋/中锋
+  PF/SF: 大前锋/小前锋
+  PG: 控球后卫
+  PG/SG: 控球后卫/得分后卫
+  SF: 小前锋
+  SF/PF: 小前锋/大前锋
+  SF/SG: 小前锋/得分后卫
+  SG: 得分后卫
+  SG/PG: 得分后卫/控球后卫
+  SG/SF: 得分后卫/小前锋
+  中锋: 中锋
+  中锋/大前锋: 中锋/大前锋
+  前锋: 前锋
+  后卫: 后卫
+  大前锋: 大前锋
+  大前锋/中锋: 大前锋/中锋
+  大前锋/小前锋: 大前锋/小前锋
+  小前锋: 小前锋
+  小前锋/大前锋: 小前锋/大前锋
+  小前锋/得分后卫: 小前锋/得分后卫
+  得分后卫: 得分后卫
+  控球后卫: 控球后卫
+  控球后卫/得分后卫: 控球后卫/得分后卫
+team_names:
+  '100074683':
+    chinese: 宁波町渥
+    english: Ningbo Dingwo (Dingwo brand)
+  '29115':
+    chinese: 北京金隅 / 北京首钢
+    english: Beijing Jinyu (BBMG) / Beijing Shougang (Capital Steel)
+  '29116':
+    chinese: 八一双鹿电池
+    english: Bayi Double Deer Batteries (the army team)
+  '29117':
+    chinese: 新疆伊力特 / 新疆广汇汽车 / 新疆广汇能源
+    english: Xinjiang Yilite (Yilite liquor) / Xinjiang Guanghui Automobile / Xinjiang
+      Guanghui Energy
+  '29118':
+    chinese: 江苏德玛斯特 / 江苏肯帝亚
+    english: Jiangsu Demaster / Jiangsu Kendia (Kendia Pharmaceutical)
+  '29124':
+    chinese: 广东东莞银行 / 广东东阳光 / 广东宏远华南虎俱乐部东莞银行篮球队
+    english: Guangdong Dongguan Bank / Guangdong Eastern Sunshine (Dongyangguang)
+      / Guangdong Hongyuan South China Tigers Club, Dongguan Bank basketball team
+      (full legal name)
+  '29125':
+    chinese: 上海久事 / 上海大鲨鱼
+    english: Shanghai Jiushi (Jiushi Group) / Shanghai Big Sharks
+  '29127':
+    chinese: 四川丰谷酒业 / 四川品胜 / 四川金强蓝鲸俱乐部品胜篮球队 / 四川锦城
+    english: Sichuan Fenggu Liquor / Sichuan Pinsheng (Pinsheng electronics) / Sichuan
+      Jinqiang Blue Whales Club, Pinsheng basketball team (full legal name) / Sichuan
+      Brocade City (Jincheng)
+  '29128':
+    chinese: 浙江东阳光 / 浙江东阳光药 / 浙江广厦 / 浙江广厦建设 / 浙江广厦控股 / 浙江广厦明凯 / 浙江广厦猛狮 / 浙江广厦雄狮俱乐部浙商证券篮球队
+      / 浙江方兴渡 / 浙江浙商证券
+    english: Zhejiang Eastern Sunshine (Dongyangguang) / Zhejiang Eastern Sunshine
+      Pharmaceutical / Zhejiang Guangsha / Zhejiang Guangsha Construction / Zhejiang
+      Guangsha Holdings / Zhejiang Guangsha Mingkai / Zhejiang Guangsha Fierce Lions
+      / Zhejiang Guangsha Lions Club, Zheshang Securities basketball team (full legal
+      name) / Zhejiang Fangxingdu / Zhejiang Zheshang Securities
+  '29129':
+    chinese: 辽宁本钢 / 辽宁盼盼
+    english: Liaoning Bengang (Benxi Steel) / Liaoning Panpan (Panpan Foods)
+  '29130':
+    chinese: 山东高速 / 山东黄金
+    english: Shandong Expressway (Hi-Speed) / Shandong Gold
+  '29131':
+    chinese: 东莞马可波罗 / 深圳马可波罗
+    english: Dongguan Marco Polo / Shenzhen Marco Polo
+  '29132':
+    chinese: 山西中宇 / 山西汾酒 / 山西汾酒猛龙 / 山西汾酒猛龙俱乐部汾酒篮球队 / 山西汾酒股份 / 山西汾酒集团
+    english: Shanxi Zhongyu / Shanxi Fen Liquor / Shanxi Fen Liquor Fierce Dragons
+      / Shanxi Fen Liquor Fierce Dragons Club, Fen Liquor basketball team (full legal
+      name) / Shanxi Fen Liquor Co. / Shanxi Fen Liquor Group
+  '29133':
+    chinese: 南京同曦宙光 / 南京天之蓝
+    english: Nanjing Tongxi Cosmic Light / Nanjing Sky Blue
+  '29134':
+    chinese: 福建SBS / 福建晋江文旅
+    english: Fujian SBS / Fujian Jinjiang Culture and Tourism
+  '29135':
+    chinese: 青岛双星 / 青岛崂山啤酒
+    english: Qingdao Double Star / Qingdao Laoshan Beer
+  '29136':
+    chinese: 北京控股
+    english: Beijing Holdings
+  '29137':
+    chinese: 吉林龙润茶 / 长白山恩都里
+    english: Jilin Longrun Tea / Changbai Mountain Endouli
+  '29138':
+    chinese: 天津先行者 / 天津荣钢
+    english: Tianjin Pioneers / Tianjin Rong Steel
+  '29139':
+    chinese: 广州智都集团 / 广州朗肽海本 / 陕西锂源动力
+    english: Guangzhou Smart City Group (Zhidu) / Guangzhou Langtai Haiben / Shaanxi
+      Lithium Source Power (Liyuan)
+  '29140':
+    chinese: 浙江稠州金租 / 浙江稠州银行
+    english: Zhejiang Chouzhou Financial Leasing / Zhejiang Chouzhou Bank

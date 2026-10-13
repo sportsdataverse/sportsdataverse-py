@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: key
+  type: character
+- description: ''
+  name: value
+  type: integer
+kind: dataframe
+schema: cba_team_counts

@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: schedule_id
+  type: integer
+- description: ''
+  name: is_report
+  type: logical
+kind: dataframe
+schema: cba_report_status

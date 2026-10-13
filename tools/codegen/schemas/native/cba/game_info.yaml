@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: schedule_id
+  type: integer
+- description: ''
+  name: count
+  type: integer
+- description: ''
+  name: guest_color
+  type: character
+- description: ''
+  name: guest_score
+  type: integer
+- description: ''
+  name: guest_team_id
+  type: integer
+- description: ''
+  name: guest_team_logo
+  type: character
+- description: ''
+  name: guest_team_name
+  type: character
+- description: ''
+  name: host_color
+  type: character
+- description: ''
+  name: host_score
+  type: integer
+- description: ''
+  name: host_team_id
+  type: integer
+- description: ''
+  name: host_team_logo
+  type: character
+- description: ''
+  name: host_team_name
+  type: character
+- description: ''
+  name: schedule_time
+  type: character
+kind: dataframe
+schema: cba_game_info

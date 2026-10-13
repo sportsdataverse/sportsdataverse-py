@@ -1,0 +1,82 @@
+{
+  "records": [
+    {
+      "minutes": 10,
+      "seconds": 0,
+      "homeColor": "#E0B71B",
+      "visitingColor": "#7E040C",
+      "color": "#7E040C",
+      "visitorScore": 0,
+      "homeScore": 0,
+      "quarterNum": 1,
+      "textualFormat": "刘传兴和卡尔顿跳球，山西汾酒队得到球权",
+      "type": 2,
+      "btTextualFormat": "刘传兴和卡尔顿跳球，山西汾酒队得到球权",
+      "teamCNAlias1": null,
+      "teamCNAlias2": null,
+      "teamCNAlias3": null,
+      "playerCNNames": [
+        "刘传兴",
+        "卡尔顿"
+      ],
+      "playerScore": null,
+      "playerFouls": null,
+      "distance": null
+    },
+    {
+      "minutes": 8,
+      "seconds": 29,
+      "homeColor": "#E0B71B",
+      "visitingColor": "#7E040C",
+      "color": "#E0B71B",
+      "visitorScore": 3,
+      "homeScore": 2,
+      "quarterNum": 1,
+      "textualFormat": "卡尔顿跳投，被刘传兴盖掉，刘传兴获得防守篮板",
+      "type": 1,
+      "btTextualFormat": "卡尔顿跳投，被刘传兴盖掉，刘传兴获得防守篮板",
+      "teamCNAlias1": null,
+      "teamCNAlias2": null,
+      "teamCNAlias3": null,
+      "playerCNNames": [
+        "卡尔顿",
+        "刘传兴",
+        "刘传兴"
+      ],
+      "playerScore": null,
+      "playerFouls": null,
+      "distance": null
+    },
+    {
+      "minutes": 7,
+      "seconds": 45,
+      "homeColor": "#E0B71B",
+      "visitingColor": "#7E040C",
+      "color": "#7E040C",
+      "visitorScore": 5,
+      "homeScore": 4,
+      "quarterNum": 1,
+      "textualFormat": "原帅带球上篮，被朱俊龙盖掉，焦海龙抢到进攻篮板",
+      "type": 2,
+      "btTextualFormat": "原帅带球上篮，被朱俊龙盖掉，焦海龙抢到进攻篮板",
+      "teamCNAlias1": null,
+      "teamCNAlias2": null,
+      "teamCNAlias3": null,
+      "playerCNNames": [
+        "原帅",
+        "焦海龙",
+        "朱俊龙"
+      ],
+      "playerScore": null,
+      "playerFouls": null,
+      "distance": null
+    }
+  ],
+  "total": 74,
+  "size": 74,
+  "current": 1,
+  "orders": [],
+  "hitCount": false,
+  "searchCount": true,
+  "pages": 1
+}

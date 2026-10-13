@@ -1,0 +1,14 @@
+{
+  "hostTeamName": "上海大鲨鱼",
+  "guestTeamName": "新疆广汇汽车",
+  "hostScore": 110,
+  "guestScore": 93,
+  "hostTeamId": 29125,
+  "guestTeamId": 29117,
+  "hostTeamLogo": "https://image.cbaleague.com/cbaleague/teamlogo/300x300/29125_300.png",
+  "guestTeamLogo": "https://image.cbaleague.com/cbaleague/teamlogo/300x300/29117_300.png",
+  "scheduleTime": "2010-01-01 19:30:00",
+  "count": 89,
+  "hostColor": "#0F1D61",
+  "guestColor": "#0F5A9D"
+}

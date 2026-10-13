@@ -1,0 +1,42 @@
+{
+  "guestTeamBestData": null,
+  "hostTeamBestData": null,
+  "hostBestPlayer": {
+    "rebounds": 3,
+    "fouls": 1,
+    "twoPointsStr": "7/13",
+    "playerName": "约翰-卢卡斯",
+    "minutes": 40,
+    "playerNameStr": "约翰-卢卡斯",
+    "freeThrowStr": "3/3",
+    "playerImg": "https://image.cbaleague.com/cbaleague/playerheaders/100004236.jpg",
+    "steals": 1,
+    "turnShare": "34%",
+    "points": 38,
+    "number": "1",
+    "blocked": 0,
+    "assists": 5,
+    "realPointRate": "72%",
+    "turnovers": 3,
+    "threePointsStr": "7/12"
+  },
+  "guestBestPlayer": {
+    "rebounds": 17,
+    "fouls": 4,
+    "twoPointsStr": "15/26",
+    "playerName": null,
+    "minutes": 38,
+    "playerNameStr": "查尔斯-盖恩斯",
+    "freeThrowStr": "11/16",
+    "playerImg": "https://image.cbaleague.com/cbaleague/playerheaders/100004241.jpg",
+    "steals": 5,
+    "turnShare": "42%",
+    "points": 41,
+    "number": "34",
+    "blocked": 0,
+    "assists": 1,
+    "realPointRate": "62%",
+    "turnovers": 2,
+    "threePointsStr": "0/0"
+  }
+}

@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: schedule_id
+  type: integer
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: ctype
+  type: character
+- description: ''
+  name: cvalue
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: player_no
+  type: character
+- description: ''
+  name: seconds
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: type
+  type: integer
+kind: dataframe
+schema: cba_best_stats

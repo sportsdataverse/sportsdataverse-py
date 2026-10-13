@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: club
+  type: character
+- description: ''
+  name: team_cn_alias
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_logo
+  type: character
+kind: dataframe
+schema: cba_teams
