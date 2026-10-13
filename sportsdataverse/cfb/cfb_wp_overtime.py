@@ -6,7 +6,7 @@ on a frame that drops every game that reached overtime (cfbfastR-cfb-data
 P(win | state, game settled in regulation):
 
 * a tied game late in the fourth quarter is learned only from games somebody won in
-  regulation, so the team with the ball is overrated (2022-25 holdout, tied with two
+  regulation, so the team with the ball is overrated (2022-25, in-sample for wp_spread; tied with two
   minutes or less left: 0.77 predicted against 0.64 won);
 * an overtime state was never seen at all. The clock reads 0, so it scores as the
   last snap of a tied regulation game that someone won (tied overtime: 0.94

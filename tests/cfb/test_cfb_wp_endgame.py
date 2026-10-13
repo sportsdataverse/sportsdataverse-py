@@ -363,7 +363,7 @@ def test_q4_one_score_holdout_rows_hold_calibration_through_the_runtime():
 #: card. With ``adjust_wp`` an identity in regulation every one of them moves (see the PR's
 #: mutation run), so none of these surfaces can drop the correction silently. They also guard the
 #: C-NF-2 booster-input shim (``cfb_pbp._as_trained_2h_flag`` and its twin in ``cfb_fourth_down._to_pandas``,
-#: removed by the task 3.8 retrain): fed the corrected flag instead of ``1 - is_home``, the 401754554
+#: removed by a retrain on the corrected flag (owner decision)): fed the corrected flag instead of ``1 - is_home``, the 401754554
 #: rows move off these base values by up to 0.0077 (task 2.6 had re-pinned them there) and fail
 #: (registry rows ``cfb-wp-shim-pipeline`` / ``cfb-wp-shim-fourth-down``).
 REGULATION_PINS = [

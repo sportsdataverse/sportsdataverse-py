@@ -520,7 +520,7 @@ def _with_ot_second(play_df):
 def _as_trained_2h_flag(features: pl.DataFrame) -> pl.DataFrame:
     """The booster input for ``pos_team_receives_2H_kickoff``: ``not is_home``, as the boosters were trained.
 
-    Shim for C-NF-2, removed by the task 3.8 retrain. The bundled ``wp_spread`` / ``wp_naive``
+    Shim for C-NF-2, removed by a retrain on the corrected flag (owner decision). The bundled ``wp_spread`` / ``wp_naive``
     were trained on a frame where the flag was ``1 - is_home`` on every row, both halves, so they
     learned it as a second home/away indicator. Feeding them the corrected published flag (true
     only on the opening kicker's first-half possessions) degrades ``wp_before_naive``; feeding
