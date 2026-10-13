@@ -337,7 +337,7 @@ espn_mbb_schedule - look up the men's college basketball scheduler for a given s
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `dates` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season. |
+| `dates` | `int` | `None` | A date (`YYYYMMDD`) or a season (`YYYY`, 2002 or later). A season reads that season's game days from ESPN's scoreboard calendar and requests each day in turn (one calendar request plus ~150 day requests), keeping the games ESPN files under the season, sorted by date. A day that fails raises `AssetFetchError`. |
 | `groups` | `int` | `50` | Used to define different divisions. 50 is Division I, 51 is Division II/Division III. |
 | `season_type` | `int` | `None` | 2 for regular season, 3 for post-season, 4 for off-season. |
 | `limit` | `int` | `500` | number of records to return, default: 500. |
@@ -345,7 +345,7 @@ espn_mbb_schedule - look up the men's college basketball scheduler for a given s
 
 **Returns**
 
-Polars dataframe containing schedule dates for the requested season. Returns None if no games
+Polars dataframe containing schedule dates for the requested season. A day or season with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|

@@ -524,7 +524,7 @@ espn_nfl_schedule - look up the NFL schedule for a given season
 
 **Returns**
 
-Polars dataframe containing schedule dates for the requested season. Returns None if no games
+Polars dataframe containing schedule dates for the requested season. A day with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -577,7 +577,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_venue_id` | character |  |
 | `home_logo` | character |  |
 | `home_score` | character | The number of points the home team scored. Is NA for games which haven't yet been played. |
-| `home_current_rank` | integer | Current AP or ESPN power ranking of the home team at the time of the game. |
+| `home_current_rank` | integer | Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules. |
 | `home_linescores` | list | Comma-separated or serialized quarter-by-quarter score totals for the home team. |
 | `home_records` | character | Serialized win-loss-tie record(s) for the home team (e.g., overall, home, away, conference). |
 | `away_id` | character |  |
@@ -593,7 +593,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_venue_id` | character |  |
 | `away_logo` | character |  |
 | `away_score` | character | The number of points the away team scored. Is NA for games which haven't yet been played. |
-| `away_current_rank` | integer | Current AP or ESPN power ranking of the away team at the time of the game. |
+| `away_current_rank` | integer | Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules. |
 | `away_linescores` | list | Comma-separated or serialized quarter-by-quarter score totals for the away team. |
 | `away_records` | character | Serialized win-loss-tie record(s) for the away team (e.g., overall, home, away, conference). |
 | `game_id` | integer | Ten digit identifier for NFL game. |
@@ -603,6 +603,8 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `format_overtime_periods` | integer |  |
 | `home_logo_dark` | character |  |
 | `away_logo_dark` | character |  |
+| `home_winner` | logical | True when the home team won, from ESPN's winner flag; null before the game ends. |
+| `away_winner` | logical | True when the away team won, from ESPN's winner flag; null before the game ends. |
 
 **Example**
 

@@ -335,7 +335,7 @@ espn_nhl_schedule - look up the NHL schedule for a given date
 
 **Returns**
 
-Polars dataframe containing schedule dates for the requested season. Returns None if no games
+Polars dataframe containing schedule dates for the requested season. A day with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -411,6 +411,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_winner` | logical | Whether the home team won. |
 | `away_logo_dark` | character |  |
 | `away_winner` | logical | Whether the away team won. |
+| `status_type_alt_detail` | character | ESPN's short extra-time label on a final ("OT", "SO"); null when the game ended in regulation. |
 
 **Example**
 

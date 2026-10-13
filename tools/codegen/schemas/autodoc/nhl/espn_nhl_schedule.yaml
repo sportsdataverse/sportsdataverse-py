@@ -217,3 +217,6 @@ columns:
 - name: away_winner
   type: logical
   description: ''
+- name: status_type_alt_detail
+  type: character
+  description: ''
