@@ -48,7 +48,7 @@ not covered by the generated API-endpoint reference above.
 | [pwhl_team_roster](additional/hockeytech-leaguestat.md#pwhl_team_roster) | PWHL team roster for a given team + season. |
 | [pwhl_teams](additional/hockeytech-leaguestat.md#pwhl_teams) | PWHL teams for a given season. |
 | [pwhl_transactions](additional/hockeytech-leaguestat.md#pwhl_transactions) | PWHL roster transactions. |
-| [pwhl_unit_ratings](additional/hockeytech-leaguestat.md#pwhl_unit_ratings) | ⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`. |
+| [pwhl_unit_ratings](additional/hockeytech-leaguestat-2.md#pwhl_unit_ratings) | ⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`. |
 
 ## Models and calculators
 

@@ -71,6 +71,7 @@ def nhl_unit_ratings(
     unit_type: str = "forward_line",
     min_toi: float = 20.0,
     return_as_pandas: bool = False,
+    xg_scored: bool = False,
     _stints: pl.DataFrame | None = None,
     _rapm: pl.DataFrame | None = None,
 ) -> "pl.DataFrame | pd.DataFrame":
@@ -85,6 +86,8 @@ def nhl_unit_ratings(
             (2-skater combinations) -- see the module's data-availability caveat.
         min_toi: minimum minutes-together for a unit to be reported.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        xg_scored: ``pbp`` already carries the shot ``xg`` to use (another league's own xG
+            model); skip re-scoring with the NHL boosters, which would replace it.
         _stints: internal test hook -- inject a pre-built stints frame.
         _rapm: internal test hook -- inject a pre-built skater-RAPM frame (paired with
             ``_stints``; both must be given together to bypass real computation).
@@ -112,7 +115,7 @@ def nhl_unit_ratings(
     else:
         if pbp.height == 0 or shifts.height == 0:
             return pl.DataFrame(schema=_UNIT_SCHEMA)
-        scored = nhl_xg(pbp, model_dir=model_dir, league=league)
+        scored = pbp if xg_scored else nhl_xg(pbp, model_dir=model_dir, league=league)
         stints = build_stints(shifts, scored)
         rapm = nhl_skater_rapm(pbp, shifts, model_dir=model_dir, league=league, _stints=stints)
         team_labels = _team_label_map(scored)

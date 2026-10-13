@@ -1,7 +1,7 @@
 ---
 title: "PWHL — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 4
+sidebar_position: 5
 description: "PWHL — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # PWHL — additional Python functions — Analytics
@@ -72,7 +72,8 @@ wp = pwhl_in_game_win_prob(pbp, pregame_home_prob=0.5)
 PWHL empirical-Bayes shots/points player-prop projections.
 
 Delegates to `sportsdataverse.nhl.nhl_player_props.nhl_player_props`
-with `league="pwhl"` defaulted.
+with `league="pwhl"` defaulted and the PWHL box loader and ratings bound
+(see the module docstring).
 
 **Parameters**
 
@@ -89,7 +90,7 @@ The NHL core's per-(player, game, stat) projection frame.
 
 ```python
 from sportsdataverse.pwhl.pwhl_player_props import pwhl_player_props
-props = pwhl_player_props(2024)
+props = pwhl_player_props(2025)
 ```
 
 ### pwhl_predict_games {#pwhl_predict_games}

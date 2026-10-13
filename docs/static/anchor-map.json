@@ -3715,7 +3715,7 @@
   "pwhl_team_roster": "hockeytech-leaguestat",
   "pwhl_teams": "hockeytech-leaguestat",
   "pwhl_transactions": "hockeytech-leaguestat",
-  "pwhl_unit_ratings": "hockeytech-leaguestat",
+  "pwhl_unit_ratings": "hockeytech-leaguestat-2",
   "spearman_corr": "models-and-calculators"
  },
  "/docs/reference/python-helpers": {

@@ -1,7 +1,7 @@
 ---
 title: "PWHL — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 5
+sidebar_position: 6
 description: "PWHL — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # PWHL — additional Python functions — Dates and seasons
