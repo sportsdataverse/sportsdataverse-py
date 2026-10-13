@@ -22,6 +22,9 @@ What the HockeyTech feed cannot supply, and how the adapter handles it:
   strength lags any change the feed only reports at its next event, so strength transitions land
   late: the seconds after a penalty starts or expires are credited to the previous state.
 
+``secondary_type`` is kept for symmetry with the NHL contract (an adapted frame can still go
+through ``nhl_xg``); the PWHL engines, scored with ``xg_scored=True``, do not consume it.
+
 A required source column that is absent raises ``ValueError`` naming it; the output is checked
 against :data:`IMPACT_PBP_CONTRACT` / :data:`IMPACT_SHIFTS_CONTRACT` before it is returned.
 """

@@ -141,7 +141,9 @@ def pwhl_skater_rapm(
         shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
         model_dir: booster directory for NHL-shaped input (the borrowed NHL xG boosters).
         xg_model: a fitted ``PwhlCoordXGModel`` scoring HockeyTech input; ``None`` fits one on
-            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`).
+            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). That default is
+            an in-sample fit: the goals in ``pbp`` shape the xG the ratings are fit to. For a
+            backtest, pass a model fit on prior seasons only.
         **kwargs: forwarded to :func:`nhl_skater_rapm` (e.g. ``lam``, ``as_of``,
             ``strength_states``, ``return_as_pandas``).
 
@@ -185,7 +187,9 @@ def pwhl_unit_ratings(
         shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
         model_dir: booster directory for NHL-shaped input (the borrowed NHL xG boosters).
         xg_model: a fitted ``PwhlCoordXGModel`` scoring HockeyTech input; ``None`` fits one on
-            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`).
+            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). That default is
+            an in-sample fit: the goals in ``pbp`` shape the xG the ratings are fit to. For a
+            backtest, pass a model fit on prior seasons only.
         **kwargs: forwarded to :func:`nhl_unit_ratings` (e.g. ``unit_type``,
             ``min_toi``, ``return_as_pandas``).
 
@@ -230,7 +234,9 @@ def pwhl_special_teams_value(
         shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
         model_dir: booster directory for NHL-shaped input (the borrowed NHL xG boosters).
         xg_model: a fitted ``PwhlCoordXGModel`` scoring HockeyTech input; ``None`` fits one on
-            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`).
+            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). That default is
+            an in-sample fit: the goals in ``pbp`` shape the xG the ratings are fit to. For a
+            backtest, pass a model fit on prior seasons only.
         **kwargs: forwarded to :func:`nhl_special_teams_value` (e.g.
             ``return_as_pandas``).
 
@@ -274,7 +280,9 @@ def pwhl_skater_war(
         shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
         model_dir: booster directory for NHL-shaped input (the borrowed NHL xG boosters).
         xg_model: a fitted ``PwhlCoordXGModel`` scoring HockeyTech input; ``None`` fits one on
-            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`).
+            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). That default is
+            an in-sample fit: the goals in ``pbp`` shape the xG the ratings are fit to. For a
+            backtest, pass a model fit on prior seasons only.
         **kwargs: forwarded to :func:`nhl_skater_war` (e.g. ``return_as_pandas``).
 
     Returns:

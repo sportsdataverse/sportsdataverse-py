@@ -21,6 +21,7 @@ import pytest
 from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
 from sportsdataverse.nhl.nhl_rapm import build_stints, nhl_skater_rapm
 from sportsdataverse.nhl.nhl_special_teams import nhl_special_teams_value
+from sportsdataverse.nhl.nhl_unit_ratings import nhl_unit_ratings
 from sportsdataverse.pwhl._impact_contract import adapt_pwhl_impact_inputs
 from sportsdataverse.pwhl.pwhl_player_impact import (
     pwhl_skater_rapm,
@@ -82,6 +83,22 @@ def test_unit_ratings_label_units_with_pwhl_teams(pbp, shifts):
     teams = set(pbp["home_team"].to_list()) | set(pbp["away_team"].to_list())
     assert set(units["team"].to_list()) <= teams
     assert (units["on_ice_xgf"] + units["on_ice_xga"]).sum() > 0
+    # the engine keeps the adapter's (PWHL) xG: measured 24.725 on-ice xGF over all units vs 24.998
+    # adapter shot xG (a stint shared by several unit combos splits its xG between them); the NHL
+    # boosters re-scoring the adapted frame gave 68.162 (review R846-9). Never lower the gate.
+    events, chart = adapt_pwhl_impact_inputs(pbp, shifts)
+    shot_xg = events.filter(pl.col("event_type").is_in(["SHOT", "GOAL"]))["xg"].sum()
+    assert 0.95 <= units["on_ice_xgf"].sum() / shot_xg <= 1.0 + 1e-9
+    # nhl_unit_ratings is itself run-to-run unstable in row order and in unit_value at 1e-16
+    direct = nhl_unit_ratings(events, chart, league="pwhl", xg_scored=True, min_toi=0.0)
+
+    a, b = units.sort("team", "unit_ids"), direct.sort("team", "unit_ids")
+    assert a.columns == b.columns and a.height == b.height
+    for col in a.columns:
+        if a.schema[col] == pl.Float64:
+            assert (a[col] - b[col]).abs().max() < 1e-9, col
+        else:
+            assert a[col].equals(b[col]), col
 
 
 def test_special_teams_value_reads_feed_strength_on_every_stint(pbp, shifts):

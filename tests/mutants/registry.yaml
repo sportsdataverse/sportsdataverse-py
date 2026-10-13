@@ -876,7 +876,7 @@
     history still shallow after the fetch must add no allowance (review R824-1).
 
 # --- C-NF-5 / B-GB-01 / supp-001: PWHL player impact on HockeyTech pbp + ratings/props routing (2.13) ----
-# Killers: tests/pwhl/test_pwhl_player_impact_real.py (three real 2025 games from fastRhockey-pwhl-data)
+# Killers: tests/pwhl/test_pwhl_player_impact_real.py (five real 2025 games from fastRhockey-pwhl-data)
 # and the `routing` tests in tests/pwhl/test_pwhl_prediction_model_shims.py (sockets closed, NHL
 # loaders refusing, PWHL loaders serving the same real slices).
 - id: pwhl-impact-secondary-type-mapped
@@ -1066,3 +1066,15 @@
   test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_team_ratings_league_keyword_is_deprecated_and_ignored
   expected: kill
   note: R846-2 -- 0.1.5 callers passing league= get a DeprecationWarning, not a TypeError or silence.
+
+- id: nhl-unit-ratings-honours-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_unit_ratings.py
+  snippet: '        scored = pbp if xg_scored else nhl_xg(pbp, model_dir=model_dir, league=league)'
+  mutant: '        scored = nhl_xg(pbp, model_dir=model_dir, league=league)'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_unit_ratings_label_units_with_pwhl_teams
+  expected: kill
+  note: >-
+    Review R846-9: with the unconditional re-score, on-ice xGF over all units moves 24.725 -> 68.162
+    on the fixture while every other test stays green; the level band kills it.
