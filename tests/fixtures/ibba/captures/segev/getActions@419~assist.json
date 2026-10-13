@@ -1,0 +1,150 @@
+{
+  "jsonrpc": "2.0",
+  "id": "42",
+  "error": null,
+  "result": {
+    "gameInfo": {
+      "gameId": "419",
+      "apiId": "",
+      "id": 419,
+      "time": "2026-10-10T19:30:00",
+      "homeTeam": {
+        "name": "MACCABI TEL AVIV",
+        "nameLocal": "מכבי Rapyd ת\"א",
+        "id": "2",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "MACCABI TEL AVIV",
+        "shortNameLocal": "מכבי ת\"א",
+        "players": [
+          {
+            "id": "1000",
+            "apiId": "1000",
+            "firstName": "JAYLEN",
+            "lastName": "HOARD",
+            "firstNameLocal": "ג'יילן",
+            "lastNameLocal": "הורד",
+            "inRoster": 2,
+            "jerseyNumber": 1
+          },
+          {
+            "id": "1014",
+            "apiId": "1014",
+            "firstName": "JIMMY",
+            "lastName": "CLARK III",
+            "firstNameLocal": "ג'ימי",
+            "lastNameLocal": "קלארק",
+            "inRoster": 2,
+            "jerseyNumber": 2
+          },
+          {
+            "id": "1016",
+            "apiId": "1016",
+            "firstName": "GUR",
+            "lastName": "LAVY",
+            "firstNameLocal": "גור",
+            "lastNameLocal": "לביא",
+            "inRoster": 0,
+            "jerseyNumber": 4
+          }
+        ]
+      },
+      "awayTeam": {
+        "name": "GALIL ELION",
+        "nameLocal": "הפועל גליל עליון",
+        "id": "10",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "GALIL ELION",
+        "shortNameLocal": "הפועל אילת",
+        "players": [
+          {
+            "id": "1106",
+            "apiId": "1106",
+            "firstName": "YAHEL",
+            "lastName": "MELAMED",
+            "firstNameLocal": "יהל",
+            "lastNameLocal": "מלמד",
+            "inRoster": 2,
+            "jerseyNumber": 12
+          },
+          {
+            "id": "1166",
+            "apiId": "1166",
+            "firstName": "YOAV",
+            "lastName": "ALMIHSLI",
+            "firstNameLocal": "יואב",
+            "lastNameLocal": "אלמישלי",
+            "inRoster": 2,
+            "jerseyNumber": 22
+          },
+          {
+            "id": "2048",
+            "apiId": "2048",
+            "firstName": "MAX",
+            "lastName": "BROOKS",
+            "firstNameLocal": "מקס",
+            "lastNameLocal": "ברוקס",
+            "inRoster": 2,
+            "jerseyNumber": 34
+          }
+        ]
+      },
+      "competition": {
+        "name": "Winner League"
+      },
+      "numberOfQuarters": 4,
+      "gameFinished": true,
+      "currentQuarter": 4,
+      "currentQuarterTime": {
+        "m": 0,
+        "s": 0
+      }
+    },
+    "actions": [
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "17"
+        },
+        "id": 4190016,
+        "parentActionId": 4190015,
+        "userTime": "17:19:16",
+        "quarterTime": "09:50",
+        "type": "assist",
+        "playerId": 2319,
+        "teamId": 2
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "17"
+        },
+        "id": 4190039,
+        "parentActionId": 4190038,
+        "userTime": "17:21:45",
+        "quarterTime": "08:34",
+        "type": "assist",
+        "playerId": 2319,
+        "teamId": 2
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "9"
+        },
+        "id": 4190050,
+        "parentActionId": 4190048,
+        "userTime": "17:24:27",
+        "quarterTime": "07:55",
+        "type": "assist",
+        "playerId": 1019,
+        "teamId": 2
+      }
+    ],
+    "success": true
+  }
+}

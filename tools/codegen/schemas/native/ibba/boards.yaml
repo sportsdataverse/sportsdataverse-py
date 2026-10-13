@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: board_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: board_name_he
+  type: character
+- description: ''
+  name: board_title_he
+  type: character
+- description: ''
+  name: category_he
+  type: character
+kind: dataframe
+schema: ibba_boards

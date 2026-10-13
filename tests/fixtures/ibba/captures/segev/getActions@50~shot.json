@@ -1,0 +1,176 @@
+{
+  "jsonrpc": "2.0",
+  "id": "42",
+  "error": null,
+  "result": {
+    "gameInfo": {
+      "gameId": "50",
+      "apiId": "",
+      "id": 50,
+      "time": "2025-10-12T18:40:00",
+      "homeTeam": {
+        "name": "BEER SHEVA",
+        "nameLocal": "אלטשולר ב\"ש/דימונה",
+        "id": "11",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "BEER SHEVA",
+        "shortNameLocal": "ב\"ש/דימונה",
+        "players": [
+          {
+            "id": "1120",
+            "apiId": "",
+            "firstName": "CODY",
+            "lastName": "DEMPS",
+            "firstNameLocal": "קודי",
+            "lastNameLocal": "דמפס",
+            "inRoster": 2,
+            "jerseyNumber": 93
+          },
+          {
+            "id": "1111",
+            "apiId": "",
+            "firstName": "NAVE",
+            "lastName": "BEN SHEMEN",
+            "firstNameLocal": "נווה",
+            "lastNameLocal": "בן שמן",
+            "inRoster": 2,
+            "jerseyNumber": 0
+          },
+          {
+            "id": "1215",
+            "apiId": "",
+            "firstName": "MATAN",
+            "lastName": "FOGEL",
+            "firstNameLocal": "מתן",
+            "lastNameLocal": "פוגל",
+            "inRoster": 2,
+            "jerseyNumber": 55
+          }
+        ]
+      },
+      "awayTeam": {
+        "name": "MACCABI TEL AVIV",
+        "nameLocal": "מכבי Rapyd ת\"א",
+        "id": "2",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "MACCABI TEL AVIV",
+        "shortNameLocal": "מכבי ת\"א",
+        "players": [
+          {
+            "id": "1017",
+            "apiId": "",
+            "firstName": "UROS",
+            "lastName": "TRIFUNOVIC",
+            "firstNameLocal": "אורוש",
+            "lastNameLocal": "טריפונוביץ'",
+            "inRoster": 0,
+            "jerseyNumber": 6
+          },
+          {
+            "id": "1025",
+            "apiId": "1025",
+            "firstName": "TAMIR",
+            "lastName": "BLATT",
+            "firstNameLocal": "תמיר",
+            "lastNameLocal": "בלאט",
+            "inRoster": 2,
+            "jerseyNumber": 45
+          },
+          {
+            "id": "1200",
+            "apiId": "1200",
+            "firstName": "OREN",
+            "lastName": "SAHAR",
+            "firstNameLocal": "אורן",
+            "lastNameLocal": "סהר",
+            "inRoster": 2,
+            "jerseyNumber": 7
+          }
+        ]
+      },
+      "competition": {
+        "name": "Winner League"
+      },
+      "numberOfQuarters": 4,
+      "gameFinished": true,
+      "currentQuarter": 4,
+      "currentQuarterTime": {
+        "m": 0,
+        "s": 0
+      }
+    },
+    "actions": [
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "21",
+          "coordX": 134.99999999999994,
+          "coordY": 223.9999999999999,
+          "points": 3,
+          "type": "jump-shot",
+          "fastBreak": false,
+          "secondChancePoints": false,
+          "pointsFromTurnover": false,
+          "made": "missed"
+        },
+        "id": 500016,
+        "parentActionId": 0,
+        "userTime": "15:42:47",
+        "quarterTime": "09:39",
+        "type": "shot",
+        "playerId": 1116,
+        "teamId": 11
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 2,
+          "player": "9",
+          "coordX": 735.0,
+          "coordY": 224.0,
+          "points": 2,
+          "type": "lay-up",
+          "fastBreak": false,
+          "secondChancePoints": false,
+          "pointsFromTurnover": false,
+          "made": "missed"
+        },
+        "id": 500037,
+        "parentActionId": 0,
+        "userTime": "15:45:16",
+        "quarterTime": "08:24",
+        "type": "shot",
+        "playerId": 1019,
+        "teamId": 2
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "16",
+          "coordX": 720.0,
+          "coordY": 112.0000000000001,
+          "points": 2,
+          "type": "dunk",
+          "fastBreak": true,
+          "secondChancePoints": false,
+          "pointsFromTurnover": false,
+          "made": "made"
+        },
+        "id": 500109,
+        "parentActionId": 0,
+        "userTime": "15:51:57",
+        "quarterTime": "05:06",
+        "type": "shot",
+        "score": "11-12",
+        "totalPlayerPoints": "2",
+        "playerId": 1115,
+        "teamId": 11
+      }
+    ],
+    "success": true
+  }
+}

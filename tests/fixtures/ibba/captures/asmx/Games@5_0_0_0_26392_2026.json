@@ -1,0 +1,34 @@
+{
+  "games": [
+    {
+      "game_id": "26392",
+      "game_date_txt": "12/10/2025",
+      "year_id": "2026",
+      "team1": "1120",
+      "team2": "1109",
+      "team1_name": "הפועל אלטשולר שחם ב&quot;ש/דימונה",
+      "team2_name": "מכבי Rapyd תל אביב",
+      "team1_name_eng": "Hapoel Altshuler Shaham Beer Sheva/Dimona",
+      "team2_name_eng": "Maccabi Rapyd Tel Aviv",
+      "team1_logo": "https://www.basket.co.il/pics/2018/logo_bs_300x300.png",
+      "team2_logo": "https://www.basket.co.il/pics/2007/logos/logo_maccabi.png",
+      "score_team1": "92",
+      "score_team2": "104",
+      "BOARD_ID": "5",
+      "board_name": "ליגת Winner סל",
+      "board_name_eng": "Winner League",
+      "gameNumber": "1",
+      "TimeOfGame": "18:40",
+      "PlaceOfGameHeb": "הקונכיה, באר שבע",
+      "PlaceOfGame": "The Shell, Be&#39;er Sheva",
+      "Ref": "דן ילון, אדר פאר, עומר וסרמן ",
+      "total_viewers": "1490",
+      "overtime": "False",
+      "total_ot": "0",
+      "score_by_q_1": "18|23|30|21",
+      "score_by_q_2": "29|26|27|22",
+      "tickets_url": "",
+      "ExternalID": "50"
+    }
+  ]
+}

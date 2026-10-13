@@ -1,0 +1,150 @@
+{
+  "jsonrpc": "2.0",
+  "id": "42",
+  "error": null,
+  "result": {
+    "gameInfo": {
+      "gameId": "50",
+      "apiId": "",
+      "id": 50,
+      "time": "2025-10-12T18:40:00",
+      "homeTeam": {
+        "name": "BEER SHEVA",
+        "nameLocal": "אלטשולר ב\"ש/דימונה",
+        "id": "11",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "BEER SHEVA",
+        "shortNameLocal": "ב\"ש/דימונה",
+        "players": [
+          {
+            "id": "1120",
+            "apiId": "",
+            "firstName": "CODY",
+            "lastName": "DEMPS",
+            "firstNameLocal": "קודי",
+            "lastNameLocal": "דמפס",
+            "inRoster": 2,
+            "jerseyNumber": 93
+          },
+          {
+            "id": "1111",
+            "apiId": "",
+            "firstName": "NAVE",
+            "lastName": "BEN SHEMEN",
+            "firstNameLocal": "נווה",
+            "lastNameLocal": "בן שמן",
+            "inRoster": 2,
+            "jerseyNumber": 0
+          },
+          {
+            "id": "1215",
+            "apiId": "",
+            "firstName": "MATAN",
+            "lastName": "FOGEL",
+            "firstNameLocal": "מתן",
+            "lastNameLocal": "פוגל",
+            "inRoster": 2,
+            "jerseyNumber": 55
+          }
+        ]
+      },
+      "awayTeam": {
+        "name": "MACCABI TEL AVIV",
+        "nameLocal": "מכבי Rapyd ת\"א",
+        "id": "2",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "MACCABI TEL AVIV",
+        "shortNameLocal": "מכבי ת\"א",
+        "players": [
+          {
+            "id": "1017",
+            "apiId": "",
+            "firstName": "UROS",
+            "lastName": "TRIFUNOVIC",
+            "firstNameLocal": "אורוש",
+            "lastNameLocal": "טריפונוביץ'",
+            "inRoster": 0,
+            "jerseyNumber": 6
+          },
+          {
+            "id": "1025",
+            "apiId": "1025",
+            "firstName": "TAMIR",
+            "lastName": "BLATT",
+            "firstNameLocal": "תמיר",
+            "lastNameLocal": "בלאט",
+            "inRoster": 2,
+            "jerseyNumber": 45
+          },
+          {
+            "id": "1200",
+            "apiId": "1200",
+            "firstName": "OREN",
+            "lastName": "SAHAR",
+            "firstNameLocal": "אורן",
+            "lastNameLocal": "סהר",
+            "inRoster": 2,
+            "jerseyNumber": 7
+          }
+        ]
+      },
+      "competition": {
+        "name": "Winner League"
+      },
+      "numberOfQuarters": 4,
+      "gameFinished": true,
+      "currentQuarter": 4,
+      "currentQuarterTime": {
+        "m": 0,
+        "s": 0
+      }
+    },
+    "actions": [
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "93"
+        },
+        "id": 500020,
+        "parentActionId": 500019,
+        "userTime": "15:43:04",
+        "quarterTime": "09:23",
+        "type": "steal",
+        "playerId": 1120,
+        "teamId": 11
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "24"
+        },
+        "id": 500097,
+        "parentActionId": 500095,
+        "userTime": "15:50:47",
+        "quarterTime": "05:26",
+        "type": "steal",
+        "playerId": 1118,
+        "teamId": 11
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "35"
+        },
+        "id": 500183,
+        "parentActionId": 500182,
+        "userTime": "15:59:36",
+        "quarterTime": "01:43",
+        "type": "steal",
+        "playerId": 1119,
+        "teamId": 11
+      }
+    ],
+    "success": true
+  }
+}

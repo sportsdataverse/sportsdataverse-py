@@ -1,0 +1,153 @@
+{
+  "jsonrpc": "2.0",
+  "id": "42",
+  "error": null,
+  "result": {
+    "gameInfo": {
+      "gameId": "300",
+      "apiId": "",
+      "id": 300,
+      "time": "2026-02-05T19:30:00",
+      "homeTeam": {
+        "name": "RAMAT GAN (W)",
+        "nameLocal": "מכבי עירוני ר\"ג",
+        "id": "38",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "RAMAT GAN (W)",
+        "shortNameLocal": "מכבי עירוני ר\"ג",
+        "players": [
+          {
+            "id": "1291",
+            "apiId": "1291",
+            "firstName": "VICTORIA",
+            "lastName": "VIVIANS",
+            "firstNameLocal": "ויקטוריה",
+            "lastNameLocal": "ויויאנס",
+            "inRoster": 2,
+            "jerseyNumber": 12
+          },
+          {
+            "id": "1294",
+            "apiId": "1294",
+            "firstName": "DARYA",
+            "lastName": "SAMARO",
+            "firstNameLocal": "דריה",
+            "lastNameLocal": "סמרו",
+            "inRoster": 2,
+            "jerseyNumber": 17
+          },
+          {
+            "id": "1984",
+            "apiId": "",
+            "firstName": "TEJA",
+            "lastName": "GORSICH",
+            "firstNameLocal": "טג'ה",
+            "lastNameLocal": "גורסיץ'",
+            "inRoster": 2,
+            "jerseyNumber": 10
+          }
+        ]
+      },
+      "awayTeam": {
+        "name": "M.B ASHDOD",
+        "nameLocal": "jez-v בנות אשדוד",
+        "id": "41",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "M.B ASHDOD",
+        "shortNameLocal": "jez-v בנות אשדוד",
+        "players": [
+          {
+            "id": "1318",
+            "apiId": "",
+            "firstName": "HADAR",
+            "lastName": "HADAD",
+            "firstNameLocal": "הדר",
+            "lastNameLocal": "חדד",
+            "inRoster": 2,
+            "jerseyNumber": 9
+          },
+          {
+            "id": "1324",
+            "apiId": "",
+            "firstName": "STASHA",
+            "lastName": "CAREY",
+            "firstNameLocal": "סטאשה",
+            "lastNameLocal": "קרי",
+            "inRoster": 2,
+            "jerseyNumber": 35
+          },
+          {
+            "id": "1367",
+            "apiId": "",
+            "firstName": "LIOR",
+            "lastName": "HEYNA",
+            "firstNameLocal": "ליאור",
+            "lastNameLocal": "היינה",
+            "inRoster": 2,
+            "jerseyNumber": 17
+          }
+        ]
+      },
+      "competition": {
+        "name": "Women"
+      },
+      "numberOfQuarters": 4,
+      "gameFinished": true,
+      "currentQuarter": 4,
+      "currentQuarterTime": {
+        "m": 0,
+        "s": 0
+      }
+    },
+    "actions": [
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "12",
+          "type": "bad-pass"
+        },
+        "id": 3000046,
+        "parentActionId": 0,
+        "userTime": "17:02:30",
+        "quarterTime": "09:28",
+        "type": "turnover",
+        "playerId": 1291,
+        "teamId": 38
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 2,
+          "player": "20",
+          "type": "5-seconds-violation"
+        },
+        "id": 3000057,
+        "parentActionId": 0,
+        "userTime": "17:04:00",
+        "quarterTime": "08:40",
+        "type": "turnover",
+        "playerId": 1321,
+        "teamId": 41
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 2,
+          "player": null,
+          "type": "8-seconds-violation"
+        },
+        "id": 3000127,
+        "parentActionId": 0,
+        "userTime": "17:11:06",
+        "quarterTime": "04:12",
+        "type": "turnover",
+        "playerId": 0,
+        "teamId": 41
+      }
+    ],
+    "success": true
+  }
+}

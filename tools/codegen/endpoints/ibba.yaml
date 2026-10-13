@@ -1,0 +1,457 @@
+api: ibba
+docstring:
+  example_import: true
+  notes:
+  - 'Access (sdv-internal-refs/ibba/README.md): unofficial and reverse-engineered,
+    keyless, for internal use. The wrappers read basket.co.il''s ASP.NET web service
+    (the ops its own site calls) and space requests at least one second apart; keep
+    crawls slow and incremental. Payloads are not redistributed as release assets.
+    Contact details (e-mail, phone, fax) and coaches'' dates of birth are dropped
+    by the parsers.'
+  - 'Season and ids. ``season`` is the END year and the host''s own ``cYear`` (2026
+    = 2025-26): no mapping. ``team_id`` and ``player_id`` are per-SEASON registrations
+    (Maccabi Tel Aviv = team 1109 in 2025-26, 2111 in 2026-27; the ASMX host has no
+    cross-season person id: the stable key is the Segev player id in ``ibba_segev_*``).
+    ``team_uid`` is the stable club id (Maccabi = 10). ``ibba_games.segev_game_id``
+    joins ``ibba_segev_*`` ``game_id`` from 2025-26.'
+  - 'Coverage: league box scores from 2004-05 (``season=2005``); ``external_id`` /
+    ``segev_game_id`` only from 2025-26; the women''s league and Liga Leumit are NOT
+    on this host (they are on Genius Sports org IBBA and in Segev). Every ASMX value
+    is a string and Hebrew text is HTML-entity encoded; the parsers cast ids, counts
+    and dates and unescape text. An unknown id answers an empty body (NoDataError);
+    box scores of unfinished games are refused.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP
+    404, an empty body for an unknown id, an empty list).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (a non-200, an error or changed envelope, a row for another
+    season, team, player, board or game, a box score of an unfinished game).'
+  raw_doc: 'the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every
+    value a string) plus ``_request`` (the op and the wire parameters sent)'
+  see_also:
+  - name: Israel Basketball Association
+    note: the league site whose web service these wrappers read
+    url: https://basket.co.il
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  parser: parse_ibba_configuration
+  path: /Configuration
+  returns_schema: native/ibba/configuration
+  short: configuration
+  summary: 'Season settings: the season label, round counters and the standings cut
+    line.'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  parser: parse_ibba_boards
+  path: /Boards
+  returns_schema: native/ibba/boards
+  short: boards
+  summary: 'Competitions (boards) of a season: league, cup, playoff rounds, play-in,
+    Supercup.'
+- example_args:
+    season: 2026
+    team_uid: 10
+  extra_params:
+  - description: Required. IBBA club id, stable across seasons (Maccabi Tel Aviv =
+      10; ``team_uid`` in ibba_teams). Use 0 for all clubs only where the route says
+      so.
+    name: team_uid
+    query_key: team_uid
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  parser: parse_ibba_boards_ex
+  path: /BoardsEx
+  returns_schema: native/ibba/boards_ex
+  short: boards_ex
+  summary: External competitions a club played in during a season (European cups,
+    national team, pre-season).
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  - default: 5
+    description: 'Competition (board) id: 5 league, 10 cup, 16 / 26 / 17 playoff quarterfinals
+      / semifinals / final, 33 play-in, 34 Supercup. Default 5.'
+    name: board_id
+    query_key: board_id
+    type: int
+  parser: parse_ibba_teams
+  path: /Teams
+  returns_schema: native/ibba/teams
+  short: teams
+  summary: Teams of a board and season with their standings line and club profile
+    fields.
+- example_args:
+    season: 2026
+    team_id: 1109
+    team_uid: 10
+  extra_params:
+  - description: 'Required. Team-season id (new every season; Maccabi = 1109 in 2025-26):
+      ``team_id`` in ibba_teams, ibba_games ``home_team_id`` / ``away_team_id`` or
+      ibba_box_score.'
+    name: team_id
+    query_key: team_id
+    required: true
+    type: int
+  - description: Required. IBBA club id, stable across seasons (Maccabi Tel Aviv =
+      10; ``team_uid`` in ibba_teams). Use 0 for all clubs only where the route says
+      so.
+    name: team_uid
+    query_key: team_uid
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  parser: parse_ibba_team
+  path: /TeamById
+  returns_schema: native/ibba/team
+  short: team
+  summary: 'One team-season: standings line and club profile (colours, sponsors, social
+    links, arena id).'
+- example_args:
+    season: 2026
+    team_id: 1109
+    team_uid: 10
+  extra_params:
+  - description: 'Required. Team-season id (new every season; Maccabi = 1109 in 2025-26):
+      ``team_id`` in ibba_teams, ibba_games ``home_team_id`` / ``away_team_id`` or
+      ibba_box_score.'
+    name: team_id
+    query_key: team_id
+    required: true
+    type: int
+  - description: Required. IBBA club id, stable across seasons (Maccabi Tel Aviv =
+      10; ``team_uid`` in ibba_teams). Use 0 for all clubs only where the route says
+      so.
+    name: team_uid
+    query_key: team_uid
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  parser: parse_ibba_players
+  path: /Players
+  returns_schema: native/ibba/players
+  short: players
+  summary: 'The roster of a team-season: jersey, names, position, height and birth
+    date.'
+- example_args:
+    player_id: 21912
+    season: 2026
+  extra_params:
+  - description: 'Required. Player-season id (new every season; Jaylen Hoard = 21912
+      in 2025-26): ``player_id`` in ibba_players.'
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  parser: parse_ibba_player
+  path: /PlayerById
+  returns_schema: native/ibba/player
+  short: player
+  summary: 'One player-season row: jersey, team, names and photo.'
+- example_args:
+    season: 2026
+    team_id: 1109
+    team_uid: 10
+  extra_params:
+  - description: 'Required. Team-season id (new every season; Maccabi = 1109 in 2025-26):
+      ``team_id`` in ibba_teams, ibba_games ``home_team_id`` / ``away_team_id`` or
+      ibba_box_score.'
+    name: team_id
+    query_key: team_id
+    required: true
+    type: int
+  - description: Required. IBBA club id, stable across seasons (Maccabi Tel Aviv =
+      10; ``team_uid`` in ibba_teams). Use 0 for all clubs only where the route says
+      so.
+    name: team_uid
+    query_key: team_uid
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  parser: parse_ibba_coaches
+  path: /Coaches
+  returns_schema: native/ibba/coaches
+  short: coaches
+  summary: The coaching staff of a team-season (birth dates are dropped).
+- example_args:
+    game_id: 26392
+    season: 2026
+  extra_params:
+  - description: 'Required. IBBA game id (e.g. 26392): ``game_id`` in ibba_games.'
+    name: game_id
+    query_key: game_id
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  parser: parse_ibba_box_score
+  path: /Boxscore
+  returns_schema: native/ibba/box_score
+  short: box_score
+  summary: 'Box score of a finished game: player lines, a team-credited line per side
+    and the TOTAL line per side.'
+- example_args:
+    player_id: 21912
+    season: 2026
+  extra_params:
+  - description: 'Required. Player-season id (new every season; Jaylen Hoard = 21912
+      in 2025-26): ``player_id`` in ibba_players.'
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  - default: false
+    description: True returns per-game averages (decimals); False (default) the season
+      totals.
+    name: is_averages
+    query_key: isAverages
+    type: bool
+  - default: false
+    description: True returns the playoff games only; False (default) the regular
+      season.
+    name: is_playoff
+    query_key: isPlayOff
+    type: bool
+  parser: parse_ibba_player_stats
+  path: /PlayerStatsById
+  returns_schema: native/ibba/player_stats
+  short: player_stats
+  summary: A player-season's totals, or per-game averages with is_averages=True.
+- example_args: {}
+  parser: parse_ibba_stats_types
+  path: /StatsTypes
+  returns_schema: native/ibba/stats_types
+  short: stats_types
+  summary: The stat categories ibba_leaders accepts (the stat_type codes) with their
+    Hebrew names.
+- example_args:
+    season: 2026
+    stat_type: pts
+  extra_params:
+  - description: 'Required. Stat category code from ibba_stats_types: VAL, pts, isr_pts,
+      plusminus, dunk, ASS, TR, [OR], DR, isr_TR, ST, [TO], ASSTO, BKF, FF, [min],
+      p2, p3, p1, p32T, p22T, p12T, PTSMIN, TRMIN, ASSMIN.'
+    name: stat_type
+    query_key: stat_type
+    required: true
+    type: str
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  - default: 0
+    description: Team-season id to restrict the list to one team; 0 (default) for
+      all teams.
+    name: team_id
+    query_key: team_id
+    type: int
+  parser: parse_ibba_leaders
+  path: /LeaderByType
+  returns_schema: native/ibba/leaders
+  short: leaders
+  summary: The top five players of a season in one stat category, for all teams or
+    one team.
+- example_args:
+    season: 2026
+    team_id: 1109
+  extra_params:
+  - description: 'Required. Team-season id (new every season; Maccabi = 1109 in 2025-26):
+      ``team_id`` in ibba_teams, ibba_games ``home_team_id`` / ``away_team_id`` or
+      ibba_box_score.'
+    name: team_id
+    query_key: team_id
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  - default: false
+    description: True returns per-game averages (decimals); False (default) the season
+      totals.
+    name: is_averages
+    query_key: isAverages
+    type: bool
+  - default: false
+    description: True returns the playoff games only; False (default) the regular
+      season.
+    name: is_playoff
+    query_key: isPlayOff
+    type: bool
+  parser: parse_ibba_team_stats
+  path: /TeamStatsById
+  returns_schema: native/ibba/team_stats
+  short: team_stats
+  summary: A team-season's totals, or per-game averages with is_averages=True.
+- example_args:
+    board_id: 5
+    board_round: 1
+    season: 2026
+  extra_params:
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  - default: 0
+    description: 'Competition (board) id: 5 league, 10 cup, 16 / 26 / 17 playoff quarterfinals
+      / semifinals / final, 33 play-in, 34 Supercup. 0 (default) for every board.'
+    name: board_id
+    query_key: board_id
+    type: int
+  - default: 0
+    description: Round (game number) within the board; 0 (default) for every round.
+    name: board_round
+    query_key: board_round
+    type: int
+  - default: 0
+    description: Team-season id; 0 (default) for every team.
+    name: team_id
+    query_key: team_id
+    type: int
+  - default: 0
+    description: IBBA club id; 0 (default) for every club.
+    name: team_uid
+    query_key: team_uid
+    type: int
+  - default: 0
+    description: IBBA game id; 0 (default) for every game.
+    name: game_id
+    query_key: game_id
+    type: int
+  parser: parse_ibba_games
+  path: /Games
+  returns_schema: native/ibba/games
+  short: games
+  summary: Games (schedule and results) of a season filtered by board, round, team
+    and game; 0 means any.
+- example_args:
+    season: 2026
+    team_uid: 10
+  extra_params:
+  - description: Required. IBBA club id, stable across seasons (Maccabi Tel Aviv =
+      10; ``team_uid`` in ibba_teams). Use 0 for all clubs only where the route says
+      so.
+    name: team_uid
+    query_key: team_uid
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  - default: 0
+    description: External board id from ibba_boards_ex (1001 EuroLeague, 1003 Champions
+      League, ...); 0 (default) for all.
+    name: board_id
+    query_key: board_id
+    type: int
+  parser: parse_ibba_games_ex
+  path: /GamesEx
+  returns_schema: native/ibba/games_ex
+  short: games_ex
+  summary: 'A club''s games of a season in external competitions (BoardsEx boards:
+    European cups, pre-season).'
+- example_args:
+    season: 2026
+    team_uid: 10
+  extra_params:
+  - description: Required. IBBA club id, stable across seasons (Maccabi Tel Aviv =
+      10; ``team_uid`` in ibba_teams). Use 0 for all clubs only where the route says
+      so.
+    name: team_uid
+    query_key: team_uid
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26); sent to the host as ``cYear``
+      unchanged.
+    name: season
+    query_key: cYear
+    required: true
+    type: int
+  parser: parse_ibba_games_by_team
+  path: /GamesByTeam
+  returns_schema: native/ibba/games_by_team
+  short: games_by_team
+  summary: Every game of a club in a season, domestic and external, in one frame.
+getter_module: sportsdataverse.basketball.ibba.ibba_runtime
+host: https://basket.co.il/ws/ws.asmx
+module: ibba
+name_pattern: ibba_{short}
+parser_columns: true
+parser_module: basketball.ibba.ibba_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: ibba_

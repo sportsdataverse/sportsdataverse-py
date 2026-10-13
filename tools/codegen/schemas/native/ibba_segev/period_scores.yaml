@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: home_points
+  type: integer
+- description: ''
+  name: away_points
+  type: integer
+- description: ''
+  name: home_fouls
+  type: integer
+- description: ''
+  name: away_fouls
+  type: integer
+kind: dataframe
+schema: ibba_segev_period_scores

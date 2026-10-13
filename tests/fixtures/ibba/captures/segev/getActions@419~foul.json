@@ -1,0 +1,162 @@
+{
+  "jsonrpc": "2.0",
+  "id": "42",
+  "error": null,
+  "result": {
+    "gameInfo": {
+      "gameId": "419",
+      "apiId": "",
+      "id": 419,
+      "time": "2026-10-10T19:30:00",
+      "homeTeam": {
+        "name": "MACCABI TEL AVIV",
+        "nameLocal": "מכבי Rapyd ת\"א",
+        "id": "2",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "MACCABI TEL AVIV",
+        "shortNameLocal": "מכבי ת\"א",
+        "players": [
+          {
+            "id": "1000",
+            "apiId": "1000",
+            "firstName": "JAYLEN",
+            "lastName": "HOARD",
+            "firstNameLocal": "ג'יילן",
+            "lastNameLocal": "הורד",
+            "inRoster": 2,
+            "jerseyNumber": 1
+          },
+          {
+            "id": "1014",
+            "apiId": "1014",
+            "firstName": "JIMMY",
+            "lastName": "CLARK III",
+            "firstNameLocal": "ג'ימי",
+            "lastNameLocal": "קלארק",
+            "inRoster": 2,
+            "jerseyNumber": 2
+          },
+          {
+            "id": "1016",
+            "apiId": "1016",
+            "firstName": "GUR",
+            "lastName": "LAVY",
+            "firstNameLocal": "גור",
+            "lastNameLocal": "לביא",
+            "inRoster": 0,
+            "jerseyNumber": 4
+          }
+        ]
+      },
+      "awayTeam": {
+        "name": "GALIL ELION",
+        "nameLocal": "הפועל גליל עליון",
+        "id": "10",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "GALIL ELION",
+        "shortNameLocal": "הפועל אילת",
+        "players": [
+          {
+            "id": "1106",
+            "apiId": "1106",
+            "firstName": "YAHEL",
+            "lastName": "MELAMED",
+            "firstNameLocal": "יהל",
+            "lastNameLocal": "מלמד",
+            "inRoster": 2,
+            "jerseyNumber": 12
+          },
+          {
+            "id": "1166",
+            "apiId": "1166",
+            "firstName": "YOAV",
+            "lastName": "ALMIHSLI",
+            "firstNameLocal": "יואב",
+            "lastNameLocal": "אלמישלי",
+            "inRoster": 2,
+            "jerseyNumber": 22
+          },
+          {
+            "id": "2048",
+            "apiId": "2048",
+            "firstName": "MAX",
+            "lastName": "BROOKS",
+            "firstNameLocal": "מקס",
+            "lastNameLocal": "ברוקס",
+            "inRoster": 2,
+            "jerseyNumber": 34
+          }
+        ]
+      },
+      "competition": {
+        "name": "Winner League"
+      },
+      "numberOfQuarters": 4,
+      "gameFinished": true,
+      "currentQuarter": 4,
+      "currentQuarterTime": {
+        "m": 0,
+        "s": 0
+      }
+    },
+    "actions": [
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "26",
+          "type": "personal",
+          "kind": "shooting",
+          "fouledOn": "0",
+          "freeThrows": 0
+        },
+        "id": 4190023,
+        "parentActionId": 0,
+        "userTime": "17:20:02",
+        "quarterTime": "09:12",
+        "type": "foul",
+        "playerId": 1039,
+        "teamId": 2
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 2,
+          "player": "9",
+          "type": "personal",
+          "kind": "shooting",
+          "fouledOn": "9",
+          "freeThrows": "1"
+        },
+        "id": 4190030,
+        "parentActionId": 4190028,
+        "userTime": "17:20:33",
+        "quarterTime": "09:07",
+        "type": "foul",
+        "playerId": 2039,
+        "teamId": 10
+      },
+      {
+        "quarter": 4,
+        "parameters": {
+          "team": 1,
+          "player": "17",
+          "type": "unsportsmanlike-flagrant",
+          "kind": "shooting",
+          "fouledOn": "8",
+          "freeThrows": "1"
+        },
+        "id": 4190729,
+        "parentActionId": 0,
+        "userTime": "18:42:23",
+        "quarterTime": "02:08",
+        "type": "foul",
+        "playerId": 2319,
+        "teamId": 2
+      }
+    ],
+    "success": true
+  }
+}

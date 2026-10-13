@@ -1,0 +1,154 @@
+api: ibba_segev
+docstring:
+  example_import: true
+  notes:
+  - 'Access (sdv-internal-refs/ibba/README.md): Segev Stats is the live-stats vendor
+    behind basket.co.il''s game pages; its JSON-RPC API is keyless, unofficial and
+    not documented for outside use. The wrappers space requests at least one second
+    apart and read only finished games; payloads are not redistributed as release
+    assets. The host serves JSON as text/html.'
+  - 'Games and ids. ``game_id`` is one flat Segev id space across seasons AND competitions:
+    men''s Winner League, Winner Cup, women''s, Leumit, youth, school and pre-season
+    games share it, so read ``competition`` from ``ibba_segev_game_info`` (team names
+    do not separate men from women reliably). There is no game list: league game ids
+    come from ``ibba_games.segev_game_id`` (2025-26 on), the women''s league and Leumit
+    from a scan or Genius Sports org IBBA. Segev team and player ids are stable across
+    seasons (Jaylen Hoard = player 1000 in games 50 and 419), unlike the IBBA season
+    registrations, and are not IBBA ids.'
+  - 'Play-by-play: actions name the player by Segev id and by JERSEY number, ``score``
+    reads away-home, and shot ``x`` / ``y`` are one half-court frame (x 0-1470 across,
+    basket near 735; y out from the baseline, rim near 112-140); which sideline is
+    x = 0 and the metric scale are unverified. Segev renamed its team game stats between
+    2025-26 and 2026-27; the parsers unify them. Unfinished games and ids of another
+    game are refused.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404,
+    ''game not found'', a finished game with no actions).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (a non-200, an error or changed envelope, a body for another
+    game, a game that is not final).'
+  raw_doc: 'the raw JSON-RPC envelope (``dict``): ``result`` with the method''s block
+    plus ``_request`` (the method and game id sent)'
+  see_also:
+  - name: Segev Stats
+    note: the live-stats vendor behind the Israeli league game pages
+    url: https://stats.segevstats.com
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args:
+    game_id: 50
+  extra_params:
+  - description: 'Required. Segev game id (e.g. 50 = Hapoel Be''er Sheva vs Maccabi
+      Tel Aviv, 2025-26 round 1): ``segev_game_id`` in ibba_games.'
+    name: game_id
+    query_key: game_id
+    required: true
+    type: int
+  fixed_params:
+    method: getGameInfo
+  parser: parse_ibba_segev_game_info
+  path: /realtimestat_heb/api/
+  returns_schema: native/ibba_segev/game_info
+  short: game_info
+  summary: 'Game header: tip-off, competition, both teams and the game state (scores
+    are in the box score).'
+- example_args:
+    game_id: 50
+  extra_params:
+  - description: 'Required. Segev game id (e.g. 50 = Hapoel Be''er Sheva vs Maccabi
+      Tel Aviv, 2025-26 round 1): ``segev_game_id`` in ibba_games.'
+    name: game_id
+    query_key: game_id
+    required: true
+    type: int
+  fixed_params:
+    method: getGameInfo
+  parser: parse_ibba_segev_rosters
+  path: /realtimestat_heb/api/
+  returns_schema: native/ibba_segev/rosters
+  short: rosters
+  summary: Both teams' game rosters with Segev player ids and names in English and
+    Hebrew.
+- example_args:
+    game_id: 50
+  extra_params:
+  - description: 'Required. Segev game id (e.g. 50 = Hapoel Be''er Sheva vs Maccabi
+      Tel Aviv, 2025-26 round 1): ``segev_game_id`` in ibba_games.'
+    name: game_id
+    query_key: game_id
+    required: true
+    type: int
+  fixed_params:
+    method: getBoxScore
+  parser: parse_ibba_segev_player_box
+  path: /realtimestat_heb/api/
+  returns_schema: native/ibba_segev/player_box
+  short: player_box
+  summary: Per-player box score of a finished game, plus a team-credited line per
+    side.
+- example_args:
+    game_id: 50
+  extra_params:
+  - description: 'Required. Segev game id (e.g. 50 = Hapoel Be''er Sheva vs Maccabi
+      Tel Aviv, 2025-26 round 1): ``segev_game_id`` in ibba_games.'
+    name: game_id
+    query_key: game_id
+    required: true
+    type: int
+  fixed_params:
+    method: getBoxScore
+  parser: parse_ibba_segev_team_box
+  path: /realtimestat_heb/api/
+  returns_schema: native/ibba_segev/team_box
+  short: team_box
+  summary: 'Team totals of both sides: final score, timeouts, lead stats, shooting,
+    rebounds and team game stats.'
+- example_args:
+    game_id: 50
+  extra_params:
+  - description: 'Required. Segev game id (e.g. 50 = Hapoel Be''er Sheva vs Maccabi
+      Tel Aviv, 2025-26 round 1): ``segev_game_id`` in ibba_games.'
+    name: game_id
+    query_key: game_id
+    required: true
+    type: int
+  fixed_params:
+    method: getBoxScore
+  parser: parse_ibba_segev_period_scores
+  path: /realtimestat_heb/api/
+  returns_schema: native/ibba_segev/period_scores
+  short: period_scores
+  summary: Points and team fouls in each period of a finished game.
+- example_args:
+    game_id: 50
+  extra_params:
+  - description: 'Required. Segev game id (e.g. 50 = Hapoel Be''er Sheva vs Maccabi
+      Tel Aviv, 2025-26 round 1): ``segev_game_id`` in ibba_games.'
+    name: game_id
+    query_key: game_id
+    required: true
+    type: int
+  fixed_params:
+    method: getActions
+  parser: parse_ibba_segev_pbp
+  path: /realtimestat_heb/api/
+  returns_schema: native/ibba_segev/pbp
+  short: pbp
+  summary: 'Play-by-play of a finished game: every action with shot coordinates, running
+    scores and jersey numbers.'
+getter_module: sportsdataverse.basketball.ibba.ibba_segev_runtime
+host: https://stats.segevstats.com
+module: ibba_segev
+name_pattern: ibba_segev_{short}
+parser_columns: true
+parser_module: basketball.ibba.ibba_segev_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: ibba_segev_

@@ -1,0 +1,34 @@
+{
+  "games": [
+    {
+      "game_id": "26646",
+      "game_date_txt": "10/10/2026",
+      "year_id": "2027",
+      "team1": "2111",
+      "team2": "2121",
+      "team1_name": "מכבי Rapyd תל אביב",
+      "team2_name": "הפועל אלפי בנדק גליל עליון",
+      "team1_name_eng": "Maccabi Rapyd Tel Aviv",
+      "team2_name_eng": "Hapoel Alfi Benedek Galil Elion",
+      "team1_logo": "https://www.basket.co.il/pics/2007/logos/logo_maccabi.png",
+      "team2_logo": "https://www.basket.co.il/pics/2019/2020/GALILWHITE.png",
+      "score_team1": "120",
+      "score_team2": "93",
+      "BOARD_ID": "5",
+      "board_name": "ליגת Winner סל",
+      "board_name_eng": "Winner League",
+      "gameNumber": "1",
+      "TimeOfGame": "20:15",
+      "PlaceOfGameHeb": "היכל מנורה מבטחים, ת&quot;א",
+      "PlaceOfGame": "Menorah Mivtachim Arena",
+      "Ref": "דן ילון, כפיר מועלם, סעיד חורי ",
+      "total_viewers": "10461",
+      "overtime": "False",
+      "total_ot": "0",
+      "score_by_q_1": "41|29|32|18",
+      "score_by_q_2": "10|20|27|36",
+      "tickets_url": "",
+      "ExternalID": "419"
+    }
+  ]
+}

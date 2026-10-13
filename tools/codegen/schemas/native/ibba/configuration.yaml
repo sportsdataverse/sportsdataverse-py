@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_label
+  type: character
+- description: ''
+  name: red_line
+  type: integer
+- description: ''
+  name: active_board_id
+  type: integer
+- description: ''
+  name: next_round
+  type: integer
+- description: ''
+  name: total_rounds
+  type: integer
+kind: dataframe
+schema: ibba_configuration
