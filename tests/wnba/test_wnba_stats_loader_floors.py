@@ -29,7 +29,9 @@ def _serve_real_row(mod, monkeypatch: pytest.MonkeyPatch) -> list[str]:
     def fake(url: str) -> pl.DataFrame:
         seen.append(url)
         name = url.rsplit("/", 1)[-1]
-        return pl.DataFrame([next(row for stem, row in REAL_ROWS.items() if name.startswith(stem))])
+        row = next((row for stem, row in REAL_ROWS.items() if name.startswith(stem)), None)
+        assert row is not None, f"no real row for asset {name}"
+        return pl.DataFrame([row])
 
     monkeypatch.setattr(mod, "_read_release_parquet", fake)
     return seen
