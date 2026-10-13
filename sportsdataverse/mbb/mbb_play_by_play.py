@@ -4,8 +4,10 @@ Source: ``hoopR/R/espn_mbb_data.R`` lines 2951-3235. The MBB helper is
 semantically identical to the WBB one (``wbb_play_by_play.py``) after league
 normalization (token-ratio 0.9966; the only residual diffs are the function
 name and one pipe-style-vs-nested ``jsonlite::toJSON`` call) -- same free-throw
-coordinate pin (dead for MBB: ``type.text`` ships ``"MadeFreeThrow"`` with no
-space, so R's ``str_detect(., "Free Throw")`` never matches), same two
+coordinate pin (live for MBB through the shared ``hoopr_coordinates``, which
+matches ``(?i)free ?throw``: ``type.text`` ships ``"MadeFreeThrow"`` with no
+space, which R's ``str_detect(., "Free Throw")`` never matched; owner ruling
+R844-3), same two
 participant-athlete columns (``athlete_id_1/2`` -- MBB never populates a third
 slot), same both-teams-agnostic column union.
 

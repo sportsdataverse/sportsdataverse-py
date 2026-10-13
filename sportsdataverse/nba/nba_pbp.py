@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._espn_basketball_pbp import hoopr_coordinates as _hoopr_coordinates
 from sportsdataverse._espn_basketball_pbp import period_end_seconds as _period_end_seconds
 from sportsdataverse._espn_basketball_pbp import pickcenter_odds as _pickcenter_odds
 from sportsdataverse._espn_basketball_pbp import team_timeout_called as _team_timeout_called
@@ -296,6 +297,8 @@ def helper_nba_pbp_features(game_id, pbp_txt, init):
         p = flatten_json_iterative(play)
         pbp_txt["plays_mod"].append(p)
     pbp_txt["plays"] = pl.from_pandas(pd.json_normalize(pbp_txt, "plays_mod"))
+    # hoopR / wehoop shot coordinates; ESPN's values kept as coordinate.{x,y}.raw (C-M20)
+    pbp_txt["plays"] = _hoopr_coordinates(pbp_txt["plays"], init["homeTeamId"])
     pbp_txt["plays"] = (
         pbp_txt["plays"]
         .with_columns(

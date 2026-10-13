@@ -947,3 +947,121 @@
   note: >-
     WBB clocks are whole seconds and the release documents clock_seconds Int32 (NBA / WNBA keep
     Float64: their sub-minute clocks carry tenths).
+
+# --- 2.16 PR2: basketball coordinates in the hoopR / wehoop convention (C-M20) + R841-1 ---------
+# Killer: tests/validation/test_basketball_coordinates.py (R's case_when written row by row from
+# the committed captures) and the last-row rule's negative control in test_basketball_clock_seconds.
+- id: basketball-coords-ft-pin-dropped
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    ft = pl.col("type.text").str.contains(FREE_THROW) if "type.text" in df.columns else pl.lit(False)'
+  mutant: '    ft = pl.lit(False)'
+  test: tests/validation/test_basketball_coordinates.py -k "hoopr_convention or free_throws"
+  expected: kill
+  note: Free throws keep ESPN's coordinates instead of hoopR's (25, 13.75) pin.
+- id: basketball-coords-ft-match-case-sensitive
+  group: basketball-coordinates
+  finding: R844-3
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: 'FREE_THROW = r"(?i)free ?throw"'
+  mutant: 'FREE_THROW = "Free Throw"'
+  test: tests/validation/test_basketball_coordinates.py -k "published_rows and mbb"
+  expected: kill
+  note: >-
+    R's case-sensitive str_detect(., "Free Throw"): MBB / WBB "MadeFreeThrow" rows stay at ESPN's
+    coordinates (the published files' shape) instead of on the line (owner ruling R844-3).
+- id: basketball-coords-home-flip-dropped
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    is_home = pl.lit(False) if home_team_id is None else (team == home_team_id).fill_null(False)'
+  mutant: '    is_home = pl.lit(False)'
+  test: tests/validation/test_basketball_coordinates.py -k "hoopr_convention or free_throws"
+  expected: kill
+  note: Home plays not negated, so both teams shoot at the same end of the full court.
+- id: basketball-coords-x-offset
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '        .otherwise(pl.col("coordinate.y") - 41.75)'
+  mutant: '        .otherwise(pl.col("coordinate.y") - 47.0)'
+  test: tests/validation/test_basketball_coordinates.py -k hoopr_convention
+  expected: kill
+  note: Away x measured from half court of an NBA floor (47 ft) instead of hoopR's 41.75.
+- id: basketball-coords-transform-twice
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    if "coordinate.x.raw" in df.columns and "coordinate.y.raw" in df.columns:'
+  mutant: '    if False:'
+  test: tests/validation/test_basketball_coordinates.py -k transform_twice
+  expected: kill
+  note: >-
+    The release converters read the processor's output; without starting over from the raw pair a
+    processed payload would be transformed a second time (or collide on the raw names).
+- id: mbb-pbp-coords-not-transformed
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/mbb/mbb_pbp.py
+  snippet: '    pbp_txt["plays"] = _hoopr_coordinates(pbp_txt["plays"], init["homeTeamId"])'
+  mutant: '    pass'
+  test: tests/validation/test_basketball_coordinates.py -k hoopr_convention
+  expected: kill
+  note: The pre-2.16 processor, ESPN's raw coordinates under hoopR's transformed names.
+- id: nba-pbp-coords-not-transformed
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/nba/nba_pbp.py
+  snippet: '    pbp_txt["plays"] = _hoopr_coordinates(pbp_txt["plays"], init["homeTeamId"])'
+  mutant: '    pass'
+  test: tests/validation/test_basketball_coordinates.py -k "hoopr_convention or game_page"
+  expected: kill
+  note: >-
+    The pre-2.16 processor; nba_game_page.shot_coordinates (#749) then finds no coordinate_x_raw on
+    the library frame.
+- id: wbb-pbp-coords-not-transformed
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/wbb/wbb_pbp.py
+  snippet: '    pbp_txt["plays"] = _hoopr_coordinates(pbp_txt["plays"], init["homeTeamId"])'
+  mutant: '    pass'
+  test: tests/validation/test_basketball_coordinates.py -k hoopr_convention
+  expected: kill
+  note: The pre-2.16 processor, ESPN's raw coordinates under wehoop's transformed names.
+- id: wnba-pbp-coords-not-transformed
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/wnba/wnba_pbp.py
+  snippet: '    pbp_txt["plays"] = _hoopr_coordinates(pbp_txt["plays"], init["homeTeamId"])'
+  mutant: '    pass'
+  test: tests/validation/test_basketball_coordinates.py -k hoopr_convention
+  expected: kill
+  note: The pre-2.16 processor, ESPN's raw coordinates under wehoop's transformed names.
+- id: basketball-period-last-row-rule-scope-dropped
+  group: basketball-end-seconds
+  finding: R841-1
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '                c("__same_period").fill_null(False) == False,'
+  mutant: '                pl.lit(False),'
+  test: tests/validation/test_basketball_clock_seconds.py -k clamp
+  expected: kill
+  note: The last-row rule checks nothing; a min(end, start) producer clamp passes group 13 again.
+- id: basketball-period-last-row-skips-final-row
+  group: basketball-end-seconds
+  finding: R844-9
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '                c("__same_period").fill_null(False) == False,'
+  mutant: '                c("__same_period") == False,'
+  test: tests/validation/test_basketball_clock_seconds.py -k clamp
+  expected: kill
+  note: The game's final row (no next row) left out of the last-row rule (4 checked -> 3).
+- id: basketball-period-last-row-held-only-to-end-le-start
+  group: basketball-end-seconds
+  finding: R841-1
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '                (c(end) - (c(start) - c(clock))).abs() > _FLOAT32_EPS,'
+  mutant: '                c(end) > c(start) + _FLOAT32_EPS,'
+  test: tests/validation/test_basketball_clock_seconds.py -k clamp
+  expected: kill
+  note: The pre-R841-1 hold on a period's last row (end <= start only), which the clamp passes.
