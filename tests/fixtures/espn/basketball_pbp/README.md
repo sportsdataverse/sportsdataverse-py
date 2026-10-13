@@ -12,7 +12,8 @@ Real ESPN Site v2 `summary` payloads, copied verbatim (2026-10-05) from the
 raw stores the hoopR / wehoop pbp releases are built from
 (`<lg>/json/raw/<game_id>.json`, the `espn_<lg>_pbp(raw=True)` shape). Used by
 `tests/test_basketball_pbp_offline.py`; the 2026-10-12 rows below are live
-`espn_<lg>_pbp(raw=True)` captures used by `tests/nba/test_nba_game_page_leagues.py`.
+`espn_<lg>_pbp(raw=True)` captures used by `tests/nba/test_nba_game_page_leagues.py`. Game dates are the US Eastern local date (ESPN's
+header time is UTC, so a night game can carry the next day's UTC date).
 
 | File | Source | Why |
 |---|---|---|
@@ -28,7 +29,7 @@ raw stores the hoopR / wehoop pbp releases are built from
 | `mbb_401829457.json.gz` | hoopR-mbb-raw @ 11e4542f967, 2025-11-23 CCU vs UND, neutral site | every ESPN row carries the header away team's score in `homeScore` (ends 75-58; official UND home 58, CCU 75) |
 | `wbb_400550784.json.gz` | wehoop-wbb-raw @ f6e7d5dc342, 2013-14, two halves | the last two rows were never re-based: ESPN ends 52-54, official 54-56 |
 | `wnba_250603003.json.gz` | `espn_wnba_pbp(250603003, raw=True)` captured 2026-10-12, 2005-06-03 NYL @ TUL | WNBA halves era (`format.regulation.periods` 2); one OT (period 3); End Period tied 54-54 at period 2; no pickcenter; not neutral |
-| `wbb_293170052.json.gz` | `espn_wbb_pbp(293170052, raw=True)` captured 2026-10-12, 2009-11-13 UNF @ FSU | WBB 2010 halves; box turnovers only under `teamTurnovers` (23 / 28; `turnovers` and `totalTurnovers` 0); not neutral |
+| `wbb_293170052.json.gz` | `espn_wbb_pbp(293170052, raw=True)` captured 2026-10-12, 2009-11-13 UNF @ FSU | WBB 2010 halves; box turnovers only under `teamTurnovers` (FSU 23 / UNF 28; `turnovers` and `totalTurnovers` 0); not neutral |
 | `wbb_273130043.json.gz` | `espn_wbb_pbp(273130043, raw=True)` captured 2026-10-12, 2007-11-09 STAN @ YALE | WBB 2008 halves; no turnovers under any box key (all 0) |
 | `mbb_401812161.json.gz` | `espn_mbb_pbp(401812161, raw=True)` captured 2026-10-12, 2026-02-19 UVM @ UMBC | MBB non-neutral conference game, regulation (max period 2), one pickcenter provider |
 | `nba_game_page_golden.json` | `nba_game_page.game_page_frames` output on `summary_nba.json` (league_id "00") and `summary_wnba.json` ("10") at e4894f0817, written before the league generalization | NBA/WNBA byte-identity gate of the league generalization |
