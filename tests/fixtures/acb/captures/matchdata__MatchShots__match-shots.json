@@ -1,0 +1,162 @@
+{
+  "competitionId": 1,
+  "homeTeam": {
+    "id": 4467,
+    "competitionId": 1,
+    "editionId": 91,
+    "clubId": 2,
+    "fullName": "Barça",
+    "shortName": "Barça",
+    "abbreviatedName": "BAR",
+    "primaryColorHex": "#154284",
+    "textColorHex": "#FFFFFF",
+    "logo": "https://static.acb.com/img/www/clubes2024/2324BarcaLogoweb.png",
+    "logoAlt": "Barça logo",
+    "secondaryLogo": "https://static.acb.com/img/www/clubes2024/2324BarcaLogoweb.png",
+    "contrastRequired": false,
+    "shirtColor": "#083C8E",
+    "shirtTextColor": "#FFFFFF"
+  },
+  "awayTeam": {
+    "id": 4472,
+    "competitionId": 1,
+    "editionId": 91,
+    "clubId": 13,
+    "fullName": "Valencia Basket",
+    "shortName": "Valencia Basket",
+    "abbreviatedName": "VBC",
+    "primaryColorHex": "#fc6c0f",
+    "textColorHex": "#000000",
+    "logo": "https://static.acb.com/img/www/clubes2026/202627ValenciaBasket40Anys.png",
+    "logoAlt": "Valencia Basket logo",
+    "secondaryLogo": "https://static.acb.com/img/www/clubes2026/202627ValenciaBasket40Anys.png",
+    "contrastRequired": false,
+    "shirtColor": "#fb6016",
+    "shirtTextColor": "#000000"
+  },
+  "homeTeamShotStats": {
+    "fieldGoals": {
+      "made": 32,
+      "attempted": 68
+    },
+    "twoPointers": {
+      "made": 26,
+      "attempted": 42
+    },
+    "threePointers": {
+      "made": 6,
+      "attempted": 26
+    }
+  },
+  "awayTeamShotStats": {
+    "fieldGoals": {
+      "made": 33,
+      "attempted": 77
+    },
+    "twoPointers": {
+      "made": 26,
+      "attempted": 46
+    },
+    "threePointers": {
+      "made": 7,
+      "attempted": 31
+    }
+  },
+  "homePlayerStats": [
+    {
+      "playerLicenseId": 30005356,
+      "points": 12,
+      "playerName": "J. Nebo",
+      "playerNumber": "32",
+      "playerImage": "https://static.acb.com/media/PRO/00/00/92/99/99/0000929999_5-6_01.jpg"
+    },
+    {
+      "playerLicenseId": 30005357,
+      "points": 6,
+      "playerName": "O. Nkamhoua",
+      "playerNumber": "13",
+      "playerImage": "https://static.acb.com/media/PRO/00/00/93/01/44/0000930144_5-6_01.jpg"
+    },
+    {
+      "playerLicenseId": 30000093,
+      "points": 0,
+      "playerName": "J. Núñez",
+      "playerNumber": "17",
+      "playerImage": "https://static.acb.com/media/PRO/00/00/93/00/20/0000930020_5-6_01.jpg"
+    }
+  ],
+  "awayPlayerStats": [
+    {
+      "playerLicenseId": 30005335,
+      "points": 4,
+      "playerName": "A. Cárdenas",
+      "playerNumber": "7",
+      "playerImage": "https://static.acb.com/media/PRO/00/00/93/09/50/0000930950_5-6_01.jpg"
+    },
+    {
+      "playerLicenseId": 20202101,
+      "points": 10,
+      "playerName": "N. Mirotic",
+      "playerNumber": "33",
+      "playerImage": "https://static.acb.com/media/PRO/00/00/93/28/75/0000932875_5-6_01.jpg"
+    },
+    {
+      "playerLicenseId": 20210392,
+      "points": 5,
+      "playerName": "J. Puerto",
+      "playerNumber": "2",
+      "playerImage": "https://static.acb.com/media/PRO/00/00/93/11/25/0000931125_5-6_01.jpg"
+    }
+  ],
+  "shotPoints": [
+    {
+      "id": 901,
+      "posX": 1426,
+      "posY": -673,
+      "playType": 97,
+      "quarter": 1,
+      "minute": 9,
+      "second": 50,
+      "local": true,
+      "scoreHome": 0,
+      "scoreAway": 0,
+      "playerLicenseId": 30005378,
+      "zone": "paint",
+      "made": false,
+      "points": 2
+    },
+    {
+      "id": 1001,
+      "posX": 484,
+      "posY": 698,
+      "playType": 93,
+      "quarter": 1,
+      "minute": 9,
+      "second": 46,
+      "local": true,
+      "scoreHome": 2,
+      "scoreAway": 0,
+      "playerLicenseId": 20212243,
+      "zone": "restricted_area",
+      "made": true,
+      "points": 2
+    },
+    {
+      "id": 7001,
+      "posX": 0,
+      "posY": 0,
+      "playType": 92,
+      "quarter": 1,
+      "minute": 3,
+      "second": 52,
+      "local": true,
+      "scoreHome": 12,
+      "scoreAway": 15,
+      "playerLicenseId": 30005356,
+      "zone": null,
+      "made": null,
+      "points": null
+    }
+  ],
+  "matchFinished": true
+}
