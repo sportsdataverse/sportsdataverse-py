@@ -91,8 +91,8 @@
           "label": "WBB"
         },
         {
-          "prefix": "fiba",
-          "label": "FIBA"
+          "prefix": "fiba_hub",
+          "label": "FIBA (digital API and game pages)"
         },
         {
           "prefix": "genius",
@@ -103,8 +103,8 @@
           "label": "Sportradar Atrium"
         },
         {
-          "prefix": "nbl",
-          "label": "NBL Australia"
+          "prefix": "nbl_au",
+          "label": "NBL Australia (Rosetta)"
         },
         {
           "prefix": "feb",

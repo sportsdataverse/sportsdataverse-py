@@ -474,12 +474,12 @@ _EURO_HOCKEY_HOMES = ("del", "icehl", "eihl", "metal", "elh", "liiga", "shl", "h
 # The international basketball homes (sdv-internal-refs Phase A intake): one docs/registry prefix each, nested under
 # ``basketball/`` through _NESTED_HOMES below. Ordered as the docs list them. A prefix is the short snake_case name
 # of a provider family, not always a league: ``genius``/``atrium`` serve many competitions, ``scb`` serves BBL and
-# DBBL, ``bnxt`` is the Sportpress family, ``dbl`` the Sportality one, ``plg`` the P. LEAGUE+ pair.
+# DBBL, ``fiba_hub``/``nbl_au`` avoid the ESPN ``fiba``/``nbl`` prefixes (function names keep ``fiba_*``/``nbl_*``), ``bnxt`` is the Sportpress family, ``dbl`` the Sportality one, ``plg`` the P. LEAGUE+ pair.
 _BASKETBALL_HOMES = (
-    "fiba",
+    "fiba_hub",
     "genius",
     "atrium",
-    "nbl",
+    "nbl_au",
     "feb",
     "scb",
     "lba",
@@ -2373,11 +2373,11 @@ FLAT_APIS = [
     # International basketball (sdv-internal-refs Phase A: feb/, scb/, genius-livestats/, atrium-embed/, nbl-rosetta/,
     # fiba/, legabasket/, acb/, ibba/, wjbl/, vtb/, kbl/, bleague/, kzs/, lkl/, tbf/, cebl/, aba-liga/, easl/,
     # sportpress/, tpbl/, pleague/, cba/, sportality/), homed under basketball/<lg>/
-    ("fiba_gdap", "fiba"),
-    ("fiba_gamepage", "fiba"),
+    ("fiba_gdap", "fiba_hub"),
+    ("fiba_gamepage", "fiba_hub"),
     ("genius", "genius"),
     ("atrium", "atrium"),
-    ("nbl_rosetta", "nbl"),
+    ("nbl_rosetta", "nbl_au"),
     ("feb", "feb"),
     ("scb", "scb"),
     ("legabasket", "lba"),
@@ -5197,7 +5197,8 @@ _LEAGUE_LABELS = {
     "magnus": "Ligue Magnus",
     "genius": "Genius Sports LiveStats",
     "atrium": "Sportradar Atrium",
-    "nbl": "NBL Australia",
+    "nbl_au": "NBL Australia (Rosetta)",
+    "fiba_hub": "FIBA (digital API and game pages)",
     "scb": "BBL / DBBL (SCB)",
     "lba": "Lega Basket Serie A",
     "wjbl": "W League (Japan)",
