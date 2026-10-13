@@ -1065,3 +1065,73 @@
   test: tests/validation/test_basketball_clock_seconds.py -k clamp
   expected: kill
   note: The pre-R841-1 hold on a period's last row (end <= start only), which the clamp passes.
+
+# --- C-M10 / C-L35: NBA props + availability as-of boundaries (task 3.7) ---------------------------
+# Killers: tests/nba/test_nba_player_props_asof.py on the committed real 2023-24 corpus and
+# tests/nba/test_nba_availability.py on the committed nba_draft/wnba_draft corpora.
+- id: nba-props-asof-inclusive
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        logs = logs.filter(pl.col("game_date") < as_of_date)'
+  mutant: '        logs = logs.filter(pl.col("game_date") <= as_of_date)'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: The target game's own line moves its projection again (own-line probe red).
+- id: nba-props-asof-no-default-cut
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        as_of_date = own.min() if own.len() else _load_game_date(season, league_id, game_id)'
+  mutant: '        as_of_date = None'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: The default call reads the whole season (own and later lines leak).
+- id: nba-props-asof-drop-only-own-game
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        logs = logs.filter(pl.col("game_date") < as_of_date)'
+  mutant: '        logs = logs.filter(pl.col("game_date") != as_of_date)'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: R774-3's shape -- the target date dropped but every later game kept (later-line probe red).
+- id: nba-props-asof-ratings-uncut
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    ratings = _load_ratings(season, league_id, as_of_date=as_of_date)'
+  mutant: '    ratings = _load_ratings(season, league_id)'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: The pace ratings snapshot is full-season while the box logs are cut.
+- id: nba-props-asof-silent-without-date
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    if "game_date" not in logs.columns:'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_player_props_asof.py -k without_game_date
+  expected: kill
+  note: >-
+    Logs without game_date would skip the cut. Killed by the error TYPE changing (the default-cut
+    lookup then raises polars ColumnNotFoundError, not the ValueError the test matches), not by a
+    silent leak: the guard only names the failure (R850-2).
+- id: nba-props-asof-no-schedule-fallback
+  group: nba-props-asof
+  finding: R850-1
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        as_of_date = own.min() if own.len() else _load_game_date(season, league_id, game_id)'
+  mutant: '        as_of_date = own.min() if own.len() else None'
+  test: tests/nba/test_nba_player_props_asof.py -k schedule_date
+  expected: kill
+  note: A played game missing from the box logs is projected with no cut (its later lines leak).
+- id: nba-availability-median-ref-from-scored-rows
+  group: nba-props-asof
+  finding: C-L35
+  file: sportsdataverse/nba/nba_availability.py
+  snippet: 'median_ref=_load_artifact(league).get("median_ref"))'
+  mutant: 'median_ref=None)'
+  test: tests/nba/test_nba_availability.py -k scored_seasons_own_gp
+  expected: kill
+  note: Imputation medians taken from the scored seasons' own GP (the label) again.

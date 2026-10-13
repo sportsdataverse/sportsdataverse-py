@@ -199,3 +199,52 @@ def test_availability_runtime_dedups_duplicate_player_id(monkeypatch: pytest.Mon
     # one row per player (player 1 deduped to a single row), not doubled
     assert out.height == 2
     assert sorted(out["player_id"].to_list()) == ["1", "2"]
+
+
+def _fit_gp_median(fixture: str, min_season: int, cutoff: int, full: float, dedup: bool) -> float:
+    s = pl.read_parquet(f"tests/fixtures/{fixture}/season_stats_raw.parquet")
+    if dedup:  # the WNBA fit script's dedup, verbatim
+        s = s.sort("min", descending=True, maintain_order=True).unique(
+            subset=["player_id", "season_id"], keep="first", maintain_order=True
+        )
+    c = s.with_columns(pl.col("season_id").str.slice(0, 4).cast(pl.Int64).alias("season"))
+    train = c.filter((pl.col("season") >= min_season) & (pl.col("season") <= cutoff))
+    return float((train["gp"].cast(pl.Float64) / full).clip(0.0, 1.0).median())
+
+
+@pytest.mark.parametrize(
+    ("league", "fixture", "min_season", "full", "dedup"),
+    [("nba", "nba_draft", 2000, 82.0, False), ("wnba", "wnba_draft", 1997, 40.0, True)],
+)
+def test_stored_median_ref_is_the_train_season_median(league, fixture, min_season, full, dedup) -> None:
+    """C-L35 lineage: the artifact's median_ref is the fit script's train-season median on the committed corpus."""
+    mod = importlib.import_module("sportsdataverse.nba.nba_availability")
+    art = mod._load_artifact(league)
+    want = _fit_gp_median(fixture, min_season, int(art["cutoff_season"]), full, dedup)
+    assert art["median_ref"] == {"gp_pct": pytest.approx(want, abs=1e-12), "bmi": 24.0}
+
+
+def test_runtime_imputation_ignores_the_scored_seasons_own_gp(monkeypatch: pytest.MonkeyPatch) -> None:
+    """C-L35: a first-season player's imputed prior/career GP% must not move when OTHER players' GP in the
+    scored season (the label) changes. Real 2018-19 corpus rows (tests/fixtures/nba_draft)."""
+    mod = importlib.import_module("sportsdataverse.nba.nba_availability")
+    raw = pl.read_parquet(f"{FIXTURE_DIR}/season_stats_raw.parquet").select(
+        "player_id", "season_id", pl.col("player_age").alias("age"), "gp"
+    )
+    first = raw.group_by("player_id").agg(pl.col("season_id").min().alias("first"))
+    rookie = first.filter(pl.col("first") == "2018-19").sort("player_id")["player_id"][0]
+
+    def _run(gp_scored_others: int | None) -> float:
+        def _fake(season: str, league_id: str | None = None) -> pl.DataFrame:
+            out = raw.filter(pl.col("season_id") == season)
+            if season == "2018-19" and gp_scored_others is not None:
+                out = out.with_columns(
+                    pl.when(pl.col("player_id") == rookie).then(pl.col("gp")).otherwise(gp_scored_others).alias("gp")
+                )
+            return out.drop("season_id")
+
+        monkeypatch.setattr(mod, "nba_stats_leaguedashplayerstats", _fake)
+        out = mod.nba_availability(2019)
+        return float(out.filter(pl.col("player_id") == str(rookie))["avail_pct"][0])
+
+    assert _run(None) == pytest.approx(_run(0), abs=1e-12)

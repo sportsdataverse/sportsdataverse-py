@@ -15,5 +15,10 @@
     0.00538158802524432
   ],
   "intercept": 0.00022502034140326968,
-  "cutoff_season": 2018
+  "cutoff_season": 2018,
+  "median_ref": {
+    "gp_pct": 0.775,
+    "bmi": 24.0
+  },
+  "cutoff_season_note": "cutoff_season is the first four characters of the corpus season_id ('2018-19' -> 2018), i.e. the WNBA season's own year (start = end): train = seasons <= 2018. median_ref = median train GP% (gp / 40) over those seasons."
 }

@@ -314,7 +314,7 @@ print(d.sort("matchup_drapm", descending=True).head())
 
 ### wnba_player_props {#wnba_player_props}
 
-`wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.
 
@@ -327,6 +327,7 @@ WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba
 | `home_team_id` | `str` |  |  |
 | `away_team_id` | `str` |  |  |
 | `league_id` | `str` | `'00'` |  |
+| `as_of_date` | `Union[date, None]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**

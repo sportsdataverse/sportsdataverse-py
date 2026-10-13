@@ -303,6 +303,26 @@ class EraCoverageWarning(UserWarning):
     """
 
 
+class AsOfCutWarning(UserWarning):
+    """Warned when a pregame projection could not place its target game in time.
+
+    :func:`sportsdataverse.nba.nba_player_props.nba_player_props` defaults its
+    ``as_of_date`` to the target game's date, read from the box logs and then
+    the schedule. When the game id is in neither, no as-of cut is applied and
+    every logged game feeds the projection, so a played game missing from both
+    (a box-score gap, a wrong ``season``) could see its own line. Pass
+    ``as_of_date`` explicitly to cut anyway.
+
+    Example:
+        Make it an error in a backtest::
+
+            import warnings
+            from sportsdataverse.errors import AsOfCutWarning
+
+            warnings.filterwarnings("error", category=AsOfCutWarning)
+    """
+
+
 def no_espn_data(response: "requests.Response") -> "requests.Response":
     """Validate an ESPN response, raising :class:`NoDataError` if empty.
 

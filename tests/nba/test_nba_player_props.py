@@ -7,6 +7,7 @@ observed value at gate time rounded to the safe side.
 from __future__ import annotations
 
 import importlib
+from datetime import date
 from pathlib import Path
 
 import polars as pl
@@ -29,6 +30,7 @@ def _mini_logs() -> pl.DataFrame:
     return pl.DataFrame(
         {
             "game_id": ["G1", "G2", "G1"],
+            "game_date": [date(2024, 1, 1), date(2024, 1, 3), date(2024, 1, 1)],
             "player_id": ["P", "P", "Q"],
             "team_id": ["A", "A", "B"],
             "minutes": [20.0, 20.0, 10.0],
@@ -148,7 +150,9 @@ def test_nba_player_props_orchestrator(monkeypatch) -> None:
     )
     mod = importlib.import_module("sportsdataverse.nba.nba_player_props")
     monkeypatch.setattr(mod, "_load_player_logs", lambda season, league_id: logs)
-    monkeypatch.setattr(mod, "_load_ratings", lambda season, league_id: ratings)
+    monkeypatch.setattr(mod, "_load_ratings", lambda season, league_id, as_of_date=None: ratings)
+    # G3 is scheduled after the logged games (unplayed): its schedule date is the cut.
+    monkeypatch.setattr(mod, "_load_game_date", lambda season, league_id, game_id: date(2024, 1, 5))
 
     out = nba_player_props(2024, "G3", "A", "B", league_id="00")
     assert set(out.columns) >= {
