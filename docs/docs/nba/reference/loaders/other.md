@@ -20,8 +20,8 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `type_id` | Int32 | Type identifier (numeric). |
 | `type_text` | String | Display text for the type field. |
 | `text` | String | Text description of the play / record. |
-| `away_score` | Int32 | Away team score at the time of the play. |
-| `home_score` | Int32 | Home team score at the time of the play. |
+| `away_score` | Int32 | Away team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value. |
+| `home_score` | Int32 | Home team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value. |
 | `period_number` | Int32 | Numeric period (1-4 for quarters; 5+ for OT). |
 | `period_display_value` | String | Period display label (e.g. '1st Quarter', 'OT'). |
 | `clock_display_value` | String | Game clock display string (e.g. '8:32'). |
@@ -81,6 +81,7 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `athlete_name_2` | String | Name of the secondary athlete involved in the play (e.g. the assister or fouled player). |
 | `athlete_name_3` | String | Name of the tertiary athlete involved in the play. |
 | `type_abbreviation` | String | Type abbreviation. |
+| `score_source` | String | Where this game's home_score/away_score come from: 'rebuilt' (summed from the scoring plays and equal to the official final on the last play) or 'espn' (ESPN's per-play values, kept when the rebuild misses the final or the game has no final). Absent from seasons published before the repair. Select it by name: it is the play-by-play builder's last column, but a release can carry columns after it. |
 
 ```python
 load_nba_pbp(seasons=2024)

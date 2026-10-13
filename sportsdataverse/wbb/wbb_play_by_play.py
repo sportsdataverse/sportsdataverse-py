@@ -21,6 +21,12 @@ the R away-first ``id_vars`` branch plucks the DARK logo for ``homeTeamLogo``
 port normalizes both teams to ``logos[0]``/``logos[1]`` with null fallbacks;
 and the nested-``participants`` compat unnest emits no ``play_id`` companion
 column and tolerates 0-3 participants where R assumes exactly 2.
+
+Running score: ``home_score``/``away_score`` are rebuilt from the scoring plays and kept
+only when the rebuild reproduces the header final; otherwise ESPN's per-play values are
+kept, and ``score_source`` (``"rebuilt"``/``"espn"``) says which. The same rule is ported
+to the hoopR / wehoop R helpers; their PRs land before any producer republish (see
+``_repair_running_score``).
 """
 
 from __future__ import annotations
@@ -94,6 +100,11 @@ _COORD_COLS: tuple[str, ...] = (
     "coordinate_y_raw",
 )
 
+# Free-throw play types: NBA/WNBA "Free Throw - 1 of 2", college "MadeFreeThrow".
+_FREE_THROW = r"(?i)free ?throw"
+# Builder columns the running-score rebuild reads; a frame missing any keeps ESPN's scores.
+_SCORE_INPUTS: tuple[str, ...] = ("scoring_play", "score_value", "team_id", "type_text", "home_score", "away_score")
+
 __all__ = ["helper_wbb_play_by_play"]
 
 
@@ -154,6 +165,11 @@ def helper_wbb_play_by_play(final: dict) -> pl.DataFrame:
         pl.DataFrame: One row per play. Empty (zero-column) frame when the
         payload has ``playByPlaySource == "none"`` or 10 or fewer plays
         (R guard) -- season builders skip empty frames.
+        ``home_score`` / ``away_score`` are rebuilt from the scoring plays
+        when that reproduces the header's official final, otherwise they are
+        ESPN's per-play values; the last column, ``score_source``
+        (``"rebuilt"`` / ``"espn"``), says which. Select it by name: a
+        release built from this frame can carry columns after it.
 
     Example:
         Quick start::
@@ -189,7 +205,8 @@ def _basketball_play_by_play(
     ``clock_seconds`` and the six ``*_seconds_remaining`` columns Float64,
     where WBB releases them Int32 (and WNBA names a third participant athlete
     column, which this core already emits for both). Callers pass their
-    league's cast tuples; everything else is shared verbatim.
+    league's cast tuples; everything else is shared verbatim. The last step is
+    :func:`_repair_running_score`, shared by all four leagues.
     """
     header = final.get("header") or {}
     competitions = header.get("competitions") or []
@@ -292,8 +309,63 @@ def _basketball_play_by_play(
         df = df.with_columns([pl.lit(None, dtype=pl.Float64).alias(c) for c in _COORD_COLS])
 
     # Released dtype contract (except `id` -- see _INT64_COLS).
-    return df.with_columns(
+    df = df.with_columns(
         [pl.col(c).cast(pl.Int32, strict=False) for c in int32_cols if c in df.columns]
         + [pl.col(c).cast(pl.Int64, strict=False) for c in _INT64_COLS if c in df.columns]
         + [pl.col(c).cast(pl.Float64, strict=False) for c in float64_cols if c in df.columns]
     )
+    return _repair_running_score(df, competitors)
+
+
+def _repair_running_score(df: pl.DataFrame, competitors: list[dict[str, Any]]) -> pl.DataFrame:
+    """Rebuild the running score from the scoring plays when that reproduces the official final.
+
+    ESPN writes each play's ``homeScore``/``awayScore`` from the live scoreboard at the moment
+    the row is keyed. A play keyed late (a technical free throw entered after play resumed)
+    gets the right score on its own row, but rows already written are never re-based, so the
+    feed runs backwards and can end short of the final (NBA 401766458: 119-95 against 120-95).
+    College neutral-site feeds can carry the away team's score in ``homeScore`` for a whole game.
+
+    The rebuild sums each scoring play's points in ESPN's array order (never re-sorted:
+    ``sequence_number`` is not chronological), crediting the header's home or away team by
+    ``team_id``. A made free throw shipped with ``scoreValue`` 0 (NBA/WNBA 2013-2019) counts 1.
+    The rebuilt pair replaces ESPN's on every row only when its last row equals the header
+    final; otherwise every row keeps ESPN's value. ``score_source`` (last column) records which:
+    ``"rebuilt"`` or ``"espn"``.
+
+    Args:
+        df: The builder frame after the released dtype casts.
+        competitors: ``header.competitions[0].competitors`` of the same payload.
+
+    Returns:
+        pl.DataFrame: ``df`` with ``home_score`` / ``away_score`` (Int32) rebuilt or untouched,
+        plus ``score_source`` (String).
+    """
+    home = next((c for c in competitors if c.get("homeAway") == "home"), {})
+    away = next((c for c in competitors if c.get("homeAway") != "home"), {})
+    home_id = _to_int((home.get("team") or {}).get("id"))
+    away_id = _to_int((away.get("team") or {}).get("id"))
+    final = (_to_int(home.get("score")), _to_int(away.get("score")))
+    espn = df.with_columns(pl.lit("espn").alias("score_source"))
+    if home_id is None or away_id is None or None in final or not set(_SCORE_INPUTS).issubset(df.columns):
+        return espn
+    points = (
+        pl.when(pl.col("scoring_play") == True)
+        .then(
+            pl.when(pl.col("score_value") > 0)
+            .then(pl.col("score_value"))
+            .when(pl.col("type_text").str.contains(_FREE_THROW))
+            .then(1)
+            .otherwise(0)
+        )
+        .otherwise(0)
+        .fill_null(0)
+        .cast(pl.Int32)
+    )
+    rebuilt = df.select(
+        pl.when(pl.col("team_id") == home_id).then(points).otherwise(0).cum_sum().cast(pl.Int32).alias("home_score"),
+        pl.when(pl.col("team_id") == away_id).then(points).otherwise(0).cum_sum().cast(pl.Int32).alias("away_score"),
+    )
+    if rebuilt.row(rebuilt.height - 1) != final:
+        return espn
+    return df.with_columns([*rebuilt.get_columns(), pl.lit("rebuilt").alias("score_source")])
