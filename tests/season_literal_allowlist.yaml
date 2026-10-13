@@ -85,7 +85,7 @@
   snippet: 'pl.col("season") <= 2013'
   count: 3
   id: C-T3
-  reason: 'defensive-score EP adjustment era cut at 2014, ported from the CFB processor (whose twin reads cfb/model_vars.py CFB_MODEL_ERA_CUTS since task 3.11); no rules/nfl.yaml entry, and it is not an nflfastR era bin, so it stays inline'
+  reason: 'the +0.92 expected-try adjustment while ESPN writes the try as its own row (through 2013), ported from the CFB processor, whose twin reads cfb/model_vars.py CFB_ESPN_TRY_ON_TD_ROW_FROM; no rules/nfl.yaml entry yet, so it stays inline'
 - file: sportsdataverse/nfl/nfl_roster_builder.py
   scope: '_relocate_team'
   snippet: 'season >= 2016'

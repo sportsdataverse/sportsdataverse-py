@@ -789,13 +789,14 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
     # flip possession to the receiving team's ensuing drive
     flipped_state = _flip_team_state(state[list(_PBP_COLS.keys())])
     # receiving team starts at (100 - yards_to_goal_end); a return TD (end==100)
-    # is handled by giving the punting team a kickoff at the 25 (handled via flip-back)
+    # is handled by giving the punting team a kickoff touchback (handled via flip-back)
     return_td = ytg_end == 100
     new_ytg = 100 - ytg_end
-    # return TD: receiving team scored, punting team now receives kickoff at the 25.
+    # return TD: receiving team scored, punting team now receives a kickoff touchback.
     # net effect on the (already once-flipped) receiving-team frame: flip score by
-    # -7 and place ball at 75 from the punting team's perspective. cfb4th sets
-    # yards_to_goal = 75 and pos_score_diff_start = -pos_diff - 7 on the punting team.
+    # -7 and place the ball at the season's touchback spot (TOUCHBACK_YARDLINE_BY_SEASON)
+    # from the punting team's perspective. cfb4th sets yards_to_goal = 75 (every season)
+    # and pos_score_diff_start = -pos_diff - 7 on the punting team.
     new_ytg = np.where(return_td, _cfb_touchback_yardline_np(flipped_state["season"]), new_ytg)
     flipped_state["yards_to_goal"] = new_ytg
     # punt distance distribution already excludes muffs; on a return TD undo the
@@ -1050,7 +1051,10 @@ def get_4th_down_probs(pbp_df) -> pd.DataFrame:
     """Full 4th-down decision surface (cfb4th ``add_4th_probs``) + recommendation.
 
     Runs :func:`get_go_wp`, :func:`get_fg_wp`, :func:`get_punt_wp` on the
-    fourth-down rows and adds the combined option columns plus:
+    fourth-down rows and adds the combined option columns plus the ones below. A
+    post-score kickoff (go touchdown, punt return touchdown, made field goal) is a
+    touchback at the season's spot (``model_vars.TOUCHBACK_YARDLINE_BY_SEASON``: 80 to go
+    through 2011, 75 from 2012); a null season takes the pre-2012 spot (80).
 
     * ``fourth_down_recommendation`` -- the max-WP choice among ``{go, punt,
       field_goal}`` (NaN options are excluded; when the FG model isn't bundled,
