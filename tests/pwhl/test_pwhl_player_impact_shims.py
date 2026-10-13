@@ -14,6 +14,7 @@ from sportsdataverse.nhl.nhl_special_teams import nhl_special_teams_value
 from sportsdataverse.nhl.nhl_unit_ratings import nhl_unit_ratings
 from sportsdataverse.nhl.nhl_war import nhl_skater_war
 from sportsdataverse.nhl.nhl_xg import nhl_xg
+from sportsdataverse.pwhl._impact_contract import adapt_pwhl_pbp
 from sportsdataverse.pwhl.pwhl_player_impact import (
     pwhl_goalie_gsax,
     pwhl_skater_rapm,
@@ -73,3 +74,12 @@ def test_pwhl_rapm_family_runs_when_shifts_coverage_is_sufficient():
     shifts = pl.read_parquet(FIX / "shifts_sample.parquet")
     rapm = pwhl_skater_rapm(pbp, shifts, model_dir=MODELS)
     assert rapm.height > 0
+
+
+def test_hockeytech_adapter_rejects_a_raw_canvas_frame():
+    pbp = pl.read_parquet(
+        Path(__file__).parent.parent / "fixtures" / "pwhl_player_impact" / "play_by_play_2025_slice.parquet"
+    )
+    raw = pbp.with_columns(x_coord=pl.col("x_coord") * 3 + 300)  # the 0-600 HockeyTech canvas
+    with pytest.raises(ValueError, match="RAW HockeyTech feed scale"):
+        adapt_pwhl_pbp(raw)

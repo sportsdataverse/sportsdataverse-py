@@ -154,3 +154,10 @@ def test_pwhl_game_total_defaults_league_pwhl(monkeypatch):
     out = pwhl_props.pwhl_game_total(pl.DataFrame(), pl.DataFrame())
     assert captured["league"] == "pwhl"
     assert out.height == 1
+
+
+def test_pwhl_team_ratings_league_keyword_is_deprecated_and_ignored(loader_calls):
+    with pytest.warns(DeprecationWarning, match=r"pwhl_team_ratings\(league=\.\.\.\) is deprecated"):
+        out = pwhl_ratings.pwhl_team_ratings(2025, league="nhl")
+    assert out.equals(pwhl_ratings.pwhl_team_ratings(2025))
+    assert "load_pwhl_pbp" in loader_calls

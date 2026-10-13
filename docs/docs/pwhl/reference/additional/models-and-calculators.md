@@ -181,7 +181,7 @@ mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 
 ### pwhl_team_ratings {#pwhl_team_ratings}
 
-`pwhl_team_ratings(seasons: 'Any', **kwargs: 'Any') -> 'Any'`
+`pwhl_team_ratings(seasons: 'Any', *, league: 'Any' = None, **kwargs: 'Any') -> 'Any'`
 
 PWHL opponent-adjusted, shrunk even-strength xG team ratings.
 
@@ -193,6 +193,7 @@ which loads PWHL pbp, schedules and game info only.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `Any` |  | an int or iterable of PWHL season end-years (`>= 2024`). |
+| `league` | `Any` | `None` | deprecated and ignored (the ratings are always PWHL); passing it warns. |
 
 **Returns**
 

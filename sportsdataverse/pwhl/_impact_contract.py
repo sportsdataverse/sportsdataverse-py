@@ -8,13 +8,19 @@ period-clock ``start_s`` / ``end_s``. :func:`adapt_pwhl_impact_inputs` maps one 
 
 What the HockeyTech feed cannot supply, and how the adapter handles it:
 
-- No missed shots: only on-net shots and goals reach the borrowed xG boosters.
+- No missed shots: ``xg`` is :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg` on the on-net
+  shots (the PWHL coordinate model ``pwhl_team_ratings`` uses), never the NHL boosters, which run
+  ~1/3 low on PWHL shots (goals / sum(xg) on full 2025: 0.74 overall, 0.65 at 5v5). Penalty shots
+  take ``nhl_xg``'s published penalty-shot constant. The engines are called with ``xg_scored=True``.
 - Faceoffs name only the home taker (``player_id`` + ``home_win``); the away taker is absent, so the
   WAR faceoff component counts home takers only.
 - Penalties name the taker; the drawer is absent (``player_two_id`` is the server), so the WAR
   penalty component counts penalties taken only.
 - Strength comes from the feed's shift-derived ``strength_state`` (home v away) where
-  ``strength_state_valid``; elsewhere it is null and the shot is left unscored.
+  ``strength_state_valid``. Elsewhere (430 of the 5,671 on-net shot rows of 2025, 7.6%, are flagged invalid) the
+  row carries the last valid strength of its game, as every inserted ``CHANGE`` row does. A carried
+  strength lags any change the feed only reports at its next event, so strength transitions land
+  late: the seconds after a penalty starts or expires are credited to the previous state.
 
 A required source column that is absent raises ``ValueError`` naming it; the output is checked
 against :data:`IMPACT_PBP_CONTRACT` / :data:`IMPACT_SHIFTS_CONTRACT` before it is returned.
@@ -22,7 +28,12 @@ against :data:`IMPACT_PBP_CONTRACT` / :data:`IMPACT_SHIFTS_CONTRACT` before it i
 
 from __future__ import annotations
 
+from typing import Any
+
 import polars as pl
+
+from sportsdataverse.nhl.nhl_xg import _PS_DEFAULT
+from sportsdataverse.pwhl.pwhl_xg_proxy import _assert_rink_feet, pwhl_shot_xg
 
 #: Columns (and dtypes) the NHL impact engines read off the pbp; asserted on the adapter output.
 IMPACT_PBP_CONTRACT: dict[str, pl.DataType] = {
@@ -41,8 +52,7 @@ IMPACT_PBP_CONTRACT: dict[str, pl.DataType] = {
     "x": pl.Float64(),
     "y": pl.Float64(),
     "x_fixed": pl.Float64(),
-    "shot_distance": pl.Float64(),
-    "shot_angle": pl.Float64(),
+    "xg": pl.Float64(),
     "empty_net": pl.Boolean(),
     "strength_state": pl.Utf8(),
     "home_skaters": pl.Int64(),
@@ -63,7 +73,7 @@ IMPACT_SHIFTS_CONTRACT: dict[str, pl.DataType] = {
 
 _PBP_SOURCE = (
     "game_id", "event", "event_type", "team_id", "period_of_game", "time_of_period", "x_coord", "y_coord",
-    "x_coord_fixed", "shot_distance", "shot_angle", "player_id", "goal", "goalie_id", "home_win", "empty_net", "game_season", "home_team",
+    "x_coord_fixed", "player_id", "goal", "goalie_id", "home_win", "empty_net", "game_season", "home_team",
     "home_team_id", "away_team", "away_team_id", "strength_state", "strength_state_valid", "skaters_home",
     "skaters_away",
 )  # fmt: skip
@@ -99,15 +109,18 @@ def is_hockeytech_pbp(pbp: pl.DataFrame) -> bool:
     return "event" in pbp.columns and "event_id" not in pbp.columns
 
 
-def adapt_pwhl_pbp(pbp: pl.DataFrame) -> pl.DataFrame:
+def adapt_pwhl_pbp(pbp: pl.DataFrame, *, xg_model: Any = None) -> pl.DataFrame:
     """Map a ``load_pwhl_pbp`` frame onto :data:`IMPACT_PBP_CONTRACT`.
 
     Shot rows become ``SHOT`` / ``GOAL`` by their ``goal`` flag; the HockeyTech goal-summary row that
     follows every scoring shot is dropped after lending the shot its ``empty_net`` flag, so each goal
-    is counted once. Shootout rows are dropped (the engines never score them).
+    is counted once. Shootout rows are dropped (the engines never score them). ``xg`` is
+    :func:`pwhl_shot_xg` on the on-net shots.
 
     Args:
-        pbp: a ``load_pwhl_pbp``-shaped frame.
+        pbp: a ``load_pwhl_pbp``-shaped frame in rink feet (a raw 0-600 canvas frame raises).
+        xg_model: a fitted ``PwhlCoordXGModel`` passed to :func:`pwhl_shot_xg`; ``None`` fits one
+            on ``pbp`` (pass a model fit on a full season when adapting a few games).
 
     Returns:
         polars.DataFrame: ``pbp`` reduced to the contract columns, in feed order.
@@ -116,6 +129,16 @@ def adapt_pwhl_pbp(pbp: pl.DataFrame) -> pl.DataFrame:
         ValueError: a source column is missing, or the output breaks the contract.
     """
     _require(pbp, _PBP_SOURCE, "PWHL pbp")
+    _assert_rink_feet(pbp)
+    pbp = pbp.with_row_index("_row")
+    # pwhl_shot_xg scores the `event == "shot"` rows and returns them in pbp order.
+    on_net = pbp.filter(pl.col("event") == "shot")
+    scored = pwhl_shot_xg(pbp.drop("_row"), model=xg_model)
+    assert scored.height == on_net.height, f"pwhl_shot_xg scored {scored.height} of {on_net.height} shots"
+    for key in ("game_id", "player_id"):
+        aligned = on_net[key].cast(pl.Int64).eq_missing(scored[key].cast(pl.Int64)).all()
+        assert aligned, f"pwhl_shot_xg rows are not in pbp order ({key})"
+    pbp = pbp.join(on_net.select("_row").with_columns(_xg=scored["xg"]), on="_row", how="left")
     period_raw = pl.col("period_of_game")
     period = (
         pl.when(period_raw.str.starts_with("OT"))
@@ -146,7 +169,7 @@ def adapt_pwhl_pbp(pbp: pl.DataFrame) -> pl.DataFrame:
             .then(pl.when(pl.col("goal") == True).then(pl.lit("GOAL")).otherwise(pl.lit("SHOT")))
             .otherwise(pl.col("event").replace_strict(_EVENT_TYPE, default=None)),
             secondary_type=pl.when(pl.col("event") == "penaltyshot")
-            .then(pl.lit("penalty shot"))
+            .then(pl.lit("Penalty Shot"))
             .when(shot)
             .then(pl.col("event_type").replace_strict(_SHOT_TYPE, default=None)),
             event_team_abbr=pl.when(pl.col("event") == "faceoff")
@@ -158,9 +181,7 @@ def adapt_pwhl_pbp(pbp: pl.DataFrame) -> pl.DataFrame:
             x=pl.col("x_coord").cast(pl.Float64),
             y=pl.col("y_coord").cast(pl.Float64),
             x_fixed=pl.col("x_coord_fixed").cast(pl.Float64),
-            # booster features: `nhl_xg` reads them off the pbp and zero-fills an absent one.
-            shot_distance=pl.col("shot_distance").cast(pl.Float64),
-            shot_angle=pl.col("shot_angle").cast(pl.Float64),
+            xg=pl.when(pl.col("event") == "penaltyshot").then(pl.lit(_PS_DEFAULT)).otherwise(pl.col("_xg")),
             empty_net=(pl.col("_empty_net") == "1").fill_null(False),
             strength_state=pl.when(valid).then(pl.col("strength_state")),
             home_skaters=pl.when(valid).then(pl.col("skaters_home").cast(pl.Int64)),
@@ -174,6 +195,7 @@ def adapt_pwhl_pbp(pbp: pl.DataFrame) -> pl.DataFrame:
             .then(pl.col("player_id"))
             .cast(pl.Int64),
         )
+        .sort("_row")
         .with_columns(pl.col("game_id").cast(pl.Int64))
         .select(list(IMPACT_PBP_CONTRACT))
     )
@@ -246,22 +268,27 @@ def adapt_pwhl_shifts(shifts: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
     return _check_contract(out, IMPACT_SHIFTS_CONTRACT, "adapted PWHL shifts")
 
 
-def adapt_pwhl_impact_inputs(pbp: pl.DataFrame, shifts: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
+def adapt_pwhl_impact_inputs(
+    pbp: pl.DataFrame, shifts: pl.DataFrame, *, xg_model: Any = None
+) -> tuple[pl.DataFrame, pl.DataFrame]:
     """Adapt a HockeyTech pbp + shift pair for the NHL impact engines; NHL-shaped input passes through.
 
     Args:
         pbp: a ``load_pwhl_pbp``-shaped (or already ``load_nhl_pbp_full``-shaped) frame.
         shifts: the matching ``load_pwhl_shifts``-shaped (or ``load_nhl_shifts``-shaped) frame.
+        xg_model: forwarded to :func:`adapt_pwhl_pbp`.
 
     Returns:
         tuple: ``(pbp, shifts)`` on the NHL contract. Like ``load_nhl_pbp_full``, the pbp carries a
-        ``CHANGE`` row at every line change; its strength is the last valid strength the feed
-        reported in that game, so a stint with no other event still gets a ``strength_state``
-        (``build_stints`` reads it off the events inside the stint; ``nhl_xg`` drops ``CHANGE`` rows).
+        ``CHANGE`` row at every line change. A ``CHANGE`` row, and any event the feed flags as
+        invalid strength, takes the last valid strength reported in that game, so a stint with no
+        other event still gets a ``strength_state`` (``build_stints`` reads it off the events
+        inside the stint). The carried strength lags a change the feed only reports at its next
+        event, so strength transitions land late, never early.
     """
     if not is_hockeytech_pbp(pbp):
         return pbp, shifts
-    events, chart = adapt_pwhl_pbp(pbp), adapt_pwhl_shifts(shifts, pbp)
+    events, chart = adapt_pwhl_pbp(pbp, xg_model=xg_model), adapt_pwhl_shifts(shifts, pbp)
     games = events.group_by("game_id").agg(pl.col("season", "home_abbr", "away_abbr").first())
     changes = (
         chart.select("game_id", "period", "game_seconds", pl.col("team_abbr").alias("event_team_abbr"))
@@ -273,16 +300,10 @@ def adapt_pwhl_impact_inputs(pbp: pl.DataFrame, shifts: pl.DataFrame) -> tuple[p
         )
     )
     state = ("strength_state", "home_skaters", "away_skaters")
-    is_change = pl.col("event_type") == "CHANGE"
     out = (
         pl.concat([events, changes], how="diagonal_relaxed")
         .sort("game_id", "game_seconds", maintain_order=True)
-        .with_columns(
-            [
-                pl.when(is_change).then(pl.col(c).forward_fill().over("game_id")).otherwise(pl.col(c)).alias(c)
-                for c in state
-            ]
-        )
+        .with_columns([pl.col(c).forward_fill().over("game_id").alias(c) for c in state])
         .with_columns(
             event_idx=pl.int_range(pl.len(), dtype=pl.Int64),
             event_id=pl.int_range(pl.len(), dtype=pl.Int64).over("game_id"),

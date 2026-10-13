@@ -645,7 +645,7 @@ One row per game in the window, as the feed ships it (String): `id`, `season_id`
 
 ### pwhl_skater_rapm {#pwhl_skater_rapm}
 
-`pwhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
+`pwhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, xg_model: 'Any' = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ② PWHL skater xG RAPM -- shim over `nhl_skater_rapm` with `league='pwhl'`.
 
@@ -659,7 +659,8 @@ too thin.
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
 | `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
-| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+| `model_dir` | `str \| None` | `None` | booster directory for NHL-shaped input (the borrowed NHL xG boosters). |
+| `xg_model` | `Any` | `None` | a fitted `PwhlCoordXGModel` scoring HockeyTech input; `None` fits one on `pbp` (see `sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). |
 
 **Returns**
 
@@ -677,7 +678,7 @@ rapm = pwhl_skater_rapm(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 
 ### pwhl_skater_war {#pwhl_skater_war}
 
-`pwhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
+`pwhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, xg_model: 'Any' = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ③ PWHL GAR/WAR composite -- shim over `nhl_skater_war` with `league='pwhl'`.
 
@@ -689,7 +690,8 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
 | `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
-| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+| `model_dir` | `str \| None` | `None` | booster directory for NHL-shaped input (the borrowed NHL xG boosters). |
+| `xg_model` | `Any` | `None` | a fitted `PwhlCoordXGModel` scoring HockeyTech input; `None` fits one on `pbp` (see `sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). |
 
 **Returns**
 
@@ -707,7 +709,7 @@ war = pwhl_skater_war(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 
 ### pwhl_special_teams_value {#pwhl_special_teams_value}
 
-`pwhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
+`pwhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, xg_model: 'Any' = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ⑥ PWHL special-teams value -- shim over `nhl_special_teams_value` with `league='pwhl'`.
 
@@ -719,7 +721,8 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
 | `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
-| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+| `model_dir` | `str \| None` | `None` | booster directory for NHL-shaped input (the borrowed NHL xG boosters). |
+| `xg_model` | `Any` | `None` | a fitted `PwhlCoordXGModel` scoring HockeyTech input; `None` fits one on `pbp` (see `sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). |
 
 **Returns**
 
@@ -1011,7 +1014,7 @@ One row per transaction on the feed's current page (the newest 20): `transaction
 
 ### pwhl_unit_ratings {#pwhl_unit_ratings}
 
-`pwhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
+`pwhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, xg_model: 'Any' = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`.
 
@@ -1023,7 +1026,8 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
 | `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
-| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+| `model_dir` | `str \| None` | `None` | booster directory for NHL-shaped input (the borrowed NHL xG boosters). |
+| `xg_model` | `Any` | `None` | a fitted `PwhlCoordXGModel` scoring HockeyTech input; `None` fits one on `pbp` (see `sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). |
 
 **Returns**
 

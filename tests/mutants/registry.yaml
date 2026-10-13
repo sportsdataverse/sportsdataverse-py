@@ -883,25 +883,26 @@
   group: pwhl-impact-routing
   finding: C-NF-5
   file: sportsdataverse/pwhl/_impact_contract.py
-  snippet: '            secondary_type=pl.when(pl.col("event") == "penaltyshot")'
-  mutant: '            _secondary_type_unmapped=pl.when(pl.col("event") == "penaltyshot")'
+  snippet: '            .then(pl.col("event_type").replace_strict(_SHOT_TYPE, default=None)),'
+  mutant: '            .then(pl.lit(None, dtype=pl.Utf8)),'
   test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_rapm_fits_shift_chart_skaters
   expected: kill
   note: >-
-    Ledger gate pwhl-impact-on-real-pbp MUTATION: without the HockeyTech shot-type mapping the engines
-    meet no `secondary_type` column again (the contract select raises ColumnNotFoundError).
+    Ledger gate pwhl-impact-on-real-pbp MUTATION, strengthened (review R846-1, reviewer mutant X1):
+    every secondary_type null. The old row only removed the column, which the contract check catches;
+    this one keeps the column and needs the per-type coverage assertion (174 of 296 typed shots).
 
 - id: pwhl-impact-change-rows-carry-strength
   group: pwhl-impact-routing
   finding: C-NF-5
   file: sportsdataverse/pwhl/_impact_contract.py
-  snippet: 'pl.when(is_change).then(pl.col(c).forward_fill().over("game_id")).otherwise(pl.col(c)).alias(c)'
-  mutant: 'pl.col(c).alias(c)'
+  snippet: '[pl.col(c).forward_fill().over("game_id").alias(c) for c in state]'
+  mutant: '[pl.col(c).alias(c) for c in state]'
   test: tests/pwhl/test_pwhl_player_impact_real.py::test_special_teams_value_reads_feed_strength_on_every_stint
   expected: kill
   note: >-
-    CHANGE rows without the carried strength leave 5,635 of 11,403 stint-seconds on the slice with a
-    null strength_state, which the 5v5 RAPM inside WAR and the PP/PK split silently drop.
+    CHANGE rows (and invalid-strength events) without the carried strength leave about half the
+    stint-seconds with a null strength_state, which the 5v5 RAPM inside WAR and the PP/PK split drop.
 
 - id: pwhl-impact-goalies-off-shift-chart
   group: pwhl-impact-routing
@@ -992,3 +993,76 @@
   test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_team_ratings_routing_reads_pwhl_loaders_only
   expected: kill
   note: the pre-2.13 body (NHL engine with PWHL constants).
+
+# Review R846: xG comes from pwhl_shot_xg and the engines must keep it. Reviewer mutant X2
+# (shot_distance -> 0.0) has no target any more: with the PWHL model no engine reads the adapter's
+# shot_distance / shot_angle, so those columns left the contract; the rows below gate the xG source.
+- id: pwhl-impact-xg-aligned-to-shots
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/_impact_contract.py
+  snippet: 'pbp = pbp.join(on_net.select("_row").with_columns(_xg=scored["xg"]), on="_row", how="left")'
+  mutant: 'pbp = pbp.join(on_net.select("_row").with_columns(_xg=scored["xg"].reverse()), on="_row", how="left")'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_special_teams_value_reads_feed_strength_on_every_stint
+  expected: kill
+  note: pwhl_shot_xg rows attached to the wrong shots keep the level band but lose the goal/save ranking.
+
+- id: pwhl-impact-shim-marks-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/pwhl_player_impact.py
+  snippet: '    return pbp, shifts, True'
+  mutant: '    return pbp, shifts, False'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_rapm_fits_shift_chart_skaters
+  expected: kill
+  note: R846-3 -- without the flag the engines re-score PWHL shots with the NHL boosters (~1/3 low).
+
+- id: nhl-rapm-honours-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: '        scored = pbp if xg_scored else nhl_xg(pbp, model_dir=model_dir, league=league)'
+  mutant: '        scored = nhl_xg(pbp, model_dir=model_dir, league=league)'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_rapm_fits_shift_chart_skaters
+  expected: kill
+  note: R846-3 -- the RAPM engine must keep a given xG.
+
+- id: nhl-special-teams-honours-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_special_teams.py
+  snippet: '        scored = pbp if xg_scored else nhl_xg(pbp, model_dir=model_dir, league=league)'
+  mutant: '        scored = nhl_xg(pbp, model_dir=model_dir, league=league)'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_special_teams_value_reads_feed_strength_on_every_stint
+  expected: kill
+  note: R846-3 -- the special-teams engine must keep a given xG.
+
+- id: nhl-war-threads-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_war.py
+  snippet: '        pbp, shifts, model_dir=model_dir, league=league, strength_states=["5v5"], xg_scored=xg_scored'
+  mutant: '        pbp, shifts, model_dir=model_dir, league=league, strength_states=["5v5"]'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_war_faceoffs_and_penalties_match_the_feed
+  expected: kill
+  note: R846-3 -- WAR's even-strength RAPM must use the given xG.
+
+- id: pwhl-impact-rejects-raw-canvas
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/_impact_contract.py
+  snippet: '    _assert_rink_feet(pbp)'
+  mutant: '    pass'
+  test: tests/pwhl/test_pwhl_player_impact_shims.py::test_hockeytech_adapter_rejects_a_raw_canvas_frame
+  expected: kill
+  note: R846-8 -- a raw 0-600 HockeyTech canvas frame must raise, not score from the wrong geometry.
+
+- id: pwhl-team-ratings-league-deprecated
+  group: pwhl-impact-routing
+  finding: supp-001
+  file: sportsdataverse/pwhl/pwhl_team_ratings.py
+  snippet: '    if league is not None:'
+  mutant: '    if False:'
+  test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_team_ratings_league_keyword_is_deprecated_and_ignored
+  expected: kill
+  note: R846-2 -- 0.1.5 callers passing league= get a DeprecationWarning, not a TypeError or silence.

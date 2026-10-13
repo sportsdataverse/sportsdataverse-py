@@ -116,6 +116,7 @@ def nhl_skater_war(
     model_dir: "str | None" = None,
     league: str = "nhl",
     return_as_pandas: bool = False,
+    xg_scored: bool = False,
 ) -> "pl.DataFrame | pd.DataFrame":
     """Per-skater GAR/WAR composite -- EV + special-teams + faceoffs + penalties.
 
@@ -126,6 +127,8 @@ def nhl_skater_war(
             ``nhl_special_teams_value``.
         league: ``"nhl"`` or ``"pwhl"``.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        xg_scored: ``pbp`` already carries the shot ``xg`` to use (another league's own xG
+            model); skip re-scoring with the NHL boosters, which would replace it.
 
     Returns:
         polars.DataFrame: ``player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64,
@@ -154,8 +157,10 @@ def nhl_skater_war(
         return pl.DataFrame(schema=_WAR_SCHEMA)
 
     cfg = get_constants(league)
-    ev_rapm = nhl_skater_rapm(pbp, shifts, model_dir=model_dir, league=league, strength_states=["5v5"])
-    st = nhl_special_teams_value(pbp, shifts, model_dir=model_dir, league=league)
+    ev_rapm = nhl_skater_rapm(
+        pbp, shifts, model_dir=model_dir, league=league, strength_states=["5v5"], xg_scored=xg_scored
+    )
+    st = nhl_special_teams_value(pbp, shifts, model_dir=model_dir, league=league, xg_scored=xg_scored)
     fp = _faceoff_penalty_components(pbp, league=league)
 
     if ev_rapm.height == 0:

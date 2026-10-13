@@ -14,8 +14,9 @@ Coverage caveats (see the design spec's Decision D6 + Open Items):
 - **HockeyTech input is adapted, not assumed NHL-shaped.** The four stint models accept
   ``load_pwhl_pbp`` + ``load_pwhl_shifts`` frames as published and map them onto the NHL column
   contract through :mod:`sportsdataverse.pwhl._impact_contract` (no missed shots; faceoffs name
-  only the home taker; penalty drawers are absent -- see that module). NHL-shaped frames pass
-  through unchanged. They still guard on ``shifts.height`` and return a documented empty frame
+  only the home taker; penalty drawers are absent -- see that module). Their ``xg`` is the PWHL
+  coordinate model (``pwhl_shot_xg``), not the borrowed NHL boosters, which run ~1/3 low on PWHL
+  shots. NHL-shaped frames pass through unchanged and are scored with the boosters. They still guard on ``shifts.height`` and return a documented empty frame
   (with a ``cli_warn``) rather than fitting a degenerate ridge on a near-empty shift chart.
 """
 
@@ -33,7 +34,7 @@ from sportsdataverse.nhl.nhl_special_teams import nhl_special_teams_value
 from sportsdataverse.nhl.nhl_unit_ratings import nhl_unit_ratings
 from sportsdataverse.nhl.nhl_war import nhl_skater_war
 from sportsdataverse.nhl.nhl_xg import nhl_xg
-from sportsdataverse.pwhl._impact_contract import adapt_pwhl_impact_inputs
+from sportsdataverse.pwhl._impact_contract import adapt_pwhl_impact_inputs, is_hockeytech_pbp
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -100,6 +101,14 @@ Example:
 """
 
 
+def _adapted(pbp: pl.DataFrame, shifts: pl.DataFrame, xg_model: Any) -> tuple[pl.DataFrame, pl.DataFrame, bool]:
+    """HockeyTech input -> NHL contract scored with the PWHL xG model; NHL-shaped input as given."""
+    if not is_hockeytech_pbp(pbp):
+        return pbp, shifts, False
+    pbp, shifts = adapt_pwhl_impact_inputs(pbp, shifts, xg_model=xg_model)
+    return pbp, shifts, True
+
+
 def _insufficient_pwhl_shifts(shifts: pl.DataFrame, *, fn_name: str) -> bool:
     insufficient = shifts.height < _MIN_PWHL_SHIFTS_ROWS
     if insufficient:
@@ -113,7 +122,12 @@ def _insufficient_pwhl_shifts(shifts: pl.DataFrame, *, fn_name: str) -> bool:
 
 
 def pwhl_skater_rapm(
-    pbp: pl.DataFrame, shifts: pl.DataFrame, *, model_dir: "str | None" = None, **kwargs: Any
+    pbp: pl.DataFrame,
+    shifts: pl.DataFrame,
+    *,
+    model_dir: "str | None" = None,
+    xg_model: Any = None,
+    **kwargs: Any,
 ) -> "pl.DataFrame | pd.DataFrame":
     """② PWHL skater xG RAPM -- shim over :func:`nhl_skater_rapm` with ``league='pwhl'``.
 
@@ -125,7 +139,9 @@ def pwhl_skater_rapm(
         pbp: a ``load_pwhl_pbp`` frame (adapted, see the module docstring) or a frame
             already shaped like ``load_nhl_pbp_full``.
         shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
-        model_dir: booster directory passed through to the borrowed NHL xG boosters.
+        model_dir: booster directory for NHL-shaped input (the borrowed NHL xG boosters).
+        xg_model: a fitted ``PwhlCoordXGModel`` scoring HockeyTech input; ``None`` fits one on
+            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`).
         **kwargs: forwarded to :func:`nhl_skater_rapm` (e.g. ``lam``, ``as_of``,
             ``strength_states``, ``return_as_pandas``).
 
@@ -147,12 +163,17 @@ def pwhl_skater_rapm(
     """
     if _insufficient_pwhl_shifts(shifts, fn_name="pwhl_skater_rapm"):
         return nhl_skater_rapm(pl.DataFrame(), pl.DataFrame())
-    pbp, shifts = adapt_pwhl_impact_inputs(pbp, shifts)
-    return nhl_skater_rapm(pbp, shifts, model_dir=model_dir, league="pwhl", **kwargs)
+    pbp, shifts, xg_scored = _adapted(pbp, shifts, xg_model)
+    return nhl_skater_rapm(pbp, shifts, model_dir=model_dir, league="pwhl", xg_scored=xg_scored, **kwargs)
 
 
 def pwhl_unit_ratings(
-    pbp: pl.DataFrame, shifts: pl.DataFrame, *, model_dir: "str | None" = None, **kwargs: Any
+    pbp: pl.DataFrame,
+    shifts: pl.DataFrame,
+    *,
+    model_dir: "str | None" = None,
+    xg_model: Any = None,
+    **kwargs: Any,
 ) -> "pl.DataFrame | pd.DataFrame":
     """⑤ PWHL line/pair ratings -- shim over :func:`nhl_unit_ratings` with ``league='pwhl'``.
 
@@ -162,7 +183,9 @@ def pwhl_unit_ratings(
         pbp: a ``load_pwhl_pbp`` frame (adapted, see the module docstring) or a frame
             already shaped like ``load_nhl_pbp_full``.
         shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
-        model_dir: booster directory passed through to the borrowed NHL xG boosters.
+        model_dir: booster directory for NHL-shaped input (the borrowed NHL xG boosters).
+        xg_model: a fitted ``PwhlCoordXGModel`` scoring HockeyTech input; ``None`` fits one on
+            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`).
         **kwargs: forwarded to :func:`nhl_unit_ratings` (e.g. ``unit_type``,
             ``min_toi``, ``return_as_pandas``).
 
@@ -185,12 +208,17 @@ def pwhl_unit_ratings(
     """
     if _insufficient_pwhl_shifts(shifts, fn_name="pwhl_unit_ratings"):
         return nhl_unit_ratings(pl.DataFrame(), pl.DataFrame())
-    pbp, shifts = adapt_pwhl_impact_inputs(pbp, shifts)
-    return nhl_unit_ratings(pbp, shifts, model_dir=model_dir, league="pwhl", **kwargs)
+    pbp, shifts, xg_scored = _adapted(pbp, shifts, xg_model)
+    return nhl_unit_ratings(pbp, shifts, model_dir=model_dir, league="pwhl", xg_scored=xg_scored, **kwargs)
 
 
 def pwhl_special_teams_value(
-    pbp: pl.DataFrame, shifts: pl.DataFrame, *, model_dir: "str | None" = None, **kwargs: Any
+    pbp: pl.DataFrame,
+    shifts: pl.DataFrame,
+    *,
+    model_dir: "str | None" = None,
+    xg_model: Any = None,
+    **kwargs: Any,
 ) -> "pl.DataFrame | pd.DataFrame":
     """⑥ PWHL special-teams value -- shim over :func:`nhl_special_teams_value` with ``league='pwhl'``.
 
@@ -200,7 +228,9 @@ def pwhl_special_teams_value(
         pbp: a ``load_pwhl_pbp`` frame (adapted, see the module docstring) or a frame
             already shaped like ``load_nhl_pbp_full``.
         shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
-        model_dir: booster directory passed through to the borrowed NHL xG boosters.
+        model_dir: booster directory for NHL-shaped input (the borrowed NHL xG boosters).
+        xg_model: a fitted ``PwhlCoordXGModel`` scoring HockeyTech input; ``None`` fits one on
+            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`).
         **kwargs: forwarded to :func:`nhl_special_teams_value` (e.g.
             ``return_as_pandas``).
 
@@ -222,12 +252,17 @@ def pwhl_special_teams_value(
     """
     if _insufficient_pwhl_shifts(shifts, fn_name="pwhl_special_teams_value"):
         return nhl_special_teams_value(pl.DataFrame(), pl.DataFrame())
-    pbp, shifts = adapt_pwhl_impact_inputs(pbp, shifts)
-    return nhl_special_teams_value(pbp, shifts, model_dir=model_dir, league="pwhl", **kwargs)
+    pbp, shifts, xg_scored = _adapted(pbp, shifts, xg_model)
+    return nhl_special_teams_value(pbp, shifts, model_dir=model_dir, league="pwhl", xg_scored=xg_scored, **kwargs)
 
 
 def pwhl_skater_war(
-    pbp: pl.DataFrame, shifts: pl.DataFrame, *, model_dir: "str | None" = None, **kwargs: Any
+    pbp: pl.DataFrame,
+    shifts: pl.DataFrame,
+    *,
+    model_dir: "str | None" = None,
+    xg_model: Any = None,
+    **kwargs: Any,
 ) -> "pl.DataFrame | pd.DataFrame":
     """③ PWHL GAR/WAR composite -- shim over :func:`nhl_skater_war` with ``league='pwhl'``.
 
@@ -237,7 +272,9 @@ def pwhl_skater_war(
         pbp: a ``load_pwhl_pbp`` frame (adapted, see the module docstring) or a frame
             already shaped like ``load_nhl_pbp_full``.
         shifts: the matching ``load_pwhl_shifts`` frame, or one shaped like ``load_nhl_shifts``.
-        model_dir: booster directory passed through to the borrowed NHL xG boosters.
+        model_dir: booster directory for NHL-shaped input (the borrowed NHL xG boosters).
+        xg_model: a fitted ``PwhlCoordXGModel`` scoring HockeyTech input; ``None`` fits one on
+            ``pbp`` (see :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`).
         **kwargs: forwarded to :func:`nhl_skater_war` (e.g. ``return_as_pandas``).
 
     Returns:
@@ -258,5 +295,5 @@ def pwhl_skater_war(
     """
     if _insufficient_pwhl_shifts(shifts, fn_name="pwhl_skater_war"):
         return nhl_skater_war(pl.DataFrame(), pl.DataFrame())
-    pbp, shifts = adapt_pwhl_impact_inputs(pbp, shifts)
-    return nhl_skater_war(pbp, shifts, model_dir=model_dir, league="pwhl", **kwargs)
+    pbp, shifts, xg_scored = _adapted(pbp, shifts, xg_model)
+    return nhl_skater_war(pbp, shifts, model_dir=model_dir, league="pwhl", xg_scored=xg_scored, **kwargs)

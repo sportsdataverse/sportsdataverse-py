@@ -674,7 +674,7 @@ gsax.filter(pl.col("shots") >= 10).sort("gsax_per_60", descending=True).head()
 
 ### nhl_skater_rapm {#nhl_skater_rapm}
 
-`nhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', lam: 'float | None' = None, as_of: 'int | None' = None, strength_states: 'list[str] | None' = None, return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
+`nhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', lam: 'float | None' = None, as_of: 'int | None' = None, strength_states: 'list[str] | None' = None, return_as_pandas: 'bool' = False, xg_scored: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per-skater xG-based Regularized Adjusted Plus-Minus (RAPM), per 60 minutes.
 
@@ -696,6 +696,7 @@ rating is the `off_<player>` coefficient; defensive rating is the **negated**
 | `as_of` | `int \| None` | `None` | forwarded to `build_stints` -- the leakage-boundary cutoff. |
 | `strength_states` | `list[str] \| None` | `None` | restrict the design matrix to these `strength_state` values (e.g. `["5v5"]` for an even-strength-only fit, as used by `nhl_skater_war`'s `ev_off`/`ev_def` components so they don't overlap with `nhl_special_teams_value`'s PP/PK components). `None` (default) uses every strength state, matching the general-purpose all-situations RAPM. |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+| `xg_scored` | `bool` | `False` | `pbp` already carries the shot `xg` to use (another league's own xG model); skip re-scoring with the NHL boosters, which would replace it. |
 | `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame, bypassing `pbp`/`shifts`/scoring (not part of the public contract). |
 
 **Returns**
@@ -717,7 +718,7 @@ print(rapm.sort("xg_rapm", descending=True).head(10))
 
 ### nhl_skater_war {#nhl_skater_war}
 
-`nhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
+`nhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, xg_scored: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per-skater GAR/WAR composite -- EV + special-teams + faceoffs + penalties.
 
@@ -730,6 +731,7 @@ Per-skater GAR/WAR composite -- EV + special-teams + faceoffs + penalties.
 | `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`/`nhl_skater_rapm`/ `nhl_special_teams_value`. |
 | `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"`. |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+| `xg_scored` | `bool` | `False` | `pbp` already carries the shot `xg` to use (another league's own xG model); skip re-scoring with the NHL boosters, which would replace it. |
 
 **Returns**
 
@@ -807,7 +809,7 @@ ratings.filter(pl.col("team") == "TOR")
 
 ### nhl_unit_ratings {#nhl_unit_ratings}
 
-`nhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', unit_type: 'str' = 'forward_line', min_toi: 'float' = 20.0, return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None, _rapm: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
+`nhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', unit_type: 'str' = 'forward_line', min_toi: 'float' = 20.0, return_as_pandas: 'bool' = False, xg_scored: 'bool' = False, _stints: 'pl.DataFrame | None' = None, _rapm: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per on-ice skater combination: observed xGF/xGA + shrinkage-blended summed RAPM.
 
@@ -822,6 +824,7 @@ Per on-ice skater combination: observed xGF/xGA + shrinkage-blended summed RAPM.
 | `unit_type` | `str` | `'forward_line'` | `"forward_line"` (3-skater combinations) or `"defense_pair"` (2-skater combinations) -- see the module's data-availability caveat. |
 | `min_toi` | `float` | `20.0` | minimum minutes-together for a unit to be reported. |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+| `xg_scored` | `bool` | `False` | `pbp` already carries the shot `xg` to use (another league's own xG model); skip re-scoring with the NHL boosters, which would replace it. |
 | `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame. |
 | `_rapm` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built skater-RAPM frame (paired with stints`; both must be given together to bypass real computation). |
 

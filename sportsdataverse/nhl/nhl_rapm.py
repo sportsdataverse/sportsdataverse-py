@@ -308,6 +308,7 @@ def nhl_skater_rapm(
     as_of: int | None = None,
     strength_states: list[str] | None = None,
     return_as_pandas: bool = False,
+    xg_scored: bool = False,
     _stints: pl.DataFrame | None = None,
 ) -> "pl.DataFrame | pd.DataFrame":
     """Per-skater xG-based Regularized Adjusted Plus-Minus (RAPM), per 60 minutes.
@@ -333,6 +334,8 @@ def nhl_skater_rapm(
             with ``nhl_special_teams_value``'s PP/PK components). ``None`` (default)
             uses every strength state, matching the general-purpose all-situations RAPM.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        xg_scored: ``pbp`` already carries the shot ``xg`` to use (another league's own xG
+            model); skip re-scoring with the NHL boosters, which would replace it.
         _stints: internal test hook -- inject a pre-built stints frame, bypassing
             ``pbp``/``shifts``/scoring (not part of the public contract).
 
@@ -362,7 +365,7 @@ def nhl_skater_rapm(
     else:
         if pbp.height == 0 or shifts.height == 0:
             return pl.DataFrame(schema=_RAPM_SCHEMA)
-        scored = nhl_xg(pbp, model_dir=model_dir, league=league)
+        scored = pbp if xg_scored else nhl_xg(pbp, model_dir=model_dir, league=league)
         stints = build_stints(shifts, scored, as_of=as_of)
 
     if strength_states is not None and stints.height > 0:

@@ -377,7 +377,7 @@ print(preds.sort("home_win_prob", descending=True).head())
 
 ### nhl_special_teams_value {#nhl_special_teams_value}
 
-`nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
+`nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, xg_scored: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 
@@ -390,6 +390,7 @@ Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 | `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`. |
 | `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects `league_xg_rate_pp`/pk` via `LEAGUE_CONSTANTS`. |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+| `xg_scored` | `bool` | `False` | `pbp` already carries the shot `xg` to use (another league's own xG model); skip re-scoring with the NHL boosters, which would replace it. |
 | `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame. |
 
 **Returns**

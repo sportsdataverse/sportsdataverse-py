@@ -24,6 +24,7 @@ See Also:
 
 from __future__ import annotations
 
+import warnings
 from typing import Any
 
 from sportsdataverse.pwhl.pwhl_xg_proxy import pwhl_ratings_from_proxy
@@ -31,7 +32,7 @@ from sportsdataverse.pwhl.pwhl_xg_proxy import pwhl_ratings_from_proxy
 __all__ = ["pwhl_team_ratings"]
 
 
-def pwhl_team_ratings(seasons: Any, **kwargs: Any) -> Any:
+def pwhl_team_ratings(seasons: Any, *, league: Any = None, **kwargs: Any) -> Any:
     """PWHL opponent-adjusted, shrunk even-strength xG team ratings.
 
     Delegates to :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_ratings_from_proxy`,
@@ -39,8 +40,12 @@ def pwhl_team_ratings(seasons: Any, **kwargs: Any) -> Any:
 
     Args:
         seasons: an int or iterable of PWHL season end-years (``>= 2024``).
+        league: deprecated and ignored (the ratings are always PWHL); passing it warns.
         **kwargs: forwarded to :func:`pwhl_ratings_from_proxy` (``as_of_date``,
             ``xg_model``, ``xg_method``, ``return_as_pandas``).
+
+    Raises:
+        DeprecationWarning: as a warning, when ``league`` is passed.
 
     Returns:
         One row per (season, team), the
@@ -55,4 +60,10 @@ def pwhl_team_ratings(seasons: Any, **kwargs: Any) -> Any:
             from sportsdataverse.pwhl.pwhl_team_ratings import pwhl_team_ratings
             ratings = pwhl_team_ratings(2025)
     """
+    if league is not None:
+        warnings.warn(
+            "pwhl_team_ratings(league=...) is deprecated and ignored: the ratings are always PWHL",
+            DeprecationWarning,
+            stacklevel=2,
+        )
     return pwhl_ratings_from_proxy(seasons, **kwargs)
