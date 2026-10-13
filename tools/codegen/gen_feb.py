@@ -73,6 +73,10 @@ COVERAGE = (
     "share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa)."
 )
 SEASON = "Season END year (2027 = 2026-27). ``feb_runtime`` sends the site's START-year key ``t = season - 1``."
+SEASON_NOTE = (
+    "Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the "
+    "START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27)."
+)
 GROUP = (
     "Required. The site's menu group (integer): 1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa, 9 and 10 "
     "LF-2, 67 LF Challenge, 73 Copa de España, 74 Liga U. A group is not a competition id (see ``comp_id``); an "
@@ -529,7 +533,7 @@ def main() -> None:
                 "sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for "
                 "(a rejected bearer token, an error or changed envelope, a page for another season or group).",
             ],
-            "notes": [LEGAL, UNOFFICIAL, COVERAGE],
+            "notes": [LEGAL, UNOFFICIAL, COVERAGE, SEASON_NOTE],
             "see_also": [
                 {
                     "name": "Baloncesto en vivo",

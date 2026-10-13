@@ -262,6 +262,8 @@ _COERCE = {"i": _i, "f": _f, "b": _b, "s": _s}
 def _frame(parser: str, rows: List[Dict[str, Any]], columns: Columns, return_as_pandas: bool) -> Frame:
     """Rows -> a frame with pinned dtypes; an empty body keeps ``columns``, a body missing one gains it as nulls."""
     names: List[str] = list(columns or [])
+    if not names and not rows:  # no body and no ``columns=``: the parser's own documented schema
+        names = list(DTYPES.get(parser, {}))
     for r in rows:
         names += [k for k in r if k not in names]
     series = []
@@ -275,7 +277,8 @@ def _frame(parser: str, rows: List[Dict[str, Any]], columns: Columns, return_as_
 
 def _row(row: Mapping[str, Any], rename: Mapping[str, str], drop: Iterable[str] = ()) -> Dict[str, Any]:
     """Flatten a nested row: ``rename`` (dotted wire path -> column) first and in its order, the rest as
-    ``underscore(path)``; ``drop`` paths and the request stamp are skipped. Lists stay lists (JSON in the frame)."""
+    ``underscore(path)``; ``drop`` paths and the request stamp are skipped. A list cell is kept here and becomes compact
+    JSON text in the frame (``_s``): no column is ever a polars List."""
     skip = set(drop)
     named: Dict[str, Any] = {out: None for out in rename.values()}
     rest: Dict[str, Any] = {}

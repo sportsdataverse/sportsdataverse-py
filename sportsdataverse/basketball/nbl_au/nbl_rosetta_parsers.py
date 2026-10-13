@@ -217,6 +217,8 @@ def _finish(df: pl.DataFrame, columns: Optional[Sequence[str]], return_as_pandas
             ):
                 casts.append(pl.col(col).cast(want, strict=False))
         df = df.with_columns(casts) if casts else df
+    if not columns and df.width == 0 and schema:  # no body and no ``columns=``: the parser's documented schema
+        columns = list(schema)
     if columns:
         if df.width == 0:
             df = pl.DataFrame(schema={c: _dtype_for(c, schema) for c in columns})

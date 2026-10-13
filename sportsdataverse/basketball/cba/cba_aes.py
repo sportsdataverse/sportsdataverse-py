@@ -94,6 +94,15 @@ def _mix(state: list[int], m: tuple[int, int, int, int]) -> list[int]:
 
 
 def decrypt_block(block: bytes, rks: list[list[int]]) -> bytes:
+    """Decrypt one 16-byte AES block.
+
+    Args:
+        block: 16 ciphertext bytes.
+        rks: the 11 round keys from the key schedule.
+
+    Returns:
+        The 16 plaintext bytes.
+    """
     s = _add(list(block), rks[10])
     for r in range(9, -1, -1):
         s = [INV_SBOX[s[i]] for i in _UNSHIFT]
@@ -104,6 +113,15 @@ def decrypt_block(block: bytes, rks: list[list[int]]) -> bytes:
 
 
 def encrypt_block(block: bytes, rks: list[list[int]]) -> bytes:
+    """Encrypt one 16-byte AES block.
+
+    Args:
+        block: 16 plaintext bytes.
+        rks: the 11 round keys from the key schedule.
+
+    Returns:
+        The 16 ciphertext bytes.
+    """
     s = _add(list(block), rks[0])
     for r in range(1, 11):
         s = [SBOX[b] for b in s]
@@ -115,7 +133,18 @@ def encrypt_block(block: bytes, rks: list[list[int]]) -> bytes:
 
 
 def encrypt_ecb(plain: bytes, key: bytes) -> bytes:
-    """PKCS7-pad and AES-128-ECB encrypt (tests / fixtures only)."""
+    """PKCS7-pad and AES-128-ECB encrypt (tests / fixtures only).
+
+    Args:
+        plain: the plaintext bytes.
+        key: the 16-byte AES-128 key.
+
+    Returns:
+        The ciphertext, a multiple of 16 bytes.
+
+    Raises:
+        Undecryptable: ``key`` is not 16 bytes.
+    """
     rks = _expand_key(key)
     pad = 16 - len(plain) % 16
     data = plain + bytes([pad]) * pad
@@ -123,7 +152,19 @@ def encrypt_ecb(plain: bytes, key: bytes) -> bytes:
 
 
 def decrypt_ecb(cipher: bytes, key: bytes) -> bytes:
-    """AES-128-ECB decrypt and strictly remove the PKCS7 padding (every pad byte checked)."""
+    """AES-128-ECB decrypt and strictly remove the PKCS7 padding (every pad byte checked).
+
+    Args:
+        cipher: the ciphertext, a positive multiple of 16 bytes.
+        key: the 16-byte AES-128 key.
+
+    Returns:
+        The plaintext without padding.
+
+    Raises:
+        Undecryptable: the length is not a positive multiple of 16, the key is not 16 bytes, or the padding is bad
+            (usually a wrong key).
+    """
     if not cipher or len(cipher) % 16:
         raise Undecryptable(f"ciphertext length {len(cipher)} is not a positive multiple of 16")
     rks = _expand_key(key)
@@ -135,15 +176,36 @@ def decrypt_ecb(cipher: bytes, key: bytes) -> bytes:
 
 
 def encrypt_body(obj: Any, key: bytes) -> str:
-    """The wire form of a response: a JSON string literal holding base64 of the ciphertext (tests / fixtures only)."""
+    """The wire form of a response: a JSON string literal holding base64 of the ciphertext (tests / fixtures only).
+
+    Args:
+        obj: the JSON-serialisable response body.
+        key: the 16-byte AES-128 key.
+
+    Returns:
+        The JSON string literal the API sends.
+
+    Raises:
+        Undecryptable: ``key`` is not 16 bytes.
+    """
     raw = json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     return json.dumps(base64.b64encode(encrypt_ecb(raw, key)).decode("ascii"))
 
 
 def decrypt_body(text: str, key: bytes) -> Any:
-    """Wire text -> parsed JSON. Accepts the JSON-string-literal form the API sends (and bare base64). Raises Undecryptable
-    for anything else: a plain-JSON body (the API's 500 envelope is not encrypted), non-base64 text, a wrong key, a
-    non-UTF-8 or non-JSON plaintext."""
+    """Wire text -> parsed JSON. Accepts the JSON-string-literal form the API sends (and bare base64).
+
+    Args:
+        text: the response text.
+        key: the 16-byte AES-128 key.
+
+    Returns:
+        The decrypted, parsed JSON value.
+
+    Raises:
+        Undecryptable: anything else: a plain-JSON body (the API's 500 envelope is not encrypted), non-base64 text, a
+            wrong key, a non-UTF-8 or non-JSON plaintext.
+    """
     t = (text or "").strip()
     if t.startswith('"'):
         try:

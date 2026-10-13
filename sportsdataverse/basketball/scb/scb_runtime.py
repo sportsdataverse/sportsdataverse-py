@@ -53,7 +53,7 @@ from typing import Any, Dict, FrozenSet, Iterator, List, Mapping, Optional, Tupl
 from urllib.parse import urlsplit
 
 from sportsdataverse import _codegen_runtime as _rt
-from sportsdataverse.basketball.basketball_runtime import SESSION, _polite_wait
+from sportsdataverse.basketball.basketball_runtime import NOREDIRECT_SESSION, SESSION
 from sportsdataverse.dl_utils import _RETRYABLE_STATUS, download
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
@@ -130,8 +130,7 @@ def _page_key(html: str) -> str:
 
 
 def _fetch_key() -> str:
-    """Scrape the page key; the throttle applies to this request like any other."""
-    _polite_wait(KEY_PAGE)
+    """Scrape the page key; ``SESSION`` throttles this request like any other (it carries no credential header)."""
     resp = download(url=KEY_PAGE, headers={"Accept": "text/html"}, session=SESSION, retry_statuses=RETRY_STATUSES)
     status = getattr(resp, "status_code", None)
     if not (isinstance(status, int) and 200 <= status < 300):
@@ -200,7 +199,11 @@ def _send(url: str, params: Mapping[str, Any], **kwargs: Any) -> Any:
     for attempt in range(2):
         with _rt._transport_errors(url):
             resp = download(
-                url=url, params=dict(params), headers=_headers(refresh=attempt == 1), session=SESSION, **kwargs
+                url=url,
+                params=dict(params),
+                headers=_headers(refresh=attempt == 1),
+                session=NOREDIRECT_SESSION,
+                **kwargs,
             )
         if getattr(resp, "status_code", None) not in _AUTH_FAILED:
             return resp

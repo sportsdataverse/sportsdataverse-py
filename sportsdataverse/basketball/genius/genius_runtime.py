@@ -64,8 +64,9 @@ PROXY_ENV = "GENIUS_PROXY"
 LIVE = "fibalivestats.dcd.shared.geniussports.com"
 HOSTED = "hosted.dcd.shared.geniussports.com"
 WIDGET = "widget.wh.geniussports.com"
-#: 403 is NOT retried: the two Genius 403s are definitive answers.
-RETRY_STATUSES = frozenset({408, 429, 500, 502, 503, 504})
+#: 403 is NOT retried: the two Genius 403s are definitive answers. Neither is 500: the "website error" page is
+#: deterministic (see the HTTP 500 policy in ``basketball_runtime``).
+RETRY_STATUSES = frozenset({408, 429, 502, 503, 504})
 ATTEMPTS = 3
 #: Public site-widget keys (embedded in each league site's page) -> the webcast ORG their games carry.
 WIDGET_KEYS: Dict[str, str] = {

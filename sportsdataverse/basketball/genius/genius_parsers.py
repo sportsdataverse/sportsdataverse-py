@@ -1026,6 +1026,9 @@ def season_end(label: Optional[str], year: Optional[int], span: Optional[str]) -
     Returns:
         ``(season, rule)``; ``(None, "unknown")`` when none of the rules applies.
 
+    Raises:
+        None: does not raise; an unreadable label gives ``(None, "unknown")``.
+
     Example:
         Season of a Greek competition::
 

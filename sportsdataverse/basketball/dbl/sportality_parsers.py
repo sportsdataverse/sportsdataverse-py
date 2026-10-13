@@ -79,6 +79,7 @@ dtypes with zero rows, so a frame from an empty body concatenates with a populat
 
 from __future__ import annotations
 
+import functools
 import json
 import re
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Union
@@ -1036,3 +1037,25 @@ def parse_sportality_h2h(raw: Any, *, return_as_pandas: bool = False, columns: O
         if isinstance(p, dict)
     ]
     return _finish(_frame(rows), columns, return_as_pandas)
+
+
+def _documented_when_empty(fn: Any, short: str) -> Any:
+    """``fn`` that, with no body and no ``columns=``, returns the zero-row frame of its documented schema ``short``."""
+
+    @functools.wraps(fn)
+    def wrapper(*args: Any, **kwargs: Any) -> Frame:
+        out = fn(*args, **kwargs)
+        if kwargs.get("columns") is None and len(out.columns) == 0:
+            return _finish(pl.DataFrame(), list(SCHEMAS[short]), bool(kwargs.get("return_as_pandas", False)))
+        return out
+
+    return wrapper
+
+
+# A parser that serves exactly one schema (its name ends in the schema key) answers an unusable body with that
+# schema's zero-row frame even without ``columns=``. The generic parsers (``parse_sportality``, ``_athlete``, ``_filter``,
+# ``_h2h``, ``_layout``, ``_page``, ``_player_crosswalk``) serve several schemas: pass ``columns=`` for those.
+for _name in __all__:
+    _short = _name.removeprefix("parse_sportality_")
+    if _name != "parse_sportality" and _short in SCHEMAS:
+        globals()[_name] = _documented_when_empty(globals()[_name], _short)

@@ -48,6 +48,7 @@ link beside each name encodes the person (and team) id, which the parser decodes
 from __future__ import annotations
 
 import base64
+import math
 import json
 import re
 import zlib
@@ -321,6 +322,10 @@ def _text(v: Any) -> Optional[str]:
         return None
     if isinstance(v, str):
         return v
+    if isinstance(v, float):  # 123.0 -> "123" (never "123.0"); NaN / inf are not values
+        if not math.isfinite(v):
+            return None
+        return str(int(v)) if v.is_integer() else str(v)
     return json.dumps(v, sort_keys=True, ensure_ascii=False) if isinstance(v, (dict, list)) else str(v)
 
 

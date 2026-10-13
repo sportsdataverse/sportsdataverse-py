@@ -723,3 +723,37 @@ def test_summaries_are_prose_with_a_terminal_period():
     for ep in doc["endpoints"]:
         s = ep["summary"]
         assert s.endswith(".") and "{" not in s and len(s.split()) > 1 and not s.startswith(("/", "GET ")), s
+
+
+@pytest.mark.parametrize("short", sorted(gen_scb.ENDPOINTS))
+def test_an_unusable_body_without_columns_still_has_the_documented_schema(short):
+    """``parse_x(None)`` (no ``columns=``) is the documented zero-row frame, so it stacks onto a populated one."""
+    parser = gen_scb.ENDPOINTS[short][2]
+    cols = [c["name"] for c in _schema(short)["columns"]]
+    full = parser(_body(short), columns=cols)
+    none = parser(None)
+    # DTYPES is per parser (several endpoints can share one), so the fallback may carry extra columns, in its own order
+    assert none.height == 0 and none.width > 0
+    shared = [c for c in cols if c in none.columns]  # a stamped column (``bucket``) is added outside DTYPES
+    assert shared and all(none.schema[c] == full.schema[c] for c in shared)
+    assert pl.concat([none, full], how="diagonal").height == full.height
+
+
+def test_list_cells_are_compact_json_strings_never_list_columns():
+    """Settles it: a list-valued field (standings ``last10_outcomes``, a player's ``previous_teams``) is JSON text."""
+    import json
+
+    seen = {}
+    for short in gen_scb.ENDPOINTS:
+        df = _parsed(short)
+        assert not [c for c, t in df.schema.items() if isinstance(t, pl.List)], short
+        for c in df.columns:
+            if df.schema[c] == pl.String:
+                vals = df[c].drop_nulls().to_list()
+                lists = [v for v in vals if v.startswith("[")]
+                if lists:
+                    seen[(short, c)] = lists[0]
+    assert ("standings", "last10_outcomes") in seen and ("season_player", "previous_teams") in seen
+    for text in seen.values():
+        assert isinstance(json.loads(text), list)
+        assert text == json.dumps(json.loads(text), ensure_ascii=False, separators=(",", ":"))

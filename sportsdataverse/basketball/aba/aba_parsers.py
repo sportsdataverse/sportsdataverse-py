@@ -961,6 +961,13 @@ def record_for(kind: str, html: str, want: Dict[str, int]) -> Dict[str, Any]:
     Raises:
         _NotParsed: the page is not the one asked for, is not final (a match) or has drifted. ``empty`` is set
             for a season the site does not hold. Any other exception inside the DOM walk is also a refusal.
+
+    Example:
+        Parse a final match page::
+
+            from sportsdataverse.basketball.aba.aba_parsers import record_for
+
+            record = record_for("match", html, {"game_no": 1, "sez": 2025, "lea": 1})
     """
     try:
         return _RECORDS[kind](html, want)
@@ -1036,6 +1043,13 @@ def helper_scope_error(kind: str, body: Any, match: Dict[str, Any]) -> Optional[
         A reason string, or ``None``. The helpers echo nothing about the game, so each is checked against the match
         page: minutes must run exactly 0..40 (+5 per overtime) and the last row must equal the final score; the shot
         chart is tallied per shooter against the box score.
+
+    Example:
+        Check a score-flow helper against the match page::
+
+            from sportsdataverse.basketball.aba.aba_parsers import helper_scope_error
+
+            reason = helper_scope_error("flow", flow_rows, match_record)  # None when the rows are this game's
     """
     if not isinstance(body, list) or not all(isinstance(r, dict) for r in body):
         return f"not a list of objects: {type(body).__name__}"

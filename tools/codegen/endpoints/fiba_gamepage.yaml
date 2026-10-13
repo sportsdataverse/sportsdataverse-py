@@ -13,6 +13,12 @@ docstring:
     the runtime reads it from the live page at run time and never logs it. Officials'
     contact details and coaches' and officials' dates of birth are dropped from every
     body.
+  - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and
+    game_id is global across competitions (the <gameId> of a game-page URL). team_id
+    is per team per competition (Germany is 279569 at the 2023 World Cup and 281545
+    at Paris 2024), while organisation_id is the stable federation or club (64 = Germany,
+    every year); the game page''s T_<id> and the play-by-play oId are organisation
+    ids, not team ids.'
   - The wrapper takes the game id and its competition (comp) and builds the real page
     URL from GDAP (the competition's marketing name gives the history slug, its schedule
     gives the two team codes; a competition with an event page is tried at its event
@@ -54,6 +60,12 @@ endpoints:
       the runtime reads it from the live page at run time and never logs it. Officials'
       contact details and coaches' and officials' dates of birth are dropped from
       every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
     - The wrapper takes the game id and its competition (comp) and builds the real
       page URL from GDAP (the competition's marketing name gives the history slug,
       its schedule gives the two team codes; a competition with an event page is tried
@@ -121,6 +133,12 @@ endpoints:
       the runtime reads it from the live page at run time and never logs it. Officials'
       contact details and coaches' and officials' dates of birth are dropped from
       every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
     - The wrapper takes the game id and its competition (comp) and builds the real
       page URL from GDAP (the competition's marketing name gives the history slug,
       its schedule gives the two team codes; a competition with an event page is tried
@@ -188,6 +206,12 @@ endpoints:
       the runtime reads it from the live page at run time and never logs it. Officials'
       contact details and coaches' and officials' dates of birth are dropped from
       every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
     - The wrapper takes the game id and its competition (comp) and builds the real
       page URL from GDAP (the competition's marketing name gives the history slug,
       its schedule gives the two team codes; a competition with an event page is tried
@@ -256,6 +280,12 @@ endpoints:
       the runtime reads it from the live page at run time and never logs it. Officials'
       contact details and coaches' and officials' dates of birth are dropped from
       every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
     - The wrapper takes the game id and its competition (comp) and builds the real
       page URL from GDAP (the competition's marketing name gives the history slug,
       its schedule gives the two team codes; a competition with an event page is tried
@@ -324,6 +354,12 @@ endpoints:
       the runtime reads it from the live page at run time and never logs it. Officials'
       contact details and coaches' and officials' dates of birth are dropped from
       every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
     - The wrapper takes the game id and its competition (comp) and builds the real
       page URL from GDAP (the competition's marketing name gives the history slug,
       its schedule gives the two team codes; a competition with an event page is tried
@@ -391,6 +427,12 @@ endpoints:
       the runtime reads it from the live page at run time and never logs it. Officials'
       contact details and coaches' and officials' dates of birth are dropped from
       every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
     - The wrapper takes the game id and its competition (comp) and builds the real
       page URL from GDAP (the competition's marketing name gives the history slug,
       its schedule gives the two team codes; a competition with an event page is tried

@@ -840,6 +840,8 @@ LOCAL_BY: Dict[str, Dict[str, str]] = {
         "quarter": "Period number: 1-4 quarters, 5+ overtimes (a finished game lists every period played).",
     },
     "player_box": {
+        "free_throws_made": "Free throws the player made in the row's period (a count; quarter 0 is the whole game).",
+        "free_throws_attempted": "Free throws the player attempted in the row's period (a count; quarter 0 is the whole game).",
         "on_court": "True while the player is on court (false once the game is over).",
         "play_time": "Time on court as 'mm:ss' in the row's period.",
         "seconds_played": "Time on court in whole seconds (play_time parsed).",
@@ -1219,6 +1221,10 @@ LOCAL_BY: Dict[str, Dict[str, str]] = {
         "times_runner_up": "Times the player was runner-up in the competition.",
     },
     "player_matches": {
+        "free_throws_made": "Free throws the player made in that match (a count, not a season total).",
+        "free_throws_attempted": "Free throws the player attempted in that match (a count, not a season total).",
+        "offensive_rebounds": "Offensive rebounds the player took in that match (a count; part of the total rebounds).",
+        "defensive_rebounds": "Defensive rebounds the player took in that match (a count; part of the total rebounds).",
         "player_id": "ACB licence number asked for.",
         "match_id": "ACB match id of the game.",
         "round_type": "Phase code of the game (LR regular season, PO playoff).",

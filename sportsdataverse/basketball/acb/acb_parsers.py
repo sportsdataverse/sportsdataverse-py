@@ -40,6 +40,7 @@ alpha-2. Comparison bars send display strings with a decimal comma (``'79,17%'``
 
 from __future__ import annotations
 
+import math
 import re
 from datetime import date, datetime
 from typing import Any, Callable, Dict, Iterable, Iterator, List, Optional, Sequence, Tuple, Union
@@ -143,6 +144,10 @@ def _s(v: Any) -> Optional[str]:
     """A stripped non-empty string, else ``None`` (numbers are stringified; containers are not)."""
     if v is None or isinstance(v, (dict, list)):
         return None
+    if isinstance(v, float):  # 123.0 -> "123" (never "123.0"); NaN / inf are not values
+        if not math.isfinite(v):
+            return None
+        v = int(v) if v.is_integer() else v
     t = str(v).strip()
     return t or None
 

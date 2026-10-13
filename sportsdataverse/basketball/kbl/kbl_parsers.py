@@ -47,6 +47,7 @@ year of its winter, and ``season_grade`` 2 tells it from the KBL).
 from __future__ import annotations
 
 import datetime as dt
+import math
 import json
 import re
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple, Union
@@ -107,7 +108,7 @@ def _i(v: Any) -> Optional[int]:
     if isinstance(v, int):
         return v
     if isinstance(v, float):
-        return int(v) if v == v and v == int(v) else None
+        return int(v) if math.isfinite(v) and v.is_integer() else None
     if isinstance(v, str) and re.fullmatch(r"\s*-?\d+\s*", v):
         return int(v)
     return None

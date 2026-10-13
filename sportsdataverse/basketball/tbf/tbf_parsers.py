@@ -31,6 +31,7 @@ Personal data (birth dates, contact fields) is dropped; photos, logos and colour
 
 from __future__ import annotations
 
+import math
 import re
 from datetime import date, datetime
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Union
@@ -184,8 +185,10 @@ def _s(v: Any) -> Optional[str]:
     """A stripped non-empty string, else ``None`` (numbers are stringified, integral floats without ``.0``)."""
     if v is None or isinstance(v, (dict, list, bool)):
         return None
-    if isinstance(v, float) and v == int(v):
-        v = int(v)
+    if isinstance(v, float):  # NaN / inf are not values; 123.0 -> "123"
+        if not math.isfinite(v):
+            return None
+        v = int(v) if v.is_integer() else v
     t = str(v).strip()
     return t or None
 
@@ -265,6 +268,17 @@ Col = Tuple[str, str, Any, Optional[Callable[[Any], Any]]]
 
 
 def c(col: str, path: str, dtype: Any = S, fn: Optional[Callable[[Any], Any]] = None) -> Col:
+    """One column spec of a row table.
+
+    Args:
+        col: the output column name.
+        path: the dotted wire path the value is read from.
+        dtype: the polars dtype (default String).
+        fn: an optional coercion applied to the raw value.
+
+    Returns:
+        The ``(col, path, dtype, fn)`` tuple the table builders read.
+    """
     return (col, path, dtype, fn)
 
 
@@ -840,11 +854,25 @@ ROWS: Dict[str, Callable[[Any], List[Dict[str, Any]]]] = {
     "team_roster": _rows_list,
     "team_staff": _rows_list,
 }
-assert set(ROWS) == set(TABLES)
+if set(ROWS) != set(TABLES):  # an explicit check (an ``assert`` vanishes under ``python -O``)
+    raise RuntimeError(f"tbf_parsers: ROWS and TABLES disagree on {sorted(set(ROWS) ^ set(TABLES))}")
 
 
 def parse(short: str, raw: Any, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
-    """The ``short`` frame of an enveloped body; a typed zero-row frame for anything unrecognised."""
+    """The ``short`` frame of an enveloped body; a typed zero-row frame for anything unrecognised.
+
+    Args:
+        short: the table name (a key of :data:`ROWS`).
+        raw: the enveloped body a wrapper returns with ``return_parsed=False``.
+        return_as_pandas: return a pandas frame instead of polars.
+        columns: documented columns to guarantee (added as nulls when missing).
+
+    Returns:
+        The frame, with the documented dtypes.
+
+    Raises:
+        KeyError: ``short`` is not a known table.
+    """
     try:
         rows = ROWS[short](raw)
     except Exception:  # noqa: BLE001 -- a malformed body is a typed empty frame, never an exception

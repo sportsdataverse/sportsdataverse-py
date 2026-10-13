@@ -19405,8 +19405,8 @@ acb_player_box:
   edition_id: Season id (editionId) = season START year - 1935 (91 = 2026-27). The wrappers take the END year, ``season``.
   first_name: Legal first name(s)
   fouls_drawn: Fouls received (player box-score row)
-  free_throws_attempted: Free throws attempted
-  free_throws_made: Free throws made
+  free_throws_attempted: Free throws the player attempted in the row's period (a count; quarter 0 is the whole game).
+  free_throws_made: Free throws the player made in the row's period (a count; quarter 0 is the whole game).
   game_role: 'Position or staff role, in Spanish: Base (point guard), Escolta (shooting guard), Alero (small forward), Ala-pivot
     (power forward), Pivot (centre); Entrenador (head coach), Segundo Entrenador / Entrenador Ayudante (assistant coach).
     Null or '''' in many rows'
@@ -19485,12 +19485,12 @@ acb_player_matches:
     Not the club id.'
   blocks: Shots blocked (player game-log row)
   date: Tip-off instant (UTC).
-  defensive_rebounds: Defensive rebounds
+  defensive_rebounds: Defensive rebounds the player took in that match (a count; part of the total rebounds).
   dunks: Dunks (player game-log row)
   edition_id: Season id read from the home team entry (START year - 1935).
   fouls_received: Fouls drawn by the player in the game.
-  free_throws_attempted: Free throws attempted
-  free_throws_made: Free throws made
+  free_throws_attempted: Free throws the player attempted in that match (a count, not a season total).
+  free_throws_made: Free throws the player made in that match (a count, not a season total).
   free_throws_percentage: Free-throw percentage, 0-100 with one decimal; 0 when there was no attempt
   has_won: True when the player's team won the game.
   home_club_id: 'Club id, stable across seasons and sponsor names (2 = Barça, 9 = Real Madrid, 13 = Valencia Basket): the
@@ -19502,7 +19502,7 @@ acb_player_matches:
     Not the club id.'
   is_selected_local: True when the player's team played at home.
   match_id: ACB match id of the game.
-  offensive_rebounds: Offensive rebounds
+  offensive_rebounds: Offensive rebounds the player took in that match (a count; part of the total rebounds).
   personal_fouls: Fouls committed
   play_time: Time on court as 'mm:ss'.
   player_id: ACB licence number asked for.
@@ -22591,7 +22591,7 @@ cebl_games:
     `team_id` in player rows and the `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second id: the
     Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53 (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton,
     Hamilton Honey Badgers) and 16+54 (Vancouver, Fraser Valley Bandits). The away team.'
-  away_team_logo_url: Away team logo URL.
+  away_team_logo_url: URL of the away team's logo image as the games feed lists it (a team-level asset, the same on every game of that team in the season).
   away_team_name: Away team full English name.
   away_team_score: 'Away team final score. On the 3 cancelled games: null, 0 or a partial score; before tip-off unobserved.'
   away_team_stats_url_en: Away team's cebl.ca stats page (English).
@@ -22609,7 +22609,7 @@ cebl_games:
     `team_id` in player rows and the `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second id: the
     Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53 (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton,
     Hamilton Honey Badgers) and 16+54 (Vancouver, Fraser Valley Bandits). The home team.'
-  home_team_logo_url: Home team logo URL.
+  home_team_logo_url: URL of the home team's logo image as the games feed lists it (a team-level asset, the same on every game of that team in the season).
   home_team_name: Home team full English name.
   home_team_score: 'Home team final score. On the 3 cancelled games: null, 0 or a partial score; before tip-off unobserved.'
   home_team_stats_url_en: Home team's cebl.ca stats page (English).
@@ -26079,14 +26079,14 @@ genius_player_box:
     do not treat any as PIR/EFF without checking against a league site. Absent in the 2014-15 era sample (WBBL 12248), which
     carries eff_1..eff_6 on players and no team tot_eff_*'
   family_name: Family name in the competition's own script
-  field_goals_attempted: Field goals attempted
-  field_goals_made: Field goals made
+  field_goals_attempted: Field goals the player attempted in the game (two- and three-pointers together; a count).
+  field_goals_made: Field goals the player made in the game (two- and three-pointers together; a count).
   field_goals_percentage: Field-goal percentage, 0-100, rounded to an integer by the feed
   first_name: Given name in the competition's own script and spelling (Greek, Hebrew, Czech, ... as entered)
   fouls_on: 'Fouls drawn: personal fouls committed against the player in the game.'
   fouls_personal: Personal fouls committed
-  free_throws_attempted: Free throws attempted
-  free_throws_made: Free throws made
+  free_throws_attempted: Free throws the player attempted in the game (a count).
+  free_throws_made: Free throws the player made in the game (a count).
   free_throws_percentage: Free-throw percentage, 0-100, rounded to an integer
   international_family_name: Family name in Latin script (often upper case)
   international_first_name: Given name in Latin script
@@ -26102,7 +26102,7 @@ genius_player_box:
   points: Points the player scored in the game, free throws included.
   points_fast_break: Fast-break points
   points_from_turnovers: Points off turnovers
-  points_in_the_paint: Points in the paint
+  points_in_the_paint: Points the player scored in the paint in the game (the feed's sPointsInThePaint).
   points_second_chance: Second-chance points
   rebounds_defensive: Defensive rebounds
   rebounds_offensive: Offensive rebounds

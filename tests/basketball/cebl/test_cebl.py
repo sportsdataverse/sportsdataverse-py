@@ -639,7 +639,8 @@ def test_no_fixture_holds_the_header_key():
             assert "X-Api-Key" not in text, path
 
 
-def test_the_runtime_is_on_the_shared_polite_session():
-    assert R.SESSION is basketball_runtime.SESSION and isinstance(R.SESSION, basketball_runtime.PoliteSession)
+def test_the_runtime_is_on_the_shared_no_redirect_polite_session():
+    assert R.SESSION is basketball_runtime.NOREDIRECT_SESSION
+    assert isinstance(R.SESSION, basketball_runtime.PoliteSession)
     assert R.RETRY_STATUSES >= {429, 503} and R.ATTEMPTS == 3
     assert 500 not in R.RETRY_STATUSES

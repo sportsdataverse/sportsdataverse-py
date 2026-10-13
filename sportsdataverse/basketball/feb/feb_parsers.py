@@ -675,6 +675,10 @@ def parse_feb_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Op
         Scores are the final score when ``clock`` is ``FINAL``, else the live score. A body without a
         ``HEADER`` gives a zero-row frame with the documented columns.
 
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
+
     Example:
         Quick start::
 
@@ -704,6 +708,10 @@ def parse_feb_period_scores(
         One row per period played. The points are scored IN the period, not cumulative. Overtime
         numbering is unverified (no overtime game is in the committed samples). A body without period
         scores gives a zero-row frame with the documented columns.
+
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
 
     Example:
         Quick start::
@@ -786,6 +794,10 @@ def parse_feb_player_box(raw: Any, *, return_as_pandas: bool = False, columns: O
         ``captain`` is null on 2020-21 games. A body without a box score gives a zero-row frame with the
         documented columns.
 
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
+
     Example:
         Quick start::
 
@@ -855,6 +867,10 @@ def parse_feb_team_stats(raw: Any, *, return_as_pandas: bool = False, columns: O
         second-chance, bench and paint points) are null on every sampled game: the federation's stat
         crews do not fill them. ``seconds_played`` and ``val`` are null on ``TEAMSTATS`` rows (filled on
         box-score totals). A body with neither block gives a zero-row frame with the documented columns.
+
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
 
     Example:
         Quick start::
@@ -934,6 +950,10 @@ def parse_feb_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
         are null there. ``player_id`` is the FEB person id; ``license_id`` is the per-season licence.
         A body without play-by-play gives a zero-row frame with the documented columns.
 
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
+
     Example:
         Quick start::
 
@@ -1008,6 +1028,10 @@ def parse_feb_shots(raw: Any, *, return_as_pandas: bool = False, columns: Option
         shooter by SHIRT NUMBER; ``player_id`` is resolved through the game's roster (the same
         side and shirt number in ``SHOTCHART.TEAM[].PLAYER[]``) and is null when that pair is not
         unique. A body without shots gives a zero-row frame with the documented columns.
+
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
 
     Example:
         Quick start::
@@ -1086,6 +1110,10 @@ def parse_feb_leaders(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         Spanish keys, translated); ``value`` is that statistic's count. A body without a ranking gives a
         zero-row frame with the documented columns.
 
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
+
     Example:
         Quick start::
 
@@ -1163,6 +1191,10 @@ def parse_feb_overview(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         finished, 1 = scheduled (live codes unverified). Ids are integers here, as everywhere in these
         frames. ``period_scores`` is ``"20-25;14-27;..."`` (home-away points per period). An empty window
         gives a zero-row frame with the documented columns.
+
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
 
     Example:
         Quick start::
@@ -1281,6 +1313,10 @@ def parse_feb_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         are team-season registrations. A record without games gives a zero-row frame with the documented
         columns.
 
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
+
     Example:
         Quick start::
 
@@ -1335,6 +1371,10 @@ def parse_feb_results(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         ties the site group to the API's competition id (group 1 -> 115, 2 -> 118, 4 -> 210). Scores are
         null on ``next_round`` rows. A record without results gives a zero-row frame with the documented
         columns.
+
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
 
     Example:
         Quick start::
@@ -1397,6 +1437,10 @@ def parse_feb_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
         (the page's ``100,0%``), ``streak`` a signed integer (+3 = three wins in a row). Only the first
         phase of the group is shown. A record without a table gives a zero-row frame with the
         documented columns.
+
+    Raises:
+        None: does not raise; an unusable body (not a dict, or without the block this parser reads) gives a zero-row
+            frame with the documented columns.
 
     Example:
         Quick start::

@@ -492,3 +492,20 @@ def test_ids_never_stringify_a_float():
     assert df["player_id"].to_list() == [1887576, None]
     junk = P.parse_sportality_pbp([{"gameSourceId": "123.0"}])
     assert junk["game_source_id"].to_list() == [None]  # a float-looking id is not an id
+
+
+@pytest.mark.parametrize(
+    ("short", "parser"),
+    [
+        ("pbp", "parse_sportality_pbp"),
+        ("player_box", "parse_sportality_player_box"),
+        ("team_stats", "parse_sportality_team_stats"),
+        ("schedule", "parse_sportality_schedule"),
+    ],
+)
+def test_an_unusable_body_without_columns_has_the_documented_schema(short, parser):
+    """A parser that serves one schema answers ``None`` with that schema's zero-row frame (generic ones need columns=)."""
+    cols = _documented(short)
+    none = getattr(P, parser)(None)
+    assert none.height == 0 and none.columns == cols
+    assert getattr(P, parser)(None, return_as_pandas=True).empty

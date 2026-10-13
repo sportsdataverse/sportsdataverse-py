@@ -451,7 +451,19 @@ _LOCAL_FIRST = frozenset(
 )
 
 
+#: Player box-score counts whose md row only restates the column name: say whose count it is and over what.
+_PLAYER_BOX_TEXT: Dict[str, str] = {
+    "field_goals_made": "Field goals the player made in the game (two- and three-pointers together; a count).",
+    "field_goals_attempted": "Field goals the player attempted in the game (two- and three-pointers together; a count).",
+    "free_throws_made": "Free throws the player made in the game (a count).",
+    "free_throws_attempted": "Free throws the player attempted in the game (a count).",
+    "points_in_the_paint": "Points the player scored in the paint in the game (the feed's sPointsInThePaint).",
+}
+
+
 def _describe(frame: str, col: str, md: Dict[str, Dict[str, str]]) -> str:
+    if frame == "player_box" and col in _PLAYER_BOX_TEXT:
+        return _PLAYER_BOX_TEXT[col]
     if frame in _DATA_FRAMES and col in _LOCAL_FIRST and col in LOCAL:
         # the game header's period / period_type are top-level wire fields the md describes well
         if not (frame == "game" and col in {"period", "period_type"}):

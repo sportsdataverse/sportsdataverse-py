@@ -299,7 +299,12 @@ _FT_ORDINAL = {"一": 1, "二": 2, "三": 3}  # 第N罰
 
 
 def action_table() -> List[Tuple[str, str, str, int]]:
-    """``(action_zh, action, meaning, events)`` for every observed phrase, ordered by code (the docs table)."""
+    """The observed play-by-play phrase vocabulary, for the docs table.
+
+    Returns:
+        ``(action_zh, action, meaning, events)`` for every observed phrase, ordered by code; the row with an
+        empty ``action_zh`` is the unlabelled action.
+    """
     rows = [(z, c, e, OBSERVED_COUNTS[z]) for z, (c, e) in ACTIONS.items()]
     rows.append(("", UNLABELLED[0], UNLABELLED[1], OBSERVED_COUNTS[""]))
     return sorted(rows, key=lambda r: (r[1], r[0]))
@@ -428,7 +433,17 @@ def _need(node: Any, what: str) -> Any:
 
 
 def season_end_year(season: str) -> int:
-    """``'2024-25'`` -> 2025 (the sdv END year)."""
+    """The sdv END year of a season label.
+
+    Args:
+        season: the site's label such as ``"2024-25"``.
+
+    Returns:
+        The END year (``"2024-25"`` -> 2025).
+
+    Raises:
+        ValueError: ``season`` does not start with a four-digit year.
+    """
     return int(season[:4]) + 1
 
 
@@ -674,6 +689,12 @@ def _video(raw: str) -> Tuple[Optional[Dict[str, Any]], bool]:
 
 def pbp_record(body: Any) -> Dict[str, Any]:
     """The play-by-play JSON body ``{error, data: '<table ...>'}`` -> ``{periods, final_score_*, events: [...]}``.
+
+    Args:
+        body: the decoded play-by-play body.
+
+    Returns:
+        ``{"periods": [...], "final_score_away": int, "final_score_home": int, "events": [...]}``.
 
     Raises:
         _NotParsed: the body is not a play-by-play table, the layout drifted, a phrase is not in the observed
@@ -1120,7 +1141,15 @@ def _score(v: Any) -> Optional[int]:
 
 
 def game_error(game: Dict[str, Any], gid: int) -> Optional[str]:
-    """Why the game page record is not a finished game ``gid`` (None when it is)."""
+    """Why the game page record is not a finished game ``gid``.
+
+    Args:
+        game: the parsed game-page record.
+        gid: the game id the caller asked for.
+
+    Returns:
+        A reason string, or ``None`` when the page is that game and it is final.
+    """
     if not _same(game.get("gid"), gid):
         return f"game page gid {game.get('gid')!r}, asked for {gid!r}"
     if game.get("status_zh") != FINAL:
@@ -1129,10 +1158,17 @@ def game_error(game: Dict[str, Any], gid: int) -> Optional[str]:
 
 
 def box_error(body: Any, game: Dict[str, Any]) -> Optional[str]:
-    """None when ``body`` is the final box of the game whose page record is ``game``.
+    """Whether ``body`` is the final box of the game whose page record is ``game``.
 
     The body echoes no game id, so identity is the scores: both finals, every quarter, and the player points
     summing to the team total (within :data:`MAX_UNCREDITED`).
+
+    Args:
+        body: the decoded box-score body.
+        game: the parsed game-page record of the game asked for.
+
+    Returns:
+        A reason string, or ``None`` when the body is that game's final box.
     """
     if not isinstance(body, dict) or body.get("error") not in ("", None):
         return f"box error field {body.get('error') if isinstance(body, dict) else body!r}"
@@ -1165,13 +1201,28 @@ def box_error(body: Any, game: Dict[str, Any]) -> Optional[str]:
 
 
 def expected_periods(game: Dict[str, Any]) -> List[str]:
-    """Q1-Q4 plus an OT label per overtime cell the game page shows with points."""
+    """The period labels a game page implies.
+
+    Args:
+        game: the parsed game-page record (its ``quarters`` cells).
+
+    Returns:
+        ``["Q1", "Q2", "Q3", "Q4"]`` plus one ``OT`` label per overtime cell the page shows with points.
+    """
     ot = sorted({k[:3].upper() for k, v in game["quarters"].items() if k.startswith("ot") and v})
     return ["Q1", "Q2", "Q3", "Q4"] + ot
 
 
 def pbp_error(rec: Dict[str, Any], game: Dict[str, Any]) -> Optional[str]:
-    """None when the parsed play-by-play closes on the page's final score with the page's periods."""
+    """Whether the parsed play-by-play closes on the page's final score with the page's periods.
+
+    Args:
+        rec: the record :func:`pbp_record` returned.
+        game: the parsed game-page record.
+
+    Returns:
+        A reason string, or ``None`` when the final score and the periods agree with the page.
+    """
     if (rec["final_score_away"], rec["final_score_home"]) != (game["away_score"], game["home_score"]):
         return (
             f"play-by-play final {rec['final_score_away']}-{rec['final_score_home']} != game page "

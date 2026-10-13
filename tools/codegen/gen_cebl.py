@@ -408,6 +408,8 @@ LOCAL_BY: Dict[str, Dict[str, str]] = {
         "minutes": "Minutes played as decimal minutes (26.4), not mm:ss; the API sends a string.",
     },
     "games": {
+        "home_team_logo_url": "URL of the home team's logo image as the games feed lists it (a team-level asset, the same on every game of that team in the season).",
+        "away_team_logo_url": "URL of the away team's logo image as the games feed lists it (a team-level asset, the same on every game of that team in the season).",
         "season": "Season of the game: the year of start_time_utc (the calendar year = the sdv END year).",
         "period": "Last period played when the API sets it (seen only on a cancelled game, which carried period 3); "
         "null on a finished game.",

@@ -360,6 +360,9 @@ VENDOR_NOTES = [
     "rotation echo nothing about the game, so only then is the made-shot count, the roster and the court time checked "
     "(rotation minutes within 30 s of the box). An unknown uuid answers 200 [] (NoDataError) or HTTP 500 "
     "(AssetFetchError).",
+    "Id key spaces: the vendor names teams by uuid (home_id / away_id of the shot list, home_team.id of the summary) "
+    "and persons by personId (the same value as the box row's person); the site's team_id (1-8, stable across seasons "
+    "and renames) joins to a uuid only through the standings logo file name (photonew.preciser.io/plg/teams/<uuid>.png).",
     "Shot x / y are in the VENDOR frame (percent of the court, the home team always attacks x = 95) while the site's "
     "play-by-play x / y are in the physical court frame (teams swap ends at half-time): x_vendor = 100 - x_pbp and "
     "y_vendor = 100 - y_pbp in the halves where the home team attacks x < 50. The court is 28.75 x 15.25 m. Clip urls "

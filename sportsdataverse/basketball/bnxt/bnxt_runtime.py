@@ -45,7 +45,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 from urllib.parse import urlsplit
 
 from sportsdataverse import _codegen_runtime as _rt
-from sportsdataverse.basketball.basketball_runtime import SESSION
+from sportsdataverse.basketball.basketball_runtime import NOREDIRECT_SESSION as SESSION
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
 

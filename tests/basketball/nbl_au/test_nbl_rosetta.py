@@ -699,3 +699,17 @@ def test_manual_descriptions_snippet_has_no_filler():
         assert set(cols) == set(_schema(key.removeprefix("nbl_rosetta_"))), key
         for name, desc in cols.items():
             assert not gen_nbl_rosetta._filler(name, desc), (key, name, desc)
+
+
+@pytest.mark.parametrize("short", sorted(ENDPOINTS))
+def test_an_unusable_body_without_columns_still_has_the_documented_schema(short):
+    """``parse_x(None)`` (no ``columns=``) is the documented zero-row frame, so it stacks onto a populated one."""
+    parser, cols = ENDPOINTS[short][2], list(_schema(short))
+    none = parser(None)
+    # DTYPES is per parser (several endpoints can share one), so the fallback may carry extra columns
+    assert none.height == 0 and set(cols) <= set(none.columns)
+    assert all(none.schema[c] == _schema(short)[c] for c in cols)
+    for name in ENDPOINTS[short][3]:
+        for path in gen_nbl_rosetta._variants(name):
+            full = parser(_stamped(str(path.relative_to(FIXTURES))), columns=cols)
+            assert pl.concat([none, full], how="diagonal").height == full.height

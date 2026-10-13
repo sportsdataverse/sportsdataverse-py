@@ -42,7 +42,7 @@ each one `ruff format`s exactly what it wrote:
 | `build()` | the `tools/codegen/_generated/` staging copies |
 | `build_live()` | `sportsdataverse/<league>/<prefix>_espn_ext.py` + the container `__init__` files |
 | `build_parsed_live()` | `sportsdataverse/parsed/*.py` (the deprecated aliases) |
-| `build_flat_live()` | `sportsdataverse/<league>/<stem>.py` from `api_module.py.jinja`; a league with a `group` in `leagues.yaml` nests under it (`soccer/mls/`), and a home in `generate._NESTED_HOMES` under its container (`hockey/sihf/`, `hockey/liiga/`, `basketball/fiba_hub/`; DEL's package is `hockey/del_/` because `del` is a Python keyword) |
+| `build_flat_live()` | `sportsdataverse/<league>/<stem>.py` from `api_module.py.jinja`; a league with a `group` in `leagues.yaml` nests under it (`soccer/mls/`), and a home in `generate._NESTED_HOMES` (hockey) or `generate._BASKETBALL_HOMES` (international basketball) under its container (`hockey/sihf/`, `hockey/liiga/`, `basketball/fiba_hub/`; DEL's package is `hockey/del_/` because `del` is a Python keyword) |
 | `build_loaders_live()` | `sportsdataverse/<lg>/<lg>_loaders.py` for the 8 `_GENERATED_LOADER_LEAGUES` |
 | `build_docs()` | the docs tree (below) |
 

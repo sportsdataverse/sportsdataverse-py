@@ -185,7 +185,7 @@ def _transport(url: str, **kwargs: Any) -> Any:
     """``download`` over the polite session; an empty 200 from a gameday route is "no data"."""
     kwargs.setdefault("session", SESSION)
     kwargs.setdefault("retry_statuses", RETRY_STATUSES)
-    kwargs.setdefault("num_retries", ATTEMPTS)
+    kwargs.setdefault("num_retries", ATTEMPTS - 1)
     resp = download(url=url, **kwargs)
     status = getattr(resp, "status_code", 200)
     if "/gameday/" in url and status == 200 and not (getattr(resp, "text", "") or "").strip():
@@ -539,7 +539,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     if _TEXT_ROUTE.search(urlsplit(url).path):
         kwargs.setdefault("session", SESSION)
         kwargs.setdefault("retry_statuses", RETRY_STATUSES)
-        kwargs.setdefault("num_retries", ATTEMPTS)
+        kwargs.setdefault("num_retries", ATTEMPTS - 1)
         with _rt._transport_errors(url):
             resp = download(url=url, **kwargs)
         text = _rt._text_body(resp, url).strip()

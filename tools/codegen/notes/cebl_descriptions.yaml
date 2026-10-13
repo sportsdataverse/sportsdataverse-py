@@ -5,7 +5,8 @@ cebl_games:
     id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
     (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
     16+54 (Vancouver, Fraser Valley Bandits). The away team.'
-  away_team_logo_url: Away team logo URL.
+  away_team_logo_url: URL of the away team's logo image as the games feed lists it
+    (a team-level asset, the same on every game of that team in the season).
   away_team_name: Away team full English name.
   away_team_score: 'Away team final score. On the 3 cancelled games: null, 0 or a
     partial score; before tip-off unobserved.'
@@ -28,7 +29,8 @@ cebl_games:
     id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
     (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
     16+54 (Vancouver, Fraser Valley Bandits). The home team.'
-  home_team_logo_url: Home team logo URL.
+  home_team_logo_url: URL of the home team's logo image as the games feed lists it
+    (a team-level asset, the same on every game of that team in the season).
   home_team_name: Home team full English name.
   home_team_score: 'Home team final score. On the 3 cancelled games: null, 0 or a
     partial score; before tip-off unobserved.'

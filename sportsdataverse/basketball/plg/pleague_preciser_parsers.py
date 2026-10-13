@@ -59,7 +59,14 @@ ROTATION_TOLERANCE = 30
 
 
 def scrub(obj: Any) -> Any:
-    """``obj`` with the vendor access key replaced by ``<redacted>`` in every string (clip urls)."""
+    """Remove the vendor access key from a decoded body.
+
+    Args:
+        obj: any decoded JSON value.
+
+    Returns:
+        A copy of ``obj`` with the vendor access key replaced by ``<redacted>`` in every string (clip urls).
+    """
     if isinstance(obj, str):
         return _KEY_QS.sub(r"\1<redacted>", obj)
     if isinstance(obj, list):
@@ -70,7 +77,14 @@ def scrub(obj: Any) -> Any:
 
 
 def has_secret(obj: Any) -> bool:
-    """True when a vendor access key survives anywhere in ``obj`` (a final scan before a body is returned)."""
+    """Scan a body for a surviving vendor access key (the last check before a body is returned).
+
+    Args:
+        obj: any decoded JSON value.
+
+    Returns:
+        ``True`` when a vendor access key is still present anywhere in ``obj``.
+    """
     return bool(SECRET.search(json.dumps(obj, ensure_ascii=False)))
 
 
@@ -592,7 +606,14 @@ def _made(cell: Any) -> int:
 
 
 def box_field_goals(box: Dict[str, Any]) -> Tuple[int, int]:
-    """(2-point makes, 3-point makes) over both sides' player rows of a box body's ``data``."""
+    """Count the made field goals of a box body.
+
+    Args:
+        box: the site box ``data`` (``home`` and ``away`` player rows).
+
+    Returns:
+        ``(2-point makes, 3-point makes)`` summed over both sides' player rows.
+    """
     two = three = 0
     for side in ("home", "away"):
         for p in box.get(side) or []:
@@ -602,7 +623,14 @@ def box_field_goals(box: Dict[str, Any]) -> Tuple[int, int]:
 
 
 def box_seconds(box: Dict[str, Any]) -> Dict[str, int]:
-    """``{name: seconds on court}`` over both sides from the box's ``mm:ss`` minutes (did-not-play rows omitted)."""
+    """Court time per player from a box body.
+
+    Args:
+        box: the site box ``data`` (``home`` and ``away`` player rows).
+
+    Returns:
+        ``{name: seconds on court}`` over both sides, parsed from the box's ``mm:ss`` minutes (did-not-play rows omitted).
+    """
     out = {}
     for side in ("home", "away"):
         for p in box.get(side) or []:
@@ -618,6 +646,15 @@ def vendor_error(kind: str, body: Any, uuid: str, ctx: Dict[str, Any]) -> Option
     ``ctx`` may hold ``game`` (the site's game record), ``box`` (the site box ``data``) and ``team_ids`` (the
     verified summary's ``(home, away)`` team uuids); a check whose context is absent is skipped, which is why the
     runtime verifies against the site only when the caller passes a ``gid``.
+
+    Args:
+        kind: the vendor body kind (``summary``, ``injury``, ``shots``, ``rotation``...).
+        body: the decoded vendor body.
+        uuid: the Preciser game uuid asked for.
+        ctx: the site context described above.
+
+    Returns:
+        A reason string, or ``None`` when the body is the ``kind`` body of game ``uuid``.
     """
     if not isinstance(body, list) or len(body) != 1 or not isinstance(body[0], dict):
         return f"{kind}: expected a one-element list"

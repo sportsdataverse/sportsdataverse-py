@@ -174,7 +174,7 @@ def _fetch(route: str, query: Dict[str, Any], body: Optional[Dict[str, Any]]) ->
                 ) from None
             continue
         if getattr(resp, "status_code", None) in RETRY_STATUSES and attempt < ATTEMPTS - 1:
-            time.sleep(_retry_after(resp))
+            time.sleep(max(_retry_after(resp), min(2.0 * 2**attempt, MAX_RETRY_AFTER)))  # backoff, or Retry-After
             continue
         break
     status = getattr(resp, "status_code", None)
