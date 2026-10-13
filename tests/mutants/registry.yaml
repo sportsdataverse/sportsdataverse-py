@@ -1432,6 +1432,47 @@
   expected: kill
   note: the 2022-25 endgame rows are a holdout for wp_ot_reach only; wp_before is scored in-sample
 
+# --- 3.4 (b3): nfl_clean play-key cast + NFL pickcenter twin --------------------------------------
+- id: nfl-clean-weird-pass-key-float-play-id
+  group: nfl-clean-play-key
+  finding: C-NF-8
+  file: sportsdataverse/nfl/nfl_clean.py
+  snippet: 'pl.col("play_id").cast(pl.Int64).cast(pl.Utf8)'
+  mutant: 'pl.col("play_id").cast(pl.Utf8)'
+  test: tests/nfl/test_nfl_clean.py -k "float_play_id"
+  expected: kill
+  note: nflverse's Float64 play_id stringifies as "1611.0" and the 15 fix_weird_pass_plays keys never match
+
+- id: nfl-pickcenter-spread-ndarray
+  group: nfl-pickcenter-scalars
+  finding: C-M19
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'gameSpread = float(_first("spread", 2.5))'
+  mutant: 'gameSpread = pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0]'
+  test: tests/nfl/test_nfl_offline_inputs.py -k "round_trip_odds"
+  expected: kill
+  note: the shape-(1,) ndarray spread is not JSON-safe, so the payload odds cannot round-trip through odds_override
+
+- id: nfl-pickcenter-home-favorite-ndarray
+  group: nfl-pickcenter-scalars
+  finding: C-M19
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'homeFavorite = bool(_first("homeTeamOdds.favorite", True))'
+  mutant: 'homeFavorite = pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]'
+  test: tests/nfl/test_nfl_offline_inputs.py -k "round_trip_odds"
+  expected: kill
+  note: an ndarray homeFavorite is not a bool and not JSON-safe
+
+- id: nfl-pickcenter-all-null-spread
+  group: nfl-pickcenter-scalars
+  finding: C-NF-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'if pickcenter is not None and _first("spread", None) is not None:'
+  mutant: 'if pickcenter is not None:'
+  test: tests/nfl/test_nfl_offline_inputs.py -k "all_null_spread"
+  expected: kill
+  note: a pickcenter with no spread on any provider is no spread; without the guard it reads as an available 2.5
+
 # --- EX-1.2-a: rush yardage text forms (task 3.4(f)) ---------------------------------------------
 # Killer: test_stated_rush_yardage_is_read, one row per form, each pinned to the feed's statYardage
 # (or, on the 2005 feed whose statYardage is 0, the next snap's yards to go).
@@ -1484,3 +1525,13 @@
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and (303102638009 or 313090025162)"
   expected: kill
   note: '"rush over left tackle for 3 yards, ... penalty" / "for 11 yards, fumbled": the statYardage stand-in skips flags and fumbles'
+
+- id: cfb-directional-rush-loss-on-flagged-or-fumbled
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_gain_text.str.contains(r"(?i)\b(?:rush|run)\b[^,]*? for (?:a )?loss of \d")'
+  mutant: '_gain_text.str.contains(r"(?i)\bNEVER_A_RUSH_LOSS\b")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 282782655"
+  expected: kill
+  note: '"rush over right end for a loss of 5 yards, ... penalty declined" (rush_forms/ fixture): 30 corpus rows / 25 games'

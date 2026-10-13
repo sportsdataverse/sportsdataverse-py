@@ -371,6 +371,16 @@ def test_fix_weird_pass_plays_forces_zero() -> None:
     assert out["pass"][0] == 0
 
 
+def test_fix_weird_pass_plays_matches_float_play_id() -> None:
+    """C-NF-8: nflverse ships ``play_id`` as Float64 (1611.0), which stringified to
+    ``1999_01_ARI_PHI_1611.0`` and matched none of the 15 keys; it goes through Int64 first.
+    On the real nflverse 1999-2020 pbp the 15 keyed rows now read pass 0, as nflverse's own column does."""
+    df = pl.DataFrame([_row(game_id="1999_01_ARI_PHI", play_id=1611.0), _row(play_id=1611.0)])
+    assert df.schema["play_id"] == pl.Float64
+    out = clean_nfl_pbp(df)
+    assert out["pass"].to_list() == [0, 1]
+
+
 # ---------------------------------------------------------------------------
 # Review fixes (task-6 verdict): null-key join regression, rush_finder
 # stray-space parity, success / jersey / home_opening_kickoff coverage
