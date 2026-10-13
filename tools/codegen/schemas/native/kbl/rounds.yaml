@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_code
+  type: integer
+- description: ''
+  name: game_code
+  type: character
+- description: ''
+  name: glkey
+  type: character
+- description: ''
+  name: round
+  type: integer
+- description: ''
+  name: from_date
+  type: date
+- description: ''
+  name: to_date
+  type: date
+kind: dataframe
+schema: kbl_rounds
