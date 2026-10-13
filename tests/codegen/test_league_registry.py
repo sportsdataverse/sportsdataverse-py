@@ -41,7 +41,7 @@ def test_registry_sports_and_labels():
     assert set(generate._BASKETBALL_HOMES) <= set(by_sport["basketball"])
     assert by_sport["basketball"]["lba"] == "Lega Basket Serie A"
     assert by_sport["basketball"]["plg"] == "P. LEAGUE+"
-    assert by_sport["basketball"]["fiba"] == "FIBA"
+    assert by_sport["basketball"]["fiba_hub"] == "FIBA (digital API and game pages)"
     assert by_sport["soccer"]["laliga"] == "LaLiga"
     assert by_sport["other"] == {
         "euroleague": "EuroLeague",
@@ -92,6 +92,9 @@ def test_basketball_homes_nest_under_basketball_and_register_every_stem():
     # a prefix names one home only: no clash with an ESPN league, a hockey home or any older home
     taken = {lg.prefix for lg in generate.spec.load_leagues(generate.ENDPOINTS / "leagues.yaml").leagues}
     taken |= set(generate._EURO_HOCKEY_HOMES) | set(generate._HOCKEYTECH_MODULE_LEAGUES)
+    taken |= {
+        p.name for p in (generate.ROOT / "sportsdataverse").iterdir() if p.is_dir()
+    }  # top-level packages (ESPN fiba, nbl, ...)
     assert not taken & set(generate._BASKETBALL_HOMES)
     assert len(generate._BASKETBALL_HOMES) == len(set(generate._BASKETBALL_HOMES))
     basketball = generate._container_groups({})["basketball"]

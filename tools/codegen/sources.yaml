@@ -275,7 +275,7 @@ providers:
     auth: none  # referer gate, not a key
     flat_apis: [nbl_rosetta]
     modules:
-      - sportsdataverse.basketball.nbl.*_runtime
+      - sportsdataverse.basketball.nbl_au.*_runtime
 
   fiba:
     label: FIBA digital API and game pages
@@ -283,7 +283,7 @@ providers:
     auth: none  # public APIM key read from the site at run time
     flat_apis: [fiba_gdap, fiba_gamepage]
     modules:
-      - sportsdataverse.basketball.fiba.*_runtime
+      - sportsdataverse.basketball.fiba_hub.*_runtime
 
   legabasket:
     label: Lega Basket Serie A

@@ -17,7 +17,7 @@ sibling checkout), and emits:
   keyed ``nbl_rosetta_<short>`` -> column, for ``manual_column_descriptions.yaml``. Each comes from
   :data:`ROUTE` (route-specific), :data:`LOCAL` / the id rules (parser-built columns), else the wrapper's
   own ``nbl-rosetta-returns.md`` row. A filler description stops the run.
-* ``sportsdataverse/basketball/nbl/nbl_rosetta_dtypes.py`` -- each parser's column dtypes (the
+* ``sportsdataverse/basketball/nbl_au/nbl_rosetta_dtypes.py`` -- each parser's column dtypes (the
   returns-schema types), so an empty or all-null frame is typed like a populated one.
 * ``tests/fixtures/nbl_rosetta/spec_paths.json`` -- the spec's routes, for the tests (CI has no refs).
 
@@ -35,8 +35,8 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 import polars as pl
 from gen_soccer_common import ROOT, load_spec, refs_dir, rewrite_schema_dir, write_yaml
 
-from sportsdataverse.basketball.nbl import nbl_rosetta_parsers as P
-from sportsdataverse.basketball.nbl.nbl_rosetta_runtime import ORGS, REQUEST_KEY, TYPES, end_year
+from sportsdataverse.basketball.nbl_au import nbl_rosetta_parsers as P
+from sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime import ORGS, REQUEST_KEY, TYPES, end_year
 
 HOST = "https://prod.rosetta.nbl.com.au/get"
 SPEC = "nbl-rosetta.openapi.yaml"
@@ -48,7 +48,7 @@ SNIPPET = ROOT / "tools" / "codegen" / "nbl_rosetta_column_descriptions.snippet.
 #: The spec's route list, committed so the tests check ENDPOINTS without the refs checkout.
 SPEC_PATHS = FIXTURES / "spec_paths.json"
 #: Each parser's column dtypes, from the returns-schemas, in a package-safe module.
-DTYPES_MODULE = ROOT / "sportsdataverse" / "basketball" / "nbl" / "nbl_rosetta_dtypes.py"
+DTYPES_MODULE = ROOT / "sportsdataverse" / "basketball" / "nbl_au" / "nbl_rosetta_dtypes.py"
 #: What tests/codegen/test_manual_descriptions.py rejects as filler.
 _BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.IGNORECASE)
 
@@ -91,7 +91,14 @@ def _p(name: str, desc: str, *, typ: str = "str", **extra: Any) -> Dict[str, Any
 
 _ORG = {"name": "org", "type": "str", "required": False, "default": "nbl", "choices": list(ORGS), "description": ORG_P}
 _SEASON = _p("season", SEASON_P, typ="int")
-_TYPE = {"name": "season_type", "type": "str", "required": False, "default": "all", "choices": list(TYPES), "description": TYPE_P}
+_TYPE = {
+    "name": "season_type",
+    "type": "str",
+    "required": False,
+    "default": "all",
+    "choices": list(TYPES),
+    "description": TYPE_P,
+}
 _LIMIT = _q("limit", "limit", LIMIT, typ="int")
 _OFFSET = _q("offset", "offset", OFFSET, typ="int")
 _MATCH = [_p("match_id", MATCH_ID)]
@@ -726,8 +733,8 @@ def main() -> None:
         "host": HOST,
         "name_pattern": "nbl_rosetta_{short}",
         "module": "nbl_rosetta",
-        "parser_module": "basketball.nbl.nbl_rosetta_parsers",
-        "getter_module": "sportsdataverse.basketball.nbl.nbl_rosetta_runtime",
+        "parser_module": "basketball.nbl_au.nbl_rosetta_parsers",
+        "getter_module": "sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime",
         "qualifier": "",
         "passthrough_query": False,
         "parser_columns": True,

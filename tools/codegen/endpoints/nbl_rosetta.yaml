@@ -656,12 +656,12 @@ endpoints:
   returns_schema: native/nbl_rosetta/next_matches
   short: next_matches
   summary: 'Each team''s next matches: opponent, venue and start time.'
-getter_module: sportsdataverse.basketball.nbl.nbl_rosetta_runtime
+getter_module: sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime
 host: https://prod.rosetta.nbl.com.au/get
 module: nbl_rosetta
 name_pattern: nbl_rosetta_{short}
 parser_columns: true
-parser_module: basketball.nbl.nbl_rosetta_parsers
+parser_module: basketball.nbl_au.nbl_rosetta_parsers
 passthrough_query: false
 qualifier: ''
 runtime_imports:

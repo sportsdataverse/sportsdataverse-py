@@ -85,6 +85,16 @@ from sportsdataverse.pwhl import *
 from sportsdataverse.wbb import *
 from sportsdataverse.wnba import *
 from sportsdataverse.nbagl import *  # noqa: F401,F403,E402
+from sportsdataverse.nbl import *  # noqa: F401,F403,E402
+from sportsdataverse.fiba import *  # noqa: F401,F403,E402
+from sportsdataverse.olympics_mbk import *  # noqa: F401,F403,E402
+from sportsdataverse.olympics_wbk import *  # noqa: F401,F403,E402
+from sportsdataverse.nbasl_lv import *  # noqa: F401,F403,E402
+from sportsdataverse.nbasl_ut import *  # noqa: F401,F403,E402
+from sportsdataverse.nbasl_ca import *  # noqa: F401,F403,E402
+from sportsdataverse.nbasl_sac import *  # noqa: F401,F403,E402
+from sportsdataverse.nbasl_orl import *  # noqa: F401,F403,E402
+from sportsdataverse.nbasl_gs import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.ahl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.ohl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.qmjhl import *  # noqa: F401,F403,E402
@@ -153,10 +163,10 @@ from sportsdataverse.hockey.nl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.magnus import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.khl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.vhl import *  # noqa: F401,F403,E402
-from sportsdataverse.basketball.fiba import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.fiba_hub import *  # noqa: F401,F403,E402
 from sportsdataverse.basketball.genius import *  # noqa: F401,F403,E402
 from sportsdataverse.basketball.atrium import *  # noqa: F401,F403,E402
-from sportsdataverse.basketball.nbl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbl_au import *  # noqa: F401,F403,E402
 from sportsdataverse.basketball.feb import *  # noqa: F401,F403,E402
 from sportsdataverse.basketball.scb import *  # noqa: F401,F403,E402
 from sportsdataverse.basketball.lba import *  # noqa: F401,F403,E402

@@ -43,6 +43,46 @@
           "label": "NBA G League"
         },
         {
+          "prefix": "nbl",
+          "label": "NBL"
+        },
+        {
+          "prefix": "fiba",
+          "label": "FIBA"
+        },
+        {
+          "prefix": "olympics_mbk",
+          "label": "Olympics men's basketball"
+        },
+        {
+          "prefix": "olympics_wbk",
+          "label": "Olympics women's basketball"
+        },
+        {
+          "prefix": "nbasl_lv",
+          "label": "NBA Summer League (Las Vegas)"
+        },
+        {
+          "prefix": "nbasl_ut",
+          "label": "NBA Summer League (Utah)"
+        },
+        {
+          "prefix": "nbasl_ca",
+          "label": "NBA Summer League (California)"
+        },
+        {
+          "prefix": "nbasl_sac",
+          "label": "NBA Summer League (Sacramento)"
+        },
+        {
+          "prefix": "nbasl_orl",
+          "label": "NBA Summer League (Orlando)"
+        },
+        {
+          "prefix": "nbasl_gs",
+          "label": "NBA Summer League (Golden State)"
+        },
+        {
           "prefix": "mbb",
           "label": "MBB"
         },
@@ -51,8 +91,8 @@
           "label": "WBB"
         },
         {
-          "prefix": "fiba",
-          "label": "FIBA"
+          "prefix": "fiba_hub",
+          "label": "FIBA (digital API and game pages)"
         },
         {
           "prefix": "genius",
@@ -63,8 +103,8 @@
           "label": "Sportradar Atrium"
         },
         {
-          "prefix": "nbl",
-          "label": "NBL Australia"
+          "prefix": "nbl_au",
+          "label": "NBL Australia (Rosetta)"
         },
         {
           "prefix": "feb",
