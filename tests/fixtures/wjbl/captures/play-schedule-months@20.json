@@ -1,0 +1,17 @@
+{
+  "league_id": "20",
+  "game_months": [
+    {
+      "game_month_jpn": "2014年4月",
+      "game_month": "2014-04"
+    },
+    {
+      "game_month_jpn": "2014年3月",
+      "game_month": "2014-03"
+    },
+    {
+      "game_month_jpn": "2014年2月",
+      "game_month": "2014-02"
+    }
+  ]
+}
