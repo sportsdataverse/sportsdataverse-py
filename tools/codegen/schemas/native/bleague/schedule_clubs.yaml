@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: tab
+  type: integer
+- description: ''
+  name: event
+  type: integer
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: name
+  type: character
+kind: dataframe
+schema: bleague_schedule_clubs

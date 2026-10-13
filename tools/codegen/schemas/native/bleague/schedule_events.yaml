@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: tab
+  type: integer
+- description: ''
+  name: event_id
+  type: integer
+- description: ''
+  name: label
+  type: character
+- description: ''
+  name: selected
+  type: logical
+kind: dataframe
+schema: bleague_schedule_events

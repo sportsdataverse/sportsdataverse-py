@@ -1,0 +1,9 @@
+[
+ "/game_detail/",
+ "/schedule/",
+ "/standings/",
+ "/v1_contexts/{ScheduleKey}/latestid",
+ "/v1_contexts/{ScheduleKey}/{latestId}.json",
+ "/v2_genius_contexts/{ScheduleKey}/latestid",
+ "/v2_genius_contexts/{ScheduleKey}/{latestId}.json"
+]

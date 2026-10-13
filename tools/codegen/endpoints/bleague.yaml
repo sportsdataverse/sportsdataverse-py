@@ -1,0 +1,456 @@
+api: bleague
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial and unsupported: the game contexts are JSON objects in B.LEAGUE''s
+    own public S3 bucket (b-league.s3.amazonaws.com, the store its game pages read),
+    and schedule / standings / game_detail are pages of www.bleague.jp parsed here.
+    Neither host publishes terms for this use (the site''s /terms/ answers 404; robots.txt
+    sets a Crawl-delay only for msnbot and bingbot), and ``bleague_runtime`` spaces
+    requests at least 1 s apart. SportsDataverse has not ruled on the site''s terms,
+    so payloads are not redistributed as release assets.'
+  - 'Seasons: the site''s ``Year`` is the season START year; every wrapper takes ``season``,
+    the END year (2026 = 2025-26), and ``bleague_runtime`` sends ``season - 1``. Game
+    wrappers take the global ``schedule_key`` (one integer sequence across B1, B2,
+    B3 and every season: 1 = the 2016-17 opener, 5856 in 2020-21, 500017 in 2022-23,
+    504734 / 505508 B1 / B2 and 10693 B3 in 2025-26); list a day''s keys with ``bleague_schedule``.
+    The runtime reads the feed at run time: v2 (B1/B2 from 2020-21), then v1 (B3 and
+    B1/B2 2018-2020), then the game page''s embedded copy (the only source of 2016-17
+    and 2017-18).'
+  - 'Coverage: game wrappers serve FINISHED games only (an unfinished game raises
+    AssetFetchError; 2019-20 game 4153 is an unfinished feed). The two feeds differ:
+    v2 ids are strings, v1 ids integers (both become text here); v1 adds leaders and
+    the score track; the team-rebound codes 18 / 19 are swapped between them and a
+    v1 substitution is one row where v2 has two (see ``bleague_pbp``). Shot x / y
+    exist from 2022-23 on v2 only, ``side`` from 2025-26; before that ``bleague_shots``
+    is empty. Player and team names are Japanese (English names only on the box score
+    and header); the code tables are in ``bleague_codes``.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey
+    no source holds, a schedule day without games, HTTP 404).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (an unfinished game, a context or page for another game, season,
+    tab or day, an error or changed body, a truncated schedule list).'
+  - 'ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.'
+  raw_doc: 'the raw body (``dict``): the game context (``Game``, ``PlayByPlays``,
+    ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``)
+    stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings
+    page record'
+  see_also:
+  - name: B.LEAGUE
+    note: the Japan Professional Basketball League site whose pages and game store
+      these wrappers read
+    url: https://www.bleague.jp
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args:
+    schedule_key: 504734
+  extra_params:
+  - description: 'Optional guard: the season END year the game must belong to. A context
+      whose Year differs raises AssetFetchError. Omitted = no check (the key alone
+      selects the game).'
+    name: season
+    query_key: season
+    required: false
+    type: int
+  parser: parse_bleague_game_info
+  path: /contexts/{schedule_key}
+  path_params:
+  - description: Required. B.LEAGUE ScheduleKey (integer, one global sequence across
+      B1, B2, B3 and every season), e.g. 504734 = B1 2025-26 sec 1, Alvark Tokyo v
+      Utsunomiya Brex; list a day's keys with bleague_schedule.
+    name: schedule_key
+    required: true
+    type: int
+  returns_schema: native/bleague/game_info
+  short: game_info
+  summary: 'Game header: competition, round, venue, officials, tip-off, both teams
+    and the scores.'
+- example_args:
+    schedule_key: 504734
+  extra_params:
+  - description: 'Optional guard: the season END year the game must belong to. A context
+      whose Year differs raises AssetFetchError. Omitted = no check (the key alone
+      selects the game).'
+    name: season
+    query_key: season
+    required: false
+    type: int
+  parser: parse_bleague_period_scores
+  path: /contexts/{schedule_key}
+  path_params:
+  - description: Required. B.LEAGUE ScheduleKey (integer, one global sequence across
+      B1, B2, B3 and every season), e.g. 504734 = B1 2025-26 sec 1, Alvark Tokyo v
+      Utsunomiya Brex; list a day's keys with bleague_schedule.
+    name: schedule_key
+    required: true
+    type: int
+  returns_schema: native/bleague/period_scores
+  short: period_scores
+  summary: Points each team scored in each period of a game, overtime included.
+- example_args:
+    schedule_key: 504734
+  extra_params:
+  - description: 'Optional guard: the season END year the game must belong to. A context
+      whose Year differs raises AssetFetchError. Omitted = no check (the key alone
+      selects the game).'
+    name: season
+    query_key: season
+    required: false
+    type: int
+  parser: parse_bleague_player_box
+  path: /contexts/{schedule_key}
+  path_params:
+  - description: Required. B.LEAGUE ScheduleKey (integer, one global sequence across
+      B1, B2, B3 and every season), e.g. 504734 = B1 2025-26 sec 1, Alvark Tokyo v
+      Utsunomiya Brex; list a day's keys with bleague_schedule.
+    name: schedule_key
+    required: true
+    type: int
+  returns_schema: native/bleague/player_box
+  short: player_box
+  summary: 'Player box score per period category: minutes, points, shooting, rebounds,
+    assists, efficiency.'
+- example_args:
+    schedule_key: 504734
+  extra_params:
+  - description: 'Optional guard: the season END year the game must belong to. A context
+      whose Year differs raises AssetFetchError. Omitted = no check (the key alone
+      selects the game).'
+    name: season
+    query_key: season
+    required: false
+    type: int
+  parser: parse_bleague_team_box
+  path: /contexts/{schedule_key}
+  path_params:
+  - description: Required. B.LEAGUE ScheduleKey (integer, one global sequence across
+      B1, B2, B3 and every season), e.g. 504734 = B1 2025-26 sec 1, Alvark Tokyo v
+      Utsunomiya Brex; list a day's keys with bleague_schedule.
+    name: schedule_key
+    required: true
+    type: int
+  returns_schema: native/bleague/team_box
+  short: team_box
+  summary: Team rows of the box score (team-credited stats and team totals) per period
+    category.
+- example_args:
+    schedule_key: 504734
+  extra_params:
+  - description: 'Optional guard: the season END year the game must belong to. A context
+      whose Year differs raises AssetFetchError. Omitted = no check (the key alone
+      selects the game).'
+    name: season
+    query_key: season
+    required: false
+    type: int
+  parser: parse_bleague_team_summary
+  path: /contexts/{schedule_key}
+  path_params:
+  - description: Required. B.LEAGUE ScheduleKey (integer, one global sequence across
+      B1, B2, B3 and every season), e.g. 504734 = B1 2025-26 sec 1, Alvark Tokyo v
+      Utsunomiya Brex; list a day's keys with bleague_schedule.
+    name: schedule_key
+    required: true
+    type: int
+  returns_schema: native/bleague/team_summary
+  short: team_summary
+  summary: 'Team summary per period category in long form: shooting, rebounds, paint,
+    fast-break and second-chance points.'
+- example_args:
+    schedule_key: 504734
+  extra_params:
+  - description: 'Optional guard: the season END year the game must belong to. A context
+      whose Year differs raises AssetFetchError. Omitted = no check (the key alone
+      selects the game).'
+    name: season
+    query_key: season
+    required: false
+    type: int
+  parser: parse_bleague_pbp
+  path: /contexts/{schedule_key}
+  path_params:
+  - description: Required. B.LEAGUE ScheduleKey (integer, one global sequence across
+      B1, B2, B3 and every season), e.g. 504734 = B1 2025-26 sec 1, Alvark Tokyo v
+      Utsunomiya Brex; list a day's keys with bleague_schedule.
+    name: schedule_key
+    required: true
+    type: int
+  returns_schema: native/bleague/pbp
+  short: pbp
+  summary: Play-by-play of a finished game in game order, with decoded action codes
+    and x / y from 2022-23.
+- example_args:
+    schedule_key: 504734
+  extra_params:
+  - description: 'Optional guard: the season END year the game must belong to. A context
+      whose Year differs raises AssetFetchError. Omitted = no check (the key alone
+      selects the game).'
+    name: season
+    query_key: season
+    required: false
+    type: int
+  parser: parse_bleague_shots
+  path: /contexts/{schedule_key}
+  path_params:
+  - description: Required. B.LEAGUE ScheduleKey (integer, one global sequence across
+      B1, B2, B3 and every season), e.g. 504734 = B1 2025-26 sec 1, Alvark Tokyo v
+      Utsunomiya Brex; list a day's keys with bleague_schedule.
+    name: schedule_key
+    required: true
+    type: int
+  returns_schema: native/bleague/shots
+  short: shots
+  summary: Field-goal attempts with court position (2022-23 onward, v2 feed).
+- example_args:
+    schedule_key: 504734
+  extra_params:
+  - description: 'Optional guard: the season END year the game must belong to. A context
+      whose Year differs raises AssetFetchError. Omitted = no check (the key alone
+      selects the game).'
+    name: season
+    query_key: season
+    required: false
+    type: int
+  parser: parse_bleague_leaders
+  path: /contexts/{schedule_key}
+  path_params:
+  - description: Required. B.LEAGUE ScheduleKey (integer, one global sequence across
+      B1, B2, B3 and every season), e.g. 504734 = B1 2025-26 sec 1, Alvark Tokyo v
+      Utsunomiya Brex; list a day's keys with bleague_schedule.
+    name: schedule_key
+    required: true
+    type: int
+  returns_schema: native/bleague/leaders
+  short: leaders
+  summary: Team leaders per statistic and period category (v1 feed only).
+- example_args:
+    schedule_key: 504734
+  extra_params:
+  - description: 'Optional guard: the season END year the game must belong to. A context
+      whose Year differs raises AssetFetchError. Omitted = no check (the key alone
+      selects the game).'
+    name: season
+    query_key: season
+    required: false
+    type: int
+  parser: parse_bleague_score_track
+  path: /contexts/{schedule_key}
+  path_params:
+  - description: Required. B.LEAGUE ScheduleKey (integer, one global sequence across
+      B1, B2, B3 and every season), e.g. 504734 = B1 2025-26 sec 1, Alvark Tokyo v
+      Utsunomiya Brex; list a day's keys with bleague_schedule.
+    name: schedule_key
+    required: true
+    type: int
+  returns_schema: native/bleague/score_track
+  short: score_track
+  summary: Running score after each scoring event (v1 feed only).
+- example_args:
+    day: 4
+    month: 10
+    season: 2026
+    tab: 1
+  extra_params:
+  - description: Required. Season END year (2026 = the 2025-26 season). The site's
+      own year is the START year; ``bleague_runtime`` sends ``season - 1``.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: 'Required. Division tab: 1 = B1, 2 = B2, 3 = B3.'
+    name: tab
+    query_key: tab
+    required: true
+    type: int
+  - description: Required. Calendar month 1-12 of the game day (seasons run September
+      to June).
+    name: month
+    query_key: month
+    required: true
+    type: int
+  - description: Required. Day of month of the game day.
+    name: day
+    query_key: day
+    required: true
+    type: int
+  - description: 'Competition type: 2 B1 league, 3 B1 Championship, 4 B1 relegation
+      playoffs, 5 all-star, 7 B2 league, 8 B2 playoffs, 11 B1-B2 promotion/relegation,
+      15 B3 league, 32 B3 playoffs. Omitted = the league competition of the tab (2
+      / 7 / 15).'
+    name: event
+    query_key: event
+    required: false
+    type: int
+  host: https://www.bleague.jp
+  parser: parse_bleague_schedule
+  path: /schedule/
+  returns_schema: native/bleague/schedule
+  short: schedule
+  summary: 'Games of one day of one competition and division: schedule keys, clubs,
+    scores, venue, tip-off.'
+- example_args:
+    day: 4
+    month: 10
+    season: 2026
+    tab: 1
+  extra_params:
+  - description: Required. Season END year (2026 = the 2025-26 season). The site's
+      own year is the START year; ``bleague_runtime`` sends ``season - 1``.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: 'Required. Division tab: 1 = B1, 2 = B2, 3 = B3.'
+    name: tab
+    query_key: tab
+    required: true
+    type: int
+  - description: Required. Calendar month 1-12 of the game day (seasons run September
+      to June).
+    name: month
+    query_key: month
+    required: true
+    type: int
+  - description: Required. Day of month of the game day.
+    name: day
+    query_key: day
+    required: true
+    type: int
+  - description: 'Competition type: 2 B1 league, 3 B1 Championship, 4 B1 relegation
+      playoffs, 5 all-star, 7 B2 league, 8 B2 playoffs, 11 B1-B2 promotion/relegation,
+      15 B3 league, 32 B3 playoffs. Omitted = the league competition of the tab (2
+      / 7 / 15).'
+    name: event
+    query_key: event
+    required: false
+    type: int
+  host: https://www.bleague.jp
+  parser: parse_bleague_schedule_clubs
+  path: /schedule/
+  returns_schema: native/bleague/schedule_clubs
+  short: schedule_clubs
+  summary: Clubs of the season and division from the schedule page's club filter,
+    with their team ids.
+- example_args:
+    day: 4
+    month: 10
+    season: 2026
+    tab: 1
+  extra_params:
+  - description: Required. Season END year (2026 = the 2025-26 season). The site's
+      own year is the START year; ``bleague_runtime`` sends ``season - 1``.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: 'Required. Division tab: 1 = B1, 2 = B2, 3 = B3.'
+    name: tab
+    query_key: tab
+    required: true
+    type: int
+  - description: Required. Calendar month 1-12 of the game day (seasons run September
+      to June).
+    name: month
+    query_key: month
+    required: true
+    type: int
+  - description: Required. Day of month of the game day.
+    name: day
+    query_key: day
+    required: true
+    type: int
+  - description: 'Competition type: 2 B1 league, 3 B1 Championship, 4 B1 relegation
+      playoffs, 5 all-star, 7 B2 league, 8 B2 playoffs, 11 B1-B2 promotion/relegation,
+      15 B3 league, 32 B3 playoffs. Omitted = the league competition of the tab (2
+      / 7 / 15).'
+    name: event
+    query_key: event
+    required: false
+    type: int
+  host: https://www.bleague.jp
+  parser: parse_bleague_schedule_events
+  path: /schedule/
+  returns_schema: native/bleague/schedule_events
+  short: schedule_events
+  summary: Competitions the schedule page offers for the season and division.
+- example_args:
+    day: 4
+    month: 10
+    season: 2026
+    tab: 1
+  extra_params:
+  - description: Required. Season END year (2026 = the 2025-26 season). The site's
+      own year is the START year; ``bleague_runtime`` sends ``season - 1``.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: 'Required. Division tab: 1 = B1, 2 = B2, 3 = B3.'
+    name: tab
+    query_key: tab
+    required: true
+    type: int
+  - description: Required. Calendar month 1-12 of the game day (seasons run September
+      to June).
+    name: month
+    query_key: month
+    required: true
+    type: int
+  - description: Required. Day of month of the game day.
+    name: day
+    query_key: day
+    required: true
+    type: int
+  - description: 'Competition type: 2 B1 league, 3 B1 Championship, 4 B1 relegation
+      playoffs, 5 all-star, 7 B2 league, 8 B2 playoffs, 11 B1-B2 promotion/relegation,
+      15 B3 league, 32 B3 playoffs. Omitted = the league competition of the tab (2
+      / 7 / 15).'
+    name: event
+    query_key: event
+    required: false
+    type: int
+  host: https://www.bleague.jp
+  parser: parse_bleague_schedule_days
+  path: /schedule/
+  returns_schema: native/bleague/schedule_days
+  short: schedule_days
+  summary: Game days of the requested month for the competition.
+- example_args:
+    season: 2026
+    tab: 1
+  extra_params:
+  - description: Required. Season END year (2026 = the 2025-26 season). The site's
+      own year is the START year; ``bleague_runtime`` sends ``season - 1``.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: 'Required. Division tab: 1 = B1, 2 = B2, 3 = B3.'
+    name: tab
+    query_key: tab
+    required: true
+    type: int
+  host: https://www.bleague.jp
+  parser: parse_bleague_standings
+  path: /standings/
+  returns_schema: native/bleague/standings
+  short: standings
+  summary: Standings of one season and division, per conference / division table and
+    wild card.
+getter_module: sportsdataverse.basketball.bleague.bleague_runtime
+host: https://b-league.s3.amazonaws.com/web_json
+module: bleague
+name_pattern: bleague_{short}
+parser_columns: true
+parser_module: basketball.bleague.bleague_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: bleague_
