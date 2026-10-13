@@ -1,66 +1,69 @@
-"""PWHL native power ratings -- thin shim over
-:mod:`sportsdataverse.nhl.nhl_team_ratings`.
+"""PWHL native power ratings, built from PWHL data.
 
-The opponent-adjust + shrinkage solver is entirely league-agnostic (every
-constant is passed in from ``LEAGUE_CONSTANTS``), so this module re-exports
-the NHL implementation with ``league="pwhl"`` defaulted -- the same
-by-reference pattern ``wbb_rapm`` uses over ``mbb_rapm``. Women's-league
-constants live in the shared ``LEAGUE_CONSTANTS["pwhl"]`` row.
-
-**Oracle gate deferred:** ``load_pwhl_pbp`` carries a categorical
-``shot_quality`` column, not the numeric ``xg`` the rating engine consumes,
-and lacks the even-strength skater/goalie state columns -- so a real PWHL
-rating validation is deferred until xG-bearing PWHL pbp lands in sdv-py
-(design spec Sec 9-7). See ``tests/fixtures/nhl_prediction/README.md`` for
-the capture contract. The shim wiring is unit-tested now.
+The opponent-adjust + shrinkage solver is the NHL one
+(:func:`sportsdataverse.nhl.nhl_team_ratings.adjust_rate_opponent`, every
+constant passed in from ``LEAGUE_CONSTANTS["pwhl"]``). The inputs are not:
+``load_pwhl_pbp`` carries no ``xg`` and no skater-count columns, so the
+per-game rates come from
+:func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_ratings_from_proxy`, which
+reads ``load_pwhl_pbp`` / ``load_pwhl_schedules`` / ``load_pwhl_game_info``
+and scores shots with the PWHL coordinate xG model. No NHL loader is read.
 
 Example:
     Quick start::
 
         from sportsdataverse.pwhl.pwhl_team_ratings import pwhl_team_ratings
 
-        ratings = pwhl_team_ratings(2024)
+        ratings = pwhl_team_ratings(2025)
 
 See Also:
-    * `nhl-api-py`_ -- companion NHL Python client (the core this shim re-exports).
+    * `fastRhockey`_ -- companion R PWHL/NHL client (raw HockeyTech capture).
 
-.. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
+.. _fastRhockey: https://fastRhockey.sportsdataverse.org
 """
 
 from __future__ import annotations
 
-import importlib
+import warnings
 from typing import Any
 
-# ponytail: importlib.import_module, not `from sportsdataverse.nhl import
-# nhl_team_ratings` -- the nhl package __init__ exports a function of the same
-# name, which shadows the submodule attribute. import_module reads sys.modules
-# directly, so `_core.nhl_team_ratings` is always the function (and stays
-# monkeypatch-interceptable at call time for the wiring test).
-_core = importlib.import_module("sportsdataverse.nhl.nhl_team_ratings")
+from sportsdataverse.pwhl.pwhl_xg_proxy import pwhl_ratings_from_proxy
 
 __all__ = ["pwhl_team_ratings"]
 
 
-def pwhl_team_ratings(seasons: Any, *, league: str = "pwhl", **kwargs: Any) -> Any:
+def pwhl_team_ratings(seasons: Any, *, league: Any = None, **kwargs: Any) -> Any:
     """PWHL opponent-adjusted, shrunk even-strength xG team ratings.
 
-    Delegates to :func:`sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings`
-    with ``league="pwhl"`` defaulted. Oracle gate deferred (no xG-bearing
-    PWHL pbp yet -- see module docstring).
+    Delegates to :func:`sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_ratings_from_proxy`,
+    which loads PWHL pbp, schedules and game info only.
 
     Args:
-        seasons: an int or iterable of seasons.
-        league: league key (defaults to ``"pwhl"``).
-        **kwargs: forwarded to the NHL core (``as_of_date``, ``return_as_pandas``).
+        seasons: an int or iterable of PWHL season end-years (``>= 2024``).
+        league: deprecated and ignored (the ratings are always PWHL); passing it warns.
+        **kwargs: forwarded to :func:`pwhl_ratings_from_proxy` (``as_of_date``,
+            ``xg_model``, ``xg_method``, ``return_as_pandas``).
+
+    Raises:
+        DeprecationWarning: as a warning, when ``league`` is passed.
 
     Returns:
-        The NHL core's ratings frame, computed with PWHL constants.
+        One row per (season, team), the
+        :func:`sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings` schema
+        (``season``, ``team``, ``adj_xgf``, ``adj_xga``, ``adj_xg_net``,
+        ``adj_gf``, ``adj_ga``, ``games``, ``off_rank``, ``def_rank``,
+        ``net_rank``, ``net_z``).
 
     Example:
         Quick start::
 
             from sportsdataverse.pwhl.pwhl_team_ratings import pwhl_team_ratings
-            ratings = pwhl_team_ratings(2024)
+            ratings = pwhl_team_ratings(2025)
     """
-    return _core.nhl_team_ratings(seasons, league=league, **kwargs)
+    if league is not None:
+        warnings.warn(
+            "pwhl_team_ratings(league=...) is deprecated and ignored: the ratings are always PWHL",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+    return pwhl_ratings_from_proxy(seasons, **kwargs)

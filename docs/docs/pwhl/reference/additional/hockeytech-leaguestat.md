@@ -645,7 +645,7 @@ One row per game in the window, as the feed ships it (String): `id`, `season_id`
 
 ### pwhl_skater_rapm {#pwhl_skater_rapm}
 
-`pwhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
+`pwhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, xg_model: 'Any' = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ② PWHL skater xG RAPM -- shim over `nhl_skater_rapm` with `league='pwhl'`.
 
@@ -657,26 +657,28 @@ too thin.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
-| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
-| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+| `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
+| `model_dir` | `str \| None` | `None` | booster directory for NHL-shaped input (the borrowed NHL xG boosters). |
+| `xg_model` | `Any` | `None` | a fitted `PwhlCoordXGModel` scoring HockeyTech input; `None` fits one on `pbp` (see `sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). That default is an in-sample fit: the goals in `pbp` shape the xG the ratings are fit to. For a backtest, pass a model fit on prior seasons only. |
 
 **Returns**
 
 Same schema as `nhl_skater_rapm`: `player_id:Int64, xg_rapm_off:Float64, xg_rapm_def:Float64, xg_rapm:Float64, toi_minutes:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
 
-No returns table is published for this function: no capture: it expects NHL-style play-by-play columns (secondary_type, x_fixed, strength_state) that no PWHL loader provides, so it raises ColumnNotFoundError on real PWHL games.
+No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
 **Example**
 
 ```python
+from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
 from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_rapm
-rapm = pwhl_skater_rapm(pbp, shifts)
+rapm = pwhl_skater_rapm(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 ```
 
 ### pwhl_skater_war {#pwhl_skater_war}
 
-`pwhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
+`pwhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, xg_model: 'Any' = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ③ PWHL GAR/WAR composite -- shim over `nhl_skater_war` with `league='pwhl'`.
 
@@ -686,26 +688,28 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
-| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
-| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+| `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
+| `model_dir` | `str \| None` | `None` | booster directory for NHL-shaped input (the borrowed NHL xG boosters). |
+| `xg_model` | `Any` | `None` | a fitted `PwhlCoordXGModel` scoring HockeyTech input; `None` fits one on `pbp` (see `sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). That default is an in-sample fit: the goals in `pbp` shape the xG the ratings are fit to. For a backtest, pass a model fit on prior seasons only. |
 
 **Returns**
 
 Same schema as `nhl_skater_war`: `player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
 
-No returns table is published for this function: no capture: it expects NHL-style play-by-play columns (secondary_type, x_fixed, strength_state) that no PWHL loader provides, so it raises ColumnNotFoundError on real PWHL games.
+No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
 **Example**
 
 ```python
+from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
 from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_war
-war = pwhl_skater_war(pbp, shifts)
+war = pwhl_skater_war(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 ```
 
 ### pwhl_special_teams_value {#pwhl_special_teams_value}
 
-`pwhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
+`pwhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, xg_model: 'Any' = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ⑥ PWHL special-teams value -- shim over `nhl_special_teams_value` with `league='pwhl'`.
 
@@ -715,21 +719,23 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
-| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
-| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+| `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
+| `model_dir` | `str \| None` | `None` | booster directory for NHL-shaped input (the borrowed NHL xG boosters). |
+| `xg_model` | `Any` | `None` | a fitted `PwhlCoordXGModel` scoring HockeyTech input; `None` fits one on `pbp` (see `sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). That default is an in-sample fit: the goals in `pbp` shape the xG the ratings are fit to. For a backtest, pass a model fit on prior seasons only. |
 
 **Returns**
 
 Same schema as `nhl_special_teams_value`: `player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
 
-No returns table is published for this function: no capture: it expects NHL-style play-by-play columns (secondary_type, x_fixed, strength_state) that no PWHL loader provides, so it raises ColumnNotFoundError on real PWHL games.
+No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
 **Example**
 
 ```python
+from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
 from sportsdataverse.pwhl.pwhl_player_impact import pwhl_special_teams_value
-st = pwhl_special_teams_value(pbp, shifts)
+st = pwhl_special_teams_value(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 ```
 
 ### pwhl_standings {#pwhl_standings}
@@ -1008,7 +1014,7 @@ One row per transaction on the feed's current page (the newest 20): `transaction
 
 ### pwhl_unit_ratings {#pwhl_unit_ratings}
 
-`pwhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
+`pwhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, xg_model: 'Any' = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`.
 
@@ -1018,19 +1024,21 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
-| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
-| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+| `pbp` | `DataFrame` |  | a `load_pwhl_pbp` frame (adapted, see the module docstring) or a frame already shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | the matching `load_pwhl_shifts` frame, or one shaped like `load_nhl_shifts`. |
+| `model_dir` | `str \| None` | `None` | booster directory for NHL-shaped input (the borrowed NHL xG boosters). |
+| `xg_model` | `Any` | `None` | a fitted `PwhlCoordXGModel` scoring HockeyTech input; `None` fits one on `pbp` (see `sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_shot_xg`). That default is an in-sample fit: the goals in `pbp` shape the xG the ratings are fit to. For a backtest, pass a model fit on prior seasons only. |
 
 **Returns**
 
 Same schema as `nhl_unit_ratings`: `team:Utf8, unit_ids:Utf8, unit_players:Utf8, toi_minutes:Float64, on_ice_xgf:Float64, on_ice_xga:Float64, on_ice_xgf_pct:Float64, summed_rapm:Float64, unit_value:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
 
-No returns table is published for this function: no capture: it expects NHL-style play-by-play columns (secondary_type, x_fixed, strength_state) that no PWHL loader provides, so it raises ColumnNotFoundError on real PWHL games.
+No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
 **Example**
 
 ```python
+from sportsdataverse.pwhl import load_pwhl_pbp, load_pwhl_shifts
 from sportsdataverse.pwhl.pwhl_player_impact import pwhl_unit_ratings
-units = pwhl_unit_ratings(pbp, shifts)
+units = pwhl_unit_ratings(load_pwhl_pbp(2025), load_pwhl_shifts(2025))
 ```

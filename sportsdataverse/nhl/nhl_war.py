@@ -77,7 +77,9 @@ def _faceoff_penalty_components(pbp: pl.DataFrame, *, league: str = "nhl") -> pl
     lost = (
         fo.group_by("event_player_2_id").agg(fo_lost=pl.len().cast(pl.Int64)).rename({"event_player_2_id": "player_id"})
     )
-    fo_tab = won.join(lost, on="player_id", how="full", coalesce=True).fill_null(0)
+    # A faceoff/penalty side with no named player groups under a null id; fill_null would turn
+    # that group into a phantom player 0, so drop it before filling.
+    fo_tab = won.join(lost, on="player_id", how="full", coalesce=True).drop_nulls("player_id").fill_null(0)
     fo_tab = fo_tab.with_columns(fo_total=(pl.col("fo_won") + pl.col("fo_lost")))
     fo_tab = fo_tab.with_columns(
         faceoffs_goals=((pl.col("fo_won") - 0.5 * pl.col("fo_total")) * cfg.faceoff_goal_weight)
@@ -94,7 +96,7 @@ def _faceoff_penalty_components(pbp: pl.DataFrame, *, league: str = "nhl") -> pl
         .agg(pens_drawn=pl.len().cast(pl.Int64))
         .rename({"event_player_2_id": "player_id"})
     )
-    pen_tab = taken.join(drawn, on="player_id", how="full", coalesce=True).fill_null(0)
+    pen_tab = taken.join(drawn, on="player_id", how="full", coalesce=True).drop_nulls("player_id").fill_null(0)
     pen_tab = pen_tab.with_columns(
         pens_goals=((pl.col("pens_drawn") - pl.col("pens_taken")) * cfg.penalty_goal_weight)
     ).select("player_id", "pens_goals")
@@ -114,6 +116,7 @@ def nhl_skater_war(
     model_dir: "str | None" = None,
     league: str = "nhl",
     return_as_pandas: bool = False,
+    xg_scored: bool = False,
 ) -> "pl.DataFrame | pd.DataFrame":
     """Per-skater GAR/WAR composite -- EV + special-teams + faceoffs + penalties.
 
@@ -124,6 +127,8 @@ def nhl_skater_war(
             ``nhl_special_teams_value``.
         league: ``"nhl"`` or ``"pwhl"``.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        xg_scored: ``pbp`` already carries the shot ``xg`` to use (another league's own xG
+            model); skip re-scoring with the NHL boosters, which would replace it.
 
     Returns:
         polars.DataFrame: ``player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64,
@@ -152,8 +157,10 @@ def nhl_skater_war(
         return pl.DataFrame(schema=_WAR_SCHEMA)
 
     cfg = get_constants(league)
-    ev_rapm = nhl_skater_rapm(pbp, shifts, model_dir=model_dir, league=league, strength_states=["5v5"])
-    st = nhl_special_teams_value(pbp, shifts, model_dir=model_dir, league=league)
+    ev_rapm = nhl_skater_rapm(
+        pbp, shifts, model_dir=model_dir, league=league, strength_states=["5v5"], xg_scored=xg_scored
+    )
+    st = nhl_special_teams_value(pbp, shifts, model_dir=model_dir, league=league, xg_scored=xg_scored)
     fp = _faceoff_penalty_components(pbp, league=league)
 
     if ev_rapm.height == 0:
