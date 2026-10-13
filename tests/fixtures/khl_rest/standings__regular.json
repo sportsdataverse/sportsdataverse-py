@@ -1,0 +1,1428 @@
+{
+  "status": "success",
+  "data": {
+    "TEXT": {
+      "OT": "ОТ",
+      "SO": "Б",
+      "last": "Последние матчи",
+      "next": "Следующий",
+      "info": "Обозначения в таблице",
+      "team": "Команда",
+      "teams": "Команды",
+      "cur": "Текущий счет",
+      "toDay": "за сегодня"
+    },
+    "COLS": {
+      "pts": {
+        "short": "О",
+        "full": "Количество набранных очков"
+      },
+      "gp": {
+        "short": "И",
+        "full": "Количество проведенных игр"
+      },
+      "w": {
+        "short": "В",
+        "full": "Выигрыши"
+      },
+      "otw": {
+        "short": "ВО",
+        "full": "Выигрыши в овертайме"
+      },
+      "sow": {
+        "short": "ВБ",
+        "full": "Выигрыши в послематчевых буллитах"
+      },
+      "sol": {
+        "short": "ПБ",
+        "full": "Проигрыши в послематчевых буллитах"
+      },
+      "otl": {
+        "short": "ПО",
+        "full": "Проигрыши в овертайме"
+      },
+      "otl_en": {
+        "short": "ПП",
+        "full": "Проигрыши в овертайме с пустыми воротами"
+      },
+      "l": {
+        "short": "П",
+        "full": "Проигрыши"
+      },
+      "g": {
+        "short": "Ш",
+        "full": "Заброшенные шайбы"
+      }
+    },
+    "values": {
+      "type": "regular",
+      "tournament": "1369"
+    },
+    "active_tab": "conferences",
+    "table": "conferences",
+    "json": {
+      "divisions": [
+        {
+          "table_tab": "bobrov",
+          "item": "bobrov",
+          "rows": [
+            {
+              "img": "//img.khl.ru/teams/ru/1369/24/200.png?u=2026",
+              "link": "/clubs/ska/",
+              "link_match": "/clubs/ska/",
+              "name": "СКА",
+              "clubid": 24,
+              "team_last_matches": [
+                {
+                  "team_1": "СКА",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/24/200.png?u=2026",
+                  "team_2": "Динамо Мн",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/207/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": true,
+                  "date": "11 мар",
+                  "town": "Санкт-Петербург",
+                  "link": "/game/1369/898197/protocol/"
+                },
+                {
+                  "team_1": "СКА",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/24/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "5 — 0",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Санкт-Петербург",
+                  "link": "/game/1369/898208/protocol/"
+                },
+                {
+                  "team_1": "Трактор",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/25/200.png?u=2026",
+                  "team_2": "СКА",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/24/200.png?u=2026",
+                  "team_score": "2 — 1",
+                  "win": false,
+                  "date": "16 мар",
+                  "town": "Челябинск",
+                  "link": "/game/1369/898219/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 81,
+                "gp": 68,
+                "w": 28,
+                "otw": 7,
+                "sow": 2,
+                "sol": 4,
+                "otl": 3,
+                "otl_en": 0,
+                "l": 24,
+                "g": "197-170"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 1,
+              "r_live": 1
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/26/200.png?u=2026",
+              "link": "/clubs/torpedo/",
+              "link_match": "/clubs/torpedo/",
+              "name": "Торпедо",
+              "clubid": 26,
+              "team_last_matches": [
+                {
+                  "team_1": "Торпедо",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/26/200.png?u=2026",
+                  "team_2": "ХК Сочи",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/451/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": true,
+                  "date": "08 мар",
+                  "town": "Нижний Новгород",
+                  "link": "/game/1369/898182/protocol/"
+                },
+                {
+                  "team_1": "Авангард",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/34/200.png?u=2026",
+                  "team_2": "Торпедо",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/26/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": false,
+                  "date": "11 мар",
+                  "town": "Омск",
+                  "link": "/game/1369/898193/protocol/"
+                },
+                {
+                  "team_1": "Трактор",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/25/200.png?u=2026",
+                  "team_2": "Торпедо",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/26/200.png?u=2026",
+                  "team_score": "3 — 2",
+                  "win": false,
+                  "date": "13 мар",
+                  "town": "Челябинск",
+                  "link": "/game/1369/898202/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 81,
+                "gp": 68,
+                "w": 27,
+                "otw": 6,
+                "sow": 4,
+                "sol": 2,
+                "otl": 5,
+                "otl_en": 0,
+                "l": 24,
+                "g": "191-191"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 2,
+              "r_live": 2
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+              "link": "/clubs/spartak/",
+              "link_match": "/clubs/spartak/",
+              "name": "Спартак",
+              "clubid": 7,
+              "team_last_matches": [
+                {
+                  "team_1": "Ак Барс",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+                  "team_2": "Спартак",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": false,
+                  "date": "10 мар",
+                  "town": "Казань",
+                  "link": "/game/1369/898192/protocol/"
+                },
+                {
+                  "team_1": "Спартак",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+                  "team_2": "Амур",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/54/200.png?u=2026",
+                  "team_score": "1 — 0",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Москва",
+                  "link": "/game/1369/898201/protocol/"
+                },
+                {
+                  "team_1": "Спартак",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+                  "team_2": "Динамо М",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/719/200.png?u=2026",
+                  "team_score": "3 — 4",
+                  "win": false,
+                  "date": "16 мар",
+                  "town": "Москва",
+                  "link": "/game/1369/898214/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 79,
+                "gp": 68,
+                "w": 29,
+                "otw": 3,
+                "sow": 3,
+                "sol": 5,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 24,
+                "g": "204-201"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 3,
+              "r_live": 3
+            }
+          ]
+        },
+        {
+          "table_tab": "tarasov",
+          "item": "tarasov",
+          "rows": [
+            {
+              "img": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+              "link": "/clubs/lokomotiv/",
+              "link_match": "/clubs/lokomotiv/",
+              "name": "Локомотив",
+              "clubid": 1,
+              "team_last_matches": [
+                {
+                  "team_1": "Локомотив",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": true,
+                  "date": "09 мар",
+                  "town": "Ярославль",
+                  "link": "/game/1369/898188/protocol/"
+                },
+                {
+                  "team_1": "Автомобилист",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+                  "team_2": "Локомотив",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": false,
+                  "date": "11 мар",
+                  "town": "Екатеринбург",
+                  "link": "/game/1369/898198/protocol/"
+                },
+                {
+                  "team_1": "Лада",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/66/200.png?u=2026",
+                  "team_2": "Локомотив",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_score": "2 — 4",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Тольятти",
+                  "link": "/game/1369/898206/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 98,
+                "gp": 68,
+                "w": 34,
+                "otw": 6,
+                "sow": 6,
+                "sol": 2,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 16,
+                "g": "185-135"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 1,
+              "r_live": 1
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/207/200.png?u=2026",
+              "link": "/clubs/dinamo_mn/",
+              "link_match": "/clubs/dinamo_mn/",
+              "name": "Динамо Мн",
+              "clubid": 207,
+              "team_last_matches": [
+                {
+                  "team_1": "Динамо М",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/719/200.png?u=2026",
+                  "team_2": "Динамо Мн",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/207/200.png?u=2026",
+                  "team_score": "6 — 4",
+                  "win": false,
+                  "date": "09 мар",
+                  "town": "Москва",
+                  "link": "/game/1369/898187/protocol/"
+                },
+                {
+                  "team_1": "СКА",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/24/200.png?u=2026",
+                  "team_2": "Динамо Мн",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/207/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": false,
+                  "date": "11 мар",
+                  "town": "Санкт-Петербург",
+                  "link": "/game/1369/898197/protocol/"
+                },
+                {
+                  "team_1": "Динамо Мн",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/207/200.png?u=2026",
+                  "team_2": "Локомотив",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_score": "2 — 1",
+                  "win": true,
+                  "date": "15 мар",
+                  "town": "Минск",
+                  "link": "/game/1369/898210/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 88,
+                "gp": 68,
+                "w": 33,
+                "otw": 2,
+                "sow": 4,
+                "sol": 5,
+                "otl": 5,
+                "otl_en": 0,
+                "l": 19,
+                "g": "247-173"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 2,
+              "r_live": 2
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+              "link": "/clubs/severstal/",
+              "link_match": "/clubs/severstal/",
+              "name": "Северсталь",
+              "clubid": 56,
+              "team_last_matches": [
+                {
+                  "team_1": "Локомотив",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": false,
+                  "date": "09 мар",
+                  "town": "Ярославль",
+                  "link": "/game/1369/898188/protocol/"
+                },
+                {
+                  "team_1": "Лада",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/66/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "1 — 3",
+                  "win": true,
+                  "date": "11 мар",
+                  "town": "Тольятти",
+                  "link": "/game/1369/898194/protocol/"
+                },
+                {
+                  "team_1": "СКА",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/24/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "5 — 0",
+                  "win": false,
+                  "date": "13 мар",
+                  "town": "Санкт-Петербург",
+                  "link": "/game/1369/898208/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 86,
+                "gp": 68,
+                "w": 29,
+                "otw": 9,
+                "sow": 2,
+                "sol": 4,
+                "otl": 2,
+                "otl_en": 0,
+                "l": 22,
+                "g": "197-185"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 3,
+              "r_live": 3
+            }
+          ]
+        },
+        {
+          "table_tab": "kharlamov",
+          "item": "kharlamov",
+          "rows": [
+            {
+              "img": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+              "link": "/clubs/metallurg_mg/",
+              "link_match": "/clubs/metallurg_mg/",
+              "name": "Металлург Мг",
+              "clubid": 37,
+              "team_last_matches": [
+                {
+                  "team_1": "Салават Юлаев",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/38/200.png?u=2026",
+                  "team_2": "Металлург Мг",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_score": "1 — 2",
+                  "win": true,
+                  "date": "11 мар",
+                  "town": "Уфа",
+                  "link": "/game/1369/898196/protocol/"
+                },
+                {
+                  "team_1": "Сибирь",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/29/200.png?u=2026",
+                  "team_2": "Металлург Мг",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_score": "1 — 2",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Новосибирск",
+                  "link": "/game/1369/898204/protocol/"
+                },
+                {
+                  "team_1": "Металлург Мг",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_2": "Автомобилист",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": true,
+                  "date": "16 мар",
+                  "town": "Магнитогорск",
+                  "link": "/game/1369/898213/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 105,
+                "gp": 68,
+                "w": 37,
+                "otw": 8,
+                "sow": 4,
+                "sol": 3,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 12,
+                "g": "252-184"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 1,
+              "r_live": 1
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+              "link": "/clubs/ak_bars/",
+              "link_match": "/clubs/ak_bars/",
+              "name": "Ак Барс",
+              "clubid": 53,
+              "team_last_matches": [
+                {
+                  "team_1": "Ак Барс",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+                  "team_2": "Спартак",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": true,
+                  "date": "10 мар",
+                  "town": "Казань",
+                  "link": "/game/1369/898192/protocol/"
+                },
+                {
+                  "team_1": "Ак Барс",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+                  "team_2": "ХК Сочи",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/451/200.png?u=2026",
+                  "team_score": "2 — 0",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Казань",
+                  "link": "/game/1369/898200/protocol/"
+                },
+                {
+                  "team_1": "Северсталь",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_2": "Ак Барс",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+                  "team_score": "4 — 2",
+                  "win": false,
+                  "date": "16 мар",
+                  "town": "Череповец",
+                  "link": "/game/1369/898218/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 94,
+                "gp": 68,
+                "w": 38,
+                "otw": 2,
+                "sow": 3,
+                "sol": 6,
+                "otl": 2,
+                "otl_en": 0,
+                "l": 17,
+                "g": "212-169"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 2,
+              "r_live": 2
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+              "link": "/clubs/avtomobilist/",
+              "link_match": "/clubs/avtomobilist/",
+              "name": "Автомобилист",
+              "clubid": 190,
+              "team_last_matches": [
+                {
+                  "team_1": "Автомобилист",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+                  "team_2": "Локомотив",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": true,
+                  "date": "11 мар",
+                  "town": "Екатеринбург",
+                  "link": "/game/1369/898198/protocol/"
+                },
+                {
+                  "team_1": "Автомобилист",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+                  "team_2": "ЦСКА",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/2/200.png?u=2026",
+                  "team_score": "0 — 3",
+                  "win": false,
+                  "date": "14 мар",
+                  "town": "Екатеринбург",
+                  "link": "/game/1369/898209/protocol/"
+                },
+                {
+                  "team_1": "Металлург Мг",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_2": "Автомобилист",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": false,
+                  "date": "16 мар",
+                  "town": "Магнитогорск",
+                  "link": "/game/1369/898213/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 84,
+                "gp": 68,
+                "w": 32,
+                "otw": 4,
+                "sow": 4,
+                "sol": 0,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 24,
+                "g": "206-164"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 3,
+              "r_live": 3
+            }
+          ]
+        }
+      ],
+      "league": [
+        {
+          "table_tab": "league",
+          "item": "league",
+          "rows": [
+            {
+              "img": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+              "link": "/clubs/metallurg_mg/",
+              "link_match": "/clubs/metallurg_mg/",
+              "name": "Металлург Мг",
+              "clubid": 37,
+              "team_last_matches": [
+                {
+                  "team_1": "Салават Юлаев",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/38/200.png?u=2026",
+                  "team_2": "Металлург Мг",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_score": "1 — 2",
+                  "win": true,
+                  "date": "11 мар",
+                  "town": "Уфа",
+                  "link": "/game/1369/898196/protocol/"
+                },
+                {
+                  "team_1": "Сибирь",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/29/200.png?u=2026",
+                  "team_2": "Металлург Мг",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_score": "1 — 2",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Новосибирск",
+                  "link": "/game/1369/898204/protocol/"
+                },
+                {
+                  "team_1": "Металлург Мг",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_2": "Автомобилист",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": true,
+                  "date": "16 мар",
+                  "town": "Магнитогорск",
+                  "link": "/game/1369/898213/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 105,
+                "gp": 68,
+                "w": 37,
+                "otw": 8,
+                "sow": 4,
+                "sol": 3,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 12,
+                "g": "252-184"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 1,
+              "r_live": 1
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/34/200.png?u=2026",
+              "link": "/clubs/avangard/",
+              "link_match": "/clubs/avangard/",
+              "name": "Авангард",
+              "clubid": 34,
+              "team_last_matches": [
+                {
+                  "team_1": "Авангард",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/34/200.png?u=2026",
+                  "team_2": "Сибирь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/29/200.png?u=2026",
+                  "team_score": "1 — 2",
+                  "win": false,
+                  "date": "09 мар",
+                  "town": "Омск",
+                  "link": "/game/1369/898186/protocol/"
+                },
+                {
+                  "team_1": "Авангард",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/34/200.png?u=2026",
+                  "team_2": "Торпедо",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/26/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": true,
+                  "date": "11 мар",
+                  "town": "Омск",
+                  "link": "/game/1369/898193/protocol/"
+                },
+                {
+                  "team_1": "Авангард",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/34/200.png?u=2026",
+                  "team_2": "Драконы",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/568/200.png?u=2026",
+                  "team_score": "6 — 1",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Омск",
+                  "link": "/game/1369/898203/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 99,
+                "gp": 68,
+                "w": 36,
+                "otw": 6,
+                "sow": 5,
+                "sol": 1,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 16,
+                "g": "228-159"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 2,
+              "r_live": 2
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+              "link": "/clubs/lokomotiv/",
+              "link_match": "/clubs/lokomotiv/",
+              "name": "Локомотив",
+              "clubid": 1,
+              "team_last_matches": [
+                {
+                  "team_1": "Локомотив",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": true,
+                  "date": "09 мар",
+                  "town": "Ярославль",
+                  "link": "/game/1369/898188/protocol/"
+                },
+                {
+                  "team_1": "Автомобилист",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+                  "team_2": "Локомотив",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": false,
+                  "date": "11 мар",
+                  "town": "Екатеринбург",
+                  "link": "/game/1369/898198/protocol/"
+                },
+                {
+                  "team_1": "Лада",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/66/200.png?u=2026",
+                  "team_2": "Локомотив",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_score": "2 — 4",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Тольятти",
+                  "link": "/game/1369/898206/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 98,
+                "gp": 68,
+                "w": 34,
+                "otw": 6,
+                "sow": 6,
+                "sol": 2,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 16,
+                "g": "185-135"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 3,
+              "r_live": 3
+            }
+          ]
+        }
+      ],
+      "conferences": [
+        {
+          "table_tab": "west",
+          "item": "west",
+          "rows": [
+            {
+              "img": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+              "link": "/clubs/lokomotiv/",
+              "link_match": "/clubs/lokomotiv/",
+              "name": "Локомотив",
+              "clubid": 1,
+              "team_last_matches": [
+                {
+                  "team_1": "Локомотив",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": true,
+                  "date": "09 мар",
+                  "town": "Ярославль",
+                  "link": "/game/1369/898188/protocol/"
+                },
+                {
+                  "team_1": "Автомобилист",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+                  "team_2": "Локомотив",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": false,
+                  "date": "11 мар",
+                  "town": "Екатеринбург",
+                  "link": "/game/1369/898198/protocol/"
+                },
+                {
+                  "team_1": "Лада",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/66/200.png?u=2026",
+                  "team_2": "Локомотив",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_score": "2 — 4",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Тольятти",
+                  "link": "/game/1369/898206/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 98,
+                "gp": 68,
+                "w": 34,
+                "otw": 6,
+                "sow": 6,
+                "sol": 2,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 16,
+                "g": "185-135"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 1,
+              "r_live": 1
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/207/200.png?u=2026",
+              "link": "/clubs/dinamo_mn/",
+              "link_match": "/clubs/dinamo_mn/",
+              "name": "Динамо Мн",
+              "clubid": 207,
+              "team_last_matches": [
+                {
+                  "team_1": "Динамо М",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/719/200.png?u=2026",
+                  "team_2": "Динамо Мн",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/207/200.png?u=2026",
+                  "team_score": "6 — 4",
+                  "win": false,
+                  "date": "09 мар",
+                  "town": "Москва",
+                  "link": "/game/1369/898187/protocol/"
+                },
+                {
+                  "team_1": "СКА",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/24/200.png?u=2026",
+                  "team_2": "Динамо Мн",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/207/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": false,
+                  "date": "11 мар",
+                  "town": "Санкт-Петербург",
+                  "link": "/game/1369/898197/protocol/"
+                },
+                {
+                  "team_1": "Динамо Мн",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/207/200.png?u=2026",
+                  "team_2": "Локомотив",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_score": "2 — 1",
+                  "win": true,
+                  "date": "15 мар",
+                  "town": "Минск",
+                  "link": "/game/1369/898210/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 88,
+                "gp": 68,
+                "w": 33,
+                "otw": 2,
+                "sow": 4,
+                "sol": 5,
+                "otl": 5,
+                "otl_en": 0,
+                "l": 19,
+                "g": "247-173"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 2,
+              "r_live": 2
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+              "link": "/clubs/severstal/",
+              "link_match": "/clubs/severstal/",
+              "name": "Северсталь",
+              "clubid": 56,
+              "team_last_matches": [
+                {
+                  "team_1": "Локомотив",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": false,
+                  "date": "09 мар",
+                  "town": "Ярославль",
+                  "link": "/game/1369/898188/protocol/"
+                },
+                {
+                  "team_1": "Лада",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/66/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "1 — 3",
+                  "win": true,
+                  "date": "11 мар",
+                  "town": "Тольятти",
+                  "link": "/game/1369/898194/protocol/"
+                },
+                {
+                  "team_1": "СКА",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/24/200.png?u=2026",
+                  "team_2": "Северсталь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_score": "5 — 0",
+                  "win": false,
+                  "date": "13 мар",
+                  "town": "Санкт-Петербург",
+                  "link": "/game/1369/898208/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 86,
+                "gp": 68,
+                "w": 29,
+                "otw": 9,
+                "sow": 2,
+                "sol": 4,
+                "otl": 2,
+                "otl_en": 0,
+                "l": 22,
+                "g": "197-185"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 3,
+              "r_live": 3
+            }
+          ]
+        },
+        {
+          "table_tab": "east",
+          "item": "east",
+          "rows": [
+            {
+              "img": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+              "link": "/clubs/metallurg_mg/",
+              "link_match": "/clubs/metallurg_mg/",
+              "name": "Металлург Мг",
+              "clubid": 37,
+              "team_last_matches": [
+                {
+                  "team_1": "Салават Юлаев",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/38/200.png?u=2026",
+                  "team_2": "Металлург Мг",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_score": "1 — 2",
+                  "win": true,
+                  "date": "11 мар",
+                  "town": "Уфа",
+                  "link": "/game/1369/898196/protocol/"
+                },
+                {
+                  "team_1": "Сибирь",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/29/200.png?u=2026",
+                  "team_2": "Металлург Мг",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_score": "1 — 2",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Новосибирск",
+                  "link": "/game/1369/898204/protocol/"
+                },
+                {
+                  "team_1": "Металлург Мг",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026",
+                  "team_2": "Автомобилист",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/190/200.png?u=2026",
+                  "team_score": "4 — 3",
+                  "win": true,
+                  "date": "16 мар",
+                  "town": "Магнитогорск",
+                  "link": "/game/1369/898213/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 105,
+                "gp": 68,
+                "w": 37,
+                "otw": 8,
+                "sow": 4,
+                "sol": 3,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 12,
+                "g": "252-184"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 1,
+              "r_live": 1
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/34/200.png?u=2026",
+              "link": "/clubs/avangard/",
+              "link_match": "/clubs/avangard/",
+              "name": "Авангард",
+              "clubid": 34,
+              "team_last_matches": [
+                {
+                  "team_1": "Авангард",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/34/200.png?u=2026",
+                  "team_2": "Сибирь",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/29/200.png?u=2026",
+                  "team_score": "1 — 2",
+                  "win": false,
+                  "date": "09 мар",
+                  "town": "Омск",
+                  "link": "/game/1369/898186/protocol/"
+                },
+                {
+                  "team_1": "Авангард",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/34/200.png?u=2026",
+                  "team_2": "Торпедо",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/26/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": true,
+                  "date": "11 мар",
+                  "town": "Омск",
+                  "link": "/game/1369/898193/protocol/"
+                },
+                {
+                  "team_1": "Авангард",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/34/200.png?u=2026",
+                  "team_2": "Драконы",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/568/200.png?u=2026",
+                  "team_score": "6 — 1",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Омск",
+                  "link": "/game/1369/898203/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 99,
+                "gp": 68,
+                "w": 36,
+                "otw": 6,
+                "sow": 5,
+                "sol": 1,
+                "otl": 4,
+                "otl_en": 0,
+                "l": 16,
+                "g": "228-159"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 2,
+              "r_live": 2
+            },
+            {
+              "img": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+              "link": "/clubs/ak_bars/",
+              "link_match": "/clubs/ak_bars/",
+              "name": "Ак Барс",
+              "clubid": 53,
+              "team_last_matches": [
+                {
+                  "team_1": "Ак Барс",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+                  "team_2": "Спартак",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+                  "team_score": "4 — 1",
+                  "win": true,
+                  "date": "10 мар",
+                  "town": "Казань",
+                  "link": "/game/1369/898192/protocol/"
+                },
+                {
+                  "team_1": "Ак Барс",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+                  "team_2": "ХК Сочи",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/451/200.png?u=2026",
+                  "team_score": "2 — 0",
+                  "win": true,
+                  "date": "13 мар",
+                  "town": "Казань",
+                  "link": "/game/1369/898200/protocol/"
+                },
+                {
+                  "team_1": "Северсталь",
+                  "team_1_image": "//img.khl.ru/teams/ru/1369/56/200.png?u=2026",
+                  "team_2": "Ак Барс",
+                  "team_2_image": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+                  "team_score": "4 — 2",
+                  "win": false,
+                  "date": "16 мар",
+                  "town": "Череповец",
+                  "link": "/game/1369/898218/protocol/"
+                }
+              ],
+              "team_next_match_image": false,
+              "team_next_match": false,
+              "is_out_playoff": false,
+              "s": {
+                "pts": 94,
+                "gp": 68,
+                "w": 38,
+                "otw": 2,
+                "sow": 3,
+                "sol": 6,
+                "otl": 2,
+                "otl_en": 0,
+                "l": 17,
+                "g": "212-169"
+              },
+              "s_live": {
+                "pts": null,
+                "gp": null,
+                "w": null,
+                "otw": null,
+                "sow": null,
+                "sol": null,
+                "otl": null,
+                "otl_en": null,
+                "l": null,
+                "g": "-"
+              },
+              "r": 3,
+              "r_live": 3
+            }
+          ]
+        }
+      ]
+    },
+    "TABS": {
+      "league": [
+        {
+          "name": "КХЛ. Регулярный чемпионат",
+          "item": "league"
+        }
+      ],
+      "conferences": [
+        {
+          "name": "Конференция \"Запад\"",
+          "item": "west",
+          "in_playoff": "8"
+        },
+        {
+          "name": "Конференция \"Восток\"",
+          "item": "east",
+          "in_playoff": "8"
+        }
+      ],
+      "divisions": [
+        {
+          "name": "Дивизион Боброва",
+          "item": "bobrov",
+          "conference": "west",
+          "group_name": "Конференция \"Запад\""
+        },
+        {
+          "name": "Дивизион Тарасова",
+          "item": "tarasov",
+          "conference": "west"
+        },
+        {
+          "name": "Дивизион Харламова",
+          "item": "kharlamov",
+          "conference": "east",
+          "group_name": "Конференция \"Восток\""
+        }
+      ]
+    },
+    "last_games": [],
+    "hasLive": false
+  },
+  "errors": []
+}

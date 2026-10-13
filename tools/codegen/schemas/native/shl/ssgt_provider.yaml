@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: provider
+  type: character
+kind: dataframe
+schema: shl_ssgt_provider

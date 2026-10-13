@@ -1,0 +1,324 @@
+[
+  {
+    "position": "Målvakter",
+    "positionCode": "GK",
+    "players": [
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "qd1-1JVKWgydZ",
+        "firstName": "Tobias",
+        "lastName": "Normann",
+        "fullName": "Tobias Normann",
+        "nationality": "NO",
+        "jerseyNumber": 30,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_32e1d256-34f0-40fb-830f-7b66ef74551aTobias Normann.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&s=48fc35bf1d4dd63f8d193e2f51d11f6a",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=160&s=e71c407c3a0e0ba236aa007d2b69886f 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=320&s=1bcf782854f105d047a7245c449b8131 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=480&s=29177ad23dc222f99572658ce18ce583 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=640&s=76982c2430b46683748cf46b7fa2c922 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=960&s=ffd89efd55cf814f029d8d700608a9ec 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=1280&s=7fb4ae91f81b804119c4d37b42a368bc 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=1600&s=002e1fa2d2eaaf37a200d28770fd00b6 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=1920&s=a4ecc36c943f273008359007e32eb31a 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=2560&s=96f06408205fed601b150581ed3d22d5 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=2880&s=1df05114740336b8634c4a89117e8f1b 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&s=48fc35bf1d4dd63f8d193e2f51d11f6a",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&s=48fc35bf1d4dd63f8d193e2f51d11f6a",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=160&s=e71c407c3a0e0ba236aa007d2b69886f 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=320&s=1bcf782854f105d047a7245c449b8131 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=480&s=29177ad23dc222f99572658ce18ce583 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=640&s=76982c2430b46683748cf46b7fa2c922 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=960&s=ffd89efd55cf814f029d8d700608a9ec 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=1280&s=7fb4ae91f81b804119c4d37b42a368bc 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=1600&s=002e1fa2d2eaaf37a200d28770fd00b6 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=1920&s=a4ecc36c943f273008359007e32eb31a 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=2560&s=96f06408205fed601b150581ed3d22d5 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&w=2880&s=1df05114740336b8634c4a89117e8f1b 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F32e1d256-34f0-40fb-830f-7b66ef74551aTobias%20Normann.png?ixlib=js-3.8.0&s=48fc35bf1d4dd63f8d193e2f51d11f6a",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "qQ9-349c7WDv6",
+        "firstName": "Lars",
+        "lastName": "Johansson",
+        "fullName": "Lars Johansson",
+        "nationality": "SE",
+        "jerseyNumber": 1,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_620f514c-fc00-4f2b-b546-6c7b00e999f2Lars Johansson.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&s=bcc9f85e5c952631c7e7897fb37b4381",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=160&s=f73742925cee22690f5ad2005d4ff444 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=320&s=6785f8624a22de036e2aa5aba941a0a9 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=480&s=e2ac42711d40d298a43668c31523c461 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=640&s=95f231a1e79edb32974bf37d3a98c01d 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=960&s=a3cb3c62d936b9afac727cf81c85120f 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=1280&s=7dd410a58cc0026f883159483f3b04f6 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=1600&s=a5f17c5dd1e136243d47ea9a18c3d25a 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=1920&s=2c4ea042cf3c5e48717936b692d6ca34 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=2560&s=6dcb84895cf6da13bc7c48c6f35d69fa 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=2880&s=62541abfe864ee0626ff1e7750a296f8 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&s=bcc9f85e5c952631c7e7897fb37b4381",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&s=bcc9f85e5c952631c7e7897fb37b4381",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=160&s=f73742925cee22690f5ad2005d4ff444 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=320&s=6785f8624a22de036e2aa5aba941a0a9 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=480&s=e2ac42711d40d298a43668c31523c461 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=640&s=95f231a1e79edb32974bf37d3a98c01d 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=960&s=a3cb3c62d936b9afac727cf81c85120f 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=1280&s=7dd410a58cc0026f883159483f3b04f6 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=1600&s=a5f17c5dd1e136243d47ea9a18c3d25a 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=1920&s=2c4ea042cf3c5e48717936b692d6ca34 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=2560&s=6dcb84895cf6da13bc7c48c6f35d69fa 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=2880&s=62541abfe864ee0626ff1e7750a296f8 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&s=bcc9f85e5c952631c7e7897fb37b4381",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      }
+    ]
+  },
+  {
+    "position": "Backar",
+    "positionCode": "D",
+    "players": [
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "qQ9-be56MtJ3k",
+        "firstName": "Tom",
+        "lastName": "Nilsson",
+        "fullName": "Tom Nilsson",
+        "nationality": "SE",
+        "jerseyNumber": 43,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_8a8480c4-bc3d-40b6-a05d-749b2c450292Tom Nilsson.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&s=410f61d4233d356dcb6eb63337b805cd",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=160&s=c313b9bcef6f57f8c481fcc2c3c8186a 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=320&s=1c344fa0ca0942b6565e803a37e3d957 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=480&s=ad485068c412dd69070f175b89a84d69 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=640&s=871ca7aa7fda49264b0b1d0996e36bbb 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=960&s=ec2197ada0ca2a254b6a38105fb6b8fb 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=1280&s=5099e65fcce0a9c13e3a08df236aabb8 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=1600&s=700091cded91fca5385b59d6f69f1db0 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=1920&s=022515c88aa9211cb1107f4de4648ace 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=2560&s=c82abf0d0322e57d68fe888d96500310 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=2880&s=f76048b4f7a8e55d572d4bee2da08fba 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&s=410f61d4233d356dcb6eb63337b805cd",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&s=410f61d4233d356dcb6eb63337b805cd",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=160&s=c313b9bcef6f57f8c481fcc2c3c8186a 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=320&s=1c344fa0ca0942b6565e803a37e3d957 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=480&s=ad485068c412dd69070f175b89a84d69 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=640&s=871ca7aa7fda49264b0b1d0996e36bbb 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=960&s=ec2197ada0ca2a254b6a38105fb6b8fb 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=1280&s=5099e65fcce0a9c13e3a08df236aabb8 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=1600&s=700091cded91fca5385b59d6f69f1db0 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=1920&s=022515c88aa9211cb1107f4de4648ace 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=2560&s=c82abf0d0322e57d68fe888d96500310 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&w=2880&s=f76048b4f7a8e55d572d4bee2da08fba 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8a8480c4-bc3d-40b6-a05d-749b2c450292Tom%20Nilsson.png?ixlib=js-3.8.0&s=410f61d4233d356dcb6eb63337b805cd",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "qQ9-e9f8rPgRL",
+        "firstName": "Henrik",
+        "lastName": "Tömmernes",
+        "fullName": "Henrik Tömmernes",
+        "nationality": "SE",
+        "jerseyNumber": 7,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik Tommernes.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&s=1a6abf565c70993b1b160ce5d6c14d59",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=160&s=89c455d0369d32139351010a993050bf 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=320&s=fb82a092d96d42b298bb2061f92b4a1c 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=480&s=ef375b556b10f8d63ba52141d28c87ba 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=640&s=5301aff4fbe7fcbab2f715d28b3e15dd 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=960&s=bc89e357d910a1eae2c48cde8a12fbe2 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=1280&s=70458b2744b71516ac3d0d694bc5c9e7 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=1600&s=5fd3915fe6ee45165fca000e5186abf4 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=1920&s=a6a7763de674c431e79886466bd85cfc 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=2560&s=6563dc3e04836a708cfab7f76b40191a 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=2880&s=2c07000d30b6b9cf74ada85e9d565dee 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&s=1a6abf565c70993b1b160ce5d6c14d59",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&s=1a6abf565c70993b1b160ce5d6c14d59",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=160&s=89c455d0369d32139351010a993050bf 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=320&s=fb82a092d96d42b298bb2061f92b4a1c 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=480&s=ef375b556b10f8d63ba52141d28c87ba 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=640&s=5301aff4fbe7fcbab2f715d28b3e15dd 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=960&s=bc89e357d910a1eae2c48cde8a12fbe2 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=1280&s=70458b2744b71516ac3d0d694bc5c9e7 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=1600&s=5fd3915fe6ee45165fca000e5186abf4 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=1920&s=a6a7763de674c431e79886466bd85cfc 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=2560&s=6563dc3e04836a708cfab7f76b40191a 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&w=2880&s=2c07000d30b6b9cf74ada85e9d565dee 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F8c418548-665f-43b8-b5a7-c4b37fae3e4cHenrik%20Tommernes.png?ixlib=js-3.8.0&s=1a6abf565c70993b1b160ce5d6c14d59",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "qRh-1LnX90eIu",
+        "firstName": "Linus",
+        "lastName": "Högberg",
+        "fullName": "Linus Högberg",
+        "nationality": "SE",
+        "jerseyNumber": 33,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_379485d8-4385-46f9-9553-ad57d6736f62Linus Hogberg.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&s=5971f253f0a6ac4007c262bc0ec2c56c",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=160&s=a689bc893f772a36aaf3c945c95a7401 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=320&s=e034e25c469f584a5cce39f64c23acf5 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=480&s=9400e125da30ef378fe8ae754b17186e 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=640&s=edf0a21b3f97c257f54aaea6186a9790 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=960&s=a3326e901de88c39341699b25b685021 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=1280&s=4d4674ff2ee9be9b8719f0030cb8a11a 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=1600&s=dbd732f53b001ad93ac9570290f989bc 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=1920&s=71a53b9ce1ebbffb050c0fc8e062d986 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=2560&s=e6b3e4a92350b4b8f04757bef2be23d7 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=2880&s=1b40085010e716fdda85f1bb614c95ab 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&s=5971f253f0a6ac4007c262bc0ec2c56c",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&s=5971f253f0a6ac4007c262bc0ec2c56c",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=160&s=a689bc893f772a36aaf3c945c95a7401 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=320&s=e034e25c469f584a5cce39f64c23acf5 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=480&s=9400e125da30ef378fe8ae754b17186e 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=640&s=edf0a21b3f97c257f54aaea6186a9790 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=960&s=a3326e901de88c39341699b25b685021 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=1280&s=4d4674ff2ee9be9b8719f0030cb8a11a 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=1600&s=dbd732f53b001ad93ac9570290f989bc 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=1920&s=71a53b9ce1ebbffb050c0fc8e062d986 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=2560&s=e6b3e4a92350b4b8f04757bef2be23d7 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&w=2880&s=1b40085010e716fdda85f1bb614c95ab 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F379485d8-4385-46f9-9553-ad57d6736f62Linus%20Hogberg.png?ixlib=js-3.8.0&s=5971f253f0a6ac4007c262bc0ec2c56c",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      }
+    ]
+  },
+  {
+    "position": "Forwards",
+    "positionCode": "F",
+    "players": [
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "czldufw1si",
+        "firstName": "Mads",
+        "lastName": "Kongsbak Klyvø",
+        "fullName": "Mads Kongsbak Klyvø",
+        "nationality": "DK",
+        "jerseyNumber": 64,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_d594f558-fd23-49f1-bb56-edaba4ff630eMads Kongsbak Klyv.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&s=072a59a6495fef8f74ba4404da291d3b",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=160&s=a01111ab25953a46e57f03c99e4f5e32 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=320&s=f0b377d1ad632ef0f0f73f9f824fcbd0 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=480&s=40df306ca901f86fe7109605099f92f9 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=640&s=48ec998d5bb672bbcdc4aa92cbb89dbe 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=960&s=534bec30c215a5b5e95b39c317c34c92 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=1280&s=45130b40f11812c75defd621ac979a87 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=1600&s=d1fe7db53bcfd4d0ec5eabca33dc166b 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=1920&s=d21cd0002b6479498c98e269a271979b 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=2560&s=089ba35218d5c1e8f9848d82a3dc10dc 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=2880&s=61ff0c026b17e530ec05609244992b1d 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&s=072a59a6495fef8f74ba4404da291d3b",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&s=072a59a6495fef8f74ba4404da291d3b",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=160&s=a01111ab25953a46e57f03c99e4f5e32 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=320&s=f0b377d1ad632ef0f0f73f9f824fcbd0 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=480&s=40df306ca901f86fe7109605099f92f9 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=640&s=48ec998d5bb672bbcdc4aa92cbb89dbe 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=960&s=534bec30c215a5b5e95b39c317c34c92 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=1280&s=45130b40f11812c75defd621ac979a87 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=1600&s=d1fe7db53bcfd4d0ec5eabca33dc166b 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=1920&s=d21cd0002b6479498c98e269a271979b 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=2560&s=089ba35218d5c1e8f9848d82a3dc10dc 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&w=2880&s=61ff0c026b17e530ec05609244992b1d 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fd594f558-fd23-49f1-bb56-edaba4ff630eMads%20Kongsbak%20Klyv.png?ixlib=js-3.8.0&s=072a59a6495fef8f74ba4404da291d3b",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "",
+        "uuid": "kczux7nz3f",
+        "firstName": "Graeme",
+        "lastName": "Clarke",
+        "fullName": "Graeme Clarke",
+        "nationality": "",
+        "jerseyNumber": 9,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_cef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&s=44b0996ae8f0821ecb44911968a6343c",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=160&s=050d175360e06182b7913732de762b5b 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=320&s=e6c82de0352303382e664d899e8cf75b 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=480&s=aafa5f53db717319d6027cc3fc2d167d 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=640&s=a7d73d7e923c95b4fd24e261cd5ceb68 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=960&s=596f2087760aef5c46ec8eb287d69e9c 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=1280&s=feac40c9887e7293df34b418bfe70e21 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=1600&s=87c2d901f07286a9acb79ba710dc7810 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=1920&s=af0dd311141834231ee92ddec9824ce8 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=2560&s=e74a257eb1745e7dfd5e53ac89ee51db 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=2880&s=29079bf9a2617d5b5d492f97e63857d8 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&s=44b0996ae8f0821ecb44911968a6343c",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&s=44b0996ae8f0821ecb44911968a6343c",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=160&s=050d175360e06182b7913732de762b5b 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=320&s=e6c82de0352303382e664d899e8cf75b 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=480&s=aafa5f53db717319d6027cc3fc2d167d 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=640&s=a7d73d7e923c95b4fd24e261cd5ceb68 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=960&s=596f2087760aef5c46ec8eb287d69e9c 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=1280&s=feac40c9887e7293df34b418bfe70e21 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=1600&s=87c2d901f07286a9acb79ba710dc7810 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=1920&s=af0dd311141834231ee92ddec9824ce8 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=2560&s=e74a257eb1745e7dfd5e53ac89ee51db 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&w=2880&s=29079bf9a2617d5b5d492f97e63857d8 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2Fcef6ecc8-1473-4a36-a8e0-f5767381a8c9GraemeClark.png?ixlib=js-3.8.0&s=44b0996ae8f0821ecb44911968a6343c",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      },
+      {
+        "globalPortraitFallback": [],
+        "playerType": "athlete",
+        "gender": "male",
+        "uuid": "qbN-8Glxp7rwi",
+        "firstName": "Noah",
+        "lastName": "Hasa",
+        "fullName": "Noah Hasa",
+        "nationality": "SE",
+        "jerseyNumber": 40,
+        "portraitList": [
+          {
+            "mediaString": "image|ramses_sports|player_portrait_5c6c2261-7077-4984-8553-78b401a40809Noah Hasa.png",
+            "type": "portrait",
+            "sortOrder": 0,
+            "renderedMedia": {
+              "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&s=93a7071ded20f3d2bf7433bc335e852b",
+              "alt": "",
+              "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=160&s=c4f74a4cc11d6ddd05c65ff2590eecc5 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=320&s=5994e695fac2076363d39e2114b4b3fe 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=480&s=f96e6b4c3c7f519cf92eda7bf6be1d9d 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=640&s=b7be6512c267c8dbf391b1ffe394763c 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=960&s=9e9f9dd6ec77a17531af7d143918cebe 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=1280&s=fb042f3bfbda2e051b613471bf01925a 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=1600&s=88483ae7b62a04969be63293f9b93bb8 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=1920&s=9d655709a8419b070b870dbaddb9354a 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=2560&s=b1efbbd0171d98666ea43e9758409a42 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=2880&s=5c4f3f4f92d256c878aeb0d873c74835 2880w",
+              "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&s=93a7071ded20f3d2bf7433bc335e852b",
+              "urlPlaceholderImage": "",
+              "videourl": "",
+              "photographer": "",
+              "focalPoint": {}
+            }
+          }
+        ],
+        "renderedLatestPortrait": {
+          "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&s=93a7071ded20f3d2bf7433bc335e852b",
+          "alt": "",
+          "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=160&s=c4f74a4cc11d6ddd05c65ff2590eecc5 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=320&s=5994e695fac2076363d39e2114b4b3fe 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=480&s=f96e6b4c3c7f519cf92eda7bf6be1d9d 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=640&s=b7be6512c267c8dbf391b1ffe394763c 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=960&s=9e9f9dd6ec77a17531af7d143918cebe 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=1280&s=fb042f3bfbda2e051b613471bf01925a 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=1600&s=88483ae7b62a04969be63293f9b93bb8 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=1920&s=9d655709a8419b070b870dbaddb9354a 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=2560&s=b1efbbd0171d98666ea43e9758409a42 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&w=2880&s=5c4f3f4f92d256c878aeb0d873c74835 2880w",
+          "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F5c6c2261-7077-4984-8553-78b401a40809Noah%20Hasa.png?ixlib=js-3.8.0&s=93a7071ded20f3d2bf7433bc335e852b",
+          "urlPlaceholderImage": "",
+          "videourl": "",
+          "photographer": "",
+          "focalPoint": {}
+        }
+      }
+    ]
+  }
+]

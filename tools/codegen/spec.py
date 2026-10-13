@@ -69,6 +69,11 @@ class Endpoint:
     # that dict INSTEAD of ``example_args`` (not merged), so a league that ignores a
     # default example param (football and ``date``) can swap in ones it honours.
     league_example_args: Dict[str, Dict[str, object]] = field(default_factory=dict)
+    # HTTP method the family's getter sends (``get`` | ``post``). Docs only: the
+    # rendered call is the same ``_get(url, params=...)`` either way, and a POST
+    # family's runtime ``_get`` sends ``params`` as the request body. ``post`` makes
+    # the docstring say ``POST`` and call the arguments body fields.
+    method: str = "get"
 
 
 @dataclass(frozen=True)
@@ -308,7 +313,10 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         fixed_params=dict(e.get("fixed_params") or {}),
         docstring=dict(e.get("docstring") or {}),
         league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
+        method=str(e.get("method") or "get").lower(),
     )
+    if ep.method not in ("get", "post"):
+        raise SpecError(f"{path}: endpoint {ep.short!r} method {ep.method!r} is not get or post")
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
     # strip optional-segment brackets first so "[/{token}]" tokens are seen.
     bare_path = ep.path.replace("[", "").replace("]", "")

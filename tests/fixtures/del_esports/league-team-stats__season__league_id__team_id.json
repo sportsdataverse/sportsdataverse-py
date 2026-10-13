@@ -1,0 +1,179 @@
+[
+  {
+    "id": 16,
+    "holema_id": null,
+    "name": "Fabio Wagner",
+    "firstname": "Fabio",
+    "surname": "Wagner",
+    "dateOfBirth": "1995-09-17",
+    "active": true,
+    "position": "DE",
+    "stick": "left",
+    "weight": 85,
+    "height": 183,
+    "jersey": 55,
+    "birthCountry": "Landshut",
+    "nationality": "Germany",
+    "nationalityShort": "GER",
+    "statistics": {
+      "teamShortcut": "RBM",
+      "games": 1,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 0,
+        "away": 0
+      },
+      "points": {
+        "home": 0,
+        "away": 0
+      },
+      "penaltyMinutes": 0,
+      "positive": 1,
+      "negative": 0,
+      "pointsPerGame": 0.0,
+      "shotEfficiency": 0,
+      "penaltyMinutesPerGame": 0.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 0,
+      "shotsOnGoal": {
+        "home": 0,
+        "away": 0
+      },
+      "shotsMissed": 0,
+      "shotsBlocked": 0,
+      "blockedShotsByPlayer": 0,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeOnIce": 858,
+      "timeOnIcePP": 0,
+      "timeOnIceSH": 177,
+      "timeOnIcePerGame": 858.0,
+      "shifts": 20,
+      "shiftsPerGame": 20.0
+    }
+  },
+  {
+    "id": 80,
+    "holema_id": null,
+    "name": "Yasin Ehliz",
+    "firstname": "Yasin",
+    "surname": "Ehliz",
+    "dateOfBirth": "1992-12-30",
+    "active": true,
+    "position": "FO",
+    "stick": "left",
+    "weight": 85,
+    "height": 175,
+    "jersey": 42,
+    "birthCountry": "Bad Tölz",
+    "nationality": "Germany",
+    "nationalityShort": "GER",
+    "statistics": {
+      "teamShortcut": "RBM",
+      "games": 8,
+      "goals": {
+        "home": 0,
+        "away": 1
+      },
+      "assists": {
+        "home": 2,
+        "away": 3
+      },
+      "points": {
+        "home": 2,
+        "away": 4
+      },
+      "penaltyMinutes": 2,
+      "positive": 4,
+      "negative": 3,
+      "pointsPerGame": 0.75,
+      "shotEfficiency": 5.26,
+      "penaltyMinutesPerGame": 0.25,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 36,
+      "shotsOnGoal": {
+        "home": 8,
+        "away": 11
+      },
+      "shotsMissed": 11,
+      "shotsBlocked": 6,
+      "blockedShotsByPlayer": 4,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeOnIce": 9158,
+      "timeOnIcePP": 1396,
+      "timeOnIceSH": 776,
+      "timeOnIcePerGame": 1145.0,
+      "shifts": 190,
+      "shiftsPerGame": 24.0
+    }
+  },
+  {
+    "id": 122,
+    "holema_id": null,
+    "name": "Mathias Niederberger",
+    "firstname": "Mathias",
+    "surname": "Niederberger",
+    "dateOfBirth": "1992-11-26",
+    "active": true,
+    "position": "GK",
+    "stick": "left",
+    "weight": 78,
+    "height": 177,
+    "jersey": 35,
+    "birthCountry": "Düsseldorf",
+    "nationality": "Germany",
+    "nationalityShort": "GER",
+    "statistics": {
+      "teamShortcut": "RBM",
+      "games": 5,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 1,
+        "away": 0
+      },
+      "points": {
+        "home": 1,
+        "away": 0
+      },
+      "penaltyMinutes": 0,
+      "positive": 0,
+      "negative": 0,
+      "pointsPerGame": 0.2,
+      "shotEfficiency": 0,
+      "penaltyMinutesPerGame": 0.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 0,
+      "shotsOnGoal": {
+        "home": 0,
+        "away": 0
+      },
+      "shotsMissed": 0,
+      "shotsBlocked": 0,
+      "blockedShotsByPlayer": 0,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeOnIce": 0,
+      "timeOnIcePP": 0,
+      "timeOnIceSH": 0,
+      "timeOnIcePerGame": 0.0,
+      "shifts": 0,
+      "shiftsPerGame": 0.0
+    }
+  }
+]

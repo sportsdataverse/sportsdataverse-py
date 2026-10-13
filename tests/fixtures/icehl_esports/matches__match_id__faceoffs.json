@@ -1,0 +1,47 @@
+[
+  {
+    "id": 23364,
+    "time": 0,
+    "realtime": "2026-09-18 18:30:39",
+    "position": "BULY_CENTRAL",
+    "positionShortcut": "C",
+    "winner": {
+      "id": 4701,
+      "name": "David Silye"
+    },
+    "looser": {
+      "id": 1075,
+      "name": "Žiga Jeglič"
+    }
+  },
+  {
+    "id": 23365,
+    "time": 54,
+    "realtime": "2026-09-18 18:32:07",
+    "position": "BULY_HOME_DEFENSE_LEFT",
+    "positionShortcut": "HDL",
+    "winner": {
+      "id": 4108,
+      "name": "Topi Rönni"
+    },
+    "looser": {
+      "id": 4795,
+      "name": "Joshua Darren Lawrence"
+    }
+  },
+  {
+    "id": 23366,
+    "time": 118,
+    "realtime": "2026-09-18 18:33:36",
+    "position": "BULY_HOME_DEFENSE_RIGHT",
+    "positionShortcut": "HDR",
+    "winner": {
+      "id": 4109,
+      "name": "Aku Kestila"
+    },
+    "looser": {
+      "id": 2984,
+      "name": "Miha Bericic"
+    }
+  }
+]

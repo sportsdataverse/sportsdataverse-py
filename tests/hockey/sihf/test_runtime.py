@@ -6,7 +6,10 @@ Measured live on 2026-10-08 (see ``sportsdataverse.hockey.sihf.sihf_runtime``):
   season answers ``400 MissingLeagueId``;
 * ``results`` without a ``Date`` range answers only today's game day for the current season;
 * an unknown season / phase is answered with ANOTHER one, visible only in
-  ``filters[].selected``, and an unknown league with one ``["Keine Tabelle gefunden!"]`` row.
+  ``filters[].selected``, and an unknown league with one ``["Keine Tabelle gefunden!"]`` row;
+* the error shapes drift within a day (2026-10-12): an unknown alias answered a 200
+  ``{"stub": true}`` and later an empty 501, a missing ``searchQuery`` an empty 501 and later
+  400 ``InvalidSearchQuery``; a game body must echo the requested ``gameId``.
 """
 
 from __future__ import annotations
@@ -191,6 +194,63 @@ def test_a_whole_or_unpaged_table_passes(monkeypatch, pages):
     assert rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026}) is body
 
 
+def test_a_null_selected_is_a_failed_fetch_not_no_data(monkeypatch):
+    # ``selected: null`` echoes nothing, like a dropped filter: unverifiable, never "no data".
+    body = _body(Season="2026")
+    body["filters"][0]["selected"] = None
+    _patch(monkeypatch, body)
+    with pytest.raises(AssetFetchError, match="dropped the Season filter"):
+        rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026})
+
+
+GAME_URL = "https://data.sihf.ch/statistic/api/cms/gameoverview"
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        {"gameId": "20261105000009"},  # another game
+        {"gameId": None},
+        {"stub": True, "data": [], "generatedAt": "2026-10-12T07:45:00"},  # /cache300?alias=gameDetail
+        {},
+        [],
+    ],
+)
+def test_a_game_body_must_echo_the_requested_game(monkeypatch, body):
+    _patch(monkeypatch, body)
+    with pytest.raises(AssetFetchError):
+        rt._get(GAME_URL, {"alias": "gameDetail", "searchQuery": 20261105000325, "language": "en"})
+
+
+def test_a_game_body_echoing_the_game_as_a_string_passes(monkeypatch):
+    body = {"gameId": "20261105000325", "summary": {}}
+    _patch(monkeypatch, body)
+    assert rt._get(GAME_URL, {"alias": "gameDetail", "searchQuery": 20261105000325}) is body
+
+
+@pytest.mark.parametrize(
+    ("body", "match"),
+    [
+        ({"stub": True, "data": [], "generatedAt": "2026-10-12T07:45:00"}, "stub"),
+        ({"action": "Redirect", "redirectTo": {"alias": "teamGoal"}}, "redirect to alias 'teamGoal'"),
+    ],
+)
+def test_a_stub_or_redirect_table_body_is_a_failed_fetch(monkeypatch, body, match):
+    _patch(monkeypatch, body)
+    with pytest.raises(AssetFetchError, match=match):
+        rt._get(URL, {"alias": "team", "searchQuery": "1//", "League": 1, "Season": 2026})
+
+
+def test_every_request_goes_over_the_throttled_session(monkeypatch):
+    """``SESSION`` waits for the host's slot before every attempt, retries included (no extra explicit wait)."""
+    seen: List[Any] = []
+    monkeypatch.setattr(
+        rt._rt, "_get", lambda url, params=None, **kw: seen.append(kw.get("session")) or _body(Season="2026")
+    )
+    rt._get(URL, {"alias": "standing", "searchQuery": "1//", "League": 1, "Season": 2026})
+    assert seen == [rt._eh.SESSION]
+
+
 def test_a_matching_echo_returns_the_body(monkeypatch):
     body = _body(Season="2026")
     _patch(monkeypatch, body)
@@ -211,7 +271,10 @@ class _Resp:
     [
         (404, '{"error":"GameNotFound"}', NoDataError),
         (400, '{"error":"MissingLeagueId"}', ValueError),
-        (501, "", AssetFetchError),  # an unknown table alias
+        (501, "", AssetFetchError),  # an unknown table alias (09:35 EDT 2026-10-12) or no searchQuery (07:45)
+        (400, '{"error":"InvalidSearchQuery"}', ValueError),  # no searchQuery (09:35 EDT 2026-10-12)
+        # an unknown table alias at ~07:45 EDT 2026-10-12: the same request, a 200 stub instead of the 501
+        (200, '{"stub":true,"data":[],"generatedAt":"2026-10-12T07:45:00+02:00"}', AssetFetchError),
     ],
 )
 def test_error_vocabulary_through_the_shared_getter(monkeypatch, status, text, exc):
@@ -223,3 +286,10 @@ def test_error_vocabulary_through_the_shared_getter(monkeypatch, status, text, e
     monkeypatch.setattr(rt._rt, "download", download)
     with pytest.raises(exc):
         rt._get(URL, {"alias": "nosuch", "searchQuery": "1//"})
+
+
+def test_a_stub_game_body_through_the_shared_getter(monkeypatch):
+    # /cache300?alias=gameDetail answers a 200 stub: through the real getter it raises, never parses empty.
+    monkeypatch.setattr(rt._rt, "download", lambda url, **kw: _Resp('{"stub":true,"data":[]}', 200))
+    with pytest.raises(AssetFetchError, match="stub"):
+        rt._get(GAME_URL, {"alias": "gameDetail", "searchQuery": 20261105000325})

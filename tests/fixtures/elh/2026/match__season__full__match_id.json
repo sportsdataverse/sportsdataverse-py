@@ -1,0 +1,269 @@
+{
+  "comments": {
+    "comment": [
+      {
+        "@attributes": {
+          "id": "70334704",
+          "order": "70335226000",
+          "written": "2026-10-11 17:20:31",
+          "last_change": "2026-10-11 17:30:10",
+          "label": "normal",
+          "label2": "",
+          "type": "",
+          "country_code": "",
+          "external_id": "",
+          "score1": "3",
+          "score2": "0",
+          "shootout_score1": "0",
+          "shootout_score2": "0",
+          "relates_to": ""
+        },
+        "time": {
+          "@attributes": {
+            "period": "ERT"
+          }
+        },
+        "details": [],
+        "title": [],
+        "message": "S tímto se s vámi pro dnešek loučím a zase někdy na počtenou!"
+      },
+      {
+        "@attributes": {
+          "id": "70334219",
+          "order": "70334311100",
+          "written": "2026-10-11 17:11:35",
+          "last_change": "2026-10-11 17:33:25",
+          "label": "goal",
+          "label2": "",
+          "type": "",
+          "country_code": "",
+          "external_id": "",
+          "score1": "3",
+          "score2": "0",
+          "shootout_score1": "0",
+          "shootout_score2": "0",
+          "relates_to": ""
+        },
+        "time": "54:18",
+        "details": {
+          "detail": {
+            "@attributes": {
+              "id": "13776352"
+            },
+            "opponent": {
+              "@attributes": {
+                "id": "156",
+                "global_id": "156",
+                "code": "SPA"
+              }
+            },
+            "player1": {
+              "@attributes": {
+                "id": "48287",
+                "global_id": "76559",
+                "firstname": "Vojtěch",
+                "surname": "Hradec",
+                "name": "Hradec",
+                "no_assist": "0"
+              }
+            },
+            "player2": {
+              "@attributes": {
+                "id": "39033",
+                "global_id": "39033",
+                "firstname": "Kristian",
+                "surname": "Vesalainen",
+                "name": "Vesalainen"
+              }
+            },
+            "player3": {
+              "@attributes": {
+                "id": "48222",
+                "global_id": "39145",
+                "firstname": "Mārtiņš",
+                "surname": "Dzierkals",
+                "name": "Dzierkals"
+              }
+            }
+          },
+          "on_field": {
+            "@attributes": {
+              "balance": "EQ"
+            },
+            "opponent1": {
+              "@attributes": {
+                "id": "156",
+                "global_id": "156",
+                "code": "SPA"
+              },
+              "player1": {
+                "@attributes": {
+                  "id": "48223",
+                  "global_id": "46381",
+                  "name": "Kořenář"
+                }
+              },
+              "player2": {
+                "@attributes": {
+                  "id": "48287",
+                  "global_id": "76559",
+                  "name": "Hradec"
+                }
+              },
+              "player3": {
+                "@attributes": {
+                  "id": "39033",
+                  "global_id": "39033",
+                  "name": "Vesalainen"
+                }
+              },
+              "player4": {
+                "@attributes": {
+                  "id": "48222",
+                  "global_id": "39145",
+                  "name": "Dzierkals"
+                }
+              },
+              "player5": {
+                "@attributes": {
+                  "id": "48216",
+                  "global_id": "37040",
+                  "name": "Pysyk"
+                }
+              },
+              "player6": {
+                "@attributes": {
+                  "id": "48238",
+                  "global_id": "81553",
+                  "name": "Sirota"
+                }
+              }
+            },
+            "opponent2": {
+              "@attributes": {
+                "id": "168",
+                "global_id": "168",
+                "code": "VIT"
+              },
+              "player1": {
+                "@attributes": {
+                  "id": "51119",
+                  "global_id": "51119",
+                  "name": "Hrachovina"
+                }
+              },
+              "player2": {
+                "@attributes": {
+                  "id": "39094",
+                  "global_id": "39094",
+                  "name": "Zbořil"
+                }
+              },
+              "player3": {
+                "@attributes": {
+                  "id": "75789",
+                  "global_id": "75789",
+                  "name": "Wesley"
+                }
+              },
+              "player4": {
+                "@attributes": {
+                  "id": "35436",
+                  "global_id": "35436",
+                  "name": "Kalus"
+                }
+              },
+              "player5": {
+                "@attributes": {
+                  "id": "86925",
+                  "global_id": "86925",
+                  "name": "Yetman"
+                }
+              },
+              "player6": {
+                "@attributes": {
+                  "id": "86924",
+                  "global_id": "86924",
+                  "name": "Nellis"
+                }
+              }
+            }
+          }
+        },
+        "title": [],
+        "message": "Sparta právě vstřelila branku!<br />\nTak tady je nejspíš hotovo! Na modré čáře se ke kotouči dostal Kristian Vesalainen, který dobře zvedl hlavu a všiml u si levé tyčky volného VOJTĚCHA HRADCE, kterému také adresoval křižnou přihrávku. Druhý jmenovaný už to měl před odkrytou brankou jednoduché. Asistence: Kristian Vesalainen, Mārtiņš Dzierkals."
+      },
+      {
+        "@attributes": {
+          "id": "70333073",
+          "order": "70333073000",
+          "written": "2026-10-11 16:50:29",
+          "last_change": "2026-10-11 16:50:29",
+          "label": "penalty",
+          "label2": "",
+          "type": "",
+          "country_code": "",
+          "external_id": "",
+          "score1": "2",
+          "score2": "0",
+          "shootout_score1": "0",
+          "shootout_score2": "0",
+          "relates_to": ""
+        },
+        "time": "41:02",
+        "details": {
+          "detail": {
+            "@attributes": {
+              "id": "13776068"
+            },
+            "opponent": {
+              "@attributes": {
+                "id": "156",
+                "global_id": "156",
+                "code": "SPA"
+              }
+            },
+            "player1": {
+              "@attributes": {
+                "id": "35589",
+                "global_id": "35589",
+                "firstname": "Ronald",
+                "surname": "Knot",
+                "name": "Knot",
+                "no_assist": "0"
+              },
+              "penalties": {
+                "penalty": {
+                  "@attributes": {
+                    "length": "2",
+                    "offense": "VYSH"
+                  }
+                }
+              }
+            },
+            "player2": {
+              "@attributes": {
+                "id": "0",
+                "global_id": "0",
+                "firstname": "",
+                "surname": "",
+                "name": ""
+              }
+            },
+            "player3": {
+              "@attributes": {
+                "id": "0",
+                "global_id": "0",
+                "firstname": "",
+                "surname": "",
+                "name": ""
+              }
+            }
+          }
+        },
+        "title": [],
+        "message": "Ronald Knot (SPA) u vítkovické střídačky zasáhl do obličeje Nellise a nabízí Rideře už pátou přesilovku v utkání!"
+      }
+    ]
+  }
+}

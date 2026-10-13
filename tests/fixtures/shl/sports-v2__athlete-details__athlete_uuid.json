@@ -1,0 +1,66 @@
+{
+  "athleteData": {
+    "uuid": "qQ9-349c7WDv6",
+    "contactInfo": null,
+    "createdAt": "2024-06-24T07:49:36.000Z",
+    "createdBy": "unknown",
+    "creatorSite": null,
+    "height": 185,
+    "dateOfBirth": "1987-07-11",
+    "deleted": false,
+    "firstName": "Lars",
+    "gender": "male",
+    "lastModified": "2026-08-18T13:35:19.000Z",
+    "lastName": "Johansson",
+    "metadata": [],
+    "nationality": "SE",
+    "shoots": "Left",
+    "weight": 90,
+    "playerExtIds": [
+      {
+        "id": 1241,
+        "extId": "566",
+        "locked": true,
+        "extIdType": {
+          "uuid": "7b6a-e633fcdB7",
+          "code": "ramses_legacy",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": null,
+          "names": [
+            {
+              "language": "sv",
+              "translation": "Ramses gammalt id"
+            },
+            {
+              "language": "en",
+              "translation": "Ramses Legacy"
+            }
+          ],
+          "visible": false
+        }
+      },
+      {
+        "id": 1242,
+        "extId": "2427",
+        "locked": true,
+        "extIdType": {
+          "uuid": "165a-d5bcMnEuq",
+          "code": "isa",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": null,
+          "names": [
+            {
+              "language": "en",
+              "translation": "ISA / Statnet"
+            }
+          ],
+          "visible": true
+        }
+      }
+    ]
+  }
+}

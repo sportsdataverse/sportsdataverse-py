@@ -18,6 +18,9 @@ Real payloads and real ESPN rows for `tests/test_crosswalk_alt.py`, copied 2026-
   - `cbs/nfl/game_boxscore/2024/29376790.json.gz` + `cbs/nfl/scoreboard/2024/regular_17.json`: CBS NAPI
     `game/boxscore` and the week-17 scoreboard page, Kansas City @ Pittsburgh 2024-12-25 (nfl-alt-raw
     "NFL Cbs Raw Update (Start: 2024 End: 2024)").
+  - `cbs/cfb/game_boxscore/2017/2843743.json.gz`: the `boxScores` of a CBS NAPI `game/boxscore` answer
+    for a CFB game id that came back as a basketball box (`playerStats` is a list), each list cut to
+    two players (cfbfastR-cfb-alt-raw "CFB Cbs Raw Update (Start: 2017 End: 2017)").
 - `espn/`: the same games on the ESPN side.
   - `nba_schedule_{season}_{game_id}.parquet` / `nba_game_rosters_{season}_{game_id}.parquet`: rows
     filtered from hoopR-nba-data `nba/schedules/parquet/nba_schedule_{season}.parquet` and

@@ -1,0 +1,148 @@
+{
+  "matches": [
+    {
+      "id": 4401,
+      "start_date": "2027-03-24 19:30:00",
+      "league_id": 3,
+      "league": "EIHL",
+      "season": "2026",
+      "round": "249",
+      "group": "",
+      "home": {
+        "id": 98,
+        "name": "Manchester Storm",
+        "shortcut": "MAN"
+      },
+      "guest": {
+        "id": 95,
+        "name": "Fife Flyers",
+        "shortcut": "FIF"
+      },
+      "status": "BEFORE_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 0,
+            "score_guest": 0
+          },
+          "first_period": {
+            "score_home": 0,
+            "score_guest": 0
+          },
+          "second_period": {
+            "score_home": 0,
+            "score_guest": 0
+          },
+          "third_period": {
+            "score_home": 0,
+            "score_guest": 0
+          }
+        }
+      },
+      "actual_time_name": "before game",
+      "actual_time_alias": "0",
+      "last_event_time": 0,
+      "arena": "AO Arena"
+    },
+    {
+      "id": 4409,
+      "start_date": "2026-09-20 16:00:00",
+      "league_id": 3,
+      "league": "EIHL",
+      "season": "2026",
+      "round": "1",
+      "group": "",
+      "home": {
+        "id": 96,
+        "name": "Glasgow Clan",
+        "shortcut": "GLA"
+      },
+      "guest": {
+        "id": 100,
+        "name": "Sheffield Steelers",
+        "shortcut": "SHE"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 1,
+            "score_guest": 6
+          },
+          "first_period": {
+            "score_home": 0,
+            "score_guest": 3
+          },
+          "second_period": {
+            "score_home": 0,
+            "score_guest": 2
+          },
+          "third_period": {
+            "score_home": 1,
+            "score_guest": 1
+          }
+        }
+      },
+      "actual_time_name": "end",
+      "actual_time_alias": "K",
+      "last_event_time": 3600,
+      "arena": "Braehead Arena"
+    },
+    {
+      "id": 4411,
+      "start_date": "2026-09-20 17:00:00",
+      "league_id": 3,
+      "league": "EIHL",
+      "season": "2026",
+      "round": "2",
+      "group": "",
+      "home": {
+        "id": 94,
+        "name": "Dundee Stars",
+        "shortcut": "DUN"
+      },
+      "guest": {
+        "id": 93,
+        "name": "Coventry Blaze",
+        "shortcut": "COV"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 3,
+            "score_guest": 4
+          },
+          "first_period": {
+            "score_home": 0,
+            "score_guest": 1
+          },
+          "second_period": {
+            "score_home": 1,
+            "score_guest": 1
+          },
+          "third_period": {
+            "score_home": 2,
+            "score_guest": 2
+          }
+        }
+      },
+      "actual_time_name": "end",
+      "actual_time_alias": "K",
+      "last_event_time": 3600,
+      "arena": "Dundee Ice Arena"
+    }
+  ]
+}

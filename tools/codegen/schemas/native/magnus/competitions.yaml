@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: competition
+  type: character
+- description: ''
+  name: competition_type_id
+  type: integer
+- description: ''
+  name: competition_type_code
+  type: character
+- description: ''
+  name: competition_type
+  type: character
+- description: ''
+  name: external_url
+  type: character
+- description: ''
+  name: published
+  type: logical
+kind: dataframe
+schema: magnus_competitions

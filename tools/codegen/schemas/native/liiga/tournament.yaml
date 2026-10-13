@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: cachebust
+  type: logical
+- description: ''
+  name: game_week
+  type: integer
+- description: ''
+  name: max_game_week
+  type: integer
+kind: dataframe
+schema: liiga_tournament

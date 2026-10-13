@@ -1,0 +1,38 @@
+{
+  "name": "EV Zug",
+  "id": 1627,
+  "urlSegment": "ev-zug",
+  "type": "Content",
+  "contentType": "club",
+  "url": "/clubs/ev-zug/",
+  "fields": {
+    "grid": [],
+    "logo": {
+      "name": "EVZ Logo",
+      "id": 7500,
+      "urlSegment": null,
+      "type": "Media",
+      "contentType": "Image",
+      "url": "/media/qixfkjiu/evz_logo.png",
+      "fields": {
+        "umbracoFile": {
+          "src": "/media/qixfkjiu/evz_logo.png",
+          "focalPoint": null,
+          "crops": []
+        },
+        "umbracoWidth": 1183,
+        "umbracoHeight": 1182,
+        "umbracoBytes": 74980,
+        "umbracoExtension": "png"
+      }
+    },
+    "teamID": "101144",
+    "website": "https://www.evz.ch/",
+    "ticketUrl": "https://www.evz.ch/tickets",
+    "gameTicketUrl": "",
+    "overridenName": "",
+    "players": "",
+    "apiName": "evz",
+    "apiKey": "<redacted>"
+  }
+}

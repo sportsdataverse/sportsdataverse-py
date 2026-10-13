@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: team_abbreviation
+  type: character
+- description: ''
+  name: team_short_name
+  type: character
+- description: ''
+  name: team_label
+  type: character
+- description: ''
+  name: gender
+  type: character
+- description: ''
+  name: logo_url
+  type: character
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: club
+  type: character
+- description: ''
+  name: club_code
+  type: character
+- description: ''
+  name: competition_ids
+  type: list
+kind: dataframe
+schema: magnus_teams

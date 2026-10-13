@@ -1,0 +1,294 @@
+{
+  "title": "Team Stats",
+  "description": "Team Stats - Shots",
+  "pages": 0,
+  "selectedPage": 0,
+  "orderBy": "sogSog",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:39:32.7957055+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Goals",
+      "rowIdentifierKey": "goalsFor",
+      "isOrderDescending": true,
+      "alias": "teamGoal"
+    },
+    {
+      "name": "Goals Pos/Nation",
+      "rowIdentifierKey": "goalsForFw",
+      "isOrderDescending": true,
+      "alias": "teamGoalPosNation"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogSog",
+      "isOrderDescending": true,
+      "alias": "teamShotDetail"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": [
+    {
+      "name": null,
+      "style": "average",
+      "rows": [
+        9
+      ]
+    }
+  ],
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "rank"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "SOG",
+      "description": "Schüsse aufs Tor",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogSog"
+    },
+    {
+      "name": "S%",
+      "description": "Schusseffizienz",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogSogPercent"
+    },
+    {
+      "name": "SOG/GP",
+      "description": "Schüsse pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogSogQuotient"
+    },
+    {
+      "name": "SOG slot",
+      "description": "Schüsse aufs Tor aus Slot total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogSogSlot"
+    },
+    {
+      "name": "SOG slot/GP",
+      "description": "Schüsse aufs Tor aus Slot pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogSogSlotPerGame"
+    },
+    {
+      "name": "SHM Total",
+      "description": "Schüsse neben das Tor Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogMissed"
+    },
+    {
+      "name": "ShM/GP",
+      "description": "Schüsse neben das Tor pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogMissedPerGame"
+    },
+    {
+      "name": "SHP Total",
+      "description": "Schüsse Torumrandung Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogPost"
+    },
+    {
+      "name": "ShP/GP",
+      "description": "Schüsse an Torumrandung pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogPostPerGame"
+    },
+    {
+      "name": "BkS",
+      "description": "geblockte Schüsse",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "blockings"
+    },
+    {
+      "name": "BkS/GP",
+      "description": "Geblockte Schüsse pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "blockingsPerGame"
+    },
+    {
+      "name": "SA",
+      "description": "Erhaltene Schüsse aufs Tor total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaSog"
+    },
+    {
+      "name": "SA/GP",
+      "description": "Erhaltene Schüsse aufs Tor pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaSogPerGame"
+    },
+    {
+      "name": "SA slot",
+      "description": "Erhaltene Schüsse aufs Tor aus Slot",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaSogSlot"
+    },
+    {
+      "name": "SA slot/GP",
+      "description": "Erhaltene Schüsse aufs Tor aus Slot pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaSogSlotPerGame"
+    }
+  ],
+  "data": [
+    [
+      "14",
+      {
+        "id": 103144,
+        "name": "HC Ajoie",
+        "acronym": "HCA",
+        "signed": false,
+        "type": "team"
+      },
+      "56",
+      "1286",
+      "8.55",
+      "22.96",
+      "523",
+      "9.34",
+      "437",
+      "7.80",
+      "25",
+      "0.45",
+      "864",
+      "15.43",
+      "1862",
+      "33.25",
+      "898",
+      "16.04"
+    ],
+    [
+      "13",
+      {
+        "id": 101149,
+        "name": "EHC Kloten",
+        "acronym": "EHCK",
+        "signed": false,
+        "type": "team"
+      },
+      "52",
+      "1407",
+      "8.32",
+      "27.06",
+      "624",
+      "12.00",
+      "480",
+      "9.23",
+      "30",
+      "0.58",
+      "630",
+      "12.12",
+      "1479",
+      "28.44",
+      "713",
+      "13.71"
+    ],
+    [
+      "12",
+      {
+        "id": 102127,
+        "name": "SCL Tigers",
+        "acronym": "SCL",
+        "signed": false,
+        "type": "team"
+      },
+      "52",
+      "1527",
+      "9.10",
+      "29.37",
+      "677",
+      "13.02",
+      "465",
+      "8.94",
+      "35",
+      "0.67",
+      "700",
+      "13.46",
+      "1604",
+      "30.85",
+      "656",
+      "12.62"
+    ]
+  ],
+  "alias": "teamShotDetail"
+}

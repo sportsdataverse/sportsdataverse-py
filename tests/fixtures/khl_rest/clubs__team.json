@@ -1,0 +1,164 @@
+{
+  "status": "success",
+  "data": {
+    "text": {
+      "country": "Гражданство",
+      "age": "Возраст"
+    },
+    "menu": {
+      "all": "Все",
+      "goalkeepers": "Вратари",
+      "defenders": "Защитники",
+      "forwards": "Нападающие",
+      "injured": "Травмированные"
+    },
+    "players": {
+      "goalkeepers": [
+        {
+          "photo": "//img.khl.ru/players/19184/320.jpg",
+          "country": "Россия",
+          "lastname": "Загидулин",
+          "firstname": "Артём",
+          "jn": 50,
+          "age": 31,
+          "favorite": false,
+          "id": 19184,
+          "link": "/players/19184/"
+        },
+        {
+          "photo": "//img.khl.ru/players/45157/320.jpg",
+          "country": "Россия",
+          "lastname": "Кайрис",
+          "firstname": "Антон",
+          "jn": 23,
+          "age": 19,
+          "favorite": false,
+          "id": 45157,
+          "link": "/players/45157/"
+        },
+        {
+          "photo": "//img.khl.ru/players/20870/320.jpg",
+          "country": "Россия",
+          "lastname": "Федотов",
+          "firstname": "Иван",
+          "jn": 28,
+          "age": 29,
+          "favorite": false,
+          "id": 20870,
+          "link": "/players/20870/"
+        }
+      ],
+      "defenders": [
+        {
+          "photo": "//img.khl.ru/players/15299/320.jpg",
+          "country": "Россия",
+          "lastname": "Вишневский",
+          "firstname": "Дмитрий",
+          "jn": 55,
+          "age": 36,
+          "favorite": false,
+          "id": 15299,
+          "link": "/players/15299/"
+        },
+        {
+          "photo": "//img.khl.ru/players/43948/320.jpg",
+          "country": "Россия",
+          "lastname": "Дронов",
+          "firstname": "Николай",
+          "jn": 49,
+          "age": 18,
+          "favorite": false,
+          "id": 43948,
+          "link": "/players/43948/"
+        },
+        {
+          "photo": "//img.khl.ru/players/41928/320.jpg",
+          "country": "США",
+          "lastname": "Кин",
+          "firstname": "Джозеф",
+          "jn": 4,
+          "age": 27,
+          "favorite": false,
+          "id": 41928,
+          "link": "/players/41928/"
+        }
+      ],
+      "forwards": [
+        {
+          "photo": "//img.khl.ru/players/24862/320.jpg",
+          "country": "Россия",
+          "lastname": "Беляев",
+          "firstname": "Александр Вл.",
+          "jn": 98,
+          "age": 27,
+          "favorite": false,
+          "id": 24862,
+          "link": "/players/24862/"
+        },
+        {
+          "photo": "//img.khl.ru/players/40141/320.jpg",
+          "country": "Россия",
+          "lastname": "Варюшкин",
+          "firstname": "Егор",
+          "jn": 2,
+          "age": 21,
+          "favorite": false,
+          "id": 40141,
+          "link": "/players/40141/"
+        },
+        {
+          "photo": "//img.khl.ru/players/17566/320.jpg",
+          "country": "Россия",
+          "lastname": "Гальченюк",
+          "firstname": "Александр",
+          "jn": 88,
+          "age": 32,
+          "favorite": false,
+          "id": 17566,
+          "link": "/players/17566/"
+        }
+      ],
+      "injured": [
+        {
+          "photo": "//img.khl.ru/players/19062/320.jpg",
+          "country": "Россия",
+          "lastname": "Брынцев",
+          "firstname": "Александр",
+          "jn": 74,
+          "age": 31,
+          "favorite": false,
+          "id": 19062,
+          "link": "/players/19062/"
+        },
+        {
+          "photo": "//img.khl.ru/players/26303/320.jpg",
+          "country": "Россия",
+          "lastname": "Мансуров",
+          "firstname": "Демид",
+          "jn": 65,
+          "age": 26,
+          "favorite": false,
+          "id": 26303,
+          "link": "/players/26303/"
+        },
+        {
+          "photo": "//img.khl.ru/players/39327/320.jpg",
+          "country": "Россия",
+          "lastname": "Орлов",
+          "firstname": "Даниил Р.",
+          "jn": 62,
+          "age": 22,
+          "favorite": false,
+          "id": 39327,
+          "link": "/players/39327/"
+        }
+      ]
+    },
+    "params": {
+      "select_need": "Авторизуйтесь для выбора предпочтений",
+      "link": "https://video.khl.ru/auth/?backurl=https%3A%2F%2Fwww.khl.ru"
+    },
+    "photo": "//img.khl.ru/teamphoto/1436/7/999.jpg"
+  },
+  "errors": []
+}

@@ -1,0 +1,22 @@
+{
+  "commentEvents": [
+    {
+      "id": 69014008,
+      "type": "normal",
+      "time": 0,
+      "content": "Vítáme vás u on-line přenosu. Utkání začíná v 15:05."
+    },
+    {
+      "id": 70328418,
+      "type": "goal",
+      "time": 306,
+      "content": "Sparta právě vstřelila branku!\nPražané trestají obrovskou vítkovickou hrubku a jdou do vedení! Wesleymu se před vlastní brankou zamotal kotouč mezi brusle, čehož dokonale využil Filip Chlapík. Ten následně ještě vylepšil pozici pro MICHAELA ŠPAČKA, který už měl před odkrytou brankou snadnou práci. Asistence: Filip Chlapík."
+    },
+    {
+      "id": 70329156,
+      "type": "penalty",
+      "time": 775,
+      "content": "Devin Shore (SPA) za vlastní brankou podrazil útočícího Abdula a nabízí Rideře první přesilovku. Ta začne po komerční přestávce."
+    }
+  ]
+}

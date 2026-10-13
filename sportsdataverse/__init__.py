@@ -141,6 +141,18 @@ from sportsdataverse.hockey.vijhl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.kijhl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.mjhl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.sihf import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.del_ import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.icehl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.eihl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.metal import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.elh import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.liiga import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.shl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.ha import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.nl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.magnus import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.khl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.vhl import *  # noqa: F401,F403,E402
 
 # Top-level QoL helpers (0.0.51+).
 #   * find_team / find_athlete / find_event — name-to-ID resolvers

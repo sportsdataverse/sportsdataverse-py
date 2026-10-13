@@ -142,7 +142,19 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16) |
 | [ESPN content (news)](espn_content/) | `sportsdataverse.espn_content` | ESPN (3) |
 | [TheSportsDB](thesportsdb/) | `sportsdataverse.thesportsdb` | TheSportsDB (12) |
-| [SIHF (Swiss hockey)](sihf/) | `sportsdataverse.hockey.sihf` | SIHF statistics API (11) |
+| [SIHF (Swiss hockey)](sihf/) | `sportsdataverse.hockey.sihf` | SIHF statistics API (33) |
+| [DEL](del/) | `sportsdataverse.hockey.del_` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (12) |
+| [ICE Hockey League](icehl/) | `sportsdataverse.hockey.icehl` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (12) |
+| [EIHL](eihl/) | `sportsdataverse.hockey.eihl` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (9) |
+| [Metal Ligaen](metal/) | `sportsdataverse.hockey.metal` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (8) |
+| [Czech Extraliga](elh/) | `sportsdataverse.hockey.elh` | hokej.cz (Czech Extraliga) (8) |
+| [Liiga](liiga/) | `sportsdataverse.hockey.liiga` | Liiga API (23) |
+| [SHL](shl/) | `sportsdataverse.hockey.shl` | SHL site API (29) |
+| [HockeyAllsvenskan](ha/) | `sportsdataverse.hockey.ha` | HockeyAllsvenskan site API (11) |
+| [National League](nl/) | `sportsdataverse.hockey.nl` | National League app API (17) |
+| [Ligue Magnus](magnus/) | `sportsdataverse.hockey.magnus` | Ligue Magnus (11) |
+| [KHL](khl/) | `sportsdataverse.hockey.khl` | KHL (site REST + webcaster API) (23) |
+| [VHL](vhl/) | `sportsdataverse.hockey.vhl` | VHL (13) |
 <!-- END generated: leagues-and-sources -->
 
 ## Errors (0.1.5)

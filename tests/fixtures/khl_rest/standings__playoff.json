@@ -1,0 +1,841 @@
+{
+  "status": "success",
+  "data": {
+    "TEXT": {
+      "rounds": {
+        "1": "1/8 финала Чемпионата",
+        "2": "1/4 финала Чемпионата",
+        "3": "1/2 финала Чемпионата"
+      },
+      "team": "Команды",
+      "seria_score": "Счет",
+      "final": "Финал",
+      "west": "з",
+      "east": "в",
+      "full_west": "Запад",
+      "full_east": "Восток",
+      "round_name": {
+        "1": "1-й матч",
+        "2": "2-й матч",
+        "3": "3-й матч"
+      }
+    },
+    "LIST": [
+      {
+        "number": "1",
+        "wins": "4",
+        "count_teams": "16",
+        "count_pairs": "8",
+        "couple": {
+          "1": {
+            "11": {
+              "codenumber": "11",
+              "id": "1",
+              "num": "1",
+              "conf": "west",
+              "pair": "1",
+              "score": "4",
+              "games": [
+                {
+                  "approved": 1,
+                  "homeScore": 5,
+                  "id": 901691,
+                  "links": {
+                    "preview": "/game/1370/901691/preview/",
+                    "stat": "/game/1370/901691/headtohead/",
+                    "text": "/game/1370/901691/text/",
+                    "teams": "/game/1370/901691/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901691/resume/",
+                    "protocol": "/game/1370/901691/protocol/"
+                  },
+                  "ots": "",
+                  "round": "1",
+                  "teama": 1,
+                  "teamb": 7,
+                  "time_format": "19:30",
+                  "tnId": 1370,
+                  "visibleDate": "24 мар",
+                  "visitorScore": 3
+                },
+                {
+                  "approved": 1,
+                  "homeScore": 1,
+                  "id": 901699,
+                  "links": {
+                    "preview": "/game/1370/901699/preview/",
+                    "stat": "/game/1370/901699/headtohead/",
+                    "text": "/game/1370/901699/text/",
+                    "teams": "/game/1370/901699/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901699/resume/",
+                    "protocol": "/game/1370/901699/protocol/"
+                  },
+                  "ots": "OT",
+                  "round": "1",
+                  "teama": 1,
+                  "teamb": 7,
+                  "time_format": "19:30",
+                  "tnId": 1370,
+                  "visibleDate": "26 мар",
+                  "visitorScore": 2
+                },
+                false
+              ]
+            },
+            "18": {
+              "codenumber": "18",
+              "id": "7",
+              "num": "8",
+              "conf": "west",
+              "pair": "1",
+              "score": "1",
+              "games": [
+                false,
+                false,
+                {
+                  "approved": 1,
+                  "homeScore": 3,
+                  "id": 901707,
+                  "links": {
+                    "preview": "/game/1370/901707/preview/",
+                    "stat": "/game/1370/901707/headtohead/",
+                    "text": "/game/1370/901707/text/",
+                    "teams": "/game/1370/901707/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901707/resume/",
+                    "protocol": "/game/1370/901707/protocol/"
+                  },
+                  "ots": "OT",
+                  "round": "1",
+                  "teama": 7,
+                  "teamb": 1,
+                  "time_format": "17:00",
+                  "tnId": 1370,
+                  "visibleDate": "28 мар",
+                  "visitorScore": 4
+                }
+              ]
+            }
+          },
+          "2": {
+            "12": {
+              "codenumber": "12",
+              "id": "190",
+              "num": "4",
+              "conf": "east",
+              "pair": "2",
+              "score": "2",
+              "games": [
+                {
+                  "approved": 1,
+                  "homeScore": 2,
+                  "id": 901690,
+                  "links": {
+                    "preview": "/game/1370/901690/preview/",
+                    "stat": "/game/1370/901690/headtohead/",
+                    "text": "/game/1370/901690/text/",
+                    "teams": "/game/1370/901690/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901690/resume/",
+                    "protocol": "/game/1370/901690/protocol/"
+                  },
+                  "ots": "",
+                  "round": "1",
+                  "teama": 190,
+                  "teamb": 38,
+                  "time_format": "17:00",
+                  "tnId": 1370,
+                  "visibleDate": "23 мар",
+                  "visitorScore": 0
+                },
+                {
+                  "approved": 1,
+                  "homeScore": 0,
+                  "id": 901698,
+                  "links": {
+                    "preview": "/game/1370/901698/preview/",
+                    "stat": "/game/1370/901698/headtohead/",
+                    "text": "/game/1370/901698/text/",
+                    "teams": "/game/1370/901698/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901698/resume/",
+                    "protocol": "/game/1370/901698/protocol/"
+                  },
+                  "ots": "",
+                  "round": "1",
+                  "teama": 190,
+                  "teamb": 38,
+                  "time_format": "17:00",
+                  "tnId": 1370,
+                  "visibleDate": "25 мар",
+                  "visitorScore": 1
+                },
+                false
+              ]
+            },
+            "17": {
+              "codenumber": "17",
+              "id": "38",
+              "num": "5",
+              "conf": "east",
+              "pair": "2",
+              "score": "4",
+              "games": [
+                false,
+                false,
+                {
+                  "approved": 1,
+                  "homeScore": 4,
+                  "id": 901706,
+                  "links": {
+                    "preview": "/game/1370/901706/preview/",
+                    "stat": "/game/1370/901706/headtohead/",
+                    "text": "/game/1370/901706/text/",
+                    "teams": "/game/1370/901706/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901706/resume/",
+                    "protocol": "/game/1370/901706/protocol/"
+                  },
+                  "ots": "",
+                  "round": "1",
+                  "teama": 38,
+                  "teamb": 190,
+                  "time_format": "17:00",
+                  "tnId": 1370,
+                  "visibleDate": "27 мар",
+                  "visitorScore": 3
+                }
+              ]
+            }
+          },
+          "3": {
+            "13": {
+              "codenumber": "13",
+              "id": "34",
+              "num": "2",
+              "conf": "east",
+              "pair": "3",
+              "score": "4",
+              "games": [
+                {
+                  "approved": 1,
+                  "homeScore": 4,
+                  "id": 901694,
+                  "links": {
+                    "preview": "/game/1370/901694/preview/",
+                    "stat": "/game/1370/901694/headtohead/",
+                    "text": "/game/1370/901694/text/",
+                    "teams": "/game/1370/901694/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901694/resume/",
+                    "protocol": "/game/1370/901694/protocol/"
+                  },
+                  "ots": "",
+                  "round": "1",
+                  "teama": 34,
+                  "teamb": 71,
+                  "time_format": "16:30",
+                  "tnId": 1370,
+                  "visibleDate": "24 мар",
+                  "visitorScore": 2
+                },
+                {
+                  "approved": 1,
+                  "homeScore": 3,
+                  "id": 901702,
+                  "links": {
+                    "preview": "/game/1370/901702/preview/",
+                    "stat": "/game/1370/901702/headtohead/",
+                    "text": "/game/1370/901702/text/",
+                    "teams": "/game/1370/901702/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901702/resume/",
+                    "protocol": "/game/1370/901702/protocol/"
+                  },
+                  "ots": "OT",
+                  "round": "1",
+                  "teama": 34,
+                  "teamb": 71,
+                  "time_format": "16:30",
+                  "tnId": 1370,
+                  "visibleDate": "26 мар",
+                  "visitorScore": 4
+                },
+                false
+              ]
+            },
+            "16": {
+              "codenumber": "16",
+              "id": "71",
+              "num": "7",
+              "conf": "east",
+              "pair": "3",
+              "score": "1",
+              "games": [
+                false,
+                false,
+                {
+                  "approved": 1,
+                  "homeScore": 1,
+                  "id": 901710,
+                  "links": {
+                    "preview": "/game/1370/901710/preview/",
+                    "stat": "/game/1370/901710/headtohead/",
+                    "text": "/game/1370/901710/text/",
+                    "teams": "/game/1370/901710/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901710/resume/",
+                    "protocol": "/game/1370/901710/protocol/"
+                  },
+                  "ots": "",
+                  "round": "1",
+                  "teama": 71,
+                  "teamb": 34,
+                  "time_format": "14:30",
+                  "tnId": 1370,
+                  "visibleDate": "28 мар",
+                  "visitorScore": 2
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "number": "2",
+        "wins": "4",
+        "count_teams": "8",
+        "count_pairs": "4",
+        "couple": {
+          "1": {
+            "11": {
+              "codenumber": "11",
+              "id": "1",
+              "num": "1",
+              "conf": "west",
+              "pair": "1",
+              "score": "4",
+              "games": [
+                {
+                  "approved": 1,
+                  "homeScore": 1,
+                  "id": 901828,
+                  "links": {
+                    "preview": "/game/1370/901828/preview/",
+                    "stat": "/game/1370/901828/headtohead/",
+                    "text": "/game/1370/901828/text/",
+                    "teams": "/game/1370/901828/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901828/resume/",
+                    "protocol": "/game/1370/901828/protocol/"
+                  },
+                  "ots": "",
+                  "round": "2",
+                  "teama": 1,
+                  "teamb": 38,
+                  "time_format": "19:30",
+                  "tnId": 1370,
+                  "visibleDate": "08 апр",
+                  "visitorScore": 0
+                },
+                {
+                  "approved": 1,
+                  "homeScore": 2,
+                  "id": 901832,
+                  "links": {
+                    "preview": "/game/1370/901832/preview/",
+                    "stat": "/game/1370/901832/headtohead/",
+                    "text": "/game/1370/901832/text/",
+                    "teams": "/game/1370/901832/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901832/resume/",
+                    "protocol": "/game/1370/901832/protocol/"
+                  },
+                  "ots": "",
+                  "round": "2",
+                  "teama": 1,
+                  "teamb": 38,
+                  "time_format": "19:30",
+                  "tnId": 1370,
+                  "visibleDate": "10 апр",
+                  "visitorScore": 0
+                },
+                false
+              ]
+            },
+            "14": {
+              "codenumber": "14",
+              "id": "38",
+              "num": "5",
+              "conf": "east",
+              "pair": "1",
+              "score": "0",
+              "games": [
+                false,
+                false,
+                {
+                  "approved": 1,
+                  "homeScore": 2,
+                  "id": 901836,
+                  "links": {
+                    "preview": "/game/1370/901836/preview/",
+                    "stat": "/game/1370/901836/headtohead/",
+                    "text": "/game/1370/901836/text/",
+                    "teams": "/game/1370/901836/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901836/resume/",
+                    "protocol": "/game/1370/901836/protocol/"
+                  },
+                  "ots": "",
+                  "round": "2",
+                  "teama": 38,
+                  "teamb": 1,
+                  "time_format": "13:30",
+                  "tnId": 1370,
+                  "visibleDate": "12 апр",
+                  "visitorScore": 3
+                }
+              ]
+            }
+          },
+          "2": {
+            "12": {
+              "codenumber": "12",
+              "id": "34",
+              "num": "2",
+              "conf": "east",
+              "pair": "2",
+              "score": "4",
+              "games": [
+                {
+                  "approved": 1,
+                  "homeScore": 3,
+                  "id": 901829,
+                  "links": {
+                    "preview": "/game/1370/901829/preview/",
+                    "stat": "/game/1370/901829/headtohead/",
+                    "text": "/game/1370/901829/text/",
+                    "teams": "/game/1370/901829/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901829/resume/",
+                    "protocol": "/game/1370/901829/protocol/"
+                  },
+                  "ots": "",
+                  "round": "2",
+                  "teama": 34,
+                  "teamb": 2,
+                  "time_format": "16:30",
+                  "tnId": 1370,
+                  "visibleDate": "08 апр",
+                  "visitorScore": 0
+                },
+                {
+                  "approved": 1,
+                  "homeScore": 3,
+                  "id": 901833,
+                  "links": {
+                    "preview": "/game/1370/901833/preview/",
+                    "stat": "/game/1370/901833/headtohead/",
+                    "text": "/game/1370/901833/text/",
+                    "teams": "/game/1370/901833/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901833/resume/",
+                    "protocol": "/game/1370/901833/protocol/"
+                  },
+                  "ots": "",
+                  "round": "2",
+                  "teama": 34,
+                  "teamb": 2,
+                  "time_format": "16:30",
+                  "tnId": 1370,
+                  "visibleDate": "10 апр",
+                  "visitorScore": 2
+                },
+                false
+              ]
+            },
+            "13": {
+              "codenumber": "13",
+              "id": "2",
+              "num": "4",
+              "conf": "west",
+              "pair": "2",
+              "score": "1",
+              "games": [
+                false,
+                false,
+                {
+                  "approved": 1,
+                  "homeScore": 2,
+                  "id": 901837,
+                  "links": {
+                    "preview": "/game/1370/901837/preview/",
+                    "stat": "/game/1370/901837/headtohead/",
+                    "text": "/game/1370/901837/text/",
+                    "teams": "/game/1370/901837/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901837/resume/",
+                    "protocol": "/game/1370/901837/protocol/"
+                  },
+                  "ots": "OT",
+                  "round": "2",
+                  "teama": 2,
+                  "teamb": 34,
+                  "time_format": "17:00",
+                  "tnId": 1370,
+                  "visibleDate": "12 апр",
+                  "visitorScore": 3
+                }
+              ]
+            }
+          },
+          "3": {
+            "21": {
+              "codenumber": "21",
+              "id": "37",
+              "num": "1",
+              "conf": "east",
+              "pair": "3",
+              "score": "4",
+              "games": [
+                {
+                  "approved": 1,
+                  "homeScore": 4,
+                  "id": 901830,
+                  "links": {
+                    "preview": "/game/1370/901830/preview/",
+                    "stat": "/game/1370/901830/headtohead/",
+                    "text": "/game/1370/901830/text/",
+                    "teams": "/game/1370/901830/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901830/resume/",
+                    "protocol": "/game/1370/901830/protocol/"
+                  },
+                  "ots": "",
+                  "round": "2",
+                  "teama": 37,
+                  "teamb": 26,
+                  "time_format": "17:00",
+                  "tnId": 1370,
+                  "visibleDate": "09 апр",
+                  "visitorScore": 3
+                },
+                {
+                  "approved": 1,
+                  "homeScore": 4,
+                  "id": 901834,
+                  "links": {
+                    "preview": "/game/1370/901834/preview/",
+                    "stat": "/game/1370/901834/headtohead/",
+                    "text": "/game/1370/901834/text/",
+                    "teams": "/game/1370/901834/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901834/resume/",
+                    "protocol": "/game/1370/901834/protocol/"
+                  },
+                  "ots": "",
+                  "round": "2",
+                  "teama": 37,
+                  "teamb": 26,
+                  "time_format": "13:30",
+                  "tnId": 1370,
+                  "visibleDate": "11 апр",
+                  "visitorScore": 1
+                },
+                false
+              ]
+            },
+            "24": {
+              "codenumber": "24",
+              "id": "26",
+              "num": "6",
+              "conf": "west",
+              "pair": "3",
+              "score": "1",
+              "games": [
+                false,
+                false,
+                {
+                  "approved": 1,
+                  "homeScore": 2,
+                  "id": 901838,
+                  "links": {
+                    "preview": "/game/1370/901838/preview/",
+                    "stat": "/game/1370/901838/headtohead/",
+                    "text": "/game/1370/901838/text/",
+                    "teams": "/game/1370/901838/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901838/resume/",
+                    "protocol": "/game/1370/901838/protocol/"
+                  },
+                  "ots": "",
+                  "round": "2",
+                  "teama": 26,
+                  "teamb": 37,
+                  "time_format": "19:00",
+                  "tnId": 1370,
+                  "visibleDate": "13 апр",
+                  "visitorScore": 4
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "number": "3",
+        "wins": "4",
+        "count_teams": "4",
+        "count_pairs": "2",
+        "couple": {
+          "1": {
+            "11": {
+              "codenumber": "11",
+              "id": "1",
+              "num": "1",
+              "conf": "west",
+              "pair": "1",
+              "score": "4",
+              "games": [
+                {
+                  "approved": 1,
+                  "homeScore": 2,
+                  "id": 901909,
+                  "links": {
+                    "preview": "/game/1370/901909/preview/",
+                    "stat": "/game/1370/901909/headtohead/",
+                    "text": "/game/1370/901909/text/",
+                    "teams": "/game/1370/901909/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901909/resume/",
+                    "protocol": "/game/1370/901909/protocol/"
+                  },
+                  "ots": "",
+                  "round": "3",
+                  "teama": 1,
+                  "teamb": 34,
+                  "time_format": "19:00",
+                  "tnId": 1370,
+                  "visibleDate": "24 апр",
+                  "visitorScore": 5
+                },
+                {
+                  "approved": 1,
+                  "homeScore": 1,
+                  "id": 901911,
+                  "links": {
+                    "preview": "/game/1370/901911/preview/",
+                    "stat": "/game/1370/901911/headtohead/",
+                    "text": "/game/1370/901911/text/",
+                    "teams": "/game/1370/901911/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901911/resume/",
+                    "protocol": "/game/1370/901911/protocol/"
+                  },
+                  "ots": "",
+                  "round": "3",
+                  "teama": 1,
+                  "teamb": 34,
+                  "time_format": "17:00",
+                  "tnId": 1370,
+                  "visibleDate": "26 апр",
+                  "visitorScore": 3
+                },
+                false
+              ]
+            },
+            "12": {
+              "codenumber": "12",
+              "id": "34",
+              "num": "2",
+              "conf": "east",
+              "pair": "1",
+              "score": "3",
+              "games": [
+                false,
+                false,
+                {
+                  "approved": 1,
+                  "homeScore": 2,
+                  "id": 901913,
+                  "links": {
+                    "preview": "/game/1370/901913/preview/",
+                    "stat": "/game/1370/901913/headtohead/",
+                    "text": "/game/1370/901913/text/",
+                    "teams": "/game/1370/901913/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901913/resume/",
+                    "protocol": "/game/1370/901913/protocol/"
+                  },
+                  "ots": "",
+                  "round": "3",
+                  "teama": 34,
+                  "teamb": 1,
+                  "time_format": "16:30",
+                  "tnId": 1370,
+                  "visibleDate": "28 апр",
+                  "visitorScore": 4
+                }
+              ]
+            }
+          },
+          "2": {
+            "21": {
+              "codenumber": "21",
+              "id": "37",
+              "num": "1",
+              "conf": "east",
+              "pair": "2",
+              "score": "1",
+              "games": [
+                {
+                  "approved": 1,
+                  "homeScore": 2,
+                  "id": 901910,
+                  "links": {
+                    "preview": "/game/1370/901910/preview/",
+                    "stat": "/game/1370/901910/headtohead/",
+                    "text": "/game/1370/901910/text/",
+                    "teams": "/game/1370/901910/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901910/resume/",
+                    "protocol": "/game/1370/901910/protocol/"
+                  },
+                  "ots": "",
+                  "round": "3",
+                  "teama": 37,
+                  "teamb": 53,
+                  "time_format": "14:00",
+                  "tnId": 1370,
+                  "visibleDate": "25 апр",
+                  "visitorScore": 5
+                },
+                {
+                  "approved": 1,
+                  "homeScore": 4,
+                  "id": 901912,
+                  "links": {
+                    "preview": "/game/1370/901912/preview/",
+                    "stat": "/game/1370/901912/headtohead/",
+                    "text": "/game/1370/901912/text/",
+                    "teams": "/game/1370/901912/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901912/resume/",
+                    "protocol": "/game/1370/901912/protocol/"
+                  },
+                  "ots": "",
+                  "round": "3",
+                  "teama": 37,
+                  "teamb": 53,
+                  "time_format": "17:00",
+                  "tnId": 1370,
+                  "visibleDate": "27 апр",
+                  "visitorScore": 2
+                },
+                false
+              ]
+            },
+            "22": {
+              "codenumber": "22",
+              "id": "53",
+              "num": "3",
+              "conf": "east",
+              "pair": "2",
+              "score": "4",
+              "games": [
+                false,
+                false,
+                {
+                  "approved": 1,
+                  "homeScore": 4,
+                  "id": 901914,
+                  "links": {
+                    "preview": "/game/1370/901914/preview/",
+                    "stat": "/game/1370/901914/headtohead/",
+                    "text": "/game/1370/901914/text/",
+                    "teams": "/game/1370/901914/teams/",
+                    "ics": "",
+                    "resume": "/game/1370/901914/resume/",
+                    "protocol": "/game/1370/901914/protocol/"
+                  },
+                  "ots": "",
+                  "round": "3",
+                  "teama": 53,
+                  "teamb": 37,
+                  "time_format": "19:30",
+                  "tnId": 1370,
+                  "visibleDate": "29 апр",
+                  "visitorScore": 1
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "CLUBS": {
+      "1": {
+        "name": "Локомотив",
+        "logo": "//img.khl.ru/teams/ru/1370/1/200.png?u=2026",
+        "link": "/clubs/lokomotiv/"
+      },
+      "7": {
+        "name": "Спартак",
+        "logo": "//img.khl.ru/teams/ru/1370/7/200.png?u=2026",
+        "link": "/clubs/spartak/"
+      },
+      "190": {
+        "name": "Автомобилист",
+        "logo": "//img.khl.ru/teams/ru/1370/190/200.png?u=2026",
+        "link": "/clubs/avtomobilist/"
+      }
+    },
+    "sort": [
+      3,
+      2,
+      1
+    ],
+    "show": {
+      "1": true,
+      "2": true,
+      "3": true
+    },
+    "grid": [
+      {
+        "r": 0,
+        "s": 0,
+        "f": 3,
+        "name": "8",
+        "line": {
+          "0": true,
+          "2": true
+        },
+        "lr": "left"
+      },
+      {
+        "r": 1,
+        "s": 0,
+        "f": 1,
+        "name": "4",
+        "header": "1-4",
+        "line": [
+          true
+        ],
+        "lr": "left"
+      },
+      {
+        "r": 2,
+        "s": 0,
+        "f": 0,
+        "name": "2",
+        "header": "1-2",
+        "line": [
+          true
+        ],
+        "lr": "left"
+      }
+    ]
+  },
+  "errors": []
+}
