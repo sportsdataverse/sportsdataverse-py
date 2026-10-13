@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: game_uuid
+  type: character
+- description: ''
+  name: minute
+  type: integer
+- description: ''
+  name: home_win_pct
+  type: numeric
+kind: dataframe
+schema: pleague_preciser_win_probability

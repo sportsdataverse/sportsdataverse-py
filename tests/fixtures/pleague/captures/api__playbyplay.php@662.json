@@ -1,0 +1,91 @@
+{
+  "period_count": 4,
+  "periods": [
+    "Q1",
+    "Q2",
+    "Q3"
+  ],
+  "final_score_away": 96,
+  "final_score_home": 112,
+  "event_count": 683,
+  "events": [
+    {
+      "seq": 3,
+      "period": "Q1",
+      "clock": "11:46",
+      "side": "home",
+      "jersey": "69",
+      "player_zh": "盧峻翔 reverseLayup",
+      "action": "fg_made",
+      "action_zh": "得分",
+      "text_zh": "#69 盧峻翔 reverseLayup得分",
+      "ft_number": null,
+      "ft_awarded": null,
+      "points": 2,
+      "score_away": 0,
+      "score_home": 2,
+      "x": 5.51,
+      "y": 52.36,
+      "nice_play": false,
+      "video": {
+        "video_uuid": "29f76b48-22b3-40ae-b068-6e10e58a4821",
+        "synergy_play_id": "13dc4760-b24b-11f0-8528-89c8b99f839c",
+        "stat_category": "two_made",
+        "tryspot_player_id": 59450,
+        "created_at": "2025-10-26T09:08:16.899Z"
+      }
+    },
+    {
+      "seq": 7,
+      "period": "Q1",
+      "clock": "11:15",
+      "side": "home",
+      "jersey": "21",
+      "player_zh": "伯朗",
+      "action": "fg3_made",
+      "action_zh": "三分球得分",
+      "text_zh": "#21 伯朗 三分球得分",
+      "ft_number": null,
+      "ft_awarded": null,
+      "points": 3,
+      "score_away": 0,
+      "score_home": 5,
+      "x": 5.62,
+      "y": 95.07,
+      "nice_play": false,
+      "video": {
+        "video_uuid": "4690b3c7-926e-48a4-97f2-8edaba541010",
+        "synergy_play_id": "26576b40-b24b-11f0-8528-89c8b99f839c",
+        "stat_category": "three_made",
+        "tryspot_player_id": 157054,
+        "created_at": "2025-10-26T09:08:47.982Z"
+      }
+    },
+    {
+      "seq": 15,
+      "period": "Q1",
+      "clock": "10:25",
+      "side": "away",
+      "jersey": "1",
+      "player_zh": "莫巴耶",
+      "action": "ft_made",
+      "action_zh": "得到兩次罰球 第一罰 罰進",
+      "text_zh": "#1 莫巴耶 得到兩次罰球 第一罰 罰進",
+      "ft_number": 1,
+      "ft_awarded": 2,
+      "points": 1,
+      "score_away": 1,
+      "score_home": 7,
+      "x": 88.11,
+      "y": 45.79,
+      "nice_play": false,
+      "video": {
+        "video_uuid": "8af86a6c-8947-49a3-99d9-d86c7c568899",
+        "synergy_play_id": "4c16cf60-b24b-11f0-8528-89c8b99f839c",
+        "stat_category": "ft_made",
+        "tryspot_player_id": 155983,
+        "created_at": "2025-10-26T09:10:10.842Z"
+      }
+    }
+  ]
+}

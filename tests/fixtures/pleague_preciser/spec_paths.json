@@ -1,0 +1,6 @@
+[
+ "/game/injury/list/o/plg/gameId/{uuid}",
+ "/game/rotation/chart/o/plg/gameId/{uuid}",
+ "/post/game/summary/o/plg/gameId/{uuid}",
+ "/v1/chart-data/id/{uuid}"
+]

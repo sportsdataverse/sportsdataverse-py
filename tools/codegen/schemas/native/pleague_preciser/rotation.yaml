@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: game_uuid
+  type: character
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: name_zh
+  type: character
+- description: ''
+  name: jersey
+  type: integer
+- description: ''
+  name: started
+  type: logical
+- description: ''
+  name: stint_no
+  type: integer
+- description: ''
+  name: start_period
+  type: character
+- description: ''
+  name: start_clock
+  type: character
+- description: ''
+  name: start_seconds
+  type: integer
+- description: ''
+  name: end_period
+  type: character
+- description: ''
+  name: end_clock
+  type: character
+- description: ''
+  name: end_seconds
+  type: integer
+kind: dataframe
+schema: pleague_preciser_rotation

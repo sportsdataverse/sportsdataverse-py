@@ -1,0 +1,62 @@
+{
+  "season": "2022-23",
+  "season_sdv": 2023,
+  "last_n": 10,
+  "team_count": 6,
+  "teams": [
+    {
+      "rank": 1,
+      "team_id": 6,
+      "team_zh": "國王",
+      "team_logo": "https://photonew.preciser.io/plg/teams/e86b0ecc-3d88-11ed-bed5-7f44ba46b0b1.png",
+      "games_played": 40,
+      "wins": 27,
+      "losses": 13,
+      "win_pct": 68.0,
+      "games_behind": 0.0,
+      "points_for_avg": 97.2,
+      "points_against_avg": 93.7,
+      "point_diff_avg": 3.5,
+      "home_record": "14-6",
+      "away_record": "13-7",
+      "streak": "L1",
+      "last_n_record": "4-6"
+    },
+    {
+      "rank": 2,
+      "team_id": 1,
+      "team_zh": "勇士",
+      "team_logo": "https://photonew.preciser.io/plg/teams/e86394aa-3d88-11ed-8ba8-7f44ba46b0b1.png",
+      "games_played": 40,
+      "wins": 25,
+      "losses": 15,
+      "win_pct": 63.0,
+      "games_behind": 2.0,
+      "points_for_avg": 98.6,
+      "points_against_avg": 93.9,
+      "point_diff_avg": 4.7,
+      "home_record": "14-6",
+      "away_record": "11-9",
+      "streak": "W2",
+      "last_n_record": "6-4"
+    },
+    {
+      "rank": 3,
+      "team_id": 2,
+      "team_zh": "領航猿",
+      "team_logo": "https://photonew.preciser.io/plg/teams/e865bb20-3d88-11ed-a956-7f44ba46b0b1.png",
+      "games_played": 40,
+      "wins": 19,
+      "losses": 21,
+      "win_pct": 48.0,
+      "games_behind": 8.0,
+      "points_for_avg": 88.0,
+      "points_against_avg": 85.4,
+      "point_diff_avg": 2.7,
+      "home_record": "11-9",
+      "away_record": "8-12",
+      "streak": "L2",
+      "last_n_record": "4-6"
+    }
+  ]
+}

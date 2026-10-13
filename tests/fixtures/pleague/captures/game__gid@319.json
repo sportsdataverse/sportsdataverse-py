@@ -1,0 +1,41 @@
+{
+  "gid": 319,
+  "uuid": "131657f4-e8d5-11ed-b647-3f2f4ff04266",
+  "status_zh": "已完賽",
+  "date": "2023-05-19",
+  "time": "19:00",
+  "venue_zh": "新北市立新莊體育館",
+  "game_label_zh": "PLAYOFFS AG1",
+  "away_name_zh": "福爾摩沙夢想家",
+  "away_name_en": "Formosa Dreamers",
+  "away_logo": "//d36fypkbmmogz6.cloudfront.net/upload/p_team/logo_4_1693553032.png",
+  "away_score": 84,
+  "home_name_zh": "新北國王",
+  "home_name_en": "New Taipei Kings",
+  "home_logo": "https:////d36fypkbmmogz6.cloudfront.net/upload/p_team/logo_5_1632361561.png",
+  "home_score": 103,
+  "quarters": {
+    "q1_away": 15,
+    "q1_home": 31,
+    "q2_away": 22,
+    "q2_home": 23,
+    "q3_away": 25,
+    "q3_home": 36,
+    "q4_away": 22,
+    "q4_home": 13
+  },
+  "officials": [
+    {
+      "role_zh": "主裁判",
+      "name_zh": "#陳宏名"
+    },
+    {
+      "role_zh": "第一檢查員",
+      "name_zh": "張呂岳"
+    },
+    {
+      "role_zh": "第二檢查員",
+      "name_zh": "叢秀卉"
+    }
+  ]
+}

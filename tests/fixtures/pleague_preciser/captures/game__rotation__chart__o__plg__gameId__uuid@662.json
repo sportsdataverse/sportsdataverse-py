@@ -1,0 +1,194 @@
+[
+  {
+    "awayTeam": [
+      {
+        "jerseyNumber": 8,
+        "name": "周桂羽",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 413,
+            "endTime": "5:07",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 691,
+            "startTime": "0:29"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1306,
+            "endTime": "2:14",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 25,
+        "name": "柏萊特",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 413,
+            "endTime": "5:07",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 608,
+            "startTime": "1:52"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 721,
+            "endTime": "11:59",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 7,
+        "name": "飛米",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 413,
+            "startTime": "5:07"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 902,
+            "endTime": "8:58",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 1027,
+            "startTime": "6:53"
+          }
+        ],
+        "started": false
+      }
+    ],
+    "homeTeam": [
+      {
+        "jerseyNumber": 9,
+        "name": "米爾納",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 367,
+            "endTime": "5:53",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 649,
+            "endTime": "1:11",
+            "startQuarter": "Q1",
+            "startSeconds": 413,
+            "startTime": "5:07"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1437,
+            "endTime": "0:03",
+            "startQuarter": "Q2",
+            "startSeconds": 855,
+            "startTime": "9:45"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 69,
+        "name": "盧峻翔",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 413,
+            "endTime": "5:07",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 649,
+            "startTime": "1:11"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1027,
+            "endTime": "6:53",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 31,
+        "name": "阿提諾",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 367,
+            "startTime": "5:53"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 855,
+            "endTime": "9:45",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1424,
+            "endTime": "0:16",
+            "startQuarter": "Q2",
+            "startSeconds": 1212,
+            "startTime": "3:48"
+          }
+        ],
+        "started": false
+      }
+    ]
+  }
+]

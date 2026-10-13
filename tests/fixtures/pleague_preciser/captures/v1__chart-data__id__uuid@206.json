@@ -1,0 +1,68 @@
+[
+  {
+    "away_id": "e86394aa-3d88-11ed-8ba8-7f44ba46b0b1",
+    "game_status": "post",
+    "home_id": "e8674343-3d88-11ed-98b4-7f44ba46b0b1",
+    "players": [
+      {
+        "id": "267bd121-3d8d-11ed-b6ee-994d25ccb590",
+        "logo_url": "https://photonew.preciser.io/plg/players/2025-26/267bd121-3d8d-11ed-b6ee-994d25ccb590.png",
+        "name": "林志傑",
+        "team_id": "e86394aa-3d88-11ed-8ba8-7f44ba46b0b1"
+      },
+      {
+        "id": "2681570d-3d8d-11ed-bcde-994d25ccb590",
+        "logo_url": "https://photonew.preciser.io/plg/players/2024-25/2681570d-3d8d-11ed-bcde-994d25ccb590.png",
+        "name": "石博恩",
+        "team_id": "e86394aa-3d88-11ed-8ba8-7f44ba46b0b1"
+      },
+      {
+        "id": "266973f4-3d8d-11ed-b779-994d25ccb590",
+        "logo_url": "https://photonew.preciser.io/plg/players/2025-26/266973f4-3d8d-11ed-b779-994d25ccb590.png",
+        "name": "周桂羽",
+        "team_id": "e86394aa-3d88-11ed-8ba8-7f44ba46b0b1"
+      }
+    ],
+    "shot": [
+      {
+        "area": "Center 8ft",
+        "clock": "01:31",
+        "message": "辛巴投進1.46公尺遠的兩分球",
+        "period": 5,
+        "player": "d48b1ece-3d8d-11ed-959e-c7930d27d079",
+        "subtype": "layup",
+        "success": true,
+        "type": "2pt",
+        "video_url": "https://api-cf.tryspot.app/api/videos/instant_play/fbad49b0-ff6b-4955-93ef-9f6aa8f8faa5.mp4?key=<redacted>",
+        "x": 90.73,
+        "y": 55.22
+      },
+      {
+        "area": "Center 8ft",
+        "clock": "09:31",
+        "message": "周桂羽未投進1.6公尺遠的兩分球",
+        "period": 2,
+        "player": "266973f4-3d8d-11ed-b779-994d25ccb590",
+        "subtype": "layup",
+        "success": false,
+        "type": "2pt",
+        "video_url": "https://api-cf.tryspot.app/api/videos/instant_play/bfcb5f57-b638-444d-8de8-ab77bcd4cc45.mp4?key=<redacted>",
+        "x": 8.94,
+        "y": 42.57
+      },
+      {
+        "area": "Center 16-23ft",
+        "clock": "08:03",
+        "message": "強森投進4.93公尺遠的兩分球",
+        "period": 1,
+        "player": "7ff29ae5-4554-11ed-a232-1f49181d2d53",
+        "subtype": "jumpShot",
+        "success": true,
+        "type": "2pt",
+        "video_url": "https://api-cf.tryspot.app/api/videos/instant_play/569040be-631b-471d-956b-bba129d02f7d.mp4?key=<redacted>",
+        "x": 21.77,
+        "y": 42.77
+      }
+    ]
+  }
+]

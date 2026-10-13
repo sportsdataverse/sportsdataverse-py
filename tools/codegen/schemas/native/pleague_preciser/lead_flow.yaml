@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: game_uuid
+  type: character
+- description: ''
+  name: seq
+  type: integer
+- description: ''
+  name: period
+  type: character
+- description: ''
+  name: period_no
+  type: integer
+- description: ''
+  name: clock
+  type: character
+- description: ''
+  name: seconds_left
+  type: integer
+- description: ''
+  name: home_score
+  type: integer
+- description: ''
+  name: away_score
+  type: integer
+- description: ''
+  name: score_difference
+  type: integer
+kind: dataframe
+schema: pleague_preciser_lead_flow

@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: game_uuid
+  type: character
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: team_uuid
+  type: character
+- description: ''
+  name: team_name_zh
+  type: character
+- description: ''
+  name: team_name_en
+  type: character
+- description: ''
+  name: color
+  type: character
+- description: ''
+  name: logo_url
+  type: character
+- description: ''
+  name: injury_report
+  type: character
+kind: dataframe
+schema: pleague_preciser_injury
