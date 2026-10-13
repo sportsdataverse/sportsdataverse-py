@@ -982,8 +982,15 @@ def parse_game_info(payload: Any, return_as_pandas: bool = False) -> Any:
 
     The reply is a bare JSON object (``details``, ``homeTeam``, ``visitingTeam``, ...), not a
     ``SiteKit`` envelope. Columns are :data:`GAME_INFO_SCHEMA`, the published
-    ``load_pwhl_game_info`` schema. An empty, ``None`` or malformed payload (no ``details.id``)
-    returns that schema with zero rows, never raises.
+    ``load_pwhl_game_info`` schema.
+
+    Args:
+        payload: The parsed ``statviewfeed/gameSummary`` reply.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row; zero rows with the same schema for an empty, ``None`` or
+            malformed payload (no ``details.id``), never raises.
     """
     details = _obj(payload, "details")
     game_id = _as_int(details.get("id"))
@@ -1061,10 +1068,19 @@ def parse_player_box(payload: Any, return_as_pandas: bool = False, league: str =
     Mirrors fastRhockey ``pwhl_player_box``: home then visiting players, one row each, with
     ``team_id`` / ``game_id`` / ``league`` added, ``time_on_ice`` in minutes and the faceoff
     losses / percentage derived. Columns are :data:`SKATER_BOX_SCHEMA` and
-    :data:`GOALIE_BOX_SCHEMA`; ``player_id`` / ``team_id`` / ``game_id`` are Int64, like every
-    other HockeyTech frame. Stats are read by key (fastRhockey renames positionally, so a backup
-    goalie whose ``timeOnIce`` is null shifts its columns there). An empty, ``None`` or malformed
-    payload returns both frames with zero rows, never raises.
+    :data:`GOALIE_BOX_SCHEMA`; ``player_id`` / ``team_id`` / ``game_id`` are Int64, matching the
+    published pbp / shifts / game_rosters releases; the library's ``parse_pbp`` / ``parse_roster``
+    ids differ (see the hockey id-dtype follow-up). Stats are read by key (fastRhockey renames
+    positionally, so a backup goalie whose ``timeOnIce`` is null shifts its columns there).
+
+    Args:
+        payload: The parsed ``statviewfeed/gameSummary`` reply.
+        return_as_pandas: Return pandas DataFrames instead of polars.
+        league: The value written to the ``league`` column.
+
+    Returns:
+        dict[str, polars.DataFrame]: ``skaters`` and ``goalies`` frames; both zero-row with their
+            schema for an empty, ``None`` or malformed payload (never raises).
     """
     game_id = _as_int(_obj(payload, "details").get("id"))
     rows: Dict[str, List[Dict[str, Any]]] = {"skaters": [], "goalies": []}
@@ -1086,8 +1102,15 @@ def parse_player_info(payload: Any, return_as_pandas: bool = False) -> Any:
     """Parse a ``statviewfeed/player`` reply (its ``info`` block) into one row of player bio.
 
     The reply is a bare JSON object (``info``, ``careerStats``, ``gameByGame``, ...), not a
-    ``SiteKit`` envelope. Columns are :data:`PLAYER_INFO_SCHEMA`. An empty, ``None`` or
-    malformed payload (no ``info.playerId``) returns that schema with zero rows, never raises.
+    ``SiteKit`` envelope. Columns are :data:`PLAYER_INFO_SCHEMA`.
+
+    Args:
+        payload: The parsed ``statviewfeed/player`` reply.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row; zero rows with the same schema for an empty, ``None`` or
+            malformed payload (no ``info.playerId``), never raises.
     """
     info = _obj(payload, "info")
     player_id = _as_int(info.get("playerId"))
