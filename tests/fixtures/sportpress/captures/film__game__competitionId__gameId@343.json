@@ -1,0 +1,178 @@
+{
+  "data": [
+    {
+      "team": {
+        "id": 12,
+        "name": "ZZ Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "ZZ Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "is_home": true,
+      "event_code": 1000,
+      "event_subcode": 2,
+      "period": 1,
+      "minute": 0,
+      "second": 35,
+      "x": 73,
+      "y": 66,
+      "order": 2,
+      "current_home_score": 2,
+      "current_away_score": 0,
+      "player": {
+        "id": 303,
+        "birthdate": "1997-09-20",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Asbjorn",
+        "last_name": "Midtgaard",
+        "nationality_code": "GER",
+        "profile_image": {
+          "name": "ASBJORN MIDTGAARD",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/Q/P/QPKvplqs5kFC8sGoFRmLYlOwD1694173813.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/Q/P/small-QPKvplqs5kFC8sGoFRmLYlOwD1694173813.png",
+            "medium": "https://bnxt.sportpress.info/storage/Q/P/medium-QPKvplqs5kFC8sGoFRmLYlOwD1694173813.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "player2": null
+    },
+    {
+      "team": {
+        "id": 12,
+        "name": "ZZ Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "ZZ Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "is_home": true,
+      "event_code": 2005,
+      "event_subcode": 27,
+      "period": 1,
+      "minute": 8,
+      "second": 54,
+      "x": 96,
+      "y": 95,
+      "order": 88,
+      "current_home_score": 4,
+      "current_away_score": 18,
+      "player": null,
+      "player2": null
+    },
+    {
+      "team": {
+        "id": 12,
+        "name": "ZZ Leiden",
+        "short_name": "LEI",
+        "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+        "club": {
+          "id": 2,
+          "name": "Netherlands"
+        },
+        "team_logo": {
+          "name": "ZZ Leiden",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+            "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "is_home": true,
+      "event_code": 1011,
+      "event_subcode": 0,
+      "period": 2,
+      "minute": 0,
+      "second": 0,
+      "x": 0,
+      "y": 0,
+      "order": 98,
+      "current_home_score": 6,
+      "current_away_score": 20,
+      "player": {
+        "id": 292,
+        "birthdate": "1988-03-14",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Worthy",
+        "last_name": "de Jong",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "Worthy",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/J/9/J930UHccNksJg8sR23M3qFIpH1677228244.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/J/9/small-J930UHccNksJg8sR23M3qFIpH1677228244.png",
+            "medium": "https://bnxt.sportpress.info/storage/J/9/medium-J930UHccNksJg8sR23M3qFIpH1677228244.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "player2": {
+        "id": 295,
+        "birthdate": "1997-09-14",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Arunas",
+        "last_name": "Mikalauskas",
+        "nationality_code": "LTU",
+        "profile_image": {
+          "name": "DBO - Mikalauskas",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/N/R/NR41JUJ2DLDDYzzn3tM1HLwqy1757111343.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/N/R/small-NR41JUJ2DLDDYzzn3tM1HLwqy1757111343.png",
+            "medium": "https://bnxt.sportpress.info/storage/N/R/medium-NR41JUJ2DLDDYzzn3tM1HLwqy1757111343.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      }
+    }
+  ]
+}

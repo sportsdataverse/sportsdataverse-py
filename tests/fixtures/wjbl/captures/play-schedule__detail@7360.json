@@ -1,0 +1,42 @@
+{
+  "play_schedule_id": 7360,
+  "game_status": "fixed",
+  "home": {
+    "team_id": 13,
+    "season_team_name": "トヨタ自動車 アンテロープス",
+    "season_team_short_name": "トヨタ自動車",
+    "team_logo_image": "/static/images/base_team/Bs3ia3gEK6OX9YfmScdRJNCistrBTkx6.png",
+    "team_entry_flg": 1,
+    "season_team_area": null,
+    "free_text": "",
+    "winner_flg": 1,
+    "score": 60,
+    "score_p1": 21,
+    "score_p2": 11,
+    "score_p3": 7,
+    "score_p4": 14,
+    "score_ot1": 7,
+    "score_ot2": null,
+    "score_ot3": null,
+    "score_ot4": null
+  },
+  "away": {
+    "team_id": 30,
+    "season_team_name": "富士通 レッドウェーブ",
+    "season_team_short_name": "富士通",
+    "team_logo_image": "/static/images/base_team/1506391673161_0.png",
+    "team_entry_flg": 1,
+    "season_team_area": null,
+    "free_text": "",
+    "winner_flg": -1,
+    "score": 55,
+    "score_p1": 17,
+    "score_p2": 14,
+    "score_p3": 16,
+    "score_p4": 6,
+    "score_ot1": 2,
+    "score_ot2": null,
+    "score_ot3": null,
+    "score_ot4": null
+  }
+}

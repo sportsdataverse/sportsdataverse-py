@@ -89,6 +89,102 @@
         {
           "prefix": "wbb",
           "label": "WBB"
+        },
+        {
+          "prefix": "fiba_hub",
+          "label": "FIBA (digital API and game pages)"
+        },
+        {
+          "prefix": "genius",
+          "label": "Genius Sports LiveStats"
+        },
+        {
+          "prefix": "atrium",
+          "label": "Sportradar Atrium"
+        },
+        {
+          "prefix": "nbl_au",
+          "label": "NBL Australia (Rosetta)"
+        },
+        {
+          "prefix": "feb",
+          "label": "Spanish FEB"
+        },
+        {
+          "prefix": "scb",
+          "label": "BBL / DBBL (SCB)"
+        },
+        {
+          "prefix": "lba",
+          "label": "Lega Basket Serie A"
+        },
+        {
+          "prefix": "acb",
+          "label": "ACB"
+        },
+        {
+          "prefix": "ibba",
+          "label": "Israeli Premier League"
+        },
+        {
+          "prefix": "wjbl",
+          "label": "W League (Japan)"
+        },
+        {
+          "prefix": "vtb",
+          "label": "VTB"
+        },
+        {
+          "prefix": "kbl",
+          "label": "KBL"
+        },
+        {
+          "prefix": "bleague",
+          "label": "B.LEAGUE"
+        },
+        {
+          "prefix": "kzs",
+          "label": "KZS"
+        },
+        {
+          "prefix": "lkl",
+          "label": "LKL"
+        },
+        {
+          "prefix": "tbf",
+          "label": "TBF"
+        },
+        {
+          "prefix": "cebl",
+          "label": "CEBL"
+        },
+        {
+          "prefix": "aba",
+          "label": "ABA League"
+        },
+        {
+          "prefix": "easl",
+          "label": "EASL"
+        },
+        {
+          "prefix": "bnxt",
+          "label": "BNXT League"
+        },
+        {
+          "prefix": "tpbl",
+          "label": "TPBL"
+        },
+        {
+          "prefix": "plg",
+          "label": "P. LEAGUE+"
+        },
+        {
+          "prefix": "cba",
+          "label": "CBA"
+        },
+        {
+          "prefix": "dbl",
+          "label": "Basketligaen"
         }
       ]
     },

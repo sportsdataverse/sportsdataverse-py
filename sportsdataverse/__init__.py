@@ -163,6 +163,30 @@ from sportsdataverse.hockey.nl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.magnus import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.khl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.vhl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.fiba_hub import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.genius import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.atrium import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbl_au import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.feb import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.scb import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.lba import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.acb import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.ibba import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.wjbl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.vtb import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.kbl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.bleague import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.kzs import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.lkl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.tbf import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.cebl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.aba import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.easl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.bnxt import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.tpbl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.plg import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.cba import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.dbl import *  # noqa: F401,F403,E402
 
 # Top-level QoL helpers (0.0.51+).
 #   * find_team / find_athlete / find_event — name-to-ID resolvers

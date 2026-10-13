@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: schedule_id
+  type: integer
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: points
+  type: integer
+kind: dataframe
+schema: cba_period_scores

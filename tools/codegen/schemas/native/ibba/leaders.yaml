@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: value
+  type: numeric
+- description: ''
+  name: games
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: jersey
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player_name_he
+  type: character
+- description: ''
+  name: photo_path
+  type: character
+kind: dataframe
+schema: ibba_leaders

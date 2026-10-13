@@ -1,0 +1,631 @@
+api: fiba_gdap
+docstring:
+  example_import: true
+  notes:
+  - FIBA's terms restrict this source. The GDAP developer-portal terms limit API use
+    to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader
+    use 'is not authorised'; the fiba.basketball terms say no portion of the site
+    may be duplicated, redistributed or manipulated. The package owner reviewed both
+    clauses on 2026-10-12, accepted them and approved the full intake, published data
+    releases included. Users who are not themselves authorised by FIBA should check
+    the terms before using the wrappers.
+  - The GDAP subscription key is public (fiba.basketball ships it in every page);
+    the runtime reads it from the live page at run time and never logs it. Officials'
+    contact details and coaches' and officials' dates of birth are dropped from every
+    body.
+  - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and
+    game_id is global across competitions (the <gameId> of a game-page URL). team_id
+    is per team per competition (Germany is 279569 at the 2023 World Cup and 281545
+    at Paris 2024), while organisation_id is the stable federation or club (64 = Germany,
+    every year); the game page''s T_<id> and the play-by-play oId are organisation
+    ids, not team ids.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404,
+    GDAP answered {} or [] for an unknown id, a game the competition does not list,
+    or a game page with no box score).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not
+    about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500,
+    a body for another game, competition, team, player, federation, family or season,
+    the HTTP 200 ''not-found shell'' of a wrong game page, a live game).'
+  - 'ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested
+    without comp.'
+  see_also:
+  - name: FIBA
+    note: the federation whose events and clubs the wrappers read
+    url: https://www.fiba.basketball/
+endpoints:
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  - description: Optional; the site passes its discipline format. 5x5 answers the
+      same as omitting it (verified on awards and rosters)
+    name: discipline_format
+    query_key: disciplineFormat
+    type: str
+  parser: parse_fiba_gdap_awards
+  path: /getgdapcompetitionawardsbyid
+  returns_schema: native/fiba_gdap/awards
+  short: awards
+  summary: Awards of a competition (MVP, All-Star Five...).
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_competition
+  path: /getGdapCompetitionById
+  returns_schema: native/fiba_gdap/competition
+  short: competition
+  summary: 'One competition (edition): season, dates, hosts, zone, category and competition
+    family.'
+- example_args:
+    family_id: 201
+    season: 2023
+  extra_params:
+  - description: 'Required. Competition family id (competitionMarketingName.competitionMarketingNameId):
+      201 = World Cup, 320 = men''s Olympics, 306 = Women''s World Cup, 112 = BCL
+      tier 1, 211 = EuroLeague Women.'
+    name: family_id
+    query_key: competitionMarketingNameId
+    required: true
+    transform: _int_id
+    type: int
+  - description: 'Season key: the END year for club competitions (BCL 2024-25 = 2025),
+      the event year for national-team events (World Cup 2023 = 2023); qualifiers
+      carry the TARGET tournament year (World Cup 2027 qualifiers played in 2025 =
+      2027). Sent unchanged. First season, inclusive; omitted = no lower bound.'
+    name: season
+    query_key: fromSeason
+    transform: _season
+    type: int
+  - description: Last season, inclusive (same key as season). Omitted with season
+      given = the same season.
+    name: to_season
+    query_key: toSeason
+    transform: _season
+    type: int
+  parser: parse_fiba_gdap_editions
+  path: /getgdapcompetitionsbyseasonsandcompetitionmarketingname
+  returns_schema: native/fiba_gdap/editions
+  short: editions
+  summary: Every edition of a competition family between two seasons.
+- example_args:
+    federation_id: 64
+  extra_params:
+  - description: Required. Federation organisationId, stable across competitions (64
+      = Germany; teamA.organisationId)
+    name: federation_id
+    query_key: gdapFederationId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_federation_games
+  path: /getgdapfederationgamesbyfederationid
+  returns_schema: native/fiba_gdap/federation_games
+  short: federation_games
+  summary: A federation's recent and upcoming national-team games.
+- example_args:
+    as_of_date: '2025-09-15'
+    category: men
+    zone_id: 1
+  extra_params:
+  - default: men
+    description: 'Ranking category: men or women (the site also knows boys/girls)'
+    name: category
+    query_key: gdapCategory
+    type: str
+  - default: 1
+    description: Ranking zone id from getgdaprankingzones (1 = World, 2 = Africa,
+      3 = Americas, 4 = Asia, 5 = Europe)
+    name: zone_id
+    query_key: zoneRankingId
+    transform: _int_id
+    type: int
+  - description: 'Ranking as of this date, ISO 8601: the latest ranking published
+      on or before it (2026-03-10 answers the 2026-03-03 ranking). Omitted = the latest
+      ranking'
+    name: as_of_date
+    query_key: asOfDate
+    type: str
+  parser: parse_fiba_gdap_federation_ranking
+  path: /getgdapfederationsranking
+  returns_schema: native/fiba_gdap/federation_ranking
+  short: federation_ranking
+  summary: FIBA world ranking of national teams.
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  fixed_params:
+    profile: 'true'
+  parser: parse_fiba_gdap_final_standings
+  path: /getgdapcompetitionfinalstandingbycompetitionid
+  returns_schema: native/fiba_gdap/final_standings
+  short: final_standings
+  summary: Final ranking of a competition.
+- example_args:
+    game_id: 100720
+  extra_params:
+  - description: 'Required. FIBA game id (global GDAP key space): gameId of a schedule
+      row; the <gameId> of a game page URL'
+    name: game_id
+    query_key: gdapGameId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_game
+  path: /getgdapgamebyid
+  returns_schema: native/fiba_gdap/game
+  short: game
+  summary: 'One game''s header: teams, score, venue, attendance and status codes (no
+    box score or play-by-play: see fiba_gamepage).'
+- example_args:
+    game_id: 100720
+  extra_params:
+  - description: 'Required. FIBA game id (global GDAP key space): gameId of a schedule
+      row; the <gameId> of a game page URL'
+    name: game_id
+    query_key: gdapGameId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_game_officials
+  path: /getgdapgamebyid
+  returns_schema: native/fiba_gdap/game_officials
+  short: game_officials
+  summary: Officials nominated to one game (referees, table officials, commissioner).
+- example_args:
+    game_id: 100720
+  extra_params:
+  - description: 'Required. FIBA game id (global GDAP key space): gameId of a schedule
+      row; the <gameId> of a game page URL'
+    name: game_id
+    query_key: gdapGameId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_game_periods
+  path: /getgdapgamebyid
+  returns_schema: native/fiba_gdap/game_periods
+  short: game_periods
+  summary: Period scores of one game.
+- example_args:
+    date_from: '2023-09-08'
+    date_to: '2023-09-11'
+  extra_params:
+  - description: Required. Window start as YYYY-MM-DD, compared with the venue-local
+      gameDateTime (not UTC).
+    name: date_from
+    query_key: dateFrom
+    required: true
+    transform: _window_date
+    type: str
+  - description: Required. Window end as YYYY-MM-DD, EXCLUSIVE (date_from = date_to
+      returns nothing).
+    name: date_to
+    query_key: dateTo
+    required: true
+    transform: _window_date
+    type: str
+  parser: parse_fiba_gdap_games_between
+  path: /getgdapgamesbetweentwodates
+  returns_schema: native/fiba_gdap/games_between
+  short: games_between
+  summary: Games of EVERY FIBA competition in a local-time window (how competitions
+    and games are discovered).
+- example_args:
+    end_date: '2025-01-16'
+    start_date: '2025-01-14'
+  extra_params:
+  - description: Required. Window start as YYYY-MM-DD.
+    name: start_date
+    query_key: startDate
+    required: true
+    transform: _window_date
+    type: str
+  - description: Required. Window end as YYYY-MM-DD.
+    name: end_date
+    query_key: endDate
+    required: true
+    transform: _window_date
+    type: str
+  fixed_params:
+    fibaFunction: competitionIdsBetweenTwoDates
+  parser: parse_fiba_gdap_gateway_competition_ids
+  path: /getcustomgateway
+  returns_schema: native/fiba_gdap/gateway_competition_ids
+  short: gateway_competition_ids
+  summary: Ids of the competitions that run in a date window.
+- example_args:
+    as_of_date: '2025-09-15'
+    gender: men
+    zone_id: 1
+  extra_params:
+  - default: men
+    description: 'federationRanking: men or women (= gdapCategory)'
+    name: gender
+    query_key: gender
+    type: str
+  - default: 1
+    description: 'federationRanking: ranking zone id (= zoneRankingId)'
+    name: zone_id
+    query_key: zoneId
+    transform: _int_id
+    type: int
+  - description: 'Ranking as of this date, ISO 8601: the latest ranking published
+      on or before it (2026-03-10 answers the 2026-03-03 ranking). Omitted = the latest
+      ranking'
+    name: as_of_date
+    query_key: asOfDate
+    type: str
+  fixed_params:
+    fibaFunction: federationRanking
+  parser: parse_fiba_gdap_gateway_federation_ranking
+  path: /getcustomgateway
+  returns_schema: native/fiba_gdap/gateway_federation_ranking
+  short: gateway_federation_ranking
+  summary: FIBA world ranking from the server-side gateway (same items as fiba_gdap_federation_ranking).
+- example_args:
+    family_id: 201
+  extra_params:
+  - description: 'Required. Competition family id (competitionMarketingName.competitionMarketingNameId):
+      201 = World Cup, 320 = men''s Olympics, 306 = Women''s World Cup, 112 = BCL
+      tier 1, 211 = EuroLeague Women.'
+    name: family_id
+    query_key: competitionMarketingNameId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_medal_count
+  path: /getgdapmedalcount
+  returns_schema: native/fiba_gdap/medal_count
+  short: medal_count
+  summary: All-time medal table of a competition family.
+- example_args: {}
+  extra_params: []
+  parser: parse_fiba_gdap_national_teams
+  path: /getgdapnationalteams
+  returns_schema: native/fiba_gdap/national_teams
+  short: national_teams
+  summary: Every national federation FIBA lists.
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  - default: competition
+    description: competition = officials nominated for the whole competition (the
+      only value the site sends)
+    name: level
+    query_key: level
+    type: str
+  parser: parse_fiba_gdap_nominations
+  path: /getgdapcompetitionnominationsbyid
+  returns_schema: native/fiba_gdap/nominations
+  short: nominations
+  summary: Officials nominated for a competition.
+- example_args:
+    comp: 208182
+    player_id: 211501
+  extra_params:
+  - description: 'Required. FIBA person id (global): personId of a roster row, pId
+      in play-by-play, P_<id> in the game-page box'
+    name: player_id
+    query_key: gdapPlayerId
+    required: true
+    transform: _int_id
+    type: int
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_player_game_stats
+  path: /getgdapplayergamestatisticsbyplayerid
+  returns_schema: native/fiba_gdap/player_game_stats
+  short: player_game_stats
+  summary: A player's game log (full box lines) at a competition.
+- example_args:
+    comp: 208182
+    player_id: 211501
+  extra_params:
+  - description: 'Required. FIBA person id (global): personId of a roster row, pId
+      in play-by-play, P_<id> in the game-page box'
+    name: player_id
+    query_key: gdapPlayerId
+    required: true
+    transform: _int_id
+    type: int
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_player_info
+  path: /getgdapplayerinfobycompetitionid
+  returns_schema: native/fiba_gdap/player_info
+  short: player_info
+  summary: A player's bio and per-game averages with ranks at a competition.
+- example_args:
+    comp: 208182
+    player_id: 211501
+  extra_params:
+  - description: 'Required. FIBA person id (global): personId of a roster row, pId
+      in play-by-play, P_<id> in the game-page box'
+    name: player_id
+    query_key: gdapPlayerId
+    required: true
+    transform: _int_id
+    type: int
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_player_stats
+  path: /getgdapplayercompetitionstatisticsbyplayerid
+  returns_schema: native/fiba_gdap/player_stats
+  short: player_stats
+  summary: A player's per-game averages, totals and highs at a competition.
+- example_args: {}
+  extra_params: []
+  parser: parse_fiba_gdap_ranking_zones
+  path: /getgdaprankingzones
+  returns_schema: native/fiba_gdap/ranking_zones
+  short: ranking_zones
+  summary: FIBA world-ranking zones.
+- example_args:
+    team_id: 279569
+  extra_params:
+  - description: 'Required. Competition team id: one per team per competition (teamA.teamId
+      of a game row; Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024).
+      Not the federation organisationId'
+    name: team_id
+    query_key: gdapTeamId
+    required: true
+    transform: _int_id
+    type: int
+  - description: Optional; the site passes its discipline format. 5x5 answers the
+      same as omitting it (verified on awards and rosters)
+    name: discipline_format
+    query_key: disciplineFormat
+    type: str
+  parser: parse_fiba_gdap_roster
+  path: /getgdapcompetitionteamrosterbyteamid
+  returns_schema: native/fiba_gdap/roster
+  short: roster
+  summary: A team's roster at a competition.
+- example_args:
+    team_id: 279569
+  extra_params:
+  - description: 'Required. Competition team id: one per team per competition (teamA.teamId
+      of a game row; Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024).
+      Not the federation organisationId'
+    name: team_id
+    query_key: gdapTeamId
+    required: true
+    transform: _int_id
+    type: int
+  - description: Optional; the site passes its discipline format. 5x5 answers the
+      same as omitting it (verified on awards and rosters)
+    name: discipline_format
+    query_key: disciplineFormat
+    type: str
+  parser: parse_fiba_gdap_roster_coaches
+  path: /getgdapcompetitionteamrosterbyteamid
+  returns_schema: native/fiba_gdap/roster_coaches
+  short: roster_coaches
+  summary: A team's coaches on its roster at a competition.
+- example_args:
+    team_id: 282183
+  extra_params:
+  - description: 'Required. Competition team id: one per team per competition (teamA.teamId
+      of a game row; Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024).
+      Not the federation organisationId'
+    name: team_id
+    query_key: gdapTeamId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_roster_latest
+  path: /getgdapcompetitionteamlatestrosterbyteamid
+  returns_schema: native/fiba_gdap/roster_latest
+  short: roster_latest
+  summary: A team's latest roster (same shape as the roster).
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_round_gamedays
+  path: /getgdapcompetitionroundgamedaysbyid
+  returns_schema: native/fiba_gdap/round_gamedays
+  short: round_gamedays
+  summary: Rounds of a competition with their game days.
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_round_standings
+  path: /getgdaproundsbycompetitionid
+  returns_schema: native/fiba_gdap/round_standings
+  short: round_standings
+  summary: Group standings of every round of a competition.
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_rounds
+  path: /getgdaproundsbycompetitionid
+  returns_schema: native/fiba_gdap/rounds
+  short: rounds
+  summary: Rounds of a competition (group stage, knockout rounds).
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_schedule
+  path: /getgdapgamesbycompetitionid
+  returns_schema: native/fiba_gdap/schedule
+  short: schedule
+  summary: 'Schedule and results of one competition (edition): one row per game.'
+- example_args:
+    team_id: 279569
+  extra_params:
+  - description: 'Required. Competition team id: one per team per competition (teamA.teamId
+      of a game row; Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024).
+      Not the federation organisationId'
+    name: team_id
+    query_key: gdapTeamId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_team_games
+  path: /getgdapgameswithleaderdetailsbyteamid
+  returns_schema: native/fiba_gdap/team_games
+  short: team_games
+  summary: A team's games with each team's leaders.
+- example_args:
+    team_id: 279569
+  extra_params:
+  - description: 'Required. Competition team id: one per team per competition (teamA.teamId
+      of a game row; Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024).
+      Not the federation organisationId'
+    name: team_id
+    query_key: gdapTeamId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_team_player_stats
+  path: /getgdapcompetitionteamstatisticsbyteamid
+  returns_schema: native/fiba_gdap/team_player_stats
+  short: team_player_stats
+  summary: Per-game averages of every player of a team at a competition.
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_team_staff
+  path: /getgdapteamstaffbycompetitionid
+  returns_schema: native/fiba_gdap/team_staff
+  short: team_staff
+  summary: Coaches of every team of a competition.
+- example_args:
+    team_id: 279569
+  extra_params:
+  - description: 'Required. Competition team id: one per team per competition (teamA.teamId
+      of a game row; Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024).
+      Not the federation organisationId'
+    name: team_id
+    query_key: gdapTeamId
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gdap_team_stats
+  path: /getgdapcompetitionteamstatisticsbyteamid
+  returns_schema: native/fiba_gdap/team_stats
+  short: team_stats
+  summary: A team's per-game averages and totals at a competition, with the bench
+    totals.
+- example_args:
+    comp: 208182
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: gdapCompetitionId
+    required: true
+    transform: _int_id
+    type: int
+  fixed_params:
+    profile: 'true'
+  parser: parse_fiba_gdap_teams
+  path: /getgdapcompetitionteamsbycompetitionid
+  returns_schema: native/fiba_gdap/teams
+  short: teams
+  summary: Teams of a competition with their profile (final ranking, per-game averages).
+getter_module: sportsdataverse.basketball.fiba_hub.fiba_runtime
+host: https://digital-api.fiba.basketball/hapi
+module: fiba_gdap
+name_pattern: fiba_gdap_{short}
+parser_columns: true
+parser_module: basketball.fiba_hub.fiba_gdap_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+- _int_id
+- _season
+- _window_date
+schema_prefix: fiba_gdap_

@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: code
+  type: integer
+- description: ''
+  name: label
+  type: character
+kind: dataframe
+schema: lba_pbp_legend

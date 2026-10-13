@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: name_en
+  type: character
+- description: ''
+  name: short_name_en
+  type: character
+- description: ''
+  name: name_fr
+  type: character
+- description: ''
+  name: short_name_fr
+  type: character
+- description: ''
+  name: is_active
+  type: logical
+- description: ''
+  name: logo_url
+  type: character
+- description: ''
+  name: icon_url
+  type: character
+kind: dataframe
+schema: cebl_teams

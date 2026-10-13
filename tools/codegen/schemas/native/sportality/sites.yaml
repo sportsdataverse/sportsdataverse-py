@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: id
+  type: character
+- description: ''
+  name: instance_id
+  type: character
+- description: ''
+  name: public_url
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: icon
+  type: character
+kind: dataframe
+schema: sportality_sites

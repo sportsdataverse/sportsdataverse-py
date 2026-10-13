@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: national_federation_id
+  type: integer
+- description: ''
+  name: display_name
+  type: character
+- description: ''
+  name: official_name
+  type: character
+- description: ''
+  name: country_id
+  type: integer
+- description: ''
+  name: country_name
+  type: character
+- description: ''
+  name: country_fiba_code
+  type: character
+- description: ''
+  name: zone_id
+  type: integer
+- description: ''
+  name: zone_name
+  type: character
+- description: ''
+  name: organisation_status_code
+  type: character
+- description: ''
+  name: membership_status_code
+  type: character
+kind: dataframe
+schema: fiba_gdap_national_teams

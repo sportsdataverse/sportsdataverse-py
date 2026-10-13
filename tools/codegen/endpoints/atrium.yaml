@@ -1,0 +1,853 @@
+api: atrium
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial: this is the public endpoint the Sportradar Atrium / Synergy ``Connect``
+    widget calls from every visitor''s browser (keyless; the host has no robots.txt).
+    The data is Sportradar''s and the leagues''. The wrappers read it on the caller''s
+    behalf, one request at least 1 s after the last, and never republish it as release
+    assets. Keep crawls small and incremental.'
+  - '``website_id`` picks the league site (12 LNB France, 14 LNBP Mexico, 3 NBL1 Australia,
+    13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro); one site carries many
+    competitions. Seasons are END years (``season=2026``): the site''s own year is
+    the START year on LNB and the calendar year elsewhere, and a year can hold several
+    competitions, so pair ``season`` with ``competition_id`` (see ``atrium_seasons``)
+    or pass ``season_id`` directly. ``atrium_end_year(website_id, year)`` maps a site''s
+    own year to that END year.'
+  - 'Columns are configured per site: a statistic one site omits is null. The player
+    and team ids are shared across sites; the player stat tables carry names only,
+    so ``person_id`` there is decoded from the widget link beside each name.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the site has nothing for the request (no
+    such season, an empty fixture list, a game with no play-by-play yet, an unknown
+    id answered 404).'
+  - 'AssetFetchError: also raised for an error body, a stub, or a body that belongs
+    to another site, type, season, game, player or team than the one asked for.'
+  see_also:
+  - name: Sportradar Connect widget
+    note: the widget whose embed API these wrappers read
+    url: https://widget.eui.connect.sportradar.com/
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+endpoints:
+- example_args:
+    website_id: 14
+  extra_params:
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Team UUID (entity_id in atrium_teams or any fixture row).
+    name: entity_id
+    query_key: entityId
+    type: str
+  - description: Round (journee) number to show; the pages that take it list their
+      rounds.
+    name: round_number
+    query_key: roundNumber
+    type: int
+  - description: 'Tab: FIXTURES (upcoming) or RESULTS (played). Omitted = the site''s
+      default tab.'
+    name: sub
+    query_key: sub
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_fixtures
+  path: /{website_id}/fixtures
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/fixtures
+  short: fixtures
+  summary: Fixtures (schedule and results) of a season, home and away side by side.
+- example_args:
+    website_id: 12
+  extra_params:
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_seasons
+  path: /{website_id}/fixtures
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/seasons
+  short: seasons
+  summary: Every season (competition and year) a site lists, with the sdv END year
+    of each.
+- example_args:
+    website_id: 14
+  extra_params:
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Team UUID (entity_id in atrium_teams or any fixture row).
+    name: entity_id
+    query_key: entityId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_fixtures_ribbon
+  path: /{website_id}/fixtures_ribbon
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/fixtures_ribbon
+  short: fixtures_ribbon
+  summary: 'The fixtures ribbon: recent and upcoming games across the site''s competitions
+    (empty on LNB off-season).'
+- example_args:
+    fixture_id: 0dc631bd-c34c-11f1-8d16-4d5a21afb79d
+    website_id: 14
+  extra_params:
+  - description: Game UUID (fixture_id in atrium_fixtures), e.g. 0dc631bd-c34c-11f1-8d16-4d5a21afb79d.
+    name: fixture_id
+    query_key: fixtureId
+    required: true
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  fixed_params:
+    sub: statistics
+  parser: parse_atrium_fixture
+  path: /{website_id}/fixture_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/fixture
+  short: fixture
+  summary: 'One game''s header: teams, score, venue, status, rules (periods, overtime,
+    shot clock) and captains.'
+- example_args:
+    fixture_id: 0dc631bd-c34c-11f1-8d16-4d5a21afb79d
+    website_id: 14
+  extra_params:
+  - description: Game UUID (fixture_id in atrium_fixtures), e.g. 0dc631bd-c34c-11f1-8d16-4d5a21afb79d.
+    name: fixture_id
+    query_key: fixtureId
+    required: true
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  fixed_params:
+    sub: statistics
+  parser: parse_atrium_fixture_periods
+  path: /{website_id}/fixture_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/fixture_periods
+  short: fixture_periods
+  summary: One game's periods with the points each team scored in each, overtime periods
+    included (ids 11+).
+- example_args:
+    fixture_id: 0dc631bd-c34c-11f1-8d16-4d5a21afb79d
+    website_id: 14
+  extra_params:
+  - description: Game UUID (fixture_id in atrium_fixtures), e.g. 0dc631bd-c34c-11f1-8d16-4d5a21afb79d.
+    name: fixture_id
+    query_key: fixtureId
+    required: true
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  fixed_params:
+    sub: statistics
+  parser: parse_atrium_box_score
+  path: /{website_id}/fixture_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/box_score
+  short: box_score
+  summary: 'One game''s box score: one row per rostered player with the statistics
+    the site configures.'
+- example_args:
+    fixture_id: 5423072b-6715-11f0-bd8b-9ffadebc148f
+    website_id: 12
+  extra_params:
+  - description: Game UUID (fixture_id in atrium_fixtures), e.g. 0dc631bd-c34c-11f1-8d16-4d5a21afb79d.
+    name: fixture_id
+    query_key: fixtureId
+    required: true
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  fixed_params:
+    sub: statistics
+  parser: parse_atrium_team_box_score
+  path: /{website_id}/fixture_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/team_box_score
+  short: team_box_score
+  summary: 'One game''s team lines: the team totals, the team-level counts and the
+    game aggregates (lead changes, biggest lead).'
+- example_args:
+    fixture_id: 0dc631bd-c34c-11f1-8d16-4d5a21afb79d
+    website_id: 14
+  extra_params:
+  - description: Game UUID (fixture_id in atrium_fixtures), e.g. 0dc631bd-c34c-11f1-8d16-4d5a21afb79d.
+    name: fixture_id
+    query_key: fixtureId
+    required: true
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  fixed_params:
+    sub: pbp
+  parser: parse_atrium_pbp
+  path: /{website_id}/fixture_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/pbp
+  short: pbp
+  summary: 'One game''s play-by-play: every event with the period clock, the player
+    and the running score.'
+- example_args:
+    fixture_id: 0dc631bd-c34c-11f1-8d16-4d5a21afb79d
+    website_id: 14
+  extra_params:
+  - description: Game UUID (fixture_id in atrium_fixtures), e.g. 0dc631bd-c34c-11f1-8d16-4d5a21afb79d.
+    name: fixture_id
+    query_key: fixtureId
+    required: true
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  fixed_params:
+    sub: shot_chart
+  parser: parse_atrium_shots
+  path: /{website_id}/fixture_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/shots
+  short: shots
+  summary: One game's 2pt / 3pt attempts with their court location (percent of the
+    court) and result.
+- example_args:
+    website_id: 14
+  extra_params:
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Round (journee) number to show; the pages that take it list their
+      rounds.
+    name: round_number
+    query_key: roundNumber
+    type: int
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_standings
+  path: /{website_id}/standings
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/standings
+  short: standings
+  summary: Standings of a season, with the columns the site configures (LNB home /
+    away splits, LNBP played and points).
+- example_args:
+    website_id: 12
+  extra_params:
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_standings
+  path: /{website_id}/standings_fragment
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/standings_summary
+  short: standings_summary
+  summary: 'Compact standings of a season: position, wins, losses and games played.'
+- example_args:
+    website_id: 12
+  extra_params:
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_teams
+  path: /{website_id}/entities
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/teams
+  short: teams
+  summary: The teams of a season.
+- example_args:
+    entity_id: f43b1b0f-55bc-11f0-84d9-01499d2f0a07
+    website_id: 12
+  extra_params:
+  - description: Team UUID (entity_id in atrium_teams or any fixture row).
+    name: entity_id
+    query_key: entityId
+    required: true
+    type: str
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_team
+  path: /{website_id}/entity_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/team
+  short: team
+  summary: 'A team page (summary tab): the team and its last and next game.'
+- example_args:
+    website_id: 12
+  extra_params:
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Team UUID (entity_id in atrium_teams or any fixture row).
+    name: entity_id
+    query_key: entityId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_players
+  path: /{website_id}/persons
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/players
+  short: players
+  summary: The players of a season, with position, nationality, birth date, age and
+    height.
+- example_args:
+    person_id: 4458f165-f865-11f0-8ebf-539c931c1654
+    website_id: 12
+  extra_params:
+  - description: Player UUID (person_id in atrium_players or a box score), e.g. 4458f165-f865-11f0-8ebf-539c931c1654.
+    name: person_id
+    query_key: personId
+    required: true
+    type: str
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_player
+  path: /{website_id}/person_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/player
+  short: player
+  summary: 'A player page: bio and the season averages the card shows.'
+- example_args:
+    person_id: 4458f165-f865-11f0-8ebf-539c931c1654
+    website_id: 12
+  extra_params:
+  - description: Player UUID (person_id in atrium_players or a box score), e.g. 4458f165-f865-11f0-8ebf-539c931c1654.
+    name: person_id
+    query_key: personId
+    required: true
+    type: str
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_player_seasons
+  path: /{website_id}/person_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/player_seasons
+  short: player_seasons
+  summary: A player's per-game averages, one row per competition-season.
+- example_args:
+    person_id: 4458f165-f865-11f0-8ebf-539c931c1654
+    website_id: 12
+  extra_params:
+  - description: Player UUID (person_id in atrium_players or a box score), e.g. 4458f165-f865-11f0-8ebf-539c931c1654.
+    name: person_id
+    query_key: personId
+    required: true
+    type: str
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  fixed_params:
+    sub: log
+  parser: parse_atrium_player_game_log
+  path: /{website_id}/person_detail
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/player_game_log
+  short: player_game_log
+  summary: 'A player''s game log: one row per game with the opponent, result and the
+    statistics the site shows.'
+- example_args:
+    website_id: 12
+  extra_params:
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Team UUID (entity_id in atrium_teams or any fixture row).
+    name: entity_id
+    query_key: entityId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_leaders
+  path: /{website_id}/statistics_leaders
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/leaders
+  short: leaders
+  summary: Season leaders per statistic (top 5 each), with their player and team ids.
+- example_args:
+    website_id: 12
+  extra_params:
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_stat_tables
+  path: /{website_id}/statistics_persons
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/player_stats
+  short: player_stats
+  summary: Player season statistics in long form (one row per player, table and statistic);
+    ids decoded from the widget links.
+- example_args:
+    website_id: 12
+  extra_params:
+  - description: Season END year (2026 = 2025-26 on LNB, site 12, whose own year is
+      the START year; the calendar year on the other sites). Needs competition_id
+      when several competitions share that year (see atrium_seasons). Omit season
+      and season_id for the site's default season.
+    name: season
+    query_key: season
+    type: int
+  - description: Season UUID (season_id in atrium_seasons); sent as is, skipping the
+      END-year lookup of season.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: Competition UUID (competition_id in atrium_seasons). Picks the season
+      together with season, and is then not sent; with neither season nor season_id
+      the API filters by it.
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_stat_tables
+  path: /{website_id}/statistics_entities
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/team_stats
+  short: team_stats
+  summary: Team season statistics in long form (one row per team, table and statistic).
+- example_args:
+    competition_id: 3f4064bb-51ad-11f0-aaaf-2923c944b404
+    website_id: 12
+  extra_params:
+  - description: Competition UUID (competition_id in atrium_seasons); required, e.g.
+      3f4064bb-51ad-11f0-aaaf-2923c944b404.
+    name: competition_id
+    query_key: competitionId
+    required: true
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_stat_tables
+  path: /{website_id}/statistics_competition_persons
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/competition_player_stats
+  short: competition_player_stats
+  summary: 'Player statistics of a competition in long form (names only: the bodies
+    carry no ids).'
+- example_args:
+    competition_id: 3f4064bb-51ad-11f0-aaaf-2923c944b404
+    website_id: 12
+  extra_params:
+  - description: Competition UUID (competition_id in atrium_seasons); required, e.g.
+      3f4064bb-51ad-11f0-aaaf-2923c944b404.
+    name: competition_id
+    query_key: competitionId
+    required: true
+    type: str
+  - description: Locale of the labels, e.g. en-EN or fr-FR. Omitted = the site's own
+      language. Ids and codes never change.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_atrium_stat_tables
+  path: /{website_id}/statistics_competition_entities
+  path_params:
+  - description: 'Site config id: which league site''s widget this is (12 LNB France,
+      14 LNBP Mexico, 3 NBL1 Australia, 13 El Salvador, 22 Panama, 236 Austria, 326
+      Montenegro). Not a league id: one site serves several competitions.'
+    name: website_id
+    required: true
+    type: int
+  returns_schema: native/atrium/competition_team_stats
+  short: competition_team_stats
+  summary: 'Team statistics of a competition in long form (names only: the bodies
+    carry no ids).'
+getter_module: sportsdataverse.basketball.atrium.atrium_runtime
+host: https://embed-api.eui.connect.sportradar.com/v1/embed
+module: atrium
+name_pattern: atrium_{short}
+parser_module: basketball.atrium.atrium_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: atrium_
