@@ -22,15 +22,14 @@ test is `tests/cfb/test_cfb_supp002_degenerate_end.py`, which also reads `../sum
     `end.yardsToEndzone >= 95` and `EPA < -2.5` (the auditor's signature), read from
     `cfb/pbp/parquet/play_by_play_<season>.parquet` on 2026-10-12.
   - 13 games (401635627, 401752791, 401752886, 401754576, 401756934, 401756935, 401762443, 401856814,
-    401858248, 401862703, 401862781, 401864432, 401864443): with the 4 signature games above, the 17
-    games holding the 19 rows the rule moves across all 20,719 cfb-raw games (review PR-834's raw scan:
-    6 Fumble Recovery (Own), 6 Rush, 7 Fumble rows). 401752886 also carries the EX-3.4-b Timeout row
-    (a defensive timeout between the moved Rush and the next snap).
+    401858248, 401862703, 401862781, 401864432, 401864443) and 401856674: with the 4 signature games above,
+    the 18 games holding the 20 rows the rule moves across all 20,719 cfb-raw games (review PR-834's raw
+    scan; 6 Fumble Recovery (Own), 6 Rush, 8 Fumble rows). 401752886 also carries the EX-3.4-b Timeout row
+    (a defensive timeout between the moved Rush and the next snap). 401856674165 is the retained-fumble
+    companion record of 401856674175, which the recovery attribution calls lost; it moves under the
+    possession predicate (owner ruling R834-7).
   - 401778310: an interception return that fumbles, with a degenerate end block, whose next snap is the
     other team's: the case the rule's same-team guard exists for (R834-3).
-  - 401856674: a degenerate-end fumble the recovery attribution calls lost while `change_of_pos_team`
-    is False and the same team snaps next: the row that tells the rule's fumble-lost predicate from a
-    `change_of_pos_team` one.
 - Play ids are ESPN's (10 to 18 digits); the test casts them to Int64.
 
 The names do not start with `summary_`, so the whole-game oracle (`summary_*` in `..`) does not pick them up.

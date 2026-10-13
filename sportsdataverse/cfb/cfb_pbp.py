@@ -1002,9 +1002,11 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
         .with_columns(
             # EX-3.4-b: the board a play hands to is the next real row's; a Timeout row is
             # filed under the team that called it with the stale start state of the play
-            # before (401856679: the interception read OU's pre-pick board, 0.52, not 0.37)
+            # before (401856679: the interception read OU's pre-pick board, 0.52, not 0.37);
+            # lead_wp_before2 is the real row after that. Only Timeout rows are skipped, not
+            # _CLOCK_STOPPAGES: the End Period / End of Half branches below read that row's board.
             _next(pl.col(wb), pl.col("type.text") == "Timeout").alias(lwb),
-            pl.col(wb).shift(-2).alias(lwb2),
+            _next(_next(pl.col(wb), pl.col("type.text") == "Timeout"), pl.col("type.text") == "Timeout").alias(lwb2),
         )
         .with_columns(
             # a stoppage just before a try took the touchdown's wp_after above and does not move it
@@ -7738,9 +7740,11 @@ class CFBPlayProcess(object):
                 # and yardsToEndzone 0, which no play that kept the ball can end at; the <= 0 clamp
                 # below read it as the own 1 (401856682's Q4 Fumble Recovery (Own): EPA -5.91,
                 # where the next snap, 3rd & 1 at the 1, gives -0.41 and Yahoo/CBS -0.39). When the
-                # fumble was not lost and the same team snaps next, that snap's start IS this play's
-                # end (yardLine and yard too). Possession is read from the recovery attribution, not
-                # change_of_pos_team. The next snap must be by the same team (401778310's interception
+                # ball was kept (change_of_pos_team, right at the source since EX-3.4-b; owner ruling
+                # R834-7: possession, not the fumble attribution, which calls 401856674165, the
+                # retained-fumble companion row of 401856674175, lost) and the same team snaps next,
+                # that snap's start IS this play's end (yardLine and yard too). The next snap must be
+                # by the same team (401778310's interception
                 # return that fumbles is next snapped by the other side), in the same period or the
                 # same half of regulation (an overtime period hands the ball back to the team that
                 # just had it). Fumble plays only: the same end block on other play types is
@@ -7749,8 +7753,7 @@ class CFBPlayProcess(object):
                 .and_(pl.col("end.yardsToEndzone") == 0)
                 .and_(pl.col("fumble_vec") == True)
                 .and_(pl.col("scoring_play") == False)
-                .and_(pl.col("pos_fumble_lost") == False)
-                .and_(pl.col("def_fumble_lost") == False)
+                .and_(pl.col("change_of_pos_team") == False)
                 .and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))
                 .and_(
                     (_next_real_play("period") == pl.col("period"))

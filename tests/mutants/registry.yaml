@@ -1309,19 +1309,12 @@
     history still shallow after the fetch must add no allowance (review R824-1).
 
 # --- supp-002 (3.4(a)): a degenerate ESPN end block takes the next snap's start ------------------
-# Killer: 23 published "Fumble Recovery (Own)" candidates; exactly 401752881299, 401761641253,
-# 401856682824 and 401864518671 move, the other 19 (incl. 401856797637) stay byte-stable.
-- id: cfb-supp002-possession-from-change-of-pos-team
-  group: cfb-supp002
-  finding: supp-002
-  file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: ".and_(pl.col(\"pos_fumble_lost\") == False)\n                .and_(pl.col(\"def_fumble_lost\") == False)"
-  mutant: ".and_(pl.col(\"change_of_pos_team\") == False)"
-  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_rule_rows_move
-  expected: kill
-  note: >-
-    change_of_pos_team is True on 401864518671 although NDSU recovers its own sack-fumble and punts
-    next, so the cop predicate leaves that row at EPA -2.72; the recovery attribution moves it
+# Killer: 41 candidates (the 23 published "Fumble Recovery (Own)" signature rows, the 20 rows the rule
+# moves across all 20,719 cfb-raw games, 401778310647); exactly the 20 move, the rest stay byte-stable.
+# Retired: cfb-supp002-possession-from-change-of-pos-team (the rule took the fumble-recovery
+# attribution and the row swapped in change_of_pos_team). Owner ruling R834-7 made change_of_pos_team
+# the rule's own predicate once EX-3.4-b made it right at the source, so the mutant is the code; as
+# with EX-2.3-c, an equivalent row is deleted with the reason recorded, not kept as a survivor.
 - id: cfb-supp002-no-degenerate-check
   group: cfb-supp002
   finding: supp-002
@@ -1345,3 +1338,53 @@
     R834-3: 401778310647 (an interception return that fumbles, degenerate end) is next snapped by the
     other team; without the guard it takes that snap's start and is scored from the wrong side (EPA
     5.10 -> 1.59)
+
+# --- EX-3.4-b (3.4(a), PR #834): a Timeout row is no change of possession ------------------------
+# Killers: tests/cfb/test_cfb_timeout_possession.py on committed captures (401752753, 401754571,
+# 401756960, 401761656 penalty rows; 401628559 punt -> receiver's timeout -> snap; 401643775 score ->
+# timeout -> kickoff; 401856679 interception -> timeout -> snap).
+- id: cfb-ex34b-timeout-row-no-possession-change
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "change_of_pos_team=pl.when(pl.col(\"type.text\") == \"Timeout\")\n                .then(False)\n                .when("
+  mutant: "change_of_pos_team=pl.when("
+  test: tests/cfb/test_cfb_timeout_possession.py::test_penalty_after_a_defensive_timeout_reads_no_turnover
+  expected: kill
+  note: "a defensive Timeout row (filed under the caller) reads as a change of possession again"
+- id: cfb-ex34b-lagged-possession-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "lag_change_of_pos_team=pl.when(pl.col(\"type.text\") == \"Timeout\")\n                .then(None)\n                .otherwise(pl.col(\"change_of_pos_team\"))\n                .forward_fill()\n                .shift(1),"
+  mutant: "lag_change_of_pos_team=pl.col(\"change_of_pos_team\").shift(1),"
+  test: tests/cfb/test_cfb_timeout_possession.py::test_punt_then_receiver_timeout_then_snap_is_a_change_of_possession
+  expected: kill
+  note: "the snap after punt + the receiver's timeout reads the timeout's (False) possession flag (EP_between 2.50)"
+- id: cfb-ex34b-lagged-score-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "pl.when(pl.col(\"type.text\") == \"Timeout\")\n                    .then(None)\n                    .otherwise(pl.col(\"scoringPlay\"))\n                    .forward_fill()\n                    .shift(1)\n                    == True"
+  mutant: "pl.col(\"lag_scoringPlay\") == True"
+  test: tests/cfb/test_cfb_timeout_possession.py::test_score_then_timeout_then_kickoff_reads_the_score
+  expected: kill
+  note: "the kickoff after score + timeout gets a phantom EP_between (-5.54 / +8.46)"
+- id: cfb-ex34b-lead-wp-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_next(pl.col(wb), pl.col("type.text") == "Timeout").alias(lwb),'
+  mutant: 'pl.col(wb).shift(-1).alias(lwb),'
+  test: tests/cfb/test_cfb_timeout_possession.py::test_wp_after_reads_the_next_real_board_across_a_timeout
+  expected: kill
+  note: the interception reads the timeout row's stale board (0.52) instead of Michigan's (0.37 for OU)
+- id: cfb-ex34b-lead-team-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'lead_team = _next(team, t == "Timeout")'
+  mutant: 'lead_team = pl.col("lead_pos_team")'
+  test: tests/cfb/test_cfb_timeout_possession.py::test_wp_after_reads_the_next_real_board_across_a_timeout
+  expected: kill
+  note: the board is stated for the timeout's team (the caller, OU) and taken unflipped (0.63)

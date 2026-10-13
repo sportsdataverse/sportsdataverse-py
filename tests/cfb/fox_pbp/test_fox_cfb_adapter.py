@@ -146,7 +146,8 @@ def test_dispatch_serves_the_game_from_fox(final):
 
 #: supp-012: observed 2026-10-11 against ESPN's own summary of 401856679 (164 / 164 plays, 137 paired):
 #: agreement type.* .9781, rush .9854, start.yardLine / end.pos_team.id / pass / td_play 1.0; corr
-#: EP_start .9996, EP_end .9719, EPA .9380, wp_before .9996, wp_after .9964. Floors, never lowered.
+#: EP_start .9996, EP_end .9719, EPA .9380, wp_before .9996, wp_after .9964 (.9987 since EX-3.4-b, PR #834).
+#: Floors, never lowered.
 ESPN_REFERENCE_PINNED = {
     "paired_share": 0.95,
     "agreement": {

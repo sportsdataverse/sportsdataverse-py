@@ -3,21 +3,21 @@
 ESPN ships some non-scoring fumble plays with ``end {yardLine 0, yardsToEndzone 0}``. The processor's
 ``<= 0`` clamp read that as the own 1, so a play that kept the ball scored a goal-line disaster
 (401856682's Q4 Fumble Recovery (Own): EPA -5.91, the Yahoo and CBS feeds of the same play -0.39). The
-rule: when the end block is degenerate, the play's text mentions a fumble that was not lost
-(``pos_fumble_lost`` / ``def_fumble_lost``, not ``change_of_pos_team``) and the same team snaps next, the
-next snap's start is the play's end.
+rule: when the end block is degenerate, the play's text mentions a fumble, the ball was kept
+(``change_of_pos_team`` False, right at the source since EX-3.4-b; owner ruling R834-7: possession, not
+the fumble attribution) and the same team snaps next, the next snap's start is the play's end.
 
-Reach: over every cfbfastR-cfb-raw game (20,719, raw repo ``98deb3f091``) the rule moves the 19 ``MOVED``
-rows in 17 games (review PR-834; owner ruling: all 19 ship): 6 Fumble Recovery (Own), 6 Rush and 7
+Reach: over every cfbfastR-cfb-raw game (20,719, raw repo ``98deb3f091``) the rule moves the 20 ``MOVED``
+rows in 18 games (review PR-834; owner rulings: all ship): 6 Fumble Recovery (Own), 6 Rush and 8
 Fumble rows, 2024-2026. Every one has a committed capture here, so the "exactly these rows move" test
 covers the whole corpus reach.
 
-Candidates (``BASE``): the 19 rule rows; every published ``cfbfastR-cfb-data`` 2019-2026 "Fumble Recovery
+Candidates (``BASE``): the 20 rule rows; every published ``cfbfastR-cfb-data`` 2019-2026 "Fumble Recovery
 (Own)" row with ``end.yardsToEndzone >= 95`` and ``EPA < -2.5`` (the auditor's signature: 23 rows on
 2026-10-12, 4 of them rule rows); and 401778310647, an interception-return fumble with a degenerate end
 whose next snap is the other team's (R834-3: only the same-team guard keeps it from being scored from the
-wrong side); and 401856674165, a degenerate-end fumble the recovery attribution calls lost while
-``change_of_pos_team`` is False (the row the ``change_of_pos_team`` predicate would move). Fixtures:
+wrong side). 401856674165, the retained-fumble companion record of 401856674175 that the recovery
+attribution calls lost, moves only under the possession predicate (R834-7). Fixtures:
 ``fixtures/supp002/`` (see its README) plus ``fixtures/summary_401856682.json``; every game runs with
 the one closing line ``ODDS``.
 
@@ -94,7 +94,7 @@ BASE = {
     401864432249: (401864432, 0, 11, 99, -1.1393542289733887, "MOVED"),
     401864443634: (401864443, 0, 24, 99, -0.25454163551330566, "MOVED"),
     401778310647: (401778310, 0, 9, 99, 5.10091495513916, "degenerate end, next snap is the other team's"),
-    401856674165: (401856674, 0, 1, 99, -3.1948139667510986, "fumble lost (attribution); change_of_pos_team False"),
+    401856674165: (401856674, 0, 1, 99, -3.1948139667510986, "MOVED"),
 }
 #: play id -> the ESPN feed's next real snap: (id, start.down, start.distance, start.yardsToEndzone)
 MOVED = {
@@ -119,13 +119,17 @@ MOVED = {
     401862781639: (401862781647, 1, 7, 7),  # Fumble -> its own Fumble Recovery (Opponent) record
     401864432249: (401864432255, 3, 18, 88),  # Fumble -> Rush
     401864443634: (401864443642, 3, 24, 89),  # Fumble -> its own Fumble Recovery (Opponent) record
+    401856674165: (401856674175, 4, 1, 24),  # Fumble -> its own companion record ("4th & 1 at ALA 24")
 }
 GAMES = sorted({v[0] for v in BASE.values()})
 assert {pid for pid, v in BASE.items() if v[-1] == "MOVED"} == set(MOVED)
 
 # 401752886 and 401864443 warn PlayOrderWarning (a period label steps back along the feed's play
 # order); tests/cfb/test_cfb_pbp_offline.py::test_period_order_warning_on_a_mislabelled_period asserts it.
-pytestmark = [pytest.mark.whole_game, pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning")]
+pytestmark = [
+    pytest.mark.whole_game,
+    pytest.mark.filterwarnings(r"ignore:CFB game (401752886|401864443)\b:sportsdataverse.errors.PlayOrderWarning"),
+]
 
 
 def _summary(game_id: int) -> dict:
@@ -179,4 +183,3 @@ def test_exactly_the_rule_rows_move():
     assert moved == set(MOVED), f"moved {sorted(moved)}"
     assert 401856797637 not in moved  # the mirrored-ytez row is a different defect (EX-3.4-a)
     assert 401778310647 not in moved  # the next snap is the other team's (R834-3)
-    assert 401856674165 not in moved  # a lost fumble the possession flag misses: the cop predicate would move it

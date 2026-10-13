@@ -1,3 +1,3 @@
-- **CFB:** a Timeout row (filed under the team that called it) is no longer a change of possession: `change_of_pos_team` reads across
-  timeouts and period ends to the next snap; the next play's `EP_between` reads the last real play's possession and score, and a play's
-  `wp_after` the next real play's board, never the timeout's stale one. Score, timeout, kickoff no longer gives a phantom `EP_between`. (#834)
+- **CFB:** a Timeout row (filed under the team that called it) is no longer a change of possession, and the next play reads the last real
+  play's possession and score, a play's `wp_after` the next real board. Penalty rows after a defensive timeout lose a phantom `EP_between`,
+  so their EPA moves by up to 6.2 points (4 of the 128 committed captures); `firstD_by_*` flags and WP columns move with it. (#834)
