@@ -11,7 +11,7 @@ refs record (unverified meanings, key spaces, units) stay in it.
 from __future__ import annotations
 
 import re
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 
 from sportsdataverse.dl_utils import underscore
 

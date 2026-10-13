@@ -193,7 +193,7 @@ sportsdataverse/
   hockeytech/ # HockeyTech core (_client/_leagues/_family/_parsers/_analytics)
   hockey/     # 20 HockeyTech league families + college hockey (mch/wch, ESPN) + SIHF (sihf, Swiss)
               #   + European leagues (del_, icehl, eihl, metal, elh, liiga, shl, ha, nl, magnus, khl, vhl)
-  basketball/ # international basketball families (fiba, genius, atrium, nbl, feb, scb, lba, acb, ibba, wjbl, vtb, kbl,
+  basketball/ # international basketball families (fiba_hub, genius, atrium, nbl_au, feb, scb, lba, acb, ibba, wjbl, vtb, kbl,
               #   bleague, kzs, lkl, tbf, cebl, aba, easl, bnxt, tpbl, plg, cba, dbl) + the shared basketball_runtime
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)

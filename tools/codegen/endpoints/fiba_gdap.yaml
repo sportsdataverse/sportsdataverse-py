@@ -609,12 +609,12 @@ endpoints:
   returns_schema: native/fiba_gdap/teams
   short: teams
   summary: Teams of a competition with their profile (final ranking, per-game averages).
-getter_module: sportsdataverse.basketball.fiba.fiba_runtime
+getter_module: sportsdataverse.basketball.fiba_hub.fiba_runtime
 host: https://digital-api.fiba.basketball/hapi
 module: fiba_gdap
 name_pattern: fiba_gdap_{short}
 parser_columns: true
-parser_module: basketball.fiba.fiba_gdap_parsers
+parser_module: basketball.fiba_hub.fiba_gdap_parsers
 passthrough_query: false
 qualifier: ''
 runtime_imports:
