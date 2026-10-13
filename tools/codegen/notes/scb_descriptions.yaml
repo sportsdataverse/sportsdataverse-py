@@ -1,0 +1,1145 @@
+scb_game:
+  commissioner_first_name: Official's given name.
+  commissioner_id: 'Official id; joins to /referees `refId` (= its `id`). /referees
+    lists only the current officials (44), so older games'' officials can be missing
+    there: all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  commissioner_last_name: Official's family name.
+  competition: 'Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL
+    host; DBBL, DBBL_CUP on the DBBL host.'
+  game_id: Game id, a string; unique within a league only (BBL and DBBL overlap),
+    and not chronological.
+  game_progress: 'Live progress code: E (ended), empty or null before the game. Meaning
+    inferred.'
+  guest_is_foreign: The team is not in this league (cup opponents from the ProA /
+    ProB).
+  guest_last10_losses: Losses in the last 10 games.
+  guest_last10_victories: Wins in the last 10 games.
+  guest_ot1_score: Guest team points in overtime 1; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot2_score: Guest team points in overtime 2; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot3_score: Guest team points in overtime 3; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot4_score: Guest team points in overtime 4; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot5_score: Guest team points in overtime 5; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot6_score: Guest team points in overtime 6; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot7_score: Guest team points in overtime 7; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot8_score: Guest team points in overtime 8; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot9_score: Guest team points in overtime 9; 0 when not played (null from OT5
+    on in old seasons).
+  guest_q1_score: Guest team points in quarter 1; 0 when quarter scores were not recorded.
+  guest_q2_score: Guest team points in quarter 2; 0 when quarter scores were not recorded.
+  guest_q3_score: Guest team points in quarter 3; 0 when quarter scores were not recorded.
+  guest_q4_score: Guest team points in quarter 4; 0 when quarter scores were not recorded.
+  guest_rank: The team's current table position.
+  guest_score: Guest team final score.
+  guest_season_team_id: Season-team id; equal to the club `teamId` in every sample
+    (BBL 2005-2026, DBBL 2024-2026).
+  guest_streak: 'Current streak: W or L; empty when none.'
+  guest_streak_count: Length of the current streak.
+  guest_team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  guest_team_name: Team name as listed that season (sponsor names included, e.g. 'EWE
+    Baskets Oldenburg').
+  guest_tlc: Three-letter club code.
+  guest_total_games: Games the guest team has played so far (the API sends it as a
+    string).
+  home_is_foreign: The team is not in this league (cup opponents from the ProA / ProB).
+  home_last10_losses: Losses in the last 10 games.
+  home_last10_victories: Wins in the last 10 games.
+  home_ot1_score: Home team points in overtime 1; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot2_score: Home team points in overtime 2; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot3_score: Home team points in overtime 3; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot4_score: Home team points in overtime 4; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot5_score: Home team points in overtime 5; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot6_score: Home team points in overtime 6; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot7_score: Home team points in overtime 7; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot8_score: Home team points in overtime 8; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot9_score: Home team points in overtime 9; 0 when not played (null from OT5
+    on in old seasons).
+  home_q1_score: Home team points in quarter 1; 0 when quarter scores were not recorded.
+  home_q2_score: Home team points in quarter 2; 0 when quarter scores were not recorded.
+  home_q3_score: Home team points in quarter 3; 0 when quarter scores were not recorded.
+  home_q4_score: Home team points in quarter 4; 0 when quarter scores were not recorded.
+  home_rank: The team's current table position.
+  home_score: Home team final score.
+  home_season_team_id: Season-team id; equal to the club `teamId` in every sample
+    (BBL 2005-2026, DBBL 2024-2026).
+  home_streak: 'Current streak: W or L; empty when none.'
+  home_streak_count: Length of the current streak.
+  home_team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  home_team_name: Team name as listed that season (sponsor names included, e.g. 'EWE
+    Baskets Oldenburg').
+  home_tlc: Three-letter club code.
+  home_total_games: Games the home team has played so far (the API sends it as a string).
+  is_free_tv: Shown on free-to-air TV.
+  is_hidden: True when the API hides the game (0/1 on /games, a boolean on the header).
+  is_tbd: Date or time not yet fixed.
+  latest_period: Number of the last period played (4 = Q4, 5 = OT1, ...); the API
+    sends `Q4` on /games and 4 on /games/recent. Null before the game.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  live_stream_url: Live-stream link (DBBL games link YouTube); empty when none.
+  match_day: Round number within the stage (Spieltag).
+  referee1_first_name: Official's given name.
+  referee1_id: 'Official id; joins to /referees `refId` (= its `id`). /referees lists
+    only the current officials (44), so older games'' officials can be missing there:
+    all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  referee1_last_name: Official's family name.
+  referee2_first_name: Official's given name.
+  referee2_id: 'Official id; joins to /referees `refId` (= its `id`). /referees lists
+    only the current officials (44), so older games'' officials can be missing there:
+    all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  referee2_last_name: Official's family name.
+  referee3_first_name: Official's given name.
+  referee3_id: 'Official id; joins to /referees `refId` (= its `id`). /referees lists
+    only the current officials (44), so older games'' officials can be missing there:
+    all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  referee3_last_name: Official's family name.
+  scheduled_time: Scheduled tip-off, ISO 8601 UTC.
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  spectators: Attendance; 0 when not recorded.
+  stage: 'Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND,
+    ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME,
+    QUALIFICATION, GROUP_STAGE.'
+  stat_status: 'Live-stats feed status code. Observed: E (ended; German Ende), N (not
+    started), 1 (old games), empty string. Meaning inferred.'
+  status: 'Game status: PRE (scheduled), LIVE, POST (ended, not yet official), OFFICIAL
+    (final).'
+  top_score: Points of the game's top scorer; null before the game.
+  top_scorer_first_name: Player's given name.
+  top_scorer_last_name: Player's family name.
+  top_scorer_real_player_id: 'Global person id: the same across clubs and seasons.
+    Joins to `realPlayerId` everywhere.'
+  top_scorer_season_player_id: 'Season-player id. BBL: a string equal to `id`. DBBL:
+    an INTEGER that matches /seasons/{seasonId} `seasonPlayerId` (5 of 5 rows checked,
+    2026-27). Joins to /season-players/{seasonPlayerId}.'
+  tv_channel: TV channel(s) showing the game, comma-joined (a list on some routes,
+    an empty string when none).
+  tv_type: TV coverage type; empty or null in every sample.
+  venue_address: Postal address, German.
+  venue_capacity: Arena capacity, spectators.
+  venue_id: Arena id, stable across seasons (Uber Arena = 2 in both 2025-26 and 2026-27);
+    a different key space from /teams `seasonVenues.id`, and no captured route is
+    keyed by it. A string in /games and /games/{gameId}, an integer in /games/recent.
+  venue_is_main: The club's main arena.
+  venue_name: Name of the arena the game is played in; `venue_id` is its stable arena
+    id.
+scb_game_actions:
+  action_id: Action id, an integer unique across games of a league.
+  action_identifier: Provider action key `<n>:<seq>` (opaque; the first part is not
+    the period).
+  assisting_season_player_id: Season-player id of the assisting player; only on assisted
+    made shots. Joins to box-score `seasonPlayer.id` and action `seasonPlayerId`.
+  game_id: Game id, a string; unique within a league only (BBL and DBBL overlap),
+    and not chronological.
+  game_time: 'Game clock as HH:MM:SS: in an action, the time LEFT in the period (00:10:00
+    at the start of a 10-minute quarter); in a game header, 00:00:00 in every sample.'
+  guest_team_points: Guest score after this action; only on scoring actions.
+  home_team_points: Home score after this action; only on scoring actions.
+  is_successful: Made / successful (shots, free throws); for other types see the action-type
+    table.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  order_id: Chronological sequence of the action within the game.
+  period: 'Period: 1-4 quarters, 5+ overtimes.'
+  qualifiers: Action qualifiers (shot kind, rebound side, foul kind, turnover kind);
+    see the qualifier table.
+  real_time: 'Wall-clock time of the action, ISO 8601 UTC. Pre-2011 games carry a
+    placeholder: local midnight of the game day (23:00 UTC the day before) on every
+    row.'
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move; see README). Joins to box-score
+    `seasonPlayer.id`, action `seasonPlayerId` and /season-players/{seasonPlayerId}.
+    Null on team and period rows.'
+  season_team_id: Season-team id; equal to the club `teamId` in every sample (BBL
+    2005-2026, DBBL 2024-2026).
+  seconds_left: 'Seconds left in the period at the action: `game_time` as seconds.'
+  shot_x: Shot x on the site's half-court chart (0-280 across, 140 through the rim);
+    null without a location. Scale and orientation unverified.
+  shot_y: Shot y along the court from behind the baseline (rim near 45, arc top near
+    147); null without a location. Scale and orientation unverified.
+  side: '`home` or `guest` (the away side), for the team the row belongs to.'
+  type: Action type; see the action-type table. Records and videos use their own `type`
+    (see those routes).
+scb_game_players:
+  assists: The player's assists in the game.
+  blocks: The player's blocked shots in the game.
+  defensive_rebounds: The player's defensive rebounds in the game.
+  double_double: The player's double-doubles in the game.
+  efficiency: The player's efficiency (EFF = PTS + REB + AST + STL + BLK - missed
+    FG - missed FT - TO; checked on a 2026 box score) in the game.
+  field_goals_attempted: The player's field goals attempted in the game.
+  field_goals_made: The player's field goals made in the game.
+  field_goals_recomputed: True when the API's field-goal totals disagreed with its
+    2-point plus 3-point parts (2005-06 box scores) and were recomputed from the parts.
+  field_goals_success_percent: The player's field-goal percentage in the game, 0-100
+    (one decimal); 0 when no attempts.
+  first_name: Player's given name.
+  fouls_committed: The player's fouls committed in the game.
+  fouls_received: The player's fouls drawn in the game.
+  free_throws_attempted: The player's free throws attempted in the game.
+  free_throws_made: The player's free throws made in the game.
+  free_throws_success_percent: The player's free-throw percentage in the game, 0-100
+    (one decimal); 0 when no attempts.
+  game_id: Game id, a string. Joins to /games/{gameId}.
+  is_starting_five: Started the game.
+  last_name: Player's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  offensive_rebounds: The player's offensive rebounds in the game.
+  opponent_team_name: Opponent's name.
+  plus_minus: The player's plus-minus (point margin while on court); null when the
+    API sends an empty string (2005-06).
+  points: The player's points in the game.
+  position: 'Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD,
+    CENTER.'
+  real_player_id: 'Global person id: the same across clubs and seasons. Joins to `realPlayerId`
+    everywhere.'
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move; see README). Joins to box-score
+    `seasonPlayer.id`, action `seasonPlayerId` and /season-players/{seasonPlayerId}.'
+  season_team_id: Season-team id; equal to the club `teamId` in every sample (BBL
+    2005-2026, DBBL 2024-2026).
+  seconds_played: The player's playing time in SECONDS in the game.
+  shirt_number: Jersey number. A number or a numeric string across rows.
+  side: '`home` or `guest` (the away side), for the team the row belongs to.'
+  steals: The player's steals in the game.
+  team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  team_name: Team name as listed that season (sponsor names included, e.g. 'EWE Baskets
+    Oldenburg').
+  team_tlc: Three-letter club code.
+  three_point_shot_success_percent: The player's 3-point field-goal percentage in
+    the game, 0-100 (one decimal); 0 when no attempts.
+  three_point_shots_attempted: The player's 3-point field goals attempted in the game.
+  three_point_shots_made: The player's 3-point field goals made in the game.
+  total_rebounds: The player's rebounds (offensive + defensive) in the game.
+  triple_double: The player's triple-doubles in the game.
+  turnovers: The player's turnovers in the game.
+  two_point_shot_success_percent: The player's 2-point field-goal percentage in the
+    game, 0-100 (one decimal); 0 when no attempts.
+  two_point_shots_attempted: The player's 2-point field goals attempted in the game.
+  two_point_shots_made: The player's 2-point field goals made in the game.
+scb_game_teams:
+  assists: The team's assists in the game (players plus the team line).
+  blocks: The team's blocked shots in the game (players plus the team line).
+  competition: 'Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL
+    host; DBBL, DBBL_CUP on the DBBL host.'
+  defensive_rebounds: The team's defensive rebounds in the game (players plus the
+    team line).
+  efficiency: The team's efficiency (EFF = PTS + REB + AST + STL + BLK - missed FG
+    - missed FT - TO; checked on a 2026 box score) in the game (players plus the team
+    line).
+  field_goals_attempted: The team's field goals attempted in the game (players plus
+    the team line).
+  field_goals_made: The team's field goals made in the game (players plus the team
+    line).
+  field_goals_recomputed: True when the API's field-goal totals disagreed with its
+    2-point plus 3-point parts (2005-06 box scores) and were recomputed from the parts.
+  field_goals_success_percent: The team's field-goal percentage in the game (players
+    plus the team line), 0-100 (one decimal); 0 when no attempts.
+  fouls_committed: The team's fouls committed in the game (players plus the team line).
+  free_throws_attempted: The team's free throws attempted in the game (players plus
+    the team line).
+  free_throws_made: The team's free throws made in the game (players plus the team
+    line).
+  free_throws_success_percent: The team's free-throw percentage in the game (players
+    plus the team line), 0-100 (one decimal); 0 when no attempts.
+  game_id: Game id, a string. Joins to /games/{gameId}.
+  head_coach_name: Name of the team's head coach.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  offensive_rebounds: The team's offensive rebounds in the game (players plus the
+    team line).
+  plus_minus: The team's point margin in the game.
+  points: The team's points in the game (players plus the team line).
+  scheduled_time: Scheduled tip-off, ISO 8601 UTC.
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  season_team_id: Season-team id; equal to the club `teamId` in every sample (BBL
+    2005-2026, DBBL 2024-2026).
+  seconds_played: The team's playing time in SECONDS in the game (players plus the
+    team line) (12000 = 5 x 40 min).
+  side: '`home` or `guest` (the away side), for the team the row belongs to.'
+  stage: 'Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND,
+    ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME,
+    QUALIFICATION, GROUP_STAGE.'
+  status: 'Game status: PRE (scheduled), LIVE, POST (ended, not yet official) or OFFICIAL
+    (final).'
+  steals: The team's steals in the game (players plus the team line).
+  team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  team_line_assists: Team-line assists (not credited to a player).
+  team_line_blocks: Team-line blocked shots (not credited to a player).
+  team_line_defensive_rebounds: Team-line defensive rebounds (not credited to a player).
+  team_line_efficiency: Team-line efficiency (EFF = PTS + REB + AST + STL + BLK -
+    missed FG - missed FT - TO; checked on a 2026 box score) (not credited to a player).
+  team_line_field_goals_attempted: Team-line field goals attempted (not credited to
+    a player).
+  team_line_field_goals_made: Team-line field goals made (not credited to a player).
+  team_line_field_goals_success_percent: Team-line field-goal percentage (not credited
+    to a player), 0-100 (one decimal); 0 when no attempts.
+  team_line_fouls_committed: Team-line fouls committed (not credited to a player).
+  team_line_free_throws_attempted: Team-line free throws attempted (not credited to
+    a player).
+  team_line_free_throws_made: Team-line free throws made (not credited to a player).
+  team_line_free_throws_success_percent: Team-line free-throw percentage (not credited
+    to a player), 0-100 (one decimal); 0 when no attempts.
+  team_line_offensive_rebounds: Team-line offensive rebounds (not credited to a player).
+  team_line_plus_minus: 'Team-line plus-minus: the team line has no court time, so
+    this is not a margin.'
+  team_line_points: Team-line points (not credited to a player).
+  team_line_seconds_played: Team-line playing time in SECONDS (not credited to a player).
+  team_line_steals: Team-line steals (not credited to a player).
+  team_line_three_point_shot_success_percent: Team-line 3-point field-goal percentage
+    (not credited to a player), 0-100 (one decimal); 0 when no attempts.
+  team_line_three_point_shots_attempted: Team-line 3-point field goals attempted (not
+    credited to a player).
+  team_line_three_point_shots_made: Team-line 3-point field goals made (not credited
+    to a player).
+  team_line_total_rebounds: Team-line rebounds (offensive + defensive) (not credited
+    to a player).
+  team_line_turnovers: Team-line turnovers (not credited to a player).
+  team_line_two_point_shot_success_percent: Team-line 2-point field-goal percentage
+    (not credited to a player), 0-100 (one decimal); 0 when no attempts.
+  team_line_two_point_shots_attempted: Team-line 2-point field goals attempted (not
+    credited to a player).
+  team_line_two_point_shots_made: Team-line 2-point field goals made (not credited
+    to a player).
+  team_name: Team name as listed that season (sponsor names included, e.g. 'EWE Baskets
+    Oldenburg').
+  team_tlc: Three-letter club code.
+  three_point_shot_success_percent: The team's 3-point field-goal percentage in the
+    game (players plus the team line), 0-100 (one decimal); 0 when no attempts.
+  three_point_shots_attempted: The team's 3-point field goals attempted in the game
+    (players plus the team line).
+  three_point_shots_made: The team's 3-point field goals made in the game (players
+    plus the team line).
+  total_rebounds: The team's rebounds (offensive + defensive) in the game (players
+    plus the team line).
+  turnovers: The team's turnovers in the game (players plus the team line).
+  two_point_shot_success_percent: The team's 2-point field-goal percentage in the
+    game (players plus the team line), 0-100 (one decimal); 0 when no attempts.
+  two_point_shots_attempted: The team's 2-point field goals attempted in the game
+    (players plus the team line).
+  two_point_shots_made: The team's 2-point field goals made in the game (players plus
+    the team line).
+scb_games:
+  commissioner_first_name: Official's given name.
+  commissioner_id: 'Official id; joins to /referees `refId` (= its `id`). /referees
+    lists only the current officials (44), so older games'' officials can be missing
+    there: all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  commissioner_last_name: Official's family name.
+  competition: 'Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL
+    host; DBBL, DBBL_CUP on the DBBL host.'
+  game_id: Game id, a string; unique within a league only (BBL and DBBL overlap),
+    and not chronological.
+  guest_is_foreign: The team is not in this league (cup opponents from the ProA /
+    ProB).
+  guest_last10_losses: Losses in the last 10 games.
+  guest_last10_victories: Wins in the last 10 games.
+  guest_ot1_score: Guest team points in overtime 1; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot2_score: Guest team points in overtime 2; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot3_score: Guest team points in overtime 3; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot4_score: Guest team points in overtime 4; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot5_score: Guest team points in overtime 5; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot6_score: Guest team points in overtime 6; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot7_score: Guest team points in overtime 7; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot8_score: Guest team points in overtime 8; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot9_score: Guest team points in overtime 9; 0 when not played (null from OT5
+    on in old seasons).
+  guest_q1_score: Guest team points in quarter 1; 0 when quarter scores were not recorded.
+  guest_q2_score: Guest team points in quarter 2; 0 when quarter scores were not recorded.
+  guest_q3_score: Guest team points in quarter 3; 0 when quarter scores were not recorded.
+  guest_q4_score: Guest team points in quarter 4; 0 when quarter scores were not recorded.
+  guest_rank: The team's current table position.
+  guest_score: Guest team final score.
+  guest_season_team_id: Season-team id; equal to the club `teamId` in every sample
+    (BBL 2005-2026, DBBL 2024-2026).
+  guest_streak: 'Current streak: W or L; empty when none.'
+  guest_streak_count: Length of the current streak.
+  guest_team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  guest_team_name: Team name as listed that season (sponsor names included, e.g. 'EWE
+    Baskets Oldenburg').
+  guest_tlc: Three-letter club code.
+  guest_total_games: Games the guest team has played so far (the API sends it as a
+    string).
+  home_is_foreign: The team is not in this league (cup opponents from the ProA / ProB).
+  home_last10_losses: Losses in the last 10 games.
+  home_last10_victories: Wins in the last 10 games.
+  home_ot1_score: Home team points in overtime 1; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot2_score: Home team points in overtime 2; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot3_score: Home team points in overtime 3; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot4_score: Home team points in overtime 4; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot5_score: Home team points in overtime 5; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot6_score: Home team points in overtime 6; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot7_score: Home team points in overtime 7; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot8_score: Home team points in overtime 8; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot9_score: Home team points in overtime 9; 0 when not played (null from OT5
+    on in old seasons).
+  home_q1_score: Home team points in quarter 1; 0 when quarter scores were not recorded.
+  home_q2_score: Home team points in quarter 2; 0 when quarter scores were not recorded.
+  home_q3_score: Home team points in quarter 3; 0 when quarter scores were not recorded.
+  home_q4_score: Home team points in quarter 4; 0 when quarter scores were not recorded.
+  home_rank: The team's current table position.
+  home_score: Home team final score.
+  home_season_team_id: Season-team id; equal to the club `teamId` in every sample
+    (BBL 2005-2026, DBBL 2024-2026).
+  home_streak: 'Current streak: W or L; empty when none.'
+  home_streak_count: Length of the current streak.
+  home_team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  home_team_name: Team name as listed that season (sponsor names included, e.g. 'EWE
+    Baskets Oldenburg').
+  home_tlc: Three-letter club code.
+  home_total_games: Games the home team has played so far (the API sends it as a string).
+  is_free_tv: Shown on free-to-air TV.
+  is_hidden: True when the API hides the game (0/1 on /games, a boolean on the header).
+  is_tbd: Date or time not yet fixed.
+  latest_period: Number of the last period played (4 = Q4, 5 = OT1, ...); the API
+    sends `Q4` on /games and 4 on /games/recent. Null before the game.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  live_stream_url: Live-stream link (DBBL games link YouTube); empty when none.
+  match_day: Round number within the stage (Spieltag).
+  referee1_first_name: Official's given name.
+  referee1_id: 'Official id; joins to /referees `refId` (= its `id`). /referees lists
+    only the current officials (44), so older games'' officials can be missing there:
+    all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  referee1_last_name: Official's family name.
+  referee2_first_name: Official's given name.
+  referee2_id: 'Official id; joins to /referees `refId` (= its `id`). /referees lists
+    only the current officials (44), so older games'' officials can be missing there:
+    all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  referee2_last_name: Official's family name.
+  referee3_first_name: Official's given name.
+  referee3_id: 'Official id; joins to /referees `refId` (= its `id`). /referees lists
+    only the current officials (44), so older games'' officials can be missing there:
+    all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  referee3_last_name: Official's family name.
+  scheduled_time: Scheduled tip-off, ISO 8601 UTC.
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  spectators: Attendance; 0 when not recorded.
+  stage: 'Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND,
+    ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME,
+    QUALIFICATION, GROUP_STAGE.'
+  status: 'Game status: PRE (scheduled), LIVE, POST (ended, not yet official), OFFICIAL
+    (final).'
+  top_score: Points of the game's top scorer; null before the game.
+  top_scorer_first_name: Player's given name.
+  top_scorer_last_name: Player's family name.
+  top_scorer_real_player_id: 'Global person id: the same across clubs and seasons.
+    Joins to `realPlayerId` everywhere.'
+  top_scorer_season_player_id: 'Season-player id. BBL: a string equal to `id`. DBBL:
+    an INTEGER that matches /seasons/{seasonId} `seasonPlayerId` (5 of 5 rows checked,
+    2026-27). Joins to /season-players/{seasonPlayerId}.'
+  tv_channel: TV channel(s) showing the game, comma-joined (a list on some routes,
+    an empty string when none).
+  tv_type: TV coverage type; empty or null in every sample.
+  venue_address: Postal address, German.
+  venue_capacity: Arena capacity, spectators.
+  venue_id: Arena id, stable across seasons (Uber Arena = 2 in both 2025-26 and 2026-27);
+    a different key space from /teams `seasonVenues.id`, and no captured route is
+    keyed by it. A string in /games and /games/{gameId}, an integer in /games/recent.
+  venue_is_main: The club's main arena.
+  venue_name: Name of the arena the game is played in; `venue_id` is its stable arena
+    id.
+scb_games_recent:
+  bucket: 'Which list of `/games/recent` the game came from: `past` (finished), `present`
+    (today or live) or `future` (scheduled).'
+  commissioner_first_name: Official's given name.
+  commissioner_id: 'Official id; joins to /referees `refId` (= its `id`). /referees
+    lists only the current officials (44), so older games'' officials can be missing
+    there: all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  commissioner_last_name: Official's family name.
+  competition: 'Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL
+    host; DBBL, DBBL_CUP on the DBBL host.'
+  game_id: Game id, a string; unique within a league only (BBL and DBBL overlap),
+    and not chronological.
+  game_progress: 'Live progress code: E (ended), empty or null before the game. Meaning
+    inferred.'
+  guest_is_foreign: The team is not in this league (cup opponents from the ProA /
+    ProB).
+  guest_last10_losses: Losses in the last 10 games.
+  guest_last10_victories: Wins in the last 10 games.
+  guest_ot1_score: Guest team points in overtime 1; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot2_score: Guest team points in overtime 2; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot3_score: Guest team points in overtime 3; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot4_score: Guest team points in overtime 4; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot5_score: Guest team points in overtime 5; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot6_score: Guest team points in overtime 6; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot7_score: Guest team points in overtime 7; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot8_score: Guest team points in overtime 8; 0 when not played (null from OT5
+    on in old seasons).
+  guest_ot9_score: Guest team points in overtime 9; 0 when not played (null from OT5
+    on in old seasons).
+  guest_q1_score: Guest team points in quarter 1; 0 when quarter scores were not recorded.
+  guest_q2_score: Guest team points in quarter 2; 0 when quarter scores were not recorded.
+  guest_q3_score: Guest team points in quarter 3; 0 when quarter scores were not recorded.
+  guest_q4_score: Guest team points in quarter 4; 0 when quarter scores were not recorded.
+  guest_rank: The team's current table position.
+  guest_score: Guest team final score.
+  guest_season_team_id: Season-team id; equal to the club `teamId` in every sample
+    (BBL 2005-2026, DBBL 2024-2026).
+  guest_streak: 'Current streak: W or L; empty when none.'
+  guest_streak_count: Length of the current streak.
+  guest_team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  guest_team_name: Team name as listed that season (sponsor names included, e.g. 'EWE
+    Baskets Oldenburg').
+  guest_tlc: Three-letter club code.
+  guest_total_games: Games the guest team has played so far (the API sends it as a
+    string).
+  home_is_foreign: The team is not in this league (cup opponents from the ProA / ProB).
+  home_last10_losses: Losses in the last 10 games.
+  home_last10_victories: Wins in the last 10 games.
+  home_ot1_score: Home team points in overtime 1; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot2_score: Home team points in overtime 2; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot3_score: Home team points in overtime 3; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot4_score: Home team points in overtime 4; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot5_score: Home team points in overtime 5; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot6_score: Home team points in overtime 6; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot7_score: Home team points in overtime 7; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot8_score: Home team points in overtime 8; 0 when not played (null from OT5
+    on in old seasons).
+  home_ot9_score: Home team points in overtime 9; 0 when not played (null from OT5
+    on in old seasons).
+  home_q1_score: Home team points in quarter 1; 0 when quarter scores were not recorded.
+  home_q2_score: Home team points in quarter 2; 0 when quarter scores were not recorded.
+  home_q3_score: Home team points in quarter 3; 0 when quarter scores were not recorded.
+  home_q4_score: Home team points in quarter 4; 0 when quarter scores were not recorded.
+  home_rank: The team's current table position.
+  home_score: Home team final score.
+  home_season_team_id: Season-team id; equal to the club `teamId` in every sample
+    (BBL 2005-2026, DBBL 2024-2026).
+  home_streak: 'Current streak: W or L; empty when none.'
+  home_streak_count: Length of the current streak.
+  home_team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  home_team_name: Team name as listed that season (sponsor names included, e.g. 'EWE
+    Baskets Oldenburg').
+  home_tlc: Three-letter club code.
+  home_total_games: Games the home team has played so far (the API sends it as a string).
+  is_free_tv: Shown on free-to-air TV.
+  is_hidden: True when the API hides the game (0/1 on /games, a boolean on the header).
+  is_tbd: Date or time not yet fixed.
+  latest_period: Number of the last period played (4 = Q4, 5 = OT1, ...); the API
+    sends `Q4` on /games and 4 on /games/recent. Null before the game.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  live_stream_url: Live-stream link (DBBL games link YouTube); empty when none.
+  match_day: Round number within the stage (Spieltag).
+  referee1_first_name: Official's given name.
+  referee1_id: 'Official id; joins to /referees `refId` (= its `id`). /referees lists
+    only the current officials (44), so older games'' officials can be missing there:
+    all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  referee1_last_name: Official's family name.
+  referee2_first_name: Official's given name.
+  referee2_id: 'Official id; joins to /referees `refId` (= its `id`). /referees lists
+    only the current officials (44), so older games'' officials can be missing there:
+    all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  referee2_last_name: Official's family name.
+  referee3_first_name: Official's given name.
+  referee3_id: 'Official id; joins to /referees `refId` (= its `id`). /referees lists
+    only the current officials (44), so older games'' officials can be missing there:
+    all 40 of 2026-27''s matched, 6 of 10 of 2008-09''s.'
+  referee3_last_name: Official's family name.
+  scheduled_time: Scheduled tip-off, ISO 8601 UTC.
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  spectators: Attendance; 0 when not recorded.
+  stage: 'Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND,
+    ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME,
+    QUALIFICATION, GROUP_STAGE.'
+  status: 'Game status: PRE (scheduled), LIVE, POST (ended, not yet official), OFFICIAL
+    (final).'
+  top_score: Points of the game's top scorer; null before the game.
+  top_scorer_first_name: Player's given name.
+  top_scorer_last_name: Player's family name.
+  top_scorer_real_player_id: 'Global person id: the same across clubs and seasons.
+    Joins to `realPlayerId` everywhere.'
+  top_scorer_season_player_id: 'Season-player id. BBL: a string equal to `id`. DBBL:
+    an INTEGER that matches /seasons/{seasonId} `seasonPlayerId` (5 of 5 rows checked,
+    2026-27). Joins to /season-players/{seasonPlayerId}.'
+  tv_channel: TV channel(s) showing the game, comma-joined (a list on some routes,
+    an empty string when none).
+  tv_type: TV coverage type; empty or null in every sample.
+  venue_address: Postal address, German.
+  venue_capacity: Arena capacity, spectators.
+  venue_id: Arena id, stable across seasons (Uber Arena = 2 in both 2025-26 and 2026-27);
+    a different key space from /teams `seasonVenues.id`, and no captured route is
+    keyed by it. A string in /games and /games/{gameId}, an integer in /games/recent.
+  venue_is_main: The club's main arena.
+  venue_name: Name of the arena the game is played in; `venue_id` is its stable arena
+    id.
+scb_player_statistics:
+  aggregation: 'Aggregation label as sent: STAGE in player tables, MAIN_ROUND in team
+    tables.'
+  assists: The player's season total assists over displayType.
+  assists_per_game: Per-game average of assists.
+  blocks: The player's season total blocked shots over displayType.
+  blocks_per_game: Per-game average of blocked shots.
+  competition: 'Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL
+    host; DBBL, DBBL_CUP on the DBBL host.'
+  defensive_rebounds: The player's season total defensive rebounds over displayType.
+  defensive_rebounds_per_game: Per-game average of defensive rebounds.
+  display_type: Which games the table covers, echoed from the request (MAIN_ROUND,
+    PLAYOFFS, PLAYOFFS_TOTAL, MAIN_ROUND_AND_PLAY_OFFS or CUP).
+  double_double: The player's season total double-doubles over displayType.
+  double_double_per_game: Per-game average of double-doubles.
+  efficiency: The player's season total efficiency (EFF = PTS + REB + AST + STL +
+    BLK - missed FG - missed FT - TO; checked on a 2026 box score) over displayType.
+  efficiency_per_game: Per-game average of efficiency (EFF = PTS + REB + AST + STL
+    + BLK - missed FG - missed FT - TO; checked on a 2026 box score).
+  field_goals_attempted: The player's season total field goals attempted over displayType.
+  field_goals_attempted_per_game: Per-game average of field goals attempted.
+  field_goals_made: The player's season total field goals made over displayType.
+  field_goals_made_per_game: Per-game average of field goals made.
+  field_goals_success_percent: The player's season total field-goal percentage over
+    displaytype, 0-100 (one decimal); 0 when no attempts.
+  field_goals_success_percent_per_game: 'Per-game average of field-goal percentage
+    (0 in every sample: unusable).'
+  first_name: Player's given name.
+  fouls_committed: The player's season total fouls committed over displayType.
+  fouls_committed_per_game: Per-game average of fouls committed.
+  fouls_received: The player's season total fouls drawn over displayType.
+  fouls_received_per_game: Per-game average of fouls drawn.
+  free_throws_attempted: The player's season total free throws attempted over displayType.
+  free_throws_attempted_per_game: Per-game average of free throws attempted.
+  free_throws_made: The player's season total free throws made over displayType.
+  free_throws_made_per_game: Per-game average of free throws made.
+  free_throws_success_percent: The player's season total free-throw percentage over
+    displaytype, 0-100 (one decimal); 0 when no attempts.
+  games_played: The player's season total games played over displayType.
+  games_started: The player's season total games started over displayType.
+  last_name: Player's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  offensive_rebounds: The player's season total offensive rebounds over displayType.
+  offensive_rebounds_per_game: Per-game average of offensive rebounds.
+  overall: False in every sample (meaning unverified).
+  plus_minus: The player's season total plus-minus over displaytype.
+  plus_minus_per_game: Per-game average of plus-minus (point margin while on court).
+  points: The player's season total points over displayType.
+  points_per_game: Per-game average of points.
+  position: 'Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD,
+    CENTER.'
+  real_player_id: 'Global person id: the same across clubs and seasons. Joins to `realPlayerId`
+    everywhere.'
+  round_code: Provider round code; 1 for MAIN_ROUND in every sample (mapping unverified).
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: The API's own season key, the START year (2025 = 2025-26); `season` minus
+    one.
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move; see README). Joins to box-score
+    `seasonPlayer.id`, action `seasonPlayerId` and /season-players/{seasonPlayerId}.'
+  season_team_id: Season-team id; equal to the club `teamId` in every sample (BBL
+    2005-2026, DBBL 2024-2026).
+  seconds_per_game: Per-game average of seconds, seconds.
+  seconds_played: The player's season total playing time in SECONDS over displayType.
+  shirt_number: Jersey number of the player, kept as text so a `00` jersey survives.
+  stage: 'Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND,
+    ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME,
+    QUALIFICATION, GROUP_STAGE.'
+  steals: The player's season total steals over displayType.
+  steals_per_game: Per-game average of steals.
+  team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  team_name: Team name as listed that season (sponsor names included, e.g. 'EWE Baskets
+    Oldenburg').
+  team_tlc: Three-letter club code.
+  three_point_shot_success_percent: The player's season total 3-point field-goal percentage
+    over displaytype, 0-100 (one decimal); 0 when no attempts.
+  three_point_shots_attempted: The player's season total 3-point field goals attempted
+    over displayType.
+  three_point_shots_attempted_per_game: Per-game average of 3-point field goals attempted.
+  three_point_shots_made: The player's season total 3-point field goals made over
+    displayType.
+  three_point_shots_made_per_game: Per-game average of 3-point field goals made.
+  total_rebounds: The player's season total rebounds (offensive + defensive) over
+    displayType.
+  total_rebounds_per_game: Per-game average of rebounds (offensive + defensive).
+  triple_double: The player's season total triple-doubles over displayType.
+  triple_double_per_game: Per-game average of triple-doubles.
+  turnovers: The player's season total turnovers over displayType.
+  turnovers_per_game: Per-game average of turnovers.
+  two_point_shot_success_percent: The player's season total 2-point field-goal percentage
+    over displaytype, 0-100 (one decimal); 0 when no attempts.
+  two_point_shots_attempted: The player's season total 2-point field goals attempted
+    over displayType.
+  two_point_shots_attempted_per_game: Per-game average of 2-point field goals attempted.
+  two_point_shots_made: The player's season total 2-point field goals made over displayType.
+  two_point_shots_made_per_game: Per-game average of 2-point field goals made.
+scb_playoff_games:
+  game_id: Game id, a string (the playoff tree sends an integer); joins `scb_games.game_id`.
+  game_winner_id: Season-team id of the game winner, a string (the playoff tree sends
+    an integer).
+  guest_team_id: Season-team id of the guest (away) team, a string (the playoff tree
+    sends an integer).
+  home_team_id: Season-team id of the home team, a string (the playoff tree sends
+    an integer).
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  points_team_a: Team A's points in the game.
+  points_team_b: Team B's points in the game.
+  round: 'Round of the bracket: `quarter_finals`, `semi_finals` or `finals`.'
+  scheduled_time: Scheduled tip-off, ISO 8601 UTC.
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: The API's own season key, the START year (2025 = 2025-26); `season` minus
+    one.
+  series: 1-based position of the game's series within its round, in the order the
+    API lists them.
+  team_a_id: Season-team id of the series' team A (the higher seed); `points_team_a`
+    is its score, whichever side hosted.
+  team_b_id: Season-team id of the series' team B; `points_team_b` is its score, whichever
+    side hosted.
+  timestamp: Tip-off, Unix seconds.
+scb_playoff_series:
+  games: Games of the series.
+  is_match_finished: The series is decided.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  match_winner_id: Season-team id of the series winner, a string (the playoff tree
+    sends an integer).
+  round: 'Round of the bracket: `quarter_finals`, `semi_finals` or `finals`.'
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  series: 1-based position of the series within its round, in the order the API lists
+    them.
+  team_a_id: Season-team id of series team A (the higher seed is A), a string (the
+    playoff tree sends it as an integer); equals the club team id.
+  team_a_name: Name of series team A (the higher seed is A) as listed that season.
+  team_a_rank: Regular-season table position (the seed) of series team A (the higher
+    seed is A).
+  team_a_tlc: Three-letter club code of series team A (the higher seed is A).
+  team_a_victories: Series wins of team A.
+  team_b_id: Season-team id of series team B (the higher seed is A), a string (the
+    playoff tree sends it as an integer); equals the club team id.
+  team_b_name: Name of series team B (the higher seed is A) as listed that season.
+  team_b_rank: Regular-season table position (the seed) of series team B (the higher
+    seed is A).
+  team_b_tlc: Three-letter club code of series team B (the higher seed is A).
+  team_b_victories: Series wins of team B.
+scb_records_per_game:
+  all_time_order_id: Sort order on the all-time list; null when not on it.
+  all_time_place: Rank on the all-time list; null when not on it.
+  first_name: Player's given name.
+  game_id: Game id, a string. Joins to /games/{gameId}.
+  guest_tlc: Three-letter code of the guest team of the record game.
+  home_tlc: Three-letter code of the home team of the record game.
+  last_name: Player's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  order_id: Sort order within the list.
+  place: Rank within the list (1 = best); 0 on some rows.
+  ratio: '[made, attempted] as strings, on percentage records only; null otherwise.'
+  real_player_id: 'Global person id: the same across clubs and seasons. Joins to `realPlayerId`
+    everywhere.'
+  scheduled_time: Scheduled tip-off, ISO 8601 UTC.
+  scope: '`season` for the requested season''s records, `all_time` for the all-time
+    list.'
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: The API's own season key, the START year (2025 = 2025-26); `season` minus
+    one.
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move; see README). Joins to box-score
+    `seasonPlayer.id`, action `seasonPlayerId` and /season-players/{seasonPlayerId}.'
+  stat: 'The record''s stat: points, rebounds, assists, steals, blocks, turnovers,
+    efficiency, free_throws_made, three_point_shots_made or free_throws_success_percentage.'
+  team_name: Team name as listed that season (sponsor names included).
+  team_tlc: The player's team code.
+  value: The record value. A STRING in /records/per-game ('52'); a number in /records/season-averages.
+scb_records_season_averages:
+  first_name: Player's given name.
+  last_name: Player's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  order_id: Sort order within the list.
+  place: Rank within the list (1 = best); 0 on some rows.
+  ratio: '[made, attempted] as strings, on percentage records only; null otherwise.'
+  real_player_id: 'Global person id: the same across clubs and seasons. Joins to `realPlayerId`
+    everywhere.'
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move; see README). Joins to box-score
+    `seasonPlayer.id`, action `seasonPlayerId` and /season-players/{seasonPlayerId}.'
+  stat: 'The record''s stat list: assist_average, block_average, efficiency_average,
+    foul_average, free_throws_success_percentage, points_average, rebound_average,
+    steal_average, three_point_shot_average or turnover_average.'
+  team_name: Team name as listed that season (sponsor names included).
+  team_tlc: The player's team code.
+  value: The record value. A STRING in /records/per-game ('52'); a number in /records/season-averages.
+scb_referees:
+  first_name: Official's given name.
+  last_name: Official's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  official_function: REFEREE or COMMISSIONER.
+  participations: League games officiated.
+  referee_id: Official id (`refId`, equal to the API's `id`); joins `referee1_id`
+    .. `commissioner_id` of `scb_games`.
+  year_joined_bbl: Year the official joined the league.
+scb_season_player:
+  active_season_player_id: The player's current season-player id (his latest club
+    engagement). Joins to /season-players/{seasonPlayerId}.
+  bbl_games_played: Career league games played (BBL host; 0 on DBBL).
+  birth_date: Date of birth, YYYY-MM-DD.
+  first_name: Player's given name.
+  has_changed_teams: Moved clubs during the season.
+  height: 'Height in metres (float32 noise: 1.77 arrives as 1.7699999809265137).'
+  is_all_star: All-Star selection flag.
+  is_young: Young-player flag (German-trained youth rule; inferred).
+  last_name: Player's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  nationalities: Nationalities, ISO 3166-1 alpha-2 codes.
+  position: 'Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD,
+    CENTER.'
+  previous_teams: Former clubs, free text (German names).
+  real_player_id: 'Global person id: the same across clubs and seasons. Joins to `realPlayerId`
+    everywhere.'
+  season_ids: Seasons (start years) with this player or club.
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move). Joins box-score lines, actions,
+    records and `scb_season_player`.'
+  shirt_number: Jersey number. A number or a numeric string across rows.
+  team_id: Club id, a string; equal to `season_team_id` in every sample. Joins to
+    `scb_team` and `scb_season_teams`.
+  team_name: Team name as listed that season (sponsor names included).
+  weight: Weight in kg; 0 when unknown.
+scb_season_players:
+  first_name: Player's given name.
+  last_name: Player's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  real_player_id: 'Global person id: the same across clubs and seasons. Joins to `realPlayerId`
+    everywhere.'
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: The API's own season key, the START year (2025 = 2025-26); `season` minus
+    one.
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move; see README). Joins to box-score
+    `seasonPlayer.id`, action `seasonPlayerId` and /season-players/{seasonPlayerId}.'
+  season_team_id: Season-team id; equal to the club `teamId` in every sample (BBL
+    2005-2026, DBBL 2024-2026).
+scb_season_teams:
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  logo_url: Logo image URL (per season).
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: The API's own season key, the START year (2025 = 2025-26); `season` minus
+    one.
+  season_team_id: Season-team id; equal to the club `teamId` in every sample (BBL
+    2005-2026, DBBL 2024-2026).
+  team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  team_name: Team name as listed that season (sponsor names included).
+  tlc: Three-letter club code.
+scb_seasons:
+  is_active: True for the season in progress.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: The API's own season key, the START year (2025 = 2025-26); `season` minus
+    one.
+scb_standings:
+  away_last10_losses: 'Away games: last 10 games, losses.'
+  away_last10_victories: 'Away games: last 10 games, wins.'
+  away_last10_victory_percentage: 'Away games: last 10 games, win percentage, 0-100.'
+  away_losses: 'Away games: number of losses in the table.'
+  away_point_difference: 'Away games: point differential, scored minus allowed (the
+    API''s `GoalDifference`).'
+  away_points_against: 'Away games: basketball points allowed (the API''s football-style
+    `GoalsAgainst`).'
+  away_points_for: 'Away games: basketball points scored (the API''s football-style
+    `GoalsMade`).'
+  away_streak: 'Away games: current streak, W or L.'
+  away_streak_count: 'Away games: length of the current streak.'
+  away_victories: 'Away games: wins.'
+  away_victory_percentage: 'Away games: win percentage, 0-100.'
+  competition: 'Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL
+    host; DBBL, DBBL_CUP on the DBBL host.'
+  has_reached_playins: Clinched at least the play-ins.
+  has_reached_playoffs: Clinched a playoff place.
+  home_last10_losses: 'Home games: last 10 games, losses.'
+  home_last10_victories: 'Home games: last 10 games, wins.'
+  home_last10_victory_percentage: 'Home games: last 10 games, win percentage, 0-100.'
+  home_losses: 'Home games: number of losses in the table.'
+  home_point_difference: 'Home games: point differential, scored minus allowed (the
+    API''s `GoalDifference`).'
+  home_points_against: 'Home games: basketball points allowed (the API''s football-style
+    `GoalsAgainst`).'
+  home_points_for: 'Home games: basketball points scored (the API''s football-style
+    `GoalsMade`).'
+  home_streak: 'Home games: current streak, W or L.'
+  home_streak_count: 'Home games: length of the current streak.'
+  home_victories: 'Home games: wins.'
+  home_victory_percentage: 'Home games: win percentage, 0-100.'
+  is_relegation_certain: Relegated for certain.
+  last10_losses: Losses in the last 10 games.
+  last10_outcomes: 'Results of the last games, newest first: W or L.'
+  last10_percentage: Win percentage over the last 10 games, 0-100.
+  last10_victories: Wins in the last 10 games.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  point_corrections: Table-point deductions; [] in every sample.
+  rank: Table position.
+  ranking_comparison_info: Tie-break detail among teams level on record.
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  season_team_id: Season-team id; equal to the club `teamId` in every sample (BBL
+    2005-2026, DBBL 2024-2026). An integer here.
+  stage: 'Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND,
+    ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME,
+    QUALIFICATION, GROUP_STAGE.'
+  standing_id: Opaque id of the standings row, a string.
+  streak: 'Current streak: W or L; empty when none.'
+  streak_count: Length of the current streak.
+  table_points: Table points scored (2 per win), from the API's `totalPointsMade`;
+    the provider's notes call its 'Points' fields table points.
+  table_points_against: Table points conceded (2 per loss), from the API's `totalPointsAgainst`;
+    per the provider's notes, table points.
+  team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  team_name: Team name; null on some rows.
+  team_name_short: Short team name (null on DBBL).
+  team_tlc: Three-letter club code.
+  total_games: Games played in the table (home and away together).
+  total_losses: Losses in the table over all games.
+  total_point_difference: 'All games: point differential, scored minus allowed (the
+    API''s `GoalDifference`).'
+  total_points_against: 'All games: basketball points allowed (the API''s football-style
+    `GoalsAgainst`).'
+  total_points_for: 'All games: basketball points scored (the API''s football-style
+    `GoalsMade`).'
+  total_victories: 'All games: wins.'
+  total_victory_percentage: 'All games: win percentage, 0-100.'
+  updated_date: Last update of the row, ISO 8601 UTC.
+scb_team:
+  best_achievements: Honours, German free text (Deutscher Meister = German champion,
+    Pokalsieger = cup winner, Vizepokalsieger = cup runner-up).
+  homepage_url: Club website address as sent (it can lack the scheme).
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  mascot: Club mascot name (null when none).
+  name_full: Full club name as the API lists it today.
+  name_short: Short name (often the city); null on DBBL.
+  order_id: Display order of the club on the site; null on some clubs.
+  team_id: Club id, a string; equal to `season_team_id` in every sample. Joins to
+    `scb_team` and `scb_season_teams`.
+  ticket_url: Ticket shop URL.
+  tlc: Three-letter club code.
+  year_joined_bbl: Year the club joined the league.
+scb_team_rosters:
+  birth_date: Date of birth, YYYY-MM-DD.
+  first_name: Player's given name.
+  height: 'Height in metres (float32 noise: 1.77 arrives as 1.7699999809265137).'
+  is_all_star: All-Star selection flag.
+  is_young: Young-player flag (German-trained youth rule; inferred).
+  last_name: Player's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  nationalities: Nationalities, ISO 3166-1 alpha-2 codes.
+  position: 'Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD,
+    CENTER.'
+  real_player_id: 'Global person id: the same across clubs and seasons. Joins to `realPlayerId`
+    everywhere.'
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move). Joins box-score lines, actions,
+    records and `scb_season_player`.'
+  season_team_id: Season-team id; equal to the club `teamId` in every sample (BBL
+    2005-2026, DBBL 2024-2026).
+  shirt_number: 'Jersey number as sent (a string: it can be `00`).'
+  team_id: Club id, a string; equal to `season_team_id` in every sample. Joins to
+    `scb_team` and `scb_season_teams`.
+  weight: Weight in kg; 0 when unknown.
+scb_team_seasons:
+  is_championship_winner: Won the championship that season.
+  is_cup_winner: Won the cup that season.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  season_team_id: Season-team id, a string; equal to the club `team_id` in every sample
+    (BBL 2005-2026, DBBL 2024-2026).
+  team_id: Club id, a string; equal to `season_team_id` in every sample. Joins to
+    `scb_team` and `scb_season_teams`.
+  team_name: Team name as listed that season (sponsor names included).
+scb_team_statistics:
+  aggregation: 'Aggregation label as sent: STAGE in player tables, MAIN_ROUND in team
+    tables.'
+  assists: The team's season total assists over displayType.
+  assists_per_game: Per-game average of assists.
+  blocks: The team's season total blocked shots over displayType.
+  blocks_per_game: Per-game average of blocked shots.
+  competition: 'Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL
+    host; DBBL, DBBL_CUP on the DBBL host.'
+  defensive_rebounds: The team's season total defensive rebounds over displayType.
+  defensive_rebounds_per_game: Per-game average of defensive rebounds.
+  display_type: Which games the table covers, echoed from the request (MAIN_ROUND,
+    PLAYOFFS, PLAYOFFS_TOTAL, MAIN_ROUND_AND_PLAY_OFFS or CUP).
+  double_double: The team's season total double-doubles over displayType.
+  double_double_per_game: Per-game average of double-doubles.
+  efficiency: The team's season total efficiency (EFF = PTS + REB + AST + STL + BLK
+    - missed FG - missed FT - TO; checked on a 2026 box score) over displayType.
+  efficiency_per_game: Per-game average of efficiency (EFF = PTS + REB + AST + STL
+    + BLK - missed FG - missed FT - TO; checked on a 2026 box score).
+  field_goals_attempted: The team's season total field goals attempted over displayType.
+  field_goals_attempted_per_game: Per-game average of field goals attempted.
+  field_goals_made: The team's season total field goals made over displayType.
+  field_goals_made_per_game: Per-game average of field goals made.
+  field_goals_success_percent: The team's season total field-goal percentage over
+    displaytype, 0-100 (one decimal); 0 when no attempts.
+  field_goals_success_percent_per_game: 'Per-game average of field-goal percentage
+    (0 in every sample: unusable).'
+  fouls_committed: The team's season total fouls committed over displayType.
+  fouls_committed_per_game: Per-game average of fouls committed.
+  free_throws_attempted: The team's season total free throws attempted over displayType.
+  free_throws_attempted_per_game: Per-game average of free throws attempted.
+  free_throws_made: The team's season total free throws made over displayType.
+  free_throws_made_per_game: Per-game average of free throws made.
+  free_throws_success_percent: The team's season total free-throw percentage over
+    displaytype, 0-100 (one decimal); 0 when no attempts.
+  games_played: The team's season total games played over displayType.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  offensive_rebounds: The team's season total offensive rebounds over displayType.
+  offensive_rebounds_per_game: Per-game average of offensive rebounds.
+  plus_minus: The team's season total plus-minus over displaytype.
+  plus_minus_per_game: Per-game average of plus-minus (point margin while on court).
+  points: The team's season total points over displayType.
+  points_per_game: Per-game average of points.
+  round_code: Provider round code; 1 for MAIN_ROUND in every sample (mapping unverified).
+  season: Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus
+    one.
+  season_id: Season, START year (2026 = 2026-27).
+  season_team_id: Season-team id; equal to the club `teamId` in every sample (BBL
+    2005-2026, DBBL 2024-2026).
+  seconds_per_game: Per-game average of seconds, seconds.
+  seconds_played: The team's season total playing time in SECONDS over displayType.
+  steals: The team's season total steals over displayType.
+  steals_per_game: Per-game average of steals.
+  team_id: Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}.
+  team_name: Team name as listed that season (sponsor names included, e.g. 'EWE Baskets
+    Oldenburg').
+  team_tlc: Three-letter club code.
+  three_point_shot_success_percent: The team's season total 3-point field-goal percentage
+    over displaytype, 0-100 (one decimal); 0 when no attempts.
+  three_point_shots_attempted: The team's season total 3-point field goals attempted
+    over displayType.
+  three_point_shots_attempted_per_game: Per-game average of 3-point field goals attempted.
+  three_point_shots_made: The team's season total 3-point field goals made over displayType.
+  three_point_shots_made_per_game: Per-game average of 3-point field goals made.
+  total_rebounds: The team's season total rebounds (offensive + defensive) over displayType.
+  total_rebounds_per_game: Per-game average of rebounds (offensive + defensive).
+  turnovers: The team's season total turnovers over displayType.
+  turnovers_per_game: Per-game average of turnovers.
+  two_point_shot_success_percent: The team's season total 2-point field-goal percentage
+    over displaytype, 0-100 (one decimal); 0 when no attempts.
+  two_point_shots_attempted: The team's season total 2-point field goals attempted
+    over displayType.
+  two_point_shots_attempted_per_game: Per-game average of 2-point field goals attempted.
+  two_point_shots_made: The team's season total 2-point field goals made over displayType.
+  two_point_shots_made_per_game: Per-game average of 2-point field goals made.
+scb_transfers:
+  destination_team_id: Club id the player joined; null when the destination is not
+    a league club.
+  destination_team_name: Name of the club the player joined (the free-text field,
+    else the short club name).
+  first_name: Player's given name.
+  last_name: Player's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  position: 'Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD,
+    CENTER.'
+  real_player_id: 'Global person id (integer): the same player across clubs and seasons.
+    Join players across seasons on this.'
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move). Joins box-score lines, actions,
+    records and `scb_season_player`.'
+  source_team_id: Club id the player left; null when the source is not a league club.
+  source_team_name: Name of the club the player left (the free-text field, else the
+    short club name).
+  transfer_date: Date of the transfer, YYYY-MM-DD (the API's `sortingDate`).
+scb_transfers_teams:
+  destination_team_id: Club id the player joined; null when the destination is not
+    a league club.
+  destination_team_name: Name of the club the player joined (the free-text field,
+    else the short club name).
+  direction: '`joining` or `leaving`: whether `team_id` is the destination or the
+    source of the move.'
+  first_name: Player's given name.
+  last_name: Player's family name.
+  league: 'League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL
+    game ids overlap, so a game is (league, game_id).'
+  position: 'Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD,
+    CENTER.'
+  real_player_id: 'Global person id (integer): the same player across clubs and seasons.
+    Join players across seasons on this.'
+  season_player_id: 'Season-player id: one player''s engagement with one club (kept
+    across seasons while he stays, new after a move). Joins box-score lines, actions,
+    records and `scb_season_player`.'
+  source_team_id: Club id the player left; null when the source is not a league club.
+  source_team_name: Name of the club the player left (the free-text field, else the
+    short club name).
+  team_id: Club id, a string; equal to `season_team_id` in every sample. Joins to
+    `scb_team` and `scb_season_teams`.
+  transfer_date: Date of the transfer, YYYY-MM-DD (the API's `sortingDate`).

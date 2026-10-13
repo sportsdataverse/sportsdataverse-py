@@ -1,0 +1,38 @@
+{
+  "id": "20381",
+  "realPlayerId": 10364,
+  "firstName": "Jana",
+  "lastName": "Koch",
+  "activeSeasonPlayerId": "20381",
+  "bblGamesPlayed": 0,
+  "birthDate": "2006-09-24",
+  "hasChangedTeams": false,
+  "height": 1.72,
+  "weight": 0,
+  "imageUrl": "https://api-1.dbbl.scb.world/images/player/portrait/2026/20381",
+  "isAllStar": false,
+  "isYoung": false,
+  "nationalities": [
+    "DE"
+  ],
+  "position": "POINT_GUARD",
+  "previousTeams": [
+    "Eigner Angels Nördlingen "
+  ],
+  "seasonIds": [
+    2024,
+    2025,
+    2026
+  ],
+  "shirtNumber": 10,
+  "socialMediaLinks": [
+    "jana.kxc"
+  ],
+  "team": {
+    "name": "Eigner Angels Nördlingen ",
+    "logoUrl": "https://api-1.dbbl.scb.world/images/teams/logo/2026/102",
+    "homepageUrl": "http://eigner-angels.de",
+    "id": "102"
+  },
+  "foreignLink": null
+}

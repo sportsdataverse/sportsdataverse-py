@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: league
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: is_active
+  type: logical
+kind: dataframe
+schema: scb_seasons

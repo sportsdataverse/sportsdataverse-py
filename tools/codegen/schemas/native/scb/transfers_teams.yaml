@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: direction
+  type: character
+- description: ''
+  name: league
+  type: character
+- description: ''
+  name: transfer_date
+  type: character
+- description: ''
+  name: season_player_id
+  type: character
+- description: ''
+  name: real_player_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: source_team_id
+  type: character
+- description: ''
+  name: source_team_name
+  type: character
+- description: ''
+  name: destination_team_id
+  type: character
+- description: ''
+  name: destination_team_name
+  type: character
+kind: dataframe
+schema: scb_transfers_teams

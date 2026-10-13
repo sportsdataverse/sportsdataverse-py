@@ -1,0 +1,319 @@
+{
+  "seasonId": 2024,
+  "quarterFinals": [
+    {
+      "matchWinnerId": 107,
+      "isMatchFinished": true,
+      "games": [
+        {
+          "timestamp": 1742405400,
+          "scheduledTime": "2025-03-19T17:30:00Z",
+          "gameId": 10591,
+          "gameWinnerId": 107,
+          "homeTeamId": 107,
+          "guestTeamId": 102,
+          "pointsTeamA": 70,
+          "pointsTeamB": 54
+        },
+        {
+          "timestamp": 1742742000,
+          "scheduledTime": "2025-03-23T15:00:00Z",
+          "gameId": 10593,
+          "gameWinnerId": 107,
+          "homeTeamId": 107,
+          "guestTeamId": 102,
+          "pointsTeamA": 85,
+          "pointsTeamB": 53
+        },
+        {
+          "timestamp": 1743184800,
+          "scheduledTime": "2025-03-28T18:00:00Z",
+          "gameId": 10592,
+          "gameWinnerId": 107,
+          "homeTeamId": 102,
+          "guestTeamId": 107,
+          "pointsTeamA": 80,
+          "pointsTeamB": 71
+        }
+      ],
+      "teamAVictories": 3,
+      "teamBVictories": 2,
+      "teamA": {
+        "seasonTeamId": 107,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/107",
+        "name": "Rutronik Stars Keltern",
+        "rank": 1,
+        "tlc": "KEL"
+      },
+      "teamB": {
+        "seasonTeamId": 102,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/102",
+        "name": "Eigner Angels Nördlingen ",
+        "rank": 8,
+        "tlc": "NÖR"
+      }
+    },
+    {
+      "matchWinnerId": 110,
+      "isMatchFinished": true,
+      "games": [
+        {
+          "timestamp": 1742580000,
+          "scheduledTime": "2025-03-21T18:00:00Z",
+          "gameId": 10606,
+          "gameWinnerId": 110,
+          "homeTeamId": 104,
+          "guestTeamId": 110,
+          "pointsTeamA": 76,
+          "pointsTeamB": 80
+        },
+        {
+          "timestamp": 1742742000,
+          "scheduledTime": "2025-03-23T15:00:00Z",
+          "gameId": 10608,
+          "gameWinnerId": 104,
+          "homeTeamId": 104,
+          "guestTeamId": 110,
+          "pointsTeamA": 94,
+          "pointsTeamB": 65
+        },
+        {
+          "timestamp": 1743184800,
+          "scheduledTime": "2025-03-28T18:00:00Z",
+          "gameId": 10607,
+          "gameWinnerId": 104,
+          "homeTeamId": 110,
+          "guestTeamId": 104,
+          "pointsTeamA": 70,
+          "pointsTeamB": 67
+        }
+      ],
+      "teamAVictories": 3,
+      "teamBVictories": 3,
+      "teamA": {
+        "seasonTeamId": 104,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/104",
+        "name": "GiroLive Panthers Osnabrück ",
+        "rank": 4,
+        "tlc": "OSN"
+      },
+      "teamB": {
+        "seasonTeamId": 110,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/110",
+        "name": "TK Hannover Luchse",
+        "rank": 5,
+        "tlc": "HAN"
+      }
+    },
+    {
+      "matchWinnerId": 100,
+      "isMatchFinished": true,
+      "games": [
+        {
+          "timestamp": 1742580000,
+          "scheduledTime": "2025-03-21T18:00:00Z",
+          "gameId": 10596,
+          "gameWinnerId": 100,
+          "homeTeamId": 100,
+          "guestTeamId": 109,
+          "pointsTeamA": 83,
+          "pointsTeamB": 59
+        },
+        {
+          "timestamp": 1742731200,
+          "scheduledTime": "2025-03-23T12:00:00Z",
+          "gameId": 10598,
+          "gameWinnerId": 100,
+          "homeTeamId": 100,
+          "guestTeamId": 109,
+          "pointsTeamA": 71,
+          "pointsTeamB": 56
+        },
+        {
+          "timestamp": 1743186600,
+          "scheduledTime": "2025-03-28T18:30:00Z",
+          "gameId": 10597,
+          "gameWinnerId": 100,
+          "homeTeamId": 109,
+          "guestTeamId": 100,
+          "pointsTeamA": 68,
+          "pointsTeamB": 66
+        }
+      ],
+      "teamAVictories": 3,
+      "teamBVictories": 2,
+      "teamA": {
+        "seasonTeamId": 100,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/100",
+        "name": "ALBA Berlin",
+        "rank": 2,
+        "tlc": "ALB"
+      },
+      "teamB": {
+        "seasonTeamId": 109,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/109",
+        "name": "SYNTAINICS MBC",
+        "rank": 7,
+        "tlc": "MBC"
+      }
+    }
+  ],
+  "semiFinals": [
+    {
+      "matchWinnerId": 104,
+      "isMatchFinished": true,
+      "games": [
+        {
+          "timestamp": 1743787800,
+          "scheduledTime": "2025-04-04T17:30:00Z",
+          "gameId": 10611,
+          "gameWinnerId": 107,
+          "homeTeamId": 107,
+          "guestTeamId": 104,
+          "pointsTeamA": 73,
+          "pointsTeamB": 67
+        },
+        {
+          "timestamp": 1743948000,
+          "scheduledTime": "2025-04-06T14:00:00Z",
+          "gameId": 10612,
+          "gameWinnerId": 104,
+          "homeTeamId": 107,
+          "guestTeamId": 104,
+          "pointsTeamA": 68,
+          "pointsTeamB": 70
+        },
+        {
+          "timestamp": 1744390800,
+          "scheduledTime": "2025-04-11T17:00:00Z",
+          "gameId": 10613,
+          "gameWinnerId": 107,
+          "homeTeamId": 104,
+          "guestTeamId": 107,
+          "pointsTeamA": 75,
+          "pointsTeamB": 70
+        }
+      ],
+      "teamAVictories": 3,
+      "teamBVictories": 3,
+      "teamA": {
+        "seasonTeamId": 107,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/107",
+        "name": "Rutronik Stars Keltern",
+        "rank": 1,
+        "tlc": "KEL"
+      },
+      "teamB": {
+        "seasonTeamId": 104,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/104",
+        "name": "GiroLive Panthers Osnabrück ",
+        "rank": 4,
+        "tlc": "OSN"
+      }
+    },
+    {
+      "matchWinnerId": 108,
+      "isMatchFinished": true,
+      "games": [
+        {
+          "timestamp": 1743861600,
+          "scheduledTime": "2025-04-05T14:00:00Z",
+          "gameId": 10616,
+          "gameWinnerId": 100,
+          "homeTeamId": 100,
+          "guestTeamId": 108,
+          "pointsTeamA": 66,
+          "pointsTeamB": 57
+        },
+        {
+          "timestamp": 1744043400,
+          "scheduledTime": "2025-04-07T16:30:00Z",
+          "gameId": 10617,
+          "gameWinnerId": 108,
+          "homeTeamId": 100,
+          "guestTeamId": 108,
+          "pointsTeamA": 67,
+          "pointsTeamB": 70
+        },
+        {
+          "timestamp": 1744390800,
+          "scheduledTime": "2025-04-11T17:00:00Z",
+          "gameId": 10618,
+          "gameWinnerId": 108,
+          "homeTeamId": 108,
+          "guestTeamId": 100,
+          "pointsTeamA": 52,
+          "pointsTeamB": 66
+        }
+      ],
+      "teamAVictories": 2,
+      "teamBVictories": 4,
+      "teamA": {
+        "seasonTeamId": 100,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/100",
+        "name": "ALBA Berlin",
+        "rank": 2,
+        "tlc": "ALB"
+      },
+      "teamB": {
+        "seasonTeamId": 108,
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/108",
+        "name": "Saarlouis Royals ",
+        "rank": 3,
+        "tlc": "SAR"
+      }
+    }
+  ],
+  "finals": {
+    "matchWinnerId": 107,
+    "isMatchFinished": true,
+    "games": [
+      {
+        "timestamp": 1745078400,
+        "scheduledTime": "2025-04-19T16:00:00Z",
+        "gameId": 10621,
+        "gameWinnerId": 107,
+        "homeTeamId": 107,
+        "guestTeamId": 108,
+        "pointsTeamA": 92,
+        "pointsTeamB": 54
+      },
+      {
+        "timestamp": 1745244000,
+        "scheduledTime": "2025-04-21T14:00:00Z",
+        "gameId": 10622,
+        "gameWinnerId": 107,
+        "homeTeamId": 107,
+        "guestTeamId": 108,
+        "pointsTeamA": 93,
+        "pointsTeamB": 57
+      },
+      {
+        "timestamp": 1745600400,
+        "scheduledTime": "2025-04-25T17:00:00Z",
+        "gameId": 10623,
+        "gameWinnerId": 107,
+        "homeTeamId": 108,
+        "guestTeamId": 107,
+        "pointsTeamA": 76,
+        "pointsTeamB": 62
+      }
+    ],
+    "teamAVictories": 3,
+    "teamBVictories": 1,
+    "teamA": {
+      "seasonTeamId": 107,
+      "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/107",
+      "name": "Rutronik Stars Keltern",
+      "rank": 1,
+      "tlc": "KEL"
+    },
+    "teamB": {
+      "seasonTeamId": 108,
+      "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2024/108",
+      "name": "Saarlouis Royals ",
+      "rank": 3,
+      "tlc": "SAR"
+    }
+  }
+}

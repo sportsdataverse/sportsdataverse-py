@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: league
+  type: character
+- description: ''
+  name: referee_id
+  type: character
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: official_function
+  type: character
+- description: ''
+  name: participations
+  type: integer
+- description: ''
+  name: year_joined_bbl
+  type: integer
+kind: dataframe
+schema: scb_referees

@@ -1,0 +1,97 @@
+{
+  "id": "102",
+  "sourceId": 102,
+  "tlc": "NÖR",
+  "nameFull": "Eigner Angels Nördlingen ",
+  "nameShort": null,
+  "logoUrl": "https://api-1.dbbl.scb.world/images/teams/logo/2026/102",
+  "mascot": null,
+  "address": "BG Donau-Ries e.V.\r\nBgm.-Reiger-Str. 3\n86720 Nördlingen\r\nTelefon: 0178-7278216\r\nFax: null\r\nsportlicheleitung@bg-donau-ries.de",
+  "homepageUrl": "http://eigner-angels.de",
+  "contactPhone": "0178-7278216",
+  "email": "sportlicheleitung@bg-donau-ries.de",
+  "ticketUrl": "www.vivenu.com/seller/xcyde-angels-nordlingen-gh7o",
+  "ticketPhone": null,
+  "yearJoinedBBL": 2008,
+  "socialMediaLinks": [
+    "www.facebook.com/EignerAngels",
+    "www.tiktok.com/@angels_noerdlingen",
+    "www.instagram.com/angels_basketball_noerdlingen/"
+  ],
+  "seasonIds": [
+    2024,
+    2025,
+    2026
+  ],
+  "seasonTeams": [
+    {
+      "id": "102",
+      "logoUrl": "https://api-1.dbbl.scb.world/images/teams/logo/2024/102",
+      "seasonId": 2024,
+      "name": "Eigner Angels Nördlingen ",
+      "isChampionshipWinner": false,
+      "isCupWinner": false,
+      "seasonVenues": [
+        {
+          "id": "1864",
+          "name": "Hermann-Kessler Halle",
+          "isMain": false,
+          "capacity": 1200
+        },
+        {
+          "id": "1865",
+          "name": "Mehrzweckhalle Nördlingen",
+          "isMain": false,
+          "capacity": 400
+        }
+      ]
+    },
+    {
+      "id": "102",
+      "logoUrl": "https://api-1.dbbl.scb.world/images/teams/logo/2025/102",
+      "seasonId": 2025,
+      "name": "Eigner Angels Nördlingen ",
+      "isChampionshipWinner": false,
+      "isCupWinner": false,
+      "seasonVenues": [
+        {
+          "id": "2539",
+          "name": "Hermann-Kessler Halle",
+          "isMain": false,
+          "capacity": 1200
+        },
+        {
+          "id": "2540",
+          "name": "Mehrzweckhalle Nördlingen",
+          "isMain": false,
+          "capacity": 400
+        }
+      ]
+    },
+    {
+      "id": "102",
+      "logoUrl": "https://api-1.dbbl.scb.world/images/teams/logo/2026/102",
+      "seasonId": 2026,
+      "name": "Eigner Angels Nördlingen ",
+      "isChampionshipWinner": false,
+      "isCupWinner": false,
+      "seasonVenues": [
+        {
+          "id": "5996",
+          "name": "Hermann-Kessler Halle",
+          "isMain": false,
+          "capacity": 1200
+        },
+        {
+          "id": "5997",
+          "name": "Mehrzweckhalle Nördlingen",
+          "isMain": false,
+          "capacity": 400
+        }
+      ]
+    }
+  ],
+  "rssFeedUrl": "TODO",
+  "orderId": null,
+  "bestAchievements": "Deutscher Vizepokalsieger 2023/2024\r\nDeutscher Vizepokalsieger 2010/2011"
+}
