@@ -2216,7 +2216,7 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
     # (EX-2.20-a). A frame without td_play (the nflverse path) keeps keying on type.text alone.
     kicker_td = pl.col("type.text").is_in(kickoff_vec) & pl.col("type.text").is_in(offense_score_vec) & kicker_recovers
     td_stood = (
-        (pl.col("td_play") == True).fill_null(False) | ~pl.col("type.text").str.contains("Touchdown").fill_null(False)  # noqa: E712
+        (pl.col("td_play") == True).fill_null(False) | ~pl.col("type.text").str.contains("Touchdown").fill_null(False)
         if "td_play" in df.columns
         else pl.lit(True)
     )
