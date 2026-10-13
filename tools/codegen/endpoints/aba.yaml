@@ -1,0 +1,438 @@
+api: aba
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial use of a public source: these wrappers read the leagues'' own PHP
+    sites (www.aba-liga.com, druga.aba-liga.com), keyless, with no bot wall; payloads
+    are not redistributed as release assets. www.aba-liga.com/robots.txt is the single
+    line ``User-agent: *`` (nothing disallowed, no Crawl-delay) and druga has no robots.txt;
+    no terms page was found. The runtime waits at least 1 s per host before every
+    request.'
+  - 'Coverage: box scores from 2001-02; play-by-play, the starter and on-court markers,
+    the shot chart and the minute-by-minute score from 2017-18 (earlier games answer
+    an empty pbp and NoDataError for the helpers). A game is keyed by (game_no, season,
+    league_id): game_no restarts at 1 for every season and league. Team and player
+    ids are global; the calendar carries club names only. Club names are the club''s
+    CURRENT name on every season: join on team_id.'
+  - 'Only finished games are served: an unplayed game, or one whose period scores,
+    team totals or play-by-play do not add up to the final score, raises AssetFetchError,
+    as does a page for another game, season or league than asked. The three live-match
+    helpers echo nothing about the game, so the runtime fetches the same game''s match
+    page first (one extra request) and checks the helper against it.'
+  - 'Times: ``CET`` means Central European wall-clock time including summer time (the
+    label never changes); ABA League 2 prints ``Local time``. Officials appear by
+    name only; the player bio (birth date and place, nationality) is the public player
+    profile.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the site has nothing for the request (an
+    unknown game or season, a season before 2001-02, a helper with no data before
+    2017-18).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (a page for another game, season or league, an unfinished game,
+    a helper that does not belong to the game, layout drift).'
+  raw_doc: 'the raw record (``dict``): the page record (the refs capture shape) or,
+    for the three live-match helpers, ``{''rows'': [...]}``, plus ``_request`` (kind,
+    season, sez, league and the game or player asked for)'
+  see_also:
+  - name: ABA League
+    note: the league site whose pages and chart helpers these wrappers read
+    url: https://www.aba-liga.com
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+endpoints:
+- example_args:
+    game_no: 6
+    season: 2026
+  extra_params:
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_game
+  path: /match/{game_no}/{season}/Overview
+  path_params:
+  - description: Required. Game number within the season AND league (it restarts at
+      1 for every season and league), e.g. 6; ``game_no`` in aba_calendar. Playoff
+      games that were not needed leave gaps.
+    name: game_no
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/aba/game
+  short: game
+  summary: 'Header of one finished game: round, date, venue, attendance, both clubs
+    with their score, commissioner and referees.'
+- example_args:
+    game_no: 6
+    season: 2026
+  extra_params:
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_periods
+  path: /match/{game_no}/{season}/Overview
+  path_params:
+  - description: Required. Game number within the season AND league (it restarts at
+      1 for every season and league), e.g. 6; ``game_no`` in aba_calendar. Playoff
+      games that were not needed leave gaps.
+    name: game_no
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/aba/periods
+  short: periods
+  summary: Points each team scored in each quarter and overtime of one finished game.
+- example_args:
+    game_no: 6
+    season: 2026
+  extra_params:
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_box_players
+  path: /match/{game_no}/{season}/Overview
+  path_params:
+  - description: Required. Game number within the season AND league (it restarts at
+      1 for every season and league), e.g. 6; ``game_no`` in aba_calendar. Playoff
+      games that were not needed leave gaps.
+    name: game_no
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/aba/box_players
+  short: box_players
+  summary: 'Player box score of one finished game (2001-02 on): minutes, points, shooting
+    splits, rebounds, assists, fouls, plus/minus and valuation.'
+- example_args:
+    game_no: 6
+    season: 2026
+  extra_params:
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_box_teams
+  path: /match/{game_no}/{season}/Overview
+  path_params:
+  - description: Required. Game number within the season AND league (it restarts at
+      1 for every season and league), e.g. 6; ``game_no`` in aba_calendar. Playoff
+      games that were not needed leave gaps.
+    name: game_no
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/aba/box_teams
+  short: box_teams
+  summary: 'Team totals of one finished game: the Team Compare table, home then away.'
+- example_args:
+    game_no: 6
+    season: 2026
+  extra_params:
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_pbp
+  path: /match/{game_no}/{season}/Overview
+  path_params:
+  - description: Required. Game number within the season AND league (it restarts at
+      1 for every season and league), e.g. 6; ``game_no`` in aba_calendar. Playoff
+      games that were not needed leave gaps.
+    name: game_no
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/aba/pbp
+  short: pbp
+  summary: 'Play-by-play of one finished game (2017-18 on), in game order: shots,
+    rebounds, fouls, substitutions, timeouts and period markers.'
+- example_args:
+    game_no: 6
+    season: 2026
+  extra_params:
+  - description: Required. Game number within the season AND league (it restarts at
+      1 for every season and league), e.g. 6; ``game_no`` in aba_calendar. Playoff
+      games that were not needed leave gaps.
+    name: game_no
+    query_key: game_no
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_shots
+  path: /live-match/rezultati-1718/create_shooting_chart.php
+  returns_schema: native/aba/shots
+  short: shots
+  summary: 'Shot chart of one finished game (2017-18 on): every field-goal attempt
+    with its court position.'
+- example_args:
+    game_no: 6
+    season: 2026
+  extra_params:
+  - description: Required. Game number within the season AND league (it restarts at
+      1 for every season and league), e.g. 6; ``game_no`` in aba_calendar. Playoff
+      games that were not needed leave gaps.
+    name: game_no
+    query_key: game_no
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_score_flow
+  path: /live-match/rezultati-1718/create_json.php
+  returns_schema: native/aba/score_flow
+  short: score_flow
+  summary: Score after every whole minute of one finished game (the Result Graph;
+    2017-18 on).
+- example_args:
+    game_no: 6
+    season: 2026
+  extra_params:
+  - description: Required. Game number within the season AND league (it restarts at
+      1 for every season and league), e.g. 6; ``game_no`` in aba_calendar. Playoff
+      games that were not needed leave gaps.
+    name: game_no
+    query_key: game_no
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_score_difference
+  path: /live-match/rezultati-1718/create_scoredifference.php
+  returns_schema: native/aba/score_difference
+  short: score_difference
+  summary: Score after every whole minute of one finished game, from the Score difference
+    chart (2017-18 on); the same rows as aba_score_flow.
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_calendar
+  path: /calendar/{season}/
+  path_params:
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/aba/calendar
+  short: calendar
+  summary: 'Full schedule and results of one season of one league: every round and
+    game.'
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_standings
+  path: /standings/{season}/
+  path_params:
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/aba/standings
+  short: standings
+  summary: 'Standings tables of one season of one league: regular season groups, Top
+    8 and Play-out.'
+- example_args:
+    player_id: 4807
+    season: 2026
+  extra_params:
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_player
+  path: /player/{player_id}/{season}/
+  path_params:
+  - description: 'Required. ABA player id (global: one person keeps one id across
+      seasons and both leagues), e.g. 4807 (Carlik Jones); ``player_id`` in aba_box_players.'
+    name: player_id
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/aba/player
+  short: player
+  summary: 'One player''s bio for one season and league: club, position, height, birth
+    date and place, nationality and the career line.'
+- example_args:
+    player_id: 4807
+    season: 2026
+  extra_params:
+  - choices:
+    - aba
+    - aba2
+    default: aba
+    description: 'League: ``aba`` (ABA League, www.aba-liga.com, site code lea=1)
+      or ``aba2`` (ABA League 2, druga.aba-liga.com, lea=2). Both sites serve one
+      database; the runtime asks the league''s own host.'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_aba_player_games
+  path: /player/{player_id}/{season}/
+  path_params:
+  - description: 'Required. ABA player id (global: one person keeps one id across
+      seasons and both leagues), e.g. 4807 (Carlik Jones); ``player_id`` in aba_box_players.'
+    name: player_id
+    required: true
+    type: int
+  - description: Required. Season END year (2026 = 2025-26). ``aba_runtime`` sends
+      the site's START-year key ``sez = season - 2001`` (25). The ABA League's first
+      season is 2001-02 (``season=2002``).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/aba/player_games
+  short: player_games
+  summary: 'One player''s game log for one season and league: one row per game with
+    the box-score stats.'
+getter_module: sportsdataverse.basketball.aba.aba_runtime
+host: https://www.aba-liga.com
+module: aba
+name_pattern: aba_{short}
+parser_columns: true
+parser_module: basketball.aba.aba_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: aba_
