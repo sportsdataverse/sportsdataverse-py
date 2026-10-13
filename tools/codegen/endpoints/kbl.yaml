@@ -1,0 +1,433 @@
+api: kbl
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial and unsupported: these wrappers read api.kbl.or.kr, the data API behind
+    the www.kbl.or.kr React site (stats vendor sports2i). No key, cookie or proxy
+    is needed, but two request headers must be present (Channel and TeamCode; the
+    runtime sends WEB and XX). www.kbl.or.kr/robots.txt returns the SPA''s HTML and
+    api.kbl.or.kr/robots.txt a 500 error envelope, so no policy or Crawl-delay is
+    published (checked 2026-10-12); the site''s terms (/terms/list) were not reviewed
+    for data reuse. The runtime waits at least 1 s before every request, retries included.
+    Payloads are not redistributed as release assets.'
+  - 'Not wrapped: the site''s /record/* and /player/player/{pcode} pages are rendered
+    by the sports2i widget from two other hosts (kbl-api.sports2i.com and api-stats.kbl.or.kr:
+    team four factors, clutch, hustle, shot dashboards, all-time leaders) and need
+    their own intake. WKBL (the women''s league) is out of scope by owner ruling.'
+  - Seasons are END years (2026 = 2025-26). KBL numbers seasons AND D-League (reserve
+    league) editions with one sequential seasonCode; division picks 'kbl' or 'd_league'
+    and game_code the competition inside the season, and kbl_runtime sends the API's
+    glkey. The playoff routes take the REGULAR-SEASON key; the old route serves seasonCode
+    below 45 and the new one 45 on, and the wrapper picks it.
+  - 'Ids: gmkey S{seasonCode}G{gameCode}N{gameNo} (a string, an object only inside
+    the new playoff bracket), team_code (two-digit string with a leading zero, not
+    stable across ownership changes) and pcode (six-digit string, the same on every
+    route). The play-by-play carries no pcode: join its player_name to the game''s
+    box score on name and team_code. isEnded is unreliable (0 on every finished game
+    through 2005-06), so a game is final when isEnded is 1 or when it is dated before
+    today (KST), both teams scored and its play-by-play reached the game-end row;
+    anything else raises AssetFetchError. The first game call also fetches the header
+    (and, for such a game, the play-by-play) once; the answer is cached for the process.'
+  - 'Coverage: box scores and play-by-play from the first season (1997); shot x/y
+    from 2006-07 (an earlier game''s shot chart is empty: NoDataError); advanced rates
+    are filled from 1997-98 on (the vendor computes them from the box); screen assists
+    and deflections are 0 before the recent seasons. fg is TWO-point field goals made
+    (dunks included), fgt all field goals, and a made dunk is its own row in the play-by-play.
+    Shot x/y are pixels on the site''s 726 x 412 full-court image; basket names the
+    target end and teams switch at half-time, so normalise with basket before stacking
+    shots.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty
+    list, a final game with no box score or shot chart, no playoff bracket, no schedule
+    rows in a window).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown
+    or partial: any non-2xx (an unknown id is the API''s HTTP 500), the KBL error
+    envelope, an empty or non-JSON body, a game that is not final, or a body for another
+    game, season or window than the one asked for.'
+  - 'ValueError: a malformed gmkey, a season that is not an END year between 1997
+    and 2027, an unknown division or game_code, or bad schedule dates (raised before
+    any request).'
+  see_also:
+  - name: Korean Basketball League
+    note: the league site whose API these wrappers read
+    url: https://www.kbl.or.kr
+  - name: hoopR
+    note: SportsDataverse men's basketball package (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args: {}
+  parser: parse_kbl_seasons
+  path: /season/list
+  returns_schema: native/kbl/seasons
+  short: seasons
+  summary: Every KBL regular season (1997 to the next one) with its competition key
+    and date range, newest first.
+- example_args: {}
+  parser: parse_kbl_teams
+  path: /common/teamList
+  returns_schema: native/kbl/teams
+  short: teams
+  summary: The current ten clubs with Korean and English names and the code of each
+    club's D-League side.
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'Season END year (2026 = 2025-26): the window from the first to the
+      last game of that END year''s KBL and D-League editions, fetched as at most
+      two requests (one per calendar year). Pass this or from_date and to_date.'
+    name: season
+    query_key: season
+    type: int
+  - description: First date of a window, YYYYMMDD (KST). Needs to_date; inside one
+      calendar year the API answers the whole window in one request (up to 396 games
+      a year, no paging).
+    name: from_date
+    query_key: fromDate
+    type: str
+  - description: Last date of the window, YYYYMMDD (KST), not before from_date.
+    name: to_date
+    query_key: toDate
+    type: str
+  parser: parse_kbl_schedule
+  path: /match/list
+  returns_schema: native/kbl/schedule
+  short: schedule
+  summary: Every game (all competitions, KBL and D-League) of a season or of a date
+    window, with scores and venue.
+- example_args:
+    gmkey: S47G01N49
+  parser: parse_kbl_game
+  path: /match/{gmkey}
+  path_params:
+  - description: 'Game key S{seasonCode}G{gameCode}N{gameNo}, e.g. ''S47G01N49'' (the
+      2025-26 regular season''s game 49): season_code, game_code and game_no of kbl_schedule.
+      Only final games are served; a malformed key is a ValueError.'
+    name: gmkey
+    required: true
+    type: str
+  returns_schema: native/kbl/game
+  short: game
+  summary: 'Game header of a final game: teams, final score, overtimes, venue, attendance,
+    officials and coaches.'
+- example_args:
+    gmkey: S47G01N49
+  parser: parse_kbl_period_scores
+  path: /match/{gmkey}
+  path_params:
+  - description: 'Game key S{seasonCode}G{gameCode}N{gameNo}, e.g. ''S47G01N49'' (the
+      2025-26 regular season''s game 49): season_code, game_code and game_no of kbl_schedule.
+      Only final games are served; a malformed key is a ValueError.'
+    name: gmkey
+    required: true
+    type: str
+  returns_schema: native/kbl/period_scores
+  short: period_scores
+  summary: Points by period (quarters and overtimes) and side of a final game, from
+    the game header.
+- example_args:
+    gmkey: S47G01N49
+  parser: parse_kbl_pbp
+  path: /match/{gmkey}/text-cast
+  path_params:
+  - description: 'Game key S{seasonCode}G{gameCode}N{gameNo}, e.g. ''S47G01N49'' (the
+      2025-26 regular season''s game 49): season_code, game_code and game_no of kbl_schedule.
+      Only final games are served; a malformed key is a ValueError.'
+    name: gmkey
+    required: true
+    type: str
+  returns_schema: native/kbl/pbp
+  short: pbp
+  summary: Play-by-play (the site's text cast) of a final game, one row per event,
+    from 1997-98 on.
+- example_args:
+    gmkey: S47G01N49
+  parser: parse_kbl_player_box
+  path: /match/{gmkey}/player-stat
+  path_params:
+  - description: 'Game key S{seasonCode}G{gameCode}N{gameNo}, e.g. ''S47G01N49'' (the
+      2025-26 regular season''s game 49): season_code, game_code and game_no of kbl_schedule.
+      Only final games are served; a malformed key is a ValueError.'
+    name: gmkey
+    required: true
+    type: str
+  returns_schema: native/kbl/player_box
+  short: player_box
+  summary: Player box score of a final game with the vendor's advanced rates, one
+    row per player of both teams.
+- example_args:
+    gmkey: S47G01N49
+  parser: parse_kbl_team_box
+  path: /match/{gmkey}/team-record
+  path_params:
+  - description: 'Game key S{seasonCode}G{gameCode}N{gameNo}, e.g. ''S47G01N49'' (the
+      2025-26 regular season''s game 49): season_code, game_code and game_no of kbl_schedule.
+      Only final games are served; a malformed key is a ValueError.'
+    name: gmkey
+    required: true
+    type: str
+  returns_schema: native/kbl/team_box
+  short: team_box
+  summary: Team box score of a final game with advanced rates and team-only counts,
+    one row per team.
+- example_args:
+    gmkey: S47G01N49
+  parser: parse_kbl_shots
+  path: /match/{gmkey}/match-chart
+  path_params:
+  - description: 'Game key S{seasonCode}G{gameCode}N{gameNo}, e.g. ''S47G01N49'' (the
+      2025-26 regular season''s game 49): season_code, game_code and game_no of kbl_schedule.
+      Only final games are served; a malformed key is a ValueError.'
+    name: gmkey
+    required: true
+    type: str
+  returns_schema: native/kbl/shots
+  short: shots
+  summary: 'Shot chart of a final game (2006-07 on): every charted shot with x/y pixels
+    on the full-court image.'
+- example_args:
+    gmkey: S47G01N49
+  parser: parse_kbl_score_track
+  path: /match/{gmkey}/match-chart
+  path_params:
+  - description: 'Game key S{seasonCode}G{gameCode}N{gameNo}, e.g. ''S47G01N49'' (the
+      2025-26 regular season''s game 49): season_code, game_code and game_no of kbl_schedule.
+      Only final games are served; a malformed key is a ValueError.'
+    name: gmkey
+    required: true
+    type: str
+  returns_schema: native/kbl/score_track
+  short: score_track
+  summary: 'Lead tracker and score chart of a final game: home margin and both scores
+    at eight checkpoints per period.'
+- example_args:
+    gmkey: S47G01N49
+  parser: parse_kbl_game_leaders
+  path: /match/{gmkey}/match-chart
+  path_params:
+  - description: 'Game key S{seasonCode}G{gameCode}N{gameNo}, e.g. ''S47G01N49'' (the
+      2025-26 regular season''s game 49): season_code, game_code and game_no of kbl_schedule.
+      Only final games are served; a malformed key is a ValueError.'
+    name: gmkey
+    required: true
+    type: str
+  returns_schema: native/kbl/game_leaders
+  short: game_leaders
+  summary: Each team's leader per category (points, rebounds, assists, steals, blocks)
+    in a final game.
+- example_args:
+    season: 2025
+  extra_params:
+  - choices:
+    - kbl
+    - d_league
+    default: kbl
+    description: '''kbl'' (the KBL itself, the default) or ''d_league'' (the KBL D-League
+      reserve league, seasonGrade 2, which has its own season codes; it starts with
+      the 2009 summer edition).'
+    name: division
+    query_key: division
+    type: str
+  - default: '01'
+    description: 'Competition inside the season, two digits: ''01'' regular season
+      (default; the first stage of a D-League edition), ''03'' playoffs, ''04'' championship
+      final, ''07'' EASL, ''08'' D-League stage 2, ''10'' All-Star, ''11''/''13''
+      cups, ''14'' Open Match Day. Only ''01'' was probed live.'
+    name: game_code
+    query_key: gameCode
+    type: str
+  parser: parse_kbl_player_totals
+  path: /leagues/{season}/stats/players
+  path_params:
+  - description: Season END year (2026 = 2025-26; the inaugural 1997 season is 1997,
+      the latest 2027). kbl_runtime maps it to the KBL seasonCode (47 = 2025-26).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/kbl/player_totals
+  short: player_totals
+  summary: Season player totals of one competition (every player with at least one
+    game).
+- example_args:
+    season: 2025
+  extra_params:
+  - choices:
+    - kbl
+    - d_league
+    default: kbl
+    description: '''kbl'' (the KBL itself, the default) or ''d_league'' (the KBL D-League
+      reserve league, seasonGrade 2, which has its own season codes; it starts with
+      the 2009 summer edition).'
+    name: division
+    query_key: division
+    type: str
+  - default: '01'
+    description: 'Competition inside the season, two digits: ''01'' regular season
+      (default; the first stage of a D-League edition), ''03'' playoffs, ''04'' championship
+      final, ''07'' EASL, ''08'' D-League stage 2, ''10'' All-Star, ''11''/''13''
+      cups, ''14'' Open Match Day. Only ''01'' was probed live.'
+    name: game_code
+    query_key: gameCode
+    type: str
+  parser: parse_kbl_standings
+  path: /league/rank/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26; the inaugural 1997 season is 1997,
+      the latest 2027). kbl_runtime maps it to the KBL seasonCode (47 = 2025-26).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/kbl/standings
+  short: standings
+  summary: Standings of one competition with each team's season totals.
+- example_args:
+    season: 2025
+  extra_params:
+  - choices:
+    - kbl
+    - d_league
+    default: kbl
+    description: '''kbl'' (the KBL itself, the default) or ''d_league'' (the KBL D-League
+      reserve league, seasonGrade 2, which has its own season codes; it starts with
+      the 2009 summer edition).'
+    name: division
+    query_key: division
+    type: str
+  - default: '01'
+    description: 'Competition inside the season, two digits: ''01'' regular season
+      (default; the first stage of a D-League edition), ''03'' playoffs, ''04'' championship
+      final, ''07'' EASL, ''08'' D-League stage 2, ''10'' All-Star, ''11''/''13''
+      cups, ''14'' Open Match Day. Only ''01'' was probed live.'
+    name: game_code
+    query_key: gameCode
+    type: str
+  parser: parse_kbl_team_tracks
+  path: /league/rank/{season}/team-tracks
+  path_params:
+  - description: Season END year (2026 = 2025-26; the inaugural 1997 season is 1997,
+      the latest 2027). kbl_runtime maps it to the KBL seasonCode (47 = 2025-26).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/kbl/team_tracks
+  short: team_tracks
+  summary: Each team's standing after every game of the season, one row per team and
+    game.
+- example_args:
+    season: 2025
+  extra_params:
+  - choices:
+    - kbl
+    - d_league
+    default: kbl
+    description: '''kbl'' (the KBL itself, the default) or ''d_league'' (the KBL D-League
+      reserve league, seasonGrade 2, which has its own season codes; it starts with
+      the 2009 summer edition).'
+    name: division
+    query_key: division
+    type: str
+  - default: '01'
+    description: 'Competition inside the season, two digits: ''01'' regular season
+      (default; the first stage of a D-League edition), ''03'' playoffs, ''04'' championship
+      final, ''07'' EASL, ''08'' D-League stage 2, ''10'' All-Star, ''11''/''13''
+      cups, ''14'' Open Match Day. Only ''01'' was probed live.'
+    name: game_code
+    query_key: gameCode
+    type: str
+  parser: parse_kbl_rounds
+  path: /league/rank/{season}/team-tracks
+  path_params:
+  - description: Season END year (2026 = 2025-26; the inaugural 1997 season is 1997,
+      the latest 2027). kbl_runtime maps it to the KBL seasonCode (47 = 2025-26).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/kbl/rounds
+  short: rounds
+  summary: The season's round calendar (the KBL plays six rounds) with each round's
+    first and last date.
+- example_args:
+    season: 2025
+  parser: parse_kbl_playoff_seeds
+  path: /league/playoff/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26; the inaugural 1997 season is 1997,
+      the latest 2027). kbl_runtime maps it to the KBL seasonCode (47 = 2025-26).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/kbl/playoff_seeds
+  short: playoff_seeds
+  summary: The regular-season finish that seeds the playoffs (the top six).
+- example_args:
+    season: 2025
+  parser: parse_kbl_playoff_series
+  path: /league/playoff/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26; the inaugural 1997 season is 1997,
+      the latest 2027). kbl_runtime maps it to the KBL seasonCode (47 = 2025-26).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/kbl/playoff_series
+  short: playoff_series
+  summary: 'The playoff series (quarterfinals, semifinals, final): wins and losses
+    of each team in each series.'
+- example_args:
+    season: 2025
+  parser: parse_kbl_playoff_games
+  path: /league/playoff/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26; the inaugural 1997 season is 1997,
+      the latest 2027). kbl_runtime maps it to the KBL seasonCode (47 = 2025-26).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/kbl/playoff_games
+  short: playoff_games
+  summary: The games of the playoff bracket (2024-25 on; the older bracket format
+    lists no games).
+- example_args:
+    season: 2025
+  parser: parse_kbl_round_mvps
+  path: /league/round-mvp/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26; the inaugural 1997 season is 1997,
+      the latest 2027). kbl_runtime maps it to the KBL seasonCode (47 = 2025-26).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/kbl/round_mvps
+  short: round_mvps
+  summary: The round MVPs of a season with their totals over the round.
+- example_args: {}
+  parser: parse_kbl_current_standings
+  path: /league/rank/team
+  returns_schema: native/kbl/current_standings
+  short: current_standings
+  summary: 'Current standings of the active season (no parameter): record, games behind,
+    streaks, splits.'
+- example_args: {}
+  parser: parse_kbl_season_leaders
+  path: /league/season-leader
+  returns_schema: native/kbl/season_leaders
+  short: season_leaders
+  summary: 'Current season leaders per category (no parameter): points, rebounds,
+    assists, steals, blocks, shooting.'
+- example_args: {}
+  parser: parse_kbl_players
+  path: /players
+  returns_schema: native/kbl/players
+  short: players
+  summary: The site's player directory (current and former players) with their current
+    or last team.
+getter_module: sportsdataverse.basketball.kbl.kbl_runtime
+host: https://api.kbl.or.kr
+module: kbl
+name_pattern: kbl_{short}
+parser_columns: false
+parser_module: basketball.kbl.kbl_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: kbl_

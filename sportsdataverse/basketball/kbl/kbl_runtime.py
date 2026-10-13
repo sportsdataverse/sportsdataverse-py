@@ -200,7 +200,7 @@ def _context(gmkey: str, body: Any) -> Dict[str, Any]:
     ots = 0
     for side in ("home", "away"):
         rec = _obj(records.get(side))
-        eq = rec.get("scoreeq") if isinstance(rec.get("scoreeq"), list) else []
+        eq: List[Any] = rec["scoreeq"] if isinstance(rec.get("scoreeq"), list) else []
         totals[side] = sum(_int_of(rec.get(f"scoreq{i}")) for i in range(1, 5)) + sum(_int_of(x) for x in eq)
         ots = max(ots, len(eq))
     return {
@@ -383,7 +383,7 @@ def _season_route(name: str, season: Any, params: Mapping[str, Any], **kw: Any) 
     if name in ("playoff", "round_mvp"):
         if division != "kbl":
             raise ValueError(f"the {name} route exists for the KBL only (division='kbl'); got {division!r}")
-        game_code = "01"  # the playoff routes take the REGULAR-SEASON key
+        game_code: Any = "01"  # the playoff routes take the REGULAR-SEASON key
     else:
         game_code = params.get("gameCode")
     code, gc, glkey = _glkey(season, division, game_code)

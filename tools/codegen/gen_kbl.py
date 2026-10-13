@@ -4,7 +4,7 @@ Idempotent: same spec + same fixtures -> byte-identical output. Modeled on ``gen
 ``gen_soccer_common.py``. Reads the frozen spec, the README crosswalk and the returns md from the ``sdv-internal-refs``
 checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
 
-* ``tools/codegen/endpoints/kbl.yaml`` -- 24 wrappers over the spec's 17 paths. One route can feed several frames (the
+* ``tools/codegen/endpoints/kbl.yaml`` -- 22 wrappers over the spec's 17 paths. One route can feed several frames (the
   game header feeds ``kbl_game`` and ``kbl_period_scores``, the match chart three frames, team-tracks two, the playoff
   bracket three); :data:`ENDPOINTS` is the source of truth. The wrapper ``path`` is the PUBLIC route: a season route
   carries the END year (``/league/rank/{season}``) where the API has a ``glkey``, and ``kbl_runtime`` rewrites it.
@@ -420,7 +420,13 @@ LOCAL: Dict[str, str] = {
     "draws": "Draws (always 0 in basketball).",
     "game_date": "Game date (KST).",
     "home_win": "True when the home team won the game.",
-    "gmkey_": "",
+    "crowds": "Attendance of the game (spectators).",
+    "foul_code": "Foul type code (the site reads an f field; no sampled row carries it): PNF personal, TCF technical, FRF unsportsmanlike, FTF fighting, PCF punching, EBF elbow.",
+    "game_count": "Games played (this season or competition).",
+    "home_wins": "Wins in the team's home games.",
+    "home_losses": "Losses in the team's home games.",
+    "away_wins": "Wins in the team's away games.",
+    "away_losses": "Losses in the team's away games.",
     "ast": "Assists (action 211)." + _BOXNOTE,
     "defr": "Defensive rebounds (action 210). Team season total on the standings route.",
     "offr": "Offensive rebounds (action 209). Team season total on the standings route.",
@@ -483,8 +489,8 @@ ROUTE: Dict[str, Dict[str, str]] = {
     },
     "standings": {
         "rank": "Standing (1 = first).",
-        "wins": "Wins (TWin).",
-        "losses": "Losses (TLoss).",
+        "wins": "Season wins of the team (the wire's TWin).",
+        "losses": "Season losses of the team (the wire's TLoss).",
         "draws": "Draws (TDraw, always 0).",
         "last_game_won": "True when the team's latest game was a win (the wire's win; a boolean, not a count).",
         "last_game_lost": "True when the team's latest game was a loss (inferred from conti_loss).",
@@ -606,12 +612,14 @@ def load_fixture(rel: str, ctx: Dict[str, Any]) -> Any:
 def _check_frames(short: str, entry: Entry) -> None:
     """Run the parser over every fixture: the frame must carry the documented schema exactly."""
     spec = {c: d for c, _w, d in P.SPECS[entry[1].__name__]}
+    rows = 0
     for rel, ctx in entry[2]:
         df = entry[1](load_fixture(rel, ctx))
         if dict(df.schema) != spec:
             raise SystemExit(f"kbl: {short}: {rel} parses to {dict(df.schema)}, not the documented schema")
-        if df.height == 0:
-            raise SystemExit(f"kbl: {short}: {rel} parses to zero rows")
+        rows += df.height
+    if rows == 0:  # a pre-2006-07 shot chart is legitimately empty; some fixture must have rows
+        raise SystemExit(f"kbl: {short}: no fixture parses to a row")
 
 
 def _snake_path(path: str) -> str:

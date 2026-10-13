@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: gmkey
+  type: character
+- description: ''
+  name: season_code
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: game_code
+  type: character
+- description: ''
+  name: game_no
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: period_label
+  type: character
+- description: ''
+  name: checkpoint
+  type: integer
+- description: ''
+  name: home_margin
+  type: integer
+- description: ''
+  name: home_score
+  type: integer
+- description: ''
+  name: away_score
+  type: integer
+kind: dataframe
+schema: kbl_score_track

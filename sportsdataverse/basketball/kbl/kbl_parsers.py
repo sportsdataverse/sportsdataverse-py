@@ -803,9 +803,9 @@ def _shape_score_track(raw: Any) -> List[Dict[str, Any]]:
     for key in sorted(keys, key=lambda k: codes.period_of(k)[0] or 0):
         period, label = codes.period_of(key)
         series = [lead.get(key), _obj(chart.get("home")).get(key), _obj(chart.get("away")).get(key)]
-        series = [s if isinstance(s, list) else [] for s in series]
-        for i in range(max(len(s) for s in series)):
-            at = [s[i] if i < len(s) else None for s in series]
+        lists: List[List[Any]] = [s if isinstance(s, list) else [] for s in series]
+        for i in range(max(len(s) for s in lists)):
+            at = [s[i] if i < len(s) else None for s in lists]
             rows.append(
                 _row(
                     "parse_kbl_score_track",
@@ -858,7 +858,7 @@ def _shape_team_tracks(raw: Any) -> List[Dict[str, Any]]:
     ctx = _season_ctx(raw)
     rows = []
     for team in _list(_obj(raw).get("tracks")):
-        ranks = team.get("tracks") if isinstance(team.get("tracks"), list) else []
+        ranks: List[Any] = team["tracks"] if isinstance(team.get("tracks"), list) else []
         rows += [
             _row("parse_kbl_team_tracks", team, **ctx, game_number=n, rank=rank) for n, rank in enumerate(ranks, 1)
         ]
@@ -933,7 +933,7 @@ def _shape_playoff_series(raw: Any) -> List[Dict[str, Any]]:
                 )
             )
     # the opponent: the other team of the same round and series
-    by = {}
+    by: Dict[Tuple[Any, Any], List[Any]] = {}
     for row in rows:
         by.setdefault((row["round"], row["series_no"]), []).append(row["team_code"])
     for row in rows:
