@@ -17,6 +17,9 @@ import polars as pl
 # the WNBA 2023-26, about 5% in NCAA 2025-26). Challenge plays are not timeouts.
 TEAM_TIMEOUT_TYPES = ["RegularTimeOut", "ShortTimeOut", "Full Timeout", "Short Timeout", "No Timeout", "Reset Timeout"]
 
+# A free-throw play type: NBA / WNBA "Free Throw 1 of 2", MBB / WBB "MadeFreeThrow".
+FREE_THROW = r"(?i)free ?throw"
+
 
 def pickcenter_odds(pickcenter: Any, default_over_under: float) -> dict[str, Any]:
     """Spread, over/under and home favorite from an ESPN summary ``pickcenter`` array.
@@ -106,14 +109,22 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
     """ESPN shot coordinates in the hoopR / wehoop convention, the raw pair kept as ``coordinate.{x,y}.raw``.
 
     Port of the ``helper_espn_<lg>_pbp`` block in hoopR (``espn_nba_data.R``, ``espn_mbb_data.R``)
-    and wehoop (``espn_wnba_data.R``, ``espn_wbb_data.R``), the convention every published
-    basketball pbp file carries. ESPN reports feet with the hoop at ``(25, 0)``. A play whose
-    ``type.text`` contains "Free Throw" (case-sensitive, as R's ``str_detect``; MBB's
-    "MadeFreeThrow" never matches) is pinned to ``(25, 13.75)``, the line 13.75 feet from the
-    hoop, in the raw pair as well. Then ``coordinate.x = y - 41.75`` and
-    ``coordinate.y = x - 25``, both negated on the home team's plays, so the two teams shoot at
-    opposite ends of one full court. A play with no ``team.id`` is not flipped (R's
-    ``case_when`` reads ``NA == id`` as false).
+    and wehoop (``espn_wnba_data.R``, ``espn_wbb_data.R``), the convention the published
+    basketball pbp files carry. ESPN reports feet with the hoop at ``(25, 0)``. A free throw is
+    pinned to ``(25, 13.75)``, the line 13.75 feet from the hoop, in the raw pair as well. Then
+    ``coordinate.x = y - 41.75`` and ``coordinate.y = x - 25``, both negated on the home team's
+    plays, so the two teams shoot at opposite ends of one full court. A play with no ``team.id``
+    is not flipped (R's ``case_when`` reads ``NA == id`` as false).
+
+    One deliberate divergence from R: a free throw is any ``type.text`` matching
+    ``(?i)free ?throw``. R's case-sensitive ``str_detect(., "Free Throw")`` never matches MBB /
+    WBB's "MadeFreeThrow" / "MissedFreeThrow", so their published free throws keep ESPN's
+    coordinates; here they sit on the line like NBA / WNBA's (owner ruling R844-3).
+
+    ESPN marks a play it did not locate with a large negative sentinel (about -2.1e8 in either
+    raw column). The transform carries it through, so ``coordinate.x`` / ``coordinate.y`` read
+    about +-2.1e8 on those plays; filter on the raw pair, e.g. ``coordinate_x_raw >
+    nba_game_page.COORD_SENTINEL``, before plotting.
 
     The raw pair takes the original columns' places and the transformed pair is appended,
     R's column order. A frame that already carries ``coordinate.x.raw`` (a processed payload
@@ -126,8 +137,9 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
         home_team_id: The home team's ESPN id.
 
     Returns:
-        ``df`` with ``coordinate.x`` / ``coordinate.y`` transformed (Float64) and
-        ``coordinate.x.raw`` / ``coordinate.y.raw`` holding ESPN's values (Float64).
+        ``df`` with ``coordinate.x`` / ``coordinate.y`` transformed (Float64, full-court frame,
+        home plays negated) and ``coordinate.x.raw`` / ``coordinate.y.raw`` holding ESPN's
+        values with free throws pinned to ``(25, 13.75)`` (Float64).
     """
     if "coordinate.x" not in df.columns or "coordinate.y" not in df.columns:
         return df
@@ -135,7 +147,7 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
         df = df.drop("coordinate.x", "coordinate.y").rename(
             {"coordinate.x.raw": "coordinate.x", "coordinate.y.raw": "coordinate.y"}
         )
-    ft = pl.col("type.text").str.contains("Free Throw") if "type.text" in df.columns else pl.lit(False)
+    ft = pl.col("type.text").str.contains(FREE_THROW) if "type.text" in df.columns else pl.lit(False)
     df = df.with_columns(
         pl.when(ft).then(pl.lit(25.0)).otherwise(pl.col("coordinate.x").cast(pl.Float64)).alias("coordinate.x"),
         pl.when(ft).then(pl.lit(13.75)).otherwise(pl.col("coordinate.y").cast(pl.Float64)).alias("coordinate.y"),

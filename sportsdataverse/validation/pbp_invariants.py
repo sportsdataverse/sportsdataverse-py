@@ -1608,14 +1608,16 @@ def _seconds_remaining(df: pl.DataFrame) -> list[RuleResult | None]:
         )
         if clock is None:
             continue
-        # the next row is in another period of the same game: this row ends at its period's 0:00
+        # the next row is in another period, or there is none (the game's final row): this row
+        # ends at its period's 0:00. A null end (a processor leaves the final row open) is
+        # undecidable and leaves the denominator.
         out.append(
             _row_rule(
                 f,
                 f"seconds.{scope}_period_last_row_ends_at_zero",
                 13,
                 f"a period's last play ends at the period's 0:00 ({scope} seconds: start less the period clock)",
-                c("__same_period") == False,
+                c("__same_period").fill_null(False) == False,
                 (c(end) - (c(start) - c(clock))).abs() > _FLOAT32_EPS,
                 (period, clock, start, end),
             )

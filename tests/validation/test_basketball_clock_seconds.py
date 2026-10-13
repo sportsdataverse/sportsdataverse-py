@@ -164,11 +164,12 @@ def test_period_last_row_rule_fires_on_a_clamp(monkeypatch) -> None:
     # every period here ends on an "End of ..." row logged at 0:00, so the quarter clock's
     # clamp lands on the right value; the half and game clocks carry the next period's start
     assert set(fired) == {f"seconds.{s}_period_last_row_ends_at_zero" for s in ("half", "game")}
-    # Q1-Q3 end (the game's final row has no next row); the half clock is right at the
-    # Q2 -> Q3 boundary, where the clamp lands on the row's own start, 0:00 of the half
+    # Q1-Q4 end: the game's final row counts as a period's last (R844-9), and the clamp leaves
+    # it at its own start, 0:00, so it passes; the half clock is right at the Q2 -> Q3
+    # boundary, where the clamp lands on the row's own start, 0:00 of the half
     assert {k: (r.n_checked, r.n_violations) for k, r in fired.items()} == {
-        "seconds.half_period_last_row_ends_at_zero": (3, 2),
-        "seconds.game_period_last_row_ends_at_zero": (3, 3),
+        "seconds.half_period_last_row_ends_at_zero": (4, 2),
+        "seconds.game_period_last_row_ends_at_zero": (4, 3),
     }
 
 

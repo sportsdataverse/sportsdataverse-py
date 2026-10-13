@@ -955,11 +955,22 @@
   group: basketball-coordinates
   finding: C-M20
   file: sportsdataverse/_espn_basketball_pbp.py
-  snippet: '    ft = pl.col("type.text").str.contains("Free Throw") if "type.text" in df.columns else pl.lit(False)'
+  snippet: '    ft = pl.col("type.text").str.contains(FREE_THROW) if "type.text" in df.columns else pl.lit(False)'
   mutant: '    ft = pl.lit(False)'
   test: tests/validation/test_basketball_coordinates.py -k "hoopr_convention or free_throws"
   expected: kill
   note: Free throws keep ESPN's coordinates instead of hoopR's (25, 13.75) pin.
+- id: basketball-coords-ft-match-case-sensitive
+  group: basketball-coordinates
+  finding: R844-3
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: 'FREE_THROW = r"(?i)free ?throw"'
+  mutant: 'FREE_THROW = "Free Throw"'
+  test: tests/validation/test_basketball_coordinates.py -k "published_rows and mbb"
+  expected: kill
+  note: >-
+    R's case-sensitive str_detect(., "Free Throw"): MBB / WBB "MadeFreeThrow" rows stay at ESPN's
+    coordinates (the published files' shape) instead of on the line (owner ruling R844-3).
 - id: basketball-coords-home-flip-dropped
   group: basketball-coordinates
   finding: C-M20
@@ -1031,11 +1042,20 @@
   group: basketball-end-seconds
   finding: R841-1
   file: sportsdataverse/validation/pbp_invariants.py
-  snippet: '                c("__same_period") == False,'
+  snippet: '                c("__same_period").fill_null(False) == False,'
   mutant: '                pl.lit(False),'
   test: tests/validation/test_basketball_clock_seconds.py -k clamp
   expected: kill
   note: The last-row rule checks nothing; a min(end, start) producer clamp passes group 13 again.
+- id: basketball-period-last-row-skips-final-row
+  group: basketball-end-seconds
+  finding: R844-9
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '                c("__same_period").fill_null(False) == False,'
+  mutant: '                c("__same_period") == False,'
+  test: tests/validation/test_basketball_clock_seconds.py -k clamp
+  expected: kill
+  note: The game's final row (no next row) left out of the last-row rule (4 checked -> 3).
 - id: basketball-period-last-row-held-only-to-end-le-start
   group: basketball-end-seconds
   finding: R841-1

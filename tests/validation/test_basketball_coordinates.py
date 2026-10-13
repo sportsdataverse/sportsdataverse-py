@@ -3,11 +3,16 @@
 The processors emit ``coordinate.{x,y}`` transformed the way the published hoopR / wehoop
 files are (free throws pinned to (25, 13.75), ``x = y - 41.75`` and ``y = x - 25``, both
 negated on home plays) with ESPN's values beside them as ``coordinate.{x,y}.raw``. The
-oracle below is R's ``case_when`` written row by row from the raw capture, independent of
-the polars code under test.
+oracles are R's ``case_when`` written row by row from the raw capture, independent of the
+polars code under test, and the published release rows of the captured games
+(``basketball_pbp/published_coordinates.parquet``). One deliberate divergence (owner ruling
+R844-3): a free throw is ``(?i)free ?throw``, so MBB / WBB's "MadeFreeThrow" rows, which R's
+case-sensitive "Free Throw" never pinned, sit on the line too.
 """
 
 from __future__ import annotations
+
+import re
 
 import polars as pl
 import pytest
@@ -18,7 +23,7 @@ from sportsdataverse.nba.nba_game_page import COORD_SENTINEL, shot_coordinates
 from sportsdataverse.nba.nba_play_by_play import helper_nba_play_by_play
 from sportsdataverse.wbb.wbb_play_by_play import helper_wbb_play_by_play
 from sportsdataverse.wnba.wnba_play_by_play import helper_wnba_play_by_play
-from tests.validation.test_basketball_clock_seconds import CAPTURES, _process, _summary
+from tests.validation.test_basketball_clock_seconds import CAPTURES, FIX, _process, _summary
 
 HALVES = "basketball_pbp/wbb_400509734.json.gz"  # 2013-14: ESPN ships no coordinates
 COORD_CAPTURES = [(lg, n) for lg, n in CAPTURES if n != HALVES]
@@ -31,13 +36,13 @@ CONVERTERS = {
 
 
 def _hoopr(summary: dict) -> list[tuple[float, float, float, float]]:
-    """(x, y, x_raw, y_raw) per play, as hoopR / wehoop ``helper_espn_<lg>_pbp`` computes them."""
+    """(x, y, x_raw, y_raw) per play: hoopR / wehoop ``helper_espn_<lg>_pbp`` with the R844-3 free-throw match."""
     competitors = summary["header"]["competitions"][0]["competitors"]
     home = next(int(c["team"]["id"]) for c in competitors if c["homeAway"] == "home")
     out = []
     for p in summary["plays"]:
         x, y = float(p["coordinate"]["x"]), float(p["coordinate"]["y"])
-        if "Free Throw" in ((p.get("type") or {}).get("text") or ""):
+        if re.search(r"(?i)free ?throw", (p.get("type") or {}).get("text") or ""):
             x, y = 25.0, 13.75
         team = (p.get("team") or {}).get("id")
         sign = -1 if team is not None and int(team) == home else 1
@@ -58,10 +63,11 @@ def test_coordinates_follow_the_hoopr_convention(monkeypatch, lg: str, name: str
     assert plays.schema["coordinate.x"] == plays.schema["coordinate.x.raw"] == pl.Float64
 
 
-def test_free_throws_pinned_and_home_plays_flipped(monkeypatch) -> None:
-    summary = _summary("summary_nba.json")
-    plays, _ = _process(monkeypatch, "nba", summary)
-    ft = plays.filter(pl.col("type.text").str.contains("Free Throw"))
+@pytest.mark.parametrize(("lg", "name"), [("nba", "summary_nba.json"), ("mbb", "summary_mbb.json")])
+def test_free_throws_pinned_and_home_plays_flipped(monkeypatch, lg: str, name: str) -> None:
+    summary = _summary(name)
+    plays, _ = _process(monkeypatch, lg, summary)
+    ft = plays.filter(pl.col("type.text").str.contains(r"(?i)free ?throw"))
     assert ft.height > 0
     assert set(ft.select("coordinate.x.raw", "coordinate.y.raw").rows()) == {(25.0, 13.75)}
     # a free throw sits 28 feet from half court on its own team's end: -28 at home, +28 away
@@ -70,6 +76,51 @@ def test_free_throws_pinned_and_home_plays_flipped(monkeypatch) -> None:
     assert home.height and away.height
     assert set(home.select("coordinate.x", "coordinate.y").rows()) == {(28.0, 0.0)}
     assert set(away.select("coordinate.x", "coordinate.y").rows()) == {(-28.0, 0.0)}
+
+
+# R844-3 partition: rows where the library departs from the published file, per game. Only
+# MBB / WBB free throws ("MadeFreeThrow" / "MissedFreeThrow") move; every other row is equal.
+PUBLISHED_FT_DIFFS = {
+    401830342: 39,
+    401856600: 44,
+    401638645: 26,
+    401637613: 37,
+    260312029: 0,
+    401585607: 0,
+    400927398: 0,
+    401726992: 0,
+}
+
+
+@pytest.mark.parametrize(("lg", "name"), COORD_CAPTURES)
+def test_published_rows_equal_except_ncaa_free_throws(monkeypatch, lg: str, name: str) -> None:
+    summary = _summary(name)
+    plays, _ = _process(monkeypatch, lg, summary)
+    gid = int(summary["header"]["id"])
+    published = pl.read_parquet(FIX / "basketball_pbp" / "published_coordinates.parquet").filter(
+        pl.col("game_id") == gid
+    )
+    lib = plays.select(
+        pl.col("id").cast(pl.Int64),
+        pl.col("type.text").alias("type_text"),
+        *[pl.col(f"coordinate.{a}{r}").alias(f"lib_{a}{r}") for a in "xy" for r in ("", ".raw")],
+    )
+    j = lib.join(published, on="id", how="full", coalesce=True)
+    assert j.height == plays.height == published.height
+    cols = [
+        ("lib_x", "coordinate_x"),
+        ("lib_y", "coordinate_y"),
+        ("lib_x.raw", "coordinate_x_raw"),
+        ("lib_y.raw", "coordinate_y_raw"),
+    ]
+    same = pl.all_horizontal(pl.col(a).eq_missing(pl.col(b)) for a, b in cols)
+    diff = j.filter(~same)
+    # every departure is an NCAA free throw on the line; R left those at ESPN's coordinates
+    ft = pl.col("type_text").str.contains(r"(?i)free ?throw") & ~pl.col("type_text").str.contains("Free Throw")
+    assert diff.filter(~ft).height == 0
+    assert set(diff.select("lib_x.raw", "lib_y.raw").rows()) <= {(25.0, 13.75)}
+    assert diff.height == PUBLISHED_FT_DIFFS[gid]
+    assert (lg in ("mbb", "wbb")) == (diff.height > 0)
 
 
 def test_a_season_without_coordinates_passes_through(monkeypatch) -> None:
