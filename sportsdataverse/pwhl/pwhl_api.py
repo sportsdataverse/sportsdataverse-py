@@ -10,7 +10,7 @@ fastRhockey; they are resolved to the integer HockeyTech ``season_id``.
 from __future__ import annotations
 
 import warnings
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 
 from sportsdataverse.errors import NoDataError
@@ -610,7 +610,7 @@ def pwhl_game_info(game_id: int, return_as_pandas: bool = False) -> Any:
     )
 
 
-def pwhl_player_box(game_id: int, return_as_pandas: bool = False) -> Dict[str, Any]:
+def pwhl_player_box(game_id: int, return_as_pandas: bool = False) -> dict[str, Any]:
     """PWHL player box score for a single game, skaters and goalies (fastRhockey ``pwhl_player_box``).
 
     Reads the ``statviewfeed`` ``gameSummary`` view. The return is a dict, as in fastRhockey and as

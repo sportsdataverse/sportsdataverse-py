@@ -374,7 +374,7 @@ df.filter(pl.col("event") == "goal").head()
 
 ### pwhl_player_box {#pwhl_player_box}
 
-`pwhl_player_box(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Dict[str, Any]'`
+`pwhl_player_box(game_id: 'int', return_as_pandas: 'bool' = False) -> 'dict[str, Any]'`
 
 PWHL player box score for a single game, skaters and goalies (fastRhockey `pwhl_player_box`).
 

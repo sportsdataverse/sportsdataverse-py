@@ -858,7 +858,7 @@ NOTE: for the leaders-specific column contract see :func:`parse_leaders`.
 # statviewfeed gameSummary / player (bare JSON objects, no SiteKit envelope)
 # ---------------------------------------------------------------------------
 
-GAME_INFO_SCHEMA: Dict[str, Any] = {
+GAME_INFO_SCHEMA: dict[str, Any] = {
     "game_id": pl.Int64,
     "game_number": pl.String,
     "game_date": pl.String,
@@ -886,7 +886,7 @@ GAME_INFO_SCHEMA: Dict[str, Any] = {
 }
 """``parse_game_info`` columns: the published ``load_pwhl_game_info`` schema."""
 
-_BOX_HEAD: Dict[str, Any] = {
+_BOX_HEAD: dict[str, Any] = {
     "player_id": pl.Int64,
     "first_name": pl.String,
     "last_name": pl.String,
@@ -897,7 +897,7 @@ _BOX_HEAD: Dict[str, Any] = {
     "toi": pl.String,
     "time_on_ice": pl.Float64,
 }
-_BOX_TAIL: Dict[str, Any] = {
+_BOX_TAIL: dict[str, Any] = {
     "penalty_minutes": pl.Int64,
     "faceoff_attempts": pl.Int64,
     "faceoff_wins": pl.Int64,
@@ -906,23 +906,23 @@ _BOX_TAIL: Dict[str, Any] = {
     "starting": pl.Int64,
 }
 _I = pl.Int64
-SKATER_BOX_SCHEMA: Dict[str, Any] = {
+SKATER_BOX_SCHEMA: dict[str, Any] = {
     **_BOX_HEAD,
-    **{c: _I for c in ("goals", "assists", "points", "shots", "hits", "blocked_shots")},
+    **dict.fromkeys(("goals", "assists", "points", "shots", "hits", "blocked_shots"), _I),
     "penalty_minutes": _I,
     "plus_minus": _I,
     **{k: v for k, v in _BOX_TAIL.items() if k != "penalty_minutes"},
 }
 """``parse_player_box()["skaters"]`` columns, in fastRhockey ``pwhl_player_box`` order."""
 
-GOALIE_BOX_SCHEMA: Dict[str, Any] = {
+GOALIE_BOX_SCHEMA: dict[str, Any] = {
     **_BOX_HEAD,
-    **{c: _I for c in ("saves", "goals_against", "shots_against", "goals", "assists", "points")},
+    **dict.fromkeys(("saves", "goals_against", "shots_against", "goals", "assists", "points"), _I),
     **_BOX_TAIL,
 }
 """``parse_player_box()["goalies"]`` columns, in fastRhockey ``pwhl_player_box`` order."""
 
-PLAYER_INFO_SCHEMA: Dict[str, Any] = {
+PLAYER_INFO_SCHEMA: dict[str, Any] = {
     "player_id": pl.Int64,
     "person_id": pl.Int64,
     "first_name": pl.String,
@@ -946,7 +946,7 @@ PLAYER_INFO_SCHEMA: Dict[str, Any] = {
 """``parse_player_info`` columns."""
 
 
-def _as_int(v: Any) -> Optional[int]:
+def _as_int(v: Any) -> int | None:
     """``int(v)`` for an int or numeric string; ``None`` for a blank, ``None`` or non-numeric value."""
     if isinstance(v, bool):
         return int(v)
@@ -956,7 +956,7 @@ def _as_int(v: Any) -> Optional[int]:
         return None
 
 
-def _toi_minutes(toi: Any) -> Optional[float]:
+def _toi_minutes(toi: Any) -> float | None:
     """``"21:54"`` -> 21.9 (minutes, 1 decimal, fastRhockey ``time_on_ice``); ``None`` when unparseable."""
     parts = str(toi).split(":") if isinstance(toi, str) else []
     if len(parts) != 2 or not all(p.strip().isdigit() for p in parts):
@@ -971,17 +971,17 @@ def _cell(v: Any, dtype: Any) -> Any:
     if dtype == pl.String:
         return v if isinstance(v, str) else str(v)
     if dtype == pl.Int64:
-        return v if isinstance(v, int) else None
+        return _as_int(v)
     return float(v) if not isinstance(v, str) else None
 
 
-def _frame(rows: List[Dict[str, Any]], schema: Dict[str, Any], return_as_pandas: bool) -> Any:
+def _frame(rows: list[dict[str, Any]], schema: dict[str, Any], return_as_pandas: bool) -> Any:
     rows = [{c: _cell(r.get(c), t) for c, t in schema.items()} for r in rows]
     df = pl.from_dicts(rows, schema=schema) if rows else pl.DataFrame(schema=schema)
     return df.to_pandas() if return_as_pandas else df
 
 
-def _obj(payload: Any, *path: str) -> Dict[str, Any]:
+def _obj(payload: Any, *path: str) -> dict[str, Any]:
     """Walk ``payload`` down ``path``; any missing or non-dict step yields ``{}``."""
     node = payload
     for key in path:
@@ -1009,7 +1009,7 @@ def parse_game_info(payload: Any, return_as_pandas: bool = False) -> Any:
     if game_id is None:
         return _frame([], GAME_INFO_SCHEMA, return_as_pandas)
     home, away = _obj(payload, "homeTeam"), _obj(payload, "visitingTeam")
-    row: Dict[str, Any] = {
+    row: dict[str, Any] = {
         "game_id": game_id,
         "game_number": details.get("gameNumber"),
         "game_date": details.get("date"),
@@ -1036,11 +1036,11 @@ def parse_game_info(payload: Any, return_as_pandas: bool = False) -> Any:
     return _frame([row], GAME_INFO_SCHEMA, return_as_pandas)
 
 
-def _box_row(player: Dict[str, Any], team_id: Optional[int], game_id: Optional[int], league: str) -> Dict[str, Any]:
+def _box_row(player: dict[str, Any], team_id: int | None, game_id: int | None, league: str) -> dict[str, Any]:
     info, stats = _obj(player, "info"), _obj(player, "stats")
     toi = stats.get("toi", stats.get("timeOnIce"))
     attempts, wins = _as_int(stats.get("faceoffAttempts")), _as_int(stats.get("faceoffWins"))
-    row: Dict[str, Any] = {
+    row: dict[str, Any] = {
         "player_id": _as_int(info.get("id")),
         "first_name": info.get("firstName"),
         "last_name": info.get("lastName"),
@@ -1074,7 +1074,7 @@ def _box_row(player: Dict[str, Any], team_id: Optional[int], game_id: Optional[i
     return row
 
 
-def parse_player_box(payload: Any, return_as_pandas: bool = False, league: str = "pwhl") -> Dict[str, Any]:
+def parse_player_box(payload: Any, return_as_pandas: bool = False, league: str = "pwhl") -> dict[str, Any]:
     """Parse a ``statviewfeed/gameSummary`` reply into ``{"skaters": frame, "goalies": frame}``.
 
     Mirrors fastRhockey ``pwhl_player_box``: home then visiting players, one row each, with
@@ -1095,7 +1095,7 @@ def parse_player_box(payload: Any, return_as_pandas: bool = False, league: str =
             schema for an empty, ``None`` or malformed payload (never raises).
     """
     game_id = _as_int(_obj(payload, "details").get("id"))
-    rows: Dict[str, List[Dict[str, Any]]] = {"skaters": [], "goalies": []}
+    rows: dict[str, list[dict[str, Any]]] = {"skaters": [], "goalies": []}
     for side in ("homeTeam", "visitingTeam") if game_id is not None else ():
         team = _obj(payload, side)
         team_id = _as_int(_obj(team, "info").get("id"))
@@ -1135,7 +1135,7 @@ def parse_player_info(payload: Any, return_as_pandas: bool = False) -> Any:
         "person_id": _as_int(info.get("personId")),
         "first_name": first,
         "last_name": last,
-        "name": " ".join(str(x) for x in (first, last) if x) or None,
+        "name": " ".join(x for x in (first, last) if isinstance(x, str) and x) or None,
         "jersey_number": info.get("jerseyNumber"),
         "position": info.get("position"),
         "shoots": info.get("shoots"),

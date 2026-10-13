@@ -167,3 +167,4 @@ def test_pwhl_player_info_non_scalar_fields_become_null():
     raw["info"]["jerseyNumber"] = 5
     row = P.parse_player_info(raw).row(0, named=True)
     assert (row["player_id"], row["first_name"], row["jersey_number"], row["last_name"]) == (12, None, "5", "Keller")
+    assert row["name"] == "Keller"
