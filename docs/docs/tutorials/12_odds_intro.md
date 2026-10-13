@@ -60,6 +60,9 @@ HAS_KEY = bool(os.environ.get("ODDS_API_KEY"))
 print("ODDS_API_KEY set:", HAS_KEY, "— live cells will" + ("" if HAS_KEY else " NOT") + " run")
 ```
 
+    ODDS_API_KEY set: True — live cells will run
+
+
 ## 🗂️ What's on the board?
 
 Start with [`toa_sports`](../odds/reference/additional.md#toa_sports) — it lists every sport/league key,
@@ -75,6 +78,30 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports(all_sports=True)"
 out
 ```
+
+
+
+
+    shape: (12, 4)
+    ┌─────────────────────────────────┬───────────────────┬───────────────────────────┬────────┐
+    │ key                             ┆ group             ┆ title                     ┆ active │
+    │ ---                             ┆ ---               ┆ ---                       ┆ ---    │
+    │ str                             ┆ str               ┆ str                       ┆ bool   │
+    ╞═════════════════════════════════╪═══════════════════╪═══════════════════════════╪════════╡
+    │ americanfootball_cfl            ┆ American Football ┆ CFL                       ┆ false  │
+    │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     ┆ true   │
+    │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner ┆ true   │
+    │ americanfootball_ncaaf_fcs      ┆ American Football ┆ NCAAF FCS                 ┆ false  │
+    │ americanfootball_nfl            ┆ American Football ┆ NFL                       ┆ true   │
+    │ …                               ┆ …                 ┆ …                         ┆ …      │
+    │ americanfootball_ufl            ┆ American Football ┆ UFL                       ┆ false  │
+    │ aussierules_afl                 ┆ Aussie Rules      ┆ AFL                       ┆ false  │
+    │ aussierules_aflw                ┆ Aussie Rules      ┆ AFL Women's               ┆ true   │
+    │ baseball_kbo                    ┆ Baseball          ┆ KBO                       ┆ false  │
+    │ baseball_milb                   ┆ Baseball          ┆ MiLB                      ┆ false  │
+    └─────────────────────────────────┴───────────────────┴───────────────────────────┴────────┘
+
+
 
 ## 💰 The main event: live odds
 
@@ -98,6 +125,40 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports_odds(sport='americanfootball_nfl', regions='us')"
 out
 ```
+
+
+
+
+    shape: (10, 7)
+    ┌──────────────┬──────────────┬─────────────┬────────────┬─────────────┬─────────────┬─────────────┐
+    │ home_team    ┆ away_team    ┆ bookmaker_k ┆ market_key ┆ outcome_nam ┆ outcome_poi ┆ outcome_pri │
+    │ ---          ┆ ---          ┆ ey          ┆ ---        ┆ e           ┆ nt          ┆ ce          │
+    │ str          ┆ str          ┆ ---         ┆ str        ┆ ---         ┆ ---         ┆ ---         │
+    │              ┆              ┆ str         ┆            ┆ str         ┆ f64         ┆ i64         │
+    ╞══════════════╪══════════════╪═════════════╪════════════╪═════════════╪═════════════╪═════════════╡
+    │ Los Angeles  ┆ Buffalo      ┆ draftkings  ┆ h2h        ┆ Buffalo     ┆ null        ┆ 154         │
+    │ Rams         ┆ Bills        ┆             ┆            ┆ Bills       ┆             ┆             │
+    │ Los Angeles  ┆ Buffalo      ┆ draftkings  ┆ h2h        ┆ Los Angeles ┆ null        ┆ -185        │
+    │ Rams         ┆ Bills        ┆             ┆            ┆ Rams        ┆             ┆             │
+    │ Los Angeles  ┆ Buffalo      ┆ draftkings  ┆ spreads    ┆ Buffalo     ┆ 3.5         ┆ -115        │
+    │ Rams         ┆ Bills        ┆             ┆            ┆ Bills       ┆             ┆             │
+    │ Los Angeles  ┆ Buffalo      ┆ draftkings  ┆ spreads    ┆ Los Angeles ┆ -3.5        ┆ -105        │
+    │ Rams         ┆ Bills        ┆             ┆            ┆ Rams        ┆             ┆             │
+    │ Los Angeles  ┆ Buffalo      ┆ williamhill ┆ h2h        ┆ Buffalo     ┆ null        ┆ 147         │
+    │ Rams         ┆ Bills        ┆ _us         ┆            ┆ Bills       ┆             ┆             │
+    │ Los Angeles  ┆ Buffalo      ┆ williamhill ┆ h2h        ┆ Los Angeles ┆ null        ┆ -176        │
+    │ Rams         ┆ Bills        ┆ _us         ┆            ┆ Rams        ┆             ┆             │
+    │ Los Angeles  ┆ Buffalo      ┆ williamhill ┆ spreads    ┆ Buffalo     ┆ 3.5         ┆ -118        │
+    │ Rams         ┆ Bills        ┆ _us         ┆            ┆ Bills       ┆             ┆             │
+    │ Los Angeles  ┆ Buffalo      ┆ williamhill ┆ spreads    ┆ Los Angeles ┆ -3.5        ┆ -102        │
+    │ Rams         ┆ Bills        ┆ _us         ┆            ┆ Rams        ┆             ┆             │
+    │ Los Angeles  ┆ Buffalo      ┆ fanduel     ┆ h2h        ┆ Buffalo     ┆ null        ┆ 150         │
+    │ Rams         ┆ Bills        ┆             ┆            ┆ Bills       ┆             ┆             │
+    │ Los Angeles  ┆ Buffalo      ┆ fanduel     ┆ h2h        ┆ Los Angeles ┆ null        ┆ -178        │
+    │ Rams         ┆ Bills        ┆             ┆            ┆ Rams        ┆             ┆             │
+    └──────────────┴──────────────┴─────────────┴────────────┴─────────────┴─────────────┴─────────────┘
+
+
 
 ## 🍳 Cookbook: common odds tasks
 
@@ -125,6 +186,29 @@ else:
 out
 ```
 
+
+
+
+    shape: (10, 5)
+    ┌──────────────────────┬───────────────────────┬───────────────────────┬────────────┬────────────┐
+    │ home_team            ┆ away_team             ┆ outcome_name          ┆ best_price ┆ best_book  │
+    │ ---                  ┆ ---                   ┆ ---                   ┆ ---        ┆ ---        │
+    │ str                  ┆ str                   ┆ str                   ┆ i64        ┆ str        │
+    ╞══════════════════════╪═══════════════════════╪═══════════════════════╪════════════╪════════════╡
+    │ Los Angeles Rams     ┆ Arizona Cardinals     ┆ Arizona Cardinals     ┆ 610        ┆ fanduel    │
+    │ Kansas City Chiefs   ┆ Los Angeles Chargers  ┆ Los Angeles Chargers  ┆ 360        ┆ fanduel    │
+    │ San Francisco 49ers  ┆ Washington Commanders ┆ Washington Commanders ┆ 350        ┆ fanduel    │
+    │ New England Patriots ┆ New York Jets         ┆ New York Jets         ┆ 300        ┆ fanduel    │
+    │ Indianapolis Colts   ┆ Tennessee Titans      ┆ Tennessee Titans      ┆ 270        ┆ draftkings │
+    │ Las Vegas Raiders    ┆ Buffalo Bills         ┆ Las Vegas Raiders     ┆ 230        ┆ draftkings │
+    │ Cleveland Browns     ┆ Baltimore Ravens      ┆ Cleveland Browns      ┆ 195        ┆ draftkings │
+    │ Atlanta Falcons      ┆ Chicago Bears         ┆ Atlanta Falcons       ┆ 158        ┆ fanduel    │
+    │ Los Angeles Rams     ┆ Buffalo Bills         ┆ Buffalo Bills         ┆ 156        ┆ lowvig     │
+    │ Denver Broncos       ┆ Seattle Seahawks      ┆ Denver Broncos        ┆ 140        ┆ bovada     │
+    └──────────────────────┴───────────────────────┴───────────────────────┴────────────┴────────────┘
+
+
+
 ### Recipe 2 — Spreads & totals for a slate 📋
 
 Ask for `markets="spreads,totals"` and the `outcome_point` column carries the
@@ -145,6 +229,39 @@ else:
 out
 ```
 
+
+
+
+    shape: (10, 6)
+    ┌─────────────────┬─────────────────┬────────────┬─────────────────┬───────────────┬───────────────┐
+    │ home_team       ┆ away_team       ┆ market_key ┆ outcome_name    ┆ outcome_point ┆ outcome_price │
+    │ ---             ┆ ---             ┆ ---        ┆ ---             ┆ ---           ┆ ---           │
+    │ str             ┆ str             ┆ str        ┆ str             ┆ f64           ┆ i64           │
+    ╞═════════════════╪═════════════════╪════════════╪═════════════════╪═══════════════╪═══════════════╡
+    │ Los Angeles     ┆ Buffalo Bills   ┆ spreads    ┆ Buffalo Bills   ┆ 3.5           ┆ -115          │
+    │ Rams            ┆                 ┆            ┆                 ┆               ┆               │
+    │ Los Angeles     ┆ Buffalo Bills   ┆ spreads    ┆ Los Angeles     ┆ -3.5          ┆ -105          │
+    │ Rams            ┆                 ┆            ┆ Rams            ┆               ┆               │
+    │ Los Angeles     ┆ Buffalo Bills   ┆ totals     ┆ Over            ┆ 55.5          ┆ -110          │
+    │ Rams            ┆                 ┆            ┆                 ┆               ┆               │
+    │ Los Angeles     ┆ Buffalo Bills   ┆ totals     ┆ Under           ┆ 55.5          ┆ -110          │
+    │ Rams            ┆                 ┆            ┆                 ┆               ┆               │
+    │ Denver Broncos  ┆ Seattle         ┆ spreads    ┆ Denver Broncos  ┆ 3.0           ┆ -118          │
+    │                 ┆ Seahawks        ┆            ┆                 ┆               ┆               │
+    │ Denver Broncos  ┆ Seattle         ┆ spreads    ┆ Seattle         ┆ -3.0          ┆ -102          │
+    │                 ┆ Seahawks        ┆            ┆ Seahawks        ┆               ┆               │
+    │ Denver Broncos  ┆ Seattle         ┆ totals     ┆ Over            ┆ 40.5          ┆ -118          │
+    │                 ┆ Seahawks        ┆            ┆                 ┆               ┆               │
+    │ Denver Broncos  ┆ Seattle         ┆ totals     ┆ Under           ┆ 40.5          ┆ -102          │
+    │                 ┆ Seahawks        ┆            ┆                 ┆               ┆               │
+    │ Jacksonville    ┆ Houston Texans  ┆ spreads    ┆ Houston Texans  ┆ 3.0           ┆ -120          │
+    │ Jaguars         ┆                 ┆            ┆                 ┆               ┆               │
+    │ Jacksonville    ┆ Houston Texans  ┆ spreads    ┆ Jacksonville    ┆ -3.0          ┆ 100           │
+    │ Jaguars         ┆                 ┆            ┆ Jaguars         ┆               ┆               │
+    └─────────────────┴─────────────────┴────────────┴─────────────────┴───────────────┴───────────────┘
+
+
+
 ### Recipe 3 — Just one book 🎯
 
 Pin a single sportsbook with `bookmakers=`. Great for tracking *your* book's
@@ -159,6 +276,24 @@ else:
     out = "needs ODDS_API_KEY"
 out
 ```
+
+
+
+
+    shape: (5, 4)
+    ┌──────────────────────┬──────────────────┬──────────────────┬───────────────┐
+    │ home_team            ┆ away_team        ┆ outcome_name     ┆ outcome_price │
+    │ ---                  ┆ ---              ┆ ---              ┆ ---           │
+    │ str                  ┆ str              ┆ str              ┆ i64           │
+    ╞══════════════════════╪══════════════════╪══════════════════╪═══════════════╡
+    │ Los Angeles Rams     ┆ Buffalo Bills    ┆ Buffalo Bills    ┆ 154           │
+    │ Los Angeles Rams     ┆ Buffalo Bills    ┆ Los Angeles Rams ┆ -185          │
+    │ Denver Broncos       ┆ Seattle Seahawks ┆ Denver Broncos   ┆ 124           │
+    │ Denver Broncos       ┆ Seattle Seahawks ┆ Seattle Seahawks ┆ -148          │
+    │ Jacksonville Jaguars ┆ Houston Texans   ┆ Houston Texans   ┆ 124           │
+    └──────────────────────┴──────────────────┴──────────────────┴───────────────┘
+
+
 
 ### Recipe 4 — Implied probability & the hold 🧮
 
@@ -188,6 +323,29 @@ else:
 out
 ```
 
+
+
+
+    shape: (10, 5)
+    ┌──────────────────────┬─────────────────────┬───────────────┬──────────────┬──────────┐
+    │ home_team            ┆ away_team           ┆ bookmaker_key ┆ market_total ┆ hold_pct │
+    │ ---                  ┆ ---                 ┆ ---           ┆ ---          ┆ ---      │
+    │ str                  ┆ str                 ┆ str           ┆ f64          ┆ f64      │
+    ╞══════════════════════╪═════════════════════╪═══════════════╪══════════════╪══════════╡
+    │ Los Angeles Rams     ┆ Buffalo Bills       ┆ lowvig        ┆ 1.030913     ┆ 3.09     │
+    │ Los Angeles Rams     ┆ Buffalo Bills       ┆ betonlineag   ┆ 1.030913     ┆ 3.09     │
+    │ Los Angeles Rams     ┆ Arizona Cardinals   ┆ betmgm        ┆ 1.031746     ┆ 3.17     │
+    │ Atlanta Falcons      ┆ Chicago Bears       ┆ betonlineag   ┆ 1.031962     ┆ 3.2      │
+    │ Atlanta Falcons      ┆ Chicago Bears       ┆ lowvig        ┆ 1.031962     ┆ 3.2      │
+    │ Denver Broncos       ┆ Seattle Seahawks    ┆ lowvig        ┆ 1.033375     ┆ 3.34     │
+    │ Denver Broncos       ┆ Seattle Seahawks    ┆ betonlineag   ┆ 1.033375     ┆ 3.34     │
+    │ Tampa Bay Buccaneers ┆ Pittsburgh Steelers ┆ lowvig        ┆ 1.033375     ┆ 3.34     │
+    │ Tampa Bay Buccaneers ┆ Pittsburgh Steelers ┆ betonlineag   ┆ 1.033375     ┆ 3.34     │
+    │ Tampa Bay Buccaneers ┆ Pittsburgh Steelers ┆ bovada        ┆ 1.034783     ┆ 3.48     │
+    └──────────────────────┴─────────────────────┴───────────────┴──────────────┴──────────┘
+
+
+
 ### Recipe 5 — Find the biggest favorite on the board 🐻
 
 Sort the moneyline outcomes by price ascending — the most negative number is
@@ -207,6 +365,24 @@ else:
     out = "needs ODDS_API_KEY"
 out
 ```
+
+
+
+
+    shape: (5, 5)
+    ┌──────────────────┬───────────────────┬──────────────────┬───────────────┬───────────────┐
+    │ home_team        ┆ away_team         ┆ outcome_name     ┆ outcome_price ┆ bookmaker_key │
+    │ ---              ┆ ---               ┆ ---              ┆ ---           ┆ ---           │
+    │ str              ┆ str               ┆ str              ┆ i64           ┆ str           │
+    ╞══════════════════╪═══════════════════╪══════════════════╪═══════════════╪═══════════════╡
+    │ Los Angeles Rams ┆ Arizona Cardinals ┆ Los Angeles Rams ┆ -901          ┆ mybookieag    │
+    │ Los Angeles Rams ┆ Arizona Cardinals ┆ Los Angeles Rams ┆ -900          ┆ fanduel       │
+    │ Los Angeles Rams ┆ Arizona Cardinals ┆ Los Angeles Rams ┆ -850          ┆ fanatics      │
+    │ Los Angeles Rams ┆ Arizona Cardinals ┆ Los Angeles Rams ┆ -835          ┆ betrivers     │
+    │ Los Angeles Rams ┆ Arizona Cardinals ┆ Los Angeles Rams ┆ -800          ┆ draftkings    │
+    └──────────────────┴───────────────────┴──────────────────┴───────────────┴───────────────┘
+
+
 
 ### Recipe 6 — Consensus over/under per game 📊
 
@@ -234,6 +410,29 @@ else:
     out = "needs ODDS_API_KEY"
 out
 ```
+
+
+
+
+    shape: (10, 4)
+    ┌──────────────────────┬───────────────────────┬─────────────────┬─────────┐
+    │ home_team            ┆ away_team             ┆ consensus_total ┆ n_books │
+    │ ---                  ┆ ---                   ┆ ---             ┆ ---     │
+    │ str                  ┆ str                   ┆ f64             ┆ u32     │
+    ╞══════════════════════╪═══════════════════════╪═════════════════╪═════════╡
+    │ Los Angeles Rams     ┆ Buffalo Bills         ┆ 55.5            ┆ 11      │
+    │ Las Vegas Raiders    ┆ Buffalo Bills         ┆ 53.0            ┆ 10      │
+    │ Green Bay Packers    ┆ Dallas Cowboys        ┆ 53.0            ┆ 10      │
+    │ Los Angeles Rams     ┆ Arizona Cardinals     ┆ 52.0            ┆ 10      │
+    │ San Francisco 49ers  ┆ Washington Commanders ┆ 50.5            ┆ 10      │
+    │ Atlanta Falcons      ┆ Chicago Bears         ┆ 49.0            ┆ 10      │
+    │ New York Giants      ┆ New Orleans Saints    ┆ 45.5            ┆ 11      │
+    │ Indianapolis Colts   ┆ Tennessee Titans      ┆ 44.0            ┆ 11      │
+    │ New England Patriots ┆ New York Jets         ┆ 43.5            ┆ 11      │
+    │ Jacksonville Jaguars ┆ Houston Texans        ┆ 42.5            ┆ 11      │
+    └──────────────────────┴───────────────────────┴─────────────────┴─────────┘
+
+
 
 ### Recipe 7 — Just today's slate ⏰
 
@@ -263,6 +462,20 @@ else:
 out
 ```
 
+
+
+
+    shape: (1, 3)
+    ┌──────────────────────┬──────────────────┬───────────────┐
+    │ commence_time        ┆ home_team        ┆ away_team     │
+    │ ---                  ┆ ---              ┆ ---           │
+    │ str                  ┆ str              ┆ str           │
+    ╞══════════════════════╪══════════════════╪═══════════════╡
+    │ 2026-10-13T00:15:00Z ┆ Los Angeles Rams ┆ Buffalo Bills │
+    └──────────────────────┴──────────────────┴───────────────┘
+
+
+
 ### Recipe 8 — Player props for one game 🎯
 
 Event-level markets (player props!) live on [`toa_event_odds`](../odds/reference/additional.md#toa_event_odds).
@@ -284,6 +497,24 @@ else:
     out = "set ODDS_API_KEY to run the player-props recipe"
 out
 ```
+
+
+
+
+    shape: (5, 4)
+    ┌──────────────┬─────────────────────┬───────────────┬───────────────┐
+    │ outcome_name ┆ outcome_description ┆ outcome_point ┆ outcome_price │
+    │ ---          ┆ ---                 ┆ ---           ┆ ---           │
+    │ str          ┆ str                 ┆ f64           ┆ i64           │
+    ╞══════════════╪═════════════════════╪═══════════════╪═══════════════╡
+    │ Over         ┆ Matthew Stafford    ┆ 2.5           ┆ 115           │
+    │ Under        ┆ Matthew Stafford    ┆ 2.5           ┆ -147          │
+    │ Over         ┆ Josh Allen          ┆ 1.5           ┆ -121          │
+    │ Under        ┆ Josh Allen          ┆ 1.5           ┆ -106          │
+    │ Over         ┆ Matthew Stafford    ┆ 2.5           ┆ 116           │
+    └──────────────┴─────────────────────┴───────────────┴───────────────┘
+
+
 
 ### Recipe 9 — Which markets does a game offer? 🗃️
 
@@ -310,6 +541,29 @@ else:
 out
 ```
 
+
+
+
+    shape: (10, 2)
+    ┌────────────────┬───────────┐
+    │ bookmaker_key  ┆ n_markets │
+    │ ---            ┆ ---       │
+    │ str            ┆ u32       │
+    ╞════════════════╪═══════════╡
+    │ draftkings     ┆ 102       │
+    │ fanduel        ┆ 65        │
+    │ betrivers      ┆ 50        │
+    │ betmgm         ┆ 48        │
+    │ bovada         ┆ 44        │
+    │ fanatics       ┆ 33        │
+    │ betonlineag    ┆ 31        │
+    │ williamhill_us ┆ 21        │
+    │ betus          ┆ 9         │
+    │ mybookieag     ┆ 3         │
+    └────────────────┴───────────┘
+
+
+
 ### Recipe 10 — Recent finals & margin of victory 🏁
 
 [`toa_sports_scores`](../odds/reference/additional.md#toa_sports_scores) returns live + recently
@@ -329,6 +583,43 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports_scores(sport='americanfootball_nfl', days_from=3)"
 out
 ```
+
+
+
+
+    shape: (10, 5)
+    ┌───────────┬─────────────────────┬─────────────────────┬─────────────────────┬────────────────────┐
+    │ completed ┆ home_team           ┆ away_team           ┆ scores              ┆ last_update        │
+    │ ---       ┆ ---                 ┆ ---                 ┆ ---                 ┆ ---                │
+    │ bool      ┆ str                 ┆ str                 ┆ str                 ┆ str                │
+    ╞═══════════╪═════════════════════╪═════════════════════╪═════════════════════╪════════════════════╡
+    │ true      ┆ Jacksonville        ┆ Philadelphia Eagles ┆ [{'name':           ┆ 2026-10-12T09:15:3 │
+    │           ┆ Jaguars             ┆                     ┆ 'Jacksonville       ┆ 7Z                 │
+    │           ┆                     ┆                     ┆ Jaguar…             ┆                    │
+    │ true      ┆ Pittsburgh Steelers ┆ Indianapolis Colts  ┆ [{'name':           ┆ 2026-10-12T09:15:3 │
+    │           ┆                     ┆                     ┆ 'Pittsburgh         ┆ 7Z                 │
+    │           ┆                     ┆                     ┆ Steelers…           ┆                    │
+    │ true      ┆ Washington          ┆ New York Giants     ┆ [{'name':           ┆ 2026-10-12T09:15:3 │
+    │           ┆ Commanders          ┆                     ┆ 'Washington         ┆ 7Z                 │
+    │           ┆                     ┆                     ┆ Commande…           ┆                    │
+    │ true      ┆ Tennessee Titans    ┆ Houston Texans      ┆ [{'name':           ┆ 2026-10-12T09:15:3 │
+    │           ┆                     ┆                     ┆ 'Tennessee Titans', ┆ 7Z                 │
+    │           ┆                     ┆                     ┆ …                   ┆                    │
+    │ true      ┆ New York Jets       ┆ Cleveland Browns    ┆ [{'name': 'New York ┆ 2026-10-12T09:15:3 │
+    │           ┆                     ┆                     ┆ Jets', 'sc…         ┆ 7Z                 │
+    │ true      ┆ Miami Dolphins      ┆ Cincinnati Bengals  ┆ [{'name': 'Miami    ┆ 2026-10-12T09:15:3 │
+    │           ┆                     ┆                     ┆ Dolphins', 's…      ┆ 7Z                 │
+    │ true      ┆ New Orleans Saints  ┆ Minnesota Vikings   ┆ [{'name': 'New      ┆ 2026-10-12T09:15:3 │
+    │           ┆                     ┆                     ┆ Orleans Saints'…    ┆ 7Z                 │
+    │ true      ┆ New England         ┆ Las Vegas Raiders   ┆ [{'name': 'New      ┆ 2026-10-12T09:15:3 │
+    │           ┆ Patriots            ┆                     ┆ England Patriot…    ┆ 7Z                 │
+    │ true      ┆ Green Bay Packers   ┆ Chicago Bears       ┆ [{'name': 'Green    ┆ 2026-10-12T09:15:3 │
+    │           ┆                     ┆                     ┆ Bay Packers',…      ┆ 7Z                 │
+    │ true      ┆ Los Angeles         ┆ Denver Broncos      ┆ [{'name': 'Los      ┆ 2026-10-12T09:15:3 │
+    │           ┆ Chargers            ┆                     ┆ Angeles Charger…    ┆ 7Z                 │
+    └───────────┴─────────────────────┴─────────────────────┴─────────────────────┴────────────────────┘
+
+
 
 ### Recipe 11 — Tour several leagues at once 🔁
 
@@ -350,6 +641,23 @@ else:
 out
 ```
 
+
+
+
+    shape: (4, 2)
+    ┌──────────────────────┬─────────────────┐
+    │ sport                ┆ upcoming_events │
+    │ ---                  ┆ ---             │
+    │ str                  ┆ i64             │
+    ╞══════════════════════╪═════════════════╡
+    │ basketball_nba       ┆ 46              │
+    │ icehockey_nhl        ┆ 18              │
+    │ americanfootball_nfl ┆ 15              │
+    │ baseball_mlb         ┆ 2               │
+    └──────────────────────┴─────────────────┘
+
+
+
 ### Recipe 12 — Who's in the league? (participants 👥)
 
 [`toa_sports_participants`](../odds/reference/additional.md#toa_sports_participants) lists every team /
@@ -367,6 +675,29 @@ else:
 out
 ```
 
+
+
+
+    shape: (10, 2)
+    ┌────────────────────┬────────────────────────────────┐
+    │ full_name          ┆ id                             │
+    │ ---                ┆ ---                            │
+    │ str                ┆ str                            │
+    ╞════════════════════╪════════════════════════════════╡
+    │ Arizona Cardinals  ┆ par_01hqmkr1xsfxmrj5pdq0f23asx │
+    │ Atlanta Falcons    ┆ par_01hqmkr1xtexkbhkq7ct921rne │
+    │ Baltimore Ravens   ┆ par_01hqmkr1xvev9rf557fy09k2cx │
+    │ Buffalo Bills      ┆ par_01hqmkr1xwe6prjwr3j4gpqwx8 │
+    │ Carolina Panthers  ┆ par_01hqmkr1xxf2ebbqzb95qzxxxm │
+    │ Chicago Bears      ┆ par_01hqmkr1xye20ahvp8fr2bvt74 │
+    │ Cincinnati Bengals ┆ par_01hqmkr1xze7xbceshy9tka512 │
+    │ Cleveland Browns   ┆ par_01hqmkr1y0ez5bem3gdncd8a0d │
+    │ Dallas Cowboys     ┆ par_01hqmkr1y1esas88pmaxe87by4 │
+    │ Denver Broncos     ┆ par_01hqmkr1y2e15tjsz9afcsj7da │
+    └────────────────────┴────────────────────────────────┘
+
+
+
 ## ⛽ Mind your quota
 
 Paid calls cost credits (every 10 bookmakers × market ≈ 1 credit). After any
@@ -378,6 +709,20 @@ request** — handy to drop at the end of a script.
 ```python
 odds.toa_usage() if HAS_KEY else "set ODDS_API_KEY to track quota with odds.toa_usage()"
 ```
+
+
+
+
+    shape: (1, 3)
+    ┌────────────────────┬───────────────┬───────────┐
+    │ requests_remaining ┆ requests_used ┆ last_cost │
+    │ ---                ┆ ---           ┆ ---       │
+    │ i64                ┆ i64           ┆ i64       │
+    ╞════════════════════╪═══════════════╪═══════════╡
+    │ 4674724            ┆ 325276        ┆ 1         │
+    └────────────────────┴───────────────┴───────────┘
+
+
 
 ## ⏳ Time travel: historical odds
 
