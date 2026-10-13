@@ -1,0 +1,1285 @@
+{
+  "game": {
+    "gameId": 110128,
+    "gameName": "26618-38-A",
+    "gameNumber": "A",
+    "statusCode": "VALID",
+    "teamA": {
+      "teamId": 278796,
+      "organisationId": 39,
+      "code": "CHN",
+      "officialName": "People 's Republic of China",
+      "shortName": "China"
+    },
+    "teamB": {
+      "teamId": 278803,
+      "organisationId": 154,
+      "code": "USA",
+      "officialName": "USA",
+      "shortName": "USA"
+    },
+    "teamAScore": 61,
+    "teamBScore": 83,
+    "isLive": false,
+    "currentPeriod": "Q4",
+    "chrono": "00:00",
+    "liveGameStatus": 999,
+    "currentPeriodStatus": "E",
+    "hostCity": "Sydney",
+    "hostCountry": "Australia",
+    "hostCountryCode": "AUS",
+    "venueId": 60537,
+    "venueName": "Sydney SuperDome",
+    "gameDateTime": "2022-10-01T16:00:00",
+    "gameDateTimeUTC": "2022-10-01T06:00:00",
+    "hasTimeGameDateTime": true,
+    "ianaTimeZone": "Australia/Sydney",
+    "utcOffset": 10,
+    "isPostponed": false,
+    "isPlayedBehindClosedDoors": false,
+    "venueCapacity": 0,
+    "spectators": 15895,
+    "statisticSystem": "OVR",
+    "groupId": "40020",
+    "groupPairingCode": "38",
+    "round": {
+      "roundId": 26618,
+      "roundCode": "F",
+      "roundName": "Final",
+      "roundNumber": 5,
+      "roundType": "NG",
+      "roundStatusCode": "COMPL",
+      "gameSystem": "Single",
+      "gameSystemCode": "S",
+      "startDate": "2022-10-01T00:00:00",
+      "endDate": "2022-10-01T23:59:59.9999999",
+      "roundKind": "Standard Round",
+      "roundOrder": 5
+    },
+    "competition": {
+      "competitionId": 208410,
+      "competitionCode": "WMW",
+      "season": 2022,
+      "officialName": "FIBA Women's Basketball World Cup",
+      "start": "2022-09-22",
+      "end": "2022-10-01",
+      "status": "Completed",
+      "ageCategory": "Senior",
+      "gender": "Women",
+      "fibaZone": "World",
+      "zoneInformation": {
+        "zoneId": 1,
+        "zoneOfficialName": "World",
+        "zoneCode": "W",
+        "topZoneId": null,
+        "topZoneOfficialName": null,
+        "topZoneCode": null
+      },
+      "competitionType": "National Teams",
+      "competitionCategory": {
+        "isLeague": false,
+        "ageType": "S",
+        "code": "WC",
+        "name": "World Cup"
+      },
+      "officialFlagItemCode": "O",
+      "officialFlagItemName": "Official",
+      "official": "Official",
+      "discipline": "Basketball",
+      "competitionMarketingName": {
+        "competitionMarketingNameId": 306,
+        "marketingName": "FIBA Women's Basketball World Cup",
+        "code": null
+      }
+    },
+    "gameStatisticStatusCode": "VALID",
+    "gamePlayByPlayStatusCode": "VALID",
+    "gameResultStatusCode": "VALID",
+    "gameResultAdditionalInformation": "None",
+    "windowCode": null,
+    "windowName": null,
+    "teamAFrom": "Winner of Game 35",
+    "teamBFrom": "Winner of Game 36"
+  },
+  "playByPlay": {
+    "items": {
+      "Q1": {
+        "name": "Q1",
+        "scoreA": 0,
+        "scoreB": 0,
+        "items": [
+          {
+            "act": "periods",
+            "Time": "10:00",
+            "GT": 1664604145000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "STARTG",
+            "txt": null,
+            "oId": null,
+            "pId": null,
+            "Id": "0:0002",
+            "order": null
+          },
+          {
+            "act": "shot",
+            "Time": "9:39",
+            "GT": 1664604167000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "P3",
+            "txt": null,
+            "oId": 39,
+            "pId": 181482,
+            "Id": "2:0013",
+            "order": 2,
+            "made": false,
+            "pts": 3,
+            "x": 251,
+            "y": 119
+          },
+          {
+            "act": "subst",
+            "Time": "4:25",
+            "GT": 1664604614000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "SUBST",
+            "txt": null,
+            "oId": 39,
+            "pId": 218463,
+            "Id": "2:0052",
+            "order": 41,
+            "p2Id": null,
+            "in": "OUT"
+          }
+        ]
+      },
+      "Q2": {
+        "name": "Q2",
+        "scoreA": 0,
+        "scoreB": 0,
+        "items": [
+          {
+            "act": "periods",
+            "Time": "10:00",
+            "GT": 1664605149000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "STARTP",
+            "txt": null,
+            "oId": null,
+            "pId": null,
+            "Id": "0:0015",
+            "order": null
+          },
+          {
+            "act": "shot",
+            "Time": "9:52",
+            "GT": 1664605161000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "P2",
+            "txt": null,
+            "oId": 154,
+            "pId": 198312,
+            "Id": "2:0108",
+            "order": 2,
+            "made": false,
+            "pts": 2,
+            "x": 101,
+            "y": 37
+          },
+          {
+            "act": "subst",
+            "Time": "8:04",
+            "GT": 1664605317000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "SUBST",
+            "txt": null,
+            "oId": 154,
+            "pId": 239832,
+            "Id": "2:0127",
+            "order": 20,
+            "p2Id": null,
+            "in": "OUT"
+          }
+        ]
+      },
+      "Q3": {
+        "name": "Q3",
+        "scoreA": 0,
+        "scoreB": 0,
+        "items": [
+          {
+            "act": "periods",
+            "Time": "10:00",
+            "GT": 1664607255000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "STARTP",
+            "txt": null,
+            "oId": null,
+            "pId": null,
+            "Id": "0:0028",
+            "order": null
+          },
+          {
+            "act": "shot",
+            "Time": "9:31",
+            "GT": 1664607303000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "P3",
+            "txt": null,
+            "oId": 154,
+            "pId": 215667,
+            "Id": "2:0241",
+            "order": 5,
+            "made": false,
+            "pts": 3,
+            "x": 52,
+            "y": 147
+          },
+          {
+            "act": "subst",
+            "Time": "8:12",
+            "GT": 1664607425000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "SUBST",
+            "txt": null,
+            "oId": 39,
+            "pId": 272269,
+            "Id": "2:0254",
+            "order": 18,
+            "p2Id": null,
+            "in": "OUT"
+          }
+        ]
+      },
+      "Q4": {
+        "name": "Q4",
+        "scoreA": 0,
+        "scoreB": 0,
+        "items": [
+          {
+            "act": "periods",
+            "Time": "10:00",
+            "GT": 1664608647000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "STARTP",
+            "txt": null,
+            "oId": null,
+            "pId": null,
+            "Id": "0:0041",
+            "order": null
+          },
+          {
+            "act": "shot",
+            "Time": "9:39",
+            "GT": 1664608671000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "P2",
+            "txt": null,
+            "oId": 39,
+            "pId": 188921,
+            "Id": "2:0340",
+            "order": 2,
+            "made": false,
+            "pts": 2,
+            "x": 213,
+            "y": 53
+          },
+          {
+            "act": "subst",
+            "Time": "8:37",
+            "GT": 1664608820000,
+            "SA": 0,
+            "SB": 0,
+            "ac": "SUBST",
+            "txt": null,
+            "oId": 39,
+            "pId": 188921,
+            "Id": "2:0353",
+            "order": 15,
+            "p2Id": null,
+            "in": "OUT"
+          }
+        ]
+      }
+    },
+    "gameTechnicalName": 110128,
+    "gameTechnicalNameOrGameId": 110128
+  },
+  "gameDetails": {
+    "c": [
+      {
+        "Id": "T_39",
+        "Score": 61,
+        "Officials": [
+          {
+            "Id": "O_11341"
+          },
+          {
+            "Id": "O_258110"
+          },
+          {
+            "Id": "O_16584"
+          }
+        ],
+        "Periods": [
+          {
+            "Id": "Q1",
+            "HalfTimeScore": 8,
+            "Score": 13
+          },
+          {
+            "Id": "Q2",
+            "HalfTimeScore": null,
+            "Score": 20
+          },
+          {
+            "Id": "Q3",
+            "HalfTimeScore": null,
+            "Score": 14
+          }
+        ],
+        "Children": [
+          {
+            "Id": "P_224131",
+            "Stats": {
+              "CB": false,
+              "AS": 1,
+              "BS": 1,
+              "BSR": 0,
+              "DR": 6,
+              "OR": 0,
+              "REB": 6,
+              "FD": 3,
+              "FG2A": 5,
+              "FG2M": 3,
+              "FG2P": 60,
+              "FG3A": 2,
+              "FG3M": 0,
+              "FG3P": 0,
+              "FGA": 7,
+              "FGM": 3,
+              "FGP": 42.9,
+              "FTA": 2,
+              "FTM": 2,
+              "FTP": 100,
+              "FGIA": 4,
+              "FGIM": 2,
+              "FGIP": 50,
+              "PF": 1,
+              "PTS": 8,
+              "ST": 1,
+              "TO": 2,
+              "TP": "24:10",
+              "PM": -11,
+              "EFF": 11,
+              "Starter": false,
+              "HasPlayed": true
+            }
+          },
+          {
+            "Id": "P_218464",
+            "Stats": {
+              "CB": false,
+              "AS": 0,
+              "BS": 0,
+              "BSR": 0,
+              "DR": 7,
+              "OR": 5,
+              "REB": 12,
+              "FD": 5,
+              "FG2A": 10,
+              "FG2M": 8,
+              "FG2P": 80,
+              "FG3A": 0,
+              "FG3M": 0,
+              "FG3P": 0,
+              "FGA": 10,
+              "FGM": 8,
+              "FGP": 80,
+              "FTA": 4,
+              "FTM": 3,
+              "FTP": 75,
+              "FGIA": 10,
+              "FGIM": 8,
+              "FGIP": 80,
+              "PF": 2,
+              "PTS": 19,
+              "ST": 0,
+              "TO": 5,
+              "TP": "28:31",
+              "PM": -13,
+              "EFF": 23,
+              "Starter": true,
+              "HasPlayed": true
+            }
+          },
+          {
+            "Id": "P_324440",
+            "Stats": {
+              "CB": false,
+              "AS": 0,
+              "BS": 0,
+              "BSR": 0,
+              "DR": 0,
+              "OR": 0,
+              "REB": 0,
+              "FD": 0,
+              "FG2A": 0,
+              "FG2M": 0,
+              "FG2P": 0,
+              "FG3A": 0,
+              "FG3M": 0,
+              "FG3P": 0,
+              "FGA": 0,
+              "FGM": 0,
+              "FGP": 0,
+              "FTA": 0,
+              "FTM": 0,
+              "FTP": 0,
+              "FGIA": 0,
+              "FGIM": 0,
+              "FGIP": 0,
+              "PF": 0,
+              "PTS": 0,
+              "ST": 0,
+              "TO": 0,
+              "TP": "0:0",
+              "PM": 0,
+              "EFF": 0,
+              "Starter": false,
+              "HasPlayed": false
+            }
+          }
+        ],
+        "Stats": {
+          "Leaders": {
+            "Points": {
+              "Id": "P_218464",
+              "Value": "19"
+            },
+            "Rebounds": {
+              "Id": "P_218464",
+              "Value": "12"
+            },
+            "Assists": {
+              "Id": "P_181482",
+              "Value": "4"
+            },
+            "Steals": {
+              "Id": "P_224131",
+              "Value": "1"
+            },
+            "Blocks": {
+              "Id": "P_224131",
+              "Value": "1"
+            },
+            "BestPerformer": {
+              "Id": "P_218464",
+              "Value": "23"
+            }
+          },
+          "AS": 15,
+          "BS": 1,
+          "DR": 28,
+          "OR": 7,
+          "REB": 35,
+          "FD": 14,
+          "FG2A": 40,
+          "FG2M": 19,
+          "FG2P": 47.5,
+          "FG3A": 16,
+          "FG3M": 5,
+          "FG3P": 31.3,
+          "FGA": 56,
+          "FGM": 24,
+          "FGP": 42.9,
+          "FTA": 10,
+          "FTM": 8,
+          "FTP": 80,
+          "FGIA": 31,
+          "FGIM": 15,
+          "FGIP": 48.4,
+          "PF": 12,
+          "PTS": 61,
+          "ST": 2,
+          "TO": 19,
+          "A_BL": 2,
+          "A_BLS": "4-2",
+          "A_BR": 6,
+          "A_BRS": "26-30",
+          "T_OR": 1,
+          "T_DR": 4,
+          "T_REB": 5,
+          "T_PF": 0,
+          "T_TO": 0,
+          "A_PAT": 4,
+          "A_PIP": 30,
+          "A_SCP": 9,
+          "A_FBP": 4,
+          "A_PFB": 24,
+          "T_PFB": 24,
+          "A_TOD": 0,
+          "A_TOT": 0,
+          "T_TL": "1:19",
+          "A_FOUL": 0,
+          "A_ACT": 0,
+          "EFF": 56
+        }
+      },
+      {
+        "Id": "T_154",
+        "Score": 83,
+        "Officials": [
+          {
+            "Id": "O_21148"
+          },
+          {
+            "Id": "O_311514"
+          },
+          {
+            "Id": "O_144910"
+          }
+        ],
+        "Periods": [
+          {
+            "Id": "Q1",
+            "HalfTimeScore": 12,
+            "Score": 18
+          },
+          {
+            "Id": "Q2",
+            "HalfTimeScore": null,
+            "Score": 25
+          },
+          {
+            "Id": "Q3",
+            "HalfTimeScore": null,
+            "Score": 25
+          }
+        ],
+        "Children": [
+          {
+            "Id": "P_239832",
+            "Stats": {
+              "CB": false,
+              "AS": 0,
+              "BS": 1,
+              "BSR": 0,
+              "DR": 3,
+              "OR": 1,
+              "REB": 4,
+              "FD": 1,
+              "FG2A": 2,
+              "FG2M": 0,
+              "FG2P": 0,
+              "FG3A": 0,
+              "FG3M": 0,
+              "FG3P": 0,
+              "FGA": 2,
+              "FGM": 0,
+              "FGP": 0,
+              "FTA": 2,
+              "FTM": 2,
+              "FTP": 100,
+              "FGIA": 1,
+              "FGIM": 0,
+              "FGIP": 0,
+              "PF": 1,
+              "PTS": 2,
+              "ST": 2,
+              "TO": 0,
+              "TP": "13:44",
+              "PM": 9,
+              "EFF": 7,
+              "Starter": false,
+              "HasPlayed": true
+            }
+          },
+          {
+            "Id": "P_176569",
+            "Stats": {
+              "CB": false,
+              "AS": 0,
+              "BS": 0,
+              "BSR": 0,
+              "DR": 0,
+              "OR": 1,
+              "REB": 1,
+              "FD": 1,
+              "FG2A": 1,
+              "FG2M": 0,
+              "FG2P": 0,
+              "FG3A": 1,
+              "FG3M": 1,
+              "FG3P": 100,
+              "FGA": 2,
+              "FGM": 1,
+              "FGP": 50,
+              "FTA": 2,
+              "FTM": 1,
+              "FTP": 50,
+              "FGIA": 0,
+              "FGIM": 0,
+              "FGIP": 0,
+              "PF": 1,
+              "PTS": 4,
+              "ST": 0,
+              "TO": 0,
+              "TP": "11:24",
+              "PM": -6,
+              "EFF": 3,
+              "Starter": false,
+              "HasPlayed": true
+            }
+          },
+          {
+            "Id": "P_256374",
+            "Stats": {
+              "CB": false,
+              "AS": 0,
+              "BS": 0,
+              "BSR": 0,
+              "DR": 1,
+              "OR": 1,
+              "REB": 2,
+              "FD": 0,
+              "FG2A": 1,
+              "FG2M": 0,
+              "FG2P": 0,
+              "FG3A": 0,
+              "FG3M": 0,
+              "FG3P": 0,
+              "FGA": 1,
+              "FGM": 0,
+              "FGP": 0,
+              "FTA": 0,
+              "FTM": 0,
+              "FTP": 0,
+              "FGIA": 1,
+              "FGIM": 0,
+              "FGIP": 0,
+              "PF": 0,
+              "PTS": 0,
+              "ST": 0,
+              "TO": 0,
+              "TP": "5:4",
+              "PM": -5,
+              "EFF": 1,
+              "Starter": false,
+              "HasPlayed": true
+            }
+          }
+        ],
+        "Stats": {
+          "Leaders": {
+            "Points": {
+              "Id": "P_202993",
+              "Value": "19"
+            },
+            "Rebounds": {
+              "Id": "P_181930",
+              "Value": "9"
+            },
+            "Assists": {
+              "Id": "P_215667",
+              "Value": "8"
+            },
+            "Steals": {
+              "Id": "P_215667",
+              "Value": "3"
+            },
+            "Blocks": {
+              "Id": "P_202993",
+              "Value": "1"
+            },
+            "BestPerformer": {
+              "Id": "P_215667",
+              "Value": "21"
+            }
+          },
+          "AS": 22,
+          "BS": 5,
+          "DR": 24,
+          "OR": 13,
+          "REB": 37,
+          "FD": 12,
+          "FG2A": 50,
+          "FG2M": 24,
+          "FG2P": 48,
+          "FG3A": 24,
+          "FG3M": 9,
+          "FG3P": 37.5,
+          "FGA": 74,
+          "FGM": 33,
+          "FGP": 44.6,
+          "FTA": 11,
+          "FTM": 8,
+          "FTP": 72.7,
+          "FGIA": 38,
+          "FGIM": 20,
+          "FGIP": 52.6,
+          "PF": 14,
+          "PTS": 83,
+          "ST": 13,
+          "TO": 7,
+          "A_BL": 29,
+          "A_BLS": "49-78",
+          "A_BR": 7,
+          "A_BRS": "47-73",
+          "T_OR": 1,
+          "T_DR": 1,
+          "T_REB": 2,
+          "T_PF": 0,
+          "T_TO": 2,
+          "A_PAT": 19,
+          "A_PIP": 40,
+          "A_SCP": 19,
+          "A_FBP": 18,
+          "A_PFB": 29,
+          "T_PFB": 29,
+          "A_TOD": 0,
+          "A_TOT": 0,
+          "T_TL": "36:17",
+          "A_FOUL": 0,
+          "A_ACT": 0,
+          "EFF": 109
+        }
+      }
+    ],
+    "id": 110128,
+    "technicalName": "26618-38-A",
+    "status": 999,
+    "RC": "00:00",
+    "CurrentPeriod": "Q4",
+    "CurrentPeriodStatus": "E",
+    "teamA": {
+      "Id": "T_39",
+      "Children": [
+        {
+          "Stats": {
+            "CB": false,
+            "AS": 1,
+            "BS": 1,
+            "BSR": 0,
+            "DR": 6,
+            "OR": 0,
+            "REB": 6,
+            "FD": 3,
+            "FG2A": 5,
+            "FG2M": 3,
+            "FG2P": 60,
+            "FG3A": 2,
+            "FG3M": 0,
+            "FG3P": 0,
+            "FGA": 7,
+            "FGM": 3,
+            "FGP": 42.9,
+            "FTA": 2,
+            "FTM": 2,
+            "FTP": 100,
+            "FGIA": 4,
+            "FGIM": 2,
+            "FGIP": 50,
+            "PF": 1,
+            "PTS": 8,
+            "ST": 1,
+            "TO": 2,
+            "TP": "24:10",
+            "PM": -11,
+            "EFF": 11,
+            "Starter": false,
+            "HasPlayed": true
+          },
+          "Id": "P_224131"
+        },
+        {
+          "Stats": {
+            "CB": false,
+            "AS": 0,
+            "BS": 0,
+            "BSR": 0,
+            "DR": 7,
+            "OR": 5,
+            "REB": 12,
+            "FD": 5,
+            "FG2A": 10,
+            "FG2M": 8,
+            "FG2P": 80,
+            "FG3A": 0,
+            "FG3M": 0,
+            "FG3P": 0,
+            "FGA": 10,
+            "FGM": 8,
+            "FGP": 80,
+            "FTA": 4,
+            "FTM": 3,
+            "FTP": 75,
+            "FGIA": 10,
+            "FGIM": 8,
+            "FGIP": 80,
+            "PF": 2,
+            "PTS": 19,
+            "ST": 0,
+            "TO": 5,
+            "TP": "28:31",
+            "PM": -13,
+            "EFF": 23,
+            "Starter": true,
+            "HasPlayed": true
+          },
+          "Id": "P_218464"
+        },
+        {
+          "Stats": {
+            "CB": false,
+            "AS": 0,
+            "BS": 0,
+            "BSR": 0,
+            "DR": 0,
+            "OR": 0,
+            "REB": 0,
+            "FD": 0,
+            "FG2A": 0,
+            "FG2M": 0,
+            "FG2P": 0,
+            "FG3A": 0,
+            "FG3M": 0,
+            "FG3P": 0,
+            "FGA": 0,
+            "FGM": 0,
+            "FGP": 0,
+            "FTA": 0,
+            "FTM": 0,
+            "FTP": 0,
+            "FGIA": 0,
+            "FGIM": 0,
+            "FGIP": 0,
+            "PF": 0,
+            "PTS": 0,
+            "ST": 0,
+            "TO": 0,
+            "TP": "0:0",
+            "PM": 0,
+            "EFF": 0,
+            "Starter": false,
+            "HasPlayed": false
+          },
+          "Id": "P_324440"
+        }
+      ],
+      "Stats": {
+        "Leaders": {
+          "Points": {
+            "Id": "P_218464",
+            "Value": "19"
+          },
+          "Rebounds": {
+            "Id": "P_218464",
+            "Value": "12"
+          },
+          "Assists": {
+            "Id": "P_181482",
+            "Value": "4"
+          },
+          "Steals": {
+            "Id": "P_224131",
+            "Value": "1"
+          },
+          "Blocks": {
+            "Id": "P_224131",
+            "Value": "1"
+          },
+          "BestPerformer": {
+            "Id": "P_218464",
+            "Value": "23"
+          }
+        },
+        "AS": 15,
+        "BS": 1,
+        "DR": 28,
+        "OR": 7,
+        "REB": 35,
+        "FD": 14,
+        "FG2A": 40,
+        "FG2M": 19,
+        "FG2P": 47.5,
+        "FG3A": 16,
+        "FG3M": 5,
+        "FG3P": 31.3,
+        "FGA": 56,
+        "FGM": 24,
+        "FGP": 42.9,
+        "FTA": 10,
+        "FTM": 8,
+        "FTP": 80,
+        "FGIA": 31,
+        "FGIM": 15,
+        "FGIP": 48.4,
+        "PF": 12,
+        "PTS": 61,
+        "ST": 2,
+        "TO": 19,
+        "A_BL": 2,
+        "A_BLS": "4-2",
+        "A_BR": 6,
+        "A_BRS": "26-30",
+        "T_OR": 1,
+        "T_DR": 4,
+        "T_REB": 5,
+        "T_PF": 0,
+        "T_TO": 0,
+        "A_PAT": 4,
+        "A_PIP": 30,
+        "A_SCP": 9,
+        "A_FBP": 4,
+        "A_PFB": 24,
+        "T_PFB": 24,
+        "A_TOD": 0,
+        "A_TOT": 0,
+        "T_TL": "1:19",
+        "A_FOUL": 0,
+        "A_ACT": 0,
+        "EFF": 56
+      },
+      "Score": 61
+    },
+    "teamB": {
+      "Id": "T_154",
+      "Children": [
+        {
+          "Stats": {
+            "CB": false,
+            "AS": 0,
+            "BS": 1,
+            "BSR": 0,
+            "DR": 3,
+            "OR": 1,
+            "REB": 4,
+            "FD": 1,
+            "FG2A": 2,
+            "FG2M": 0,
+            "FG2P": 0,
+            "FG3A": 0,
+            "FG3M": 0,
+            "FG3P": 0,
+            "FGA": 2,
+            "FGM": 0,
+            "FGP": 0,
+            "FTA": 2,
+            "FTM": 2,
+            "FTP": 100,
+            "FGIA": 1,
+            "FGIM": 0,
+            "FGIP": 0,
+            "PF": 1,
+            "PTS": 2,
+            "ST": 2,
+            "TO": 0,
+            "TP": "13:44",
+            "PM": 9,
+            "EFF": 7,
+            "Starter": false,
+            "HasPlayed": true
+          },
+          "Id": "P_239832"
+        },
+        {
+          "Stats": {
+            "CB": false,
+            "AS": 0,
+            "BS": 0,
+            "BSR": 0,
+            "DR": 0,
+            "OR": 1,
+            "REB": 1,
+            "FD": 1,
+            "FG2A": 1,
+            "FG2M": 0,
+            "FG2P": 0,
+            "FG3A": 1,
+            "FG3M": 1,
+            "FG3P": 100,
+            "FGA": 2,
+            "FGM": 1,
+            "FGP": 50,
+            "FTA": 2,
+            "FTM": 1,
+            "FTP": 50,
+            "FGIA": 0,
+            "FGIM": 0,
+            "FGIP": 0,
+            "PF": 1,
+            "PTS": 4,
+            "ST": 0,
+            "TO": 0,
+            "TP": "11:24",
+            "PM": -6,
+            "EFF": 3,
+            "Starter": false,
+            "HasPlayed": true
+          },
+          "Id": "P_176569"
+        },
+        {
+          "Stats": {
+            "CB": false,
+            "AS": 0,
+            "BS": 0,
+            "BSR": 0,
+            "DR": 1,
+            "OR": 1,
+            "REB": 2,
+            "FD": 0,
+            "FG2A": 1,
+            "FG2M": 0,
+            "FG2P": 0,
+            "FG3A": 0,
+            "FG3M": 0,
+            "FG3P": 0,
+            "FGA": 1,
+            "FGM": 0,
+            "FGP": 0,
+            "FTA": 0,
+            "FTM": 0,
+            "FTP": 0,
+            "FGIA": 1,
+            "FGIM": 0,
+            "FGIP": 0,
+            "PF": 0,
+            "PTS": 0,
+            "ST": 0,
+            "TO": 0,
+            "TP": "5:4",
+            "PM": -5,
+            "EFF": 1,
+            "Starter": false,
+            "HasPlayed": true
+          },
+          "Id": "P_256374"
+        }
+      ],
+      "Stats": {
+        "Leaders": {
+          "Points": {
+            "Id": "P_202993",
+            "Value": "19"
+          },
+          "Rebounds": {
+            "Id": "P_181930",
+            "Value": "9"
+          },
+          "Assists": {
+            "Id": "P_215667",
+            "Value": "8"
+          },
+          "Steals": {
+            "Id": "P_215667",
+            "Value": "3"
+          },
+          "Blocks": {
+            "Id": "P_202993",
+            "Value": "1"
+          },
+          "BestPerformer": {
+            "Id": "P_215667",
+            "Value": "21"
+          }
+        },
+        "AS": 22,
+        "BS": 5,
+        "DR": 24,
+        "OR": 13,
+        "REB": 37,
+        "FD": 12,
+        "FG2A": 50,
+        "FG2M": 24,
+        "FG2P": 48,
+        "FG3A": 24,
+        "FG3M": 9,
+        "FG3P": 37.5,
+        "FGA": 74,
+        "FGM": 33,
+        "FGP": 44.6,
+        "FTA": 11,
+        "FTM": 8,
+        "FTP": 72.7,
+        "FGIA": 38,
+        "FGIM": 20,
+        "FGIP": 52.6,
+        "PF": 14,
+        "PTS": 83,
+        "ST": 13,
+        "TO": 7,
+        "A_BL": 29,
+        "A_BLS": "49-78",
+        "A_BR": 7,
+        "A_BRS": "47-73",
+        "T_OR": 1,
+        "T_DR": 1,
+        "T_REB": 2,
+        "T_PF": 0,
+        "T_TO": 2,
+        "A_PAT": 19,
+        "A_PIP": 40,
+        "A_SCP": 19,
+        "A_FBP": 18,
+        "A_PFB": 29,
+        "T_PFB": 29,
+        "A_TOD": 0,
+        "A_TOT": 0,
+        "T_TL": "36:17",
+        "A_FOUL": 0,
+        "A_ACT": 0,
+        "EFF": 109
+      },
+      "Score": 83
+    },
+    "Stats": {
+      "DUR": "1:37",
+      "A_LC": 2,
+      "A_TT": 3,
+      "SPECT": 15895
+    },
+    "scoreList": [
+      {
+        "period": "Q1",
+        "items": [
+          {
+            "SA": 0,
+            "Time": "8:43",
+            "SB": 1
+          },
+          {
+            "SA": 0,
+            "Time": "8:43",
+            "SB": 2
+          },
+          {
+            "SA": 2,
+            "Time": "8:24",
+            "SB": 2
+          }
+        ]
+      },
+      {
+        "period": "Q2",
+        "items": [
+          {
+            "SA": 16,
+            "Time": "8:55",
+            "SB": 18
+          },
+          {
+            "SA": 16,
+            "Time": "8:04",
+            "SB": 21
+          },
+          {
+            "SA": 16,
+            "Time": "8:04",
+            "SB": 22
+          }
+        ]
+      },
+      {
+        "period": "Q3",
+        "items": [
+          {
+            "SA": 33,
+            "Time": "7:24",
+            "SB": 45
+          },
+          {
+            "SA": 33,
+            "Time": "6:31",
+            "SB": 48
+          },
+          {
+            "SA": 35,
+            "Time": "6:09",
+            "SB": 48
+          }
+        ]
+      }
+    ],
+    "quartersScores": [
+      {
+        "period": "Q1",
+        "teamA": 13,
+        "teamB": 18
+      },
+      {
+        "period": "Q2",
+        "teamA": 20,
+        "teamB": 25
+      },
+      {
+        "period": "Q3",
+        "teamA": 14,
+        "teamB": 25
+      }
+    ]
+  },
+  "playersTeamA": [
+    {
+      "personId": 218463,
+      "firstName": "Ru",
+      "lastName": "Zhang",
+      "uniformNumber": "10",
+      "isCaptain": false,
+      "position": "F"
+    },
+    {
+      "personId": 203409,
+      "firstName": "Sijing",
+      "lastName": "Huang",
+      "uniformNumber": "11",
+      "isCaptain": false,
+      "position": "PF"
+    },
+    {
+      "personId": 257740,
+      "firstName": "Zhenqi",
+      "lastName": "Pan",
+      "uniformNumber": "12",
+      "isCaptain": false,
+      "position": "F"
+    }
+  ],
+  "playersTeamB": [
+    {
+      "personId": 176575,
+      "firstName": "Breanna",
+      "lastName": "Stewart",
+      "uniformNumber": "10",
+      "isCaptain": true,
+      "position": "PF"
+    },
+    {
+      "personId": 228813,
+      "firstName": "Kahleah",
+      "lastName": "Copper",
+      "uniformNumber": "11",
+      "isCaptain": false,
+      "position": "F"
+    },
+    {
+      "personId": 181930,
+      "firstName": "Alyssa",
+      "lastName": "Thomas",
+      "uniformNumber": "12",
+      "isCaptain": false,
+      "position": "PF"
+    }
+  ]
+}

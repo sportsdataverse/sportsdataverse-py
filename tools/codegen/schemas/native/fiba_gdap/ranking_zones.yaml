@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: zone_ranking_id
+  type: integer
+- description: ''
+  name: code
+  type: character
+- description: ''
+  name: official_name
+  type: character
+kind: dataframe
+schema: fiba_gdap_ranking_zones
