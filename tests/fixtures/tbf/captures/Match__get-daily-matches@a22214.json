@@ -1,0 +1,142 @@
+{
+  "data": [
+    {
+      "groupName": "Lig Maçları",
+      "totalCount": 3,
+      "matches": [
+        {
+          "genuisId": "2934620",
+          "matchId": 346293.0,
+          "activityName": "BSL 2026-2027",
+          "activityId": 22214.0,
+          "activityDisplayName": "Türkiye Sigorta Basketbol Süper Ligi",
+          "activityCode": "bsl",
+          "seasonId": 174.0,
+          "season": "2026-2027",
+          "matchDate": "2026-10-11T13:00:00",
+          "matchDateOnly": "2026-10-11",
+          "matchTime": "13:00",
+          "week": "3. Hafta",
+          "halfValue": "1",
+          "venueName": "Hayri Gür Spor Salonu",
+          "homeTeam": {
+            "id": 266029.0,
+            "name": "TRABZONSPOR",
+            "logoUrl": "https://tbf.org.tr/res/eaf110a2-ee82-4b8a-9b70-e6aede619b70_TRABZONSPORanalogo.png",
+            "score": "83",
+            "isHome": true,
+            "hexCode1": "#028de3",
+            "hexCode2": "#640202"
+          },
+          "awayTeam": {
+            "id": 265993.0,
+            "name": "PİZZABULLS BORDO BANDIRMA",
+            "logoUrl": "https://tbf.org.tr/res/ac7222b2-80ae-4e4b-bf72-cc226b01f3c8_bordo_pizzabullslogo_version.png",
+            "score": "80",
+            "isHome": false,
+            "hexCode1": "#cbc8c8",
+            "hexCode2": "#880707"
+          },
+          "matchStatusId": 1.0,
+          "matchStatus": "Oynandı",
+          "youtubeLink": "",
+          "broadcastChannel": "beINSports",
+          "isFavorite": false,
+          "cinsiyet": "",
+          "matchCode": "1EA4931",
+          "hasUzatma": false,
+          "isDirectActivityId": false
+        },
+        {
+          "genuisId": "2934621",
+          "matchId": 346294.0,
+          "activityName": "BSL 2026-2027",
+          "activityId": 22214.0,
+          "activityDisplayName": "Türkiye Sigorta Basketbol Süper Ligi",
+          "activityCode": "bsl",
+          "seasonId": 174.0,
+          "season": "2026-2027",
+          "matchDate": "2026-10-11T15:30:00",
+          "matchDateOnly": "2026-10-11",
+          "matchTime": "15:30",
+          "week": "3. Hafta",
+          "halfValue": "1",
+          "venueName": "Turkcell Basketbol Gelişim Merkezi",
+          "homeTeam": {
+            "id": 265990.0,
+            "name": "ANADOLU EFES",
+            "logoUrl": "https://tbf.org.tr/res/613182-anadoluefes-6032D6C7-0F79-4EDF-B6DD-F893B3445426.png",
+            "score": "85",
+            "isHome": true,
+            "hexCode1": "#cecece",
+            "hexCode2": "#071088"
+          },
+          "awayTeam": {
+            "id": 266028.0,
+            "name": "YUKATEL DENİZLİ BASKET",
+            "logoUrl": "https://tbf.org.tr/res/be447bdd-b2e6-496c-892b-be016c5c24c0_yukateldenizlibasket.png",
+            "score": "76",
+            "isHome": false,
+            "hexCode1": "#bababa",
+            "hexCode2": "#000000"
+          },
+          "matchStatusId": 1.0,
+          "matchStatus": "Oynandı",
+          "youtubeLink": "",
+          "broadcastChannel": "beINSports",
+          "isFavorite": false,
+          "cinsiyet": "",
+          "matchCode": "1EA4932",
+          "hasUzatma": false,
+          "isDirectActivityId": false
+        },
+        {
+          "genuisId": "2934625",
+          "matchId": 346292.0,
+          "activityName": "BSL 2026-2027",
+          "activityId": 22214.0,
+          "activityDisplayName": "Türkiye Sigorta Basketbol Süper Ligi",
+          "activityCode": "bsl",
+          "seasonId": 174.0,
+          "season": "2026-2027",
+          "matchDate": "2026-10-11T18:00:00",
+          "matchDateOnly": "2026-10-11",
+          "matchTime": "18:00",
+          "week": "3. Hafta",
+          "halfValue": "1",
+          "venueName": "Ankara Spor Salonu",
+          "homeTeam": {
+            "id": 266030.0,
+            "name": "TÜRK TELEKOM",
+            "logoUrl": "https://tbf.org.tr/res/26caef75-20c1-4382-9d68-ef3f27da676d_TTBasketbolLogo120923CMYK1.png",
+            "score": "88",
+            "isHome": true,
+            "hexCode1": "#bababd",
+            "hexCode2": "#194dc8"
+          },
+          "awayTeam": {
+            "id": 265992.0,
+            "name": "BEŞİKTAŞ",
+            "logoUrl": "https://tbf.org.tr/res/329146-bjk120-c686b5ac-9734-40a4-bee5-e76f49f81ea6.png",
+            "score": "63",
+            "isHome": false,
+            "hexCode1": "#bababa",
+            "hexCode2": "#050505"
+          },
+          "matchStatusId": 1.0,
+          "matchStatus": "Oynandı",
+          "youtubeLink": "",
+          "broadcastChannel": "beINSports",
+          "isFavorite": false,
+          "cinsiyet": "",
+          "matchCode": "1EA4930",
+          "hasUzatma": false,
+          "isDirectActivityId": false
+        }
+      ]
+    }
+  ],
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

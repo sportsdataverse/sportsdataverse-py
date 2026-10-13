@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "sezon_Hafta": "31",
+      "devre_ID": 3.0,
+      "devre_Deger": "Playoff Çeyrek Final",
+      "display_Text": "Playoff Çeyrek Final",
+      "isCurrentWeek": false
+    },
+    {
+      "sezon_Hafta": "32",
+      "devre_ID": 4.0,
+      "devre_Deger": "Playoff Yarı Final",
+      "display_Text": "Playoff Yarı Final",
+      "isCurrentWeek": false
+    },
+    {
+      "sezon_Hafta": "33",
+      "devre_ID": 5.0,
+      "devre_Deger": "Playoff Final",
+      "display_Text": "Playoff Final",
+      "isCurrentWeek": true
+    }
+  ],
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: is_starter
+  type: logical
+- description: ''
+  name: is_active
+  type: logical
+kind: dataframe
+schema: tbf_game_players

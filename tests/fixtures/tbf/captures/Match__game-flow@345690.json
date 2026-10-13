@@ -1,0 +1,64 @@
+{
+  "data": {
+    "matchId": "345690",
+    "events": [
+      {
+        "actionNumber": 6,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-0",
+        "action": "Hava Atışı - Kazandı",
+        "time": "09:59",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Emma Meesseman",
+        "jerseyNumber": "11",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "actionNumber": 8,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-0",
+        "action": "3 Sayı Sıçrayarak Atış Başarısız",
+        "time": "09:44",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Alperi Onar",
+        "jerseyNumber": "10",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "actionNumber": 11,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "3-2",
+        "action": "3 Sayı Aniden Durarak Sıçrayarak Atış Başarılı",
+        "time": "09:00",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Tima Pouye",
+        "jerseyNumber": "32",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

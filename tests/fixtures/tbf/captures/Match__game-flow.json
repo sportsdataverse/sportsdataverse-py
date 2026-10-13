@@ -1,0 +1,64 @@
+{
+  "data": {
+    "matchId": "346279",
+    "events": [
+      {
+        "actionNumber": 5,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-0",
+        "action": "Hava Atışı - Kazandı",
+        "time": "09:59",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Terrell Carter II",
+        "jerseyNumber": "5",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "actionNumber": 7,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-0",
+        "action": "Top Kaybı - Kötü Pas",
+        "time": "09:43",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Bryce Jones",
+        "jerseyNumber": "32",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "actionNumber": 10,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-0",
+        "action": "Savunma Ribaundu",
+        "time": "09:29",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Gabe Brown",
+        "jerseyNumber": "44",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

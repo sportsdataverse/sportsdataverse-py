@@ -1,0 +1,64 @@
+{
+  "data": {
+    "matchId": "345915",
+    "events": [
+      {
+        "actionNumber": 6,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-0",
+        "action": "Hava Atışı - Kaybetti",
+        "time": "09:59",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Ahmet Arda Aydın",
+        "jerseyNumber": "23",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "actionNumber": 8,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-0",
+        "action": "Savunma Ribaundu",
+        "time": "09:35",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Ali Işık",
+        "jerseyNumber": "44",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "actionNumber": 9,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-0",
+        "action": "3 Sayı Aniden Durarak Sıçrayarak Atış Başarısız",
+        "time": "09:20",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Ömercan Engin",
+        "jerseyNumber": "8",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

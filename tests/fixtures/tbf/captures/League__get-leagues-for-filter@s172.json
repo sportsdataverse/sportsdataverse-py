@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "activityId": 20728,
+      "name": "BSL 2025-2026",
+      "displayName": "BSL",
+      "prefixUrl": "BSL",
+      "gender": "Erkek",
+      "seasonId": 172,
+      "season": "2025-2026",
+      "leagueLogo": "https://tbf.org.tr/assets/images/sites-logo/bsl-renkli.svg",
+      "transparentLeagueLogo": "https://tbf.org.tr/assets/images/sites-logo/bsl-beyaz.svg",
+      "sort": 1,
+      "logoGray": "https://tbf.org.tr/assets/images/sites-logo/bsl-gri.svg"
+    },
+    {
+      "activityId": 20773,
+      "name": "KBSL 2025-2026",
+      "displayName": "KBSL",
+      "prefixUrl": "KBSL",
+      "gender": "Kadın",
+      "seasonId": 172,
+      "season": "2025-2026",
+      "leagueLogo": "https://tbf.org.tr/assets/images/sites-logo/kbsl-renkli.svg",
+      "transparentLeagueLogo": "https://tbf.org.tr/assets/images/sites-logo/kbsl-beyaz.svg",
+      "sort": 2,
+      "logoGray": "https://tbf.org.tr/assets/images/sites-logo/kbsl-gri.svg"
+    },
+    {
+      "activityId": 20727,
+      "name": "TBL 2025-2026",
+      "displayName": "TBL",
+      "prefixUrl": "TBL",
+      "gender": "Erkek",
+      "seasonId": 172,
+      "season": "2025-2026",
+      "leagueLogo": "https://tbf.org.tr/assets/images/sites-logo/tbl-renkli.svg",
+      "transparentLeagueLogo": "https://tbf.org.tr/assets/images/sites-logo/tbl-beyaz.svg",
+      "sort": 3,
+      "logoGray": "https://tbf.org.tr/assets/images/sites-logo/tbl-gri.svg"
+    }
+  ],
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

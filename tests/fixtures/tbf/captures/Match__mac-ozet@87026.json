@@ -1,0 +1,91 @@
+{
+  "data": {
+    "matchId": "87026",
+    "homeTeamScore": [
+      {
+        "score": 15,
+        "quarter": 1,
+        "periodType": 1
+      },
+      {
+        "score": 24,
+        "quarter": 2,
+        "periodType": 1
+      },
+      {
+        "score": 16,
+        "quarter": 3,
+        "periodType": 1
+      }
+    ],
+    "awayTeamScore": [
+      {
+        "score": 15,
+        "quarter": 1,
+        "periodType": 1
+      },
+      {
+        "score": 25,
+        "quarter": 2,
+        "periodType": 1
+      },
+      {
+        "score": 22,
+        "quarter": 3,
+        "periodType": 1
+      }
+    ],
+    "matchHighlightLeaders": [
+      {
+        "title": "Sayı",
+        "homeValue": "35",
+        "awayValue": "28",
+        "homePlayer": "ANDREW DELANO ANDREWS",
+        "homePlayerImage": "https://tbf.org.tr/res/c2e40aeb-f9a6-41c2-9d94-7e1d6af835e3_12 andrew andrews headshot photo.jpg",
+        "awayPlayer": "DORON EMANUEL LAMB",
+        "awayPlayerImage": "https://tbf.org.tr/res/6b71d3de-669f-4cb9-9113-762123bf7083_5623.jpg"
+      },
+      {
+        "title": "Ribaund",
+        "homeValue": "7",
+        "awayValue": "10",
+        "homePlayer": "ANDREW DELANO ANDREWS",
+        "homePlayerImage": "https://tbf.org.tr/res/c2e40aeb-f9a6-41c2-9d94-7e1d6af835e3_12 andrew andrews headshot photo.jpg",
+        "awayPlayer": "JARROD JONES",
+        "awayPlayerImage": "https://tbf.org.tr/res/adbeb1ce-c422-4adc-93e0-150cc98b5d49_JARROD MICHAEL JONES.jpg"
+      },
+      {
+        "title": "Asist",
+        "homeValue": "8",
+        "awayValue": "7",
+        "homePlayer": "OSIRIS ELDRIDGE",
+        "homePlayerImage": "https://tbf.org.tr/res/85195-913926-7E42AB27-DDBD-418F-B9AC-491281E79F54.jpg",
+        "awayPlayer": "Doğuş Özdemiroğlu",
+        "awayPlayerImage": "https://tbf.org.tr/res/426534d6-6284-486f-84dc-0d4afc242b45_dogus ozdemiroglu.jpeg"
+      }
+    ],
+    "matchHighlightStatistics": [
+      {
+        "title": "Sayı",
+        "leaderCategory": "Sayi",
+        "homeValue": "85",
+        "awayValue": "92"
+      },
+      {
+        "title": "Ribaund",
+        "leaderCategory": "Ribaund",
+        "homeValue": "31",
+        "awayValue": "46"
+      },
+      {
+        "title": "Hücum Ribaundu",
+        "leaderCategory": "HucumRibaundu",
+        "homeValue": "5",
+        "awayValue": "17"
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

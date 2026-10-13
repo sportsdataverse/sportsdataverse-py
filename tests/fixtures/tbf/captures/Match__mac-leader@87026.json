@@ -1,0 +1,145 @@
+{
+  "data": {
+    "matchId": "87026",
+    "categories": [
+      {
+        "leaderCategory": "SavunmaRibaundu",
+        "leaderCategoryDescription": "Savunma Ribaundu",
+        "leaders": [
+          {
+            "value": 6.0,
+            "playerId": 230328,
+            "playerName": "OSIRIS ELDRIDGE",
+            "jerseyNumber": "0",
+            "image": "https://tbf.org.tr/res/85195-913926-7E42AB27-DDBD-418F-B9AC-491281E79F54.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 5.0,
+            "playerId": 396160,
+            "playerName": "ANDREW DELANO ANDREWS",
+            "jerseyNumber": "12",
+            "image": "https://tbf.org.tr/res/c2e40aeb-f9a6-41c2-9d94-7e1d6af835e3_12 andrew andrews headshot photo.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 5.0,
+            "playerId": 473697,
+            "playerName": "ROBERT RIDJELL UPSHAW III",
+            "jerseyNumber": "55",
+            "image": "https://tbf.org.tr/res/1e5222c2-de5b-4040-8e23-8e2d5e632b26_5682.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "Ribaund",
+        "leaderCategoryDescription": "Ribaund",
+        "leaders": [
+          {
+            "value": 7.0,
+            "playerId": 396160,
+            "playerName": "ANDREW DELANO ANDREWS",
+            "jerseyNumber": "12",
+            "image": "https://tbf.org.tr/res/c2e40aeb-f9a6-41c2-9d94-7e1d6af835e3_12 andrew andrews headshot photo.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 6.0,
+            "playerId": 230328,
+            "playerName": "OSIRIS ELDRIDGE",
+            "jerseyNumber": "0",
+            "image": "https://tbf.org.tr/res/85195-913926-7E42AB27-DDBD-418F-B9AC-491281E79F54.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 6.0,
+            "playerId": 473697,
+            "playerName": "ROBERT RIDJELL UPSHAW III",
+            "jerseyNumber": "55",
+            "image": "https://tbf.org.tr/res/1e5222c2-de5b-4040-8e23-8e2d5e632b26_5682.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "Asist",
+        "leaderCategoryDescription": "Asist",
+        "leaders": [
+          {
+            "value": 8.0,
+            "playerId": 230328,
+            "playerName": "OSIRIS ELDRIDGE",
+            "jerseyNumber": "0",
+            "image": "https://tbf.org.tr/res/85195-913926-7E42AB27-DDBD-418F-B9AC-491281E79F54.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 4.0,
+            "playerId": 396160,
+            "playerName": "ANDREW DELANO ANDREWS",
+            "jerseyNumber": "12",
+            "image": "https://tbf.org.tr/res/c2e40aeb-f9a6-41c2-9d94-7e1d6af835e3_12 andrew andrews headshot photo.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 4.0,
+            "playerId": 473697,
+            "playerName": "ROBERT RIDJELL UPSHAW III",
+            "jerseyNumber": "55",
+            "image": "https://tbf.org.tr/res/1e5222c2-de5b-4040-8e23-8e2d5e632b26_5682.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

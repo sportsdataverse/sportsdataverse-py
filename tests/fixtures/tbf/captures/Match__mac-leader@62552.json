@@ -1,0 +1,145 @@
+{
+  "data": {
+    "matchId": "62552",
+    "categories": [
+      {
+        "leaderCategory": "VerimlilikPuanı",
+        "leaderCategoryDescription": "Verimlilik Puanı",
+        "leaders": [
+          {
+            "value": 0.0,
+            "playerId": 20953,
+            "playerName": "BORA HUN PAÇUN",
+            "jerseyNumber": "15",
+            "image": "https://tbf.org.tr/res/46992d3f-23fb-413e-a952-388b30532be7_25957236852.jpg",
+            "isHome": false,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 0.0,
+            "playerId": 165267,
+            "playerName": "MUSTAFA ABİ",
+            "jerseyNumber": "10",
+            "image": "https://tbf.org.tr/res/126323-170308-0C90F969-DF54-4A5B-AB0F-7FDA76ED9039.jpg",
+            "isHome": false,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 0.0,
+            "playerId": 165443,
+            "playerName": "ERMAL KURTOĞLU",
+            "jerseyNumber": "5",
+            "image": "https://tbf.org.tr/res/140687-42760473632-F454B43A-1366-480A-ACB9-678960111C3F.jpg",
+            "isHome": false,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "Sayi",
+        "leaderCategoryDescription": "Sayı",
+        "leaders": [
+          {
+            "value": 19.0,
+            "playerId": 165443,
+            "playerName": "ERMAL KURTOĞLU",
+            "jerseyNumber": "5",
+            "image": "https://tbf.org.tr/res/140687-42760473632-F454B43A-1366-480A-ACB9-678960111C3F.jpg",
+            "isHome": false,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 16.0,
+            "playerId": 166022,
+            "playerName": "CENK AKYOL",
+            "jerseyNumber": "9",
+            "image": "https://tbf.org.tr/res/494c1031-3450-4c72-8f3e-bdb3b6e5561a_CenkAkyol.png",
+            "isHome": false,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 15.0,
+            "playerId": 223194,
+            "playerName": "Ümit Sonkol",
+            "jerseyNumber": "11",
+            "image": "https://tbf.org.tr/res/ab0b3849-f060-437f-9a4f-f74e5cb2fe25_MT.png",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "HucumRibaundu",
+        "leaderCategoryDescription": "Hücum Ribaundu",
+        "leaders": [
+          {
+            "value": 0.0,
+            "playerId": 20953,
+            "playerName": "BORA HUN PAÇUN",
+            "jerseyNumber": "15",
+            "image": "https://tbf.org.tr/res/46992d3f-23fb-413e-a952-388b30532be7_25957236852.jpg",
+            "isHome": false,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 0.0,
+            "playerId": 165267,
+            "playerName": "MUSTAFA ABİ",
+            "jerseyNumber": "10",
+            "image": "https://tbf.org.tr/res/126323-170308-0C90F969-DF54-4A5B-AB0F-7FDA76ED9039.jpg",
+            "isHome": false,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 0.0,
+            "playerId": 165443,
+            "playerName": "ERMAL KURTOĞLU",
+            "jerseyNumber": "5",
+            "image": "https://tbf.org.tr/res/140687-42760473632-F454B43A-1366-480A-ACB9-678960111C3F.jpg",
+            "isHome": false,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

@@ -1,0 +1,62 @@
+{
+  "data": [
+    {
+      "fotograf": "https://tbf.org.tr/res/83f4014d-1346-49bb-9fd2-593b71d68b2d_KLS_0625.webp",
+      "adiSoyadi": "Aleyna  Tokgöz",
+      "tabiyet": "TÜRKİYE",
+      "tabiyetKısa": "TUR",
+      "takimAdi": "BOTAŞ",
+      "takimLogo": "https://tbf.org.tr/res/451ab2ad-bdaf-4251-aeb1-9bcd623d53ba_de3fa1fb7a4248cca93e0a64ad323085_a5f07c1b4a4c4302a1a51407f9f921fa_b0f6e8435c6d40aa84d41b12a88a3593_BOTAGELM.png",
+      "takimHexRenkKod1": "#bababa",
+      "takimHexRenkKod2": "#f12128",
+      "dogumTarihi": "2006-01-20T00:00:00",
+      "kisiID": 406912,
+      "takimID": 20,
+      "formaNo": "15",
+      "prefix": "kbsl",
+      "isFavorite": false,
+      "seasonId": 174
+    },
+    {
+      "fotograf": "https://tbf.org.tr/res/b6ac2cab-d3da-4e5f-93a2-5e52fec6a836_KLS_1069.webp",
+      "adiSoyadi": "Aleyna Akkurt",
+      "tabiyet": "TÜRKİYE",
+      "tabiyetKısa": "TUR",
+      "takimAdi": "FENERBAHÇE TARFİN",
+      "takimLogo": "https://tbf.org.tr/res/d4b1945c-f195-438d-8d42-e14c25e33f11_KkFBtarfinBasketbolKadinPNG.png",
+      "takimHexRenkKod1": "#ffed00",
+      "takimHexRenkKod2": "#043673",
+      "dogumTarihi": "2007-09-28T00:00:00",
+      "kisiID": 477219,
+      "takimID": 16,
+      "formaNo": "55",
+      "prefix": "kbsl",
+      "isFavorite": false,
+      "seasonId": 174
+    },
+    {
+      "fotograf": "https://tbf.org.tr/res/f326e0b3-95e3-4c4c-b89a-c9454e3ff9ee_FOTORAF_92.webp",
+      "adiSoyadi": "Alina Iagupova",
+      "tabiyet": "UKRAYNA",
+      "tabiyetKısa": "UKR",
+      "takimAdi": "ÇİMSA ÇBK MERSİN",
+      "takimLogo": "https://tbf.org.tr/res/7d642524-53fd-49f2-a57b-8d9ca8541a8b_731af5f871df4fbf886b70b3260e9f8d_cimsacbkmersin2.png",
+      "takimHexRenkKod1": "#ea601e",
+      "takimHexRenkKod2": "#000000",
+      "dogumTarihi": "1992-02-09T00:00:00",
+      "kisiID": 411466,
+      "takimID": 71652,
+      "formaNo": "23",
+      "prefix": "kbsl",
+      "isFavorite": false,
+      "seasonId": 174
+    }
+  ],
+  "count": 162,
+  "pageNumber": 1,
+  "pageCount": 1,
+  "hasPreviousPage": false,
+  "hasNextPage": false,
+  "isSuccess": true,
+  "problemDetails": null
+}

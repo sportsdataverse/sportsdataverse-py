@@ -1,0 +1,191 @@
+{
+  "data": [
+    {
+      "grup": "",
+      "weeksByGroup": [
+        "30",
+        "29",
+        "28"
+      ],
+      "standings": [
+        {
+          "takimIslemId": 246971.0,
+          "faaliyetAltAlanId": 20728.0,
+          "takimAdi": "ALİAĞA PETKİM SPOR",
+          "faaliyetAdi": null,
+          "grup": "",
+          "hafta": 30,
+          "sira": 13,
+          "o": 30,
+          "g": 9,
+          "m": 21,
+          "a": 2399,
+          "y": 2614,
+          "puan": 39,
+          "icP": "6",
+          "icA": "3",
+          "toA": "-215",
+          "ihrac": 0,
+          "teamLogo": "https://tbf.org.tr/res/68544fcb-12cf-4d69-abc1-a538313858fb_petkim.png",
+          "tiedRows": [
+            {
+              "order": 13,
+              "teamName": "ALİAĞA PETKİM SPOR",
+              "teamProcessId": 246971.0,
+              "homePointFor": 369,
+              "homePointAgainst": 366,
+              "homePoint": "6",
+              "homePointDiff": 3,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 14,
+              "teamName": "KARŞIYAKA",
+              "teamProcessId": 246967.0,
+              "homePointFor": 355,
+              "homePointAgainst": 355,
+              "homePoint": "6",
+              "homePointDiff": 0,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 15,
+              "teamName": "MERSİN SPOR",
+              "teamProcessId": 246970.0,
+              "homePointFor": 369,
+              "homePointAgainst": 372,
+              "homePoint": "6",
+              "homePointDiff": -3,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            }
+          ]
+        },
+        {
+          "takimIslemId": 246967.0,
+          "faaliyetAltAlanId": 20728.0,
+          "takimAdi": "KARŞIYAKA",
+          "faaliyetAdi": null,
+          "grup": "",
+          "hafta": 30,
+          "sira": 14,
+          "o": 30,
+          "g": 9,
+          "m": 21,
+          "a": 2408,
+          "y": 2627,
+          "puan": 39,
+          "icP": "6",
+          "icA": "0",
+          "toA": "-219",
+          "ihrac": 0,
+          "teamLogo": "https://tbf.org.tr/res/b48630bd-9317-4adf-b9c9-1456ea1b8f4e_karyaka.png",
+          "tiedRows": [
+            {
+              "order": 13,
+              "teamName": "ALİAĞA PETKİM SPOR",
+              "teamProcessId": 246971.0,
+              "homePointFor": 369,
+              "homePointAgainst": 366,
+              "homePoint": "6",
+              "homePointDiff": 3,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 14,
+              "teamName": "KARŞIYAKA",
+              "teamProcessId": 246967.0,
+              "homePointFor": 355,
+              "homePointAgainst": 355,
+              "homePoint": "6",
+              "homePointDiff": 0,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 15,
+              "teamName": "MERSİN SPOR",
+              "teamProcessId": 246970.0,
+              "homePointFor": 369,
+              "homePointAgainst": 372,
+              "homePoint": "6",
+              "homePointDiff": -3,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            }
+          ]
+        },
+        {
+          "takimIslemId": 246970.0,
+          "faaliyetAltAlanId": 20728.0,
+          "takimAdi": "MERSİN SPOR",
+          "faaliyetAdi": null,
+          "grup": "",
+          "hafta": 30,
+          "sira": 15,
+          "o": 30,
+          "g": 9,
+          "m": 21,
+          "a": 2537,
+          "y": 2650,
+          "puan": 39,
+          "icP": "6",
+          "icA": "-3",
+          "toA": "-113",
+          "ihrac": 0,
+          "teamLogo": "https://tbf.org.tr/res/43df2b0b-4a54-4e08-bd86-8151f7498ff7_mersin.png",
+          "tiedRows": [
+            {
+              "order": 13,
+              "teamName": "ALİAĞA PETKİM SPOR",
+              "teamProcessId": 246971.0,
+              "homePointFor": 369,
+              "homePointAgainst": 366,
+              "homePoint": "6",
+              "homePointDiff": 3,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 14,
+              "teamName": "KARŞIYAKA",
+              "teamProcessId": 246967.0,
+              "homePointFor": 355,
+              "homePointAgainst": 355,
+              "homePoint": "6",
+              "homePointDiff": 0,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 15,
+              "teamName": "MERSİN SPOR",
+              "teamProcessId": 246970.0,
+              "homePointFor": 369,
+              "homePointAgainst": 372,
+              "homePoint": "6",
+              "homePointDiff": -3,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

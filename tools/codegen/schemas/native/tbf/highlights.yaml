@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: title
+  type: character
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: home_value
+  type: character
+- description: ''
+  name: away_value
+  type: character
+- description: ''
+  name: home_number
+  type: numeric
+- description: ''
+  name: away_number
+  type: numeric
+kind: dataframe
+schema: tbf_highlights

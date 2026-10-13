@@ -1,0 +1,191 @@
+{
+  "data": [
+    {
+      "grup": "",
+      "weeksByGroup": [
+        "3",
+        "2",
+        "1"
+      ],
+      "standings": [
+        {
+          "takimIslemId": 266026.0,
+          "faaliyetAltAlanId": 22214.0,
+          "takimAdi": "GALATASARAY MCT TECHNIC",
+          "faaliyetAdi": null,
+          "grup": "",
+          "hafta": 3,
+          "sira": 8,
+          "o": 3,
+          "g": 1,
+          "m": 2,
+          "a": 261,
+          "y": 250,
+          "puan": 4,
+          "icP": "0",
+          "icA": "0",
+          "toA": "11",
+          "ihrac": 0,
+          "teamLogo": "https://tbf.org.tr/res/27c5991a-e2b8-4699-977f-94ff7a3db973_GalatasarayMCTTechnic.png",
+          "tiedRows": [
+            {
+              "order": 8,
+              "teamName": "GALATASARAY MCT TECHNIC",
+              "teamProcessId": 266026.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": -12,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 10,
+              "teamName": "KARŞIYAKA",
+              "teamProcessId": 266027.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": 7,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 12,
+              "teamName": "BURSASPOR BASKETBOL",
+              "teamProcessId": 266176.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": 5,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            }
+          ]
+        },
+        {
+          "takimIslemId": 266028.0,
+          "faaliyetAltAlanId": 22214.0,
+          "takimAdi": "YUKATEL DENİZLİ BASKET",
+          "faaliyetAdi": null,
+          "grup": "",
+          "hafta": 3,
+          "sira": 9,
+          "o": 3,
+          "g": 1,
+          "m": 2,
+          "a": 258,
+          "y": 257,
+          "puan": 4,
+          "icP": "0",
+          "icA": "0",
+          "toA": "1",
+          "ihrac": 0,
+          "teamLogo": "https://tbf.org.tr/res/be447bdd-b2e6-496c-892b-be016c5c24c0_yukateldenizlibasket.png",
+          "tiedRows": [
+            {
+              "order": 8,
+              "teamName": "GALATASARAY MCT TECHNIC",
+              "teamProcessId": 266026.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": -12,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 10,
+              "teamName": "KARŞIYAKA",
+              "teamProcessId": 266027.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": 7,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 12,
+              "teamName": "BURSASPOR BASKETBOL",
+              "teamProcessId": 266176.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": 5,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            }
+          ]
+        },
+        {
+          "takimIslemId": 266027.0,
+          "faaliyetAltAlanId": 22214.0,
+          "takimAdi": "KARŞIYAKA",
+          "faaliyetAdi": null,
+          "grup": "",
+          "hafta": 3,
+          "sira": 10,
+          "o": 3,
+          "g": 1,
+          "m": 2,
+          "a": 232,
+          "y": 236,
+          "puan": 4,
+          "icP": "0",
+          "icA": "0",
+          "toA": "-4",
+          "ihrac": 0,
+          "teamLogo": "https://tbf.org.tr/res/48672bae-89cb-49f7-8278-5964017d9157_KARIYAKA.png",
+          "tiedRows": [
+            {
+              "order": 8,
+              "teamName": "GALATASARAY MCT TECHNIC",
+              "teamProcessId": 266026.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": -12,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 10,
+              "teamName": "KARŞIYAKA",
+              "teamProcessId": 266027.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": 7,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 12,
+              "teamName": "BURSASPOR BASKETBOL",
+              "teamProcessId": 266176.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": 5,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

@@ -1,0 +1,145 @@
+{
+  "data": {
+    "matchId": "345690",
+    "categories": [
+      {
+        "leaderCategory": "VerimlilikPuanı",
+        "leaderCategoryDescription": "Verimlilik Puanı",
+        "leaders": [
+          {
+            "value": 23.0,
+            "playerId": 519562,
+            "playerName": "Emma Meesseman",
+            "jerseyNumber": "11",
+            "image": "https://tbf.org.tr/res/28d9ffc6-7629-4008-9335-cf14e04f2fad_emma2.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 19.0,
+            "playerId": 52819,
+            "playerName": "Olcay Çakır Turgut",
+            "jerseyNumber": "4",
+            "image": "https://tbf.org.tr/res/856fef00-9dec-481e-9b93-e57a2684377a_OLCAY.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 17.0,
+            "playerId": 95557,
+            "playerName": "Alperi Onar",
+            "jerseyNumber": "10",
+            "image": "https://tbf.org.tr/res/d0be88fc-d7ef-49b8-b516-6ceb918759a5_ALPER.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "Sayi",
+        "leaderCategoryDescription": "Sayı",
+        "leaders": [
+          {
+            "value": 18.0,
+            "playerId": 95557,
+            "playerName": "Alperi Onar",
+            "jerseyNumber": "10",
+            "image": "https://tbf.org.tr/res/d0be88fc-d7ef-49b8-b516-6ceb918759a5_ALPER.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 15.0,
+            "playerId": 519562,
+            "playerName": "Emma Meesseman",
+            "jerseyNumber": "11",
+            "image": "https://tbf.org.tr/res/28d9ffc6-7629-4008-9335-cf14e04f2fad_emma2.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 15.0,
+            "playerId": 729744,
+            "playerName": "Tima Pouye",
+            "jerseyNumber": "32",
+            "image": "https://tbf.org.tr/res/cae79431-703d-4bf9-be16-7c4d06042c05_TIMA.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "HucumRibaundu",
+        "leaderCategoryDescription": "Hücum Ribaundu",
+        "leaders": [
+          {
+            "value": 2.0,
+            "playerId": 52819,
+            "playerName": "Olcay Çakır Turgut",
+            "jerseyNumber": "4",
+            "image": "https://tbf.org.tr/res/856fef00-9dec-481e-9b93-e57a2684377a_OLCAY.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 2.0,
+            "playerId": 95557,
+            "playerName": "Alperi Onar",
+            "jerseyNumber": "10",
+            "image": "https://tbf.org.tr/res/d0be88fc-d7ef-49b8-b516-6ceb918759a5_ALPER.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 2.0,
+            "playerId": 233076,
+            "playerName": "Zeynep Şevval  Gül",
+            "jerseyNumber": "12",
+            "image": "https://tbf.org.tr/res/fc74598d-2b80-40dd-8e99-0828d82d5ee8_KLS_1360.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

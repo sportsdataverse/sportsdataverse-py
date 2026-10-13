@@ -1,0 +1,37 @@
+{
+  "data": [
+    {
+      "faaliyet": "KBSL 2026-2027",
+      "url": "kbsl-2026-2027",
+      "faaliyet_ID": 22209,
+      "sezon_ID": 174,
+      "logo": "https://tbf.org.tr/assets/images/sites-logo/kbslrenkli.svg",
+      "sezon": "2026-2027",
+      "sezonGorunenAdi": null,
+      "logoGray": "https://tbf.org.tr/assets/images/sites-logo/kbslgri.svg"
+    },
+    {
+      "faaliyet": "KBSL 2025-2026",
+      "url": "kbsl-2025-2026",
+      "faaliyet_ID": 20773,
+      "sezon_ID": 172,
+      "logo": "https://tbf.org.tr/assets/images/sites-logo/kbsl-renkli.svg",
+      "sezon": "2025-2026",
+      "sezonGorunenAdi": null,
+      "logoGray": "https://tbf.org.tr/assets/images/sites-logo/kbsl-gri.svg"
+    },
+    {
+      "faaliyet": "ING KBSL 2024-2025",
+      "url": "kbsl-2024-2025",
+      "faaliyet_ID": 19282,
+      "sezon_ID": 170,
+      "logo": "https://tbf.org.tr/assets/images/sites-logo/kbsl-logo-Halkbank.png",
+      "sezon": "2024-2025",
+      "sezonGorunenAdi": null,
+      "logoGray": ""
+    }
+  ],
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

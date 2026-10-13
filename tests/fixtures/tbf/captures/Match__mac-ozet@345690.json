@@ -1,0 +1,91 @@
+{
+  "data": {
+    "matchId": "345690",
+    "homeTeamScore": [
+      {
+        "score": 30,
+        "quarter": 1,
+        "periodType": 1
+      },
+      {
+        "score": 28,
+        "quarter": 2,
+        "periodType": 1
+      },
+      {
+        "score": 16,
+        "quarter": 3,
+        "periodType": 1
+      }
+    ],
+    "awayTeamScore": [
+      {
+        "score": 25,
+        "quarter": 1,
+        "periodType": 1
+      },
+      {
+        "score": 13,
+        "quarter": 2,
+        "periodType": 1
+      },
+      {
+        "score": 20,
+        "quarter": 3,
+        "periodType": 1
+      }
+    ],
+    "matchHighlightLeaders": [
+      {
+        "title": "Sayı",
+        "homeValue": "18",
+        "awayValue": "14",
+        "homePlayer": "Alperi Onar",
+        "homePlayerImage": "https://tbf.org.tr/res/d0be88fc-d7ef-49b8-b516-6ceb918759a5_ALPER.webp",
+        "awayPlayer": "Melek Uzunoğlu",
+        "awayPlayerImage": "https://tbf.org.tr/res/a5d772a5-4be8-4ff0-8be5-d6764e39f492_emlak152.webp"
+      },
+      {
+        "title": "Ribaund",
+        "homeValue": "6",
+        "awayValue": "8",
+        "homePlayer": "Emma Meesseman",
+        "homePlayerImage": "https://tbf.org.tr/res/28d9ffc6-7629-4008-9335-cf14e04f2fad_emma2.webp",
+        "awayPlayer": "Melek Uzunoğlu",
+        "awayPlayerImage": "https://tbf.org.tr/res/a5d772a5-4be8-4ff0-8be5-d6764e39f492_emlak152.webp"
+      },
+      {
+        "title": "Asist",
+        "homeValue": "6",
+        "awayValue": "5",
+        "homePlayer": "Olcay Çakır Turgut",
+        "homePlayerImage": "https://tbf.org.tr/res/856fef00-9dec-481e-9b93-e57a2684377a_OLCAY.webp",
+        "awayPlayer": "Lindsay Allen",
+        "awayPlayerImage": "https://tbf.org.tr/res/da44884a-8b72-4479-925a-7d2ff5b54ca7_emlak122.webp"
+      }
+    ],
+    "matchHighlightStatistics": [
+      {
+        "title": "Sayı",
+        "leaderCategory": "Sayi",
+        "homeValue": "87",
+        "awayValue": "78"
+      },
+      {
+        "title": "Ribaund",
+        "leaderCategory": "Ribaund",
+        "homeValue": "34",
+        "awayValue": "30"
+      },
+      {
+        "title": "Hücum Ribaundu",
+        "leaderCategory": "HucumRibaundu",
+        "homeValue": "12",
+        "awayValue": "12"
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

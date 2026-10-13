@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: activity_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: competition
+  type: character
+- description: ''
+  name: week
+  type: character
+- description: ''
+  name: phase
+  type: integer
+- description: ''
+  name: phase_name
+  type: character
+- description: ''
+  name: label
+  type: character
+- description: ''
+  name: is_current
+  type: logical
+kind: dataframe
+schema: tbf_weeks

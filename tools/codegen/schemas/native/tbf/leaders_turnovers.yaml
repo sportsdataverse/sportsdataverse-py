@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: competition
+  type: character
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: kind
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: team_process_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: games
+  type: integer
+- description: ''
+  name: value
+  type: numeric
+kind: dataframe
+schema: tbf_leaders_turnovers

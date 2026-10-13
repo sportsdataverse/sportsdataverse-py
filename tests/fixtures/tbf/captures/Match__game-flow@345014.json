@@ -1,0 +1,64 @@
+{
+  "data": {
+    "matchId": "345014",
+    "events": [
+      {
+        "actionNumber": 6,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-0",
+        "action": "Hava Atışı - Kaybetti",
+        "time": "09:59",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Khem Birch",
+        "jerseyNumber": "92",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "actionNumber": 9,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-2",
+        "action": "2 Sayı Turnike Başarısız",
+        "time": "09:26",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Nicolo Melli",
+        "jerseyNumber": "4",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "actionNumber": 12,
+        "quarterNumber": 1,
+        "periodType": 1,
+        "score": "0-2",
+        "action": "Kişisel Faul",
+        "time": "09:21",
+        "isHome": true,
+        "playerId": 0,
+        "playerName": "Arturs Zagars",
+        "jerseyNumber": "32",
+        "image": "",
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

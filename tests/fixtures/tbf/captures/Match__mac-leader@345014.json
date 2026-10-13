@@ -1,0 +1,145 @@
+{
+  "data": {
+    "matchId": "345014",
+    "categories": [
+      {
+        "leaderCategory": "HucumRibaundu",
+        "leaderCategoryDescription": "Hücum Ribaundu",
+        "leaders": [
+          {
+            "value": 3.0,
+            "playerId": 735811,
+            "playerName": "Talen Horton-Tucker",
+            "jerseyNumber": "8",
+            "image": "https://tbf.org.tr/res/35b7d188-b601-442f-878d-b686239df18b_TalenHortonTucker.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 2.0,
+            "playerId": 360082,
+            "playerName": "Khem Birch",
+            "jerseyNumber": "92",
+            "image": "https://tbf.org.tr/res/3b128f74-f9e5-4d3f-b236-4ad214894fb0_KhemBrch.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 2.0,
+            "playerId": 667814,
+            "playerName": "Wade Baldwin IV",
+            "jerseyNumber": "2",
+            "image": "https://tbf.org.tr/res/b2b8f388-e064-4505-89c8-07cb5371cfbb_WadeMBaldwinIV.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "SavunmaRibaundu",
+        "leaderCategoryDescription": "Savunma Ribaundu",
+        "leaders": [
+          {
+            "value": 8.0,
+            "playerId": 412247,
+            "playerName": "Nicolo Melli",
+            "jerseyNumber": "4",
+            "image": "https://tbf.org.tr/res/22d3baa9-1ce7-4ade-ba0d-55e252dbfc24_NcoloMelli.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 5.0,
+            "playerId": 459449,
+            "playerName": "Tarık Biberovic",
+            "jerseyNumber": "13",
+            "image": "https://tbf.org.tr/res/45a89f4b-15f5-472b-b6be-29d068e82359_TarkBiberovi.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 3.0,
+            "playerId": 735814,
+            "playerName": "Mikael Jantunen",
+            "jerseyNumber": "18",
+            "image": "https://tbf.org.tr/res/a85c1146-9417-46fa-98c5-56ed2f5b352e_MikaelJantunen.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "Ribaund",
+        "leaderCategoryDescription": "Ribaund",
+        "leaders": [
+          {
+            "value": 8.0,
+            "playerId": 412247,
+            "playerName": "Nicolo Melli",
+            "jerseyNumber": "4",
+            "image": "https://tbf.org.tr/res/22d3baa9-1ce7-4ade-ba0d-55e252dbfc24_NcoloMelli.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 5.0,
+            "playerId": 459449,
+            "playerName": "Tarık Biberovic",
+            "jerseyNumber": "13",
+            "image": "https://tbf.org.tr/res/45a89f4b-15f5-472b-b6be-29d068e82359_TarkBiberovi.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 5.0,
+            "playerId": 735811,
+            "playerName": "Talen Horton-Tucker",
+            "jerseyNumber": "8",
+            "image": "https://tbf.org.tr/res/35b7d188-b601-442f-878d-b686239df18b_TalenHortonTucker.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}
